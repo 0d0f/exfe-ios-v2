@@ -31,11 +31,6 @@
 //    self.window.backgroundColor = [UIColor whiteColor];
     [self.window addSubview:controller.view];
     [self.window makeKeyAndVisible];
-    
-    APICrosses *crossapi=[[APICrosses alloc]init];
-    [crossapi getCrossById];
-    
-    
     return YES;
 }
 

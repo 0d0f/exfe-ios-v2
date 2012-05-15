@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "APICrosses.h"
 
-@interface CrossesViewController : UIViewController
-
+@interface CrossesViewController : UIViewController{
+    APICrosses *crossapi;
+}
+    
 @end

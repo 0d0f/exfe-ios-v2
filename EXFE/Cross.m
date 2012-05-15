@@ -14,4 +14,17 @@
 @synthesize title=_title;
 @synthesize description=_description;
 @synthesize created_at=_created_at;
+@synthesize by_identity=_by_identity;
+@synthesize host_identity=_host_identity;
+- (void)dealloc {
+    [_id release];
+    [_id_base62 release];
+    [_title release];
+    [_description release];
+    [_created_at release];
+    [_by_identity release];
+    [_host_identity release];
+    [super dealloc];
+}
+
 @end

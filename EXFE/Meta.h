@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Meta : NSObject
+@interface Meta : NSObject{
+	NSString* _code;
+
+}
 @property (nonatomic,retain) NSString *code;
 @end

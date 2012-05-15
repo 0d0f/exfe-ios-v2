@@ -10,4 +10,9 @@
 
 @implementation Meta
 @synthesize code = _code;
+- (void)dealloc {
+    [_code release];
+    [super dealloc];
+}
+
 @end

@@ -7,12 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Identity.h"
 
-@interface Cross : NSObject
+@interface Cross : NSObject{
+    NSNumber* _id;
+    NSString* _id_base62;
+    NSString* _title;
+    NSString* _description;
+    NSString* _created_at;
+    Identity* _by_identity;
+    Identity* _host_identity;
+}
 
 @property (nonatomic,retain) NSNumber *id;
 @property (nonatomic,retain) NSString *id_base62;
 @property (nonatomic,retain) NSString *title;
 @property (nonatomic,retain) NSString *description;
 @property (nonatomic,retain) NSString *created_at;
+@property (nonatomic,retain) Identity *by_identity;
+@property (nonatomic,retain) Identity *host_identity;
 @end

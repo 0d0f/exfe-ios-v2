@@ -7,6 +7,7 @@
 //
 
 #import "CrossesViewController.h"
+#import "APICrosses.h"
 
 @interface CrossesViewController ()
 
@@ -26,12 +27,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    crossapi=[[APICrosses alloc]init];
+    [crossapi getCrossById];
+
     // Do any additional setup after loading the view from its nib.
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    [crossapi release];
+
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
