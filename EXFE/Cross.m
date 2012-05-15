@@ -16,6 +16,8 @@
 @synthesize created_at=_created_at;
 @synthesize by_identity=_by_identity;
 @synthesize host_identity=_host_identity;
+@synthesize place=_place;
+
 - (void)dealloc {
     [_id release];
     [_id_base62 release];
@@ -24,6 +26,7 @@
     [_created_at release];
     [_by_identity release];
     [_host_identity release];
+    [_place release];
     [super dealloc];
 }
 

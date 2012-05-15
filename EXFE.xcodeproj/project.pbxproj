@@ -24,6 +24,7 @@
 		78A98EFF156116AF009E0806 /* Meta.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98EFE156116AF009E0806 /* Meta.m */; };
 		78A98F03156117D8009E0806 /* APICrosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F02156117D8009E0806 /* APICrosses.m */; };
 		78A98F0C156214A7009E0806 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F0B156214A7009E0806 /* Cross.m */; };
+		78E836DC156267E200763A60 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E836DB156267E100763A60 /* Place.m */; };
 		78E88742156244E70026D197 /* CrossesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E88740156244E70026D197 /* CrossesViewController.m */; };
 		78E88743156244E70026D197 /* CrossesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78E88741156244E70026D197 /* CrossesViewController.xib */; };
 		78E88746156252EC0026D197 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E88745156252EC0026D197 /* Identity.m */; };
@@ -99,6 +100,8 @@
 		78A98F02156117D8009E0806 /* APICrosses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APICrosses.m; sourceTree = "<group>"; };
 		78A98F0A156214A7009E0806 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
 		78A98F0B156214A7009E0806 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
+		78E836DA156267E100763A60 /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
+		78E836DB156267E100763A60 /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
 		78E8873F156244E70026D197 /* CrossesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossesViewController.h; sourceTree = "<group>"; };
 		78E88740156244E70026D197 /* CrossesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossesViewController.m; sourceTree = "<group>"; };
 		78E88741156244E70026D197 /* CrossesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossesViewController.xib; sourceTree = "<group>"; };
@@ -208,6 +211,8 @@
 				78A98F0B156214A7009E0806 /* Cross.m */,
 				78E88744156252EC0026D197 /* Identity.h */,
 				78E88745156252EC0026D197 /* Identity.m */,
+				78E836DA156267E100763A60 /* Place.h */,
+				78E836DB156267E100763A60 /* Place.m */,
 			);
 			name = Class;
 			sourceTree = "<group>";
@@ -345,6 +350,7 @@
 				78A98F0C156214A7009E0806 /* Cross.m in Sources */,
 				78E88742156244E70026D197 /* CrossesViewController.m in Sources */,
 				78E88746156252EC0026D197 /* Identity.m in Sources */,
+				78E836DC156267E200763A60 /* Place.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

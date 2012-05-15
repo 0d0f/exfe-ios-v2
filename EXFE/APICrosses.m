@@ -9,6 +9,7 @@
 #import "APICrosses.h"
 #import "Meta.h"
 #import "Cross.h"
+#import "Place.h"
 #import "Identity.h"
 
 #define API_V2_ROOT @"http://api.local.exfe.com/v2"
@@ -34,7 +35,19 @@
      @"created_at", @"created_at", 
      @"updated_at", @"updated_at", 
      nil];
-
+    
+    RKObjectMapping *placeMapping = [RKObjectMapping mappingForClass:[Place class]];
+    [placeMapping mapKeyPathsToAttributes:@"id", @"id",
+     @"description", @"description", 
+     @"external_id", @"external_id", 
+     @"lat", @"lat", 
+     @"lng", @"lng",
+     @"title", @"title", 
+     @"provider", @"provider",
+     @"created_at", @"created_at", 
+     @"updated_at", @"updated_at", 
+     nil];
+    
     RKObjectMapping *crossMapping = [RKObjectMapping mappingForClass:[Cross class]];
     [crossMapping mapKeyPath:@"id" toAttribute:@"id"];
     [crossMapping mapKeyPath:@"id_base62" toAttribute:@"id_base62"];
@@ -43,6 +56,7 @@
     [crossMapping mapKeyPath:@"created_at" toAttribute:@"created_at"];
     [crossMapping mapKeyPath:@"by_identity" toRelationship:@"by_identity" withMapping:identityMapping];
     [crossMapping mapKeyPath:@"host_identity" toRelationship:@"host_identity" withMapping:identityMapping];
+    [crossMapping mapKeyPath:@"place" toRelationship:@"place" withMapping:placeMapping];
     
     RKObjectManager* manager = [RKObjectManager managerWithBaseURLString:API_V2_ROOT];
 

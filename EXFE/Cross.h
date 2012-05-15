@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Identity.h"
+#import "Place.h"
 
 @interface Cross : NSObject{
     NSNumber* _id;
@@ -17,6 +18,7 @@
     NSString* _created_at;
     Identity* _by_identity;
     Identity* _host_identity;
+    Place* _place;
 }
 
 @property (nonatomic,retain) NSNumber *id;
@@ -26,4 +28,5 @@
 @property (nonatomic,retain) NSString *created_at;
 @property (nonatomic,retain) Identity *by_identity;
 @property (nonatomic,retain) Identity *host_identity;
+@property (nonatomic,retain) Place *place;
 @end
