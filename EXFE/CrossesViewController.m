@@ -8,6 +8,9 @@
 
 #import "CrossesViewController.h"
 #import "APICrosses.h"
+#import "Cross.h"
+#import "Exfee.h"
+#import "Identity.h"
 
 @interface CrossesViewController ()
 
@@ -34,6 +37,45 @@
     crossapi=[[APICrosses alloc]init];
     [crossapi getCrossById];
 
+    NSFetchRequest* request = [Cross fetchRequest];
+	NSSortDescriptor* id_descriptor = [NSSortDescriptor sortDescriptorWithKey:@"cross_id" ascending:NO];
+	[request setSortDescriptors:[NSArray arrayWithObject:id_descriptor]];
+    
+    NSError* error = nil;
+    id crossfetch=[Cross fetchRequest];
+    
+	NSArray* objects = [[NSManagedObjectContext contextForCurrentThread] executeFetchRequest:crossfetch error:&error];
+    if([objects count]>1)
+    {
+    
+    Cross* cross = [objects objectAtIndex:0];
+    Exfee* aexfee=cross.exfee;
+
+    NSSet *inv=(NSSet*)aexfee.invitations;
+    NSEnumerator *enumerator = [inv objectEnumerator];
+    id value;
+        
+    while ((value = [enumerator nextObject])) {
+        NSLog(@"%@",value);
+    }
+        
+    NSLog(@"cross id:%u",[cross.cross_id intValue]);
+    NSLog(@"by %@",cross.by_identity.name);
+    NSLog(@"host %@",cross.host_identity.name);
+
+    cross = [objects objectAtIndex:1];
+    
+    NSLog(@"cross id:%u",[cross.cross_id intValue]);
+    NSLog(@"by %@",cross.by_identity.name);
+    NSLog(@"host %@",cross.host_identity.name);
+
+    cross = [objects objectAtIndex:2];
+    
+    NSLog(@"cross id:%u",[cross.cross_id intValue]);
+    NSLog(@"by %@",cross.by_identity.name);
+    NSLog(@"host %@",cross.host_identity.name);
+    }
+    
     // Do any additional setup after loading the view from its nib.
 }
 

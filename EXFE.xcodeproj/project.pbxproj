@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		782B3C99156A504600721150 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3C98156A504600721150 /* Cross.m */; };
+		782B3C9C156A519D00721150 /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3C9B156A519D00721150 /* Exfee.m */; };
 		785D8136156A1AE400FC0984 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 785D8135156A1AE400FC0984 /* Place.m */; };
+		785D8156156A4AE200FC0984 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 785D8155156A4AE200FC0984 /* Invitation.m */; };
 		78A98E8C1560F832009E0806 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
 		78A98E8E1560F832009E0806 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8D1560F832009E0806 /* Foundation.framework */; };
 		78A98E901560F832009E0806 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8F1560F832009E0806 /* CoreGraphics.framework */; };
@@ -23,7 +26,6 @@
 		78A98EF91561110C009E0806 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF81561110C009E0806 /* QuartzCore.framework */; };
 		78A98EFB15611113009E0806 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EFA15611113009E0806 /* libxml2.dylib */; };
 		78A98F03156117D8009E0806 /* APICrosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F02156117D8009E0806 /* APICrosses.m */; };
-		78A98F0C156214A7009E0806 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F0B156214A7009E0806 /* Cross.m */; };
 		78E837F6156655CF00763A60 /* Meta.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E837F5156655CF00763A60 /* Meta.m */; };
 		78E837F9156658A300763A60 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 78E837F7156658A300763A60 /* Model.xcdatamodeld */; };
 		78E837FC15665A0E00763A60 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E837FB15665A0E00763A60 /* Identity.m */; };
@@ -77,8 +79,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		782B3C97156A504600721150 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
+		782B3C98156A504600721150 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
+		782B3C9A156A519D00721150 /* Exfee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exfee.h; sourceTree = "<group>"; };
+		782B3C9B156A519D00721150 /* Exfee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Exfee.m; sourceTree = "<group>"; };
 		785D8134156A1AE400FC0984 /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
 		785D8135156A1AE400FC0984 /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
+		785D8154156A4AE200FC0984 /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
+		785D8155156A4AE200FC0984 /* Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
 		78A98E871560F832009E0806 /* EXFE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EXFE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78A98E8B1560F832009E0806 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		78A98E8D1560F832009E0806 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -99,8 +107,6 @@
 		78A98EFA15611113009E0806 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		78A98F01156117D8009E0806 /* APICrosses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APICrosses.h; sourceTree = "<group>"; };
 		78A98F02156117D8009E0806 /* APICrosses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APICrosses.m; sourceTree = "<group>"; };
-		78A98F0A156214A7009E0806 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
-		78A98F0B156214A7009E0806 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
 		78E837F4156655CF00763A60 /* Meta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Meta.h; sourceTree = "<group>"; };
 		78E837F5156655CF00763A60 /* Meta.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Meta.m; sourceTree = "<group>"; };
 		78E837F8156658A300763A60 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -208,14 +214,18 @@
 			isa = PBXGroup;
 			children = (
 				78E837F7156658A300763A60 /* Model.xcdatamodeld */,
+				782B3C9A156A519D00721150 /* Exfee.h */,
+				782B3C9B156A519D00721150 /* Exfee.m */,
+				782B3C97156A504600721150 /* Cross.h */,
+				782B3C98156A504600721150 /* Cross.m */,
+				785D8154156A4AE200FC0984 /* Invitation.h */,
+				785D8155156A4AE200FC0984 /* Invitation.m */,
 				785D8134156A1AE400FC0984 /* Place.h */,
 				785D8135156A1AE400FC0984 /* Place.m */,
 				78E837FA15665A0E00763A60 /* Identity.h */,
 				78E837FB15665A0E00763A60 /* Identity.m */,
 				78E837F4156655CF00763A60 /* Meta.h */,
 				78E837F5156655CF00763A60 /* Meta.m */,
-				78A98F0A156214A7009E0806 /* Cross.h */,
-				78A98F0B156214A7009E0806 /* Cross.m */,
 			);
 			name = Class;
 			sourceTree = "<group>";
@@ -349,12 +359,14 @@
 				78A98E981560F832009E0806 /* main.m in Sources */,
 				78A98E9C1560F832009E0806 /* AppDelegate.m in Sources */,
 				78A98F03156117D8009E0806 /* APICrosses.m in Sources */,
-				78A98F0C156214A7009E0806 /* Cross.m in Sources */,
 				78E88742156244E70026D197 /* CrossesViewController.m in Sources */,
 				78E837F6156655CF00763A60 /* Meta.m in Sources */,
 				78E837F9156658A300763A60 /* Model.xcdatamodeld in Sources */,
 				78E837FC15665A0E00763A60 /* Identity.m in Sources */,
 				785D8136156A1AE400FC0984 /* Place.m in Sources */,
+				785D8156156A4AE200FC0984 /* Invitation.m in Sources */,
+				782B3C99156A504600721150 /* Cross.m in Sources */,
+				782B3C9C156A519D00721150 /* Exfee.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

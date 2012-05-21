@@ -26,6 +26,7 @@
     NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
     NSString *databaseName = @"CoreData.sqlite";
 #endif
+    RKLogConfigureByName("RestKit/*", RKLogLevelTrace);
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURLString:API_V2_ROOT];
 
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
@@ -46,8 +47,6 @@
      @"created_at", @"created_at", 
      @"updated_at", @"updated_at", 
      nil];
-    [manager.mappingProvider setObjectMapping:identityMapping forKeyPath:@"response.cross.by_identity"];
-    [manager.mappingProvider setObjectMapping:identityMapping forKeyPath:@"response.cross.host_identity"];
     
     RKManagedObjectMapping* placeMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Place" inManagedObjectStore:manager.objectStore];
     placeMapping.primaryKeyAttribute=@"place_id";
@@ -61,7 +60,40 @@
      @"created_at", @"created_at", 
      @"updated_at", @"updated_at", 
      nil];
-    [manager.mappingProvider setObjectMapping:placeMapping forKeyPath:@"response.cross.place"];
+    
+    RKManagedObjectMapping* invitationMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Invitation" inManagedObjectStore:manager.objectStore];
+    invitationMapping.primaryKeyAttribute=@"invitation_id";
+    [invitationMapping mapKeyPathsToAttributes:@"id", @"invitation_id",
+     @"rsvp_status", @"rsvp_status", 
+     @"via", @"via", 
+     @"updated_at", @"updated_at", 
+     @"created_at", @"created_at",
+     nil];
+    [invitationMapping mapRelationship:@"identity" withMapping:identityMapping];
+    [invitationMapping mapRelationship:@"by_identity" withMapping:identityMapping];
+
+    RKManagedObjectMapping* exfeeMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Exfee" inManagedObjectStore:manager.objectStore];
+    exfeeMapping.primaryKeyAttribute=@"exfee_id";
+    [exfeeMapping mapKeyPathsToAttributes:@"id", @"exfee_id",
+     nil];
+    [exfeeMapping mapRelationship:@"invitations" withMapping:invitationMapping];
+    
+    
+    RKManagedObjectMapping* crossMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Cross" inManagedObjectStore:manager.objectStore];
+    crossMapping.primaryKeyAttribute=@"cross_id";
+    [crossMapping mapKeyPathsToAttributes:@"id", @"cross_id",
+     @"title", @"title", 
+     @"description", @"cross_description", 
+     @"id_base62", @"crossid_base62", 
+     @"created_at", @"created_at",
+     nil];
+    [crossMapping mapRelationship:@"by_identity" withMapping:identityMapping];
+    [crossMapping mapRelationship:@"host_identity" withMapping:identityMapping];
+    [crossMapping mapRelationship:@"place" withMapping:placeMapping];
+    [crossMapping mapRelationship:@"exfee" withMapping:exfeeMapping];
+    
+    [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.cross"];
+    
     NSString *endpoint = @"/crosses/100209?token=98eddc9c0afc48087f722ca1419c8650";                           
 
     [manager loadObjectsAtResourcePath:endpoint delegate:self];
@@ -70,63 +102,9 @@
     
     [manager loadObjectsAtResourcePath:endpoint delegate:self];
 
-//    RKObjectMapping *metaMapping = [RKObjectMapping mappingForClass:[Meta class]];
-//    [metaMapping mapAttributes:@"code", nil];
-//    RKManagedObjectStore* objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:@"MyApp.sqlite"];
+    endpoint = @"/crosses/100203?token=98eddc9c0afc48087f722ca1419c8650";                           
     
-//    manager.objectStore = objectStore;
-//    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
-//    NSString *databaseName = @"RKExfeData.sqlite";
-//    
-//    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
-//    RKManagedObjectStore* objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:@"MyApp.sqlite"];
-//    manager.objectStore= [RKManagedObjectStore objectStoreWithStoreFilename:@"MyApp.sqlite"];
-    
-    //????
-//    NSEntityDescription *entity=[Identity entity];
-    
-//    RKManagedObjectMapping *identityMapping =[RKManagedObjectMapping mappingForEntity:[Identity entity] inManagedObjectStore:manager.objectStore];
-//    RKManagedObjectMapping *identityMapping =[RKManagedObjectMapping mappingForClass:[Identity class] inManagedObjectStore: manager.objectStore];
-//    RKManagedObjectMapping* statusMapping = [RKManagedObjectMapping mappingForClass:[RKTStatus class] inManagedObjectStore:objectManager.objectStore];
-
-    
-    //[RKManagedObjectMapping mappingForClass:[Identity class] ];
-//    
-//    RKObjectMapping *placeMapping = [RKObjectMapping mappingForClass:[Place class]];
-//    [placeMapping mapKeyPathsToAttributes:@"id", @"id",
-//     @"description", @"description", 
-//     @"external_id", @"external_id", 
-//     @"lat", @"lat", 
-//     @"lng", @"lng",
-//     @"title", @"title", 
-//     @"provider", @"provider",
-//     @"created_at", @"created_at", 
-//     @"updated_at", @"updated_at", 
-//     nil];
-//    
-//    RKObjectMapping *crossMapping = [RKObjectMapping mappingForClass:[Cross class]];
-//    [crossMapping mapKeyPath:@"id" toAttribute:@"id"];
-//    [crossMapping mapKeyPath:@"id_base62" toAttribute:@"id_base62"];
-//    [crossMapping mapKeyPath:@"title" toAttribute:@"title"];
-//    [crossMapping mapKeyPath:@"description" toAttribute:@"description"];
-//    [crossMapping mapKeyPath:@"created_at" toAttribute:@"created_at"];
-//    [crossMapping mapKeyPath:@"by_identity" toRelationship:@"by_identity" withMapping:identityMapping];
-//    [crossMapping mapKeyPath:@"host_identity" toRelationship:@"host_identity" withMapping:identityMapping];
-//    [crossMapping mapKeyPath:@"place" toRelationship:@"place" withMapping:placeMapping];
-
-    
-    
-//    RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:@"http://restkit.org"];
-//    RKManagedObjectStore* objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:@"MyApp.sqlite"];
-//    objectManager.objectStore = objectStore;
-    
-    
-//    NSString *endpoint = @"/crosses/100183?token=98eddc9c0afc48087f722ca1419c8650";                           
-//    NSString *endpoint = @"/users/131/crosses?updated_at=2012-05-01%2009:40:26&token=98eddc9c0afc48087f722ca1419c8650";
-
-//    [manager.mappingProvider setMapping:crossMapping forKeyPath:@"response.crosses"];
-//    [manager.mappingProvider setObjectMapping:identityMapping forKeyPath:@"response.cross.by_identity"];
-//    [manager loadObjectsAtResourcePath:endpoint delegate:self];
+    [manager loadObjectsAtResourcePath:endpoint delegate:self];
     
 }
 

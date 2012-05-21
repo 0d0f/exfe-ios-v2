@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11D50b" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Cross" syncable="YES"/>
+    <entity name="Cross" representedClassName="Cross" syncable="YES">
+        <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="cross_description" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cross_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="crossid_base62" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
+        <relationship name="exfee" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Exfee" syncable="YES"/>
+        <relationship name="host_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
+        <relationship name="place" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Place" syncable="YES"/>
+    </entity>
+    <entity name="Exfee" representedClassName="Exfee" syncable="YES">
+        <attribute name="exfee_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="invitations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Invitation" syncable="YES"/>
+    </entity>
     <entity name="Identity" representedClassName="Identity" syncable="YES">
         <attribute name="avatar_filename" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="avatar_updated_at" optional="YES" attributeType="String" syncable="YES"/>
@@ -15,6 +29,15 @@
         <attribute name="provider" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="Invitation" representedClassName="Invitation" syncable="YES">
+        <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="invitation_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="rsvp_status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="via" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
+        <relationship name="identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
+    </entity>
     <entity name="Place" representedClassName="Place" syncable="YES">
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="external_id" optional="YES" attributeType="String" syncable="YES"/>
@@ -27,8 +50,10 @@
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <elements>
+        <element name="Cross" positionX="160" positionY="192" width="128" height="180"/>
+        <element name="Exfee" positionX="160" positionY="192" width="128" height="75"/>
         <element name="Identity" positionX="160" positionY="267" width="128" height="225"/>
+        <element name="Invitation" positionX="160" positionY="192" width="128" height="150"/>
         <element name="Place" positionX="160" positionY="192" width="128" height="180"/>
-        <element name="Cross" positionX="160" positionY="192" width="128" height="45"/>
     </elements>
 </model>
