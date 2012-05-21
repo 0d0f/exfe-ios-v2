@@ -34,19 +34,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "RestKit/Code/ObjectMapping/RKObjectManager.m"
-         timestampString = "358685368.295227"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "179"
-         endingLineNumber = "179"
-         landmarkName = "-loaderWithResourcePath:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "RestKit/Code/ObjectMapping/RKObjectManager.m"
          timestampString = "358685390.366988"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
@@ -98,13 +85,13 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "EXFE/APICrosses.m"
-         timestampString = "358771457.237161"
+         filePath = "RestKit/Code/CoreData/NSManagedObject+ActiveRecord.m"
+         timestampString = "358851126.159935"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "73"
-         endingLineNumber = "73"
-         landmarkName = "-objectLoader:didLoadObjects:"
+         startingLineNumber = "55"
+         endingLineNumber = "55"
+         landmarkName = "+entity"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

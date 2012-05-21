@@ -27,6 +27,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
+    NSString *documentsDirectory = [paths objectAtIndex:0]; 
+    NSLog(@"doc path:%@",documentsDirectory);
+
     crossapi=[[APICrosses alloc]init];
     [crossapi getCrossById];
 
