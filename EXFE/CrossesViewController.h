@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "APICrosses.h"
 
-@interface CrossesViewController : UIViewController{
+@interface CrossesViewController : UIViewController<RKRequestDelegate>{
     APICrosses *crossapi;
 }
-    
+   
+-(void) refreshCrosses;
 @end

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Exfee, Identity, Place;
+@class CrossTime, Exfee, Identity, Place;
 
 @interface Cross : NSManagedObject
 
@@ -22,5 +22,6 @@
 @property (nonatomic, retain) Exfee *exfee;
 @property (nonatomic, retain) Identity *host_identity;
 @property (nonatomic, retain) Place *place;
+@property (nonatomic, retain) CrossTime *time;
 
 @end

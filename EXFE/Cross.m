@@ -7,6 +7,7 @@
 //
 
 #import "Cross.h"
+#import "CrossTime.h"
 #import "Exfee.h"
 #import "Identity.h"
 #import "Place.h"
@@ -23,5 +24,6 @@
 @dynamic exfee;
 @dynamic host_identity;
 @dynamic place;
+@dynamic time;
 
 @end

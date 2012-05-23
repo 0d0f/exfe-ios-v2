@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "RestKit.h"
+#import "AppDelegate.h"
 
-@interface APICrosses : NSObject <RKObjectLoaderDelegate>
-- (void)getCrossById;
+@interface APICrosses : NSObject 
++(void) MappingCross;
++(void) LoadCrossWithUserId:(int)userid updatetime:(NSString*)updatetime delegate:(id)delegate;
 @end

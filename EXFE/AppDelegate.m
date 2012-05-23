@@ -9,27 +9,58 @@
 #import "AppDelegate.h"
 #import "APICrosses.h"
 #import "CrossesViewController.h"
+#import "LandingViewController.h"
+
 
 @implementation AppDelegate
 
 @synthesize window = _window;
+@synthesize navigationController=_navigationController;
 
 - (void)dealloc
 {
     [_window release];
+    [_navigationController release];
     [super dealloc];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    CrossesViewController* viewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
-	UINavigationController* controller = [[UINavigationController alloc] initWithRootViewController:viewController];
-
-    
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
 //    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window addSubview:controller.view];
+
+#ifdef RESTKIT_GENERATE_SEED_DB
+    NSString *seedDatabaseName = nil;
+    NSString *databaseName = RKDefaultSeedDatabaseFileName;
+#else
+    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
+    NSString *databaseName = @"CoreData.sqlite";
+#endif
+//    RKLogConfigureByName("RestKit/*", RKLogLevelTrace);
+//    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURLString:API_V2_ROOT];
+    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
+
+    
+    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
+    [APICrosses MappingCross];
+
+    CrossesViewController* viewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
+    
+	self.navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    
+    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+
+    [self.window addSubview:self.navigationController.view];
+    BOOL login=[self Checklogin];
+    if(login==NO){
+        LandingViewController *landingView=[[[LandingViewController alloc]initWithNibName:@"LandingViewController" bundle:nil]autorelease];
+        landingView.delegate=self;
+        double delayInSeconds = 0.1;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [self.navigationController presentModalViewController:landingView animated:YES];
+        });        
+    }
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -61,4 +92,15 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+-(void)SigninDidFinish{
+    [self.navigationController dismissModalViewControllerAnimated:YES];
+}
+-(BOOL) Checklogin{
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSString *access_token=[[NSUserDefaults standardUserDefaults] stringForKey:@"access_token"]; 
+    NSString *userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"userid"]; 
+    if(access_token!=NULL && userid!=NULL)
+        return YES;
+    return NO;
+}
 @end

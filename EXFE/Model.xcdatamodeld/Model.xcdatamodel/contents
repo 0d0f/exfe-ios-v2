@@ -10,6 +10,19 @@
         <relationship name="exfee" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Exfee" syncable="YES"/>
         <relationship name="host_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
         <relationship name="place" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Place" syncable="YES"/>
+        <relationship name="time" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="CrossTime" syncable="YES"/>
+    </entity>
+    <entity name="CrossTime" representedClassName="CrossTime" syncable="YES">
+        <attribute name="origin" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="outputformat" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="begin_at" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="EFTime" syncable="YES"/>
+    </entity>
+    <entity name="EFTime" representedClassName="EFTime" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="date_word" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time_word" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timezone" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Exfee" representedClassName="Exfee" syncable="YES">
         <attribute name="exfee_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -55,5 +68,7 @@
         <element name="Identity" positionX="160" positionY="267" width="128" height="225"/>
         <element name="Invitation" positionX="160" positionY="192" width="128" height="150"/>
         <element name="Place" positionX="160" positionY="192" width="128" height="180"/>
+        <element name="CrossTime" positionX="135" positionY="135" width="128" height="90"/>
+        <element name="EFTime" positionX="144" positionY="144" width="128" height="120"/>
     </elements>
 </model>

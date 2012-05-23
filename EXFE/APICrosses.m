@@ -12,25 +12,12 @@
 #import "Place.h"
 #import "Identity.h"
 
-#define API_V2_ROOT @"http://api.local.exfe.com/v2"
+
 
 @implementation APICrosses
-- (void)getCrossById
++(void) MappingCross
 {    
-    
-//NSString *endpoint = @"/users/131/crosses?updated_at=2012-05-01%2009:40:26&token=98eddc9c0afc48087f722ca1419c8650";
-#ifdef RESTKIT_GENERATE_SEED_DB
-    NSString *seedDatabaseName = nil;
-    NSString *databaseName = RKDefaultSeedDatabaseFileName;
-#else
-    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
-    NSString *databaseName = @"CoreData.sqlite";
-#endif
-    RKLogConfigureByName("RestKit/*", RKLogLevelTrace);
-    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURLString:API_V2_ROOT];
-
-    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
-    
+    RKObjectManager* manager =[RKObjectManager sharedManager];
     RKManagedObjectMapping* identityMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Identity" inManagedObjectStore:manager.objectStore];
     
     identityMapping.primaryKeyAttribute=@"identity_id";
@@ -78,6 +65,20 @@
      nil];
     [exfeeMapping mapRelationship:@"invitations" withMapping:invitationMapping];
     
+    RKManagedObjectMapping* EFMapping = [RKManagedObjectMapping mappingForEntityWithName:@"EFTime" inManagedObjectStore:manager.objectStore];
+    [EFMapping mapKeyPathsToAttributes:@"date", @"date",
+     @"date_word", @"date_word", 
+     @"time", @"time", 
+     @"time_word", @"time_word", 
+     @"timezone", @"timezone",
+     nil];    
+
+    RKManagedObjectMapping* crosstimeMapping = [RKManagedObjectMapping mappingForEntityWithName:@"CrossTime" inManagedObjectStore:manager.objectStore];
+    [crosstimeMapping mapKeyPathsToAttributes:@"origin", @"origin",
+     @"outputformat", @"outputformat",
+     nil];    
+    [crosstimeMapping mapRelationship:@"begin_at" withMapping:EFMapping];
+    
     
     RKManagedObjectMapping* crossMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Cross" inManagedObjectStore:manager.objectStore];
     crossMapping.primaryKeyAttribute=@"cross_id";
@@ -91,26 +92,22 @@
     [crossMapping mapRelationship:@"host_identity" withMapping:identityMapping];
     [crossMapping mapRelationship:@"place" withMapping:placeMapping];
     [crossMapping mapRelationship:@"exfee" withMapping:exfeeMapping];
+    [crossMapping mapRelationship:@"time" withMapping:crosstimeMapping];
     
     [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.cross"];
     
-    NSString *endpoint = @"/crosses/100209?token=98eddc9c0afc48087f722ca1419c8650";                           
+    //NSString *endpoint = @"/crosses/100209?token=98eddc9c0afc48087f722ca1419c8650";                           
 
-    [manager loadObjectsAtResourcePath:endpoint delegate:self];
-
-    endpoint = @"/crosses/100183?token=98eddc9c0afc48087f722ca1419c8650";                           
-    
-    [manager loadObjectsAtResourcePath:endpoint delegate:self];
-
-    endpoint = @"/crosses/100203?token=98eddc9c0afc48087f722ca1419c8650";                           
-    
-    [manager loadObjectsAtResourcePath:endpoint delegate:self];
-    
+    //[manager loadObjectsAtResourcePath:endpoint delegate:self];
 }
-
++(void) LoadCrossWithUserId:(int)userid updatetime:(NSString*)updatetime delegate:(id)delegate{
+    NSString *endpoint = @"/crosses/100209?token=98eddc9c0afc48087f722ca1419c8650";   
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    [manager loadObjectsAtResourcePath:endpoint delegate:delegate];
+}
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    Cross *cross=[objects objectAtIndex:0];
-    NSLog(@"load:%@",cross);
+//    Cross *cross=[objects objectAtIndex:0];
+//    NSLog(@"load:%@",cross);
 //    UsersLogin *result = [objects objectAtIndex:0];
     
 //    NSLog(@"Response code=%@, token=[%@], userName=[%@]", [[result meta] code], [result token], [[result user] userName]);

@@ -7,8 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		782B3C99156A504600721150 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3C98156A504600721150 /* Cross.m */; };
 		782B3C9C156A519D00721150 /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3C9B156A519D00721150 /* Exfee.m */; };
+		782B3CA5156A604A00721150 /* EFTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CA4156A604A00721150 /* EFTime.m */; };
+		782B3CA8156A604C00721150 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CA7156A604C00721150 /* Cross.m */; };
+		782B3CAB156A604C00721150 /* CrossTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CAA156A604C00721150 /* CrossTime.m */; };
+		782B3CB7156B80A000721150 /* LandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CB5156B809F00721150 /* LandingViewController.m */; };
+		782B3CB8156B80A000721150 /* LandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CB6156B809F00721150 /* LandingViewController.xib */; };
+		782B3CD0156B948600721150 /* twitter@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CCC156B948600721150 /* twitter@2x~ipad.png */; };
+		782B3CD1156B948600721150 /* twitter@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CCD156B948600721150 /* twitter@2x~iphone.png */; };
+		782B3CD2156B948600721150 /* twitter~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CCE156B948600721150 /* twitter~ipad.png */; };
+		782B3CD3156B948600721150 /* twitter~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CCF156B948600721150 /* twitter~iphone.png */; };
+		782B3CD9156B997200721150 /* SigninViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CD7156B997200721150 /* SigninViewController.m */; };
+		782B3CDA156B997200721150 /* SigninViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CD8156B997200721150 /* SigninViewController.xib */; };
 		785D8136156A1AE400FC0984 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 785D8135156A1AE400FC0984 /* Place.m */; };
 		785D8156156A4AE200FC0984 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 785D8155156A4AE200FC0984 /* Invitation.m */; };
 		78A98E8C1560F832009E0806 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
@@ -79,10 +89,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		782B3C97156A504600721150 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
-		782B3C98156A504600721150 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
 		782B3C9A156A519D00721150 /* Exfee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exfee.h; sourceTree = "<group>"; };
 		782B3C9B156A519D00721150 /* Exfee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Exfee.m; sourceTree = "<group>"; };
+		782B3CA3156A604A00721150 /* EFTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTime.h; sourceTree = "<group>"; };
+		782B3CA4156A604A00721150 /* EFTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTime.m; sourceTree = "<group>"; };
+		782B3CA6156A604C00721150 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
+		782B3CA7156A604C00721150 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
+		782B3CA9156A604C00721150 /* CrossTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossTime.h; sourceTree = "<group>"; };
+		782B3CAA156A604C00721150 /* CrossTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossTime.m; sourceTree = "<group>"; };
+		782B3CB4156B809F00721150 /* LandingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandingViewController.h; sourceTree = "<group>"; };
+		782B3CB5156B809F00721150 /* LandingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandingViewController.m; sourceTree = "<group>"; };
+		782B3CB6156B809F00721150 /* LandingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LandingViewController.xib; sourceTree = "<group>"; };
+		782B3CCC156B948600721150 /* twitter@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter@2x~ipad.png"; sourceTree = "<group>"; };
+		782B3CCD156B948600721150 /* twitter@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter@2x~iphone.png"; sourceTree = "<group>"; };
+		782B3CCE156B948600721150 /* twitter~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter~ipad.png"; sourceTree = "<group>"; };
+		782B3CCF156B948600721150 /* twitter~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter~iphone.png"; sourceTree = "<group>"; };
+		782B3CD6156B997200721150 /* SigninViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SigninViewController.h; sourceTree = "<group>"; };
+		782B3CD7156B997200721150 /* SigninViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SigninViewController.m; sourceTree = "<group>"; };
+		782B3CD8156B997200721150 /* SigninViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SigninViewController.xib; sourceTree = "<group>"; };
 		785D8134156A1AE400FC0984 /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
 		785D8135156A1AE400FC0984 /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
 		785D8154156A4AE200FC0984 /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
@@ -139,6 +163,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		782B3CC7156B918B00721150 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				782B3CB4156B809F00721150 /* LandingViewController.h */,
+				782B3CB5156B809F00721150 /* LandingViewController.m */,
+				782B3CB6156B809F00721150 /* LandingViewController.xib */,
+				782B3CD6156B997200721150 /* SigninViewController.h */,
+				782B3CD7156B997200721150 /* SigninViewController.m */,
+				782B3CD8156B997200721150 /* SigninViewController.xib */,
+			);
+			name = User;
+			sourceTree = "<group>";
+		};
+		782B3CCB156B946100721150 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				782B3CCC156B948600721150 /* twitter@2x~ipad.png */,
+				782B3CCD156B948600721150 /* twitter@2x~iphone.png */,
+				782B3CCE156B948600721150 /* twitter~ipad.png */,
+				782B3CCF156B948600721150 /* twitter~iphone.png */,
+			);
+			name = Resource;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		78A98E7C1560F832009E0806 = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +231,7 @@
 				78A98EFC1561169E009E0806 /* Class */,
 				78A98E9A1560F832009E0806 /* AppDelegate.h */,
 				78A98E9B1560F832009E0806 /* AppDelegate.m */,
+				782B3CCB156B946100721150 /* Resource */,
 				78A98E921560F832009E0806 /* Supporting Files */,
 			);
 			path = EXFE;
@@ -213,11 +263,15 @@
 		78A98EFC1561169E009E0806 /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				782B3CA3156A604A00721150 /* EFTime.h */,
+				782B3CA9156A604C00721150 /* CrossTime.h */,
+				782B3CAA156A604C00721150 /* CrossTime.m */,
+				782B3CA6156A604C00721150 /* Cross.h */,
+				782B3CA7156A604C00721150 /* Cross.m */,
+				782B3CA4156A604A00721150 /* EFTime.m */,
 				78E837F7156658A300763A60 /* Model.xcdatamodeld */,
 				782B3C9A156A519D00721150 /* Exfee.h */,
 				782B3C9B156A519D00721150 /* Exfee.m */,
-				782B3C97156A504600721150 /* Cross.h */,
-				782B3C98156A504600721150 /* Cross.m */,
 				785D8154156A4AE200FC0984 /* Invitation.h */,
 				785D8155156A4AE200FC0984 /* Invitation.m */,
 				785D8134156A1AE400FC0984 /* Place.h */,
@@ -242,6 +296,7 @@
 		78E8873E156244BD0026D197 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				782B3CC7156B918B00721150 /* User */,
 				78E8873F156244E70026D197 /* CrossesViewController.h */,
 				78E88740156244E70026D197 /* CrossesViewController.m */,
 				78E88741156244E70026D197 /* CrossesViewController.xib */,
@@ -346,6 +401,12 @@
 			files = (
 				78A98E961560F832009E0806 /* InfoPlist.strings in Resources */,
 				78E88743156244E70026D197 /* CrossesViewController.xib in Resources */,
+				782B3CB8156B80A000721150 /* LandingViewController.xib in Resources */,
+				782B3CD0156B948600721150 /* twitter@2x~ipad.png in Resources */,
+				782B3CD1156B948600721150 /* twitter@2x~iphone.png in Resources */,
+				782B3CD2156B948600721150 /* twitter~ipad.png in Resources */,
+				782B3CD3156B948600721150 /* twitter~iphone.png in Resources */,
+				782B3CDA156B997200721150 /* SigninViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,8 +426,12 @@
 				78E837FC15665A0E00763A60 /* Identity.m in Sources */,
 				785D8136156A1AE400FC0984 /* Place.m in Sources */,
 				785D8156156A4AE200FC0984 /* Invitation.m in Sources */,
-				782B3C99156A504600721150 /* Cross.m in Sources */,
 				782B3C9C156A519D00721150 /* Exfee.m in Sources */,
+				782B3CA5156A604A00721150 /* EFTime.m in Sources */,
+				782B3CA8156A604C00721150 /* Cross.m in Sources */,
+				782B3CAB156A604C00721150 /* CrossTime.m in Sources */,
+				782B3CB7156B80A000721150 /* LandingViewController.m in Sources */,
+				782B3CD9156B997200721150 /* SigninViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

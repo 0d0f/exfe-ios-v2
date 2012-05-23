@@ -11,6 +11,8 @@
 #import "Cross.h"
 #import "Exfee.h"
 #import "Identity.h"
+#import "CrossTime.h"
+#import "EFTime.h"
 
 @interface CrossesViewController ()
 
@@ -33,48 +35,59 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
     NSString *documentsDirectory = [paths objectAtIndex:0]; 
     NSLog(@"doc path:%@",documentsDirectory);
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 
-    crossapi=[[APICrosses alloc]init];
-    [crossapi getCrossById];
-
-    NSFetchRequest* request = [Cross fetchRequest];
-	NSSortDescriptor* id_descriptor = [NSSortDescriptor sortDescriptorWithKey:@"cross_id" ascending:NO];
-	[request setSortDescriptors:[NSArray arrayWithObject:id_descriptor]];
-    
-    NSError* error = nil;
-    id crossfetch=[Cross fetchRequest];
-    
-	NSArray* objects = [[NSManagedObjectContext contextForCurrentThread] executeFetchRequest:crossfetch error:&error];
-    if([objects count]>1)
+    BOOL login=[app Checklogin];
+    if(login==YES)
     {
-    
-    Cross* cross = [objects objectAtIndex:0];
-    Exfee* aexfee=cross.exfee;
-
-    NSSet *inv=(NSSet*)aexfee.invitations;
-    NSEnumerator *enumerator = [inv objectEnumerator];
-    id value;
-        
-    while ((value = [enumerator nextObject])) {
-        NSLog(@"%@",value);
+        [self refreshCrosses];
     }
-        
-    NSLog(@"cross id:%u",[cross.cross_id intValue]);
-    NSLog(@"by %@",cross.by_identity.name);
-    NSLog(@"host %@",cross.host_identity.name);
+//    crossapi=[[APICrosses alloc]init];
+//    [crossapi getCrossById];
+//    APIUser *user=[[APIUser alloc]init];
 
-    cross = [objects objectAtIndex:1];
-    
-    NSLog(@"cross id:%u",[cross.cross_id intValue]);
-    NSLog(@"by %@",cross.by_identity.name);
-    NSLog(@"host %@",cross.host_identity.name);
+//[user SigninWithIdentity:@"virushuo@gmail.com" password:@"tmdtmd"];
 
-    cross = [objects objectAtIndex:2];
-    
-    NSLog(@"cross id:%u",[cross.cross_id intValue]);
-    NSLog(@"by %@",cross.by_identity.name);
-    NSLog(@"host %@",cross.host_identity.name);
-    }
+//    NSFetchRequest* request = [Cross fetchRequest];
+//	NSSortDescriptor* id_descriptor = [NSSortDescriptor sortDescriptorWithKey:@"cross_id" ascending:NO];
+//	[request setSortDescriptors:[NSArray arrayWithObject:id_descriptor]];
+//    
+//    NSError* error = nil;
+//    id crossfetch=[Cross fetchRequest];
+//    
+//	NSArray* objects = [[NSManagedObjectContext contextForCurrentThread] executeFetchRequest:crossfetch error:&error];
+//    if([objects count]>1)
+//    {
+//    
+//    Cross* cross = [objects objectAtIndex:0];
+//    Exfee* aexfee=cross.exfee;
+//
+//    NSSet *inv=(NSSet*)aexfee.invitations;
+//    NSEnumerator *enumerator = [inv objectEnumerator];
+//    id value;
+//        
+//    while ((value = [enumerator nextObject])) {
+//        NSLog(@"%@",value);
+//    }
+//    
+//    NSLog(@"cross id:%u",[cross.cross_id intValue]);
+//    NSLog(@"by %@",cross.by_identity.name);
+//    NSLog(@"host %@",cross.host_identity.name);
+//    NSLog(@"cross begin_at date:%@",cross.time.begin_at.date);
+//    NSLog(@"cross begin_at time:%@",cross.time.begin_at.time);
+//
+//    cross = [objects objectAtIndex:1];
+//    
+//    NSLog(@"cross id:%u",[cross.cross_id intValue]);
+//    NSLog(@"by %@",cross.by_identity.name);
+//    NSLog(@"host %@",cross.host_identity.name);
+//
+//    cross = [objects objectAtIndex:2];
+//    
+//    NSLog(@"cross id:%u",[cross.cross_id intValue]);
+//    NSLog(@"by %@",cross.by_identity.name);
+//    NSLog(@"host %@",cross.host_identity.name);
+//    }
     
     // Do any additional setup after loading the view from its nib.
 }
@@ -82,15 +95,31 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    [crossapi release];
+    //[crossapi release];
 
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
-
+-(void) refreshCrosses{
+    [APICrosses LoadCrossWithUserId:0 updatetime:@"" delegate:self];
+    
+}
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+#pragma Mark - RKRequestDelegate
+- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+    NSLog(@"success:%@",objects);
+    //    Cross *cross=[objects objectAtIndex:0];
+    //    NSLog(@"load:%@",cross);
+    //    UsersLogin *result = [objects objectAtIndex:0];
+    
+    //    NSLog(@"Response code=%@, token=[%@], userName=[%@]", [[result meta] code], [result token], [[result user] userName]);
+}
+
+- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+    NSLog(@"Error!:%@",error);
+}
 @end
