@@ -7,6 +7,7 @@
 //
 
 #import "CrossesViewController.h"
+#import "CrossDetailViewController.h"
 #import "APICrosses.h"
 #import "Cross.h"
 #import "Exfee.h"
@@ -36,11 +37,14 @@
     NSString *documentsDirectory = [paths objectAtIndex:0]; 
     NSLog(@"doc path:%@",documentsDirectory);
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-
+    
+    [self loadObjectsFromDataStore];
+    NSLog(@"%@",_crosses);
     BOOL login=[app Checklogin];
     if(login==YES)
     {
         [self refreshCrosses];
+
     }
 //    crossapi=[[APICrosses alloc]init];
 //    [crossapi getCrossById];
@@ -100,18 +104,63 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
--(void) refreshCrosses{
-    [APICrosses LoadCrossWithUserId:0 updatetime:@"" delegate:self];
-    
+- (void)dealloc {
+//	[_tableView release];
+	[_crosses release];
+    [super dealloc];
 }
+
+-(void) refreshCrosses{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+//    NSString *updated_at=[[NSUserDefaults standardUserDefaults] stringForKey:@"exfee_updated_at"]; 
+    NSString *updated_at=@"";
+    NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"]; 
+    if(date_updated_at!=nil)
+    {
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+//        2012-04-24 07:06:13 +0000
+        //Optionally for time zone converstions
+        [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        updated_at = [formatter stringFromDate:date_updated_at];
+        [formatter release];
+    }
+
+//    if(updated_at==nil){
+//        updated_at=@"";
+//    }
+    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (void)loadObjectsFromDataStore {
+	[_crosses release];
+	NSFetchRequest* request = [Cross fetchRequest];
+	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:NO];
+	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
+	_crosses = [[Cross objectsWithFetchRequest:request] retain];
+    [_tableView reloadData];
+}
+
+
 #pragma Mark - RKRequestDelegate
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    NSLog(@"success:%@",objects);
+//    NSLog(@"success:%@",objects);
+    if([objects count]>0)
+    {
+        Cross *cross=[objects lastObject];
+        NSLog(@"%@",cross.updated_at);
+        [[NSUserDefaults standardUserDefaults] setObject:cross.updated_at forKey:@"exfee_updated_at"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+
+        [self loadObjectsFromDataStore];
+    }
+    
     //    Cross *cross=[objects objectAtIndex:0];
     //    NSLog(@"load:%@",cross);
     //    UsersLogin *result = [objects objectAtIndex:0];
@@ -121,5 +170,45 @@
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     NSLog(@"Error!:%@",error);
+}
+
+#pragma mark UITableViewDataSource methods
+- (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
+	return [_crosses count];
+}
+
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+//	NSDate* lastUpdatedAt = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastUpdatedAt"];
+//	NSString* dateString = [NSDateFormatter localizedStringFromDate:lastUpdatedAt dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterMediumStyle];
+//	if (nil == dateString) {
+//		dateString = @"Never";
+//	}
+//	return [NSString stringWithFormat:@"Last Load: %@", dateString];
+//}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	NSString* reuseIdentifier = @"Tweet Cell";
+	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+	if (nil == cell) {
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
+		cell.textLabel.font = [UIFont systemFontOfSize:14];
+		cell.textLabel.numberOfLines = 0;
+//		cell.textLabel.backgroundColor = [UIColor clearColor];
+//		cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"listbg.png"]];
+	}
+//    RKTStatus* status = [_statuses objectAtIndex:indexPath.row];
+    Cross *cross=[_crosses objectAtIndex:indexPath.row];
+	cell.textLabel.text = cross.title;
+	return cell;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Cross *cross=[_crosses objectAtIndex:indexPath.row]; 
+    CrossDetailViewController *detailViewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
+    detailViewController.cross=cross;
+    [self.navigationController pushViewController:detailViewController animated:YES];
+    [detailViewController release];
+    
+    
 }
 @end

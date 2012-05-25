@@ -6,6 +6,7 @@
         <attribute name="cross_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="crossid_base62" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
         <relationship name="exfee" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Exfee" syncable="YES"/>
         <relationship name="host_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
@@ -62,13 +63,22 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
+    <entity name="Post" representedClassName="Post" syncable="YES">
+        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="post_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="postable_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="postable_type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Cross" positionX="160" positionY="192" width="128" height="180"/>
+        <element name="CrossTime" positionX="135" positionY="135" width="128" height="90"/>
+        <element name="EFTime" positionX="144" positionY="144" width="128" height="120"/>
         <element name="Exfee" positionX="160" positionY="192" width="128" height="75"/>
         <element name="Identity" positionX="160" positionY="267" width="128" height="225"/>
         <element name="Invitation" positionX="160" positionY="192" width="128" height="150"/>
         <element name="Place" positionX="160" positionY="192" width="128" height="180"/>
-        <element name="CrossTime" positionX="135" positionY="135" width="128" height="90"/>
-        <element name="EFTime" positionX="144" positionY="144" width="128" height="120"/>
+        <element name="Post" positionX="160" positionY="192" width="128" height="135"/>
     </elements>
 </model>

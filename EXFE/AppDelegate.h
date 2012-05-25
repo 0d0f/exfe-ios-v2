@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #define API_V2_ROOT @"http://api.local.exfe.com/v2"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>{
-
+    int userid;
+    NSString *accesstoken;
+    UIViewController* crossviewController;
 }
 //@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 //@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
@@ -18,6 +21,8 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, retain) UINavigationController *navigationController;
+@property (nonatomic) int userid;
+@property (nonatomic, retain) NSString *accesstoken;
 
 -(void)SigninDidFinish;
 -(BOOL) Checklogin;

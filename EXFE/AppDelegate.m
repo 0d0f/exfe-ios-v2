@@ -8,12 +8,14 @@
 
 #import "AppDelegate.h"
 #import "APICrosses.h"
+#import "APIConversation.h"
 #import "CrossesViewController.h"
 #import "LandingViewController.h"
 
 
 @implementation AppDelegate
-
+@synthesize userid;
+@synthesize accesstoken;
 @synthesize window = _window;
 @synthesize navigationController=_navigationController;
 
@@ -43,10 +45,11 @@
     
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
     [APICrosses MappingCross];
+    [APIConversation MappingConversation];
 
-    CrossesViewController* viewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
+    crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
     
-	self.navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+	self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 
@@ -93,14 +96,26 @@
 }
 
 -(void)SigninDidFinish{
-    [self.navigationController dismissModalViewControllerAnimated:YES];
+    if([self Checklogin]==YES)
+    {
+        [(CrossesViewController*)crossviewController refreshCrosses];
+        [self.navigationController dismissModalViewControllerAnimated:YES];
+    }
 }
 -(BOOL) Checklogin{
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    NSString *access_token=[[NSUserDefaults standardUserDefaults] stringForKey:@"access_token"]; 
-    NSString *userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"userid"]; 
-    if(access_token!=NULL && userid!=NULL)
+    if (self.userid>0) {
         return YES;
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSString *_access_token=[[NSUserDefaults standardUserDefaults] stringForKey:@"access_token"]; 
+    NSString *_userid=[[NSUserDefaults standardUserDefaults] stringForKey:@"userid"]; 
+
+    if(_access_token!=NULL && _userid!=NULL)
+    {
+        self.userid=[_userid intValue];
+        self.accesstoken=_access_token;
+        return YES;
+    }
     return NO;
 }
 @end

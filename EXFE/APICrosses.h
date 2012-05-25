@@ -12,5 +12,5 @@
 
 @interface APICrosses : NSObject 
 +(void) MappingCross;
-+(void) LoadCrossWithUserId:(int)userid updatetime:(NSString*)updatetime delegate:(id)delegate;
++(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate;
 @end

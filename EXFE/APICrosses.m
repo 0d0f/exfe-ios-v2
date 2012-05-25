@@ -7,33 +7,35 @@
 //
 
 #import "APICrosses.h"
+#import "Mapping.h"
 #import "Meta.h"
 #import "Cross.h"
 #import "Place.h"
 #import "Identity.h"
-
+#import "Util.h"
 
 
 @implementation APICrosses
 +(void) MappingCross
 {    
     RKObjectManager* manager =[RKObjectManager sharedManager];
-    RKManagedObjectMapping* identityMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Identity" inManagedObjectStore:manager.objectStore];
-    
-    identityMapping.primaryKeyAttribute=@"identity_id";
-    [identityMapping mapKeyPathsToAttributes:@"id", @"identity_id",
-     @"name", @"name", 
-     @"nickname", @"nickname",
-     @"provider", @"provider", 
-     @"external_id", @"external_id", 
-     @"external_username", @"external_username", 
-     @"connected_user_id", @"connected_user_id",
-     @"bio", @"bio", 
-     @"avatar_filename", @"avatar_filename",
-     @"avatar_updated_at", @"avatar_updated_at", 
-     @"created_at", @"created_at", 
-     @"updated_at", @"updated_at", 
-     nil];
+    RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
+//    RKManagedObjectMapping* identityMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Identity" inManagedObjectStore:manager.objectStore];
+//    
+//    identityMapping.primaryKeyAttribute=@"identity_id";
+//    [identityMapping mapKeyPathsToAttributes:@"id", @"identity_id",
+//     @"name", @"name", 
+//     @"nickname", @"nickname",
+//     @"provider", @"provider", 
+//     @"external_id", @"external_id", 
+//     @"external_username", @"external_username", 
+//     @"connected_user_id", @"connected_user_id",
+//     @"bio", @"bio", 
+//     @"avatar_filename", @"avatar_filename",
+//     @"avatar_updated_at", @"avatar_updated_at", 
+//     @"created_at", @"created_at", 
+//     @"updated_at", @"updated_at", 
+//     nil];
     
     RKManagedObjectMapping* placeMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Place" inManagedObjectStore:manager.objectStore];
     placeMapping.primaryKeyAttribute=@"place_id";
@@ -87,6 +89,7 @@
      @"description", @"cross_description", 
      @"id_base62", @"crossid_base62", 
      @"created_at", @"created_at",
+     @"updated_at", @"updated_at",     
      nil];
     [crossMapping mapRelationship:@"by_identity" withMapping:identityMapping];
     [crossMapping mapRelationship:@"host_identity" withMapping:identityMapping];
@@ -94,26 +97,24 @@
     [crossMapping mapRelationship:@"exfee" withMapping:exfeeMapping];
     [crossMapping mapRelationship:@"time" withMapping:crosstimeMapping];
     
+    [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.crosses"];
     [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.cross"];
     
     //NSString *endpoint = @"/crosses/100209?token=98eddc9c0afc48087f722ca1419c8650";                           
 
     //[manager loadObjectsAtResourcePath:endpoint delegate:self];
 }
-+(void) LoadCrossWithUserId:(int)userid updatetime:(NSString*)updatetime delegate:(id)delegate{
-    NSString *endpoint = @"/crosses/100209?token=98eddc9c0afc48087f722ca1419c8650";   
++(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
+        updatedtime=[Util encodeToPercentEscapeString:updatedtime];
+
+    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/crosses?updated_at=%@&token=%@",app.userid,updatedtime,app.accesstoken];
+//    NSString *endpoint = @"/users/131/crosses?updated_at=2012-05-20%2009:40:26&token=98eddc9c0afc48087f722ca1419c8650";   
     RKObjectManager* manager =[RKObjectManager sharedManager];
     [manager loadObjectsAtResourcePath:endpoint delegate:delegate];
-}
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    Cross *cross=[objects objectAtIndex:0];
-//    NSLog(@"load:%@",cross);
-//    UsersLogin *result = [objects objectAtIndex:0];
-    
-//    NSLog(@"Response code=%@, token=[%@], userName=[%@]", [[result meta] code], [result token], [[result user] userName]);
+
+
 }
 
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
-}
 @end

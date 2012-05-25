@@ -10,8 +10,10 @@
 #import "APICrosses.h"
 
 @interface CrossesViewController : UIViewController<RKRequestDelegate>{
-    APICrosses *crossapi;
+    IBOutlet UITableView* _tableView;
+    NSArray* _crosses;
 }
    
 -(void) refreshCrosses;
+- (void)loadObjectsFromDataStore;
 @end
