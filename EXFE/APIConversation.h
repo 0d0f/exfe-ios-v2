@@ -12,6 +12,6 @@
 
 @interface APIConversation : NSObject
 +(void) MappingConversation;
-+(void) LoadConversationWithExfeeId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate;
++(void) LoadConversationWithExfeeId:(int)exfee_id updatedtime:(NSString*)updatedtime delegate:(id)delegate;
 
 @end

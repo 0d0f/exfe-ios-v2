@@ -89,6 +89,7 @@
      @"description", @"cross_description", 
      @"id_base62", @"crossid_base62", 
      @"created_at", @"created_at",
+     @"updated", @"updated",     
      @"updated_at", @"updated_at",     
      nil];
     [crossMapping mapRelationship:@"by_identity" withMapping:identityMapping];

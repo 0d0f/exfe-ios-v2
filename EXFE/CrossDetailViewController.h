@@ -9,11 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "Cross.h"
 #import "APIConversation.h"
+#import "ConversationViewController.h"
 
 @interface CrossDetailViewController : UIViewController <RKRequestDelegate>{
     Cross* cross;
-    IBOutlet UILabel* cross_tiltle;
-    IBOutlet UILabel* exfee_id;
+    IBOutlet UIWebView *webview;
+
+    ConversationViewController *conversationView;
 }
 @property (retain,nonatomic) Cross* cross;
+- (NSString*)GenerateHtmlWithEvent;
+- (void)toconversation;
 @end

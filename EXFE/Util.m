@@ -27,4 +27,10 @@
     return [(NSString *)urlString autorelease];
     
 }
++ (UIColor*) getHighlightColor{
+    return [UIColor colorWithRed:17/255.0f green:117/255.0f blue:165/255.0f alpha:1];
+}
++ (UIColor*) getRegularColor{
+    return [UIColor colorWithRed:19/255.0f green:19/255.0f blue:19/255.0f alpha:1];
+}
 @end

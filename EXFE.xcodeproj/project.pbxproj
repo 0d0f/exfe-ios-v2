@@ -18,15 +18,26 @@
 		782B3CD3156B948600721150 /* twitter~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CCF156B948600721150 /* twitter~iphone.png */; };
 		782B3CD9156B997200721150 /* SigninViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CD7156B997200721150 /* SigninViewController.m */; };
 		782B3CDA156B997200721150 /* SigninViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CD8156B997200721150 /* SigninViewController.xib */; };
-		78409163156E3275006DF115 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409162156E3275006DF115 /* Cross.m */; };
 		78409168156F3AC3006DF115 /* CrossDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409166156F3AC3006DF115 /* CrossDetailViewController.m */; };
 		78409169156F3AC3006DF115 /* CrossDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78409167156F3AC3006DF115 /* CrossDetailViewController.xib */; };
 		7840916C156F6AA5006DF115 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7840916B156F6AA5006DF115 /* Util.m */; };
 		7840916F156F7DE4006DF115 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 7840916E156F7DE4006DF115 /* Post.m */; };
 		78409172156F80A7006DF115 /* APIConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409171156F80A6006DF115 /* APIConversation.m */; };
 		78409175156F81E6006DF115 /* Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409174156F81E6006DF115 /* Mapping.m */; };
+		7840917915732A91006DF115 /* ConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7840917715732A90006DF115 /* ConversationViewController.m */; };
+		7840917A15732A91006DF115 /* ConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7840917815732A91006DF115 /* ConversationViewController.xib */; };
+		7840917F15732CA5006DF115 /* chat@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917B15732CA5006DF115 /* chat@2x~iphone.png */; };
+		7840918015732CA5006DF115 /* chat~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917C15732CA5006DF115 /* chat~iphone.png */; };
+		7840918115732CA5006DF115 /* chat@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917D15732CA5006DF115 /* chat@2x~ipad.png */; };
+		7840918215732CA5006DF115 /* chat~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917E15732CA5006DF115 /* chat~ipad.png */; };
 		785D8136156A1AE400FC0984 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 785D8135156A1AE400FC0984 /* Place.m */; };
-		785D8156156A4AE200FC0984 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 785D8155156A4AE200FC0984 /* Invitation.m */; };
+		7876512A1574C74C00E3DFD9 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 787651291574C74C00E3DFD9 /* Cross.m */; };
+		7876512D1575F23100E3DFD9 /* x.html in Resources */ = {isa = PBXBuildFile; fileRef = 7876512B1575F23100E3DFD9 /* x.html */; };
+		7876512E1575F23100E3DFD9 /* x_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 7876512C1575F23100E3DFD9 /* x_background.png */; };
+		787651311576093500E3DFD9 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 787651301576093500E3DFD9 /* Invitation.m */; };
+		7876513415760A4900E3DFD9 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 7876513315760A4800E3DFD9 /* Identity.m */; };
+		788312A815738D6100D67103 /* CrossCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 788312A715738D6100D67103 /* CrossCell.m */; };
+		788312AB1574A63600D67103 /* ImgCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 788312AA1574A5DE00D67103 /* ImgCache.m */; };
 		78A98E8C1560F832009E0806 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
 		78A98E8E1560F832009E0806 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8D1560F832009E0806 /* Foundation.framework */; };
 		78A98E901560F832009E0806 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8F1560F832009E0806 /* CoreGraphics.framework */; };
@@ -44,7 +55,6 @@
 		78A98F03156117D8009E0806 /* APICrosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F02156117D8009E0806 /* APICrosses.m */; };
 		78E837F6156655CF00763A60 /* Meta.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E837F5156655CF00763A60 /* Meta.m */; };
 		78E837F9156658A300763A60 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 78E837F7156658A300763A60 /* Model.xcdatamodeld */; };
-		78E837FC15665A0E00763A60 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E837FB15665A0E00763A60 /* Identity.m */; };
 		78E88742156244E70026D197 /* CrossesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E88740156244E70026D197 /* CrossesViewController.m */; };
 		78E88743156244E70026D197 /* CrossesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78E88741156244E70026D197 /* CrossesViewController.xib */; };
 /* End PBXBuildFile section */
@@ -111,8 +121,6 @@
 		782B3CD6156B997200721150 /* SigninViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SigninViewController.h; sourceTree = "<group>"; };
 		782B3CD7156B997200721150 /* SigninViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SigninViewController.m; sourceTree = "<group>"; };
 		782B3CD8156B997200721150 /* SigninViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SigninViewController.xib; sourceTree = "<group>"; };
-		78409161156E3275006DF115 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
-		78409162156E3275006DF115 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
 		78409165156F3AC3006DF115 /* CrossDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossDetailViewController.h; sourceTree = "<group>"; };
 		78409166156F3AC3006DF115 /* CrossDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossDetailViewController.m; sourceTree = "<group>"; };
 		78409167156F3AC3006DF115 /* CrossDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossDetailViewController.xib; sourceTree = "<group>"; };
@@ -124,10 +132,27 @@
 		78409171156F80A6006DF115 /* APIConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIConversation.m; sourceTree = "<group>"; };
 		78409173156F81E6006DF115 /* Mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mapping.h; sourceTree = "<group>"; };
 		78409174156F81E6006DF115 /* Mapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mapping.m; sourceTree = "<group>"; };
+		7840917615732A90006DF115 /* ConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationViewController.h; sourceTree = "<group>"; };
+		7840917715732A90006DF115 /* ConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationViewController.m; sourceTree = "<group>"; };
+		7840917815732A91006DF115 /* ConversationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConversationViewController.xib; sourceTree = "<group>"; };
+		7840917B15732CA5006DF115 /* chat@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat@2x~iphone.png"; sourceTree = "<group>"; };
+		7840917C15732CA5006DF115 /* chat~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~iphone.png"; sourceTree = "<group>"; };
+		7840917D15732CA5006DF115 /* chat@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat@2x~ipad.png"; sourceTree = "<group>"; };
+		7840917E15732CA5006DF115 /* chat~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~ipad.png"; sourceTree = "<group>"; };
 		785D8134156A1AE400FC0984 /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
 		785D8135156A1AE400FC0984 /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
-		785D8154156A4AE200FC0984 /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
-		785D8155156A4AE200FC0984 /* Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
+		787651281574C74C00E3DFD9 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
+		787651291574C74C00E3DFD9 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
+		7876512B1575F23100E3DFD9 /* x.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = x.html; sourceTree = "<group>"; };
+		7876512C1575F23100E3DFD9 /* x_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_background.png; sourceTree = "<group>"; };
+		7876512F1576093500E3DFD9 /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
+		787651301576093500E3DFD9 /* Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
+		7876513215760A4800E3DFD9 /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
+		7876513315760A4800E3DFD9 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
+		788312A615738D6100D67103 /* CrossCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossCell.h; sourceTree = "<group>"; };
+		788312A715738D6100D67103 /* CrossCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossCell.m; sourceTree = "<group>"; };
+		788312A91574A5DE00D67103 /* ImgCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgCache.h; sourceTree = "<group>"; };
+		788312AA1574A5DE00D67103 /* ImgCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgCache.m; sourceTree = "<group>"; };
 		78A98E871560F832009E0806 /* EXFE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EXFE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78A98E8B1560F832009E0806 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		78A98E8D1560F832009E0806 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -151,8 +176,6 @@
 		78E837F4156655CF00763A60 /* Meta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Meta.h; sourceTree = "<group>"; };
 		78E837F5156655CF00763A60 /* Meta.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Meta.m; sourceTree = "<group>"; };
 		78E837F8156658A300763A60 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		78E837FA15665A0E00763A60 /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
-		78E837FB15665A0E00763A60 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		78E8873F156244E70026D197 /* CrossesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossesViewController.h; sourceTree = "<group>"; };
 		78E88740156244E70026D197 /* CrossesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossesViewController.m; sourceTree = "<group>"; };
 		78E88741156244E70026D197 /* CrossesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossesViewController.xib; sourceTree = "<group>"; };
@@ -196,6 +219,12 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				7876512B1575F23100E3DFD9 /* x.html */,
+				7876512C1575F23100E3DFD9 /* x_background.png */,
+				7840917B15732CA5006DF115 /* chat@2x~iphone.png */,
+				7840917C15732CA5006DF115 /* chat~iphone.png */,
+				7840917D15732CA5006DF115 /* chat@2x~ipad.png */,
+				7840917E15732CA5006DF115 /* chat~ipad.png */,
 				782B3CCC156B948600721150 /* twitter@2x~ipad.png */,
 				782B3CCD156B948600721150 /* twitter@2x~iphone.png */,
 				782B3CCE156B948600721150 /* twitter~ipad.png */,
@@ -214,8 +243,20 @@
 				78409165156F3AC3006DF115 /* CrossDetailViewController.h */,
 				78409166156F3AC3006DF115 /* CrossDetailViewController.m */,
 				78409167156F3AC3006DF115 /* CrossDetailViewController.xib */,
+				7840917615732A90006DF115 /* ConversationViewController.h */,
+				7840917715732A90006DF115 /* ConversationViewController.m */,
+				7840917815732A91006DF115 /* ConversationViewController.xib */,
 			);
 			name = Cross;
+			sourceTree = "<group>";
+		};
+		788312A515738D2600D67103 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				788312A615738D6100D67103 /* CrossCell.h */,
+				788312A715738D6100D67103 /* CrossCell.m */,
+			);
+			name = Cell;
 			sourceTree = "<group>";
 		};
 		78A98E7C1560F832009E0806 = {
@@ -263,6 +304,8 @@
 				78A98E9B1560F832009E0806 /* AppDelegate.m */,
 				7840916A156F6AA4006DF115 /* Util.h */,
 				7840916B156F6AA5006DF115 /* Util.m */,
+				788312A91574A5DE00D67103 /* ImgCache.h */,
+				788312AA1574A5DE00D67103 /* ImgCache.m */,
 				782B3CCB156B946100721150 /* Resource */,
 				78A98E921560F832009E0806 /* Supporting Files */,
 			);
@@ -300,18 +343,18 @@
 				782B3CAA156A604C00721150 /* CrossTime.m */,
 				782B3CA4156A604A00721150 /* EFTime.m */,
 				78E837F7156658A300763A60 /* Model.xcdatamodeld */,
+				7876513215760A4800E3DFD9 /* Identity.h */,
+				7876513315760A4800E3DFD9 /* Identity.m */,
+				7876512F1576093500E3DFD9 /* Invitation.h */,
+				787651301576093500E3DFD9 /* Invitation.m */,
+				787651281574C74C00E3DFD9 /* Cross.h */,
+				787651291574C74C00E3DFD9 /* Cross.m */,
 				7840916D156F7DE4006DF115 /* Post.h */,
 				7840916E156F7DE4006DF115 /* Post.m */,
-				78409161156E3275006DF115 /* Cross.h */,
-				78409162156E3275006DF115 /* Cross.m */,
 				782B3C9A156A519D00721150 /* Exfee.h */,
 				782B3C9B156A519D00721150 /* Exfee.m */,
-				785D8154156A4AE200FC0984 /* Invitation.h */,
-				785D8155156A4AE200FC0984 /* Invitation.m */,
 				785D8134156A1AE400FC0984 /* Place.h */,
 				785D8135156A1AE400FC0984 /* Place.m */,
-				78E837FA15665A0E00763A60 /* Identity.h */,
-				78E837FB15665A0E00763A60 /* Identity.m */,
 				78E837F4156655CF00763A60 /* Meta.h */,
 				78E837F5156655CF00763A60 /* Meta.m */,
 			);
@@ -334,6 +377,7 @@
 		78E8873E156244BD0026D197 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				788312A515738D2600D67103 /* Cell */,
 				78409164156F3AA7006DF115 /* Cross */,
 				782B3CC7156B918B00721150 /* User */,
 			);
@@ -444,6 +488,13 @@
 				782B3CD3156B948600721150 /* twitter~iphone.png in Resources */,
 				782B3CDA156B997200721150 /* SigninViewController.xib in Resources */,
 				78409169156F3AC3006DF115 /* CrossDetailViewController.xib in Resources */,
+				7840917A15732A91006DF115 /* ConversationViewController.xib in Resources */,
+				7840917F15732CA5006DF115 /* chat@2x~iphone.png in Resources */,
+				7840918015732CA5006DF115 /* chat~iphone.png in Resources */,
+				7840918115732CA5006DF115 /* chat@2x~ipad.png in Resources */,
+				7840918215732CA5006DF115 /* chat~ipad.png in Resources */,
+				7876512D1575F23100E3DFD9 /* x.html in Resources */,
+				7876512E1575F23100E3DFD9 /* x_background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -460,20 +511,23 @@
 				78E88742156244E70026D197 /* CrossesViewController.m in Sources */,
 				78E837F6156655CF00763A60 /* Meta.m in Sources */,
 				78E837F9156658A300763A60 /* Model.xcdatamodeld in Sources */,
-				78E837FC15665A0E00763A60 /* Identity.m in Sources */,
 				785D8136156A1AE400FC0984 /* Place.m in Sources */,
-				785D8156156A4AE200FC0984 /* Invitation.m in Sources */,
 				782B3C9C156A519D00721150 /* Exfee.m in Sources */,
 				782B3CA5156A604A00721150 /* EFTime.m in Sources */,
 				782B3CAB156A604C00721150 /* CrossTime.m in Sources */,
 				782B3CB7156B80A000721150 /* LandingViewController.m in Sources */,
 				782B3CD9156B997200721150 /* SigninViewController.m in Sources */,
-				78409163156E3275006DF115 /* Cross.m in Sources */,
 				78409168156F3AC3006DF115 /* CrossDetailViewController.m in Sources */,
 				7840916C156F6AA5006DF115 /* Util.m in Sources */,
 				7840916F156F7DE4006DF115 /* Post.m in Sources */,
 				78409172156F80A7006DF115 /* APIConversation.m in Sources */,
 				78409175156F81E6006DF115 /* Mapping.m in Sources */,
+				7840917915732A91006DF115 /* ConversationViewController.m in Sources */,
+				788312A815738D6100D67103 /* CrossCell.m in Sources */,
+				788312AB1574A63600D67103 /* ImgCache.m in Sources */,
+				7876512A1574C74C00E3DFD9 /* Cross.m in Sources */,
+				787651311576093500E3DFD9 /* Invitation.m in Sources */,
+				7876513415760A4900E3DFD9 /* Identity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

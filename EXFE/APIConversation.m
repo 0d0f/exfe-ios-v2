@@ -30,15 +30,13 @@
 
 }
 
-+(void) LoadConversationWithExfeeId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate{
++(void) LoadConversationWithExfeeId:(int)exfee_id updatedtime:(NSString*)updatedtime delegate:(id)delegate{
 
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 //    if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
 //        updatedtime=[Util encodeToPercentEscapeString:updatedtime];
-    
-//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/crosses?updated_at=%@&token=%@",app.userid,updatedtime,app.accesstoken];
-    NSString *endpoint = @"/conversation/110067?token=d2864ecbd97687087bbcfc62fb5c6c37";
-    
+//    updatedtime,
+    NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u?token=%@",exfee_id,app.accesstoken];
 //    users/131/crosses?updated_at=2012-05-20%2009:40:26&token=98eddc9c0afc48087f722ca1419c8650";   
     RKObjectManager* manager =[RKObjectManager sharedManager];
     [manager loadObjectsAtResourcePath:endpoint delegate:delegate];

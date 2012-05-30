@@ -10,10 +10,14 @@
 #import "CrossDetailViewController.h"
 #import "APICrosses.h"
 #import "Cross.h"
+#import "Place.h"
 #import "Exfee.h"
 #import "Identity.h"
 #import "CrossTime.h"
 #import "EFTime.h"
+#import "CrossTime.h"
+#import "CrossCell.h"
+#import "ImgCache.h"
 
 @interface CrossesViewController ()
 
@@ -33,67 +37,21 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+  
+    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
     NSString *documentsDirectory = [paths objectAtIndex:0]; 
     NSLog(@"doc path:%@",documentsDirectory);
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [self loadObjectsFromDataStore];
-    NSLog(@"%@",_crosses);
     BOOL login=[app Checklogin];
     if(login==YES)
     {
         [self refreshCrosses];
 
     }
-//    crossapi=[[APICrosses alloc]init];
-//    [crossapi getCrossById];
-//    APIUser *user=[[APIUser alloc]init];
 
-//[user SigninWithIdentity:@"virushuo@gmail.com" password:@"tmdtmd"];
-
-//    NSFetchRequest* request = [Cross fetchRequest];
-//	NSSortDescriptor* id_descriptor = [NSSortDescriptor sortDescriptorWithKey:@"cross_id" ascending:NO];
-//	[request setSortDescriptors:[NSArray arrayWithObject:id_descriptor]];
-//    
-//    NSError* error = nil;
-//    id crossfetch=[Cross fetchRequest];
-//    
-//	NSArray* objects = [[NSManagedObjectContext contextForCurrentThread] executeFetchRequest:crossfetch error:&error];
-//    if([objects count]>1)
-//    {
-//    
-//    Cross* cross = [objects objectAtIndex:0];
-//    Exfee* aexfee=cross.exfee;
-//
-//    NSSet *inv=(NSSet*)aexfee.invitations;
-//    NSEnumerator *enumerator = [inv objectEnumerator];
-//    id value;
-//        
-//    while ((value = [enumerator nextObject])) {
-//        NSLog(@"%@",value);
-//    }
-//    
-//    NSLog(@"cross id:%u",[cross.cross_id intValue]);
-//    NSLog(@"by %@",cross.by_identity.name);
-//    NSLog(@"host %@",cross.host_identity.name);
-//    NSLog(@"cross begin_at date:%@",cross.time.begin_at.date);
-//    NSLog(@"cross begin_at time:%@",cross.time.begin_at.time);
-//
-//    cross = [objects objectAtIndex:1];
-//    
-//    NSLog(@"cross id:%u",[cross.cross_id intValue]);
-//    NSLog(@"by %@",cross.by_identity.name);
-//    NSLog(@"host %@",cross.host_identity.name);
-//
-//    cross = [objects objectAtIndex:2];
-//    
-//    NSLog(@"cross id:%u",[cross.cross_id intValue]);
-//    NSLog(@"by %@",cross.by_identity.name);
-//    NSLog(@"host %@",cross.host_identity.name);
-//    }
-    
-    // Do any additional setup after loading the view from its nib.
 }
 
 - (void)viewDidUnload
@@ -105,7 +63,6 @@
     // e.g. self.myOutlet = nil;
 }
 - (void)dealloc {
-//	[_tableView release];
 	[_crosses release];
     [super dealloc];
 }
@@ -141,9 +98,17 @@
 - (void)loadObjectsFromDataStore {
 	[_crosses release];
 	NSFetchRequest* request = [Cross fetchRequest];
-	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:NO];
+	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
 	_crosses = [[Cross objectsWithFetchRequest:request] retain];
+
+//    for (int i=0;i<[_crosses count];i++)
+//    {
+//        Cross *cross=[_crosses objectAtIndex:i];
+//        NSLog(@"cross id:%u",[cross.cross_id intValue]);
+//
+//    }
+
     [_tableView reloadData];
 }
 
@@ -154,18 +119,11 @@
     if([objects count]>0)
     {
         Cross *cross=[objects lastObject];
-        NSLog(@"%@",cross.updated_at);
         [[NSUserDefaults standardUserDefaults] setObject:cross.updated_at forKey:@"exfee_updated_at"];
         [[NSUserDefaults standardUserDefaults] synchronize];
 
         [self loadObjectsFromDataStore];
     }
-    
-    //    Cross *cross=[objects objectAtIndex:0];
-    //    NSLog(@"load:%@",cross);
-    //    UsersLogin *result = [objects objectAtIndex:0];
-    
-    //    NSLog(@"Response code=%@, token=[%@], userName=[%@]", [[result meta] code], [result token], [[result user] userName]);
 }
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
@@ -187,27 +145,63 @@
 //}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSString* reuseIdentifier = @"Tweet Cell";
-	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+	NSString* reuseIdentifier = @"cross Cell";
+	
+//    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    CrossCell *cell =[tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    
 	if (nil == cell) {
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
-		cell.textLabel.font = [UIFont systemFontOfSize:14];
-		cell.textLabel.numberOfLines = 0;
-//		cell.textLabel.backgroundColor = [UIColor clearColor];
-//		cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"listbg.png"]];
+        cell = [[[CrossCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
+        
 	}
-//    RKTStatus* status = [_statuses objectAtIndex:indexPath.row];
     Cross *cross=[_crosses objectAtIndex:indexPath.row];
-	cell.textLabel.text = cross.title;
+    if(cross.updated!=nil)
+    {
+        id updated=cross.updated;
+        if([updated isKindOfClass:[NSDictionary class]])
+        {
+            NSLog(@"cross updated:%@",updated);
+            cell.updated=(NSDictionary*)updated;
+        }
+        
+    }
+    
+    cell.title=cross.title;
+    cell.place=cross.place.title;
+    cell.time=cross.time.begin_at.date;
+    if(cross.by_identity.avatar_filename!=nil) {
+//        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+//        dispatch_async(imgQueue, ^{
+            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:cross.by_identity.avatar_filename];
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+                    cell.avatar=avatar;
+//                    [cell setNeedsDisplay];
+//                }
+//            });
+//        });
+//        dispatch_release(imgQueue);        
+    }
 	return cell;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 61;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Cross *cross=[_crosses objectAtIndex:indexPath.row]; 
+    if(cross.updated!=nil) {
+        cross.updated=nil;
+        NSError *saveError;
+        [[Cross currentContext] save:&saveError];
+    }
+    
     CrossDetailViewController *detailViewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
     detailViewController.cross=cross;
     [self.navigationController pushViewController:detailViewController animated:YES];
-    [detailViewController release];
+//    [detailViewController release];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     
 }

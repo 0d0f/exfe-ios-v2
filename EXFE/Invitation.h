@@ -2,7 +2,7 @@
 //  Invitation.h
 //  EXFE
 //
-//  Created by ju huo on 5/21/12.
+//  Created by ju huo on 5/30/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -13,12 +13,13 @@
 
 @interface Invitation : NSManagedObject
 
+@property (nonatomic, retain) NSDate * created_at;
 @property (nonatomic, retain) NSNumber * invitation_id;
 @property (nonatomic, retain) NSString * rsvp_status;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSString * via;
-@property (nonatomic, retain) NSDate * created_at;
-@property (nonatomic, retain) Identity *identity;
+@property (nonatomic, retain) NSNumber * host;
 @property (nonatomic, retain) Identity *by_identity;
+@property (nonatomic, retain) Identity *identity;
 
 @end

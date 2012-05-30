@@ -12,6 +12,7 @@
 
 + (NSString*) decodeFromPercentEscapeString:(NSString*)string;
 + (NSString*) encodeToPercentEscapeString:(NSString*)string;
-
++ (UIColor*) getHighlightColor;
++ (UIColor*) getRegularColor;
 @end
 
