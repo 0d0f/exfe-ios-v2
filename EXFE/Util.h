@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CrossTime.h"
 
 @interface Util : NSObject
 
@@ -14,5 +15,6 @@
 + (NSString*) encodeToPercentEscapeString:(NSString*)string;
 + (UIColor*) getHighlightColor;
 + (UIColor*) getRegularColor;
++ (NSString*) crossTimeToString:(CrossTime*)crosstime;
 @end
 

@@ -12,7 +12,6 @@
 #import "CrossesViewController.h"
 #import "LandingViewController.h"
 
-
 @implementation AppDelegate
 @synthesize userid;
 @synthesize accesstoken;
@@ -28,9 +27,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
-//    self.window.backgroundColor = [UIColor whiteColor];
-
 #ifdef RESTKIT_GENERATE_SEED_DB
     NSString *seedDatabaseName = nil;
     NSString *databaseName = RKDefaultSeedDatabaseFileName;

@@ -18,6 +18,7 @@
 #import "CrossTime.h"
 #import "CrossCell.h"
 #import "ImgCache.h"
+#import "Util.h"
 
 @interface CrossesViewController ()
 
@@ -36,8 +37,20 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-  
+    [super viewDidLoad];    
+//    CrossTime *crosstime = [NSEntityDescription
+//                                    insertNewObjectForEntityForName:@"CrossTime"
+//                                    inManagedObjectContext:[CrossTime currentContext]];
+//    EFTime *begin_at= [NSEntityDescription
+//                         insertNewObjectForEntityForName:@"EFTime"
+//                         inManagedObjectContext:[EFTime currentContext]];
+//    begin_at.timezone=@"+08:00 CST";
+//
+//    crosstime.begin_at=begin_at;
+//    crosstime.origin=@"2012-12-03 20:00:05 CST";
+//    crosstime.outputformat=[NSNumber numberWithInt:1];
+//    NSString *dtstr=[Util crossTimeToString:crosstime];
+//    NSLog(@"dtstr:%@",dtstr);
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
     NSString *documentsDirectory = [paths objectAtIndex:0]; 
@@ -135,40 +148,29 @@
 	return [_crosses count];
 }
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-//	NSDate* lastUpdatedAt = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastUpdatedAt"];
-//	NSString* dateString = [NSDateFormatter localizedStringFromDate:lastUpdatedAt dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterMediumStyle];
-//	if (nil == dateString) {
-//		dateString = @"Never";
-//	}
-//	return [NSString stringWithFormat:@"Last Load: %@", dateString];
-//}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSString* reuseIdentifier = @"cross Cell";
-	
+//	
 //    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     CrossCell *cell =[tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-    
 	if (nil == cell) {
         cell = [[[CrossCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
-        
 	}
     Cross *cross=[_crosses objectAtIndex:indexPath.row];
     if(cross.updated!=nil)
     {
         id updated=cross.updated;
         if([updated isKindOfClass:[NSDictionary class]])
-        {
-            NSLog(@"cross updated:%@",updated);
             cell.updated=(NSDictionary*)updated;
-        }
-        
     }
-    
+//    
+
     cell.title=cross.title;
     cell.place=cross.place.title;
     cell.time=cross.time.begin_at.date;
+    cell.time=[Util crossTimeToString:cross.time];
     if(cross.by_identity.avatar_filename!=nil) {
 //        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
 //        dispatch_async(imgQueue, ^{
@@ -182,6 +184,7 @@
 //        });
 //        dispatch_release(imgQueue);        
     }
+    //[cell setNeedsDisplay];
 	return cell;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -200,7 +203,6 @@
     CrossDetailViewController *detailViewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
     detailViewController.cross=cross;
     [self.navigationController pushViewController:detailViewController animated:YES];
-//    [detailViewController release];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     

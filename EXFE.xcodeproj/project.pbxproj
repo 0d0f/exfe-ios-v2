@@ -31,6 +31,7 @@
 		7840918115732CA5006DF115 /* chat@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917D15732CA5006DF115 /* chat@2x~ipad.png */; };
 		7840918215732CA5006DF115 /* chat~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917E15732CA5006DF115 /* chat~ipad.png */; };
 		785D8136156A1AE400FC0984 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 785D8135156A1AE400FC0984 /* Place.m */; };
+		78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78615B3B15788BCD003CF68A /* ABTableViewCell.m */; };
 		7876512A1574C74C00E3DFD9 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 787651291574C74C00E3DFD9 /* Cross.m */; };
 		7876512D1575F23100E3DFD9 /* x.html in Resources */ = {isa = PBXBuildFile; fileRef = 7876512B1575F23100E3DFD9 /* x.html */; };
 		7876512E1575F23100E3DFD9 /* x_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 7876512C1575F23100E3DFD9 /* x_background.png */; };
@@ -141,6 +142,8 @@
 		7840917E15732CA5006DF115 /* chat~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~ipad.png"; sourceTree = "<group>"; };
 		785D8134156A1AE400FC0984 /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
 		785D8135156A1AE400FC0984 /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
+		78615B3A15788BCC003CF68A /* ABTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABTableViewCell.h; sourceTree = "<group>"; };
+		78615B3B15788BCD003CF68A /* ABTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABTableViewCell.m; sourceTree = "<group>"; };
 		787651281574C74C00E3DFD9 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
 		787651291574C74C00E3DFD9 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
 		7876512B1575F23100E3DFD9 /* x.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = x.html; sourceTree = "<group>"; };
@@ -253,6 +256,8 @@
 		788312A515738D2600D67103 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				78615B3A15788BCC003CF68A /* ABTableViewCell.h */,
+				78615B3B15788BCD003CF68A /* ABTableViewCell.m */,
 				788312A615738D6100D67103 /* CrossCell.h */,
 				788312A715738D6100D67103 /* CrossCell.m */,
 			);
@@ -528,6 +533,7 @@
 				7876512A1574C74C00E3DFD9 /* Cross.m in Sources */,
 				787651311576093500E3DFD9 /* Invitation.m in Sources */,
 				7876513415760A4900E3DFD9 /* Identity.m in Sources */,
+				78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

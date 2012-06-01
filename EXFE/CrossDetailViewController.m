@@ -14,6 +14,9 @@
 #import "Identity.h"
 #import "APIConversation.h"
 #import "ImgCache.h"
+#import "EFTime.h"
+#import "CrossTime.h"
+#import "Util.h"
 
 
 @interface CrossDetailViewController ()
@@ -73,7 +76,7 @@
     dispatch_release(loaddata);
  */
     
-//    [APIConversation LoadConversationWithExfeeId:[cross.exfee.exfee_id intValue] updatedtime:@"" delegate:self];
+    [APIConversation LoadConversationWithExfeeId:[cross.exfee.exfee_id intValue] updatedtime:@"" delegate:self];
     //LoadConversationWithExfeeId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate{
     
     // Do any additional setup after loading the view from its nib.
@@ -94,6 +97,15 @@
 - (NSString*)GenerateHtmlWithEvent
 {
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    NSString *dateString;
+    
+    
+//    if( cross.time.begin_at.time_word isEqualToString:@""
+
+    //cross.time.begin_at.date_word
+    
+//    Time_word (at) Time (Timezone) Date_word (on) Date
+        
 //    DBUtil *dbu=[DBUtil sharedManager];
 
 //    NSDate *theDate = nil;
@@ -115,18 +127,20 @@
 //    
 //    NSString *dateString_human = [dateFormatter_human stringFromDate:theDate];
 //    [dateFormatter_human release];
-    NSString *dateString;
-    if(dateString==nil)
-    {
-//        dateString_human=@"Anytime";
-        dateString=@"";
-    }
+    
+//    dateString=[Util crossTimeToString:cross.time];
+//
+//    if(dateString==nil)
+//    {
+////        dateString_human=@"Anytime";
+//        dateString=@"";
+//    }
     
     NSString *xpath=[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"x.html"];
     NSString *html=[NSString stringWithContentsOfFile:xpath encoding:NSUTF8StringEncoding error:nil];
 //    html=[html stringByReplacingOccurrencesOfString:@"{#begin_at_human#}" withString:[Util formattedDateRelativeToNow:eventobj.begin_at withTimeType:eventobj.time_type]];
     
-//    html=[html stringByReplacingOccurrencesOfString:@"{#begin_at#}" withString:[Util getLongLocalTimeStrWithTimetype:eventobj.time_type time:eventobj.begin_at]];
+    html=[html stringByReplacingOccurrencesOfString:@"{#begin_at#}" withString:[Util crossTimeToString:cross.time]];
     
 //    if([eventobj.begin_at isEqualToString:@"0000-00-00 00:00:00"]&& [eventobj.time_type isEqualToString:@""])
 //    {
@@ -187,16 +201,19 @@
     {
         NSEnumerator *enumerator=[invitations objectEnumerator];
         Invitation *invitation=nil;
-        for (Invitation *invitation in invitations) {
-            if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
-                confirmed_num++;
-            
-        }
+//        for (Invitation *invitation in invitations) {
+//            if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+//                confirmed_num++;
+//            
+//        }
 
         while (invitation = [enumerator nextObject])
         {
             if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+            {
+                NSLog(@"invitation: %@",invitation.rsvp_status);
                 confirmed_num++;
+            }
             
             NSString 	*imgurl = [ImgCache getImgUrl:invitation.identity.avatar_filename];
             NSString *host=@"";

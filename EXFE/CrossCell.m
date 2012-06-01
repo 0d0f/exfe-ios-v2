@@ -16,27 +16,6 @@
 @synthesize place;
 @synthesize updated;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-            
-//        title = [[UILabel alloc]initWithFrame:CGRectMake(60, 10, 250, 24)];
-//        avatar = [[UIImageView alloc] initWithFrame:CGRectMake(10, 11, 40, 40)];
-//        place =[[UILabel alloc]initWithFrame:CGRectMake(60, 34, 250, 100)];
-//        time =[[UILabel alloc]initWithFrame:CGRectMake(160, 34, 250, 100)];
-//        [self.contentView addSubview:title];
-//        [self.contentView addSubview:avatar];
-//        [self.contentView addSubview:place];
-//        [self.contentView addSubview:time];
-        
-//        timeZoneView = [[TimeZoneView alloc] initWithFrame:tzvFrame];
-//        timeZoneView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//        [self.contentView addSubview:timeZoneView];
-    }
-    return self;
-}
-
 - (void)dealloc {
 	[title release];
     [avatar release];
@@ -45,18 +24,47 @@
     [updated release];
     [super dealloc];
 }
-- (void)drawRect:(CGRect)rect {
-    
+
+- (void)setTitle:(NSString *)s {
+	[title release];
+	title = [s copy];
+	[self setNeedsDisplay]; 
+}
+- (void)setTime:(NSString *)s {
+	[time release];
+	time = [s copy];
+	[self setNeedsDisplay]; 
+}
+- (void)setPlace:(NSString *)s {
+	[place release];
+	place = [s copy];
+	[self setNeedsDisplay]; 
+}
+- (void)setAvatar:(UIImage *)a {
+	[avatar release];
+	avatar = [a copy];
+	[self setNeedsDisplay]; 
+}
+- (void)layoutSubviews
+{
+	CGRect b = [self bounds];
+    //	b.size.height -= 1; // leave room for the separator line
+    //	b.size.width += 30; // allow extra width to slide for editing
+    //	b.origin.x -= (self.editing && !self.showingDeleteConfirmation) ? 0 : 30; // start 30px left unless editing
+	[contentView setFrame:b];
+    [super layoutSubviews];
+}
+- (void)drawContentView:(CGRect)r{
     if([updated objectForKey:@"title"]!=nil)
         [[Util getHighlightColor] set];    
     else 
         [[Util getRegularColor] set];
     [title drawInRect:CGRectMake(60, 10, 250, 24) withFont:[UIFont fontWithName:@"Helvetica" size:18]];
-
+//    
     [avatar drawInRect:CGRectMake(10, 11, 40, 40)];
     float place_width=100;
-
- 
+    
+    
     if([updated objectForKey:@"place"]!=nil)
         [[Util getHighlightColor] set];  
     else 
@@ -69,6 +77,7 @@
     else 
         [[Util getRegularColor] set];
     [time drawInRect:CGRectMake(60+place_width, 34, time_width, 18) withFont:[UIFont fontWithName:@"Helvetica" size:12] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
+    
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
@@ -80,7 +89,5 @@
 
     // Configure the view for the selected state
 }
-
-
 
 @end
