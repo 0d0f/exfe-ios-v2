@@ -11,13 +11,14 @@
 #import "APIConversation.h"
 #import "ConversationViewController.h"
 
-@interface CrossDetailViewController : UIViewController <RKRequestDelegate>{
+@interface CrossDetailViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate>{
     Cross* cross;
+    BOOL interceptLinks;
     IBOutlet UIWebView *webview;
-
     ConversationViewController *conversationView;
 }
 @property (retain,nonatomic) Cross* cross;
+@property BOOL interceptLinks;
 - (NSString*)GenerateHtmlWithEvent;
 - (void)toconversation;
 @end

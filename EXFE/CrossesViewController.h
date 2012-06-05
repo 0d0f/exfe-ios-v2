@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "APICrosses.h"
 
-@interface CrossesViewController : UIViewController<RKRequestDelegate>{
+@interface CrossesViewController : UIViewController<RKRequestDelegate,RKObjectLoaderDelegate>{
     IBOutlet UITableView* _tableView;
     NSArray* _crosses;
 }

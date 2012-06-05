@@ -61,7 +61,8 @@
         [[Util getRegularColor] set];
     [title drawInRect:CGRectMake(60, 10, 250, 24) withFont:[UIFont fontWithName:@"Helvetica" size:18]];
 //    
-    [avatar drawInRect:CGRectMake(10, 11, 40, 40)];
+    if(avatar!=nil && ![avatar isKindOfClass:[NSNull class]])
+        [avatar drawInRect:CGRectMake(10, 11, 40, 40)];
     float place_width=100;
     
     

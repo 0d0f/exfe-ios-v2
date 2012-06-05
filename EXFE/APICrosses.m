@@ -12,6 +12,7 @@
 #import "Cross.h"
 #import "Place.h"
 #import "Identity.h"
+#import "Rsvp.h"
 #import "Util.h"
 
 
@@ -90,6 +91,7 @@
      @"id_base62", @"crossid_base62", 
      @"created_at", @"created_at",
      @"updated", @"updated",     
+     @"widget", @"widget",     
      @"updated_at", @"updated_at",     
      nil];
     [crossMapping mapRelationship:@"by_identity" withMapping:identityMapping];
@@ -101,6 +103,18 @@
     [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.crosses"];
     [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.cross"];
     
+
+    RKManagedObjectMapping* RsvpMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Rsvp" inManagedObjectStore:manager.objectStore];
+    [RsvpMapping mapKeyPathsToAttributes:@"identity_id", @"identity_id",
+     @"rsvp_status", @"rsvp_status", 
+     @"by_identity_id", @"by_identity_id", 
+     @"exfee_id", @"exfee_id", 
+     nil];
+    
+    [manager.mappingProvider setSerializationMapping:RsvpMapping forClass:[Rsvp class]]; 
+    
+    [manager setSerializationMIMEType:RKMIMETypeJSON];
+    [manager.router routeClass:[Rsvp class] toResourcePath:@"/exfee/:exfee_id/rsvp" forMethod:RKRequestMethodPOST];
     //NSString *endpoint = @"/crosses/100209?token=98eddc9c0afc48087f722ca1419c8650";                           
 
     //[manager loadObjectsAtResourcePath:endpoint delegate:self];

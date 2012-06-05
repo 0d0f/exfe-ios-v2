@@ -16,6 +16,7 @@
 #import "CrossTime.h"
 #import "EFTime.h"
 #import "CrossTime.h"
+#import "Rsvp.h"
 #import "CrossCell.h"
 #import "ImgCache.h"
 #import "Util.h"
@@ -38,19 +39,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];    
-//    CrossTime *crosstime = [NSEntityDescription
-//                                    insertNewObjectForEntityForName:@"CrossTime"
-//                                    inManagedObjectContext:[CrossTime currentContext]];
-//    EFTime *begin_at= [NSEntityDescription
-//                         insertNewObjectForEntityForName:@"EFTime"
-//                         inManagedObjectContext:[EFTime currentContext]];
-//    begin_at.timezone=@"+08:00 CST";
-//
-//    crosstime.begin_at=begin_at;
-//    crosstime.origin=@"2012-12-03 20:00:05 CST";
-//    crosstime.outputformat=[NSNumber numberWithInt:1];
-//    NSString *dtstr=[Util crossTimeToString:crosstime];
-//    NSLog(@"dtstr:%@",dtstr);
+
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
     NSString *documentsDirectory = [paths objectAtIndex:0]; 
@@ -64,6 +53,8 @@
         [self refreshCrosses];
 
     }
+
+
 
 }
 
@@ -165,24 +156,24 @@
         if([updated isKindOfClass:[NSDictionary class]])
             cell.updated=(NSDictionary*)updated;
     }
-//    
 
     cell.title=cross.title;
     cell.place=cross.place.title;
-    cell.time=cross.time.begin_at.date;
-    cell.time=[Util crossTimeToString:cross.time];
+//    cell.time=cross.time.begin_at.date;
+    NSDictionary *humanable_date=[Util crossTimeToString:cross.time];
+    cell.time=[humanable_date objectForKey:@"date"];
     if(cross.by_identity.avatar_filename!=nil) {
-//        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-//        dispatch_async(imgQueue, ^{
+        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+        dispatch_async(imgQueue, ^{
             UIImage *avatar = [[ImgCache sharedManager] getImgFrom:cross.by_identity.avatar_filename];
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
                     cell.avatar=avatar;
 //                    [cell setNeedsDisplay];
-//                }
-//            });
-//        });
-//        dispatch_release(imgQueue);        
+                }
+            });
+        });
+        dispatch_release(imgQueue);        
     }
     //[cell setNeedsDisplay];
 	return cell;
@@ -207,4 +198,6 @@
     
     
 }
+
+
 @end

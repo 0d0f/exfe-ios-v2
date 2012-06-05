@@ -8,6 +8,7 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="widget" optional="YES" attributeType="Transformable" syncable="YES"/>
         <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
         <relationship name="exfee" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Exfee" syncable="YES"/>
         <relationship name="host_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
@@ -73,6 +74,15 @@
         <attribute name="postable_type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
     </entity>
+    <entity name="Rsvp" representedClassName="Rsvp" syncable="YES">
+        <attribute name="by_identity_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="exfee_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="identity_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="rsvp_status" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Widget" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Cross" positionX="160" positionY="192" width="128" height="180"/>
         <element name="CrossTime" positionX="135" positionY="135" width="128" height="90"/>
@@ -82,5 +92,7 @@
         <element name="Invitation" positionX="160" positionY="192" width="128" height="165"/>
         <element name="Place" positionX="160" positionY="192" width="128" height="180"/>
         <element name="Post" positionX="160" positionY="192" width="128" height="135"/>
+        <element name="Rsvp" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="Widget" positionX="160" positionY="192" width="128" height="60"/>
     </elements>
 </model>

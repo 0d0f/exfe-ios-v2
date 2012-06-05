@@ -384,14 +384,22 @@
       
       function opacity(id, type) {
           document.getElementById(id).setAttribute('class', type ? '' : 'opacity');
+          
       }
       
       function opt_rsvp_callback(args) {
-          
-          changeHtml('change_rsvp',args.state_str);
+          var state_str="";
+          if(args.rsvp_status=="ACCEPTED")
+            state_str="Accepted";
+          else if(args.rsvp_status=="DECLINED")
+            state_str="Declined";
+          else if(args.rsvp_status=="INTERESTED")
+            state_str="Interested";
+
+          changeHtml('change_rsvp',state_str);
           display('rsvp_btns', 'hide');
           display('change_rsvp', 'show');
-          opacity("avatar_"+args.identity_id, args.state == 1 ? 1 : 0);
+          opacity("avatar_"+args.identity_id, args.rsvp_status=="ACCEPTED" ? 1 : 0);
           document.getElementById('confirmed_num').innerHTML=args.confirmed_num;
       }
       

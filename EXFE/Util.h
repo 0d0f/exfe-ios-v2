@@ -15,6 +15,8 @@
 + (NSString*) encodeToPercentEscapeString:(NSString*)string;
 + (UIColor*) getHighlightColor;
 + (UIColor*) getRegularColor;
-+ (NSString*) crossTimeToString:(CrossTime*)crosstime;
++ (NSDictionary*) crossTimeToString:(CrossTime*)crosstime;
++ (NSString *) formattedLongDateRelativeToNow:(NSString*)datestr;
++ (NSString*) getBackgroundLink:(NSString*)imgname;
 @end
 

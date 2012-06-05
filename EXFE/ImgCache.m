@@ -91,6 +91,9 @@ static NSMutableDictionary *imgs;
 
 + (NSString *) getImgUrl:(NSString*)imgName
 {
+    if([imgName length]<5)
+        imgName=@"default.png";
+//        return @"";
     if([[imgName substringWithRange:NSMakeRange(0,5)] isEqualToString:@"http:"])
         return imgName;
     
