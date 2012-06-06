@@ -42,6 +42,7 @@
 {
     [super viewDidLoad];
     conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
+    conversationView.exfee_id=[cross.exfee.exfee_id intValue];
     [conversationView.view setHidden:YES];
     [self.view addSubview:conversationView.view];
 
@@ -79,8 +80,8 @@
     });
     dispatch_release(loaddata);
  */
-    
-    [APIConversation LoadConversationWithExfeeId:[cross.exfee.exfee_id intValue] updatedtime:@"" delegate:self];
+    [conversationView refreshConversation];
+    //[APIConversation LoadConversationWithExfeeId:[cross.exfee.exfee_id intValue] updatedtime:@"" delegate:self];
     //LoadConversationWithExfeeId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate{
     
     // Do any additional setup after loading the view from its nib.
@@ -291,7 +292,7 @@
     if(conversationView.view.isHidden==YES)
     {
         [conversationView.view setHidden:NO];
-
+        [conversationView refreshConversation];
         [UIView transitionFromView:self.view toView:conversationView.view duration:1 options:UIViewAnimationOptionTransitionFlipFromLeft completion:nil];
     }
     else {
@@ -406,36 +407,6 @@
     }
     NSMutableDictionary *r_rsvp=[NSMutableDictionary dictionaryWithDictionary:rsvp];
     [r_rsvp setObject:[NSNumber numberWithInt:confirmed_num] forKey:@"confirmed_num"];
-
-//    NSString *rsvp_status=[rsvp objectForKey:@"rsvp_status"];
-//    NSString *state_str=@"";
-//    NSNumber *state;
-//    if([rsvp_status isEqualToString:@"ACCEPTED"])
-//    {
-//       state_str=@"Accepted";
-//        state=[NSNumber numberWithInt:1];
-//    }
-//    else if([rsvp_status isEqualToString:@"DECLINED"])
-//    {
-//        state_str=@"Declined";
-//        state=[NSNumber numberWithInt:2];
-//    }
-//    else if([rsvp_status isEqualToString:@"INTERESTED"])
-//    {
-//        state_str=@"Interested";
-//        state=[NSNumber numberWithInt:3];
-//    }
-//    rsvp 
-       
-//    NSMutableDictionary* invitation=[[arg objectForKey:@"invitations"] objectAtIndex:0];
-//    if([[invitation objectForKey:@"state"] intValue]==1)
-//        [invitation setObject:@"Accepted" forKey:@"state_str"];
-//    else if([[invitation objectForKey:@"state"] intValue]==2)
-//        [invitation setObject:@"Declined" forKey:@"state_str"];
-//    else if([[invitation objectForKey:@"state"] intValue]==3)
-//        [invitation setObject:@"Interested" forKey:@"state_str"];
-//    [invitation setObject:[arg objectForKey:@"confirmed_num"] forKey:@"confirmed_num"];
-//    NSString *result=[[[arg objectForKey:@"invitations"] objectAtIndex:0] JSONRepresentation] ;
     NSString *result=[r_rsvp JSONString];
     [webview stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"NativeBridge.resultForCallback(%d,%@);",callbackId,result]];
     

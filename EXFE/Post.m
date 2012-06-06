@@ -2,7 +2,7 @@
 //  Post.m
 //  EXFE
 //
-//  Created by ju huo on 5/25/12.
+//  Created by ju huo on 6/6/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -12,11 +12,12 @@
 
 @implementation Post
 
-@dynamic post_id;
 @dynamic content;
 @dynamic created_at;
+@dynamic post_id;
 @dynamic postable_id;
 @dynamic postable_type;
+@dynamic updated_at;
 @dynamic by_identity;
 
 @end

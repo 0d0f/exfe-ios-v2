@@ -72,6 +72,7 @@
         <attribute name="post_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="postable_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="postable_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
     </entity>
     <entity name="Rsvp" representedClassName="Rsvp" syncable="YES">

@@ -39,7 +39,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];    
-
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
     NSString *documentsDirectory = [paths objectAtIndex:0]; 
@@ -51,11 +50,7 @@
     if(login==YES)
     {
         [self refreshCrosses];
-
     }
-
-
-
 }
 
 - (void)viewDidUnload
@@ -71,6 +66,20 @@
     [super dealloc];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"appear");
+    
+    [super viewWillAppear:animated];
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    BOOL login=[app Checklogin];
+    if(login==YES)
+    {
+        [self refreshCrosses];
+    }
+
+
+}
 -(void) refreshCrosses{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 
@@ -82,15 +91,11 @@
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
 //        2012-04-24 07:06:13 +0000
-        //Optionally for time zone converstions
         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         updated_at = [formatter stringFromDate:date_updated_at];
         [formatter release];
     }
 
-//    if(updated_at==nil){
-//        updated_at=@"";
-//    }
     [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self];
 }
 

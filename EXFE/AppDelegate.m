@@ -34,7 +34,7 @@
     NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
     NSString *databaseName = @"CoreData.sqlite";
 #endif
-    RKLogConfigureByName("RestKit/*", RKLogLevelTrace);
+//    RKLogConfigureByName("RestKit/*", RKLogLevelTrace);
 //    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURLString:API_V2_ROOT];
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
 

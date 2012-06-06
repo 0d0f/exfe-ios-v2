@@ -9,6 +9,7 @@
 #import "APIConversation.h"
 #import "Post.h"
 #import "Mapping.h"
+#import "Util.h"
 
 @implementation APIConversation
 +(void) MappingConversation{
@@ -20,6 +21,7 @@
     [postMapping mapKeyPathsToAttributes:@"id", @"post_id",
      @"content", @"content", 
      @"created_at", @"created_at",
+     @"updated_at", @"updated_at",
      @"postable_id", @"postable_id", 
      @"postable_type", @"postable_type", 
      nil];
@@ -33,10 +35,16 @@
 +(void) LoadConversationWithExfeeId:(int)exfee_id updatedtime:(NSString*)updatedtime delegate:(id)delegate{
 
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
-//        updatedtime=[Util encodeToPercentEscapeString:updatedtime];
-//    updatedtime,
-    NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u?token=%@",exfee_id,app.accesstoken];
+    
+    if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
+        updatedtime=[Util encodeToPercentEscapeString:updatedtime];
+    
+    NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u?updated_at=%@&token=%@",exfee_id, updatedtime,app.accesstoken];
+    
+//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/crosses?updated_at=%@&token=%@",app.userid,updatedtime,app.accesstoken];
+//    RKObjectManager* manager =[RKObjectManager sharedManager];
+//    [manager loadObjectsAtResourcePath:endpoint delegate:delegate];
+    
 //    users/131/crosses?updated_at=2012-05-20%2009:40:26&token=98eddc9c0afc48087f722ca1419c8650";   
     RKObjectManager* manager =[RKObjectManager sharedManager];
     [manager loadObjectsAtResourcePath:endpoint delegate:delegate];

@@ -10,7 +10,12 @@
 
 @interface ConversationViewController : UIViewController{
     IBOutlet UITableView* _tableView;
+    int exfee_id;
     NSArray* _posts;
 }
+
+@property int exfee_id;
+
+-(void) refreshConversation;
 - (void)loadObjectsFromDataStore;
 @end

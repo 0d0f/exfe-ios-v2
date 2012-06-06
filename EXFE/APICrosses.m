@@ -21,22 +21,6 @@
 {    
     RKObjectManager* manager =[RKObjectManager sharedManager];
     RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
-//    RKManagedObjectMapping* identityMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Identity" inManagedObjectStore:manager.objectStore];
-//    
-//    identityMapping.primaryKeyAttribute=@"identity_id";
-//    [identityMapping mapKeyPathsToAttributes:@"id", @"identity_id",
-//     @"name", @"name", 
-//     @"nickname", @"nickname",
-//     @"provider", @"provider", 
-//     @"external_id", @"external_id", 
-//     @"external_username", @"external_username", 
-//     @"connected_user_id", @"connected_user_id",
-//     @"bio", @"bio", 
-//     @"avatar_filename", @"avatar_filename",
-//     @"avatar_updated_at", @"avatar_updated_at", 
-//     @"created_at", @"created_at", 
-//     @"updated_at", @"updated_at", 
-//     nil];
     
     RKManagedObjectMapping* placeMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Place" inManagedObjectStore:manager.objectStore];
     placeMapping.primaryKeyAttribute=@"place_id";
@@ -125,7 +109,6 @@
         updatedtime=[Util encodeToPercentEscapeString:updatedtime];
 
     NSString *endpoint = [NSString stringWithFormat:@"/users/%u/crosses?updated_at=%@&token=%@",app.userid,updatedtime,app.accesstoken];
-//    NSString *endpoint = @"/users/131/crosses?updated_at=2012-05-20%2009:40:26&token=98eddc9c0afc48087f722ca1419c8650";   
     RKObjectManager* manager =[RKObjectManager sharedManager];
     [manager loadObjectsAtResourcePath:endpoint delegate:delegate];
 
