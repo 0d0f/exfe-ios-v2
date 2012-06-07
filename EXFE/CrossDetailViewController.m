@@ -20,6 +20,10 @@
 #import "Util.h"
 #import "JSONKit.h"
 
+#define kStatusBarHeight 20
+#define kDefaultToolbarHeight 40
+#define kKeyboardHeightPortrait 216
+#define kKeyboardHeightLandscape 140
 
 @interface CrossDetailViewController ()
 
@@ -28,6 +32,7 @@
 @implementation CrossDetailViewController
 @synthesize interceptLinks;
 @synthesize cross;
+@synthesize inputToolbar;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -37,15 +42,43 @@
     }
     return self;
 }
-
+//- (void)loadView
+//{
+//    [super loadView];
+//    
+//    //keyboardIsVisible = NO;
+//    
+//    /* Calculate screen size */
+//    CGRect screenFrame = [[UIScreen mainScreen] applicationFrame];
+//    self.view = [[UIView alloc] initWithFrame:screenFrame];
+//    self.view.backgroundColor = [UIColor whiteColor];
+//    /* Create toolbar */
+//    self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight)];
+//    [self.view addSubview:self.inputToolbar];
+//    inputToolbar.delegate = self;
+//}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
     conversationView.exfee_id=[cross.exfee.exfee_id intValue];
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSSet *invitations=cross.exfee.invitations;
+    if(invitations !=nil&&[invitations count]>0)
+    {
+        for(Invitation* invitation in invitations)
+            if([invitation.identity.connected_user_id intValue]==app.userid)
+                conversationView.identity=invitation.identity;  
+    }
+    
     [conversationView.view setHidden:YES];
     [self.view addSubview:conversationView.view];
-
+    
+    
+//    CGRect crect=conversationView.view.frame;
+//    conversationView.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
+//    CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight);
+    
 //    Exfee *exfee=cross.exfee;
 //    NSLog(@"%@",exfee.exfee_id);
 //    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -67,24 +100,9 @@
     NSString *documentsDirectory = [paths objectAtIndex:0]; 
     NSURL *baseURL = [NSURL fileURLWithPath:documentsDirectory];
     NSString *html=[self GenerateHtmlWithEvent];
-    NSLog(@"%@",html);
     [webview loadHTMLString:html baseURL:baseURL];
-
-/*
-    dispatch_queue_t loaddata= dispatch_queue_create("loaddata", NULL);
-    dispatch_async(loaddata, ^{
-        NSString *html=[self GenerateHtmlWithEvent];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [webview loadHTMLString:html baseURL:baseURL];
-        });
-    });
-    dispatch_release(loaddata);
- */
     [conversationView refreshConversation];
-    //[APIConversation LoadConversationWithExfeeId:[cross.exfee.exfee_id intValue] updatedtime:@"" delegate:self];
-    //LoadConversationWithExfeeId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate{
-    
-    // Do any additional setup after loading the view from its nib.
+
 }
 
 - (void)viewDidUnload
@@ -215,9 +233,6 @@
         html=[html stringByReplacingOccurrencesOfString:@"{#place_line2#}" withString:place_line2];
     }
     html=[html stringByReplacingOccurrencesOfString:@"{#title#}" withString:cross.title];
-//    if(eventobj.background!=nil && ![eventobj.background isEqualToString:@""])
-//        html=[html stringByReplacingOccurrencesOfString:@"{#background_img#}" withString:
-//    }
     
     NSString *exfeelist=@"";
     NSSet *invitations=cross.exfee.invitations;
@@ -226,36 +241,24 @@
     {
         NSEnumerator *enumerator=[invitations objectEnumerator];
         Invitation *invitation=nil;
-//        for (Invitation *invitation in invitations) {
-//            if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
-//                confirmed_num++;
-//            
-//        }
 
         while (invitation = [enumerator nextObject])
         {
             if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
                 confirmed_num++;
-//            {
-//                NSLog(@"invitation: %@",invitation.rsvp_status);
-//            }
-//            NSLog(@"%@",invitation.identity.avatar_filename);
-            NSString 	*imgurl = [ImgCache getImgUrl:invitation.identity.avatar_filename];
+
+            NSString *imgurl = [ImgCache getImgUrl:invitation.identity.avatar_filename];
             NSString *host=@"";
             NSString *withnum=@"";
             if((BOOL)invitation.host==YES)
                 host=@"<span class='rt'>H</span>";
-//            if(invitation.withnum>0)
-//                withnum=[NSString stringWithFormat:@"<span class='lt'>%d</span>",invitation.withnum];
+
             if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
                 exfeelist=[exfeelist stringByAppendingFormat:@"<li id='avatar_%d'><img alt='' width='40px' height='40px' src='%@' />%@%@</li>",[invitation.identity.identity_id intValue],imgurl,host,withnum];
             else
                 exfeelist=[exfeelist stringByAppendingFormat:@"<li id='avatar_%d' class='opacity'><img alt='' width='40px' height='40px' src='%@' />%@%@</li>",[invitation.identity.identity_id intValue],imgurl,host,withnum];
             if([invitation.identity.connected_user_id intValue]==app.userid)
             {
-                
-                
-                
                 if([invitation.rsvp_status isEqualToString:@"ACCEPTED"] || [invitation.rsvp_status isEqualToString:@"DECLINED"] || [invitation.rsvp_status isEqualToString:@"INTERESTED"])
                 {
                     html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_btn_show#}" withString:@"style='display:none'"];
@@ -285,9 +288,6 @@
 
 - (void)toconversation
 {
-//    if(conversationView==nil)
-//    {
-//    }
     
     if(conversationView.view.isHidden==YES)
     {
@@ -414,7 +414,6 @@
 
 - (void)handleCall:(NSString*)functionName callbackId:(int)callbackId args:(NSArray*)args
 {
-    NSLog(@"%@",args);
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     if ([functionName isEqualToString:@"rsvp"]) {

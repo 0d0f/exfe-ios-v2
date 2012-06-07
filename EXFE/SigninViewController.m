@@ -32,7 +32,7 @@
 #pragma Mark - RKRequestDelegate
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
-
+    
     if ([request isGET]) {
         if ([response isOK]) {
             NSLog(@"Data returned: %@", [response bodyAsString]);

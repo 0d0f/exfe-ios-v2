@@ -9,6 +9,10 @@
 #import "ConversationViewController.h"
 #import "Post.h"
 #import "APIConversation.h"
+#import "PostCell.h"
+#import "ImgCache.h"
+#import "Util.h"
+#import "JSONKit.h"
 
 @interface ConversationViewController ()
 
@@ -16,6 +20,8 @@
 
 @implementation ConversationViewController
 @synthesize exfee_id;
+@synthesize identity;
+@synthesize inputToolbar;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -30,6 +36,35 @@
 {
     [super viewDidLoad];
     [self refreshConversation];
+//    [self addPost:@"test"];
+
+    /* Calculate screen size */
+//    CGRect screenFrame = [[UIScreen mainScreen] applicationFrame];
+//    self.view = [[UIView alloc] initWithFrame:screenFrame];
+//    self.view.backgroundColor = [UIColor whiteColor];
+    /* Create toolbar */
+//    self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight)];
+//    [self.view addSubview:self.inputToolbar];
+//    inputToolbar.delegate = self;
+    
+    CGRect screenFrame = [self.view frame];
+    CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight-kNavBarHeight, screenFrame.size.width, kDefaultToolbarHeight);
+    
+    inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
+    inputToolbar.delegate = self;
+    [self.view addSubview:inputToolbar];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+#ifdef __IPHONE_5_0
+    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (version >= 5.0) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    }
+#endif    
+
+
+//    NSLog(@"%@",identity);
     //[self loadObjectsFromDataStore];
     // Do any additional setup after loading the view from its nib.
 }
@@ -37,6 +72,17 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    
+#ifdef __IPHONE_5_0
+    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (version >= 5.0) {
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+    }
+#endif
+
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
@@ -45,6 +91,56 @@
     //	[_tableView release];
 	[_posts release];
     [super dealloc];
+}
+//- (void)viewWillAppear:(BOOL)animated 
+//{
+//	[super viewWillAppear:animated];
+//    
+//}
+//
+//- (void)viewWillDisappear:(BOOL)animated 
+//{
+//	[super viewWillDisappear:animated];
+//	/* No longer listen for keyboard */
+//}
+- (void)keyboardWillShow:(NSNotification *)notification 
+{
+    CGRect keyboardEndFrame;
+    
+    [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+    
+    /* Move the toolbar to above the keyboard */
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.1];
+	CGRect frame = self.inputToolbar.frame;
+    
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height;
+        
+    }
+    else {
+        frame.origin.y = self.view.frame.size.width - frame.size.height - keyboardEndFrame.size.height - kStatusBarHeight;
+    }
+	self.inputToolbar.frame = frame;
+	[UIView commitAnimations];
+//    keyboardIsVisible = YES;
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification 
+{
+    /* Move the toolbar back to bottom of the screen */
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.1];
+	CGRect frame = self.inputToolbar.frame;
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        frame.origin.y = self.view.frame.size.height - frame.size.height;
+    }
+    else {
+        frame.origin.y = self.view.frame.size.width - frame.size.height;
+    }
+	self.inputToolbar.frame = frame;
+	[UIView commitAnimations];
+//    keyboardIsVisible = NO;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -55,7 +151,7 @@
     if(_posts==nil)
         [self loadObjectsFromDataStore];
     
-    Post *post=[_posts lastObject];
+    Post *post=[_posts objectAtIndex:0];
     NSString *updated_at=@"";
     if(post)
     {
@@ -100,31 +196,115 @@
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
 	return [_posts count];
 }
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 61;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSString* reuseIdentifier = @"Conversation Cell";
-	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-	if (nil == cell) {
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
-		cell.textLabel.font = [UIFont systemFontOfSize:14];
-		cell.textLabel.numberOfLines = 0;
+	NSString* reuseIdentifier = @"Post Cell";
 
+//    Cross *cross=[_crosses objectAtIndex:indexPath.row];
+//    if(cross.updated!=nil)
+//    {
+//        id updated=cross.updated;
+//        if([updated isKindOfClass:[NSDictionary class]])
+//            cell.updated=(NSDictionary*)updated;
+//    }
+    
+//    cell.title=cross.title;
+
+    PostCell *cell =[tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+	if (nil == cell) {
+        cell = [[[PostCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
 	}
+
+    
+//	if (nil == cell) {
+//		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
+//		cell.textLabel.font = [UIFont systemFontOfSize:14];
+//		cell.textLabel.numberOfLines = 0;
+//
+//	}
+    
+    
+    
     Post *post=[_posts objectAtIndex:indexPath.row];
     NSLog(@"%@",post);
-	cell.textLabel.text = post.content;
+    cell.content=post.content;
+    if(post.by_identity.avatar_filename!=nil) {
+        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+        dispatch_async(imgQueue, ^{
+            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:post.by_identity.avatar_filename];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+                    cell.avatar=avatar;
+                }
+            });
+        });
+        dispatch_release(imgQueue);        
+    }    
+//    + (NSString *) formattedLongDateRelativeToNow:(NSString*)datestr
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+    NSString *dateString = [dateFormatter stringFromDate:post.created_at];
+    [dateFormatter release];
+    cell.time=[Util formattedLongDateRelativeToNow:dateString];
+//	cell.textLabel.text = post.content;
 	return cell;
 }
+- (void) addPost:(NSString*)content{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:identity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
     
+    RKParams* postParams = [RKParams params];
+    [postParams setValue:[postdict JSONString] forParam:@"post"];
+    RKClient *client = [RKClient sharedClient];
+    NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u/add?token=%@",exfee_id,app.accesstoken];
+    [client post:endpoint usingBlock:^(RKRequest *request){
+        request.method=RKRequestMethodPOST;
+        request.params=postParams;
+        request.onDidLoadResponse=^(RKResponse *response){
+            if (response.statusCode == 200) {
+                NSLog(@"%@",response.bodyAsString);
+                [self refreshConversation];
+                
+//                
+//                NSDictionary *body=[response.body objectFromJSONData];
+//                if([body isKindOfClass:[NSDictionary class]]) {
+//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                    if(code)
+//                        if([code intValue]==200) {
+//                            
+//                            [self returnResult:callbackId args:[[body objectForKey:@"response"] objectForKey:@"rsvp"]];
+//                        }
+//                    
+//                }
+//                //We got an error!
+            }else {
+                NSLog(@"%@",response);
+                //Check Response Body to get Data!
+            }
+        };
+        request.delegate=self;
+    }];
+    
+}
+-(void)inputButtonPressed:(NSString *)inputText{
+    [self addPost:inputText];
+}
 #pragma Mark - RKRequestDelegate
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
     NSLog(@"success:%@",objects);
-    if([objects count]>0)
-    {
-//        Post *post=[objects lastObject];
-//        [[NSUserDefaults standardUserDefaults] setObject:post.updated_at forKey:@"conversation_updated_at"];
-//        [[NSUserDefaults standardUserDefaults] synchronize];
-        [self loadObjectsFromDataStore];
+
+    if(objectLoader.isGET) {
+        if([objects count]>0)
+        {
+            //        Post *post=[objects lastObject];
+            //        [[NSUserDefaults standardUserDefaults] setObject:post.updated_at forKey:@"conversation_updated_at"];
+            //        [[NSUserDefaults standardUserDefaults] synchronize];
+            [self loadObjectsFromDataStore];
+        }
     }
 }
 

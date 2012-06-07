@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		780D27A4157F368900402460 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A3157F368900402460 /* Post.m */; };
+		780D27A7157F4AB100402460 /* PostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A6157F4AB100402460 /* PostCell.m */; };
 		782B3C9C156A519D00721150 /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3C9B156A519D00721150 /* Exfee.m */; };
 		782B3CA5156A604A00721150 /* EFTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CA4156A604A00721150 /* EFTime.m */; };
 		782B3CAB156A604C00721150 /* CrossTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CAA156A604C00721150 /* CrossTime.m */; };
@@ -30,6 +31,15 @@
 		7840918115732CA5006DF115 /* chat@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917D15732CA5006DF115 /* chat@2x~ipad.png */; };
 		7840918215732CA5006DF115 /* chat~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917E15732CA5006DF115 /* chat~ipad.png */; };
 		785D8136156A1AE400FC0984 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 785D8135156A1AE400FC0984 /* Place.m */; };
+		785FD5871580797F0056590D /* UIExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 785FD5821580797F0056590D /* UIExpandingTextView.m */; };
+		785FD5881580797F0056590D /* UIExpandingTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 785FD5841580797F0056590D /* UIExpandingTextViewInternal.m */; };
+		785FD5891580797F0056590D /* UIInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 785FD5861580797F0056590D /* UIInputToolbar.m */; };
+		785FD590158079970056590D /* buttonbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58A158079970056590D /* buttonbg@2x~iphone.png */; };
+		785FD591158079970056590D /* buttonbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58B158079970056590D /* buttonbg~iphone.png */; };
+		785FD592158079970056590D /* textbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58C158079970056590D /* textbg@2x~iphone.png */; };
+		785FD593158079970056590D /* textbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58D158079970056590D /* textbg~iphone.png */; };
+		785FD594158079970056590D /* toolbarbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58E158079970056590D /* toolbarbg@2x~iphone.png */; };
+		785FD595158079970056590D /* toolbarbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58F158079970056590D /* toolbarbg~iphone.png */; };
 		78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78615B3B15788BCD003CF68A /* ABTableViewCell.m */; };
 		78615B401578CC22003CF68A /* ConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7840917815732A91006DF115 /* ConversationViewController.xib */; };
 		7876512D1575F23100E3DFD9 /* x.html in Resources */ = {isa = PBXBuildFile; fileRef = 7876512B1575F23100E3DFD9 /* x.html */; };
@@ -109,6 +119,8 @@
 /* Begin PBXFileReference section */
 		780D27A2157F368800402460 /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
 		780D27A3157F368900402460 /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
+		780D27A5157F4AB100402460 /* PostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCell.h; sourceTree = "<group>"; };
+		780D27A6157F4AB100402460 /* PostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostCell.m; sourceTree = "<group>"; };
 		782B3C9A156A519D00721150 /* Exfee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exfee.h; sourceTree = "<group>"; };
 		782B3C9B156A519D00721150 /* Exfee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Exfee.m; sourceTree = "<group>"; };
 		782B3CA3156A604A00721150 /* EFTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTime.h; sourceTree = "<group>"; };
@@ -143,6 +155,18 @@
 		7840917E15732CA5006DF115 /* chat~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~ipad.png"; sourceTree = "<group>"; };
 		785D8134156A1AE400FC0984 /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
 		785D8135156A1AE400FC0984 /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
+		785FD5811580797F0056590D /* UIExpandingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIExpandingTextView.h; sourceTree = "<group>"; };
+		785FD5821580797F0056590D /* UIExpandingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIExpandingTextView.m; sourceTree = "<group>"; };
+		785FD5831580797F0056590D /* UIExpandingTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIExpandingTextViewInternal.h; sourceTree = "<group>"; };
+		785FD5841580797F0056590D /* UIExpandingTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIExpandingTextViewInternal.m; sourceTree = "<group>"; };
+		785FD5851580797F0056590D /* UIInputToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInputToolbar.h; sourceTree = "<group>"; };
+		785FD5861580797F0056590D /* UIInputToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInputToolbar.m; sourceTree = "<group>"; };
+		785FD58A158079970056590D /* buttonbg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buttonbg@2x~iphone.png"; sourceTree = "<group>"; };
+		785FD58B158079970056590D /* buttonbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buttonbg~iphone.png"; sourceTree = "<group>"; };
+		785FD58C158079970056590D /* textbg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbg@2x~iphone.png"; sourceTree = "<group>"; };
+		785FD58D158079970056590D /* textbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbg~iphone.png"; sourceTree = "<group>"; };
+		785FD58E158079970056590D /* toolbarbg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbarbg@2x~iphone.png"; sourceTree = "<group>"; };
+		785FD58F158079970056590D /* toolbarbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbarbg~iphone.png"; sourceTree = "<group>"; };
 		78615B3A15788BCC003CF68A /* ABTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABTableViewCell.h; sourceTree = "<group>"; };
 		78615B3B15788BCD003CF68A /* ABTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABTableViewCell.m; sourceTree = "<group>"; };
 		7876512B1575F23100E3DFD9 /* x.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = x.html; sourceTree = "<group>"; };
@@ -235,6 +259,12 @@
 				782B3CCD156B948600721150 /* twitter@2x~iphone.png */,
 				782B3CCE156B948600721150 /* twitter~ipad.png */,
 				782B3CCF156B948600721150 /* twitter~iphone.png */,
+				785FD58A158079970056590D /* buttonbg@2x~iphone.png */,
+				785FD58B158079970056590D /* buttonbg~iphone.png */,
+				785FD58C158079970056590D /* textbg@2x~iphone.png */,
+				785FD58D158079970056590D /* textbg~iphone.png */,
+				785FD58E158079970056590D /* toolbarbg@2x~iphone.png */,
+				785FD58F158079970056590D /* toolbarbg~iphone.png */,
 			);
 			name = Resource;
 			path = ..;
@@ -256,6 +286,27 @@
 			name = Cross;
 			sourceTree = "<group>";
 		};
+		785FD54E158065610056590D /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				785FD54F158065820056590D /* UIInputToolbar */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+		785FD54F158065820056590D /* UIInputToolbar */ = {
+			isa = PBXGroup;
+			children = (
+				785FD5811580797F0056590D /* UIExpandingTextView.h */,
+				785FD5821580797F0056590D /* UIExpandingTextView.m */,
+				785FD5831580797F0056590D /* UIExpandingTextViewInternal.h */,
+				785FD5841580797F0056590D /* UIExpandingTextViewInternal.m */,
+				785FD5851580797F0056590D /* UIInputToolbar.h */,
+				785FD5861580797F0056590D /* UIInputToolbar.m */,
+			);
+			name = UIInputToolbar;
+			sourceTree = "<group>";
+		};
 		788312A515738D2600D67103 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -263,6 +314,8 @@
 				78615B3B15788BCD003CF68A /* ABTableViewCell.m */,
 				788312A615738D6100D67103 /* CrossCell.h */,
 				788312A715738D6100D67103 /* CrossCell.m */,
+				780D27A5157F4AB100402460 /* PostCell.h */,
+				780D27A6157F4AB100402460 /* PostCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -305,11 +358,13 @@
 		78A98E911560F832009E0806 /* EXFE */ = {
 			isa = PBXGroup;
 			children = (
+				785FD54E158065610056590D /* lib */,
 				78E8873E156244BD0026D197 /* UI */,
 				78A98F00156117BE009E0806 /* API */,
 				78A98EFC1561169E009E0806 /* Class */,
 				78A98E9A1560F832009E0806 /* AppDelegate.h */,
 				78A98E9B1560F832009E0806 /* AppDelegate.m */,
+				78E837F7156658A300763A60 /* Model.xcdatamodeld */,
 				7840916A156F6AA4006DF115 /* Util.h */,
 				7840916B156F6AA5006DF115 /* Util.m */,
 				788312A91574A5DE00D67103 /* ImgCache.h */,
@@ -352,7 +407,6 @@
 				782B3CA4156A604A00721150 /* EFTime.m */,
 				78920EBA157CB0E1004F3901 /* Rsvp.h */,
 				78920EBB157CB0E1004F3901 /* Rsvp.m */,
-				78E837F7156658A300763A60 /* Model.xcdatamodeld */,
 				780D27A2157F368800402460 /* Post.h */,
 				780D27A3157F368900402460 /* Post.m */,
 				78920EB4157C7B84004F3901 /* Cross.h */,
@@ -505,6 +559,12 @@
 				7876512D1575F23100E3DFD9 /* x.html in Resources */,
 				7876512E1575F23100E3DFD9 /* x_background.png in Resources */,
 				78615B401578CC22003CF68A /* ConversationViewController.xib in Resources */,
+				785FD590158079970056590D /* buttonbg@2x~iphone.png in Resources */,
+				785FD591158079970056590D /* buttonbg~iphone.png in Resources */,
+				785FD592158079970056590D /* textbg@2x~iphone.png in Resources */,
+				785FD593158079970056590D /* textbg~iphone.png in Resources */,
+				785FD594158079970056590D /* toolbarbg@2x~iphone.png in Resources */,
+				785FD595158079970056590D /* toolbarbg~iphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -540,6 +600,10 @@
 				78920EB6157C7B84004F3901 /* Cross.m in Sources */,
 				78920EBC157CB0E1004F3901 /* Rsvp.m in Sources */,
 				780D27A4157F368900402460 /* Post.m in Sources */,
+				780D27A7157F4AB100402460 /* PostCell.m in Sources */,
+				785FD5871580797F0056590D /* UIExpandingTextView.m in Sources */,
+				785FD5881580797F0056590D /* UIExpandingTextViewInternal.m in Sources */,
+				785FD5891580797F0056590D /* UIInputToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

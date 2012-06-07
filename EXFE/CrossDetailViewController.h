@@ -16,9 +16,12 @@
     BOOL interceptLinks;
     IBOutlet UIWebView *webview;
     ConversationViewController *conversationView;
+    UIInputToolbar *inputToolbar;
+
 }
 @property (retain,nonatomic) Cross* cross;
 @property BOOL interceptLinks;
+@property (nonatomic, retain) UIInputToolbar *inputToolbar;
 - (NSString*)GenerateHtmlWithEvent;
 - (void)toconversation;
 @end

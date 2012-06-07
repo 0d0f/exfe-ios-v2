@@ -39,12 +39,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];    
-    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
     NSString *documentsDirectory = [paths objectAtIndex:0]; 
     NSLog(@"doc path:%@",documentsDirectory);
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
     [self loadObjectsFromDataStore];
     BOOL login=[app Checklogin];
     if(login==YES)
@@ -148,8 +146,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSString* reuseIdentifier = @"cross Cell";
-//	
-//    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     CrossCell *cell =[tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
 	if (nil == cell) {
         cell = [[[CrossCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
@@ -174,7 +170,6 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
                     cell.avatar=avatar;
-//                    [cell setNeedsDisplay];
                 }
             });
         });
@@ -200,8 +195,7 @@
     detailViewController.cross=cross;
     [self.navigationController pushViewController:detailViewController animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    
+
 }
 
 
