@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "APICrosses.h"
 #import "APIConversation.h"
+#import "APIProfile.h"
 #import "CrossesViewController.h"
 #import "LandingViewController.h"
 
@@ -42,6 +43,7 @@
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
     [APICrosses MappingCross];
     [APIConversation MappingConversation];
+    [APIProfile MappingUsers];
 
     crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
     

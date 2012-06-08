@@ -41,11 +41,6 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u?updated_at=%@&token=%@",exfee_id, updatedtime,app.accesstoken];
     
-//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/crosses?updated_at=%@&token=%@",app.userid,updatedtime,app.accesstoken];
-//    RKObjectManager* manager =[RKObjectManager sharedManager];
-//    [manager loadObjectsAtResourcePath:endpoint delegate:delegate];
-    
-//    users/131/crosses?updated_at=2012-05-20%2009:40:26&token=98eddc9c0afc48087f722ca1419c8650";   
     RKObjectManager* manager =[RKObjectManager sharedManager];
     [manager loadObjectsAtResourcePath:endpoint delegate:delegate];
 

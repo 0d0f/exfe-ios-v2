@@ -98,6 +98,25 @@
     return self;
 }
 
+- (void)hidekeyboard
+{
+    /* Remove the keyboard and clear the text */
+    [self.textView resignFirstResponder];
+    
+    [self.textView clearText];
+    
+}
+- (void)setInputEnabled:(BOOL)enabled
+{
+    [self.textView setUserInteractionEnabled:enabled];
+    [inputButton setEnabled:enabled];
+    if(enabled==TRUE)
+        [self.textView setTextColor:[UIColor blackColor]];
+    else
+        [self.textView setTextColor:[UIColor grayColor]];
+    
+}
+
 - (void)drawRect:(CGRect)rect 
 {
     /* Draw custon toolbar background */

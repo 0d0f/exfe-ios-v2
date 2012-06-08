@@ -8,6 +8,7 @@
 
 #import "CrossesViewController.h"
 #import "CrossDetailViewController.h"
+#import "ProfileViewController.h"
 #import "APICrosses.h"
 #import "Cross.h"
 #import "Place.h"
@@ -48,9 +49,20 @@
     if(login==YES)
     {
         [self refreshCrosses];
+        [self initUI];
     }
 }
-
+- (void)initUI{
+    UIImage *settingbtnimg = [UIImage imageNamed:@"navbar_setting.png"];   
+    UIButton *settingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
+    settingButton.frame = CGRectMake(0, 0, settingbtnimg.size.width, settingbtnimg.size.height);
+    [settingButton addTarget:self action:@selector(ShowProfileView) forControlEvents:UIControlEventTouchUpInside];
+    barButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
+    
+    [self.navigationController navigationBar].topItem.rightBarButtonItem=barButtonItem;      
+    
+}
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -75,9 +87,14 @@
     {
         [self refreshCrosses];
     }
-
-
 }
+
+- (void)ShowProfileView{
+    ProfileViewController *profileViewController=[[ProfileViewController alloc]initWithNibName:@"ProfileViewController" bundle:nil];
+    [self.navigationController pushViewController:profileViewController animated:YES];
+    
+}
+
 -(void) refreshCrosses{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 

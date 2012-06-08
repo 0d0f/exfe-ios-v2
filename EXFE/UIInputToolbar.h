@@ -38,6 +38,8 @@
     NSObject <UIInputToolbarDelegate> *delegate;
 }
 
+- (void)hidekeyboard;
+- (void)setInputEnabled:(BOOL)enabled;
 - (void)drawRect:(CGRect)rect;
 
 @property (nonatomic, retain) UIExpandingTextView *textView;

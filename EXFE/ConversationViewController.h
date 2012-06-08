@@ -10,6 +10,7 @@
 #import "Identity.h"
 #import "RestKit.h"
 #import "UIInputToolbar.h"
+#import "ConversationTableView.h"
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20
@@ -18,7 +19,7 @@
 #define kKeyboardHeightLandscape 140
 
 @interface ConversationViewController : UIViewController  <RKRequestDelegate,UIInputToolbarDelegate>{
-    IBOutlet UITableView* _tableView;
+    IBOutlet ConversationTableView* _tableView;
     int exfee_id;
     UIInputToolbar *inputToolbar;
     Identity *identity;

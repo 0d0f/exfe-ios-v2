@@ -150,12 +150,11 @@
 -(void) refreshConversation{
     if(_posts==nil)
         [self loadObjectsFromDataStore];
-    
-    Post *post=[_posts objectAtIndex:0];
     NSString *updated_at=@"";
-    if(post)
+    if(_posts!=nil && [_posts count]>0)
     {
-        if(post.updated_at!=nil)
+        Post *post=[_posts objectAtIndex:0];
+        if(post && post.updated_at!=nil)
         {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
@@ -165,18 +164,12 @@
             [formatter release];
             NSLog(@"%@",updated_at);
         }
-
-        
-//        NSString *updated_at=;
     }
-    // [_posts lastObject]
-    
     [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at delegate:self];
-
-//    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self];
-   
 }
-
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    NSLog (@"conversation touch began");
+}
 - (void)loadObjectsFromDataStore {
 	[_posts release];
 
@@ -190,9 +183,13 @@
     
 	_posts = [[Post objectsWithFetchRequest:request] retain];
     [_tableView reloadData];
+    [inputToolbar setInputEnabled:YES];
+    [inputToolbar hidekeyboard];
+
 }
 
 #pragma mark UITableViewDataSource methods
+
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
 	return [_posts count];
 }
@@ -217,6 +214,7 @@
     PostCell *cell =[tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
 	if (nil == cell) {
         cell = [[[PostCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
 
     
@@ -253,6 +251,13 @@
 //	cell.textLabel.text = post.content;
 	return cell;
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+//    [inputToolbar setInputEnabled:NO];
+    [inputToolbar hidekeyboard];
+//    NSLog(@"111");
+}
 - (void) addPost:(NSString*)content{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:identity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
@@ -261,6 +266,8 @@
     [postParams setValue:[postdict JSONString] forParam:@"post"];
     RKClient *client = [RKClient sharedClient];
     NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u/add?token=%@",exfee_id,app.accesstoken];
+    [inputToolbar setInputEnabled:NO];
+
     [client post:endpoint usingBlock:^(RKRequest *request){
         request.method=RKRequestMethodPOST;
         request.params=postParams;

@@ -11,9 +11,12 @@
 
 @interface CrossesViewController : UIViewController<RKRequestDelegate,RKObjectLoaderDelegate>{
     IBOutlet UITableView* _tableView;
+    UIBarButtonItem *barButtonItem;
     NSArray* _crosses;
 }
    
 -(void) refreshCrosses;
 - (void)loadObjectsFromDataStore;
+- (void)initUI;
+- (void)ShowProfileView;
 @end
