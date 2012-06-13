@@ -2,7 +2,7 @@
 //  Cross.h
 //  EXFE
 //
-//  Created by ju huo on 6/4/12.
+//  Created by ju huo on 6/11/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSString * cross_description;
 @property (nonatomic, retain) NSNumber * cross_id;
 @property (nonatomic, retain) NSString * crossid_base62;
+@property (nonatomic, retain) NSDate * read_at;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) id updated;
 @property (nonatomic, retain) NSDate * updated_at;

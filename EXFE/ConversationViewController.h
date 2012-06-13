@@ -11,6 +11,7 @@
 #import "RestKit.h"
 #import "UIInputToolbar.h"
 #import "ConversationTableView.h"
+#import "PostCell.h"
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20

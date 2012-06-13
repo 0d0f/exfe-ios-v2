@@ -60,7 +60,9 @@
     [settingButton addTarget:self action:@selector(ShowProfileView) forControlEvents:UIControlEventTouchUpInside];
     barButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
     
-    [self.navigationController navigationBar].topItem.rightBarButtonItem=barButtonItem;      
+    [self.navigationController navigationBar].topItem.leftBarButtonItem=barButtonItem;      
+////    CGRect tableview=self.view.frame;
+//    [self.view setFrame:CGRectMake(self.view.frame.origin.x,self.view.frame.origin.y,self.view.frame.size.width,self.view.frame.size.height/2)];
     
 }
 - (void)viewDidUnload
@@ -122,37 +124,53 @@
 - (void)loadObjectsFromDataStore {
 	[_crosses release];
 	NSFetchRequest* request = [Cross fetchRequest];
+//    request.includesPendingChanges=YES;
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
 	_crosses = [[Cross objectsWithFetchRequest:request] retain];
 
-//    for (int i=0;i<[_crosses count];i++)
-//    {
-//        Cross *cross=[_crosses objectAtIndex:i];
-//        NSLog(@"cross id:%u",[cross.cross_id intValue]);
-//
-//    }
-
-    [_tableView reloadData];
+    [self.tableView reloadData];
 }
-
+- (void)refresh
+{
+    [self refreshCrosses];
+}
 
 #pragma Mark - RKRequestDelegate
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
 //    NSLog(@"success:%@",objects);
     if([objects count]>0)
     {
+        NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"]; 
+//        if(date_updated_at==nil)
+//        {
+//            NSDate *now = [NSDate date];
+//            for( Cross *cross in objects)
+//            {
+//                cross.read_at=now;
+//                NSError *saveError;
+//                [[Cross currentContext] save:&saveError];
+//            }
+//
+//            NSLog(@"the first loading");
+//        }
+
+        
         Cross *cross=[objects lastObject];
         [[NSUserDefaults standardUserDefaults] setObject:cross.updated_at forKey:@"exfee_updated_at"];
         [[NSUserDefaults standardUserDefaults] synchronize];
 
         [self loadObjectsFromDataStore];
     }
+
+    [self stopLoading];
 }
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     NSLog(@"Error!:%@",error);
+    [self stopLoading];
 }
+
 
 #pragma mark UITableViewDataSource methods
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
@@ -163,7 +181,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSString* reuseIdentifier = @"cross Cell";
-    CrossCell *cell =[tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    CrossCell *cell =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
 	if (nil == cell) {
         cell = [[[CrossCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
 	}
@@ -171,8 +189,12 @@
     if(cross.updated!=nil)
     {
         id updated=cross.updated;
-        if([updated isKindOfClass:[NSDictionary class]])
+        if([updated isKindOfClass:[NSDictionary class]]){
             cell.updated=(NSDictionary*)updated;
+            if(cross.read_at!=nil)
+                cell.read_at=cross.read_at;
+            
+        }
     }
 
     cell.title=cross.title;
@@ -202,8 +224,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Cross *cross=[_crosses objectAtIndex:indexPath.row]; 
-    if(cross.updated!=nil) {
-        cross.updated=nil;
+    NSLog(@"cross.read_at: %@",cross.read_at);
+    if(cross.read_at==nil) {
+        cross.read_at=[NSDate date];
         NSError *saveError;
         [[Cross currentContext] save:&saveError];
     }
@@ -211,7 +234,7 @@
     CrossDetailViewController *detailViewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
     detailViewController.cross=cross;
     [self.navigationController pushViewController:detailViewController animated:YES];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 
 }
 

@@ -23,6 +23,8 @@
 @synthesize identity;
 @synthesize inputToolbar;
 
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -62,7 +64,9 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
     }
 #endif    
+//    [_tableView setFrame:CGRectMake(_tableView.frame.origin.x,_tableView.frame.origin.y-50,_tableView.frame.size.width,_tableView.frame.size.height/2)];
 
+//    _tableView.frame
 
 //    NSLog(@"%@",identity);
     //[self loadObjectsFromDataStore];
@@ -111,7 +115,7 @@
     
     /* Move the toolbar to above the keyboard */
 	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:0.1];
+	[UIView setAnimationDuration:0.3];
 	CGRect frame = self.inputToolbar.frame;
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
@@ -130,7 +134,7 @@
 {
     /* Move the toolbar back to bottom of the screen */
 	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:0.1];
+	[UIView setAnimationDuration:0.3];
 	CGRect frame = self.inputToolbar.frame;
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
         frame.origin.y = self.view.frame.size.height - frame.size.height;
@@ -195,41 +199,34 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 61;
+    Post *post=[_posts objectAtIndex:indexPath.row];
+    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN_LEFT +CELL_CONTENT_MARGIN_RIGHT), 20000.0f);
+    CGSize size = [post.content sizeWithFont:[UIFont fontWithName:@"Helvetica" size:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    CGFloat height = MAX(size.height, 20.0);
+    return height + (CELL_CONTENT_MARGIN_TOP+CELL_CONTENT_MARGIN_BOTTOM);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSString* reuseIdentifier = @"Post Cell";
-
-//    Cross *cross=[_crosses objectAtIndex:indexPath.row];
-//    if(cross.updated!=nil)
-//    {
-//        id updated=cross.updated;
-//        if([updated isKindOfClass:[NSDictionary class]])
-//            cell.updated=(NSDictionary*)updated;
-//    }
-    
-//    cell.title=cross.title;
-
     PostCell *cell =[tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    
 	if (nil == cell) {
         cell = [[[PostCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
 
-    
-//	if (nil == cell) {
-//		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
-//		cell.textLabel.font = [UIFont systemFontOfSize:14];
-//		cell.textLabel.numberOfLines = 0;
-//
-//	}
-    
-    
-    
     Post *post=[_posts objectAtIndex:indexPath.row];
-    NSLog(@"%@",post);
+    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN_LEFT+CELL_CONTENT_MARGIN_RIGHT), 20000.0f);
+    CGSize size = [post.content sizeWithFont:[UIFont fontWithName:@"Helvetica" size:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    CGFloat height = MAX(size.height, 20.0);
+//    NSLog(@"height: %f",height );
     cell.content=post.content;
+    cell.text_height=height;
+    
+    cell.time=[Util formattedDateRelativeToNow:post.created_at];
+    
+//    NSLog(@"post.post.time:%@",post_time);
+    
     if(post.by_identity.avatar_filename!=nil) {
         dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
         dispatch_async(imgQueue, ^{
@@ -243,12 +240,11 @@
         dispatch_release(imgQueue);        
     }    
 //    + (NSString *) formattedLongDateRelativeToNow:(NSString*)datestr
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-    NSString *dateString = [dateFormatter stringFromDate:post.created_at];
-    [dateFormatter release];
-    cell.time=[Util formattedLongDateRelativeToNow:dateString];
-//	cell.textLabel.text = post.content;
+//    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+//    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+//    NSString *dateString = [dateFormatter stringFromDate:post.created_at];
+//    [dateFormatter release];
+//    cell.time=[Util formattedLongDateRelativeToNow:dateString];
 	return cell;
 }
 

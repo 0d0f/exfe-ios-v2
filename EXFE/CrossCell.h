@@ -14,11 +14,13 @@
     NSString *time;
     NSString *place; 
     NSDictionary *updated;
+    NSDate *read_at;
 }
 @property (nonatomic,copy) NSString* title;
 @property (nonatomic,retain) NSString* time;
 @property (nonatomic,retain) NSString* place;
 @property (nonatomic,retain) UIImage* avatar;
 @property (nonatomic,retain) NSDictionary *updated;
+@property (nonatomic,retain) NSDate *read_at;
 
 @end

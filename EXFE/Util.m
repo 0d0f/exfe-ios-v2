@@ -141,7 +141,6 @@
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
-//    [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     NSDate *date = [dateFormat dateFromString:datestr]; 
     [dateFormat release];
     if(date==nil)
@@ -191,6 +190,72 @@
     return relativeString;      
 }
 
++ (NSString *) formattedDateRelativeToNow:(NSDate*)date
+{
+    const int SECOND = 1;
+    const int MINUTE = 60 * SECOND;
+    const int HOUR = 60 * MINUTE;
+    const int DAY = 24 * HOUR;
+    const int MONTH = 30 * DAY;
+    
+//    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+//    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+
+//    [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+//    NSDate *date = [dateFormat dateFromString:datestr]; 
+//    [dateFormat release];
+    
+    NSDate *now = [NSDate date];
+    NSTimeInterval delta = [date timeIntervalSinceDate:now] * -1.0;
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSUInteger units = (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit);
+    NSDateComponents *components = [calendar components:units fromDate:date toDate:now options:0];
+    
+    NSString *relativeString;
+    
+    if (delta < 0) {
+        delta=-delta;
+        //        relativeString = @"!n the future!";
+    }// else 
+    
+    if (delta < 1 * MINUTE) {
+        //        relativeString = (components.second == 1) ? @"One second ago" : [NSString stringWithFormat:@"%d seconds ago",components.second];
+        relativeString =[NSString stringWithFormat:@"%ds",components.second];
+        
+    } else if (delta < 2 * MINUTE) {
+        //        relativeString =  @"a minute ago";
+        relativeString =  @"1m";
+        
+    } else if (delta < 45 * MINUTE) {
+        relativeString = [NSString stringWithFormat:@"%dm",components.minute];
+        
+    } else if (delta < 90 * MINUTE) {
+        //        relativeString = @"an hour ago";
+        relativeString = @"1h";
+        
+    } else if (delta < 24 * HOUR) {
+        relativeString = [NSString stringWithFormat:@"%dh",components.hour];
+        
+    } else if (delta < 48 * HOUR) {
+        //        relativeString = @"yesterday";
+        relativeString = @"1d";
+        
+    } else if (delta < 30 * DAY) {
+        //        relativeString = [NSString stringWithFormat:@"%d days ago",components.day];
+        relativeString = [NSString stringWithFormat:@"%dd",components.day];
+        
+    } else if (delta < 12 * MONTH) {
+        //        relativeString = (components.month <= 1) ? @"one month ago" : [NSString stringWithFormat:@"%d months ago",components.month];
+        relativeString = [NSString stringWithFormat:@"%dm",components.month];
+        
+    } else {
+        //        relativeString = (components.year <= 1) ? @"one year ago" : [NSString stringWithFormat:@"%d years ago",components.year];
+        relativeString = [NSString stringWithFormat:@"%dy",components.year];
+    }
+    NSLog(@"%@",relativeString);
+    return relativeString;  
+}
 + (NSString*) getBackgroundLink:(NSString*)imgname
 {
     return [NSString stringWithFormat:@"http://img.exfe.com/xbgimage/%@_ios.jpg",imgname];

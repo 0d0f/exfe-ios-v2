@@ -13,6 +13,7 @@
 @synthesize content;
 @synthesize avatar;
 @synthesize time;
+@synthesize text_height;
 
 
 - (void)setContent:(NSString *)s {
@@ -64,25 +65,11 @@
 //        [[Util getHighlightColor] set];    
 //    else 
 //        [[Util getRegularColor] set];
-    [content drawInRect:CGRectMake(60, 10, 250, 24) withFont:[UIFont fontWithName:@"Helvetica" size:18]];
-    //    
+    [content drawInRect:CGRectMake(35, 8, CELL_CONTENT_WIDTH-CELL_CONTENT_MARGIN_LEFT-CELL_CONTENT_MARGIN_RIGHT-20-5, text_height) withFont:[UIFont fontWithName:@"Helvetica" size:FONT_SIZE]];
+
     if(avatar!=nil && ![avatar isKindOfClass:[NSNull class]])
-        [avatar drawInRect:CGRectMake(10, 11, 40, 40)];
-    float place_width=100;
-    
-    
-//    if([updated objectForKey:@"place"]!=nil)
-//        [[Util getHighlightColor] set];  
-//    else 
-//        [[Util getRegularColor] set];
-//    [place drawInRect:CGRectMake(60, 34, place_width, 18) withFont:[UIFont fontWithName:@"Helvetica" size:12]];
-    float time_width=320-60-10-place_width;
-//    
-//    if([updated objectForKey:@"time"]!=nil)
-//        [[Util getHighlightColor] set];  
-//    else 
-//        [[Util getRegularColor] set];
-    [time drawInRect:CGRectMake(60+place_width, 34, time_width, 18) withFont:[UIFont fontWithName:@"Helvetica" size:12] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
+        [avatar drawInRect:CGRectMake(10, 8, 20, 20)];
+    [time drawInRect:CGRectMake(CELL_CONTENT_WIDTH-CELL_CONTENT_MARGIN_RIGHT, r.size.height-CELL_CONTENT_MARGIN_BOTTOM-14 , 20, 14) withFont:[UIFont fontWithName:@"Helvetica" size:14] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
     
 }
 @end

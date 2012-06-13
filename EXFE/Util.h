@@ -17,6 +17,7 @@
 + (UIColor*) getRegularColor;
 + (NSDictionary*) crossTimeToString:(CrossTime*)crosstime;
 + (NSString *) formattedLongDateRelativeToNow:(NSString*)datestr;
++ (NSString *) formattedDateRelativeToNow:(NSDate*)date;
 + (NSString*) getBackgroundLink:(NSString*)imgname;
 @end
 

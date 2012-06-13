@@ -2,7 +2,7 @@
 //  Cross.m
 //  EXFE
 //
-//  Created by ju huo on 6/4/12.
+//  Created by ju huo on 6/11/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -19,6 +19,7 @@
 @dynamic cross_description;
 @dynamic cross_id;
 @dynamic crossid_base62;
+@dynamic read_at;
 @dynamic title;
 @dynamic updated;
 @dynamic updated_at;

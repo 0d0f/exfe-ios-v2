@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "APICrosses.h"
+#import "PullRefreshTableViewController.h"
 
-@interface CrossesViewController : UIViewController<RKRequestDelegate,RKObjectLoaderDelegate>{
-    IBOutlet UITableView* _tableView;
+@interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate>{
+    IBOutlet UITableView* tableView;
     UIBarButtonItem *barButtonItem;
     NSArray* _crosses;
 }

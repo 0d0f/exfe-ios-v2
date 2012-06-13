@@ -15,6 +15,7 @@
 @synthesize time;
 @synthesize place;
 @synthesize updated;
+@synthesize read_at;
 
 - (void)dealloc {
 	[title release];
@@ -22,7 +23,9 @@
     [time release];
     [place release];
     [updated release];
+    [read_at release];
     [super dealloc];
+    
 }
 
 - (void)setTitle:(NSString *)s {
@@ -55,8 +58,13 @@
     [super layoutSubviews];
 }
 - (void)drawContentView:(CGRect)r{
+    
     if([updated objectForKey:@"title"]!=nil)
+    {
+        id title_update=[updated objectForKey:@"title"];
+        NSLog(@"%@",title_update);
         [[Util getHighlightColor] set];    
+    }
     else 
         [[Util getRegularColor] set];
     [title drawInRect:CGRectMake(60, 10, 250, 24) withFont:[UIFont fontWithName:@"Helvetica" size:18]];
