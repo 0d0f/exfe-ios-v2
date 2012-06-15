@@ -10,6 +10,8 @@
 #import "APIProfile.h"
 #import "ImgCache.h"
 #import "Identity.h"
+#import "CrossesViewController.h"
+#import "AppDelegate.h"
 
 @interface ProfileViewController ()
 
@@ -81,12 +83,11 @@
         NSString *imgurl = [ImgCache getImgUrl:imgName];
         
         UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
-
-        [useravatar setImage:image];
+        if(image!=nil && ![image isEqual:[NSNull null]])
+            [useravatar setImage:image];
         for (Identity *identity in user.identities)
         {
-            NSLog(@"%@",identity.provider);
-            if([identity.provider isEqualToString:@"iOSAPN"])
+            if([identity.provider isEqualToString:@"iOSAPN"]|| [identity.provider isEqualToString:@"Android"])
             {
                 [devices_section addObject:identity];
             }
@@ -94,8 +95,6 @@
                 [identities_section addObject:identity];
             }
         }
-//        NSLog(@"%@",identities_section);
-//        NSLog(@"%@",devices_section);
         [identitiesData addObject:identities_section];
         [identitiesData addObject:devices_section];
         [devices_section release];
@@ -152,11 +151,60 @@
         [[NSBundle mainBundle] loadNibNamed:@"ProfileCellView" owner:self options:nil];
         cell = tblCell;
     }
-    
-//    
-////    Identity *identity=[[user.identities allObjects] objectAtIndex:indexPath.row];
-//    cell.name=@"identity.name";
-    [cell setLabelName:@"identity.name"];
+    Identity *identity=[[identitiesData objectAtIndex:[indexPath section]]  objectAtIndex:indexPath.row];
+//    Identity *identity=[[user.identities allObjects] objectAtIndex:indexPath.row];
+//    if(![identity.name isEqualToString:@""])
+//        [cell setLabelName:identity.name];
+//    else
+//        [cell setLabelName:identity.external_username];
+//
+//    if([identity.provider isEqualToString:@"email"])
+//        [cell setLabelIdentity:identity.external_id];
+//    else{
+//        [cell setLabelIdentity:[NSString stringWithFormat:@"%@@%@",identity.external_username,identity.provider]];
+//    }
+//
+//    [cell setLabelStatus:1];
+    if([indexPath section]==0)
+    {
+        if(identity.avatar_filename==nil || [identity.avatar_filename isEqualToString:@""] )
+        {
+            UIImage *img = [UIImage imageNamed:@"default_avatar.png"];
+            if((NSNull*)img!=[NSNull null])
+                [cell setAvartar:img];
+        }
+        else
+        {
+            NSString* imgName = identity.avatar_filename;
+            NSString *imgurl = [ImgCache getImgUrl:imgName];
+            UIImage *img = [[ImgCache sharedManager] getImgFrom:imgurl];
+            if((NSNull*)img!=[NSNull null])
+                [cell setAvartar:img];
+        }
+        if(![identity.name isEqualToString:@""])
+            [cell setLabelName:identity.name];
+        else
+            [cell setLabelName:identity.external_id];
+        if([identity.provider isEqualToString:@"email"])
+            [cell setLabelIdentity:identity.external_id];
+        else{
+            [cell setLabelIdentity:[NSString stringWithFormat:@"%@@%@",identity.external_username,identity.provider]];
+        }
+        return cell;
+    }
+    else
+    {
+        UIImage *img = [UIImage imageNamed:@"device_iPhone.png"];
+        [cell setLabelStatus:1];
+        [cell setAvartar:img];
+        [cell setLabelName:identity.external_username];
+        
+        if([identity.external_id isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"]])
+        {
+            [cell IsThisDevice:@""];
+        }
+        return cell;
+    }    
 	return cell;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -178,7 +226,64 @@
         return 40.0;
     return 1.0;
 }
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    //        return [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+    if (section==0)
+        return nil;
+    if (section==1)
+    if(footerView == nil) {
+        //allocate the view if it doesn't exist yet
+        footerView  = [[UIView alloc] init];
+        //create the button
+        UIImage *signbtnimg = [UIImage imageNamed:@"signoutbtn.png"];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setTitle:@"Sign Out" forState:UIControlStateNormal];
+        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18]]; 
+        [button setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
+        [button setBackgroundImage:signbtnimg forState:UIControlStateNormal];
+        [button setFrame:CGRectMake(200, 10, 100, 40)];  
+        
+        [button addTarget:self action:@selector(Logout:) forControlEvents:UIControlEventTouchUpInside];
+        [footerView addSubview:button];
+    }
+    
+    //return the view for the footer
+    return footerView;
+}
 
+- (IBAction) Logout:(id) sender
+{
+    NSString *token=[[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"] copy];
+//    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"username"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"access_token"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userid"];
+//    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetoken"];
+//    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetokenreg"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
+//    DBUtil *dbu=[DBUtil sharedManager];
+//    [dbu emptyDBData];
+    
+    AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];  
+    
+    NSArray *viewControllers = app.navigationController.viewControllers;
+    CrossesViewController *rootViewController = [viewControllers objectAtIndex:0];
+//    @property (nonatomic) int userid;
+//    @property (nonatomic, retain) NSString *accesstoken;
+
+    
+//    [rootViewController emptyView];
+    
+//    APIHandler *api=[[APIHandler alloc]init];
+//    NSString *responseString=[api disconnectDeviceToken:token];
+//    [token release];
+//    [api release];
+//    [responseString release];
+    [rootViewController emptyView];
+    [app SignoutDidFinish];
+    
+}
 //- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 //{
 //    

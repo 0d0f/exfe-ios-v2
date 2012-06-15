@@ -28,18 +28,19 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+
 #ifdef RESTKIT_GENERATE_SEED_DB
     NSString *seedDatabaseName = nil;
-    NSString *databaseName = RKDefaultSeedDatabaseFileName;
+//    NSString *databaseName = RKDefaultSeedDatabaseFileName;
+    NSString *databaseName = @"exfe_v2_0.sqlite";
 #else
     NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
-    NSString *databaseName = @"CoreData.sqlite";
+    NSString *databaseName = @"exfe_v2_0.sqlite";
 #endif
-//    RKLogConfigureByName("RestKit/*", RKLogLevelTrace);
+    RKLogConfigureByName("RestKit/*", RKLogLevelTrace);
 //    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURLString:API_V2_ROOT];
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
 
-    
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
     [APICrosses MappingCross];
     [APIConversation MappingConversation];
@@ -54,18 +55,21 @@
     [self.window addSubview:self.navigationController.view];
     BOOL login=[self Checklogin];
     if(login==NO){
-        LandingViewController *landingView=[[[LandingViewController alloc]initWithNibName:@"LandingViewController" bundle:nil]autorelease];
-        landingView.delegate=self;
-        double delayInSeconds = 0.1;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [self.navigationController presentModalViewController:landingView animated:YES];
-        });        
+        [self ShowLanding];
     }
     [self.window makeKeyAndVisible];
     return YES;
 }
-
+-(void)ShowLanding{
+    LandingViewController *landingView=[[[LandingViewController alloc]initWithNibName:@"LandingViewController" bundle:nil]autorelease];
+    landingView.delegate=self;
+    double delayInSeconds = 0.1;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self.navigationController presentModalViewController:landingView animated:YES];
+    });        
+    
+}
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -97,10 +101,33 @@
     if([self Checklogin]==YES)
     {
         [(CrossesViewController*)crossviewController refreshCrosses];
+        [(CrossesViewController*)crossviewController initUI];
         [self.navigationController dismissModalViewControllerAnimated:YES];
     }
 }
+
+-(void)SignoutDidFinish{
+    NSLog(@"logout");
+    self.userid=0;
+    self.accesstoken=@"";
+    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
+    [objectStore deletePersistantStore];
+    [objectStore save:nil];    
+
+//    NSArray *stores = [persistentStoreCoordinator persistentStores];
+//    
+//    for(NSPersistentStore *store in stores) {
+//        [persistentStoreCoordinator removePersistentStore:store error:nil];
+//        [[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:nil];
+//    }
+//    
+//    [persistentStoreCoordinator release], persistentStoreCoordinator = nil;
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
+//    [self.navigationController dismissModalViewControllerAnimated:YES];    
+}
 -(BOOL) Checklogin{
+
     if (self.userid>0) {
         return YES;
     }

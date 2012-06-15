@@ -14,16 +14,21 @@
 @synthesize avatar;
 @synthesize time;
 @synthesize place;
-@synthesize updated;
-@synthesize read_at;
+@synthesize hlTitle;
+@synthesize hlTime;
+@synthesize hlPlace;    
+@synthesize hlExfee;
+@synthesize hlConversation;
+//@synthesize updated;
+//@synthesize read_at;
 
 - (void)dealloc {
 	[title release];
     [avatar release];
     [time release];
     [place release];
-    [updated release];
-    [read_at release];
+//    [updated release];
+//    [read_at release];
     [super dealloc];
     
 }
@@ -58,30 +63,28 @@
     [super layoutSubviews];
 }
 - (void)drawContentView:(CGRect)r{
-    
-    if([updated objectForKey:@"title"]!=nil)
-    {
-        id title_update=[updated objectForKey:@"title"];
-        NSLog(@"%@",title_update);
+    if (hlTitle)
         [[Util getHighlightColor] set];    
-    }
     else 
         [[Util getRegularColor] set];
     [title drawInRect:CGRectMake(60, 10, 250, 24) withFont:[UIFont fontWithName:@"Helvetica" size:18]];
-//    
+
     if(avatar!=nil && ![avatar isKindOfClass:[NSNull class]])
         [avatar drawInRect:CGRectMake(10, 11, 40, 40)];
     float place_width=100;
     
-    
-    if([updated objectForKey:@"place"]!=nil)
+    //highlight
+//    if([updated objectForKey:@"place"]!=nil && read_at!=nil)
+    if(hlPlace)
         [[Util getHighlightColor] set];  
     else 
         [[Util getRegularColor] set];
     [place drawInRect:CGRectMake(60, 34, place_width, 18) withFont:[UIFont fontWithName:@"Helvetica" size:12]];
     float time_width=320-60-10-place_width;
     
-    if([updated objectForKey:@"time"]!=nil)
+    //highlight
+//    if([updated objectForKey:@"time"]!=nil && read_at!=nil)
+    if(hlTime)
         [[Util getHighlightColor] set];  
     else 
         [[Util getRegularColor] set];

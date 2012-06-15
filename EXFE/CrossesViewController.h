@@ -19,5 +19,6 @@
 -(void) refreshCrosses;
 - (void)loadObjectsFromDataStore;
 - (void)initUI;
+- (void)emptyView;
 - (void)ShowProfileView;
 @end

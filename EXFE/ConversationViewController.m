@@ -303,12 +303,12 @@
     if(objectLoader.isGET) {
         if([objects count]>0)
         {
-            //        Post *post=[objects lastObject];
-            //        [[NSUserDefaults standardUserDefaults] setObject:post.updated_at forKey:@"conversation_updated_at"];
-            //        [[NSUserDefaults standardUserDefaults] synchronize];
             [self loadObjectsFromDataStore];
         }
     }
+}
+- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+    NSLog(@"Error!:%@",error);
 }
 
 @end

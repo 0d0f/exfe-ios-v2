@@ -32,6 +32,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        [self initUI];
         // Custom initialization
     }
     return self;
@@ -53,6 +54,7 @@
     }
 }
 - (void)initUI{
+    
     UIImage *settingbtnimg = [UIImage imageNamed:@"navbar_setting.png"];   
     UIButton *settingButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
@@ -61,6 +63,7 @@
     barButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
     
     [self.navigationController navigationBar].topItem.leftBarButtonItem=barButtonItem;      
+    [self.navigationController.view setNeedsDisplay];
 ////    CGRect tableview=self.view.frame;
 //    [self.view setFrame:CGRectMake(self.view.frame.origin.x,self.view.frame.origin.y,self.view.frame.size.width,self.view.frame.size.height/2)];
     
@@ -89,6 +92,9 @@
     {
         [self refreshCrosses];
     }
+    else {
+        [app ShowLanding];
+    }
 }
 
 - (void)ShowProfileView{
@@ -100,7 +106,6 @@
 -(void) refreshCrosses{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 
-//    NSString *updated_at=[[NSUserDefaults standardUserDefaults] stringForKey:@"exfee_updated_at"]; 
     NSString *updated_at=@"";
     NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"]; 
     if(date_updated_at!=nil)
@@ -135,10 +140,14 @@
 {
     [self refreshCrosses];
 }
-
+- (void)emptyView{
+    [_crosses release];
+    _crosses=nil;
+    [tableView reloadData];
+}
 #pragma Mark - RKRequestDelegate
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    NSLog(@"success:%@",objects);
+    NSLog(@"success:%@",objects);
     if([objects count]>0)
     {
         NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"]; 
@@ -186,20 +195,46 @@
         cell = [[[CrossCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
 	}
     Cross *cross=[_crosses objectAtIndex:indexPath.row];
+    cell.hlTitle=NO;
+    cell.hlPlace=NO;
+    cell.hlTime=NO;
+    cell.hlExfee=NO;
+    cell.hlConversation=NO;
+
     if(cross.updated!=nil)
     {
         id updated=cross.updated;
         if([updated isKindOfClass:[NSDictionary class]]){
-            cell.updated=(NSDictionary*)updated;
-            if(cross.read_at!=nil)
-                cell.read_at=cross.read_at;
-            
-        }
-    }
+            NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
+            NSString *key=nil;
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
 
+            while (key = [enumerator nextObject]){
+                NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
+                NSString *updated_at_str=[obj objectForKey:@"updated_at"];
+                NSDate *updated_at = [formatter dateFromString:updated_at_str];
+                if([updated_at compare: cross.read_at] == NSOrderedDescending) // if start is later in time than end
+                {
+                    if([key isEqualToString:@"title"])
+                        cell.hlTitle=YES;
+                    else if([key isEqualToString:@"place"])
+                        cell.hlPlace=YES;
+                    else if([key isEqualToString:@"time"])
+                        cell.hlTime=YES;
+                    else if([key isEqualToString:@"exfee"])
+                        cell.hlExfee=YES;
+                    else if([key isEqualToString:@"conversation"])
+                        cell.hlConversation=YES;
+                }
+            }
+            [formatter release];
+        }
+        
+    }
     cell.title=cross.title;
     cell.place=cross.place.title;
-//    cell.time=cross.time.begin_at.date;
     NSDictionary *humanable_date=[Util crossTimeToString:cross.time];
     cell.time=[humanable_date objectForKey:@"date"];
     if(cross.by_identity.avatar_filename!=nil) {
@@ -214,7 +249,6 @@
         });
         dispatch_release(imgQueue);        
     }
-    //[cell setNeedsDisplay];
 	return cell;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -225,12 +259,38 @@
 {
     Cross *cross=[_crosses objectAtIndex:indexPath.row]; 
     NSLog(@"cross.read_at: %@",cross.read_at);
-    if(cross.read_at==nil) {
-        cross.read_at=[NSDate date];
-        NSError *saveError;
-        [[Cross currentContext] save:&saveError];
+//    if(cross.read_at==nil) {
+//        cross.read_at=[NSDate date];
+//        NSError *saveError;
+//        [[Cross currentContext] save:&saveError];
+//    }
+//find the biggest time in the update object
+    if(cross.updated!=nil)
+    {
+        id updated=cross.updated;
+        if([updated isKindOfClass:[NSDictionary class]]){
+            NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
+            NSString *key=nil;
+            
+            while (key = [enumerator nextObject]){
+                NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
+                NSString *updated_at_str=[obj objectForKey:@"updated_at"];
+                NSLog(@"%@ , %@ %@",key,obj,cross.read_at);
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                NSDate *updated_at = [formatter dateFromString:updated_at_str];
+                [formatter release];
+                NSLog(@"laterdate:%@",[cross.read_at laterDate:updated_at]);
+                cross.read_at=[cross.read_at laterDate:updated_at];
+            }
+            NSError *saveError;
+            [[Cross currentContext] save:&saveError];
+            [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: indexPath]
+                             withRowAnimation: UITableViewRowAnimationNone];
+        }
+
     }
-    
     CrossDetailViewController *detailViewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
     detailViewController.cross=cross;
     [self.navigationController pushViewController:detailViewController animated:YES];

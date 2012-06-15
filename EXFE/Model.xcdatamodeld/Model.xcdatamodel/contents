@@ -56,6 +56,11 @@
         <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
         <relationship name="identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
     </entity>
+    <entity name="Meta" representedClassName="Meta" syncable="YES">
+        <attribute name="code" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="errorDetail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="errorType" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="Place" representedClassName="Place" syncable="YES">
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="external_id" optional="YES" attributeType="String" syncable="YES"/>
@@ -107,5 +112,6 @@
         <element name="Rsvp" positionX="160" positionY="192" width="128" height="105"/>
         <element name="User" positionX="160" positionY="192" width="128" height="165"/>
         <element name="Widget" positionX="160" positionY="192" width="128" height="60"/>
+        <element name="Meta" positionX="160" positionY="192" width="128" height="90"/>
     </elements>
 </model>

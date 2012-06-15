@@ -26,5 +26,7 @@
 @property (nonatomic, retain) NSString *accesstoken;
 
 -(void)SigninDidFinish;
+-(void)SignoutDidFinish;
+-(void)ShowLanding;
 -(BOOL) Checklogin;
 @end
