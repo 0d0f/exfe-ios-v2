@@ -9,6 +9,17 @@
 #import "Mapping.h"
 
 @implementation Mapping
++ (RKManagedObjectMapping*) getMetaMapping{
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    RKManagedObjectMapping* metaMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Meta" inManagedObjectStore:manager.objectStore];
+    
+    [metaMapping mapKeyPathsToAttributes:@"code", @"code",
+     @"errorDetail", @"errorDetail", 
+     @"errorType", @"errorType",
+     nil];
+    return metaMapping;
+}
+
 + (RKManagedObjectMapping*) getIdentityMapping{
     
     RKObjectManager* manager =[RKObjectManager sharedManager];

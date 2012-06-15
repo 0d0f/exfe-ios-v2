@@ -52,6 +52,7 @@
 		785FD595158079970056590D /* toolbarbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58F158079970056590D /* toolbarbg~iphone.png */; };
 		78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78615B3B15788BCD003CF68A /* ABTableViewCell.m */; };
 		78615B401578CC22003CF68A /* ConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7840917815732A91006DF115 /* ConversationViewController.xib */; };
+		78684154158B50E50054FF50 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EE215611028009E0806 /* libRestKit.a */; };
 		7876512D1575F23100E3DFD9 /* x.html in Resources */ = {isa = PBXBuildFile; fileRef = 7876512B1575F23100E3DFD9 /* x.html */; };
 		7876512E1575F23100E3DFD9 /* x_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 7876512C1575F23100E3DFD9 /* x_background.png */; };
 		787651311576093500E3DFD9 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 787651301576093500E3DFD9 /* Invitation.m */; };
@@ -71,7 +72,6 @@
 		78A98E961560F832009E0806 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 78A98E941560F832009E0806 /* InfoPlist.strings */; };
 		78A98E981560F832009E0806 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E971560F832009E0806 /* main.m */; };
 		78A98E9C1560F832009E0806 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E9B1560F832009E0806 /* AppDelegate.m */; };
-		78A98EED156110DC009E0806 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EE215611028009E0806 /* libRestKit.a */; };
 		78A98EEF156110F0009E0806 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EEE156110F0009E0806 /* CFNetwork.framework */; };
 		78A98EF1156110F5009E0806 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF0156110F5009E0806 /* CoreData.framework */; };
 		78A98EF3156110FB009E0806 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF2156110FB009E0806 /* MobileCoreServices.framework */; };
@@ -256,6 +256,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78684154158B50E50054FF50 /* libRestKit.a in Frameworks */,
 				78A98EFB15611113009E0806 /* libxml2.dylib in Frameworks */,
 				78A98EF91561110C009E0806 /* QuartzCore.framework in Frameworks */,
 				78A98EF715611107009E0806 /* SystemConfiguration.framework in Frameworks */,
@@ -263,7 +264,6 @@
 				78A98EF3156110FB009E0806 /* MobileCoreServices.framework in Frameworks */,
 				78A98EF1156110F5009E0806 /* CoreData.framework in Frameworks */,
 				78A98EEF156110F0009E0806 /* CFNetwork.framework in Frameworks */,
-				78A98EED156110DC009E0806 /* libRestKit.a in Frameworks */,
 				78A98E8C1560F832009E0806 /* UIKit.framework in Frameworks */,
 				78A98E8E1560F832009E0806 /* Foundation.framework in Frameworks */,
 				78A98E901560F832009E0806 /* CoreGraphics.framework in Frameworks */,
@@ -722,6 +722,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -742,6 +743,7 @@
 					"-ObjC",
 					"-all_load",
 				);
+				PROVISIONING_PROFILE = "78F89A6D-5A91-476F-BF39-2B5440E0C4D4";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -752,6 +754,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: EXFE HOLDINGS";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -767,6 +770,7 @@
 					"-ObjC",
 					"-all_load",
 				);
+				PROVISIONING_PROFILE = "CA2443E9-B682-44E7-ACA6-AB39CD0EAAF0";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

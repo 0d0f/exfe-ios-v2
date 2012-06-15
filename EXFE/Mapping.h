@@ -11,4 +11,5 @@
 
 @interface Mapping : NSObject
 + (RKManagedObjectMapping*) getIdentityMapping;
++ (RKManagedObjectMapping*) getMetaMapping;
 @end

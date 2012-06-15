@@ -253,7 +253,7 @@
 
 - (IBAction) Logout:(id) sender
 {
-    NSString *token=[[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"] copy];
+//    NSString *token=[[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"] copy];
 //    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"username"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"access_token"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userid"];
@@ -262,24 +262,21 @@
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
     
     [[NSUserDefaults standardUserDefaults] synchronize];
+    AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];  
+
+    app.userid=0;
+    app.accesstoken=@"";
+    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
+    [objectStore deletePersistantStore];
+    [objectStore save:nil];
+
+    
 //    DBUtil *dbu=[DBUtil sharedManager];
 //    [dbu emptyDBData];
     
-    AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];  
     
     NSArray *viewControllers = app.navigationController.viewControllers;
     CrossesViewController *rootViewController = [viewControllers objectAtIndex:0];
-//    @property (nonatomic) int userid;
-//    @property (nonatomic, retain) NSString *accesstoken;
-
-    
-//    [rootViewController emptyView];
-    
-//    APIHandler *api=[[APIHandler alloc]init];
-//    NSString *responseString=[api disconnectDeviceToken:token];
-//    [token release];
-//    [api release];
-//    [responseString release];
     [rootViewController emptyView];
     [app SignoutDidFinish];
     

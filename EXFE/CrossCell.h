@@ -12,7 +12,8 @@
     NSString *title;
     UIImage *avatar;
     NSString *time;
-    NSString *place; 
+    NSString *place;
+    BOOL removed;
     BOOL hlTitle;
     BOOL hlTime;
     BOOL hlPlace;    
@@ -30,6 +31,7 @@
 @property BOOL hlPlace;    
 @property BOOL hlExfee;
 @property BOOL hlConversation;
+@property BOOL removed;
 //@property (nonatomic,retain) NSDictionary *updated;
 //@property (nonatomic,retain) NSDate *read_at;
 

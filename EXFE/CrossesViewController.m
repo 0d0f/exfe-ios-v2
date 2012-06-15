@@ -141,16 +141,22 @@
     [self refreshCrosses];
 }
 - (void)emptyView{
+    
+    NSArray *cells=self.tableView.visibleCells;
+    for (CrossCell* cell in cells) {
+        cell.removed=YES;
+        cell.title =@"";
+    }
+
     [_crosses release];
     _crosses=nil;
-    [tableView reloadData];
 }
 #pragma Mark - RKRequestDelegate
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
     NSLog(@"success:%@",objects);
     if([objects count]>0)
     {
-        NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"]; 
+        NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
 //        if(date_updated_at==nil)
 //        {
 //            NSDate *now = [NSDate date];
@@ -195,6 +201,7 @@
         cell = [[[CrossCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
 	}
     Cross *cross=[_crosses objectAtIndex:indexPath.row];
+    cell.removed=NO;
     cell.hlTitle=NO;
     cell.hlPlace=NO;
     cell.hlTime=NO;

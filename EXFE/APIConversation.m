@@ -14,6 +14,9 @@
 @implementation APIConversation
 +(void) MappingConversation{
     RKObjectManager* manager =[RKObjectManager sharedManager];
+//    RKManagedObjectMapping* metaMapping = [Mapping getMetaMapping];
+//    [manager.mappingProvider setObjectMapping:metaMapping forKeyPath:@"meta"];
+
     RKManagedObjectMapping* postMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Post" inManagedObjectStore:manager.objectStore];
     
     postMapping.primaryKeyAttribute=@"post_id";
@@ -27,9 +30,8 @@
      nil];
     RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
     [postMapping mapRelationship:@"by_identity" withMapping:identityMapping];
-    
+  
     [manager.mappingProvider setObjectMapping:postMapping forKeyPath:@"response.conversation"];
-
 }
 
 +(void) LoadConversationWithExfeeId:(int)exfee_id updatedtime:(NSString*)updatedtime delegate:(id)delegate{

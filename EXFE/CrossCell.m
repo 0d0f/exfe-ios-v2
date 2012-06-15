@@ -14,6 +14,7 @@
 @synthesize avatar;
 @synthesize time;
 @synthesize place;
+@synthesize removed;
 @synthesize hlTitle;
 @synthesize hlTime;
 @synthesize hlPlace;    
@@ -63,6 +64,8 @@
     [super layoutSubviews];
 }
 - (void)drawContentView:(CGRect)r{
+    if(removed==NO)
+    {
     if (hlTitle)
         [[Util getHighlightColor] set];    
     else 
@@ -89,6 +92,7 @@
     else 
         [[Util getRegularColor] set];
     [time drawInRect:CGRectMake(60+place_width, 34, time_width, 18) withFont:[UIFont fontWithName:@"Helvetica" size:12] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
+    }
     
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

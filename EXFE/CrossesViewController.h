@@ -14,6 +14,7 @@
     IBOutlet UITableView* tableView;
     UIBarButtonItem *barButtonItem;
     NSArray* _crosses;
+    BOOL logoutflag;
 }
    
 -(void) refreshCrosses;

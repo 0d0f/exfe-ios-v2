@@ -12,6 +12,7 @@
 #import "APIProfile.h"
 #import "CrossesViewController.h"
 #import "LandingViewController.h"
+#define DBNAME @"exfe_v2_0.sqlite"
 
 @implementation AppDelegate
 @synthesize userid;
@@ -31,16 +32,13 @@
 
 #ifdef RESTKIT_GENERATE_SEED_DB
     NSString *seedDatabaseName = nil;
-//    NSString *databaseName = RKDefaultSeedDatabaseFileName;
-    NSString *databaseName = @"exfe_v2_0.sqlite";
+    NSString *databaseName = DBNAME;
 #else
     NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
-    NSString *databaseName = @"exfe_v2_0.sqlite";
+    NSString *databaseName = DBNAME;
 #endif
-    RKLogConfigureByName("RestKit/*", RKLogLevelTrace);
-//    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURLString:API_V2_ROOT];
+//    RKLogConfigureByName("RestKit/*", RKLogLevelTrace);
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
-
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
     [APICrosses MappingCross];
     [APIConversation MappingConversation];
@@ -108,23 +106,20 @@
 
 -(void)SignoutDidFinish{
     NSLog(@"logout");
-    self.userid=0;
-    self.accesstoken=@"";
-    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
-    [objectStore deletePersistantStore];
-    [objectStore save:nil];    
+    
+#ifdef RESTKIT_GENERATE_SEED_DB
+    NSString *seedDatabaseName = nil;
+    //    NSString *databaseName = RKDefaultSeedDatabaseFileName;
+    NSString *databaseName = DBNAME;
+#else
+    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
+    NSString *databaseName = DBNAME;
+#endif
 
-//    NSArray *stores = [persistentStoreCoordinator persistentStores];
-//    
-//    for(NSPersistentStore *store in stores) {
-//        [persistentStoreCoordinator removePersistentStore:store error:nil];
-//        [[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:nil];
-//    }
-//    
-//    [persistentStoreCoordinator release], persistentStoreCoordinator = nil;
+    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
+    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
     
     [self.navigationController popToRootViewControllerAnimated:YES];
-//    [self.navigationController dismissModalViewControllerAnimated:YES];    
 }
 -(BOOL) Checklogin{
 
@@ -142,5 +137,9 @@
         return YES;
     }
     return NO;
+}
+- (void) observeContextSave:(NSNotification*) notification {
+    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
+    [[objectStore managedObjectContextForCurrentThread] mergeChangesFromContextDidSaveNotification:notification];
 }
 @end
