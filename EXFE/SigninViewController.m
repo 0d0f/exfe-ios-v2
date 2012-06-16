@@ -29,6 +29,26 @@
     [[RKClient sharedClient] post:@"/users/signin" params:params delegate:self];
     
 }
+- (IBAction) TwitterLoginButtonPress:(id) sender{
+    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+    oauth.delegate=self;
+    
+    [self presentModalViewController:oauth animated:YES];
+    
+
+}
+#pragma Mark - OAuthlogin Delegate
+- (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
+    [self dismissModalViewControllerAnimated:YES];        
+    [oauthlogin release]; 
+    oauthlogin = nil; 
+}
+-(void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
+{
+//    [self loginSuccessWithUserId:userid username:username external_id:external_id token:token];
+
+    [self loginSuccessWith:token userid:userid username:username];
+}
 #pragma Mark - RKRequestDelegate
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
@@ -51,6 +71,14 @@
     }    //    NSLog(@"Response code=%@, token=[%@], userName=[%@]", [[result meta] code], [result token], [[result user] userName]);
 }
 
+- (void)loginSuccessWith:(NSString *)token userid:(NSString *)userid username:(NSString *)username {
+    [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"access_token"];
+    [[NSUserDefaults standardUserDefaults] setObject:userid forKey:@"userid"];
+    [[NSUserDefaults standardUserDefaults] setObject:username forKey:@"username"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [delegate SigninDidFinish];
+}
+
 - (void) processResponse:(id)obj{
     if([obj isKindOfClass:[NSDictionary class]])
     {
@@ -60,17 +88,19 @@
             id code=[[obj objectForKey:@"meta"] objectForKey:@"code"];
             if([code isKindOfClass:[NSNumber class]])
             {
+                id response=[obj objectForKey:@"response"];
                 if([code intValue]==200)
                 {
-                    id response=[obj objectForKey:@"response"];
                     if([response isKindOfClass:[NSDictionary class]])
                     {
                         NSString *token=[response objectForKey:@"token"];
-                        [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"access_token"];
-                        [[NSUserDefaults standardUserDefaults] setObject:[response objectForKey:@"user_id"]   forKey:@"userid"];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                        [delegate SigninDidFinish];
+                        NSString *userid=[response objectForKey:@"user_id"];
+                        NSString *username=[response objectForKey:@"username"];
+                        [self loginSuccessWith:token userid:userid username:username];
                     }
+                }
+                else{
+                    NSLog(@"%@",obj);
                 }
             }
         }

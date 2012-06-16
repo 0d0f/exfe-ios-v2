@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "RestKit.h"
+#import "OAuthLoginViewController.h"
 
-@interface SigninViewController : UIViewController <RKRequestDelegate> {
+@interface SigninViewController : UIViewController <RKRequestDelegate,OAuthLoginViewControllerDelegate> {
     id delegate;
     
     IBOutlet UITextField *textUsername;
@@ -23,4 +24,5 @@
 - (IBAction) Signin:(id) sender;
 - (void)SigninDidFinish;
 - (void) processResponse:(id)obj;
+- (IBAction) TwitterLoginButtonPress:(id) sender;
 @end
