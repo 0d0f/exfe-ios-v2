@@ -103,16 +103,22 @@
 
     //[manager loadObjectsAtResourcePath:endpoint delegate:self];
 }
-+(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate{
++(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate  source:(NSString*)source{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
         updatedtime=[Util encodeToPercentEscapeString:updatedtime];
 
     NSString *endpoint = [NSString stringWithFormat:@"/users/%u/crosses?updated_at=%@&token=%@",app.userid,updatedtime,app.accesstoken];
     RKObjectManager* manager =[RKObjectManager sharedManager];
-    [manager loadObjectsAtResourcePath:endpoint delegate:delegate];
-
-
+//    RKObjectManager *flickrManager = [RKObjectManager objectManagerWithBaseURL:@"crossviewload"];
+//    [RKObjectManager objectManagerWithBaseURLString:<#(NSString *)#>]
+//    [manager loader
+//    [manager loadObjectsAtResourcePath:endpoint delegate:delegate];
+        RKObjectLoader *loader = [manager loaderWithResourcePath:endpoint];
+        loader.delegate = delegate;
+        loader.method = RKRequestMethodGET;
+        loader.userData=source;
+    	[loader send];
 }
 
 @end

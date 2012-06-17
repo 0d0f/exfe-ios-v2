@@ -271,19 +271,6 @@
             if (response.statusCode == 200) {
                 NSLog(@"%@",response.bodyAsString);
                 [self refreshConversation];
-                
-//                
-//                NSDictionary *body=[response.body objectFromJSONData];
-//                if([body isKindOfClass:[NSDictionary class]]) {
-//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                    if(code)
-//                        if([code intValue]==200) {
-//                            
-//                            [self returnResult:callbackId args:[[body objectForKey:@"response"] objectForKey:@"rsvp"]];
-//                        }
-//                    
-//                }
-//                //We got an error!
             }else {
                 NSLog(@"%@",response);
                 //Check Response Body to get Data!

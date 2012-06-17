@@ -9,6 +9,7 @@
 #import "CrossesViewController.h"
 #import "CrossDetailViewController.h"
 #import "ProfileViewController.h"
+#import "GatherViewController.h"
 #import "APICrosses.h"
 #import "Cross.h"
 #import "Place.h"
@@ -49,7 +50,7 @@
     BOOL login=[app Checklogin];
     if(login==YES)
     {
-        [self refreshCrosses];
+        [self refreshCrosses:@"crossview"];
         [self initUI];
     }
 }
@@ -60,12 +61,19 @@
     [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
     settingButton.frame = CGRectMake(0, 0, settingbtnimg.size.width, settingbtnimg.size.height);
     [settingButton addTarget:self action:@selector(ShowProfileView) forControlEvents:UIControlEventTouchUpInside];
-    barButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
+    profileButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
+
+    UIImage *gatherbtnimg = [UIImage imageNamed:@"navbar_setting.png"];
+    UIButton *gatherButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [gatherButton setImage:gatherbtnimg forState:UIControlStateNormal];
+    gatherButton.frame = CGRectMake(0, 0, gatherbtnimg.size.width, gatherbtnimg.size.height);
+    [gatherButton addTarget:self action:@selector(ShowGatherView) forControlEvents:UIControlEventTouchUpInside];
+    gatherButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:gatherButton] autorelease];
     
-    [self.navigationController navigationBar].topItem.leftBarButtonItem=barButtonItem;      
+    [self.navigationController navigationBar].topItem.leftBarButtonItem=profileButtonItem;
+    [self.navigationController navigationBar].topItem.rightBarButtonItem=gatherButtonItem;
+
     [self.navigationController.view setNeedsDisplay];
-////    CGRect tableview=self.view.frame;
-//    [self.view setFrame:CGRectMake(self.view.frame.origin.x,self.view.frame.origin.y,self.view.frame.size.width,self.view.frame.size.height/2)];
     
 }
 - (void)viewDidUnload
@@ -90,7 +98,7 @@
     BOOL login=[app Checklogin];
     if(login==YES)
     {
-        [self refreshCrosses];
+        [self refreshCrosses:@"crossview"];
     }
     else {
         [app ShowLanding];
@@ -102,8 +110,12 @@
     [self.navigationController pushViewController:profileViewController animated:YES];
     
 }
+- (void)ShowGatherView{
+    GatherViewController *gatherViewController=[[GatherViewController alloc]initWithNibName:@"GatherViewController" bundle:nil];
+    [self.navigationController presentModalViewController:gatherViewController animated:YES];
+}
 
--(void) refreshCrosses{
+- (void) refreshCrosses:(NSString*)source{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 
     NSString *updated_at=@"";
@@ -118,7 +130,7 @@
         [formatter release];
     }
 
-    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self];
+    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self source:source];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -138,7 +150,7 @@
 }
 - (void)refresh
 {
-    [self refreshCrosses];
+    [self refreshCrosses:@"crossview"];
 }
 - (void)emptyView{
     
@@ -154,6 +166,7 @@
 #pragma Mark - RKRequestDelegate
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
     NSLog(@"success:%@",objects);
+    NSLog(@"%@",objectLoader.userData);
     if([objects count]>0)
     {
         NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
@@ -176,6 +189,11 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
 
         [self loadObjectsFromDataStore];
+    }
+    if ([objectLoader.userData isEqualToString:@"gatherview"]) {
+        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+        [app.navigationController dismissModalViewControllerAnimated:YES];
     }
 
     [self stopLoading];

@@ -47,7 +47,9 @@
     [format setDateFormat:@"yyyy"];
     NSString *localYear = [format stringFromDate:[NSDate date]];
     [format release];
-    NSString* cross_timezone=[crosstime.begin_at.timezone substringToIndex:6];
+    NSString* cross_timezone=@"";
+    if(crosstime.begin_at.timezone.length>=6 )
+        cross_timezone=[crosstime.begin_at.timezone substringToIndex:6];
     BOOL is_same_timezone=false;
     if([cross_timezone isEqualToString:localTimezone])
         is_same_timezone=true;

@@ -12,14 +12,16 @@
 
 @interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate>{
     IBOutlet UITableView* tableView;
-    UIBarButtonItem *barButtonItem;
+    UIBarButtonItem *profileButtonItem;
+    UIBarButtonItem *gatherButtonItem;
     NSArray* _crosses;
     BOOL logoutflag;
 }
    
--(void) refreshCrosses;
+- (void) refreshCrosses:(NSString*)source;
 - (void)loadObjectsFromDataStore;
 - (void)initUI;
 - (void)emptyView;
 - (void)ShowProfileView;
+- (void)ShowGatherView;
 @end

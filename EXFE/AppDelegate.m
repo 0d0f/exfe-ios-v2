@@ -98,7 +98,7 @@
 -(void)SigninDidFinish{
     if([self Checklogin]==YES)
     {
-        [(CrossesViewController*)crossviewController refreshCrosses];
+        [(CrossesViewController*)crossviewController refreshCrosses:@"crossview"];
         [(CrossesViewController*)crossviewController initUI];
         [self.navigationController dismissModalViewControllerAnimated:YES];
     }
