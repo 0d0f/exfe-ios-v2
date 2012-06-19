@@ -9,8 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "RestKit.h"
 #import "AppDelegate.h"
+#import "Cross.h"
 
 @interface APICrosses : NSObject 
 +(void) MappingCross;
++(void) MappingRoute;
 +(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSString*)source;
++(void) GatherCross:(Cross*) cross delegate:(id)delegate;
 @end

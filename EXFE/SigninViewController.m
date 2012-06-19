@@ -74,9 +74,16 @@
 - (void)loginSuccessWith:(NSString *)token userid:(NSString *)userid username:(NSString *)username {
     [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"access_token"];
     [[NSUserDefaults standardUserDefaults] setObject:userid forKey:@"userid"];
-    [[NSUserDefaults standardUserDefaults] setObject:username forKey:@"username"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [delegate SigninDidFinish];
+
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    app.userid=[userid intValue];
+    app.accesstoken=token;
+
+    [APIProfile LoadUsrWithUserId:app.userid delegate:self];
+
+    
 }
 
 - (void) processResponse:(id)obj{
@@ -140,6 +147,32 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+#pragma mark RKObjectLoaderDelegate methods
+
+- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+	NSFetchRequest* request = [User fetchRequest];
+    NSPredicate *predicate = [NSPredicate
+                              predicateWithFormat:@"user_id = %u", app.userid];    
+    [request setPredicate:predicate];
+	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    
+    if(users!=nil && [users count] >0)
+    {
+        User* user=[users objectAtIndex:0];
+        NSLog(@"%@",user.name );
+        [[NSUserDefaults standardUserDefaults] setObject:user.name forKey:@"username"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        app.username=user.name;
+    }
+    [delegate SigninDidFinish];
+}
+
+- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+    NSLog(@"Error!:%@",error);
+    //    [self stopLoading];
 }
 
 @end

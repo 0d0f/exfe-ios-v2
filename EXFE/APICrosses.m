@@ -18,7 +18,7 @@
 
 @implementation APICrosses
 +(void) MappingCross
-{    
+{
     RKObjectManager* manager =[RKObjectManager sharedManager];
     RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
     
@@ -86,7 +86,6 @@
     
     [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.crosses"];
     [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.cross"];
-    
 
     RKManagedObjectMapping* RsvpMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Rsvp" inManagedObjectStore:manager.objectStore];
     [RsvpMapping mapKeyPathsToAttributes:@"identity_id", @"identity_id",
@@ -96,13 +95,33 @@
      nil];
     
     [manager.mappingProvider setSerializationMapping:RsvpMapping forClass:[Rsvp class]]; 
-    
-    [manager setSerializationMIMEType:RKMIMETypeJSON];
-    [manager.router routeClass:[Rsvp class] toResourcePath:@"/exfee/:exfee_id/rsvp" forMethod:RKRequestMethodPOST];
-    //NSString *endpoint = @"/crosses/100209?token=98eddc9c0afc48087f722ca1419c8650";                           
 
-    //[manager loadObjectsAtResourcePath:endpoint delegate:self];
+    RKObjectMapping* crossSerializationMapping = [crossMapping inverseMapping];
+    [manager.mappingProvider setSerializationMapping:crossSerializationMapping forClass:[Cross class]];
+    
+    manager.serializationMIMEType = RKMIMETypeJSON;
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    RKObjectManager* manager =[RKObjectManager sharedManager];
+    NSString *endpoint = [NSString stringWithFormat:@"/crosses/gather"];
+    [manager.router routeClass:[Cross class] toResourcePath:endpoint forMethod:RKRequestMethodPOST];
+
+    
 }
++(void) MappingRoute {
+    
+//    RKObjectManager* manager =[RKObjectManager sharedManager];
+}
+
++(void) GatherCross:(Cross*) cross delegate:(id)delegate{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    [manager.client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+    [manager postObject:cross usingBlock:^(RKObjectLoader *loader){
+        
+        loader.delegate=delegate;
+    }];
+}
+     
 +(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate  source:(NSString*)source{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     if(updatedtime!=nil && ![updatedtime isEqualToString:@""])

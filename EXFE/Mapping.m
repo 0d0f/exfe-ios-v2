@@ -41,4 +41,13 @@
      nil];
     return identityMapping;
 }
++ (RKObjectMapping*) getIdentitySerializationMapping{
+    RKObjectMapping* identitySerializationMapping = [RKObjectMapping mappingForClass:[Identity class]];
+
+    [identitySerializationMapping mapKeyPathsToAttributes:
+     @"identity_id", @"id",  nil];
+
+    return identitySerializationMapping;
+
+}
 @end

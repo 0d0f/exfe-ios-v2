@@ -72,6 +72,10 @@
     
     [self.navigationController navigationBar].topItem.leftBarButtonItem=profileButtonItem;
     [self.navigationController navigationBar].topItem.rightBarButtonItem=gatherButtonItem;
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSLog(@"%@",app.username);
+
+    [self.navigationController navigationBar].topItem.title=app.username;
 
     [self.navigationController.view setNeedsDisplay];
     
@@ -108,6 +112,7 @@
 - (void)ShowProfileView{
     ProfileViewController *profileViewController=[[ProfileViewController alloc]initWithNibName:@"ProfileViewController" bundle:nil];
     [self.navigationController pushViewController:profileViewController animated:YES];
+    [profileViewController release];
     
 }
 - (void)ShowGatherView{
@@ -163,10 +168,12 @@
     [_crosses release];
     _crosses=nil;
 }
-#pragma Mark - RKRequestDelegate
+
+#pragma mark RKObjectLoaderDelegate methods
+
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    NSLog(@"success:%@",objects);
-    NSLog(@"%@",objectLoader.userData);
+//    NSLog(@"success:%@",objects);
+//    NSLog(@"%@",objectLoader.userData);
     if([objects count]>0)
     {
         NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
@@ -284,12 +291,6 @@
 {
     Cross *cross=[_crosses objectAtIndex:indexPath.row]; 
     NSLog(@"cross.read_at: %@",cross.read_at);
-//    if(cross.read_at==nil) {
-//        cross.read_at=[NSDate date];
-//        NSError *saveError;
-//        [[Cross currentContext] save:&saveError];
-//    }
-//find the biggest time in the update object
     if(cross.updated!=nil)
     {
         id updated=cross.updated;
@@ -300,13 +301,11 @@
             while (key = [enumerator nextObject]){
                 NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
                 NSString *updated_at_str=[obj objectForKey:@"updated_at"];
-                NSLog(@"%@ , %@ %@",key,obj,cross.read_at);
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                 [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
                 [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                 NSDate *updated_at = [formatter dateFromString:updated_at_str];
                 [formatter release];
-                NSLog(@"laterdate:%@",[cross.read_at laterDate:updated_at]);
                 cross.read_at=[cross.read_at laterDate:updated_at];
             }
             NSError *saveError;

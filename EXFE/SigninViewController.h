@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "RestKit.h"
 #import "OAuthLoginViewController.h"
+#import "APIProfile.h"
+#import "User.h"
 
-@interface SigninViewController : UIViewController <RKRequestDelegate,OAuthLoginViewControllerDelegate> {
+@interface SigninViewController : UIViewController <RKRequestDelegate,OAuthLoginViewControllerDelegate,RKObjectLoaderDelegate> {
     id delegate;
     
     IBOutlet UITextField *textUsername;

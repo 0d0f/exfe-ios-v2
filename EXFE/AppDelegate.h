@@ -14,6 +14,7 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>{
     int userid;
     NSString *accesstoken;
+    NSString *username;
     UIViewController* crossviewController;
 }
 //@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -24,9 +25,11 @@
 @property (nonatomic, retain) UINavigationController *navigationController;
 @property (nonatomic) int userid;
 @property (nonatomic, retain) NSString *accesstoken;
+@property (nonatomic, retain) NSString *username;
 
 -(void)SigninDidFinish;
 -(void)SignoutDidFinish;
+-(void)GatherCrossDidFinish;
 -(void)ShowLanding;
 -(BOOL) Checklogin;
 @end

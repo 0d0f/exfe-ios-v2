@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "RestKit.h"
+#import "Identity.h"
 
 @interface Mapping : NSObject
 + (RKManagedObjectMapping*) getIdentityMapping;
 + (RKManagedObjectMapping*) getMetaMapping;
++ (RKObjectMapping*) getIdentitySerializationMapping;
+
 @end

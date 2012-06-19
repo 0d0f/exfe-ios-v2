@@ -40,7 +40,6 @@
     [self loadObjectsFromDataStore];
     [APIProfile LoadUsrWithUserId:app.userid delegate:self];
 
-
 }
 
 - (void)viewDidUnload
@@ -110,20 +109,8 @@
 
 #pragma Mark - RKRequestDelegate
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    NSLog(@"success:%@",objects);
-//    if([objects count]>0)
-//    {
-        
-//        User *user=[objects objectAtIndex:0];
-//        NSLog(@"%@",user.default_identity);
-//        NSSet *identities=user.identities;
-//        NSLog(@"%@",identities);
-//        Cross *cross=[objects lastObject];
-//        [[NSUserDefaults standardUserDefaults] setObject:cross.updated_at forKey:@"exfee_updated_at"];
-//        [[NSUserDefaults standardUserDefaults] synchronize];
-        
+   
         [self loadObjectsFromDataStore];
-//    }
 }
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {

@@ -33,11 +33,13 @@
 +(void) LoadUsrWithUserId:(int)user_id delegate:(id)delegate {
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    
     NSString *endpoint = [NSString stringWithFormat:@"/users/%u?token=%@",app.userid, app.accesstoken];
     
     RKObjectManager* manager =[RKObjectManager sharedManager];
-    [manager loadObjectsAtResourcePath:endpoint delegate:delegate];
+    [manager loadObjectsAtResourcePath:endpoint usingBlock:^(RKObjectLoader *loader) {
+        loader.userData = [NSNumber numberWithInt:user_id];
+        loader.delegate = delegate;
+    }];
     
 }
 

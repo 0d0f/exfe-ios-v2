@@ -11,8 +11,15 @@
 #import "RestKit.h"
 #import "AppDelegate.h"
 #import "CrossesViewController.h"
+#import "Cross.h"
+#import "Identity.h"
+#import "Exfee.h"
+#import "Invitation.h"
 
-@interface GatherViewController : UIViewController <RKRequestDelegate>
+@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate>{
+    IBOutlet UITextField *crosstitle;
+}
 
 - (IBAction) Gather:(id) sender;
+- (IBAction) Close:(id) sender;
 @end
