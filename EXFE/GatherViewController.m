@@ -29,6 +29,7 @@
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 
     crosstitle.text=[NSString stringWithFormat:@"Meet %@",app.username];
+    [crosstitle becomeFirstResponder];
     // Do any additional setup after loading the view from its nib.
 }
 - (IBAction) Gather:(id) sender{
