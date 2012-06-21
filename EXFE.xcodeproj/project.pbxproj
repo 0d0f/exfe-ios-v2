@@ -54,7 +54,6 @@
 		785FD595158079970056590D /* toolbarbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58F158079970056590D /* toolbarbg~iphone.png */; };
 		78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78615B3B15788BCD003CF68A /* ABTableViewCell.m */; };
 		78615B401578CC22003CF68A /* ConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7840917815732A91006DF115 /* ConversationViewController.xib */; };
-		78684154158B50E50054FF50 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EE215611028009E0806 /* libRestKit.a */; };
 		7876512D1575F23100E3DFD9 /* x.html in Resources */ = {isa = PBXBuildFile; fileRef = 7876512B1575F23100E3DFD9 /* x.html */; };
 		7876512E1575F23100E3DFD9 /* x_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 7876512C1575F23100E3DFD9 /* x_background.png */; };
 		787651311576093500E3DFD9 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 787651301576093500E3DFD9 /* Invitation.m */; };
@@ -63,6 +62,7 @@
 		788312AB1574A63600D67103 /* ImgCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 788312AA1574A5DE00D67103 /* ImgCache.m */; };
 		78920EBC157CB0E1004F3901 /* Rsvp.m in Sources */ = {isa = PBXBuildFile; fileRef = 78920EBB157CB0E1004F3901 /* Rsvp.m */; };
 		789C8CAD1591D9B700580624 /* EXImagesCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 789C8CAC1591D9B700580624 /* EXImagesCollectionView.m */; };
+		789C8D6F159334ED00580624 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 789C8D6115931BF100580624 /* libRestKit.a */; };
 		78A834091588BBDC0019FDF5 /* ProfileCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A834081588BBDB0019FDF5 /* ProfileCellView.m */; };
 		78A8340B1588BBEE0019FDF5 /* ProfileCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A8340A1588BBEE0019FDF5 /* ProfileCellView.xib */; };
 		78A8341015899EFD0019FDF5 /* device_iPhone@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78A8340C15899EFC0019FDF5 /* device_iPhone@2x~iphone.png */; };
@@ -95,35 +95,35 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		78A98EE115611028009E0806 /* PBXContainerItemProxy */ = {
+		789C8D6015931BF100580624 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78A98ED615611028009E0806 /* RestKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 25160D1614564E810060A5C5;
 			remoteInfo = RestKit;
 		};
-		78A98EE315611028009E0806 /* PBXContainerItemProxy */ = {
+		789C8D6215931BF100580624 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78A98ED615611028009E0806 /* RestKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 25160D2614564E820060A5C5;
 			remoteInfo = RestKitTests;
 		};
-		78A98EE515611028009E0806 /* PBXContainerItemProxy */ = {
+		789C8D6415931BF100580624 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78A98ED615611028009E0806 /* RestKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 25160E62145651060060A5C5;
 			remoteInfo = RestKitFramework;
 		};
-		78A98EE715611028009E0806 /* PBXContainerItemProxy */ = {
+		789C8D6615931BF100580624 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78A98ED615611028009E0806 /* RestKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 25160E78145651060060A5C5;
 			remoteInfo = RestKitFrameworkTests;
 		};
-		78A98EE915611028009E0806 /* PBXContainerItemProxy */ = {
+		789C8D6815931BF100580624 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78A98ED615611028009E0806 /* RestKit.xcodeproj */;
 			proxyType = 2;
@@ -272,7 +272,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				78684154158B50E50054FF50 /* libRestKit.a in Frameworks */,
+				789C8D6F159334ED00580624 /* libRestKit.a in Frameworks */,
 				78A98EFB15611113009E0806 /* libxml2.dylib in Frameworks */,
 				78A98EF91561110C009E0806 /* QuartzCore.framework in Frameworks */,
 				78A98EF715611107009E0806 /* SystemConfiguration.framework in Frameworks */,
@@ -472,11 +472,11 @@
 		78A98ED715611028009E0806 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				78A98EE215611028009E0806 /* libRestKit.a */,
-				78A98EE415611028009E0806 /* RestKitTests.octest */,
-				78A98EE615611028009E0806 /* RestKit.framework */,
-				78A98EE815611028009E0806 /* RestKitFrameworkTests.octest */,
-				78A98EEA15611028009E0806 /* RestKitResources.bundle */,
+				789C8D6115931BF100580624 /* libRestKit.a */,
+				789C8D6315931BF100580624 /* RestKitTests.octest */,
+				789C8D6515931BF100580624 /* RestKit.framework */,
+				789C8D6715931BF100580624 /* RestKitFrameworkTests.octest */,
+				789C8D6915931BF100580624 /* RestKitResources.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -598,39 +598,39 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		78A98EE215611028009E0806 /* libRestKit.a */ = {
+		789C8D6115931BF100580624 /* libRestKit.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRestKit.a;
-			remoteRef = 78A98EE115611028009E0806 /* PBXContainerItemProxy */;
+			remoteRef = 789C8D6015931BF100580624 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		78A98EE415611028009E0806 /* RestKitTests.octest */ = {
+		789C8D6315931BF100580624 /* RestKitTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = RestKitTests.octest;
-			remoteRef = 78A98EE315611028009E0806 /* PBXContainerItemProxy */;
+			remoteRef = 789C8D6215931BF100580624 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		78A98EE615611028009E0806 /* RestKit.framework */ = {
+		789C8D6515931BF100580624 /* RestKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RestKit.framework;
-			remoteRef = 78A98EE515611028009E0806 /* PBXContainerItemProxy */;
+			remoteRef = 789C8D6415931BF100580624 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		78A98EE815611028009E0806 /* RestKitFrameworkTests.octest */ = {
+		789C8D6715931BF100580624 /* RestKitFrameworkTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = RestKitFrameworkTests.octest;
-			remoteRef = 78A98EE715611028009E0806 /* PBXContainerItemProxy */;
+			remoteRef = 789C8D6615931BF100580624 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		78A98EEA15611028009E0806 /* RestKitResources.bundle */ = {
+		789C8D6915931BF100580624 /* RestKitResources.bundle */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = RestKitResources.bundle;
-			remoteRef = 78A98EE915611028009E0806 /* PBXContainerItemProxy */;
+			remoteRef = 789C8D6815931BF100580624 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -816,7 +816,10 @@
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -829,7 +832,10 @@
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

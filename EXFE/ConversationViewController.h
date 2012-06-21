@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Identity.h"
-#import "RestKit.h"
+#import <RestKit/RestKit.h>
 #import "UIInputToolbar.h"
 #import "ConversationTableView.h"
 #import "PostCell.h"

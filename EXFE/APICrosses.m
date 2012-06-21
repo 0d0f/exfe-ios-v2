@@ -129,10 +129,6 @@
 
     NSString *endpoint = [NSString stringWithFormat:@"/users/%u/crosses?updated_at=%@&token=%@",app.userid,updatedtime,app.accesstoken];
     RKObjectManager* manager =[RKObjectManager sharedManager];
-//    RKObjectManager *flickrManager = [RKObjectManager objectManagerWithBaseURL:@"crossviewload"];
-//    [RKObjectManager objectManagerWithBaseURLString:<#(NSString *)#>]
-//    [manager loader
-//    [manager loadObjectsAtResourcePath:endpoint delegate:delegate];
         RKObjectLoader *loader = [manager loaderWithResourcePath:endpoint];
         loader.delegate = delegate;
         loader.method = RKRequestMethodGET;

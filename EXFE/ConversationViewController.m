@@ -12,7 +12,8 @@
 #import "PostCell.h"
 #import "ImgCache.h"
 #import "Util.h"
-#import "JSONKit.h"
+//#import "JSONKit.h"
+#import <RestKit/JSONKit.h>
 
 @interface ConversationViewController ()
 

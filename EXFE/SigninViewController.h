@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RestKit.h"
+#import <RestKit/RestKit.h>
 #import "OAuthLoginViewController.h"
 #import "APIProfile.h"
 #import "User.h"

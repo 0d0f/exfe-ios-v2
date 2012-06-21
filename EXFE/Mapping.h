@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RestKit.h"
+#import <RestKit/RestKit.h>
 #import "Identity.h"
 
 @interface Mapping : NSObject

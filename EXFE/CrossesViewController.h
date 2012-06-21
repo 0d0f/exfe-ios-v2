@@ -19,6 +19,7 @@
 }
    
 - (void) refreshCrosses:(NSString*)source;
+- (void)loadIdentitiesFromDataStore;
 - (void)loadObjectsFromDataStore;
 - (void)initUI;
 - (void)emptyView;
