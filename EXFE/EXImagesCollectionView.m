@@ -33,7 +33,23 @@
     imageXmargin=2;
     imageYmargin=2;
     [self calculateColumn];
-
+    int x_count=0;
+    int y_count=0;
+    int count=maxColumn*maxRow;
+    grid=[[NSMutableArray alloc]initWithCapacity:count];
+    for(int i=0;i<count;i++)
+    {
+        if( x_count==maxColumn){
+            x_count=0;
+            y_count++;
+        }
+        int x=x_count*(imageWidth+imageXmargin*2);
+        int y=y_count*(imageHeight+imageYmargin*2);
+        CGRect rect=CGRectMake(x,y,imageWidth,imageHeight);
+        [grid addObject:[NSValue valueWithCGRect:rect]];
+        x_count++;
+    }
+    NSLog(@"%@",grid);
 }
 
 - (void) setImageWidth:(float)width height:(float)height{
@@ -49,8 +65,12 @@
 - (void) setDataSource:(id) dataSource{
     _dataSource=dataSource;
 }
+- (void) setDelegate:(id) delegate{
+    _delegate=delegate;
+}
 - (void) calculateColumn{
     maxColumn=self.frame.size.width/(imageWidth+imageXmargin*2);
+    maxRow=self.frame.size.height/(imageHeight+imageYmargin*2);
 }
 
 - (void)drawRect:(CGRect)rect
@@ -66,20 +86,44 @@
         }
         int x=x_count*(imageWidth+imageXmargin*2);
         int y=y_count*(imageHeight+imageYmargin*2);
-        //UIImage *image=(UIImage*)[imageList objectAtIndex:i];
         UIImage *image=[_dataSource imageCollectionView:self imageAtIndex:i];
         [image drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
         x_count++;
     }
-//    UIImage *image=[UIImage imageNamed:@"twitter.png"];
-//    [image drawInRect:CGRectMake(0,0,40,40)];
-//    [image drawInRect:CGRectMake(40,0,40,40)];
-    NSLog(@"drawrect:%u",[imageList count]);
 }
-- (void) reloadData{
-    UIImage *image=[UIImage imageNamed:@"twitter.png"];
-    imageList=[[NSArray alloc] initWithObjects:image,image,image,nil];
 
+- (void) reloadData{
     [self setNeedsDisplay];
+}
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    for (UITouch *touch in touches) {
+        CGPoint touchPoint = [touch locationInView:self];
+        [self onImageTouch:touchPoint];
+    }
+}
+
+- (void) onImageTouch:(CGPoint) point{
+    int x_count=0;
+    int y_count=0;
+
+    for (int i=0;i<[grid count];i++)
+    {
+        if( x_count==maxColumn){
+            x_count=0;
+            y_count++;
+        }
+
+        CGRect rect=[(NSValue*)[grid objectAtIndex:i] CGRectValue];
+        BOOL inrect=CGRectContainsPoint(rect,point);
+        if(inrect==YES){
+            [_delegate imageCollectionView:self didSelectRowAtIndex:i row:y_count col:x_count];
+        }
+        x_count++;
+    }
+}
+
+- (void)dealloc {
+	[grid release];
+    [super dealloc];
 }
 @end

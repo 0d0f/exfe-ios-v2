@@ -44,6 +44,7 @@
     [APICrosses MappingCross];
     [APIConversation MappingConversation];
     [APIProfile MappingUsers];
+    [APIProfile MappingSuggest];
     BOOL login=[self Checklogin];
     if(login==NO){
         [self ShowLanding];

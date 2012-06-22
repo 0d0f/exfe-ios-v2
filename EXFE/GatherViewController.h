@@ -19,13 +19,14 @@
 #import "Invitation.h"
 #import "EXImagesCollectionView.h"
 #import "ImgCache.h"
+#import "APIProfile.h"
 
-@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate>{
+@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate>{
     IBOutlet UITextField *crosstitle;
     IBOutlet UITextField *ExfeeInput;
     UITableView *suggestionTable;
-    NSArray *suggestIdentities;
-    NSMutableArray *exfeeIdentities;
+    NSMutableArray *suggestIdentities;
+    NSArray *exfeeIdentities;
     IBOutlet EXImagesCollectionView *exfeeShowview;
 }
 
@@ -36,5 +37,4 @@
 - (IBAction)textEditBegin:(id)textField;
 
 - (void) addDefaultIdentity;
-
 @end

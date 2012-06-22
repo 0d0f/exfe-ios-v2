@@ -29,6 +29,11 @@
     
     [manager.mappingProvider setObjectMapping:userMapping forKeyPath:@"response.user"];    
 }
++(void) MappingSuggest{
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
+    [manager.mappingProvider setObjectMapping:identityMapping forKeyPath:@"response.identities"];
+}
 
 +(void) LoadUsrWithUserId:(int)user_id delegate:(id)delegate {
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -41,6 +46,19 @@
         loader.delegate = delegate;
     }];
     
+}
+
++ (void) LoadSuggest:(NSString*)key delegate:(id)delegate{
+
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    NSString *endpoint = [NSString stringWithFormat:@"/identities/complete?key=%@",key];
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    [manager.client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+    [manager loadObjectsAtResourcePath:endpoint usingBlock:^(RKObjectLoader *loader) {
+        loader.userData=@"suggest";
+        loader.delegate = delegate;
+    }];
 }
 
 @end

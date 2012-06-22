@@ -13,6 +13,7 @@
 
 @interface APIProfile : NSObject
 +(void) MappingUsers;
++(void) MappingSuggest;
 +(void) LoadUsrWithUserId:(int)user_id delegate:(id)delegate;
-
++(void) LoadSuggest:(NSString*)key delegate:(id)delegate;
 @end

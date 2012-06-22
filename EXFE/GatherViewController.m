@@ -38,6 +38,7 @@
     suggestionTable.delegate=self;
     
     [exfeeShowview setDataSource:self];
+    [exfeeShowview setDelegate:self];
     [self addDefaultIdentity];
     // Do any additional setup after loading the view from its nib.
 }
@@ -105,13 +106,17 @@
 
 - (IBAction)textDidChange:(UITextField*)textField
 {
-    [self loadIdentitiesFromDataStore];
+    if(ExfeeInput.text!=nil && ExfeeInput.text.length>=1) {
+        [APIProfile LoadSuggest:ExfeeInput.text delegate:self];
+        [self loadIdentitiesFromDataStore];
+    }
+    else{
+        [suggestionTable removeFromSuperview];
+    }
 }
 
 - (void)loadIdentitiesFromDataStore {
-
-    if(ExfeeInput.text!=nil && ExfeeInput.text.length>=1)
-    {
+        NSLog(@"%@",@"loadIdentitiesFromDataStore");
         [suggestIdentities release];
         NSFetchRequest* request = [Identity fetchRequest];
         NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:NO];
@@ -120,7 +125,23 @@
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((name like[c] %@) OR (external_username like[c] %@) OR (external_id like[c] %@) OR (nickname like[c] %@)) AND provider != %@ AND  provider != %@ ",inputpredicate,inputpredicate,inputpredicate,inputpredicate,@"iOSAPN",@"android"];
         [request setPredicate:predicate];
         [request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
-        suggestIdentities = [[Identity objectsWithFetchRequest:request] retain];
+        NSMutableArray *temp=[[NSMutableArray alloc]initWithCapacity:10];
+        NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
+        for (Identity *identity in suggestwithselected){
+            BOOL flag=NO;
+            for (Identity *selected in exfeeIdentities){
+                if([selected.identity_id intValue]==[identity.identity_id intValue])
+                {
+                    flag=YES;
+                    continue;
+                }
+            }
+            if(flag==NO)
+                [temp addObject:identity];
+        }
+        
+        suggestIdentities=[temp retain];
+        [temp release];
         if([suggestIdentities count]>0)
         {
             [suggestionTable reloadData];
@@ -130,16 +151,6 @@
             [self.view addSubview:suggestionTable];
         }
 
-//        for(Identity *identity in [NSSet setWithArray:identities])
-//        {
-//            NSLog(@"%u %@",[identity.identity_id intValue],identity.name);
-//        }
-    }
-    else{
-        [suggestionTable removeFromSuperview];
-        
-    }
-//    [self.tableView reloadData];
 }
 
 
@@ -150,7 +161,10 @@
     if([objects count]>0)
     {
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [app GatherCrossDidFinish];
+        if([objectLoader.userData isEqualToString:@"suggest"])
+            [self loadIdentitiesFromDataStore];
+        else
+            [app GatherCrossDidFinish];
     }
     
 }
@@ -201,10 +215,14 @@
 - (UIImage *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
     
     Identity *identity=[exfeeIdentities objectAtIndex:index];
-    NSLog(@"%@",identity.avatar_filename);
     UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-
     return avatar;
-//    return (UIImage*)[imageList objectAtIndex:index];
 }
+
+#pragma mark EXImagesCollectionView delegate methods
+- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col {
+    
+    NSLog(@"exfee click index:%i, row:%i, col:%i",index,row,col);
+}
+
 @end
