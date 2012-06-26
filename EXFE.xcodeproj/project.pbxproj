@@ -83,6 +83,10 @@
 		78A98EF91561110C009E0806 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF81561110C009E0806 /* QuartzCore.framework */; };
 		78A98EFB15611113009E0806 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EFA15611113009E0806 /* libxml2.dylib */; };
 		78A98F03156117D8009E0806 /* APICrosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F02156117D8009E0806 /* APICrosses.m */; };
+		78ADED6B15998D93002B459A /* default_avatar@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6715998D93002B459A /* default_avatar@2x~ipad.png */; };
+		78ADED6C15998D93002B459A /* default_avatar@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6815998D93002B459A /* default_avatar@2x~iphone.png */; };
+		78ADED6D15998D93002B459A /* default_avatar~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6915998D93002B459A /* default_avatar~ipad.png */; };
+		78ADED6E15998D93002B459A /* default_avatar~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6A15998D93002B459A /* default_avatar~iphone.png */; };
 		78D0A600158CFB4C00401BCA /* OAuthLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */; };
 		78D0A601158CFB5F00401BCA /* URLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FF158CFAD200401BCA /* URLParser.m */; };
 		78D0A602158CFE1900401BCA /* OAuthLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */; };
@@ -92,6 +96,10 @@
 		78E88742156244E70026D197 /* CrossesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E88740156244E70026D197 /* CrossesViewController.m */; };
 		78E88743156244E70026D197 /* CrossesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78E88741156244E70026D197 /* CrossesViewController.xib */; };
 		78EA70F91585D4E70097A528 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 78EA70F81585D4E70097A528 /* Cross.m */; };
+		78F057FF1599A57C00F360F2 /* PlaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F057FD1599A57B00F360F2 /* PlaceViewController.m */; };
+		78F058001599A57C00F360F2 /* PlaceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78F057FE1599A57C00F360F2 /* PlaceViewController.xib */; };
+		78F058021599B1BE00F360F2 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F058011599B1BD00F360F2 /* MapKit.framework */; };
+		78F058041599C30200F360F2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F058031599C30200F360F2 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -250,6 +258,10 @@
 		78A98EFA15611113009E0806 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		78A98F01156117D8009E0806 /* APICrosses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APICrosses.h; sourceTree = "<group>"; };
 		78A98F02156117D8009E0806 /* APICrosses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APICrosses.m; sourceTree = "<group>"; };
+		78ADED6715998D93002B459A /* default_avatar@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar@2x~ipad.png"; sourceTree = "<group>"; };
+		78ADED6815998D93002B459A /* default_avatar@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar@2x~iphone.png"; sourceTree = "<group>"; };
+		78ADED6915998D93002B459A /* default_avatar~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar~ipad.png"; sourceTree = "<group>"; };
+		78ADED6A15998D93002B459A /* default_avatar~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar~iphone.png"; sourceTree = "<group>"; };
 		78D0A5FB158CFAD200401BCA /* OAuthLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAuthLoginViewController.h; sourceTree = "<group>"; };
 		78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAuthLoginViewController.m; sourceTree = "<group>"; };
 		78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAuthLoginViewController.xib; sourceTree = "<group>"; };
@@ -265,6 +277,11 @@
 		78E88741156244E70026D197 /* CrossesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossesViewController.xib; sourceTree = "<group>"; };
 		78EA70F71585D4E70097A528 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
 		78EA70F81585D4E70097A528 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
+		78F057FC1599A57B00F360F2 /* PlaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceViewController.h; sourceTree = "<group>"; };
+		78F057FD1599A57B00F360F2 /* PlaceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceViewController.m; sourceTree = "<group>"; };
+		78F057FE1599A57C00F360F2 /* PlaceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceViewController.xib; sourceTree = "<group>"; };
+		78F058011599B1BD00F360F2 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		78F058031599C30200F360F2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,6 +289,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78F058041599C30200F360F2 /* CoreLocation.framework in Frameworks */,
+				78F058021599B1BE00F360F2 /* MapKit.framework in Frameworks */,
 				789C8D6F159334ED00580624 /* libRestKit.a in Frameworks */,
 				78A98EFB15611113009E0806 /* libxml2.dylib in Frameworks */,
 				78A98EF91561110C009E0806 /* QuartzCore.framework in Frameworks */,
@@ -336,6 +355,10 @@
 				78A8340D15899EFD0019FDF5 /* device_iPhone~iphone.png */,
 				78A8340E15899EFD0019FDF5 /* device_iPhone@2x~ipad.png */,
 				78A8340F15899EFD0019FDF5 /* device_iPhone~ipad.png */,
+				78ADED6715998D93002B459A /* default_avatar@2x~ipad.png */,
+				78ADED6815998D93002B459A /* default_avatar@2x~iphone.png */,
+				78ADED6915998D93002B459A /* default_avatar~ipad.png */,
+				78ADED6A15998D93002B459A /* default_avatar~iphone.png */,
 			);
 			name = Resource;
 			path = ..;
@@ -356,6 +379,9 @@
 				7832B663158DAEAA007A052D /* GatherViewController.h */,
 				7832B664158DAEAA007A052D /* GatherViewController.m */,
 				7832B665158DAEAA007A052D /* GatherViewController.xib */,
+				78F057FC1599A57B00F360F2 /* PlaceViewController.h */,
+				78F057FD1599A57B00F360F2 /* PlaceViewController.m */,
+				78F057FE1599A57C00F360F2 /* PlaceViewController.xib */,
 			);
 			name = Cross;
 			sourceTree = "<group>";
@@ -422,6 +448,8 @@
 		78A98E8A1560F832009E0806 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				78F058031599C30200F360F2 /* CoreLocation.framework */,
+				78F058011599B1BD00F360F2 /* MapKit.framework */,
 				78A98EFA15611113009E0806 /* libxml2.dylib */,
 				78A98EF81561110C009E0806 /* QuartzCore.framework */,
 				78A98EF615611107009E0806 /* SystemConfiguration.framework */,
@@ -675,6 +703,11 @@
 				78A8341315899EFD0019FDF5 /* device_iPhone~ipad.png in Resources */,
 				78D0A602158CFE1900401BCA /* OAuthLoginViewController.xib in Resources */,
 				7832B667158DAEAA007A052D /* GatherViewController.xib in Resources */,
+				78ADED6B15998D93002B459A /* default_avatar@2x~ipad.png in Resources */,
+				78ADED6C15998D93002B459A /* default_avatar@2x~iphone.png in Resources */,
+				78ADED6D15998D93002B459A /* default_avatar~ipad.png in Resources */,
+				78ADED6E15998D93002B459A /* default_avatar~iphone.png in Resources */,
+				78F058001599A57C00F360F2 /* PlaceViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -724,6 +757,7 @@
 				78D0A601158CFB5F00401BCA /* URLParser.m in Sources */,
 				7832B666158DAEAA007A052D /* GatherViewController.m in Sources */,
 				789C8CAD1591D9B700580624 /* EXImagesCollectionView.m in Sources */,
+				78F057FF1599A57C00F360F2 /* PlaceViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

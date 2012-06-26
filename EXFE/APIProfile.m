@@ -61,4 +61,8 @@
     }];
 }
 
++(void) getIdentity:(NSString*)identity_json{
+    
+}
+
 @end

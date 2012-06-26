@@ -20,4 +20,5 @@
 + (NSString *) getImgName:(NSString *)url;
 - (UIImage*) getImgFrom:(NSString*)url;
 + (NSString *) getImgUrl:(NSString*)imgName;
++ (UIImage *) getDefaultImage;
 @end

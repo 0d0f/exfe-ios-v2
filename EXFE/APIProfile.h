@@ -16,4 +16,5 @@
 +(void) MappingSuggest;
 +(void) LoadUsrWithUserId:(int)user_id delegate:(id)delegate;
 +(void) LoadSuggest:(NSString*)key delegate:(id)delegate;
++(void) getIdentity:(NSString*)identity_json;
 @end

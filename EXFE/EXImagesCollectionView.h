@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ImgCache.h"
 
 @class EXImagesCollectionView;
 @protocol EXImagesCollectionDataSource;

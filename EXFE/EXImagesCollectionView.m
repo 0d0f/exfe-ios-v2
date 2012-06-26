@@ -87,6 +87,10 @@
         int x=x_count*(imageWidth+imageXmargin*2);
         int y=y_count*(imageHeight+imageYmargin*2);
         UIImage *image=[_dataSource imageCollectionView:self imageAtIndex:i];
+        if(image==nil || [image isEqual:[NSNull null]]){
+            image=[ImgCache getDefaultImage];
+        }
+
         [image drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
         x_count++;
     }

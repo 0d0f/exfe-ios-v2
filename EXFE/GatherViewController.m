@@ -55,7 +55,10 @@
     {
         User *user=[users objectAtIndex:0];
         if(user!=nil){
-            [exfeeIdentities addObject:user.default_identity];
+            Invitation *invitation=[Invitation object];
+            invitation.rsvp_status=@"ACCEPTED";
+            invitation.identity=user.default_identity;
+            [exfeeIdentities addObject:invitation];
             [exfeeShowview reloadData];
         }
     }
@@ -100,10 +103,38 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (IBAction)textEditBegin:(id)textField
-{
+- (IBAction)textEditBegin:(id)textField {
 }
 
+- (IBAction) ShowPlaceView:(id) sender{
+    PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
+    [self presentModalViewController:placeViewController animated:YES];
+    [placeViewController release];
+    
+    NSLog(@"ShowPlaceView");
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+
+    NSCharacterSet *split=[NSCharacterSet characterSetWithCharactersInString:@",;"];
+    NSArray *identity_list=[textField.text componentsSeparatedByCharactersInSet:split];
+    NSString *json=@"";
+    for(NSString *identity_input in identity_list)
+    {
+        NSString *provider=[self findProvider:identity_input];
+        if(![provider isEqualToString:@""])
+        {
+            if(![json isEqualToString:@""])
+                json=[json stringByAppendingString:@","];
+            
+            json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,identity_input];
+        }
+        NSLog(@"%@",provider);
+    }
+    json=[NSString stringWithFormat:@"[%@]",json];
+    [self getIdentity:json];
+    return YES;
+}
 - (IBAction)textDidChange:(UITextField*)textField
 {
     if(ExfeeInput.text!=nil && ExfeeInput.text.length>=1) {
@@ -115,8 +146,82 @@
     }
 }
 
+- (NSString*) findProvider:(NSString*)external_id{
+    
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"; 
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex]; 
+
+    if([emailTest evaluateWithObject:external_id]==YES)
+        return @"email";
+
+    NSString *twitterRegex = @"@[A-Za-z0-9.-]+";
+    NSPredicate *twitterTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex];
+    if([twitterTest evaluateWithObject:external_id]==YES)
+        return @"twitter";
+    
+    return @"";
+}
+- (void) getIdentity:(NSString*)identity_json{
+    
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    RKClient *client = [RKClient sharedClient];
+    NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
+
+    RKParams* rsvpParams = [RKParams params];
+    [rsvpParams setValue:identity_json forParam:@"identities"];
+
+//    [manager.client setValue: forHTTPHeaderField:@"token"];
+    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+    [ExfeeInput setEnabled:NO];
+    [client post:endpoint usingBlock:^(RKRequest *request){
+        
+        request.method=RKRequestMethodPOST;
+        request.params=rsvpParams;
+        
+        request.onDidLoadResponse=^(RKResponse *response){
+            if (response.statusCode == 200) {
+                NSDictionary *body=[response.body objectFromJSONData];
+                if([body isKindOfClass:[NSDictionary class]]) {
+                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                    if(code)
+                        if([code intValue]==200) {
+                            NSDictionary* response = [body objectForKey:@"response"];
+                            NSArray *identities = [response objectForKey:@"identities"];
+                            for (NSDictionary *identitydict in identities)
+                            {
+                                NSString *external_id=[identitydict objectForKey:@"external_id"];
+                                NSString *provider=[identitydict objectForKey:@"provider"];
+                                NSString *avatar_filename=[identitydict objectForKey:@"avatar_filename"];
+                                NSString *identity_id=[identitydict objectForKey:@"id"];
+                                
+                                Identity *identity=[Identity object];
+                                identity.external_id=external_id;
+                                identity.provider=provider;
+                                identity.avatar_filename=avatar_filename;
+                                identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
+                                Invitation *invitation =[Invitation object];
+                                invitation.rsvp_status=@"ACCEPTED";
+                                invitation.identity=identity;
+                                [exfeeIdentities addObject:invitation];
+                                [exfeeShowview reloadData];
+                                [suggestionTable removeFromSuperview];
+                                
+                            }
+                            ExfeeInput.text=@"";
+                            [ExfeeInput setEnabled:YES];
+                        }
+                }
+            }else {
+                    [ExfeeInput setEnabled:YES];
+                //Check Response Body to get Data!
+            }
+        };
+        request.delegate=self;
+    }];
+    
+}
+
 - (void)loadIdentitiesFromDataStore {
-        NSLog(@"%@",@"loadIdentitiesFromDataStore");
         [suggestIdentities release];
         NSFetchRequest* request = [Identity fetchRequest];
         NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:NO];
@@ -129,8 +234,8 @@
         NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
         for (Identity *identity in suggestwithselected){
             BOOL flag=NO;
-            for (Identity *selected in exfeeIdentities){
-                if([selected.identity_id intValue]==[identity.identity_id intValue])
+            for (Invitation *selected in exfeeIdentities){
+                if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
                 {
                     flag=YES;
                     continue;
@@ -150,9 +255,10 @@
             [suggestionTable setHidden:NO];
             [self.view addSubview:suggestionTable];
         }
-
+        else{
+            [suggestionTable removeFromSuperview];
+        }
 }
-
 
 #pragma mark RKObjectLoaderDelegate methods
 
@@ -166,7 +272,6 @@
         else
             [app GatherCrossDidFinish];
     }
-    
 }
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
@@ -202,7 +307,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
-    [exfeeIdentities addObject:identity];
+    Invitation *invitation =[Invitation object];
+    invitation.rsvp_status=@"ACCEPTED";
+    invitation.identity=identity;
+
+    [exfeeIdentities addObject:invitation];
     [exfeeShowview reloadData];
     [suggestionTable removeFromSuperview];
 }
@@ -213,9 +322,12 @@
     return [exfeeIdentities count];
 }
 - (UIImage *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
-    
-    Identity *identity=[exfeeIdentities objectAtIndex:index];
-    UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
+    Invitation *invitation =[exfeeIdentities objectAtIndex:index];
+    UIImage *avatar = [[ImgCache sharedManager] getImgFrom:invitation.identity.avatar_filename];
+//    if([avatar isEqual:[NSNull null]]){
+//        avatar=[ImgCache getDefaultImage];
+//        NSLog(@"get default image");
+//    }
     return avatar;
 }
 

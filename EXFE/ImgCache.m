@@ -102,4 +102,9 @@ static NSMutableDictionary *imgs;
     else
         return [NSString stringWithFormat:@"http://img.exfe.com/%@/%@/80_80_%@",[imgName substringWithRange:NSMakeRange(0, 1)],[imgName substringWithRange:NSMakeRange(1, 2)],imgName];
 }
+
++ (UIImage *) getDefaultImage{
+    return [UIImage imageNamed:@"default_avatar"];
+}
+
 @end
