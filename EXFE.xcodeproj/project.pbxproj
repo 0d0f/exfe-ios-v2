@@ -32,6 +32,8 @@
 		7840918015732CA5006DF115 /* chat~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917C15732CA5006DF115 /* chat~iphone.png */; };
 		7840918115732CA5006DF115 /* chat@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917D15732CA5006DF115 /* chat@2x~ipad.png */; };
 		7840918215732CA5006DF115 /* chat~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917E15732CA5006DF115 /* chat~ipad.png */; };
+		78415346159C3F5C002B7A2E /* PlaceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415345159C3F5C002B7A2E /* PlaceAnnotation.m */; };
+		78415363159D6766002B7A2E /* WildcardGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */; };
 		785D8136156A1AE400FC0984 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 785D8135156A1AE400FC0984 /* Place.m */; };
 		785F6F541581DE4C00BF8EA0 /* APIProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F531581DE4C00BF8EA0 /* APIProfile.m */; };
 		785F6F60158204FE00BF8EA0 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F5F158204FE00BF8EA0 /* User.m */; };
@@ -87,6 +89,7 @@
 		78ADED6C15998D93002B459A /* default_avatar@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6815998D93002B459A /* default_avatar@2x~iphone.png */; };
 		78ADED6D15998D93002B459A /* default_avatar~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6915998D93002B459A /* default_avatar~ipad.png */; };
 		78ADED6E15998D93002B459A /* default_avatar~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6A15998D93002B459A /* default_avatar~iphone.png */; };
+		78C25ABA159D8211002AED1E /* EXPlaceEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C25AB9159D8211002AED1E /* EXPlaceEditView.m */; };
 		78D0A600158CFB4C00401BCA /* OAuthLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */; };
 		78D0A601158CFB5F00401BCA /* URLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FF158CFAD200401BCA /* URLParser.m */; };
 		78D0A602158CFE1900401BCA /* OAuthLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */; };
@@ -100,6 +103,7 @@
 		78F058001599A57C00F360F2 /* PlaceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78F057FE1599A57C00F360F2 /* PlaceViewController.xib */; };
 		78F058021599B1BE00F360F2 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F058011599B1BD00F360F2 /* MapKit.framework */; };
 		78F058041599C30200F360F2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F058031599C30200F360F2 /* CoreLocation.framework */; };
+		78F0580B159B708F00F360F2 /* APIPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F0580A159B708F00F360F2 /* APIPlace.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -187,6 +191,10 @@
 		7840917C15732CA5006DF115 /* chat~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~iphone.png"; sourceTree = "<group>"; };
 		7840917D15732CA5006DF115 /* chat@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat@2x~ipad.png"; sourceTree = "<group>"; };
 		7840917E15732CA5006DF115 /* chat~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~ipad.png"; sourceTree = "<group>"; };
+		78415344159C3F5C002B7A2E /* PlaceAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceAnnotation.h; sourceTree = "<group>"; };
+		78415345159C3F5C002B7A2E /* PlaceAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceAnnotation.m; sourceTree = "<group>"; };
+		78415361159D672A002B7A2E /* WildcardGestureRecognizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WildcardGestureRecognizer.h; sourceTree = "<group>"; };
+		78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WildcardGestureRecognizer.m; sourceTree = "<group>"; };
 		785D8134156A1AE400FC0984 /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
 		785D8135156A1AE400FC0984 /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
 		785F6F521581DE4C00BF8EA0 /* APIProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIProfile.h; sourceTree = "<group>"; };
@@ -262,6 +270,8 @@
 		78ADED6815998D93002B459A /* default_avatar@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar@2x~iphone.png"; sourceTree = "<group>"; };
 		78ADED6915998D93002B459A /* default_avatar~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar~ipad.png"; sourceTree = "<group>"; };
 		78ADED6A15998D93002B459A /* default_avatar~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar~iphone.png"; sourceTree = "<group>"; };
+		78C25AB8159D8211002AED1E /* EXPlaceEditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXPlaceEditView.h; sourceTree = "<group>"; };
+		78C25AB9159D8211002AED1E /* EXPlaceEditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXPlaceEditView.m; sourceTree = "<group>"; };
 		78D0A5FB158CFAD200401BCA /* OAuthLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAuthLoginViewController.h; sourceTree = "<group>"; };
 		78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAuthLoginViewController.m; sourceTree = "<group>"; };
 		78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAuthLoginViewController.xib; sourceTree = "<group>"; };
@@ -282,6 +292,8 @@
 		78F057FE1599A57C00F360F2 /* PlaceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceViewController.xib; sourceTree = "<group>"; };
 		78F058011599B1BD00F360F2 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		78F058031599C30200F360F2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		78F05809159B708F00F360F2 /* APIPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIPlace.h; sourceTree = "<group>"; };
+		78F0580A159B708F00F360F2 /* APIPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIPlace.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -367,6 +379,8 @@
 		78409164156F3AA7006DF115 /* Cross */ = {
 			isa = PBXGroup;
 			children = (
+				78415361159D672A002B7A2E /* WildcardGestureRecognizer.h */,
+				78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */,
 				78E8873F156244E70026D197 /* CrossesViewController.h */,
 				78E88740156244E70026D197 /* CrossesViewController.m */,
 				78E88741156244E70026D197 /* CrossesViewController.xib */,
@@ -389,8 +403,6 @@
 		785FD54E158065610056590D /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				789C8CAB1591D9B700580624 /* EXImagesCollectionView.h */,
-				789C8CAC1591D9B700580624 /* EXImagesCollectionView.m */,
 				785F6F791585A5A200BF8EA0 /* PullRefreshTableViewController.h */,
 				785F6F7A1585A5A200BF8EA0 /* PullRefreshTableViewController.m */,
 				785FD54F158065820056590D /* UIInputToolbar */,
@@ -549,8 +561,21 @@
 				78409174156F81E6006DF115 /* Mapping.m */,
 				785F6F521581DE4C00BF8EA0 /* APIProfile.h */,
 				785F6F531581DE4C00BF8EA0 /* APIProfile.m */,
+				78F05809159B708F00F360F2 /* APIPlace.h */,
+				78F0580A159B708F00F360F2 /* APIPlace.m */,
 			);
 			name = API;
+			sourceTree = "<group>";
+		};
+		78C25AB7159D81ED002AED1E /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				789C8CAB1591D9B700580624 /* EXImagesCollectionView.h */,
+				789C8CAC1591D9B700580624 /* EXImagesCollectionView.m */,
+				78C25AB8159D8211002AED1E /* EXPlaceEditView.h */,
+				78C25AB9159D8211002AED1E /* EXPlaceEditView.m */,
+			);
+			name = CustomView;
 			sourceTree = "<group>";
 		};
 		78E4EE571581CFF000AE6211 /* View */ = {
@@ -558,6 +583,8 @@
 			children = (
 				78E4EE581581D02B00AE6211 /* ConversationTableView.h */,
 				78E4EE591581D02B00AE6211 /* ConversationTableView.m */,
+				78415344159C3F5C002B7A2E /* PlaceAnnotation.h */,
+				78415345159C3F5C002B7A2E /* PlaceAnnotation.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -565,6 +592,7 @@
 		78E8873E156244BD0026D197 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				78C25AB7159D81ED002AED1E /* CustomView */,
 				78E4EE571581CFF000AE6211 /* View */,
 				788312A515738D2600D67103 /* Cell */,
 				78409164156F3AA7006DF115 /* Cross */,
@@ -758,6 +786,10 @@
 				7832B666158DAEAA007A052D /* GatherViewController.m in Sources */,
 				789C8CAD1591D9B700580624 /* EXImagesCollectionView.m in Sources */,
 				78F057FF1599A57C00F360F2 /* PlaceViewController.m in Sources */,
+				78F0580B159B708F00F360F2 /* APIPlace.m in Sources */,
+				78415346159C3F5C002B7A2E /* PlaceAnnotation.m in Sources */,
+				78415363159D6766002B7A2E /* WildcardGestureRecognizer.m in Sources */,
+				78C25ABA159D8211002AED1E /* EXPlaceEditView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

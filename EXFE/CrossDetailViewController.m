@@ -390,7 +390,6 @@
 - (void)returnResult:(int)callbackId args:(id)arg;
 {
     NSArray *rsvp_list=(NSArray*)arg;
-//    int count=[rsvp_list count];
     NSDictionary *rsvp=[rsvp_list objectAtIndex:0];
     int confirmed_num=0;
     for (Invitation *invitation in cross.exfee.invitations)

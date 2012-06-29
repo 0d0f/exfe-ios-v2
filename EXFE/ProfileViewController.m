@@ -254,7 +254,7 @@
     app.userid=0;
     app.accesstoken=@"";
     RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
-    [objectStore deletePersistantStore];
+    [objectStore deletePersistentStore];
     [objectStore save:nil];
 
     

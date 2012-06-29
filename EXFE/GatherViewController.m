@@ -40,8 +40,22 @@
     [exfeeShowview setDataSource:self];
     [exfeeShowview setDelegate:self];
     [self addDefaultIdentity];
+    
+    map=[[MKMapView alloc] initWithFrame:CGRectMake(149,271,152,117)];
+    [self.view addSubview:map];
+    
+    WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
+    tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
+        NSLog(@"map click");
+        [self ShowPlaceView];
+        //        self.lockedOnUserLocation = NO;
+    };
+    [map addGestureRecognizer:tapInterceptor];
+
     // Do any additional setup after loading the view from its nib.
 }
+
+
 
 - (void) addDefaultIdentity{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -87,6 +101,7 @@
 - (void)dealloc {
 	[exfeeIdentities release];
     [suggestIdentities release];
+    [map release];
     [super dealloc];
 }
 - (void)didReceiveMemoryWarning
@@ -106,12 +121,11 @@
 - (IBAction)textEditBegin:(id)textField {
 }
 
-- (IBAction) ShowPlaceView:(id) sender{
+- (void) ShowPlaceView{
     PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
+    placeViewController.gatherview=self;
     [self presentModalViewController:placeViewController animated:YES];
     [placeViewController release];
-    
-    NSLog(@"ShowPlaceView");
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -260,6 +274,25 @@
         }
 }
 
+- (void) setPlace:(NSDictionary*)placedict{
+    Place *_place=[Place object];
+    _place.title=[placedict objectForKey:@"title"];
+    _place.lat=[NSNumber numberWithDouble:[[placedict objectForKey:@"lat"] doubleValue]];
+    _place.lng=[NSNumber numberWithDouble:[[placedict objectForKey:@"lng"] doubleValue]];
+    _place.place_description =[placedict objectForKey:@"description"];
+    _place.external_id=[placedict objectForKey:@"external_id"];
+    _place.provider=[placedict objectForKey:@"provier"];
+    
+}
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+
+    UITouch * touch = [touches anyObject];
+    if(touch.phase == UITouchPhaseBegan) {
+        [crosstitle resignFirstResponder];
+        [map becomeFirstResponder];
+    }
+//    NSLog(@"click view");
+}
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
@@ -282,7 +315,6 @@
 #pragma mark UITableView Datasource methods
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-//	return [_crosses count];
     if(suggestIdentities)
         return [suggestIdentities count];
     return 0;
@@ -324,10 +356,6 @@
 - (UIImage *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
     Invitation *invitation =[exfeeIdentities objectAtIndex:index];
     UIImage *avatar = [[ImgCache sharedManager] getImgFrom:invitation.identity.avatar_filename];
-//    if([avatar isEqual:[NSNull null]]){
-//        avatar=[ImgCache getDefaultImage];
-//        NSLog(@"get default image");
-//    }
     return avatar;
 }
 
