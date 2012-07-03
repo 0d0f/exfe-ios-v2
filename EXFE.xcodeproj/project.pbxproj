@@ -320,6 +320,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7825A5C415A2CE3E00A853CD /* gather */ = {
+			isa = PBXGroup;
+			children = (
+				78415361159D672A002B7A2E /* WildcardGestureRecognizer.h */,
+				78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */,
+				7832B663158DAEAA007A052D /* GatherViewController.h */,
+				7832B664158DAEAA007A052D /* GatherViewController.m */,
+				7832B665158DAEAA007A052D /* GatherViewController.xib */,
+				78F057FC1599A57B00F360F2 /* PlaceViewController.h */,
+				78F057FD1599A57B00F360F2 /* PlaceViewController.m */,
+				78F057FE1599A57C00F360F2 /* PlaceViewController.xib */,
+			);
+			name = gather;
+			sourceTree = "<group>";
+		};
 		782B3CC7156B918B00721150 /* User */ = {
 			isa = PBXGroup;
 			children = (
@@ -379,8 +394,7 @@
 		78409164156F3AA7006DF115 /* Cross */ = {
 			isa = PBXGroup;
 			children = (
-				78415361159D672A002B7A2E /* WildcardGestureRecognizer.h */,
-				78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */,
+				7825A5C415A2CE3E00A853CD /* gather */,
 				78E8873F156244E70026D197 /* CrossesViewController.h */,
 				78E88740156244E70026D197 /* CrossesViewController.m */,
 				78E88741156244E70026D197 /* CrossesViewController.xib */,
@@ -390,12 +404,6 @@
 				7840917615732A90006DF115 /* ConversationViewController.h */,
 				7840917715732A90006DF115 /* ConversationViewController.m */,
 				7840917815732A91006DF115 /* ConversationViewController.xib */,
-				7832B663158DAEAA007A052D /* GatherViewController.h */,
-				7832B664158DAEAA007A052D /* GatherViewController.m */,
-				7832B665158DAEAA007A052D /* GatherViewController.xib */,
-				78F057FC1599A57B00F360F2 /* PlaceViewController.h */,
-				78F057FD1599A57B00F360F2 /* PlaceViewController.m */,
-				78F057FE1599A57C00F360F2 /* PlaceViewController.xib */,
 			);
 			name = Cross;
 			sourceTree = "<group>";

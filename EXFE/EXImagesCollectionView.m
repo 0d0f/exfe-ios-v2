@@ -30,8 +30,8 @@
 
     imageWidth=40;
     imageHeight=40;
-    imageXmargin=2;
-    imageYmargin=2;
+    imageXmargin=10;
+    imageYmargin=15+10;
     [self calculateColumn];
     int x_count=0;
     int y_count=0;

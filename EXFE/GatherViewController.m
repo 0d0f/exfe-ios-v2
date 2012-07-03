@@ -29,14 +29,25 @@
 
     exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    exfeeInput=[[UITextField alloc] initWithFrame:CGRectMake(24, 117, 145, 31)];
+    [exfeeInput setBorderStyle:UITextBorderStyleRoundedRect];
+    [exfeeInput setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:UITextFieldTextDidChangeNotification object:exfeeInput];
+    [exfeeInput setDelegate:self];
+    [exfeeInput setHidden:YES];
+    [self.view addSubview:exfeeInput];
+    
+    exfeeShowview =[[EXImagesCollectionView alloc] initWithFrame:CGRectMake(20, 120, 288, 103)];
+    [exfeeShowview setBackgroundColor:[UIColor grayColor]];
 
+    [self.view addSubview:exfeeShowview];
     crosstitle.text=[NSString stringWithFormat:@"Meet %@",app.username];
+    
     [crosstitle becomeFirstResponder];
 
     suggestionTable = [[UITableView alloc] initWithFrame:CGRectMake(0,0,60,60) style:UITableViewStylePlain];
     suggestionTable.dataSource=self;
     suggestionTable.delegate=self;
-    
     [exfeeShowview setDataSource:self];
     [exfeeShowview setDelegate:self];
     [self addDefaultIdentity];
@@ -46,11 +57,11 @@
     
     WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
     tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
-        NSLog(@"map click");
         [self ShowPlaceView];
-        //        self.lockedOnUserLocation = NO;
     };
     [map addGestureRecognizer:tapInterceptor];
+    
+    [self setExfeeNum];
 
     // Do any additional setup after loading the view from its nib.
 }
@@ -106,6 +117,8 @@
     [APICrosses GatherCross:cross delegate:self];
 }
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:exfeeInput];
+
 	[exfeeIdentities release];
     [suggestIdentities release];
     [map release];
@@ -125,8 +138,6 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (IBAction)textEditBegin:(id)textField {
-}
 
 - (void) ShowPlaceView{
     PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
@@ -156,10 +167,10 @@
     [self getIdentity:json];
     return YES;
 }
-- (IBAction)textDidChange:(UITextField*)textField
+- (void)textDidChange:(UITextField*)textField
 {
-    if(ExfeeInput.text!=nil && ExfeeInput.text.length>=1) {
-        [APIProfile LoadSuggest:ExfeeInput.text delegate:self];
+    if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
+        [APIProfile LoadSuggest:exfeeInput.text delegate:self];
         [self loadIdentitiesFromDataStore];
     }
     else{
@@ -193,7 +204,7 @@
 
 //    [manager.client setValue: forHTTPHeaderField:@"token"];
     [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-    [ExfeeInput setEnabled:NO];
+//    [ExfeeInput setEnabled:NO];
     [client post:endpoint usingBlock:^(RKRequest *request){
         
         request.method=RKRequestMethodPOST;
@@ -228,12 +239,12 @@
                                 [suggestionTable removeFromSuperview];
                                 
                             }
-                            ExfeeInput.text=@"";
-                            [ExfeeInput setEnabled:YES];
+                            exfeeInput.text=@"";
+                            [exfeeInput setEnabled:YES];
                         }
                 }
             }else {
-                    [ExfeeInput setEnabled:YES];
+                    [exfeeInput setEnabled:YES];
                 //Check Response Body to get Data!
             }
         };
@@ -247,7 +258,7 @@
         NSFetchRequest* request = [Identity fetchRequest];
         NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:NO];
 
-        NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",ExfeeInput.text];
+        NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",exfeeInput.text];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((name like[c] %@) OR (external_username like[c] %@) OR (external_id like[c] %@) OR (nickname like[c] %@)) AND provider != %@ AND  provider != %@ ",inputpredicate,inputpredicate,inputpredicate,inputpredicate,@"iOSAPN",@"android"];
         [request setPredicate:predicate];
         [request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
@@ -271,7 +282,7 @@
         if([suggestIdentities count]>0)
         {
             [suggestionTable reloadData];
-            CGRect rect=ExfeeInput.frame;
+            CGRect rect=exfeeInput.frame;
             [suggestionTable setFrame:CGRectMake(rect.origin.x, rect.origin.y+rect.size.height, rect.size.width, 200)];
             [suggestionTable setHidden:NO];
             [self.view addSubview:suggestionTable];
@@ -292,11 +303,51 @@
     place=_place;
     
 }
+
+- (void) ShowExfeeInput:(BOOL)show{
+    if(show==YES){
+        CGRect rect=exfeeShowview.frame;
+        rect.origin.y=rect.origin.y+31;
+        
+        [UIView animateWithDuration:0.25f
+                              delay:0.0f
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             [exfeeShowview setFrame:CGRectMake(rect.origin.x, rect.origin.y+31, rect.size.width, rect.size.height)];
+                             [exfeeInput setFrame:CGRectMake(20, rect.origin.y-8, 280, 31)];
+                             [exfeeInput setHidden:NO];
+                         }
+                         completion:nil];
+
+    }
+    else{
+        CGRect rect=exfeeShowview.frame;
+        rect.origin.y=rect.origin.y-31;
+        
+        [UIView animateWithDuration:0.25f
+                              delay:0.0f
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             [exfeeShowview setFrame:CGRectMake(rect.origin.x, rect.origin.y-31, rect.size.width, rect.size.height)];
+                             [exfeeInput setFrame:CGRectMake(20, rect.origin.y-8, 280, 31)];
+                             [exfeeInput setHidden:YES];
+                         }
+                         completion:nil];
+        
+    }
+    NSLog(@"show exfee input");
+}
+- (void) setExfeeNum{
+    int count=[exfeeIdentities count];
+    exfeenum.text=[NSString stringWithFormat:@"%u Exfees",count];
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 
     UITouch * touch = [touches anyObject];
     if(touch.phase == UITouchPhaseBegan) {
         [crosstitle resignFirstResponder];
+        [exfeeInput resignFirstResponder];
         [map becomeFirstResponder];
     }
 //    NSLog(@"click view");
@@ -354,6 +405,8 @@
     [exfeeIdentities addObject:invitation];
     [exfeeShowview reloadData];
     [suggestionTable removeFromSuperview];
+    exfeeInput.text=@"";
+    [self ShowExfeeInput:NO];
 }
 
 #pragma mark EXImagesCollectionView Datasource methods
@@ -369,7 +422,18 @@
 
 #pragma mark EXImagesCollectionView delegate methods
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col {
-    
+    if(index==[exfeeIdentities count])
+    {
+//        ExfeeViewController *exfeeViewController=[[ExfeeViewController alloc]initWithNibName:@"ExfeeViewController" bundle:nil];
+//        exfeeViewController.gatherview=self;
+//        exfeeViewController.exfee_title=crosstitle.text;
+//        [exfeeViewController setToolbarTitle:crosstitle.text];
+//        [self presentModalViewController:exfeeViewController animated:YES];
+//        [ExfeeViewController release];
+//        [self ShowExfeeInput];
+        [self ShowExfeeInput:YES];
+        NSLog(@"click add button");
+    }
     NSLog(@"exfee click index:%i, row:%i, col:%i",index,row,col);
 }
 

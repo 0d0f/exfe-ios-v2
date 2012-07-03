@@ -117,6 +117,7 @@
 }
 - (void)ShowGatherView{
     GatherViewController *gatherViewController=[[GatherViewController alloc]initWithNibName:@"GatherViewController" bundle:nil];
+    
     [self.navigationController presentModalViewController:gatherViewController animated:YES];
 }
 

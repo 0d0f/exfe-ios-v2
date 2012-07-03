@@ -39,36 +39,17 @@
 }
 +(void) GetPlacesFromGoogleByTitle:(NSString*) title lat:(double)lat lng:(double)lng delegate:(id)delegate{
     
-//    RKRequestQueue* queue = [[RKRequestQueue alloc] init];
-//    queue.delegate=delegate;
-//    queue.showsNetworkActivityIndicatorWhenBusy=YES;
-
     RKRequestQueue *queue=[RKRequestQueue requestQueueWithName:@"place"];
     [queue cancelRequestsWithDelegate:delegate];
-//    RKRequestQueue* queue = [[RKRequestQueue alloc] init];
-//    queue addRequest:]
-//    [[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:delegate];
     NSString * language = [[NSLocale preferredLanguages] objectAtIndex:0];
     RKClient *client=[RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:@"https://maps.googleapis.com"]];
-//    NSString *key=@"AIzaSyCBJcbHO0x87BvSVT-2Sg14PWko-GUN09c";
     NSString *endpoint = [NSString stringWithFormat:@"/maps/api/place/textsearch/json?query=%@&location=%g,%g&radius=1000&language=%@&sensor=true&key=%@",title,lat,lng,language,GOOGLE_API_KEY];
     if(lng==0 && lat==0)
         endpoint =[NSString stringWithFormat:@"/maps/api/place/textsearch/json?query=%@&language=%@&sensor=true&key=%@",title,language,GOOGLE_API_KEY];
     RKRequest *request=[client get:endpoint delegate:delegate];
     [queue addRequest:request];
     [queue start];
-    
-    
-    
-//    [client get:endpoint usingBlock:^(RKRequest *request) {
-//        request.method=RKRequestMethodGET;
-//        request.onDidLoadResponse=^(RKResponse *response){
-//            NSLog(@"%@",response.bodyAsString);
-//        };
-//    }];
-//    https://maps.googleapis.com/浦东麦当劳&sensor=true&key=AIzaSyCBJcbHO0x87BvSVT-2Sg14PWko-GUN09c
-    
 }
 +(void) GetPlacesFromGoogleNearby:(double)lat lng:(double)lng delegate:(id)delegate{
     NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];

@@ -28,24 +28,27 @@
 
 @interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate>{
     IBOutlet UITextField *crosstitle;
-    IBOutlet UITextField *ExfeeInput;
+    UITextField *exfeeInput;
+    IBOutlet UILabel *exfeenum;
     MKMapView *map;
     
     UITableView *suggestionTable;
     NSMutableArray *suggestIdentities;
     NSMutableArray *exfeeIdentities;
     Place *place;
-    IBOutlet EXImagesCollectionView *exfeeShowview;
+    EXImagesCollectionView *exfeeShowview;
 }
 
 - (IBAction) Gather:(id) sender;
 - (IBAction) Close:(id) sender;
 - (void) ShowPlaceView;
 
-- (IBAction)textDidChange:(UITextField*)textField;
-- (IBAction)textEditBegin:(id)textField;
+- (void)textDidChange:(UITextField*)textField;
 - (void) addDefaultIdentity;
 - (NSString*) findProvider:(NSString*)external_id;
 - (void) getIdentity:(NSString*)identity_json;
 - (void) setPlace:(NSDictionary*)placedict;
+- (void) ShowExfeeInput:(BOOL)show;
+- (void) setExfeeNum;
+
 @end
