@@ -49,7 +49,6 @@
         [grid addObject:[NSValue valueWithCGRect:rect]];
         x_count++;
     }
-    NSLog(@"%@",grid);
 }
 
 - (void) setImageWidth:(float)width height:(float)height{
@@ -94,6 +93,23 @@
         [image drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
         x_count++;
     }
+
+//    x_count++;
+    if( x_count==maxColumn){
+        x_count=0;
+        y_count++;
+    }
+
+    int x=x_count*(imageWidth+imageXmargin*2);
+    int y=y_count*(imageHeight+imageYmargin*2);
+    UIImage *image=[UIImage imageNamed:@"chat.png"]; //[_dataSource imageCollectionView:self imageAtIndex:i];
+    if(image==nil || [image isEqual:[NSNull null]]){
+        image=[ImgCache getDefaultImage];
+    }
+    
+    [image drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
+
+    
 }
 
 - (void) reloadData{

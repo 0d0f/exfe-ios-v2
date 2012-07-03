@@ -26,7 +26,6 @@
 #import <MapKit/MapKit.h>
 #import "WildcardGestureRecognizer.h"
 
-//#define AVATAR_API @"http://api.0d0f.com/v2/avatar/default?name="
 @interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate>{
     IBOutlet UITextField *crosstitle;
     IBOutlet UITextField *ExfeeInput;

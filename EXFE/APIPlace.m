@@ -17,49 +17,85 @@
     [client get:endpoint usingBlock:^(RKRequest *request) {
         request.method=RKRequestMethodGET;
         request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-                NSDictionary *body=[response.body objectFromJSONData];
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code)
-                        if([code intValue]==200) {
-                            NSArray *places=[[body objectForKey:@"places"] retain];
-                            [(PlaceViewController*)delegate reloadPlaceData:places];
-                        }
-                }
-            }
-            else {
-                //Check Response Body to get Data!
-            }
+            NSLog(@"%@",[response bodyAsString]);
+//            if (response.statusCode == 200) {
+//                NSDictionary *body=[response.body objectFromJSONData];
+//                if([body isKindOfClass:[NSDictionary class]]) {
+//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                    if(code)
+//                        if([code intValue]==200) {
+//                            NSArray *places=[[body objectForKey:@"places"] retain];
+//                            [(PlaceViewController*)delegate reloadPlaceData:places];
+//                        }
+//                }
+//            }
+//            else {
+//                //Check Response Body to get Data!
+//            }
         };
     }
     ];
     
 }
++(void) GetPlacesFromGoogleByTitle:(NSString*) title lat:(double)lat lng:(double)lng delegate:(id)delegate{
+    
+//    RKRequestQueue* queue = [[RKRequestQueue alloc] init];
+//    queue.delegate=delegate;
+//    queue.showsNetworkActivityIndicatorWhenBusy=YES;
 
+    RKRequestQueue *queue=[RKRequestQueue requestQueueWithName:@"place"];
+    [queue cancelRequestsWithDelegate:delegate];
+//    RKRequestQueue* queue = [[RKRequestQueue alloc] init];
+//    queue addRequest:]
+//    [[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:delegate];
+    NSString * language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    RKClient *client=[RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:@"https://maps.googleapis.com"]];
+//    NSString *key=@"AIzaSyCBJcbHO0x87BvSVT-2Sg14PWko-GUN09c";
+    NSString *endpoint = [NSString stringWithFormat:@"/maps/api/place/textsearch/json?query=%@&location=%g,%g&radius=1000&language=%@&sensor=true&key=%@",title,lat,lng,language,GOOGLE_API_KEY];
+    if(lng==0 && lat==0)
+        endpoint =[NSString stringWithFormat:@"/maps/api/place/textsearch/json?query=%@&language=%@&sensor=true&key=%@",title,language,GOOGLE_API_KEY];
+    RKRequest *request=[client get:endpoint delegate:delegate];
+    [queue addRequest:request];
+    [queue start];
+    
+    
+    
+//    [client get:endpoint usingBlock:^(RKRequest *request) {
+//        request.method=RKRequestMethodGET;
+//        request.onDidLoadResponse=^(RKResponse *response){
+//            NSLog(@"%@",response.bodyAsString);
+//        };
+//    }];
+//    https://maps.googleapis.com/浦东麦当劳&sensor=true&key=AIzaSyCBJcbHO0x87BvSVT-2Sg14PWko-GUN09c
+    
+}
 +(void) GetPlacesFromGoogleNearby:(double)lat lng:(double)lng delegate:(id)delegate{
-    RKClient *client = [RKClient clientWithBaseURLString:@"https://maps.googleapis.com"];
-    NSString *key=@"AIzaSyCBJcbHO0x87BvSVT-2Sg14PWko-GUN09c";
-    NSString *endpoint = [NSString stringWithFormat:@"/maps/api/place/search/json?location=%g,%g&radius=1000&language=%@&sensor=true&key=%@",lat,lng,@"zh",key];
+    NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    RKClient *client=[RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:@"https://maps.googleapis.com"]];
+
+//    NSString *key=@"AIzaSyCBJcbHO0x87BvSVT-2Sg14PWko-GUN09c";
+    NSString *endpoint = [NSString stringWithFormat:@"/maps/api/place/search/json?location=%g,%g&radius=1000&language=%@&sensor=true&key=%@",lat,lng,language,GOOGLE_API_KEY];
     [client get:endpoint usingBlock:^(RKRequest *request) {
         request.method=RKRequestMethodGET;
         request.onDidLoadResponse=^(RKResponse *response){
-            NSLog(@"%@",response.bodyAsString);
             if (response.statusCode == 200) {
                 NSDictionary *body=[response.body objectFromJSONData];
                 if([body isKindOfClass:[NSDictionary class]]) {
                     NSString *status=[body objectForKey:@"status"];
                     if(status!=nil &&[status isEqualToString:@"OK"])
                     {
-                        NSArray *results=[[body objectForKey:@"results"] retain];
-                        [(PlaceViewController*)delegate reloadPlaceData:results];
+                        NSArray *results=[body objectForKey:@"results"] ;
+                        NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]] ;
+                        for(NSDictionary *place in results)
+                        {
+
+                            NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:[place objectForKey:@"name"],@"title",[place objectForKey:@"vicinity"],@"description",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[place objectForKey:@"id"],@"external_id",@"google",@"provier", nil];
+                            [local_results addObject:dict];
+                        }
+                        [(PlaceViewController*)delegate reloadPlaceData:local_results];
                     }
-//                    if(code)
-//                        if([code intValue]==200) {
-//
-////                            NSArray *places=[[body objectForKey:@"places"] retain];
-////
-//                        }
                 }
             }
             else {
@@ -68,7 +104,7 @@
         };
     }
     ];
-    
+//    [client release];
 }
 
 @end

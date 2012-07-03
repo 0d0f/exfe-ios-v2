@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #define API_V2_ROOT @"http://api.local.exfe.com/v2"
+#define GOOGLE_API_KEY @"AIzaSyCO_MQfEQI-p0r4tlQ3lj0WKLwbMtR5f3A"
 //#define API_V2_ROOT @"https://www.exfe.com/v2"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>{

@@ -85,15 +85,22 @@
     cross.title=crosstitle.text;
     cross.cross_description=@"test desc";
     cross.by_identity=by_identity;
-//    cross.cross_id=[NSNumber numberWithInt:1];
-    Invitation *invitation=[Invitation object];
-    invitation.identity=by_identity;
-    invitation.by_identity=by_identity;
-    invitation.rsvp_status=@"ACCEPTED";
-    invitation.host=[NSNumber numberWithBool:YES];
+    cross.place=place;
 
+    
+//    Invitation *invitation=[Invitation object];
+//    invitation.identity=by_identity;
+//    invitation.by_identity=by_identity;
+//    invitation.rsvp_status=@"ACCEPTED";
+//    invitation.host=[NSNumber numberWithBool:YES];
+//
+//    Exfee *exfee=[Exfee object];
+//    [exfee addInvitationsObject:invitation];
     Exfee *exfee=[Exfee object];
-    [exfee addInvitationsObject:invitation];
+    for(Invitation *invitation in exfeeIdentities)
+    {
+        [exfee addInvitationsObject:invitation];  
+    }
     cross.exfee = exfee;
     
     [APICrosses GatherCross:cross delegate:self];
@@ -282,6 +289,7 @@
     _place.place_description =[placedict objectForKey:@"description"];
     _place.external_id=[placedict objectForKey:@"external_id"];
     _place.provider=[placedict objectForKey:@"provier"];
+    place=_place;
     
 }
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {

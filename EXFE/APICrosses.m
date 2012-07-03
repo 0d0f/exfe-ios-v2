@@ -115,6 +115,7 @@
 +(void) GatherCross:(Cross*) cross delegate:(id)delegate{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     RKObjectManager* manager =[RKObjectManager sharedManager];
+    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
     [manager.client setValue:app.accesstoken forHTTPHeaderField:@"token"];
     [manager postObject:cross usingBlock:^(RKObjectLoader *loader){
         
