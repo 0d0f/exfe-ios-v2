@@ -26,10 +26,13 @@
 #import <MapKit/MapKit.h>
 #import "WildcardGestureRecognizer.h"
 
+#define VIEW_MARGIN 15
+
 @interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate>{
-    IBOutlet UITextField *crosstitle;
+    IBOutlet UIToolbar *toolbar;
+    UITextField *crosstitle;
     UITextField *exfeeInput;
-    IBOutlet UILabel *exfeenum;
+    UILabel *exfeenum;
     MKMapView *map;
     
     UITableView *suggestionTable;

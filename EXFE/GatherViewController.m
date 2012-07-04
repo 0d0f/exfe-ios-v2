@@ -29,7 +29,18 @@
 
     exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    exfeeInput=[[UITextField alloc] initWithFrame:CGRectMake(24, 117, 145, 31)];
+    float width=self.view.frame.size.width-VIEW_MARGIN*2;
+    crosstitle=[[UITextField alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6, width, 40)];
+    [crosstitle setBorderStyle:UITextBorderStyleRoundedRect];
+    [self.view addSubview:crosstitle];
+    crosstitle.text=[NSString stringWithFormat:@"Meet %@",app.username];
+    [crosstitle becomeFirstResponder];
+    
+    
+    exfeenum=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15, width, 24)];
+    [self.view addSubview:exfeenum];
+    
+    exfeeInput=[[UITextField alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
     [exfeeInput setBorderStyle:UITextBorderStyleRoundedRect];
     [exfeeInput setAutocorrectionType:UITextAutocorrectionTypeNo];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:UITextFieldTextDidChangeNotification object:exfeeInput];
@@ -37,13 +48,15 @@
     [exfeeInput setHidden:YES];
     [self.view addSubview:exfeeInput];
     
-    exfeeShowview =[[EXImagesCollectionView alloc] initWithFrame:CGRectMake(20, 120, 288, 103)];
-    [exfeeShowview setBackgroundColor:[UIColor grayColor]];
-
-    [self.view addSubview:exfeeShowview];
-    crosstitle.text=[NSString stringWithFormat:@"Meet %@",app.username];
+    //TODO: workaround for a responder chain bug
+    exfeeShowview =[[EXImagesCollectionView alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, width, 120)];
+    [exfeeShowview setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, width, 40+15)];
+    [exfeeShowview calculateColumn];
     
-    [crosstitle becomeFirstResponder];
+
+    [exfeeShowview setBackgroundColor:[UIColor grayColor]];
+    [self.view addSubview:exfeeShowview];
+    
 
     suggestionTable = [[UITableView alloc] initWithFrame:CGRectMake(0,0,60,60) style:UITableViewStylePlain];
     suggestionTable.dataSource=self;
@@ -79,10 +92,11 @@
     if(users!=nil && [users count] >0)
     {
         User *user=[users objectAtIndex:0];
+        Identity *default_identity=user.default_identity;
         if(user!=nil){
             Invitation *invitation=[Invitation object];
             invitation.rsvp_status=@"ACCEPTED";
-            invitation.identity=user.default_identity;
+            invitation.identity=default_identity;
             [exfeeIdentities addObject:invitation];
             [exfeeShowview reloadData];
         }
@@ -121,6 +135,9 @@
 
 	[exfeeIdentities release];
     [suggestIdentities release];
+    [exfeeInput release];
+    [exfeeShowview release];
+    [crosstitle release];
     [map release];
     [super dealloc];
 }
@@ -225,11 +242,16 @@
                                 NSString *provider=[identitydict objectForKey:@"provider"];
                                 NSString *avatar_filename=[identitydict objectForKey:@"avatar_filename"];
                                 NSString *identity_id=[identitydict objectForKey:@"id"];
+                                NSString *name=[identitydict objectForKey:@"name"];
+                                NSString *nickname=[identitydict objectForKey:@"nickname"];
+
                                 
                                 Identity *identity=[Identity object];
                                 identity.external_id=external_id;
                                 identity.provider=provider;
                                 identity.avatar_filename=avatar_filename;
+                                identity.name=name;
+                                identity.nickname=nickname;
                                 identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
                                 Invitation *invitation =[Invitation object];
                                 invitation.rsvp_status=@"ACCEPTED";
@@ -305,17 +327,22 @@
 }
 
 - (void) ShowExfeeInput:(BOOL)show{
+    float width=self.view.frame.size.width-VIEW_MARGIN*2;
+
     if(show==YES){
+//
         CGRect rect=exfeeShowview.frame;
-        rect.origin.y=rect.origin.y+31;
-        
         [UIView animateWithDuration:0.25f
                               delay:0.0f
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
-                             [exfeeShowview setFrame:CGRectMake(rect.origin.x, rect.origin.y+31, rect.size.width, rect.size.height)];
-                             [exfeeInput setFrame:CGRectMake(20, rect.origin.y-8, 280, 31)];
+                             [crosstitle setHidden:YES];
+                             [exfeenum setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6,exfeenum.frame.size.width, exfeenum.frame.size.height)];
+                             [exfeeInput setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
                              [exfeeInput setHidden:NO];
+                             
+                             [exfeeShowview setFrame:CGRectMake(rect.origin.x,toolbar.frame.size.height+6+exfeenum.frame.size.height+8+exfeeInput.frame.size.height+8, rect.size.width, rect.size.height)];
+                             
                          }
                          completion:nil];
 
@@ -328,9 +355,13 @@
                               delay:0.0f
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
-                             [exfeeShowview setFrame:CGRectMake(rect.origin.x, rect.origin.y-31, rect.size.width, rect.size.height)];
-                             [exfeeInput setFrame:CGRectMake(20, rect.origin.y-8, 280, 31)];
+                             [crosstitle setHidden:NO];
+                             
+                             [exfeenum setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15, width, 24)];
+                             [exfeeInput setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
                              [exfeeInput setHidden:YES];
+                             
+                             [exfeeShowview setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, rect.size.width, rect.size.height)];
                          }
                          completion:nil];
         
@@ -349,6 +380,7 @@
         [crosstitle resignFirstResponder];
         [exfeeInput resignFirstResponder];
         [map becomeFirstResponder];
+        [self ShowExfeeInput:NO];
     }
 //    NSLog(@"click view");
 }
@@ -406,7 +438,8 @@
     [exfeeShowview reloadData];
     [suggestionTable removeFromSuperview];
     exfeeInput.text=@"";
-    [self ShowExfeeInput:NO];
+    [self setExfeeNum];
+    //[self ShowExfeeInput:NO];
 }
 
 #pragma mark EXImagesCollectionView Datasource methods
@@ -414,10 +447,20 @@
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
     return [exfeeIdentities count];
 }
-- (UIImage *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
+- (Identity *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
     Invitation *invitation =[exfeeIdentities objectAtIndex:index];
-    UIImage *avatar = [[ImgCache sharedManager] getImgFrom:invitation.identity.avatar_filename];
-    return avatar;
+    Identity *identity=invitation.identity;
+//    UIImage *avatar = [[ImgCache sharedManager] getImgFrom:invitation.identity.avatar_filename];
+//    return avatar;
+    return identity;
+}
+- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
+    int old_height=exfeeShowview.frame.size.height;
+    int y_move=height-old_height;
+
+    [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
+    [exfeeShowview calculateColumn];
+    NSLog(@"new height %f",height);
 }
 
 #pragma mark EXImagesCollectionView delegate methods

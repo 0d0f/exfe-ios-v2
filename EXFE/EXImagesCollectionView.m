@@ -16,6 +16,7 @@
     if (self) {
         // Initialization code
     }
+    
     [self initData];
     return self;
 }
@@ -27,11 +28,12 @@
 }
 
 - (void) initData{
-
+    self.userInteractionEnabled=YES;
     imageWidth=40;
     imageHeight=40;
-    imageXmargin=10;
-    imageYmargin=15+10;
+    nameHeight=15;
+    imageXmargin=5;
+    imageYmargin=5;
     [self calculateColumn];
     int x_count=0;
     int y_count=0;
@@ -44,7 +46,7 @@
             y_count++;
         }
         int x=x_count*(imageWidth+imageXmargin*2);
-        int y=y_count*(imageHeight+imageYmargin*2);
+        int y=y_count*(imageHeight+nameHeight+imageYmargin*2);
         CGRect rect=CGRectMake(x,y,imageWidth,imageHeight);
         [grid addObject:[NSValue valueWithCGRect:rect]];
         x_count++;
@@ -68,8 +70,8 @@
     _delegate=delegate;
 }
 - (void) calculateColumn{
-    maxColumn=self.frame.size.width/(imageWidth+imageXmargin*2);
-    maxRow=self.frame.size.height/(imageHeight+imageYmargin*2);
+    maxColumn=(self.frame.size.width-imageWidth)/(imageWidth+imageXmargin*2)+1;
+    maxRow=(self.frame.size.height-(imageHeight+nameHeight))/(imageHeight+nameHeight+imageYmargin*2)+1;
 }
 
 - (void)drawRect:(CGRect)rect
@@ -85,34 +87,55 @@
         }
         int x=x_count*(imageWidth+imageXmargin*2);
         int y=y_count*(imageHeight+imageYmargin*2);
-        UIImage *image=[_dataSource imageCollectionView:self imageAtIndex:i];
-        if(image==nil || [image isEqual:[NSNull null]]){
-            image=[ImgCache getDefaultImage];
+        if(y_count>0)
+            y+=15;
+        Identity *identity=[_dataSource imageCollectionView:self imageAtIndex:i];
+//        UIImage *image
+        UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
+
+        if(avatar==nil || [avatar isEqual:[NSNull null]]){
+            avatar=[ImgCache getDefaultImage];
         }
 
-        [image drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
+        [avatar drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
+//         NSString *name=@"name";
+        NSString *name=identity.name;
+        if(name==nil)
+            name=identity.external_username;
+        if(name==nil)
+            name=identity.external_id;
+        if(name!=nil){
+            [[UIColor blackColor] set];
+            [name drawInRect:CGRectMake(x, y+imageHeight+2, imageWidth, 15-2) withFont:[UIFont fontWithName:@"Helvetica" size:11] lineBreakMode:NSLineBreakByClipping alignment:UITextAlignmentCenter];
+        }
         x_count++;
     }
 
-//    x_count++;
     if( x_count==maxColumn){
         x_count=0;
         y_count++;
     }
 
-    int x=x_count*(imageWidth+imageXmargin*2);
-    int y=y_count*(imageHeight+imageYmargin*2);
-    UIImage *image=[UIImage imageNamed:@"chat.png"]; //[_dataSource imageCollectionView:self imageAtIndex:i];
-    if(image==nil || [image isEqual:[NSNull null]]){
-        image=[ImgCache getDefaultImage];
+    if(count<maxColumn*maxRow) {
+        int x=x_count*(imageWidth+imageXmargin*2);
+        int y=y_count*(imageHeight+imageYmargin*2);
+        if(y_count>0)
+            y+=15;
+        UIImage *image=[UIImage imageNamed:@"chat.png"];
+        if(image==nil || [image isEqual:[NSNull null]])
+            image=[ImgCache getDefaultImage];
+        [image drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
     }
-    
-    [image drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
-
-    
 }
 
 - (void) reloadData{
+
+    int count=[_dataSource numberOfimageCollectionView:self];
+    if(count >maxColumn*maxRow-1)
+    {
+        float new_height=imageHeight+15+(10+imageHeight+15)*maxRow;
+        [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
+    }
     [self setNeedsDisplay];
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{

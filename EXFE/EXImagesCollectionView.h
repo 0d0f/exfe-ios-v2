@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ImgCache.h"
+#import "Identity.h"
 
 @class EXImagesCollectionView;
 @protocol EXImagesCollectionDataSource;
@@ -16,20 +17,21 @@
 
 @required
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView;
-- (UIImage *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index;
+- (Identity *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index;
 @end
 
 @protocol EXImagesCollectionDelegate<NSObject>
 @required
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col;
+- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height;
 @end
 
 
 @interface EXImagesCollectionView : UIView{
-//    NSArray *imageList;
     NSMutableArray *grid;
     float imageWidth;
     float imageHeight;
+    float nameHeight;
     float imageXmargin;
     float imageYmargin;
     int maxColumn;
