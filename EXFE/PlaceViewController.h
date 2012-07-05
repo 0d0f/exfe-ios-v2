@@ -27,6 +27,7 @@
     NSDictionary* gatherplace;
     UIViewController *gatherview;
     EXPlaceEditView *placeedit;
+    
     double editinginterval;
 
     double lng;
@@ -36,11 +37,13 @@
     
 - (IBAction) Close:(id) sender;
 - (void) reloadPlaceData:(NSArray*)places;
-- (void) addPinToMap;
+- (void) drawMapAnnontations;
 - (void) selectOnMap:(id) sender;
 - (void) selectPlace:(int)index;
 - (void) addPlaceEdit:(NSDictionary*)place;
 - (void) getPlace;
 - (void) setRightButton:(NSString*) title Selector:(SEL)aSelector;
 - (void) done;
+- (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer;
+//- (void) addNewPin;
 @end

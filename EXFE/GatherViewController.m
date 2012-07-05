@@ -30,15 +30,17 @@
     exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     float width=self.view.frame.size.width-VIEW_MARGIN*2;
+    containview=[[UIView alloc] initWithFrame:CGRectMake(0,0,width,460)];
+    [self.view addSubview:containview];
+    
     crosstitle=[[UITextField alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6, width, 40)];
     [crosstitle setBorderStyle:UITextBorderStyleRoundedRect];
-    [self.view addSubview:crosstitle];
+    [containview addSubview:crosstitle];
     crosstitle.text=[NSString stringWithFormat:@"Meet %@",app.username];
     [crosstitle becomeFirstResponder];
     
-    
     exfeenum=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15, width, 24)];
-    [self.view addSubview:exfeenum];
+    [containview addSubview:exfeenum];
     
     exfeeInput=[[UITextField alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
     [exfeeInput setBorderStyle:UITextBorderStyleRoundedRect];
@@ -46,17 +48,16 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:UITextFieldTextDidChangeNotification object:exfeeInput];
     [exfeeInput setDelegate:self];
     [exfeeInput setHidden:YES];
-    [self.view addSubview:exfeeInput];
+    [containview addSubview:exfeeInput];
     
     //TODO: workaround for a responder chain bug
     exfeeShowview =[[EXImagesCollectionView alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, width, 120)];
     [exfeeShowview setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, width, 40+15)];
     [exfeeShowview calculateColumn];
-    
 
     [exfeeShowview setBackgroundColor:[UIColor grayColor]];
-    [self.view addSubview:exfeeShowview];
-    
+    [containview addSubview:exfeeShowview];
+    isExfeeInputShow=NO;
 
     suggestionTable = [[UITableView alloc] initWithFrame:CGRectMake(0,0,60,60) style:UITableViewStylePlain];
     suggestionTable.dataSource=self;
@@ -65,18 +66,55 @@
     [exfeeShowview setDelegate:self];
     [self addDefaultIdentity];
     
-    map=[[MKMapView alloc] initWithFrame:CGRectMake(149,271,152,117)];
-    [self.view addSubview:map];
+    map=[[MKMapView alloc] initWithFrame:CGRectMake(VIEW_MARGIN+160,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,130,80)];
+    
+    [containview addSubview:map];
     
     WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
     tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
         [self ShowPlaceView];
     };
     [map addGestureRecognizer:tapInterceptor];
+    [tapInterceptor release];
     
     [self setExfeeNum];
+    [self.view bringSubviewToFront:toolbar];
+    
+    timetitle=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15,160,24)];
+    timetitle.text=@"Sometime";
+    [timetitle setFont:[UIFont fontWithName:@"Helvetica" size:18]];
+    timetitle.textColor=[Util getHighlightColor];
+    [containview addSubview:timetitle];
 
-    // Do any additional setup after loading the view from its nib.
+    timedesc=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+24,160,18)];
+    timedesc.text=@"Tap here to set time";
+    [timedesc setFont:[UIFont fontWithName:@"Helvetica" size:12]];
+//    timedesc.textColor=[Util getHighlightColor];
+    [containview addSubview:timedesc];
+    
+    
+    placetitle=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15,160,24)];
+    placetitle.text=@"Somwhere";
+    [placetitle setFont:[UIFont fontWithName:@"Helvetica" size:18]];
+    placetitle.textColor=[Util getHighlightColor];
+    [containview addSubview:placetitle];
+    
+    placedesc=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height,160,18)];
+    placedesc.text=@"Tap here to set place";
+    [placedesc setFont:[UIFont fontWithName:@"Helvetica" size:12]];
+//    placedesc.textColor=[Util getHighlightColor];
+    [containview addSubview:placedesc];
+
+    crossdescription=[[UITextView alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,width,132)];
+    [crossdescription setBackgroundColor:[UIColor  grayColor]];
+    [crossdescription setDelegate:self];
+    UISwipeGestureRecognizer *pull = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(pullcontainviewDown)];
+    [pull setDirection:(UISwipeGestureRecognizerDirectionDown)];
+    [crossdescription addGestureRecognizer:pull];
+    [pull release];
+    [containview addSubview:crossdescription];
+    
+    boardoffset=6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height;
 }
 
 
@@ -103,6 +141,7 @@
     }
 }
 - (IBAction) Gather:(id) sender{
+    [self pullcontainviewDown];
     Identity *by_identity=[Identity object];
     by_identity.identity_id=[NSNumber numberWithInt:174];
     
@@ -122,8 +161,7 @@
 //    Exfee *exfee=[Exfee object];
 //    [exfee addInvitationsObject:invitation];
     Exfee *exfee=[Exfee object];
-    for(Invitation *invitation in exfeeIdentities)
-    {
+    for(Invitation *invitation in exfeeIdentities){
         [exfee addInvitationsObject:invitation];  
     }
     cross.exfee = exfee;
@@ -139,6 +177,12 @@
     [exfeeShowview release];
     [crosstitle release];
     [map release];
+    [crossdescription release];
+    [timetitle release];
+    [timedesc release];
+    [placetitle release];
+    [placedesc release];
+    [containview release];
     [super dealloc];
 }
 - (void)didReceiveMemoryWarning
@@ -152,6 +196,7 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 - (IBAction) Close:(id) sender{
+    [self pullcontainviewDown];
     [self dismissModalViewControllerAnimated:YES];
 }
 
@@ -161,6 +206,9 @@
     placeViewController.gatherview=self;
     [self presentModalViewController:placeViewController animated:YES];
     [placeViewController release];
+}
+- (void) ShowTimeView{
+    NSLog(@"show time view");
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -323,50 +371,76 @@
     _place.external_id=[placedict objectForKey:@"external_id"];
     _place.provider=[placedict objectForKey:@"provier"];
     place=_place;
+    placetitle.text=_place.title;
+    placedesc.text=_place.place_description;
     
 }
-
+- (void) pullcontainviewDown{
+    if(containview.frame.origin.y<0){
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDelay:0];
+        [UIView setAnimationDuration:0.25];
+        [containview setFrame:CGRectMake(0,0,self.view.frame.size.width,460)];
+        [UIView commitAnimations];
+        [crossdescription resignFirstResponder];
+    }
+    
+}
 - (void) ShowExfeeInput:(BOOL)show{
     float width=self.view.frame.size.width-VIEW_MARGIN*2;
+    
+    [self pullcontainviewDown];
+    
+    
+    if(show==YES && isExfeeInputShow==NO){
+        exfeeInput.alpha=0;
+        [exfeeInput setHidden:NO];
 
-    if(show==YES){
-//
-        CGRect rect=exfeeShowview.frame;
-        [UIView animateWithDuration:0.25f
-                              delay:0.0f
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             [crosstitle setHidden:YES];
-                             [exfeenum setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6,exfeenum.frame.size.width, exfeenum.frame.size.height)];
-                             [exfeeInput setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
-                             [exfeeInput setHidden:NO];
-                             
-                             [exfeeShowview setFrame:CGRectMake(rect.origin.x,toolbar.frame.size.height+6+exfeenum.frame.size.height+8+exfeeInput.frame.size.height+8, rect.size.width, rect.size.height)];
-                             
-                         }
-                         completion:nil];
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDelay:0];
+        [UIView setAnimationDuration:0.25];
+        [crosstitle setFrame:CGRectMake(VIEW_MARGIN,crosstitle.frame.origin.y-48,crosstitle.frame.size.width,crosstitle.frame.size.height)];
+        [exfeenum setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6,exfeenum.frame.size.width, exfeenum.frame.size.height)];
+        [exfeeInput setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
+
+        [UIView commitAnimations];
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDelay:0.25];
+        [UIView setAnimationDuration:0.25];
+        exfeeInput.alpha=1;
+        [UIView commitAnimations];
+        isExfeeInputShow=YES;
+        [exfeeInput becomeFirstResponder];
+
 
     }
-    else{
+    else if(show==NO && isExfeeInputShow==YES){
         CGRect rect=exfeeShowview.frame;
-        rect.origin.y=rect.origin.y-31;
+//        rect.origin.y=rect.origin.y-31;
         
         [UIView animateWithDuration:0.25f
                               delay:0.0f
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
-                             [crosstitle setHidden:NO];
-                             
+//                             [crosstitle setHidden:NO];
+                             [crosstitle setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6,crosstitle.frame.size.width,crosstitle.frame.size.height)];
+
                              [exfeenum setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15, width, 24)];
                              [exfeeInput setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
                              [exfeeInput setHidden:YES];
                              
+                             
                              [exfeeShowview setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, rect.size.width, rect.size.height)];
+
+                             [map setFrame:CGRectMake(map.frame.origin.x,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+rect.size.height+15+5,map.frame.size.width,map.frame.size.height)];
+                             isExfeeInputShow=NO;
+                             
                          }
                          completion:nil];
         
     }
-    NSLog(@"show exfee input");
+//    NSLog(@"show exfee input");
 }
 - (void) setExfeeNum{
     int count=[exfeeIdentities count];
@@ -377,12 +451,41 @@
 
     UITouch * touch = [touches anyObject];
     if(touch.phase == UITouchPhaseBegan) {
+
+        if (CGRectContainsPoint([placetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([placedesc frame], [touch locationInView:self.view]))
+        {
+            [self ShowPlaceView];
+        }
+        if (CGRectContainsPoint([timetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([timedesc frame], [touch locationInView:self.view]))
+        {
+            [self ShowTimeView];
+        }
+
+        
         [crosstitle resignFirstResponder];
         [exfeeInput resignFirstResponder];
         [map becomeFirstResponder];
         [self ShowExfeeInput:NO];
     }
 //    NSLog(@"click view");
+}
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
+    NSLog(@"textview begin");
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDelay:0];
+    [UIView setAnimationDuration:0.25];
+    [containview setFrame:CGRectMake(0,-boardoffset,containview.frame.size.width,containview.frame.size.height)];
+    [UIView commitAnimations];
+    
+//
+//    [singleTap setNumberOfTapsRequired:1];
+//    [self.textView addGestureRecognizer:singleTap];
+//    [singleTap release];
+    
+    return YES;
+}
+- (void) pullPannelDown{
+    [self ShowExfeeInput:NO];
 }
 #pragma mark RKObjectLoaderDelegate methods
 
@@ -459,6 +562,9 @@
     int y_move=height-old_height;
 
     [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
+
+    [map setFrame:CGRectMake(map.frame.origin.x,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,map.frame.size.width,map.frame.size.height)];
+
     [exfeeShowview calculateColumn];
     NSLog(@"new height %f",height);
 }
@@ -467,13 +573,6 @@
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col {
     if(index==[exfeeIdentities count])
     {
-//        ExfeeViewController *exfeeViewController=[[ExfeeViewController alloc]initWithNibName:@"ExfeeViewController" bundle:nil];
-//        exfeeViewController.gatherview=self;
-//        exfeeViewController.exfee_title=crosstitle.text;
-//        [exfeeViewController setToolbarTitle:crosstitle.text];
-//        [self presentModalViewController:exfeeViewController animated:YES];
-//        [ExfeeViewController release];
-//        [self ShowExfeeInput];
         [self ShowExfeeInput:YES];
         NSLog(@"click add button");
     }

@@ -28,23 +28,32 @@
 
 #define VIEW_MARGIN 15
 
-@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate>{
+@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate,UITextViewDelegate>{
     IBOutlet UIToolbar *toolbar;
     UITextField *crosstitle;
     UITextField *exfeeInput;
     UILabel *exfeenum;
     MKMapView *map;
-    
+    UITextView *crossdescription;
+    UIView *containview;
+    BOOL isExfeeInputShow;
     UITableView *suggestionTable;
     NSMutableArray *suggestIdentities;
     NSMutableArray *exfeeIdentities;
     Place *place;
+    int boardoffset;
     EXImagesCollectionView *exfeeShowview;
+    UILabel *timetitle;
+    UILabel *timedesc;
+    UILabel *placetitle;
+    UILabel *placedesc;
+
 }
 
 - (IBAction) Gather:(id) sender;
 - (IBAction) Close:(id) sender;
 - (void) ShowPlaceView;
+- (void) ShowTimeView;
 
 - (void)textDidChange:(UITextField*)textField;
 - (void) addDefaultIdentity;
@@ -53,5 +62,6 @@
 - (void) setPlace:(NSDictionary*)placedict;
 - (void) ShowExfeeInput:(BOOL)show;
 - (void) setExfeeNum;
-
+- (void) pullPannelDown;
+- (void) pullcontainviewDown;
 @end

@@ -40,6 +40,7 @@
 					<object class="IBUIToolbar" id="921753108">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">266</int>
+						<array class="NSMutableArray" key="NSSubviews"/>
 						<string key="NSFrameSize">{320, 44}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
@@ -130,7 +131,6 @@
 						<int key="objectID">1</int>
 						<reference key="object" ref="191373211"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="921753108"/>
 							<object class="IBNSLayoutConstraint" id="121603132">
 								<reference key="firstItem" ref="921753108"/>
 								<int key="firstAttribute">6</int>
@@ -179,6 +179,7 @@
 								<float key="scoringTypeFloat">29</float>
 								<int key="contentType">3</int>
 							</object>
+							<reference ref="921753108"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -259,7 +260,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">400</int>
+			<int key="maxID">415</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
