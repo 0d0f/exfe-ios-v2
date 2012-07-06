@@ -33,7 +33,28 @@
     locationManager.desiredAccuracy = kCLLocationAccuracyBest; // 100 m
     [locationManager startUpdatingLocation];
 
+    if(gatherplace==nil)
+    {
+        gatherplace=[[NSMutableDictionary alloc] init];
+    }
+    else{
+        CLLocationCoordinate2D location;
+        location.latitude =[[gatherplace objectForKey:@"lat"] doubleValue];
+        location.longitude =[[gatherplace objectForKey:@"lng"] doubleValue];
+        
+        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[gatherplace objectForKey:@"title"]  description:[gatherplace objectForKey:@"description"]];
+        annotation.index=-1;
+        [map addAnnotation:annotation];
+        [annotation release];
 
+        MKCoordinateRegion region;
+        
+        region.center = location;
+        region.span.longitudeDelta = 0.02;
+        region.span.latitudeDelta = 0.02;
+        [map setRegion:region animated:YES];
+
+    }
     float tableviewx=map.frame.origin.x;
     float tableviewy=map.frame.origin.y+map.frame.size.height;
     float tableviewidth=map.frame.size.width;
@@ -47,16 +68,87 @@
     placeedit=[[EXPlaceEditView alloc] initWithFrame:CGRectMake(10, 5, 200, 100)];
     [placeedit setHidden:YES];
     [map addSubview:placeedit];
+    actionsheet=[[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Remove" otherButtonTitles:nil, nil];
+//    – initWithTitle:delegate:cancelButtonTitle:destructiveButtonTitle:otherButtonTitles:
+    
     
     UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maplongpress:)];
     longpress.minimumPressDuration = 1;
-//    [pull setDirection:(UISwipeGestureRecognizerDirectionDown)];
     [map addGestureRecognizer:longpress];
     [longpress release];
-
     
+    WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
+    tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
+        UITouch * touch = [touches anyObject];
+        if (!CGRectContainsPoint([placeedit frame], [touch locationInView:map]))
+        {
+            [placeedit setHidden:YES];
+            [placeedit resignFirstResponder];
+        }
+        
+        
+        if (CGRectContainsPoint([placeedit getCloseButtonFrame], [touch locationInView:map]))
+        {
+            [actionsheet showInView:self.view];
+        }
+        [self setViewStyle:EXPlaceViewStyleMap];
+    };
+    [map addGestureRecognizer:tapInterceptor];
+    [tapInterceptor release];
+    //[self setViewStyle:EXPlaceViewStyleMap];
 }
 
+- (void) PlaceEditClose:(id) sender{
+    NSLog(@"place edit close");
+}
+- (void) setViewStyle:(EXPlaceViewStyle)style{
+    if(style== EXPlaceViewStyleDefault){
+        
+    } else if(style== EXPlaceViewStyleMap){
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDelay:0];
+        [UIView setAnimationDuration:0.25];
+        
+        [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, self.view.frame.size.height, _tableView.frame.size.width, _tableView.frame.size.height)];
+        [map setFrame:CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height-44)];
+        [UIView commitAnimations];
+        [inputplace resignFirstResponder];
+        
+        
+        [map becomeFirstResponder];
+        
+    } else if(style== EXPlaceViewStyleTableview){
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDelay:0];
+        [UIView setAnimationDuration:0.25];
+        
+        [map setFrame:CGRectMake(0, 44, self.view.frame.size.width,230)];
+        [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, 44+85, _tableView.frame.size.width, self.view.frame.size.height-44-85)];
+        [UIView commitAnimations];
+        
+    } else if(style== EXPlaceViewStyleEdit){
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDelay:0];
+        [UIView setAnimationDuration:0.25];
+        
+        [map setFrame:CGRectMake(0, 44, self.view.frame.size.width,self.view.frame.size.height-44-216)];
+        [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, map.frame.size.height+44, _tableView.frame.size.width, self.view.frame.size.height-44-85)];
+        [UIView commitAnimations];
+        
+    }
+}
+- (void) setPlace:(Place*)_place{
+    if(gatherplace==nil)
+            gatherplace=[[NSMutableDictionary alloc] init];
+    [gatherplace setObject:_place.title forKey:@"title"];
+    [gatherplace setObject:_place.place_description forKey:@"description"];
+    [gatherplace setObject:_place.lat forKey:@"lat"];
+    [gatherplace setObject:_place.lng forKey:@"lng"];
+    [gatherplace setObject:_place.external_id forKey:@"external_id"];
+    [gatherplace setObject:_place.provider forKey:@"provider"];
+    isedit=YES;
+    
+}
 - (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer{
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
 //        NSLog(@"Long press Ended");
@@ -66,7 +158,7 @@
         CLLocationCoordinate2D touchMapCoordinate =
         [map convertPoint:touchPoint toCoordinateFromView:map];
         [map removeAnnotations: map.annotations];
-        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:touchMapCoordinate withTitle:@"here" description:@"here"];
+        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:touchMapCoordinate withTitle:@"Somewhere" description:@""];
         
         if([[map annotations] count]==0)
             annotation.index=-1;
@@ -85,9 +177,15 @@
 
 //    [gatherplace objectForKey:@"title"]
 //    [gatherplace objectForKey:@"description"]
-    
     if(gatherplace){
-        [(GatherViewController*)gatherview setPlace:gatherplace];
+        
+        NSString *provider=[gatherplace objectForKey:@"provider"];
+        if(provider==nil)
+           provider=@"exfe";
+           
+        NSDictionary *place =[NSDictionary dictionaryWithKeysAndObjects:@"title",[placeedit getPlaceTitle],@"description",[placeedit getPlaceDesc], @"lat",[gatherplace objectForKey:@"lat"],@"lng",[gatherplace objectForKey:@"lng"],@"provider",provider,@"external_id",[gatherplace objectForKey:@"external_id"], nil];
+
+        [(GatherViewController*)gatherview setPlace:place];
         [self dismissModalViewControllerAnimated:YES];
     }
     else{
@@ -115,18 +213,19 @@
     CLLocationCoordinate2D location;
     location.latitude = newLocation.coordinate.latitude;
     location.longitude = newLocation.coordinate.longitude;
-
-    MKCoordinateRegion region;
-
-    region.center = location;
-    region.span.longitudeDelta = 0.02;
-    region.span.latitudeDelta = 0.02;
-    [map setRegion:region animated:YES];
-    
-    CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
-    if(meters<0 || meters>500)
+    if(isedit==NO)
     {
-//        [APIPlace GetPlacesFromGoogleNearby:location.latitude lng:location.longitude delegate:self];
+        MKCoordinateRegion region;
+        region.center = location;
+        region.span.longitudeDelta = 0.02;
+        region.span.latitudeDelta = 0.02;
+        [map setRegion:region animated:YES];
+        
+        CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
+        if(meters<0 || meters>500)
+        {
+    //        [APIPlace GetPlacesFromGoogleNearby:location.latitude lng:location.longitude delegate:self];
+        }
     }
     lng=location.longitude;
     lat=location.latitude;
@@ -145,6 +244,7 @@
     [_annotations release];
     [_tableView release];
     [placeedit release];
+    [actionsheet release];
     [super dealloc];
 }
 //- (void) addNewPin{
@@ -176,6 +276,25 @@
     [map addAnnotations:_annotations];
 
 }
+
+#pragma mark UIActionSheetDelegate delegate methods
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(buttonIndex==0)
+    {
+        [placeedit setHidden:YES];
+        [placeedit resignFirstResponder];
+        [map removeAnnotations:[map annotations]];
+        [gatherplace setObject:@"" forKey:@"title"];
+        [gatherplace setObject:@"" forKey:@"description"];
+        [gatherplace setObject:[NSNumber numberWithInt:0] forKey:@"lat"];
+        [gatherplace setObject:[NSNumber numberWithInt:0] forKey:@"lng"];
+        [gatherplace setObject:@"" forKey:@"external_id"];
+        [gatherplace setObject:@"" forKey:@"provider"];
+        
+    }
+    NSLog(@"click %u",buttonIndex);
+}
+
 #pragma mark UITableView Datasource methods
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
@@ -225,25 +344,27 @@
         if([annotations count]>0)
         {
             PlaceAnnotation *annotation=[annotations objectAtIndex:0];
-            
-            NSDictionary *place=[[NSDictionary alloc] initWithObjectsAndKeys:@"placetitle",@"title",[NSNumber numberWithDouble:annotation.coordinate.latitude],@"lat",[NSNumber numberWithDouble:annotation.coordinate.longitude],@"lng",@"placedesc",@"description",@"exfe",@"provider",nil ];
-            [self addPlaceEdit:place];
-            [place release];
-        }
-//        Place *_place=[Place object];
-//        _place.title=[placedict objectForKey:@"title"];
-//        _place.lat=[NSNumber numberWithDouble:[[placedict objectForKey:@"lat"] doubleValue]];
-//        _place.lng=[NSNumber numberWithDouble:[[placedict objectForKey:@"lng"] doubleValue]];
-//        _place.place_description =[placedict objectForKey:@"description"];
-//        _place.external_id=[placedict objectForKey:@"external_id"];
-//        _place.provider=[placedict objectForKey:@"provier"];
 
-        NSLog(@"new place");
+            [gatherplace setObject:annotation.place_title forKey:@"title"];
+            [gatherplace setObject:annotation.place_description forKey:@"description"];
+            [gatherplace setObject:[NSNumber numberWithDouble:annotation.coordinate.latitude] forKey:@"lat"];
+            [gatherplace setObject:[NSNumber numberWithDouble:annotation.coordinate.longitude] forKey:@"lng"];
+            [gatherplace setObject:@"" forKey:@"external_id"];
+            [gatherplace setObject:@"exfe" forKey:@"provider"];
+            [self addPlaceEdit:gatherplace];
+        }
     }else{
         NSDictionary *place=[_places objectAtIndex:index];
-        [self addPlaceEdit:place];
-        gatherplace=place;
+        [gatherplace setObject:[place objectForKey:@"title"] forKey:@"title"];
+        [gatherplace setObject:[place objectForKey:@"description"] forKey:@"description"];
+        [gatherplace setObject:[place objectForKey:@"lat"] forKey:@"lat"];
+        [gatherplace setObject:[place objectForKey:@"lng"] forKey:@"lng"];
+        [gatherplace setObject:[place objectForKey:@"external_id"] forKey:@"external_id"];
+        [gatherplace setObject:[place objectForKey:@"provider"] forKey:@"provider"];
+
+        [self addPlaceEdit:gatherplace];
     }
+    
     [self setRightButton:@"done" Selector:@selector(done)];
 }
 
@@ -281,6 +402,10 @@
         [self performSelector:@selector(getPlace) withObject:self afterDelay:1.2];
     }
 }
+- (IBAction)editingDidBegan:(UITextField*)textField{
+    [self setViewStyle:EXPlaceViewStyleTableview];
+    [textField becomeFirstResponder];
+}
 - (void) setRightButton:(NSString*) title Selector:(SEL)aSelector{
     rightbutton.title=title;
     [rightbutton setAction:aSelector];
@@ -297,7 +422,7 @@
                 NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]];
                 for(NSDictionary *place in results)
                 {
-                    NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:[place objectForKey:@"name"],@"title",[place objectForKey:@"formatted_address"],@"description",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[place objectForKey:@"id"],@"external_id",@"google",@"provier",nil];
+                    NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:[place objectForKey:@"name"],@"title",[place objectForKey:@"formatted_address"],@"description",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[place objectForKey:@"id"],@"external_id",@"google",@"provider",nil];
                     [local_results addObject:dict];
                 }
                 [self reloadPlaceData:local_results];

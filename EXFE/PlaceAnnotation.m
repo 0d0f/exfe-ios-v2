@@ -14,6 +14,7 @@
 @synthesize place_title;
 @synthesize place_description;
 
+
 -(id)initWithCoordinate:(CLLocationCoordinate2D) c withTitle:(NSString*)title description:(NSString*)description{
     coordinate=c;
     place_title=title;

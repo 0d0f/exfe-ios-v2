@@ -204,6 +204,8 @@
 - (void) ShowPlaceView{
     PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
     placeViewController.gatherview=self;
+    if(place)
+        [placeViewController setPlace:place];
     [self presentModalViewController:placeViewController animated:YES];
     [placeViewController release];
 }
@@ -365,14 +367,32 @@
 - (void) setPlace:(NSDictionary*)placedict{
     Place *_place=[Place object];
     _place.title=[placedict objectForKey:@"title"];
-    _place.lat=[NSNumber numberWithDouble:[[placedict objectForKey:@"lat"] doubleValue]];
-    _place.lng=[NSNumber numberWithDouble:[[placedict objectForKey:@"lng"] doubleValue]];
+    NSNumber *lat=[placedict objectForKey:@"lat"];
+    NSNumber *lng=[NSNumber numberWithDouble:[[placedict objectForKey:@"lng"] doubleValue]];
+    _place.lat= lat;
+    _place.lng= lng;
     _place.place_description =[placedict objectForKey:@"description"];
     _place.external_id=[placedict objectForKey:@"external_id"];
-    _place.provider=[placedict objectForKey:@"provier"];
+    _place.provider=[placedict objectForKey:@"provider"];
     place=_place;
     placetitle.text=_place.title;
     placedesc.text=_place.place_description;
+    
+    CLLocationCoordinate2D location;
+    
+    [map removeAnnotations: map.annotations];
+    location.latitude = [_place.lat doubleValue];
+    location.longitude = [_place.lng doubleValue];
+    PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:_place.title  description:_place.place_description];
+    MKCoordinateRegion region;
+    
+    region.center = location;
+    region.span.longitudeDelta = 0.02;
+    region.span.latitudeDelta = 0.02;
+    [map setRegion:region animated:YES];
+
+    [map addAnnotation:annotation];
+    
     
 }
 - (void) pullcontainviewDown{

@@ -14,28 +14,40 @@
 #import "GatherViewController.h"
 #import "EXPlaceEditView.h"
 
+typedef NS_ENUM(NSInteger, EXPlaceViewStyle) {
+    EXPlaceViewStyleDefault,
+    EXPlaceViewStyleMap,
+    EXPlaceViewStyleTableview,
+    EXPlaceViewStyleEdit
+};
 
-@interface PlaceViewController : UIViewController <CLLocationManagerDelegate,UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,UITextFieldDelegate>{
+@interface PlaceViewController : UIViewController <CLLocationManagerDelegate,UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,UITextFieldDelegate,UIActionSheetDelegate>{
     CLLocationManager *locationManager;
     IBOutlet MKMapView *map;
     IBOutlet UITextField *inputplace;
     IBOutlet UIBarButtonItem *rightbutton;
     NSArray* _places;
     NSArray* _annotations;
-    NSDictionary* _place;
     UITableView* _tableView;
-    NSDictionary* gatherplace;
+    NSMutableDictionary* gatherplace;
     UIViewController *gatherview;
     EXPlaceEditView *placeedit;
+    UIActionSheet *actionsheet;
+    BOOL isedit;
     
     double editinginterval;
 
     double lng;
     double lat;
 }
+
+
 @property (nonatomic,retain) UIViewController* gatherview;
     
 - (IBAction) Close:(id) sender;
+- (void) PlaceEditClose:(id) sender;
+- (IBAction)textDidChange:(UITextField*)textField;
+- (IBAction)editingDidBegan:(UITextField*)textField;
 - (void) reloadPlaceData:(NSArray*)places;
 - (void) drawMapAnnontations;
 - (void) selectOnMap:(id) sender;
@@ -45,5 +57,7 @@
 - (void) setRightButton:(NSString*) title Selector:(SEL)aSelector;
 - (void) done;
 - (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer;
+- (void) setPlace:(Place*)_place;
+- (void) setViewStyle:(EXPlaceViewStyle)style;
 //- (void) addNewPin;
 @end
