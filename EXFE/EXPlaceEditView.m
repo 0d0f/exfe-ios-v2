@@ -30,7 +30,6 @@
         PlaceDesc=[[UITextView alloc] initWithFrame:CGRectMake(0, 4+size.height+5, frame.size.width-8, sizedesc.height)];
         [PlaceDesc setFont:[UIFont fontWithName:@"Helvetica" size:14]];
 
-
         [self addSubview:PlaceTitle];
         [self addSubview:PlaceDesc];
         
@@ -39,7 +38,6 @@
         [closeButton setBackgroundImage:[UIImage imageNamed:@"closebutton"]
                                forState:UIControlStateNormal];
         [self addSubview:closeButton];
-        
     }
     return self;
 }

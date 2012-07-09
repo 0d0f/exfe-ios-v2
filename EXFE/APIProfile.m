@@ -39,8 +39,9 @@
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     NSString *endpoint = [NSString stringWithFormat:@"/users/%u?token=%@",app.userid, app.accesstoken];
-    
     RKObjectManager* manager =[RKObjectManager sharedManager];
+    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+
     [manager loadObjectsAtResourcePath:endpoint usingBlock:^(RKObjectLoader *loader) {
         loader.userData = [NSNumber numberWithInt:user_id];
         loader.delegate = delegate;
@@ -54,6 +55,8 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"/identities/complete?key=%@",key];
     RKObjectManager* manager =[RKObjectManager sharedManager];
+    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+
     [manager.client setValue:app.accesstoken forHTTPHeaderField:@"token"];
     [manager loadObjectsAtResourcePath:endpoint usingBlock:^(RKObjectLoader *loader) {
         loader.userData=@"suggest";

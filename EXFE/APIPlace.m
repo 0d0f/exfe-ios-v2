@@ -51,6 +51,7 @@
     [queue addRequest:request];
     [queue start];
 }
+
 +(void) GetPlacesFromGoogleNearby:(double)lat lng:(double)lng delegate:(id)delegate{
     NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
     RKClient *client=[RKClient sharedClient];

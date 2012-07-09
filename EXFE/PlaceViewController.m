@@ -95,7 +95,6 @@
     };
     [map addGestureRecognizer:tapInterceptor];
     [tapInterceptor release];
-    //[self setViewStyle:EXPlaceViewStyleMap];
 }
 
 - (void) PlaceEditClose:(id) sender{
@@ -364,7 +363,8 @@
 
         [self addPlaceEdit:gatherplace];
     }
-    
+    [self setViewStyle:EXPlaceViewStyleMap];
+
     [self setRightButton:@"done" Selector:@selector(done)];
 }
 
