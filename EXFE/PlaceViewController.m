@@ -65,12 +65,10 @@
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
    
-    placeedit=[[EXPlaceEditView alloc] initWithFrame:CGRectMake(10, 5, 200, 100)];
+    placeedit=[[EXPlaceEditView alloc] initWithFrame:CGRectMake(10, 5, 280, 120)];
     [placeedit setHidden:YES];
     [map addSubview:placeedit];
     actionsheet=[[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Remove" otherButtonTitles:nil, nil];
-//    – initWithTitle:delegate:cancelButtonTitle:destructiveButtonTitle:otherButtonTitles:
-    
     
     UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maplongpress:)];
     longpress.minimumPressDuration = 1;
@@ -150,7 +148,6 @@
 }
 - (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer{
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-//        NSLog(@"Long press Ended");
     }
     else {
         CGPoint touchPoint = [gestureRecognizer locationInView:map];
@@ -158,11 +155,9 @@
         [map convertPoint:touchPoint toCoordinateFromView:map];
         [map removeAnnotations: map.annotations];
         PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:touchMapCoordinate withTitle:@"Somewhere" description:@""];
-        
         if([[map annotations] count]==0)
             annotation.index=-1;
         [map addAnnotation:annotation];
-        
         [annotation release];
     }
 }
@@ -172,12 +167,9 @@
 }
 
 - (void) done{
-    
-
 //    [gatherplace objectForKey:@"title"]
 //    [gatherplace objectForKey:@"description"]
     if(gatherplace){
-        
         NSString *provider=[gatherplace objectForKey:@"provider"];
         if(provider==nil)
            provider=@"exfe";
@@ -223,7 +215,7 @@
         CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
         if(meters<0 || meters>500)
         {
-    //        [APIPlace GetPlacesFromGoogleNearby:location.latitude lng:location.longitude delegate:self];
+            [APIPlace GetPlacesFromGoogleNearby:location.latitude lng:location.longitude delegate:self];
         }
     }
     lng=location.longitude;
@@ -336,7 +328,8 @@
     return annView;
 }
 - (void) selectPlace:(int)index{
-    
+    CLLocationCoordinate2D location;
+
     if(index==-1)
     {
         NSArray *annotations=[map annotations];
@@ -351,6 +344,11 @@
             [gatherplace setObject:@"" forKey:@"external_id"];
             [gatherplace setObject:@"exfe" forKey:@"provider"];
             [self addPlaceEdit:gatherplace];
+//            lat=annotation.coordinate.latitude;
+//            lng=annotation.coordinate.longitude;
+            location.latitude = annotation.coordinate.latitude;
+            location.longitude = annotation.coordinate.longitude;
+
         }
     }else{
         NSDictionary *place=[_places objectAtIndex:index];
@@ -360,11 +358,37 @@
         [gatherplace setObject:[place objectForKey:@"lng"] forKey:@"lng"];
         [gatherplace setObject:[place objectForKey:@"external_id"] forKey:@"external_id"];
         [gatherplace setObject:[place objectForKey:@"provider"] forKey:@"provider"];
-
         [self addPlaceEdit:gatherplace];
+
+        location.latitude = [[place objectForKey:@"lat"] doubleValue];
+        location.longitude = [[place objectForKey:@"lng"] doubleValue];
+
     }
     [self setViewStyle:EXPlaceViewStyleMap];
 
+    CGPoint point=[map convertCoordinate:location toPointToView:map];
+    CGPoint mapcenter=[map convertCoordinate:map.region.center toPointToView:map];
+    if(point.y<mapcenter.y)
+    {
+        float moveto_y=placeedit.frame.origin.y+placeedit.frame.size.height-30;
+        float offset=moveto_y-point.y;
+        mapcenter.y=mapcenter.y-moveto_y-offset;
+    }
+    else
+    {
+        float moveto_y=placeedit.frame.origin.y+placeedit.frame.size.height-30;
+        float offset=point.y-moveto_y;
+
+        mapcenter.y=mapcenter.y-moveto_y+offset;
+    }
+    CLLocationCoordinate2D newll =[map convertPoint:mapcenter toCoordinateFromView:map];
+    
+    MKCoordinateRegion region;
+    region.center = newll;
+    region.span.longitudeDelta = 0.02;
+    region.span.latitudeDelta = 0.02;
+    [map setRegion:region animated:YES];
+    
     [self setRightButton:@"done" Selector:@selector(done)];
 }
 
