@@ -22,6 +22,7 @@
 #import "Invitation.h"
 #import "ImgCache.h"
 #import "PlaceViewController.h"
+#import "TimeViewController.h"
 #import "Place.h"
 #import <MapKit/MapKit.h>
 #import "WildcardGestureRecognizer.h"
@@ -41,6 +42,7 @@
     NSMutableArray *suggestIdentities;
     NSMutableArray *exfeeIdentities;
     Place *place;
+    CrossTime *datetime;
     int boardoffset;
     EXImagesCollectionView *exfeeShowview;
     UILabel *timetitle;
@@ -60,6 +62,7 @@
 - (NSString*) findProvider:(NSString*)external_id;
 - (void) getIdentity:(NSString*)identity_json;
 - (void) setPlace:(NSDictionary*)placedict;
+- (void) setDateTime:(CrossTime*)crosstime;
 - (void) ShowExfeeInput:(BOOL)show;
 - (void) setExfeeNum;
 - (void) pullPannelDown;

@@ -21,7 +21,6 @@
 {
     RKObjectManager* manager =[RKObjectManager sharedManager];
     RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
-    
     RKManagedObjectMapping* placeMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Place" inManagedObjectStore:manager.objectStore];
     placeMapping.primaryKeyAttribute=@"place_id";
     [placeMapping mapKeyPathsToAttributes:@"id", @"place_id",

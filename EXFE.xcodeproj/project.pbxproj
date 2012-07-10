@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		780D27A4157F368900402460 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A3157F368900402460 /* Post.m */; };
 		780D27A7157F4AB100402460 /* PostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A6157F4AB100402460 /* PostCell.m */; };
+		7826673215ABE3C300CD29C4 /* TimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7826673015ABE3C300CD29C4 /* TimeViewController.m */; };
+		7826673315ABE3C300CD29C4 /* TimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7826673115ABE3C300CD29C4 /* TimeViewController.xib */; };
 		782B3C9C156A519D00721150 /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3C9B156A519D00721150 /* Exfee.m */; };
 		782B3CA5156A604A00721150 /* EFTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CA4156A604A00721150 /* EFTime.m */; };
 		782B3CAB156A604C00721150 /* CrossTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CAA156A604C00721150 /* CrossTime.m */; };
@@ -158,6 +160,9 @@
 		780D27A3157F368900402460 /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
 		780D27A5157F4AB100402460 /* PostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCell.h; sourceTree = "<group>"; };
 		780D27A6157F4AB100402460 /* PostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostCell.m; sourceTree = "<group>"; };
+		7826672F15ABE3C300CD29C4 /* TimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeViewController.h; sourceTree = "<group>"; };
+		7826673015ABE3C300CD29C4 /* TimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeViewController.m; sourceTree = "<group>"; };
+		7826673115ABE3C300CD29C4 /* TimeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimeViewController.xib; sourceTree = "<group>"; };
 		782B3C9A156A519D00721150 /* Exfee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exfee.h; sourceTree = "<group>"; };
 		782B3C9B156A519D00721150 /* Exfee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Exfee.m; sourceTree = "<group>"; };
 		782B3CA3156A604A00721150 /* EFTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTime.h; sourceTree = "<group>"; };
@@ -335,6 +340,9 @@
 				78F057FC1599A57B00F360F2 /* PlaceViewController.h */,
 				78F057FD1599A57B00F360F2 /* PlaceViewController.m */,
 				78F057FE1599A57C00F360F2 /* PlaceViewController.xib */,
+				7826672F15ABE3C300CD29C4 /* TimeViewController.h */,
+				7826673015ABE3C300CD29C4 /* TimeViewController.m */,
+				7826673115ABE3C300CD29C4 /* TimeViewController.xib */,
 			);
 			name = gather;
 			sourceTree = "<group>";
@@ -752,6 +760,7 @@
 				78F058001599A57C00F360F2 /* PlaceViewController.xib in Resources */,
 				78C8B0E415A71CA5005A44E1 /* closebutton.png in Resources */,
 				78C8B0E515A71CA5005A44E1 /* closebutton@2x.png in Resources */,
+				7826673315ABE3C300CD29C4 /* TimeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -806,6 +815,7 @@
 				78415346159C3F5C002B7A2E /* PlaceAnnotation.m in Sources */,
 				78415363159D6766002B7A2E /* WildcardGestureRecognizer.m in Sources */,
 				78C25ABA159D8211002AED1E /* EXPlaceEditView.m in Sources */,
+				7826673215ABE3C300CD29C4 /* TimeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

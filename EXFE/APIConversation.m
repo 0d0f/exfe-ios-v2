@@ -14,8 +14,7 @@
 @implementation APIConversation
 +(void) MappingConversation{
     RKObjectManager* manager =[RKObjectManager sharedManager];
-//    RKManagedObjectMapping* metaMapping = [Mapping getMetaMapping];
-//    [manager.mappingProvider setObjectMapping:metaMapping forKeyPath:@"meta"];
+    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
 
     RKManagedObjectMapping* postMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Post" inManagedObjectStore:manager.objectStore];
     
@@ -44,6 +43,7 @@
     NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u?updated_at=%@&token=%@",exfee_id, updatedtime,app.accesstoken];
     
     RKObjectManager* manager =[RKObjectManager sharedManager];
+    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
     [manager loadObjectsAtResourcePath:endpoint delegate:delegate];
 
     

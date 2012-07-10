@@ -39,8 +39,9 @@
 + (NSDictionary*) crossTimeToString:(CrossTime*)crosstime{
   
     NSMutableDictionary *result=[[[NSMutableDictionary alloc]initWithCapacity:2] autorelease];
-//    EFTime *begin_at=crosstime.begin_at;
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    [format setLocale:locale];
     [format setDateFormat:@"zzz"];
     NSString *localTimezone = [format stringFromDate:[NSDate date]];
     localTimezone=[localTimezone substringFromIndex:3];
@@ -57,7 +58,7 @@
 
     if(![crosstime.begin_at.date isEqualToString:@""]&&![crosstime.begin_at.time isEqualToString:@""] && ![crosstime.begin_at.timezone isEqualToString:@""])
     {
-        
+//        NSLog(@"timezone: %@",crosstime.begin_at.timezone);
         NSString *relative=[self formattedLongDateRelativeToNow:[crosstime.begin_at.date stringByAppendingFormat:@" %@ %@",crosstime.begin_at.time,[[crosstime.begin_at.timezone substringToIndex:3] stringByAppendingString:[crosstime.begin_at.timezone substringWithRange:NSMakeRange(4,2)]]]];
         
         [result setObject:relative forKey:@"relative"];
@@ -81,7 +82,7 @@
             NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
 
             NSString *hh=[localTimezone substringWithRange:NSMakeRange(1, 2)];
-            NSString *mm=[localTimezone substringWithRange:NSMakeRange(4, 2)];
+            NSString *mm=[localTimezone substringWithRange:NSMakeRange(3, 2)];
             int second_offset=(([hh intValue]*60+[mm intValue])*60)*60;
             [dateformat setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:second_offset]];
             [dateformat setDateFormat:@"HH:mm:ss"];

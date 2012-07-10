@@ -388,7 +388,7 @@
     region.span.longitudeDelta = 0.02;
     region.span.latitudeDelta = 0.02;
     [map setRegion:region animated:YES];
-    
+    [placeedit becomeFirstResponder];
     [self setRightButton:@"done" Selector:@selector(done)];
 }
 

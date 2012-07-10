@@ -55,7 +55,7 @@
     [exfeeShowview setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, width, 40+15)];
     [exfeeShowview calculateColumn];
 
-    [exfeeShowview setBackgroundColor:[UIColor grayColor]];
+    [exfeeShowview setBackgroundColor:[UIColor whiteColor]];
     [containview addSubview:exfeeShowview];
     isExfeeInputShow=NO;
 
@@ -89,9 +89,7 @@
     timedesc=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+24,160,18)];
     timedesc.text=@"Tap here to set time";
     [timedesc setFont:[UIFont fontWithName:@"Helvetica" size:12]];
-//    timedesc.textColor=[Util getHighlightColor];
     [containview addSubview:timedesc];
-    
     
     placetitle=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15,160,24)];
     placetitle.text=@"Somwhere";
@@ -102,12 +100,12 @@
     placedesc=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height,160,18)];
     placedesc.text=@"Tap here to set place";
     [placedesc setFont:[UIFont fontWithName:@"Helvetica" size:12]];
-//    placedesc.textColor=[Util getHighlightColor];
     [containview addSubview:placedesc];
 
-    crossdescription=[[UITextView alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,width,132)];
+    crossdescription=[[UITextView alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,width,144)];
     [crossdescription setBackgroundColor:[UIColor  grayColor]];
     [crossdescription setDelegate:self];
+    
     UISwipeGestureRecognizer *pull = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(pullcontainviewDown)];
     [pull setDirection:(UISwipeGestureRecognizerDirectionDown)];
     [crossdescription addGestureRecognizer:pull];
@@ -150,6 +148,8 @@
     cross.cross_description=@"test desc";
     cross.by_identity=by_identity;
     cross.place=place;
+    EFTime *eftime=datetime.begin_at;
+    cross.time=datetime;
 
     
 //    Invitation *invitation=[Invitation object];
@@ -210,6 +210,11 @@
     [placeViewController release];
 }
 - (void) ShowTimeView{
+    TimeViewController *timeViewController=[[TimeViewController alloc] initWithNibName:@"TimeViewController" bundle:nil];
+    timeViewController.gatherview=self;
+    [self presentModalViewController:timeViewController animated:YES];
+    [timeViewController release];
+    
     NSLog(@"show time view");
 }
 
@@ -387,14 +392,20 @@
     MKCoordinateRegion region;
     
     region.center = location;
-    region.span.longitudeDelta = 0.02;
-    region.span.latitudeDelta = 0.02;
+    region.span.longitudeDelta = 0.005;
+    region.span.latitudeDelta = 0.005;
     [map setRegion:region animated:YES];
-
+    [map removeAnnotations:[map annotations]];
     [map addAnnotation:annotation];
-    
-    
 }
+
+- (void) setDateTime:(CrossTime*)crosstime{
+    NSDictionary *humanreadable_date=[Util crossTimeToString:crosstime];
+    timetitle.text=[humanreadable_date objectForKey:@"relative"];
+    timedesc.text=[humanreadable_date objectForKey:@"date"];
+    datetime=crosstime;
+}
+
 - (void) pullcontainviewDown{
     if(containview.frame.origin.y<0){
         [UIView beginAnimations:nil context:NULL];
