@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7803EB8B15AD801500291B69 /* EXButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7803EB8A15AD801500291B69 /* EXButton.m */; };
 		780D27A4157F368900402460 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A3157F368900402460 /* Post.m */; };
 		780D27A7157F4AB100402460 /* PostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A6157F4AB100402460 /* PostCell.m */; };
 		7826673215ABE3C300CD29C4 /* TimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7826673015ABE3C300CD29C4 /* TimeViewController.m */; };
@@ -34,6 +35,7 @@
 		7840918015732CA5006DF115 /* chat~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917C15732CA5006DF115 /* chat~iphone.png */; };
 		7840918115732CA5006DF115 /* chat@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917D15732CA5006DF115 /* chat@2x~ipad.png */; };
 		7840918215732CA5006DF115 /* chat~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 7840917E15732CA5006DF115 /* chat~ipad.png */; };
+		7841389A15AD36C2002E1030 /* EXIconToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7841389915AD36C2002E1030 /* EXIconToolBar.m */; };
 		78415346159C3F5C002B7A2E /* PlaceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415345159C3F5C002B7A2E /* PlaceAnnotation.m */; };
 		78415363159D6766002B7A2E /* WildcardGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */; };
 		785D8136156A1AE400FC0984 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 785D8135156A1AE400FC0984 /* Place.m */; };
@@ -156,6 +158,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7803EB8915AD801500291B69 /* EXButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXButton.h; sourceTree = "<group>"; };
+		7803EB8A15AD801500291B69 /* EXButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXButton.m; sourceTree = "<group>"; };
 		780D27A2157F368800402460 /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
 		780D27A3157F368900402460 /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
 		780D27A5157F4AB100402460 /* PostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCell.h; sourceTree = "<group>"; };
@@ -198,6 +202,8 @@
 		7840917C15732CA5006DF115 /* chat~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~iphone.png"; sourceTree = "<group>"; };
 		7840917D15732CA5006DF115 /* chat@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat@2x~ipad.png"; sourceTree = "<group>"; };
 		7840917E15732CA5006DF115 /* chat~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~ipad.png"; sourceTree = "<group>"; };
+		7841389815AD36C2002E1030 /* EXIconToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXIconToolBar.h; sourceTree = "<group>"; };
+		7841389915AD36C2002E1030 /* EXIconToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXIconToolBar.m; sourceTree = "<group>"; };
 		78415344159C3F5C002B7A2E /* PlaceAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceAnnotation.h; sourceTree = "<group>"; };
 		78415345159C3F5C002B7A2E /* PlaceAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaceAnnotation.m; sourceTree = "<group>"; };
 		78415361159D672A002B7A2E /* WildcardGestureRecognizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WildcardGestureRecognizer.h; sourceTree = "<group>"; };
@@ -596,6 +602,10 @@
 				789C8CAC1591D9B700580624 /* EXImagesCollectionView.m */,
 				78C25AB8159D8211002AED1E /* EXPlaceEditView.h */,
 				78C25AB9159D8211002AED1E /* EXPlaceEditView.m */,
+				7841389815AD36C2002E1030 /* EXIconToolBar.h */,
+				7841389915AD36C2002E1030 /* EXIconToolBar.m */,
+				7803EB8915AD801500291B69 /* EXButton.h */,
+				7803EB8A15AD801500291B69 /* EXButton.m */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -816,6 +826,8 @@
 				78415363159D6766002B7A2E /* WildcardGestureRecognizer.m in Sources */,
 				78C25ABA159D8211002AED1E /* EXPlaceEditView.m in Sources */,
 				7826673215ABE3C300CD29C4 /* TimeViewController.m in Sources */,
+				7841389A15AD36C2002E1030 /* EXIconToolBar.m in Sources */,
+				7803EB8B15AD801500291B69 /* EXButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

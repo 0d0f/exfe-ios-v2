@@ -90,7 +90,6 @@
         if(y_count>0)
             y+=15;
         Identity *identity=[_dataSource imageCollectionView:self imageAtIndex:i];
-//        UIImage *image
         UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
 
         if(avatar==nil || [avatar isEqual:[NSNull null]]){
@@ -98,7 +97,6 @@
         }
 
         [avatar drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
-//         NSString *name=@"name";
         NSString *name=identity.name;
         if(name==nil)
             name=identity.external_username;

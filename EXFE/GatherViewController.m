@@ -43,6 +43,7 @@
     [containview addSubview:exfeenum];
     
     exfeeInput=[[UITextField alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
+    [exfeeInput setPlaceholder:@"Invite friends by name, email…"];
     [exfeeInput setBorderStyle:UITextBorderStyleRoundedRect];
     [exfeeInput setAutocorrectionType:UITextAutocorrectionTypeNo];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:UITextFieldTextDidChangeNotification object:exfeeInput];
@@ -74,6 +75,7 @@
     tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
         [self ShowPlaceView];
     };
+    
     [map addGestureRecognizer:tapInterceptor];
     [tapInterceptor release];
     
@@ -138,6 +140,7 @@
         }
     }
 }
+
 - (IBAction) Gather:(id) sender{
     [self pullcontainviewDown];
     Identity *by_identity=[Identity object];
@@ -148,18 +151,10 @@
     cross.cross_description=@"test desc";
     cross.by_identity=by_identity;
     cross.place=place;
+
     EFTime *eftime=datetime.begin_at;
     cross.time=datetime;
 
-    
-//    Invitation *invitation=[Invitation object];
-//    invitation.identity=by_identity;
-//    invitation.by_identity=by_identity;
-//    invitation.rsvp_status=@"ACCEPTED";
-//    invitation.host=[NSNumber numberWithBool:YES];
-//
-//    Exfee *exfee=[Exfee object];
-//    [exfee addInvitationsObject:invitation];
     Exfee *exfee=[Exfee object];
     for(Invitation *invitation in exfeeIdentities){
         [exfee addInvitationsObject:invitation];  
@@ -417,6 +412,34 @@
     }
     
 }
+
+- (void) ShowRSVPToolBar:(int)exfeeIndex{
+    selectedExfeeIndex=exfeeIndex;
+    if(rsvptoolbar==nil){
+        rsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, self.view.frame.size.height-44) buttonsize:CGSizeMake(20, 20) delegate:self];
+        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"chat.png"]];
+        [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
+        EXButton *addmate=[[EXButton alloc] initWithName:@"addmate" title:@"+1 mate" image:[UIImage imageNamed:@"chat.png"]];
+        [addmate addTarget:self action:@selector(rsvpaddmate) forControlEvents:UIControlEventTouchUpInside];
+        EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"+1 mate" image:[UIImage imageNamed:@"chat.png"]];
+        [submate addTarget:self action:@selector(rsvpsubmate) forControlEvents:UIControlEventTouchUpInside];
+        EXButton *reset=[[EXButton alloc] initWithName:@"reset" title:@"Reset" image:[UIImage imageNamed:@"chat.png"]];
+        [reset addTarget:self action:@selector(rsvpreset) forControlEvents:UIControlEventTouchUpInside];
+        NSArray *array=[NSArray arrayWithObjects:accept,addmate,submate,reset, nil];
+        [rsvptoolbar drawButton:array];
+        [accept release];
+        [addmate release];
+        [submate release];
+        [reset release];
+        [self.view addSubview:rsvptoolbar];
+    }
+    [rsvptoolbar setItemIndex:exfeeIndex];
+    [rsvptoolbar setHidden:NO];
+    //rsvptoolbar.tag=exfeeIndex;
+    
+    NSLog(@"show rsvp");
+}
+
 - (void) ShowExfeeInput:(BOOL)show{
     float width=self.view.frame.size.width-VIEW_MARGIN*2;
     
@@ -433,9 +456,7 @@
         [crosstitle setFrame:CGRectMake(VIEW_MARGIN,crosstitle.frame.origin.y-48,crosstitle.frame.size.width,crosstitle.frame.size.height)];
         [exfeenum setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6,exfeenum.frame.size.width, exfeenum.frame.size.height)];
         [exfeeInput setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
-
         [UIView commitAnimations];
-        
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDelay:0.25];
         [UIView setAnimationDuration:0.25];
@@ -584,8 +605,6 @@
 - (Identity *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
     Invitation *invitation =[exfeeIdentities objectAtIndex:index];
     Identity *identity=invitation.identity;
-//    UIImage *avatar = [[ImgCache sharedManager] getImgFrom:invitation.identity.avatar_filename];
-//    return avatar;
     return identity;
 }
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
@@ -604,10 +623,32 @@
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col {
     if(index==[exfeeIdentities count])
     {
+        if(rsvptoolbar)
+            [rsvptoolbar setHidden:YES];
         [self ShowExfeeInput:YES];
-        NSLog(@"click add button");
     }
-    NSLog(@"exfee click index:%i, row:%i, col:%i",index,row,col);
+    else{
+        
+        [exfeeInput resignFirstResponder];
+        [crosstitle resignFirstResponder];
+        [crosstitle endEditing:YES];
+        [exfeeInput endEditing:YES];
+        [self ShowRSVPToolBar:index];
+    }
 }
+
+#pragma mark RSVPToolbar delegate methods
+- (void) rsvpaccept{
+//    NSInteger index = ((UIControl*)sender).tag;
+//    if(index<[exfeeIdentities count])
+//    {
+//       	 
+//    }
+    NSLog(@"rsvp accept: %i  in %i",selectedExfeeIndex,[exfeeIdentities count]);
+}
+- (void) rsvpaddmate{
+    NSLog(@"rsvp addmate");
+}
+
 
 @end

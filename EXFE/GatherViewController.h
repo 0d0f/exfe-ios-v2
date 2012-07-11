@@ -24,6 +24,8 @@
 #import "PlaceViewController.h"
 #import "TimeViewController.h"
 #import "Place.h"
+#import "EXIconToolBar.h"
+//#import "EXToolbarItem.h"
 #import <MapKit/MapKit.h>
 #import "WildcardGestureRecognizer.h"
 
@@ -34,6 +36,7 @@
     UITextField *crosstitle;
     UITextField *exfeeInput;
     UILabel *exfeenum;
+    EXIconToolBar *rsvptoolbar;
     MKMapView *map;
     UITextView *crossdescription;
     UIView *containview;
@@ -49,6 +52,7 @@
     UILabel *timedesc;
     UILabel *placetitle;
     UILabel *placedesc;
+    int selectedExfeeIndex;
 
 }
 
@@ -56,7 +60,7 @@
 - (IBAction) Close:(id) sender;
 - (void) ShowPlaceView;
 - (void) ShowTimeView;
-
+- (void) ShowRSVPToolBar:(int)exfeeIndex;
 - (void)textDidChange:(UITextField*)textField;
 - (void) addDefaultIdentity;
 - (NSString*) findProvider:(NSString*)external_id;
@@ -67,4 +71,6 @@
 - (void) setExfeeNum;
 - (void) pullPannelDown;
 - (void) pullcontainviewDown;
+- (void) rsvpaccept;
+- (void) rsvpaddmate;
 @end
