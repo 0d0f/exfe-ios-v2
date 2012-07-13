@@ -99,6 +99,7 @@
 		78D0A600158CFB4C00401BCA /* OAuthLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */; };
 		78D0A601158CFB5F00401BCA /* URLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FF158CFAD200401BCA /* URLParser.m */; };
 		78D0A602158CFE1900401BCA /* OAuthLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */; };
+		78D7F4E415B03EE60028DAB2 /* bg_gradient@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D7F4E315B03EE60028DAB2 /* bg_gradient@2x.png */; };
 		78DABCE9158B236C004447B5 /* Meta.m in Sources */ = {isa = PBXBuildFile; fileRef = 78DABCE8158B236C004447B5 /* Meta.m */; };
 		78E4EE5A1581D02B00AE6211 /* ConversationTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E4EE591581D02B00AE6211 /* ConversationTableView.m */; };
 		78E837F9156658A300763A60 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 78E837F7156658A300763A60 /* Model.xcdatamodeld */; };
@@ -294,6 +295,7 @@
 		78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAuthLoginViewController.xib; sourceTree = "<group>"; };
 		78D0A5FE158CFAD200401BCA /* URLParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = URLParser.h; sourceTree = "<group>"; };
 		78D0A5FF158CFAD200401BCA /* URLParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URLParser.m; sourceTree = "<group>"; };
+		78D7F4E315B03EE60028DAB2 /* bg_gradient@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_gradient@2x.png"; sourceTree = "<group>"; };
 		78DABCE7158B236C004447B5 /* Meta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Meta.h; sourceTree = "<group>"; };
 		78DABCE8158B236C004447B5 /* Meta.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Meta.m; sourceTree = "<group>"; };
 		78E4EE581581D02B00AE6211 /* ConversationTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationTableView.h; sourceTree = "<group>"; };
@@ -408,6 +410,7 @@
 				78ADED6815998D93002B459A /* default_avatar@2x~iphone.png */,
 				78ADED6915998D93002B459A /* default_avatar~ipad.png */,
 				78ADED6A15998D93002B459A /* default_avatar~iphone.png */,
+				78D7F4E315B03EE60028DAB2 /* bg_gradient@2x.png */,
 			);
 			name = Resource;
 			path = ..;
@@ -775,6 +778,7 @@
 				78C8B0E415A71CA5005A44E1 /* closebutton.png in Resources */,
 				78C8B0E515A71CA5005A44E1 /* closebutton@2x.png in Resources */,
 				7826673315ABE3C300CD29C4 /* TimeViewController.xib in Resources */,
+				78D7F4E415B03EE60028DAB2 /* bg_gradient@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

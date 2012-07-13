@@ -64,6 +64,9 @@
     [super layoutSubviews];
 }
 - (void)drawContentView:(CGRect)r{
+    
+
+    [Util drawRoundRect:r color:[UIColor blueColor] radius:5];
     if(removed==NO)
     {
     if (hlTitle)
@@ -74,7 +77,7 @@
 
     if(avatar!=nil && ![avatar isKindOfClass:[NSNull class]])
         [avatar drawInRect:CGRectMake(10, 11, 40, 40)];
-    float place_width=100;
+    float place_width=140;
     
     //highlight
 //    if([updated objectForKey:@"place"]!=nil && read_at!=nil)
@@ -82,7 +85,7 @@
         [[Util getHighlightColor] set];  
     else 
         [[Util getRegularColor] set];
-    [place drawInRect:CGRectMake(60, 34, place_width, 18) withFont:[UIFont fontWithName:@"Helvetica" size:12]];
+    [place drawInRect:CGRectMake(60, 34, place_width, 18) withFont:[UIFont fontWithName:@"Helvetica" size:12] lineBreakMode:UILineBreakModeTailTruncation];
     float time_width=320-60-10-place_width;
     
     //highlight

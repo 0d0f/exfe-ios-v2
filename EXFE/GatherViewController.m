@@ -251,7 +251,7 @@
 - (NSString*) findProvider:(NSString*)external_id{
     
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"; 
-    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex]; 
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
 
     if([emailTest evaluateWithObject:external_id]==YES)
         return @"email";
@@ -534,11 +534,6 @@
     [containview setFrame:CGRectMake(0,-boardoffset,containview.frame.size.width,containview.frame.size.height)];
     [UIView commitAnimations];
     
-//
-//    [singleTap setNumberOfTapsRequired:1];
-//    [self.textView addGestureRecognizer:singleTap];
-//    [singleTap release];
-    
     return YES;
 }
 - (void) pullPannelDown{
@@ -631,13 +626,7 @@
     [placedesc setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height,160,18)];
 
     [crossdescription setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,crossdescription.frame.size.width,144-60)];
-    
-    
-//    timetitle=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15,160,24)];
-
-
     [exfeeShowview calculateColumn];
-    NSLog(@"new height %f",height);
 }
 
 #pragma mark EXImagesCollectionView delegate methods
@@ -648,7 +637,7 @@
             [rsvptoolbar setHidden:YES];
         [self ShowExfeeInput:YES];
     }
-    else{
+    else if(index <[exfeeIdentities count]){
         
         [exfeeInput resignFirstResponder];
         [crosstitle resignFirstResponder];

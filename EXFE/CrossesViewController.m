@@ -78,6 +78,11 @@
     [self.navigationController navigationBar].topItem.title=app.username;
 
     [self.navigationController.view setNeedsDisplay];
+//    UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_gradient.png"]];
+//    [tempImageView setFrame:self.tableView.frame]; 
+//    
+//    self.tableView.backgroundView = tempImageView;
+//    [tempImageView release];
     
 }
 - (void)viewDidUnload
@@ -253,7 +258,8 @@
     cell.title=cross.title;
     cell.place=cross.place.title;
     NSDictionary *humanable_date=[Util crossTimeToString:cross.time];
-    cell.time=[humanable_date objectForKey:@"date"];
+//    [Util formattedShortDate:cross.time];
+    cell.time=[humanable_date objectForKey:@"short"];
     if(cross.by_identity.avatar_filename!=nil) {
         dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
         dispatch_async(imgQueue, ^{

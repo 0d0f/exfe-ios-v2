@@ -35,10 +35,48 @@
 + (UIColor*) getRegularColor{
     return [UIColor colorWithRed:19/255.0f green:19/255.0f blue:19/255.0f alpha:1];
 }
-
++ (NSString*) formattedShortDate:(CrossTime*)crosstime{
+    NSString *shortdate=@"Sometime";
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    NSTimeZone *timezone=[NSTimeZone timeZoneWithName:@"GMT"];
+    [format setTimeZone:timezone];
+    NSString *formatstr=@"";
+    NSString *origin_date_str=@"";
+    if(crosstime.begin_at.date!=nil) {
+        formatstr=@"yyyy-MM-dd";
+        origin_date_str=crosstime.begin_at.date;
+    }
+    if(crosstime.begin_at.time!=nil){
+        formatstr=[formatstr stringByAppendingFormat:@" HH:mm:ss"];
+        origin_date_str=[origin_date_str stringByAppendingFormat:@" %@", crosstime.begin_at.time] ;
+    }
+    [format setDateFormat:formatstr];
+    NSDate *date=[format dateFromString:origin_date_str];
+    
+    if(date!=nil){
+        [format setTimeZone:[NSTimeZone localTimeZone]];
+        if(crosstime.begin_at.time!=nil && crosstime.begin_at.date!=nil)
+            [format setDateFormat:@"h:mma ccc, MMM d"];
+        else if(crosstime.begin_at.date!=nil)
+            [format setDateFormat:@"ccc, MMM d"];
+        shortdate=[format stringFromDate:date];
+    
+    }
+    [format release];
+    return shortdate;
+}
 + (NSDictionary*) crossTimeToString:(CrossTime*)crosstime{
   
+        
     NSMutableDictionary *result=[[[NSMutableDictionary alloc]initWithCapacity:2] autorelease];
+    if(crosstime==nil){
+        [result setObject:@"" forKey:@"date"];
+        [result setObject:@"Sometime" forKey:@"relative"];
+        [result setObject:@"Sometime" forKey:@"Short"];
+        return result;
+    }
+        
+
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     [format setLocale:locale];
@@ -47,6 +85,7 @@
     localTimezone=[localTimezone substringFromIndex:3];
     [format setDateFormat:@"yyyy"];
     NSString *localYear = [format stringFromDate:[NSDate date]];
+    
     [format release];
     NSString* cross_timezone=@"";
     if(crosstime.begin_at.timezone.length>=6 )
@@ -58,14 +97,12 @@
 
     if(![crosstime.begin_at.date isEqualToString:@""]&&![crosstime.begin_at.time isEqualToString:@""] && ![crosstime.begin_at.timezone isEqualToString:@""])
     {
-//        NSLog(@"timezone: %@",crosstime.begin_at.timezone);
         NSString *relative=[self formattedLongDateRelativeToNow:[crosstime.begin_at.date stringByAppendingFormat:@" %@ %@",crosstime.begin_at.time,[[crosstime.begin_at.timezone substringToIndex:3] stringByAppendingString:[crosstime.begin_at.timezone substringWithRange:NSMakeRange(4,2)]]]];
         
         [result setObject:relative forKey:@"relative"];
-//        NSLog(@"%@",relative);
     }
+    [result setObject:[self formattedShortDate:crosstime] forKey:@"short"];
 
-    
     if( [crosstime.outputformat intValue]==1) {
         NSString *datestr=@"";
         datestr=[datestr stringByAppendingString:crosstime.origin];
