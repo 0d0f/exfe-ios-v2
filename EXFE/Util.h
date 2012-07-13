@@ -19,5 +19,6 @@
 + (NSString *) formattedLongDateRelativeToNow:(NSString*)datestr;
 + (NSString *) formattedDateRelativeToNow:(NSDate*)date;
 + (NSString*) getBackgroundLink:(NSString*)imgname;
++ (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 @end
 

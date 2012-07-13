@@ -176,19 +176,6 @@
     if([objects count]>0)
     {
         NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-//        if(date_updated_at==nil)
-//        {
-//            NSDate *now = [NSDate date];
-//            for( Cross *cross in objects)
-//            {
-//                cross.read_at=now;
-//                NSError *saveError;
-//                [[Cross currentContext] save:&saveError];
-//            }
-//
-//            NSLog(@"the first loading");
-//        }
-
         
         Cross *cross=[objects lastObject];
         [[NSUserDefaults standardUserDefaults] setObject:cross.updated_at forKey:@"exfee_updated_at"];
@@ -201,7 +188,6 @@
 
         [app.navigationController dismissModalViewControllerAnimated:YES];
     }
-
     [self stopLoading];
 }
 

@@ -12,6 +12,7 @@
 #import "UIInputToolbar.h"
 #import "ConversationTableView.h"
 #import "PostCell.h"
+#import <RestKit/RKRequestSerialization.h>
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20

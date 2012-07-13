@@ -2,8 +2,8 @@
 //  Invitation.m
 //  EXFE
 //
-//  Created by ju huo on 5/30/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by huoju on 7/12/12.
+//
 //
 
 #import "Invitation.h"
@@ -13,11 +13,12 @@
 @implementation Invitation
 
 @dynamic created_at;
+@dynamic host;
 @dynamic invitation_id;
 @dynamic rsvp_status;
 @dynamic updated_at;
 @dynamic via;
-@dynamic host;
+@dynamic mates;
 @dynamic by_identity;
 @dynamic identity;
 

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7803EB8B15AD801500291B69 /* EXButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7803EB8A15AD801500291B69 /* EXButton.m */; };
+		7803EB8E15AE859200291B69 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7803EB8D15AE859200291B69 /* Invitation.m */; };
 		780D27A4157F368900402460 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A3157F368900402460 /* Post.m */; };
 		780D27A7157F4AB100402460 /* PostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A6157F4AB100402460 /* PostCell.m */; };
 		7826673215ABE3C300CD29C4 /* TimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7826673015ABE3C300CD29C4 /* TimeViewController.m */; };
@@ -62,7 +63,6 @@
 		78615B401578CC22003CF68A /* ConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7840917815732A91006DF115 /* ConversationViewController.xib */; };
 		7876512D1575F23100E3DFD9 /* x.html in Resources */ = {isa = PBXBuildFile; fileRef = 7876512B1575F23100E3DFD9 /* x.html */; };
 		7876512E1575F23100E3DFD9 /* x_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 7876512C1575F23100E3DFD9 /* x_background.png */; };
-		787651311576093500E3DFD9 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 787651301576093500E3DFD9 /* Invitation.m */; };
 		7876513415760A4900E3DFD9 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 7876513315760A4800E3DFD9 /* Identity.m */; };
 		788312A815738D6100D67103 /* CrossCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 788312A715738D6100D67103 /* CrossCell.m */; };
 		788312AB1574A63600D67103 /* ImgCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 788312AA1574A5DE00D67103 /* ImgCache.m */; };
@@ -160,6 +160,8 @@
 /* Begin PBXFileReference section */
 		7803EB8915AD801500291B69 /* EXButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXButton.h; sourceTree = "<group>"; };
 		7803EB8A15AD801500291B69 /* EXButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXButton.m; sourceTree = "<group>"; };
+		7803EB8C15AE859200291B69 /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
+		7803EB8D15AE859200291B69 /* Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
 		780D27A2157F368800402460 /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
 		780D27A3157F368900402460 /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
 		780D27A5157F4AB100402460 /* PostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCell.h; sourceTree = "<group>"; };
@@ -514,6 +516,8 @@
 				78A98E9A1560F832009E0806 /* AppDelegate.h */,
 				78A98E9B1560F832009E0806 /* AppDelegate.m */,
 				78E837F7156658A300763A60 /* Model.xcdatamodeld */,
+				7803EB8C15AE859200291B69 /* Invitation.h */,
+				7803EB8D15AE859200291B69 /* Invitation.m */,
 				7840916A156F6AA4006DF115 /* Util.h */,
 				7840916B156F6AA5006DF115 /* Util.m */,
 				78D0A5FE158CFAD200401BCA /* URLParser.h */,
@@ -799,7 +803,6 @@
 				7840917915732A91006DF115 /* ConversationViewController.m in Sources */,
 				788312A815738D6100D67103 /* CrossCell.m in Sources */,
 				788312AB1574A63600D67103 /* ImgCache.m in Sources */,
-				787651311576093500E3DFD9 /* Invitation.m in Sources */,
 				7876513415760A4900E3DFD9 /* Identity.m in Sources */,
 				78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */,
 				78920EBC157CB0E1004F3901 /* Rsvp.m in Sources */,
@@ -828,6 +831,7 @@
 				7826673215ABE3C300CD29C4 /* TimeViewController.m in Sources */,
 				7841389A15AD36C2002E1030 /* EXIconToolBar.m in Sources */,
 				7803EB8B15AD801500291B69 /* EXButton.m in Sources */,
+				7803EB8E15AE859200291B69 /* Invitation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

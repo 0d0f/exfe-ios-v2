@@ -28,6 +28,8 @@
     [super viewDidLoad];
 
     exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
+    exfeeSelected=[[NSMutableArray alloc] initWithCapacity:12];
+    
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     float width=self.view.frame.size.width-VIEW_MARGIN*2;
     containview=[[UIView alloc] initWithFrame:CGRectMake(0,0,width,460)];
@@ -53,7 +55,7 @@
     
     //TODO: workaround for a responder chain bug
     exfeeShowview =[[EXImagesCollectionView alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, width, 120)];
-    [exfeeShowview setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, width, 40+15)];
+    [exfeeShowview setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, width, 40+15+5)];
     [exfeeShowview calculateColumn];
 
     [exfeeShowview setBackgroundColor:[UIColor whiteColor]];
@@ -134,8 +136,11 @@
         if(user!=nil){
             Invitation *invitation=[Invitation object];
             invitation.rsvp_status=@"ACCEPTED";
+            invitation.host=[NSNumber numberWithBool:YES];
+            invitation.mates=0;
             invitation.identity=default_identity;
             [exfeeIdentities addObject:invitation];
+            [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
             [exfeeShowview reloadData];
         }
     }
@@ -151,10 +156,7 @@
     cross.cross_description=@"test desc";
     cross.by_identity=by_identity;
     cross.place=place;
-
-    EFTime *eftime=datetime.begin_at;
     cross.time=datetime;
-
     Exfee *exfee=[Exfee object];
     for(Invitation *invitation in exfeeIdentities){
         [exfee addInvitationsObject:invitation];  
@@ -167,6 +169,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:exfeeInput];
 
 	[exfeeIdentities release];
+    [exfeeSelected release];
     [suggestIdentities release];
     [exfeeInput release];
     [exfeeShowview release];
@@ -306,7 +309,9 @@
                                 Invitation *invitation =[Invitation object];
                                 invitation.rsvp_status=@"ACCEPTED";
                                 invitation.identity=identity;
+                                
                                 [exfeeIdentities addObject:invitation];
+                                [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
                                 [exfeeShowview reloadData];
                                 [suggestionTable removeFromSuperview];
                                 
@@ -590,6 +595,7 @@
     invitation.identity=identity;
 
     [exfeeIdentities addObject:invitation];
+    [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
     [exfeeShowview reloadData];
     [suggestionTable removeFromSuperview];
     exfeeInput.text=@"";
@@ -602,18 +608,33 @@
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
     return [exfeeIdentities count];
 }
-- (Identity *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
+- (Invitation *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
     Invitation *invitation =[exfeeIdentities objectAtIndex:index];
-    Identity *identity=invitation.identity;
-    return identity;
+//    Identity *identity=invitation.identity;
+    return invitation;
+}
+- (NSArray *) selectedOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
+    return exfeeSelected;
+    
 }
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
-    int old_height=exfeeShowview.frame.size.height;
-    int y_move=height-old_height;
+//    int old_height=exfeeShowview.frame.size.height;
+//    int y_move=height-old_height;
 
     [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
 
     [map setFrame:CGRectMake(map.frame.origin.x,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,map.frame.size.width,map.frame.size.height)];
+    [timetitle setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15,160,24)];
+    [timedesc setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+24,160,18)];
+    [placetitle setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15,160,24)];
+    
+    [placedesc setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height,160,18)];
+
+    [crossdescription setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,crossdescription.frame.size.width,144-60)];
+    
+    
+//    timetitle=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15,160,24)];
+
 
     [exfeeShowview calculateColumn];
     NSLog(@"new height %f",height);
@@ -633,22 +654,56 @@
         [crosstitle resignFirstResponder];
         [crosstitle endEditing:YES];
         [exfeeInput endEditing:YES];
+        
+        [exfeeSelected replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:![[exfeeSelected objectAtIndex:index] boolValue]]];
+        [exfeeShowview reloadData];
         [self ShowRSVPToolBar:index];
+//        [exfeeShowview select:0,1,3, nil];
     }
 }
 
 #pragma mark RSVPToolbar delegate methods
 - (void) rsvpaccept{
-//    NSInteger index = ((UIControl*)sender).tag;
-//    if(index<[exfeeIdentities count])
-//    {
-//       	 
-//    }
-    NSLog(@"rsvp accept: %i  in %i",selectedExfeeIndex,[exfeeIdentities count]);
+    for(int i=0;i< [exfeeSelected count];i++) {
+        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
+            if(i<[exfeeIdentities count]) {
+            Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+            invitation.rsvp_status=@"ACCEPTED";
+            }
+        }
+    }
+    [exfeeShowview reloadData];
 }
 - (void) rsvpaddmate{
-    NSLog(@"rsvp addmate");
+    for(int i=0;i< [exfeeSelected count];i++) {
+        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
+            if(i<[exfeeIdentities count]) {
+                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+                invitation.mates=[NSNumber numberWithInt:[invitation.mates intValue]+1];
+            }
+        }
+    }
+    [exfeeShowview reloadData];
 }
+- (void) rsvpsubmate{
+    for(int i=0;i< [exfeeSelected count];i++) {
+        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
+            if(i<[exfeeIdentities count]) {
+                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+                int mates=[invitation.mates intValue]-1;
+                if(mates<0)
+                    mates=0;
+                invitation.mates=[NSNumber numberWithInt:mates];
+            }
+        }
+    }
+    [exfeeShowview reloadData];
+
+}
+- (void) rsvpreset{
+    
+}
+
 
 
 @end

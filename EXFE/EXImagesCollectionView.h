@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ImgCache.h"
 #import "Identity.h"
+#import "Invitation.h"
+#import "Util.h"
 
 @class EXImagesCollectionView;
 @protocol EXImagesCollectionDataSource;
@@ -17,7 +19,8 @@
 
 @required
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView;
-- (Identity *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index;
+- (Invitation *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index;
+- (NSArray *) selectedOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView;
 @end
 
 @protocol EXImagesCollectionDelegate<NSObject>
@@ -47,5 +50,6 @@
 - (void) initData;
 - (void) calculateColumn;
 - (void) onImageTouch:(CGPoint) point;
+//- (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 
 @end

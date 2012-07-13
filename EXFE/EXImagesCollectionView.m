@@ -79,6 +79,8 @@
     int x_count=0;
     int y_count=0;
     int count=[_dataSource numberOfimageCollectionView:self];
+    NSArray *selected=[_dataSource selectedOfimageCollectionView:self];
+    
     for(int i=0;i<count;i++)
     {
         if( x_count==maxColumn){
@@ -86,10 +88,23 @@
             y_count++;
         }
         int x=x_count*(imageWidth+imageXmargin*2);
+        if(x==0)
+            x=imageXmargin;
         int y=y_count*(imageHeight+imageYmargin*2);
+        if(y==0)
+            y=imageYmargin;
         if(y_count>0)
             y+=15;
-        Identity *identity=[_dataSource imageCollectionView:self imageAtIndex:i];
+
+        BOOL isSelected=[[selected objectAtIndex:i] boolValue];
+        if(isSelected==YES)
+        {
+            [Util drawRoundRect:CGRectMake(x-imageXmargin, y-imageYmargin, imageWidth+imageXmargin*2, imageHeight+imageYmargin+15) color:[UIColor blueColor] radius:5];
+        }
+        
+        Invitation *invitation=[_dataSource imageCollectionView:self imageAtIndex:i];
+        Identity *identity=invitation.identity;
+        
         UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
 
         if(avatar==nil || [avatar isEqual:[NSNull null]]){
@@ -97,14 +112,17 @@
         }
 
         [avatar drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
+        if([invitation.host boolValue]==YES)
+            [[UIImage imageNamed:@"closebutton"] drawInRect:CGRectMake(x+imageWidth-10, y, 10, 10)];
         NSString *name=identity.name;
         if(name==nil)
             name=identity.external_username;
         if(name==nil)
             name=identity.external_id;
+        NSLog(@"%f",y+imageHeight+15);
         if(name!=nil){
             [[UIColor blackColor] set];
-            [name drawInRect:CGRectMake(x, y+imageHeight+2, imageWidth, 15-2) withFont:[UIFont fontWithName:@"Helvetica" size:11] lineBreakMode:NSLineBreakByClipping alignment:UITextAlignmentCenter];
+            [name drawInRect:CGRectMake(x, y+imageHeight, imageWidth, 15) withFont:[UIFont fontWithName:@"Helvetica" size:11] lineBreakMode:NSLineBreakByClipping alignment:UITextAlignmentCenter];
         }
         x_count++;
     }
@@ -116,7 +134,12 @@
 
     if(count<maxColumn*maxRow) {
         int x=x_count*(imageWidth+imageXmargin*2);
+        if(x==0)
+            x=imageXmargin;
+
         int y=y_count*(imageHeight+imageYmargin*2);
+        if(y==0)
+            y=imageXmargin;
         if(y_count>0)
             y+=15;
         UIImage *image=[UIImage imageNamed:@"chat.png"];
@@ -125,6 +148,25 @@
         [image drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
     }
 }
+//- (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius{
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    CGContextSetFillColorWithColor(context, color.CGColor);
+//    CGContextMoveToPoint(context, rect.origin.x, rect.origin.y + radius);
+//    CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y + rect.size.height - radius);
+//    CGContextAddArc(context, rect.origin.x + radius, rect.origin.y + rect.size.height - radius, 
+//                    radius, M_PI, M_PI / 2, 1); //STS fixed
+//    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width - radius, 
+//                            rect.origin.y + rect.size.height);
+//    CGContextAddArc(context, rect.origin.x + rect.size.width - radius, 
+//                    rect.origin.y + rect.size.height - radius, radius, M_PI / 2, 0.0f, 1);
+//    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y + radius);
+//    CGContextAddArc(context, rect.origin.x + rect.size.width - radius, rect.origin.y + radius, 
+//                    radius, 0.0f, -M_PI / 2, 1);
+//    CGContextAddLineToPoint(context, rect.origin.x + radius, rect.origin.y);
+//    CGContextAddArc(context, rect.origin.x + radius, rect.origin.y + radius, radius, 
+//                    -M_PI / 2, M_PI, 1);
+//    CGContextFillPath(context);
+//}
 
 - (void) reloadData{
 

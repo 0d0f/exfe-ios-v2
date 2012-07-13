@@ -12,7 +12,6 @@
 #import "PostCell.h"
 #import "ImgCache.h"
 #import "Util.h"
-//#import "JSONKit.h"
 #import <RestKit/JSONKit.h>
 
 @interface ConversationViewController ()
@@ -259,15 +258,17 @@
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:identity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
     
-    RKParams* postParams = [RKParams params];
-    [postParams setValue:[postdict JSONString] forParam:@"post"];
+//    RKParams* postParams = [RKParams params];
+//    [postParams setValue:[postdict JSONString] forParam:@"post"];
     RKClient *client = [RKClient sharedClient];
     NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u/add?token=%@",exfee_id,app.accesstoken];
     [inputToolbar setInputEnabled:NO];
-
+    NSString *JSON=[postdict JSONString];
+    RKParams *params = [RKRequestSerialization serializationWithData:[JSON 
+                                                                      dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
     [client post:endpoint usingBlock:^(RKRequest *request){
         request.method=RKRequestMethodPOST;
-        request.params=postParams;
+        request.params=params;
         request.onDidLoadResponse=^(RKResponse *response){
             if (response.statusCode == 200) {
                 NSLog(@"%@",response.bodyAsString);

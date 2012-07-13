@@ -44,6 +44,7 @@
     UITableView *suggestionTable;
     NSMutableArray *suggestIdentities;
     NSMutableArray *exfeeIdentities;
+    NSMutableArray *exfeeSelected;
     Place *place;
     CrossTime *datetime;
     int boardoffset;
@@ -73,4 +74,6 @@
 - (void) pullcontainviewDown;
 - (void) rsvpaccept;
 - (void) rsvpaddmate;
+- (void) rsvpsubmate;
+- (void) rsvpreset;
 @end
