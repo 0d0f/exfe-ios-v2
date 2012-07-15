@@ -13,12 +13,14 @@
     UIImage *avatar;
     NSString *time;
     NSString *place;
+    UIImage *backgroundimg;
     BOOL removed;
     BOOL hlTitle;
     BOOL hlTime;
     BOOL hlPlace;    
     BOOL hlExfee;
     BOOL hlConversation;
+    BOOL isbackground;
 //    NSDictionary *updated;
 //    NSDate *read_at;
 }
@@ -26,12 +28,14 @@
 @property (nonatomic,retain) NSString* time;
 @property (nonatomic,retain) NSString* place;
 @property (nonatomic,retain) UIImage* avatar;
+@property (nonatomic,retain) UIImage* backgroundimg;
 @property BOOL hlTitle;
 @property BOOL hlTime;
 @property BOOL hlPlace;    
 @property BOOL hlExfee;
 @property BOOL hlConversation;
 @property BOOL removed;
+@property BOOL isbackground;
 //@property (nonatomic,retain) NSDictionary *updated;
 //@property (nonatomic,retain) NSDate *read_at;
 

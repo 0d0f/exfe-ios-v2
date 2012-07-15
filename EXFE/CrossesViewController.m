@@ -204,6 +204,8 @@
 
 #pragma mark UITableViewDataSource methods
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
+    if([_crosses count]<4)
+        return 4;
 	return [_crosses count];
 }
 
@@ -215,6 +217,19 @@
 	if (nil == cell) {
         cell = [[[CrossCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
 	}
+    NSString *backimgname=[NSString stringWithFormat:@"x_cell_%u.png",4];
+    if(indexPath.row<=4)
+        backimgname=[NSString stringWithFormat:@"x_cell_%u.png",indexPath.row];
+    
+    cell.backgroundimg=[UIImage imageNamed:backimgname];
+    if(indexPath.row>=[_crosses count])
+    {
+        backimgname=[NSString stringWithFormat:@"x_cell_blank_%u.png",indexPath.row];
+        cell.backgroundimg=[UIImage imageNamed:backimgname];
+        cell.isbackground=YES;
+        return cell;
+    }
+
     Cross *cross=[_crosses objectAtIndex:indexPath.row];
     cell.removed=NO;
     cell.hlTitle=NO;
@@ -222,7 +237,7 @@
     cell.hlTime=NO;
     cell.hlExfee=NO;
     cell.hlConversation=NO;
-
+    
     if(cross.updated!=nil)
     {
         id updated=cross.updated;
@@ -276,7 +291,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 61;
+    return 104;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

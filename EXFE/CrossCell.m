@@ -20,6 +20,8 @@
 @synthesize hlPlace;    
 @synthesize hlExfee;
 @synthesize hlConversation;
+@synthesize backgroundimg;
+@synthesize isbackground;
 //@synthesize updated;
 //@synthesize read_at;
 
@@ -66,7 +68,9 @@
 - (void)drawContentView:(CGRect)r{
     
 
-    [Util drawRoundRect:r color:[UIColor blueColor] radius:5];
+    [backgroundimg drawInRect:r];
+    if(isbackground==YES)
+        return;
     if(removed==NO)
     {
     if (hlTitle)
