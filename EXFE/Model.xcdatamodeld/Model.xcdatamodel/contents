@@ -29,7 +29,9 @@
         <attribute name="timezone" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Exfee" representedClassName="Exfee" syncable="YES">
+        <attribute name="accepted" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="exfee_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="total" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="invitations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Invitation" syncable="YES"/>
     </entity>
     <entity name="Identity" representedClassName="Identity" syncable="YES">
@@ -105,7 +107,7 @@
         <element name="Cross" positionX="160" positionY="192" width="128" height="255"/>
         <element name="CrossTime" positionX="135" positionY="135" width="128" height="90"/>
         <element name="EFTime" positionX="144" positionY="144" width="128" height="120"/>
-        <element name="Exfee" positionX="160" positionY="192" width="128" height="75"/>
+        <element name="Exfee" positionX="160" positionY="192" width="128" height="105"/>
         <element name="Identity" positionX="160" positionY="267" width="128" height="225"/>
         <element name="Invitation" positionX="160" positionY="192" width="128" height="195"/>
         <element name="Meta" positionX="160" positionY="192" width="128" height="90"/>

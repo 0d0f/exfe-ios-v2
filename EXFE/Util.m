@@ -66,16 +66,13 @@
     return shortdate;
 }
 + (NSDictionary*) crossTimeToString:(CrossTime*)crosstime{
-  
-        
     NSMutableDictionary *result=[[[NSMutableDictionary alloc]initWithCapacity:2] autorelease];
     if(crosstime==nil){
         [result setObject:@"" forKey:@"date"];
         [result setObject:@"Sometime" forKey:@"relative"];
-        [result setObject:@"Sometime" forKey:@"Short"];
+        [result setObject:@"Sometime" forKey:@"short"];
         return result;
     }
-        
 
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
@@ -115,30 +112,39 @@
         NSString *crosstime_date=crosstime.begin_at.date;
         NSString *crosstime_time=crosstime.begin_at.time;     
         
+        NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
         if(is_same_timezone==false) {
-            NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
 
             NSString *hh=[localTimezone substringWithRange:NSMakeRange(1, 2)];
             NSString *mm=[localTimezone substringWithRange:NSMakeRange(3, 2)];
             int second_offset=(([hh intValue]*60+[mm intValue])*60)*60;
             [dateformat setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:second_offset]];
-            [dateformat setDateFormat:@"HH:mm:ss"];
-            NSString *cross_time_server=crosstime.begin_at.time;
-            if(![crosstime.begin_at.date isEqualToString:@""]) {
-                cross_time_server = [crosstime.begin_at.date stringByAppendingFormat:@" %@",crosstime.begin_at.time];
-                [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-           }
-            NSDate *begin_at_date=[dateformat dateFromString:cross_time_server];
-            NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
-            [dateformat_to setTimeZone:[NSTimeZone defaultTimeZone]];
-            [dateformat_to setDateFormat:@"HH:mm:ss"];
-            crosstime_time=[dateformat_to stringFromDate:begin_at_date];
-
-            [dateformat_to setDateFormat:@"yyyy-MM-dd"];
-            crosstime_date=[dateformat_to stringFromDate:begin_at_date];
-            [dateformat_to release];
-            [dateformat release];
         }
+        [dateformat setDateFormat:@"HH:mm:ss"];
+        NSString *cross_time_server=crosstime.begin_at.time;
+        if(![crosstime.begin_at.date isEqualToString:@""]) {
+            cross_time_server = [crosstime.begin_at.date stringByAppendingFormat:@" %@",crosstime.begin_at.time];
+            [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        }
+        NSDate *begin_at_date=[dateformat dateFromString:cross_time_server];
+        NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
+        [dateformat_to setTimeZone:[NSTimeZone defaultTimeZone]];
+        [dateformat_to setDateFormat:@"HH:mm:ss"];
+        crosstime_time=[dateformat_to stringFromDate:begin_at_date];
+        
+        [dateformat_to setDateFormat:@"yyyy-MM-dd"];
+        crosstime_date=[dateformat_to stringFromDate:begin_at_date];
+
+        [dateformat_to setDateFormat:@"d"];
+        NSString *day_str=[dateformat_to stringFromDate:begin_at_date];
+        [dateformat_to setDateFormat:@"MMM"];
+        NSString *month_str=[dateformat_to stringFromDate:begin_at_date];
+        [result setObject:day_str forKey:@"day"];
+        [result setObject:month_str forKey:@"month"];
+        
+        [dateformat_to release];
+        [dateformat release];
+        
         if([localYear isEqualToString:[crosstime_date substringToIndex:4]])
             crosstime_date=[crosstime_date substringFromIndex:5];
 
@@ -168,8 +174,6 @@
         }
 
     }
-//        Time_word (at) Time (Timezone) Date_word (on) Date
-        
 }
 
 + (NSString *) formattedLongDateRelativeToNow:(NSString*)datestr {
@@ -319,5 +323,34 @@
     CGContextAddArc(context, rect.origin.x + radius, rect.origin.y + radius, radius, 
                     -M_PI / 2, M_PI, 1);
     CGContextFillPath(context);
+}
++ (UIImage *)scaleImage:(UIImage*)image toResolution:(int)resolution{
+    CGImageRef imgRef = [image CGImage];
+    CGFloat width = CGImageGetWidth(imgRef);
+    CGFloat height = CGImageGetHeight(imgRef);
+    CGRect bounds = CGRectMake(0, 0, width, height);
+    
+    //if already at the minimum resolution, return the orginal image, otherwise scale
+    if (width <= resolution && height <= resolution) {
+        return image;
+        
+    } else {
+        CGFloat ratio = width/height;
+        
+        if (ratio > 1) {
+            bounds.size.width = resolution;
+            bounds.size.height = bounds.size.width / ratio;
+        } else {
+            bounds.size.height = resolution;
+            bounds.size.width = bounds.size.height * ratio;
+        }
+    }
+    
+    UIGraphicsBeginImageContext(bounds.size);
+    [image drawInRect:CGRectMake(0.0, 0.0, bounds.size.width, bounds.size.height)];
+    UIImage *imageCopy = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return imageCopy;
 }
 @end

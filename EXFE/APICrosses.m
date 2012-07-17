@@ -48,7 +48,7 @@
 
     RKManagedObjectMapping* exfeeMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Exfee" inManagedObjectStore:manager.objectStore];
     exfeeMapping.primaryKeyAttribute=@"exfee_id";
-    [exfeeMapping mapKeyPathsToAttributes:@"id", @"exfee_id",
+    [exfeeMapping mapKeyPathsToAttributes:@"id", @"exfee_id",@"total",@"total",@"accepted",@"accepted",
      nil];
     [exfeeMapping mapRelationship:@"invitations" withMapping:invitationMapping];
     

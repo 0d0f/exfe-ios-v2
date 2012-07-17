@@ -69,8 +69,6 @@
         username.text=user.name;
         if(identitiesData!=nil)
         {
-//            for (NSMutableArray *section in identitiesData)
-//                [section release];
             [identitiesData release];
         }
             

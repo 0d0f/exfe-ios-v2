@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "CrossTime.h"
+#define FONT_COLOR_100 [UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1]
+#define FONT_COLOR_69 [UIColor colorWithRed:69/255.0f green:69/255.0f blue:69/255.0f alpha:1]
+#define FONT_COLOR_233 [UIColor colorWithRed:233/255.0f green:233/255.0f blue:233/255.0f alpha:1]
+#define FONT_COLOR_98 [UIColor colorWithRed:98/255.0f green:132/255.0f blue:159/255.0f alpha:1]
 
 @interface Util : NSObject
 
@@ -21,5 +25,6 @@
 + (NSString*) getBackgroundLink:(NSString*)imgname;
 + (NSString*) formattedShortDate:(CrossTime*)crosstime;
 + (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
++ (UIImage *)scaleImage:(UIImage*)image toResolution:(int)resolution;
 @end
 

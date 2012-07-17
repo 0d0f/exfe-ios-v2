@@ -22,18 +22,28 @@
 @synthesize hlConversation;
 @synthesize backgroundimg;
 @synthesize isbackground;
-//@synthesize updated;
-//@synthesize read_at;
+@synthesize total;
+@synthesize accepted;
+@synthesize showDetailTime;
+@synthesize time_day;
+@synthesize time_month;
 
 - (void)dealloc {
 	[title release];
     [avatar release];
     [time release];
     [place release];
-//    [updated release];
-//    [read_at release];
     [super dealloc];
     
+}
+
+- (void)setTotal:(int)s{
+    total=s;
+    [self setNeedsDisplay];
+}
+- (void)setAccepted:(int)s{
+    accepted=s;
+    [self setNeedsDisplay];
 }
 
 - (void)setTitle:(NSString *)s {
@@ -59,46 +69,56 @@
 - (void)layoutSubviews
 {
 	CGRect b = [self bounds];
-    //	b.size.height -= 1; // leave room for the separator line
-    //	b.size.width += 30; // allow extra width to slide for editing
-    //	b.origin.x -= (self.editing && !self.showingDeleteConfirmation) ? 0 : 30; // start 30px left unless editing
 	[contentView setFrame:b];
     [super layoutSubviews];
 }
 - (void)drawContentView:(CGRect)r{
     
-
     [backgroundimg drawInRect:r];
     if(isbackground==YES)
         return;
     if(removed==NO)
     {
-    if (hlTitle)
-        [[Util getHighlightColor] set];    
-    else 
-        [[Util getRegularColor] set];
-    [title drawInRect:CGRectMake(60, 10, 250, 24) withFont:[UIFont fontWithName:@"Helvetica" size:18]];
+        if (hlTitle)
+            [[Util getHighlightColor] set];    
+        else 
+            [FONT_COLOR_69 set];
+        
+        [title drawInRect:CGRectMake(10, 8, 270, 16) withFont:[UIFont fontWithName:@"HelveticaNeue" size:21] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentLeft ];
 
-    if(avatar!=nil && ![avatar isKindOfClass:[NSNull class]])
-        [avatar drawInRect:CGRectMake(10, 11, 40, 40)];
-    float place_width=140;
+//        if(avatar!=nil && ![avatar isKindOfClass:[NSNull class]])
+//            [avatar drawInRect:CGRectMake(10, 11, 40, 40)];
     
-    //highlight
-//    if([updated objectForKey:@"place"]!=nil && read_at!=nil)
-    if(hlPlace)
-        [[Util getHighlightColor] set];  
-    else 
-        [[Util getRegularColor] set];
-    [place drawInRect:CGRectMake(60, 34, place_width, 18) withFont:[UIFont fontWithName:@"Helvetica" size:12] lineBreakMode:UILineBreakModeTailTruncation];
-    float time_width=320-60-10-place_width;
-    
-    //highlight
-//    if([updated objectForKey:@"time"]!=nil && read_at!=nil)
-    if(hlTime)
-        [[Util getHighlightColor] set];  
-    else 
-        [[Util getRegularColor] set];
-    [time drawInRect:CGRectMake(60+place_width, 34, time_width, 18) withFont:[UIFont fontWithName:@"Helvetica" size:12] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
+        NSString *acceptedstr=[NSString stringWithFormat:@"%u",accepted];
+        NSString *totalstr=[NSString stringWithFormat:@"%u",total];
+        
+        [FONT_COLOR_98 set];
+        [acceptedstr drawInRect:CGRectMake(278, 9, 19, 12) withFont:[UIFont fontWithName:@"TeluguSangamMN-Bold" size:15] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentRight];
+        [totalstr drawInRect:CGRectMake(300, 18, 19, 12) withFont:[UIFont fontWithName:@"TeluguSangamMN" size:13] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentLeft];
+        [[UIImage imageNamed:@"slash.png"] drawInRect:CGRectMake(296, 13, 7, 14)]; 
+        [[UIImage imageNamed:@"location.png"] drawInRect:CGRectMake(12, 43, 24, 24)];
+
+        if(hlPlace)
+            [[Util getHighlightColor] set];
+        else
+            [FONT_COLOR_69 set];
+        [place drawInRect:CGRectMake(42, 49, 200, 16) withFont:[UIFont fontWithName:@"MalayalamSangamMN" size:13] lineBreakMode:UILineBreakModeTailTruncation alignment:NSTextAlignmentLeft];
+        
+        if(showDetailTime==YES){
+            [[UIImage imageNamed:@"cal_badge.png"]drawInRect:CGRectMake(12, 70, 24, 24)];
+            [FONT_COLOR_100 set];
+            [time_month drawInRect:CGRectMake(14, 70, 20, 8) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:9] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentCenter];
+            [time_day drawInRect:CGRectMake(14, 79, 20, 18) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentCenter ];
+        }
+        else
+            [[UIImage imageNamed:@"time_icon.png"]drawInRect:CGRectMake(12, 70, 24, 24)];
+        
+        
+        if(hlTime)
+            [[Util getHighlightColor] set];
+        else 
+            [FONT_COLOR_69 set];
+        [time drawInRect:CGRectMake(42, 76, 200, 16) withFont:[UIFont fontWithName:@"MalayalamSangamMN" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft];
     }
     
 }

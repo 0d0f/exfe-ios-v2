@@ -12,8 +12,12 @@
     NSString *title;
     UIImage *avatar;
     NSString *time;
+    NSString *time_month;
+    NSString *time_day;
     NSString *place;
     UIImage *backgroundimg;
+    int total;
+    int accepted;
     BOOL removed;
     BOOL hlTitle;
     BOOL hlTime;
@@ -21,12 +25,15 @@
     BOOL hlExfee;
     BOOL hlConversation;
     BOOL isbackground;
+    BOOL showDetailTime;
 //    NSDictionary *updated;
 //    NSDate *read_at;
 }
 @property (nonatomic,copy) NSString* title;
 @property (nonatomic,retain) NSString* time;
 @property (nonatomic,retain) NSString* place;
+@property (nonatomic,retain) NSString* time_month;
+@property (nonatomic,retain) NSString* time_day;
 @property (nonatomic,retain) UIImage* avatar;
 @property (nonatomic,retain) UIImage* backgroundimg;
 @property BOOL hlTitle;
@@ -36,7 +43,8 @@
 @property BOOL hlConversation;
 @property BOOL removed;
 @property BOOL isbackground;
-//@property (nonatomic,retain) NSDictionary *updated;
-//@property (nonatomic,retain) NSDate *read_at;
+@property BOOL showDetailTime;
+@property (nonatomic) int total;
+@property (nonatomic) int accepted;
 
 @end

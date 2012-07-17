@@ -12,6 +12,5 @@
     NSString *buttonName;
 }
 @property (nonatomic,retain) NSString *buttonName;
-
 - (id)initWithName:(NSString*)name title:(NSString*)buttontitle image:(UIImage*) img;
 @end

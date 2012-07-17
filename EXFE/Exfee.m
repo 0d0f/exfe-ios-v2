@@ -2,8 +2,8 @@
 //  Exfee.m
 //  EXFE
 //
-//  Created by ju huo on 5/21/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by huoju on 7/17/12.
+//
 //
 
 #import "Exfee.h"
@@ -13,6 +13,8 @@
 @implementation Exfee
 
 @dynamic exfee_id;
+@dynamic total;
+@dynamic accepted;
 @dynamic invitations;
 
 @end

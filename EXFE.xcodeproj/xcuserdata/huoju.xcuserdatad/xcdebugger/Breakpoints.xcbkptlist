@@ -163,19 +163,6 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "EXFE/CrossesViewController.m"
-         timestampString = "361606909.36147"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "45"
-         endingLineNumber = "45"
-         landmarkName = "-viewDidLoad"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "EXFE/ConversationViewController.m"
          timestampString = "363854667.505061"
          startingColumnNumber = "9223372036854775807"
@@ -229,11 +216,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossesViewController.m"
-         timestampString = "364063258.210645"
+         timestampString = "364215955.733616"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "285"
-         endingLineNumber = "285"
+         startingLineNumber = "332"
+         endingLineNumber = "332"
          landmarkName = "-tableView:cellForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -242,11 +229,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossesViewController.m"
-         timestampString = "363872050.331593"
+         timestampString = "364215955.733616"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "154"
-         endingLineNumber = "154"
+         startingLineNumber = "188"
+         endingLineNumber = "188"
          landmarkName = "-loadObjectsFromDataStore"
          landmarkType = "5">
       </FileBreakpoint>
@@ -268,11 +255,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/Util.m"
-         timestampString = "363867387.507734"
+         timestampString = "364208622.159048"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "288"
-         endingLineNumber = "288"
+         startingLineNumber = "292"
+         endingLineNumber = "292"
          landmarkName = "+formattedDateRelativeToNow:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -307,11 +294,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/ProfileViewController.m"
-         timestampString = "361819184.827022"
+         timestampString = "364114206.728093"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "102"
-         endingLineNumber = "102"
+         startingLineNumber = "100"
+         endingLineNumber = "100"
          landmarkName = "-loadObjectsFromDataStore"
          landmarkType = "5">
       </FileBreakpoint>
@@ -320,11 +307,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/ProfileViewController.m"
-         timestampString = "361819184.827022"
+         timestampString = "364114206.728093"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "74"
-         endingLineNumber = "74"
+         startingLineNumber = "72"
+         endingLineNumber = "72"
          landmarkName = "-loadObjectsFromDataStore"
          landmarkType = "5">
       </FileBreakpoint>
@@ -345,19 +332,6 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "EXFE/CrossesViewController.m"
-         timestampString = "361606909.36147"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "59"
-         endingLineNumber = "59"
-         landmarkName = "-initUI"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "RestKit/Code/CoreData/RKManagedObjectStore.m"
          timestampString = "361958992.761035"
          startingColumnNumber = "9223372036854775807"
@@ -372,11 +346,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossesViewController.m"
-         timestampString = "364063258.210645"
+         timestampString = "364215955.733616"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "313"
-         endingLineNumber = "313"
+         startingLineNumber = "360"
+         endingLineNumber = "360"
          landmarkName = "-tableView:didSelectRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -385,11 +359,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossesViewController.m"
-         timestampString = "364063258.210645"
+         timestampString = "364215955.733616"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "316"
-         endingLineNumber = "316"
+         startingLineNumber = "363"
+         endingLineNumber = "363"
          landmarkName = "-tableView:didSelectRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -398,11 +372,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossesViewController.m"
-         timestampString = "364063258.210645"
+         timestampString = "364215955.733616"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "258"
-         endingLineNumber = "258"
+         startingLineNumber = "292"
+         endingLineNumber = "292"
          landmarkName = "-tableView:cellForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -411,11 +385,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossesViewController.m"
-         timestampString = "364063258.210645"
+         timestampString = "364215955.733616"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "252"
-         endingLineNumber = "252"
+         startingLineNumber = "286"
+         endingLineNumber = "286"
          landmarkName = "-tableView:cellForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -424,11 +398,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/AppDelegate.m"
-         timestampString = "362037092.362692"
+         timestampString = "364203023.8629"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "133"
-         endingLineNumber = "133"
+         startingLineNumber = "135"
+         endingLineNumber = "135"
          landmarkName = "-Checklogin"
          landmarkType = "5">
       </FileBreakpoint>
@@ -437,11 +411,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/AppDelegate.m"
-         timestampString = "362037092.362692"
+         timestampString = "364203023.8629"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "129"
-         endingLineNumber = "129"
+         startingLineNumber = "131"
+         endingLineNumber = "131"
          landmarkName = "-SignoutDidFinish"
          landmarkType = "5">
       </FileBreakpoint>
@@ -836,16 +810,55 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "No"
+         shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/Util.m"
-         timestampString = "363867358.648645"
+         timestampString = "364109673.845767"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "71"
-         endingLineNumber = "71"
+         startingLineNumber = "108"
+         endingLineNumber = "108"
          landmarkName = "+crossTimeToString:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/CrossCell.m"
+         timestampString = "364215955.733616"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "120"
+         endingLineNumber = "120"
+         landmarkName = "-drawContentView:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/CrossCell.m"
+         timestampString = "364214190.300036"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "85"
+         endingLineNumber = "85"
+         landmarkName = "-drawContentView:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/CrossCell.m"
+         timestampString = "364215955.733616"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "101"
+         endingLineNumber = "101"
+         landmarkName = "-drawContentView:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

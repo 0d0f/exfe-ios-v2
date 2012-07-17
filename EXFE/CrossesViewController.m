@@ -55,13 +55,10 @@
     }
 }
 - (void)initUI{
-    
-    UIImage *settingbtnimg = [UIImage imageNamed:@"navbar_setting.png"];   
-    UIButton *settingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
-    settingButton.frame = CGRectMake(0, 0, settingbtnimg.size.width, settingbtnimg.size.height);
-    [settingButton addTarget:self action:@selector(ShowProfileView) forControlEvents:UIControlEventTouchUpInside];
-    profileButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
+//    CGRect tablerect=self.tableView.frame;
+//    tablerect.origin.y=5;
+//    [self.tableView setFrame:tablerect];
+//    [self.tableView setNeedsDisplay];
 
     UIImage *gatherbtnimg = [UIImage imageNamed:@"navbar_setting.png"];
     UIButton *gatherButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -69,21 +66,59 @@
     gatherButton.frame = CGRectMake(0, 0, gatherbtnimg.size.width, gatherbtnimg.size.height);
     [gatherButton addTarget:self action:@selector(ShowGatherView) forControlEvents:UIControlEventTouchUpInside];
     gatherButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:gatherButton] autorelease];
-    
-    [self.navigationController navigationBar].topItem.leftBarButtonItem=profileButtonItem;
     [self.navigationController navigationBar].topItem.rightBarButtonItem=gatherButtonItem;
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSLog(@"%@",app.username);
+    NSFetchRequest* request = [User fetchRequest];
+    NSPredicate *predicate = [NSPredicate
+                              predicateWithFormat:@"user_id = %u", app.userid];    
+    [request setPredicate:predicate];
+	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    UIImage *settingbtnimg = [UIImage imageNamed:@"navbar_setting.png"];
+    if(users!=nil && [users count] >0){
+        User *user=[users objectAtIndex:0];
+        if(user){
+            Identity *identity=user.default_identity;
 
-    [self.navigationController navigationBar].topItem.title=app.username;
-
-    [self.navigationController.view setNeedsDisplay];
-//    UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_gradient.png"]];
-//    [tempImageView setFrame:self.tableView.frame]; 
-//    
-//    self.tableView.backgroundView = tempImageView;
-//    [tempImageView release];
+            UIImage *image = [[ImgCache sharedManager] getImgFrom:[ImgCache getImgUrl:identity.avatar_filename]];
+            settingbtnimg = image;
+        }
+    }
     
+    EXInnerButton *settingButton = [[EXInnerButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    settingButton.image=settingbtnimg;
+    [settingButton addTarget:self action:@selector(ShowProfileView) forControlEvents:UIControlEventTouchUpInside];
+    settingButton.layer.cornerRadius=6.0f;
+    settingButton.clipsToBounds = YES;
+    UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"avatar_effect.png"]];
+    shadowImageView.contentMode = UIViewContentModeScaleToFill;
+    shadowImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    shadowImageView.frame = settingButton.bounds;
+    [settingButton addSubview:shadowImageView];
+    profileButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
+    [self.navigationController navigationBar].topItem.leftBarButtonItem=profileButtonItem;
+    [shadowImageView release];
+    [settingButton release];
+    
+    [self.navigationController navigationBar].topItem.title=app.username;
+    CGRect frame = CGRectMake(0, 0, 400, 44);
+    UILabel *label = [[[UILabel alloc] initWithFrame:frame] autorelease];
+    label.backgroundColor = [UIColor clearColor];
+    [FONT_COLOR_233 set];
+    label.font =[UIFont fontWithName:@"HelveticaNeue-Bold" size:16];
+    label.shadowColor = [UIColor colorWithWhite:0 alpha:0.5];
+    label.shadowOffset= CGSizeMake(0, -1);
+    label.textAlignment = UITextAlignmentLeft;
+    label.textColor = [UIColor whiteColor];
+    label.text = [self.navigationController navigationBar].topItem.title;
+    [self.navigationController navigationBar].topItem.titleView = label;
+    
+    
+    UINavigationBar *navbar=[self.navigationController navigationBar];
+    if(navbar)
+    {
+        [navbar setBackgroundImage:[UIImage imageNamed:@"navbar.png"]  forBarMetrics:UIBarMetricsDefault];
+    }
+    [self.navigationController.view setNeedsDisplay];    
 }
 - (void)viewDidUnload
 {
@@ -204,12 +239,12 @@
 
 #pragma mark UITableViewDataSource methods
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    if([_crosses count]<4)
+    if([_crosses count]==0)
+        return 0;
+    if([_crosses count]<4 && [_crosses count]>0)
         return 4;
 	return [_crosses count];
 }
-
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSString* reuseIdentifier = @"cross Cell";
@@ -217,14 +252,14 @@
 	if (nil == cell) {
         cell = [[[CrossCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
 	}
-    NSString *backimgname=[NSString stringWithFormat:@"x_cell_%u.png",4];
+    NSString *backimgname=[NSString stringWithFormat:@"cell_%u_card.png",4];
     if(indexPath.row<=4)
-        backimgname=[NSString stringWithFormat:@"x_cell_%u.png",indexPath.row];
+        backimgname=[NSString stringWithFormat:@"cell_%u_card.png",indexPath.row];
     
     cell.backgroundimg=[UIImage imageNamed:backimgname];
     if(indexPath.row>=[_crosses count])
     {
-        backimgname=[NSString stringWithFormat:@"x_cell_blank_%u.png",indexPath.row];
+        backimgname=[NSString stringWithFormat:@"cell_%u_null.png",indexPath.row];
         cell.backgroundimg=[UIImage imageNamed:backimgname];
         cell.isbackground=YES;
         return cell;
@@ -272,9 +307,22 @@
     }
     cell.title=cross.title;
     cell.place=cross.place.title;
-    NSDictionary *humanable_date=[Util crossTimeToString:cross.time];
-//    [Util formattedShortDate:cross.time];
-    cell.time=[humanable_date objectForKey:@"short"];
+    cell.accepted=[cross.exfee.accepted intValue];
+    cell.total=[cross.exfee.total intValue];
+    if([cross.time.begin_at.date isEqualToString:@""])
+    {
+        cell.showDetailTime=NO;
+        if([cross.time.origin isEqualToString:@""])
+            cell.time=@"Sometime";
+        else
+            cell.time=cross.time.origin;
+    }else{
+        NSDictionary *humanable_date=[Util crossTimeToString:cross.time];
+        cell.time=[humanable_date objectForKey:@"short"];
+        cell.showDetailTime=YES;
+        cell.time_day=[humanable_date objectForKey:@"day"];
+        cell.time_month=[humanable_date objectForKey:@"month"];
+    }
     if(cross.by_identity.avatar_filename!=nil) {
         dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
         dispatch_async(imgQueue, ^{

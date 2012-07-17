@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "APICrosses.h"
 #import "PullRefreshTableViewController.h"
+#import "ImgCache.h"
+#import "EXInnerButton.h"
 
-@interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate>{
+@interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate>
+{
     IBOutlet UITableView* tableView;
     UIBarButtonItem *profileButtonItem;
     UIBarButtonItem *gatherButtonItem;
