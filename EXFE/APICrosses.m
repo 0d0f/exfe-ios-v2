@@ -76,7 +76,8 @@
      @"created_at", @"created_at",
      @"updated", @"updated",     
      @"widget", @"widget",     
-     @"updated_at", @"updated_at",     
+     @"updated_at", @"updated_at",
+     @"conversation_count",@"conversation_count",
      nil];
     [crossMapping mapRelationship:@"by_identity" withMapping:identityMapping];
     [crossMapping mapRelationship:@"host_identity" withMapping:identityMapping];

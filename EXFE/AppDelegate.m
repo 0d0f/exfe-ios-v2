@@ -49,17 +49,12 @@
     if(login==NO){
         [self ShowLanding];
     }
-
     crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
-    
 	self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
-//    UINavigationBar *uibar=[[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, 320, 49)];
-//    [self.navigationController setValue:uibar forKeyPath:@"navigationBar"];
-
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-
     [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
     return YES;
 }
 -(void)ShowLanding{

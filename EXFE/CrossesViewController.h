@@ -19,13 +19,17 @@
     UIBarButtonItem *gatherButtonItem;
     NSArray* _crosses;
     BOOL logoutflag;
+    int current_cellrow;
+    NSArray *cellbackimglist;
+    NSArray *cellbackimgblanklist;
+    NSMutableArray *cellDateTime;
+
 }
-   
+- (void) refreshCell;
 - (void) refreshCrosses:(NSString*)source;
-- (void)loadIdentitiesFromDataStore;
-- (void)loadObjectsFromDataStore;
-- (void)initUI;
-- (void)emptyView;
-- (void)ShowProfileView;
-- (void)ShowGatherView;
+- (void) loadObjectsFromDataStore;
+- (void) initUI;
+- (void) emptyView;
+- (void) ShowProfileView;
+- (void) ShowGatherView;
 @end

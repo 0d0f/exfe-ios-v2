@@ -18,6 +18,7 @@
     UIImage *backgroundimg;
     int total;
     int accepted;
+    int conversationCount;
     BOOL removed;
     BOOL hlTitle;
     BOOL hlTime;
@@ -46,5 +47,6 @@
 @property BOOL showDetailTime;
 @property (nonatomic) int total;
 @property (nonatomic) int accepted;
+@property (nonatomic) int conversationCount;
 
 @end

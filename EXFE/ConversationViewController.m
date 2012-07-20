@@ -38,16 +38,6 @@
 {
     [super viewDidLoad];
     [self refreshConversation];
-//    [self addPost:@"test"];
-
-    /* Calculate screen size */
-//    CGRect screenFrame = [[UIScreen mainScreen] applicationFrame];
-//    self.view = [[UIView alloc] initWithFrame:screenFrame];
-//    self.view.backgroundColor = [UIColor whiteColor];
-    /* Create toolbar */
-//    self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight)];
-//    [self.view addSubview:self.inputToolbar];
-//    inputToolbar.delegate = self;
     
     CGRect screenFrame = [self.view frame];
     CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight-kNavBarHeight, screenFrame.size.width, kDefaultToolbarHeight);
@@ -162,11 +152,9 @@
         {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-            //        2012-04-24 07:06:13 +0000
             [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             updated_at = [formatter stringFromDate:post.updated_at];
             [formatter release];
-            NSLog(@"%@",updated_at);
         }
     }
     [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at delegate:self];

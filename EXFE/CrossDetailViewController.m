@@ -43,21 +43,7 @@
     }
     return self;
 }
-//- (void)loadView
-//{
-//    [super loadView];
-//    
-//    //keyboardIsVisible = NO;
-//    
-//    /* Calculate screen size */
-//    CGRect screenFrame = [[UIScreen mainScreen] applicationFrame];
-//    self.view = [[UIView alloc] initWithFrame:screenFrame];
-//    self.view.backgroundColor = [UIColor whiteColor];
-//    /* Create toolbar */
-//    self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight)];
-//    [self.view addSubview:self.inputToolbar];
-//    inputToolbar.delegate = self;
-//}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -75,14 +61,6 @@
     [conversationView.view setHidden:YES];
     [self.view addSubview:conversationView.view];
     
-    
-//    CGRect crect=conversationView.view.frame;
-//    conversationView.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
-//    CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight);
-    
-//    Exfee *exfee=cross.exfee;
-//    NSLog(@"%@",exfee.exfee_id);
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     UIImage *chatimg = [UIImage imageNamed:@"chat.png"];
     UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [chatButton setTitle:@"Chat" forState:UIControlStateNormal];
@@ -94,8 +72,6 @@
     
 	self.navigationItem.rightBarButtonItem = barButtonItem;
     [barButtonItem release];  
-//    cross_tiltle.text=cross.title;
-//    exfee_id.text=[cross.exfee.exfee_id stringValue];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
     NSString *documentsDirectory = [paths objectAtIndex:0]; 
@@ -103,14 +79,11 @@
     NSString *html=[self GenerateHtmlWithEvent];
     [webview loadHTMLString:html baseURL:baseURL];
     [conversationView refreshConversation];
-
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (void)dealloc {
@@ -121,45 +94,6 @@
 - (NSString*)GenerateHtmlWithEvent
 {
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    NSString *dateString;
-    
-    
-//    if( cross.time.begin_at.time_word isEqualToString:@""
-
-    //cross.time.begin_at.date_word
-    
-//    Time_word (at) Time (Timezone) Date_word (on) Date
-        
-//    DBUtil *dbu=[DBUtil sharedManager];
-
-//    NSDate *theDate = nil;
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//    theDate = [dateFormatter dateFromString:eventobj.begin_at];  
-//    
-//    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-//    NSString *dateString = [dateFormatter stringFromDate:theDate];
-//    [dateFormatter release];
-//    
-//    
-//    NSDateFormatter *dateFormatter_human = [[NSDateFormatter alloc] init];
-//    [dateFormatter_human setTimeStyle:NSDateFormatterNoStyle];
-//    [dateFormatter_human setDateStyle:NSDateFormatterMediumStyle];
-//    [dateFormatter_human setLocale:[NSLocale currentLocale]];
-//    
-//    [dateFormatter_human setDoesRelativeDateFormatting:YES];
-//    
-//    NSString *dateString_human = [dateFormatter_human stringFromDate:theDate];
-//    [dateFormatter_human release];
-    
-//    dateString=[Util crossTimeToString:cross.time];
-//
-//    if(dateString==nil)
-//    {
-////        dateString_human=@"Anytime";
-//        dateString=@"";
-//    }
-    
     NSString *xpath=[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"x.html"];
     NSString *html=[NSString stringWithContentsOfFile:xpath encoding:NSUTF8StringEncoding error:nil];
 //    html=[html stringByReplacingOccurrencesOfString:@"{#begin_at_human#}" withString:[Util formattedDateRelativeToNow:eventobj.begin_at withTimeType:eventobj.time_type]];
@@ -167,15 +101,6 @@
 
     html=[html stringByReplacingOccurrencesOfString:@"{#begin_at#}" withString:[humanreadable_date objectForKey:@"date"]];
     html=[html stringByReplacingOccurrencesOfString:@"{#begin_at_human#}" withString:[humanreadable_date objectForKey:@"relative"]];
-    
-//    if([eventobj.begin_at isEqualToString:@"0000-00-00 00:00:00"]&& [eventobj.time_type isEqualToString:@""])
-//    {
-//        html=[html stringByReplacingOccurrencesOfString:@"{#hidden_calendar#}" withString:@"hidden"];
-//        html=[html stringByReplacingOccurrencesOfString:@"{#show_detail_time#}" withString:@"display:none"];
-//    }
-//    else
-//        html=[html stringByReplacingOccurrencesOfString:@"{#show_detail_time#}" withString:@"display:block"];
-    
     
     NSString *mapimg=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/staticmap?center=%@,%@&markers=size:mid|color:blue|%@,%@&zoom=13&size=130x75&sensor=false",cross.place.lat,cross.place.lng,cross.place.lat,cross.place.lng];
     NSString *background=@"x_background.png";
@@ -294,6 +219,19 @@
     {
         [conversationView.view setHidden:NO];
         [conversationView refreshConversation];
+        cross.conversation_count=0;
+        NSError *saveError;
+        [[Cross currentContext] save:&saveError];
+
+        NSLog(@"%@",self.navigationController.viewControllers);
+        
+        for(id viewcontroller in self.navigationController.viewControllers)
+        {
+            if([viewcontroller isKindOfClass:[CrossesViewController class]])
+            {
+                [viewcontroller refreshCell];
+            }
+        }
         [UIView transitionFromView:self.view toView:conversationView.view duration:1 options:UIViewAnimationOptionTransitionFlipFromLeft completion:nil];
     }
     else {
@@ -506,8 +444,6 @@
         [webview stopLoading];
     webview.delegate = nil;
     [self.navigationController popToRootViewControllerAnimated:YES];
-    
-    
 }
 
 @end

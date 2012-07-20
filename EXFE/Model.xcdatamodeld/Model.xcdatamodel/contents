@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1480" systemVersion="12A269" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Cross" representedClassName="Cross" syncable="YES">
+        <attribute name="conversation_count" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="cross_description" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cross_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -104,7 +105,7 @@
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Cross" positionX="160" positionY="192" width="128" height="255"/>
+        <element name="Cross" positionX="160" positionY="192" width="128" height="285"/>
         <element name="CrossTime" positionX="135" positionY="135" width="128" height="90"/>
         <element name="EFTime" positionX="144" positionY="144" width="128" height="120"/>
         <element name="Exfee" positionX="160" positionY="192" width="128" height="105"/>

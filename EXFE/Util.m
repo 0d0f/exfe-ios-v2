@@ -127,22 +127,25 @@
             [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         }
         NSDate *begin_at_date=[dateformat dateFromString:cross_time_server];
-        NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
-        [dateformat_to setTimeZone:[NSTimeZone defaultTimeZone]];
-        [dateformat_to setDateFormat:@"HH:mm:ss"];
-        crosstime_time=[dateformat_to stringFromDate:begin_at_date];
+        if(begin_at_date!=nil)
+        {
+            NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
+            [dateformat_to setTimeZone:[NSTimeZone defaultTimeZone]];
+            [dateformat_to setDateFormat:@"HH:mm:ss"];
+            crosstime_time=[dateformat_to stringFromDate:begin_at_date];
         
-        [dateformat_to setDateFormat:@"yyyy-MM-dd"];
-        crosstime_date=[dateformat_to stringFromDate:begin_at_date];
+            [dateformat_to setDateFormat:@"yyyy-MM-dd"];
+            crosstime_date=[dateformat_to stringFromDate:begin_at_date];
 
-        [dateformat_to setDateFormat:@"d"];
-        NSString *day_str=[dateformat_to stringFromDate:begin_at_date];
-        [dateformat_to setDateFormat:@"MMM"];
-        NSString *month_str=[dateformat_to stringFromDate:begin_at_date];
-        [result setObject:day_str forKey:@"day"];
-        [result setObject:month_str forKey:@"month"];
-        
-        [dateformat_to release];
+            [dateformat_to setDateFormat:@"d"];
+            NSString *day_str=[dateformat_to stringFromDate:begin_at_date];
+            [dateformat_to setDateFormat:@"MMM"];
+            NSString *month_str=[dateformat_to stringFromDate:begin_at_date];
+            [result setObject:day_str forKey:@"day"];
+            [result setObject:month_str forKey:@"month"];
+            
+            [dateformat_to release];
+        }
         [dateformat release];
         
         if([localYear isEqualToString:[crosstime_date substringToIndex:4]])

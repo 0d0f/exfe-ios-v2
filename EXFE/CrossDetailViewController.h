@@ -10,6 +10,7 @@
 #import "Cross.h"
 #import "APIConversation.h"
 #import "ConversationViewController.h"
+#import "CrossesViewController.h"
 
 @interface CrossDetailViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate>{
     Cross* cross;

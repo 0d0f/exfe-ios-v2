@@ -2,8 +2,8 @@
 //  Cross.m
 //  EXFE
 //
-//  Created by ju huo on 6/11/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by huoju on 7/19/12.
+//
 //
 
 #import "Cross.h"
@@ -24,6 +24,7 @@
 @dynamic updated;
 @dynamic updated_at;
 @dynamic widget;
+@dynamic conversation_count;
 @dynamic by_identity;
 @dynamic exfee;
 @dynamic host_identity;

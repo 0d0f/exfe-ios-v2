@@ -2,8 +2,8 @@
 //  Cross.h
 //  EXFE
 //
-//  Created by ju huo on 6/11/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by huoju on 7/19/12.
+//
 //
 
 #import <Foundation/Foundation.h>
@@ -22,6 +22,7 @@
 @property (nonatomic, retain) id updated;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) id widget;
+@property (nonatomic, retain) NSNumber * conversation_count;
 @property (nonatomic, retain) Identity *by_identity;
 @property (nonatomic, retain) Exfee *exfee;
 @property (nonatomic, retain) Identity *host_identity;
