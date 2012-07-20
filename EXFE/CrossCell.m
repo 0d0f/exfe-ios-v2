@@ -81,7 +81,7 @@
     if(removed==NO)
     {
         if (hlTitle)
-            [[Util getHighlightColor] set];    
+            [FONT_COLOR_HL set];    
         else 
             [FONT_COLOR_69 set];
         
@@ -101,7 +101,7 @@
         [[UIImage imageNamed:@"location.png"] drawInRect:CGRectMake(10, 43, 24, 24)];
 
         if(hlPlace)
-            [[Util getHighlightColor] set];
+            [FONT_COLOR_HL set];
         else
             [FONT_COLOR_69 set];
         [place drawInRect:CGRectMake(40, 49, 320-40-10, 16) withFont:[UIFont fontWithName:@"MalayalamSangamMN" size:13] lineBreakMode:UILineBreakModeTailTruncation alignment:NSTextAlignmentLeft];
@@ -116,7 +116,7 @@
             [[UIImage imageNamed:@"time_icon.png"]drawInRect:CGRectMake(10, 70, 24, 24)];
         
         if(hlTime)
-            [[Util getHighlightColor] set];
+            [FONT_COLOR_HL set];
         else 
             [FONT_COLOR_69 set];
         int timefield_width=320-40-10;

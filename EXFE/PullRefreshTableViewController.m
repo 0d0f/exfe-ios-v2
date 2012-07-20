@@ -93,9 +93,6 @@
     [refreshHeaderView addSubview:refreshLabel];
     [refreshHeaderView addSubview:refreshArrow];
     [refreshHeaderView addSubview:refreshSpinner];
-
-
-    
     [self.tableView addSubview:refreshHeaderView];
 }
 

@@ -356,4 +356,20 @@
     
     return imageCopy;
 }
+
++ (NSString*) findProvider:(NSString*)external_id{
+    
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"; 
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    
+    if([emailTest evaluateWithObject:external_id]==YES)
+        return @"email";
+    
+    NSString *twitterRegex = @"@[A-Za-z0-9.-]+";
+    NSPredicate *twitterTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex];
+    if([twitterTest evaluateWithObject:external_id]==YES)
+        return @"twitter";
+    
+    return @"";
+}
 @end

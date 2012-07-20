@@ -28,6 +28,7 @@
 //#import "EXToolbarItem.h"
 #import <MapKit/MapKit.h>
 #import "WildcardGestureRecognizer.h"
+#import "Util.h"
 
 #define VIEW_MARGIN 15
 
@@ -62,7 +63,7 @@
 - (void) ShowPlaceView;
 - (void) ShowTimeView;
 - (void) ShowRSVPToolBar:(int)exfeeIndex;
-- (void)textDidChange:(UITextField*)textField;
+- (void) textDidChange:(UITextField*)textField;
 - (void) addDefaultIdentity;
 - (NSString*) findProvider:(NSString*)external_id;
 - (void) getIdentity:(NSString*)identity_json;

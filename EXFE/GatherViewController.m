@@ -223,7 +223,7 @@
     NSString *json=@"";
     for(NSString *identity_input in identity_list)
     {
-        NSString *provider=[self findProvider:identity_input];
+        NSString *provider=[Util findProvider:identity_input];
         if(![provider isEqualToString:@""])
         {
             if(![json isEqualToString:@""])
@@ -231,7 +231,6 @@
             
             json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,identity_input];
         }
-        NSLog(@"%@",provider);
     }
     json=[NSString stringWithFormat:@"[%@]",json];
     [self getIdentity:json];
@@ -271,54 +270,47 @@
 
     RKParams* rsvpParams = [RKParams params];
     [rsvpParams setValue:identity_json forParam:@"identities"];
-
-//    [manager.client setValue: forHTTPHeaderField:@"token"];
     [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-//    [ExfeeInput setEnabled:NO];
     [client post:endpoint usingBlock:^(RKRequest *request){
-        
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        
-        request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-                NSDictionary *body=[response.body objectFromJSONData];
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code)
-                        if([code intValue]==200) {
-                            NSDictionary* response = [body objectForKey:@"response"];
-                            NSArray *identities = [response objectForKey:@"identities"];
-                            for (NSDictionary *identitydict in identities)
-                            {
-                                NSString *external_id=[identitydict objectForKey:@"external_id"];
-                                NSString *provider=[identitydict objectForKey:@"provider"];
-                                NSString *avatar_filename=[identitydict objectForKey:@"avatar_filename"];
-                                NSString *identity_id=[identitydict objectForKey:@"id"];
-                                NSString *name=[identitydict objectForKey:@"name"];
-                                NSString *nickname=[identitydict objectForKey:@"nickname"];
-
-                                
-                                Identity *identity=[Identity object];
-                                identity.external_id=external_id;
-                                identity.provider=provider;
-                                identity.avatar_filename=avatar_filename;
-                                identity.name=name;
-                                identity.nickname=nickname;
-                                identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
-                                Invitation *invitation =[Invitation object];
-                                invitation.rsvp_status=@"ACCEPTED";
-                                invitation.identity=identity;
-                                
-                                [exfeeIdentities addObject:invitation];
-                                [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
-                                [exfeeShowview reloadData];
-                                [suggestionTable removeFromSuperview];
-                                
-                            }
-                            exfeeInput.text=@"";
-                            [exfeeInput setEnabled:YES];
+    request.method=RKRequestMethodPOST;
+    request.params=rsvpParams;
+    request.onDidLoadResponse=^(RKResponse *response){
+        if (response.statusCode == 200) {
+            NSDictionary *body=[response.body objectFromJSONData];
+            if([body isKindOfClass:[NSDictionary class]]) {
+                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                if(code)
+                    if([code intValue]==200) {
+                        NSDictionary* response = [body objectForKey:@"response"];
+                        NSArray *identities = [response objectForKey:@"identities"];
+                        for (NSDictionary *identitydict in identities) {
+                            NSString *external_id=[identitydict objectForKey:@"external_id"];
+                            NSString *provider=[identitydict objectForKey:@"provider"];
+                            NSString *avatar_filename=[identitydict objectForKey:@"avatar_filename"];
+                            NSString *identity_id=[identitydict objectForKey:@"id"];
+                            NSString *name=[identitydict objectForKey:@"name"];
+                            NSString *nickname=[identitydict objectForKey:@"nickname"];
+                            
+                            Identity *identity=[Identity object];
+                            identity.external_id=external_id;
+                            identity.provider=provider;
+                            identity.avatar_filename=avatar_filename;
+                            identity.name=name;
+                            identity.nickname=nickname;
+                            identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
+                            Invitation *invitation =[Invitation object];
+                            invitation.rsvp_status=@"ACCEPTED";
+                            invitation.identity=identity;
+                            
+                            [exfeeIdentities addObject:invitation];
+                            [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
+                            [exfeeShowview reloadData];
+                            [suggestionTable removeFromSuperview];
+                            
                         }
+                        exfeeInput.text=@"";
+                        [exfeeInput setEnabled:YES];
+                    }
                 }
             }else {
                     [exfeeInput setEnabled:YES];

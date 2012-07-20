@@ -149,6 +149,94 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (IBAction)editingDidBegan:(UITextField*)textField{
+    NSLog(@"editing did");
+    
+}
+- (void) getUser{
+    if(CFAbsoluteTimeGetCurrent()-editinginterval>1.2)
+    {
+        NSString *provider=[Util findProvider:textUsername.text];
+        if(![provider isEqualToString:@""]){
+            NSString *json=[NSString stringWithFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",@"email",textUsername.text];
+            json=[NSString stringWithFormat:@"[%@]",json];
+            RKClient *client = [RKClient sharedClient];
+            NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
+            RKParams* rsvpParams = [RKParams params];
+            [rsvpParams setValue:json forParam:@"identities"];
+            AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+            [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+            
+            [client post:endpoint usingBlock:^(RKRequest *request){
+                request.method=RKRequestMethodPOST;
+                request.params=rsvpParams;
+                request.onDidLoadResponse=^(RKResponse *response){
+                    if (response.statusCode == 200) {
+                        NSDictionary *body=[response.body objectFromJSONData];
+                        id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                        if(code)
+                            if([code intValue]==200) {
+                                NSDictionary* response = [body objectForKey:@"response"];
+                                NSArray *identities = [response objectForKey:@"identities"];
+                                if(identities && [identities count]>0) {
+                                    NSDictionary *identity=[identities objectAtIndex:0];
+                                    NSString *avatar_filename=[identity objectForKey:@"avatar_filename"];
+                                    if(avatar_filename!=nil) {
+                                        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                                        dispatch_async(imgQueue, ^{
+                                            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatar_filename];
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+                                                    avatarview.image=avatar;
+                                                }
+                                            });
+                                        });
+                                        dispatch_release(imgQueue);        
+                                    }
+                                }
+                            }
+                    }
+                };
+            }];
+        }
+    }
+}
+
+
+- (IBAction)textDidChange:(UITextField*)textField{
+    if([textField.text length]>2) {
+        editinginterval=CFAbsoluteTimeGetCurrent();
+        [self performSelector:@selector(getUser) withObject:self afterDelay:1.2];
+    } else {
+        avatarview.image=nil;
+    }
+}
+
+- (IBAction)showForgetPwd:(id)sender{
+    [self setHintView:@"forgetpassword"];
+    NSLog(@"forget password");
+}
+- (void) setHintView:(NSString*)hintname{
+    [textUsername resignFirstResponder];
+    [textPassword resignFirstResponder];
+    NSArray *subviews=[hintpannel subviews];
+    for(UIView *view in subviews){
+        [view removeFromSuperview];
+    }
+    if([hintname isEqualToString:@"forgetpassword"]){
+        UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(10, 10, 300, 30)];
+        label.text=@"Forgot Password";
+        [hintpannel addSubview:label];
+        [label release];
+        UILabel *labeldesc=[[UILabel alloc] initWithFrame:CGRectMake(10, 40, 300, 80)];
+        labeldesc.text=@"You can reset your EXFE password through this identity. Confirm sending reset token to your mailbox?";
+        [labeldesc setLineBreakMode:UILineBreakModeWordWrap];
+        labeldesc.numberOfLines = 0;
+        [hintpannel addSubview:labeldesc];
+        [labeldesc release];
+    }
+}
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {

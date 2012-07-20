@@ -83,8 +83,6 @@
             [placeedit setHidden:YES];
             [placeedit resignFirstResponder];
         }
-        
-        
         if (CGRectContainsPoint([placeedit getCloseButtonFrame], [touch locationInView:map]))
         {
             [actionsheet showInView:self.view];
@@ -167,8 +165,6 @@
 }
 
 - (void) done{
-//    [gatherplace objectForKey:@"title"]
-//    [gatherplace objectForKey:@"description"]
     if(gatherplace){
         NSString *provider=[gatherplace objectForKey:@"provider"];
         if(provider==nil)
@@ -238,9 +234,7 @@
     [actionsheet release];
     [super dealloc];
 }
-//- (void) addNewPin{
-//    
-//}
+
 - (void) drawMapAnnontations{
 
     NSMutableArray *annotations=[[NSMutableArray alloc] initWithCapacity:[_places count]];
@@ -254,7 +248,6 @@
         PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[place objectForKey:@"title"]  description:[place objectForKey:@"description"]];
         annotation.index=i;
         [annotations addObject:annotation];
-//        [map addAnnotation:annotation];
         [annotation release];
         i++;
     }
