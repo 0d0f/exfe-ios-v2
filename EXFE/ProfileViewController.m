@@ -227,7 +227,6 @@
         [button setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
         [button setBackgroundImage:signbtnimg forState:UIControlStateNormal];
         [button setFrame:CGRectMake(200, 10, 100, 40)];  
-        
         [button addTarget:self action:@selector(Logout:) forControlEvents:UIControlEventTouchUpInside];
         [footerView addSubview:button];
     }

@@ -23,6 +23,9 @@
     IBOutlet UIActivityIndicatorView* activityIndicatorview;
     IBOutlet UIButton *loginbtn;
     IBOutlet UIImageView *avatarview;
+    IBOutlet UILabel *hint_title;
+    IBOutlet UITextView *hint_desc;
+    IBOutlet UIButton *Send;
     double editinginterval;
     IBOutlet UIView *hintpannel;
 }
@@ -34,5 +37,6 @@
 - (void) processResponse:(id)obj;
 - (IBAction) TwitterLoginButtonPress:(id) sender;
 - (IBAction)showForgetPwd:(id)sender;
+- (IBAction)sendPwd:(id)sender;
 - (void) setHintView:(NSString*)hintname;
 @end

@@ -113,6 +113,8 @@
         [map becomeFirstResponder];
         
     } else if(style== EXPlaceViewStyleTableview){
+        [placeedit setHidden:YES];
+        [placeedit resignFirstResponder];
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDelay:0];
         [UIView setAnimationDuration:0.25];

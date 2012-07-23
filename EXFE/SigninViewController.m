@@ -17,8 +17,6 @@
 
 - (IBAction) Signin:(id) sender{
     
-//    NSString *identity=@"virushuo@gmail.com";
-//    NSString *password=@"tmdtmd";
     NSString *password=[textPassword text];
     NSString *identity=[textUsername text];
 
@@ -173,6 +171,7 @@
                 request.params=rsvpParams;
                 request.onDidLoadResponse=^(RKResponse *response){
                     if (response.statusCode == 200) {
+                        NSLog(@"%@",response.bodyAsString);
                         NSDictionary *body=[response.body objectFromJSONData];
                         id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                         if(code)
@@ -220,22 +219,51 @@
 - (void) setHintView:(NSString*)hintname{
     [textUsername resignFirstResponder];
     [textPassword resignFirstResponder];
-    NSArray *subviews=[hintpannel subviews];
-    for(UIView *view in subviews){
-        [view removeFromSuperview];
-    }
+    
     if([hintname isEqualToString:@"forgetpassword"]){
-        UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(10, 10, 300, 30)];
-        label.text=@"Forgot Password";
-        [hintpannel addSubview:label];
-        [label release];
-        UILabel *labeldesc=[[UILabel alloc] initWithFrame:CGRectMake(10, 40, 300, 80)];
-        labeldesc.text=@"You can reset your EXFE password through this identity. Confirm sending reset token to your mailbox?";
-        [labeldesc setLineBreakMode:UILineBreakModeWordWrap];
-        labeldesc.numberOfLines = 0;
-        [hintpannel addSubview:labeldesc];
-        [labeldesc release];
+        hint_title.text=@"Forgot Password";
+//        NSAttributedString *desc=
+        NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"You can reset your EXFE password through this identity. Confirm sending reset token to your mailbox?"];
+        [desc addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0,19)];
+        [desc addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(19,4)];
+        
+//        [desc addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(11,5)];
+        
+        hint_desc.attributedText=desc;
+        [desc release];
+        [hint_title setHidden:NO];
+        [hint_desc setHidden:NO];
+        [Send setHidden:NO];
+
     }
+}
+- (IBAction)sendPwd:(id)sender{
+    
+//    if(![provider isEqualToString:@""]){
+//        NSString *json=[NSString stringWithFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",@"email",textUsername.text];
+    
+    
+    RKClient *client = [RKClient sharedClient];
+    NSString *endpoint = [NSString stringWithFormat:@"/users/forgotpassword"];
+    RKParams* rsvpParams = [RKParams params];
+    NSString *provider=[Util findProvider:textUsername.text];
+    [rsvpParams setValue:provider forParam:@"provider"];
+    [rsvpParams setValue:textUsername.text forParam:@"external_id"];
+    
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+    
+    [client post:endpoint usingBlock:^(RKRequest *request){
+        request.method=RKRequestMethodPOST;
+        request.params=rsvpParams;
+        request.onDidLoadResponse=^(RKResponse *response){
+            if (response.statusCode == 200) {
+                [hint_desc setText:@"Verification sent, it should arrive in minutes. Please check your mailbox and follow the instruction."];
+                [Send setHidden:YES];
+            }
+        };
+    }];
 }
 #pragma mark RKObjectLoaderDelegate methods
 
@@ -250,7 +278,6 @@
     if(users!=nil && [users count] >0)
     {
         User* user=[users objectAtIndex:0];
-        NSLog(@"%@",user.name );
         [[NSUserDefaults standardUserDefaults] setObject:user.name forKey:@"username"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         app.username=user.name;
