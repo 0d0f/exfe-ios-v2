@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7803EB8B15AD801500291B69 /* EXButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7803EB8A15AD801500291B69 /* EXButton.m */; };
 		7803EB8E15AE859200291B69 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7803EB8D15AE859200291B69 /* Invitation.m */; };
+		7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 780961FF15BDB70B0071E9D0 /* EXOverlayView.m */; };
 		780D27A4157F368900402460 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A3157F368900402460 /* Post.m */; };
 		780D27A7157F4AB100402460 /* PostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A6157F4AB100402460 /* PostCell.m */; };
 		7826673215ABE3C300CD29C4 /* TimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7826673015ABE3C300CD29C4 /* TimeViewController.m */; };
@@ -205,6 +206,8 @@
 		7803EB8A15AD801500291B69 /* EXButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXButton.m; sourceTree = "<group>"; };
 		7803EB8C15AE859200291B69 /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
 		7803EB8D15AE859200291B69 /* Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
+		780961FE15BDB70B0071E9D0 /* EXOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXOverlayView.h; sourceTree = "<group>"; };
+		780961FF15BDB70B0071E9D0 /* EXOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXOverlayView.m; sourceTree = "<group>"; };
 		780D27A2157F368800402460 /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
 		780D27A3157F368900402460 /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
 		780D27A5157F4AB100402460 /* PostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCell.h; sourceTree = "<group>"; };
@@ -759,6 +762,8 @@
 				78B9FCF015B4680F00F5E4D3 /* EXInnerButton.m */,
 				78B9FD3115B5498200F5E4D3 /* EXNavigationBar.h */,
 				78B9FD3215B5498200F5E4D3 /* EXNavigationBar.m */,
+				780961FE15BDB70B0071E9D0 /* EXOverlayView.h */,
+				780961FF15BDB70B0071E9D0 /* EXOverlayView.m */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -1024,6 +1029,7 @@
 				78B9FCF815B5346D00F5E4D3 /* Exfee.m in Sources */,
 				78B9FD3315B5498200F5E4D3 /* EXNavigationBar.m in Sources */,
 				78B0181315B812FC00778192 /* Cross.m in Sources */,
+				7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

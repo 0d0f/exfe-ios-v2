@@ -30,7 +30,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observeContextSave:)
+                                                 name:NSManagedObjectContextDidSaveNotification
+                                               object:nil];
 #ifdef RESTKIT_GENERATE_SEED_DB
     NSString *seedDatabaseName = nil;
     NSString *databaseName = DBNAME;
@@ -55,8 +58,12 @@
     [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
+    
+    
     return YES;
 }
+
+
 -(void)ShowLanding{
     LandingViewController *landingView=[[[LandingViewController alloc]initWithNibName:@"LandingViewController" bundle:nil]autorelease];
     landingView.delegate=self;
@@ -98,11 +105,38 @@
     if([self Checklogin]==YES)
     {
         [APICrosses MappingRoute];
+        NSString* devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"];
+        if(!devicetoken)
+        {
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
+        }
+        NSLog(@"SigninDidFinish");
+
         [(CrossesViewController*)crossviewController refreshCrosses:@"crossview"];
         [(CrossesViewController*)crossviewController initUI];
         [self.navigationController dismissModalViewControllerAnimated:YES];
     }
 }
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    
+//    NSString * tokenAsString = [[[deviceToken description] 
+//                                 stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] 
+//                                stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+//    BOOL reg=[api regDeviceToken:tokenAsString];
+//    if(reg==YES)
+//    {
+//        [[NSUserDefaults standardUserDefaults] setObject:@"YES"  forKey:@"devicetokenreg"];
+//        [[NSUserDefaults standardUserDefaults] setObject:tokenAsString  forKey:@"devicetoken"];
+//    }
+}
+
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+    NSLog(@"Error in registration. Error: %@", err);
+}
+
+
 -(void)GatherCrossDidFinish{
     [(CrossesViewController*)crossviewController refreshCrosses:@"gatherview"];
     [self.navigationController dismissModalViewControllerAnimated:YES];
@@ -110,18 +144,38 @@
 
 -(void)SignoutDidFinish{
     NSLog(@"logout");
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"access_token"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userid"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetoken"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
     
-#ifdef RESTKIT_GENERATE_SEED_DB
-    NSString *seedDatabaseName = nil;
-    //    NSString *databaseName = RKDefaultSeedDatabaseFileName;
-    NSString *databaseName = DBNAME;
-#else
-    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
-    NSString *databaseName = DBNAME;
-#endif
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];  
+    
+    app.userid=0;
+    app.accesstoken=@"";
+    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
+//#ifdef RESTKIT_GENERATE_SEED_DB
+//    NSString *seedDatabaseName = nil;
+//    NSString *databaseName = DBNAME;
+//#else
+//    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
+//    NSString *databaseName = DBNAME;
+//#endif
 
-    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
-    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
+//    [objectStore deletePersistentStoreUsingSeedDatabaseName:seedDatabaseName];
+    [objectStore deletePersistentStore];
+    [objectStore save:nil];
+
+    NSArray *viewControllers = app.navigationController.viewControllers;
+    CrossesViewController *rootViewController = [viewControllers objectAtIndex:0];
+    [rootViewController emptyView];
+    
+    
+
+//
+//    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
+//    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

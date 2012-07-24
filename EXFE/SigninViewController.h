@@ -38,5 +38,8 @@
 - (IBAction) TwitterLoginButtonPress:(id) sender;
 - (IBAction)showForgetPwd:(id)sender;
 - (IBAction)sendPwd:(id)sender;
+- (IBAction)sendVerify:(id)sender;
 - (void) setHintView:(NSString*)hintname;
+
+
 @end

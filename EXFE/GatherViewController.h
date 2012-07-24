@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import <RestKit/JSONKit.h>
 #import <RestKit/RestKit.h>
 #import "AppDelegate.h"
@@ -29,10 +30,11 @@
 #import <MapKit/MapKit.h>
 #import "WildcardGestureRecognizer.h"
 #import "Util.h"
+#import "EXOverlayView.h"
 
 #define VIEW_MARGIN 15
 
-@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate,UITextViewDelegate>{
+@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate,UITextViewDelegate,UIScrollViewDelegate>{
     IBOutlet UIToolbar *toolbar;
     UITextField *crosstitle;
     UITextField *exfeeInput;
@@ -40,7 +42,7 @@
     EXIconToolBar *rsvptoolbar;
     MKMapView *map;
     UITextView *crossdescription;
-    UIView *containview;
+    UIScrollView *containview;
     BOOL isExfeeInputShow;
     UITableView *suggestionTable;
     NSMutableArray *suggestIdentities;
@@ -77,4 +79,6 @@
 - (void) rsvpaddmate;
 - (void) rsvpsubmate;
 - (void) rsvpreset;
+
+- (void)touchesBegan:(UITapGestureRecognizer*)sender;
 @end

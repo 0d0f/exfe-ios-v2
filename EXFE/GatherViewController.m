@@ -26,14 +26,25 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIImageView *imgback=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_gradient.png"]];
+    [self.view addSubview:imgback];
+    [imgback release];
 
     exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
     exfeeSelected=[[NSMutableArray alloc] initWithCapacity:12];
-    
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     float width=self.view.frame.size.width-VIEW_MARGIN*2;
-    containview=[[UIView alloc] initWithFrame:CGRectMake(0,0,width,460)];
+    containview=[[UIScrollView alloc] initWithFrame:self.view.frame];
+    [containview setDelegate:self];
+    [containview setContentSize:CGSizeMake(self.view.frame.size.width, 900)];
     [self.view addSubview:containview];
+    EXOverlayView *holeView=[[EXOverlayView alloc] initWithFrame:CGRectMake(0, 0, 20, 80)];
+    [holeView setOpaque:NO];
+    [[holeView layer] setShadowOffset:CGSizeMake(5, 5)];
+    [[holeView layer] setShadowOpacity:0.4];
+    
+    [containview addSubview:holeView];
+    [holeView release];
     
     crosstitle=[[UITextField alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6, width, 40)];
     [crosstitle setBorderStyle:UITextBorderStyleRoundedRect];
@@ -77,9 +88,24 @@
     tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
         [self ShowPlaceView];
     };
-    
     [map addGestureRecognizer:tapInterceptor];
+//    [placetitle addGestureRecognizer:tapInterceptor];
+//    [placedesc addGestureRecognizer:tapInterceptor];
     [tapInterceptor release];
+
+    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
+    gestureRecognizer.delegate = self;
+    [containview addGestureRecognizer:gestureRecognizer];
+
+    
+//    WildcardGestureRecognizer * tapInterceptordate = [[WildcardGestureRecognizer alloc] init];
+//    tapInterceptordate.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
+//        [self ShowTimeView];
+//    };
+//    [timedesc addGestureRecognizer:tapInterceptordate];
+//    [timetitle addGestureRecognizer:tapInterceptordate];
+//    [tapInterceptordate release];
+
     
     [self setExfeeNum];
     [self.view bringSubviewToFront:toolbar];
@@ -495,12 +521,34 @@
     int count=[exfeeIdentities count];
     exfeenum.text=[NSString stringWithFormat:@"%u Exfees",count];
 }
+- (void)touchesBegan:(UITapGestureRecognizer*)sender{
+    CGPoint location = [sender locationInView:sender.view];
+    NSLog(@"touch begin");
+    if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
+    {
+        [self ShowPlaceView];
+    }
+    if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))
+    {
+        [self ShowTimeView];
+    }
+    if (CGRectContainsPoint([exfeeShowview frame], location))
+    {
+        CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
+        [exfeeShowview onImageTouch:exfeeviewlocation];
+    }
+    else{
+    [crosstitle resignFirstResponder];
+    [exfeeInput resignFirstResponder];
+    [map becomeFirstResponder];
+    [self ShowExfeeInput:NO];
+    }
 
+}
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 
     UITouch * touch = [touches anyObject];
     if(touch.phase == UITouchPhaseBegan) {
-
         if (CGRectContainsPoint([placetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([placedesc frame], [touch locationInView:self.view]))
         {
             [self ShowPlaceView];
@@ -530,6 +578,16 @@
 }
 - (void) pullPannelDown{
     [self ShowExfeeInput:NO];
+}
+
+#pragma mark UIScrollView methods
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    for (UIView *view in [containview subviews])
+    {
+        [view resignFirstResponder];
+    }
+    [containview becomeFirstResponder];
 }
 #pragma mark RKObjectLoaderDelegate methods
 
