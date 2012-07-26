@@ -46,7 +46,7 @@
     UITextView *crossdescription;
     UIView *backgroundview;
     UIScrollView *containview;
-    UIView *containcardview;
+    EXOverlayView *containcardview;
     BOOL isExfeeInputShow;
     UITableView *suggestionTable;
     NSMutableArray *suggestIdentities;

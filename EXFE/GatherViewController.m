@@ -44,8 +44,17 @@
     [containview setContentSize:CGSizeMake(containview.frame.size.width, 900)];
     [backgroundview addSubview:containview];
 
-    containcardview=[[UIView alloc] initWithFrame:CGRectMake(0, INNER_MARGIN, containview.frame.size.width, containview.frame.size.height)];
-    containcardview.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"paper_texture.png"]];
+    containcardview=[[EXOverlayView alloc] initWithFrame:CGRectMake(0, INNER_MARGIN, containview.frame.size.width, containview.frame.size.height)];
+    containcardview.backgroundimage=[UIImage imageNamed:@"paper_texture.png"];
+    UIBezierPath *triangle = [UIBezierPath bezierPath];
+    [triangle moveToPoint:CGPointMake(5,44)];
+    [triangle addLineToPoint:CGPointMake(5,80)];
+    [triangle addLineToPoint:CGPointMake(20,44+18)];
+    [triangle addLineToPoint:CGPointMake(5,44)];
+    containcardview.transparentPath=triangle;
+    
+    
+//    containcardview.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"paper_texture.png"]];
     [containview addSubview:containcardview];
     
     
@@ -97,7 +106,7 @@
     [exfeeShowview setDelegate:self];
     [self addDefaultIdentity];
     
-    map=[[MKMapView alloc] initWithFrame:CGRectMake(VIEW_MARGIN+160,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,130,80)];
+    map=[[MKMapView alloc] initWithFrame:CGRectMake(INNER_MARGIN+160,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,130,80)];
     [containview addSubview:map];
     
     WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
@@ -113,27 +122,29 @@
     [self setExfeeNum];
     [self.view bringSubviewToFront:toolbar];
     
-    timetitle=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15,160,24)];
+    timetitle=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,
+                                                        exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10
+                                                        ,160,25)];
     [timetitle setBackgroundColor:[UIColor clearColor]];
     timetitle.text=@"Sometime";
     [timetitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     timetitle.textColor=[Util getHighlightColor];
     [containview addSubview:timetitle];
 
-    timedesc=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+24,160,18)];
+    timedesc=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,timetitle.frame.origin.y+timetitle.frame.size.height,160,18)];
     [timedesc setBackgroundColor:[UIColor clearColor]];
     timedesc.text=@"Tap here to set time";
     [timedesc setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
     [containview addSubview:timedesc];
     
-    placetitle=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15,160,24)];
+    placetitle=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15,160,24)];
     [placetitle setBackgroundColor:[UIColor clearColor]];
     placetitle.text=@"Somwhere";
     [placetitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     placetitle.textColor=[Util getHighlightColor];
     [containview addSubview:placetitle];
     
-    placedesc=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2,18)];
+    placedesc=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2,18)];
     [placedesc setBackgroundColor:[UIColor clearColor]];
     placedesc.numberOfLines=0;
     placedesc.adjustsFontSizeToFitWidth=NO;
@@ -141,16 +152,26 @@
     [placedesc setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
     [containview addSubview:placedesc];
 
-    crossdescription=[[UITextView alloc] initWithFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,width,144)];
+    crossdescription=[[UITextView alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,width,144)];
     [crossdescription setBackgroundColor:[UIColor  grayColor]];
     [crossdescription setDelegate:self];
     [containview addSubview:crossdescription];
     
     boardoffset=6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height;
+    [self reArrangeViews];
 }
 
 - (void) reArrangeViews{
-    [crossdescription setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,crossdescription.frame.size.width,144)];
+    [crossdescription setFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,crossdescription.frame.size.width,144)];
+    
+    [timetitle setFrame:CGRectMake(INNER_MARGIN, exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,160,24)];
+    [timedesc setFrame:CGRectMake(INNER_MARGIN,timetitle.frame.origin.y+timetitle.frame.size.height,160,18)];
+    [placetitle setFrame:CGRectMake(INNER_MARGIN,timedesc.frame.origin.y+timedesc.frame.size.height+15,160,24)];
+    [placedesc setFrame:CGRectMake(INNER_MARGIN,placetitle.frame.origin.y+placetitle.frame.size.height,160,18)];
+    
+    [map setFrame:CGRectMake(INNER_MARGIN+160,exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,130,80)];
+    
+    [crossdescription setFrame:CGRectMake(INNER_MARGIN,placedesc.frame.origin.y+placedesc.frame.size.height+15,containview.frame.size.width-INNER_MARGIN*2,144)];
     
 }
 
@@ -683,12 +704,8 @@
     [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
 
     [map setFrame:CGRectMake(map.frame.origin.x,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,map.frame.size.width,map.frame.size.height)];
-    [timetitle setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15,160,24)];
-    [timedesc setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+24,160,18)];
-    [placetitle setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15,160,24)];
-    
-    [placedesc setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height,160,18)];
 
+    [self reArrangeViews];
     [crossdescription setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,crossdescription.frame.size.width,144-60)];
     [exfeeShowview calculateColumn];
 }
