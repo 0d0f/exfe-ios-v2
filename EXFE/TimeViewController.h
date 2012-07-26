@@ -25,7 +25,7 @@
 @property (nonatomic,retain) UIViewController* gatherview;
 
 - (IBAction) Done:(id) sender;
-- (void) saveDate:(NSString*) date_word;
+- (void) saveDate:(NSString*) time_word;
 - (void) cleanDate;
 //- (void) updateDate;
 @end

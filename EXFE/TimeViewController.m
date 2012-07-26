@@ -79,7 +79,7 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (void) saveDate:(NSString*) date_word{
+- (void) saveDate:(NSString*) time_word{
     EFTime *eftime=[EFTime object];
     CrossTime *crosstime=[CrossTime object];
     
@@ -101,19 +101,19 @@
     NSString *eftimezone=[timezonestr substringFromIndex:3];
     [formatter release];
     
-    if(date_word!=nil)
+    if(time_word!=nil)
     {
         crosstime.outputformat=[NSNumber numberWithInt:0];
-        crosstime.origin=[NSString stringWithFormat:@"%@ %@",stringFromDate,date_word];
-        eftime.date_word=date_word;
+        crosstime.origin=[NSString stringWithFormat:@"%@ %@",stringFromDate,time_word];
+        eftime.time_word=time_word;
     }
     else{
         crosstime.origin=stringFromDate;
-        eftime.date_word=@"";
+        eftime.time_word=@"";
     }
     eftime.date=datestr;
     eftime.time=timestr;
-    eftime.time_word=@"";
+    eftime.date_word=@"";
     eftime.timezone=eftimezone;
     crosstime.begin_at=eftime;
     [(GatherViewController*)gatherview setDateTime:crosstime];

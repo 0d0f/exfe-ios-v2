@@ -68,6 +68,7 @@
 + (NSDictionary*) crossTimeToString:(CrossTime*)crosstime{
     NSMutableDictionary *result=[[[NSMutableDictionary alloc]initWithCapacity:2] autorelease];
     if(crosstime==nil){
+        [result setObject:@"" forKey:@"date_v2"];
         [result setObject:@"" forKey:@"date"];
         [result setObject:@"Sometime" forKey:@"relative"];
         [result setObject:@"Sometime" forKey:@"short"];
@@ -95,7 +96,6 @@
     if(![crosstime.begin_at.date isEqualToString:@""]&&![crosstime.begin_at.time isEqualToString:@""] && ![crosstime.begin_at.timezone isEqualToString:@""])
     {
         NSString *relative=[self formattedLongDateRelativeToNow:[crosstime.begin_at.date stringByAppendingFormat:@" %@ %@",crosstime.begin_at.time,[[crosstime.begin_at.timezone substringToIndex:3] stringByAppendingString:[crosstime.begin_at.timezone substringWithRange:NSMakeRange(4,2)]]]];
-        
         [result setObject:relative forKey:@"relative"];
     }
     [result setObject:[self formattedShortDate:crosstime] forKey:@"short"];
@@ -106,6 +106,8 @@
         if(is_same_timezone == false)
             datestr=[datestr stringByAppendingString:crosstime.begin_at.timezone];
         [result setObject:datestr forKey:@"date"];
+        
+        
         return result;
     }
     else {
@@ -131,7 +133,7 @@
         {
             NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
             [dateformat_to setTimeZone:[NSTimeZone defaultTimeZone]];
-            [dateformat_to setDateFormat:@"HH:mm:ss"];
+            [dateformat_to setDateFormat:@"HH:mm a"];
             crosstime_time=[dateformat_to stringFromDate:begin_at_date];
         
             [dateformat_to setDateFormat:@"yyyy-MM-dd"];
@@ -154,9 +156,10 @@
         NSString *timestr=@"";
         NSString *datestr=@"";
         if(![crosstime.begin_at.time_word isEqualToString:@""] && ![crosstime.begin_at.time isEqualToString:@""])
-            timestr=[timestr stringByAppendingFormat:@"%@ at %@",crosstime.begin_at.time_word,crosstime.begin_at.time];
+            timestr=crosstime.begin_at.time_word;
+//            timestr=[timestr stringByAppendingFormat:@"%@ at %@",crosstime.begin_at.time_word,crosstime.begin_at.time];
         else
-            timestr=[timestr stringByAppendingFormat:@"%@%@",crosstime.begin_at.time_word,crosstime.begin_at.time];
+            timestr=[timestr stringByAppendingFormat:@"%@%@",crosstime.begin_at.time_word,crosstime_time];
 
         if(is_same_timezone==false)
             timestr=[timestr stringByAppendingFormat:@" %@",crosstime.begin_at.timezone];
@@ -172,10 +175,13 @@
             return result;
         }
         else{
-            [result setObject:[timestr stringByAppendingFormat:@" on %@",datestr] forKey:@"date"];
+            if(![timestr isEqualToString:@""])
+                [result setObject:[timestr stringByAppendingFormat:@" on %@",datestr] forKey:@"date"];
+            else
+                [result setObject:datestr forKey:@"date"];
+
             return result;
         }
-
     }
 }
 

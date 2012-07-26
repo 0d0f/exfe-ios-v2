@@ -65,11 +65,11 @@
 //        [[Util getHighlightColor] set];    
 //    else 
 //        [[Util getRegularColor] set];
-    [content drawInRect:CGRectMake(35, 8, CELL_CONTENT_WIDTH-CELL_CONTENT_MARGIN_LEFT-CELL_CONTENT_MARGIN_RIGHT-20-5, text_height) withFont:[UIFont fontWithName:@"Helvetica" size:FONT_SIZE]];
+    [content drawInRect:CGRectMake(35, 8, CELL_CONTENT_WIDTH-CELL_CONTENT_MARGIN_LEFT-CELL_CONTENT_MARGIN_RIGHT-20-5, text_height) withFont:[UIFont fontWithName:@"HelveticaNeue" size:FONT_SIZE]];
 
     if(avatar!=nil && ![avatar isKindOfClass:[NSNull class]])
         [avatar drawInRect:CGRectMake(10, 8, 20, 20)];
-    [time drawInRect:CGRectMake(CELL_CONTENT_WIDTH-CELL_CONTENT_MARGIN_RIGHT, r.size.height-CELL_CONTENT_MARGIN_BOTTOM-14 , 20, 14) withFont:[UIFont fontWithName:@"Helvetica" size:14] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
+    [time drawInRect:CGRectMake(CELL_CONTENT_WIDTH-CELL_CONTENT_MARGIN_RIGHT, r.size.height-CELL_CONTENT_MARGIN_BOTTOM-14 , 20, 14) withFont:[UIFont fontWithName:@"HelveticaNeue" size:14] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
     
 }
 @end

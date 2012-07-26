@@ -92,7 +92,7 @@
     [settingButton addTarget:self action:@selector(ShowProfileView) forControlEvents:UIControlEventTouchUpInside];
     settingButton.layer.cornerRadius=5.5f;
     settingButton.clipsToBounds = YES;
-    UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"avatar_effect.png"]];
+    UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"i_avatar_effect.png"]];
     shadowImageView.contentMode = UIViewContentModeScaleToFill;
     shadowImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     shadowImageView.frame = settingButton.bounds;

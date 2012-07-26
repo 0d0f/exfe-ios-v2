@@ -18,17 +18,17 @@
         self.backgroundColor=[UIColor whiteColor];
 
         CGSize constraint = CGSizeMake(frame.size.width , 20000.0f);
-        CGSize size = [@"A" sizeWithFont:[UIFont fontWithName:@"Helvetica" size:21] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+        CGSize size = [@"A" sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:21] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
 
         PlaceTitle=[[UITextField alloc] initWithFrame:CGRectMake(4, 4, frame.size.width-8, size.height+5)];
-        [PlaceTitle setFont:[UIFont fontWithName:@"Helvetica" size:21]];
+        [PlaceTitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:21]];
         [PlaceTitle setDelegate:self];
 
         PlaceTitle.textColor=[Util getHighlightColor];
 
-        CGSize sizedesc = [@"A\nA\nA\nA" sizeWithFont:[UIFont fontWithName:@"Helvetica" size:14] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+        CGSize sizedesc = [@"A\nA\nA\nA" sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:14] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
         PlaceDesc=[[UITextView alloc] initWithFrame:CGRectMake(0, 4+size.height+5, frame.size.width-8, sizedesc.height)];
-        [PlaceDesc setFont:[UIFont fontWithName:@"Helvetica" size:14]];
+        [PlaceDesc setFont:[UIFont fontWithName:@"HelveticaNeue" size:14]];
 
         [self addSubview:PlaceTitle];
         [self addSubview:PlaceDesc];

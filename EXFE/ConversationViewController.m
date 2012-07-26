@@ -189,7 +189,7 @@
 {
     Post *post=[_posts objectAtIndex:indexPath.row];
     CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN_LEFT +CELL_CONTENT_MARGIN_RIGHT), 20000.0f);
-    CGSize size = [post.content sizeWithFont:[UIFont fontWithName:@"Helvetica" size:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [post.content sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
     CGFloat height = MAX(size.height, 20.0);
     return height + (CELL_CONTENT_MARGIN_TOP+CELL_CONTENT_MARGIN_BOTTOM);
 }
@@ -205,7 +205,7 @@
 
     Post *post=[_posts objectAtIndex:indexPath.row];
     CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN_LEFT+CELL_CONTENT_MARGIN_RIGHT), 20000.0f);
-    CGSize size = [post.content sizeWithFont:[UIFont fontWithName:@"Helvetica" size:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [post.content sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
     CGFloat height = MAX(size.height, 20.0);
 //    NSLog(@"height: %f",height );
     cell.content=post.content;

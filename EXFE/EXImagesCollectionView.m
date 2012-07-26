@@ -111,7 +111,19 @@
             avatar=[ImgCache getDefaultImage];
         }
 
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(x,y,imageWidth,imageHeight) cornerRadius:3];
+        CGContextRef currentContext = UIGraphicsGetCurrentContext();
+        CGContextSaveGState(currentContext);
+        CGContextBeginPath(currentContext);
+        CGContextAddPath(currentContext, maskPath.CGPath);
+        CGContextClosePath(currentContext);
+        CGContextClip(currentContext);
+        UIImage *avatar_effect=[UIImage imageNamed:@"avatar_effect.png"];
         [avatar drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
+        [avatar_effect drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
+
+        CGContextRestoreGState(currentContext);
+        
         if([invitation.host boolValue]==YES)
             [[UIImage imageNamed:@"closebutton"] drawInRect:CGRectMake(x+imageWidth-10, y, 10, 10)];
         NSString *name=identity.name;
@@ -122,7 +134,7 @@
         NSLog(@"%f",y+imageHeight+15);
         if(name!=nil){
             [[UIColor blackColor] set];
-            [name drawInRect:CGRectMake(x, y+imageHeight, imageWidth, 15) withFont:[UIFont fontWithName:@"Helvetica" size:11] lineBreakMode:NSLineBreakByClipping alignment:UITextAlignmentCenter];
+            [name drawInRect:CGRectMake(x, y+imageHeight, imageWidth, 15) withFont:[UIFont fontWithName:@"HelveticaNeue" size:11] lineBreakMode:NSLineBreakByClipping alignment:UITextAlignmentCenter];
         }
         x_count++;
     }
@@ -142,10 +154,10 @@
             y=imageXmargin;
         if(y_count>0)
             y+=15;
-        UIImage *image=[UIImage imageNamed:@"chat.png"];
+        UIImage *image=[UIImage imageNamed:@"gather_add_exfee.png"];
         if(image==nil || [image isEqual:[NSNull null]])
             image=[ImgCache getDefaultImage];
-        [image drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
+        [image drawInRect:CGRectMake(x,y,140,40)];
     }
 }
 
