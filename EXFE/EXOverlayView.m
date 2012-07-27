@@ -34,7 +34,10 @@
 //    [triangle addLineToPoint:CGPointMake(5,44)];
     transparentPath.usesEvenOddFillRule=YES;
     
-    UIBezierPath *framepath = [UIBezierPath bezierPathWithRect:rect];
+//    UIBezierPath *framepath = [UIBezierPath bezierPathWithRect:rect];
+    UIBezierPath *framepath = [UIBezierPath bezierPathWithRoundedRect:rect
+                                                           cornerRadius:5];
+    
     [framepath appendPath:transparentPath];
     
     CGContextRef currentContext = UIGraphicsGetCurrentContext();

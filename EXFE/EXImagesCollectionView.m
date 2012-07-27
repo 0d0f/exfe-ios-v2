@@ -87,12 +87,12 @@
             x_count=0;
             y_count++;
         }
-        int x=x_count*(imageWidth+imageXmargin*2);
-        if(x==0)
-            x=imageXmargin;
-        int y=y_count*(imageHeight+imageYmargin*2);
-        if(y==0)
-            y=imageYmargin;
+        int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
+//        if(x==0)
+//            x=imageXmargin;
+        int y=y_count*(imageHeight+imageYmargin*2)+imageYmargin;
+//        if(y==0)
+//            y=imageYmargin;
         if(y_count>0)
             y+=15;
 
@@ -131,7 +131,6 @@
             name=identity.external_username;
         if(name==nil)
             name=identity.external_id;
-        NSLog(@"%f",y+imageHeight+15);
         if(name!=nil){
             [[UIColor blackColor] set];
             [name drawInRect:CGRectMake(x, y+imageHeight, imageWidth, 15) withFont:[UIFont fontWithName:@"HelveticaNeue" size:11] lineBreakMode:NSLineBreakByClipping alignment:UITextAlignmentCenter];
@@ -145,13 +144,13 @@
     }
 
     if(count<maxColumn*maxRow) {
-        int x=x_count*(imageWidth+imageXmargin*2);
-        if(x==0)
-            x=imageXmargin;
+        int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
+//        if(x==0)
+//            x=imageXmargin;
 
-        int y=y_count*(imageHeight+imageYmargin*2);
-        if(y==0)
-            y=imageXmargin;
+        int y=y_count*(imageHeight+imageYmargin*2)+imageXmargin;
+//        if(y==0)
+//            y=imageXmargin;
         if(y_count>0)
             y+=15;
         UIImage *image=[UIImage imageNamed:@"gather_add_exfee.png"];

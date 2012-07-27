@@ -44,6 +44,7 @@
     EXIconToolBar *rsvptoolbar;
     MKMapView *map;
     UITextView *crossdescription;
+    UIView *crossdescbackimg;
     UIView *backgroundview;
     UIScrollView *containview;
     EXOverlayView *containcardview;
@@ -70,7 +71,7 @@
 - (void) ShowTimeView;
 - (void) ShowExfeeView;
 - (void) ShowRSVPToolBar:(int)exfeeIndex;
-- (void) textDidChange:(UITextField*)textField;
+//- (void) textDidChange:(UITextField*)textField;
 - (void) addDefaultIdentity;
 - (void) reArrangeViews;
 - (NSString*) findProvider:(NSString*)external_id;
@@ -79,7 +80,6 @@
 - (void) setDateTime:(CrossTime*)crosstime;
 - (void) ShowExfeeInput:(BOOL)show;
 - (void) setExfeeNum;
-- (void) pullPannelDown;
 - (void) pullcontainviewDown;
 - (void) rsvpaccept;
 - (void) rsvpaddmate;

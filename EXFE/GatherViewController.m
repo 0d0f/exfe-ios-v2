@@ -26,9 +26,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIImageView *imgback=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_gradient.png"]];
-    [self.view addSubview:imgback];
-    [imgback release];
+//    UIImageView *imgback=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_gradient.png"]];
+//    [self.view addSubview:imgback];
+//    [imgback release];
 
     exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
     exfeeSelected=[[NSMutableArray alloc] initWithCapacity:12];
@@ -41,34 +41,18 @@
     CGRect containviewframe=CGRectMake(self.view.frame.origin.x+VIEW_MARGIN,self.view.frame.origin.y+toolbar.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2, self.view.frame.size.height);
     containview=[[UIScrollView alloc] initWithFrame:containviewframe];
     [containview setDelegate:self];
-    [containview setContentSize:CGSizeMake(containview.frame.size.width, 900)];
     [backgroundview addSubview:containview];
 
     containcardview=[[EXOverlayView alloc] initWithFrame:CGRectMake(0, INNER_MARGIN, containview.frame.size.width, containview.frame.size.height)];
     containcardview.backgroundimage=[UIImage imageNamed:@"paper_texture.png"];
-    UIBezierPath *triangle = [UIBezierPath bezierPath];
-    [triangle moveToPoint:CGPointMake(5,44)];
-    [triangle addLineToPoint:CGPointMake(5,80)];
-    [triangle addLineToPoint:CGPointMake(20,44+18)];
-    [triangle addLineToPoint:CGPointMake(5,44)];
-    containcardview.transparentPath=triangle;
-    
     
 //    containcardview.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"paper_texture.png"]];
     [containview addSubview:containcardview];
-    
-    
     UIImageView *title_input_img=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gather_title_input_area.png"]];
     [title_input_img setFrame:CGRectMake(0, 0, 308, 69)];
     [containcardview addSubview:title_input_img];
     [title_input_img release];
-    
-//    EXOverlayView *holeView=[[EXOverlayView alloc] initWithFrame:CGRectMake(0, 0, 20, 80)];
-//    [holeView setOpaque:NO];
-//    [[holeView layer] setShadowOffset:CGSizeMake(5, 5)];
-//    [[holeView layer] setShadowOpacity:0.4];
-//    [containview addSubview:holeView];
-//    [holeView release];
+
     crosstitle=[[UITextView alloc] initWithFrame:CGRectMake(INNER_MARGIN+30, 5,containview.frame.size.width-INNER_MARGIN-30, 48)];
     [containcardview addSubview:crosstitle];
     crosstitle.text=[NSString stringWithFormat:@"Meet %@",app.username];
@@ -76,8 +60,9 @@
     [crosstitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     [crosstitle becomeFirstResponder];
     
+    
     exfeenum=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15, width, 24)];
-    [containview addSubview:exfeenum];
+    [containcardview addSubview:exfeenum];
     [exfeenum setHidden:YES];
     
     exfeeInput=[[UITextField alloc] initWithFrame:CGRectMake(INNER_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
@@ -86,28 +71,25 @@
     [exfeeInput setAutocorrectionType:UITextAutocorrectionTypeNo];
     [exfeeInput setBackgroundColor:[UIColor clearColor]];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:UITextFieldTextDidChangeNotification object:exfeeInput];
-    [exfeeInput setDelegate:self];
-    [exfeeInput setHidden:YES];
-    [containview addSubview:exfeeInput];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:UITextFieldTextDidChangeNotification object:exfeeInput];
+//    [exfeeInput setDelegate:self];
+//    [exfeeInput setHidden:YES];
+//    [containview addSubview:exfeeInput];
     
     //TODO: workaround for a responder chain bug
     exfeeShowview =[[EXImagesCollectionView alloc] initWithFrame:CGRectMake(INNER_MARGIN, crosstitle.frame.origin.x+crosstitle.frame.size.height, width, 120)];
-    [exfeeShowview setFrame:CGRectMake(INNER_MARGIN, 69+4-5, width, 40+15+5)];
+    [exfeeShowview setFrame:CGRectMake(INNER_MARGIN-6, 69+4-5, width, 40+15+5)];
     [exfeeShowview calculateColumn];
     [exfeeShowview setBackgroundColor:[UIColor clearColor]];
     [containcardview addSubview:exfeeShowview];
-    isExfeeInputShow=NO;
+//    isExfeeInputShow=NO;
 
-    suggestionTable = [[UITableView alloc] initWithFrame:CGRectMake(0,0,60,60) style:UITableViewStylePlain];
-    suggestionTable.dataSource=self;
-    suggestionTable.delegate=self;
     [exfeeShowview setDataSource:self];
     [exfeeShowview setDelegate:self];
     [self addDefaultIdentity];
     
     map=[[MKMapView alloc] initWithFrame:CGRectMake(INNER_MARGIN+160,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,130,80)];
-    [containview addSubview:map];
+    [containcardview addSubview:map];
     
     WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
     tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
@@ -117,7 +99,7 @@
     [tapInterceptor release];
 
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
-    [containview addGestureRecognizer:gestureRecognizer];
+    [containcardview addGestureRecognizer:gestureRecognizer];
     
     [self setExfeeNum];
     [self.view bringSubviewToFront:toolbar];
@@ -129,20 +111,20 @@
     timetitle.text=@"Sometime";
     [timetitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     timetitle.textColor=[Util getHighlightColor];
-    [containview addSubview:timetitle];
+    [containcardview addSubview:timetitle];
 
     timedesc=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,timetitle.frame.origin.y+timetitle.frame.size.height,160,18)];
     [timedesc setBackgroundColor:[UIColor clearColor]];
     timedesc.text=@"Tap here to set time";
     [timedesc setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
-    [containview addSubview:timedesc];
+    [containcardview addSubview:timedesc];
     
     placetitle=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15,160,24)];
     [placetitle setBackgroundColor:[UIColor clearColor]];
     placetitle.text=@"Somwhere";
     [placetitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     placetitle.textColor=[Util getHighlightColor];
-    [containview addSubview:placetitle];
+    [containcardview addSubview:placetitle];
     
     placedesc=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2,18)];
     [placedesc setBackgroundColor:[UIColor clearColor]];
@@ -150,19 +132,24 @@
     placedesc.adjustsFontSizeToFitWidth=NO;
     placedesc.text=@"Tap here to set place";
     [placedesc setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
-    [containview addSubview:placedesc];
+    [containcardview addSubview:placedesc];
 
     crossdescription=[[UITextView alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,width,144)];
-    [crossdescription setBackgroundColor:[UIColor  grayColor]];
+
+    crossdescbackimg=[[UIView alloc] initWithFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y, crossdescription.frame.size.width, 75)];
+    crossdescbackimg.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"gather_describe_area.png"]];
+                              
+    [containcardview addSubview:crossdescbackimg];
+    [crossdescription setBackgroundColor:[UIColor clearColor]];
     [crossdescription setDelegate:self];
-    [containview addSubview:crossdescription];
+    [containcardview addSubview:crossdescription];
     
-    boardoffset=6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height;
+//    boardoffset=6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height;
     [self reArrangeViews];
 }
 
 - (void) reArrangeViews{
-    [crossdescription setFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,crossdescription.frame.size.width,144)];
+//    [crossdescription setFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,crossdescription.frame.size.width,144)];
     
     [timetitle setFrame:CGRectMake(INNER_MARGIN, exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,160,24)];
     [timedesc setFrame:CGRectMake(INNER_MARGIN,timetitle.frame.origin.y+timetitle.frame.size.height,160,18)];
@@ -171,10 +158,35 @@
     
     [map setFrame:CGRectMake(INNER_MARGIN+160,exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,130,80)];
     
-    [crossdescription setFrame:CGRectMake(INNER_MARGIN,placedesc.frame.origin.y+placedesc.frame.size.height+15,containview.frame.size.width-INNER_MARGIN*2,144)];
-    
-}
+    [crossdescription setFrame:CGRectMake(0,placedesc.frame.origin.y+placedesc.frame.size.height+15,containview.frame.size.width,145)];
+    [crossdescbackimg setFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y, crossdescription.frame.size.width, 75)];
 
+    float triheight=4;
+    float y=timetitle.frame.origin.y+timetitle.frame.size.height/2-triheight;
+    UIBezierPath *triangle = [UIBezierPath bezierPath];
+    [triangle moveToPoint:CGPointMake(0,y)];
+    [triangle addLineToPoint:CGPointMake(0,y+triheight*2)];
+    [triangle addLineToPoint:CGPointMake(triheight,y+triheight)];
+    [triangle addLineToPoint:CGPointMake(0,y)];
+
+    y=placetitle.frame.origin.y+placetitle.frame.size.height/2-triheight;
+    [triangle moveToPoint:CGPointMake(0,y)];
+    [triangle addLineToPoint:CGPointMake(0,y+triheight*2)];
+    [triangle addLineToPoint:CGPointMake(triheight,y+triheight)];
+    [triangle addLineToPoint:CGPointMake(0,y)];
+    
+    containcardview.transparentPath=triangle;
+    [containcardview setFrame:CGRectMake(containcardview.frame.origin.x, containcardview.frame.origin.y, containcardview.frame.size.width, crossdescription.frame.origin.y+crossdescription.frame.size.height)];
+    [containview setContentSize:CGSizeMake(containview.frame.size.width, containcardview.frame.size.height+6)];
+    containview.alwaysBounceVertical=YES;
+//    containcardview.layer.shadowOffset
+    containview.layer.shadowColor = [UIColor blackColor].CGColor;
+    containview.layer.shadowOpacity = 0.7f;
+    containview.layer.shadowOffset = CGSizeMake(-3, 1.0f);
+    containview.layer.shadowRadius = 5.0f;
+    containview.layer.masksToBounds = NO;
+    [containcardview setNeedsDisplay];
+}
 - (void) addDefaultIdentity{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSFetchRequest* request = [User fetchRequest];
@@ -238,6 +250,7 @@
     [containview release];
     [backgroundview release];
     [containcardview release];
+    [crossdescbackimg release];
     [super dealloc];
 }
 - (void)didReceiveMemoryWarning
@@ -296,16 +309,16 @@
     return YES;
 }
 
-- (void)textDidChange:(UITextField*)textField
-{
-    if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
-        [APIProfile LoadSuggest:exfeeInput.text delegate:self];
-        [self loadIdentitiesFromDataStore];
-    }
-    else{
-        [suggestionTable removeFromSuperview];
-    }
-}
+//- (void)textDidChange:(UITextField*)textField
+//{
+//    if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
+//        [APIProfile LoadSuggest:exfeeInput.text delegate:self];
+//        [self loadIdentitiesFromDataStore];
+//    }
+//    else{
+//        [suggestionTable removeFromSuperview];
+//    }
+//}
 
 - (NSString*) findProvider:(NSString*)external_id{
     
@@ -365,7 +378,7 @@
                             [exfeeIdentities addObject:invitation];
                             [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
                             [exfeeShowview reloadData];
-                            [suggestionTable removeFromSuperview];
+//                            [suggestionTable removeFromSuperview];
                             
                         }
                         exfeeInput.text=@"";
@@ -388,44 +401,44 @@
     [self setExfeeNum];
 }
 
-- (void)loadIdentitiesFromDataStore {
-        [suggestIdentities release];
-        NSFetchRequest* request = [Identity fetchRequest];
-        NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:NO];
-
-        NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",exfeeInput.text];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((name like[c] %@) OR (external_username like[c] %@) OR (external_id like[c] %@) OR (nickname like[c] %@)) AND provider != %@ AND  provider != %@ ",inputpredicate,inputpredicate,inputpredicate,inputpredicate,@"iOSAPN",@"android"];
-        [request setPredicate:predicate];
-        [request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
-        NSMutableArray *temp=[[NSMutableArray alloc]initWithCapacity:10];
-        NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
-        for (Identity *identity in suggestwithselected){
-            BOOL flag=NO;
-            for (Invitation *selected in exfeeIdentities){
-                if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
-                {
-                    flag=YES;
-                    continue;
-                }
-            }
-            if(flag==NO)
-                [temp addObject:identity];
-        }
-        
-        suggestIdentities=[temp retain];
-        [temp release];
-        if([suggestIdentities count]>0)
-        {
-            [suggestionTable reloadData];
-            CGRect rect=exfeeInput.frame;
-            [suggestionTable setFrame:CGRectMake(rect.origin.x, rect.origin.y+rect.size.height, rect.size.width, 200)];
-            [suggestionTable setHidden:NO];
-            [self.view addSubview:suggestionTable];
-        }
-        else{
-            [suggestionTable removeFromSuperview];
-        }
-}
+//- (void)loadIdentitiesFromDataStore {
+//        [suggestIdentities release];
+//        NSFetchRequest* request = [Identity fetchRequest];
+//        NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:NO];
+//
+//        NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",exfeeInput.text];
+//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((name like[c] %@) OR (external_username like[c] %@) OR (external_id like[c] %@) OR (nickname like[c] %@)) AND provider != %@ AND  provider != %@ ",inputpredicate,inputpredicate,inputpredicate,inputpredicate,@"iOSAPN",@"android"];
+//        [request setPredicate:predicate];
+//        [request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
+//        NSMutableArray *temp=[[NSMutableArray alloc]initWithCapacity:10];
+//        NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
+//        for (Identity *identity in suggestwithselected){
+//            BOOL flag=NO;
+//            for (Invitation *selected in exfeeIdentities){
+//                if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
+//                {
+//                    flag=YES;
+//                    continue;
+//                }
+//            }
+//            if(flag==NO)
+//                [temp addObject:identity];
+//        }
+//        
+//        suggestIdentities=[temp retain];
+//        [temp release];
+//        if([suggestIdentities count]>0)
+//        {
+//            [suggestionTable reloadData];
+//            CGRect rect=exfeeInput.frame;
+//            [suggestionTable setFrame:CGRectMake(rect.origin.x, rect.origin.y+rect.size.height, rect.size.width, 200)];
+//            [suggestionTable setHidden:NO];
+//            [self.view addSubview:suggestionTable];
+//        }
+//        else{
+//            [suggestionTable removeFromSuperview];
+//        }
+//}
 
 - (void) setPlace:(NSDictionary*)placedict{
     Place *_place=[Place object];
@@ -512,50 +525,50 @@
     [rsvptoolbar setHidden:NO];
 }
 
-- (void) ShowExfeeInput:(BOOL)show{
-    float width=self.view.frame.size.width-VIEW_MARGIN*2;
-    [self pullcontainviewDown];
-    if(show==YES && isExfeeInputShow==NO){
-        exfeeInput.alpha=0;
-        [exfeeInput setHidden:NO];
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDelay:0];
-        [UIView setAnimationDuration:0.25];
-        [crosstitle setFrame:CGRectMake(VIEW_MARGIN,crosstitle.frame.origin.y-48,crosstitle.frame.size.width,crosstitle.frame.size.height)];
-        [exfeenum setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6,exfeenum.frame.size.width, exfeenum.frame.size.height)];
-        [exfeeInput setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
-        [UIView commitAnimations];
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDelay:0.25];
-        [UIView setAnimationDuration:0.25];
-        exfeeInput.alpha=1;
-        [UIView commitAnimations];
-        isExfeeInputShow=YES;
-        [exfeeInput becomeFirstResponder];
-    }
-    else if(show==NO && isExfeeInputShow==YES){
-        CGRect rect=exfeeShowview.frame;
-        [UIView animateWithDuration:0.25f
-                              delay:0.0f
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             [crosstitle setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6,crosstitle.frame.size.width,crosstitle.frame.size.height)];
-
-                             [exfeenum setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15, width, 24)];
-                             [exfeeInput setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
-                             [exfeeInput setHidden:YES];
-                             
-                             
-                             [exfeeShowview setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, rect.size.width, rect.size.height)];
-
-                             [map setFrame:CGRectMake(map.frame.origin.x,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+rect.size.height+15+5,map.frame.size.width,map.frame.size.height)];
-                             isExfeeInputShow=NO;
-                             
-                         }
-                         completion:nil];
-        
-    }
-}
+//- (void) ShowExfeeInput:(BOOL)show{
+//    float width=self.view.frame.size.width-VIEW_MARGIN*2;
+//    [self pullcontainviewDown];
+//    if(show==YES && isExfeeInputShow==NO){
+//        exfeeInput.alpha=0;
+//        [exfeeInput setHidden:NO];
+//        [UIView beginAnimations:nil context:NULL];
+//        [UIView setAnimationDelay:0];
+//        [UIView setAnimationDuration:0.25];
+//        [crosstitle setFrame:CGRectMake(VIEW_MARGIN,crosstitle.frame.origin.y-48,crosstitle.frame.size.width,crosstitle.frame.size.height)];
+//        [exfeenum setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6,exfeenum.frame.size.width, exfeenum.frame.size.height)];
+//        [exfeeInput setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
+//        [UIView commitAnimations];
+//        [UIView beginAnimations:nil context:NULL];
+//        [UIView setAnimationDelay:0.25];
+//        [UIView setAnimationDuration:0.25];
+//        exfeeInput.alpha=1;
+//        [UIView commitAnimations];
+//        isExfeeInputShow=YES;
+//        [exfeeInput becomeFirstResponder];
+//    }
+//    else if(show==NO && isExfeeInputShow==YES){
+//        CGRect rect=exfeeShowview.frame;
+//        [UIView animateWithDuration:0.25f
+//                              delay:0.0f
+//                            options:UIViewAnimationOptionCurveEaseInOut
+//                         animations:^{
+//                             [crosstitle setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6,crosstitle.frame.size.width,crosstitle.frame.size.height)];
+//
+//                             [exfeenum setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15, width, 24)];
+//                             [exfeeInput setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
+//                             [exfeeInput setHidden:YES];
+//                             
+//                             
+//                             [exfeeShowview setFrame:CGRectMake(INNER_MARGIN-6, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, rect.size.width, rect.size.height)];
+//
+//                             [map setFrame:CGRectMake(map.frame.origin.x,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+rect.size.height+15+5,map.frame.size.width,map.frame.size.height)];
+//                             isExfeeInputShow=NO;
+//                             
+//                         }
+//                         completion:nil];
+//        
+//    }
+//}
 - (void) setExfeeNum{
     int count=[exfeeIdentities count];
     exfeenum.text=[NSString stringWithFormat:@"%u Exfees",count];
@@ -605,20 +618,13 @@
 //    NSLog(@"click view");
 }
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
-    NSLog(@"textview begin");
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDelay:0];
     [UIView setAnimationDuration:0.25];
-    
-    containview.contentOffset =CGPointMake(0, crossdescription.frame.origin.y-44-10) ;
+    [containview setContentOffset:CGPointMake(0, containview.frame.size.height- crossdescription.frame.size.height-44-6-20)];
     [UIView commitAnimations];
-    
     return YES;
 }
-- (void) pullPannelDown{
-//    [self ShowExfeeInput:NO];
-}
-
 #pragma mark UIScrollView methods
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -672,17 +678,17 @@
     
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
-    Invitation *invitation =[Invitation object];
-    invitation.rsvp_status=@"ACCEPTED";
-    invitation.identity=identity;
-
-    [suggestionTable removeFromSuperview];
-    exfeeInput.text=@"";
-    //[self ShowExfeeInput:NO];
-}
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
+//    Invitation *invitation =[Invitation object];
+//    invitation.rsvp_status=@"ACCEPTED";
+//    invitation.identity=identity;
+//
+//    [suggestionTable removeFromSuperview];
+//    exfeeInput.text=@"";
+//    //[self ShowExfeeInput:NO];
+//}
 
 
 #pragma mark EXImagesCollectionView Datasource methods
@@ -706,7 +712,6 @@
     [map setFrame:CGRectMake(map.frame.origin.x,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,map.frame.size.width,map.frame.size.height)];
 
     [self reArrangeViews];
-    [crossdescription setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,crossdescription.frame.size.width,144-60)];
     [exfeeShowview calculateColumn];
 }
 
