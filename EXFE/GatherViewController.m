@@ -38,7 +38,7 @@
     [backgroundview setBackgroundColor:[UIColor grayColor]];
     [self.view addSubview:backgroundview];
     
-    CGRect containviewframe=CGRectMake(self.view.frame.origin.x+VIEW_MARGIN,self.view.frame.origin.y+toolbar.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2, self.view.frame.size.height);
+    CGRect containviewframe=CGRectMake(self.view.frame.origin.x+VIEW_MARGIN,self.view.frame.origin.y+toolbar.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2, self.view.frame.size.height-toolbar.frame.size.height);
     containview=[[UIScrollView alloc] initWithFrame:containviewframe];
     [containview setDelegate:self];
     [backgroundview addSubview:containview];
@@ -46,7 +46,6 @@
     containcardview=[[EXOverlayView alloc] initWithFrame:CGRectMake(0, INNER_MARGIN, containview.frame.size.width, containview.frame.size.height)];
     containcardview.backgroundimage=[UIImage imageNamed:@"paper_texture.png"];
     
-//    containcardview.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"paper_texture.png"]];
     [containview addSubview:containcardview];
     UIImageView *title_input_img=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gather_title_input_area.png"]];
     [title_input_img setFrame:CGRectMake(0, 0, 308, 69)];
@@ -70,11 +69,6 @@
     [exfeeInput setBorderStyle:UITextBorderStyleRoundedRect];
     [exfeeInput setAutocorrectionType:UITextAutocorrectionTypeNo];
     [exfeeInput setBackgroundColor:[UIColor clearColor]];
-
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:UITextFieldTextDidChangeNotification object:exfeeInput];
-//    [exfeeInput setDelegate:self];
-//    [exfeeInput setHidden:YES];
-//    [containview addSubview:exfeeInput];
     
     //TODO: workaround for a responder chain bug
     exfeeShowview =[[EXImagesCollectionView alloc] initWithFrame:CGRectMake(INNER_MARGIN, crosstitle.frame.origin.x+crosstitle.frame.size.height, width, 120)];
@@ -144,17 +138,22 @@
     [crossdescription setDelegate:self];
     [containcardview addSubview:crossdescription];
     
-//    boardoffset=6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height;
     [self reArrangeViews];
 }
 
 - (void) reArrangeViews{
-//    [crossdescription setFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,crossdescription.frame.size.width,144)];
     
     [timetitle setFrame:CGRectMake(INNER_MARGIN, exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,160,24)];
     [timedesc setFrame:CGRectMake(INNER_MARGIN,timetitle.frame.origin.y+timetitle.frame.size.height,160,18)];
     [placetitle setFrame:CGRectMake(INNER_MARGIN,timedesc.frame.origin.y+timedesc.frame.size.height+15,160,24)];
-    [placedesc setFrame:CGRectMake(INNER_MARGIN,placetitle.frame.origin.y+placetitle.frame.size.height,160,18)];
+    
+    
+    [placedesc setFrame:CGRectMake(INNER_MARGIN,placetitle.frame.origin.y+placetitle.frame.size.height,160,containcardview.frame.size.width-INNER_MARGIN*2)];
+
+    CGSize constraint = CGSizeMake(placedesc.frame.size.width,400);
+    CGSize placedescsize = [placedesc.text sizeWithFont:placedesc.font constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+
+    [placedesc setFrame:CGRectMake(INNER_MARGIN,placetitle.frame.origin.y+placetitle.frame.size.height,160,placedescsize.height)];
     
     [map setFrame:CGRectMake(INNER_MARGIN+160,exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,130,80)];
     
@@ -177,14 +176,16 @@
     
     containcardview.transparentPath=triangle;
     [containcardview setFrame:CGRectMake(containcardview.frame.origin.x, containcardview.frame.origin.y, containcardview.frame.size.width, crossdescription.frame.origin.y+crossdescription.frame.size.height)];
-    [containview setContentSize:CGSizeMake(containview.frame.size.width, containcardview.frame.size.height+6)];
+    [containview setContentSize:CGSizeMake(containview.frame.size.width, containcardview.frame.size.height+20)];
+
     containview.alwaysBounceVertical=YES;
-//    containcardview.layer.shadowOffset
-    containview.layer.shadowColor = [UIColor blackColor].CGColor;
-    containview.layer.shadowOpacity = 0.7f;
-    containview.layer.shadowOffset = CGSizeMake(-3, 1.0f);
-    containview.layer.shadowRadius = 5.0f;
-    containview.layer.masksToBounds = NO;
+    
+//    containview.layer.shadowColor = [UIColor blueColor].CGColor;
+//    containview.layer.shadowOpacity = 0.7f;
+//    containview.layer.shadowOffset = CGSizeMake(-3, 1);
+//    containview.layer.shadowRadius = 5.0f;
+//    containview.layer.masksToBounds = NO;
+    
     [containcardview setNeedsDisplay];
 }
 - (void) addDefaultIdentity{
