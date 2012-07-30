@@ -27,7 +27,6 @@
 #import "ExfeeInputViewController.h"
 #import "Place.h"
 #import "EXIconToolBar.h"
-//#import "EXToolbarItem.h"
 #import <MapKit/MapKit.h>
 #import "WildcardGestureRecognizer.h"
 #import "Util.h"
@@ -36,13 +35,14 @@
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9
 
-@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate,UITextViewDelegate,UIScrollViewDelegate>{
+@interface GatherViewController : UIViewController <RKRequestDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate,UITextViewDelegate,UIScrollViewDelegate>{
     IBOutlet UIToolbar *toolbar;
     UITextView *crosstitle;
     UITextField *exfeeInput;
     UILabel *exfeenum;
     EXIconToolBar *rsvptoolbar;
     MKMapView *map;
+    UIImageView *mapbox;
     UITextView *crossdescription;
     UIView *crossdescbackimg;
     UIView *backgroundview;
@@ -61,9 +61,12 @@
     UILabel *timedesc;
     UILabel *placetitle;
     UILabel *placedesc;
+    Cross* cross;
     int selectedExfeeIndex;
+    BOOL viewmode;
 
 }
+@property (retain,nonatomic) Cross* cross;
 
 - (IBAction) Gather:(id) sender;
 - (IBAction) Close:(id) sender;
@@ -71,11 +74,9 @@
 - (void) ShowTimeView;
 - (void) ShowExfeeView;
 - (void) ShowRSVPToolBar:(int)exfeeIndex;
-//- (void) textDidChange:(UITextField*)textField;
 - (void) addDefaultIdentity;
 - (void) reArrangeViews;
 - (NSString*) findProvider:(NSString*)external_id;
-//- (void) getIdentity:(NSString*)identity_json;
 - (void) setPlace:(NSDictionary*)placedict;
 - (void) setDateTime:(CrossTime*)crosstime;
 - (void) ShowExfeeInput:(BOOL)show;
@@ -85,7 +86,9 @@
 - (void) rsvpaddmate;
 - (void) rsvpsubmate;
 - (void) rsvpremove;
+- (void) setViewMode;
 - (void) addExfee:(Invitation*) invitation;
+- (void) initData;
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender;
 @end

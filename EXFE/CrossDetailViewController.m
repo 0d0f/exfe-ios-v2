@@ -18,7 +18,6 @@
 #import "CrossTime.h"
 #import "Rsvp.h"
 #import "Util.h"
-//#import "JSONKit.h"
 #import <RestKit/JSONKit.h>
 
 #define kStatusBarHeight 20

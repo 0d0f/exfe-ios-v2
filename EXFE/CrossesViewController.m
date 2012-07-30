@@ -396,9 +396,14 @@
         }
 
     }
-    CrossDetailViewController *detailViewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-    detailViewController.cross=cross;
-    [self.navigationController pushViewController:detailViewController animated:YES];
+//    CrossDetailViewController *detailViewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
+//    detailViewController.cross=cross;
+//    [self.navigationController pushViewController:detailViewController animated:YES];
+    GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+    gatherViewController.cross=cross;
+    [gatherViewController setViewMode]; 
+    
+    [self.navigationController pushViewController:gatherViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     current_cellrow=indexPath.row;
 }

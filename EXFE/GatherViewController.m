@@ -13,11 +13,12 @@
 @end
 
 @implementation GatherViewController
-
+@synthesize cross;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        viewmode=false;
         // Custom initialization
     }
     return self;
@@ -26,10 +27,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    UIImageView *imgback=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_gradient.png"]];
-//    [self.view addSubview:imgback];
-//    [imgback release];
-
     exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
     exfeeSelected=[[NSMutableArray alloc] initWithCapacity:12];
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -84,6 +81,8 @@
     
     map=[[MKMapView alloc] initWithFrame:CGRectMake(INNER_MARGIN+160,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,130,80)];
     [containcardview addSubview:map];
+    mapbox=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_area_null.png"]];
+    [containcardview addSubview:mapbox];
     
     WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
     tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
@@ -137,26 +136,39 @@
     [crossdescription setBackgroundColor:[UIColor clearColor]];
     [crossdescription setDelegate:self];
     [containcardview addSubview:crossdescription];
-    
+    if(self.cross!=nil && viewmode==YES)
+    {
+        [self initData];
+    }
     [self reArrangeViews];
 }
-
+- (void) initData{
+    if(self.cross!=nil){
+        crosstitle.text=cross.title;
+        [self setDateTime:cross.time];
+        
+    }
+}
 - (void) reArrangeViews{
-    
-    [timetitle setFrame:CGRectMake(INNER_MARGIN, exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,160,24)];
-    [timedesc setFrame:CGRectMake(INNER_MARGIN,timetitle.frame.origin.y+timetitle.frame.size.height,160,18)];
-    [placetitle setFrame:CGRectMake(INNER_MARGIN,timedesc.frame.origin.y+timedesc.frame.size.height+15,160,24)];
-    
-    
-    [placedesc setFrame:CGRectMake(INNER_MARGIN,placetitle.frame.origin.y+placetitle.frame.size.height,160,containcardview.frame.size.width-INNER_MARGIN*2)];
 
-    CGSize constraint = CGSizeMake(placedesc.frame.size.width,400);
-    CGSize placedescsize = [placedesc.text sizeWithFont:placedesc.font constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    CGSize timetitleconstraint = CGSizeMake(160,timetitle.frame.size.height);
+    CGSize timetitlesize = [timetitle.text sizeWithFont:timetitle.font constrainedToSize:timetitleconstraint lineBreakMode:UILineBreakModeWordWrap];
+    [timetitle setFrame:CGRectMake(INNER_MARGIN, exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,timetitlesize.width,24)];
+    
+    CGSize timedescconstraint = CGSizeMake(160,timedesc.frame.size.height);
+    CGSize timedescsize = [timedesc.text sizeWithFont:timedesc.font constrainedToSize:timedescconstraint lineBreakMode:UILineBreakModeWordWrap];
+    [timedesc setFrame:CGRectMake(INNER_MARGIN,timetitle.frame.origin.y+timetitle.frame.size.height,timedescsize.width,18)];
 
-    [placedesc setFrame:CGRectMake(INNER_MARGIN,placetitle.frame.origin.y+placetitle.frame.size.height,160,placedescsize.height)];
+    CGSize placetitleconstraint = CGSizeMake(160,placetitle.frame.size.height);
+    CGSize placetitlesize = [placetitle.text sizeWithFont:placetitle.font constrainedToSize:placetitleconstraint lineBreakMode:UILineBreakModeTailTruncation];
+    [placetitle setFrame:CGRectMake(INNER_MARGIN,timedesc.frame.origin.y+timedesc.frame.size.height+15,placetitlesize.width,placetitle.frame.size.height)];
     
-    [map setFrame:CGRectMake(INNER_MARGIN+160,exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,130,80)];
-    
+    CGSize placedescconstraint = CGSizeMake(containcardview.frame.size.width-INNER_MARGIN*2,400);
+    CGSize placedescsize = [placedesc.text sizeWithFont:placedesc.font constrainedToSize:placedescconstraint lineBreakMode:UILineBreakModeWordWrap];
+    [placedesc setFrame:CGRectMake(INNER_MARGIN,placetitle.frame.origin.y+placetitle.frame.size.height,placedescsize.width,placedescsize.height)];
+
+    [map setFrame:CGRectMake(INNER_MARGIN+170+6,exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10+7,115,70)];
+    [mapbox setFrame:CGRectMake(INNER_MARGIN+170,exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,126,84)];
     [crossdescription setFrame:CGRectMake(0,placedesc.frame.origin.y+placedesc.frame.size.height+15,containview.frame.size.width,145)];
     [crossdescbackimg setFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y, crossdescription.frame.size.width, 75)];
 
@@ -179,15 +191,18 @@
     [containview setContentSize:CGSizeMake(containview.frame.size.width, containcardview.frame.size.height+20)];
 
     containview.alwaysBounceVertical=YES;
-    
-//    containview.layer.shadowColor = [UIColor blueColor].CGColor;
-//    containview.layer.shadowOpacity = 0.7f;
-//    containview.layer.shadowOffset = CGSizeMake(-3, 1);
-//    containview.layer.shadowRadius = 5.0f;
-//    containview.layer.masksToBounds = NO;
+    if(viewmode==YES){
+        [map setHidden:YES];
+        [mapbox setHidden:YES];
+        [toolbar setHidden:YES];
+    }
     
     [containcardview setNeedsDisplay];
 }
+- (void) setViewMode{
+    viewmode=YES;
+}
+    
 - (void) addDefaultIdentity{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSFetchRequest* request = [User fetchRequest];
@@ -218,19 +233,19 @@
     Identity *by_identity=[Identity object];
     by_identity.identity_id=[NSNumber numberWithInt:174];
     
-    Cross *cross=[Cross object];
-    cross.title=crosstitle.text;
-    cross.cross_description=@"test desc";
-    cross.by_identity=by_identity;
-    cross.place=place;
-    cross.time=datetime;
+    Cross *_cross=[Cross object];
+    _cross.title=crosstitle.text;
+    _cross.cross_description=@"test desc";
+    _cross.by_identity=by_identity;
+    _cross.place=place;
+    _cross.time=datetime;
     Exfee *exfee=[Exfee object];
     for(Invitation *invitation in exfeeIdentities){
-        [exfee addInvitationsObject:invitation];  
+        [exfee addInvitationsObject:invitation];
     }
-    cross.exfee = exfee;
+    _cross.exfee = exfee;
     
-    [APICrosses GatherCross:cross delegate:self];
+    [APICrosses GatherCross:_cross delegate:self];
 }
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:exfeeInput];
@@ -242,6 +257,7 @@
     [exfeeShowview release];
     [crosstitle release];
     [map release];
+    [mapbox release];
     [crossdescription release];
     [timetitle release];
     [timedesc release];
@@ -336,63 +352,7 @@
     
     return @"";
 }
-//- (void) getIdentity:(NSString*)identity_json{
-//    
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    RKClient *client = [RKClient sharedClient];
-//    NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
-//
-//    RKParams* rsvpParams = [RKParams params];
-//    [rsvpParams setValue:identity_json forParam:@"identities"];
-//    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-//    [client post:endpoint usingBlock:^(RKRequest *request){
-//    request.method=RKRequestMethodPOST;
-//    request.params=rsvpParams;
-//    request.onDidLoadResponse=^(RKResponse *response){
-//        if (response.statusCode == 200) {
-//            NSDictionary *body=[response.body objectFromJSONData];
-//            if([body isKindOfClass:[NSDictionary class]]) {
-//                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                if(code)
-//                    if([code intValue]==200) {
-//                        NSDictionary* response = [body objectForKey:@"response"];
-//                        NSArray *identities = [response objectForKey:@"identities"];
-//                        for (NSDictionary *identitydict in identities) {
-//                            NSString *external_id=[identitydict objectForKey:@"external_id"];
-//                            NSString *provider=[identitydict objectForKey:@"provider"];
-//                            NSString *avatar_filename=[identitydict objectForKey:@"avatar_filename"];
-//                            NSString *identity_id=[identitydict objectForKey:@"id"];
-//                            NSString *name=[identitydict objectForKey:@"name"];
-//                            NSString *nickname=[identitydict objectForKey:@"nickname"];
-//                            
-//                            Identity *identity=[Identity object];
-//                            identity.external_id=external_id;
-//                            identity.provider=provider;
-//                            identity.avatar_filename=avatar_filename;
-//                            identity.name=name;
-//                            identity.nickname=nickname;
-//                            identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
-//                            Invitation *invitation =[Invitation object];
-//                            invitation.rsvp_status=@"NORESPONSE";
-//                            invitation.identity=identity;
-//                            
-//                            [exfeeIdentities addObject:invitation];
-//                            [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
-//                            [exfeeShowview reloadData];
-//                        }
-//                        exfeeInput.text=@"";
-//                        [exfeeInput setEnabled:YES];
-//                    }
-//                }
-//            }else {
-//                    [exfeeInput setEnabled:YES];
-//                //Check Response Body to get Data!
-//            }
-//        };
-//        request.delegate=self;
-//    }];
-//    
-//}
+
 - (void) addExfee:(Invitation*) invitation{
     [exfeeIdentities addObject:invitation];
     [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
@@ -415,32 +375,18 @@
     placetitle.text=_place.title;
     placedesc.text=_place.place_description;
     
-    CGSize maximumLabelSize = CGSizeMake(placedesc.frame.size.width,9999);
-    
-    CGSize expectedLabelSize = [placedesc.text sizeWithFont:placedesc.font constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeWordWrap];
-    CGRect newFrame = placedesc.frame;
-    newFrame.size.height = expectedLabelSize.height;
-    placedesc.frame = newFrame;
     [self reArrangeViews];
     
-    
-    
-//    placedesc 
-    
     CLLocationCoordinate2D location;
-    
     [map removeAnnotations: map.annotations];
     location.latitude = [_place.lat doubleValue];
     location.longitude = [_place.lng doubleValue];
-    PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:_place.title  description:_place.place_description];
     MKCoordinateRegion region;
-    
     region.center = location;
     region.span.longitudeDelta = 0.005;
     region.span.latitudeDelta = 0.005;
     [map setRegion:region animated:YES];
-    [map removeAnnotations:[map annotations]];
-    [map addAnnotation:annotation];
+    mapbox.image=[UIImage imageNamed:@"map_area.png"];
 }
 
 - (void) setDateTime:(CrossTime*)crosstime{
@@ -448,6 +394,7 @@
     timetitle.text=[humanreadable_date objectForKey:@"relative"];
     timedesc.text=[humanreadable_date objectForKey:@"date"];
     datetime=crosstime;
+    [self reArrangeViews];    
 }
 
 - (void) pullcontainviewDown{
@@ -486,50 +433,6 @@
     [rsvptoolbar setHidden:NO];
 }
 
-//- (void) ShowExfeeInput:(BOOL)show{
-//    float width=self.view.frame.size.width-VIEW_MARGIN*2;
-//    [self pullcontainviewDown];
-//    if(show==YES && isExfeeInputShow==NO){
-//        exfeeInput.alpha=0;
-//        [exfeeInput setHidden:NO];
-//        [UIView beginAnimations:nil context:NULL];
-//        [UIView setAnimationDelay:0];
-//        [UIView setAnimationDuration:0.25];
-//        [crosstitle setFrame:CGRectMake(VIEW_MARGIN,crosstitle.frame.origin.y-48,crosstitle.frame.size.width,crosstitle.frame.size.height)];
-//        [exfeenum setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6,exfeenum.frame.size.width, exfeenum.frame.size.height)];
-//        [exfeeInput setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
-//        [UIView commitAnimations];
-//        [UIView beginAnimations:nil context:NULL];
-//        [UIView setAnimationDelay:0.25];
-//        [UIView setAnimationDuration:0.25];
-//        exfeeInput.alpha=1;
-//        [UIView commitAnimations];
-//        isExfeeInputShow=YES;
-//        [exfeeInput becomeFirstResponder];
-//    }
-//    else if(show==NO && isExfeeInputShow==YES){
-//        CGRect rect=exfeeShowview.frame;
-//        [UIView animateWithDuration:0.25f
-//                              delay:0.0f
-//                            options:UIViewAnimationOptionCurveEaseInOut
-//                         animations:^{
-//                             [crosstitle setFrame:CGRectMake(VIEW_MARGIN,toolbar.frame.size.height+6,crosstitle.frame.size.width,crosstitle.frame.size.height)];
-//
-//                             [exfeenum setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15, width, 24)];
-//                             [exfeeInput setFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+exfeenum.frame.size.height+8, width, 40)];
-//                             [exfeeInput setHidden:YES];
-//                             
-//                             
-//                             [exfeeShowview setFrame:CGRectMake(INNER_MARGIN-6, toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8, rect.size.width, rect.size.height)];
-//
-//                             [map setFrame:CGRectMake(map.frame.origin.x,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+rect.size.height+15+5,map.frame.size.width,map.frame.size.height)];
-//                             isExfeeInputShow=NO;
-//                             
-//                         }
-//                         completion:nil];
-//        
-//    }
-//}
 - (void) setExfeeNum{
     int count=[exfeeIdentities count];
     exfeenum.text=[NSString stringWithFormat:@"%u Exfees",count];
@@ -546,14 +449,14 @@
     }
     if (CGRectContainsPoint([exfeeShowview frame], location))
     {
+        [crosstitle resignFirstResponder];
+        [exfeeShowview becomeFirstResponder];
         CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
         [exfeeShowview onImageTouch:exfeeviewlocation];
     }
     else{
     [crosstitle resignFirstResponder];
-    [exfeeInput resignFirstResponder];
     [map becomeFirstResponder];
-//    [self ShowExfeeInput:NO];
     }
 
 }
@@ -596,61 +499,6 @@
     [crossdescription resignFirstResponder];
     [containview becomeFirstResponder];
 }
-#pragma mark RKObjectLoaderDelegate methods
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-
-    if([objects count]>0)
-    {
-        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-        if([objectLoader.userData isEqualToString:@"suggest"])
-            [self loadIdentitiesFromDataStore];
-        else
-            [app GatherCrossDidFinish];
-    }
-}
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
-//    [self stopLoading];
-}
-
-#pragma mark UITableView Datasource methods
-
-- (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    if(suggestIdentities)
-        return [suggestIdentities count];
-    return 0;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"suggest view";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil)
-	{
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-	
-    Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
-	cell.textLabel.text = identity.name;
-	
-    return cell;
-    
-}
-
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
-//    Invitation *invitation =[Invitation object];
-//    invitation.rsvp_status=@"ACCEPTED";
-//    invitation.identity=identity;
-//
-//    [suggestionTable removeFromSuperview];
-//    exfeeInput.text=@"";
-//    //[self ShowExfeeInput:NO];
-//}
-
 
 #pragma mark EXImagesCollectionView Datasource methods
 
@@ -741,9 +589,6 @@
 - (void) rsvpremove{
 
     NSMutableIndexSet *mutableIndexSet = [[NSMutableIndexSet alloc] init];
-//    [mutableIndexSet addIndex:0];
-//    [mutableIndexSet addIndex:2];
-//    [mutableIndexSet addIndex:9];
     for(int i=0;i< [exfeeSelected count];i++) {
         if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
             if(i<[exfeeIdentities count]) {
