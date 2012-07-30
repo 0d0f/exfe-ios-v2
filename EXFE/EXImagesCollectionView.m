@@ -18,6 +18,11 @@
     }
     
     [self initData];
+    taghost=[UIImage imageNamed:@"tag-host.png"];
+    avatareffect=[UIImage imageNamed:@"avatar_effect.png"];
+    addexfee=[UIImage imageNamed:@"gather_add_exfee.png"];
+    tagmates=[UIImage imageNamed:@"tag-mates.png"];
+    tagrsvpaccepted=[UIImage imageNamed:@"rsvpbg-accepted.png"];
     return self;
 }
 
@@ -88,11 +93,7 @@
             y_count++;
         }
         int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
-//        if(x==0)
-//            x=imageXmargin;
         int y=y_count*(imageHeight+imageYmargin*2)+imageYmargin;
-//        if(y==0)
-//            y=imageYmargin;
         if(y_count>0)
             y+=15;
 
@@ -118,14 +119,26 @@
         CGContextAddPath(currentContext, maskPath.CGPath);
         CGContextClosePath(currentContext);
         CGContextClip(currentContext);
-        UIImage *avatar_effect=[UIImage imageNamed:@"avatar_effect.png"];
+//        UIImage *avatar_effect=[UIImage imageNamed:@"avatar_effect.png"];
         [avatar drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
-        [avatar_effect drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
+        [avatareffect drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
 
         CGContextRestoreGState(currentContext);
         
         if([invitation.host boolValue]==YES)
-            [[UIImage imageNamed:@"closebutton"] drawInRect:CGRectMake(x+imageWidth-10, y, 10, 10)];
+            [taghost drawInRect:CGRectMake(x+imageWidth-12, y, 12, 12)];
+        int mates=[invitation.mates intValue];
+        if(mates>0)
+        {
+            [[UIColor whiteColor] set];
+            [tagmates drawInRect:CGRectMake(x, y, 12, 12)];
+            NSString *mates=[invitation.mates stringValue];
+            [mates drawInRect:CGRectMake(x+6, y, 12, 12) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:10]];
+            [@"+" drawInRect:CGRectMake(x, y, 12, 12) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:10]];
+        }
+        if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+            [tagrsvpaccepted drawInRect:CGRectMake(x+imageWidth-12, y+imageHeight-12, 12, 12)];
+
         NSString *name=identity.name;
         if(name==nil)
             name=identity.external_username;
@@ -145,18 +158,10 @@
 
     if(count<maxColumn*maxRow) {
         int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
-//        if(x==0)
-//            x=imageXmargin;
-
         int y=y_count*(imageHeight+imageYmargin*2)+imageXmargin;
-//        if(y==0)
-//            y=imageXmargin;
         if(y_count>0)
             y+=15;
-        UIImage *image=[UIImage imageNamed:@"gather_add_exfee.png"];
-        if(image==nil || [image isEqual:[NSNull null]])
-            image=[ImgCache getDefaultImage];
-        [image drawInRect:CGRectMake(x,y,140,40)];
+        [addexfee drawInRect:CGRectMake(x,y,140,40)];
     }
 }
 

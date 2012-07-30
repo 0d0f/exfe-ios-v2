@@ -303,7 +303,7 @@
                 NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
                 NSString *updated_at_str=[obj objectForKey:@"updated_at"];
                 NSDate *updated_at = [formatter dateFromString:updated_at_str];
-                if([updated_at compare: cross.read_at] == NSOrderedDescending) {
+                if([updated_at compare: cross.read_at] == NSOrderedAscending || cross.read_at==nil) {
                     if([key isEqualToString:@"title"])
                         cell.hlTitle=YES;
                     else if([key isEqualToString:@"place"])
@@ -384,7 +384,10 @@
                 [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                 NSDate *updated_at = [formatter dateFromString:updated_at_str];
                 [formatter release];
-                cross.read_at=[cross.read_at laterDate:updated_at];
+                if(cross.read_at==nil)
+                    cross.read_at=updated_at;
+                else
+                    cross.read_at=[cross.read_at laterDate:updated_at];
             }
             NSError *saveError;
             [[Cross currentContext] save:&saveError];

@@ -41,6 +41,12 @@
     int maxRow;
     id <EXImagesCollectionDataSource>  _dataSource;
     id <EXImagesCollectionDelegate> _delegate;
+    UIImage *taghost;
+    UIImage *avatareffect;
+    UIImage *addexfee;
+    UIImage *tagmates;
+    UIImage *tagrsvpaccepted;
+    
 }
 - (void) setImageWidth:(float)width height:(float)height;
 - (void) setImageXMargin:(float)xmargin YMargin:(float)ymargin;

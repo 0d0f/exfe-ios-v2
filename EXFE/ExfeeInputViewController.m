@@ -158,7 +158,7 @@
                                 identity.nickname=nickname;
                                 identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
                                 Invitation *invitation =[Invitation object];
-                                invitation.rsvp_status=@"ACCEPTED";
+                                invitation.rsvp_status=@"NORESPONSE";
                                 invitation.identity=identity;
                                 
                                 [(GatherViewController*)gatherview addExfee:invitation];
@@ -237,7 +237,7 @@
             row-=1;
         Identity *identity=[suggestIdentities objectAtIndex:row];
         Invitation *invitation =[Invitation object];
-        invitation.rsvp_status=@"ACCEPTED";
+        invitation.rsvp_status=@"NORESPONSE";
         invitation.identity=identity;
         [(GatherViewController*)gatherview addExfee:invitation];
         [self dismissModalViewControllerAnimated:YES];

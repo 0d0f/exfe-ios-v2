@@ -150,7 +150,7 @@
         }
         [dateformat release];
         
-        if([localYear isEqualToString:[crosstime_date substringToIndex:4]])
+        if([crosstime_date length]>=5 && [localYear isEqualToString:[crosstime_date substringToIndex:4]])
             crosstime_date=[crosstime_date substringFromIndex:5];
 
         NSString *timestr=@"";

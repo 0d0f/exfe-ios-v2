@@ -31,7 +31,7 @@
     RKParams* rsvpParams = [RKParams params];
     NSString *provider=[Util findProvider:textUsername.text];
     [rsvpParams setValue:provider forParam:@"provider"];
-    [rsvpParams setValue:textUsername.text forParam:@"external_id"];
+    [rsvpParams setValue:textUsername.text forParam:@"external_username"];
     [rsvpParams setValue:textPassword.text forParam:@"password"];
     [client post:endpoint usingBlock:^(RKRequest *request){
         request.method=RKRequestMethodPOST;
@@ -175,7 +175,7 @@
         NSString *provider=[Util findProvider:textUsername.text];
         if(![provider isEqualToString:@""]){
             RKClient *client = [RKClient sharedClient];
-            NSString *endpoint = [NSString stringWithFormat:@"/users/GetRegistrationFlag?external_id=%@&provider=%@",textUsername.text,provider];
+            NSString *endpoint = [NSString stringWithFormat:@"/users/GetRegistrationFlag?external_username=%@&provider=%@",textUsername.text,provider];
             AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
             [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
             [client get:endpoint usingBlock:^(RKRequest *request){
@@ -268,7 +268,7 @@
 - (IBAction)sendVerify:(id)sender{
     RKClient *client = [RKClient sharedClient];
     NSString *provider=[Util findProvider:textUsername.text];
-    NSString *endpoint = [NSString stringWithFormat:@"/users/VerifyIdentity?provider=%@&external_id=%@",provider,textUsername.text];
+    NSString *endpoint = [NSString stringWithFormat:@"/users/VerifyIdentity?provider=%@&external_username=%@",provider,textUsername.text];
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -288,7 +288,7 @@
     RKParams* rsvpParams = [RKParams params];
     NSString *provider=[Util findProvider:textUsername.text];
     [rsvpParams setValue:provider forParam:@"provider"];
-    [rsvpParams setValue:textUsername.text forParam:@"external_id"];
+    [rsvpParams setValue:textUsername.text forParam:@"external_username"];
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     

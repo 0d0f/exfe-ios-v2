@@ -75,7 +75,7 @@
 - (void) addDefaultIdentity;
 - (void) reArrangeViews;
 - (NSString*) findProvider:(NSString*)external_id;
-- (void) getIdentity:(NSString*)identity_json;
+//- (void) getIdentity:(NSString*)identity_json;
 - (void) setPlace:(NSDictionary*)placedict;
 - (void) setDateTime:(CrossTime*)crosstime;
 - (void) ShowExfeeInput:(BOOL)show;
@@ -84,7 +84,7 @@
 - (void) rsvpaccept;
 - (void) rsvpaddmate;
 - (void) rsvpsubmate;
-- (void) rsvpreset;
+- (void) rsvpremove;
 - (void) addExfee:(Invitation*) invitation;
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender;
