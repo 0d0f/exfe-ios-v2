@@ -75,7 +75,7 @@
 - (void) ShowPlaceView;
 - (void) ShowTimeView;
 - (void) ShowExfeeView;
-- (void) ShowRSVPToolBar:(int)exfeeIndex;
+- (void) ShowRSVPToolBar;
 - (void) addDefaultIdentity;
 - (void) reArrangeViews;
 - (NSString*) findProvider:(NSString*)external_id;
@@ -85,6 +85,7 @@
 - (void) setExfeeNum;
 - (void) pullcontainviewDown;
 - (void) rsvpaccept;
+- (void) rsvpunaccept;
 - (void) rsvpaddmate;
 - (void) rsvpsubmate;
 - (void) rsvpremove;

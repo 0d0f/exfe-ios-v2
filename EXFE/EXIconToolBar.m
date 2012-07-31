@@ -48,16 +48,31 @@
     _delegate=delegate;
 }
 - (void) drawButton:(NSArray*)buttons{
-//    int width=self.frame.size.width/[buttons count];
     for(int i=0;i<[buttons count];i++)
     {
         EXButton *button=[buttons objectAtIndex:i];
-        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:10.0]];
+        [button.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:10]];
         [button.titleLabel setTextColor:FONT_COLOR_250];
         [self addSubview:button];
     }
 }
-
+- (void) replaceButtonImage:(UIImage*)img title:(NSString*)title target:(id)target action:(SEL)action forname:(NSString*)name{
+    
+    for(UIControl* view in self.subviews)
+    {
+        if([view isKindOfClass:[EXButton class]])
+        {
+            EXButton* button=(EXButton*)view;
+            if([button.buttonName isEqualToString:name])
+            {
+                [button setImage:img forState:UIControlStateNormal];
+                [button setTitle:title forState:UIControlStateNormal];
+                [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+                [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+            }
+        }
+    }
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

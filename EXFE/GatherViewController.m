@@ -447,29 +447,58 @@
     }
 }
 
-- (void) ShowRSVPToolBar:(int)exfeeIndex{
-    selectedExfeeIndex=exfeeIndex;
+- (void) ShowRSVPToolBar{
+//    selectedExfeeIndex=exfeeIndex;
     if(rsvptoolbar==nil){
         rsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, self.view.frame.size.height-50) buttonsize:CGSizeMake(20, 20) delegate:self];
-        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"toolbar_accept.png"] inFrame:CGRectMake(54, 6, 36, 30)];
+        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"toolbar_accept.png"] inFrame:CGRectMake(35, 6, 36, 30)];
+        [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
         
-//        [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
-//        EXButton *addmate=[[EXButton alloc] initWithName:@"addmate" title:@"+1 mate" image:[UIImage imageNamed:@"chat.png"]];
-//        [addmate addTarget:self action:@selector(rsvpaddmate) forControlEvents:UIControlEventTouchUpInside];
-//        EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"+1 mate" image:[UIImage imageNamed:@"chat.png"]];
-//        [submate addTarget:self action:@selector(rsvpsubmate) forControlEvents:UIControlEventTouchUpInside];
-//        EXButton *reset=[[EXButton alloc] initWithName:@"reset" title:@"Reset" image:[UIImage imageNamed:@"chat.png"]];
-//        [reset addTarget:self action:@selector(rsvpremove) forControlEvents:UIControlEventTouchUpInside];
-//        NSArray *array=[NSArray arrayWithObjects:accept,addmate,submate,reset, nil];
-        NSArray *array=[NSArray arrayWithObjects:accept, nil];
+        EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"-1 mate" image:[UIImage imageNamed:@"toolbar_mates_minus.png"] inFrame:CGRectMake(35+36+45, 6, 44, 30)];
+        [submate addTarget:self action:@selector(rsvpsubmate) forControlEvents:UIControlEventTouchUpInside];
+        [submate setTitle:@"" forState:UIControlStateNormal];
+        EXButton *addmate=[[EXButton alloc] initWithName:@"addmate" title:@"+1 mate" image:[UIImage imageNamed:@"toolbar_mates_plus.png"] inFrame:CGRectMake(35+36+45+44, 6, 44, 30)];
+        [addmate addTarget:self action:@selector(rsvpaddmate) forControlEvents:UIControlEventTouchUpInside];
+        [addmate setTitle:@"" forState:UIControlStateNormal];
+        
+        EXButton *remove=[[EXButton alloc] initWithName:@"remove" title:@"Remove" image:[UIImage imageNamed:@"toolbar_remove.png"] inFrame:CGRectMake(35+36+45+44+44+45, 6, 36, 30)];
+        [remove addTarget:self action:@selector(rsvpremove) forControlEvents:UIControlEventTouchUpInside];
+        NSArray *array=[NSArray arrayWithObjects:accept,submate,addmate,remove, nil];
         [rsvptoolbar drawButton:array];
         [accept release];
-//        [addmate release];
-//        [submate release];
-//        [reset release];
+        [addmate release];
+        [submate release];
+        [remove release];
+        
+        UILabel *hint=[[UILabel alloc] initWithFrame:CGRectMake(35+36+45+22, 30+6, 44, 14)];
+        hint.text=@"Mates";
+        [hint setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:10]];
+        [hint setBackgroundColor:[UIColor clearColor]];
+        hint.textAlignment=UITextAlignmentCenter;
+        [hint setTextColor:FONT_COLOR_250];
+        [rsvptoolbar addSubview:hint];
+        [hint release];
         [self.view addSubview:rsvptoolbar];
     }
-    [rsvptoolbar setItemIndex:exfeeIndex];
+    BOOL isAllAccept=YES;
+    int idx=0;
+    for(NSNumber *number in exfeeSelected)
+    {
+        if([number boolValue]==YES)
+        {
+            Invitation *invitation=[exfeeIdentities objectAtIndex:idx];
+            NSLog(@"%@",invitation.rsvp_status);
+            if(![invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+            {
+                    isAllAccept=NO;
+            }
+        }
+        idx++;
+    }
+    if(isAllAccept==YES)
+        [rsvptoolbar replaceButtonImage:[UIImage imageNamed:@"toolbar_un_accept.png"] title:@"Un-accept" target:self action:@selector(rsvpunaccept) forname:@"accept"];
+    else
+        [rsvptoolbar replaceButtonImage:[UIImage imageNamed:@"toolbar_accept.png"] title:@"Accept" target:self action:@selector(rsvpaccept) forname:@"accept"];
     [rsvptoolbar setHidden:NO];
 }
 
@@ -597,7 +626,19 @@
         
         [exfeeSelected replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:![[exfeeSelected objectAtIndex:index] boolValue]]];
         [exfeeShowview reloadData];
-        [self ShowRSVPToolBar:index];
+        NSLog(@"%@",exfeeSelected);
+        BOOL isSelect=NO;
+        for(NSNumber *number in exfeeSelected){
+            if([number boolValue]==YES)
+                isSelect=YES;
+        }
+        if(isSelect)
+            [self ShowRSVPToolBar];
+        else
+        {
+            if(rsvptoolbar!=nil)
+                [rsvptoolbar setHidden:YES];
+        }
 //        [exfeeShowview select:0,1,3, nil];
     }
 }
@@ -613,6 +654,19 @@
         }
     }
     [exfeeShowview reloadData];
+    [self ShowRSVPToolBar];
+}
+- (void) rsvpunaccept{
+    for(int i=0;i< [exfeeSelected count];i++) {
+        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
+            if(i<[exfeeIdentities count]) {
+                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+                invitation.rsvp_status=@"NORESPONSE";
+            }
+        }
+    }
+    [exfeeShowview reloadData];
+    [self ShowRSVPToolBar];
 }
 - (void) rsvpaddmate{
     for(int i=0;i< [exfeeSelected count];i++) {

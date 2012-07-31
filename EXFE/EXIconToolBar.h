@@ -23,4 +23,5 @@
 - (id)initWithPoint:(CGPoint)point buttonsize:(CGSize)buttonsize delegate:(id)delegate;
 - (void) drawButton:(NSArray*)buttons;
 - (void) setItemIndex:(int)index;
+- (void) replaceButtonImage:(UIImage*)img title:(NSString*)title target:(id)target action:(SEL)action forname:(NSString*)name;
 @end
