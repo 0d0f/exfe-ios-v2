@@ -12,7 +12,7 @@
 
 - (id)initWithPoint:(CGPoint)point buttonsize:(CGSize)buttonsize delegate:(id)delegate
 {
-    CGRect toolbarframe=CGRectMake(point.x, point.y, 320, 44);
+    CGRect toolbarframe=CGRectMake(point.x, point.y, 320, 50);
     if(buttonsize.width==0 && buttonsize.height==0)
     {
         button_width=DEFAULT_BUTTON_WIDTH;
@@ -23,8 +23,8 @@
         button_height=buttonsize.height;
     }
     self = [self initWithFrame:toolbarframe];
-    [self setBackgroundColor:[UIColor blackColor]];
-    self.alpha=0.5;
+    ;
+    [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"toolbar.png"]]];
     _delegate=delegate;
     return self;
 }
@@ -48,14 +48,12 @@
     _delegate=delegate;
 }
 - (void) drawButton:(NSArray*)buttons{
-    int width=self.frame.size.width/[buttons count];
+//    int width=self.frame.size.width/[buttons count];
     for(int i=0;i<[buttons count];i++)
     {
-        float x=width*i+(width-button_width)/2;
         EXButton *button=[buttons objectAtIndex:i];
-        [button setFrame:CGRectMake(x, 0, button_width, button_height)];
-        [button setBackgroundColor:[UIColor whiteColor]];
         [button.titleLabel setFont:[UIFont boldSystemFontOfSize:10.0]];
+        [button.titleLabel setTextColor:FONT_COLOR_250];
         [self addSubview:button];
     }
 }

@@ -18,15 +18,17 @@
     }
     return self;
 }
-- (id)initWithName:(NSString*)name title:(NSString*)buttontitle image:(UIImage*) img{
+- (id)initWithName:(NSString*)name title:(NSString*)buttontitle image:(UIImage*)  img inFrame:(CGRect) frame{
 
-    self = [super initWithFrame:CGRectMake(0, 0, 20, 20)];
+    self = [super initWithFrame:frame];
     if (self) {
         buttonName=name;
         [self setImage:img forState:UIControlStateNormal];
-        [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -img.size.width, -40.0, 0.0)];
+        [self setBackgroundColor:[UIColor clearColor]];
+        [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -img.size.width, -img.size.height-14, 0.0)];
         [self setTitle:buttontitle forState:UIControlStateNormal];
     }
     return self;
 }
+
 @end

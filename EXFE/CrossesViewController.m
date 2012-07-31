@@ -396,9 +396,7 @@
         }
 
     }
-//    CrossDetailViewController *detailViewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-//    detailViewController.cross=cross;
-//    [self.navigationController pushViewController:detailViewController animated:YES];
+
     GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
     gatherViewController.cross=cross;
     [gatherViewController setViewMode]; 

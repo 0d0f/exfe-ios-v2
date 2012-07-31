@@ -29,5 +29,6 @@
 + (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 + (UIImage *)scaleImage:(UIImage*)image toResolution:(int)resolution;
 + (NSString*) findProvider:(NSString*)external_id;
++ (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime;// timezone:(NSString*)timezone;
 @end
 

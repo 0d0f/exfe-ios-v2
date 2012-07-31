@@ -38,7 +38,7 @@
 + (NSString*) formattedShortDate:(CrossTime*)crosstime{
     NSString *shortdate=@"Sometime";
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
-    NSTimeZone *timezone=[NSTimeZone timeZoneWithName:@"GMT"];
+    NSTimeZone *timezone=[self getTimeZoneWithCrossTime:crosstime];//[NSTimeZone timeZoneWithName:@"GMT"];
     [format setTimeZone:timezone];
     NSString *formatstr=@"";
     NSString *origin_date_str=@"";
@@ -75,6 +75,7 @@
         return result;
     }
 
+    [self getTimeZoneWithCrossTime:crosstime];
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     [format setLocale:locale];
@@ -115,13 +116,8 @@
         NSString *crosstime_time=crosstime.begin_at.time;     
         
         NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
-        if(is_same_timezone==false) {
-
-            NSString *hh=[localTimezone substringWithRange:NSMakeRange(1, 2)];
-            NSString *mm=[localTimezone substringWithRange:NSMakeRange(3, 2)];
-            int second_offset=(([hh intValue]*60+[mm intValue])*60)*60;
-            [dateformat setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:second_offset]];
-        }
+        
+        [dateformat setTimeZone:[self getTimeZoneWithCrossTime:crosstime]];
         [dateformat setDateFormat:@"HH:mm:ss"];
         NSString *cross_time_server=crosstime.begin_at.time;
         if(![crosstime.begin_at.date isEqualToString:@""]) {
@@ -132,8 +128,8 @@
         if(begin_at_date!=nil)
         {
             NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
-            [dateformat_to setTimeZone:[NSTimeZone defaultTimeZone]];
-            [dateformat_to setDateFormat:@"HH:mm a"];
+            [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
+            [dateformat_to setDateFormat:@"h:mm a"];
             crosstime_time=[dateformat_to stringFromDate:begin_at_date];
         
             [dateformat_to setDateFormat:@"yyyy-MM-dd"];
@@ -161,13 +157,13 @@
         else
             timestr=[timestr stringByAppendingFormat:@"%@%@",crosstime.begin_at.time_word,crosstime_time];
 
-        if(is_same_timezone==false)
-            timestr=[timestr stringByAppendingFormat:@" %@",crosstime.begin_at.timezone];
+//        if(is_same_timezone==false)
+//            timestr=[timestr stringByAppendingFormat:@" %@",crosstime.begin_at.timezone];
         
         if(![crosstime.begin_at.date_word isEqualToString:@""] && ![crosstime.begin_at.date isEqualToString:@""])
-            datestr=[datestr stringByAppendingFormat:@"%@ at %@",crosstime.begin_at.date_word,crosstime.begin_at.date];
+            datestr=[datestr stringByAppendingFormat:@"%@ at %@",crosstime.begin_at.date_word,crosstime_date];
         else
-            datestr=[datestr stringByAppendingFormat:@"%@%@",crosstime.begin_at.date_word,crosstime.begin_at.date];
+            datestr=[datestr stringByAppendingFormat:@"%@%@",crosstime.begin_at.date_word,crosstime_date];
 
         
         if([timestr isEqualToString:@""]) {
@@ -378,4 +374,37 @@
     
     return @"";
 }
++ (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime{
+    
+    BOOL is_same_timezone=false;
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    [format setLocale:locale];
+    [format setDateFormat:@"zzz"];
+    NSString *localTimezone = [format stringFromDate:[NSDate date]];
+    localTimezone=[localTimezone substringFromIndex:3];
+    [format setDateFormat:@"yyyy"];
+
+    NSString* cross_timezone=@"";
+    if(crosstime.begin_at.timezone.length>=6 )
+        cross_timezone=[crosstime.begin_at.timezone substringToIndex:6];
+    if([cross_timezone isEqualToString:localTimezone])
+        is_same_timezone=YES;
+    [locale release];
+    [format release];
+
+    if(is_same_timezone==YES)
+        return [NSTimeZone localTimeZone];
+        
+    if([crosstime.begin_at.timezone length]==6)
+    {
+        NSString *hh=[crosstime.begin_at.timezone substringWithRange:NSMakeRange(1, 2)];
+        NSString *mm=[crosstime.begin_at.timezone substringWithRange:NSMakeRange(4, 2)];
+        int second_offset=([hh intValue]*60+[mm intValue])*60;
+        NSTimeZone *timezone=[NSTimeZone timeZoneForSecondsFromGMT:second_offset];
+        return timezone;
+    }
+    return nil;
+}
+
 @end

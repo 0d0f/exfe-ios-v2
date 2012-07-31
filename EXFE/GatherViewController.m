@@ -36,6 +36,8 @@
     [self.view addSubview:backgroundview];
     
     CGRect containviewframe=CGRectMake(self.view.frame.origin.x+VIEW_MARGIN,self.view.frame.origin.y+toolbar.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2, self.view.frame.size.height-toolbar.frame.size.height);
+    if(viewmode==YES)
+        containviewframe=CGRectMake(self.view.frame.origin.x+VIEW_MARGIN,self.view.frame.origin.y,self.view.frame.size.width-VIEW_MARGIN*2, self.view.frame.size.height-toolbar.frame.size.height);
     containview=[[UIScrollView alloc] initWithFrame:containviewframe];
     [containview setDelegate:self];
     [backgroundview addSubview:containview];
@@ -44,10 +46,9 @@
     containcardview.backgroundimage=[UIImage imageNamed:@"paper_texture.png"];
     
     [containview addSubview:containcardview];
-    UIImageView *title_input_img=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gather_title_input_area.png"]];
+    title_input_img=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gather_title_input_area.png"]];
     [title_input_img setFrame:CGRectMake(0, 0, 308, 69)];
     [containcardview addSubview:title_input_img];
-    [title_input_img release];
 
     crosstitle=[[UITextView alloc] initWithFrame:CGRectMake(INNER_MARGIN+30, 5,containview.frame.size.width-INNER_MARGIN-30, 48)];
     [containcardview addSubview:crosstitle];
@@ -56,6 +57,12 @@
     [crosstitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     [crosstitle becomeFirstResponder];
     
+    crosstitle_view=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN+30, 5,containview.frame.size.width-INNER_MARGIN-30, 48)];
+    
+    [crosstitle_view setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+    [crosstitle_view  setBackgroundColor:[UIColor clearColor]];
+    [containcardview addSubview:crosstitle_view];
+    [crosstitle_view setHidden:YES];
     
     exfeenum=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15, width, 24)];
     [containcardview addSubview:exfeenum];
@@ -77,7 +84,6 @@
 
     [exfeeShowview setDataSource:self];
     [exfeeShowview setDelegate:self];
-    [self addDefaultIdentity];
     
     map=[[MKMapView alloc] initWithFrame:CGRectMake(INNER_MARGIN+160,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,130,80)];
     [containcardview addSubview:map];
@@ -136,17 +142,32 @@
     [crossdescription setBackgroundColor:[UIColor clearColor]];
     [crossdescription setDelegate:self];
     [containcardview addSubview:crossdescription];
-    if(self.cross!=nil && viewmode==YES)
-    {
-        [self initData];
-    }
+//    if(self.cross!=nil && viewmode==YES)
+//    {
+    [self initData];
+//    }
     [self reArrangeViews];
 }
 - (void) initData{
-    if(self.cross!=nil){
+    if(self.cross!=nil && viewmode==YES){
         crosstitle.text=cross.title;
         [self setDateTime:cross.time];
-        
+        NSDictionary *placedict=[NSDictionary dictionaryWithKeysAndObjects:@"title",cross.place.title,@"description",cross.place.place_description,@"lat",cross.place.lat, @"lng",cross.place.lng,@"external_id",cross.place.external_id,@"provider",cross.place.provider, nil];
+        [self setPlace:placedict];
+        crossdescription.text=cross.cross_description;
+        for(Invitation *invitation in cross.exfee.invitations)
+        {
+            if([invitation.host boolValue]==YES)
+                [exfeeIdentities insertObject:invitation atIndex:0];
+            else{
+                [exfeeIdentities addObject:invitation];
+                [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
+            }
+        }
+        [exfeeShowview reloadData];
+    }
+    else if(viewmode==NO){
+        [self addDefaultIdentity];
     }
 }
 - (void) reArrangeViews{
@@ -192,9 +213,14 @@
 
     containview.alwaysBounceVertical=YES;
     if(viewmode==YES){
-        [map setHidden:YES];
-        [mapbox setHidden:YES];
+        [crosstitle resignFirstResponder];
+//        [map setHidden:YES];
+//        [mapbox setHidden:YES];
         [toolbar setHidden:YES];
+        [crosstitle setHidden:YES];
+        [title_input_img setHidden:YES];
+        [crosstitle_view setHidden:NO];
+        crosstitle_view.text=crosstitle.text;
     }
     
     [containcardview setNeedsDisplay];
@@ -235,7 +261,7 @@
     
     Cross *_cross=[Cross object];
     _cross.title=crosstitle.text;
-    _cross.cross_description=@"test desc";
+    _cross.cross_description=crossdescription.text;
     _cross.by_identity=by_identity;
     _cross.place=place;
     _cross.time=datetime;
@@ -256,6 +282,7 @@
     [exfeeInput release];
     [exfeeShowview release];
     [crosstitle release];
+    [title_input_img release];
     [map release];
     [mapbox release];
     [crossdescription release];
@@ -363,30 +390,42 @@
 
 - (void) setPlace:(NSDictionary*)placedict{
     Place *_place=[Place object];
-    _place.title=[placedict objectForKey:@"title"];
     NSNumber *lat=[placedict objectForKey:@"lat"];
     NSNumber *lng=[NSNumber numberWithDouble:[[placedict objectForKey:@"lng"] doubleValue]];
+        
     _place.lat= lat;
     _place.lng= lng;
+    
+    _place.title=[placedict objectForKey:@"title"];
     _place.place_description =[placedict objectForKey:@"description"];
     _place.external_id=[placedict objectForKey:@"external_id"];
     _place.provider=[placedict objectForKey:@"provider"];
     place=_place;
+
+    if([lat isEqualToNumber:[NSNumber numberWithInt:0]] && [lng isEqualToNumber:[NSNumber numberWithInt:0]] && [_place.title isEqualToString:@""] && [_place.place_description isEqualToString:@""])
+    {
+        _place.title=@"Somewhere";
+        place=nil;
+    }
+
     placetitle.text=_place.title;
     placedesc.text=_place.place_description;
+
     
     [self reArrangeViews];
-    
-    CLLocationCoordinate2D location;
-    [map removeAnnotations: map.annotations];
-    location.latitude = [_place.lat doubleValue];
-    location.longitude = [_place.lng doubleValue];
-    MKCoordinateRegion region;
-    region.center = location;
-    region.span.longitudeDelta = 0.005;
-    region.span.latitudeDelta = 0.005;
-    [map setRegion:region animated:YES];
-    mapbox.image=[UIImage imageNamed:@"map_area.png"];
+    if(place!=nil)
+    {
+        CLLocationCoordinate2D location;
+        [map removeAnnotations: map.annotations];
+        location.latitude = [_place.lat doubleValue];
+        location.longitude = [_place.lng doubleValue];
+        MKCoordinateRegion region;
+        region.center = location;
+        region.span.longitudeDelta = 0.005;
+        region.span.latitudeDelta = 0.005;
+        [map setRegion:region animated:YES];
+        mapbox.image=[UIImage imageNamed:@"map_area.png"];
+    }
 }
 
 - (void) setDateTime:(CrossTime*)crosstime{
@@ -398,7 +437,6 @@
 }
 
 - (void) pullcontainviewDown{
-    NSLog(@"pull down");
     if(containview.frame.origin.y<0){
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDelay:0];
@@ -412,21 +450,23 @@
 - (void) ShowRSVPToolBar:(int)exfeeIndex{
     selectedExfeeIndex=exfeeIndex;
     if(rsvptoolbar==nil){
-        rsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, self.view.frame.size.height-44) buttonsize:CGSizeMake(20, 20) delegate:self];
-        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"chat.png"]];
-        [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
-        EXButton *addmate=[[EXButton alloc] initWithName:@"addmate" title:@"+1 mate" image:[UIImage imageNamed:@"chat.png"]];
-        [addmate addTarget:self action:@selector(rsvpaddmate) forControlEvents:UIControlEventTouchUpInside];
-        EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"+1 mate" image:[UIImage imageNamed:@"chat.png"]];
-        [submate addTarget:self action:@selector(rsvpsubmate) forControlEvents:UIControlEventTouchUpInside];
-        EXButton *reset=[[EXButton alloc] initWithName:@"reset" title:@"Reset" image:[UIImage imageNamed:@"chat.png"]];
-        [reset addTarget:self action:@selector(rsvpremove) forControlEvents:UIControlEventTouchUpInside];
-        NSArray *array=[NSArray arrayWithObjects:accept,addmate,submate,reset, nil];
+        rsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, self.view.frame.size.height-50) buttonsize:CGSizeMake(20, 20) delegate:self];
+        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"toolbar_accept.png"] inFrame:CGRectMake(54, 6, 36, 30)];
+        
+//        [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
+//        EXButton *addmate=[[EXButton alloc] initWithName:@"addmate" title:@"+1 mate" image:[UIImage imageNamed:@"chat.png"]];
+//        [addmate addTarget:self action:@selector(rsvpaddmate) forControlEvents:UIControlEventTouchUpInside];
+//        EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"+1 mate" image:[UIImage imageNamed:@"chat.png"]];
+//        [submate addTarget:self action:@selector(rsvpsubmate) forControlEvents:UIControlEventTouchUpInside];
+//        EXButton *reset=[[EXButton alloc] initWithName:@"reset" title:@"Reset" image:[UIImage imageNamed:@"chat.png"]];
+//        [reset addTarget:self action:@selector(rsvpremove) forControlEvents:UIControlEventTouchUpInside];
+//        NSArray *array=[NSArray arrayWithObjects:accept,addmate,submate,reset, nil];
+        NSArray *array=[NSArray arrayWithObjects:accept, nil];
         [rsvptoolbar drawButton:array];
         [accept release];
-        [addmate release];
-        [submate release];
-        [reset release];
+//        [addmate release];
+//        [submate release];
+//        [reset release];
         [self.view addSubview:rsvptoolbar];
     }
     [rsvptoolbar setItemIndex:exfeeIndex];
@@ -498,6 +538,21 @@
     }
     [crossdescription resignFirstResponder];
     [containview becomeFirstResponder];
+}
+#pragma mark RKObjectLoaderDelegate methods
+
+- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+    
+    if([objects count]>0)
+    {
+        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+        [app GatherCrossDidFinish];
+    }
+}
+
+- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+    NSLog(@"Error!:%@",error);
+    //    [self stopLoading];
 }
 
 #pragma mark EXImagesCollectionView Datasource methods
