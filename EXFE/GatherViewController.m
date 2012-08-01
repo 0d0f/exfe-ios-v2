@@ -51,12 +51,14 @@
     [containcardview addSubview:title_input_img];
 
     crosstitle=[[UITextView alloc] initWithFrame:CGRectMake(INNER_MARGIN+30, 5,containview.frame.size.width-INNER_MARGIN-30, 48)];
+    crosstitle.tag=101;
+    
     [containcardview addSubview:crosstitle];
     crosstitle.text=[NSString stringWithFormat:@"Meet %@",app.username];
+    [crosstitle setDelegate:self];
     [crosstitle setBackgroundColor:[UIColor clearColor]];
     [crosstitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     [crosstitle becomeFirstResponder];
-    
     crosstitle_view=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN+30, 5,containview.frame.size.width-INNER_MARGIN-30, 48)];
     
     [crosstitle_view setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
@@ -80,7 +82,6 @@
     [exfeeShowview calculateColumn];
     [exfeeShowview setBackgroundColor:[UIColor clearColor]];
     [containcardview addSubview:exfeeShowview];
-//    isExfeeInputShow=NO;
 
     [exfeeShowview setDataSource:self];
     [exfeeShowview setDelegate:self];
@@ -134,6 +135,7 @@
     [containcardview addSubview:placedesc];
 
     crossdescription=[[UITextView alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,width,144)];
+    crossdescription.tag=108;
 
     crossdescbackimg=[[UIView alloc] initWithFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y, crossdescription.frame.size.width, 75)];
     crossdescbackimg.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"gather_describe_area.png"]];
@@ -142,10 +144,7 @@
     [crossdescription setBackgroundColor:[UIColor clearColor]];
     [crossdescription setDelegate:self];
     [containcardview addSubview:crossdescription];
-//    if(self.cross!=nil && viewmode==YES)
-//    {
     [self initData];
-//    }
     [self reArrangeViews];
 }
 - (void) initData{
@@ -170,6 +169,23 @@
         [self addDefaultIdentity];
     }
 }
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)aRange replacementText:(NSString*)aText
+{
+    if(textView.tag==101)
+    {
+        NSString* newText = [textView.text stringByReplacingCharactersInRange:aRange withString:aText];
+        CGSize tallerSize = CGSizeMake(textView.frame.size.width-15,textView.frame.size.height*2);
+        CGSize newSize = [newText sizeWithFont:textView.font constrainedToSize:tallerSize lineBreakMode:UILineBreakModeWordWrap];
+        
+        if (newSize.height > textView.frame.size.height)
+        {
+            return NO;
+        }
+        else
+            return YES;
+    }
+    return YES;
+}
 - (void) reArrangeViews{
 
     CGSize timetitleconstraint = CGSizeMake(160,timetitle.frame.size.height);
@@ -191,7 +207,7 @@
     [map setFrame:CGRectMake(INNER_MARGIN+170+6,exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10+7,115,70)];
     [mapbox setFrame:CGRectMake(INNER_MARGIN+170,exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,126,84)];
     [crossdescription setFrame:CGRectMake(0,placedesc.frame.origin.y+placedesc.frame.size.height+15,containview.frame.size.width,145)];
-    [crossdescbackimg setFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y, crossdescription.frame.size.width, 75)];
+    [crossdescbackimg setFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y-9, crossdescription.frame.size.width, 75)];
 
     float triheight=4;
     float y=timetitle.frame.origin.y+timetitle.frame.size.height/2-triheight;
@@ -363,7 +379,6 @@
 //        [suggestionTable removeFromSuperview];
 //    }
 //}
-
 - (NSString*) findProvider:(NSString*)external_id{
     
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"; 
@@ -551,11 +566,16 @@
 //    NSLog(@"click view");
 }
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDelay:0];
-    [UIView setAnimationDuration:0.25];
-    [containview setContentOffset:CGPointMake(0, containview.frame.size.height- crossdescription.frame.size.height-44-6-20)];
-    [UIView commitAnimations];
+    float KEYBOARD_LANDSCAPE=216;
+    if(textView.tag==108)
+    {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDelay:0];
+        [UIView setAnimationDuration:0.25];
+        float y=crossdescbackimg.frame.origin.y-(self.view.frame.size.height-toolbar.frame.size.height-KEYBOARD_LANDSCAPE-crossdescription.frame.size.height-20);
+        [containview setContentOffset:CGPointMake(0, y)];
+        [UIView commitAnimations];
+    }
     return YES;
 }
 #pragma mark UIScrollView methods
@@ -603,9 +623,10 @@
     [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
 
     [map setFrame:CGRectMake(map.frame.origin.x,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,map.frame.size.width,map.frame.size.height)];
-
-    [self reArrangeViews];
+    NSLog(@"resize exfee collection view ");
     [exfeeShowview calculateColumn];
+    [self reArrangeViews];
+    
 }
 
 #pragma mark EXImagesCollectionView delegate methods
@@ -709,6 +730,7 @@
     [exfeeSelected removeObjectsAtIndexes:mutableIndexSet];
 
     [mutableIndexSet release];
+    [exfeeShowview calculateColumn];
     [exfeeShowview reloadData];
     
 }

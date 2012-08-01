@@ -173,6 +173,19 @@
         float new_height=imageHeight+15+(10+imageHeight+15)*maxRow;
         [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
     }
+    else{
+        int row=1;
+        for(int row_idx=0;row_idx<=maxRow;row_idx++)
+        {
+            if(maxColumn*row_idx-(count)>0)
+            {
+                row=row_idx;
+                break;
+            }
+        }
+        float new_height=imageHeight+15+(10+imageHeight+15)*(row-1);
+        [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
+    }
     [self setNeedsDisplay];
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
