@@ -24,6 +24,9 @@
     if (self) {
         buttonName=name;
         [self setImage:img forState:UIControlStateNormal];
+        //UIControlStateSelected | UIControlStateHighlighted|
+        [self setBackgroundImage:[UIImage imageNamed:@"toolbar_btndown_bg.png"] forState:UIControlStateHighlighted];
+        self.adjustsImageWhenHighlighted=NO;
         [self setBackgroundColor:[UIColor clearColor]];
         [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -img.size.width, -img.size.height-14, 0.0)];
         [self setTitle:buttontitle forState:UIControlStateNormal];

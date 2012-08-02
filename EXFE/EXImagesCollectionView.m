@@ -23,6 +23,7 @@
     addexfee=[UIImage imageNamed:@"gather_add_exfee.png"];
     tagmates=[UIImage imageNamed:@"tag-mates.png"];
     tagrsvpaccepted=[UIImage imageNamed:@"rsvpbg-accepted.png"];
+    hiddenAddButton=NO;
     return self;
 }
 
@@ -93,9 +94,7 @@
             y_count++;
         }
         int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
-        int y=y_count*(imageHeight+imageYmargin*2)+imageYmargin;
-        if(y_count>0)
-            y+=15;
+        int y=y_count*(imageHeight+15+imageYmargin)+imageYmargin;
 
         BOOL isSelected=[[selected objectAtIndex:i] boolValue];
         if(isSelected==YES)
@@ -119,7 +118,6 @@
         CGContextAddPath(currentContext, maskPath.CGPath);
         CGContextClosePath(currentContext);
         CGContextClip(currentContext);
-//        UIImage *avatar_effect=[UIImage imageNamed:@"avatar_effect.png"];
         [avatar drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
         [avatareffect drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
 
@@ -156,21 +154,23 @@
         y_count++;
     }
 
-    if(count<maxColumn*maxRow) {
-        int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
-        int y=y_count*(imageHeight+imageYmargin*2)+imageXmargin;
-        if(y_count>0)
-            y+=15;
-        [addexfee drawInRect:CGRectMake(x,y,140,40)];
-    }
+    if(hiddenAddButton==NO)
+        if(count<maxColumn*maxRow) {
+            int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
+            int y=y_count*(imageHeight+imageYmargin+15)+imageYmargin;
+            
+            [addexfee drawInRect:CGRectMake(x,y,140,40)];
+        }
 }
-
+- (void) HiddenAddButton{
+    hiddenAddButton=YES;
+}
 - (void) reloadData{
 
     int count=[_dataSource numberOfimageCollectionView:self];
     if(count >maxColumn*maxRow-1)
     {
-        float new_height=imageHeight+15+(10+imageHeight+15)*maxRow;
+        float new_height=imageYmargin+imageHeight+15+(imageYmargin+imageHeight+15)*maxRow;
         [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
     }
     else{
@@ -183,7 +183,7 @@
                 break;
             }
         }
-        float new_height=imageHeight+15+(10+imageHeight+15)*(row-1);
+        float new_height=imageYmargin+imageHeight+15+(imageYmargin+imageHeight+15)*(row-1);
         [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
     }
     [self setNeedsDisplay];

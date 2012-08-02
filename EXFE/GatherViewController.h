@@ -40,9 +40,9 @@
     UITextView *crosstitle;
     UIImageView *title_input_img;
     UILabel *crosstitle_view;
-    UITextField *exfeeInput;
+//    UITextField *exfeeInput;
     UILabel *exfeenum;
-    EXIconToolBar *rsvptoolbar;
+    EXIconToolBar *gathertoolbar;
     MKMapView *map;
     UIImageView *mapbox;
     UITextView *crossdescription;
@@ -50,7 +50,7 @@
     UIView *backgroundview;
     UIScrollView *containview;
     EXOverlayView *containcardview;
-    BOOL isExfeeInputShow;
+//    BOOL isExfeeInputShow;
     UITableView *suggestionTable;
     NSMutableArray *suggestIdentities;
     NSMutableArray *exfeeIdentities;
@@ -75,7 +75,7 @@
 - (void) ShowPlaceView;
 - (void) ShowTimeView;
 - (void) ShowExfeeView;
-- (void) ShowRSVPToolBar;
+- (void) ShowGatherToolBar;
 - (void) addDefaultIdentity;
 - (void) reArrangeViews;
 - (NSString*) findProvider:(NSString*)external_id;

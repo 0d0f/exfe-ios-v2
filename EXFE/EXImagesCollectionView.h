@@ -46,12 +46,14 @@
     UIImage *addexfee;
     UIImage *tagmates;
     UIImage *tagrsvpaccepted;
+    BOOL hiddenAddButton;
     
 }
 - (void) setImageWidth:(float)width height:(float)height;
 - (void) setImageXMargin:(float)xmargin YMargin:(float)ymargin;
 - (void) setDataSource:(id) dataSource;
 - (void) setDelegate:(id) delegate;
+- (void) HiddenAddButton;
 - (void) reloadData;
 - (void) initData;
 - (void) calculateColumn;

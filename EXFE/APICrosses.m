@@ -38,7 +38,8 @@
     invitationMapping.primaryKeyAttribute=@"invitation_id";
     [invitationMapping mapKeyPathsToAttributes:@"id", @"invitation_id",
      @"rsvp_status", @"rsvp_status", 
-     @"mates", @"mates", 
+     @"host", @"host", 
+     @"mates", @"mates",
      @"via", @"via",
      @"updated_at", @"updated_at", 
      @"created_at", @"created_at",

@@ -93,7 +93,7 @@
     NSString *stringFromDate = [formatter stringFromDate:date];
     [formatter setDateFormat:@"yyyy-MM-dd"];
     NSString *datestr=[formatter stringFromDate:date];
-    [formatter setDateFormat:@"hh:mm:ss"];
+    [formatter setDateFormat:@"HH:mm:ss"];
     NSString *timestr=[formatter stringFromDate:date];
     
     [formatter setDateFormat:@"z"];
