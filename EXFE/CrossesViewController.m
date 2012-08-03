@@ -303,7 +303,7 @@
                 NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
                 NSString *updated_at_str=[obj objectForKey:@"updated_at"];
                 NSDate *updated_at = [formatter dateFromString:updated_at_str];
-                if([updated_at compare: cross.read_at] == NSOrderedAscending || cross.read_at==nil) {
+                if([updated_at compare: cross.read_at] == NSOrderedDescending || cross.read_at==nil) {
                     if([key isEqualToString:@"title"])
                         cell.hlTitle=YES;
                     else if([key isEqualToString:@"place"])

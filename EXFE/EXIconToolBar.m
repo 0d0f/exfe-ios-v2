@@ -24,7 +24,7 @@
     }
     self = [self initWithFrame:toolbarframe];
     ;
-    [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"toolbar.png"]]];
+    [self setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"toolbar_bg.png"]]];
     _delegate=delegate;
     return self;
 }

@@ -22,14 +22,16 @@
 
     self = [super initWithFrame:frame];
     if (self) {
+        [self setFrame:frame];
         buttonName=name;
         [self setImage:img forState:UIControlStateNormal];
-        //UIControlStateSelected | UIControlStateHighlighted|
         [self setBackgroundImage:[UIImage imageNamed:@"toolbar_btndown_bg.png"] forState:UIControlStateHighlighted];
         self.adjustsImageWhenHighlighted=NO;
         [self setBackgroundColor:[UIColor clearColor]];
         [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -img.size.width, -img.size.height-14, 0.0)];
         [self setTitle:buttontitle forState:UIControlStateNormal];
+        int margin=(self.frame.size.width-img.size.width)/2;
+        [self setImageEdgeInsets:UIEdgeInsetsMake(0, margin, 0, margin)];
     }
     return self;
 }

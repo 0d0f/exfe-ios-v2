@@ -9,6 +9,7 @@
 #import "Util.h"
 #import "CrossTime.h"
 #import "EFTime.h"
+#import <math.h>
 
 @implementation Util
 + (NSString*) decodeFromPercentEscapeString:(NSString*)string{
@@ -64,7 +65,7 @@
 + (NSString*) formattedShortDate:(CrossTime*)crosstime{
     NSString *shortdate=@"Sometime";
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
-    NSTimeZone *timezone=[self getTimeZoneWithCrossTime:crosstime];//[NSTimeZone timeZoneWithName:@"GMT"];
+    NSTimeZone *timezone=[NSTimeZone timeZoneWithName:@"UTC"];[self getTimeZoneWithCrossTime:crosstime];//[NSTimeZone timeZoneWithName:@"GMT"];
     [format setTimeZone:timezone];
     NSString *formatstr=@"";
     NSString *origin_date_str=@"";
@@ -108,7 +109,7 @@
     if(![crosstime.begin_at.date isEqualToString:@""])
     {
         NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
-        [dateformat setTimeZone:[self getTimeZoneWithCrossTime:crosstime]];
+        [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];//[self getTimeZoneWithCrossTime:crosstime]];
         [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSDate *begin_at_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ 00:00:00",crosstime.begin_at.date]];
         NSDate *begin_at_date_time=[dateformat dateFromString:[NSString stringWithFormat:@"%@ %@",crosstime.begin_at.date,crosstime.begin_at.time]];
@@ -143,6 +144,8 @@
 }
 
 + (NSDictionary*) crossTimeToString:(CrossTime*)crosstime{
+    
+    
     NSMutableDictionary *result=[[[NSMutableDictionary alloc]initWithCapacity:2] autorelease];
     if(crosstime==nil){
         [result setObject:@"" forKey:@"date_v2"];
@@ -152,7 +155,6 @@
         return result;
     }
 
-    [self getTimeZoneWithCrossTime:crosstime];
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     [format setLocale:locale];
@@ -190,7 +192,8 @@
         NSString *crosstime_date=crosstime.begin_at.date;
         NSString *crosstime_time=crosstime.begin_at.time;     
         NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
-        [dateformat setTimeZone:[self getTimeZoneWithCrossTime:crosstime]];
+        [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        //[self getTimeZoneWithCrossTime:crosstime]];
         [dateformat setDateFormat:@"HH:mm:ss"];
         NSString *cross_time_server=crosstime.begin_at.time;
         if(![crosstime.begin_at.date isEqualToString:@""] && ![crosstime.begin_at.time isEqualToString:@""]) {
@@ -534,5 +537,142 @@
     }
     return nil;
 }
++ (NSDate*) beginningOfWeek:(NSDate*)date{
+    NSDate *today = [NSDate date];
+    NSCalendar *gregorian = [NSCalendar currentCalendar];
+    NSDateComponents *weekdayComponents = [gregorian components:NSWeekdayCalendarUnit fromDate:today];
+    NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
+    [componentsToSubtract setDay: - ([weekdayComponents weekday] - [gregorian firstWeekday])];
+    NSDate *beginningOfWeek = [gregorian dateByAddingComponents:componentsToSubtract toDate:today options:0];
+    NSDateComponents *components = [gregorian components: (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate: beginningOfWeek];
+    beginningOfWeek = [gregorian dateFromComponents: components];
+    return beginningOfWeek;
+}
++ (NSString*) getTimeTitle:(CrossTime*)crosstime{
+    if( [crosstime.outputformat intValue]==1) {
+        if([crosstime.origin isEqualToString:@""])
+            return @"Sometime";
+        return crosstime.origin;
+    }
+    if(crosstime.begin_at.date)
+        return [self EXRelative:crosstime];
+    return @"Sometime";
+}
++ (NSString*) EXRelative:(CrossTime*)crosstime{
 
+    NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
+    [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *begin_at_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ 00:00:00",crosstime.begin_at.date]];
+    [dateformat setTimeZone:[NSTimeZone localTimeZone]];
+    [dateformat setDateFormat:@"yyyy-MM-dd"];
+    NSString *nowdate_str=[dateformat stringFromDate:[NSDate date]];
+    [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+    NSDate *now_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ 00:00:00 ",nowdate_str]];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *comps =[calendar components: NSDayCalendarUnit fromDate:now_date toDate:begin_at_date options:0];
+    NSDate *beginingofweek=[self beginningOfWeek:now_date];
+
+    NSDateComponents *comps_firstdayofweek =[calendar components: NSDayCalendarUnit fromDate:beginingofweek toDate:begin_at_date options:0];
+  
+    NSString *relativeTime=@"";
+    int day=[comps day];
+    if(abs(day)>1)
+    {
+        int year=round(day/365.25);
+        float f_m=fmod(day,365.25)/30;
+        //round 8 away from zero, round 7 towards zero
+        int moth=round(f_m+0.2);
+        if(f_m<0)
+            moth=round(f_m-0.2);
+        NSString *m_str=@"months";
+        NSString *y_str=@"years";
+        if(abs(moth)==1)
+            m_str=@"month";
+        if(abs(year)==1)
+            y_str=@"year";
+
+        if(abs(year)>0) {
+            if(abs(moth)>0) {
+                if(moth>0)
+                    relativeTime=[NSString stringWithFormat:@"In %u %@ %u %@",abs(year),y_str,abs(moth),m_str];
+                else
+                    relativeTime=[NSString stringWithFormat:@"%u %@ %u %@ ago",abs(year),y_str,abs(moth),m_str];
+            }
+            else if(abs(moth)==0){
+                if(year>0)
+                    relativeTime=[NSString stringWithFormat:@"In %u %@",abs(year),y_str];
+                else
+                    relativeTime=[NSString stringWithFormat:@"%u %@ ago",abs(year),y_str];
+            }
+        }
+        else if(abs(year)==0){
+            if(day<=-3 && day>=-30)
+                relativeTime=[NSString stringWithFormat:@"%u days ago",abs(day)];
+            else if(day==-2)
+                relativeTime=[NSString stringWithFormat:@"The day before yesterday"];
+            else if(day==2)
+                relativeTime=[NSString stringWithFormat:@"The day after tomorrow"];
+            else if(day>0)
+            {
+                NSDateFormatter *weekdayformatter = [[NSDateFormatter alloc] init];
+                [weekdayformatter setDateFormat: @"EEEE"];
+                NSString *weekdaysymbol=[weekdayformatter stringFromDate:begin_at_date];
+                [weekdayformatter release];
+                
+                int beginingofweek_tobegin_at_day=[comps_firstdayofweek day];
+                if(beginingofweek_tobegin_at_day<=7)
+                    relativeTime=[NSString stringWithFormat:@"%@",weekdaysymbol];
+                if(beginingofweek_tobegin_at_day<=13)
+                    relativeTime=[NSString stringWithFormat:@"Next %@",weekdaysymbol];
+                if(beginingofweek_tobegin_at_day>=14)
+                    relativeTime=[NSString stringWithFormat:@"In %u days",day];
+            }
+        }
+    }
+    else{
+        if(day==-1)
+           relativeTime=[NSString stringWithFormat:@"Yesterday"];
+        else if(day==1)
+            relativeTime=[NSString stringWithFormat:@"Tomorrow"];
+        else if(day==0)
+            relativeTime=[NSString stringWithFormat:@"Today"];
+    }
+    
+    if(day==0)
+    {
+        if(crosstime.begin_at.time!=@"")
+        {
+            [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];//[self getTimeZoneWithCrossTime:crosstime]];
+            [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            begin_at_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ %@",crosstime.begin_at.date,crosstime.begin_at.time]];
+            NSDate *now=[NSDate date];
+            NSDateComponents *comps_in_a_day =[calendar components: NSMinuteCalendarUnit fromDate:now toDate:begin_at_date options:0];
+            int minute=[comps_in_a_day minute];
+            if(minute>=-1439 && minute<=-720)
+                relativeTime=[NSString stringWithFormat:@"23 hours ago"];
+            else if(minute>=-719 && minute<=-60){
+                float f_h=minute/60.0;
+                int hour=round(f_h-0.2);//round 8 away from zero, round 7 towards zero
+                relativeTime=[NSString stringWithFormat:@"%u hours ago",abs(hour)];
+            }
+            else if(minute>=-59 && minute<=-31)
+                relativeTime=[NSString stringWithFormat:@"Just now"];
+            else if(minute>=-30 && minute<=0)
+                relativeTime=[NSString stringWithFormat:@"Now"];
+            else if(minute>=1 && minute<=59)
+                relativeTime=[NSString stringWithFormat:@"In 59 minutes"];
+            else if(minute>=60 && minute<=749){
+                float f_h=minute/60.0;
+                int hour=round(f_h+0.2);//round 8 away from zero, round 7 towards zero
+                relativeTime=[NSString stringWithFormat:@"In %u hours",hour];
+            }
+        }
+        
+    }
+    
+    [dateformat release];
+    return relativeTime;
+}
 @end

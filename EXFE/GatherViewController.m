@@ -153,6 +153,7 @@
 }
 - (void) initData{
     if(self.cross!=nil && viewmode==YES){
+        
         crosstitle.text=cross.title;
         [self setExfeeNum];
         NSArray *widgets=cross.widget;
@@ -176,7 +177,6 @@
         [self setDateTime:cross.time];
         NSDictionary *placedict=[NSDictionary dictionaryWithKeysAndObjects:@"title",cross.place.title,@"description",cross.place.place_description,@"lat",cross.place.lat, @"lng",cross.place.lng,@"external_id",cross.place.external_id,@"provider",cross.place.provider, nil];
         [self setPlace:placedict];
-        
         
         crossdescription.text=cross.cross_description;
         for(Invitation *invitation in cross.exfee.invitations)
@@ -263,8 +263,16 @@
         exfeshowframe.origin.x=15-5;
         [exfeeShowview setFrame:exfeshowframe];
 
+//        CGSize constrainedSize = CGSizeMake(500,timetitle.frame.size.height);
+//        CGSize newtimetitleSize = [timetitle.text sizeWithFont:timetitle.font constrainedToSize:constrainedSize lineBreakMode:UILineBreakModeWordWrap];
+
         CGRect timetitleframe=timetitle.frame;
         timetitleframe.origin.x=15;
+//        timetitleframe.size.width=newtimetitleSize.width;
+
+//        if(timetitleframe.size.width>175) // MAX timetitle width=175
+//            timetitleframe.size.width=175;
+        
         [timetitle setFrame:timetitleframe];
 
         CGRect timedescframe=timedesc.frame;
@@ -368,7 +376,8 @@
     [timedesc release];
     [placetitle release];
     [placedesc release];
-    
+    [gathertoolbar release];
+    [rsvptoolbar release];
     [containview release];
     [backgroundview release];
     [containcardview release];
@@ -476,13 +485,9 @@
 }
 
 - (void) setDateTime:(CrossTime*)crosstime{
-//    NSDictionary *humanreadable_date=[Util crossTimeToString:crosstime];
     NSDictionary *humanreadable_date=[Util crossTimeToStringSimple:crosstime];
-    timetitle.text=[humanreadable_date objectForKey:@"timetitle"];
+    timetitle.text=[Util getTimeTitle:crosstime];
     timedesc.text=[humanreadable_date objectForKey:@"timedesc"];
-    if([timetitle.text isEqualToString:@""] && [timedesc.text isEqualToString:@""])
-        timetitle.text=@"Sometime";
-
     datetime=crosstime;
     if(viewmode==NO)
         [self reArrangeViews];
@@ -498,7 +503,33 @@
         [crossdescription resignFirstResponder];
     }
 }
+- (void) ShowRsvpToolBar{
+    if(rsvptoolbar==nil){
+        rsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, self.view.frame.size.height-50) buttonsize:CGSizeMake(20, 20) delegate:self];
+        EXButton *ignore=[[EXButton alloc] initWithName:@"ignore" title:@"Ignore" image:[UIImage imageNamed:@"toolbar_accept.png"] inFrame:CGRectMake(0, 6, 80, 30)];
+        [ignore addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
 
+        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"toolbar_accept.png"] inFrame:CGRectMake(80, 6, 80, 30)];
+        [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
+        
+        EXButton *interested=[[EXButton alloc] initWithName:@"interested" title:@"Interested" image:[UIImage imageNamed:@"toolbar_interested.png"] inFrame:CGRectMake(160, 6, 80, 30)];
+        [interested addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
+
+        EXButton *decline=[[EXButton alloc] initWithName:@"decline" title:@"Decline" image:[UIImage imageNamed:@"toolbar_decline.png"] inFrame:CGRectMake(240, 6, 80, 30)];
+        [decline addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
+
+        NSArray *array=[NSArray arrayWithObjects:ignore,accept,interested,decline, nil];
+        [rsvptoolbar drawButton:array];
+        [ignore release];
+        [accept release];
+        [interested release];
+        [decline release];
+        
+        [self.view addSubview:rsvptoolbar];
+    }
+    [rsvptoolbar setHidden:NO];
+
+}
 - (void) ShowGatherToolBar{
     if(gathertoolbar==nil){
         gathertoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, self.view.frame.size.height-50) buttonsize:CGSizeMake(20, 20) delegate:self];
@@ -695,8 +726,12 @@
             if([number boolValue]==YES)
                 isSelect=YES;
         }
-        if(isSelect)
-            [self ShowGatherToolBar];
+        if(isSelect){
+            if(viewmode==YES)
+                [self ShowRsvpToolBar];
+            else
+                [self ShowGatherToolBar];
+        }
         else
         {
             if(gathertoolbar!=nil)
@@ -705,18 +740,81 @@
     }
 }
 
-#pragma mark RSVPToolbar delegate methods
+- (void) sendrsvp:(NSString*)status{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    NSNumber *by_identity_id=[NSNumber numberWithInt:0];
+    for (Invitation* invitation in cross.exfee.invitations )
+    {
+        if([invitation.identity.connected_user_id intValue] == app.userid)
+            by_identity_id=invitation.identity.identity_id;
+    }
+    if(by_identity_id>0)
+    {
+        NSMutableArray *postarray= [[NSMutableArray alloc] initWithCapacity:12];
+        for(int i=0;i< [exfeeSelected count];i++) {
+            if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
+                if(i<[exfeeIdentities count]) {
+                    Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+                    invitation.rsvp_status=status;
+                    
+                    NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",by_identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
+                    [postarray addObject:rsvpdict];
+                }
+            }
+        }
+        
+        if(viewmode==YES)
+        {
+            RKParams* rsvpParams = [RKParams params];
+            [rsvpParams setValue:[postarray JSONString] forParam:@"rsvp"];
+            RKClient *client = [RKClient sharedClient];
+            NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/rsvp?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
+            [client post:endpoint usingBlock:^(RKRequest *request){
+                request.method=RKRequestMethodPOST;
+                request.params=rsvpParams;
+                request.onDidLoadResponse=^(RKResponse *response){
+                    if (response.statusCode == 200) {
+                        NSDictionary *body=[response.body objectFromJSONData];
+                        if([body isKindOfClass:[NSDictionary class]]) {
+                            id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                            if(code)
+                                if([code intValue]==200) {
+                                    NSLog(@"send rsvp ok!");
+                                    //                                [self returnResult:callbackId args:[[body objectForKey:@"response"] objectForKey:@"rsvp"]];
+                                }
+                        }
+                        //We got an error!
+                    }else {
+                        //Check Response Body to get Data!
+                    }
+                };
+                request.delegate=self;
+            }];
+        }
+    }
+//    [exfeeShowview reloadData];
+//    [self ShowGatherToolBar];
+}
+#pragma mark GatherToolbar delegate methods
 - (void) rsvpaccept{
     for(int i=0;i< [exfeeSelected count];i++) {
         if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
             if(i<[exfeeIdentities count]) {
-            Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
-            invitation.rsvp_status=@"ACCEPTED";
+                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+                invitation.rsvp_status=@"ACCEPTED";
             }
         }
     }
+    if(viewmode==YES)
+    {
+        [self sendrsvp:@"ACCEPTED"];
+        [self ShowRsvpToolBar];
+    }
+    else
+        [self ShowGatherToolBar];
+
     [exfeeShowview reloadData];
-    [self ShowRSVPToolBar];
 }
 - (void) rsvpunaccept{
     for(int i=0;i< [exfeeSelected count];i++) {
@@ -728,7 +826,7 @@
         }
     }
     [exfeeShowview reloadData];
-    [self ShowRSVPToolBar];
+    [self ShowGatherToolBar];
 }
 - (void) rsvpaddmate{
     for(int i=0;i< [exfeeSelected count];i++) {

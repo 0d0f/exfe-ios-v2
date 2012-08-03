@@ -40,9 +40,9 @@
     UITextView *crosstitle;
     UIImageView *title_input_img;
     UILabel *crosstitle_view;
-//    UITextField *exfeeInput;
     UILabel *exfeenum;
     EXIconToolBar *gathertoolbar;
+    EXIconToolBar *rsvptoolbar;
     MKMapView *map;
     UIImageView *mapbox;
     UITextView *crossdescription;
@@ -50,7 +50,6 @@
     UIView *backgroundview;
     UIScrollView *containview;
     EXOverlayView *containcardview;
-//    BOOL isExfeeInputShow;
     UITableView *suggestionTable;
     NSMutableArray *suggestIdentities;
     NSMutableArray *exfeeIdentities;
@@ -76,6 +75,7 @@
 - (void) ShowTimeView;
 - (void) ShowExfeeView;
 - (void) ShowGatherToolBar;
+- (void) ShowRsvpToolBar;
 - (void) addDefaultIdentity;
 - (void) reArrangeViews;
 - (NSString*) findProvider:(NSString*)external_id;
@@ -89,6 +89,7 @@
 - (void) rsvpaddmate;
 - (void) rsvpsubmate;
 - (void) rsvpremove;
+- (void) sendrsvp:(NSString*)status;
 - (void) setViewMode;
 - (void) addExfee:(Invitation*) invitation;
 - (void) initData;
