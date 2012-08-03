@@ -25,6 +25,9 @@
     int exfee_id;
     UIInputToolbar *inputToolbar;
     Identity *identity;
+    UIImage *cellbackground;
+    UIImage *cellsepator;
+    UIImage *avatarframe;
     NSArray* _posts;
 }
 

@@ -31,6 +31,7 @@
 #import "WildcardGestureRecognizer.h"
 #import "Util.h"
 #import "EXOverlayView.h"
+#import "ConversationViewController.h"
 
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9
@@ -65,6 +66,7 @@
     Cross* cross;
     int selectedExfeeIndex;
     BOOL viewmode;
+    ConversationViewController *conversationView;
 
 }
 @property (retain,nonatomic) Cross* cross;
@@ -84,6 +86,7 @@
 - (void) ShowExfeeInput:(BOOL)show;
 - (void) setExfeeNum;
 - (void) pullcontainviewDown;
+- (void) toconversation;
 - (void) rsvpaccept;
 - (void) rsvpunaccept;
 - (void) rsvpaddmate;

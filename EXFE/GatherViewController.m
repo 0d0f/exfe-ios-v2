@@ -148,6 +148,32 @@
     [crossdescription setBackgroundColor:[UIColor clearColor]];
     [crossdescription setDelegate:self];
     [containcardview addSubview:crossdescription];
+    if(viewmode==YES){
+        UIImage *chatimg = [UIImage imageNamed:@"chat.png"];
+        UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+        [chatButton setImage:chatimg forState:UIControlStateNormal];
+        chatButton.frame = CGRectMake(0, 0, chatimg.size.width, chatimg.size.height);
+        [chatButton addTarget:self action:@selector(toconversation) forControlEvents:UIControlEventTouchUpInside];
+        
+        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:chatButton];
+        
+        self.navigationItem.rightBarButtonItem = barButtonItem;
+        [barButtonItem release];
+        conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
+        conversationView.exfee_id=[cross.exfee.exfee_id intValue];
+        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSSet *invitations=cross.exfee.invitations;
+        if(invitations !=nil&&[invitations count]>0)
+        {
+            for(Invitation* invitation in invitations)
+                if([invitation.identity.connected_user_id intValue]==app.userid)
+                    conversationView.identity=invitation.identity;  
+        }
+        
+        [conversationView.view setHidden:YES];
+        [self.view addSubview:conversationView.view];
+    }
     [self initData];
     [self reArrangeViews];
 }
@@ -382,6 +408,7 @@
     [backgroundview release];
     [containcardview release];
     [crossdescbackimg release];
+    [conversationView release];
     [super dealloc];
 }
 - (void)didReceiveMemoryWarning
@@ -501,6 +528,31 @@
         [containview setFrame:CGRectMake(0,0,self.view.frame.size.width,460)];
         [UIView commitAnimations];
         [crossdescription resignFirstResponder];
+    }
+}
+- (void) toconversation{
+    if(conversationView.view.isHidden==YES)
+    {
+        [conversationView.view setHidden:NO];
+        [conversationView refreshConversation];
+        cross.conversation_count=0;
+        NSError *saveError;
+        [[Cross currentContext] save:&saveError];
+        
+        NSLog(@"%@",self.navigationController.viewControllers);
+        
+        for(id viewcontroller in self.navigationController.viewControllers)
+        {
+            if([viewcontroller isKindOfClass:[CrossesViewController class]])
+            {
+                [viewcontroller refreshCell];
+            }
+        }
+        [UIView transitionFromView:self.view toView:conversationView.view duration:1 options:UIViewAnimationOptionTransitionFlipFromLeft completion:nil];
+    }
+    else {
+        [UIView transitionFromView:conversationView.view toView:self.view duration:1 options:UIViewAnimationOptionTransitionFlipFromRight completion:nil];
+        [conversationView.view setHidden:YES];
     }
 }
 - (void) ShowRsvpToolBar{

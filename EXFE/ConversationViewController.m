@@ -54,13 +54,11 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
     }
 #endif    
-//    [_tableView setFrame:CGRectMake(_tableView.frame.origin.x,_tableView.frame.origin.y-50,_tableView.frame.size.width,_tableView.frame.size.height/2)];
-
-//    _tableView.frame
-
-//    NSLog(@"%@",identity);
-    //[self loadObjectsFromDataStore];
-    // Do any additional setup after loading the view from its nib.
+    cellbackground=[UIImage imageNamed:@"conversation_bg.png"];
+    cellsepator=[UIImage imageNamed:@"conversation_line_h.png"];
+    avatarframe=[UIImage imageNamed:@"conversation_portrait_frame.png"];
+    _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
+    _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
 }
 
 - (void)viewDidUnload
@@ -84,6 +82,9 @@
 - (void)dealloc {
     //	[_tableView release];
 	[_posts release];
+    [cellbackground release];
+    [cellsepator release];
+    [avatarframe release];
     [super dealloc];
 }
 //- (void)viewWillAppear:(BOOL)animated 
@@ -207,14 +208,12 @@
     CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN_LEFT+CELL_CONTENT_MARGIN_RIGHT), 20000.0f);
     CGSize size = [post.content sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
     CGFloat height = MAX(size.height, 20.0);
-//    NSLog(@"height: %f",height );
     cell.content=post.content;
     cell.text_height=height;
-    
     cell.time=[Util formattedDateRelativeToNow:post.created_at];
-    
-//    NSLog(@"post.post.time:%@",post_time);
-    
+    cell.background=cellbackground;
+    cell.avatarframe=avatarframe;
+    cell.separator=cellsepator;
     if(post.by_identity.avatar_filename!=nil) {
         dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
         dispatch_async(imgQueue, ^{
@@ -227,12 +226,6 @@
         });
         dispatch_release(imgQueue);        
     }    
-//    + (NSString *) formattedLongDateRelativeToNow:(NSString*)datestr
-//    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-//    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-//    NSString *dateString = [dateFormatter stringFromDate:post.created_at];
-//    [dateFormatter release];
-//    cell.time=[Util formattedLongDateRelativeToNow:dateString];
 	return cell;
 }
 
