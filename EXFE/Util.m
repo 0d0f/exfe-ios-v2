@@ -109,7 +109,7 @@
     if(![crosstime.begin_at.date isEqualToString:@""])
     {
         NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
-        [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];//[self getTimeZoneWithCrossTime:crosstime]];
+        [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSDate *begin_at_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ 00:00:00",crosstime.begin_at.date]];
         NSDate *begin_at_date_time=[dateformat dateFromString:[NSString stringWithFormat:@"%@ %@",crosstime.begin_at.date,crosstime.begin_at.time]];
@@ -144,8 +144,6 @@
 }
 
 + (NSDictionary*) crossTimeToString:(CrossTime*)crosstime{
-    
-    
     NSMutableDictionary *result=[[[NSMutableDictionary alloc]initWithCapacity:2] autorelease];
     if(crosstime==nil){
         [result setObject:@"" forKey:@"date_v2"];
@@ -171,13 +169,13 @@
     BOOL is_same_timezone=false;
     if([cross_timezone isEqualToString:localTimezone])
         is_same_timezone=true;
-    [result setObject:@"" forKey:@"relative"];
+//    [result setObject:@"" forKey:@"relative"];
 
-    if(![crosstime.begin_at.date isEqualToString:@""] && ![crosstime.begin_at.timezone isEqualToString:@""])
-    {
-        NSString *relative=[self formattedLongDateRelativeToNow:[crosstime.begin_at.date stringByAppendingFormat:@" %@ %@",crosstime.begin_at.time,[[crosstime.begin_at.timezone substringToIndex:3] stringByAppendingString:[crosstime.begin_at.timezone substringWithRange:NSMakeRange(4,2)]]]];
-        [result setObject:relative forKey:@"relative"];
-    }
+//    if(![crosstime.begin_at.date isEqualToString:@""] && ![crosstime.begin_at.timezone isEqualToString:@""])
+//    {
+//        NSString *relative=[self formattedLongDateRelativeToNow:[crosstime.begin_at.date stringByAppendingFormat:@" %@ %@",crosstime.begin_at.time,[[crosstime.begin_at.timezone substringToIndex:3] stringByAppendingString:[crosstime.begin_at.timezone substringWithRange:NSMakeRange(4,2)]]]];
+//        [result setObject:relative forKey:@"relative"];
+//    }
     [result setObject:[self formattedShortDate:crosstime] forKey:@"short"];
 
     if( [crosstime.outputformat intValue]==1) {
@@ -557,6 +555,92 @@
     if(crosstime.begin_at.date)
         return [self EXRelative:crosstime];
     return @"Sometime";
+}
++ (NSString*) getTimeDesc:(CrossTime*)crosstime{
+    NSString *timedesc=@"";
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    [format setLocale:locale];
+    [format setDateFormat:@"zzz"];
+    NSString *localTimezone = [format stringFromDate:[NSDate date]];
+    localTimezone=[localTimezone substringFromIndex:3];
+    [format setDateFormat:@"yyyy"];
+    NSString *localYear = [format stringFromDate:[NSDate date]];
+    [format release];
+    
+    NSString* cross_timezone=@"";
+    if(crosstime.begin_at.timezone.length>=6 )
+        cross_timezone=[crosstime.begin_at.timezone substringToIndex:6];
+    BOOL is_same_timezone=false;
+    if([cross_timezone isEqualToString:localTimezone])
+        is_same_timezone=true;
+    
+    if( [crosstime.outputformat intValue]==1) { //use origin
+        timedesc=[timedesc stringByAppendingString:crosstime.origin];
+        if(is_same_timezone == false)
+            timedesc=[timedesc stringByAppendingString:crosstime.begin_at.timezone];
+    }
+    else {
+        NSString *crosstime_date=crosstime.begin_at.date;
+        NSString *crosstime_time=crosstime.begin_at.time;     
+        NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
+        [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        [dateformat setDateFormat:@"HH:mm:ss"];
+        NSString *cross_time_server=crosstime.begin_at.time;
+        if(![crosstime.begin_at.date isEqualToString:@""] && ![crosstime.begin_at.time isEqualToString:@""]) {
+            cross_time_server = [crosstime.begin_at.date stringByAppendingFormat:@" %@",crosstime.begin_at.time];
+            [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        }
+        else  if(![crosstime.begin_at.date isEqualToString:@""]) {
+            cross_time_server = crosstime.begin_at.date;
+            [dateformat setDateFormat:@"yyyy-MM-dd"];
+        }
+        NSDate *begin_at_date=[dateformat dateFromString:cross_time_server];
+        if(begin_at_date!=nil)
+        {
+            NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
+            if(![crosstime.begin_at.time isEqualToString:@""]){
+                [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
+                [dateformat_to setDateFormat:@"h:mm a"];
+                crosstime_time=[dateformat_to stringFromDate:begin_at_date];
+            }
+            else
+                crosstime_time=@"";
+            
+            [dateformat_to setDateFormat:@"yyyy-MM-dd"];
+            crosstime_date=[dateformat_to stringFromDate:begin_at_date];
+            [dateformat_to release];
+        }
+        [dateformat release];
+        
+        if([crosstime_date length]>=5 && [localYear isEqualToString:[crosstime_date substringToIndex:4]])
+            crosstime_date=[crosstime_date substringFromIndex:5];
+        
+        NSString *timestr=@"";
+        NSString *datestr=@"";
+//        Time_word (at) Time (Timezone) Date_word (on) Date
+        if(![crosstime.begin_at.time_word isEqualToString:@""] && ![crosstime.begin_at.time isEqualToString:@""])
+            timestr=[NSString stringWithFormat:@"%@ at %@",crosstime.begin_at.time_word,crosstime_time];
+        else if([crosstime.begin_at.time_word isEqualToString:@""])
+            timestr=crosstime_time;
+        else if([crosstime.begin_at.time isEqualToString:@""])
+            timestr=crosstime.begin_at.time;
+        if(is_same_timezone == false)
+            timestr=[timestr stringByAppendingFormat:@" %@",crosstime.begin_at.timezone];
+            
+        if(![crosstime.begin_at.date_word isEqualToString:@""] && ![crosstime.begin_at.date isEqualToString:@""])
+            datestr=[datestr stringByAppendingFormat:@"%@ on %@",crosstime.begin_at.date_word,crosstime_date];
+        else if([crosstime.begin_at.date_word isEqualToString:@""])
+            datestr=crosstime_date;
+        else if([crosstime.begin_at.date isEqualToString:@""])
+            datestr=crosstime.begin_at.date;
+        
+        if([timestr isEqualToString:@""])
+            timedesc=datestr;
+        else
+            timedesc=[timestr stringByAppendingFormat:@" %@",datestr];
+    }
+    return timedesc;
 }
 + (NSString*) EXRelative:(CrossTime*)crosstime{
 

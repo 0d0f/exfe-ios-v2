@@ -485,9 +485,9 @@
 }
 
 - (void) setDateTime:(CrossTime*)crosstime{
-    NSDictionary *humanreadable_date=[Util crossTimeToStringSimple:crosstime];
+   // NSDictionary *humanreadable_date=[Util crossTimeToStringSimple:crosstime];
     timetitle.text=[Util getTimeTitle:crosstime];
-    timedesc.text=[humanreadable_date objectForKey:@"timedesc"];
+    timedesc.text=[Util getTimeDesc:crosstime];
     datetime=crosstime;
     if(viewmode==NO)
         [self reArrangeViews];

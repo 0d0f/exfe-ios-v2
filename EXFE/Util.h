@@ -37,6 +37,7 @@
 + (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime;
 + (NSString*) EXRelative:(CrossTime*)crosstime;
 + (NSString*) getTimeTitle:(CrossTime*)crosstime;
++ (NSString*) getTimeDesc:(CrossTime*)crosstime;
 + (NSDate*) beginningOfWeek:(NSDate*)date;
 @end
 
