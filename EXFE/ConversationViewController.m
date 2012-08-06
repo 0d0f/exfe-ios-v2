@@ -196,7 +196,7 @@
 
 }
 - (CGSize)textWidthForHeight:(CGFloat)inHeight withAttributedString:(NSAttributedString *)attributedString {
-    CTLineRef line = CTLineCreateWithAttributedString((CFAttributedStringRef) attributedString);
+//    CTLineRef line = CTLineCreateWithAttributedString((CFAttributedStringRef) attributedString);
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef) attributedString);
     int textLength = [attributedString length];
     CFRange range;
@@ -206,9 +206,6 @@
     
     //  checking frame sizes
     CGSize coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, textLength), nil, constraint, &range); 
-
-    
-    
 //    CGFloat ascent;
 //    CGFloat descent;
 //    CGFloat width = CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
@@ -277,21 +274,32 @@
                     [_tableView.layer addSublayer:timetextlayer];
 
                 }
-                NSString *timestring=@"";
+//                NSString *timestring=@"";
                 int textheight=14;
+                NSMutableAttributedString *timeattribstring;
+                
+                
                 if(showTimeMode==0)
-                    timestring=[Util formattedDateRelativeToNow:post.created_at];
+                {
+                    NSString *timestring=[Util formattedDateRelativeToNow:post.created_at];
+                    timeattribstring=[[NSMutableAttributedString alloc] initWithString:timestring];
+                    [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:10] range:NSMakeRange(0,[timestring length])];
+                }
                 else if(showTimeMode==1)
                 {
                     NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
                     [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
-                    [dateformat_to setDateFormat:@"ccc, MMM d \n h:mm a"];
-                    timestring=[dateformat_to stringFromDate:post.created_at];
+                    [dateformat_to setDateFormat:@"ccc, MMM d"];
+                    NSString *datestring=[dateformat_to stringFromDate:post.created_at];
+                    [dateformat_to setDateFormat:@"h:mm a"];
+                    NSString *timestring=[dateformat_to stringFromDate:post.created_at];
+                    
                     [dateformat_to release];
+                    timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",datestring,timestring]];
+                    [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:10] range:NSMakeRange(0,[datestring length])];
+                    [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:9] range:NSMakeRange([datestring length]+1,[timestring length])];
                     textheight=28;
                 }
-
-                NSAttributedString *timeattribstring=[[NSAttributedString alloc] initWithString:timestring attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"HelveticaNeue" size:10],NSFontAttributeName, nil]];
                 CGSize timesize=[self textWidthForHeight:textheight withAttributedString:timeattribstring];
                 [CATransaction begin];
                 [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
