@@ -398,40 +398,39 @@
     }// else 
     
     if (delta < 1 * MINUTE) {
-        //        relativeString = (components.second == 1) ? @"One second ago" : [NSString stringWithFormat:@"%d seconds ago",components.second];
-        relativeString =[NSString stringWithFormat:@"%ds",components.second];
+        relativeString = (components.second == 1) ? @"One second ago" : [NSString stringWithFormat:@"%d seconds ago",components.second];
+//        relativeString =[NSString stringWithFormat:@"%ds",components.second];
         
     } else if (delta < 2 * MINUTE) {
-        //        relativeString =  @"a minute ago";
-        relativeString =  @"1m";
+        relativeString =  @"a minute ago";
+//        relativeString =  @"1m";
         
     } else if (delta < 45 * MINUTE) {
-        relativeString = [NSString stringWithFormat:@"%dm",components.minute];
+        relativeString = [NSString stringWithFormat:@"%d minutes ago",components.minute];
         
     } else if (delta < 90 * MINUTE) {
-        //        relativeString = @"an hour ago";
-        relativeString = @"1h";
+        relativeString = @"an hour ago";
+//        relativeString = @"1h";
         
     } else if (delta < 24 * HOUR) {
-        relativeString = [NSString stringWithFormat:@"%dh",components.hour];
+        relativeString = [NSString stringWithFormat:@"%d hours ago",components.hour];
         
     } else if (delta < 48 * HOUR) {
-        //        relativeString = @"yesterday";
-        relativeString = @"1d";
+        relativeString = @"yesterday";
+//        relativeString = @"1d";
         
     } else if (delta < 30 * DAY) {
-        //        relativeString = [NSString stringWithFormat:@"%d days ago",components.day];
-        relativeString = [NSString stringWithFormat:@"%dd",components.day];
+        relativeString = [NSString stringWithFormat:@"%d days ago",components.day];
+//        relativeString = [NSString stringWithFormat:@"%dd",components.day];
         
     } else if (delta < 12 * MONTH) {
-        //        relativeString = (components.month <= 1) ? @"one month ago" : [NSString stringWithFormat:@"%d months ago",components.month];
-        relativeString = [NSString stringWithFormat:@"%dm",components.month];
+        relativeString = (components.month <= 1) ? @"one month ago" : [NSString stringWithFormat:@"%d months ago",components.month];
+//        relativeString = [NSString stringWithFormat:@"%dm",components.month];
         
     } else {
-        //        relativeString = (components.year <= 1) ? @"one year ago" : [NSString stringWithFormat:@"%d years ago",components.year];
-        relativeString = [NSString stringWithFormat:@"%dy",components.year];
+        relativeString = (components.year <= 1) ? @"one year ago" : [NSString stringWithFormat:@"%d years ago",components.year];
+//        relativeString = [NSString stringWithFormat:@"%dy",components.year];
     }
-    NSLog(@"%@",relativeString);
     return relativeString;  
 }
 + (NSString*) getBackgroundLink:(NSString*)imgname
@@ -552,7 +551,7 @@
             return @"Sometime";
         return crosstime.origin;
     }
-    if(crosstime.begin_at.date)
+    if(crosstime.begin_at.date && ![crosstime.begin_at.date isEqualToString:@""])
         return [self EXRelative:crosstime];
     return @"Sometime";
 }
@@ -641,6 +640,9 @@
             timedesc=[timestr stringByAppendingFormat:@" %@",datestr];
     }
     return timedesc;
+}
++ (NSString*) EXRelativeFromDate:(NSDate*)date{
+
 }
 + (NSString*) EXRelative:(CrossTime*)crosstime{
 

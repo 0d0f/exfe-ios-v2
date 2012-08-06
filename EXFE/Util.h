@@ -35,6 +35,8 @@
 + (UIImage *)scaleImage:(UIImage*)image toResolution:(int)resolution;
 + (NSString*) findProvider:(NSString*)external_id;
 + (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime;
+
++ (NSString*) EXRelativeFromDate:(NSDate*)date;
 + (NSString*) EXRelative:(CrossTime*)crosstime;
 + (NSString*) getTimeTitle:(CrossTime*)crosstime;
 + (NSString*) getTimeDesc:(CrossTime*)crosstime;

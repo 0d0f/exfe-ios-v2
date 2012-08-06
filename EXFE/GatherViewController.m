@@ -103,6 +103,7 @@
 
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [containcardview addGestureRecognizer:gestureRecognizer];
+    [gestureRecognizer release];
     
 //    [self setExfeeNum];
     [self.view bringSubviewToFront:toolbar];
@@ -139,6 +140,7 @@
     [containcardview addSubview:placedesc];
 
     crossdescription=[[UITextView alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,width,144)];
+    [crossdescription setFont:[UIFont fontWithName:@"HelveticaNeue" size:13]];
     crossdescription.tag=108;
 
     crossdescbackimg=[[UIView alloc] initWithFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y, crossdescription.frame.size.width, 75)];

@@ -57,8 +57,23 @@
     cellbackground=[UIImage imageNamed:@"conversation_bg.png"];
     cellsepator=[UIImage imageNamed:@"conversation_line_h.png"];
     avatarframe=[UIImage imageNamed:@"conversation_portrait_frame.png"];
+    CGRect _tableviewrect=_tableView.frame;
+    _tableviewrect.size.height-=kDefaultToolbarHeight;
+    [_tableView setFrame:_tableviewrect];
     _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
+
+    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
+    [_tableView addGestureRecognizer:gestureRecognizer];
+    [gestureRecognizer release];
+    istimehidden=YES;
+    showTimeMode=0;
+
+//    floatTime=[[UILabel alloc] initWithFrame:CGRectMake(0, 80, 60, 26)];
+//    floatTime.text=@"label time";
+//    [self.view addSubview:floatTime];
+    
+
 }
 
 - (void)viewDidUnload
@@ -180,6 +195,125 @@
     [inputToolbar hidekeyboard];
 
 }
+- (CGSize)textWidthForHeight:(CGFloat)inHeight withAttributedString:(NSAttributedString *)attributedString {
+    CTLineRef line = CTLineCreateWithAttributedString((CFAttributedStringRef) attributedString);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef) attributedString);
+    int textLength = [attributedString length];
+    CFRange range;
+    CGFloat maxWidth  = 100.0f;
+    CGFloat maxHeight = 10000.0f;
+    CGSize constraint = CGSizeMake(maxWidth, maxHeight);
+    
+    //  checking frame sizes
+    CGSize coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, textLength), nil, constraint, &range); 
+
+    
+    
+//    CGFloat ascent;
+//    CGFloat descent;
+//    CGFloat width = CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
+//    CGFloat height = ascent+descent;
+    return coreTextSize;//CGSizeMake(width, height);
+}
+
+- (void) setShowTime:(BOOL)show{
+    
+}
+- (void) hiddenTime{
+    CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+    fadeoutAnimation.fillMode = kCAFillModeForwards;
+    fadeoutAnimation.duration=0.5;
+    fadeoutAnimation.removedOnCompletion =NO;
+    fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
+    fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
+    [timetextlayer addAnimation:fadeoutAnimation forKey:@"fadeout"];
+    istimehidden=YES;
+
+}
+
+
+- (void)touchesBegan:(UITapGestureRecognizer*)sender{
+
+    
+    CGPoint location = [sender locationInView:self.view];
+//    NSLog(@"touch: %f %f",location.x,location.y);
+    CGRect showTimeRect=[self.view frame];
+    showTimeRect.origin.x=showTimeRect.size.width-60;
+    showTimeRect.size.width=60;
+    if(CGRectContainsPoint(showTimeRect, location))
+    {
+        CGPoint point=_tableView.contentOffset;
+        NSArray *paths = [_tableView indexPathsForVisibleRows];
+        for(NSIndexPath *path in paths){
+            CGRect rect=[_tableView rectForRowAtIndexPath:path];
+            rect.origin.y-=point.y;
+            if(CGRectContainsPoint(rect, location))
+            {
+                if(istimehidden==NO)
+                {
+                    CGRect timetextlayerrect=timetextlayer.frame;
+                    timetextlayerrect.origin.y-=point.y;
+                    if(CGRectContainsPoint(timetextlayerrect, location))
+                    {
+                        showTimeMode+=1;
+                        if(showTimeMode>1)
+                            showTimeMode=0;
+                    }
+                }
+                else{
+                   showTimeMode=0; 
+                }
+                    
+                istimehidden=NO;
+//                showTimeMode=0;
+                Post *post=[_posts objectAtIndex:path.row];
+                if(post && !timetextlayer){
+                    timetextlayer=[CATextLayer layer];
+                    timetextlayer.contentsScale=[[UIScreen mainScreen] scale];
+                    timetextlayer.cornerRadius = 2.0;
+                    timetextlayer.backgroundColor=[UIColor yellowColor].CGColor;
+                    [timetextlayer setAlignmentMode:kCAAlignmentCenter];
+
+                    [_tableView.layer addSublayer:timetextlayer];
+
+                }
+                NSString *timestring=@"";
+                int textheight=14;
+                if(showTimeMode==0)
+                    timestring=[Util formattedDateRelativeToNow:post.created_at];
+                else if(showTimeMode==1)
+                {
+                    NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
+                    [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
+                    [dateformat_to setDateFormat:@"ccc, MMM d \n h:mm a"];
+                    timestring=[dateformat_to stringFromDate:post.created_at];
+                    [dateformat_to release];
+                    textheight=28;
+                }
+
+                NSAttributedString *timeattribstring=[[NSAttributedString alloc] initWithString:timestring attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"HelveticaNeue" size:10],NSFontAttributeName, nil]];
+                CGSize timesize=[self textWidthForHeight:textheight withAttributedString:timeattribstring];
+                [CATransaction begin];
+                [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+                [timetextlayer setFrame:CGRectMake(rect.origin.x+rect.size.width-5-(timesize.width+4*2),rect.origin.y+point.y+1,timesize.width+8,timesize.height+2)];
+                [timetextlayer setString:timeattribstring];
+                [CATransaction commit];
+
+                [timeattribstring release];
+                [timetextlayer removeAnimationForKey:@"fadeout"];
+                [NSObject cancelPreviousPerformRequestsWithTarget:self];
+                [self performSelector:@selector(hiddenTime) withObject:nil afterDelay:2];
+
+
+                
+                
+//                [((PostCell*)[_tableView cellForRowAtIndexPath:path]) setRelativetime:crosstime_time];
+//                [((PostCell*)[_tableView cellForRowAtIndexPath:path]) setShowTime:YES];
+            }
+        }
+    }
+}
+
 
 #pragma mark UITableViewDataSource methods
 
@@ -210,10 +344,11 @@
     CGFloat height = MAX(size.height, 20.0);
     cell.content=post.content;
     cell.text_height=height;
-    cell.time=[Util formattedDateRelativeToNow:post.created_at];
+    cell.time=@"";
     cell.background=cellbackground;
     cell.avatarframe=avatarframe;
     cell.separator=cellsepator;
+    [cell setShowTime:NO];
     if(post.by_identity.avatar_filename!=nil) {
         dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
         dispatch_async(imgQueue, ^{
@@ -233,7 +368,7 @@
 {
 //    [inputToolbar setInputEnabled:NO];
     [inputToolbar hidekeyboard];
-//    NSLog(@"111");
+    NSLog(@"select cell");
 }
 - (void) addPost:(NSString*)content{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];

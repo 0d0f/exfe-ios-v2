@@ -12,18 +12,21 @@
     NSString *content;
     UIImage *avatar;
     NSString *time;
+    NSString *relativetime;
     UIImage *background;
     UIImage *separator;
     UIImage *avatarframe;
-    int text_height;
+    float text_height;
+    BOOL showtime;
 }
 @property (nonatomic,retain) NSString* content;
 @property (nonatomic,retain) NSString* time;
+@property (nonatomic,retain) NSString* relativetime;
 @property (nonatomic,retain) UIImage* avatar;
 @property (nonatomic,retain) UIImage* background;
 @property (nonatomic,retain) UIImage* separator;
 @property (nonatomic,retain) UIImage* avatarframe;
-@property int text_height;
+@property float text_height;
 
 #define FONT_SIZE 14.0f
 #define AVATAR_LEFT_MERGIN 15.0f
@@ -35,5 +38,6 @@
 #define CELL_CONTENT_MARGIN_BOTTOM 10.0f
 #define CELL_CONTENT_MARGIN_LEFT 5.0f
 #define CELL_CONTENT_MARGIN_RIGHT 5.0f
-
+- (void) setShowTime:(BOOL)show;
+- (void) hiddenTime;
 @end

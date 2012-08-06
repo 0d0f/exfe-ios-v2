@@ -128,6 +128,8 @@
 		78A98EF91561110C009E0806 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF81561110C009E0806 /* QuartzCore.framework */; };
 		78A98EFB15611113009E0806 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EFA15611113009E0806 /* libxml2.dylib */; };
 		78A98F03156117D8009E0806 /* APICrosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F02156117D8009E0806 /* APICrosses.m */; };
+		78AA793615CFB94C00883025 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78AA793515CFB94C00883025 /* CoreText.framework */; };
+		78AA793915CFCFEB00883025 /* CASmoothFontTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AA793815CFCFEB00883025 /* CASmoothFontTextLayer.m */; };
 		78ADED6B15998D93002B459A /* default_avatar@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6715998D93002B459A /* default_avatar@2x~ipad.png */; };
 		78ADED6C15998D93002B459A /* default_avatar@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6815998D93002B459A /* default_avatar@2x~iphone.png */; };
 		78ADED6D15998D93002B459A /* default_avatar~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6915998D93002B459A /* default_avatar~ipad.png */; };
@@ -425,6 +427,9 @@
 		78A98EFA15611113009E0806 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		78A98F01156117D8009E0806 /* APICrosses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APICrosses.h; sourceTree = "<group>"; };
 		78A98F02156117D8009E0806 /* APICrosses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APICrosses.m; sourceTree = "<group>"; };
+		78AA793515CFB94C00883025 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		78AA793715CFCFEB00883025 /* CASmoothFontTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CASmoothFontTextLayer.h; sourceTree = "<group>"; };
+		78AA793815CFCFEB00883025 /* CASmoothFontTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CASmoothFontTextLayer.m; sourceTree = "<group>"; };
 		78ADED6715998D93002B459A /* default_avatar@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar@2x~ipad.png"; sourceTree = "<group>"; };
 		78ADED6815998D93002B459A /* default_avatar@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar@2x~iphone.png"; sourceTree = "<group>"; };
 		78ADED6915998D93002B459A /* default_avatar~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar~ipad.png"; sourceTree = "<group>"; };
@@ -533,6 +538,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78AA793615CFB94C00883025 /* CoreText.framework in Frameworks */,
 				78F058041599C30200F360F2 /* CoreLocation.framework in Frameworks */,
 				78F058021599B1BE00F360F2 /* MapKit.framework in Frameworks */,
 				789C8D6F159334ED00580624 /* libRestKit.a in Frameworks */,
@@ -767,6 +773,7 @@
 		78A98E8A1560F832009E0806 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				78AA793515CFB94C00883025 /* CoreText.framework */,
 				78F058031599C30200F360F2 /* CoreLocation.framework */,
 				78F058011599B1BD00F360F2 /* MapKit.framework */,
 				78A98EFA15611113009E0806 /* libxml2.dylib */,
@@ -1000,6 +1007,8 @@
 				788312A515738D2600D67103 /* Cell */,
 				78409164156F3AA7006DF115 /* Cross */,
 				782B3CC7156B918B00721150 /* User */,
+				78AA793715CFCFEB00883025 /* CASmoothFontTextLayer.h */,
+				78AA793815CFCFEB00883025 /* CASmoothFontTextLayer.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1302,6 +1311,7 @@
 				78CEBFF015BFE7BE002BCA27 /* ExfeeInputViewController.m in Sources */,
 				78D1F24A15CA5240005894FB /* SORelativeDateTransformer.m in Sources */,
 				7820A0B415CA8DE5008D0BB5 /* Invitation.m in Sources */,
+				78AA793915CFCFEB00883025 /* CASmoothFontTextLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

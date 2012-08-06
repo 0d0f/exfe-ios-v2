@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreText/CoreText.h>
 #import "Identity.h"
 #import <RestKit/RestKit.h>
 #import "UIInputToolbar.h"
 #import "ConversationTableView.h"
 #import "PostCell.h"
 #import <RestKit/RKRequestSerialization.h>
+#import "CASmoothFontTextLayer.h"
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20
@@ -25,10 +27,15 @@
     int exfee_id;
     UIInputToolbar *inputToolbar;
     Identity *identity;
+//    UILabel *floatTime;
     UIImage *cellbackground;
     UIImage *cellsepator;
     UIImage *avatarframe;
+    CATextLayer *timetextlayer;
     NSArray* _posts;
+    BOOL istimehidden;
+    int showTimeMode; //0 relativetime 1 time
+    
 }
 
 @property int exfee_id;
@@ -38,4 +45,9 @@
 -(void) refreshConversation;
 - (void)loadObjectsFromDataStore;
 - (void) addPost:(NSString*)content;
+- (void)touchesBegan:(UITapGestureRecognizer*)sender;
+- (CGSize)textWidthForHeight:(CGFloat)inHeight withAttributedString:(NSAttributedString *)attributedString;
+- (void) setShowTime:(BOOL)show;
+- (void) hiddenTime;
+
 @end
