@@ -32,9 +32,11 @@
     UIImage *cellsepator;
     UIImage *avatarframe;
     CATextLayer *timetextlayer;
+    CATextLayer *floattimetextlayer;
     NSArray* _posts;
     BOOL istimehidden;
     int showTimeMode; //0 relativetime 1 time
+    int topcellPath;
     
 }
 
@@ -49,5 +51,6 @@
 - (CGSize)textWidthForHeight:(CGFloat)inHeight withAttributedString:(NSAttributedString *)attributedString;
 - (void) setShowTime:(BOOL)show;
 - (void) hiddenTime;
+- (void) hiddenTimeNow;
 
 @end

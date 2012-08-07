@@ -68,6 +68,7 @@
     [gestureRecognizer release];
     istimehidden=YES;
     showTimeMode=0;
+    topcellPath=-1;
 
 //    floatTime=[[UILabel alloc] initWithFrame:CGRectMake(0, 80, 60, 26)];
 //    floatTime.text=@"label time";
@@ -227,16 +228,28 @@
     istimehidden=YES;
 
 }
+- (void) hiddenTimeNow{
+    CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+    fadeoutAnimation.fillMode = kCAFillModeForwards;
+    fadeoutAnimation.duration=0.2;
+    fadeoutAnimation.removedOnCompletion =NO;
+    fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
+    fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
+    [timetextlayer addAnimation:fadeoutAnimation forKey:@"fadeout"];
+//    timetextlayer.opacity=0;
+    istimehidden=YES;
+    
+}
 
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
-
-    
     CGPoint location = [sender locationInView:self.view];
 //    NSLog(@"touch: %f %f",location.x,location.y);
     CGRect showTimeRect=[self.view frame];
-    showTimeRect.origin.x=showTimeRect.size.width-60;
-    showTimeRect.size.width=60;
+    
+// TODO: right 60px for touch area
+//    showTimeRect.origin.x=showTimeRect.size.width-60;
+//    showTimeRect.size.width=60;
     if(CGRectContainsPoint(showTimeRect, location))
     {
         CGPoint point=_tableView.contentOffset;
@@ -268,22 +281,21 @@
                     timetextlayer=[CATextLayer layer];
                     timetextlayer.contentsScale=[[UIScreen mainScreen] scale];
                     timetextlayer.cornerRadius = 2.0;
-                    timetextlayer.backgroundColor=[UIColor yellowColor].CGColor;
+                    timetextlayer.backgroundColor=FONT_COLOR_232737.CGColor;
                     [timetextlayer setAlignmentMode:kCAAlignmentCenter];
 
                     [_tableView.layer addSublayer:timetextlayer];
 
                 }
-//                NSString *timestring=@"";
                 int textheight=14;
                 NSMutableAttributedString *timeattribstring;
-                
                 
                 if(showTimeMode==0)
                 {
                     NSString *timestring=[Util formattedDateRelativeToNow:post.created_at];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:timestring];
                     [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:10] range:NSMakeRange(0,[timestring length])];
+                    [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[timestring length])];
                 }
                 else if(showTimeMode==1)
                 {
@@ -297,13 +309,16 @@
                     [dateformat_to release];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",datestring,timestring]];
                     [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:10] range:NSMakeRange(0,[datestring length])];
+                    [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[datestring length])];
+
                     [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:9] range:NSMakeRange([datestring length]+1,[timestring length])];
+                    [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_CCC.CGColor range:NSMakeRange([datestring length]+1,[timestring length])];
                     textheight=28;
                 }
                 CGSize timesize=[self textWidthForHeight:textheight withAttributedString:timeattribstring];
                 [CATransaction begin];
                 [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-                [timetextlayer setFrame:CGRectMake(rect.origin.x+rect.size.width-5-(timesize.width+4*2),rect.origin.y+point.y+1,timesize.width+8,timesize.height+2)];
+                [timetextlayer setFrame:CGRectMake(rect.origin.x+rect.size.width-5-(timesize.width+4*2),rect.origin.y+point.y+5,timesize.width+8,timesize.height+2)];
                 [timetextlayer setString:timeattribstring];
                 [CATransaction commit];
 
@@ -311,17 +326,79 @@
                 [timetextlayer removeAnimationForKey:@"fadeout"];
                 [NSObject cancelPreviousPerformRequestsWithTarget:self];
                 [self performSelector:@selector(hiddenTime) withObject:nil afterDelay:2];
-
-
-                
-                
-//                [((PostCell*)[_tableView cellForRowAtIndexPath:path]) setRelativetime:crosstime_time];
-//                [((PostCell*)[_tableView cellForRowAtIndexPath:path]) setShowTime:YES];
             }
         }
     }
 }
 
+#pragma mark UIScrollView methods
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+    fadeoutAnimation.fillMode = kCAFillModeForwards;
+    fadeoutAnimation.duration=0.5;
+    fadeoutAnimation.removedOnCompletion =NO;
+    fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
+    fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
+    [floattimetextlayer addAnimation:fadeoutAnimation forKey:@"fadeout"];
+
+      NSLog(@"stop");
+}
+//-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+//    NSLog(@"stop");
+//}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGPoint point=_tableView.contentOffset;
+    [inputToolbar hidekeyboard];
+    if(istimehidden==NO)
+    {
+        [timetextlayer removeAnimationForKey:@"fadeout"];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        [self hiddenTimeNow];
+    }
+    if(!floattimetextlayer){
+        floattimetextlayer=[CATextLayer layer];
+        floattimetextlayer.contentsScale=[[UIScreen mainScreen] scale];
+        floattimetextlayer.cornerRadius = 2.0;
+        floattimetextlayer.backgroundColor=FONT_COLOR_232737.CGColor;
+        [floattimetextlayer setAlignmentMode:kCAAlignmentCenter];
+        [self.view.layer addSublayer:floattimetextlayer];
+    }
+
+    NSArray *paths = [_tableView indexPathsForVisibleRows];
+    NSIndexPath *path=(NSIndexPath*)[paths objectAtIndex:0];
+    if(topcellPath!=path.row && point.y>0)
+    {
+        [floattimetextlayer removeAnimationForKey:@"fadeout"];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+
+        Post *post=[_posts objectAtIndex:path.row];
+        NSString *relative=[Util formattedDateRelativeToNow:post.created_at];
+        NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
+        [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
+        [dateformat_to setDateFormat:@"h:mm a MMM d"];
+        NSString *datestring=[dateformat_to stringFromDate:post.created_at];
+        [dateformat_to release];
+
+        NSMutableAttributedString *timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",relative,datestring]];
+
+        [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:10] range:NSMakeRange(0,[relative length])];
+        [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[relative length])];
+
+        [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:9] range:NSMakeRange([relative length]+1,[datestring length])];
+        [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_CCC.CGColor range:NSMakeRange([relative length]+1,[datestring length])];
+
+        CGSize timesize=[self textWidthForHeight:28 withAttributedString:timeattribstring];
+        [CATransaction begin];
+        [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+        [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width-5-(timesize.width+4*2),0,timesize.width+8,timesize.height+2)];
+        [floattimetextlayer setString:timeattribstring];
+        [CATransaction commit];
+        NSLog(@"scroll");
+        topcellPath=path.row;
+    }
+}
 
 #pragma mark UITableViewDataSource methods
 
