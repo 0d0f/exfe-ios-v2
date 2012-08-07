@@ -94,7 +94,7 @@
     
     
     NSString *callback=@"oauth://handleTwitterLogin";
-    NSString *urlstr=[NSString stringWithFormat:@"%@/twitterRedirect?device=iOS&device_callback=%@",EXFE_OAUTH_LINK,callback];
+    NSString *urlstr=[NSString stringWithFormat:@"%@/TwitterAuthenticate?device=iOS&device_callback=%@",EXFE_OAUTH_LINK,callback];
     
 //    NSString *urlstr=[NSString stringWithFormat:@"https://exfe.com/oAuth/twitterRedirect?device=iOS&device_callback=%@",callback];
     firstLoading=YES;

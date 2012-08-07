@@ -76,12 +76,14 @@
 		785FD5891580797F0056590D /* UIInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 785FD5861580797F0056590D /* UIInputToolbar.m */; };
 		785FD590158079970056590D /* buttonbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58A158079970056590D /* buttonbg@2x~iphone.png */; };
 		785FD591158079970056590D /* buttonbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58B158079970056590D /* buttonbg~iphone.png */; };
-		785FD592158079970056590D /* textbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58C158079970056590D /* textbg@2x~iphone.png */; };
-		785FD593158079970056590D /* textbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58D158079970056590D /* textbg~iphone.png */; };
+		785FD592158079970056590D /* textbg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58C158079970056590D /* textbg@2x.png */; };
+		785FD593158079970056590D /* textbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58D158079970056590D /* textbg.png */; };
 		785FD594158079970056590D /* toolbarbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58E158079970056590D /* toolbarbg@2x~iphone.png */; };
 		785FD595158079970056590D /* toolbarbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58F158079970056590D /* toolbarbg~iphone.png */; };
 		78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78615B3B15788BCD003CF68A /* ABTableViewCell.m */; };
 		78615B401578CC22003CF68A /* ConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7840917815732A91006DF115 /* ConversationViewController.xib */; };
+		786595BF15D120C800F85879 /* conversation_portrait_frame.png in Resources */ = {isa = PBXBuildFile; fileRef = 786595BD15D120C800F85879 /* conversation_portrait_frame.png */; };
+		786595C015D120C800F85879 /* conversation_portrait_frame@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 786595BE15D120C800F85879 /* conversation_portrait_frame@2x.png */; };
 		7865BAAC15C7DCA7000F7009 /* toolbar_mates_minus.png in Resources */ = {isa = PBXBuildFile; fileRef = 7865BAA815C7DCA7000F7009 /* toolbar_mates_minus.png */; };
 		7865BAAD15C7DCA7000F7009 /* toolbar_mates_minus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7865BAA915C7DCA7000F7009 /* toolbar_mates_minus@2x.png */; };
 		7865BAAE15C7DCA7000F7009 /* toolbar_mates_plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 7865BAAA15C7DCA7000F7009 /* toolbar_mates_plus.png */; };
@@ -129,7 +131,6 @@
 		78A98EFB15611113009E0806 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EFA15611113009E0806 /* libxml2.dylib */; };
 		78A98F03156117D8009E0806 /* APICrosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F02156117D8009E0806 /* APICrosses.m */; };
 		78AA793615CFB94C00883025 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78AA793515CFB94C00883025 /* CoreText.framework */; };
-		78AA793915CFCFEB00883025 /* CASmoothFontTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AA793815CFCFEB00883025 /* CASmoothFontTextLayer.m */; };
 		78ADED6B15998D93002B459A /* default_avatar@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6715998D93002B459A /* default_avatar@2x~ipad.png */; };
 		78ADED6C15998D93002B459A /* default_avatar@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6815998D93002B459A /* default_avatar@2x~iphone.png */; };
 		78ADED6D15998D93002B459A /* default_avatar~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6915998D93002B459A /* default_avatar~ipad.png */; };
@@ -190,8 +191,6 @@
 		78D0A602158CFE1900401BCA /* OAuthLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */; };
 		78D1F24A15CA5240005894FB /* SORelativeDateTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D1F24815CA51C6005894FB /* SORelativeDateTransformer.m */; };
 		78D1F24B15CA5243005894FB /* SORelativeDateTransformer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 78D1F24615CA51C6005894FB /* SORelativeDateTransformer.bundle */; };
-		78D7804215CC55B000DD37C8 /* conversation_portrait_frame.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D7804015CC55B000DD37C8 /* conversation_portrait_frame.png */; };
-		78D7804315CC55B000DD37C8 /* conversation_portrait_frame@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D7804115CC55B000DD37C8 /* conversation_portrait_frame@2x.png */; };
 		78D7F4E415B03EE60028DAB2 /* bg_gradient@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D7F4E315B03EE60028DAB2 /* bg_gradient@2x.png */; };
 		78DABCE9158B236C004447B5 /* Meta.m in Sources */ = {isa = PBXBuildFile; fileRef = 78DABCE8158B236C004447B5 /* Meta.m */; };
 		78DD0E2C15C65664005A10EB /* tag-host.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DD0E2A15C65664005A10EB /* tag-host.png */; };
@@ -215,6 +214,7 @@
 		78F058021599B1BE00F360F2 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F058011599B1BD00F360F2 /* MapKit.framework */; };
 		78F058041599C30200F360F2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F058031599C30200F360F2 /* CoreLocation.framework */; };
 		78F0580B159B708F00F360F2 /* APIPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F0580A159B708F00F360F2 /* APIPlace.m */; };
+		78FB79E815D0ECFC00DF9D73 /* ConversationInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB79E715D0ECFC00DF9D73 /* ConversationInputAccessoryView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -362,12 +362,14 @@
 		785FD5861580797F0056590D /* UIInputToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInputToolbar.m; sourceTree = "<group>"; };
 		785FD58A158079970056590D /* buttonbg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buttonbg@2x~iphone.png"; sourceTree = "<group>"; };
 		785FD58B158079970056590D /* buttonbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buttonbg~iphone.png"; sourceTree = "<group>"; };
-		785FD58C158079970056590D /* textbg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbg@2x~iphone.png"; sourceTree = "<group>"; };
-		785FD58D158079970056590D /* textbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbg~iphone.png"; sourceTree = "<group>"; };
+		785FD58C158079970056590D /* textbg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbg@2x.png"; sourceTree = "<group>"; };
+		785FD58D158079970056590D /* textbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = textbg.png; sourceTree = "<group>"; };
 		785FD58E158079970056590D /* toolbarbg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbarbg@2x~iphone.png"; sourceTree = "<group>"; };
 		785FD58F158079970056590D /* toolbarbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbarbg~iphone.png"; sourceTree = "<group>"; };
 		78615B3A15788BCC003CF68A /* ABTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABTableViewCell.h; sourceTree = "<group>"; };
 		78615B3B15788BCD003CF68A /* ABTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABTableViewCell.m; sourceTree = "<group>"; };
+		786595BD15D120C800F85879 /* conversation_portrait_frame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = conversation_portrait_frame.png; path = "../../../../Dropbox/0d0f/Product/1x 产品设计/m1B UI Design/ iOS slicing/conversation_portrait_frame.png"; sourceTree = "<group>"; };
+		786595BE15D120C800F85879 /* conversation_portrait_frame@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "conversation_portrait_frame@2x.png"; path = "../../../../Dropbox/0d0f/Product/1x 产品设计/m1B UI Design/ iOS slicing/conversation_portrait_frame@2x.png"; sourceTree = "<group>"; };
 		7865BAA815C7DCA7000F7009 /* toolbar_mates_minus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = toolbar_mates_minus.png; sourceTree = "<group>"; };
 		7865BAA915C7DCA7000F7009 /* toolbar_mates_minus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbar_mates_minus@2x.png"; sourceTree = "<group>"; };
 		7865BAAA15C7DCA7000F7009 /* toolbar_mates_plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = toolbar_mates_plus.png; sourceTree = "<group>"; };
@@ -428,8 +430,6 @@
 		78A98F01156117D8009E0806 /* APICrosses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APICrosses.h; sourceTree = "<group>"; };
 		78A98F02156117D8009E0806 /* APICrosses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APICrosses.m; sourceTree = "<group>"; };
 		78AA793515CFB94C00883025 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		78AA793715CFCFEB00883025 /* CASmoothFontTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CASmoothFontTextLayer.h; sourceTree = "<group>"; };
-		78AA793815CFCFEB00883025 /* CASmoothFontTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CASmoothFontTextLayer.m; sourceTree = "<group>"; };
 		78ADED6715998D93002B459A /* default_avatar@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar@2x~ipad.png"; sourceTree = "<group>"; };
 		78ADED6815998D93002B459A /* default_avatar@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar@2x~iphone.png"; sourceTree = "<group>"; };
 		78ADED6915998D93002B459A /* default_avatar~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar~ipad.png"; sourceTree = "<group>"; };
@@ -499,8 +499,6 @@
 		78D1F24615CA51C6005894FB /* SORelativeDateTransformer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SORelativeDateTransformer.bundle; sourceTree = "<group>"; };
 		78D1F24715CA51C6005894FB /* SORelativeDateTransformer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SORelativeDateTransformer.h; sourceTree = "<group>"; };
 		78D1F24815CA51C6005894FB /* SORelativeDateTransformer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SORelativeDateTransformer.m; sourceTree = "<group>"; };
-		78D7804015CC55B000DD37C8 /* conversation_portrait_frame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = conversation_portrait_frame.png; sourceTree = "<group>"; };
-		78D7804115CC55B000DD37C8 /* conversation_portrait_frame@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "conversation_portrait_frame@2x.png"; sourceTree = "<group>"; };
 		78D7F4E315B03EE60028DAB2 /* bg_gradient@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_gradient@2x.png"; sourceTree = "<group>"; };
 		78DABCE7158B236C004447B5 /* Meta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Meta.h; sourceTree = "<group>"; };
 		78DABCE8158B236C004447B5 /* Meta.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Meta.m; sourceTree = "<group>"; };
@@ -531,6 +529,8 @@
 		78F058031599C30200F360F2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		78F05809159B708F00F360F2 /* APIPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIPlace.h; sourceTree = "<group>"; };
 		78F0580A159B708F00F360F2 /* APIPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIPlace.m; sourceTree = "<group>"; };
+		78FB79E615D0ECFC00DF9D73 /* ConversationInputAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationInputAccessoryView.h; sourceTree = "<group>"; };
+		78FB79E715D0ECFC00DF9D73 /* ConversationInputAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationInputAccessoryView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -658,8 +658,8 @@
 				782B3CCF156B948600721150 /* twitter~iphone.png */,
 				785FD58A158079970056590D /* buttonbg@2x~iphone.png */,
 				785FD58B158079970056590D /* buttonbg~iphone.png */,
-				785FD58C158079970056590D /* textbg@2x~iphone.png */,
-				785FD58D158079970056590D /* textbg~iphone.png */,
+				785FD58D158079970056590D /* textbg.png */,
+				785FD58C158079970056590D /* textbg@2x.png */,
 				785FD58E158079970056590D /* toolbarbg@2x~iphone.png */,
 				785FD58F158079970056590D /* toolbarbg~iphone.png */,
 				785F6F6615820CA500BF8EA0 /* navbar_setting@2x~iphone.png */,
@@ -716,7 +716,6 @@
 				785FD5831580797F0056590D /* UIExpandingTextViewInternal.h */,
 				785FD5841580797F0056590D /* UIExpandingTextViewInternal.m */,
 				785FD5851580797F0056590D /* UIInputToolbar.h */,
-				785FD5861580797F0056590D /* UIInputToolbar.m */,
 			);
 			name = UIInputToolbar;
 			sourceTree = "<group>";
@@ -730,8 +729,8 @@
 				78803E3C15CC2C620078DFE4 /* conversation_line_h@2x.png */,
 				78803E3D15CC2C620078DFE4 /* conversation_line_v.png */,
 				78803E3E15CC2C620078DFE4 /* conversation_line_v@2x.png */,
-				78D7804015CC55B000DD37C8 /* conversation_portrait_frame.png */,
-				78D7804115CC55B000DD37C8 /* conversation_portrait_frame@2x.png */,
+				786595BD15D120C800F85879 /* conversation_portrait_frame.png */,
+				786595BE15D120C800F85879 /* conversation_portrait_frame@2x.png */,
 			);
 			name = conversation;
 			sourceTree = "<group>";
@@ -1002,13 +1001,14 @@
 		78E8873E156244BD0026D197 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				785FD5861580797F0056590D /* UIInputToolbar.m */,
 				78C25AB7159D81ED002AED1E /* CustomView */,
 				78E4EE571581CFF000AE6211 /* View */,
 				788312A515738D2600D67103 /* Cell */,
 				78409164156F3AA7006DF115 /* Cross */,
 				782B3CC7156B918B00721150 /* User */,
-				78AA793715CFCFEB00883025 /* CASmoothFontTextLayer.h */,
-				78AA793815CFCFEB00883025 /* CASmoothFontTextLayer.m */,
+				78FB79E615D0ECFC00DF9D73 /* ConversationInputAccessoryView.h */,
+				78FB79E715D0ECFC00DF9D73 /* ConversationInputAccessoryView.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1126,8 +1126,8 @@
 				78615B401578CC22003CF68A /* ConversationViewController.xib in Resources */,
 				785FD590158079970056590D /* buttonbg@2x~iphone.png in Resources */,
 				785FD591158079970056590D /* buttonbg~iphone.png in Resources */,
-				785FD592158079970056590D /* textbg@2x~iphone.png in Resources */,
-				785FD593158079970056590D /* textbg~iphone.png in Resources */,
+				785FD592158079970056590D /* textbg@2x.png in Resources */,
+				785FD593158079970056590D /* textbg.png in Resources */,
 				785FD594158079970056590D /* toolbarbg@2x~iphone.png in Resources */,
 				785FD595158079970056590D /* toolbarbg~iphone.png in Resources */,
 				785F6F6515820A0000BF8EA0 /* ProfileViewController.xib in Resources */,
@@ -1247,8 +1247,8 @@
 				78803E4015CC2C620078DFE4 /* conversation_line_h@2x.png in Resources */,
 				78803E4115CC2C620078DFE4 /* conversation_line_v.png in Resources */,
 				78803E4215CC2C620078DFE4 /* conversation_line_v@2x.png in Resources */,
-				78D7804215CC55B000DD37C8 /* conversation_portrait_frame.png in Resources */,
-				78D7804315CC55B000DD37C8 /* conversation_portrait_frame@2x.png in Resources */,
+				786595BF15D120C800F85879 /* conversation_portrait_frame.png in Resources */,
+				786595C015D120C800F85879 /* conversation_portrait_frame@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1311,7 +1311,7 @@
 				78CEBFF015BFE7BE002BCA27 /* ExfeeInputViewController.m in Sources */,
 				78D1F24A15CA5240005894FB /* SORelativeDateTransformer.m in Sources */,
 				7820A0B415CA8DE5008D0BB5 /* Invitation.m in Sources */,
-				78AA793915CFCFEB00883025 /* CASmoothFontTextLayer.m in Sources */,
+				78FB79E815D0ECFC00DF9D73 /* ConversationInputAccessoryView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

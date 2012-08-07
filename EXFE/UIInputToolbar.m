@@ -48,29 +48,29 @@
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
     self.tintColor = [UIColor lightGrayColor];
     
-    /* Create custom send button*/
-    UIImage *buttonImage = [UIImage imageNamed:@"buttonbg.png"];
-    buttonImage          = [buttonImage stretchableImageWithLeftCapWidth:floorf(buttonImage.size.width/2) topCapHeight:floorf(buttonImage.size.height/2)];
-    
-    UIButton *button               = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.titleLabel.font         = [UIFont boldSystemFontOfSize:15.0f];
-    button.titleLabel.shadowOffset = CGSizeMake(0, -1);
-    button.titleEdgeInsets         = UIEdgeInsetsMake(0, 2, 0, 2);
-    button.contentStretch          = CGRectMake(0.5, 0.5, 0, 0);
-    button.contentMode             = UIViewContentModeScaleToFill;
-    
-    [button setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    [button setTitle:buttonLabel forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(inputButtonPressed) forControlEvents:UIControlEventTouchDown];
-    [button sizeToFit];
-    
-    self.inputButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-    self.inputButton.customView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    /* Disable button initially */
-    self.inputButton.enabled = NO;
+//    /* Create custom send button*/
+//    UIImage *buttonImage = [UIImage imageNamed:@"buttonbg.png"];
+//    buttonImage          = [buttonImage stretchableImageWithLeftCapWidth:floorf(buttonImage.size.width/2) topCapHeight:floorf(buttonImage.size.height/2)];
+//    
+//    UIButton *button               = [UIButton buttonWithType:UIButtonTypeCustom];
+//    button.titleLabel.font         = [UIFont boldSystemFontOfSize:15.0f];
+//    button.titleLabel.shadowOffset = CGSizeMake(0, -1);
+//    button.titleEdgeInsets         = UIEdgeInsetsMake(0, 2, 0, 2);
+//    button.contentStretch          = CGRectMake(0.5, 0.5, 0, 0);
+//    button.contentMode             = UIViewContentModeScaleToFill;
+//    
+//    [button setBackgroundImage:buttonImage forState:UIControlStateNormal];
+//    [button setTitle:buttonLabel forState:UIControlStateNormal];
+//    [button addTarget:self action:@selector(inputButtonPressed) forControlEvents:UIControlEventTouchDown];
+//    [button sizeToFit];
+//    
+//    self.inputButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+//    self.inputButton.customView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+//    /* Disable button initially */
+//    self.inputButton.enabled = NO;
 
     /* Create UIExpandingTextView input */
-    self.textView = [[UIExpandingTextView alloc] initWithFrame:CGRectMake(7, 7, 236, 26)];
+    self.textView = [[UIExpandingTextView alloc] initWithFrame:CGRectMake(10, 7, 300, 26)];
     self.textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(4.0f, 0.0f, 10.0f, 0.0f);
     self.textView.delegate = self;
     [self addSubview:self.textView];

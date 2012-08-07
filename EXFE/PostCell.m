@@ -80,7 +80,38 @@
 	[contentView setFrame:b];
     [super layoutSubviews];
 }
+- (void) drawString:(CGContextRef) context  rect:(CGRect)r{
+    CGContextSaveGState(context);
 
+    CGFloat lineheight = 20;
+    CGFloat linespacing = 5;
+    CTParagraphStyleSetting setting[2] = {
+        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespacing},
+        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &lineheight}
+    };
+    
+    CTParagraphStyleRef style = CTParagraphStyleCreate(setting, 2);
+    NSMutableAttributedString *attributedString=[[NSMutableAttributedString alloc] initWithString:content];
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:14] range:NSMakeRange(0,[content length])];
+    [attributedString addAttribute:(id)kCTParagraphStyleAttributeName value:(id)style range:NSMakeRange(0,[content length])];
+    
+    CGContextSetTextMatrix(context, CGAffineTransformIdentity);
+    CGContextTranslateCTM(context, 0, self.bounds.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddRect(path, NULL, r);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedString);
+    CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [attributedString length]), path, NULL);
+    CFRelease(framesetter);
+    CFRelease(path);
+    
+    CTFrameDraw(theFrame, context);
+    CFRelease(theFrame);
+    [attributedString release];
+    CGContextRestoreGState(context);
+    
+}
 - (void)drawContentView:(CGRect)r{
     CGImageRef background_ref = CGImageRetain(background.CGImage);
     CGRect image_rect;
@@ -92,23 +123,27 @@
     CGContextDrawTiledImage(context, CGRectMake(0, 0, background.size.width, background.size.height), background_ref);
     CGImageRelease(background_ref);
     
-    CGImageRef separator_ref = CGImageRetain(separator.CGImage);
-    CGContextClipToRect(context, CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH, 0, r.size.width, 2));
-    CGContextTranslateCTM(context, AVATAR_LEFT_MERGIN+AVATAR_WIDTH, separator.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
-    CGContextDrawTiledImage(context, CGRectMake(0, 0, 1, 2), separator_ref);
-    CGImageRelease(separator_ref);
-    CGContextRestoreGState(context);
+    if(separator)
+    {
+        CGImageRef separator_ref = CGImageRetain(separator.CGImage);
+        CGContextClipToRect(context, CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH, 0, r.size.width, 2));
+        CGContextTranslateCTM(context, AVATAR_LEFT_MERGIN+AVATAR_WIDTH, separator.size.height);
+        CGContextScaleCTM(context, 1.0, -1.0);
+        CGContextDrawTiledImage(context, CGRectMake(0, 0, 1, 2), separator_ref);
+        CGImageRelease(separator_ref);
+        CGContextRestoreGState(context);
+    }
     
 
     [[UIColor whiteColor] set];
-    [content drawInRect:CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH+CELL_CONTENT_MARGIN_LEFT, CELL_CONTENT_MARGIN_TOP, CELL_CONTENT_WIDTH,text_height ) withFont:[UIFont fontWithName:@"HelveticaNeue" size:FONT_SIZE]];
+//    [content drawInRect:CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH+CELL_CONTENT_MARGIN_LEFT, CELL_CONTENT_MARGIN_TOP, CELL_CONTENT_WIDTH,r.size.height-CELL_CONTENT_MARGIN_TOP-CELL_CONTENT_MARGIN_BOTTOM) withFont:[UIFont fontWithName:@"HelveticaNeue" size:FONT_SIZE]];
+    [self drawString:context rect:CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH+CELL_CONTENT_MARGIN_LEFT, 0, CELL_CONTENT_WIDTH,r.size.height)];
     
     if(avatar!=nil && ![avatar isKindOfClass:[NSNull class]])
     {
         float avatar_y=1;
-        if(text_height==20)
-            avatar_y=10;
+//        if(text_height==20)
+//            avatar_y=10;
         
         [avatar drawInRect:CGRectMake(AVATAR_LEFT_MERGIN, avatar_y, AVATAR_WIDTH, AVATAR_HEIGHT)];
         [avatarframe drawInRect:CGRectMake(AVATAR_LEFT_MERGIN-1, avatar_y, avatarframe.size.width, avatarframe.size.height)];

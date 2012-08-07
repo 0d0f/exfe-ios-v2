@@ -7,6 +7,7 @@
 //
 
 #import "ABTableViewCell.h"
+#import <CoreText/CoreText.h>
 
 @interface PostCell : ABTableViewCell{
     NSString *content;
@@ -29,15 +30,16 @@
 @property float text_height;
 
 #define FONT_SIZE 14.0f
-#define AVATAR_LEFT_MERGIN 15.0f
-#define AVATAR_WIDTH 25.0f
-#define AVATAR_HEIGHT 25.0f
+#define AVATAR_LEFT_MERGIN 8.0f
+#define AVATAR_WIDTH 32.0f
+#define AVATAR_HEIGHT 32.0f
 
 #define CELL_CONTENT_WIDTH 260.0f
-#define CELL_CONTENT_MARGIN_TOP 10.0f
-#define CELL_CONTENT_MARGIN_BOTTOM 10.0f
+#define CELL_CONTENT_MARGIN_TOP 8.0f
+#define CELL_CONTENT_MARGIN_BOTTOM 12.0f
 #define CELL_CONTENT_MARGIN_LEFT 5.0f
 #define CELL_CONTENT_MARGIN_RIGHT 5.0f
 - (void) setShowTime:(BOOL)show;
 - (void) hiddenTime;
+- (void) drawString:(CGContextRef) context rect:(CGRect)r;
 @end

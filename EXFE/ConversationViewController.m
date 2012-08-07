@@ -44,6 +44,9 @@
     
     inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
     inputToolbar.delegate = self;
+    inputToolbar.textView.delegate=self;
+    [inputToolbar.textView.internalTextView setReturnKeyType:UIReturnKeySend];
+//    inputToolbar.textView.maximumNumberOfLines=2;
     [self.view addSubview:inputToolbar];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -69,6 +72,10 @@
     istimehidden=YES;
     showTimeMode=0;
     topcellPath=-1;
+    showfloattime=YES;
+    inputaccessoryview=[[ConversationInputAccessoryView alloc] initWithFrame:CGRectMake(10.0, 0.0, 310.0, 40.0)];
+    [inputaccessoryview setBackgroundColor:[UIColor lightGrayColor]];
+    [inputaccessoryview setAlpha: 0.8];
 
 //    floatTime=[[UILabel alloc] initWithFrame:CGRectMake(0, 80, 60, 26)];
 //    floatTime.text=@"label time";
@@ -103,18 +110,8 @@
     [avatarframe release];
     [super dealloc];
 }
-//- (void)viewWillAppear:(BOOL)animated 
-//{
-//	[super viewWillAppear:animated];
-//    
-//}
-//
-//- (void)viewWillDisappear:(BOOL)animated 
-//{
-//	[super viewWillDisappear:animated];
-//	/* No longer listen for keyboard */
-//}
-- (void)keyboardWillShow:(NSNotification *)notification 
+
+- (void)keyboardWillShow:(NSNotification *)notification
 {
     CGRect keyboardEndFrame;
     
@@ -127,14 +124,20 @@
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
         frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height;
+        if(_tableView.contentSize.height>_tableView.frame.size.height)
+        {
+        CGRect _tableviewrect=_tableView.frame;
+            _tableviewrect.origin.y=-keyboardEndFrame.size.height;
+            [_tableView setFrame:_tableviewrect];
+        }
         
     }
     else {
         frame.origin.y = self.view.frame.size.width - frame.size.height - keyboardEndFrame.size.height - kStatusBarHeight;
+
     }
 	self.inputToolbar.frame = frame;
 	[UIView commitAnimations];
-//    keyboardIsVisible = YES;
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification 
@@ -145,6 +148,12 @@
 	CGRect frame = self.inputToolbar.frame;
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
         frame.origin.y = self.view.frame.size.height - frame.size.height;
+        if(_tableView.contentSize.height>_tableView.frame.size.height){
+            CGRect _tableviewrect=_tableView.frame;
+            _tableviewrect.origin.y=0;
+            [_tableView setFrame:_tableviewrect];
+        }
+
     }
     else {
         frame.origin.y = self.view.frame.size.width - frame.size.height;
@@ -177,6 +186,7 @@
     [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at delegate:self];
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [inputToolbar hidekeyboard];
     NSLog (@"conversation touch began");
 }
 - (void)loadObjectsFromDataStore {
@@ -187,11 +197,16 @@
                               predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
                               @"exfee", exfee_id];    
     [request setPredicate:predicate];
-	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
+	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:YES];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
     
 	_posts = [[Post objectsWithFetchRequest:request] retain];
     [_tableView reloadData];
+    if(_tableView.contentSize.height>_tableView.frame.size.height) {
+        CGPoint bottomOffset = CGPointMake(0, _tableView.contentSize.height - _tableView.bounds.size.height);
+        showfloattime=NO;
+        [_tableView setContentOffset:bottomOffset animated:YES];
+    }
     [inputToolbar setInputEnabled:YES];
     [inputToolbar hidekeyboard];
 
@@ -275,7 +290,6 @@
                 }
                     
                 istimehidden=NO;
-//                showTimeMode=0;
                 Post *post=[_posts objectAtIndex:path.row];
                 if(post && !timetextlayer){
                     timetextlayer=[CATextLayer layer];
@@ -283,13 +297,11 @@
                     timetextlayer.cornerRadius = 2.0;
                     timetextlayer.backgroundColor=FONT_COLOR_232737.CGColor;
                     [timetextlayer setAlignmentMode:kCAAlignmentCenter];
-
                     [_tableView.layer addSublayer:timetextlayer];
-
                 }
                 int textheight=14;
                 NSMutableAttributedString *timeattribstring;
-                
+
                 if(showTimeMode==0)
                 {
                     NSString *timestring=[Util formattedDateRelativeToNow:post.created_at];
@@ -318,7 +330,10 @@
                 CGSize timesize=[self textWidthForHeight:textheight withAttributedString:timeattribstring];
                 [CATransaction begin];
                 [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-                [timetextlayer setFrame:CGRectMake(rect.origin.x+rect.size.width-5-(timesize.width+4*2),rect.origin.y+point.y+5,timesize.width+8,timesize.height+2)];
+                if(rect.size.height<=40 && timesize.height>20)
+                    [timetextlayer setFrame:CGRectMake(rect.origin.x+rect.size.width-5-(timesize.width+4*2),rect.origin.y+point.y+12-5,timesize.width+8,timesize.height+2)];
+                else
+                    [timetextlayer setFrame:CGRectMake(rect.origin.x+rect.size.width-5-(timesize.width+4*2),rect.origin.y+point.y+12,timesize.width+8,timesize.height+2)];
                 [timetextlayer setString:timeattribstring];
                 [CATransaction commit];
 
@@ -330,27 +345,40 @@
         }
     }
 }
+#pragma mark UIExpandingTextViewDelegate methods
+- (BOOL)expandingTextViewShouldReturn:(UIExpandingTextView *)expandingTextView{
+    [self addPost:expandingTextView.internalTextView.text];
+    return YES;
+}
+-(void)expandingTextView:(UIExpandingTextView *)expandingTextView willChangeHeight:(float)height
+{
+    [inputToolbar expandingTextView:expandingTextView willChangeHeight:height];
+}
 
 #pragma mark UIScrollView methods
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+//    CGPoint point=_tableView.contentOffset;
+//    NSLog(@"drag: %f",point.y);
+//    if(point.y>0)
+    showfloattime=YES;
+   [inputToolbar hidekeyboard];
+}
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-    fadeoutAnimation.fillMode = kCAFillModeForwards;
-    fadeoutAnimation.duration=0.5;
-    fadeoutAnimation.removedOnCompletion =NO;
-    fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
-    fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
-    [floattimetextlayer addAnimation:fadeoutAnimation forKey:@"fadeout"];
-
-      NSLog(@"stop");
+    if(showfloattime==YES)
+    {
+        CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+        fadeoutAnimation.fillMode = kCAFillModeForwards;
+        fadeoutAnimation.duration=0.5;
+        fadeoutAnimation.removedOnCompletion =NO;
+        fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
+        fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
+        [floattimetextlayer addAnimation:fadeoutAnimation forKey:@"fadeout"];
+    }
 }
-//-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-//    NSLog(@"stop");
-//}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    CGPoint point=_tableView.contentOffset;
-    [inputToolbar hidekeyboard];
     if(istimehidden==NO)
     {
         [timetextlayer removeAnimationForKey:@"fadeout"];
@@ -365,38 +393,35 @@
         [floattimetextlayer setAlignmentMode:kCAAlignmentCenter];
         [self.view.layer addSublayer:floattimetextlayer];
     }
-
+    CGPoint point=_tableView.contentOffset;
     NSArray *paths = [_tableView indexPathsForVisibleRows];
-    NSIndexPath *path=(NSIndexPath*)[paths objectAtIndex:0];
-    if(topcellPath!=path.row && point.y>0)
+    if(paths!=nil && [paths count]>0)
     {
-        [floattimetextlayer removeAnimationForKey:@"fadeout"];
-        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        NSIndexPath *path=(NSIndexPath*)[paths objectAtIndex:0];
+        if(paths!=nil && topcellPath!=path.row && point.y>0 && showfloattime==YES)
+        {
+            [floattimetextlayer removeAnimationForKey:@"fadeout"];
+            [NSObject cancelPreviousPerformRequestsWithTarget:self];
+            Post *post=[_posts objectAtIndex:path.row];
+            NSString *relative=[Util formattedDateRelativeToNow:post.created_at];
+            NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
+            [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
+            [dateformat_to setDateFormat:@"h:mm a MMM d"];
+            NSString *datestring=[dateformat_to stringFromDate:post.created_at];
+            [dateformat_to release];
 
-        Post *post=[_posts objectAtIndex:path.row];
-        NSString *relative=[Util formattedDateRelativeToNow:post.created_at];
-        NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
-        [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
-        [dateformat_to setDateFormat:@"h:mm a MMM d"];
-        NSString *datestring=[dateformat_to stringFromDate:post.created_at];
-        [dateformat_to release];
+            NSMutableAttributedString *timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",relative,datestring]];
 
-        NSMutableAttributedString *timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",relative,datestring]];
+            [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:10] range:NSMakeRange(0,[relative length])];
+            [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[relative length])];
 
-        [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:10] range:NSMakeRange(0,[relative length])];
-        [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[relative length])];
-
-        [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:9] range:NSMakeRange([relative length]+1,[datestring length])];
-        [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_CCC.CGColor range:NSMakeRange([relative length]+1,[datestring length])];
-
-        CGSize timesize=[self textWidthForHeight:28 withAttributedString:timeattribstring];
-        [CATransaction begin];
-        [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-        [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width-5-(timesize.width+4*2),0,timesize.width+8,timesize.height+2)];
-        [floattimetextlayer setString:timeattribstring];
-        [CATransaction commit];
-        NSLog(@"scroll");
-        topcellPath=path.row;
+            [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:9] range:NSMakeRange([relative length]+1,[datestring length])];
+            [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_CCC.CGColor range:NSMakeRange([relative length]+1,[datestring length])];
+            CGSize timesize=[self textWidthForHeight:28 withAttributedString:timeattribstring];
+            [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width-5-(timesize.width+4*2),0,timesize.width+8,timesize.height+2)];
+            [floattimetextlayer setString:timeattribstring];
+            topcellPath=path.row;
+        }
     }
 }
 
@@ -425,14 +450,17 @@
 
     Post *post=[_posts objectAtIndex:indexPath.row];
     CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN_LEFT+CELL_CONTENT_MARGIN_RIGHT), 20000.0f);
-    CGSize size = [post.content sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [[post.content stringByTrimmingCharactersInSet:
+                   [NSCharacterSet whitespaceAndNewlineCharacterSet] ] sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
     CGFloat height = MAX(size.height, 20.0);
-    cell.content=post.content;
+    cell.content=[post.content stringByTrimmingCharactersInSet:
+    [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     cell.text_height=height;
     cell.time=@"";
     cell.background=cellbackground;
     cell.avatarframe=avatarframe;
-    cell.separator=cellsepator;
+    if(indexPath.row!=0)
+        cell.separator=cellsepator;
     [cell setShowTime:NO];
     if(post.by_identity.avatar_filename!=nil) {
         dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
@@ -452,15 +480,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 //    [inputToolbar setInputEnabled:NO];
-    [inputToolbar hidekeyboard];
-    NSLog(@"select cell");
+//    [inputToolbar hidekeyboard];
 }
 - (void) addPost:(NSString*)content{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:identity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
     
-//    RKParams* postParams = [RKParams params];
-//    [postParams setValue:[postdict JSONString] forParam:@"post"];
     RKClient *client = [RKClient sharedClient];
     NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u/add?token=%@",exfee_id,app.accesstoken];
     [inputToolbar setInputEnabled:NO];
@@ -476,7 +501,6 @@
                 [self refreshConversation];
             }else {
                 NSLog(@"%@",response);
-                //Check Response Body to get Data!
             }
         };
         request.delegate=self;

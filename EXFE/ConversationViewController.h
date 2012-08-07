@@ -14,7 +14,7 @@
 #import "ConversationTableView.h"
 #import "PostCell.h"
 #import <RestKit/RKRequestSerialization.h>
-#import "CASmoothFontTextLayer.h"
+#import "ConversationInputAccessoryView.h"
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20
@@ -22,7 +22,7 @@
 #define kKeyboardHeightPortrait 216
 #define kKeyboardHeightLandscape 140
 
-@interface ConversationViewController : UIViewController  <RKRequestDelegate,UIInputToolbarDelegate>{
+@interface ConversationViewController : UIViewController  <RKRequestDelegate,UIInputToolbarDelegate,UIExpandingTextViewDelegate>{
     IBOutlet ConversationTableView* _tableView;
     int exfee_id;
     UIInputToolbar *inputToolbar;
@@ -31,12 +31,14 @@
     UIImage *cellbackground;
     UIImage *cellsepator;
     UIImage *avatarframe;
+    ConversationInputAccessoryView *inputaccessoryview;
     CATextLayer *timetextlayer;
     CATextLayer *floattimetextlayer;
     NSArray* _posts;
     BOOL istimehidden;
     int showTimeMode; //0 relativetime 1 time
     int topcellPath;
+    BOOL showfloattime;
     
 }
 
