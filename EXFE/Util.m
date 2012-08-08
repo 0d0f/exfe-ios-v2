@@ -92,56 +92,6 @@
     [format release];
     return shortdate;
 }
-+ (NSDictionary*) crossTimeToStringSimple:(CrossTime*)crosstime{
-    
-    NSMutableDictionary *result=[[[NSMutableDictionary alloc]initWithCapacity:2] autorelease];
-    if(crosstime==nil){
-        [result setObject:@"Sometime" forKey:@"timetitle"];
-        [result setObject:@"" forKey:@"timedesc"];
-        return result;
-    }
-    if( [crosstime.outputformat intValue]==1) {
-        [result setObject:crosstime.origin forKey:@"timetitle"];
-        [result setObject:@"" forKey:@"timedesc"];
-        return result;
-    }
-    
-    if(![crosstime.begin_at.date isEqualToString:@""])
-    {
-        NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
-        [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-        [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSDate *begin_at_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ 00:00:00",crosstime.begin_at.date]];
-        NSDate *begin_at_date_time=[dateformat dateFromString:[NSString stringWithFormat:@"%@ %@",crosstime.begin_at.date,crosstime.begin_at.time]];
-        [dateformat setTimeZone:[NSTimeZone localTimeZone]];
-        [dateformat setDateFormat:@"yyyy-MM-dd"];
-        NSString *nowdate_str=[dateformat stringFromDate:[NSDate date]];
-        
-        [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSDate *now_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ 00:00:00 ",nowdate_str]];
-        
-        [dateformat release];
-
-        NSCalendar *cal=[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-        NSDateComponents *comps =[cal components: NSDayCalendarUnit fromDate:now_date toDate:begin_at_date options:0];
-        int days=[comps day];
-        if(days==0 || days==1){
-            if(![crosstime.begin_at.time isEqualToString:@""])
-            {
-                SORelativeDateTransformer *relativeDateTransformer = [[SORelativeDateTransformer alloc] init];
-                NSString *relativeDate = [relativeDateTransformer transformedValue: begin_at_date_time];
-                [relativeDateTransformer release];
-                [result setObject:relativeDate forKey:@"timetitle"];
-                [result setObject:[self formattedLongDate:crosstime] forKey:@"timedesc"];
-                return result;
-            }
-        }
-    }
-    
-    [result setObject:@"Sometime" forKey:@"timetitle"];
-    [result setObject:@"" forKey:@"timedesc"];
-    return result;
-}
 
 + (NSDictionary*) crossTimeToString:(CrossTime*)crosstime{
     NSMutableDictionary *result=[[[NSMutableDictionary alloc]initWithCapacity:2] autorelease];

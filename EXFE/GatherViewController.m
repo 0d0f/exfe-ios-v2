@@ -178,6 +178,7 @@
     }
     [self initData];
     [self reArrangeViews];
+    [self ShowMyRsvpToolBar];
 }
 - (void) initData{
     if(self.cross!=nil && viewmode==YES){
@@ -406,6 +407,7 @@
     [placedesc release];
     [gathertoolbar release];
     [rsvptoolbar release];
+    [myrsvptoolbar release];
     [containview release];
     [backgroundview release];
     [containcardview release];
@@ -514,7 +516,6 @@
 }
 
 - (void) setDateTime:(CrossTime*)crosstime{
-   // NSDictionary *humanreadable_date=[Util crossTimeToStringSimple:crosstime];
     timetitle.text=[Util getTimeTitle:crosstime];
     timedesc.text=[Util getTimeDesc:crosstime];
     datetime=crosstime;
@@ -541,8 +542,6 @@
         NSError *saveError;
         [[Cross currentContext] save:&saveError];
         
-        NSLog(@"%@",self.navigationController.viewControllers);
-        
         for(id viewcontroller in self.navigationController.viewControllers)
         {
             if([viewcontroller isKindOfClass:[CrossesViewController class]])
@@ -557,9 +556,35 @@
         [conversationView.view setHidden:YES];
     }
 }
+- (void) ShowMyRsvpToolBar{
+    if(myrsvptoolbar==nil){
+        myrsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, 460-44-50) buttonsize:CGSizeMake(20, 20) delegate:self];
+
+        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"toolbar_accept.png"] inFrame:CGRectMake(0, 6, 107, 30)];
+        [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
+        
+        EXButton *interested=[[EXButton alloc] initWithName:@"interested" title:@"Interested" image:[UIImage imageNamed:@"toolbar_interested.png"] inFrame:CGRectMake(107, 6, 107, 30)];
+        [interested addTarget:self action:@selector(rsvpinterested) forControlEvents:UIControlEventTouchUpInside];
+        
+        EXButton *decline=[[EXButton alloc] initWithName:@"decline" title:@"Decline" image:[UIImage imageNamed:@"toolbar_decline.png"] inFrame:CGRectMake(214, 6, 107, 30)];
+        [decline addTarget:self action:@selector(rsvpdeclined) forControlEvents:UIControlEventTouchUpInside];
+
+        NSArray *array=[NSArray arrayWithObjects:accept,interested,decline, nil];
+        [myrsvptoolbar drawButton:array];
+        
+        [accept release];
+        [interested release];
+        [decline release];
+        
+        [self.view addSubview:myrsvptoolbar];
+    }
+    [myrsvptoolbar setHidden:NO];    
+}
+
+
 - (void) ShowRsvpToolBar{
     if(rsvptoolbar==nil){
-        rsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, self.view.frame.size.height-50) buttonsize:CGSizeMake(20, 20) delegate:self];
+        rsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, 460-44-50) buttonsize:CGSizeMake(20, 20) delegate:self];
         EXButton *ignore=[[EXButton alloc] initWithName:@"ignore" title:@"Ignore" image:[UIImage imageNamed:@"toolbar_accept.png"] inFrame:CGRectMake(0, 6, 80, 30)];
         [ignore addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
 
@@ -637,6 +662,17 @@
     [gathertoolbar setHidden:NO];
 }
 
+- (void) updateButtonFrame:(NSString*)name frame:(CGRect)rect{
+    
+}
+- (Invitation*) getHostInvitation{
+    for(Invitation *invitation in exfeeIdentities)
+    {
+        if([invitation.host boolValue]==YES)
+            return invitation;
+    }
+    return nil;
+}
 - (void) setExfeeNum{
     NSString *total=[cross.exfee.total stringValue];
     NSString *accepted=[cross.exfee.accepted stringValue];
@@ -752,8 +788,7 @@
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
 
     [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
-
-    [map setFrame:CGRectMake(map.frame.origin.x,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,map.frame.size.width,map.frame.size.height)];
+//    [map setFrame:CGRectMake(map.frame.origin.x,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,map.frame.size.width,map.frame.size.height)];
     [exfeeShowview calculateColumn];
     if(viewmode==NO)
         [self reArrangeViews];
@@ -788,8 +823,10 @@
         }
         else
         {
-            if(gathertoolbar!=nil)
-                [gathertoolbar setHidden:YES];
+            [self ShowRsvpToolBar];
+
+//            if(gathertoolbar!=nil)
+//                [gathertoolbar setHidden:YES];
         }
     }
 }
@@ -806,15 +843,26 @@
     if(by_identity_id>0)
     {
         NSMutableArray *postarray= [[NSMutableArray alloc] initWithCapacity:12];
-        for(int i=0;i< [exfeeSelected count];i++) {
-            if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
-                if(i<[exfeeIdentities count]) {
-                    Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+        BOOL selected=NO;
+            for(int i=0;i< [exfeeSelected count];i++) {
+                if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
+                    selected=YES;
+                    if(i<[exfeeIdentities count]) {
+                        Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+                        invitation.rsvp_status=status;
+                        NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",by_identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
+                        [postarray addObject:rsvpdict];
+                    }
+                }
+            }
+        
+            if(selected==NO){
+            // is host
+                Invitation *invitation=[self getHostInvitation];
+                if(invitation!=nil) {
                     invitation.rsvp_status=status;
-                    
                     NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",by_identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
                     [postarray addObject:rsvpdict];
-                }
             }
         }
         
@@ -852,14 +900,14 @@
 }
 #pragma mark GatherToolbar delegate methods
 - (void) rsvpaccept{
-    for(int i=0;i< [exfeeSelected count];i++) {
-        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
-            if(i<[exfeeIdentities count]) {
-                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
-                invitation.rsvp_status=@"ACCEPTED";
-            }
-        }
-    }
+//    for(int i=0;i< [exfeeSelected count];i++) {
+//        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
+//            if(i<[exfeeIdentities count]) {
+//                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+//                invitation.rsvp_status=@"ACCEPTED";
+//            }
+//        }
+//    }
     if(viewmode==YES)
     {
         [self sendrsvp:@"ACCEPTED"];
@@ -870,15 +918,56 @@
 
     [exfeeShowview reloadData];
 }
-- (void) rsvpunaccept{
-    for(int i=0;i< [exfeeSelected count];i++) {
-        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
-            if(i<[exfeeIdentities count]) {
-                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
-                invitation.rsvp_status=@"NORESPONSE";
-            }
-        }
+
+- (void) rsvpinterested{
+//    for(int i=0;i< [exfeeSelected count];i++) {
+//        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
+//            if(i<[exfeeIdentities count]) {
+//                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+//                invitation.rsvp_status=@"INTERESTED";
+//            }
+//        }
+//    }
+    if(viewmode==YES)
+    {
+        [self sendrsvp:@"INTERESTED"];
+        [self ShowRsvpToolBar];
     }
+    else
+        [self ShowGatherToolBar];
+    
+    [exfeeShowview reloadData];
+}
+
+- (void) rsvpdeclined{
+//    for(int i=0;i< [exfeeSelected count];i++) {
+//        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
+//            if(i<[exfeeIdentities count]) {
+//                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+//                invitation.rsvp_status=@"DECLINED";
+//            }
+//        }
+//    }
+    if(viewmode==YES)
+    {
+        [self sendrsvp:@"DECLINED"];
+        [self ShowRsvpToolBar];
+    }
+    else
+        [self ShowGatherToolBar];
+    
+    [exfeeShowview reloadData];
+}
+
+- (void) rsvpunaccept{
+//    for(int i=0;i< [exfeeSelected count];i++) {
+//        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
+//            if(i<[exfeeIdentities count]) {
+//                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+//                invitation.rsvp_status=@"NORESPONSE";
+//            }
+//        }
+//    }
     [exfeeShowview reloadData];
     [self ShowGatherToolBar];
 }

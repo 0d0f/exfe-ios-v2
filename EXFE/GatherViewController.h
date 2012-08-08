@@ -44,6 +44,7 @@
     UILabel *exfeenum;
     EXIconToolBar *gathertoolbar;
     EXIconToolBar *rsvptoolbar;
+    EXIconToolBar *myrsvptoolbar;
     MKMapView *map;
     UIImageView *mapbox;
     UITextView *crossdescription;
@@ -78,6 +79,8 @@
 - (void) ShowExfeeView;
 - (void) ShowGatherToolBar;
 - (void) ShowRsvpToolBar;
+- (void) ShowMyRsvpToolBar;
+- (Invitation*) getHostInvitation;
 - (void) addDefaultIdentity;
 - (void) reArrangeViews;
 - (NSString*) findProvider:(NSString*)external_id;
@@ -89,6 +92,8 @@
 - (void) toconversation;
 - (void) rsvpaccept;
 - (void) rsvpunaccept;
+- (void) rsvpinterested;
+- (void) rsvpdeclined;
 - (void) rsvpaddmate;
 - (void) rsvpsubmate;
 - (void) rsvpremove;

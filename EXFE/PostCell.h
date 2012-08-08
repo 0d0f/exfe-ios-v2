@@ -17,7 +17,7 @@
     UIImage *background;
     UIImage *separator;
     UIImage *avatarframe;
-    float text_height;
+//    float text_height;
     BOOL showtime;
 }
 @property (nonatomic,retain) NSString* content;
@@ -27,7 +27,7 @@
 @property (nonatomic,retain) UIImage* background;
 @property (nonatomic,retain) UIImage* separator;
 @property (nonatomic,retain) UIImage* avatarframe;
-@property float text_height;
+//@property float text_height;
 
 #define FONT_SIZE 14.0f
 #define AVATAR_LEFT_MERGIN 8.0f

@@ -222,10 +222,6 @@
     
     //  checking frame sizes
     CGSize coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, textLength), nil, constraint, &range); 
-//    CGFloat ascent;
-//    CGFloat descent;
-//    CGFloat width = CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
-//    CGFloat height = ascent+descent;
     return coreTextSize;//CGSizeMake(width, height);
 }
 
@@ -434,7 +430,10 @@
 {
     Post *post=[_posts objectAtIndex:indexPath.row];
     CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN_LEFT +CELL_CONTENT_MARGIN_RIGHT), 20000.0f);
-    CGSize size = [post.content sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:post.content];
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:14] range:NSMakeRange(0,[post.content length])];
+    CGSize size= [CTUtil CTSizeOfString:attributedString minLineHeight:20 linespacing:0 constraint:constraint];
+    [attributedString release];
     CGFloat height = MAX(size.height, 20.0);
     return height + (CELL_CONTENT_MARGIN_TOP+CELL_CONTENT_MARGIN_BOTTOM);
 }
@@ -449,13 +448,8 @@
 	}
 
     Post *post=[_posts objectAtIndex:indexPath.row];
-    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN_LEFT+CELL_CONTENT_MARGIN_RIGHT), 20000.0f);
-    CGSize size = [[post.content stringByTrimmingCharactersInSet:
-                   [NSCharacterSet whitespaceAndNewlineCharacterSet] ] sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
-    CGFloat height = MAX(size.height, 20.0);
     cell.content=[post.content stringByTrimmingCharactersInSet:
     [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    cell.text_height=height;
     cell.time=@"";
     cell.background=cellbackground;
     cell.avatarframe=avatarframe;
@@ -497,10 +491,8 @@
         request.params=params;
         request.onDidLoadResponse=^(RKResponse *response){
             if (response.statusCode == 200) {
-                NSLog(@"%@",response.bodyAsString);
                 [self refreshConversation];
             }else {
-                NSLog(@"%@",response);
             }
         };
         request.delegate=self;
@@ -512,7 +504,7 @@
 }
 #pragma Mark - RKRequestDelegate
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    NSLog(@"success:%@",objects);
+//    NSLog(@"success:%@",objects);
 
     if(objectLoader.isGET) {
         if([objects count]>0)

@@ -15,6 +15,7 @@
 #import "PostCell.h"
 #import <RestKit/RKRequestSerialization.h>
 #import "ConversationInputAccessoryView.h"
+#import "CTUtil.h"
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20

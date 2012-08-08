@@ -56,6 +56,18 @@
         [self addSubview:button];
     }
 }
+- (void) updateButtonFrame:(NSString*)name frame:(CGRect)rect{
+//    for(UIControl* view in self.subviews)
+//    {
+//        if([view isKindOfClass:[EXButton class]])
+//        {
+//            EXButton* button=(EXButton*)view;
+//            if([button.buttonName isEqualToString:name])
+//                [button updateFrame:rect];
+//        }
+//    }
+}
+
 - (void) replaceButtonImage:(UIImage*)img title:(NSString*)title target:(id)target action:(SEL)action forname:(NSString*)name{
     
     for(UIControl* view in self.subviews)

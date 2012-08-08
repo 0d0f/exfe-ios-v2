@@ -171,7 +171,8 @@
     if(count >maxColumn*maxRow-1)
     {
         float new_height=imageYmargin+imageHeight+15+(imageYmargin+imageHeight+15)*maxRow;
-        [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
+        if(new_height!=self.frame.size.height)
+            [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
     }
     else{
         int row=1;
@@ -184,7 +185,8 @@
             }
         }
         float new_height=imageYmargin+imageHeight+15+(imageYmargin+imageHeight+15)*(row-1);
-        [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
+        if(new_height!=self.frame.size.height)
+            [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
     }
     [self setNeedsDisplay];
 }

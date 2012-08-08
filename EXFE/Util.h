@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "CrossTime.h"
-#import "SORelativeDateTransformer.h"
 
 #define FONT_COLOR_100 [UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1]
 #define FONT_COLOR_69 [UIColor colorWithRed:69/255.0f green:69/255.0f blue:69/255.0f alpha:1]
@@ -27,7 +26,6 @@
 + (UIColor*) getHighlightColor;
 + (UIColor*) getRegularColor;
 + (NSDictionary*) crossTimeToString:(CrossTime*)crosstime;
-+ (NSDictionary*) crossTimeToStringSimple:(CrossTime*)crosstime;
 + (NSString *) formattedLongDateRelativeToNow:(NSString*)datestr;
 + (NSString *) formattedLongDateRelativeToNowWiteDate:(NSDate*)date;
 + (NSString *) formattedDateRelativeToNow:(NSDate*)date;

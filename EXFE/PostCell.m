@@ -16,7 +16,7 @@
 @synthesize relativetime;
 @synthesize background;
 @synthesize separator;
-@synthesize text_height;
+//@synthesize text_height;
 @synthesize avatarframe;
 
 - (void)setContent:(NSString *)s {
@@ -84,7 +84,7 @@
     CGContextSaveGState(context);
 
     CGFloat lineheight = 20;
-    CGFloat linespacing = 5;
+    CGFloat linespacing = 0;
     CTParagraphStyleSetting setting[2] = {
         {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespacing},
         {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &lineheight}
@@ -137,7 +137,7 @@
 
     [[UIColor whiteColor] set];
 //    [content drawInRect:CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH+CELL_CONTENT_MARGIN_LEFT, CELL_CONTENT_MARGIN_TOP, CELL_CONTENT_WIDTH,r.size.height-CELL_CONTENT_MARGIN_TOP-CELL_CONTENT_MARGIN_BOTTOM) withFont:[UIFont fontWithName:@"HelveticaNeue" size:FONT_SIZE]];
-    [self drawString:context rect:CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH+CELL_CONTENT_MARGIN_LEFT, 0, CELL_CONTENT_WIDTH,r.size.height)];
+    [self drawString:context rect:CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH+CELL_CONTENT_MARGIN_LEFT, 8, CELL_CONTENT_WIDTH,r.size.height-8-12)];
     
     if(avatar!=nil && ![avatar isKindOfClass:[NSNull class]])
     {

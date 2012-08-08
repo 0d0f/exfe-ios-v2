@@ -35,5 +35,11 @@
     }
     return self;
 }
-
+- (void) updateFrame:(CGRect)rect{
+    [self setFrame:rect];
+    
+    [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -self.imageView.image.size.width, -self.imageView.image.size.height-14, 0.0)];
+    int margin=(self.frame.size.width-self.imageView.image.size.width)/2;
+    [self setImageEdgeInsets:UIEdgeInsetsMake(0, margin, 0, margin)];
+}
 @end

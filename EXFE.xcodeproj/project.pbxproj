@@ -189,8 +189,6 @@
 		78D0A600158CFB4C00401BCA /* OAuthLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */; };
 		78D0A601158CFB5F00401BCA /* URLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FF158CFAD200401BCA /* URLParser.m */; };
 		78D0A602158CFE1900401BCA /* OAuthLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */; };
-		78D1F24A15CA5240005894FB /* SORelativeDateTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D1F24815CA51C6005894FB /* SORelativeDateTransformer.m */; };
-		78D1F24B15CA5243005894FB /* SORelativeDateTransformer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 78D1F24615CA51C6005894FB /* SORelativeDateTransformer.bundle */; };
 		78D7F4E415B03EE60028DAB2 /* bg_gradient@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D7F4E315B03EE60028DAB2 /* bg_gradient@2x.png */; };
 		78DABCE9158B236C004447B5 /* Meta.m in Sources */ = {isa = PBXBuildFile; fileRef = 78DABCE8158B236C004447B5 /* Meta.m */; };
 		78DD0E2C15C65664005A10EB /* tag-host.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DD0E2A15C65664005A10EB /* tag-host.png */; };
@@ -215,6 +213,7 @@
 		78F058041599C30200F360F2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F058031599C30200F360F2 /* CoreLocation.framework */; };
 		78F0580B159B708F00F360F2 /* APIPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F0580A159B708F00F360F2 /* APIPlace.m */; };
 		78FB79E815D0ECFC00DF9D73 /* ConversationInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB79E715D0ECFC00DF9D73 /* ConversationInputAccessoryView.m */; };
+		78FC07E015D224FC004BB482 /* CTUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC07DF15D224FC004BB482 /* CTUtil.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -496,9 +495,6 @@
 		78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAuthLoginViewController.xib; sourceTree = "<group>"; };
 		78D0A5FE158CFAD200401BCA /* URLParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = URLParser.h; sourceTree = "<group>"; };
 		78D0A5FF158CFAD200401BCA /* URLParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URLParser.m; sourceTree = "<group>"; };
-		78D1F24615CA51C6005894FB /* SORelativeDateTransformer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SORelativeDateTransformer.bundle; sourceTree = "<group>"; };
-		78D1F24715CA51C6005894FB /* SORelativeDateTransformer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SORelativeDateTransformer.h; sourceTree = "<group>"; };
-		78D1F24815CA51C6005894FB /* SORelativeDateTransformer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SORelativeDateTransformer.m; sourceTree = "<group>"; };
 		78D7F4E315B03EE60028DAB2 /* bg_gradient@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_gradient@2x.png"; sourceTree = "<group>"; };
 		78DABCE7158B236C004447B5 /* Meta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Meta.h; sourceTree = "<group>"; };
 		78DABCE8158B236C004447B5 /* Meta.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Meta.m; sourceTree = "<group>"; };
@@ -531,6 +527,8 @@
 		78F0580A159B708F00F360F2 /* APIPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIPlace.m; sourceTree = "<group>"; };
 		78FB79E615D0ECFC00DF9D73 /* ConversationInputAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationInputAccessoryView.h; sourceTree = "<group>"; };
 		78FB79E715D0ECFC00DF9D73 /* ConversationInputAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationInputAccessoryView.m; sourceTree = "<group>"; };
+		78FC07DE15D224FC004BB482 /* CTUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTUtil.h; sourceTree = "<group>"; };
+		78FC07DF15D224FC004BB482 /* CTUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTUtil.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -700,7 +698,6 @@
 		785FD54E158065610056590D /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				78D1F24915CA51D2005894FB /* SORelativeDateTransformer */,
 				785F6F791585A5A200BF8EA0 /* PullRefreshTableViewController.h */,
 				785F6F7A1585A5A200BF8EA0 /* PullRefreshTableViewController.m */,
 				785FD54F158065820056590D /* UIInputToolbar */,
@@ -716,6 +713,7 @@
 				785FD5831580797F0056590D /* UIExpandingTextViewInternal.h */,
 				785FD5841580797F0056590D /* UIExpandingTextViewInternal.m */,
 				785FD5851580797F0056590D /* UIInputToolbar.h */,
+				785FD5861580797F0056590D /* UIInputToolbar.m */,
 			);
 			name = UIInputToolbar;
 			sourceTree = "<group>";
@@ -805,6 +803,8 @@
 				78B0181215B812F700778192 /* Cross.m */,
 				78B9FCF615B5346D00F5E4D3 /* Exfee.h */,
 				78B9FCF715B5346D00F5E4D3 /* Exfee.m */,
+				78FC07DE15D224FC004BB482 /* CTUtil.h */,
+				78FC07DF15D224FC004BB482 /* CTUtil.m */,
 				7840916A156F6AA4006DF115 /* Util.h */,
 				7840916B156F6AA5006DF115 /* Util.m */,
 				78D0A5FE158CFAD200401BCA /* URLParser.h */,
@@ -958,16 +958,6 @@
 			name = toolbar;
 			sourceTree = "<group>";
 		};
-		78D1F24915CA51D2005894FB /* SORelativeDateTransformer */ = {
-			isa = PBXGroup;
-			children = (
-				78D1F24615CA51C6005894FB /* SORelativeDateTransformer.bundle */,
-				78D1F24715CA51C6005894FB /* SORelativeDateTransformer.h */,
-				78D1F24815CA51C6005894FB /* SORelativeDateTransformer.m */,
-			);
-			name = SORelativeDateTransformer;
-			sourceTree = "<group>";
-		};
 		78DD0E3215C65D12005A10EB /* tag-icon */ = {
 			isa = PBXGroup;
 			children = (
@@ -1001,7 +991,6 @@
 		78E8873E156244BD0026D197 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				785FD5861580797F0056590D /* UIInputToolbar.m */,
 				78C25AB7159D81ED002AED1E /* CustomView */,
 				78E4EE571581CFF000AE6211 /* View */,
 				788312A515738D2600D67103 /* Cell */,
@@ -1233,7 +1222,6 @@
 				78465E1215C920BE00BA5C1F /* cross_bg@2x.png in Resources */,
 				78465E1315C920BE00BA5C1F /* cross_bgmask.png in Resources */,
 				78465E1415C920BE00BA5C1F /* cross_bgmask@2x.png in Resources */,
-				78D1F24B15CA5243005894FB /* SORelativeDateTransformer.bundle in Resources */,
 				7820A0B715CB8E37008D0BB5 /* toolbar_bg.png in Resources */,
 				7820A0B815CB8E37008D0BB5 /* toolbar_bg@2x.png in Resources */,
 				7820A0BA15CB8E42008D0BB5 /* toolbar_btndown_bg_TEST@2x.png in Resources */,
@@ -1309,9 +1297,9 @@
 				78B0181315B812FC00778192 /* Cross.m in Sources */,
 				7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */,
 				78CEBFF015BFE7BE002BCA27 /* ExfeeInputViewController.m in Sources */,
-				78D1F24A15CA5240005894FB /* SORelativeDateTransformer.m in Sources */,
 				7820A0B415CA8DE5008D0BB5 /* Invitation.m in Sources */,
 				78FB79E815D0ECFC00DF9D73 /* ConversationInputAccessoryView.m in Sources */,
+				78FC07E015D224FC004BB482 /* CTUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
