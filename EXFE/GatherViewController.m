@@ -560,13 +560,13 @@
     if(myrsvptoolbar==nil){
         myrsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, 460-44-50) buttonsize:CGSizeMake(20, 20) delegate:self];
 
-        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"toolbar_accept.png"] inFrame:CGRectMake(0, 6, 107, 30)];
+        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(0, 6, 107, 30)];
         [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
         
-        EXButton *interested=[[EXButton alloc] initWithName:@"interested" title:@"Interested" image:[UIImage imageNamed:@"toolbar_interested.png"] inFrame:CGRectMake(107, 6, 107, 30)];
+        EXButton *interested=[[EXButton alloc] initWithName:@"interested" title:@"Interested" image:[UIImage imageNamed:@"rsvp_interested_toolbar.png"] inFrame:CGRectMake(107, 6, 107, 30)];
         [interested addTarget:self action:@selector(rsvpinterested) forControlEvents:UIControlEventTouchUpInside];
         
-        EXButton *decline=[[EXButton alloc] initWithName:@"decline" title:@"Decline" image:[UIImage imageNamed:@"toolbar_decline.png"] inFrame:CGRectMake(214, 6, 107, 30)];
+        EXButton *decline=[[EXButton alloc] initWithName:@"decline" title:@"Decline" image:[UIImage imageNamed:@"rsvp_unavailable_toolbar.png"] inFrame:CGRectMake(214, 6, 107, 30)];
         [decline addTarget:self action:@selector(rsvpdeclined) forControlEvents:UIControlEventTouchUpInside];
 
         NSArray *array=[NSArray arrayWithObjects:accept,interested,decline, nil];
@@ -578,34 +578,50 @@
         
         [self.view addSubview:myrsvptoolbar];
     }
-    [myrsvptoolbar setHidden:NO];    
+    [rsvptoolbar setHidden:YES];
+    [myrsvptoolbar setHidden:NO];
 }
 
 
 - (void) ShowRsvpToolBar{
     if(rsvptoolbar==nil){
         rsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, 460-44-50) buttonsize:CGSizeMake(20, 20) delegate:self];
-        EXButton *ignore=[[EXButton alloc] initWithName:@"ignore" title:@"Ignore" image:[UIImage imageNamed:@"toolbar_accept.png"] inFrame:CGRectMake(0, 6, 80, 30)];
+
+        EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"-1 mate" image:[UIImage imageNamed:@"rsvp_mates_minus_toolbar.png"] inFrame:CGRectMake(14, 6, 44, 30)];
+        [submate addTarget:self action:@selector(rsvpsubmate) forControlEvents:UIControlEventTouchUpInside];
+        [submate setTitle:@"" forState:UIControlStateNormal];
+        EXButton *addmate=[[EXButton alloc] initWithName:@"addmate" title:@"+1 mate" image:[UIImage imageNamed:@"rsvp_mates_plus_toolbar.png"] inFrame:CGRectMake(58, 6, 44, 30)];
+        [addmate addTarget:self action:@selector(rsvpaddmate) forControlEvents:UIControlEventTouchUpInside];
+        [addmate setTitle:@"" forState:UIControlStateNormal];
+        
+        UILabel *hint=[[UILabel alloc] initWithFrame:CGRectMake(44, 30+6, 44, 14)];
+        hint.text=@"Mates";
+        [hint setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:10]];
+        [hint setBackgroundColor:[UIColor clearColor]];
+        hint.textAlignment=UITextAlignmentCenter;
+        [hint setTextColor:FONT_COLOR_250];
+        [rsvptoolbar addSubview:hint];
+        [hint release];
+
+        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(116, 6, 68, 30)];
+        [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
+
+        EXButton *ignore=[[EXButton alloc] initWithName:@"ignore" title:@"Pending" image:[UIImage imageNamed:@"rsvp_pending_toolbar.png"] inFrame:CGRectMake(184, 6, 68, 30)];
         [ignore addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
 
-        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"toolbar_accept.png"] inFrame:CGRectMake(80, 6, 80, 30)];
-        [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
-        
-        EXButton *interested=[[EXButton alloc] initWithName:@"interested" title:@"Interested" image:[UIImage imageNamed:@"toolbar_interested.png"] inFrame:CGRectMake(160, 6, 80, 30)];
-        [interested addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
-
-        EXButton *decline=[[EXButton alloc] initWithName:@"decline" title:@"Decline" image:[UIImage imageNamed:@"toolbar_decline.png"] inFrame:CGRectMake(240, 6, 80, 30)];
+        EXButton *decline=[[EXButton alloc] initWithName:@"decline" title:@"Unavailable" image:[UIImage imageNamed:@"rsvp_unavailable_toolbar.png"] inFrame:CGRectMake(252, 6, 68, 30)];
         [decline addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
 
-        NSArray *array=[NSArray arrayWithObjects:ignore,accept,interested,decline, nil];
+        NSArray *array=[NSArray arrayWithObjects:submate,addmate,ignore,accept,decline, nil];
         [rsvptoolbar drawButton:array];
+        [submate release];
+        [addmate release];
         [ignore release];
         [accept release];
-        [interested release];
         [decline release];
-        
         [self.view addSubview:rsvptoolbar];
     }
+    [myrsvptoolbar setHidden:YES];
     [rsvptoolbar setHidden:NO];
 
 }
@@ -823,10 +839,10 @@
         }
         else
         {
-            [self ShowRsvpToolBar];
-
-//            if(gathertoolbar!=nil)
-//                [gathertoolbar setHidden:YES];
+            if(viewmode==YES)
+                [self ShowMyRsvpToolBar];
+//            else
+//                [self ShowRsvpToolBar];
         }
     }
 }
@@ -883,13 +899,26 @@
                             if(code)
                                 if([code intValue]==200) {
                                     NSLog(@"send rsvp ok!");
-                                    //                                [self returnResult:callbackId args:[[body objectForKey:@"response"] objectForKey:@"rsvp"]];
                                 }
                         }
                         //We got an error!
                     }else {
                         //Check Response Body to get Data!
                     }
+                    NSLog(@"responsed,show toolbar");
+                    if(selected==NO)
+                        [self ShowMyRsvpToolBar];
+                    else
+                        [self ShowRsvpToolBar];
+
+                };
+                request.onDidFailLoadWithError=^(NSError *error){
+                    NSLog(@"%@",error);
+                    if(selected==NO)
+                        [self ShowMyRsvpToolBar];
+                    else
+                        [self ShowRsvpToolBar];
+                    
                 };
                 request.delegate=self;
             }];
@@ -908,13 +937,13 @@
 //            }
 //        }
 //    }
-    if(viewmode==YES)
-    {
+//    if(viewmode==YES)
+//    {
         [self sendrsvp:@"ACCEPTED"];
-        [self ShowRsvpToolBar];
-    }
-    else
-        [self ShowGatherToolBar];
+//        [self ShowRsvpToolBar];
+//    }
+//    else
+//        [self ShowGatherToolBar];
 
     [exfeeShowview reloadData];
 }
@@ -928,13 +957,13 @@
 //            }
 //        }
 //    }
-    if(viewmode==YES)
-    {
+//    if(viewmode==YES)
+//    {
         [self sendrsvp:@"INTERESTED"];
-        [self ShowRsvpToolBar];
-    }
-    else
-        [self ShowGatherToolBar];
+//        [self ShowRsvpToolBar];
+//    }
+//    else
+//        [self ShowGatherToolBar];
     
     [exfeeShowview reloadData];
 }
@@ -948,13 +977,13 @@
 //            }
 //        }
 //    }
-    if(viewmode==YES)
-    {
+//    if(viewmode==YES)
+//    {
         [self sendrsvp:@"DECLINED"];
-        [self ShowRsvpToolBar];
-    }
-    else
-        [self ShowGatherToolBar];
+//        [self ShowRsvpToolBar];
+//    }
+//    else
+//        [self ShowGatherToolBar];
     
     [exfeeShowview reloadData];
 }
