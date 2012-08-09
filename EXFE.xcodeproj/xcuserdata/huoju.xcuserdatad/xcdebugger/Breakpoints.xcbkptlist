@@ -472,19 +472,6 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/GatherViewController.m"
-         timestampString = "366189052.600973"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "947"
-         endingLineNumber = "947"
-         landmarkName = "-sendrsvp:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
@@ -515,11 +502,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "366189052.600973"
+         timestampString = "366190532.085791"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "803"
-         endingLineNumber = "803"
+         startingLineNumber = "835"
+         endingLineNumber = "835"
          landmarkName = "-selectedOfimageCollectionView:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -554,11 +541,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "366189052.600973"
+         timestampString = "366190532.085791"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "785"
-         endingLineNumber = "785"
+         startingLineNumber = "817"
+         endingLineNumber = "817"
          landmarkName = "-objectLoader:didFailWithError:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -567,11 +554,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "366188288.564372"
+         timestampString = "366190532.085791"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "587"
-         endingLineNumber = "587"
+         startingLineNumber = "592"
+         endingLineNumber = "592"
          landmarkName = "-ShowRsvpToolBar"
          landmarkType = "5">
       </FileBreakpoint>
@@ -580,11 +567,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "366189052.600973"
+         timestampString = "366190532.085791"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "887"
-         endingLineNumber = "887"
+         startingLineNumber = "931"
+         endingLineNumber = "931"
          landmarkName = "-sendrsvp:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -593,11 +580,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "366189052.600973"
+         timestampString = "366190532.085791"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "899"
-         endingLineNumber = "899"
+         startingLineNumber = "927"
+         endingLineNumber = "927"
          landmarkName = "-sendrsvp:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -606,11 +593,50 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "366189052.600973"
+         timestampString = "366190532.085791"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "895"
-         endingLineNumber = "895"
+         startingLineNumber = "967"
+         endingLineNumber = "967"
+         landmarkName = "-rsvpinterested"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/GatherViewController.m"
+         timestampString = "366190532.085791"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "883"
+         endingLineNumber = "883"
+         landmarkName = "-sendrsvp:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/GatherViewController.m"
+         timestampString = "366190532.085791"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "909"
+         endingLineNumber = "909"
+         landmarkName = "-sendrsvp:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/GatherViewController.m"
+         timestampString = "366190532.085791"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "947"
+         endingLineNumber = "947"
          landmarkName = "-sendrsvp:"
          landmarkType = "5">
       </FileBreakpoint>

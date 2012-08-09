@@ -45,6 +45,7 @@
     EXIconToolBar *gathertoolbar;
     EXIconToolBar *rsvptoolbar;
     EXIconToolBar *myrsvptoolbar;
+    EXButton *rsvpbutton;
     MKMapView *map;
     UIImageView *mapbox;
     UITextView *crossdescription;
@@ -80,6 +81,7 @@
 - (void) ShowGatherToolBar;
 - (void) ShowRsvpToolBar;
 - (void) ShowMyRsvpToolBar;
+- (void) ShowRsvpButton;
 - (Invitation*) getHostInvitation;
 - (void) addDefaultIdentity;
 - (void) reArrangeViews;

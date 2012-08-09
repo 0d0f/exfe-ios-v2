@@ -172,17 +172,17 @@
                 if([invitation.identity.connected_user_id intValue]==app.userid)
                     conversationView.identity=invitation.identity;  
         }
-        
         [conversationView.view setHidden:YES];
         [self.view addSubview:conversationView.view];
     }
     [self initData];
     [self reArrangeViews];
-    [self ShowMyRsvpToolBar];
+//    [self ShowMyRsvpToolBar];
+    if(viewmode==YES)
+        [self ShowRsvpButton];
 }
 - (void) initData{
     if(self.cross!=nil && viewmode==YES){
-        
         crosstitle.text=cross.title;
         [self setExfeeNum];
         NSArray *widgets=cross.widget;
@@ -408,6 +408,8 @@
     [gathertoolbar release];
     [rsvptoolbar release];
     [myrsvptoolbar release];
+    if(rsvpbutton)
+        [rsvpbutton release];
     [containview release];
     [backgroundview release];
     [containcardview release];
@@ -579,6 +581,7 @@
         [self.view addSubview:myrsvptoolbar];
     }
     [rsvptoolbar setHidden:YES];
+    [rsvpbutton setHidden:YES];
     [myrsvptoolbar setHidden:NO];
 }
 
@@ -624,6 +627,33 @@
     [myrsvptoolbar setHidden:YES];
     [rsvptoolbar setHidden:NO];
 
+}
+
+- (void) ShowRsvpButton{
+    [rsvptoolbar setHidden:YES];
+
+    if(rsvpbutton)
+        [rsvpbutton release];
+    Invitation *hostInvitation=[self getHostInvitation];
+    if(hostInvitation && ![hostInvitation.rsvp_status isEqualToString:@"NORESPONSE"])
+    {
+        NSString *buttonimgname=@"";
+        if([hostInvitation.rsvp_status isEqualToString:@"ACCEPTED"])
+            buttonimgname=@"rsvp_accept_toolbar.png";
+        else if([hostInvitation.rsvp_status isEqualToString:@"INTERESTED"])
+            buttonimgname=@"rsvp_interested_toolbar.png";
+        else if([hostInvitation.rsvp_status isEqualToString:@"DECLINED"])
+            buttonimgname=@"rsvp_unavailable_toolbar.png";
+        
+        rsvpbutton=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:buttonimgname] inFrame:CGRectMake(self.view.frame.size.width/2-30, 460-44-30, 60, 30)];
+        
+        [rsvpbutton setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"toolbar_bg.png"]]];
+        [rsvpbutton addTarget:self action:@selector(ShowMyRsvpToolBar) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:rsvpbutton];
+        [myrsvptoolbar setHidden:YES];
+    }
+    else
+        [myrsvptoolbar setHidden:NO];
 }
 - (void) ShowGatherToolBar{
     if(gathertoolbar==nil){
@@ -905,9 +935,8 @@
                     }else {
                         //Check Response Body to get Data!
                     }
-                    NSLog(@"responsed,show toolbar");
                     if(selected==NO)
-                        [self ShowMyRsvpToolBar];
+                        [self ShowRsvpToolBar];
                     else
                         [self ShowRsvpToolBar];
 
@@ -929,76 +958,21 @@
 }
 #pragma mark GatherToolbar delegate methods
 - (void) rsvpaccept{
-//    for(int i=0;i< [exfeeSelected count];i++) {
-//        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
-//            if(i<[exfeeIdentities count]) {
-//                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
-//                invitation.rsvp_status=@"ACCEPTED";
-//            }
-//        }
-//    }
-//    if(viewmode==YES)
-//    {
         [self sendrsvp:@"ACCEPTED"];
-//        [self ShowRsvpToolBar];
-//    }
-//    else
-//        [self ShowGatherToolBar];
-
-    [exfeeShowview reloadData];
 }
 
 - (void) rsvpinterested{
-//    for(int i=0;i< [exfeeSelected count];i++) {
-//        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
-//            if(i<[exfeeIdentities count]) {
-//                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
-//                invitation.rsvp_status=@"INTERESTED";
-//            }
-//        }
-//    }
-//    if(viewmode==YES)
-//    {
         [self sendrsvp:@"INTERESTED"];
-//        [self ShowRsvpToolBar];
-//    }
-//    else
-//        [self ShowGatherToolBar];
-    
-    [exfeeShowview reloadData];
 }
 
 - (void) rsvpdeclined{
-//    for(int i=0;i< [exfeeSelected count];i++) {
-//        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
-//            if(i<[exfeeIdentities count]) {
-//                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
-//                invitation.rsvp_status=@"DECLINED";
-//            }
-//        }
-//    }
-//    if(viewmode==YES)
-//    {
         [self sendrsvp:@"DECLINED"];
-//        [self ShowRsvpToolBar];
-//    }
-//    else
-//        [self ShowGatherToolBar];
-    
-    [exfeeShowview reloadData];
 }
 
 - (void) rsvpunaccept{
-//    for(int i=0;i< [exfeeSelected count];i++) {
-//        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
-//            if(i<[exfeeIdentities count]) {
-//                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
-//                invitation.rsvp_status=@"NORESPONSE";
-//            }
-//        }
-//    }
-    [exfeeShowview reloadData];
-    [self ShowGatherToolBar];
+    [self sendrsvp:@"NORESPONSE"];
+//    [exfeeShowview reloadData];
+//    [self ShowGatherToolBar];
 }
 - (void) rsvpaddmate{
     for(int i=0;i< [exfeeSelected count];i++) {
