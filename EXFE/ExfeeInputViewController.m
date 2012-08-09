@@ -199,7 +199,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"suggest view";
-    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
 	{
@@ -220,37 +219,41 @@
             cell.textLabel.text = identity.external_username;
         if(cell.textLabel.text==nil|| [cell.textLabel.text isEqualToString:@""])
             cell.textLabel.text = identity.external_id;
+        if(identity.avatar_filename!=nil) {
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+                UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+                        cell.imageView.image=avatar;
+                    }
+                });
+            });
+            dispatch_release(imgQueue);        
+        }
     }
     return cell;
     
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //TODO: add exfee to the selected toolbar, don't dismess this view!
     
-    if(showInputinSuggestion==YES && indexPath.row==0 )
-    {
-        [self addByText];
-    }
-    else{
-        int row=indexPath.row;
-        if(showInputinSuggestion==YES )
-            row-=1;
-        Identity *identity=[suggestIdentities objectAtIndex:row];
-        Invitation *invitation =[Invitation object];
-        invitation.rsvp_status=@"NORESPONSE";
-        invitation.identity=identity;
-        [(GatherViewController*)gatherview addExfee:invitation];
-        [self dismissModalViewControllerAnimated:YES];
-    }
-
-//
-//    [exfeeIdentities addObject:invitation];
-//    [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
-//    [exfeeShowview reloadData];
-//    [suggestionTable removeFromSuperview];
-//    exfeeInput.text=@"";
-//    [self setExfeeNum];
-    //[self ShowExfeeInput:NO];
+//    if(showInputinSuggestion==YES && indexPath.row==0 )
+//    {
+//        [self addByText];
+//    }
+//    else{
+//        int row=indexPath.row;
+//        if(showInputinSuggestion==YES )
+//            row-=1;
+//        Identity *identity=[suggestIdentities objectAtIndex:row];
+//        Invitation *invitation =[Invitation object];
+//        invitation.rsvp_status=@"NORESPONSE";
+//        invitation.identity=identity;
+//        [(GatherViewController*)gatherview addExfee:invitation];
+//        [self dismissModalViewControllerAnimated:YES];
+//    }
 }
 #pragma mark RKObjectLoaderDelegate methods
 

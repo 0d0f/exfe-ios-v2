@@ -104,8 +104,7 @@
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [containcardview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
-    
-//    [self setExfeeNum];
+
     [self.view bringSubviewToFront:toolbar];
     
     timetitle=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,
@@ -562,7 +561,7 @@
     if(myrsvptoolbar==nil){
         myrsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, 460-44-50) buttonsize:CGSizeMake(20, 20) delegate:self];
 
-        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(0, 6, 107, 30)];
+        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"I'm in" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(0, 6, 107, 30)];
         [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
         
         EXButton *interested=[[EXButton alloc] initWithName:@"interested" title:@"Interested" image:[UIImage imageNamed:@"rsvp_interested_toolbar.png"] inFrame:CGRectMake(107, 6, 107, 30)];
@@ -610,10 +609,10 @@
         [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
 
         EXButton *ignore=[[EXButton alloc] initWithName:@"ignore" title:@"Pending" image:[UIImage imageNamed:@"rsvp_pending_toolbar.png"] inFrame:CGRectMake(184, 6, 68, 30)];
-        [ignore addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
+        [ignore addTarget:self action:@selector(rsvpinterested) forControlEvents:UIControlEventTouchUpInside];
 
         EXButton *decline=[[EXButton alloc] initWithName:@"decline" title:@"Unavailable" image:[UIImage imageNamed:@"rsvp_unavailable_toolbar.png"] inFrame:CGRectMake(252, 6, 68, 30)];
-        [decline addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
+        [decline addTarget:self action:@selector(rsvpdeclined) forControlEvents:UIControlEventTouchUpInside];
 
         NSArray *array=[NSArray arrayWithObjects:submate,addmate,ignore,accept,decline, nil];
         [rsvptoolbar drawButton:array];
@@ -625,8 +624,8 @@
         [self.view addSubview:rsvptoolbar];
     }
     [myrsvptoolbar setHidden:YES];
+    [rsvpbutton setHidden:YES];
     [rsvptoolbar setHidden:NO];
-
 }
 
 - (void) ShowRsvpButton{
@@ -634,15 +633,15 @@
 
     if(rsvpbutton)
         [rsvpbutton release];
-    Invitation *hostInvitation=[self getHostInvitation];
-    if(hostInvitation && ![hostInvitation.rsvp_status isEqualToString:@"NORESPONSE"])
+    Invitation *myInvitation=[self getMyInvitation];
+    if(myInvitation && ![myInvitation.rsvp_status isEqualToString:@"NORESPONSE"])
     {
         NSString *buttonimgname=@"";
-        if([hostInvitation.rsvp_status isEqualToString:@"ACCEPTED"])
+        if([myInvitation.rsvp_status isEqualToString:@"ACCEPTED"])
             buttonimgname=@"rsvp_accept_toolbar.png";
-        else if([hostInvitation.rsvp_status isEqualToString:@"INTERESTED"])
+        else if([myInvitation.rsvp_status isEqualToString:@"INTERESTED"])
             buttonimgname=@"rsvp_interested_toolbar.png";
-        else if([hostInvitation.rsvp_status isEqualToString:@"DECLINED"])
+        else if([myInvitation.rsvp_status isEqualToString:@"DECLINED"])
             buttonimgname=@"rsvp_unavailable_toolbar.png";
         
         rsvpbutton=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:buttonimgname] inFrame:CGRectMake(self.view.frame.size.width/2-30, 460-44-30, 60, 30)];
@@ -711,10 +710,11 @@
 - (void) updateButtonFrame:(NSString*)name frame:(CGRect)rect{
     
 }
-- (Invitation*) getHostInvitation{
+- (Invitation*) getMyInvitation{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     for(Invitation *invitation in exfeeIdentities)
     {
-        if([invitation.host boolValue]==YES)
+        if([invitation.identity.connected_user_id intValue] == app.userid)
             return invitation;
     }
     return nil;
@@ -870,7 +870,7 @@
         else
         {
             if(viewmode==YES)
-                [self ShowMyRsvpToolBar];
+                [self ShowRsvpButton];
 //            else
 //                [self ShowRsvpToolBar];
         }
@@ -904,7 +904,7 @@
         
             if(selected==NO){
             // is host
-                Invitation *invitation=[self getHostInvitation];
+                Invitation *invitation=[self getMyInvitation];
                 if(invitation!=nil) {
                     invitation.rsvp_status=status;
                     NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",by_identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
@@ -928,7 +928,8 @@
                             id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                             if(code)
                                 if([code intValue]==200) {
-                                    NSLog(@"send rsvp ok!");
+                                    [exfeeShowview reloadData];
+//                                    NSLog(@"send rsvp ok!");
                                 }
                         }
                         //We got an error!
@@ -936,7 +937,7 @@
                         //Check Response Body to get Data!
                     }
                     if(selected==NO)
-                        [self ShowRsvpToolBar];
+                        [self ShowRsvpButton];
                     else
                         [self ShowRsvpToolBar];
 
@@ -971,8 +972,6 @@
 
 - (void) rsvpunaccept{
     [self sendrsvp:@"NORESPONSE"];
-//    [exfeeShowview reloadData];
-//    [self ShowGatherToolBar];
 }
 - (void) rsvpaddmate{
     for(int i=0;i< [exfeeSelected count];i++) {

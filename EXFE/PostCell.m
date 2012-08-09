@@ -61,16 +61,6 @@
 - (void)drawLayer:(CALayer *)theLayer
         inContext:(CGContextRef)theContext
 {
-//    UIGraphicsPushContext(theContext);
-//    CGContextSetShouldSmoothFonts(theContext, YES);
-//    CGContextSetAllowsAntialiasing(theContext, true);
-//    CGContextSetShouldAntialias(theContext, true);
-//    CGSize timesize=[time sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:10] constrainedToSize:CGSizeMake(100, 13) lineBreakMode:NSLineBreakByTruncatingTail];
-////    [[UIImage imageNamed:@"chat.png"] drawAtPoint:CGPointMake(0, 0)];
-//    [[UIColor whiteColor] set];
-//    [time drawInRect:CGRectMake(0, 3, timesize.width, timesize.height) withFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
-//    [relativetime drawInRect:CGRectMake(0, 3+timesize.height+1, timesize.width, timesize.height) withFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
-//    UIGraphicsPopContext();
     
 }
 
