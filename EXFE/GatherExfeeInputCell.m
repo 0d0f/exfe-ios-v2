@@ -48,5 +48,14 @@
 }
 
 - (void)drawContentView:(CGRect)r{
+    [title drawInRect:CGRectMake(5+30+5, 6, self.frame.size.width-(5+30+5+5), 20) withFont:[UIFont fontWithName:@"HelveticaNeue" size:18] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentLeft ];
+    [subtitle drawInRect:CGRectMake(5+30+5, 6+22, self.frame.size.width-(5+30+5+5), 18) withFont:[UIFont fontWithName:@"HelveticaNeue" size:12] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentLeft ];
+    [avatar drawInRect:CGRectMake(5, 5, 30, 30)];
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    CGContextSaveGState(context);
+    
+//    CGContextRestoreGState(context);
+
+    
 }
 @end

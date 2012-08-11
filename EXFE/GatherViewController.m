@@ -570,7 +570,7 @@
         EXButton *decline=[[EXButton alloc] initWithName:@"decline" title:@"Decline" image:[UIImage imageNamed:@"rsvp_unavailable_toolbar.png"] inFrame:CGRectMake(214, 6, 107, 30)];
         [decline addTarget:self action:@selector(rsvpdeclined) forControlEvents:UIControlEventTouchUpInside];
 
-        NSArray *array=[NSArray arrayWithObjects:accept,interested,decline, nil];
+        NSArray *array=[NSArray arrayWithObjects:interested,accept,decline, nil];
         [myrsvptoolbar drawButton:array];
         
         [accept release];

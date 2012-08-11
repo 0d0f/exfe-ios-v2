@@ -16,8 +16,8 @@
 @synthesize relativetime;
 @synthesize background;
 @synthesize separator;
-//@synthesize text_height;
 @synthesize avatarframe;
+@synthesize identity_name;
 
 - (void)setContent:(NSString *)s {
 	[content release];
@@ -71,19 +71,22 @@
     [super layoutSubviews];
 }
 - (void) drawString:(CGContextRef) context  rect:(CGRect)r{
+    
     CGContextSaveGState(context);
-
     CGFloat lineheight = 20;
     CGFloat linespacing = 0;
     CTParagraphStyleSetting setting[2] = {
         {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespacing},
         {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &lineheight}
     };
-    
     CTParagraphStyleRef style = CTParagraphStyleCreate(setting, 2);
-    NSMutableAttributedString *attributedString=[[NSMutableAttributedString alloc] initWithString:content];
-    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:14] range:NSMakeRange(0,[content length])];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  %@",identity_name,content]];
+    
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Bold" size:14] range:NSMakeRange(0,[identity_name length])];
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:14] range:NSMakeRange([identity_name length]+2,[content length])];
+
     [attributedString addAttribute:(id)kCTParagraphStyleAttributeName value:(id)style range:NSMakeRange(0,[content length])];
+    [attributedString addAttribute:(id)kCTForegroundColorAttributeName value:(id)[FONT_COLOR_FA CGColor] range:NSMakeRange(0,[content length]+[identity_name length]+2)];
     
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
     CGContextTranslateCTM(context, 0, self.bounds.size.height);
@@ -123,10 +126,8 @@
         CGImageRelease(separator_ref);
         CGContextRestoreGState(context);
     }
-    
 
     [[UIColor whiteColor] set];
-//    [content drawInRect:CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH+CELL_CONTENT_MARGIN_LEFT, CELL_CONTENT_MARGIN_TOP, CELL_CONTENT_WIDTH,r.size.height-CELL_CONTENT_MARGIN_TOP-CELL_CONTENT_MARGIN_BOTTOM) withFont:[UIFont fontWithName:@"HelveticaNeue" size:FONT_SIZE]];
     [self drawString:context rect:CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH+CELL_CONTENT_MARGIN_LEFT, 8, CELL_CONTENT_WIDTH,r.size.height-8-12)];
     
     if(avatar!=nil && ![avatar isKindOfClass:[NSNull class]])

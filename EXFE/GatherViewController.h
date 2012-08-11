@@ -82,7 +82,7 @@
 - (void) ShowRsvpToolBar;
 - (void) ShowMyRsvpToolBar;
 - (void) ShowRsvpButton;
-- (Invitation*) getHostInvitation;
+- (Invitation*) getMyInvitation;
 - (void) addDefaultIdentity;
 - (void) reArrangeViews;
 - (NSString*) findProvider:(NSString*)external_id;

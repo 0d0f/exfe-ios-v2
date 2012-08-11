@@ -187,8 +187,6 @@
 		78D2BAF615D394CC00716819 /* rsvp_mates_minus_toolbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D2BAF215D394CC00716819 /* rsvp_mates_minus_toolbar@2x.png */; };
 		78D2BAF715D394CC00716819 /* rsvp_mates_plus_toolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D2BAF315D394CC00716819 /* rsvp_mates_plus_toolbar.png */; };
 		78D2BAF815D394CC00716819 /* rsvp_mates_plus_toolbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D2BAF415D394CC00716819 /* rsvp_mates_plus_toolbar@2x.png */; };
-		78D2BAFB15D394E400716819 /* rsvp_remove_toolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D2BAF915D394E400716819 /* rsvp_remove_toolbar.png */; };
-		78D2BAFC15D394E400716819 /* rsvp_remove_toolbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D2BAFA15D394E400716819 /* rsvp_remove_toolbar@2x.png */; };
 		78D2BAFF15D394F800716819 /* rsvp_unavailable_toolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D2BAFD15D394F800716819 /* rsvp_unavailable_toolbar.png */; };
 		78D2BB0015D394F800716819 /* rsvp_unavailable_toolbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D2BAFE15D394F800716819 /* rsvp_unavailable_toolbar@2x.png */; };
 		78D2BB0315D3A3C800716819 /* GatherExfeeInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D2BB0215D3A3C800716819 /* GatherExfeeInputCell.m */; };
@@ -215,6 +213,8 @@
 		78F058021599B1BE00F360F2 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F058011599B1BD00F360F2 /* MapKit.framework */; };
 		78F058041599C30200F360F2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F058031599C30200F360F2 /* CoreLocation.framework */; };
 		78F0580B159B708F00F360F2 /* APIPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F0580A159B708F00F360F2 /* APIPlace.m */; };
+		78FB6B8D15D6C64000EF83B3 /* EXBubbleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB6B8A15D6C63F00EF83B3 /* EXBubbleButton.m */; };
+		78FB6B8E15D6C64000EF83B3 /* EXBubbleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB6B8C15D6C64000EF83B3 /* EXBubbleScrollView.m */; };
 		78FB79E815D0ECFC00DF9D73 /* ConversationInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB79E715D0ECFC00DF9D73 /* ConversationInputAccessoryView.m */; };
 		78FC07E015D224FC004BB482 /* CTUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC07DF15D224FC004BB482 /* CTUtil.m */; };
 /* End PBXBuildFile section */
@@ -496,8 +496,6 @@
 		78D2BAF215D394CC00716819 /* rsvp_mates_minus_toolbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "rsvp_mates_minus_toolbar@2x.png"; path = "../../../../Dropbox/0d0f/Product/1x 产品设计/m1B UI Design/ iOS slicing/rsvp_mates_minus_toolbar@2x.png"; sourceTree = "<group>"; };
 		78D2BAF315D394CC00716819 /* rsvp_mates_plus_toolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rsvp_mates_plus_toolbar.png; path = "../../../../Dropbox/0d0f/Product/1x 产品设计/m1B UI Design/ iOS slicing/rsvp_mates_plus_toolbar.png"; sourceTree = "<group>"; };
 		78D2BAF415D394CC00716819 /* rsvp_mates_plus_toolbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "rsvp_mates_plus_toolbar@2x.png"; path = "../../../../Dropbox/0d0f/Product/1x 产品设计/m1B UI Design/ iOS slicing/rsvp_mates_plus_toolbar@2x.png"; sourceTree = "<group>"; };
-		78D2BAF915D394E400716819 /* rsvp_remove_toolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rsvp_remove_toolbar.png; path = "../../../../Dropbox/0d0f/Product/1x 产品设计/m1B UI Design/ iOS slicing/rsvp_remove_toolbar.png"; sourceTree = "<group>"; };
-		78D2BAFA15D394E400716819 /* rsvp_remove_toolbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "rsvp_remove_toolbar@2x.png"; path = "../../../../Dropbox/0d0f/Product/1x 产品设计/m1B UI Design/ iOS slicing/rsvp_remove_toolbar@2x.png"; sourceTree = "<group>"; };
 		78D2BAFD15D394F800716819 /* rsvp_unavailable_toolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rsvp_unavailable_toolbar.png; path = "../../../../Dropbox/0d0f/Product/1x 产品设计/m1B UI Design/ iOS slicing/rsvp_unavailable_toolbar.png"; sourceTree = "<group>"; };
 		78D2BAFE15D394F800716819 /* rsvp_unavailable_toolbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "rsvp_unavailable_toolbar@2x.png"; path = "../../../../Dropbox/0d0f/Product/1x 产品设计/m1B UI Design/ iOS slicing/rsvp_unavailable_toolbar@2x.png"; sourceTree = "<group>"; };
 		78D2BB0115D3A3C800716819 /* GatherExfeeInputCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GatherExfeeInputCell.h; sourceTree = "<group>"; };
@@ -532,6 +530,10 @@
 		78F058031599C30200F360F2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		78F05809159B708F00F360F2 /* APIPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIPlace.h; sourceTree = "<group>"; };
 		78F0580A159B708F00F360F2 /* APIPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIPlace.m; sourceTree = "<group>"; };
+		78FB6B8915D6C63F00EF83B3 /* EXBubbleButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXBubbleButton.h; sourceTree = "<group>"; };
+		78FB6B8A15D6C63F00EF83B3 /* EXBubbleButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXBubbleButton.m; sourceTree = "<group>"; };
+		78FB6B8B15D6C64000EF83B3 /* EXBubbleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXBubbleScrollView.h; sourceTree = "<group>"; };
+		78FB6B8C15D6C64000EF83B3 /* EXBubbleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXBubbleScrollView.m; sourceTree = "<group>"; };
 		78FB79E615D0ECFC00DF9D73 /* ConversationInputAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationInputAccessoryView.h; sourceTree = "<group>"; };
 		78FB79E715D0ECFC00DF9D73 /* ConversationInputAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationInputAccessoryView.m; sourceTree = "<group>"; };
 		78FC07DE15D224FC004BB482 /* CTUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTUtil.h; sourceTree = "<group>"; };
@@ -939,6 +941,10 @@
 				78B9FD3215B5498200F5E4D3 /* EXNavigationBar.m */,
 				780961FE15BDB70B0071E9D0 /* EXOverlayView.h */,
 				780961FF15BDB70B0071E9D0 /* EXOverlayView.m */,
+				78FB6B8915D6C63F00EF83B3 /* EXBubbleButton.h */,
+				78FB6B8A15D6C63F00EF83B3 /* EXBubbleButton.m */,
+				78FB6B8B15D6C64000EF83B3 /* EXBubbleScrollView.h */,
+				78FB6B8C15D6C64000EF83B3 /* EXBubbleScrollView.m */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -956,8 +962,6 @@
 				78D2BAE615D3948800716819 /* rsvp_interested_toolbar@2x.png */,
 				78D2BAED15D394B200716819 /* rsvp_pending_toolbar.png */,
 				78D2BAEE15D394B200716819 /* rsvp_pending_toolbar@2x.png */,
-				78D2BAF915D394E400716819 /* rsvp_remove_toolbar.png */,
-				78D2BAFA15D394E400716819 /* rsvp_remove_toolbar@2x.png */,
 				78D2BAFD15D394F800716819 /* rsvp_unavailable_toolbar.png */,
 				78D2BAFE15D394F800716819 /* rsvp_unavailable_toolbar@2x.png */,
 				7820A0B915CB8E42008D0BB5 /* toolbar_btndown_bg_TEST@2x.png */,
@@ -1246,8 +1250,6 @@
 				78D2BAF615D394CC00716819 /* rsvp_mates_minus_toolbar@2x.png in Resources */,
 				78D2BAF715D394CC00716819 /* rsvp_mates_plus_toolbar.png in Resources */,
 				78D2BAF815D394CC00716819 /* rsvp_mates_plus_toolbar@2x.png in Resources */,
-				78D2BAFB15D394E400716819 /* rsvp_remove_toolbar.png in Resources */,
-				78D2BAFC15D394E400716819 /* rsvp_remove_toolbar@2x.png in Resources */,
 				78D2BAFF15D394F800716819 /* rsvp_unavailable_toolbar.png in Resources */,
 				78D2BB0015D394F800716819 /* rsvp_unavailable_toolbar@2x.png in Resources */,
 			);
@@ -1314,6 +1316,8 @@
 				78FB79E815D0ECFC00DF9D73 /* ConversationInputAccessoryView.m in Sources */,
 				78FC07E015D224FC004BB482 /* CTUtil.m in Sources */,
 				78D2BB0315D3A3C800716819 /* GatherExfeeInputCell.m in Sources */,
+				78FB6B8D15D6C64000EF83B3 /* EXBubbleButton.m in Sources */,
+				78FB6B8E15D6C64000EF83B3 /* EXBubbleScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

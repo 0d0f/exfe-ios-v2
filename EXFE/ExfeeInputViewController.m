@@ -30,17 +30,24 @@
     [exfeeInput setPlaceholder:@"Invite friends by name, email…"];
     [exfeeInput setBorderStyle:UITextBorderStyleRoundedRect];
     [exfeeInput setAutocorrectionType:UITextAutocorrectionTypeNo];
-//    [exfeeInput setDelegate:self];
-//    [exfeeInput setBackgroundColor:[UIColor clearColor]];
+    
+    suggestionTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 44+6+44, 320, 460-44-6-44) style:UITableViewStylePlain];
+    [self.view addSubview:suggestionTable];
+    suggestionTable.dataSource=self;
+    suggestionTable.delegate=self;
+    
+    
+    exfeeList=[[EXBubbleScrollView alloc] initWithFrame:CGRectMake(0, 44+6, self.view.frame.size.width, 44)];
+    [exfeeList setContentSize:CGSizeMake(self.view.frame.size.width, 44)];
+    [exfeeList setDelegate:self];
 
-    // Do any additional setup after loading the view from its nib.
+    [self.view addSubview:exfeeList];
 }
 - (IBAction) Close:(id) sender{
     [self dismissModalViewControllerAnimated:YES];    
 }
 
 - (IBAction)textDidChange:(UITextField*)textField{
-    NSLog(@"change:%@",textField);
     if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
         showInputinSuggestion=YES;
         [APIProfile LoadSuggest:exfeeInput.text delegate:self];
@@ -48,8 +55,11 @@
     }
     if(exfeeInput.text==nil || [exfeeInput.text isEqualToString:@""])
     {
-        showInputinSuggestion=NO;
-        [suggestionTable reloadData];
+        if(suggestIdentities!=nil){
+            [suggestIdentities release];
+            suggestIdentities=nil;
+            [suggestionTable reloadData];
+        }
     }
 
 }
@@ -187,56 +197,62 @@
 #pragma mark UITableView Datasource methods
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    int input=0;
-    if(showInputinSuggestion==YES)
-        input=1;
+//    int input=0;
+//    if(showInputinSuggestion==YES)
+//        input=1;
     if(suggestIdentities)
     {
-        return [suggestIdentities count]+input;
+        return [suggestIdentities count];
     }
-    return 0+input;
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"suggest view";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    GatherExfeeInputCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
 	{
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[GatherExfeeInputCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    if(showInputinSuggestion==YES&&indexPath.row==0)
-    {
-        cell.textLabel.text = exfeeInput.text;
-    }
-    else{
+//    if(showInputinSuggestion==YES&&indexPath.row==0)
+//    {
+//        cell.title = exfeeInput.text;
+//    }
+//    else{
         int row=indexPath.row;
-        if(showInputinSuggestion==YES)
-            row-=1;
+//        if(showInputinSuggestion==YES)
+//            row-=1;
             
         Identity *identity=[suggestIdentities objectAtIndex:row];
-        cell.textLabel.text = identity.name;
-        if(cell.textLabel.text==nil || [cell.textLabel.text isEqualToString:@""])
-            cell.textLabel.text = identity.external_username;
-        if(cell.textLabel.text==nil|| [cell.textLabel.text isEqualToString:@""])
-            cell.textLabel.text = identity.external_id;
+        cell.title = identity.name;
+        if(cell.title==nil || [cell.title isEqualToString:@""])
+            cell.title = identity.external_username;
+        
+        if([identity.provider isEqualToString:@"twitter"])
+            cell.subtitle =[NSString stringWithFormat:@"@%@",identity.external_username];
+        else
+            cell.subtitle =identity.external_id;
+        
         if(identity.avatar_filename!=nil) {
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(imgQueue, ^{
                 UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                        cell.imageView.image=avatar;
+                        cell.avatar=avatar;
+//                        cell.imageView.image=avatar;
                     }
                 });
             });
             dispatch_release(imgQueue);        
         }
-    }
+//    }
     return cell;
     
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     //TODO: add exfee to the selected toolbar, don't dismess this view!
     
 //    if(showInputinSuggestion==YES && indexPath.row==0 )
@@ -247,7 +263,10 @@
 //        int row=indexPath.row;
 //        if(showInputinSuggestion==YES )
 //            row-=1;
-//        Identity *identity=[suggestIdentities objectAtIndex:row];
+    Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
+
+    //    [selectedIdentities addObject:identity];
+//    [selectedexfee reloadData];
 //        Invitation *invitation =[Invitation object];
 //        invitation.rsvp_status=@"NORESPONSE";
 //        invitation.identity=identity;
@@ -269,6 +288,30 @@
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     NSLog(@"Error!:%@",error);
     //    [self stopLoading];
+}
+
+#pragma mark EXBubbleScrollViewDelegate methods
+- (void)OnInputConfirm:(EXBubbleScrollView *)bubbleScrollView textField:(UITextField*)textfield{
+    [bubbleScrollView addBubble:textfield.text];
+    
+}
+- (id)customObject:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
+    NSDictionary *dictionary=[[NSDictionary alloc] initWithObjectsAndKeys:input,@"name",@"id",@"id", nil ];
+    return dictionary;
+}
+- (BOOL)isInputValid:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    BOOL isemail= [emailTest evaluateWithObject:input];
+    if(isemail==YES)
+        return YES;
+    
+    NSString *twitterRegex = @"@[A-Za-z0-9]+";
+    NSPredicate *twitterTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex];
+    BOOL istwitter= [twitterTest evaluateWithObject:input];
+    if(istwitter==YES)
+        return YES;
+    return NO;
 }
 
 @end

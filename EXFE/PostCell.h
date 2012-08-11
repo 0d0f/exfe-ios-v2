@@ -13,6 +13,7 @@
     NSString *content;
     UIImage *avatar;
     NSString *time;
+    NSString *identity_name;
     NSString *relativetime;
     UIImage *background;
     UIImage *separator;
@@ -27,6 +28,7 @@
 @property (nonatomic,retain) UIImage* background;
 @property (nonatomic,retain) UIImage* separator;
 @property (nonatomic,retain) UIImage* avatarframe;
+@property (nonatomic,retain) NSString* identity_name;
 //@property float text_height;
 
 #define FONT_SIZE 14.0f

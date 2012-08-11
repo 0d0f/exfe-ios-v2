@@ -11,13 +11,18 @@
 #import "Identity.h"
 #import "Invitation.h"
 #import "GatherViewController.h"
+#import "EXBubbleScrollView.h"
 
-@interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,RKObjectLoaderDelegate>{
+@interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,RKObjectLoaderDelegate,UITableViewDelegate,UITableViewDataSource,EXBubbleScrollViewDelegate>{
+    
     IBOutlet UITextField *exfeeInput;
     NSMutableArray *suggestIdentities;
+//    NSMutableArray *selectedIdentities;
     UIViewController *gatherview;
-    IBOutlet UITableView *suggestionTable;
+    UITableView *suggestionTable;
     BOOL showInputinSuggestion;
+    
+    EXBubbleScrollView *exfeeList;
 }
 @property (nonatomic,retain) UIViewController* gatherview;
 

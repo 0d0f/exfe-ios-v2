@@ -46,7 +46,6 @@
     inputToolbar.delegate = self;
     inputToolbar.textView.delegate=self;
     [inputToolbar.textView.internalTextView setReturnKeyType:UIReturnKeySend];
-//    inputToolbar.textView.maximumNumberOfLines=2;
     [self.view addSubview:inputToolbar];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -61,7 +60,7 @@
     cellsepator=[UIImage imageNamed:@"conversation_line_h.png"];
     avatarframe=[UIImage imageNamed:@"conversation_portrait_frame.png"];
     CGRect _tableviewrect=_tableView.frame;
-    _tableviewrect.size.height-=kDefaultToolbarHeight;
+    _tableviewrect.size.height-=kDefaultToolbarHeight-44;
     [_tableView setFrame:_tableviewrect];
     _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
@@ -203,10 +202,11 @@
 	_posts = [[Post objectsWithFetchRequest:request] retain];
     [_tableView reloadData];
     if(_tableView.contentSize.height>_tableView.frame.size.height) {
-        CGPoint bottomOffset = CGPointMake(0, _tableView.contentSize.height - _tableView.bounds.size.height);
+        CGPoint bottomOffset = CGPointMake(0, _tableView.contentSize.height - _tableView.frame.size.height);
         showfloattime=NO;
-        [_tableView setContentOffset:bottomOffset animated:YES];
+        [_tableView setContentOffset:bottomOffset animated:NO];
     }
+    
     [inputToolbar setInputEnabled:YES];
     [inputToolbar hidekeyboard];
 
@@ -375,6 +375,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    NSLog(@"scroll %f",_tableView.contentOffset.y);
     if(istimehidden==NO)
     {
         [timetextlayer removeAnimationForKey:@"fadeout"];
@@ -429,9 +430,17 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Post *post=[_posts objectAtIndex:indexPath.row];
+    NSString *name=post.by_identity.nickname;
+    if(name==nil || [name isEqualToString:@""])
+        name=post.by_identity.name;
+
     CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN_LEFT +CELL_CONTENT_MARGIN_RIGHT), 20000.0f);
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:post.content];
-    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:14] range:NSMakeRange(0,[post.content length])];
+
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  %@",name,post.content]];
+
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Bold" size:14] range:NSMakeRange(0,[name length])];
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:14] range:NSMakeRange([name length]+2,[post.content length])];
+    
     CGSize size= [CTUtil CTSizeOfString:attributedString minLineHeight:20 linespacing:0 constraint:constraint];
     [attributedString release];
     CGFloat height = MAX(size.height, 20.0);
@@ -453,6 +462,9 @@
     cell.time=@"";
     cell.background=cellbackground;
     cell.avatarframe=avatarframe;
+    cell.identity_name=post.by_identity.nickname;
+    if(cell.identity_name==nil || [cell.identity_name isEqualToString:@""])
+        cell.identity_name=post.by_identity.name;
     if(indexPath.row!=0)
         cell.separator=cellsepator;
     [cell setShowTime:NO];
