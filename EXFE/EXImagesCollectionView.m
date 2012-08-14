@@ -23,6 +23,10 @@
     addexfee=[UIImage imageNamed:@"gather_add_exfee.png"];
     tagmates=[UIImage imageNamed:@"tag-mates.png"];
     tagrsvpaccepted=[UIImage imageNamed:@"rsvpbg-accepted.png"];
+    
+    exfee_frame_host=[UIImage imageNamed:@"exfee_frame_host.png"];
+    exfee_frame_mates=[UIImage imageNamed:@"exfee_frame_mates.png"];
+    exfee_frame=[UIImage imageNamed:@"exfee_frame.png"];
     hiddenAddButton=NO;
     return self;
 }
@@ -99,7 +103,7 @@
         BOOL isSelected=[[selected objectAtIndex:i] boolValue];
         if(isSelected==YES)
         {
-            [Util drawRoundRect:CGRectMake(x-imageXmargin, y-imageYmargin, imageWidth+imageXmargin*2, imageHeight+imageYmargin+15) color:[UIColor blueColor] radius:5];
+//            [Util drawRoundRect:CGRectMake(x-imageXmargin, y-imageYmargin, imageWidth+imageXmargin*2, imageHeight+imageYmargin+15) color:[UIColor blueColor] radius:5];
         }
         
         Invitation *invitation=[_dataSource imageCollectionView:self imageAtIndex:i];
@@ -124,15 +128,19 @@
         CGContextRestoreGState(currentContext);
         
         if([invitation.host boolValue]==YES)
-            [taghost drawInRect:CGRectMake(x+imageWidth-12, y, 12, 12)];
+            [exfee_frame drawInRect:CGRectMake(x-1, y-1, 42, 42)];
+//            [taghost drawInRect:CGRectMake(x+imageWidth-12, y, 12, 12)];
         int mates=[invitation.mates intValue];
         if(mates>0)
         {
-            [[UIColor whiteColor] set];
-            [tagmates drawInRect:CGRectMake(x, y, 12, 12)];
-            NSString *mates=[invitation.mates stringValue];
-            [mates drawInRect:CGRectMake(x+6, y, 12, 12) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:10]];
-            [@"+" drawInRect:CGRectMake(x, y, 12, 12) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:10]];
+            [exfee_frame_mates drawInRect:CGRectMake(x-3, y-2, 46, 44)];
+            
+
+//            [[UIColor whiteColor] set];
+//            [tagmates drawInRect:CGRectMake(x, y, 12, 12)];
+//            NSString *mates=[invitation.mates stringValue];
+//            [mates drawInRect:CGRectMake(x+6, y, 12, 12) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:10]];
+//            [@"+" drawInRect:CGRectMake(x, y, 12, 12) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:10]];
         }
         if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
             [tagrsvpaccepted drawInRect:CGRectMake(x+imageWidth-12, y+imageHeight-12, 12, 12)];

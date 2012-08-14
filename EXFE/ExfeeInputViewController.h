@@ -14,14 +14,13 @@
 #import "EXBubbleScrollView.h"
 
 @interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,RKObjectLoaderDelegate,UITableViewDelegate,UITableViewDataSource,EXBubbleScrollViewDelegate>{
-    
     IBOutlet UITextField *exfeeInput;
+    IBOutlet UIToolbar *toolbar;
     NSMutableArray *suggestIdentities;
 //    NSMutableArray *selectedIdentities;
     UIViewController *gatherview;
     UITableView *suggestionTable;
     BOOL showInputinSuggestion;
-    
     EXBubbleScrollView *exfeeList;
 }
 @property (nonatomic,retain) UIViewController* gatherview;
@@ -30,6 +29,7 @@
 - (IBAction)textDidChange:(UITextField*)textField;
 - (IBAction)editingDidBegan:(UITextField*)textField;
 - (IBAction)editingDidEnd:(UITextField*)textField;
-- (void) addByText;
-- (void) getIdentity:(NSString*)identity_json;
+//- (void) addByText;
+- (void) addByInputIdentity:(NSString*)input;
+- (void)loadIdentitiesFromDataStore:(NSString*)input;
 @end

@@ -12,6 +12,7 @@
 @synthesize avatar;
 @synthesize title;
 @synthesize subtitle;
+@synthesize providerIcon;
 
 
 - (void)setTitle:(NSString *)s {
@@ -28,6 +29,11 @@
 - (void)setAvatar:(UIImage *)a {
 	[avatar release];
 	avatar = [a copy];
+	[self setNeedsDisplay]; 
+}
+- (void) setProviderIcon:(UIImage *)a{
+	[providerIcon release];
+	providerIcon = [a copy];
 	[self setNeedsDisplay]; 
 }
 
@@ -51,6 +57,7 @@
     [title drawInRect:CGRectMake(5+30+5, 6, self.frame.size.width-(5+30+5+5), 20) withFont:[UIFont fontWithName:@"HelveticaNeue" size:18] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentLeft ];
     [subtitle drawInRect:CGRectMake(5+30+5, 6+22, self.frame.size.width-(5+30+5+5), 18) withFont:[UIFont fontWithName:@"HelveticaNeue" size:12] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentLeft ];
     [avatar drawInRect:CGRectMake(5, 5, 30, 30)];
+    [providerIcon drawInRect:CGRectMake(self.frame.size.width-18-10, 6, 18, 18)];
 //    CGContextRef context = UIGraphicsGetCurrentContext();
 //    CGContextSaveGState(context);
     

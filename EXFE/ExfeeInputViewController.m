@@ -27,21 +27,25 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [exfeeInput setPlaceholder:@"Invite friends by name, email…"];
-    [exfeeInput setBorderStyle:UITextBorderStyleRoundedRect];
-    [exfeeInput setAutocorrectionType:UITextAutocorrectionTypeNo];
+//    [exfeeInput setPlaceholder:@"Invite friends by name, email…"];
+//    [exfeeInput setBorderStyle:UITextBorderStyleRoundedRect];
+//    [exfeeInput setAutocorrectionType:UITextAutocorrectionTypeNo];
     
-    suggestionTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 44+6+44, 320, 460-44-6-44) style:UITableViewStylePlain];
+    suggestionTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 44+6, 320, 460-44-6) style:UITableViewStylePlain];
     [self.view addSubview:suggestionTable];
     suggestionTable.dataSource=self;
     suggestionTable.delegate=self;
     
     
-    exfeeList=[[EXBubbleScrollView alloc] initWithFrame:CGRectMake(0, 44+6, self.view.frame.size.width, 44)];
-    [exfeeList setContentSize:CGSizeMake(self.view.frame.size.width, 44)];
+    exfeeList=[[EXBubbleScrollView alloc] initWithFrame:CGRectMake(10, 7, 255, 30)];
+    [exfeeList setContentSize:CGSizeMake(self.view.frame.size.width, 30)];
     [exfeeList setDelegate:self];
 
-    [self.view addSubview:exfeeList];
+    [toolbar addSubview:exfeeList];
+    
+    //        self.backgroundColor
+
+    
 }
 - (IBAction) Close:(id) sender{
     [self dismissModalViewControllerAnimated:YES];    
@@ -51,7 +55,7 @@
     if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
         showInputinSuggestion=YES;
         [APIProfile LoadSuggest:exfeeInput.text delegate:self];
-        [self loadIdentitiesFromDataStore];
+        [self loadIdentitiesFromDataStore:exfeeInput.text];
     }
     if(exfeeInput.text==nil || [exfeeInput.text isEqualToString:@""])
     {
@@ -78,13 +82,13 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (void)loadIdentitiesFromDataStore {
+- (void)loadIdentitiesFromDataStore:(NSString*)input{
     [suggestIdentities release];
     suggestIdentities=nil;
     NSFetchRequest* request = [Identity fetchRequest];
     NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:NO];
     
-    NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",exfeeInput.text];
+    NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",input];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((name like[c] %@) OR (external_username like[c] %@) OR (external_id like[c] %@) OR (nickname like[c] %@)) AND provider != %@ AND  provider != %@ ",inputpredicate,inputpredicate,inputpredicate,inputpredicate,@"iOSAPN",@"android"];
     [request setPredicate:predicate];
     [request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
@@ -111,34 +115,43 @@
     NSLog(@"%@",textField.text);
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self addByText];
+//    [self addByText];
     return NO;
 }
 
-- (void) addByText{
-    NSCharacterSet *split=[NSCharacterSet characterSetWithCharactersInString:@",;"];
-    NSArray *identity_list=[exfeeInput.text componentsSeparatedByCharactersInSet:split];
+//- (void) addByText{
+//    NSCharacterSet *split=[NSCharacterSet characterSetWithCharactersInString:@",;"];
+//    NSArray *identity_list=[exfeeInput.text componentsSeparatedByCharactersInSet:split];
+//    NSString *json=@"";
+//    for(NSString *identity_input in identity_list) {
+//        NSString *provider=[Util findProvider:identity_input];
+//        if(![provider isEqualToString:@""]) {
+//            if(![json isEqualToString:@""])
+//                json=[json stringByAppendingString:@","];
+//            json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,identity_input];
+//        }
+//    }
+//    json=[NSString stringWithFormat:@"[%@]",json];
+//    [self getIdentity:json];
+//}
+
+- (void) addByInputIdentity:(NSString*)input{
+
     NSString *json=@"";
-    for(NSString *identity_input in identity_list) {
-        NSString *provider=[Util findProvider:identity_input];
-        if(![provider isEqualToString:@""]) {
-            if(![json isEqualToString:@""])
-                json=[json stringByAppendingString:@","];
-            json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,identity_input];
-        }
+    NSString *provider=[Util findProvider:input];
+    if(![provider isEqualToString:@""]) {
+        if(![json isEqualToString:@""])
+            json=[json stringByAppendingString:@","];
+        json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,input];
     }
     json=[NSString stringWithFormat:@"[%@]",json];
-    [self getIdentity:json];
-}
-
-- (void) getIdentity:(NSString*)identity_json{
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     RKClient *client = [RKClient sharedClient];
     NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
     
     RKParams* rsvpParams = [RKParams params];
-    [rsvpParams setValue:identity_json forParam:@"identities"];
+    [rsvpParams setValue:json forParam:@"identities"];
     [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
     [client post:endpoint usingBlock:^(RKRequest *request){
         request.method=RKRequestMethodPOST;
@@ -170,24 +183,15 @@
                                 Invitation *invitation =[Invitation object];
                                 invitation.rsvp_status=@"NORESPONSE";
                                 invitation.identity=identity;
-                                
-                                [(GatherViewController*)gatherview addExfee:invitation];
-                                [self dismissModalViewControllerAnimated:YES];
+                                [exfeeList addBubble:input customObject:invitation];
 
-//                                [exfeeIdentities addObject:invitation];
-//                                [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
-//                                [exfeeShowview reloadData];
-//                                [suggestionTable removeFromSuperview];
-                                
                             }
-                            exfeeInput.text=@"";
-                            [exfeeInput setEnabled:YES];
                         }
                 }
-            }else {
-                [exfeeInput setEnabled:YES];
-                //Check Response Body to get Data!
             }
+        };
+        request.onDidFailLoadWithError=^(NSError *error){
+            NSLog(@"%@",error);
         };
         request.delegate=self;
     }];
@@ -232,6 +236,13 @@
             cell.subtitle =[NSString stringWithFormat:@"@%@",identity.external_username];
         else
             cell.subtitle =identity.external_id;
+    
+        if(identity.provider!=nil && ![identity.provider isEqualToString:@""]){
+
+            NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",identity.provider];
+            UIImage *icon=[UIImage imageNamed:iconname];
+            cell.providerIcon=icon;
+        }
         
         if(identity.avatar_filename!=nil) {
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
@@ -240,8 +251,9 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
                         cell.avatar=avatar;
-//                        cell.imageView.image=avatar;
                     }
+                    else
+                        cell.avatar=[UIImage imageNamed:@"portrait_default.png"];
                 });
             });
             dispatch_release(imgQueue);        
@@ -252,36 +264,28 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    //TODO: add exfee to the selected toolbar, don't dismess this view!
-    
-//    if(showInputinSuggestion==YES && indexPath.row==0 )
-//    {
-//        [self addByText];
-//    }
-//    else{
-//        int row=indexPath.row;
-//        if(showInputinSuggestion==YES )
-//            row-=1;
     Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
+    Invitation *invitation =[Invitation object];
+    invitation.rsvp_status=@"NORESPONSE";
+    invitation.identity=identity;
 
-    //    [selectedIdentities addObject:identity];
-//    [selectedexfee reloadData];
-//        Invitation *invitation =[Invitation object];
-//        invitation.rsvp_status=@"NORESPONSE";
-//        invitation.identity=identity;
-//        [(GatherViewController*)gatherview addExfee:invitation];
-//        [self dismissModalViewControllerAnimated:YES];
-//    }
+    NSString *identity_name=identity.nickname;
+    if(identity_name==nil || [identity_name isEqualToString:@""])
+        identity_name=identity.name;
+    if(identity_name==nil || [identity_name isEqualToString:@""])
+        identity_name=identity.external_username;
+    if(identity_name==nil || [identity_name isEqualToString:@""])
+        identity_name=identity.external_id;
+    
+    [exfeeList addBubble:identity_name customObject:invitation];
 }
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
     
-    if([objects count]>0)
-    {
+    if([objects count]>0) {
         if([objectLoader.userData isEqualToString:@"suggest"])
-            [self loadIdentitiesFromDataStore];
+            [self loadIdentitiesFromDataStore:[exfeeList getInput]];
     }
 }
 
@@ -292,7 +296,10 @@
 
 #pragma mark EXBubbleScrollViewDelegate methods
 - (void)OnInputConfirm:(EXBubbleScrollView *)bubbleScrollView textField:(UITextField*)textfield{
-    [bubbleScrollView addBubble:textfield.text];
+//    [self getIdentity:json];
+
+    [self addByInputIdentity:textfield.text];
+//    [bubbleScrollView addBubble:textfield.text customObject:nil];
     
 }
 - (id)customObject:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
@@ -313,5 +320,20 @@
         return YES;
     return NO;
 }
-
+- (BOOL) inputTextChange:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
+    if(input!=nil && input.length>=1) {
+        showInputinSuggestion=YES;
+        [APIProfile LoadSuggest:input delegate:self];
+        [self loadIdentitiesFromDataStore:input];
+    }
+    if(input==nil || [input isEqualToString:@""])
+    {
+        if(suggestIdentities!=nil){
+            [suggestIdentities release];
+            suggestIdentities=nil;
+            [suggestionTable reloadData];
+        }
+    }
+    return YES;
+}
 @end

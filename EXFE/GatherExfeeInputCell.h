@@ -12,9 +12,11 @@
     UIImage *avatar;
     NSString *title;
     NSString *subtitle;
+    UIImage *providerIcon;
 }
 
 @property (nonatomic,retain) UIImage* avatar;
+@property (nonatomic,retain) UIImage* providerIcon;
 @property (nonatomic,retain) NSString* title;
 @property (nonatomic,retain) NSString* subtitle;
 @end

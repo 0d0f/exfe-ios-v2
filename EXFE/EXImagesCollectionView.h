@@ -46,6 +46,11 @@
     UIImage *addexfee;
     UIImage *tagmates;
     UIImage *tagrsvpaccepted;
+    
+    UIImage *exfee_frame_host;
+    UIImage *exfee_frame_mates;
+    UIImage *exfee_frame;
+    
     BOOL hiddenAddButton;
     
 }

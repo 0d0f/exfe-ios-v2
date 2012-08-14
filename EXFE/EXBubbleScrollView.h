@@ -17,15 +17,21 @@
 - (void)OnInputConfirm:(EXBubbleScrollView *)bubbleScrollView textField:(UITextField*)textfield;
 - (id)customObject:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input;
 - (BOOL)isInputValid:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input;
-
+- (BOOL) inputTextChange:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input;
 @end
 
 @interface EXBubbleScrollView : UIScrollView <UITextFieldDelegate> {
     NSMutableArray *bubbles;
     UITextField *input;
+    UIImageView *inputbackgroundImage;
+    UIImageView *icon;
     id <EXBubbleScrollViewDelegate> _exdelegate;
 }
--(BOOL) addBubble:(NSString*)title;
+-(BOOL) addBubble:(NSString*)title customObject:(id)customobject;
+-(void) deleteLastBubble;
 -(void) setDelegate:(id<EXBubbleScrollViewDelegate>)delegate;
 -(NSArray*) bubbleCustomObjects;
+- (void)inputTextChange:(NSNotification *)notification;
+- (NSString*)getInput;
+
 @end
