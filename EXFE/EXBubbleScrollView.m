@@ -14,23 +14,29 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-//        self.backgroundColor=
-        //        self.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"toolbar_bg.png"]];
         
-        self.backgroundColor=[UIColor clearColor];
-        input=[[UITextField alloc] initWithFrame:CGRectMake(18, 3, self.frame.size.width-18, 30)];
-
+        UIView *leftview = [[UIView alloc] initWithFrame:CGRectMake(-320, 0, 320, 30)];
+        leftview.backgroundColor=[UIColor whiteColor];
+        [self addSubview:leftview];
+        [leftview release];
         
+        self.backgroundColor=[UIColor whiteColor];
+        
+        input=[[UITextField alloc] initWithFrame:CGRectMake(6+18+4, 0, self.frame.size.width, 30)];
+        [input setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+        
+        input.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         CGRect inputframe=input.frame;
-        //        inputframe.size.height=27;
         inputframe.origin.x=0;
+        inputframe.origin.y=0;
         inputbackgroundImage = [[UIImageView alloc] initWithFrame:inputframe];
-        inputbackgroundImage.image = [UIImage imageNamed:@"textfield_navbar.png"];
+        inputbackgroundImage.image = [UIImage imageNamed:@"textfield_navbar_frame.png"];
         inputbackgroundImage.contentMode    = UIViewContentModeScaleToFill;
         inputbackgroundImage.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
         
-        [self addSubview:inputbackgroundImage];
-
+        backgroundview=[[UIView alloc] initWithFrame:inputframe];
+        backgroundview.backgroundColor=[UIColor whiteColor];
+        [self addSubview:backgroundview];
         bubbles=[[NSMutableArray alloc] initWithCapacity:12];
         
         input.delegate=self;
@@ -38,12 +44,9 @@
         [input setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [input setText:@" "];
         [input setBackgroundColor:[UIColor clearColor]];
+        
         [self addSubview:input];
 
-        icon=[[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 18, 18)];
-        icon.image=[UIImage imageNamed:@"exfee_18.png"];
-        [self addSubview:icon];
-        
         self.showsHorizontalScrollIndicator=NO;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputTextChange:) name:UITextFieldTextDidChangeNotification object:input];
@@ -58,7 +61,7 @@
     [inputbackgroundImage release];
     [bubbles release];
     [input release];
-    [icon release];
+    [backgroundview release];
 	[super dealloc];
 }
 -(void) deleteLastBubble{
@@ -68,15 +71,23 @@
     CGRect lastbubbleframe=lastbubble.frame;
     CGRect inputframe=input.frame;
     inputframe.origin.x=lastbubbleframe.origin.x+lastbubbleframe.size.width+4;
+    if(inputframe.origin.x<6+18+4)
+        inputframe.origin.x=6+18+4;
+
     if(inputframe.origin.x+inputframe.size.width<self.frame.size.width)
         inputframe.size.width=self.frame.size.width-inputframe.origin.x;
-
+    
     [input setFrame:inputframe];
+    CGRect backframe=backgroundview.frame;
+    backframe.size.width=inputframe.origin.x+inputframe.size.width;
+    [backgroundview setFrame:backframe];
     if(inputframe.origin.x+inputframe.size.width<self.contentSize.width){
         [self setContentSize:CGSizeMake(inputframe.origin.x+input.frame.size.width, self.contentSize.height)];
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.3];
         float offset=self.contentSize.width-self.frame.size.width;
+//        if(offset<=6+18+4)
+//            offset=0;
         [self setContentOffset:CGPointMake(offset, 0)];
         [UIView commitAnimations];
     }
@@ -93,10 +104,9 @@
     }
     EXBubbleButton *button=[EXBubbleButton buttonWithType:UIButtonTypeCustom];
     button.customObject=customobject;
-    button.backgroundColor=[UIColor greenColor];
     [button setAdjustsImageWhenHighlighted:NO];
 	[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-	[[button titleLabel] setFont:[UIFont fontWithName:@"Helvetica Neue" size:9]];
+	[[button titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
 	[[button titleLabel] setLineBreakMode:NSLineBreakByTruncatingTail];
 	[button setTitleEdgeInsets:UIEdgeInsetsMake(2, 10, 0, 10)];
 	[button setTitle:title forState:UIControlStateNormal];
@@ -104,22 +114,30 @@
 	[button sizeToFit];
     CGRect rect=[button frame];
     rect.size.width+=25;
-    rect.size.height+=10;
+    rect.size.height=30;
+    
     UIButton *lastbubble=[bubbles lastObject];
     if(lastbubble!=nil){
         int newx=lastbubble.frame.origin.x+lastbubble.frame.size.width;
-        rect.origin.x=newx+4;
+        rect.origin.x=newx;
+    }else{
+        rect.origin.x=6+18+4;
     }
+    
     [button setFrame:rect];
     [bubbles addObject:button];
-    [self addSubview:button];
+    [backgroundview addSubview:button];
     CGRect inputframe=input.frame;
-    inputframe.origin.x=rect.origin.x+rect.size.width+4;
+    inputframe.origin.x=rect.origin.x+rect.size.width;
     if(inputframe.size.width>INPUT_MIN_WIDTH)
-        inputframe.size.width-=rect.size.width+4;
+        inputframe.size.width-=rect.size.width;
     if(inputframe.size.width<INPUT_MIN_WIDTH)
         inputframe.size.width=INPUT_MIN_WIDTH;
     [input setFrame:inputframe];
+    
+    CGRect backframe=backgroundview.frame;
+    backframe.size.width=inputframe.origin.x+inputframe.size.width;
+    [backgroundview setFrame:backframe];
 
     if(inputframe.origin.x+inputframe.size.width>self.contentSize.width){
         [self setContentSize:CGSizeMake(inputframe.origin.x+input.frame.size.width, self.contentSize.height)];
@@ -149,8 +167,6 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     
     if([input.text isKindOfClass:[NSString class]] && NSEqualRanges(NSMakeRange(0, 1), range) && [string isEqualToString:@""]){
-//        NSString *inputtext=[input.text substringToIndex:1];
-//        NSLog(@"back delete:%@ ",inputtext);
         [input setText:@"  "];
         if([bubbles count]>0)
             [self deleteLastBubble];
@@ -167,11 +183,27 @@
     _exdelegate=delegate;
 }
 - (NSString*)getInput{
-    return input.text;
+    NSString *inputtext=[input.text stringByTrimmingCharactersInSet:
+                         [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    return inputtext;
 }
 
 //- (void)drawRect:(CGRect)rect
 //{
+//
+//    rect.origin.x+=2;
+//    [[UIColor whiteColor] set];
+//    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:15];
+//    [path fill];
+//    [path stroke];
+    
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    CGContextBeginPath(context);
+//    CGContextAddPath(context, framepath.CGPath);
+//    CGContextClosePath(context);
+
+//    CGContextClipToRect(context, CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH, 0, r.size.width, 2));
+
 //    UIImage *backgroundImage = [UIImage imageNamed:@"toolbarbg.png"];
 //    backgroundImage = [backgroundImage stretchableImageWithLeftCapWidth:floorf(backgroundImage.size.width/2) topCapHeight:floorf(backgroundImage.size.height/2)];
 //    [backgroundImage drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];

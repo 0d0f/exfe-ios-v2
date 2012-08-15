@@ -36,13 +36,28 @@
     suggestionTable.dataSource=self;
     suggestionTable.delegate=self;
     
-    
     exfeeList=[[EXBubbleScrollView alloc] initWithFrame:CGRectMake(10, 7, 255, 30)];
-    [exfeeList setContentSize:CGSizeMake(self.view.frame.size.width, 30)];
+    [exfeeList setContentSize:CGSizeMake(exfeeList.frame.size.width, 30)];
     [exfeeList setDelegate:self];
-
+    
     [toolbar addSubview:exfeeList];
     
+    inputframeview=[[UIImageView alloc] initWithFrame:exfeeList.frame];
+    inputframeview.image=[UIImage imageNamed:@"textfield_navbar_frame.png"];
+    inputframeview.contentMode    = UIViewContentModeScaleToFill;
+    inputframeview.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+    
+    [toolbar addSubview:inputframeview];
+    exfeeList.layer.cornerRadius=15;
+
+//    CGRect lefticonrect=exfeeList.frame;
+//    lefticonrect.origin.y=14;
+//    lefticonrect.size.width=18;
+//    lefticonrect.size.height=18;
+    
+    inputlefticon=[[UIImageView alloc] initWithFrame:CGRectMake(exfeeList.frame.origin.x+6, 14, 18, 18)];
+    inputlefticon.image=[UIImage imageNamed:@"exfee_18.png"];
+    [toolbar addSubview:inputlefticon];
     //        self.backgroundColor
 
     
@@ -108,6 +123,7 @@
     }
     
     suggestIdentities=[temp retain];
+    NSLog(@"%@",suggestIdentities);
     [temp release];
     [suggestionTable reloadData];
 }
@@ -297,8 +313,10 @@
 #pragma mark EXBubbleScrollViewDelegate methods
 - (void)OnInputConfirm:(EXBubbleScrollView *)bubbleScrollView textField:(UITextField*)textfield{
 //    [self getIdentity:json];
+    NSString *inputtext=[textfield.text stringByTrimmingCharactersInSet:
+                         [NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-    [self addByInputIdentity:textfield.text];
+    [self addByInputIdentity:inputtext];
 //    [bubbleScrollView addBubble:textfield.text customObject:nil];
     
 }

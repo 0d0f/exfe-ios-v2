@@ -176,7 +176,6 @@
     }
     [self initData];
     [self reArrangeViews];
-//    [self ShowMyRsvpToolBar];
     if(viewmode==YES)
         [self ShowRsvpButton];
 }
@@ -501,8 +500,7 @@
 
     if(viewmode==NO)
         [self reArrangeViews];
-    if(place!=nil)
-    {
+    if(place!=nil) {
         CLLocationCoordinate2D location;
         [map removeAnnotations: map.annotations];
         location.latitude = [_place.lat doubleValue];
@@ -657,17 +655,17 @@
 - (void) ShowGatherToolBar{
     if(gathertoolbar==nil){
         gathertoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, self.view.frame.size.height-50) buttonsize:CGSizeMake(20, 20) delegate:self];
-        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"toolbar_accept.png"] inFrame:CGRectMake(35, 6, 36, 30)];
+        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(35, 6, 36, 30)];
         [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
         
-        EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"-1 mate" image:[UIImage imageNamed:@"toolbar_mates_minus.png"] inFrame:CGRectMake(35+36+45, 6, 44, 30)];
+        EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"-1 mate" image:[UIImage imageNamed:@"rsvp_mates_minus_toolbar.png"] inFrame:CGRectMake(35+36+45, 6, 44, 30)];
         [submate addTarget:self action:@selector(rsvpsubmate) forControlEvents:UIControlEventTouchUpInside];
         [submate setTitle:@"" forState:UIControlStateNormal];
-        EXButton *addmate=[[EXButton alloc] initWithName:@"addmate" title:@"+1 mate" image:[UIImage imageNamed:@"toolbar_mates_plus.png"] inFrame:CGRectMake(35+36+45+44, 6, 44, 30)];
+        EXButton *addmate=[[EXButton alloc] initWithName:@"addmate" title:@"+1 mate" image:[UIImage imageNamed:@"rsvp_mates_plus_toolbar.png"] inFrame:CGRectMake(35+36+45+44, 6, 44, 30)];
         [addmate addTarget:self action:@selector(rsvpaddmate) forControlEvents:UIControlEventTouchUpInside];
         [addmate setTitle:@"" forState:UIControlStateNormal];
         
-        EXButton *remove=[[EXButton alloc] initWithName:@"remove" title:@"Remove" image:[UIImage imageNamed:@"toolbar_remove.png"] inFrame:CGRectMake(35+36+45+44+44+45, 6, 36, 30)];
+        EXButton *remove=[[EXButton alloc] initWithName:@"remove" title:@"Remove" image:[UIImage imageNamed:@"remove_toolbar.png"] inFrame:CGRectMake(35+36+45+44+44+45, 6, 36, 30)];
         [remove addTarget:self action:@selector(rsvpremove) forControlEvents:UIControlEventTouchUpInside];
         NSArray *array=[NSArray arrayWithObjects:accept,submate,addmate,remove, nil];
         [gathertoolbar drawButton:array];
@@ -701,9 +699,9 @@
         idx++;
     }
     if(isAllAccept==YES)
-        [gathertoolbar replaceButtonImage:[UIImage imageNamed:@"toolbar_un_accept.png"] title:@"Un-accept" target:self action:@selector(rsvpunaccept) forname:@"accept"];
+        [gathertoolbar replaceButtonImage:[UIImage imageNamed:@"rsvp_accept_toolbar_grey.png"] title:@"Un-accept" target:self action:@selector(rsvpunaccept) forname:@"accept"];
     else
-        [gathertoolbar replaceButtonImage:[UIImage imageNamed:@"toolbar_accept.png"] title:@"Accept" target:self action:@selector(rsvpaccept) forname:@"accept"];
+        [gathertoolbar replaceButtonImage:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] title:@"Accept" target:self action:@selector(rsvpaccept) forname:@"accept"];
     [gathertoolbar setHidden:NO];
 }
 
@@ -845,8 +843,9 @@
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col {
     if(index==[exfeeIdentities count])
     {
-        if(gathertoolbar)
-            [gathertoolbar setHidden:YES];
+        [self ShowGatherToolBar];
+//        if(gathertoolbar)
+//            [gathertoolbar setHidden:YES];
         [self ShowExfeeView];
     }
     else if(index <[exfeeIdentities count]){

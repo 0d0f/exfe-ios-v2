@@ -23,7 +23,29 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    // Drawing code
+    [FONT_COLOR_HL set];
+    UIBezierPath *path = [UIBezierPath bezierPathWithRect:rect];
+    [path fill];
+    [path stroke];
+
+    [[UIColor colorWithRed:0 green:0 blue:0 alpha:0.25] set]; //Black
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(currentContext);
+    CGContextBeginPath(currentContext);
+    CGContextMoveToPoint(currentContext, rect.size.width, 0);
+    CGContextAddLineToPoint(currentContext, rect.size.width, rect.size.height);
+    CGContextSetLineWidth(currentContext, 1);
+    CGContextStrokePath(currentContext);
+    CGContextRestoreGState(currentContext);
+
+    [[UIColor colorWithRed:1 green:1 blue:1 alpha:0.25] set];
+    CGContextSaveGState(currentContext);
+    CGContextBeginPath(currentContext);
+    CGContextMoveToPoint(currentContext, 0, 0);
+    CGContextAddLineToPoint(currentContext, 0, rect.size.height);
+    CGContextSetLineWidth(currentContext, 1);
+    CGContextStrokePath(currentContext);
+    CGContextRestoreGState(currentContext);
 }
 
 @end

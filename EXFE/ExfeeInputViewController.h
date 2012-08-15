@@ -20,8 +20,10 @@
 //    NSMutableArray *selectedIdentities;
     UIViewController *gatherview;
     UITableView *suggestionTable;
+    UIImageView *inputframeview;
     BOOL showInputinSuggestion;
     EXBubbleScrollView *exfeeList;
+    UIImageView *inputlefticon;
 }
 @property (nonatomic,retain) UIViewController* gatherview;
 

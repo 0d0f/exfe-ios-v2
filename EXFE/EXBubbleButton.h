@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Util.h"
 
 @interface EXBubbleButton : UIButton{
     id customObject;

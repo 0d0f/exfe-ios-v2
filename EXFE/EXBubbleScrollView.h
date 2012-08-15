@@ -24,7 +24,8 @@
     NSMutableArray *bubbles;
     UITextField *input;
     UIImageView *inputbackgroundImage;
-    UIImageView *icon;
+//    UIImageView *icon;
+    UIView *backgroundview;
     id <EXBubbleScrollViewDelegate> _exdelegate;
 }
 -(BOOL) addBubble:(NSString*)title customObject:(id)customobject;
