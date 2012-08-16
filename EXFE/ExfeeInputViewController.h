@@ -17,7 +17,6 @@
     IBOutlet UITextField *exfeeInput;
     IBOutlet UIToolbar *toolbar;
     NSMutableArray *suggestIdentities;
-//    NSMutableArray *selectedIdentities;
     UIViewController *gatherview;
     UITableView *suggestionTable;
     UIImageView *inputframeview;
@@ -27,6 +26,7 @@
 }
 @property (nonatomic,retain) UIViewController* gatherview;
 
+- (void) done:(id)sender;
 - (IBAction) Close:(id) sender;
 - (IBAction)textDidChange:(UITextField*)textField;
 - (IBAction)editingDidBegan:(UITextField*)textField;

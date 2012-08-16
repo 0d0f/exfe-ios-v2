@@ -36,7 +36,7 @@
     suggestionTable.dataSource=self;
     suggestionTable.delegate=self;
     
-    exfeeList=[[EXBubbleScrollView alloc] initWithFrame:CGRectMake(10, 7, 255, 30)];
+    exfeeList=[[EXBubbleScrollView alloc] initWithFrame:CGRectMake(5, 7, 255, 30)];
     [exfeeList setContentSize:CGSizeMake(exfeeList.frame.size.width, 30)];
     [exfeeList setDelegate:self];
     
@@ -49,23 +49,38 @@
     
     [toolbar addSubview:inputframeview];
     exfeeList.layer.cornerRadius=15;
-
-//    CGRect lefticonrect=exfeeList.frame;
-//    lefticonrect.origin.y=14;
-//    lefticonrect.size.width=18;
-//    lefticonrect.size.height=18;
+    [toolbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"] forToolbarPosition:UIToolbarPositionBottom barMetrics:UIBarMetricsDefault];
     
     inputlefticon=[[UIImageView alloc] initWithFrame:CGRectMake(exfeeList.frame.origin.x+6, 14, 18, 18)];
     inputlefticon.image=[UIImage imageNamed:@"exfee_18.png"];
     [toolbar addSubview:inputlefticon];
-    //        self.backgroundColor
-
+    
+    UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];
+    UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(255+5+5, 7, 50, 31)];
+    backimg.image=btn_dark;
+    backimg.contentMode=UIViewContentModeScaleToFill;
+    backimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+    [toolbar addSubview:backimg];
+    [backimg release];
+    
+    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [doneButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+    doneButton.frame = CGRectMake(255+5+5, 7, 50, 30);
+    [doneButton addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
+    [toolbar addSubview:doneButton];
     
 }
 - (IBAction) Close:(id) sender{
     [self dismissModalViewControllerAnimated:YES];    
 }
-
+- (void) done:(id)sender{
+    NSLog(@"done");
+    NSArray *customobjects=[exfeeList bubbleCustomObjects];
+    for(Invitation* invitation in customobjects)
+        [(GatherViewController*)gatherview addExfee:invitation];
+    [self dismissModalViewControllerAnimated:YES];    
+}
 - (IBAction)textDidChange:(UITextField*)textField{
     if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
         showInputinSuggestion=YES;

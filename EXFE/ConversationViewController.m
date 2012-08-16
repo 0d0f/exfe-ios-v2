@@ -56,9 +56,9 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
     }
 #endif    
-    cellbackground=[UIImage imageNamed:@"conversation_bg.png"];
-    cellsepator=[UIImage imageNamed:@"conversation_line_h.png"];
-    avatarframe=[UIImage imageNamed:@"conversation_portrait_frame.png"];
+    cellbackground=[UIImage imageNamed:@"conv_bg.png"];
+    cellsepator=[UIImage imageNamed:@"conv_line_h.png"];
+    avatarframe=[UIImage imageNamed:@"conv_portrait_frame.png"];
     CGRect _tableviewrect=_tableView.frame;
     _tableviewrect.size.height-=kDefaultToolbarHeight-44;
     [_tableView setFrame:_tableviewrect];

@@ -140,7 +140,7 @@
         [avatarframe drawInRect:CGRectMake(AVATAR_LEFT_MERGIN-1, avatar_y, avatarframe.size.width, avatarframe.size.height)];
     }
     CGContextSaveGState(context);
-    UIImage *v_line=[UIImage imageNamed:@"conversation_line_v.png"];
+    UIImage *v_line=[UIImage imageNamed:@"conv_line_v.png"];
     CGImageRef v_line_ref = CGImageRetain(v_line.CGImage);
     CGContextClipToRect(context, CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH-10, 0, 11, r.size.height));
     CGContextTranslateCTM(context, AVATAR_LEFT_MERGIN+AVATAR_WIDTH-10, v_line.size.height);

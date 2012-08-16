@@ -187,7 +187,6 @@
                          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     return inputtext;
 }
-
 //- (void)drawRect:(CGRect)rect
 //{
 //

@@ -44,7 +44,7 @@
     current_cellrow=-1;
     self.tableView.backgroundColor=[UIColor colorWithRed:0.27f green:0.33f blue:0.41f alpha:1.00f];
     UIView *topview = [[UIView alloc] initWithFrame:CGRectMake(0, 0 - 480, 320, 480)];
-    topview.backgroundColor=[UIColor colorWithRed:0.64f green:0.69f blue:0.77f alpha:1.00f];;
+    topview.backgroundColor=[UIColor colorWithRed:0.64f green:0.69f blue:0.77f alpha:1.00f];
     [self.tableView addSubview:topview];
     [topview release];
     [super viewDidLoad];
@@ -122,7 +122,7 @@
     UINavigationBar *navbar=[self.navigationController navigationBar];
     if(navbar)
     {
-        [navbar setBackgroundImage:[UIImage imageNamed:@"navbar.png"]  forBarMetrics:UIBarMetricsDefault];
+        [navbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"]  forBarMetrics:UIBarMetricsDefault];
     }
     [self.navigationController.view setNeedsDisplay];    
 }
