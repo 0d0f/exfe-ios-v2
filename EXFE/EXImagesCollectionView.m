@@ -27,6 +27,12 @@
     exfee_frame_host=[UIImage imageNamed:@"exfee_frame_host.png"];
     exfee_frame_mates=[UIImage imageNamed:@"exfee_frame_mates.png"];
     exfee_frame=[UIImage imageNamed:@"exfee_frame.png"];
+    
+    rsvp_accept_badge=[UIImage imageNamed:@"rsvp_accept_badge.png"];
+    rsvp_interested_badge=[UIImage imageNamed:@"rsvp_interested_badge.png"];
+    rsvp_pending_badge=[UIImage imageNamed:@"rsvp_pending_badge.png"];
+    rsvp_unavailable_badge=[UIImage imageNamed:@"rsvp_unavailable_badge.png"];
+
     hiddenAddButton=NO;
     return self;
 }
@@ -101,10 +107,6 @@
         int y=y_count*(imageHeight+15+imageYmargin)+imageYmargin;
 
         BOOL isSelected=[[selected objectAtIndex:i] boolValue];
-        if(isSelected==YES)
-        {
-//            [Util drawRoundRect:CGRectMake(x-imageXmargin, y-imageYmargin, imageWidth+imageXmargin*2, imageHeight+imageYmargin+15) color:[UIColor blueColor] radius:5];
-        }
         
         Invitation *invitation=[_dataSource imageCollectionView:self imageAtIndex:i];
         Identity *identity=invitation.identity;
@@ -133,17 +135,28 @@
         int mates=[invitation.mates intValue];
         if(mates>0)
         {
-            [exfee_frame_mates drawInRect:CGRectMake(x-3, y-2, 46, 44)];
-            
-
+            [exfee_frame_mates drawInRect:CGRectMake(x-3, y-3, 46, 44)];
 //            [[UIColor whiteColor] set];
 //            [tagmates drawInRect:CGRectMake(x, y, 12, 12)];
 //            NSString *mates=[invitation.mates stringValue];
 //            [mates drawInRect:CGRectMake(x+6, y, 12, 12) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:10]];
 //            [@"+" drawInRect:CGRectMake(x, y, 12, 12) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:10]];
         }
-        if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
-            [tagrsvpaccepted drawInRect:CGRectMake(x+imageWidth-12, y+imageHeight-12, 12, 12)];
+        if(isSelected==YES)
+        {
+            if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+                [rsvp_accept_badge drawInRect:CGRectMake(x-4, y-4, 52, 52)];
+            else if([invitation.rsvp_status isEqualToString:@"INTERESTED"])
+                [rsvp_interested_badge drawInRect:CGRectMake(x-4, y-4, 52, 52)];
+            else if([invitation.rsvp_status isEqualToString:@"NORESPONSE"])
+                [rsvp_pending_badge drawInRect:CGRectMake(x-4, y-4, 52, 52)];
+            else if([invitation.rsvp_status isEqualToString:@"DECLINED"])
+                [rsvp_unavailable_badge drawInRect:CGRectMake(x-4, y-4, 52, 52)];
+            
+        }
+
+//        if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+//            [tagrsvpaccepted drawInRect:CGRectMake(x+imageWidth-12, y+imageHeight-12, 12, 12)];
 
         NSString *name=identity.name;
         if(name==nil)
@@ -219,7 +232,7 @@
         CGRect rect=[(NSValue*)[grid objectAtIndex:i] CGRectValue];
         BOOL inrect=CGRectContainsPoint(rect,point);
         if(inrect==YES){
-            [_delegate imageCollectionView:self didSelectRowAtIndex:i row:y_count col:x_count];
+            [_delegate imageCollectionView:self didSelectRowAtIndex:i row:y_count col:x_count frame:rect];
         }
         x_count++;
     }

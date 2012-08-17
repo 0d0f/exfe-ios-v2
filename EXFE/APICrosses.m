@@ -132,7 +132,6 @@
 
     NSString *endpoint = [NSString stringWithFormat:@"/users/%u/crosses?updated_at=%@&token=%@",app.userid,updatedtime,app.accesstoken];
     RKObjectManager* manager =[RKObjectManager sharedManager];
-    NSLog(@"LoadCrossWithUserId %@",endpoint);
     [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
         RKObjectLoader *loader = [manager loaderWithResourcePath:endpoint];
         loader.delegate = delegate;

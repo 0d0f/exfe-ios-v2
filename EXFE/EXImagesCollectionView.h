@@ -25,7 +25,7 @@
 
 @protocol EXImagesCollectionDelegate<NSObject>
 @required
-- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col;
+- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect;
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height;
 @end
 
@@ -50,6 +50,11 @@
     UIImage *exfee_frame_host;
     UIImage *exfee_frame_mates;
     UIImage *exfee_frame;
+    
+    UIImage *rsvp_accept_badge;
+    UIImage *rsvp_interested_badge;
+    UIImage *rsvp_pending_badge;
+    UIImage *rsvp_unavailable_badge;
     
     BOOL hiddenAddButton;
     

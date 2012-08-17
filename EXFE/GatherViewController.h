@@ -32,6 +32,7 @@
 #import "Util.h"
 #import "EXOverlayView.h"
 #import "ConversationViewController.h"
+#import "EXQuoteView.h"
 
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9
@@ -53,6 +54,7 @@
     UIView *backgroundview;
     UIScrollView *containview;
     EXOverlayView *containcardview;
+    EXQuoteView *popover;
     UITableView *suggestionTable;
     NSMutableArray *suggestIdentities;
     NSMutableArray *exfeeIdentities;
@@ -103,6 +105,6 @@
 - (void) setViewMode;
 - (void) addExfee:(Invitation*) invitation;
 - (void) initData;
-
-- (void)touchesBegan:(UITapGestureRecognizer*)sender;
+- (void) ShowExfeePopOver:(Invitation*) invitation pointTo:(CGPoint)point arrowx:(float)arrowx;
+- (void) touchesBegan:(UITapGestureRecognizer*)sender;
 @end

@@ -47,8 +47,10 @@
 
     containcardview=[[EXOverlayView alloc] initWithFrame:CGRectMake(0, INNER_MARGIN, containview.frame.size.width, containview.frame.size.height)];
     containcardview.backgroundimage=[UIImage imageNamed:@"paper_texture.png"];
+    containcardview.cornerRadius=5;
     
     [containview addSubview:containcardview];
+
     title_input_img=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gather_title_input_area.png"]];
     [title_input_img setFrame:CGRectMake(0, 0, 308, 69)];
     [containcardview addSubview:title_input_img];
@@ -340,6 +342,8 @@
     }
     
     [containcardview setNeedsDisplay];
+    
+
 }
 - (void) setViewMode{
     viewmode=YES;
@@ -369,7 +373,44 @@
         }
     }
 }
+- (void)ShowExfeePopOver:(Invitation*) invitation pointTo:(CGPoint)point  arrowx:(float)arrowx{
+    float width=100;
+    float height=57.5;
+    float arrow_height=8;
+//    float arrow_left=width/2-arrow_height;
+//    float arrow_left=20;//point.x-arrow_height;
+//    float arrow_left_n=point.x-arrow_height;
+    
+    float framex=point.x-width/2;
 
+    if(framex<0){
+        framex=0;
+    }else if(framex+width>self.view.frame.size.width){
+        framex=self.view.frame.size.width-width;
+    }
+    float framey=point.y-height;
+    float arrow_left=point.x-arrow_height-framex;
+
+//    popover=[[EXQuoteView alloc] initWithFrame:CGRectMake(framex,framey,width,height)];
+//    popover.gradientcolors=YES;
+//    [containcardview addSubview:popover];
+//    [popover setNeedsDisplay];
+    
+    if(popover==nil){
+        popover =[[EXQuoteView alloc]initWithFrame:CGRectMake(framex,framey,width,height)];
+        [self.view addSubview:popover];
+    }
+    [popover setFrame:CGRectMake(framex,framey,width,height)];
+    popover.arrowleft=arrow_left;
+    popover.arrowHeight=8;
+    popover.cornerRadius=5;
+    popover.layer.shadowColor=[UIColor blackColor].CGColor;
+    popover.layer.shadowOpacity = 0.5;
+    popover.layer.shadowRadius = 1;
+    popover.layer.shadowOffset = CGSizeMake(2.0f, 2.0f);
+    [popover setNeedsDisplay];
+    
+}
 - (IBAction) Gather:(id) sender{
     [self pullcontainviewDown];
     Identity *by_identity=[Identity object];
@@ -840,7 +881,8 @@
 }
 
 #pragma mark EXImagesCollectionView delegate methods
-- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col {
+- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
+
     if(index==[exfeeIdentities count])
     {
         [self ShowGatherToolBar];
@@ -861,8 +903,16 @@
                 isSelect=YES;
         }
         if(isSelect){
-            if(viewmode==YES)
+            CGRect f=imageCollectionView.frame;
+            float x=f.origin.x+rect.origin.x+rect.size.width/2;
+            float y=f.origin.y+rect.origin.y;
+            
+            
+            Invitation *invitation=[exfeeIdentities objectAtIndex:index];
+            [self ShowExfeePopOver:invitation pointTo:CGPointMake(x,y) arrowx:rect.origin.x+rect.size.width/2+f.origin.x];
+            if(viewmode==YES){
                 [self ShowRsvpToolBar];
+            }
             else
                 [self ShowGatherToolBar];
         }
