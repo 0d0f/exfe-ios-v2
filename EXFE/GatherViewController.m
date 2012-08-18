@@ -381,7 +381,7 @@
     if([invitation.mates intValue]>0)
         width=182;
     if(framex<0){
-        framex=0;
+        framex=5;
     }else if(framex+width>self.view.frame.size.width){
         framex=self.view.frame.size.width-width;
     }
@@ -399,12 +399,47 @@
     popover.layer.shadowOpacity = 0.5;
     popover.layer.shadowRadius = 1;
     popover.layer.shadowOffset = CGSizeMake(2.0f, 2.0f);
+    
+    NSString *rsvp_status=@"Pending";
+    if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+        rsvp_status=@"Accepted";
+    else if([invitation.rsvp_status isEqualToString:@"INTERESTED"])
+        rsvp_status=@"Interested";
+    else if([invitation.rsvp_status isEqualToString:@"DECLINED"])
+        rsvp_status=@"Unavailable";
+    
+    NSString *mate=@"";
+    if([invitation.mates intValue]>0)
+    {
+        mate=[mate stringByAppendingFormat:@" with %u mate.",[invitation.mates intValue]];
+    }
+    else
+        rsvp_status=[rsvp_status stringByAppendingString:@"."];
+    NSString *host=@"";
+    if([invitation.host boolValue]==YES)
+        host=@"Host. ";
+    
+    NSMutableAttributedString *Line1 = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@%@",host,rsvp_status,mate]];
+    [Line1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Bold" size:14] range:NSMakeRange(0,[Line1 length])];
+    [Line1 addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(0,[host length])];
+    [Line1 addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(0+[host length],[rsvp_status length])];
+    if([mate length]>10){
+        [Line1 addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0+[host length]+[rsvp_status length],[mate length])];
+        
+        [Line1 addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(0+[host length]+[rsvp_status length]+6,[[invitation.mates stringValue] length])];
+    }
+    NSMutableAttributedString *temp=[Line1 mutableCopy];
+    CGSize Line1_size=[CTUtil CTSizeOfString:temp minLineHeight:15 linespacing:1 constraint:CGSizeMake(self.view.frame.size.width, 15)];
+    [temp release];
+
+    popover.Line1=Line1;
+    [Line1 release];
+
+    
     popover.invitation=invitation;
-//    [popover setHidden:YES];
     [popover setFrame:CGRectMake(framex,framey,width,height)];
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
-//    [popover setHidden:NO];
     [popover.layer removeAnimationForKey:@"fadeout"];
     [UIView commitAnimations];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
