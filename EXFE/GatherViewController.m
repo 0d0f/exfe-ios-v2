@@ -374,15 +374,12 @@
     }
 }
 - (void)ShowExfeePopOver:(Invitation*) invitation pointTo:(CGPoint)point  arrowx:(float)arrowx{
-    float width=100;
+    float width=131;
     float height=57.5;
     float arrow_height=8;
-//    float arrow_left=width/2-arrow_height;
-//    float arrow_left=20;//point.x-arrow_height;
-//    float arrow_left_n=point.x-arrow_height;
-    
     float framex=point.x-width/2;
-
+    if([invitation.mates intValue]>0)
+        width=182;
     if(framex<0){
         framex=0;
     }else if(framex+width>self.view.frame.size.width){
@@ -391,16 +388,10 @@
     float framey=point.y-height;
     float arrow_left=point.x-arrow_height-framex;
 
-//    popover=[[EXQuoteView alloc] initWithFrame:CGRectMake(framex,framey,width,height)];
-//    popover.gradientcolors=YES;
-//    [containcardview addSubview:popover];
-//    [popover setNeedsDisplay];
-    
     if(popover==nil){
-        popover =[[EXQuoteView alloc]initWithFrame:CGRectMake(framex,framey,width,height)];
-        [self.view addSubview:popover];
+        popover =[[EXInvitationQuoteView alloc]initWithFrame:CGRectMake(framex,framey,width,height)];
+        [containcardview addSubview:popover];
     }
-    [popover setFrame:CGRectMake(framex,framey,width,height)];
     popover.arrowleft=arrow_left;
     popover.arrowHeight=8;
     popover.cornerRadius=5;
@@ -408,8 +399,29 @@
     popover.layer.shadowOpacity = 0.5;
     popover.layer.shadowRadius = 1;
     popover.layer.shadowOffset = CGSizeMake(2.0f, 2.0f);
+    popover.invitation=invitation;
+//    [popover setHidden:YES];
+    [popover setFrame:CGRectMake(framex,framey,width,height)];
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3];
+//    [popover setHidden:NO];
+    [popover.layer removeAnimationForKey:@"fadeout"];
+    [UIView commitAnimations];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    [self performSelector:@selector(hiddenPopover) withObject:nil afterDelay:2];
     [popover setNeedsDisplay];
     
+}
+- (void) hiddenPopover{
+    CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+    fadeoutAnimation.fillMode = kCAFillModeForwards;
+    fadeoutAnimation.duration=0.5;
+    fadeoutAnimation.removedOnCompletion =NO;
+    fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
+    fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
+    [popover.layer addAnimation:fadeoutAnimation forKey:@"fadeout"];
+//    istimehidden=YES;
+
 }
 - (IBAction) Gather:(id) sender{
     [self pullcontainviewDown];

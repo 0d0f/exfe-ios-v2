@@ -32,7 +32,7 @@
 #import "Util.h"
 #import "EXOverlayView.h"
 #import "ConversationViewController.h"
-#import "EXQuoteView.h"
+#import "EXInvitationQuoteView.h"
 
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9
@@ -54,7 +54,7 @@
     UIView *backgroundview;
     UIScrollView *containview;
     EXOverlayView *containcardview;
-    EXQuoteView *popover;
+    EXInvitationQuoteView *popover;
     UITableView *suggestionTable;
     NSMutableArray *suggestIdentities;
     NSMutableArray *exfeeIdentities;
@@ -107,4 +107,5 @@
 - (void) initData;
 - (void) ShowExfeePopOver:(Invitation*) invitation pointTo:(CGPoint)point arrowx:(float)arrowx;
 - (void) touchesBegan:(UITapGestureRecognizer*)sender;
+- (void) hiddenPopover;
 @end

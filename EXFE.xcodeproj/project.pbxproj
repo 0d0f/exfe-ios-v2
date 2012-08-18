@@ -213,6 +213,7 @@
 		78B1FCF615DCB9EC00DD1C56 /* btn_light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B1FCEC15DCB9EC00DD1C56 /* btn_light@2x.png */; };
 		78B1FCF715DCB9EC00DD1C56 /* btn_red_dark_44.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B1FCED15DCB9EC00DD1C56 /* btn_red_dark_44.png */; };
 		78B1FCF815DCB9EC00DD1C56 /* btn_red_dark_44@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B1FCEE15DCB9EC00DD1C56 /* btn_red_dark_44@2x.png */; };
+		78B22F9715DF4E5B008BEA47 /* EXInvitationQuoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B22F9615DF4E5B008BEA47 /* EXInvitationQuoteView.m */; };
 		78B2AF6815DEABF400451EA2 /* EXQuoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B2AF6715DEAB5F00451EA2 /* EXQuoteView.m */; };
 		78B563B115B55B330052B8DE /* cal_badge.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B563AF15B55B330052B8DE /* cal_badge.png */; };
 		78B563B215B55B330052B8DE /* cal_badge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B563B015B55B330052B8DE /* cal_badge@2x.png */; };
@@ -593,6 +594,8 @@
 		78B1FCEC15DCB9EC00DD1C56 /* btn_light@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_light@2x.png"; sourceTree = "<group>"; };
 		78B1FCED15DCB9EC00DD1C56 /* btn_red_dark_44.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_red_dark_44.png; sourceTree = "<group>"; };
 		78B1FCEE15DCB9EC00DD1C56 /* btn_red_dark_44@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_red_dark_44@2x.png"; sourceTree = "<group>"; };
+		78B22F9515DF4E5B008BEA47 /* EXInvitationQuoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXInvitationQuoteView.h; sourceTree = "<group>"; };
+		78B22F9615DF4E5B008BEA47 /* EXInvitationQuoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXInvitationQuoteView.m; sourceTree = "<group>"; };
 		78B2AF6615DEAB5F00451EA2 /* EXQuoteView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXQuoteView.h; sourceTree = "<group>"; };
 		78B2AF6715DEAB5F00451EA2 /* EXQuoteView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EXQuoteView.m; sourceTree = "<group>"; };
 		78B563AF15B55B330052B8DE /* cal_badge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cal_badge.png; sourceTree = "<group>"; };
@@ -1251,6 +1254,8 @@
 				78FB6B8C15D6C64000EF83B3 /* EXBubbleScrollView.m */,
 				78B2AF6615DEAB5F00451EA2 /* EXQuoteView.h */,
 				78B2AF6715DEAB5F00451EA2 /* EXQuoteView.m */,
+				78B22F9515DF4E5B008BEA47 /* EXInvitationQuoteView.h */,
+				78B22F9615DF4E5B008BEA47 /* EXInvitationQuoteView.m */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -1704,6 +1709,7 @@
 				78FB6B8D15D6C64000EF83B3 /* EXBubbleButton.m in Sources */,
 				78FB6B8E15D6C64000EF83B3 /* EXBubbleScrollView.m in Sources */,
 				78B2AF6815DEABF400451EA2 /* EXQuoteView.m in Sources */,
+				78B22F9715DF4E5B008BEA47 /* EXInvitationQuoteView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
