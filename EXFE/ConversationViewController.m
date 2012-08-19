@@ -302,7 +302,8 @@
                 {
                     NSString *timestring=[Util formattedDateRelativeToNow:post.created_at];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:timestring];
-                    [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:10] range:NSMakeRange(0,[timestring length])];
+                    
+                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL) range:NSMakeRange(0,[timestring length])];
                     [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[timestring length])];
                 }
                 else if(showTimeMode==1)
@@ -316,10 +317,10 @@
                     
                     [dateformat_to release];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",datestring,timestring]];
-                    [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:10] range:NSMakeRange(0,[datestring length])];
+                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL) range:NSMakeRange(0,[datestring length])];
                     [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[datestring length])];
 
-                    [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:9] range:NSMakeRange([datestring length]+1,[timestring length])];
+                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 9.0, NULL) range:NSMakeRange([datestring length]+1,[timestring length])];
                     [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_CCC.CGColor range:NSMakeRange([datestring length]+1,[timestring length])];
                     textheight=28;
                 }
@@ -375,7 +376,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSLog(@"scroll %f",_tableView.contentOffset.y);
+//    NSLog(@"scroll %f",_tableView.contentOffset.y);
     if(istimehidden==NO)
     {
         [timetextlayer removeAnimationForKey:@"fadeout"];
@@ -409,10 +410,10 @@
 
             NSMutableAttributedString *timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",relative,datestring]];
 
-            [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:10] range:NSMakeRange(0,[relative length])];
+            [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL) range:NSMakeRange(0,[relative length])];
             [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[relative length])];
 
-            [timeattribstring addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:9] range:NSMakeRange([relative length]+1,[datestring length])];
+            [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 9.0, NULL) range:NSMakeRange([relative length]+1,[datestring length])];
             [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_CCC.CGColor range:NSMakeRange([relative length]+1,[datestring length])];
             CGSize timesize=[self textWidthForHeight:28 withAttributedString:timeattribstring];
             [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width-5-(timesize.width+4*2),0,timesize.width+8,timesize.height+2)];
@@ -438,8 +439,9 @@
 
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  %@",name,post.content]];
 
-    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Bold" size:14] range:NSMakeRange(0,[name length])];
-    [attributedString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:14] range:NSMakeRange([name length]+2,[post.content length])];
+    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 14.0, NULL) range:NSMakeRange(0,[name length])];
+    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL) range:NSMakeRange([name length]+2,[post.content length])];
+    
     
     CGSize size= [CTUtil CTSizeOfString:attributedString minLineHeight:20 linespacing:0 constraint:constraint];
     [attributedString release];

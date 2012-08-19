@@ -85,7 +85,7 @@
         else 
             [FONT_COLOR_69 set];
         
-        [title drawInRect:CGRectMake(10, 8, 270, 16) withFont:[UIFont fontWithName:@"HelveticaNeue" size:21] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentLeft ];
+        [title drawInRect:CGRectMake(10, 8, 270, 16) withFont:[UIFont fontWithName:@"HelveticaNeue" size:21] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
         [[UIImage imageNamed:@"title_fadeout.png"] drawInRect:CGRectMake(10+270-32,3,32,33)];
 
 //        if(avatar!=nil && ![avatar isKindOfClass:[NSNull class]])
@@ -95,8 +95,8 @@
         NSString *totalstr=[NSString stringWithFormat:@"%u",total];
         
         [FONT_COLOR_98 set];
-        [acceptedstr drawInRect:CGRectMake(278, 9, 19, 12) withFont:[UIFont fontWithName:@"TeluguSangamMN-Bold" size:15] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentRight];
-        [totalstr drawInRect:CGRectMake(300, 18, 19, 12) withFont:[UIFont fontWithName:@"TeluguSangamMN" size:13] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentLeft];
+        [acceptedstr drawInRect:CGRectMake(278, 9, 19, 12) withFont:[UIFont fontWithName:@"TeluguSangamMN-Bold" size:15] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
+        [totalstr drawInRect:CGRectMake(300, 18, 19, 12) withFont:[UIFont fontWithName:@"TeluguSangamMN" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft];
         [[UIImage imageNamed:@"slash.png"] drawInRect:CGRectMake(296, 13, 7, 14)]; 
         [[UIImage imageNamed:@"location.png"] drawInRect:CGRectMake(10, 43, 24, 24)];
 
@@ -104,13 +104,13 @@
             [FONT_COLOR_HL set];
         else
             [FONT_COLOR_69 set];
-        [place drawInRect:CGRectMake(40, 49, 320-40-10, 16) withFont:[UIFont fontWithName:@"MalayalamSangamMN" size:13] lineBreakMode:UILineBreakModeTailTruncation alignment:NSTextAlignmentLeft];
+        [place drawInRect:CGRectMake(40, 49, 320-40-10, 16) withFont:[UIFont fontWithName:@"MalayalamSangamMN" size:13] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
         
         if(showDetailTime==YES){
             [[UIImage imageNamed:@"cal_badge.png"]drawInRect:CGRectMake(10, 70, 24, 24)];
             [FONT_COLOR_100 set];
-            [time_month drawInRect:CGRectMake(12, 70, 20, 8) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:9] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentCenter];
-            [time_day drawInRect:CGRectMake(12, 79, 20, 18) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13] lineBreakMode:NSLineBreakByClipping alignment:NSTextAlignmentCenter ];
+            [time_month drawInRect:CGRectMake(12, 70, 20, 8) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:9] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
+            [time_day drawInRect:CGRectMake(12, 79, 20, 18) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter ];
         }
         else
             [[UIImage imageNamed:@"time_icon.png"]drawInRect:CGRectMake(10, 70, 24, 24)];

@@ -82,7 +82,8 @@
     CGGradientRelease(gradient), gradient = NULL;
     
     CGContextRestoreGState(currentContext);
-    [UIColor colorWithRed:38/255.0f green:44/255.0f blue:51/255.0f alpha:1];
+    [[UIColor colorWithRed:38/255.0f green:44/255.0f blue:51/255.0f alpha:1] set];
+//    [[UIColor redColor] set];
     [path stroke];
 }
 

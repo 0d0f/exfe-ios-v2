@@ -165,7 +165,7 @@
             name=identity.external_id;
         if(name!=nil){
             [[UIColor blackColor] set];
-            [name drawInRect:CGRectMake(x, y+imageHeight, imageWidth, 15) withFont:[UIFont fontWithName:@"HelveticaNeue" size:11] lineBreakMode:NSLineBreakByClipping alignment:UITextAlignmentCenter];
+            [name drawInRect:CGRectMake(x, y+imageHeight, imageWidth, 15) withFont:[UIFont fontWithName:@"HelveticaNeue" size:11] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
         }
         x_count++;
     }

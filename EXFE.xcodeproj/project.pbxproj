@@ -180,6 +180,7 @@
 		78A98EFB15611113009E0806 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EFA15611113009E0806 /* libxml2.dylib */; };
 		78A98F03156117D8009E0806 /* APICrosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F02156117D8009E0806 /* APICrosses.m */; };
 		78AA793615CFB94C00883025 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78AA793515CFB94C00883025 /* CoreText.framework */; };
+		78ABF5FA15E1564500A9F6D3 /* TESTView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78ABF5F915E1564500A9F6D3 /* TESTView.m */; };
 		78ADED6B15998D93002B459A /* default_avatar@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6715998D93002B459A /* default_avatar@2x~ipad.png */; };
 		78ADED6C15998D93002B459A /* default_avatar@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6815998D93002B459A /* default_avatar@2x~iphone.png */; };
 		78ADED6D15998D93002B459A /* default_avatar~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 78ADED6915998D93002B459A /* default_avatar~ipad.png */; };
@@ -560,6 +561,8 @@
 		78A98F01156117D8009E0806 /* APICrosses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APICrosses.h; sourceTree = "<group>"; };
 		78A98F02156117D8009E0806 /* APICrosses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APICrosses.m; sourceTree = "<group>"; };
 		78AA793515CFB94C00883025 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		78ABF5F815E1564500A9F6D3 /* TESTView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TESTView.h; path = ../../CTTest/CTTest/TESTView.h; sourceTree = "<group>"; };
+		78ABF5F915E1564500A9F6D3 /* TESTView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TESTView.m; path = ../../CTTest/CTTest/TESTView.m; sourceTree = "<group>"; };
 		78ADED6715998D93002B459A /* default_avatar@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar@2x~ipad.png"; sourceTree = "<group>"; };
 		78ADED6815998D93002B459A /* default_avatar@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar@2x~iphone.png"; sourceTree = "<group>"; };
 		78ADED6915998D93002B459A /* default_avatar~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar~ipad.png"; sourceTree = "<group>"; };
@@ -773,6 +776,8 @@
 		7825A5C415A2CE3E00A853CD /* gather */ = {
 			isa = PBXGroup;
 			children = (
+				78ABF5F815E1564500A9F6D3 /* TESTView.h */,
+				78ABF5F915E1564500A9F6D3 /* TESTView.m */,
 				78415361159D672A002B7A2E /* WildcardGestureRecognizer.h */,
 				78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */,
 				7832B663158DAEAA007A052D /* GatherViewController.h */,
@@ -1710,6 +1715,7 @@
 				78FB6B8E15D6C64000EF83B3 /* EXBubbleScrollView.m in Sources */,
 				78B2AF6815DEABF400451EA2 /* EXQuoteView.m in Sources */,
 				78B22F9715DF4E5B008BEA47 /* EXInvitationQuoteView.m in Sources */,
+				78ABF5FA15E1564500A9F6D3 /* TESTView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1802,7 +1808,7 @@
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -1819,7 +1825,7 @@
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",

@@ -17,7 +17,9 @@
     };
     CTParagraphStyleRef style = CTParagraphStyleCreate(setting, 2);
     [attributedString addAttribute:(id)kCTParagraphStyleAttributeName value:(id)style range:NSMakeRange(0,[attributedString length])];
-    CTFramesetterRef framesetter=CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedString);
+
+    CFAttributedStringRef stringref=(CFAttributedStringRef)attributedString;
+    CTFramesetterRef framesetter=CTFramesetterCreateWithAttributedString(stringref);
     CFRange range;
     CGSize coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [attributedString length]), nil, constraint, &range);
 

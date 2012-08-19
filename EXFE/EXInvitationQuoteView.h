@@ -23,4 +23,6 @@
 @property (nonatomic,retain) NSAttributedString* Line1;
 @property (nonatomic,retain) NSAttributedString* Line2;
 @property (nonatomic,retain) NSAttributedString* Line3;
+
+
 @end

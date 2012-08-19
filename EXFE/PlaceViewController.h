@@ -15,12 +15,19 @@
 #import "EXPlaceEditView.h"
 
 
-typedef NS_ENUM(NSInteger, EXPlaceViewStyle) {
+//typedef NS_ENUM(NSInteger, EXPlaceViewStyle) {
+//    EXPlaceViewStyleDefault,
+//    EXPlaceViewStyleMap,
+//    EXPlaceViewStyleTableview,
+//    EXPlaceViewStyleEdit
+//};
+typedef enum {
     EXPlaceViewStyleDefault,
     EXPlaceViewStyleMap,
     EXPlaceViewStyleTableview,
     EXPlaceViewStyleEdit
-};
+} EXPlaceViewStyle;
+
 
 @interface PlaceViewController : UIViewController <CLLocationManagerDelegate,UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,UITextFieldDelegate,UIActionSheetDelegate>{
     CLLocationManager *locationManager;

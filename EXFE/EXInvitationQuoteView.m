@@ -18,89 +18,60 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
     }
     return self;
 }
 
+
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
-    NSString *rsvp_status=@"Pending";
-    if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
-        rsvp_status=@"Accepted";
-    else if([invitation.rsvp_status isEqualToString:@"INTERESTED"])
-        rsvp_status=@"Interested";
-    else if([invitation.rsvp_status isEqualToString:@"DECLINED"])
-        rsvp_status=@"Unavailable";
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+
+    CGContextSetTextMatrix(context, CGAffineTransformIdentity);
+    CGContextTranslateCTM(context, 0, self.bounds.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)Line1);
+    CFRange range;
+    CGSize Line1coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [Line1 length]), nil, CGSizeMake(rect.size.width, 17), &range);
+    CGRect titlerect=CGRectMake(10, rect.size.height-3-Line1coreTextSize.height, rect.size.width-20, Line1coreTextSize.height);
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddRect(path, NULL, titlerect);
+    CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [Line1 length]), path, NULL);
+    CFRelease(framesetter);
+    CFRelease(path);
+    CTFrameDraw(theFrame, context);
+    CFRelease(theFrame);
     
-    NSString *mate=@"";
-    if([invitation.mates intValue]>0)
-    {
-        mate=[mate stringByAppendingFormat:@" with %u mate.",[invitation.mates intValue]];
-    }
-    else
-        rsvp_status=[rsvp_status stringByAppendingString:@"."];
-    NSString *host=@"";
-    if([invitation.host boolValue]==YES)
-        host=@"Host. ";
-
-//    NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@%@",host,rsvp_status,mate]];
-//    [title addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Bold" size:14] range:NSMakeRange(0,[title length])];
-//    [title addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(0,[host length])];
-//    [title addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(0+[host length],[rsvp_status length])];
-//    if([mate length]>10){
-//        [title addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0+[host length]+[rsvp_status length],[mate length])];
-//
-//        [title addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(0+[host length]+[rsvp_status length]+6,[[invitation.mates stringValue] length])];
-//    }
-//        
-////    [title drawInRect:titlerect];
-//    [title release];
-    CGRect titlerect=CGRectMake(10, 3, 160, 16);
-    if([mate length]>10){
-        titlerect.size.width=162;
-    }
-
-    [Line1 drawInRect:titlerect];
+    CTFramesetterRef framesetterLine2 = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)Line2);
+    CGSize Line2coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetterLine2, CFRangeMake(0, [Line2 length]), nil, CGSizeMake(rect.size.width-20-19, 17), &range);
+    CGRect line2rect=CGRectMake(10+19+3, rect.size.height-19-Line2coreTextSize.height, rect.size.width-20, Line2coreTextSize.height);
+    CGMutablePathRef pathline2 = CGPathCreateMutable();
+    CGPathAddRect(pathline2, NULL, line2rect);
+    CTFrameRef theFrameline2 = CTFramesetterCreateFrame(framesetterLine2, CFRangeMake(0, [Line2 length]), pathline2, NULL);
+    CFRelease(framesetterLine2);
+    CFRelease(pathline2);
+    CTFrameDraw(theFrameline2, context);
+    CFRelease(theFrameline2);
+  
+    CTFramesetterRef framesetterLine3 = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)Line3);
+    CGSize Line3coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetterLine3, CFRangeMake(0, [Line3 length]), nil, CGSizeMake(150, 15), &range);
+    
+    CGRect line3rect=CGRectMake(rect.size.width-10-150, rect.size.height-19-Line2coreTextSize.height-Line3coreTextSize.height, 150, Line3coreTextSize.height);
+    CGMutablePathRef pathline3 = CGPathCreateMutable();
+    CGPathAddRect(pathline3, NULL, line3rect);
+    CTFrameRef theFrameline3 = CTFramesetterCreateFrame(framesetterLine3, CFRangeMake(0, [Line3 length]), pathline3, NULL);
+    CFRelease(framesetterLine3);
+    CFRelease(pathline3);
+    CTFrameDraw(theFrameline3, context);
+    CFRelease(theFrameline3);
+    
     NSString *iconname=[NSString stringWithFormat:@"identity_%@_18.png",invitation.identity.provider];
     UIImage *icon=[UIImage imageNamed:iconname];
-    [icon drawAtPoint:CGPointMake(11, 19)];
-    NSString *identity_name=invitation.identity.external_username;
-    if([invitation.identity.provider isEqualToString:@"twitter"])
-        identity_name=[@"@" stringByAppendingString:identity_name];
-
-    if(identity_name==nil)
-        identity_name=invitation.identity.external_id;
-
-    NSMutableAttributedString *identity_name_attributed = [[NSMutableAttributedString alloc] initWithString:identity_name];
-    [identity_name_attributed addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Italic" size:11] range:NSMakeRange(0,[identity_name length])];
-    [identity_name_attributed addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_FA range:NSMakeRange(0,[identity_name length])];
-    NSMutableAttributedString *temp=[identity_name_attributed mutableCopy];
-    CGSize identity_name_size=[CTUtil CTSizeOfString:temp minLineHeight:15 linespacing:1 constraint:CGSizeMake(rect.size.width, 15)];
-    [temp release];
-    [identity_name_attributed drawInRect:CGRectMake(32, 19, identity_name_size.width, 15)];
-    [identity_name_attributed release];
-
-    NSString *by_name=invitation.by_identity.name;
-    if(by_name==nil)
-        by_name=invitation.by_identity.external_username;
-    if(by_name==nil)
-        by_name=invitation.by_identity.external_id;
-    
-    NSString *create_at_and_by=[NSString stringWithFormat:@"%@ by %@",[Util formattedDateRelativeToNow:invitation.created_at],by_name];
-    NSMutableAttributedString *create_at_and_by_attributed = [[NSMutableAttributedString alloc] initWithString:create_at_and_by];
-    [create_at_and_by_attributed addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:11] range:NSMakeRange(0,[create_at_and_by_attributed length])];
-    [create_at_and_by_attributed addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_FA range:NSMakeRange(0,[create_at_and_by_attributed length])];
-
-    temp=[create_at_and_by_attributed mutableCopy];
-    CGSize create_at_and_by_attributed_size=[CTUtil CTSizeOfString:temp minLineHeight:15 linespacing:1 constraint:CGSizeMake(350, 15)];
-    [temp release];
-
-    [create_at_and_by_attributed drawInRect:CGRectMake(rect.size.width-5-create_at_and_by_attributed_size.width, 19+16, create_at_and_by_attributed_size.width, 15)];
-    
-    [create_at_and_by_attributed release];
-    
+    CGImageRef imageref = CGImageRetain(icon.CGImage);
+    CGContextDrawImage(context,CGRectMake(10, 19, 18, 18),imageref);
+    CGImageRelease(imageref);
 }
 
 @end

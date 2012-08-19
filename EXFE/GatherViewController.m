@@ -180,6 +180,7 @@
     [self reArrangeViews];
     if(viewmode==YES)
         [self ShowRsvpButton];
+
 }
 - (void) initData{
     if(self.cross!=nil && viewmode==YES){
@@ -373,7 +374,11 @@
         }
     }
 }
-- (void)ShowExfeePopOver:(Invitation*) invitation pointTo:(CGPoint)point  arrowx:(float)arrowx{
+- (void)ShowExfeePopOver:(Invitation*) invitation pointTo:(CGPoint)point  arrowx:(float)arrowx
+{
+//                TESTView *v=[[TESTView alloc] initWithFrame:CGRectMake(10, 10, 200, 80)];
+//                [self.view addSubview:v];
+
     float width=131;
     float height=57.5;
     float arrow_height=8;
@@ -397,8 +402,8 @@
     popover.cornerRadius=5;
     popover.layer.shadowColor=[UIColor blackColor].CGColor;
     popover.layer.shadowOpacity = 0.5;
-    popover.layer.shadowRadius = 1;
-    popover.layer.shadowOffset = CGSizeMake(2.0f, 2.0f);
+    popover.layer.shadowRadius = 5;
+    popover.layer.shadowOffset = CGSizeMake(0.0f, 3.0f);
     
     NSString *rsvp_status=@"Pending";
     if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
@@ -420,24 +425,112 @@
         host=@"Host. ";
     
     NSMutableAttributedString *Line1 = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@%@",host,rsvp_status,mate]];
-    [Line1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Bold" size:14] range:NSMakeRange(0,[Line1 length])];
-    [Line1 addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(0,[host length])];
-    [Line1 addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(0+[host length],[rsvp_status length])];
+    [Line1 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 14.0, NULL) range:NSMakeRange(0,[Line1 length])];
+    [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0,[host length])];
+    [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[host length],[rsvp_status length])];
     if([mate length]>10){
-        [Line1 addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0+[host length]+[rsvp_status length],[mate length])];
+        [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor whiteColor].CGColor range:NSMakeRange(0+[host length]+[rsvp_status length],[mate length])];
         
-        [Line1 addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(0+[host length]+[rsvp_status length]+6,[[invitation.mates stringValue] length])];
+        [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[host length]+[rsvp_status length]+6,[[invitation.mates stringValue] length])];
     }
-    NSMutableAttributedString *temp=[Line1 mutableCopy];
-    CGSize Line1_size=[CTUtil CTSizeOfString:temp minLineHeight:15 linespacing:1 constraint:CGSizeMake(self.view.frame.size.width, 15)];
-    [temp release];
+    
+    float linespaceing=1;
+    float minheight=17;
+    CTParagraphStyleSetting setting[2] = {
+        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
+        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
+    };
+    
+    CTParagraphStyleRef style = CTParagraphStyleCreate(setting, 2);
+    [Line1 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)style range:NSMakeRange(0,[Line1 length])];
 
+//    NSMutableParagraphStyle *paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
+//    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
+//    [Line1 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle
+//     range:NSMakeRange(0,[Line1 length])];
+
+    CTFramesetterRef framesetter=CTFramesetterCreateWithAttributedString((CFAttributedStringRef)Line1);
+    CFRange range;
+    CGSize Line1coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [Line1 length]), nil, CGSizeMake(self.view.frame.size.width, 17), &range);
+    CFRelease(style);
+    CFRelease(framesetter);
+    
     popover.Line1=Line1;
     [Line1 release];
 
+    NSString *identity_name=invitation.identity.external_username;
+    if([invitation.identity.provider isEqualToString:@"twitter"])
+        identity_name=[@"@" stringByAppendingString:identity_name];
+    if(identity_name==nil)
+        identity_name=invitation.identity.external_id;
+    NSMutableAttributedString *Line2 = [[NSMutableAttributedString alloc] initWithString:identity_name];
+    [Line2 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 11.0, NULL) range:NSMakeRange(0,[identity_name length])];
+    [Line2 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[identity_name length])];
+    linespaceing=1;
+    minheight=15;
+    CTParagraphStyleSetting line2setting[2] = {
+        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
+        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
+    };
     
+    CTParagraphStyleRef line2style = CTParagraphStyleCreate(line2setting, 2);
+    [Line2 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)line2style range:NSMakeRange(0,[Line2 length])];
+    
+//    paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
+//    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
+//    [Line2 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0,[Line2 length])];
+    
+    framesetter=CTFramesetterCreateWithAttributedString((CFAttributedStringRef)Line2);
+    CGSize Line2coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [Line2 length]), nil, CGSizeMake(self.view.frame.size.width-20-19, 17), &range);
+    CFRelease(line2style);
+    CFRelease(framesetter);
+    popover.Line2=Line2;
+    [Line2 release];
+    
+    NSString *by_name=invitation.by_identity.name;
+    if(by_name==nil)
+        by_name=invitation.by_identity.external_username;
+    if(by_name==nil)
+        by_name=invitation.by_identity.external_id;
+    NSString *create_at_and_by=[NSString stringWithFormat:@"%@ by %@",[Util formattedDateRelativeToNow:invitation.created_at],by_name];
+    NSMutableAttributedString *Line3 = [[NSMutableAttributedString alloc] initWithString:create_at_and_by];
+    [Line3 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 11.0, NULL) range:NSMakeRange(0,[Line3 length])];
+    [Line3 addAttribute:(NSString*)kCTForegroundColorAttributeName value:FONT_COLOR_FA range:NSMakeRange(0,[Line3 length])];
+    CTTextAlignment alignment = kCTRightTextAlignment;
+    CTLineBreakMode linebreakmode=kCTLineBreakByTruncatingTail;
+    CTParagraphStyleSetting line3setting[4] = {
+        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
+        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
+        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
+        {kCTParagraphStyleSpecifierLineBreakMode, sizeof(linebreakmode), &linebreakmode},
+    };
+    
+    CTParagraphStyleRef line3style = CTParagraphStyleCreate(line3setting, 4);
+    [Line3 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)line3style range:NSMakeRange(0,[Line3 length])];
+    
+//    paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
+//    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
+//    [paragraphStyle setAlignment:NSTextAlignmentRight];
+//    [Line3 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0,[Line3 length])];
+    
+    framesetter=CTFramesetterCreateWithAttributedString((CFAttributedStringRef)Line3);
+    CGSize Line3coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [Line3 length]), nil, CGSizeMake(150, 17), &range);
+    CFRelease(line3style);
+    CFRelease(framesetter);
+
+    popover.Line3=Line3;
+    [Line3 release];
+
+    float maxwidth=MAX(Line1coreTextSize.width, Line2coreTextSize.width);
+    float line3width= MAX(150,Line3coreTextSize.width+30);
+    
+    maxwidth=MAX(maxwidth, line3width);
+    maxwidth+=20;
+    if(maxwidth>200)
+        maxwidth=200;
+//
     popover.invitation=invitation;
-    [popover setFrame:CGRectMake(framex,framey,width,height)];
+    [popover setFrame:CGRectMake(framex,framey,maxwidth,height)];
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
     [popover.layer removeAnimationForKey:@"fadeout"];
@@ -812,13 +905,13 @@
     
     NSMutableAttributedString * exfeestr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ / %@",accepted,total]];
     
-    [exfeestr addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(0,accepted.length)];
-    [exfeestr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:21] range:NSMakeRange(0,accepted.length)];
+    [exfeestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(0,accepted.length)];
+    [exfeestr addAttribute:(NSString*)kCTFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:21] range:NSMakeRange(0,accepted.length)];
     
-    [exfeestr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(accepted.length,exfeestr.length-accepted.length)];
-    [exfeestr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:13] range:NSMakeRange(accepted.length,exfeestr.length-accepted.length)];
+    [exfeestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(accepted.length,exfeestr.length-accepted.length)];
+    [exfeestr addAttribute:(NSString*)kCTFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:13] range:NSMakeRange(accepted.length,exfeestr.length-accepted.length)];
     
-    exfeenum.attributedText=exfeestr;//[NSString stringWithFormat:@"%u Exfees",count];
+    exfeenum.text=exfeestr.string;
 }
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
@@ -950,6 +1043,7 @@
                 isSelect=YES;
         }
         if(isSelect){
+
             CGRect f=imageCollectionView.frame;
             float x=f.origin.x+rect.origin.x+rect.size.width/2;
             float y=f.origin.y+rect.origin.y;

@@ -239,9 +239,12 @@
     if([hintname isEqualToString:@"forgetpassword"]){
         hint_title.text=@"Forgot Password";
         NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"You can reset your EXFE password through this identity. Confirm sending reset token to your mailbox?"];
-        [desc addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0,19)];
-        [desc addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(19,4)];
-        hint_desc.attributedText=desc;
+    
+        [desc addAttribute:(NSString*)kCTForegroundColorAttributeName  value:(id)[UIColor blackColor].CGColor range:NSMakeRange(0,19)];
+
+        [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL range:NSMakeRange(19,4)];
+        hint_desc.text=desc;
+
         [desc release];
         [hint_title setHidden:NO];
         [hint_desc setHidden:NO];
@@ -253,9 +256,8 @@
     else if([hintname isEqualToString:@"verification"]){
         hint_title.text=@"Verification";
         NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"This identity requires verification before using.\nConfirm sending verification to your mailbox?"];
-        [desc addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0,50)];
-//        [desc addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(19,4)];
-        hint_desc.attributedText=desc;
+        [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor redColor] range:NSMakeRange(0,50)];
+        hint_desc.text=desc;
         [desc release];
         [hint_title setHidden:NO];
         [hint_desc setHidden:NO];

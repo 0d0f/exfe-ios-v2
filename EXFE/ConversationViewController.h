@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreText/CoreText.h>
+#import <QuartzCore/QuartzCore.h>
 #import "Identity.h"
 #import <RestKit/RestKit.h>
 #import "UIInputToolbar.h"
