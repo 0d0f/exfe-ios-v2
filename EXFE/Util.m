@@ -502,7 +502,7 @@
         return crosstime.origin;
     }
     if(crosstime.begin_at.date && ![crosstime.begin_at.date isEqualToString:@""])
-        return [self EXRelative:crosstime];
+        return [self EXRelative:crosstime type:@"cross"];
     return @"Sometime";
 }
 + (NSString*) getTimeDesc:(CrossTime*)crosstime{
@@ -594,7 +594,7 @@
 + (NSString*) EXRelativeFromDate:(NSDate*)date{
 
 }
-+ (NSString*) EXRelative:(CrossTime*)crosstime{
++ (NSString*) EXRelative:(CrossTime*)crosstime type:(NSString*)type{
 
     NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
     [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];

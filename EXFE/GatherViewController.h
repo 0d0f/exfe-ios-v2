@@ -33,7 +33,6 @@
 #import "EXOverlayView.h"
 #import "ConversationViewController.h"
 #import "EXInvitationQuoteView.h"
-#import "TESTView.h"
 
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9

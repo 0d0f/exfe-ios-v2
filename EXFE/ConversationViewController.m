@@ -376,7 +376,6 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-//    NSLog(@"scroll %f",_tableView.contentOffset.y);
     if(istimehidden==NO)
     {
         [timetextlayer removeAnimationForKey:@"fadeout"];

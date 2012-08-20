@@ -376,12 +376,9 @@
 }
 - (void)ShowExfeePopOver:(Invitation*) invitation pointTo:(CGPoint)point  arrowx:(float)arrowx
 {
-//                TESTView *v=[[TESTView alloc] initWithFrame:CGRectMake(10, 10, 200, 80)];
-//                [self.view addSubview:v];
-
     float width=131;
-    float height=57.5;
-    float arrow_height=8;
+    float height=58;
+    float arrow_height=6;
     float framex=point.x-width/2;
     if([invitation.mates intValue]>0)
         width=182;
@@ -435,7 +432,7 @@
     }
     
     float linespaceing=1;
-    float minheight=17;
+    float minheight=18;
     CTParagraphStyleSetting setting[2] = {
         {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
         {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
@@ -444,14 +441,9 @@
     CTParagraphStyleRef style = CTParagraphStyleCreate(setting, 2);
     [Line1 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)style range:NSMakeRange(0,[Line1 length])];
 
-//    NSMutableParagraphStyle *paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
-//    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-//    [Line1 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle
-//     range:NSMakeRange(0,[Line1 length])];
-
     CTFramesetterRef framesetter=CTFramesetterCreateWithAttributedString((CFAttributedStringRef)Line1);
     CFRange range;
-    CGSize Line1coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [Line1 length]), nil, CGSizeMake(self.view.frame.size.width, 17), &range);
+    CGSize Line1coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [Line1 length]), nil, CGSizeMake(self.view.frame.size.width, 18), &range);
     CFRelease(style);
     CFRelease(framesetter);
     
@@ -467,7 +459,7 @@
     [Line2 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 11.0, NULL) range:NSMakeRange(0,[identity_name length])];
     [Line2 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[identity_name length])];
     linespaceing=1;
-    minheight=15;
+    minheight=13;
     CTParagraphStyleSetting line2setting[2] = {
         {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
         {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
@@ -476,12 +468,8 @@
     CTParagraphStyleRef line2style = CTParagraphStyleCreate(line2setting, 2);
     [Line2 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)line2style range:NSMakeRange(0,[Line2 length])];
     
-//    paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
-//    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-//    [Line2 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0,[Line2 length])];
-    
     framesetter=CTFramesetterCreateWithAttributedString((CFAttributedStringRef)Line2);
-    CGSize Line2coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [Line2 length]), nil, CGSizeMake(self.view.frame.size.width-20-19, 17), &range);
+    CGSize Line2coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [Line2 length]), nil, CGSizeMake(self.view.frame.size.width-20-19, 13), &range);
     CFRelease(line2style);
     CFRelease(framesetter);
     popover.Line2=Line2;
@@ -508,13 +496,8 @@
     CTParagraphStyleRef line3style = CTParagraphStyleCreate(line3setting, 4);
     [Line3 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)line3style range:NSMakeRange(0,[Line3 length])];
     
-//    paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
-//    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-//    [paragraphStyle setAlignment:NSTextAlignmentRight];
-//    [Line3 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0,[Line3 length])];
-    
     framesetter=CTFramesetterCreateWithAttributedString((CFAttributedStringRef)Line3);
-    CGSize Line3coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [Line3 length]), nil, CGSizeMake(150, 17), &range);
+    CGSize Line3coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [Line3 length]), nil, CGSizeMake(150, 13), &range);
     CFRelease(line3style);
     CFRelease(framesetter);
 
@@ -528,7 +511,7 @@
     maxwidth+=20;
     if(maxwidth>200)
         maxwidth=200;
-//
+
     popover.invitation=invitation;
     [popover setFrame:CGRectMake(framex,framey,maxwidth,height)];
     [UIView beginAnimations:nil context:NULL];
@@ -536,7 +519,7 @@
     [popover.layer removeAnimationForKey:@"fadeout"];
     [UIView commitAnimations];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    [self performSelector:@selector(hiddenPopover) withObject:nil afterDelay:2];
+    [self performSelector:@selector(hiddenPopover) withObject:nil afterDelay:6];
     [popover setNeedsDisplay];
     
 }
@@ -548,8 +531,6 @@
     fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
     fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
     [popover.layer addAnimation:fadeoutAnimation forKey:@"fadeout"];
-//    istimehidden=YES;
-
 }
 - (IBAction) Gather:(id) sender{
     [self pullcontainviewDown];

@@ -118,13 +118,13 @@
     label.text = app.username;
     [self.navigationController navigationBar].topItem.titleView = label;
     
-    
     UINavigationBar *navbar=[self.navigationController navigationBar];
-    if(navbar)
-    {
-        [navbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"]  forBarMetrics:UIBarMetricsDefault];
-    }
-    [self.navigationController.view setNeedsDisplay];    
+    [navbar setBackgroundImage:[UIImage imageNamed:@"navbar.png"] forBarMetrics:UIBarMetricsDefault];
+//    if(navbar)
+//    {
+//        [navbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"]  forBarMetrics:UIBarMetricsDefault];
+//    }
+    [self.navigationController.view setNeedsDisplay];
 }
 - (void)viewDidUnload
 {
