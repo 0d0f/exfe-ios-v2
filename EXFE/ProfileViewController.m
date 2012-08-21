@@ -36,10 +36,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
+    [useravatar addGestureRecognizer:gestureRecognizer];
+    [gestureRecognizer release];
+
+    
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     [self loadObjectsFromDataStore];
     [APIProfile LoadUsrWithUserId:app.userid delegate:self];
 
+}
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+
+    FullScreenViewController *viewcontroller=[[FullScreenViewController alloc] initWithNibName:@"FullScreenViewController" bundle:nil];
+    viewcontroller.wantsFullScreenLayout=YES;
+    viewcontroller.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+     [self presentModalViewController:viewcontroller animated:YES];
+    
 }
 
 - (void)viewDidUnload

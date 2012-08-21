@@ -495,14 +495,14 @@
     beginningOfWeek = [gregorian dateFromComponents: components];
     return beginningOfWeek;
 }
-+ (NSString*) getTimeTitle:(CrossTime*)crosstime{
++ (NSString*) getTimeTitle:(CrossTime*)crosstime localTime:(BOOL)localtime{
     if( [crosstime.outputformat intValue]==1) {
         if([crosstime.origin isEqualToString:@""])
             return @"Sometime";
         return crosstime.origin;
     }
     if(crosstime.begin_at.date && ![crosstime.begin_at.date isEqualToString:@""])
-        return [self EXRelative:crosstime type:@"cross"];
+        return [self EXRelative:crosstime type:@"cross" localTime:localtime];
     return @"Sometime";
 }
 + (NSString*) getTimeDesc:(CrossTime*)crosstime{
@@ -591,15 +591,15 @@
     }
     return timedesc;
 }
-+ (NSString*) EXRelativeFromDate:(NSDate*)date{
 
-}
-+ (NSString*) EXRelative:(CrossTime*)crosstime type:(NSString*)type{
-
++ (NSString*) EXRelativeFromDateStr:(NSString*)datestr TimeStr:(NSString*)timestr type:(NSString*)type localTime:(BOOL)localtime{
     NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
-    [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    if(localtime==YES)
+        [dateformat setTimeZone:[NSTimeZone localTimeZone]];
+    else
+        [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate *begin_at_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ 00:00:00",crosstime.begin_at.date]];
+    NSDate *begin_at_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ 00:00:00",datestr]];
     [dateformat setTimeZone:[NSTimeZone localTimeZone]];
     [dateformat setDateFormat:@"yyyy-MM-dd"];
     NSString *nowdate_str=[dateformat stringFromDate:[NSDate date]];
@@ -609,9 +609,8 @@
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *comps =[calendar components: NSDayCalendarUnit fromDate:now_date toDate:begin_at_date options:0];
     NSDate *beginingofweek=[self beginningOfWeek:now_date];
-
+    
     NSDateComponents *comps_firstdayofweek =[calendar components: NSDayCalendarUnit fromDate:beginingofweek toDate:begin_at_date options:0];
-  
     NSString *relativeTime=@"";
     int day=[comps day];
     if(abs(day)>1)
@@ -628,7 +627,7 @@
             m_str=@"month";
         if(abs(year)==1)
             y_str=@"year";
-
+        
         if(abs(year)>0) {
             if(abs(moth)>0) {
                 if(moth>0)
@@ -669,7 +668,7 @@
     }
     else{
         if(day==-1)
-           relativeTime=[NSString stringWithFormat:@"Yesterday"];
+            relativeTime=[NSString stringWithFormat:@"Yesterday"];
         else if(day==1)
             relativeTime=[NSString stringWithFormat:@"Tomorrow"];
         else if(day==0)
@@ -678,11 +677,14 @@
     
     if(day==0)
     {
-        if(crosstime.begin_at.time!=@"")
+        if(timestr!=@"")
         {
-            [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];//[self getTimeZoneWithCrossTime:crosstime]];
+            if(localtime==YES)
+                [dateformat setTimeZone:[NSTimeZone localTimeZone]];
+            else
+                [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            begin_at_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ %@",crosstime.begin_at.date,crosstime.begin_at.time]];
+            begin_at_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ %@",datestr,timestr]];
             NSDate *now=[NSDate date];
             NSDateComponents *comps_in_a_day =[calendar components: NSMinuteCalendarUnit fromDate:now toDate:begin_at_date options:0];
             int minute=[comps_in_a_day minute];
@@ -693,10 +695,24 @@
                 int hour=round(f_h-0.2);//round 8 away from zero, round 7 towards zero
                 relativeTime=[NSString stringWithFormat:@"%u hours ago",abs(hour)];
             }
-            else if(minute>=-59 && minute<=-31)
-                relativeTime=[NSString stringWithFormat:@"Just now"];
-            else if(minute>=-30 && minute<=0)
-                relativeTime=[NSString stringWithFormat:@"Now"];
+            else if(minute>=-59 && minute<=-31){
+                if([type isEqualToString:@"cross"])
+                    relativeTime=[NSString stringWithFormat:@"Just now"];
+                else
+                    relativeTime=[NSString stringWithFormat:@"59 minutes ago"];
+            }
+            else if(minute>=-30 && minute<-1){
+                if([type isEqualToString:@"cross"])
+                    relativeTime=[NSString stringWithFormat:@"Now"];
+                else
+                    relativeTime=[NSString stringWithFormat:@"30 minutes ago"];
+            }
+            else if(minute>=-1 && minute<=0){
+                if([type isEqualToString:@"cross"])
+                    relativeTime=[NSString stringWithFormat:@"Now"];
+                else
+                    relativeTime=[NSString stringWithFormat:@"Seconds ago"];
+            }
             else if(minute>=1 && minute<=59)
                 relativeTime=[NSString stringWithFormat:@"In 59 minutes"];
             else if(minute>=60 && minute<=749){
@@ -710,5 +726,10 @@
     
     [dateformat release];
     return relativeTime;
+
+}
+
++ (NSString*) EXRelative:(CrossTime*)crosstime type:(NSString*)type localTime:(BOOL)localtime{
+    return [self EXRelativeFromDateStr:crosstime.begin_at.date TimeStr:crosstime.begin_at.time type:type localTime:localtime];
 }
 @end

@@ -37,9 +37,9 @@
 + (NSString*) findProvider:(NSString*)external_id;
 + (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime;
 
-+ (NSString*) EXRelativeFromDate:(NSDate*)date;
-+ (NSString*) EXRelative:(CrossTime*)crosstime type:(NSString*)type;
-+ (NSString*) getTimeTitle:(CrossTime*)crosstime;
++ (NSString*) EXRelativeFromDateStr:(NSString*)datestr TimeStr:(NSString*)timestr type:(NSString*)type localTime:(BOOL)localtime;
++ (NSString*) EXRelative:(CrossTime*)crosstime type:(NSString*)type localTime:(BOOL)localtime;
++ (NSString*) getTimeTitle:(CrossTime*)crosstime localTime:(BOOL)localtime;
 + (NSString*) getTimeDesc:(CrossTime*)crosstime;
 + (NSDate*) beginningOfWeek:(NSDate*)date;
 @end

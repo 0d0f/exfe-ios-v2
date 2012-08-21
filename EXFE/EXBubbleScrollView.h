@@ -12,15 +12,19 @@
 #define INPUT_MIN_WIDTH 100
 
 @class EXBubbleScrollView;
-@protocol EXBubbleScrollViewDelegate <UIScrollViewDelegate>
+@protocol EXBubbleScrollViewDelegate <NSObject>
 @required
 - (void)OnInputConfirm:(EXBubbleScrollView *)bubbleScrollView textField:(UITextField*)textfield;
 - (id)customObject:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input;
 - (BOOL)isInputValid:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input;
 - (BOOL) inputTextChange:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input;
+- (void) deleteLastBubble:(EXBubbleScrollView *)bubbleScrollView deletedbubble:(EXBubbleButton*)bubble;
+@optional
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView;
 @end
 
-@interface EXBubbleScrollView : UIScrollView <UITextFieldDelegate> {
+
+@interface EXBubbleScrollView : UIScrollView <UITextFieldDelegate,UIScrollViewDelegate> {
     NSMutableArray *bubbles;
     UITextField *input;
     UIImageView *inputbackgroundImage;
@@ -30,9 +34,9 @@
 }
 -(BOOL) addBubble:(NSString*)title customObject:(id)customobject;
 -(void) deleteLastBubble;
--(void) setDelegate:(id<EXBubbleScrollViewDelegate>)delegate;
+-(void) setEXBubbleDelegate:(id<EXBubbleScrollViewDelegate>)delegate;
 -(NSArray*) bubbleCustomObjects;
 - (void)inputTextChange:(NSNotification *)notification;
 - (NSString*)getInput;
-
+- (int) bubblecount;
 @end

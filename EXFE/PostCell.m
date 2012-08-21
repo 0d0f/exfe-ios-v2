@@ -80,22 +80,29 @@
         {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &lineheight}
     };
     CTParagraphStyleRef style = CTParagraphStyleCreate(setting, 2);
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  %@",identity_name,content]];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@   %@",identity_name,content]];
     
     [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 14.0, NULL) range:NSMakeRange(0,[identity_name length])];
     
-    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL) range:NSMakeRange([identity_name length]+2,[content length])];
+    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL) range:NSMakeRange([identity_name length]+3,[content length])];
 
     [attributedString addAttribute:(id)kCTParagraphStyleAttributeName value:(id)style range:NSMakeRange(0,[content length])];
-    [attributedString addAttribute:(id)kCTForegroundColorAttributeName value:(id)[FONT_COLOR_FA CGColor] range:NSMakeRange(0,[content length]+[identity_name length]+2)];
+    [attributedString addAttribute:(id)kCTForegroundColorAttributeName value:(id)[FONT_COLOR_FA CGColor] range:NSMakeRange(0,[content length]+[identity_name length]+3)];
+
     
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
     CGContextTranslateCTM(context, 0, self.bounds.size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
     
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, NULL, r);
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedString);
+    CFRange range;
+    CGSize coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [attributedString length]), nil, r.size, &range);
+    CGMutablePathRef path = CGPathCreateMutable();
+    int rectheight=r.size.height;
+    r.origin.y=rectheight-coreTextSize.height-8;
+    r.size.height=coreTextSize.height;
+    CGPathAddRect(path, NULL, r);
+
     CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [attributedString length]), path, NULL);
     CFRelease(framesetter);
     CFRelease(path);
@@ -129,7 +136,7 @@
     }
 
     [[UIColor whiteColor] set];
-    [self drawString:context rect:CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH+CELL_CONTENT_MARGIN_LEFT, 8, CELL_CONTENT_WIDTH,r.size.height-8-12)];
+    [self drawString:context rect:CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH+CELL_CONTENT_MARGIN_LEFT, 8, CELL_CONTENT_WIDTH,r.size.height)];
     
     if(avatar!=nil && ![avatar isKindOfClass:[NSNull class]])
     {

@@ -61,13 +61,7 @@
     CGContextSaveGState(currentContext);
     CGContextClip(currentContext);
     
-//    [[UIColor blueColor] set];
-//    UIRectFill(rect);
-//    [[UIColor redColor] setStroke];
-//    [path stroke];
-//    
-    
-    CGFloat colors [] = { 
+    CGFloat colors [] = {
         38/255.0f, 44/255.0f, 51/255.0f, 0.95,
         58/255.0f, 66/255.0f, 76/255.0f, 0.95
     };
@@ -83,7 +77,6 @@
     
     CGContextRestoreGState(currentContext);
     [[UIColor colorWithRed:38/255.0f green:44/255.0f blue:51/255.0f alpha:1] set];
-//    [[UIColor redColor] set];
     [path stroke];
 }
 

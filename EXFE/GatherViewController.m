@@ -14,6 +14,9 @@
 
 @implementation GatherViewController
 @synthesize cross;
+@synthesize exfeeIdentities;
+@synthesize default_user;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -183,6 +186,18 @@
 
 }
 - (void) initData{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+	NSFetchRequest* request = [User fetchRequest];
+    NSPredicate *predicate = [NSPredicate
+                              predicateWithFormat:@"user_id = %u", app.userid];
+    [request setPredicate:predicate];
+	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    
+    if(users!=nil && [users count] >0)
+    {
+        default_user=[users objectAtIndex:0];
+    }
+    
     if(self.cross!=nil && viewmode==YES){
         crosstitle.text=cross.title;
         [self setExfeeNum];
@@ -351,16 +366,17 @@
 }
     
 - (void) addDefaultIdentity{
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];    
-    [request setPredicate:predicate];
-	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    
-    if(users!=nil && [users count] >0)
-    {
-        User *user=[users objectAtIndex:0];
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//	NSFetchRequest* request = [User fetchRequest];
+//    NSPredicate *predicate = [NSPredicate
+//                              predicateWithFormat:@"user_id = %u", app.userid];    
+//    [request setPredicate:predicate];
+//	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+//    
+//    if(users!=nil && [users count] >0)
+//    {
+//        User *user=[users objectAtIndex:0];
+        User *user=default_user;
         Identity *default_identity=user.default_identity;
         if(user!=nil){
             Invitation *invitation=[Invitation object];
@@ -368,10 +384,20 @@
             invitation.host=[NSNumber numberWithBool:YES];
             invitation.mates=0;
             invitation.identity=default_identity;
+            invitation.by_identity=default_identity;
+            invitation.updated_at=[NSDate date];
+            invitation.created_at=[NSDate date];
             [exfeeIdentities addObject:invitation];
             [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
             [exfeeShowview reloadData];
         }
+//    }
+}
+
+- (void) refreshExfeePopOver{
+    for(Invitation *invitation in exfeeIdentities){
+        if([invitation.invitation_id isEqual:popover.invitation.invitation_id])
+            [self ShowExfeePopOver:invitation pointTo:popover.point arrowx:popover.arrowleft];
     }
 }
 - (void)ShowExfeePopOver:(Invitation*) invitation pointTo:(CGPoint)point  arrowx:(float)arrowx
@@ -382,20 +408,14 @@
     float framex=point.x-width/2;
     if([invitation.mates intValue]>0)
         width=182;
-    if(framex<0){
-        framex=5;
-    }else if(framex+width>self.view.frame.size.width){
-        framex=self.view.frame.size.width-width;
-    }
     float framey=point.y-height;
-    float arrow_left=point.x-arrow_height-framex;
 
     if(popover==nil){
         popover =[[EXInvitationQuoteView alloc]initWithFrame:CGRectMake(framex,framey,width,height)];
         [containcardview addSubview:popover];
     }
-    popover.arrowleft=arrow_left;
-    popover.arrowHeight=8;
+    popover.point=point;
+    popover.arrowHeight=arrow_height;
     popover.cornerRadius=5;
     popover.layer.shadowColor=[UIColor blackColor].CGColor;
     popover.layer.shadowOpacity = 0.5;
@@ -411,10 +431,10 @@
         rsvp_status=@"Unavailable";
     
     NSString *mate=@"";
-    if([invitation.mates intValue]>0)
-    {
+    if([invitation.mates intValue]==1)
         mate=[mate stringByAppendingFormat:@" with %u mate.",[invitation.mates intValue]];
-    }
+    else if([invitation.mates intValue]>1)
+        mate=[mate stringByAppendingFormat:@" with %u mates.",[invitation.mates intValue]];
     else
         rsvp_status=[rsvp_status stringByAppendingString:@"."];
     NSString *host=@"";
@@ -480,7 +500,20 @@
         by_name=invitation.by_identity.external_username;
     if(by_name==nil)
         by_name=invitation.by_identity.external_id;
-    NSString *create_at_and_by=[NSString stringWithFormat:@"%@ by %@",[Util formattedDateRelativeToNow:invitation.created_at],by_name];
+
+    NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
+    [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    [dateformat setDateFormat:@"yyyy-MM-dd"];
+    NSString *datestr=[dateformat stringFromDate:invitation.updated_at];
+    [dateformat setDateFormat:@"HH:mm:ss"];
+    NSString *timestr=[dateformat stringFromDate:invitation.updated_at];
+    [dateformat release];
+    
+    NSString *timestring=@"";
+    if(invitation.created_at!=nil)
+        timestring=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"rsvp" localTime:NO];
+    
+    NSString *create_at_and_by=[NSString stringWithFormat:@"%@ by %@",timestring,by_name];
     NSMutableAttributedString *Line3 = [[NSMutableAttributedString alloc] initWithString:create_at_and_by];
     [Line3 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 11.0, NULL) range:NSMakeRange(0,[Line3 length])];
     [Line3 addAttribute:(NSString*)kCTForegroundColorAttributeName value:FONT_COLOR_FA range:NSMakeRange(0,[Line3 length])];
@@ -509,9 +542,17 @@
     
     maxwidth=MAX(maxwidth, line3width);
     maxwidth+=20;
+
     if(maxwidth>200)
         maxwidth=200;
+    if(framex<0){
+        framex=5;
+    }else if(framex+maxwidth>containcardview.frame.size.width){
+        framex=containcardview.frame.size.width-maxwidth-5;
+    }
+    float arrow_left=point.x-arrow_height-framex;
 
+    popover.arrowleft=arrow_left;
     popover.invitation=invitation;
     [popover setFrame:CGRectMake(framex,framey,maxwidth,height)];
     [UIView beginAnimations:nil context:NULL];
@@ -635,7 +676,9 @@
     [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
     [exfeeShowview reloadData];
 }
-
+- (int) exfeeIdentitiesCount{
+    return [exfeeIdentities count];
+}
 
 - (void) setPlace:(NSDictionary*)placedict{
     Place *_place=[Place object];
@@ -677,7 +720,7 @@
 }
 
 - (void) setDateTime:(CrossTime*)crosstime{
-    timetitle.text=[Util getTimeTitle:crosstime];
+    timetitle.text=[Util getTimeTitle:crosstime localTime:NO];
     timedesc.text=[Util getTimeDesc:crosstime];
     datetime=crosstime;
     if(viewmode==NO)
@@ -1099,6 +1142,8 @@
                             id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                             if(code)
                                 if([code intValue]==200) {
+                                    [self refreshExfeePopOver];
+
                                     [exfeeShowview reloadData];
 //                                    NSLog(@"send rsvp ok!");
                                 }
@@ -1154,6 +1199,7 @@
             }
         }
     }
+    [self refreshExfeePopOver];
     [exfeeShowview reloadData];
 }
 - (void) rsvpsubmate{
@@ -1168,6 +1214,8 @@
             }
         }
     }
+    [self refreshExfeePopOver];
+
     [exfeeShowview reloadData];
 
 }
@@ -1186,6 +1234,8 @@
 
     [mutableIndexSet release];
     [exfeeShowview calculateColumn];
+    [self refreshExfeePopOver];
+
     [exfeeShowview reloadData];
     
 }

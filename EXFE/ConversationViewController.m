@@ -60,7 +60,7 @@
     cellsepator=[UIImage imageNamed:@"conv_line_h.png"];
     avatarframe=[UIImage imageNamed:@"conv_portrait_frame.png"];
     CGRect _tableviewrect=_tableView.frame;
-    _tableviewrect.size.height-=kDefaultToolbarHeight-44;
+    _tableviewrect.size.height-=(kDefaultToolbarHeight);
     [_tableView setFrame:_tableviewrect];
     _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
@@ -186,7 +186,6 @@
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [inputToolbar hidekeyboard];
-    NSLog (@"conversation touch began");
 }
 - (void)loadObjectsFromDataStore {
 	[_posts release];
@@ -300,7 +299,14 @@
 
                 if(showTimeMode==0)
                 {
-                    NSString *timestring=[Util formattedDateRelativeToNow:post.created_at];
+                    NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
+                    [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                    [dateformat setDateFormat:@"yyyy-MM-dd"];
+                    NSString *datestr=[dateformat stringFromDate:post.created_at];
+                    [dateformat setDateFormat:@"HH:mm:ss"];
+                    NSString *timestr=[dateformat stringFromDate:post.created_at];
+                    [dateformat release];
+                    NSString *timestring=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:timestring];
                     
                     [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL) range:NSMakeRange(0,[timestring length])];
@@ -400,7 +406,16 @@
             [floattimetextlayer removeAnimationForKey:@"fadeout"];
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
             Post *post=[_posts objectAtIndex:path.row];
-            NSString *relative=[Util formattedDateRelativeToNow:post.created_at];
+
+            NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
+            [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+            [dateformat setDateFormat:@"yyyy-MM-dd"];
+            NSString *datestr=[dateformat stringFromDate:post.created_at];
+            [dateformat setDateFormat:@"HH:mm:ss"];
+            NSString *timestr=[dateformat stringFromDate:post.created_at];
+            [dateformat release];
+            NSString *relative=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
+
             NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
             [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
             [dateformat_to setDateFormat:@"h:mm a MMM d"];

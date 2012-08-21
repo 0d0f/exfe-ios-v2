@@ -7,13 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
+
 #import "APIProfile.h"
 #import "Identity.h"
 #import "Invitation.h"
 #import "GatherViewController.h"
 #import "EXBubbleScrollView.h"
+#import "Util.h"
 
-@interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,RKObjectLoaderDelegate,UITableViewDelegate,UITableViewDataSource,EXBubbleScrollViewDelegate>{
+@interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,RKObjectLoaderDelegate,UITableViewDelegate,UITableViewDataSource,EXBubbleScrollViewDelegate,UIScrollViewDelegate>{
     IBOutlet UITextField *exfeeInput;
     IBOutlet UIToolbar *toolbar;
     NSMutableArray *suggestIdentities;
@@ -23,6 +26,9 @@
     BOOL showInputinSuggestion;
     EXBubbleScrollView *exfeeList;
     UIImageView *inputlefticon;
+    UIView *errorHint;
+    UIImageView *errorHinticon;
+    UILabel *errorHintLabel;
 }
 @property (nonatomic,retain) UIViewController* gatherview;
 
@@ -33,5 +39,8 @@
 - (IBAction)editingDidEnd:(UITextField*)textField;
 //- (void) addByText;
 - (void) addByInputIdentity:(NSString*)input;
-- (void)loadIdentitiesFromDataStore:(NSString*)input;
+- (void) loadIdentitiesFromDataStore:(NSString*)input;
+- (void) changeLeftIconWhite:(BOOL)iswhite;
+- (void) ErrorHint:(BOOL)hidden content:(NSString*)content;
+- (BOOL) showErrorHint;
 @end

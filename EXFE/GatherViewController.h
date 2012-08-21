@@ -68,12 +68,15 @@
     UILabel *placetitle;
     UILabel *placedesc;
     Cross* cross;
+    User* default_user;
     int selectedExfeeIndex;
     BOOL viewmode;
     ConversationViewController *conversationView;
 
 }
 @property (retain,nonatomic) Cross* cross;
+@property (retain,readonly) NSMutableArray *exfeeIdentities;
+@property (retain,nonatomic) User* default_user;
 
 - (IBAction) Gather:(id) sender;
 - (IBAction) Close:(id) sender;
@@ -90,7 +93,7 @@
 - (NSString*) findProvider:(NSString*)external_id;
 - (void) setPlace:(NSDictionary*)placedict;
 - (void) setDateTime:(CrossTime*)crosstime;
-- (void) ShowExfeeInput:(BOOL)show;
+//- (void) ShowExfeeInput:(BOOL)show;
 - (void) setExfeeNum;
 - (void) pullcontainviewDown;
 - (void) toconversation;
@@ -106,6 +109,10 @@
 - (void) addExfee:(Invitation*) invitation;
 - (void) initData;
 - (void) ShowExfeePopOver:(Invitation*) invitation pointTo:(CGPoint)point arrowx:(float)arrowx;
+- (void) refreshExfeePopOver;
+
 - (void) touchesBegan:(UITapGestureRecognizer*)sender;
 - (void) hiddenPopover;
+- (int) exfeeIdentitiesCount;
+
 @end

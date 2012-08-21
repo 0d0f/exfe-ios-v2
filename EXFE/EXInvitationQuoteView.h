@@ -17,12 +17,15 @@
     NSAttributedString *Line1;
     NSAttributedString *Line2;
     NSAttributedString *Line3;
+    CGPoint point;
+    
 }
 
 @property (nonatomic,retain) Invitation* invitation;
 @property (nonatomic,retain) NSAttributedString* Line1;
 @property (nonatomic,retain) NSAttributedString* Line2;
 @property (nonatomic,retain) NSAttributedString* Line3;
+@property CGPoint point;
 
 
 @end

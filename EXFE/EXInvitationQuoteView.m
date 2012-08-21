@@ -13,6 +13,7 @@
 @synthesize Line1;
 @synthesize Line2;
 @synthesize Line3;
+@synthesize point;
 
 - (id)initWithFrame:(CGRect)frame
 {

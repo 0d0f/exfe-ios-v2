@@ -48,7 +48,7 @@
         [self addSubview:input];
 
         self.showsHorizontalScrollIndicator=NO;
-        
+        self.delegate=self;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputTextChange:) name:UITextFieldTextDidChangeNotification object:input];
         
         // Initialization code
@@ -63,6 +63,9 @@
     [input release];
     [backgroundview release];
 	[super dealloc];
+}
+- (void) deleteLastBubble:(EXBubbleScrollView *)bubbleScrollView deletedbubble:(EXBubbleButton*)bubble{
+    [_exdelegate deleteLastBubble:bubbleScrollView deletedbubble:bubble];
 }
 -(void) deleteLastBubble{
     [[bubbles lastObject] removeFromSuperview];
@@ -81,13 +84,12 @@
     CGRect backframe=backgroundview.frame;
     backframe.size.width=inputframe.origin.x+inputframe.size.width;
     [backgroundview setFrame:backframe];
+    [self deleteLastBubble:self deletedbubble:(EXBubbleButton*)lastbubble];
     if(inputframe.origin.x+inputframe.size.width<self.contentSize.width){
         [self setContentSize:CGSizeMake(inputframe.origin.x+input.frame.size.width, self.contentSize.height)];
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.3];
         float offset=self.contentSize.width-self.frame.size.width;
-//        if(offset<=6+18+4)
-//            offset=0;
         [self setContentOffset:CGPointMake(offset, 0)];
         [UIView commitAnimations];
     }
@@ -105,8 +107,10 @@
     EXBubbleButton *button=[EXBubbleButton buttonWithType:UIButtonTypeCustom];
     button.customObject=customobject;
     [button setAdjustsImageWhenHighlighted:NO];
-	[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+	[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 	[[button titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+    [[button titleLabel] setShadowColor:[UIColor blackColor]];
+    [[button titleLabel] setShadowOffset:CGSizeMake(1.0, 1.0)];
 	[[button titleLabel] setLineBreakMode:UILineBreakModeTailTruncation];
 	[button setTitleEdgeInsets:UIEdgeInsetsMake(2, 10, 0, 10)];
 	[button setTitle:title forState:UIControlStateNormal];
@@ -121,7 +125,7 @@
         int newx=lastbubble.frame.origin.x+lastbubble.frame.size.width;
         rect.origin.x=newx;
     }else{
-        rect.origin.x=6+18+4;
+        rect.origin.x=0;//6+18+4;
     }
     
     [button setFrame:rect];
@@ -179,7 +183,7 @@
     [_exdelegate inputTextChange:self input:inputtext];
 }
 
--(void) setDelegate:(id<EXBubbleScrollViewDelegate>)delegate{
+-(void) setEXBubbleDelegate:(id<EXBubbleScrollViewDelegate>)delegate{
     _exdelegate=delegate;
 }
 - (NSString*)getInput{
@@ -187,26 +191,11 @@
                          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     return inputtext;
 }
-//- (void)drawRect:(CGRect)rect
-//{
-//
-//    rect.origin.x+=2;
-//    [[UIColor whiteColor] set];
-//    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:15];
-//    [path fill];
-//    [path stroke];
-    
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-//    CGContextBeginPath(context);
-//    CGContextAddPath(context, framepath.CGPath);
-//    CGContextClosePath(context);
-
-//    CGContextClipToRect(context, CGRectMake(AVATAR_LEFT_MERGIN+AVATAR_WIDTH, 0, r.size.width, 2));
-
-//    UIImage *backgroundImage = [UIImage imageNamed:@"toolbarbg.png"];
-//    backgroundImage = [backgroundImage stretchableImageWithLeftCapWidth:floorf(backgroundImage.size.width/2) topCapHeight:floorf(backgroundImage.size.height/2)];
-//    [backgroundImage drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-//}
-
+- (int) bubblecount{
+    return [bubbles count];
+}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [_exdelegate scrollViewDidScroll:scrollView];
+}
 
 @end

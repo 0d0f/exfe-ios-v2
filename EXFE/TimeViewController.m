@@ -85,7 +85,9 @@
     
     NSDate *date=datepicker.date;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
+//    [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];    
+    
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     [formatter setLocale:locale];
     
@@ -130,7 +132,7 @@
 //    [self selectPlace:indexPath.row];
 }
 - (void) cleanDate{
-    [(GatherViewController*)gatherview setDateTime:nil];
+    [(GatherViewController*)gatherview setDateTimeForGather:nil];
 }
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [inputtimeword resignFirstResponder];

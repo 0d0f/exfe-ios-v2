@@ -31,14 +31,14 @@
 //    [exfeeInput setBorderStyle:UITextBorderStyleRoundedRect];
 //    [exfeeInput setAutocorrectionType:UITextAutocorrectionTypeNo];
     
-    suggestionTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 44+6, 320, 460-44-6) style:UITableViewStylePlain];
+    suggestionTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 44, 320, 460-44) style:UITableViewStylePlain];
     [self.view addSubview:suggestionTable];
     suggestionTable.dataSource=self;
     suggestionTable.delegate=self;
     
     exfeeList=[[EXBubbleScrollView alloc] initWithFrame:CGRectMake(5, 7, 255, 30)];
     [exfeeList setContentSize:CGSizeMake(exfeeList.frame.size.width, 30)];
-    [exfeeList setDelegate:self];
+    [exfeeList setEXBubbleDelegate:self];
     
     [toolbar addSubview:exfeeList];
     
@@ -50,10 +50,18 @@
     [toolbar addSubview:inputframeview];
     exfeeList.layer.cornerRadius=15;
     [toolbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"] forToolbarPosition:UIToolbarPositionBottom barMetrics:UIBarMetricsDefault];
+    [self changeLeftIconWhite:NO];
+//    exfeeList.backgroundColor=FONT_COLOR_HL;
+  
+    UIView *leftestview = [[UIView alloc] initWithFrame:CGRectMake(0-320, 0, 320,exfeeList.frame.size.height)];
+    leftestview.backgroundColor=FONT_COLOR_HL;
+    [exfeeList addSubview:leftestview];
+    [leftestview release];
+
     
-    inputlefticon=[[UIImageView alloc] initWithFrame:CGRectMake(exfeeList.frame.origin.x+6, 14, 18, 18)];
-    inputlefticon.image=[UIImage imageNamed:@"exfee_18.png"];
-    [toolbar addSubview:inputlefticon];
+//    inputlefticon=[[UIImageView alloc] initWithFrame:CGRectMake(exfeeList.frame.origin.x+6, 14, 18, 18)];
+//    inputlefticon.image=[UIImage imageNamed:@"exfee_18.png"];
+//    [toolbar addSubview:inputlefticon];
     
     UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];
     UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(255+5+5, 7, 50, 31)];
@@ -71,11 +79,102 @@
     [toolbar addSubview:doneButton];
     
 }
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    NSLog(@"scrolling");
+}
+
+- (void) changeLeftIconWhite:(BOOL)iswhite{
+    if(inputlefticon==nil)
+    {
+        inputlefticon=[[UIImageView alloc] initWithFrame:CGRectMake(exfeeList.frame.origin.x+6, 14, 18, 18)];
+        [toolbar addSubview:inputlefticon];
+    }
+    
+    if(iswhite==YES)
+        inputlefticon.image=[UIImage imageNamed:@"exfee_18_white.png"];
+    else
+        inputlefticon.image=[UIImage imageNamed:@"exfee_18.png"];
+
+}
+
+- (void) ErrorHint:(BOOL)hidden content:(NSString*)content{
+    CGRect suggectrect=[suggestionTable frame];
+    if(hidden==YES){
+        suggectrect.origin.y-=44;
+        suggectrect.size.height+=44;
+    }else{
+        suggectrect.origin.y+=44;
+        suggectrect.size.height-=44;
+    }
+    if(errorHint==nil){
+        errorHint=[[UIView alloc] initWithFrame:CGRectMake(0, 44, self.view.frame.size.width, 44)];
+        [self.view addSubview:errorHint];
+        errorHinticon=[[UIImageView alloc] initWithFrame:CGRectMake(12, 13, 18, 18)];
+        errorHinticon.image=[UIImage imageNamed:@"exclamation.png"];
+        [errorHint addSubview:errorHinticon];
+        errorHintLabel=[[UILabel alloc] initWithFrame:CGRectMake(12+18+6+6, 13,self.view.frame.size.width-(12+18+6+6)-5 , 21)];
+        errorHintLabel.backgroundColor=[UIColor clearColor];
+        [errorHintLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+        [errorHintLabel setTextColor:[UIColor colorWithRed:204/255.0f green:81/255.0f blue:71/255.0f alpha:1]];
+        [errorHintLabel setShadowColor:[UIColor blackColor]];
+        [errorHintLabel setShadowOffset:CGSizeMake(0, 1)];
+        [errorHint addSubview:errorHintLabel];
+    }
+    errorHintLabel.text=content;
+    [UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.3];
+    [suggestionTable setFrame:suggectrect];
+    [UIView commitAnimations];
+    
+    if(hidden==YES){
+        [errorHint setHidden:YES];
+        CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+
+        fadeoutAnimation.fillMode = kCAFillModeForwards;
+        fadeoutAnimation.duration=0.5;
+        fadeoutAnimation.removedOnCompletion =NO;
+        fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
+        fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
+        [errorHint.layer addAnimation:fadeoutAnimation forKey:@"fadeout"];
+    }else{
+        [errorHint setHidden:NO];
+        CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+        fadeoutAnimation.fillMode = kCAFillModeForwards;
+        fadeoutAnimation.duration=0.5;
+        fadeoutAnimation.removedOnCompletion =NO;
+        fadeoutAnimation.fromValue=[NSNumber numberWithFloat:0.0];
+        fadeoutAnimation.toValue=[NSNumber numberWithFloat:1.0];
+        [errorHint.layer addAnimation:fadeoutAnimation forKey:@"fadein"];
+    }
+
+
+}
+- (void)dealloc {
+    [inputlefticon release];
+    [errorHinticon release];
+    [errorHintLabel release];
+    [errorHint release];
+    [super dealloc];
+}
+- (BOOL) showErrorHint{
+    if([(GatherViewController*)gatherview exfeeIdentitiesCount]+[exfeeList bubblecount]>=12){
+        if(errorHint==nil||[errorHint isHidden]==YES){
+            [self ErrorHint:NO content:@"12 exfees maximum"];
+        }
+        return YES;
+    }
+    else{
+        if(errorHint!=nil && [errorHint isHidden]==NO)
+            [self ErrorHint:YES content:@""];
+    }
+    return NO;
+}
+
+
 - (IBAction) Close:(id) sender{
     [self dismissModalViewControllerAnimated:YES];    
 }
 - (void) done:(id)sender{
-    NSLog(@"done");
     NSArray *customobjects=[exfeeList bubbleCustomObjects];
     for(Invitation* invitation in customobjects)
         [(GatherViewController*)gatherview addExfee:invitation];
@@ -83,6 +182,8 @@
 }
 - (IBAction)textDidChange:(UITextField*)textField{
     if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
+        //[exfeeList bubblecount]+
+        
         showInputinSuggestion=YES;
         [APIProfile LoadSuggest:exfeeInput.text delegate:self];
         [self loadIdentitiesFromDataStore:exfeeInput.text];
@@ -126,19 +227,28 @@
     NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
     for (Identity *identity in suggestwithselected){
         BOOL flag=NO;
-//        for (Invitation *selected in exfeeIdentities){
-//            if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
-//            {
-//                flag=YES;
-//                continue;
-//            }
-//        }
+        
+        for (Invitation *selected in ((GatherViewController*)gatherview).exfeeIdentities){
+            if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
+            {
+                flag=YES;
+                continue;
+            }
+        }
+        for (Invitation *selected in exfeeList.bubbleCustomObjects){
+            if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
+            {
+                flag=YES;
+                continue;
+            }
+        }
+
+        
         if(flag==NO)
             [temp addObject:identity];
     }
     
     suggestIdentities=[temp retain];
-    NSLog(@"%@",suggestIdentities);
     [temp release];
     [suggestionTable reloadData];
 }
@@ -214,7 +324,10 @@
                                 Invitation *invitation =[Invitation object];
                                 invitation.rsvp_status=@"NORESPONSE";
                                 invitation.identity=identity;
+                                invitation.by_identity=((GatherViewController*)gatherview).default_user.default_identity;
                                 [exfeeList addBubble:input customObject:invitation];
+//                                if([exfeeList bubblecount]>0)
+//                                    [self changeLeftIconWhite:YES];
 
                             }
                         }
@@ -299,6 +412,8 @@
     Invitation *invitation =[Invitation object];
     invitation.rsvp_status=@"NORESPONSE";
     invitation.identity=identity;
+    invitation.by_identity=((GatherViewController*)gatherview).default_user.default_identity;
+
 
     NSString *identity_name=identity.nickname;
     if(identity_name==nil || [identity_name isEqualToString:@""])
@@ -309,6 +424,8 @@
         identity_name=identity.external_id;
     
     [exfeeList addBubble:identity_name customObject:invitation];
+//    [self ErrorHint:NO content:@"12 exfees maximum"];
+//    [self changeLeftIcon];
 }
 #pragma mark RKObjectLoaderDelegate methods
 
@@ -326,14 +443,25 @@
 }
 
 #pragma mark EXBubbleScrollViewDelegate methods
+- (void) deleteLastBubble:(EXBubbleScrollView *)bubbleScrollView deletedbubble:(EXBubbleButton*)bubble{
+    [self showErrorHint];
+}
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+//    if(scrollView.contentOffset.x>5&&scrollView.contentOffset.x<20)
+//        [self changeLeftIconWhite:NO];
+//    if(scrollView.contentOffset.x>20)
+//        [self changeLeftIconWhite:YES];
+//    else
+//        [self changeLeftIconWhite:NO];
+}
 - (void)OnInputConfirm:(EXBubbleScrollView *)bubbleScrollView textField:(UITextField*)textfield{
 //    [self getIdentity:json];
     NSString *inputtext=[textfield.text stringByTrimmingCharactersInSet:
                          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
     [self addByInputIdentity:inputtext];
-//    [bubbleScrollView addBubble:textfield.text customObject:nil];
-    
 }
 - (id)customObject:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
     NSDictionary *dictionary=[[NSDictionary alloc] initWithObjectsAndKeys:input,@"name",@"id",@"id", nil ];
@@ -355,6 +483,8 @@
 }
 - (BOOL) inputTextChange:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
     if(input!=nil && input.length>=1) {
+        if([self showErrorHint]==YES)
+            return YES;
         showInputinSuggestion=YES;
         [APIProfile LoadSuggest:input delegate:self];
         [self loadIdentitiesFromDataStore:input];

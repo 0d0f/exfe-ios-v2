@@ -10,6 +10,7 @@
 //#import "ProfileCell.h"
 #import "ProfileCellView.h"
 #import "User.h"
+#import "FullScreenViewController.h"
 
 @interface ProfileViewController : UIViewController{
     IBOutlet UIToolbar* toolbar;
@@ -22,5 +23,6 @@
     UIView *footerView;
     User *user;
 }
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 - (void)loadObjectsFromDataStore;
 @end
