@@ -39,6 +39,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    backgroundview=[[LandingBackgroundView alloc] initWithFrame:self.view.bounds];
+//    [self.view addSubview:backgroundview];
+//    logo=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfe_170.png"]];
+//    [logo setFrame:CGRectMake(69, 164, 182, 182)];
+//    [self.view addSubview:logo];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -47,6 +52,10 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+}
+- (void)dealloc {
+//    [backgroundview release];
+    [super dealloc];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

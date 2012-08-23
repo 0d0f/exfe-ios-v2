@@ -25,8 +25,8 @@
     CGContextSaveGState(context);
 
     CGFloat colors [] = {
-        38/255.0f, 44/255.0f, 51/255.0f, 0.95,
-        58/255.0f, 66/255.0f, 76/255.0f, 0.95
+        137/255.0f, 169/255.0f, 204/255.0f, 1.0,
+        28/255.0f, 39/255.0f, 51/255.0f, 1.0
     };
     CGColorSpaceRef baseSpace = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColorComponents(baseSpace, colors, NULL, 2);

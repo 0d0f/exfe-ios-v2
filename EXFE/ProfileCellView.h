@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface ProfileCellView : UITableViewCell{
     IBOutlet UILabel *cellName;
@@ -14,6 +15,7 @@
     IBOutlet UILabel *isThisDevice;    
     IBOutlet UIImageView *cellAvatar;
     IBOutlet UIImageView *cellStatus;    
+    IBOutlet UIImageView *cellProvider;
 }
 - (void)setLabelName:(NSString *)_text;
 - (void)setLabelIdentity:(NSString *)_text;
@@ -21,5 +23,5 @@
 - (void)setAvartar:(UIImage*)_img;
 - (void)setLabelStatus:(int)type;
 - (void)IsThisDevice:(NSString*)devicename;
-
+- (void)setProvider:(UIImage*)_img;
 @end

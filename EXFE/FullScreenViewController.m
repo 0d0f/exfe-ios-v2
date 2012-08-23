@@ -13,7 +13,7 @@
 @end
 
 @implementation FullScreenViewController
-
+@synthesize image;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -29,7 +29,18 @@
     [super viewDidLoad];
     self.view=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view.backgroundColor=[UIColor blackColor];
-
+    imageview=[[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [self.view addSubview:imageview];
+    if(image!=nil){
+        imageview.image=image;
+        CGRect full=[UIScreen mainScreen].bounds;
+        float x=(full.size.width-image.size.width)/2;
+        float y=(full.size.height-image.size.height)/2;
+        x=MAX(0,x);
+        y=MAX(0,y);
+        [imageview setFrame:CGRectMake(x, y, image.size.width, image.size.height)];
+    }
+    
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [self.view addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
@@ -40,6 +51,7 @@
 
 - (void)viewDidUnload
 {
+    [imageview release];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

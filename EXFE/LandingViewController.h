@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LandingBackgroundView.h"
 
 @interface LandingViewController : UIViewController{
     id delegate;
+    UIImageView *logo;
+    UIView *backgroundview;
 }
 
 @property (nonatomic, assign) id delegate;

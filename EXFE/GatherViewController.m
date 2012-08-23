@@ -224,8 +224,9 @@
         [self setPlace:placedict];
         
         crossdescription.text=cross.cross_description;
-        for(Invitation *invitation in cross.exfee.invitations)
-        {
+        NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES];
+        NSArray *invitations=[cross.exfee.invitations sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+        for(Invitation *invitation in invitations) {
             if([invitation.host boolValue]==YES)
                 [exfeeIdentities insertObject:invitation atIndex:0];
             else{

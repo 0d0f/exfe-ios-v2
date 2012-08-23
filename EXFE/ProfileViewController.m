@@ -37,22 +37,35 @@
 {
     [super viewDidLoad];
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
-    [useravatar addGestureRecognizer:gestureRecognizer];
+    [tabview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
-
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     [self loadObjectsFromDataStore];
     [APIProfile LoadUsrWithUserId:app.userid delegate:self];
 
 }
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-
-    FullScreenViewController *viewcontroller=[[FullScreenViewController alloc] initWithNibName:@"FullScreenViewController" bundle:nil];
-    viewcontroller.wantsFullScreenLayout=YES;
-    viewcontroller.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
-     [self presentModalViewController:viewcontroller animated:YES];
+- (void)touchesBegan:(UITapGestureRecognizer*)sender{
+    CGPoint location = [sender locationInView:sender.view];
+    CGRect useravatarRect=[useravatar frame];
     
+    if(CGRectContainsPoint(useravatarRect, location))
+    {
+        FullScreenViewController *viewcontroller=[[FullScreenViewController alloc] initWithNibName:@"FullScreenViewController" bundle:nil];
+        viewcontroller.wantsFullScreenLayout=YES;
+        viewcontroller.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+        viewcontroller.image=useravatar.image;
+        [self presentModalViewController:viewcontroller animated:YES];
+    }
+    else{
+        CGPoint location2= [sender locationInView:footerView];
+        
+        CGRect signoutbuttonRect=[buttonsignout frame];
+        if(CGRectContainsPoint(signoutbuttonRect, location2))
+        {
+            [self Logout];
+        }
+    }
 }
 
 - (void)viewDidUnload
@@ -142,7 +155,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	NSString* reuseIdentifier = @"Profile Cell";
-//    ProfileCellView *cell=(ProfileCellView*)
     ProfileCellView *cell=(ProfileCellView*)[tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     
     if(nil == cell) {
@@ -188,14 +200,32 @@
         else{
             [cell setLabelIdentity:[NSString stringWithFormat:@"%@@%@",identity.external_username,identity.provider]];
         }
+        if(identity.provider!=nil && ![identity.provider isEqualToString:@""]){
+            
+            NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",identity.provider];
+            UIImage *icon=[UIImage imageNamed:iconname];
+            [cell setProvider:icon];
+        }
+
+        
         return cell;
     }
     else
     {
-        UIImage *img = [UIImage imageNamed:@"device_iPhone.png"];
+        NSString *iconname=@"";
+        if([identity.provider isEqualToString:@"iOSAPN"])
+            iconname=@"device_iphone.png";
+        else if([identity.provider isEqualToString:@"android"])
+            iconname=@"device_android.png";
+           
+        if(![iconname isEqualToString:@""])
+        {
+            UIImage *img = [UIImage imageNamed:iconname];
+            [cell setAvartar:img];
+        }
         [cell setLabelStatus:1];
-        [cell setAvartar:img];
         [cell setLabelName:identity.external_username];
+        
         
         if([identity.external_id isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"]])
         {
@@ -211,53 +241,74 @@
 }
 -(UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+    if(section == 0){
+        if(headerView==nil){
+            headerView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 111)];
+            useravatar=[[UIImageView alloc] initWithFrame:CGRectMake(20, 16, 64, 64)];
+            useravatar.image=[UIImage imageNamed:@"portrait_default.png"];
+            useravatar.layer.cornerRadius=2;
+            useravatar.clipsToBounds = YES;
+            [headerView addSubview:useravatar];
+            
+            username=[[UILabel alloc] initWithFrame:CGRectMake(100, 16, 160, 52)];
+            username.backgroundColor=[UIColor clearColor];
+            username.textColor=[UIColor whiteColor];
+            username.font=[UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
+            username.shadowColor=[UIColor blackColor];
+            username.shadowOffset=CGSizeMake(0, -1);
+            [headerView addSubview:username];
+            
+        }
+        return headerView;
+    }
+    return nil;
 }
 -(CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section
 {
     if(section == 0)
-        return 30.0;
+        return 111.0;
     return 15.0;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     if(section == [identitiesData count]-1)
-        return 40.0;
+        return 60;
     return 1.0;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    //        return [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
     if (section==0)
         return nil;
     if (section==1)
     if(footerView == nil) {
-        //allocate the view if it doesn't exist yet
-        footerView  = [[UIView alloc] init];
-        //create the button
-        UIImage *signbtnimg = [UIImage imageNamed:@"signoutbtn.png"];
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setTitle:@"Sign Out" forState:UIControlStateNormal];
-        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18]]; 
-        [button setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
-        [button setBackgroundImage:signbtnimg forState:UIControlStateNormal];
-        [button setFrame:CGRectMake(200, 10, 100, 40)];  
-        [button addTarget:self action:@selector(Logout:) forControlEvents:UIControlEventTouchUpInside];
-        [footerView addSubview:button];
+        footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 44)];
+        UIImage *btn_red_dark = [UIImage imageNamed:@"btn_red_dark_44.png"];
+        UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(200, 10, 100, 44)];
+        backimg.image=btn_red_dark;
+        backimg.contentMode=UIViewContentModeScaleToFill;
+        backimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+        [footerView addSubview:backimg];
+        [backimg release];
+
+        buttonsignout = [UIButton buttonWithType:UIButtonTypeCustom];
+        [buttonsignout setTitle:@"Sign Out" forState:UIControlStateNormal];
+        [buttonsignout.titleLabel setFont:[UIFont boldSystemFontOfSize:18]]; 
+        [buttonsignout setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
+        
+        [buttonsignout setFrame:CGRectMake(200, 10, 100, 44)];
+        [buttonsignout setBackgroundColor:[UIColor clearColor]];
+        [buttonsignout addTarget:self action:@selector(Logout) forControlEvents:UIControlEventTouchUpInside];
+        [footerView addSubview:buttonsignout];
     }
     
     //return the view for the footer
     return footerView;
 }
 
-- (IBAction) Logout:(id) sender
+- (void) Logout
 {
+    NSLog(@"logout");
     AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];  
     [app SignoutDidFinish];
-    
 }
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    
-//}
 
 
 @end

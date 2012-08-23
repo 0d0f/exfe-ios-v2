@@ -196,6 +196,7 @@
 	[_crosses release];
 	NSFetchRequest* request = [Cross fetchRequest];
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
+
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
 	_crosses = [[Cross objectsWithFetchRequest:request] retain];
         if(_crosses){

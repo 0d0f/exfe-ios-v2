@@ -14,12 +14,9 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
     }
     return self;
 }
-
-
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
@@ -31,6 +28,10 @@
 - (void)setAvartar:(UIImage*)_img
 {
     cellAvatar.image=_img;
+    cellAvatar.layer.cornerRadius=3;
+}
+- (void)setProvider:(UIImage*)_img{
+    cellProvider.image=_img;
 }
 
 - (void)setLabelName:(NSString *)_text

@@ -9,7 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface FullScreenViewController : UIViewController{
-//    UIView *view;
+    UIImage *image;
+    UIImageView *imageview;
 }
+
+@property (nonatomic,retain) UIImage *image;
 
 @end

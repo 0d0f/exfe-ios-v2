@@ -7,22 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "ProfileCell.h"
+#import <QuartzCore/QuartzCore.h>
 #import "ProfileCellView.h"
 #import "User.h"
+#import "Util.h"
 #import "FullScreenViewController.h"
 
 @interface ProfileViewController : UIViewController{
     IBOutlet UIToolbar* toolbar;
-    IBOutlet UIImageView* useravatar;
-    IBOutlet UILabel* username;
+    UIImageView* useravatar;
+    UILabel* username;
     IBOutlet UITableView* tabview;
     IBOutlet ProfileCellView *tblCell;
 
     NSMutableArray *identitiesData;
+    UIView *headerView;
     UIView *footerView;
+    UIButton *buttonsignout;
     User *user;
 }
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void)touchesBegan:(UITapGestureRecognizer*)sender;
 - (void)loadObjectsFromDataStore;
+- (void) Logout;
 @end
