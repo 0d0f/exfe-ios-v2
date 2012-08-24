@@ -141,6 +141,80 @@
     [super viewDidLoad];
     signindelegate=[[SigninDelegate alloc]init];
     signindelegate.parent=self;
+    
+    signintoolbar=[[SigninIconToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 50) style:@"signin" delegate:self];
+    signintoolbar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"signinbar_bg.png"]];
+    [self.view addSubview:signintoolbar];
+    
+    UIImage *textfieldback = [UIImage imageNamed:@"textfield_bg_rect.png"];
+    identitybackimg=[[UIImageView alloc] initWithFrame:CGRectMake(20, 70, 230, 41)];
+    identitybackimg.image=textfieldback;
+    identitybackimg.contentMode=UIViewContentModeScaleToFill;
+    identitybackimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+    [self.view addSubview:identitybackimg];
+    
+    passwordbackimg=[[UIImageView alloc] initWithFrame:CGRectMake(20, 135, 230, 41)];
+    passwordbackimg.image=textfieldback;
+    passwordbackimg.contentMode=UIViewContentModeScaleToFill;
+    passwordbackimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+    [self.view addSubview:passwordbackimg];
+    
+    
+    identityLeftIcon=[[UIImageView alloc] initWithFrame:CGRectMake(6, 12, 18, 18)];
+    identityLeftIcon.image=nil;//[UIImage imageNamed:@"identity_email_18_grey.png"];
+    [identitybackimg addSubview:identityLeftIcon];
+    
+    identityRightIcon=[[UIImageView alloc] initWithFrame:CGRectMake(206, 12, 18, 18)];
+    identityRightIcon.image=nil;//[UIImage imageNamed:@"textfield_clear.png"];
+    [identitybackimg addSubview:identityRightIcon];
+    
+    textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 70, 230-(6+18+6)*2, 41)];
+    textUsername.placeholder=@"Enter your email";
+    textUsername.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
+    textUsername.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
+    textUsername.textAlignment=UITextAlignmentCenter;
+    textUsername.autocorrectionType=UITextAutocorrectionTypeNo;
+    textUsername.autocapitalizationType=UITextAutocapitalizationTypeNone;
+    [textUsername setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:18]];
+    [textUsername setTextColor:FONT_COLOR_25];
+    [textUsername addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.view addSubview:textUsername];
+    [textUsername becomeFirstResponder];
+    
+    textPassword=[[UITextField alloc] initWithFrame:CGRectMake(20, 135, 230, 41)];
+    textPassword.placeholder=@"Enter EXFE Password";
+    textPassword.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
+    textPassword.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
+    textPassword.textAlignment=UITextAlignmentCenter;
+    textPassword.autocorrectionType=UITextAutocorrectionTypeNo;
+    textPassword.autocapitalizationType=UITextAutocapitalizationTypeNone;
+    textPassword.secureTextEntry=YES;
+    [textPassword setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+    [textPassword setTextColor:FONT_COLOR_25];
+    [self.view addSubview:textPassword];
+
+    avatarview=[[UIImageView alloc] initWithFrame:CGRectMake(260, 70, 40, 40)];
+    avatarview.image=nil;
+    [self.view addSubview:avatarview];
+
+    UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];
+    UIImageView *startbackimg=[[UIImageView alloc] initWithFrame:CGRectMake(20, 200, 280, 44)];
+    startbackimg.image=btn_dark;
+    startbackimg.contentMode=UIViewContentModeScaleToFill;
+    startbackimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+    [self.view addSubview:startbackimg];
+    [startbackimg release];
+
+    loginbtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    [loginbtn setFrame:CGRectMake(20, 200, 280, 44)];
+    [loginbtn setTitle:@"Start" forState:UIControlStateNormal];
+    [loginbtn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+    [loginbtn setTitleColor:[UIColor colorWithRed:204.0/255.0f green:229.0/255.0f blue:255.0/255.0f alpha:1] forState:UIControlStateNormal];
+    [loginbtn addTarget:self action:@selector(Signin:) forControlEvents:UIControlEventTouchUpInside];
+    [loginbtn setTitleShadowColor:[UIColor colorWithRed:21.0/255.0f green:52.0/255.0f blue:84.0/255.0f alpha:1] forState:UIControlStateNormal];
+    loginbtn.titleLabel.shadowOffset=CGSizeMake(0, 1);
+    [self.view addSubview:loginbtn];
+    
 }
 
 - (void)viewDidUnload
@@ -151,7 +225,11 @@
 }
 - (void)dealloc
 {
+    [identitybackimg release];
+    [textUsername release];
     [signindelegate release];
+    [identityLeftIcon release];
+    [identityRightIcon release];
     [super dealloc];
 
 }
@@ -189,6 +267,10 @@
                                 {
                                     NSDictionary *identity = [response objectForKey:@"identity"];
                                     NSString *avatar_filename=[identity objectForKey:@"avatar_filename"];
+                                    NSString *provider=[identity objectForKey:@"provider"];
+                                    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
+                                    identityLeftIcon.image=[UIImage imageNamed:iconname];
+
                                     if(avatar_filename!=nil) {
                                         dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
                                         dispatch_async(imgQueue, ^{
@@ -217,10 +299,14 @@
 
 - (IBAction)textDidChange:(UITextField*)textField{
     if([textField.text length]>2) {
+        identityRightIcon.image=[UIImage imageNamed:@"textfield_clear.png"];
         editinginterval=CFAbsoluteTimeGetCurrent();
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
         [self performSelector:@selector(getUser) withObject:self afterDelay:1.2];
     } else {
         avatarview.image=nil;
+        identityRightIcon.image=nil;
+        identityLeftIcon.image=nil;
     }
 }
 
@@ -263,6 +349,12 @@
         
     }
 }
+- (void)TwitterSigninButtonPress:(id)sender{
+    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+    oauth.delegate=signindelegate;
+    [self presentModalViewController:oauth animated:YES];
+}
+
 - (IBAction)sendVerify:(id)sender{
     RKClient *client = [RKClient sharedClient];
     NSString *provider=[Util findProvider:textUsername.text];

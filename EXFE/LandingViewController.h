@@ -10,14 +10,15 @@
 #import "LandingBackgroundView.h"
 #import "EXIconToolBar.h"
 #import "SigninDelegate.h"
+#import "SigninIconToolbarView.h"
 
 @interface LandingViewController : UIViewController{
     id delegate;
     UIImageView *logo;
     UIView *backgroundview;
-    UIView *signintoolbar;
-    UIButton *signinbutton;
-    UIButton *twitterbutton;
+    SigninIconToolbarView *signintoolbar;
+//    UIButton *signinbutton;
+//    UIButton *twitterbutton;
     SigninDelegate *signindelegate;
 
 

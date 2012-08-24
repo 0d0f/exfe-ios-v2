@@ -320,11 +320,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/SigninViewController.m"
-         timestampString = "367489904.133766"
+         timestampString = "367513446.61614"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "242"
-         endingLineNumber = "242"
+         startingLineNumber = "331"
+         endingLineNumber = "331"
          landmarkName = "-setHintView:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -333,11 +333,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/SigninViewController.m"
-         timestampString = "367489904.133766"
+         timestampString = "367513446.61614"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "259"
-         endingLineNumber = "259"
+         startingLineNumber = "348"
+         endingLineNumber = "348"
          landmarkName = "-setHintView:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -670,19 +670,6 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "EXFE/OAuthLoginViewController.m"
-         timestampString = "367494629.623606"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "95"
-         endingLineNumber = "95"
-         landmarkName = "-viewDidLoad"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "EXFE/AppDelegate.m"
          timestampString = "367489378.912127"
          startingColumnNumber = "9223372036854775807"
@@ -690,19 +677,6 @@
          startingLineNumber = "103"
          endingLineNumber = "103"
          landmarkName = "-SigninDidFinish"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/OAuthLoginViewController.m"
-         timestampString = "367494629.623606"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "102"
-         endingLineNumber = "102"
-         landmarkName = "-cancel"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

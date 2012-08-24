@@ -15,22 +15,35 @@
 #import "User.h"
 #import "ImgCache.h"
 #import "SigninDelegate.h"
+#import "SigninIconToolbarView.h"
 
 @interface SigninViewController : UIViewController <RKRequestDelegate> {
     id delegate;
     SigninDelegate *signindelegate;
 
-    IBOutlet UITextField *textUsername;
-    IBOutlet UITextField *textPassword;    
     IBOutlet UILabel *hint;
     IBOutlet UIActivityIndicatorView* activityIndicatorview;
-    IBOutlet UIButton *loginbtn;
-    IBOutlet UIImageView *avatarview;
     IBOutlet UILabel *hint_title;
     IBOutlet UITextView *hint_desc;
     IBOutlet UIButton *Send;
     double editinginterval;
     IBOutlet UIView *hintpannel;
+    
+    SigninIconToolbarView *signintoolbar;
+    
+    UIImageView *identitybackimg;
+    UIImageView *passwordbackimg;
+    
+    UIImageView *identityLeftIcon;
+    UIImageView *identityRightIcon;
+    UIImageView *avatarview;
+    UITextField *textUsername;
+    UITextField *textPassword;
+    UIButton *loginbtn;
+
+    
+    
+
 }
 @property (nonatomic, assign) id delegate;
 
@@ -44,6 +57,7 @@
 - (IBAction)sendPwd:(id)sender;
 - (IBAction)sendVerify:(id)sender;
 - (void) setHintView:(NSString*)hintname;
+- (void)TwitterSigninButtonPress:(id)sender;
 
 
 @end
