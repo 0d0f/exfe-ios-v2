@@ -290,7 +290,7 @@
 
         buttonsignout = [UIButton buttonWithType:UIButtonTypeCustom];
         [buttonsignout setTitle:@"Sign Out" forState:UIControlStateNormal];
-        [buttonsignout.titleLabel setFont:[UIFont boldSystemFontOfSize:18]]; 
+        [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
         [buttonsignout setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
         
         [buttonsignout setFrame:CGRectMake(200, 10, 100, 44)];

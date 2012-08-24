@@ -16,16 +16,6 @@
 @synthesize delegate;
 
 - (IBAction) Signin:(id) sender{
-    
-//    NSString *password=[textPassword text];
-//    NSString *identity=[textUsername text];
-//
-//    NSDictionary* params=[NSDictionary dictionaryWithObjectsAndKeys:identity, @"external_id",
-//                          @"email", @"provider",
-//                          password, @"password", nil];
-    
-//    [[RKClient sharedClient] post:@"/users/signin" params:params delegate:self];
-    
     RKClient *client = [RKClient sharedClient];
     NSString *endpoint = [NSString stringWithFormat:@"/users/signin"];
     RKParams* rsvpParams = [RKParams params];
@@ -48,22 +38,21 @@
 }
 - (IBAction) TwitterLoginButtonPress:(id) sender{
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-    oauth.delegate=self;
-    
+    oauth.delegate=signindelegate;
     [self presentModalViewController:oauth animated:YES];
     
 
 }
-#pragma Mark - OAuthlogin Delegate
-- (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
-    [self dismissModalViewControllerAnimated:YES];        
-    [oauthlogin release]; 
-    oauthlogin = nil; 
-}
--(void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
-{
-    [self loginSuccessWith:token userid:userid username:username];
-}
+//#pragma Mark - OAuthlogin Delegate
+//- (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
+//    [self dismissModalViewControllerAnimated:YES];        
+//    [oauthlogin release]; 
+//    oauthlogin = nil; 
+//}
+//-(void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
+//{
+//    [self loginSuccessWith:token userid:userid username:username];
+//}
 #pragma Mark - RKRequestDelegate
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
@@ -86,18 +75,18 @@
     }    //    NSLog(@"Response code=%@, token=[%@], userName=[%@]", [[result meta] code], [result token], [[result user] userName]);
 }
 
-- (void)loginSuccessWith:(NSString *)token userid:(NSString *)userid username:(NSString *)username {
-    [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"access_token"];
-    [[NSUserDefaults standardUserDefaults] setObject:userid forKey:@"userid"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-
-    app.userid=[userid intValue];
-    app.accesstoken=token;
-    NSLog(@"loaduser with userid..");
-    [APIProfile LoadUsrWithUserId:app.userid delegate:self];
-}
+//- (void)loginSuccessWith:(NSString *)token userid:(NSString *)userid username:(NSString *)username {
+//    [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"access_token"];
+//    [[NSUserDefaults standardUserDefaults] setObject:userid forKey:@"userid"];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+//
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//
+//    app.userid=[userid intValue];
+//    app.accesstoken=token;
+//    NSLog(@"loaduser with userid..");
+//    [APIProfile LoadUsrWithUserId:app.userid delegate:self];
+//}
 
 - (void) processResponse:(id)obj{
     
@@ -119,7 +108,7 @@
                         NSString *userid=[response objectForKey:@"user_id"];
                         NSString *username=[response objectForKey:@"username"];
                         NSLog(@"login success with ");
-                        [self loginSuccessWith:token userid:userid username:username];
+                        [signindelegate loginSuccessWith:token userid:userid username:username];
                     }
                 }
                 else{
@@ -150,7 +139,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    signindelegate=[[SigninDelegate alloc]init];
+    signindelegate.parent=self;
 }
 
 - (void)viewDidUnload
@@ -158,6 +148,12 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+}
+- (void)dealloc
+{
+    [signindelegate release];
+    [super dealloc];
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -243,7 +239,7 @@
         [desc addAttribute:(NSString*)kCTForegroundColorAttributeName  value:(id)[UIColor blackColor].CGColor range:NSMakeRange(0,19)];
 
         [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL range:NSMakeRange(19,4)];
-        hint_desc.text=desc;
+//        hint_desc.text=desc;
 
         [desc release];
         [hint_title setHidden:NO];
@@ -257,7 +253,7 @@
         hint_title.text=@"Verification";
         NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"This identity requires verification before using.\nConfirm sending verification to your mailbox?"];
         [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor redColor] range:NSMakeRange(0,50)];
-        hint_desc.text=desc;
+//        hint_desc.text=desc;
         [desc release];
         [hint_title setHidden:NO];
         [hint_desc setHidden:NO];
@@ -307,29 +303,29 @@
         };
     }];
 }
-#pragma mark RKObjectLoaderDelegate methods
+//#pragma mark RKObjectLoaderDelegate methods
 
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];    
-    [request setPredicate:predicate];
-	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    
-    if(users!=nil && [users count] >0)
-    {
-        User* user=[users objectAtIndex:0];
-        [[NSUserDefaults standardUserDefaults] setObject:user.name forKey:@"username"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        app.username=user.name;
-    }
-    [delegate SigninDidFinish];
-}
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
-    //    [self stopLoading];
-}
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//	NSFetchRequest* request = [User fetchRequest];
+//    NSPredicate *predicate = [NSPredicate
+//                              predicateWithFormat:@"user_id = %u", app.userid];    
+//    [request setPredicate:predicate];
+//	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+//    
+//    if(users!=nil && [users count] >0)
+//    {
+//        User* user=[users objectAtIndex:0];
+//        [[NSUserDefaults standardUserDefaults] setObject:user.name forKey:@"username"];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//        app.username=user.name;
+//    }
+//    [delegate SigninDidFinish];
+//}
+//
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+//    NSLog(@"Error!:%@",error);
+//    //    [self stopLoading];
+//}
 
 @end

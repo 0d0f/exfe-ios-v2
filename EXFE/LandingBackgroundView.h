@@ -14,6 +14,9 @@
     NSMutableDictionary *circleRects;
     NSMutableAttributedString *titleexfe;
     NSMutableAttributedString *titlethex;
+    NSMutableAttributedString *titlesafe;
+    NSMutableAttributedString *titlehandy;
+    NSMutableAttributedString *titlersvp;
     NSString *bigtitlename;
 }
 - (void) drawCircle:(CGPoint)center radius:(float)r str:(NSAttributedString*)str isRing:(BOOL)isring;

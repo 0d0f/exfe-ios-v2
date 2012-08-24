@@ -57,8 +57,8 @@
     }
 }
 - (void)viewDidLoad {
-    [super viewDidLoad];
     
+    [super viewDidLoad];
     //[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     
 	self.title = @"Sign In";
@@ -99,15 +99,6 @@
 //    NSString *urlstr=[NSString stringWithFormat:@"https://exfe.com/oAuth/twitterRedirect?device=iOS&device_callback=%@",callback];
     firstLoading=YES;
     [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstr]]];
-
-    
-//	self.navigationController.delegate = self;    
-    
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
-//                                                 name:UIKeyboardWillShowNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
-
-  //  [self requestTokenWithCallbackUrl:oAuthCallbackUrl];
 }
 
 - (void)cancel {
@@ -135,6 +126,9 @@
         return NO;
     }
     return YES;
+}
+-(void)dealloc{
+    [super dealloc];
 }
 - (void)viewDidUnload
 {

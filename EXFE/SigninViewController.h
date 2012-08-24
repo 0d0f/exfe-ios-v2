@@ -14,10 +14,12 @@
 #import "APIProfile.h"
 #import "User.h"
 #import "ImgCache.h"
+#import "SigninDelegate.h"
 
-@interface SigninViewController : UIViewController <RKRequestDelegate,OAuthLoginViewControllerDelegate,RKObjectLoaderDelegate> {
+@interface SigninViewController : UIViewController <RKRequestDelegate> {
     id delegate;
-    
+    SigninDelegate *signindelegate;
+
     IBOutlet UITextField *textUsername;
     IBOutlet UITextField *textPassword;    
     IBOutlet UILabel *hint;

@@ -70,9 +70,24 @@
 }
 - (void) drawBigTitle{
     NSAttributedString *bigtitle=titleexfe;
+    int y=self.frame.size.height-30-64;
     if(bigtitlename!=nil){
-        if([bigtitlename isEqualToString:@"thex"])
+        if([bigtitlename isEqualToString:@"thex"]){
             bigtitle=titlethex;
+            y=self.frame.size.height-30-64;
+        }
+        else if([bigtitlename isEqualToString:@"rsvp"]){
+            bigtitle=titlersvp;
+            y=self.frame.size.height-30-64-(64-50);
+        }
+        else if([bigtitlename isEqualToString:@"handy"]){
+            bigtitle=titlehandy;
+            y=self.frame.size.height-30-64-(64-50);
+        }
+        else if([bigtitlename isEqualToString:@"safe"]){
+            bigtitle=titlesafe;
+            y=self.frame.size.height-30-64-(64-50);
+        }
     }
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
@@ -82,7 +97,7 @@
     
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)bigtitle);
     CFRange range;
-    CGRect rectstrthex=CGRectMake(0,self.frame.size.height-30-64,320,64);
+    CGRect rectstrthex=CGRectMake(0,y,320,64);
     CGMutablePathRef textpath = CGPathCreateMutable();
     CGPathAddRect(textpath, NULL, rectstrthex);
     CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [bigtitle length]), textpath, NULL);
@@ -129,12 +144,17 @@
     float t_y=l_r*sin(angle/360.0*M_PI*2);
     float t_x=l_r*cos(angle/360.0*M_PI*2);
     int circle_r=17.0;
+    BOOL isring=NO;
     
     NSMutableAttributedString *handy=[[[NSMutableAttributedString alloc] initWithString:@"Handy"] autorelease];
     [handy addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL) range:NSMakeRange(0,[handy length])];
     [handy addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:21/255.0f green:52/255.0f blue:84/255.0f alpha:1].CGColor range:NSMakeRange(0,[handy length])];
+    if([bigtitlename isEqualToString:@"handy"])
+        isring=NO;
+    else
+        isring=YES;
 
-    [self drawCircle:CGPointMake(centerx+t_x, centery+t_y) radius:circle_r str:handy isRing:NO];
+    [self drawCircle:CGPointMake(centerx+t_x, centery+t_y) radius:circle_r str:handy isRing:isring];
     
     [circleRects setObject:[NSValue valueWithCGRect:CGRectMake(centerx+t_x-circle_r, centery+t_y-circle_r, 2*circle_r, 2*circle_r)] forKey:@"handy"];
     
@@ -144,7 +164,11 @@
     NSMutableAttributedString *safe=[[[NSMutableAttributedString alloc] initWithString:@"Safe"] autorelease];
     [safe addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 14.0, NULL) range:NSMakeRange(0,[safe length])];
     [safe addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:21/255.0f green:52/255.0f blue:84/255.0f alpha:1].CGColor range:NSMakeRange(0,[safe length])];
-    [self drawCircle:CGPointMake(centerx+t_x, centery+t_y) radius:17.0 str:safe isRing:NO];
+    if([bigtitlename isEqualToString:@"safe"])
+        isring=NO;
+    else
+        isring=YES;
+    [self drawCircle:CGPointMake(centerx+t_x, centery+t_y) radius:17.0 str:safe isRing:isring];
     [circleRects setObject:[NSValue valueWithCGRect:CGRectMake(centerx+t_x-circle_r, centery+t_y-circle_r, 2*circle_r, 2*circle_r)] forKey:@"safe"];
 
     angle=135;
@@ -154,7 +178,11 @@
     NSMutableAttributedString *thex=[[[NSMutableAttributedString alloc] initWithString:@"·X·"] autorelease];
     [thex addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 18.0, NULL) range:NSMakeRange(0,[thex length])];
     [thex addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0,[thex length])];
-    [self drawCircle:CGPointMake(centerx+t_x, centery+t_y) radius:17.0 str:thex isRing:NO];
+    if([bigtitlename isEqualToString:@"thex"])
+        isring=NO;
+    else
+        isring=YES;
+    [self drawCircle:CGPointMake(centerx+t_x, centery+t_y) radius:17.0 str:thex isRing:isring];
     [circleRects setObject:[NSValue valueWithCGRect:CGRectMake(centerx+t_x-circle_r, centery+t_y-circle_r, 2*circle_r, 2*circle_r)] forKey:@"thex"];
 
     
@@ -164,8 +192,12 @@
     NSMutableAttributedString *rsvp=[[[NSMutableAttributedString alloc] initWithString:@"RSVP"] autorelease];
     [rsvp addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 11.0, NULL) range:NSMakeRange(0,[rsvp length])];
     [rsvp addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:21/255.0f green:52/255.0f blue:84/255.0f alpha:1].CGColor range:NSMakeRange(0,[rsvp length])];
+    if([bigtitlename isEqualToString:@"rsvp"])
+        isring=NO;
+    else
+        isring=YES;
 
-    [self drawCircle:CGPointMake(centerx+t_x, centery+t_y) radius:17.0 str:rsvp isRing:NO];
+    [self drawCircle:CGPointMake(centerx+t_x, centery+t_y) radius:17.0 str:rsvp isRing:isring];
     [circleRects setObject:[NSValue valueWithCGRect:CGRectMake(centerx+t_x-circle_r, centery+t_y-circle_r, 2*circle_r, 2*circle_r)] forKey:@"rsvp"];
     
     [self drawBigTitle];
@@ -206,8 +238,49 @@
         CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 4);
         [titlethex addAttribute:(id)kCTParagraphStyleAttributeName value:(id)titlestyle range:NSMakeRange(0,[titlethex length])];
     }
+    if(titlesafe==nil)
+    {
+        titlesafe=[[NSMutableAttributedString alloc] initWithString:@"Private,\nattendee access only."];
+        [titlesafe addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 18, NULL) range:NSMakeRange(0,[titlesafe length])];
+
+        [titlesafe addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[titlesafe length])];
         
+        CTTextAlignment alignment = kCTCenterTextAlignment;
+        CTParagraphStyleSetting titlesetting[1] = {
+            {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
+        };
+        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 4);
+        [titlesafe addAttribute:(id)kCTParagraphStyleAttributeName value:(id)titlestyle range:NSMakeRange(0,[titlesafe length])];
+    }
+    if(titlersvp==nil){
+        titlersvp=[[NSMutableAttributedString alloc] initWithString:@"No more endless calls,\nemails, messages off-the-point."];
+        [titlersvp addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 18, NULL) range:NSMakeRange(0,[titlersvp length])];
+        
+        [titlersvp addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[titlersvp length])];
+        
+        CTTextAlignment alignment = kCTCenterTextAlignment;
+        CTParagraphStyleSetting titlesetting[1] = {
+            {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
+        };
+        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 4);
+        [titlersvp addAttribute:(id)kCTParagraphStyleAttributeName value:(id)titlestyle range:NSMakeRange(0,[titlersvp length])];
+    }
+    if(titlehandy==nil){
+        titlehandy=[[NSMutableAttributedString alloc] initWithString:@"Connected,\nwith tools & apps you preferred."];
+        [titlehandy addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 18, NULL) range:NSMakeRange(0,[titlehandy length])];
+        
+        [titlehandy addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[titlehandy length])];
+        
+        CTTextAlignment alignment = kCTCenterTextAlignment;
+        CTParagraphStyleSetting titlesetting[1] = {
+            {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
+        };
+        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 4);
+        [titlehandy addAttribute:(id)kCTParagraphStyleAttributeName value:(id)titlestyle range:NSMakeRange(0,[titlehandy length])];
+    }
     
+    
+        
 }
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     NSSet *touchforview=[event touchesForView:self];
@@ -237,27 +310,28 @@
 - (void) dealloc{
     [titleexfe release];
     [titlethex release];
+    [titlersvp release];
+    [titlehandy release];
+    [titlesafe release];
     [circleRects release];
     [super dealloc];
 }
 
 - (void) touch_thex{
-    //titlethex
     bigtitlename=@"thex";
     [self setNeedsDisplay];
-    NSLog(@"thex");
 }
 - (void) touch_rsvp{
-    NSLog(@"rsvp");
-    
+    bigtitlename=@"rsvp";
+    [self setNeedsDisplay];
 }
 - (void) touch_handy{
-    NSLog(@"handy");
-    
+    bigtitlename=@"handy";
+    [self setNeedsDisplay];
 }
 - (void) touch_safe{
-    NSLog(@"safe");
-    
+    bigtitlename=@"safe";
+    [self setNeedsDisplay];
 }
 
 @end
