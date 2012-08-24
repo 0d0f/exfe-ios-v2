@@ -14,7 +14,7 @@
 
 #pragma Mark - OAuthlogin Delegate
 - (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
-    [modalview dismissModalViewControllerAnimated:YES];
+    [oauthlogin dismissModalViewControllerAnimated:YES];
     [oauthlogin release];
     oauthlogin = nil;
 }
@@ -57,7 +57,6 @@
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     NSLog(@"Error!:%@",error);
-    //    [self stopLoading];
 }
 
 @end

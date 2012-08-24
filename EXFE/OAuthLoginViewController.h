@@ -13,10 +13,11 @@
 @interface OAuthLoginViewController : UIViewController
 {
     id<OAuthLoginViewControllerDelegate> delegate;
-    IBOutlet UIToolbar* toolbar;
+    UIView *toolbar;
     IBOutlet UIWebView *webView;
     bool firstLoading;
-    
+    UIButton *cancelbutton;
+    UILabel *titlelabel;
 }
 @property (nonatomic, assign) id <OAuthLoginViewControllerDelegate> delegate;
 @property (nonatomic, assign)  UIWebView* webView;

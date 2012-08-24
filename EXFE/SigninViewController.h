@@ -37,6 +37,7 @@
 - (void) getUser;
 - (IBAction) Signin:(id) sender;
 - (void)SigninDidFinish;
+- (void)SigninCancel;
 - (void) processResponse:(id)obj;
 - (IBAction) TwitterLoginButtonPress:(id) sender;
 - (IBAction)showForgetPwd:(id)sender;

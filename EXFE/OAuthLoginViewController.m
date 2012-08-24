@@ -59,39 +59,35 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    //[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    
+    toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
+    [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
 	self.title = @"Sign In";
+    UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];
+    UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(5, 7, 50, 30)];
+    backimg.image=btn_dark;
+    backimg.contentMode=UIViewContentModeScaleToFill;
+    backimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+    [toolbar addSubview:backimg];
+    [backimg release];
 
-//	UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
-//                                     initWithTitle:@"Cancel"
-//                                     style:UIBarButtonItemStylePlain
-//                                     target:self
-//                                     action:@selector(cancel)];	
-//	self.navigationItem.leftBarButtonItem = cancelButton;
-//	[cancelButton release];
-
-    UIBarButtonItem *flexibleSpaceLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-
-    UIImage *closesettingbtnimg = [UIImage imageNamed:@"close_settingbtn.png"];
-    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [doneButton setTitle:@"Close" forState:UIControlStateNormal];
-    doneButton.titleLabel.font         = [UIFont boldSystemFontOfSize:12.0f];
-    [doneButton setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
+    cancelbutton=[UIButton buttonWithType:UIButtonTypeCustom];
+    [cancelbutton setFrame:CGRectMake(5, 7, 50, 30)];
+    [cancelbutton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cancelbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+    [cancelbutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
     
-    doneButton.titleEdgeInsets         = UIEdgeInsetsMake(0, 2, 0, 2);
-    doneButton.contentStretch          = CGRectMake(0.5, 0.5, 0, 0);
-    doneButton.contentMode             = UIViewContentModeScaleToFill;
+    [cancelbutton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
+    [toolbar addSubview:cancelbutton];
     
-    [doneButton setBackgroundImage:closesettingbtnimg forState:UIControlStateNormal];
-    doneButton.frame = CGRectMake(0, 0, closesettingbtnimg.size.width, closesettingbtnimg.size.height);
-    [doneButton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
-    
-    [toolbar setItems:[NSArray arrayWithObjects:flexibleSpaceLeft, [[[UIBarButtonItem alloc] initWithCustomView:doneButton] autorelease], nil]];
-    
-    [flexibleSpaceLeft release];
-    
-    
+    titlelabel=[[UILabel alloc] initWithFrame:CGRectMake(65, 10, 230, 24)];
+    titlelabel.text=@"Twitter Authorization";
+    titlelabel.backgroundColor=[UIColor clearColor];
+    [titlelabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:20]];
+    [titlelabel setShadowColor:[UIColor colorWithWhite:0 alpha:0.75]];
+    [titlelabel setShadowOffset:CGSizeMake(0, 1)];
+    [titlelabel setTextColor:[UIColor whiteColor]];
+    [toolbar addSubview:titlelabel];
+    [self.view addSubview:toolbar];
     
     NSString *callback=@"oauth://handleTwitterLogin";
     NSString *urlstr=[NSString stringWithFormat:@"%@/TwitterAuthenticate?device=iOS&device_callback=%@",EXFE_OAUTH_LINK,callback];
@@ -128,6 +124,8 @@
     return YES;
 }
 -(void)dealloc{
+    [toolbar release];
+    [titlelabel release];
     [super dealloc];
 }
 - (void)viewDidUnload

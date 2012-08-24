@@ -18,6 +18,7 @@
     NSMutableAttributedString *titlehandy;
     NSMutableAttributedString *titlersvp;
     NSString *bigtitlename;
+
 }
 - (void) drawCircle:(CGPoint)center radius:(float)r str:(NSAttributedString*)str isRing:(BOOL)isring;
 - (void) initAttributedString;

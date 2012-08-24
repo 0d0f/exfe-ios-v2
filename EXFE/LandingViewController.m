@@ -24,11 +24,9 @@
 }
 - (void)TwitterSigninButtonPress:(id)sender{
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-    oauth.delegate=self;
+    oauth.delegate=signindelegate;
     [self presentModalViewController:oauth animated:YES];
 }
-
-
 
 - (void)SigninDidFinish{
     [self.navigationController dismissModalViewControllerAnimated:YES];
@@ -46,8 +44,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    signindelegate=[[SigninDelegate alloc]init];
+    signindelegate.parent=self;
+
     signintoolbar=[[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-50, self.view.bounds.size.width, 50)];
-//
+
     signintoolbar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"signinbar_bg.png"]];
     UIImage *signbtn_backimg = [UIImage imageNamed:@"signinbar_btnbg.png"];
     UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 126, 31)];
@@ -88,7 +89,7 @@
 - (void)dealloc {
     [signinbutton release];
     [twitterbutton release];
-//    [backgroundview release];
+    [signindelegate release];
     [super dealloc];
 }
 

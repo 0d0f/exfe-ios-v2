@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "LandingBackgroundView.h"
 #import "EXIconToolBar.h"
+#import "SigninDelegate.h"
 
 @interface LandingViewController : UIViewController{
     id delegate;
@@ -17,6 +18,8 @@
     UIView *signintoolbar;
     UIButton *signinbutton;
     UIButton *twitterbutton;
+    SigninDelegate *signindelegate;
+
 
 }
 
