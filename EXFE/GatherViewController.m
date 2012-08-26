@@ -182,8 +182,14 @@
         [conversationView.view setHidden:YES];
         [self.view addSubview:conversationView.view];
     }
+    NSTimeInterval t1=[[NSDate date] timeIntervalSince1970];
     [self initData];
+    NSTimeInterval t2=[[NSDate date] timeIntervalSince1970];
     [self reArrangeViews];
+    NSTimeInterval t3=[[NSDate date] timeIntervalSince1970];
+    float t1_t2=t2-t1;
+    float t2_t3=t3-t2;
+    NSLog(@"time initdata:%f rearrangeviews %f",t1_t2 ,t2_t3);
     if(viewmode==YES)
         [self ShowRsvpButton];
 }
@@ -191,19 +197,22 @@
 
 }
 - (void) initData{
+
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSFetchRequest* request = [User fetchRequest];
     NSPredicate *predicate = [NSPredicate
                               predicateWithFormat:@"user_id = %u", app.userid];
     [request setPredicate:predicate];
 	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    
+
     if(users!=nil && [users count] >0)
     {
         default_user=[users objectAtIndex:0];
     }
     
     if(self.cross!=nil && viewmode==YES){
+        NSTimeInterval t1=[[NSDate date] timeIntervalSince1970];
+
         crosstitle.text=cross.title;
         [self setExfeeNum];
         NSArray *widgets=cross.widget;
@@ -211,9 +220,17 @@
             if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
                 NSString *imgurl=[NSString stringWithFormat:@"%@/xbg/%@",IMG_ROOT,[widget objectForKey:@"image"]];
                 UIImageView *imageview=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, containview.frame.size.width, 180)];
-                UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
-                if(backimg!=nil && ![backimg isEqual:[NSNull null]]) 
-                    imageview.image=backimg;
+                imageview.image=nil;
+                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                dispatch_async(imgQueue, ^{
+                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(backimg!=nil && ![backimg isEqual:[NSNull null]])
+                            imageview.image=backimg;
+                    });
+                });
+                
+                dispatch_release(imgQueue);
 
                 UIImageView *imagemaskview=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, containview.frame.size.width, 180)];
                 imagemaskview.image=[UIImage imageNamed:@"cross_bgmask.png"];
@@ -224,6 +241,8 @@
                 [imageview release];
             }
         }
+        NSTimeInterval t2=[[NSDate date] timeIntervalSince1970];
+
         [self setDateTime:cross.time];
         NSDictionary *placedict=[NSDictionary dictionaryWithKeysAndObjects:@"title",cross.place.title,@"description",cross.place.place_description,@"lat",cross.place.lat, @"lng",cross.place.lng,@"external_id",cross.place.external_id,@"provider",cross.place.provider, nil];
         [self setPlace:placedict];
@@ -240,10 +259,14 @@
             [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
         }
         [exfeeShowview reloadData];
+        NSTimeInterval t3=[[NSDate date] timeIntervalSince1970];
+        NSLog(@"initdate: 1 %f 2 %f",t2-t1,t3-t2);
+
     }
     else if(viewmode==NO){
         [self addDefaultIdentity];
     }
+
 }
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)aRange replacementText:(NSString*)aText
 {

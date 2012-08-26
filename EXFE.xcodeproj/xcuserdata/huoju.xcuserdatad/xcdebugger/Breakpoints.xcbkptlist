@@ -398,11 +398,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "367699320.708207"
+         timestampString = "367703728.428773"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1043"
-         endingLineNumber = "1043"
+         startingLineNumber = "1066"
+         endingLineNumber = "1066"
          landmarkName = "-selectedOfimageCollectionView:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -437,11 +437,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "367699320.708207"
+         timestampString = "367703728.428773"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1025"
-         endingLineNumber = "1025"
+         startingLineNumber = "1048"
+         endingLineNumber = "1048"
          landmarkName = "-objectLoader:didLoadObjects:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -599,6 +599,19 @@
          startingLineNumber = "103"
          endingLineNumber = "103"
          landmarkName = "-changeLeftIconWhite:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/GatherViewController.m"
+         timestampString = "367703728.428773"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "290"
+         endingLineNumber = "290"
+         landmarkName = "-reArrangeViews"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
