@@ -30,7 +30,6 @@
     int exfee_id;
     UIInputToolbar *inputToolbar;
     Identity *identity;
-//    UILabel *floatTime;
     UIImage *cellbackground;
     UIImage *cellsepator;
     UIImage *avatarframe;

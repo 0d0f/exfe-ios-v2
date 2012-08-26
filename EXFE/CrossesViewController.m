@@ -7,7 +7,6 @@
 //
 
 #import "CrossesViewController.h"
-#import "CrossDetailViewController.h"
 #import "ProfileViewController.h"
 #import "GatherViewController.h"
 #import "APICrosses.h"
@@ -52,7 +51,7 @@
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     [self loadObjectsFromDataStore];
     cellbackimglist=[[NSArray alloc] initWithObjects:[UIImage imageNamed:@"cell_0_card.png"],[UIImage imageNamed:@"cell_1_card.png"],[UIImage imageNamed:@"cell_2_card.png"],[UIImage imageNamed:@"cell_3_card.png"], [UIImage imageNamed:@"cell_4_card.png"], nil ];
-    
+//
     cellbackimgblanklist=[[NSArray alloc] initWithObjects:[UIImage imageNamed:@"cell_0_null.png"],[UIImage imageNamed:@"cell_1_null.png"],[UIImage imageNamed:@"cell_2_null.png"],[UIImage imageNamed:@"cell_3_null.png"], [UIImage imageNamed:@"cell_4_null.png"], nil];
     
     BOOL login=[app Checklogin];
@@ -303,7 +302,10 @@
             while (key = [enumerator nextObject]){
                 NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
                 NSString *updated_at_str=[obj objectForKey:@"updated_at"];
-                NSDate *updated_at = [formatter dateFromString:updated_at_str];
+                NSDate *updated_at =[NSDate date];
+                //FIXME: in old redis, the updated_at_str is a number. 
+                if([updated_at_str isKindOfClass:[NSString class]])
+                    updated_at = [formatter dateFromString:updated_at_str];
                 if([updated_at compare: cross.read_at] == NSOrderedDescending || cross.read_at==nil) {
                     if([key isEqualToString:@"title"])
                         cell.hlTitle=YES;

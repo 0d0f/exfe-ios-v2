@@ -42,6 +42,20 @@
     
     [toolbar addSubview:exfeeList];
     
+    inputleftmask=[[UIImageView alloc] initWithFrame:CGRectMake(exfeeList.frame.origin.x,exfeeList.frame.origin.y , 40, 30)];
+    inputleftmask.image=[UIImage imageNamed:@"exfee_inputfield.png"];
+
+    
+    CAShapeLayer *maskLayer = [CAShapeLayer layer];
+    UIBezierPath *roundedPath =
+    [UIBezierPath bezierPathWithRoundedRect:inputleftmask.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerBottomLeft cornerRadii:CGSizeMake(15.f, 15.f)];
+    maskLayer.path = [roundedPath CGPath];
+    inputleftmask.layer.mask=maskLayer;
+    inputleftmask.layer.masksToBounds = YES;
+    [inputleftmask setHidden:YES];
+    [toolbar addSubview:inputleftmask];
+
+    
     inputframeview=[[UIImageView alloc] initWithFrame:exfeeList.frame];
     inputframeview.image=[UIImage imageNamed:@"textfield_navbar_frame.png"];
     inputframeview.contentMode    = UIViewContentModeScaleToFill;
@@ -49,7 +63,7 @@
     
     [toolbar addSubview:inputframeview];
     exfeeList.layer.cornerRadius=15;
-    [toolbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"] forToolbarPosition:UIToolbarPositionBottom barMetrics:UIBarMetricsDefault];
+//    [toolbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"] forToolbarPosition:UIToolbarPositionBottom barMetrics:UIBarMetricsDefault];
     [self changeLeftIconWhite:NO];
 //    exfeeList.backgroundColor=FONT_COLOR_HL;
   
@@ -57,11 +71,6 @@
     leftestview.backgroundColor=FONT_COLOR_HL;
     [exfeeList addSubview:leftestview];
     [leftestview release];
-
-    
-//    inputlefticon=[[UIImageView alloc] initWithFrame:CGRectMake(exfeeList.frame.origin.x+6, 14, 18, 18)];
-//    inputlefticon.image=[UIImage imageNamed:@"exfee_18.png"];
-//    [toolbar addSubview:inputlefticon];
     
     UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];
     UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(255+5+5, 7, 50, 31)];
@@ -90,10 +99,14 @@
         [toolbar addSubview:inputlefticon];
     }
     
-    if(iswhite==YES)
+    if(iswhite==YES){
         inputlefticon.image=[UIImage imageNamed:@"exfee_18_white.png"];
-    else
+        [inputleftmask setHidden:NO];
+    }
+    else{
         inputlefticon.image=[UIImage imageNamed:@"exfee_18.png"];
+        [inputleftmask setHidden:YES];
+    }
 
 }
 
@@ -326,8 +339,8 @@
                                 invitation.identity=identity;
                                 invitation.by_identity=((GatherViewController*)gatherview).default_user.default_identity;
                                 [exfeeList addBubble:input customObject:invitation];
-//                                if([exfeeList bubblecount]>0)
-//                                    [self changeLeftIconWhite:YES];
+                                if([exfeeList bubblecount]>0)
+                                    [self changeLeftIconWhite:YES];
 
                             }
                         }
@@ -424,6 +437,9 @@
         identity_name=identity.external_id;
     
     [exfeeList addBubble:identity_name customObject:invitation];
+    if([exfeeList bubblecount]>0)
+        [self changeLeftIconWhite:YES];
+
 //    [self ErrorHint:NO content:@"12 exfees maximum"];
 //    [self changeLeftIcon];
 }
@@ -445,6 +461,9 @@
 #pragma mark EXBubbleScrollViewDelegate methods
 - (void) deleteLastBubble:(EXBubbleScrollView *)bubbleScrollView deletedbubble:(EXBubbleButton*)bubble{
     [self showErrorHint];
+    if([exfeeList bubblecount]==0)
+        [self changeLeftIconWhite:NO];
+
 }
 
 

@@ -60,7 +60,7 @@
     cellsepator=[UIImage imageNamed:@"conv_line_h.png"];
     avatarframe=[UIImage imageNamed:@"conv_portrait_frame.png"];
     CGRect _tableviewrect=_tableView.frame;
-    _tableviewrect.size.height-=(kDefaultToolbarHeight);
+    _tableviewrect.size.height=_tableviewrect.size.height-kDefaultToolbarHeight-44;
     [_tableView setFrame:_tableviewrect];
     _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
@@ -122,7 +122,7 @@
 	CGRect frame = self.inputToolbar.frame;
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
-        frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height;
+        frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height-44;
         if(_tableView.contentSize.height>_tableView.frame.size.height)
         {
         CGRect _tableviewrect=_tableView.frame;
@@ -146,7 +146,7 @@
 	[UIView setAnimationDuration:0.3];
 	CGRect frame = self.inputToolbar.frame;
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
-        frame.origin.y = self.view.frame.size.height - frame.size.height;
+        frame.origin.y = self.view.frame.size.height - frame.size.height-44;
         if(_tableView.contentSize.height>_tableView.frame.size.height){
             CGRect _tableviewrect=_tableView.frame;
             _tableviewrect.origin.y=0;
@@ -501,8 +501,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    [inputToolbar setInputEnabled:NO];
-//    [inputToolbar hidekeyboard];
+    [inputToolbar setInputEnabled:NO];
+    [inputToolbar hidekeyboard];
 }
 - (void) addPost:(NSString*)content{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -520,6 +520,7 @@
         request.onDidLoadResponse=^(RKResponse *response){
             if (response.statusCode == 200) {
                 [self refreshConversation];
+                [inputToolbar.textView clearText];
             }else {
             }
         };

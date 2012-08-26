@@ -26,6 +26,7 @@
     BOOL showInputinSuggestion;
     EXBubbleScrollView *exfeeList;
     UIImageView *inputlefticon;
+    UIImageView *inputleftmask;
     UIView *errorHint;
     UIImageView *errorHinticon;
     UILabel *errorHintLabel;

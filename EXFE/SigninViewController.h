@@ -35,15 +35,16 @@
     UIImageView *passwordbackimg;
     
     UIImageView *identityLeftIcon;
-    UIImageView *identityRightIcon;
+    UIButton *identityRightButton;
+    UIImageView *divider;
     UIImageView *avatarview;
+    
     UITextField *textUsername;
     UITextField *textPassword;
+    UITextField *textDisplayname;
+    
     UIButton *loginbtn;
-
-    
-    
-
+    UIButton *setupnewbtn;
 }
 @property (nonatomic, assign) id delegate;
 
@@ -57,7 +58,9 @@
 - (IBAction)sendPwd:(id)sender;
 - (IBAction)sendVerify:(id)sender;
 - (void) setHintView:(NSString*)hintname;
-- (void)TwitterSigninButtonPress:(id)sender;
-
+- (void) TwitterSigninButtonPress:(id)sender;
+- (void) setSignupView;
+- (void) setSigninView;
+- (void) clearIdentity;
 
 @end

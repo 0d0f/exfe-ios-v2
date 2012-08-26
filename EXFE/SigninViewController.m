@@ -17,6 +17,7 @@
 
 - (IBAction) Signin:(id) sender{
     RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
     NSString *endpoint = [NSString stringWithFormat:@"/users/signin"];
     RKParams* rsvpParams = [RKParams params];
     NSString *provider=[Util findProvider:textUsername.text];
@@ -159,16 +160,26 @@
     passwordbackimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
     [self.view addSubview:passwordbackimg];
     
+    UIImage *dividerback = [UIImage imageNamed:@"textfield_divider.png"];
+    divider=[[UIImageView alloc] initWithFrame:CGRectMake(21, 120+40, 230-2, 2)];
+    divider.image=dividerback;
+    divider.contentMode=UIViewContentModeScaleToFill;
+    divider.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+    [divider setHidden:YES];
+    [self.view addSubview:divider];
+    
     
     identityLeftIcon=[[UIImageView alloc] initWithFrame:CGRectMake(6, 12, 18, 18)];
     identityLeftIcon.image=nil;//[UIImage imageNamed:@"identity_email_18_grey.png"];
     [identitybackimg addSubview:identityLeftIcon];
     
-    identityRightIcon=[[UIImageView alloc] initWithFrame:CGRectMake(206, 12, 18, 18)];
-    identityRightIcon.image=nil;//[UIImage imageNamed:@"textfield_clear.png"];
-    [identitybackimg addSubview:identityRightIcon];
+    identityRightButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    [identityRightButton setFrame:CGRectMake(identitybackimg.frame.origin.x+230-18-6, 81, 18, 18)];
+    [identityRightButton addTarget:self action:@selector(clearIdentity) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:identityRightButton];
     
-    textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 70, 230-(6+18+6)*2, 41)];
+    
+    textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 70, 230-(6+18+6)*2, 40)];
     textUsername.placeholder=@"Enter your email";
     textUsername.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     textUsername.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
@@ -181,7 +192,7 @@
     [self.view addSubview:textUsername];
     [textUsername becomeFirstResponder];
     
-    textPassword=[[UITextField alloc] initWithFrame:CGRectMake(20, 135, 230, 41)];
+    textPassword=[[UITextField alloc] initWithFrame:CGRectMake(20, 135, 230, 40)];
     textPassword.placeholder=@"Enter EXFE Password";
     textPassword.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     textPassword.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
@@ -193,6 +204,19 @@
     [textPassword setTextColor:FONT_COLOR_25];
     [self.view addSubview:textPassword];
 
+    textDisplayname=[[UITextField alloc] initWithFrame:CGRectMake(20, 120, 230, 40)];
+    textDisplayname.placeholder=@"Set a recognizable name";
+    textDisplayname.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
+    textDisplayname.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
+    textDisplayname.textAlignment=UITextAlignmentCenter;
+    textDisplayname.autocorrectionType=UITextAutocorrectionTypeNo;
+    textDisplayname.autocapitalizationType=UITextAutocapitalizationTypeNone;
+    [textDisplayname setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+    [textDisplayname setTextColor:FONT_COLOR_25];
+    [textDisplayname setHidden:YES];
+    [self.view addSubview:textDisplayname];
+
+    
     avatarview=[[UIImageView alloc] initWithFrame:CGRectMake(260, 70, 40, 40)];
     avatarview.image=nil;
     [self.view addSubview:avatarview];
@@ -215,7 +239,37 @@
     loginbtn.titleLabel.shadowOffset=CGSizeMake(0, 1);
     [self.view addSubview:loginbtn];
     
+    setupnewbtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    [setupnewbtn setFrame:CGRectMake(20, 200, 280, 44)];
+    [setupnewbtn setTitle:@"Set up new account" forState:UIControlStateNormal];
+    [setupnewbtn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+    [setupnewbtn setTitleColor:[UIColor colorWithRed:204.0/255.0f green:229.0/255.0f blue:255.0/255.0f alpha:1] forState:UIControlStateNormal];
+    [setupnewbtn addTarget:self action:@selector(Signin:) forControlEvents:UIControlEventTouchUpInside];
+    [setupnewbtn setTitleShadowColor:[UIColor colorWithRed:21.0/255.0f green:52.0/255.0f blue:84.0/255.0f alpha:1] forState:UIControlStateNormal];
+    setupnewbtn.titleLabel.shadowOffset=CGSizeMake(0, 1);
+    [setupnewbtn setHidden:YES];
+    [self.view addSubview:setupnewbtn];
+    
+    
 }
+- (void) setSigninView{
+    [passwordbackimg setFrame:CGRectMake(20, 135, 230, 41)];
+    [textPassword setFrame:CGRectMake(20, 135, 230, 40)];
+    [textDisplayname setHidden:YES];
+    [divider setHidden:YES];
+    [setupnewbtn setHidden:YES];
+    [loginbtn setHidden:NO];
+    
+}
+- (void) setSignupView{
+    [passwordbackimg setFrame:CGRectMake(20, 120, 230, 81)];
+    [textPassword setFrame:CGRectMake(20, 120+41, 230, 40)];
+    [textDisplayname setHidden:NO];
+    [divider setHidden:NO];
+    [setupnewbtn setHidden:NO];
+    [loginbtn setHidden:YES];
+}
+
 
 - (void)viewDidUnload
 {
@@ -227,13 +281,17 @@
 {
     [identitybackimg release];
     [textUsername release];
+    [textPassword release];
+    [textDisplayname release];
     [signindelegate release];
     [identityLeftIcon release];
-    [identityRightIcon release];
     [super dealloc];
 
 }
+- (void) clearIdentity{
+    [textUsername setText:@""];
 
+}
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
@@ -244,11 +302,13 @@
     
 }
 - (void) getUser{
-    if(CFAbsoluteTimeGetCurrent()-editinginterval>1.2)
-    {
+//    if(CFAbsoluteTimeGetCurrent()-editinginterval>1.2)
+//    {
         NSString *provider=[Util findProvider:textUsername.text];
         if(![provider isEqualToString:@""]){
             RKClient *client = [RKClient sharedClient];
+            [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+
             NSString *endpoint = [NSString stringWithFormat:@"/users/GetRegistrationFlag?external_username=%@&provider=%@",textUsername.text,provider];
             AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
             [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
@@ -256,7 +316,6 @@
                 request.method=RKRequestMethodGET;
                 request.onDidLoadResponse=^(RKResponse *response){
                     if (response.statusCode == 200) {
-                        NSLog(@"%@",response.bodyAsString);
                         NSDictionary *body=[response.body objectFromJSONData];
                         id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                         if(code)
@@ -265,6 +324,7 @@
                                 NSString *registration_flag=(NSString*)[response objectForKey:@"registration_flag"] ;
                                 if([registration_flag isEqualToString:@"SIGN_IN"] )
                                 {
+                                    [self setSigninView];
                                     NSDictionary *identity = [response objectForKey:@"identity"];
                                     NSString *avatar_filename=[identity objectForKey:@"avatar_filename"];
                                     NSString *provider=[identity objectForKey:@"provider"];
@@ -284,7 +344,11 @@
                                         dispatch_release(imgQueue);        
                                     }
                                 }
-                                if([registration_flag isEqualToString:@"VERIFY"] )
+                                else if([registration_flag isEqualToString:@"SIGN_UP"] ){
+                                    [self setSignupView];
+                                }
+                                
+                                else if([registration_flag isEqualToString:@"VERIFY"] )
                                 {
                                     [self setHintView:@"verification"];
                                 }
@@ -293,19 +357,23 @@
                 };
             }];
         }
-    }
+    
+//    }
 }
 
 
 - (IBAction)textDidChange:(UITextField*)textField{
     if([textField.text length]>2) {
-        identityRightIcon.image=[UIImage imageNamed:@"textfield_clear.png"];
-        editinginterval=CFAbsoluteTimeGetCurrent();
-        [NSObject cancelPreviousPerformRequestsWithTarget:self];
-        [self performSelector:@selector(getUser) withObject:self afterDelay:1.2];
+        [identityRightButton setImage:[UIImage imageNamed:@"textfield_clear.png"] forState:UIControlStateNormal];
+
+        NSString *provider=[Util findProvider:textField.text];
+        if(![provider isEqualToString:@""]) {
+            [NSObject cancelPreviousPerformRequestsWithTarget:self];
+            [self performSelector:@selector(getUser) withObject:self];
+        }
     } else {
         avatarview.image=nil;
-        identityRightIcon.image=nil;
+        [identityRightButton setImage:nil forState:UIControlStateNormal];
         identityLeftIcon.image=nil;
     }
 }

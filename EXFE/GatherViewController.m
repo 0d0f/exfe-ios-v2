@@ -31,33 +31,36 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor grayColor]];
+
+}
+- (void)viewDidAppear:(BOOL)animated{
     exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
     exfeeSelected=[[NSMutableArray alloc] initWithCapacity:12];
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     float width=self.view.frame.size.width-VIEW_MARGIN*2;
-    
-    CGRect containviewframe=CGRectMake(self.view.frame.origin.x+VIEW_MARGIN,self.view.frame.origin.y+toolbar.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2, self.view.frame.size.height-toolbar.frame.size.height);
+//    float tempy=self.view.frame.origin.y;
+    CGRect containviewframe=CGRectMake(self.view.frame.origin.x+VIEW_MARGIN,6+toolbar.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2, self.view.frame.size.height-toolbar.frame.size.height);
     
     if(viewmode==YES)
         containviewframe=CGRectMake(0,self.view.frame.origin.y,self.view.frame.size.width, self.view.frame.size.height-toolbar.frame.size.height);
     containview=[[UIScrollView alloc] initWithFrame:containviewframe];
     [containview setDelegate:self];
     [self.view addSubview:containview];
-
+    
     backgroundview=[[UIView alloc] initWithFrame:containview.frame];
     [backgroundview setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"cross_bg.png"]]];
     [containview addSubview:backgroundview];
-
+    
     containcardview=[[EXOverlayView alloc] initWithFrame:CGRectMake(0, INNER_MARGIN, containview.frame.size.width, containview.frame.size.height)];
     containcardview.backgroundimage=[UIImage imageNamed:@"paper_texture.png"];
     containcardview.cornerRadius=5;
     
     [containview addSubview:containcardview];
-
+    
     title_input_img=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gather_title_input_area.png"]];
     [title_input_img setFrame:CGRectMake(0, 0, 308, 69)];
     [containcardview addSubview:title_input_img];
-
+    
     crosstitle=[[UITextView alloc] initWithFrame:CGRectMake(INNER_MARGIN+30, 5,containview.frame.size.width-INNER_MARGIN-30, 48)];
     crosstitle.tag=101;
     
@@ -72,7 +75,7 @@
     [crosstitle_view setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     crosstitle_view.shadowOffset=CGSizeMake(0, 1);
     crosstitle_view.shadowColor=[UIColor whiteColor];
-
+    
     [crosstitle_view  setBackgroundColor:[UIColor clearColor]];
     [containcardview addSubview:crosstitle_view];
     [crosstitle_view setHidden:YES];
@@ -90,7 +93,7 @@
     [exfeeShowview setBackgroundColor:[UIColor clearColor]];
     
     [containcardview addSubview:exfeeShowview];
-
+    
     [exfeeShowview setDataSource:self];
     [exfeeShowview setDelegate:self];
     
@@ -105,11 +108,11 @@
     };
     [map addGestureRecognizer:tapInterceptor];
     [tapInterceptor release];
-
+    
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [containcardview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
-
+    
     [self.view bringSubviewToFront:toolbar];
     
     timetitle=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,
@@ -121,7 +124,7 @@
     timetitle.textColor=[Util getHighlightColor];
     
     [containcardview addSubview:timetitle];
-
+    
     timedesc=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,timetitle.frame.origin.y+timetitle.frame.size.height,160,18)];
     [timedesc setBackgroundColor:[UIColor clearColor]];
     timedesc.text=@"Tap here to set time";
@@ -142,14 +145,14 @@
     placedesc.text=@"Tap here to set place";
     [placedesc setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
     [containcardview addSubview:placedesc];
-
+    
     crossdescription=[[UITextView alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,width,144)];
     [crossdescription setFont:[UIFont fontWithName:@"HelveticaNeue" size:13]];
     crossdescription.tag=108;
-
+    
     crossdescbackimg=[[UIView alloc] initWithFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y, crossdescription.frame.size.width, 75)];
     crossdescbackimg.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"gather_describe_area.png"]];
-                              
+    
     [containcardview addSubview:crossdescbackimg];
     [crossdescription setBackgroundColor:[UIColor clearColor]];
     [crossdescription setDelegate:self];
@@ -163,7 +166,7 @@
         [chatButton addTarget:self action:@selector(toconversation) forControlEvents:UIControlEventTouchUpInside];
         
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:chatButton];
-        
+        //
         self.navigationItem.rightBarButtonItem = barButtonItem;
         [barButtonItem release];
         conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
@@ -174,7 +177,7 @@
         {
             for(Invitation* invitation in invitations)
                 if([invitation.identity.connected_user_id intValue]==app.userid)
-                    conversationView.identity=invitation.identity;  
+                    conversationView.identity=invitation.identity;
         }
         [conversationView.view setHidden:YES];
         [self.view addSubview:conversationView.view];
@@ -183,6 +186,8 @@
     [self reArrangeViews];
     if(viewmode==YES)
         [self ShowRsvpButton];
+}
+- (void) buildView{
 
 }
 - (void) initData{
@@ -354,7 +359,11 @@
         [triangle addLineToPoint:CGPointMake(0,y)];
 
         containcardview.transparentPath=triangle;
-        [containcardview setFrame:CGRectMake(containcardview.frame.origin.x, containcardview.frame.origin.y, containcardview.frame.size.width, crossdescription.frame.origin.y+crossdescription.frame.size.height)];
+        CGRect rect=CGRectMake(containcardview.frame.origin.x,0, containcardview.frame.size.width, crossdescription.frame.origin.y+crossdescription.frame.size.height);
+        [containcardview setFrame:rect];
+        CGRect containrect=containview.frame;
+        
+        containrect.origin.y=0;
 
     }
     

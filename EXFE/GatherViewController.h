@@ -115,4 +115,5 @@
 - (void) hiddenPopover;
 - (int) exfeeIdentitiesCount;
 
+- (void) buildView;
 @end

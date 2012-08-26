@@ -78,8 +78,6 @@
 		78392DCA15D8A51C00F731FB /* exfee_matebulb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78392DC815D8A51C00F731FB /* exfee_matebulb@2x.png */; };
 		7839555015E21A520042A1D3 /* navbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7839554E15E21A520042A1D3 /* navbar.png */; };
 		7839555115E21A520042A1D3 /* navbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7839554F15E21A520042A1D3 /* navbar@2x.png */; };
-		78409168156F3AC3006DF115 /* CrossDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409166156F3AC3006DF115 /* CrossDetailViewController.m */; };
-		78409169156F3AC3006DF115 /* CrossDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78409167156F3AC3006DF115 /* CrossDetailViewController.xib */; };
 		7840916C156F6AA5006DF115 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7840916B156F6AA5006DF115 /* Util.m */; };
 		78409172156F80A7006DF115 /* APIConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409171156F80A6006DF115 /* APIConversation.m */; };
 		78409175156F81E6006DF115 /* Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409174156F81E6006DF115 /* Mapping.m */; };
@@ -270,6 +268,8 @@
 		78C25ABA159D8211002AED1E /* EXPlaceEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C25AB9159D8211002AED1E /* EXPlaceEditView.m */; };
 		78C8B0E415A71CA5005A44E1 /* closebutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C8B0E215A71CA5005A44E1 /* closebutton.png */; };
 		78C8B0E515A71CA5005A44E1 /* closebutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C8B0E315A71CA5005A44E1 /* closebutton@2x.png */; };
+		78C8E9A315EAA7D1001E495B /* exfee_inputfield.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C8E9A115EAA7D1001E495B /* exfee_inputfield.png */; };
+		78C8E9A415EAA7D1001E495B /* exfee_inputfield@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C8E9A215EAA7D1001E495B /* exfee_inputfield@2x.png */; };
 		78CEBFF015BFE7BE002BCA27 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		78CEBFF115BFE7BE002BCA27 /* ExfeeInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78CEBFEF15BFE7BE002BCA27 /* ExfeeInputViewController.xib */; };
 		78D0A600158CFB4C00401BCA /* OAuthLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */; };
@@ -451,9 +451,6 @@
 		78392DC815D8A51C00F731FB /* exfee_matebulb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfee_matebulb@2x.png"; sourceTree = "<group>"; };
 		7839554E15E21A520042A1D3 /* navbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navbar.png; sourceTree = "<group>"; };
 		7839554F15E21A520042A1D3 /* navbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar@2x.png"; sourceTree = "<group>"; };
-		78409165156F3AC3006DF115 /* CrossDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossDetailViewController.h; sourceTree = "<group>"; };
-		78409166156F3AC3006DF115 /* CrossDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossDetailViewController.m; sourceTree = "<group>"; };
-		78409167156F3AC3006DF115 /* CrossDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossDetailViewController.xib; sourceTree = "<group>"; };
 		7840916A156F6AA4006DF115 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		7840916B156F6AA5006DF115 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 		78409170156F80A6006DF115 /* APIConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIConversation.h; sourceTree = "<group>"; };
@@ -684,6 +681,8 @@
 		78C25AB9159D8211002AED1E /* EXPlaceEditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EXPlaceEditView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		78C8B0E215A71CA5005A44E1 /* closebutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = closebutton.png; sourceTree = "<group>"; };
 		78C8B0E315A71CA5005A44E1 /* closebutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closebutton@2x.png"; sourceTree = "<group>"; };
+		78C8E9A115EAA7D1001E495B /* exfee_inputfield.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exfee_inputfield.png; sourceTree = "<group>"; };
+		78C8E9A215EAA7D1001E495B /* exfee_inputfield@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfee_inputfield@2x.png"; sourceTree = "<group>"; };
 		78CEBFED15BFE7BE002BCA27 /* ExfeeInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExfeeInputViewController.h; sourceTree = "<group>"; };
 		78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExfeeInputViewController.m; sourceTree = "<group>"; };
 		78CEBFEF15BFE7BE002BCA27 /* ExfeeInputViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExfeeInputViewController.xib; sourceTree = "<group>"; };
@@ -966,9 +965,6 @@
 				78E8873F156244E70026D197 /* CrossesViewController.h */,
 				78E88740156244E70026D197 /* CrossesViewController.m */,
 				78E88741156244E70026D197 /* CrossesViewController.xib */,
-				78409165156F3AC3006DF115 /* CrossDetailViewController.h */,
-				78409166156F3AC3006DF115 /* CrossDetailViewController.m */,
-				78409167156F3AC3006DF115 /* CrossDetailViewController.xib */,
 				7840917615732A90006DF115 /* ConversationViewController.h */,
 				7840917715732A90006DF115 /* ConversationViewController.m */,
 				7840917815732A91006DF115 /* ConversationViewController.xib */,
@@ -1285,6 +1281,8 @@
 				78392DC415D8A3CB00F731FB /* textfield_navbar@2x.png */,
 				787986B415DB6DF600AA631B /* textfield_navbar_frame.png */,
 				787986B515DB6DF600AA631B /* textfield_navbar_frame@2x.png */,
+				78C8E9A115EAA7D1001E495B /* exfee_inputfield.png */,
+				78C8E9A215EAA7D1001E495B /* exfee_inputfield@2x.png */,
 			);
 			name = input;
 			sourceTree = "<group>";
@@ -1524,7 +1522,6 @@
 				782B3CD2156B948600721150 /* twitter~ipad.png in Resources */,
 				782B3CD3156B948600721150 /* twitter~iphone.png in Resources */,
 				782B3CDA156B997200721150 /* SigninViewController.xib in Resources */,
-				78409169156F3AC3006DF115 /* CrossDetailViewController.xib in Resources */,
 				7840917F15732CA5006DF115 /* chat@2x~iphone.png in Resources */,
 				7840918015732CA5006DF115 /* chat~iphone.png in Resources */,
 				7840918115732CA5006DF115 /* chat@2x~ipad.png in Resources */,
@@ -1748,6 +1745,8 @@
 				78867BC515E794260091A47C /* textfield_clear@2x.png in Resources */,
 				78867BC615E794260091A47C /* textfield_divider.png in Resources */,
 				78867BC715E794260091A47C /* textfield_divider@2x.png in Resources */,
+				78C8E9A315EAA7D1001E495B /* exfee_inputfield.png in Resources */,
+				78C8E9A415EAA7D1001E495B /* exfee_inputfield@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1768,7 +1767,6 @@
 				782B3CAB156A604C00721150 /* CrossTime.m in Sources */,
 				782B3CB7156B80A000721150 /* LandingViewController.m in Sources */,
 				782B3CD9156B997200721150 /* SigninViewController.m in Sources */,
-				78409168156F3AC3006DF115 /* CrossDetailViewController.m in Sources */,
 				7840916C156F6AA5006DF115 /* Util.m in Sources */,
 				78409172156F80A7006DF115 /* APIConversation.m in Sources */,
 				78409175156F81E6006DF115 /* Mapping.m in Sources */,
@@ -1927,6 +1925,8 @@
 		78A98EA11560F832009E0806 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: EXFE HOLDINGS";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: EXFE HOLDINGS";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
@@ -1937,9 +1937,58 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "FF621710-1C75-46EB-B9BC-825CB55758D3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FF621710-1C75-46EB-B9BC-825CB55758D3";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
+		};
+		78EC9BE615E7FC42005EAA4B /* Adhoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: EXFE HOLDINGS";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = RESTKIT_GENERATE_SEED_DB;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				PROVISIONING_PROFILE = "CA2443E9-B682-44E7-ACA6-AB39CD0EAAF0";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Adhoc;
+		};
+		78EC9BE715E7FC42005EAA4B /* Adhoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: EXFE HOLDINGS";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FF621710-1C75-46EB-B9BC-825CB55758D3";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Adhoc;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1949,6 +1998,7 @@
 			buildConfigurations = (
 				78A98E9D1560F832009E0806 /* Debug */,
 				78A98E9E1560F832009E0806 /* Release */,
+				78EC9BE615E7FC42005EAA4B /* Adhoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1958,6 +2008,7 @@
 			buildConfigurations = (
 				78A98EA01560F832009E0806 /* Debug */,
 				78A98EA11560F832009E0806 /* Release */,
+				78EC9BE715E7FC42005EAA4B /* Adhoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
