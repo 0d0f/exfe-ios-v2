@@ -50,6 +50,7 @@
 
 - (void) getUser;
 - (IBAction) Signin:(id) sender;
+- (void) Signupnew:(id) sender;
 - (void)SigninDidFinish;
 - (void)SigninCancel;
 - (void) processResponse:(id)obj;

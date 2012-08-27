@@ -82,6 +82,7 @@
     titlelabel=[[UILabel alloc] initWithFrame:CGRectMake(65, 10, 230, 24)];
     titlelabel.text=@"Twitter Authorization";
     titlelabel.backgroundColor=[UIColor clearColor];
+    titlelabel.textAlignment=UITextAlignmentCenter;
     [titlelabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:20]];
     [titlelabel setShadowColor:[UIColor colorWithWhite:0 alpha:0.75]];
     [titlelabel setShadowOffset:CGSizeMake(0, 1)];

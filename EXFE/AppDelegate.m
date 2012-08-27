@@ -41,7 +41,7 @@
     NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
     NSString *databaseName = DBNAME;
 #endif
-//    RKLogConfigureByName("RestKit", RKLogLevelTrace);
+    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
     [APICrosses MappingCross];
@@ -141,7 +141,6 @@
 }
 
 -(void)SignoutDidFinish{
-    NSLog(@"logout");
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"access_token"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userid"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetoken"];
@@ -164,14 +163,12 @@
 //    [objectStore deletePersistentStoreUsingSeedDatabaseName:seedDatabaseName];
     [objectStore deletePersistentStore];
     [objectStore save:nil];
-
+    
     NSArray *viewControllers = app.navigationController.viewControllers;
     CrossesViewController *rootViewController = [viewControllers objectAtIndex:0];
     [rootViewController emptyView];
     
     
-
-//
 //    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
 //    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
     

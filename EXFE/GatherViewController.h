@@ -39,7 +39,7 @@
 #define INNER_MARGIN 9
 
 @interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate,UITextViewDelegate,UIScrollViewDelegate>{
-    IBOutlet UIToolbar *toolbar;
+    UIView *toolbar;
     UITextView *crosstitle;
     UIImageView *title_input_img;
     UILabel *crosstitle_view;
@@ -72,6 +72,7 @@
     User* default_user;
     int selectedExfeeIndex;
     BOOL viewmode;
+    BOOL firstLoad;
     ConversationViewController *conversationView;
 
 }

@@ -30,40 +30,92 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.view setBackgroundColor:[UIColor grayColor]];
+    firstLoad=YES;
+    toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
+    [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
+    [self.view addSubview:toolbar];
+    UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];
+    UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(5, 7, 50, 30)];
+    backimg.image=btn_dark;
+    backimg.contentMode=UIViewContentModeScaleToFill;
+    backimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+    [toolbar addSubview:backimg];
+    [backimg release];
+    backimg=[[UIImageView alloc] initWithFrame:CGRectMake(toolbar.frame.size.width-5-50, 7, 50, 30)];
+    backimg.image=btn_dark;
+    backimg.contentMode=UIViewContentModeScaleToFill;
+    backimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+    [toolbar addSubview:backimg];
+    [backimg release];
+    
+    UIButton *closebutton=[UIButton buttonWithType:UIButtonTypeCustom];
+    [closebutton setFrame:CGRectMake(5, 7, 50, 30)];
+    [closebutton setTitle:@"Close" forState:UIControlStateNormal];
+    [closebutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+    [closebutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
+    
+    [closebutton addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
+    [toolbar addSubview:closebutton];
+
+    UIButton *gatherbutton=[UIButton buttonWithType:UIButtonTypeCustom];
+    [gatherbutton setFrame:CGRectMake(toolbar.frame.size.width-5-50, 7, 50, 30)];
+    [gatherbutton setTitle:@"Gather" forState:UIControlStateNormal];
+    [gatherbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+    [gatherbutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
+    
+    [gatherbutton addTarget:self action:@selector(Gather:) forControlEvents:UIControlEventTouchUpInside];
+    [toolbar addSubview:gatherbutton];
+    
+    
+    [self buildView];
+//    dispatch_queue_t initQueue = dispatch_queue_create("init thread", NULL);
+//    dispatch_async(initQueue, ^{
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//           [self buildView]; 
+//        });
+//    });
+//    dispatch_release(initQueue);
+
 
 }
-- (void)viewDidAppear:(BOOL)animated{
+//- (void)viewDidAppear:(BOOL)animated{
+//    [super viewDidAppear:animated];
+//    if(firstLoad==YES){
+//        firstLoad=NO;
+//    }
+//}
+- (void)buildView{
+    NSTimeInterval t1=[[NSDate date] timeIntervalSince1970];
+    [self.view setBackgroundColor:[UIColor grayColor]];
     exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
     exfeeSelected=[[NSMutableArray alloc] initWithCapacity:12];
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     float width=self.view.frame.size.width-VIEW_MARGIN*2;
-//    float tempy=self.view.frame.origin.y;
     CGRect containviewframe=CGRectMake(self.view.frame.origin.x+VIEW_MARGIN,6+toolbar.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2, self.view.frame.size.height-toolbar.frame.size.height);
-    
+
     if(viewmode==YES)
-        containviewframe=CGRectMake(0,self.view.frame.origin.y,self.view.frame.size.width, self.view.frame.size.height-toolbar.frame.size.height);
+    containviewframe=CGRectMake(0,self.view.frame.origin.y,self.view.frame.size.width, self.view.frame.size.height-toolbar.frame.size.height);
     containview=[[UIScrollView alloc] initWithFrame:containviewframe];
     [containview setDelegate:self];
     [self.view addSubview:containview];
-    
+
     backgroundview=[[UIView alloc] initWithFrame:containview.frame];
     [backgroundview setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"cross_bg.png"]]];
     [containview addSubview:backgroundview];
-    
+
     containcardview=[[EXOverlayView alloc] initWithFrame:CGRectMake(0, INNER_MARGIN, containview.frame.size.width, containview.frame.size.height)];
     containcardview.backgroundimage=[UIImage imageNamed:@"paper_texture.png"];
     containcardview.cornerRadius=5;
-    
+
     [containview addSubview:containcardview];
-    
+
     title_input_img=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gather_title_input_area.png"]];
     [title_input_img setFrame:CGRectMake(0, 0, 308, 69)];
     [containcardview addSubview:title_input_img];
-    
+
     crosstitle=[[UITextView alloc] initWithFrame:CGRectMake(INNER_MARGIN+30, 5,containview.frame.size.width-INNER_MARGIN-30, 48)];
     crosstitle.tag=101;
-    
+
     [containcardview addSubview:crosstitle];
     crosstitle.text=[NSString stringWithFormat:@"Meet %@",app.username];
     [crosstitle setDelegate:self];
@@ -71,50 +123,50 @@
     [crosstitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     [crosstitle becomeFirstResponder];
     crosstitle_view=[[UILabel alloc] initWithFrame:CGRectMake(15, 10,containview.frame.size.width-30, 50)];
-    
+
     [crosstitle_view setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     crosstitle_view.shadowOffset=CGSizeMake(0, 1);
     crosstitle_view.shadowColor=[UIColor whiteColor];
-    
+
     [crosstitle_view  setBackgroundColor:[UIColor clearColor]];
     [containcardview addSubview:crosstitle_view];
     [crosstitle_view setHidden:YES];
-    
+
     exfeenum=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15, width, 24)];
     [exfeenum setBackgroundColor:[UIColor clearColor]];
     exfeenum.textAlignment=UITextAlignmentRight;
     [containcardview addSubview:exfeenum];
     [exfeenum setHidden:YES];
-    
+
     //TODO: workaround for a responder chain bug
     exfeeShowview =[[EXImagesCollectionView alloc] initWithFrame:CGRectMake(INNER_MARGIN, crosstitle.frame.origin.x+crosstitle.frame.size.height, width, 120)];
     [exfeeShowview setFrame:CGRectMake(INNER_MARGIN-6, 69, width, 40+15+4)];
     [exfeeShowview calculateColumn];
     [exfeeShowview setBackgroundColor:[UIColor clearColor]];
-    
+
     [containcardview addSubview:exfeeShowview];
-    
+
     [exfeeShowview setDataSource:self];
     [exfeeShowview setDelegate:self];
-    
+
     map=[[MKMapView alloc] initWithFrame:CGRectMake(INNER_MARGIN+160,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,130,80)];
     [containcardview addSubview:map];
     mapbox=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_area_null.png"]];
     [containcardview addSubview:mapbox];
-    
+
     WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
     tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
         [self ShowPlaceView];
     };
     [map addGestureRecognizer:tapInterceptor];
     [tapInterceptor release];
-    
+
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [containcardview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
-    
+
     [self.view bringSubviewToFront:toolbar];
-    
+
     timetitle=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,
                                                         exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10
                                                         ,160,25)];
@@ -122,22 +174,22 @@
     timetitle.text=@"Sometime";
     [timetitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     timetitle.textColor=[Util getHighlightColor];
-    
+
     [containcardview addSubview:timetitle];
-    
+
     timedesc=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,timetitle.frame.origin.y+timetitle.frame.size.height,160,18)];
     [timedesc setBackgroundColor:[UIColor clearColor]];
     timedesc.text=@"Tap here to set time";
     [timedesc setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
     [containcardview addSubview:timedesc];
-    
+
     placetitle=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15,160,24)];
     [placetitle setBackgroundColor:[UIColor clearColor]];
     placetitle.text=@"Somwhere";
     [placetitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     placetitle.textColor=[Util getHighlightColor];
     [containcardview addSubview:placetitle];
-    
+
     placedesc=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2,18)];
     [placedesc setBackgroundColor:[UIColor clearColor]];
     placedesc.numberOfLines=0;
@@ -145,18 +197,19 @@
     placedesc.text=@"Tap here to set place";
     [placedesc setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
     [containcardview addSubview:placedesc];
-    
+
     crossdescription=[[UITextView alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height+placedesc.frame.size.height+10,width,144)];
     [crossdescription setFont:[UIFont fontWithName:@"HelveticaNeue" size:13]];
     crossdescription.tag=108;
-    
+
     crossdescbackimg=[[UIView alloc] initWithFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y, crossdescription.frame.size.width, 75)];
     crossdescbackimg.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"gather_describe_area.png"]];
-    
+
     [containcardview addSubview:crossdescbackimg];
     [crossdescription setBackgroundColor:[UIColor clearColor]];
     [crossdescription setDelegate:self];
     [containcardview addSubview:crossdescription];
+
     if(viewmode==YES){
         UIImage *chatimg = [UIImage imageNamed:@"chat.png"];
         UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -169,6 +222,7 @@
         //
         self.navigationItem.rightBarButtonItem = barButtonItem;
         [barButtonItem release];
+        
         conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
         conversationView.exfee_id=[cross.exfee.exfee_id intValue];
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -182,20 +236,16 @@
         [conversationView.view setHidden:YES];
         [self.view addSubview:conversationView.view];
     }
-    NSTimeInterval t1=[[NSDate date] timeIntervalSince1970];
-    [self initData];
     NSTimeInterval t2=[[NSDate date] timeIntervalSince1970];
+    [self initData];
     [self reArrangeViews];
     NSTimeInterval t3=[[NSDate date] timeIntervalSince1970];
-    float t1_t2=t2-t1;
-    float t2_t3=t3-t2;
-    NSLog(@"time initdata:%f rearrangeviews %f",t1_t2 ,t2_t3);
+    //
     if(viewmode==YES)
-        [self ShowRsvpButton];
+    [self ShowRsvpButton];
+    NSLog(@"time t1 %f t3 %f",t2-t1,t3-t2);
 }
-- (void) buildView{
 
-}
 - (void) initData{
 
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -285,7 +335,7 @@
     return YES;
 }
 - (void) reArrangeViews{
-
+    NSLog(@"reArrangeViews");
     CGSize timetitleconstraint = CGSizeMake(160,timetitle.frame.size.height);
     CGSize timetitlesize = [timetitle.text sizeWithFont:timetitle.font constrainedToSize:timetitleconstraint lineBreakMode:UILineBreakModeWordWrap];
     [timetitle setFrame:CGRectMake(INNER_MARGIN, exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,timetitlesize.width,24)];
@@ -865,7 +915,6 @@
 
 - (void) ShowRsvpButton{
     [rsvptoolbar setHidden:YES];
-
     if(rsvpbutton)
         [rsvpbutton release];
     Invitation *myInvitation=[self getMyInvitation];

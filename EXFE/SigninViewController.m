@@ -33,8 +33,26 @@
             }
         };
     }];
-    
-    
+}
+- (void) Signupnew:(id) sender{
+    RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+    NSString *endpoint = [NSString stringWithFormat:@"/users/signin"];
+    RKParams* rsvpParams = [RKParams params];
+    NSString *provider=[Util findProvider:textUsername.text];
+    [rsvpParams setValue:provider forParam:@"provider"];
+    [rsvpParams setValue:textUsername.text forParam:@"external_username"];
+    [rsvpParams setValue:textDisplayname.text forParam:@"name"];
+    [rsvpParams setValue:textPassword.text forParam:@"password"];
+    [client post:endpoint usingBlock:^(RKRequest *request){
+        request.method=RKRequestMethodPOST;
+        request.params=rsvpParams;
+        request.onDidLoadResponse=^(RKResponse *response){
+            if (response.statusCode == 200) {
+                [self processResponse:[response.body objectFromJSONData]];
+            }
+        };
+    }];
     
 }
 - (IBAction) TwitterLoginButtonPress:(id) sender{
@@ -244,7 +262,7 @@
     [setupnewbtn setTitle:@"Set up new account" forState:UIControlStateNormal];
     [setupnewbtn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     [setupnewbtn setTitleColor:[UIColor colorWithRed:204.0/255.0f green:229.0/255.0f blue:255.0/255.0f alpha:1] forState:UIControlStateNormal];
-    [setupnewbtn addTarget:self action:@selector(Signin:) forControlEvents:UIControlEventTouchUpInside];
+    [setupnewbtn addTarget:self action:@selector(Signupnew:) forControlEvents:UIControlEventTouchUpInside];
     [setupnewbtn setTitleShadowColor:[UIColor colorWithRed:21.0/255.0f green:52.0/255.0f blue:84.0/255.0f alpha:1] forState:UIControlStateNormal];
     setupnewbtn.titleLabel.shadowOffset=CGSizeMake(0, 1);
     [setupnewbtn setHidden:YES];
