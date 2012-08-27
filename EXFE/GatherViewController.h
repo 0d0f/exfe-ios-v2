@@ -33,6 +33,7 @@
 #import "EXOverlayView.h"
 #import "ConversationViewController.h"
 #import "EXInvitationQuoteView.h"
+#import "ObjectToDict.h"
 
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9
@@ -105,6 +106,7 @@
 - (void) rsvpsubmate;
 - (void) rsvpremove;
 - (void) sendrsvp:(NSString*)status;
+- (void) setMates:(int)mates;
 - (void) setViewMode;
 - (void) addExfee:(Invitation*) invitation;
 - (void) initData;

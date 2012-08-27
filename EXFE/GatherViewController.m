@@ -747,7 +747,7 @@
         region.center = location;
         region.span.longitudeDelta = 0.005;
         region.span.latitudeDelta = 0.005;
-        [map setRegion:region animated:YES];
+        [map setRegion:region animated:NO];
         mapbox.image=[UIImage imageNamed:@"map_area.png"];
     }
 }
@@ -1124,6 +1124,7 @@
     }
 }
 
+
 - (void) sendrsvp:(NSString*)status{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -1206,6 +1207,91 @@
 //    [exfeeShowview reloadData];
 //    [self ShowGatherToolBar];
 }
+- (void) setMates:(int)mates{
+
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    NSNumber *by_identity_id=[NSNumber numberWithInt:0];
+    for (Invitation* invitation in cross.exfee.invitations )
+    {
+        if([invitation.identity.connected_user_id intValue] == app.userid)
+            by_identity_id=invitation.identity.identity_id;
+    }
+    if(by_identity_id>0)
+    {
+        BOOL selected=NO;
+        for(int i=0;i< [exfeeSelected count];i++) {
+            if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
+                selected=YES;
+                if(i<[exfeeIdentities count]) {
+                    for(Invitation *invitation in cross.exfee.invitations)
+                    {
+                        Invitation *selectedinvitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+                        if([invitation.invitation_id intValue]==[selectedinvitation.invitation_id intValue]){
+                            if(mates!=0){
+                                int mates_result=[invitation.mates intValue]+mates;
+                                if(mates_result<0)
+                                    mates_result=0;
+                                invitation.mates= [NSNumber numberWithInt:mates_result];
+                            }
+                            else
+                                invitation.mates=0;
+                        }
+                    }
+                }
+            }
+        }
+        if(viewmode==YES)
+        {
+            RKParams* rsvpParams = [RKParams params];
+            
+            NSDictionary *exfee_dict=[ObjectToDict ExfeeDict:cross.exfee];
+            NSLog(@"%@",[exfee_dict JSONString]);
+            [rsvpParams setValue:[exfee_dict JSONString] forParam:@"exfee"];
+            [rsvpParams setValue:[self getMyInvitation].identity.identity_id forParam:@"by_identity_id"];
+            RKClient *client = [RKClient sharedClient];
+            NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/edit?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
+            
+            [client post:endpoint usingBlock:^(RKRequest *request){
+                request.method=RKRequestMethodPOST;
+                request.params=rsvpParams;
+                request.onDidLoadResponse=^(RKResponse *response){
+                    if (response.statusCode == 200) {
+                        NSDictionary *body=[response.body objectFromJSONData];
+                        if([body isKindOfClass:[NSDictionary class]]) {
+                            id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                            if(code)
+                                if([code intValue]==200) {
+                                    [self refreshExfeePopOver];
+                                    
+                                    [exfeeShowview reloadData];
+                                    //                                    NSLog(@"send rsvp ok!");
+                                }
+                        }
+                        //We got an error!
+                    }else {
+                        //Check Response Body to get Data!
+                    }
+//                    if(selected==NO)
+//                        [self ShowRsvpButton];
+//                    else
+//                        [self ShowRsvpToolBar];
+                    
+                };
+                request.onDidFailLoadWithError=^(NSError *error){
+                    NSLog(@"%@",error);
+//                    if(selected==NO)
+//                        [self ShowMyRsvpToolBar];
+//                    else
+//                        [self ShowRsvpToolBar];
+                    
+                };
+                request.delegate=self;
+            }];
+        }
+    }
+
+}
 #pragma mark GatherToolbar delegate methods
 - (void) rsvpaccept{
         [self sendrsvp:@"ACCEPTED"];
@@ -1216,44 +1302,20 @@
 }
 
 - (void) rsvpdeclined{
-        [self sendrsvp:@"DECLINED"];
+    [self sendrsvp:@"DECLINED"];
+//    [self setMates:0];
 }
 
 - (void) rsvpunaccept{
     [self sendrsvp:@"NORESPONSE"];
 }
 - (void) rsvpaddmate{
-    for(int i=0;i< [exfeeSelected count];i++) {
-        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
-            if(i<[exfeeIdentities count]) {
-                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
-                if([invitation.mates intValue]<9)
-                    invitation.mates=[NSNumber numberWithInt:[invitation.mates intValue]+1];
-            }
-        }
-    }
-    [self refreshExfeePopOver];
-    [exfeeShowview reloadData];
+    [self setMates:1];
 }
 - (void) rsvpsubmate{
-    for(int i=0;i< [exfeeSelected count];i++) {
-        if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
-            if(i<[exfeeIdentities count]) {
-                Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
-                int mates=[invitation.mates intValue]-1;
-                if(mates<0)
-                    mates=0;
-                invitation.mates=[NSNumber numberWithInt:mates];
-            }
-        }
-    }
-    [self refreshExfeePopOver];
-
-    [exfeeShowview reloadData];
-
+    [self setMates:-1];
 }
 - (void) rsvpremove{
-
     NSMutableIndexSet *mutableIndexSet = [[NSMutableIndexSet alloc] init];
     for(int i=0;i< [exfeeSelected count];i++) {
         if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
