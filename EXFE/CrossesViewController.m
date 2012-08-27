@@ -76,21 +76,33 @@
     [request setPredicate:predicate];
 	NSArray *users = [[User objectsWithFetchRequest:request] retain];
     UIImage *settingbtnimg = [UIImage imageNamed:@"navbar_setting.png"];
-    if(users!=nil && [users count] >0){
-        User *user=[users objectAtIndex:0];
-        if(user){
-            Identity *identity=user.default_identity;
-            UIImage *image = [[ImgCache sharedManager] getImgFrom:[ImgCache getImgUrl:identity.avatar_filename]];
-            settingbtnimg = image;
-        }
-    }
-    UIView *containview=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 32, 44)];
-    containview.backgroundColor=[UIColor clearColor];
+
     EXInnerButton *settingButton = [[EXInnerButton alloc] initWithFrame:CGRectMake(2, 6, 30, 30)];
     settingButton.image=settingbtnimg;
     [settingButton addTarget:self action:@selector(ShowProfileView) forControlEvents:UIControlEventTouchUpInside];
     settingButton.layer.cornerRadius=5.5f;
     settingButton.clipsToBounds = YES;
+
+    if(users!=nil && [users count] >0){
+        User *user=[users objectAtIndex:0];
+        if(user){
+            Identity *identity=user.default_identity;
+
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+                UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(avatar_img!=nil && ![avatar_img isEqual:[NSNull null]]){
+                        settingButton.image=avatar_img;
+                        [settingButton setNeedsDisplay];
+                    }
+                });
+            });
+            dispatch_release(imgQueue);
+        }
+    }
+    UIView *containview=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 32, 44)];
+    containview.backgroundColor=[UIColor clearColor];
     UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"i_avatar_effect.png"]];
     shadowImageView.contentMode = UIViewContentModeScaleToFill;
     shadowImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

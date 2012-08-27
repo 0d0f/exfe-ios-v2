@@ -305,7 +305,6 @@
 
 - (void) Logout
 {
-    NSLog(@"logout");
     AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];  
     [app SignoutDidFinish];
 }

@@ -229,7 +229,6 @@
                             imageview.image=backimg;
                     });
                 });
-                
                 dispatch_release(imgQueue);
 
                 UIImageView *imagemaskview=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, containview.frame.size.width, 180)];
@@ -880,15 +879,29 @@
         else if([myInvitation.rsvp_status isEqualToString:@"DECLINED"])
             buttonimgname=@"rsvp_unavailable_toolbar.png";
         
-        rsvpbutton=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:buttonimgname] inFrame:CGRectMake(self.view.frame.size.width/2-30, 460-44-30, 60, 30)];
-        
+        rsvpbutton=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:buttonimgname] inFrame:CGRectMake(self.view.frame.size.width/2-30, 460-44, 60, 30)];
+        CGRect rect=[rsvpbutton frame];
+        float y=460-44-30;
         [rsvpbutton setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"toolbar_bg.png"]]];
         [rsvpbutton addTarget:self action:@selector(ShowMyRsvpToolBar) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:rsvpbutton];
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.3];
+        rect.origin.y=y;
+        [rsvpbutton setFrame:rect];
+        [UIView commitAnimations];
+
         [myrsvptoolbar setHidden:YES];
     }
-    else
+    else{
+        CGRect rect=[myrsvptoolbar frame];
         [myrsvptoolbar setHidden:NO];
+
+//        [UIView beginAnimations:nil context:NULL];
+//        [UIView setAnimationDuration:0.3];
+
+        [myrsvptoolbar setHidden:NO];
+    }
 }
 - (void) ShowGatherToolBar{
     if(gathertoolbar==nil){
@@ -1303,7 +1316,6 @@
 
 - (void) rsvpdeclined{
     [self sendrsvp:@"DECLINED"];
-//    [self setMates:0];
 }
 
 - (void) rsvpunaccept{

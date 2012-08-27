@@ -22,7 +22,8 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    [image drawInRect:CGRectMake(0,0,30,30)];
+    if(image!=nil)
+        [image drawInRect:CGRectMake(0,0,30,30)];
 }
 
 
