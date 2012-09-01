@@ -252,10 +252,11 @@
     NSTimeInterval t2=[[NSDate date] timeIntervalSince1970];
     [self initData];
     [self reArrangeViews];
+    [self setExfeeNum];
     NSTimeInterval t3=[[NSDate date] timeIntervalSince1970];
     //
     if(viewmode==YES)
-    [self ShowRsvpButton];
+        [self ShowRsvpButton];
     NSLog(@"time t1 %f t3 %f",t2-t1,t3-t2);
 }
 
@@ -388,13 +389,16 @@
         CGRect cardframe=containcardview.frame;
         cardframe.origin.y=0;
         [containcardview setFrame:cardframe];
-        [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 54, 124, 27)];
+//        [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 54, 124, 27)];
         [exfeenum setHidden:NO];
 
         
         containcardview.backgroundimage=nil;
         [crossdescription setEditable:NO];
-        [exfeeShowview HiddenAddButton];
+        if(exfeeedit==NO)
+            [exfeeShowview HiddenAddButton];
+        else
+            [exfeeShowview ShowAddButton];
         CGRect exfeshowframe=exfeeShowview.frame;
         exfeshowframe.origin.x=15-5;
         [exfeeShowview setFrame:exfeshowframe];
@@ -772,6 +776,7 @@
     [exfeeIdentities addObject:invitation];
     [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
     [exfeeShowview reloadData];
+    [self setExfeeNum];
 }
 - (int) exfeeIdentitiesCount{
     return [exfeeIdentities count];
@@ -1112,8 +1117,17 @@
     CTParagraphStyleRef linestyle = CTParagraphStyleCreate(linesetting, 1);
     [exfeestr addAttribute:(id)kCTParagraphStyleAttributeName value:(id)linestyle range:NSMakeRange(0,[exfeestr length])];
     exfeenum.attributedText=exfeestr;
+    
+    if([exfeeIdentities count]<3)
+        [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 50+20, 124, 27)];
+    else
+        [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 50, 124, 27)];
+    
+    
     [exfeenum setNeedsDisplay];
 }
+
+
 - (void)saveCrossUpdate{
     NSError *error;
     NSString *json = [[RKObjectSerializer serializerWithObject:cross mapping:[[APICrosses getCrossMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
@@ -1179,11 +1193,28 @@
         if(isSelect==YES){
             [self ShowGatherToolBar];
         }
+    }else{
+        exfeeedit=NO;
+        [exfeeShowview HiddenAddButton];
+        [rsvptoolbar setHidden:YES];
+        [rsvpbutton setHidden:YES];
+        [myrsvptoolbar setHidden:YES];
+        [gathertoolbar setHidden:YES];
+        BOOL isSelect=NO;
+        for(NSNumber *number in exfeeSelected){
+            if([number boolValue]==YES)
+                isSelect=YES;
+        }
+        if(isSelect==YES){
+            [self ShowRsvpToolBar];
+        }
+        else
+            [self ShowRsvpButton];
     }
 }
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
-    if(viewmode==NO)
+    if(viewmode==NO && exfeeedit==NO)
     {
         if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
         {
@@ -1196,6 +1227,11 @@
         if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))
         {
             [self ShowTimeView];
+        }
+    }
+    if(exfeeedit==YES){
+        if (!CGRectContainsPoint([exfeeShowview frame], location)){
+            [self setExfeeViewMode:NO];
         }
     }
     if (CGRectContainsPoint([exfeeShowview frame], location))
@@ -1316,9 +1352,8 @@
 
     [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
     [exfeeShowview calculateColumn];
-    if(viewmode==NO)
+    if(viewmode==NO || exfeeedit==YES)
         [self reArrangeViews];
-    
 }
 
 #pragma mark EXImagesCollectionView delegate methods
@@ -1459,7 +1494,6 @@
             [exfeeShowview reloadData];
             [self setExfeeNum];
             [self ShowGatherToolBar];
-
         }
 
     }

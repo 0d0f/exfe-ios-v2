@@ -196,6 +196,7 @@
     [self setNeedsDisplay];
     maskview.itemsCache=itemsCache;
     [maskview setNeedsDisplay];
+    
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch *touch in touches) {

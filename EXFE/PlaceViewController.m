@@ -212,6 +212,9 @@
         if(provider==nil)
            provider=@"exfe";
            
+        if([gatherplace objectForKey:@"place_id"]==nil)
+            [gatherplace setObject:[NSNumber numberWithInt:0] forKey:@"place_id"];
+        
         NSDictionary *place =[NSDictionary dictionaryWithKeysAndObjects:@"place_id",[gatherplace objectForKey:@"place_id"],@"title",[placeedit getPlaceTitle],@"description",[placeedit getPlaceDesc], @"lat",[gatherplace objectForKey:@"lat"],@"lng",[gatherplace objectForKey:@"lng"],@"provider",provider,@"external_id",[gatherplace objectForKey:@"external_id"], nil];
 
         [(GatherViewController*)gatherview savePlace:place];
