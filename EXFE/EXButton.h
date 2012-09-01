@@ -10,8 +10,12 @@
 
 @interface EXButton : UIButton{
     NSString *buttonName;
+    UIImageView *backgroundview;
+    BOOL setInset;
 }
 @property (nonatomic,retain) NSString *buttonName;
+@property BOOL setInset;
+
 - (id)initWithName:(NSString*)name title:(NSString*)buttontitle image:(UIImage*) img inFrame:(CGRect) frame;
 - (void) updateFrame:(CGRect)rect;
 @end

@@ -39,6 +39,39 @@
     [super viewDidLoad];
     [self refreshConversation];
     
+    UIImage *chatimg = [UIImage imageNamed:@"conv_navbarbtn.png"];
+    UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+    [chatButton setImage:chatimg forState:UIControlStateNormal];
+    chatButton.frame = CGRectMake(0, 0, chatimg.size.width, chatimg.size.height);
+    [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
+
+    [chatButton addTarget:self action:@selector(toCross) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:chatButton];
+    self.navigationItem.rightBarButtonItem = barButtonItem;
+    [barButtonItem release];
+
+//    [self.navigationItem setHidesBackButton:YES];
+    
+    UIButton *homeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [homeButton setFrame:CGRectMake(0, 0, 55, 30)];
+    [homeButton setTitle:@"Home  " forState:UIControlStateNormal];
+    [homeButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+    [homeButton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
+    homeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    
+    [homeButton setBackgroundImage:[[UIImage imageNamed:@"btn_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 6)] forState:UIControlStateNormal];
+    [homeButton addTarget:self action:@selector(toHome) forControlEvents:UIControlEventTouchUpInside];
+
+//    [homeButton addTarget:self action:@selector(toCross) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *leftbarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:homeButton];
+
+    self.navigationItem.leftBarButtonItem = leftbarButtonItem;
+    [leftbarButtonItem release];
+
     CGRect screenFrame = [self.view frame];
     CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight-kNavBarHeight, screenFrame.size.width, kDefaultToolbarHeight);
     
@@ -60,7 +93,7 @@
     cellsepator=[UIImage imageNamed:@"conv_line_h.png"];
     avatarframe=[UIImage imageNamed:@"conv_portrait_frame.png"];
     CGRect _tableviewrect=_tableView.frame;
-    _tableviewrect.size.height=_tableviewrect.size.height-kDefaultToolbarHeight-44;
+    _tableviewrect.size.height=_tableviewrect.size.height-kDefaultToolbarHeight;
     [_tableView setFrame:_tableviewrect];
     _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
@@ -81,6 +114,28 @@
 //    [self.view addSubview:floatTime];
     
 
+}
+
+- (void) toCross{
+    [UIView beginAnimations:@"View Flip" context:nil];
+    [UIView setAnimationDuration:0.80];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationTransition:
+     UIViewAnimationTransitionFlipFromLeft
+                           forView:self.navigationController.view cache:NO];
+    [self.navigationController popViewControllerAnimated:NO];
+    [UIView commitAnimations];
+}
+- (void) toHome{
+    [UIView beginAnimations:@"View Flip" context:nil];
+    [UIView setAnimationDuration:0.80];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationTransition:
+     UIViewAnimationTransitionFlipFromLeft
+                           forView:self.navigationController.view cache:NO];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    [UIView commitAnimations];
+    
 }
 
 - (void)viewDidUnload
@@ -509,9 +564,12 @@
     NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:identity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
     
     RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
     NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u/add?token=%@",exfee_id,app.accesstoken];
     [inputToolbar setInputEnabled:NO];
     NSString *JSON=[postdict JSONString];
+    
+    
     RKParams *params = [RKRequestSerialization serializationWithData:[JSON 
                                                                       dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
     [client post:endpoint usingBlock:^(RKRequest *request){

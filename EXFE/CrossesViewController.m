@@ -40,6 +40,9 @@
 
 - (void)viewDidLoad
 {
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[[UIImage imageNamed:@"btn_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 6)]
+                                                      forState:UIControlStateNormal
+                                                    barMetrics:UIBarMetricsDefault];
     current_cellrow=-1;
     self.tableView.backgroundColor=[UIColor colorWithRed:0.27f green:0.33f blue:0.41f alpha:1.00f];
     UIView *topview = [[UIView alloc] initWithFrame:CGRectMake(0, 0 - 480, 320, 480)];
@@ -60,6 +63,7 @@
         [self initUI];
         [self refreshCrosses:@"crossview"];
     }
+    
 }
 - (void)initUI{
     UIImage *gatherbtnimg = [UIImage imageNamed:@"gather_button.png"];
@@ -75,7 +79,7 @@
                               predicateWithFormat:@"user_id = %u", app.userid];    
     [request setPredicate:predicate];
 	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    UIImage *settingbtnimg = [UIImage imageNamed:@"navbar_setting.png"];
+    UIImage *settingbtnimg = [UIImage imageNamed:@"portrait_default.png"];
 
     EXInnerButton *settingButton = [[EXInnerButton alloc] initWithFrame:CGRectMake(2, 6, 30, 30)];
     settingButton.image=settingbtnimg;
@@ -87,7 +91,6 @@
         User *user=[users objectAtIndex:0];
         if(user){
             Identity *identity=user.default_identity;
-
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(imgQueue, ^{
                 UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
@@ -137,6 +140,14 @@
 //    }
     [self.navigationController.view setNeedsDisplay];
 }
+- (Cross*) crossWithId:(int)cross_id{
+    for(Cross *c in _crosses)
+    {
+        if([c.cross_id intValue]==cross_id)
+            return c;
+    }
+    return nil;
+}
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -182,8 +193,24 @@
 }
 
 - (void) refreshCrosses:(NSString*)source{
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//
+//    NSString *updated_at=@"";
+//    NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"]; 
+//    if(date_updated_at!=nil)
+//    {
+//        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+//        [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+//        updated_at = [formatter stringFromDate:date_updated_at];
+//        [formatter release];
+//    }
+//    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObject:source forKey:@"name"]];
+    [self refreshCrosses:(NSString*)source withCrossId:0];
+}
+- (void) refreshCrosses:(NSString*)source withCrossId:(int)cross_id{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-
+    
     NSString *updated_at=@"";
     NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"]; 
     if(date_updated_at!=nil)
@@ -194,10 +221,9 @@
         updated_at = [formatter stringFromDate:date_updated_at];
         [formatter release];
     }
-
-    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self source:source];
+    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]];
+    
 }
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
@@ -254,10 +280,32 @@
 
         [self loadObjectsFromDataStore];
     }
-    if ([objectLoader.userData isEqualToString:@"gatherview"]) {
+    if ([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"gatherview"]) {
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
         [app.navigationController dismissModalViewControllerAnimated:YES];
     }
+    else if([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"pushtocross"]) {
+        NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
+        Cross *cross=[self crossWithId:[cross_id intValue]];
+        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+        gatherViewController.cross=cross;
+        [gatherViewController setViewMode];
+        [self.navigationController pushViewController:gatherViewController animated:YES];
+
+        NSLog(@"pushtocross %i",[cross_id intValue]);
+    }
+    else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"pushtoconversation"]) {
+        NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
+        NSLog(@"pushtoconversation %i",[cross_id intValue]);
+        
+        Cross *cross=[self crossWithId:[cross_id intValue]];
+        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+        gatherViewController.cross=cross;
+        [gatherViewController setViewMode];
+        [self.navigationController pushViewController:gatherViewController animated:YES];
+        [gatherViewController toconversation];
+    }
+    
     [self stopLoading];
 }
 
@@ -282,7 +330,6 @@
 	if (nil == cell) {
         cell = [[[CrossCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
 	}
-    
     if(indexPath.row>=[_crosses count])
     {
         cell.backgroundimg=[cellbackimgblanklist objectAtIndex:indexPath.row];
@@ -315,7 +362,6 @@
                 NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
                 NSString *updated_at_str=[obj objectForKey:@"updated_at"];
                 NSDate *updated_at =[NSDate date];
-                //FIXME: in old redis, the updated_at_str is a number. 
                 if([updated_at_str isKindOfClass:[NSString class]])
                     updated_at = [formatter dateFromString:updated_at_str];
                 if([updated_at compare: cross.read_at] == NSOrderedDescending || cross.read_at==nil) {
@@ -419,6 +465,18 @@
     [self.navigationController pushViewController:gatherViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     current_cellrow=indexPath.row;
+}
+- (void) refreshTableViewWithCrossId:(int)cross_id{
+    for(int i=0;i<[_crosses count];i++)
+    {
+        
+        Cross *c=[_crosses objectAtIndex:i];
+        
+        
+        if([c.cross_id intValue]==cross_id)
+            [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: [NSIndexPath indexPathForRow:i inSection:0]]
+                                  withRowAnimation: UITableViewRowAnimationNone];
+    }
 }
 - (void) refreshCell{
     

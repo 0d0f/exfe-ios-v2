@@ -27,10 +27,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    [exfeeInput setPlaceholder:@"Invite friends by name, email…"];
-//    [exfeeInput setBorderStyle:UITextBorderStyleRoundedRect];
-//    [exfeeInput setAutocorrectionType:UITextAutocorrectionTypeNo];
-    
+    toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
+    [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
+    [self.view addSubview:toolbar];
+
     suggestionTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 44, 320, 460-44) style:UITableViewStylePlain];
     [self.view addSubview:suggestionTable];
     suggestionTable.dataSource=self;
@@ -41,6 +41,7 @@
     [exfeeList setEXBubbleDelegate:self];
     
     [toolbar addSubview:exfeeList];
+    
     
     inputleftmask=[[UIImageView alloc] initWithFrame:CGRectMake(exfeeList.frame.origin.x,exfeeList.frame.origin.y , 40, 30)];
     inputleftmask.image=[UIImage imageNamed:@"exfee_inputfield.png"];
@@ -63,9 +64,7 @@
     
     [toolbar addSubview:inputframeview];
     exfeeList.layer.cornerRadius=15;
-//    [toolbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"] forToolbarPosition:UIToolbarPositionBottom barMetrics:UIBarMetricsDefault];
     [self changeLeftIconWhite:NO];
-//    exfeeList.backgroundColor=FONT_COLOR_HL;
   
     UIView *leftestview = [[UIView alloc] initWithFrame:CGRectMake(0-320, 0, 320,exfeeList.frame.size.height)];
     leftestview.backgroundColor=FONT_COLOR_HL;
@@ -302,6 +301,8 @@
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+
     NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
     
     RKParams* rsvpParams = [RKParams params];
@@ -400,7 +401,8 @@
             UIImage *icon=[UIImage imageNamed:iconname];
             cell.providerIcon=icon;
         }
-        
+        cell.avatar=[UIImage imageNamed:@"portrait_default.png"];
+    
         if(identity.avatar_filename!=nil) {
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(imgQueue, ^{
@@ -409,8 +411,8 @@
                     if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
                         cell.avatar=avatar;
                     }
-                    else
-                        cell.avatar=[UIImage imageNamed:@"portrait_default.png"];
+//                    else
+//                        cell.avatar=[UIImage imageNamed:@"portrait_default.png"];
                 });
             });
             dispatch_release(imgQueue);        

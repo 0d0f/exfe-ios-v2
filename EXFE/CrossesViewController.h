@@ -27,9 +27,12 @@
 }
 - (void) refreshCell;
 - (void) refreshCrosses:(NSString*)source;
+- (void) refreshCrosses:(NSString*)source withCrossId:(int)cross_id;
 - (void) loadObjectsFromDataStore;
 - (void) initUI;
 - (void) emptyView;
 - (void) ShowProfileView;
 - (void) ShowGatherView;
+- (Cross*) crossWithId:(int)cross_id;
+- (void) refreshTableViewWithCrossId:(int)cross_id;
 @end

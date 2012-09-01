@@ -9,13 +9,15 @@
 #import <UIKit/UIKit.h>
 
 #define API_V2_ROOT @"http://api.local.exfe.com/v2"
-//#define IMG_ROOT @"http://local.exfe.com/static/img"
+#define IMG_ROOT @"http://local.exfe.com/static/img"
+
 //#define API_V2_ROOT @"http://api.0d0f.com/v2"
-#define IMG_ROOT @"http://dev.0d0f.com/static/img"
+//#define IMG_ROOT @"http://dev.0d0f.com/static/img"
+
+//#define API_V2_ROOT @"https://www.exfe.com/v2"
+//#define IMG_ROOT @"https://img.exfe.com"
 
 #define GOOGLE_API_KEY @"AIzaSyCO_MQfEQI-p0r4tlQ3lj0WKLwbMtR5f3A"
-//#define API_V2_ROOT @"https://www.exfe.com/v2"
-//#define IMG_ROOT @"https://exfe.com/static/img"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>{
     int userid;
@@ -32,6 +34,8 @@
 -(void)SigninDidFinish;
 -(void)SignoutDidFinish;
 -(void)GatherCrossDidFinish;
+-(void)CrossUpdateDidFinish;
 -(void)ShowLanding;
 -(BOOL) Checklogin;
+-(void) deviceReg;
 @end

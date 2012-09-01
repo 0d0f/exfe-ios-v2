@@ -18,10 +18,11 @@
 #import "ConversationInputAccessoryView.h"
 #import "GatherExfeeInputCell.h"
 #import "CTUtil.h"
+#import "CrossesViewController.h"
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20
-#define kDefaultToolbarHeight 40
+#define kDefaultToolbarHeight 42
 #define kKeyboardHeightPortrait 216
 #define kKeyboardHeightLandscape 140
 
@@ -56,5 +57,7 @@
 - (void) setShowTime:(BOOL)show;
 - (void) hiddenTime;
 - (void) hiddenTimeNow;
+- (void) toCross;
+- (void) toHome;
 
 @end

@@ -11,6 +11,8 @@
 #import "Identity.h"
 #import "Invitation.h"
 #import "Util.h"
+#import "EXImagesItem.h"
+#import "EXCollectionMask.h"
 
 @class EXImagesCollectionView;
 @protocol EXImagesCollectionDataSource;
@@ -19,7 +21,7 @@
 
 @required
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView;
-- (Invitation *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index;
+- (EXImagesItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index;
 - (NSArray *) selectedOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView;
 @end
 
@@ -57,17 +59,31 @@
     UIImage *rsvp_unavailable_badge;
     
     BOOL hiddenAddButton;
-    
+    NSMutableDictionary *itemsCache;
+    EXCollectionMask *maskview;
 }
+@property int maxColumn;
+@property int maxRow;
+@property float imageWidth;
+@property float imageHeight;
+@property float nameHeight;
+@property float imageXmargin;
+@property float imageYmargin;
+@property (nonatomic,retain) NSMutableDictionary *itemsCache;
+
+
+
 - (void) setImageWidth:(float)width height:(float)height;
 - (void) setImageXMargin:(float)xmargin YMargin:(float)ymargin;
 - (void) setDataSource:(id) dataSource;
 - (void) setDelegate:(id) delegate;
 - (void) HiddenAddButton;
+- (void) ShowAddButton;
 - (void) reloadData;
 - (void) initData;
 - (void) calculateColumn;
 - (void) onImageTouch:(CGPoint) point;
+
 //- (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 
 @end

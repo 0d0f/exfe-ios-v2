@@ -34,6 +34,8 @@
 #import "ConversationViewController.h"
 #import "EXInvitationQuoteView.h"
 #import "ObjectToDict.h"
+#import "EXAttributedLabel.h"
+#import "EXImagesItem.h"
 
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9
@@ -43,7 +45,7 @@
     UITextView *crosstitle;
     UIImageView *title_input_img;
     UILabel *crosstitle_view;
-    UILabel *exfeenum;
+    EXAttributedLabel *exfeenum;
     EXIconToolBar *gathertoolbar;
     EXIconToolBar *rsvptoolbar;
     EXIconToolBar *myrsvptoolbar;
@@ -72,8 +74,10 @@
     User* default_user;
     int selectedExfeeIndex;
     BOOL viewmode;
+    BOOL exfeeedit;
     BOOL firstLoad;
     ConversationViewController *conversationView;
+    UILabel *ccbuttonText;
 
 }
 @property (retain,nonatomic) Cross* cross;
@@ -93,9 +97,10 @@
 - (void) addDefaultIdentity;
 - (void) reArrangeViews;
 - (NSString*) findProvider:(NSString*)external_id;
+- (void) savePlace:(NSDictionary*)placedict;
 - (void) setPlace:(NSDictionary*)placedict;
 - (void) setDateTime:(CrossTime*)crosstime;
-//- (void) ShowExfeeInput:(BOOL)show;
+- (void) saveDateTime:(CrossTime*)crosstime;
 - (void) setExfeeNum;
 - (void) pullcontainviewDown;
 - (void) toconversation;
@@ -115,8 +120,10 @@
 - (void) refreshExfeePopOver;
 
 - (void) touchesBegan:(UITapGestureRecognizer*)sender;
+- (void) didlongpress:(UILongPressGestureRecognizer*)sender;
 - (void) hiddenPopover;
 - (int) exfeeIdentitiesCount;
-
 - (void) buildView;
+- (void) saveCrossUpdate;
+- (void) setExfeeViewMode:(BOOL)edit;
 @end

@@ -17,36 +17,53 @@
 
 
 @implementation APICrosses
-+(void) MappingCross
-{
++ (RKManagedObjectMapping*) getPlaceMapping{
+    
     RKObjectManager* manager =[RKObjectManager sharedManager];
-    RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
     RKManagedObjectMapping* placeMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Place" inManagedObjectStore:manager.objectStore];
     placeMapping.primaryKeyAttribute=@"place_id";
     [placeMapping mapKeyPathsToAttributes:@"id", @"place_id",
-     @"title", @"title", 
-     @"description", @"place_description", 
-     @"lat", @"lat", 
-     @"lng", @"lng", 
-     @"provider", @"provider", 
-     @"external_id", @"external_id", 
-     @"created_at", @"created_at", 
-     @"updated_at", @"updated_at", 
+     @"title", @"title",
+     @"description", @"place_description",
+     @"lat", @"lat",
+     @"lng", @"lng",
+     @"provider", @"provider",
+     @"external_id", @"external_id",
+     @"created_at", @"created_at",
+     @"updated_at", @"updated_at",
      nil];
-    
+    return placeMapping;
+}
+
++ (RKManagedObjectMapping*) getInvitationMapping{
+    RKObjectManager* manager =[RKObjectManager sharedManager];
     RKManagedObjectMapping* invitationMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Invitation" inManagedObjectStore:manager.objectStore];
     invitationMapping.primaryKeyAttribute=@"invitation_id";
     [invitationMapping mapKeyPathsToAttributes:@"id", @"invitation_id",
-     @"rsvp_status", @"rsvp_status", 
-     @"host", @"host", 
+     @"rsvp_status", @"rsvp_status",
+     @"host", @"host",
      @"mates", @"mates",
      @"via", @"via",
-     @"updated_at", @"updated_at", 
+     @"updated_at", @"updated_at",
      @"created_at", @"created_at",
      nil];
-    [invitationMapping mapRelationship:@"identity" withMapping:identityMapping];
-    [invitationMapping mapRelationship:@"by_identity" withMapping:identityMapping];
+    [invitationMapping mapRelationship:@"identity" withMapping:[Mapping getIdentityMapping]];
+    [invitationMapping mapRelationship:@"by_identity" withMapping:[Mapping getIdentityMapping]];
+    return invitationMapping;
+}
 
++ (RKManagedObjectMapping*) getCrossMapping{
+    
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
+    RKManagedObjectMapping* placeMapping =[APICrosses getPlaceMapping];
+    RKManagedObjectMapping* invitationMapping=[APICrosses getInvitationMapping];
+    
+    RKObjectMapping* invitationSerializationMapping = [invitationMapping inverseMapping];
+    [manager.mappingProvider setSerializationMapping:invitationSerializationMapping forClass:[Invitation class]];
+    [manager.mappingProvider setObjectMapping:invitationSerializationMapping forKeyPath:@"invitation"];
+    
+    
     RKManagedObjectMapping* exfeeMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Exfee" inManagedObjectStore:manager.objectStore];
     exfeeMapping.primaryKeyAttribute=@"exfee_id";
     [exfeeMapping mapKeyPathsToAttributes:@"id", @"exfee_id",@"total",@"total",@"accepted",@"accepted",
@@ -55,28 +72,28 @@
     
     RKManagedObjectMapping* EFMapping = [RKManagedObjectMapping mappingForEntityWithName:@"EFTime" inManagedObjectStore:manager.objectStore];
     [EFMapping mapKeyPathsToAttributes:@"date", @"date",
-     @"date_word", @"date_word", 
-     @"time", @"time", 
-     @"time_word", @"time_word", 
+     @"date_word", @"date_word",
+     @"time", @"time",
+     @"time_word", @"time_word",
      @"timezone", @"timezone",
-     nil];    
-
+     nil];
+    
     RKManagedObjectMapping* crosstimeMapping = [RKManagedObjectMapping mappingForEntityWithName:@"CrossTime" inManagedObjectStore:manager.objectStore];
     [crosstimeMapping mapKeyPathsToAttributes:@"origin", @"origin",
      @"outputformat", @"outputformat",
-     nil];    
+     nil];
     [crosstimeMapping mapRelationship:@"begin_at" withMapping:EFMapping];
     
     
     RKManagedObjectMapping* crossMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Cross" inManagedObjectStore:manager.objectStore];
     crossMapping.primaryKeyAttribute=@"cross_id";
     [crossMapping mapKeyPathsToAttributes:@"id", @"cross_id",
-     @"title", @"title", 
-     @"description", @"cross_description", 
-     @"id_base62", @"crossid_base62", 
+     @"title", @"title",
+     @"description", @"cross_description",
+     @"id_base62", @"crossid_base62",
      @"created_at", @"created_at",
-     @"updated", @"updated",     
-     @"widget", @"widget",     
+     @"updated", @"updated",
+     @"widget", @"widget",
      @"updated_at", @"updated_at",
      @"conversation_count",@"conversation_count",
      nil];
@@ -85,7 +102,13 @@
     [crossMapping mapRelationship:@"place" withMapping:placeMapping];
     [crossMapping mapRelationship:@"exfee" withMapping:exfeeMapping];
     [crossMapping mapRelationship:@"time" withMapping:crosstimeMapping];
-    
+    return crossMapping;
+}
+
++(void) MappingCross
+{
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    RKManagedObjectMapping *crossMapping=[APICrosses getCrossMapping];
     [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.crosses"];
     [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.cross"];
 
@@ -102,8 +125,6 @@
     [manager.mappingProvider setSerializationMapping:crossSerializationMapping forClass:[Cross class]];
     
     manager.serializationMIMEType = RKMIMETypeJSON;
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    RKObjectManager* manager =[RKObjectManager sharedManager];
     NSString *endpoint = [NSString stringWithFormat:@"/crosses/gather"];
     [manager.router routeClass:[Cross class] toResourcePath:endpoint forMethod:RKRequestMethodPOST];
 
@@ -125,7 +146,7 @@
     }];
 }
      
-+(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate  source:(NSString*)source{
++(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
         updatedtime=[Util encodeToPercentEscapeString:updatedtime];

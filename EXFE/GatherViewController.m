@@ -27,6 +27,14 @@
     return self;
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    if([cross.conversation_count intValue]>0 && [cross.conversation_count intValue]<=9){
+        [ccbuttonText setText:[cross.conversation_count stringValue]];
+    }
+    else if([cross.conversation_count intValue]==0)
+        [ccbuttonText setText:@""];
+    [ccbuttonText setNeedsDisplay];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -34,26 +42,13 @@
     toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
     [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
     [self.view addSubview:toolbar];
-    UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];
-    UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(5, 7, 50, 30)];
-    backimg.image=btn_dark;
-    backimg.contentMode=UIViewContentModeScaleToFill;
-    backimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
-    [toolbar addSubview:backimg];
-    [backimg release];
-    backimg=[[UIImageView alloc] initWithFrame:CGRectMake(toolbar.frame.size.width-5-50, 7, 50, 30)];
-    backimg.image=btn_dark;
-    backimg.contentMode=UIViewContentModeScaleToFill;
-    backimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
-    [toolbar addSubview:backimg];
-    [backimg release];
     
     UIButton *closebutton=[UIButton buttonWithType:UIButtonTypeCustom];
     [closebutton setFrame:CGRectMake(5, 7, 50, 30)];
     [closebutton setTitle:@"Close" forState:UIControlStateNormal];
     [closebutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     [closebutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
-    
+    [closebutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
     [closebutton addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:closebutton];
 
@@ -62,28 +57,13 @@
     [gatherbutton setTitle:@"Gather" forState:UIControlStateNormal];
     [gatherbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     [gatherbutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
-    
+    [gatherbutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
+
     [gatherbutton addTarget:self action:@selector(Gather:) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:gatherbutton];
     
-    
     [self buildView];
-//    dispatch_queue_t initQueue = dispatch_queue_create("init thread", NULL);
-//    dispatch_async(initQueue, ^{
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//           [self buildView]; 
-//        });
-//    });
-//    dispatch_release(initQueue);
-
-
 }
-//- (void)viewDidAppear:(BOOL)animated{
-//    [super viewDidAppear:animated];
-//    if(firstLoad==YES){
-//        firstLoad=NO;
-//    }
-//}
 - (void)buildView{
     NSTimeInterval t1=[[NSDate date] timeIntervalSince1970];
     [self.view setBackgroundColor:[UIColor grayColor]];
@@ -132,9 +112,9 @@
     [containcardview addSubview:crosstitle_view];
     [crosstitle_view setHidden:YES];
 
-    exfeenum=[[UILabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15, width, 24)];
+    exfeenum=[[EXAttributedLabel alloc] initWithFrame:CGRectMake(VIEW_MARGIN, toolbar.frame.size.height+6+crosstitle.frame.size.height+15, width, 24)];
     [exfeenum setBackgroundColor:[UIColor clearColor]];
-    exfeenum.textAlignment=UITextAlignmentRight;
+//    exfeenum.textAlignment=UITextAlignmentRight;
     [containcardview addSubview:exfeenum];
     [exfeenum setHidden:YES];
 
@@ -154,17 +134,30 @@
     mapbox=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_area_null.png"]];
     [containcardview addSubview:mapbox];
 
-    WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
-    tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
-        [self ShowPlaceView];
-    };
-    [map addGestureRecognizer:tapInterceptor];
-    [tapInterceptor release];
-
+    if(viewmode==YES){
+        UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(ShowPlaceView)];
+        longpress.minimumPressDuration = 1;
+        [map addGestureRecognizer:longpress];
+        [longpress release];
+    }else{
+        WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
+        tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
+            [self ShowPlaceView];
+        };
+        [map addGestureRecognizer:tapInterceptor];
+        [tapInterceptor release];
+    }
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [containcardview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
+    if(viewmode==YES){
+        UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didlongpress:)];
+        longpress.minimumPressDuration = 1;
+        [containcardview addGestureRecognizer:longpress];
+        [longpress release];
+    }
 
+    
     [self.view bringSubviewToFront:toolbar];
 
     timetitle=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,
@@ -211,30 +204,50 @@
     [containcardview addSubview:crossdescription];
 
     if(viewmode==YES){
-        UIImage *chatimg = [UIImage imageNamed:@"chat.png"];
+        UIImage *chatimg = [UIImage imageNamed:@"conv_navbarbtn.png"];
         UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [chatButton setTitle:@"Chat" forState:UIControlStateNormal];
         [chatButton setImage:chatimg forState:UIControlStateNormal];
         chatButton.frame = CGRectMake(0, 0, chatimg.size.width, chatimg.size.height);
+        [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
+
         [chatButton addTarget:self action:@selector(toconversation) forControlEvents:UIControlEventTouchUpInside];
-        
+//         [chatButton setTitle:@"A" forState:UIControlStateNormal];
+//        [chatButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:10]];
+//        [chatButton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
+//        chatButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+//        chatButton.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+//        chatButton.titleEdgeInsets=UIEdgeInsetsMake(2, chatimg.size.width+5, 2, 2);
+
+
+//        cross.conversation_count
+        if([cross.conversation_count intValue]>0 && [cross.conversation_count intValue]<9){
+            ccbuttonText=[[UILabel alloc]initWithFrame:CGRectMake(8, 3, 12, 22)];
+//            [ccbuttonText setText:[cross.conversation_count stringValue]];
+            ccbuttonText.textAlignment=UITextAlignmentCenter;
+            ccbuttonText.backgroundColor=[UIColor clearColor];
+            [ccbuttonText setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:9]];
+            ccbuttonText.textColor=[UIColor whiteColor];
+            [chatButton addSubview:ccbuttonText];
+        }
+//        else if(conversationCount>9)
+//            [[UIImage imageNamed:@"conversation_badge_full.png"]drawInRect:CGRectMake(279, 70, 30, 26)];
+
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:chatButton];
-        //
         self.navigationItem.rightBarButtonItem = barButtonItem;
         [barButtonItem release];
         
-        conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
-        conversationView.exfee_id=[cross.exfee.exfee_id intValue];
-        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-        NSSet *invitations=cross.exfee.invitations;
-        if(invitations !=nil&&[invitations count]>0)
-        {
-            for(Invitation* invitation in invitations)
-                if([invitation.identity.connected_user_id intValue]==app.userid)
-                    conversationView.identity=invitation.identity;
-        }
-        [conversationView.view setHidden:YES];
-        [self.view addSubview:conversationView.view];
+//        conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
+//        conversationView.exfee_id=[cross.exfee.exfee_id intValue];
+//        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//        NSSet *invitations=cross.exfee.invitations;
+//        if(invitations !=nil&&[invitations count]>0)
+//        {
+//            for(Invitation* invitation in invitations)
+//                if([invitation.identity.connected_user_id intValue]==app.userid)
+//                    conversationView.identity=invitation.identity;
+//        }
+//        [conversationView.view setHidden:YES];
+//        [self.view addSubview:conversationView.view];
     }
     NSTimeInterval t2=[[NSDate date] timeIntervalSince1970];
     [self initData];
@@ -268,7 +281,7 @@
         NSArray *widgets=cross.widget;
         for(NSDictionary *widget in widgets) {
             if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-                NSString *imgurl=[NSString stringWithFormat:@"%@/xbg/%@",IMG_ROOT,[widget objectForKey:@"image"]];
+                NSString *imgurl=[Util getBackgroundLink:[widget objectForKey:@"image"]];
                 UIImageView *imageview=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, containview.frame.size.width, 180)];
                 imageview.image=nil;
                 dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
@@ -293,7 +306,7 @@
         NSTimeInterval t2=[[NSDate date] timeIntervalSince1970];
 
         [self setDateTime:cross.time];
-        NSDictionary *placedict=[NSDictionary dictionaryWithKeysAndObjects:@"title",cross.place.title,@"description",cross.place.place_description,@"lat",cross.place.lat, @"lng",cross.place.lng,@"external_id",cross.place.external_id,@"provider",cross.place.provider, nil];
+        NSDictionary *placedict=[NSDictionary dictionaryWithKeysAndObjects:@"place_id",cross.place.place_id,@"title",cross.place.title,@"description",cross.place.place_description,@"lat",cross.place.lat, @"lng",cross.place.lng,@"external_id",cross.place.external_id,@"provider",cross.place.provider, nil];
         [self setPlace:placedict];
         
         crossdescription.text=cross.cross_description;
@@ -691,13 +704,14 @@
     [gathertoolbar release];
     [rsvptoolbar release];
     [myrsvptoolbar release];
+    [ccbuttonText release];
     if(rsvpbutton)
         [rsvpbutton release];
     [containview release];
     [backgroundview release];
     [containcardview release];
     [crossdescbackimg release];
-    [conversationView release];
+//    [conversationView release];
     [super dealloc];
 }
 - (void)didReceiveMemoryWarning
@@ -727,6 +741,7 @@
 - (void) ShowTimeView{
     TimeViewController *timeViewController=[[TimeViewController alloc] initWithNibName:@"TimeViewController" bundle:nil];
     timeViewController.gatherview=self;
+    [timeViewController setDateTime:datetime];
     [self presentModalViewController:timeViewController animated:YES];
     [timeViewController release];
 }
@@ -761,15 +776,25 @@
 - (int) exfeeIdentitiesCount{
     return [exfeeIdentities count];
 }
+- (void) savePlace:(NSDictionary*)placedict{
+    [self setPlace:placedict];
+    if(viewmode==YES){
+        if(cross!=nil){
+            cross.place=place;
+            [self saveCrossUpdate];
+        }
+    }
+}
 
 - (void) setPlace:(NSDictionary*)placedict{
     Place *_place=[Place object];
     NSNumber *lat=[placedict objectForKey:@"lat"];
+    NSNumber *place_id=[placedict objectForKey:@"place_id"];
     NSNumber *lng=[NSNumber numberWithDouble:[[placedict objectForKey:@"lng"] doubleValue]];
         
     _place.lat= lat;
     _place.lng= lng;
-    
+    _place.place_id=place_id;
     _place.title=[placedict objectForKey:@"title"];
     _place.place_description =[placedict objectForKey:@"description"];
     _place.external_id=[placedict objectForKey:@"external_id"];
@@ -785,8 +810,8 @@
     placetitle.text=_place.title;
     placedesc.text=_place.place_description;
 
-    if(viewmode==NO)
-        [self reArrangeViews];
+//    if(viewmode==NO)
+    [self reArrangeViews];
     if(place!=nil) {
         CLLocationCoordinate2D location;
         [map removeAnnotations: map.annotations];
@@ -799,14 +824,27 @@
         [map setRegion:region animated:NO];
         mapbox.image=[UIImage imageNamed:@"map_area.png"];
     }
+    
 }
-
+- (void) saveDateTime:(CrossTime*)crosstime{
+    [self setDateTime:crosstime];
+    if(viewmode==YES){
+        if(cross!=nil){
+            cross.time=datetime;
+            [self saveCrossUpdate];
+        }
+    }
+}
 - (void) setDateTime:(CrossTime*)crosstime{
-    timetitle.text=[Util getTimeTitle:crosstime localTime:NO];
-    timedesc.text=[Util getTimeDesc:crosstime];
+    if(crosstime==nil){
+        timetitle.text=@"Sometime";
+        timedesc.text=@"";
+    }else{
+        timetitle.text=[Util getTimeTitle:crosstime localTime:NO];
+        timedesc.text=[Util getTimeDesc:crosstime];
+    }
     datetime=crosstime;
-    if(viewmode==NO)
-        [self reArrangeViews];
+    [self reArrangeViews];
 }
 
 - (void) pullcontainviewDown{
@@ -820,39 +858,43 @@
     }
 }
 - (void) toconversation{
-    if(conversationView.view.isHidden==YES)
+    conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
+    conversationView.exfee_id=[cross.exfee.exfee_id intValue];
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSSet *invitations=cross.exfee.invitations;
+    if(invitations !=nil&&[invitations count]>0)
     {
-        [conversationView.view setHidden:NO];
-        [conversationView refreshConversation];
-        cross.conversation_count=0;
-        NSError *saveError;
-        [[Cross currentContext] save:&saveError];
-        
-        for(id viewcontroller in self.navigationController.viewControllers)
-        {
-            if([viewcontroller isKindOfClass:[CrossesViewController class]])
-            {
-                [viewcontroller refreshCell];
-            }
-        }
-        [UIView transitionFromView:self.view toView:conversationView.view duration:1 options:UIViewAnimationOptionTransitionFlipFromLeft completion:nil];
+        for(Invitation* invitation in invitations)
+            if([invitation.identity.connected_user_id intValue]==app.userid)
+                conversationView.identity=invitation.identity;
     }
-    else {
-        [UIView transitionFromView:conversationView.view toView:self.view duration:1 options:UIViewAnimationOptionTransitionFlipFromRight completion:nil];
-        [conversationView.view setHidden:YES];
-    }
+    cross.conversation_count=0;
+    NSError *saveError;
+    [[Cross currentContext] save:&saveError];
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+    [crossViewController refreshTableViewWithCrossId:[cross.cross_id intValue]];
+    
+    [UIView beginAnimations:@"View Flip" context:nil];
+    [UIView setAnimationDuration:0.80];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationTransition:
+     UIViewAnimationTransitionFlipFromRight
+                           forView:self.navigationController.view cache:NO];
+    [self.navigationController pushViewController:conversationView animated:NO];
+    [UIView commitAnimations];
 }
 - (void) ShowMyRsvpToolBar{
     if(myrsvptoolbar==nil){
         myrsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, 460-44-50) buttonsize:CGSizeMake(20, 20) delegate:self];
 
-        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"I'm in" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(0, 6, 107, 30)];
+        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"I'm in" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(0, 0, 107, 50)];
         [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
         
-        EXButton *interested=[[EXButton alloc] initWithName:@"interested" title:@"Interested" image:[UIImage imageNamed:@"rsvp_interested_toolbar.png"] inFrame:CGRectMake(107, 6, 107, 30)];
+        EXButton *interested=[[EXButton alloc] initWithName:@"interested" title:@"Interested" image:[UIImage imageNamed:@"rsvp_interested_toolbar.png"] inFrame:CGRectMake(107, 0, 107, 50)];
         [interested addTarget:self action:@selector(rsvpinterested) forControlEvents:UIControlEventTouchUpInside];
         
-        EXButton *decline=[[EXButton alloc] initWithName:@"decline" title:@"Decline" image:[UIImage imageNamed:@"rsvp_unavailable_toolbar.png"] inFrame:CGRectMake(214, 6, 107, 30)];
+        EXButton *decline=[[EXButton alloc] initWithName:@"decline" title:@"Decline" image:[UIImage imageNamed:@"rsvp_unavailable_toolbar.png"] inFrame:CGRectMake(214, 0, 107, 50)];
         [decline addTarget:self action:@selector(rsvpdeclined) forControlEvents:UIControlEventTouchUpInside];
 
         NSArray *array=[NSArray arrayWithObjects:interested,accept,decline, nil];
@@ -874,29 +916,42 @@
     if(rsvptoolbar==nil){
         rsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, 460-44-50) buttonsize:CGSizeMake(20, 20) delegate:self];
 
-        EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"-1 mate" image:[UIImage imageNamed:@"rsvp_mates_minus_toolbar.png"] inFrame:CGRectMake(14, 6, 44, 30)];
+        EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"-1 mate" image:[UIImage imageNamed:@"rsvp_mates_minus_toolbar.png"] inFrame:CGRectMake(0, 0, 44+14, 50)];
+        [submate setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
         [submate addTarget:self action:@selector(rsvpsubmate) forControlEvents:UIControlEventTouchUpInside];
         [submate setTitle:@"" forState:UIControlStateNormal];
-        EXButton *addmate=[[EXButton alloc] initWithName:@"addmate" title:@"+1 mate" image:[UIImage imageNamed:@"rsvp_mates_plus_toolbar.png"] inFrame:CGRectMake(58, 6, 44, 30)];
+        submate.setInset=YES;
+        [submate setImageEdgeInsets:UIEdgeInsetsMake(6, 0, 14, 0)];
+        
+        EXButton *addmate=[[EXButton alloc] initWithName:@"addmate" title:@"+1 mate" image:[UIImage imageNamed:@"rsvp_mates_plus_toolbar.png"] inFrame:CGRectMake(58, 0, 44+14, 50)];
+        [addmate setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
         [addmate addTarget:self action:@selector(rsvpaddmate) forControlEvents:UIControlEventTouchUpInside];
         [addmate setTitle:@"" forState:UIControlStateNormal];
+        [addmate setImageEdgeInsets:UIEdgeInsetsMake(6, 0, 14, 0)];
+        addmate.setInset=YES;
         
-        UILabel *hint=[[UILabel alloc] initWithFrame:CGRectMake(44, 30+6, 44, 14)];
+        UILabel *hint=[[UILabel alloc] initWithFrame:CGRectMake(38, 36, 44, 14)];
         hint.text=@"Mates";
         [hint setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:10]];
+//        CGSize hinttextrect=[hint.text sizeWithFont:hint.font];
+//        CGRect hintframe=[hint frame];
+//        hintframe.size.height=hinttextrect.height;
+        
+//        hinttextrect.height
+        
         [hint setBackgroundColor:[UIColor clearColor]];
         hint.textAlignment=UITextAlignmentCenter;
         [hint setTextColor:FONT_COLOR_250];
         [rsvptoolbar addSubview:hint];
         [hint release];
 
-        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(116, 6, 68, 30)];
+        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(116, 0, 68, 50)];
         [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
 
-        EXButton *ignore=[[EXButton alloc] initWithName:@"ignore" title:@"Pending" image:[UIImage imageNamed:@"rsvp_pending_toolbar.png"] inFrame:CGRectMake(184, 6, 68, 30)];
+        EXButton *ignore=[[EXButton alloc] initWithName:@"ignore" title:@"Pending" image:[UIImage imageNamed:@"rsvp_pending_toolbar.png"] inFrame:CGRectMake(184, 0, 68, 50)];
         [ignore addTarget:self action:@selector(rsvpinterested) forControlEvents:UIControlEventTouchUpInside];
 
-        EXButton *decline=[[EXButton alloc] initWithName:@"decline" title:@"Unavailable" image:[UIImage imageNamed:@"rsvp_unavailable_toolbar.png"] inFrame:CGRectMake(252, 6, 68, 30)];
+        EXButton *decline=[[EXButton alloc] initWithName:@"decline" title:@"Unavailable" image:[UIImage imageNamed:@"rsvp_unavailable_toolbar.png"] inFrame:CGRectMake(252, 0, 68, 50)];
         [decline addTarget:self action:@selector(rsvpdeclined) forControlEvents:UIControlEventTouchUpInside];
 
         NSArray *array=[NSArray arrayWithObjects:submate,addmate,ignore,accept,decline, nil];
@@ -915,8 +970,10 @@
 
 - (void) ShowRsvpButton{
     [rsvptoolbar setHidden:YES];
-    if(rsvpbutton)
+    if(rsvpbutton){
+        [rsvpbutton removeFromSuperview];
         [rsvpbutton release];
+    }
     Invitation *myInvitation=[self getMyInvitation];
     if(myInvitation && ![myInvitation.rsvp_status isEqualToString:@"NORESPONSE"])
     {
@@ -928,7 +985,7 @@
         else if([myInvitation.rsvp_status isEqualToString:@"DECLINED"])
             buttonimgname=@"rsvp_unavailable_toolbar.png";
         
-        rsvpbutton=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:buttonimgname] inFrame:CGRectMake(self.view.frame.size.width/2-30, 460-44, 60, 30)];
+        rsvpbutton=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:buttonimgname] inFrame:CGRectMake(self.view.frame.size.width/2-30, 460-44, 60, 44)];
         CGRect rect=[rsvpbutton frame];
         float y=460-44-30;
         [rsvpbutton setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"toolbar_bg.png"]]];
@@ -943,29 +1000,34 @@
         [myrsvptoolbar setHidden:YES];
     }
     else{
-        CGRect rect=[myrsvptoolbar frame];
-        [myrsvptoolbar setHidden:NO];
-
+//        CGRect rect=[myrsvptoolbar frame];
+//        [myrsvptoolbar setHidden:NO];
+        [self ShowMyRsvpToolBar];
 //        [UIView beginAnimations:nil context:NULL];
 //        [UIView setAnimationDuration:0.3];
 
-        [myrsvptoolbar setHidden:NO];
+//        [myrsvptoolbar setHidden:NO];
     }
 }
 - (void) ShowGatherToolBar{
+    if(rsvpbutton)
+        [rsvpbutton setHidden:YES];
+    if(rsvptoolbar)
+        [rsvptoolbar setHidden:YES];
     if(gathertoolbar==nil){
         gathertoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, self.view.frame.size.height-50) buttonsize:CGSizeMake(20, 20) delegate:self];
-        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(35, 6, 36, 30)];
+        
+        EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(35, 0, 44, 50)];
         [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
         
-        EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"-1 mate" image:[UIImage imageNamed:@"rsvp_mates_minus_toolbar.png"] inFrame:CGRectMake(35+36+45, 6, 44, 30)];
+        EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"-1 mate" image:[UIImage imageNamed:@"rsvp_mates_minus_toolbar.png"] inFrame:CGRectMake(35+36+45, 0, 44, 50)];
         [submate addTarget:self action:@selector(rsvpsubmate) forControlEvents:UIControlEventTouchUpInside];
         [submate setTitle:@"" forState:UIControlStateNormal];
-        EXButton *addmate=[[EXButton alloc] initWithName:@"addmate" title:@"+1 mate" image:[UIImage imageNamed:@"rsvp_mates_plus_toolbar.png"] inFrame:CGRectMake(35+36+45+44, 6, 44, 30)];
+        EXButton *addmate=[[EXButton alloc] initWithName:@"addmate" title:@"+1 mate" image:[UIImage imageNamed:@"rsvp_mates_plus_toolbar.png"] inFrame:CGRectMake(35+36+45+44, 0, 44, 50)];
         [addmate addTarget:self action:@selector(rsvpaddmate) forControlEvents:UIControlEventTouchUpInside];
         [addmate setTitle:@"" forState:UIControlStateNormal];
         
-        EXButton *remove=[[EXButton alloc] initWithName:@"remove" title:@"Remove" image:[UIImage imageNamed:@"remove_toolbar.png"] inFrame:CGRectMake(35+36+45+44+44+45, 6, 36, 30)];
+        EXButton *remove=[[EXButton alloc] initWithName:@"remove" title:@"Remove" image:[UIImage imageNamed:@"remove_toolbar.png"] inFrame:CGRectMake(35+36+45+44+44+45, 0, 44, 50)];
         [remove addTarget:self action:@selector(rsvpremove) forControlEvents:UIControlEventTouchUpInside];
         NSArray *array=[NSArray arrayWithObjects:accept,submate,addmate,remove, nil];
         [gathertoolbar drawButton:array];
@@ -999,7 +1061,7 @@
         idx++;
     }
     if(isAllAccept==YES)
-        [gathertoolbar replaceButtonImage:[UIImage imageNamed:@"rsvp_accept_toolbar_grey.png"] title:@"Un-accept" target:self action:@selector(rsvpunaccept) forname:@"accept"];
+        [gathertoolbar replaceButtonImage:[UIImage imageNamed:@"rsvp_accept_toolbar_grey.png"] title:@"Pending" target:self action:@selector(rsvpunaccept) forname:@"accept"];
     else
         [gathertoolbar replaceButtonImage:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] title:@"Accept" target:self action:@selector(rsvpaccept) forname:@"accept"];
     [gathertoolbar setHidden:NO];
@@ -1017,30 +1079,124 @@
     }
     return nil;
 }
+
 - (void) setExfeeNum{
-    NSString *total=[cross.exfee.total stringValue];
-    NSString *accepted=[cross.exfee.accepted stringValue];
+    int all=0;
+    int accept=0;
+    NSArray *exfee=exfeeIdentities;
+    if(exfee==nil || [exfee count] == 0)
+        exfee=[cross.exfee.invitations allObjects];
+    for(Invitation *invitation in exfee) {
+        all+=[invitation.mates intValue]+1;
+        if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+            accept+=[invitation.mates intValue]+1;
+    }
+    NSString *total=[[NSNumber numberWithInt:all] stringValue]; //[cross.exfee.total stringValue];
+    NSString *accepted=[[NSNumber numberWithInt:accept] stringValue]; //[cross.exfee.accepted stringValue];
     
     
     NSMutableAttributedString * exfeestr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ / %@",accepted,total]];
     
-    [exfeestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:FONT_COLOR_HL range:NSMakeRange(0,accepted.length)];
-    [exfeestr addAttribute:(NSString*)kCTFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:21] range:NSMakeRange(0,accepted.length)];
+    [exfeestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0,accepted.length)];
+    [exfeestr addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL) range:NSMakeRange(0,accepted.length)];
+    [exfeestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor blackColor].CGColor range:NSMakeRange(accepted.length,exfeestr.length-accepted.length)];
+    [exfeestr addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 13.0, NULL) range:NSMakeRange(accepted.length,exfeestr.length-accepted.length)];
+
+    CTTextAlignment alignment = kCTRightTextAlignment;
+    CTParagraphStyleSetting linesetting[1] = {
+//        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
+//        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
+        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
+    };
     
-    [exfeestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(accepted.length,exfeestr.length-accepted.length)];
-    [exfeestr addAttribute:(NSString*)kCTFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:13] range:NSMakeRange(accepted.length,exfeestr.length-accepted.length)];
-    
-    exfeenum.text=exfeestr.string;
+    CTParagraphStyleRef linestyle = CTParagraphStyleCreate(linesetting, 1);
+    [exfeestr addAttribute:(id)kCTParagraphStyleAttributeName value:(id)linestyle range:NSMakeRange(0,[exfeestr length])];
+    exfeenum.attributedText=exfeestr;
+    [exfeenum setNeedsDisplay];
+}
+- (void)saveCrossUpdate{
+    NSError *error;
+    NSString *json = [[RKObjectSerializer serializerWithObject:cross mapping:[[APICrosses getCrossMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
+    if(!error){
+        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+        RKClient *client = [RKClient sharedClient];
+        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+        NSString *endpoint = [NSString stringWithFormat:@"/crosses/%u/edit?token=%@",[cross.cross_id intValue],app.accesstoken];
+        [client post:endpoint usingBlock:^(RKRequest *request){
+            request.method=RKRequestMethodPOST;
+            request.params=[RKRequestSerialization serializationWithData:[json dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
+            request.onDidLoadResponse=^(RKResponse *response){
+                if (response.statusCode == 200) {
+                    [app CrossUpdateDidFinish];
+                }else {
+                    //Check Response Body to get Data!
+                }
+                
+            };
+            request.onDidFailLoadWithError=^(NSError *error){
+//                NSLog(@"%@",error);
+            };
+            request.delegate=self;
+        }];
+    }
+}
+
+- (void) didlongpress:(UILongPressGestureRecognizer*)sender{
+    CGPoint location = [sender locationInView:sender.view];
+    if(viewmode==YES)
+    {
+        if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
+        {
+            [crosstitle resignFirstResponder];
+            [map becomeFirstResponder];
+            
+            [self ShowPlaceView];
+        }
+        
+        if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))
+        {
+            [self ShowTimeView];
+        }
+        if (CGRectContainsPoint([exfeeShowview frame], location))
+        {
+            [self setExfeeViewMode:YES];
+        }
+    }
+}
+- (void) setExfeeViewMode:(BOOL)edit{
+    if(edit==YES)
+    {
+        exfeeedit=YES;
+        [exfeeShowview ShowAddButton];
+        [rsvptoolbar setHidden:YES];
+        [rsvpbutton setHidden:YES];
+        [myrsvptoolbar setHidden:YES];
+        BOOL isSelect=NO;
+        for(NSNumber *number in exfeeSelected){
+            if([number boolValue]==YES)
+                isSelect=YES;
+        }
+        if(isSelect==YES){
+            [self ShowGatherToolBar];
+        }
+    }
 }
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
-    if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
+    if(viewmode==NO)
     {
-        [self ShowPlaceView];
-    }
-    if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))
-    {
-        [self ShowTimeView];
+        if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
+        {
+            [crosstitle resignFirstResponder];
+            [map becomeFirstResponder];
+
+            [self ShowPlaceView];
+        }
+        
+        if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))
+        {
+            [self ShowTimeView];
+        }
     }
     if (CGRectContainsPoint([exfeeShowview frame], location))
     {
@@ -1061,20 +1217,17 @@
     if(touch.phase == UITouchPhaseBegan) {
         if (CGRectContainsPoint([placetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([placedesc frame], [touch locationInView:self.view]))
         {
+            [crosstitle resignFirstResponder];
+            [map becomeFirstResponder];
             [self ShowPlaceView];
         }
         if (CGRectContainsPoint([timetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([timedesc frame], [touch locationInView:self.view]))
         {
+            [crosstitle resignFirstResponder];
+            [timetitle becomeFirstResponder];
             [self ShowTimeView];
         }
-
-        
-        [crosstitle resignFirstResponder];
-//        [exfeeInput resignFirstResponder];
-        [map becomeFirstResponder];
-//        [self ShowExfeeInput:NO];
     }
-//    NSLog(@"click view");
 }
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
     float KEYBOARD_LANDSCAPE=216;
@@ -1120,10 +1273,40 @@
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
     return [exfeeIdentities count];
 }
-- (Invitation *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
+- (EXImagesItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
+    EXImagesItem *item=[[[EXImagesItem alloc] init] autorelease];
     Invitation *invitation =[exfeeIdentities objectAtIndex:index];
-//    Identity *identity=invitation.identity;
-    return invitation;
+    Identity *identity=invitation.identity;
+    UIImage *img=[[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
+    if(img!=nil)
+        item.avatar=img;
+    else{
+        item.avatar=[UIImage imageNamed:@"portrait_default.png"];
+        if(identity.avatar_filename!=nil) {
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+                UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+                        item.avatar=avatar;
+                        [item setNeedsDisplay];
+                    }
+                });
+            });
+            dispatch_release(imgQueue);
+        }
+    }
+    
+    item.isHost=[invitation.host boolValue];
+    item.mates=[invitation.mates intValue];
+    item.rsvp_status=invitation.rsvp_status;
+    NSString *name=identity.name;
+    if(name==nil)
+        name=identity.external_username;
+    if(name==nil)
+        name=identity.external_id;
+    item.name=name;
+    return item;
 }
 - (NSArray *) selectedOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
     return exfeeSelected;
@@ -1132,7 +1315,6 @@
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
 
     [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
-//    [map setFrame:CGRectMake(map.frame.origin.x,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,map.frame.size.width,map.frame.size.height)];
     [exfeeShowview calculateColumn];
     if(viewmode==NO)
         [self reArrangeViews];
@@ -1141,12 +1323,11 @@
 
 #pragma mark EXImagesCollectionView delegate methods
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
-
     if(index==[exfeeIdentities count])
     {
+        if(viewmode==YES && exfeeedit==NO)
+            return;
         [self ShowGatherToolBar];
-//        if(gathertoolbar)
-//            [gathertoolbar setHidden:YES];
         [self ShowExfeeView];
     }
     else if(index <[exfeeIdentities count]){
@@ -1154,7 +1335,13 @@
         [crosstitle resignFirstResponder];
         [crosstitle endEditing:YES];
         
-        [exfeeSelected replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:![[exfeeSelected objectAtIndex:index] boolValue]]];
+        BOOL select_status=[[exfeeSelected objectAtIndex:index] boolValue];
+        
+        
+        for( int i=0;i<[exfeeSelected count];i++){
+            [exfeeSelected replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:NO]];
+        }
+        [exfeeSelected replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:!select_status]];
         [exfeeShowview reloadData];
         BOOL isSelect=NO;
         for(NSNumber *number in exfeeSelected){
@@ -1166,11 +1353,9 @@
             CGRect f=imageCollectionView.frame;
             float x=f.origin.x+rect.origin.x+rect.size.width/2;
             float y=f.origin.y+rect.origin.y;
-            
-            
             Invitation *invitation=[exfeeIdentities objectAtIndex:index];
             [self ShowExfeePopOver:invitation pointTo:CGPointMake(x,y) arrowx:rect.origin.x+rect.size.width/2+f.origin.x];
-            if(viewmode==YES){
+            if(viewmode==YES && exfeeedit==NO){
                 [self ShowRsvpToolBar];
             }
             else
@@ -1178,9 +1363,11 @@
         }
         else
         {
-            if(viewmode==YES)
+            if(viewmode==YES&& exfeeedit==NO)
                 [self ShowRsvpButton];
-//            else
+            else if(exfeeedit==YES)
+                [gathertoolbar setHidden:YES];
+                //            else
 //                [self ShowRsvpToolBar];
         }
     }
@@ -1227,6 +1414,8 @@
             RKParams* rsvpParams = [RKParams params];
             [rsvpParams setValue:[postarray JSONString] forParam:@"rsvp"];
             RKClient *client = [RKClient sharedClient];
+            [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+
             NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/rsvp?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
             [client post:endpoint usingBlock:^(RKRequest *request){
                 request.method=RKRequestMethodPOST;
@@ -1239,8 +1428,8 @@
                             if(code)
                                 if([code intValue]==200) {
                                     [self refreshExfeePopOver];
-
                                     [exfeeShowview reloadData];
+                                    [self setExfeeNum];
 //                                    NSLog(@"send rsvp ok!");
                                 }
                         }
@@ -1265,12 +1454,21 @@
                 request.delegate=self;
             }];
         }
+        else{
+            [self refreshExfeePopOver];
+            [exfeeShowview reloadData];
+            [self setExfeeNum];
+            [self ShowGatherToolBar];
+
+        }
+
     }
 //    [exfeeShowview reloadData];
 //    [self ShowGatherToolBar];
 }
 - (void) setMates:(int)mates{
-
+    NSError* error = nil;
+    
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 
     NSNumber *by_identity_id=[NSNumber numberWithInt:0];
@@ -1286,9 +1484,10 @@
             if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
                 selected=YES;
                 if(i<[exfeeIdentities count]) {
-                    for(Invitation *invitation in cross.exfee.invitations)
+                    for(Invitation *invitation in exfeeIdentities)
                     {
                         Invitation *selectedinvitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
+                        
                         if([invitation.invitation_id intValue]==[selectedinvitation.invitation_id intValue]){
                             if(mates!=0){
                                 int mates_result=[invitation.mates intValue]+mates;
@@ -1306,14 +1505,12 @@
         if(viewmode==YES)
         {
             RKParams* rsvpParams = [RKParams params];
-            
             NSDictionary *exfee_dict=[ObjectToDict ExfeeDict:cross.exfee];
-            NSLog(@"%@",[exfee_dict JSONString]);
             [rsvpParams setValue:[exfee_dict JSONString] forParam:@"exfee"];
             [rsvpParams setValue:[self getMyInvitation].identity.identity_id forParam:@"by_identity_id"];
             RKClient *client = [RKClient sharedClient];
+            [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
             NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/edit?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
-            
             [client post:endpoint usingBlock:^(RKRequest *request){
                 request.method=RKRequestMethodPOST;
                 request.params=rsvpParams;
@@ -1325,32 +1522,32 @@
                             if(code)
                                 if([code intValue]==200) {
                                     [self refreshExfeePopOver];
-                                    
                                     [exfeeShowview reloadData];
-                                    //                                    NSLog(@"send rsvp ok!");
+                                    [self setExfeeNum];
                                 }
                         }
-                        //We got an error!
                     }else {
                         //Check Response Body to get Data!
                     }
-//                    if(selected==NO)
-//                        [self ShowRsvpButton];
-//                    else
-//                        [self ShowRsvpToolBar];
                     
                 };
                 request.onDidFailLoadWithError=^(NSError *error){
                     NSLog(@"%@",error);
-//                    if(selected==NO)
-//                        [self ShowMyRsvpToolBar];
-//                    else
-//                        [self ShowRsvpToolBar];
                     
                 };
                 request.delegate=self;
             }];
         }
+        else{
+            [self refreshExfeePopOver];
+            [exfeeShowview reloadData];
+            [self setExfeeNum];
+        }
+    }else{
+        [self refreshExfeePopOver];
+        [exfeeShowview reloadData];
+        [self setExfeeNum];
+
     }
 
 }

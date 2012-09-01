@@ -9,14 +9,20 @@
 #import "EXImagesCollectionView.h"
 
 @implementation EXImagesCollectionView
+@synthesize maxColumn;
+@synthesize maxRow;
+@synthesize imageWidth;
+@synthesize imageHeight;
+@synthesize nameHeight;
+@synthesize imageXmargin;
+@synthesize imageYmargin;
+@synthesize itemsCache;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
     }
-    
     [self initData];
     taghost=[UIImage imageNamed:@"tag-host.png"];
     avatareffect=[UIImage imageNamed:@"avatar_effect.png"];
@@ -33,7 +39,22 @@
     rsvp_pending_badge=[UIImage imageNamed:@"rsvp_pending_badge.png"];
     rsvp_unavailable_badge=[UIImage imageNamed:@"rsvp_unavailable_badge.png"];
 
-    hiddenAddButton=NO;
+//    hiddenAddButton=NO;
+    itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
+    maskview=[[EXCollectionMask alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+    [maskview setBackgroundColor:[UIColor clearColor]];
+    maskview.imageWidth=imageWidth;
+    maskview.imageHeight=imageHeight;
+    maskview.nameHeight=nameHeight;
+    maskview.imageXmargin=imageXmargin;
+    maskview.imageYmargin=imageYmargin;
+    maskview.maxColumn=maxColumn;
+    maskview.maxRow=maxRow;
+    maskview.hiddenAddButton=NO;
+    
+    
+    [self addSubview:maskview];
+    [self bringSubviewToFront:maskview];
     return self;
 }
 
@@ -89,105 +110,31 @@
     maxColumn=(self.frame.size.width-imageWidth)/(imageWidth+imageXmargin*2)+1;
     maxRow=(self.frame.size.height-(imageHeight+nameHeight))/(imageHeight+nameHeight+imageYmargin*2)+1;
 }
-
+- (void) setFrame:(CGRect)frame{
+    [super setFrame:frame];
+    [maskview setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+}
 - (void)drawRect:(CGRect)rect
 {
-    int x_count=0;
-    int y_count=0;
-    int count=[_dataSource numberOfimageCollectionView:self];
-    NSArray *selected=[_dataSource selectedOfimageCollectionView:self];
-    
-    for(int i=0;i<count;i++)
-    {
-        if( x_count==maxColumn){
-            x_count=0;
-            y_count++;
-        }
-        int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
-        int y=y_count*(imageHeight+15+imageYmargin)+imageYmargin;
 
-        BOOL isSelected=[[selected objectAtIndex:i] boolValue];
-        
-        Invitation *invitation=[_dataSource imageCollectionView:self imageAtIndex:i];
-        Identity *identity=invitation.identity;
-        
-        UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-
-        if(avatar==nil || [avatar isEqual:[NSNull null]]){
-            avatar=[ImgCache getDefaultImage];
-        }
-
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(x,y,imageWidth,imageHeight) cornerRadius:3];
-        CGContextRef currentContext = UIGraphicsGetCurrentContext();
-        CGContextSaveGState(currentContext);
-        CGContextBeginPath(currentContext);
-        CGContextAddPath(currentContext, maskPath.CGPath);
-        CGContextClosePath(currentContext);
-        CGContextClip(currentContext);
-        [avatar drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
-        [avatareffect drawInRect:CGRectMake(x,y,imageWidth,imageHeight)];
-
-        CGContextRestoreGState(currentContext);
-        
-        if([invitation.host boolValue]==YES)
-            [exfee_frame drawInRect:CGRectMake(x-1, y-1, 42, 42)];
-//            [taghost drawInRect:CGRectMake(x+imageWidth-12, y, 12, 12)];
-        int mates=[invitation.mates intValue];
-        if(mates>0)
-        {
-            [exfee_frame_mates drawInRect:CGRectMake(x-3, y-3, 46, 44)];
-//            [[UIColor whiteColor] set];
-//            [tagmates drawInRect:CGRectMake(x, y, 12, 12)];
-//            NSString *mates=[invitation.mates stringValue];
-//            [mates drawInRect:CGRectMake(x+6, y, 12, 12) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:10]];
-//            [@"+" drawInRect:CGRectMake(x, y, 12, 12) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:10]];
-        }
-        if(isSelected==YES)
-        {
-            if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
-                [rsvp_accept_badge drawInRect:CGRectMake(x-4, y-4, 52, 52)];
-            else if([invitation.rsvp_status isEqualToString:@"INTERESTED"])
-                [rsvp_interested_badge drawInRect:CGRectMake(x-4, y-4, 52, 52)];
-            else if([invitation.rsvp_status isEqualToString:@"NORESPONSE"])
-                [rsvp_pending_badge drawInRect:CGRectMake(x-4, y-4, 52, 52)];
-            else if([invitation.rsvp_status isEqualToString:@"DECLINED"])
-                [rsvp_unavailable_badge drawInRect:CGRectMake(x-4, y-4, 52, 52)];
-            
-        }
-
-//        if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
-//            [tagrsvpaccepted drawInRect:CGRectMake(x+imageWidth-12, y+imageHeight-12, 12, 12)];
-
-        NSString *name=identity.name;
-        if(name==nil)
-            name=identity.external_username;
-        if(name==nil)
-            name=identity.external_id;
-        if(name!=nil){
-            [[UIColor blackColor] set];
-            [name drawInRect:CGRectMake(x, y+imageHeight, imageWidth, 15) withFont:[UIFont fontWithName:@"HelveticaNeue" size:11] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
-        }
-        x_count++;
-    }
-
-    if( x_count==maxColumn){
-        x_count=0;
-        y_count++;
-    }
-
-    if(hiddenAddButton==NO)
-        if(count<maxColumn*maxRow) {
-            int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
-            int y=y_count*(imageHeight+imageYmargin+15)+imageYmargin;
-            
-            [addexfee drawInRect:CGRectMake(x,y,140,40)];
-        }
 }
 - (void) HiddenAddButton{
-    hiddenAddButton=YES;
+    maskview.hiddenAddButton=YES;
+    [maskview setNeedsDisplay];
+}
+- (void) ShowAddButton{
+    maskview.hiddenAddButton=NO;
+    [maskview setNeedsDisplay];
+    
 }
 - (void) reloadData{
-
+    for(UIView *view in self.subviews){
+        if([view isKindOfClass:[EXImagesItem class]])
+            [view removeFromSuperview];
+    }
+    [itemsCache removeAllObjects];
+    [itemsCache release];
+    itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
     int count=[_dataSource numberOfimageCollectionView:self];
     if(count >maxColumn*maxRow-1)
     {
@@ -209,7 +156,46 @@
         if(new_height!=self.frame.size.height)
             [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
     }
+
+    int x_count=0;
+    int y_count=0;
+    NSArray *selected=[_dataSource selectedOfimageCollectionView:self];
+    for(int i=0;i<count;i++)
+    {
+        if( x_count==maxColumn){
+            x_count=0;
+            y_count++;
+        }
+        int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
+        int y=y_count*(imageHeight+15+imageYmargin)+imageYmargin;
+        BOOL isSelected=[[selected objectAtIndex:i] boolValue];
+        EXImagesItem *item=[itemsCache objectForKey:[NSNumber numberWithInt:i]];
+        if(item==nil)
+        {
+            EXImagesItem *item=[_dataSource imageCollectionView:self imageAtIndex:i];
+            item.isSelected=isSelected;
+            [item setFrame:CGRectMake(x, y, imageWidth, imageHeight+15)];
+            [item setBackgroundColor:[UIColor clearColor]];
+            [itemsCache setObject:item forKey:[NSNumber numberWithInt:i]];
+            [self addSubview:item];
+            [self sendSubviewToBack:item];
+
+        }
+        else{
+            [item setNeedsDisplay];
+        }
+  
+        x_count++;
+    }
+    //
+    if( x_count==maxColumn){
+        x_count=0;
+        y_count++;
+    }
+    //
     [self setNeedsDisplay];
+    maskview.itemsCache=itemsCache;
+    [maskview setNeedsDisplay];
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch *touch in touches) {

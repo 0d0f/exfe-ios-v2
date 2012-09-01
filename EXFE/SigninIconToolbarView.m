@@ -16,14 +16,6 @@
     if (self) {
         if([style isEqualToString:@"landing"])
         {
-            UIImage *signbtn_backimg = [UIImage imageNamed:@"signinbar_btnbg.png"];
-            UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 126, 31)];
-            backimg.image=signbtn_backimg;
-            backimg.contentMode=UIViewContentModeScaleToFill;
-            backimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
-            [self addSubview:backimg];
-            [backimg release];
-            
             signinbutton=[UIButton buttonWithType:UIButtonTypeCustom];
             [signinbutton setFrame:CGRectMake(14, 10, 126, 31)];
             [signinbutton setTitle:@"Start with email" forState:UIControlStateNormal];
@@ -31,8 +23,10 @@
             [signinbutton setTitleColor:FONT_COLOR_51 forState:UIControlStateNormal];
             [signinbutton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
             signinbutton.titleLabel.shadowOffset=CGSizeMake(0, 1);
+            [signinbutton setBackgroundImage:[[UIImage imageNamed:@"signinbar_btnbg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 15)] forState:UIControlStateNormal];
             
             [signinbutton addTarget:delegate action:@selector(SigninButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+            
             [self addSubview:signinbutton];
         }
         else if([style isEqualToString:@"signin"]){

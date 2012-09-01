@@ -103,11 +103,21 @@
         identitiesData=[[NSMutableArray alloc] initWithCapacity:2];
         
         NSString* imgName = user.avatar_filename; 
-        NSString *imgurl = [ImgCache getImgUrl:imgName];
         
-        UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
-        if(image!=nil && ![image isEqual:[NSNull null]])
-            [useravatar setImage:image];
+        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+        dispatch_async(imgQueue, ^{
+            UIImage *image=[[ImgCache sharedManager] getImgFrom:imgName];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(image!=nil && ![image isEqual:[NSNull null]]){
+                    [useravatar setImage:image];
+                    [useravatar setNeedsDisplay];
+                }
+
+            });
+        });
+        dispatch_release(imgQueue);
+
+        
         for (Identity *identity in user.identities)
         {
             if([identity.provider isEqualToString:@"iOSAPN"]|| [identity.provider isEqualToString:@"Android"])
@@ -179,7 +189,7 @@
     {
         if(identity.avatar_filename==nil || [identity.avatar_filename isEqualToString:@""] )
         {
-            UIImage *img = [UIImage imageNamed:@"default_avatar.png"];
+            UIImage *img = [UIImage imageNamed:@"portrait_default.png"];
             if((NSNull*)img!=[NSNull null])
                 [cell setAvartar:img];
         }
@@ -280,18 +290,13 @@
     if (section==1)
     if(footerView == nil) {
         footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 44)];
-        UIImage *btn_red_dark = [UIImage imageNamed:@"btn_red_dark_44.png"];
-        UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(200, 10, 100, 44)];
-        backimg.image=btn_red_dark;
-        backimg.contentMode=UIViewContentModeScaleToFill;
-        backimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
-        [footerView addSubview:backimg];
-        [backimg release];
 
         buttonsignout = [UIButton buttonWithType:UIButtonTypeCustom];
         [buttonsignout setTitle:@"Sign Out" forState:UIControlStateNormal];
         [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
         [buttonsignout setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
+        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
+
         
         [buttonsignout setFrame:CGRectMake(200, 10, 100, 44)];
         [buttonsignout setBackgroundColor:[UIColor clearColor]];

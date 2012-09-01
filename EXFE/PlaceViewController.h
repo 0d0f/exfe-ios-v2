@@ -14,13 +14,6 @@
 #import "GatherViewController.h"
 #import "EXPlaceEditView.h"
 
-
-//typedef NS_ENUM(NSInteger, EXPlaceViewStyle) {
-//    EXPlaceViewStyleDefault,
-//    EXPlaceViewStyleMap,
-//    EXPlaceViewStyleTableview,
-//    EXPlaceViewStyleEdit
-//};
 typedef enum {
     EXPlaceViewStyleDefault,
     EXPlaceViewStyleMap,
@@ -31,9 +24,11 @@ typedef enum {
 
 @interface PlaceViewController : UIViewController <CLLocationManagerDelegate,UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,UITextFieldDelegate,UIActionSheetDelegate>{
     CLLocationManager *locationManager;
+    UIView *toolbar;
     IBOutlet MKMapView *map;
-    IBOutlet UITextField *inputplace;
-    IBOutlet UIBarButtonItem *rightbutton;
+    UITextField *inputplace;
+//    IBOutlet UIBarButtonItem *rightbutton;
+    UIButton *rightbutton;
     NSArray* _places;
     NSArray* _annotations;
     UITableView* _tableView;
@@ -41,6 +36,8 @@ typedef enum {
     UIViewController *gatherview;
     EXPlaceEditView *placeedit;
     UIActionSheet *actionsheet;
+    UIImageView *inputbackgroundImage;
+    UIView *backgroundview;
     BOOL isedit;
     
     double editinginterval;
@@ -54,12 +51,12 @@ typedef enum {
     
 - (IBAction) Close:(id) sender;
 - (void) PlaceEditClose:(id) sender;
-- (IBAction)textDidChange:(UITextField*)textField;
-- (IBAction)editingDidBegan:(UITextField*)textField;
+- (void) textDidChange:(NSNotification*)notification;
+- (void) editingDidBegan:(NSNotification*)notification;
 - (void) reloadPlaceData:(NSArray*)places;
 - (void) drawMapAnnontations;
 - (void) selectOnMap:(id) sender;
-- (void) selectPlace:(int)index;
+- (void) selectPlace:(int)index editing:(BOOL)editing;
 - (void) addPlaceEdit:(NSDictionary*)place;
 - (void) getPlace;
 - (void) setRightButton:(NSString*) title Selector:(SEL)aSelector;

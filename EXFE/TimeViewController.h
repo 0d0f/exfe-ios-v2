@@ -20,12 +20,17 @@
     UITableView *_tableView;
     IBOutlet UIDatePicker *datepicker;
     NSArray* _times;
-    
+    UIView *toolbar;
+    UIView *lasttimeview;
+    CrossTime *_crosstime;
+    UIButton *lasttimebutton;
 }
 @property (nonatomic,retain) UIViewController* gatherview;
 
 - (IBAction) Done:(id) sender;
 - (void) saveDate:(NSString*) time_word;
+- (void) setDateTime:(CrossTime*)crosstime;
 - (void) cleanDate;
+- (void) uselasttime;
 //- (void) updateDate;
 @end

@@ -18,7 +18,7 @@
 
 @interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,RKObjectLoaderDelegate,UITableViewDelegate,UITableViewDataSource,EXBubbleScrollViewDelegate,UIScrollViewDelegate>{
     IBOutlet UITextField *exfeeInput;
-    IBOutlet UIToolbar *toolbar;
+    UIView *toolbar;
     NSMutableArray *suggestIdentities;
     UIViewController *gatherview;
     UITableView *suggestionTable;

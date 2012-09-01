@@ -63,5 +63,6 @@
 - (void) setSignupView;
 - (void) setSigninView;
 - (void) clearIdentity;
+- (void) checkInputIdentity;
 
 @end

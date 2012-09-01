@@ -42,6 +42,7 @@
     NSString *databaseName = DBNAME;
 #endif
     RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+    
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
     [APICrosses MappingCross];
@@ -52,6 +53,12 @@
     if(login==NO){
         [self ShowLanding];
     }
+    NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
+    if(!ifdevicetokenSave)
+    {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
+    }
+
     crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
 	self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
@@ -60,7 +67,10 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
     return YES;
 }
+-(void) deviceReg{
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
 
+}
 
 -(void)ShowLanding{
     LandingViewController *landingView=[[[LandingViewController alloc]initWithNibName:@"LandingViewController" bundle:nil]autorelease];
@@ -103,12 +113,12 @@
     if([self Checklogin]==YES)
     {
         [APICrosses MappingRoute];
-        NSString* devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"];
-        if(!devicetoken)
+//        NSString* devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"];
+        NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
+        if(!ifdevicetokenSave)
         {
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
         }
-        NSLog(@"SigninDidFinish");
 
         [(CrossesViewController*)crossviewController refreshCrosses:@"crossview"];
         [(CrossesViewController*)crossviewController initUI];
@@ -118,20 +128,109 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     
-//    NSString * tokenAsString = [[[deviceToken description] 
-//                                 stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] 
-//                                stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString * tokenAsString = [[[deviceToken description] 
+                                 stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]]
+                                stringByReplacingOccurrencesOfString:@" " withString:@""];
+    RKParams* rsvpParams = [RKParams params];
+    [rsvpParams setValue:tokenAsString forParam:@"udid"];
+    [rsvpParams setValue:tokenAsString forParam:@"push_token"];
+    [rsvpParams setValue:@"iOS" forParam:@"os_name"];
+    [rsvpParams setValue:@"apple" forParam:@"brand"];
+    [rsvpParams setValue:@"" forParam:@"model"];
+    [rsvpParams setValue:@"6" forParam:@"os_version"];
     
-//    BOOL reg=[api regDeviceToken:tokenAsString];
-//    if(reg==YES)
-//    {
-//        [[NSUserDefaults standardUserDefaults] setObject:@"YES"  forKey:@"devicetokenreg"];
-//        [[NSUserDefaults standardUserDefaults] setObject:tokenAsString  forKey:@"devicetoken"];
-//    }
+    RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+    
+    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/regdevice?token=%@",self.userid,self.accesstoken];
+    
+    [client post:endpoint usingBlock:^(RKRequest *request){
+        request.method=RKRequestMethodPOST;
+        request.params=rsvpParams;
+        request.onDidLoadResponse=^(RKResponse *response){
+            if (response.statusCode == 200) {
+                NSDictionary *body=[response.body objectFromJSONData];
+                if([body isKindOfClass:[NSDictionary class]]) {
+                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                    if(code)
+                        if([code intValue]==200) {
+                            //TODO: make sure the api response is ok.
+                            [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"ifdevicetokenSave"];
+//                            [self refreshExfeePopOver];
+//                            [exfeeShowview reloadData];
+                        }
+                }
+            }else {
+                //Check Response Body to get Data!
+            }
+            
+        };
+        request.onDidFailLoadWithError=^(NSError *error){
+            NSLog(@"%@",error);
+            
+        };
+    }];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
     NSLog(@"Error in registration. Error: %@", err);
+}
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    BOOL isForeground=TRUE;
+    if(application.applicationState != UIApplicationStateActive)
+        isForeground=FALSE;
+    [self ReceivePushData:userInfo RunOnForeground:isForeground];
+}
+
+- (void)ReceivePushData:(NSDictionary*)userInfo RunOnForeground:(BOOL)isForeground
+{
+    NSLog(@"%@",userInfo);
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+//
+    id cid=[[userInfo objectForKey:@"args"] objectForKey:@"cid"];
+    if([[userInfo objectForKey:@"args"] objectForKey:@"cid"] !=NULL && [[[userInfo objectForKey:@"args"] objectForKey:@"cid"] isKindOfClass:[NSNumber class]])
+    {
+        if([[[userInfo objectForKey:@"args"] objectForKey:@"cid"] intValue]>0 )
+        {
+            int cross_id=[[[userInfo objectForKey:@"args"] objectForKey:@"cid"] intValue];
+            NSString *type=[[userInfo objectForKey:@"args"] objectForKey:@"t"];
+            if([type isEqualToString:@"i"])
+                [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+//                [crossViewController refreshCrosses:@"pushtocross"];
+            if([type isEqualToString:@"c"])
+                [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+//                [crossViewController refreshCrosses:@"pushtoconversation"];
+//            dispatch_queue_t fetchDataQueue = dispatch_queue_create("fetch new data thread", NULL);
+
+            //
+//            dispatch_async(fetchDataQueue, ^{
+//                dispatch_async(dispatch_get_main_queue(), ^{
+////                    //                    NSLog(@"load new data complete, push view...");
+//                    if (isForeground != TRUE)
+//                    {
+////                        Cross *cross=[rootViewController getEventByCrossId:cross_id];
+////                        
+////                        if(cross!=nil)
+////                        {
+////                            EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil];
+////                            detailViewController.eventid=cross_id;
+////                            detailViewController.eventobj=cross;
+////                            [self.navigationController pushViewController:detailViewController animated:YES];
+////                            if([type isEqualToString:@"c"])
+////                                [detailViewController loadConversationData];
+////                            [detailViewController release]; 	
+////                        }
+//                    }
+//                });
+//            });
+//
+//            dispatch_release(fetchDataQueue);              
+            //fetch, then push controller in mainqueue
+//
+        }
+    }
 }
 
 
@@ -139,7 +238,10 @@
     [(CrossesViewController*)crossviewController refreshCrosses:@"gatherview"];
     [self.navigationController dismissModalViewControllerAnimated:YES];
 }
-
+-(void)CrossUpdateDidFinish{
+    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
+    
+}
 -(void)SignoutDidFinish{
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"access_token"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userid"];
@@ -167,7 +269,6 @@
     NSArray *viewControllers = app.navigationController.viewControllers;
     CrossesViewController *rootViewController = [viewControllers objectAtIndex:0];
     [rootViewController emptyView];
-    
     
 //    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
 //    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];

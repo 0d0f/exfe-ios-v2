@@ -385,7 +385,7 @@
 }
 + (NSString*) getBackgroundLink:(NSString*)imgname
 {
-    return [NSString stringWithFormat:@"http://img.exfe.com/xbgimage/%@_ios.jpg",imgname];
+    return [NSString stringWithFormat:@"http://%@/xbgimage/%@_ios.jpg",IMG_ROOT,imgname];
 }
 
 + (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius{
@@ -731,6 +731,11 @@
 
 + (NSString*) EXRelative:(CrossTime*)crosstime type:(NSString*)type localTime:(BOOL)localtime{
     return [self EXRelativeFromDateStr:crosstime.begin_at.date TimeStr:crosstime.begin_at.time type:type localTime:localtime];
+}
+
++ (BOOL) isCommonDomainName:(NSString*)domainname{
+    NSArray *domains =[NSArray arrayWithObjects:@"biz",@"com",@"nfo",@"net",@"org",@".us",@".uk",@".jp",@".cn",@".ca",@".au",@".de", nil];
+    return [domains containsObject:[domainname lowercaseString]];
 }
 
 @end

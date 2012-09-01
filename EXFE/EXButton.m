@@ -10,6 +10,8 @@
 
 @implementation EXButton
 @synthesize buttonName;
+@synthesize setInset;
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -25,13 +27,16 @@
         [self setFrame:frame];
         buttonName=name;
         [self setImage:img forState:UIControlStateNormal];
-        [self setBackgroundImage:[UIImage imageNamed:@"toolbar_btndown_bg.png"] forState:UIControlStateHighlighted];
+        [self setBackgroundImage:[UIImage imageNamed:@"toolbar_pressed.png"] forState:UIControlStateHighlighted];
         self.adjustsImageWhenHighlighted=NO;
         [self setBackgroundColor:[UIColor clearColor]];
-        [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -img.size.width, -img.size.height-14, 0.0)];
+        [self.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:10]];
+//        -img.size.height-30
+        [self setTitleEdgeInsets:UIEdgeInsetsMake(38, -img.size.width, 2, 0.0)];
         [self setTitle:buttontitle forState:UIControlStateNormal];
         int margin=(self.frame.size.width-img.size.width)/2;
-        [self setImageEdgeInsets:UIEdgeInsetsMake(0, margin, 0, margin)];
+        if(setInset==NO)
+            [self setImageEdgeInsets:UIEdgeInsetsMake(6, margin, 14, margin)];
     }
     return self;
 }

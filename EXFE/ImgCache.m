@@ -66,6 +66,11 @@ static NSMutableDictionary *imgs;
     
     return md5key;
 }
+- (UIImage*) checkImgFrom:(NSString*)url{
+    NSString *md5key=[ImgCache md5:url];
+    UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
+    return imgfromdict;
+}
 - (UIImage*) getImgFrom:(NSString*)url
 {
     NSString *md5key=[ImgCache md5:url];
@@ -104,7 +109,7 @@ static NSMutableDictionary *imgs;
 }
 
 + (UIImage *) getDefaultImage{
-    return [UIImage imageNamed:@"default_avatar"];
+    return [UIImage imageNamed:@"portrait_default.png"];
 }
 
 @end

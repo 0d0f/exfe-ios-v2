@@ -239,14 +239,6 @@
     avatarview.image=nil;
     [self.view addSubview:avatarview];
 
-    UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];
-    UIImageView *startbackimg=[[UIImageView alloc] initWithFrame:CGRectMake(20, 200, 280, 44)];
-    startbackimg.image=btn_dark;
-    startbackimg.contentMode=UIViewContentModeScaleToFill;
-    startbackimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
-    [self.view addSubview:startbackimg];
-    [startbackimg release];
-
     loginbtn=[UIButton buttonWithType:UIButtonTypeCustom];
     [loginbtn setFrame:CGRectMake(20, 200, 280, 44)];
     [loginbtn setTitle:@"Start" forState:UIControlStateNormal];
@@ -255,6 +247,8 @@
     [loginbtn addTarget:self action:@selector(Signin:) forControlEvents:UIControlEventTouchUpInside];
     [loginbtn setTitleShadowColor:[UIColor colorWithRed:21.0/255.0f green:52.0/255.0f blue:84.0/255.0f alpha:1] forState:UIControlStateNormal];
     loginbtn.titleLabel.shadowOffset=CGSizeMake(0, 1);
+    [loginbtn setBackgroundImage:[[UIImage imageNamed:@"btn_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
+
     [self.view addSubview:loginbtn];
     
     setupnewbtn=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -265,6 +259,8 @@
     [setupnewbtn addTarget:self action:@selector(Signupnew:) forControlEvents:UIControlEventTouchUpInside];
     [setupnewbtn setTitleShadowColor:[UIColor colorWithRed:21.0/255.0f green:52.0/255.0f blue:84.0/255.0f alpha:1] forState:UIControlStateNormal];
     setupnewbtn.titleLabel.shadowOffset=CGSizeMake(0, 1);
+    [setupnewbtn setBackgroundImage:[[UIImage imageNamed:@"btn_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
+
     [setupnewbtn setHidden:YES];
     [self.view addSubview:setupnewbtn];
     
@@ -308,6 +304,7 @@
 }
 - (void) clearIdentity{
     [textUsername setText:@""];
+    identityLeftIcon.image=nil;
 
 }
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -322,17 +319,17 @@
 - (void) getUser{
 //    if(CFAbsoluteTimeGetCurrent()-editinginterval>1.2)
 //    {
-        NSString *provider=[Util findProvider:textUsername.text];
-        if(![provider isEqualToString:@""]){
+    NSString *provider=[Util findProvider:textUsername.text];
+    if(![provider isEqualToString:@""]){
             RKClient *client = [RKClient sharedClient];
             [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-
             NSString *endpoint = [NSString stringWithFormat:@"/users/GetRegistrationFlag?external_username=%@&provider=%@",textUsername.text,provider];
             AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
             [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
             [client get:endpoint usingBlock:^(RKRequest *request){
                 request.method=RKRequestMethodGET;
                 request.onDidLoadResponse=^(RKResponse *response){
+                    NSLog(@"%@",response.bodyAsString);
                     if (response.statusCode == 200) {
                         NSDictionary *body=[response.body objectFromJSONData];
                         id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
@@ -387,7 +384,11 @@
         NSString *provider=[Util findProvider:textField.text];
         if(![provider isEqualToString:@""]) {
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
-            [self performSelector:@selector(getUser) withObject:self];
+            NSString *domainext=[textField.text substringFromIndex:textField.text.length-3];
+            if([Util isCommonDomainName:domainext])
+                [self performSelector:@selector(getUser) withObject:self];
+            else
+                [self performSelector:@selector(getUser) withObject:self afterDelay:0.8];
         }
     } else {
         avatarview.image=nil;
