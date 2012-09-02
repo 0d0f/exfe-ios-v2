@@ -25,8 +25,8 @@
 
 - (void)viewDidLoad
 {
-    
     [super viewDidLoad];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     self.view=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view.backgroundColor=[UIColor blackColor];
     imageview=[[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -51,7 +51,7 @@
 
 - (void)viewDidUnload
 {
-    [imageview release];
+    
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -59,9 +59,14 @@
 - (void)dealloc
 {
 	[super dealloc];
-    [self.view release];
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
+//    statusBarHidden = YES;
+
+    [imageview release];
+    [self.view release];
     [self dismissModalViewControllerAnimated:YES];
 }
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

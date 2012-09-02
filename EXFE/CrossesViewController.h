@@ -11,6 +11,7 @@
 #import "PullRefreshTableViewController.h"
 #import "ImgCache.h"
 #import "EXInnerButton.h"
+#import "CustomStatusBar.h"
 
 @interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate>
 {
@@ -23,7 +24,7 @@
     NSArray *cellbackimglist;
     NSArray *cellbackimgblanklist;
     NSMutableArray *cellDateTime;
-
+    CustomStatusBar *customStatusBar;
 }
 - (void) refreshCell;
 - (void) refreshCrosses:(NSString*)source;

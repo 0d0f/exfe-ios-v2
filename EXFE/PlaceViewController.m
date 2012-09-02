@@ -73,15 +73,17 @@
     locationManager.desiredAccuracy = kCLLocationAccuracyBest; // 100 m
     [locationManager startUpdatingLocation];
 
-    if(gatherplace==nil) {
-        gatherplace=[[NSMutableDictionary alloc] init];
+    if(place==nil) {
+        place=[Place object];
+//        gatherplace=[[NSMutableDictionary alloc] init];
     }
     else{
         CLLocationCoordinate2D location;
-        location.latitude =[[gatherplace objectForKey:@"lat"] doubleValue];
-        location.longitude =[[gatherplace objectForKey:@"lng"] doubleValue];
+        location.latitude =[place.lat doubleValue];
+        location.longitude =[place.lng doubleValue];
+        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:place.title description:place.place_description];
         
-        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[gatherplace objectForKey:@"title"]  description:[gatherplace objectForKey:@"description"]];
+//        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[gatherplace objectForKey:@"title"]  description:[gatherplace objectForKey:@"description"]];
         annotation.index=-1;
         [map addAnnotation:annotation];
         [annotation release];
@@ -174,15 +176,16 @@
     }
 }
 - (void) setPlace:(Place*)_place{
-    if(gatherplace==nil)
-            gatherplace=[[NSMutableDictionary alloc] init];
-    [gatherplace setObject:_place.place_id forKey:@"place_id"];
-    [gatherplace setObject:_place.title forKey:@"title"];
-    [gatherplace setObject:_place.place_description forKey:@"description"];
-    [gatherplace setObject:_place.lat forKey:@"lat"];
-    [gatherplace setObject:_place.lng forKey:@"lng"];
-    [gatherplace setObject:_place.external_id forKey:@"external_id"];
-    [gatherplace setObject:_place.provider forKey:@"provider"];
+    place=_place;
+//    if(gatherplace==nil)
+//            gatherplace=[[NSMutableDictionary alloc] init];
+//    [gatherplace setObject:_place.place_id forKey:@"place_id"];
+//    [gatherplace setObject:_place.title forKey:@"title"];
+//    [gatherplace setObject:_place.place_description forKey:@"description"];
+//    [gatherplace setObject:_place.lat forKey:@"lat"];
+//    [gatherplace setObject:_place.lng forKey:@"lng"];
+//    [gatherplace setObject:_place.external_id forKey:@"external_id"];
+//    [gatherplace setObject:_place.provider forKey:@"provider"];
     isedit=YES;
     
 }
@@ -207,24 +210,29 @@
 }
 
 - (void) done{
-    if(gatherplace){
-        NSString *provider=[gatherplace objectForKey:@"provider"];
-        if(provider==nil)
-           provider=@"exfe";
-           
-        if([gatherplace objectForKey:@"place_id"]==nil)
-            [gatherplace setObject:[NSNumber numberWithInt:0] forKey:@"place_id"];
-        
-        NSDictionary *place =[NSDictionary dictionaryWithKeysAndObjects:@"place_id",[gatherplace objectForKey:@"place_id"],@"title",[placeedit getPlaceTitle],@"description",[placeedit getPlaceDesc], @"lat",[gatherplace objectForKey:@"lat"],@"lng",[gatherplace objectForKey:@"lng"],@"provider",provider,@"external_id",[gatherplace objectForKey:@"external_id"], nil];
-
-        [(GatherViewController*)gatherview savePlace:place];
-        [self dismissModalViewControllerAnimated:YES];
-    }
-    else{
-        
-    }
+//    if(gatherplace){
+//        NSString *provider=[gatherplace objectForKey:@"provider"];
+//        if(provider==nil)
+//           provider=@"exfe";
+//           
+//        if([gatherplace objectForKey:@"place_id"]==nil)
+//            [gatherplace setObject:[NSNumber numberWithInt:0] forKey:@"place_id"];
+//        
+//        NSDictionary *place =[NSDictionary dictionaryWithKeysAndObjects:@"place_id",[gatherplace objectForKey:@"place_id"],@"title",[placeedit getPlaceTitle],@"description",[placeedit getPlaceDesc], @"lat",[gatherplace objectForKey:@"lat"],@"lng",[gatherplace objectForKey:@"lng"],@"provider",provider,@"external_id",[gatherplace objectForKey:@"external_id"], nil];
     
-    NSLog(@"%@",@"done");
+    place.title=[placeedit getPlaceTitle];
+    place.place_description=[placeedit getPlaceDesc];
+    if(isedit==YES)
+        [(GatherViewController*)gatherview savePlace:place];
+    else
+        [(GatherViewController*)gatherview setPlace:place];
+        
+    [self dismissModalViewControllerAnimated:YES];
+//    }
+//    else{
+//        
+//    }
+//    
 }
 - (void)didReceiveMemoryWarning
 {
@@ -287,13 +295,13 @@
 
     NSMutableArray *annotations=[[NSMutableArray alloc] initWithCapacity:[_places count]];
     int i=0;
-    for(NSDictionary *place in _places)
+    for(NSDictionary *placedict in _places)
     {
         CLLocationCoordinate2D location;
         
-        location.latitude = [[place objectForKey:@"lat"] doubleValue];
-        location.longitude = [[place objectForKey:@"lng"] doubleValue];
-        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[place objectForKey:@"title"]  description:[place objectForKey:@"description"]];
+        location.latitude = [[placedict objectForKey:@"lat"] doubleValue];
+        location.longitude = [[placedict objectForKey:@"lng"] doubleValue];
+        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[placedict objectForKey:@"title"]  description:[placedict objectForKey:@"description"]];
         annotation.index=i;
         [annotations addObject:annotation];
         [annotation release];
@@ -316,21 +324,20 @@
         [placeedit setHidden:YES];
         [placeedit resignFirstResponder];
         [map removeAnnotations:[map annotations]];
-        [gatherplace setObject:@"" forKey:@"title"];
-        [gatherplace setObject:@"" forKey:@"description"];
-        [gatherplace setObject:[NSNumber numberWithInt:0] forKey:@"lat"];
-        [gatherplace setObject:[NSNumber numberWithInt:0] forKey:@"lng"];
-        [gatherplace setObject:@"" forKey:@"external_id"];
-        [gatherplace setObject:@"" forKey:@"provider"];
+        place=nil;
+//        [gatherplace setObject:@"" forKey:@"title"];
+//        [gatherplace setObject:@"" forKey:@"description"];
+//        [gatherplace setObject:[NSNumber numberWithInt:0] forKey:@"lat"];
+//        [gatherplace setObject:[NSNumber numberWithInt:0] forKey:@"lng"];
+//        [gatherplace setObject:@"" forKey:@"external_id"];
+//        [gatherplace setObject:@"" forKey:@"provider"];
         
     }
-    NSLog(@"click %u",buttonIndex);
 }
 
 #pragma mark UITableView Datasource methods
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"number count");
     if(_places)
         return [_places count];
     return 0;
@@ -351,12 +358,12 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     }
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-	NSDictionary *place=[_places objectAtIndex:indexPath.row];
+	NSDictionary *placedict=[_places objectAtIndex:indexPath.row];
     
-    if([place objectForKey:@"title"]!=nil)
-        cell.textLabel.text = [place objectForKey:@"title"];
-    if([place objectForKey:@"description"]!=nil);
-    cell.detailTextLabel.text=[place objectForKey:@"description"];
+    if([placedict objectForKey:@"title"]!=nil)
+        cell.textLabel.text = [placedict objectForKey:@"title"];
+    if([placedict objectForKey:@"description"]!=nil);
+    cell.detailTextLabel.text=[placedict objectForKey:@"description"];
     return cell;
     
 }
@@ -385,14 +392,20 @@
         if([annotations count]>0)
         {
             PlaceAnnotation *annotation=[annotations objectAtIndex:0];
+            place.title=annotation.place_title;
+            place.place_description=annotation.place_description;
+            place.lat=[NSNumber numberWithDouble:annotation.coordinate.latitude];
+            place.lng=[NSNumber numberWithDouble:annotation.coordinate.longitude];
+            place.external_id=@"";
+            place.provider=@"exfe";
 
-            [gatherplace setObject:annotation.place_title forKey:@"title"];
-            [gatherplace setObject:annotation.place_description forKey:@"description"];
-            [gatherplace setObject:[NSNumber numberWithDouble:annotation.coordinate.latitude] forKey:@"lat"];
-            [gatherplace setObject:[NSNumber numberWithDouble:annotation.coordinate.longitude] forKey:@"lng"];
-            [gatherplace setObject:@"" forKey:@"external_id"];
-            [gatherplace setObject:@"exfe" forKey:@"provider"];
-            [self addPlaceEdit:gatherplace];
+//            [gatherplace setObject:annotation.place_title forKey:@"title"];
+//            [gatherplace setObject:annotation.place_description forKey:@"description"];
+//            [gatherplace setObject:[NSNumber numberWithDouble:annotation.coordinate.latitude] forKey:@"lat"];
+//            [gatherplace setObject:[NSNumber numberWithDouble:annotation.coordinate.longitude] forKey:@"lng"];
+//            [gatherplace setObject:@"" forKey:@"external_id"];
+//            [gatherplace setObject:@"exfe" forKey:@"provider"];
+            [self addPlaceEdit:place];
 //            lat=annotation.coordinate.latitude;
 //            lng=annotation.coordinate.longitude;
             location.latitude = annotation.coordinate.latitude;
@@ -400,17 +413,24 @@
 
         }
     }else{
-        NSDictionary *place=[_places objectAtIndex:index];
-        [gatherplace setObject:[place objectForKey:@"title"] forKey:@"title"];
-        [gatherplace setObject:[place objectForKey:@"description"] forKey:@"description"];
-        [gatherplace setObject:[place objectForKey:@"lat"] forKey:@"lat"];
-        [gatherplace setObject:[place objectForKey:@"lng"] forKey:@"lng"];
-        [gatherplace setObject:[place objectForKey:@"external_id"] forKey:@"external_id"];
-        [gatherplace setObject:[place objectForKey:@"provider"] forKey:@"provider"];
-        [self addPlaceEdit:gatherplace];
+        NSDictionary *placedict=[_places objectAtIndex:index];
+        place.title=[placedict objectForKey:@"title"];
+        place.place_description=[placedict objectForKey:@"description"];
+        place.lat=[placedict objectForKey:@"lat"];
+        place.lng=[placedict objectForKey:@"lng"];
+        place.external_id=[placedict objectForKey:@"external_id"];
+        place.provider=[placedict objectForKey:@"provider"];
+        
+//        [gatherplace setObject:[place objectForKey:@"title"] forKey:@"title"];
+//        [gatherplace setObject:[place objectForKey:@"description"] forKey:@"description"];
+//        [gatherplace setObject:[place objectForKey:@"lat"] forKey:@"lat"];
+//        [gatherplace setObject:[place objectForKey:@"lng"] forKey:@"lng"];
+//        [gatherplace setObject:[place objectForKey:@"external_id"] forKey:@"external_id"];
+//        [gatherplace setObject:[place objectForKey:@"provider"] forKey:@"provider"];
+        [self addPlaceEdit:place];
 
-        location.latitude = [[place objectForKey:@"lat"] doubleValue];
-        location.longitude = [[place objectForKey:@"lng"] doubleValue];
+        location.latitude = [[placedict objectForKey:@"lat"] doubleValue];
+        location.longitude = [[placedict objectForKey:@"lng"] doubleValue];
     }
     
     if(editing==YES){
@@ -448,16 +468,15 @@
     [self selectPlace:index editing:YES];
 }
 
-- (void) addPlaceEdit:(NSDictionary*)place{
-    
-    if([place objectForKey:@"title"] !=nil && [place objectForKey:@"title"]!=[NSNull null])
-        [placeedit setPlaceTitle:[place objectForKey:@"title"]];
-    if([place objectForKey:@"description"]!=nil && [place objectForKey:@"description"]!=[NSNull null])
-        [placeedit setPlaceDesc:[place objectForKey:@"description"]];
+- (void) addPlaceEdit:(Place*)_place{
+    if(_place.title !=nil )
+        [placeedit setPlaceTitle:place.title];
+    if(_place.place_description!=nil)
+        [placeedit setPlaceDesc:place.place_description];
     [placeedit setHidden:NO];
-
     [placeedit becomeFirstResponder];
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self selectPlace:indexPath.row editing:NO];

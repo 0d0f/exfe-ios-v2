@@ -62,7 +62,7 @@
     NSMutableArray *suggestIdentities;
     NSMutableArray *exfeeIdentities;
     NSMutableArray *exfeeSelected;
-    Place *place;
+//    Place *place;
     CrossTime *datetime;
     int boardoffset;
     EXImagesCollectionView *exfeeShowview;
@@ -97,8 +97,8 @@
 - (void) addDefaultIdentity;
 - (void) reArrangeViews;
 - (NSString*) findProvider:(NSString*)external_id;
-- (void) savePlace:(NSDictionary*)placedict;
-- (void) setPlace:(NSDictionary*)placedict;
+- (void) savePlace:(Place*)place;
+- (void) setPlace:(Place*)place;
 - (void) setDateTime:(CrossTime*)crosstime;
 - (void) saveDateTime:(CrossTime*)crosstime;
 - (void) setExfeeNum;

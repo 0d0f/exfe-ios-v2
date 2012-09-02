@@ -19,7 +19,8 @@
     UILabel* username;
     IBOutlet UITableView* tabview;
     IBOutlet ProfileCellView *tblCell;
-
+//    BOOL statusBarHidden;
+    
     NSMutableArray *identitiesData;
     UIView *headerView;
     UIView *footerView;

@@ -82,10 +82,24 @@
     
     if(date!=nil){
         [format setTimeZone:[NSTimeZone localTimeZone]];
+        [format setDateFormat:@"yyyy"];
+        NSString *y=[format stringFromDate:date];
+        NSString *nowy=[format stringFromDate:[NSDate date]];
+        
         if(crosstime.begin_at.time!=nil && crosstime.begin_at.date!=nil)
-            [format setDateFormat:@"h:mma ccc, MMM d"];
-        else if(crosstime.begin_at.date!=nil)
-            [format setDateFormat:@"ccc, MMM d"];
+        {
+            if([y isEqualToString:nowy])
+                [format setDateFormat:@"h:mma ccc, MMM d"];
+            else
+                [format setDateFormat:@"h:mma ccc, MMM d, YYYY"];
+
+        }
+        else if(crosstime.begin_at.date!=nil){
+            if([y isEqualToString:nowy])
+                [format setDateFormat:@"ccc, MMM d"];
+            else
+                [format setDateFormat:@"ccc, MMM d, YYYY"];
+        }
         shortdate=[format stringFromDate:date];
     
     }

@@ -42,7 +42,6 @@
     NSString *databaseName = DBNAME;
 #endif
 //    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-    
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
     [APICrosses MappingCross];
@@ -96,11 +95,13 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
@@ -119,6 +120,8 @@
         {
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
         }
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+        self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
 
         [(CrossesViewController*)crossviewController refreshCrosses:@"crossview"];
         [(CrossesViewController*)crossviewController initUI];
@@ -185,51 +188,33 @@
 
 - (void)ReceivePushData:(NSDictionary*)userInfo RunOnForeground:(BOOL)isForeground
 {
-    NSLog(@"%@",userInfo);
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
-//
-    id cid=[[userInfo objectForKey:@"args"] objectForKey:@"cid"];
-    if([[userInfo objectForKey:@"args"] objectForKey:@"cid"] !=NULL && [[[userInfo objectForKey:@"args"] objectForKey:@"cid"] isKindOfClass:[NSNumber class]])
-    {
-        if([[[userInfo objectForKey:@"args"] objectForKey:@"cid"] intValue]>0 )
+    if(isForeground==NO){
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+        if(userInfo!=nil)
         {
-            int cross_id=[[[userInfo objectForKey:@"args"] objectForKey:@"cid"] intValue];
-            NSString *type=[[userInfo objectForKey:@"args"] objectForKey:@"t"];
-            if([type isEqualToString:@"i"])
-                [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
-//                [crossViewController refreshCrosses:@"pushtocross"];
-            if([type isEqualToString:@"c"])
-                [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
-//                [crossViewController refreshCrosses:@"pushtoconversation"];
-//            dispatch_queue_t fetchDataQueue = dispatch_queue_create("fetch new data thread", NULL);
-
-            //
-//            dispatch_async(fetchDataQueue, ^{
-//                dispatch_async(dispatch_get_main_queue(), ^{
-////                    //                    NSLog(@"load new data complete, push view...");
-//                    if (isForeground != TRUE)
-//                    {
-////                        Cross *cross=[rootViewController getEventByCrossId:cross_id];
-////                        
-////                        if(cross!=nil)
-////                        {
-////                            EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil];
-////                            detailViewController.eventid=cross_id;
-////                            detailViewController.eventobj=cross;
-////                            [self.navigationController pushViewController:detailViewController animated:YES];
-////                            if([type isEqualToString:@"c"])
-////                                [detailViewController loadConversationData];
-////                            [detailViewController release]; 	
-////                        }
-//                    }
-//                });
-//            });
-//
-//            dispatch_release(fetchDataQueue);              
-            //fetch, then push controller in mainqueue
-//
+            id arg=[userInfo objectForKey:@"arg"];
+            if([arg isKindOfClass:[NSDictionary class]])
+            {
+                id cid=[arg objectForKey:@"cid"];
+                id msg_type=[arg objectForKey:@"t"];
+                if(cid !=nil && [cid isKindOfClass:[NSNumber class]] && msg_type!=nil && [msg_type isKindOfClass:[NSString class]])
+                {
+                    if([cid intValue]>0 )
+                    {
+                        int cross_id=[cid intValue];
+                        NSString *type=(NSString*)msg_type;
+                        if([type isEqualToString:@"i"])
+                            [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+                        if([type isEqualToString:@"c"])
+                            [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+                    }
+                }
+            }
         }
+    }
+    else{
+        [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
     }
 }
 

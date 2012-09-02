@@ -32,7 +32,8 @@ typedef enum {
     NSArray* _places;
     NSArray* _annotations;
     UITableView* _tableView;
-    NSMutableDictionary* gatherplace;
+//    NSMutableDictionary* gatherplace;
+    Place *place;
     UIViewController *gatherview;
     EXPlaceEditView *placeedit;
     UIActionSheet *actionsheet;
@@ -57,7 +58,8 @@ typedef enum {
 - (void) drawMapAnnontations;
 - (void) selectOnMap:(id) sender;
 - (void) selectPlace:(int)index editing:(BOOL)editing;
-- (void) addPlaceEdit:(NSDictionary*)place;
+//- (void) addPlaceEdit:(NSDictionary*)place;
+- (void) addPlaceEdit:(Place*)_place;
 - (void) getPlace;
 - (void) setRightButton:(NSString*) title Selector:(SEL)aSelector;
 - (void) done;

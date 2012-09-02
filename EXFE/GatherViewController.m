@@ -57,7 +57,7 @@
     [gatherbutton setTitle:@"Gather" forState:UIControlStateNormal];
     [gatherbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     [gatherbutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
-    [gatherbutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
+    [gatherbutton setBackgroundImage:[[UIImage imageNamed:@"btn_blue_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
 
     [gatherbutton addTarget:self action:@selector(Gather:) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:gatherbutton];
@@ -211,15 +211,7 @@
         [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
 
         [chatButton addTarget:self action:@selector(toconversation) forControlEvents:UIControlEventTouchUpInside];
-//         [chatButton setTitle:@"A" forState:UIControlStateNormal];
-//        [chatButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:10]];
-//        [chatButton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
-//        chatButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-//        chatButton.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-//        chatButton.titleEdgeInsets=UIEdgeInsetsMake(2, chatimg.size.width+5, 2, 2);
 
-
-//        cross.conversation_count
         if([cross.conversation_count intValue]>0 && [cross.conversation_count intValue]<9){
             ccbuttonText=[[UILabel alloc]initWithFrame:CGRectMake(8, 3, 12, 22)];
 //            [ccbuttonText setText:[cross.conversation_count stringValue]];
@@ -235,19 +227,6 @@
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:chatButton];
         self.navigationItem.rightBarButtonItem = barButtonItem;
         [barButtonItem release];
-        
-//        conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
-//        conversationView.exfee_id=[cross.exfee.exfee_id intValue];
-//        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//        NSSet *invitations=cross.exfee.invitations;
-//        if(invitations !=nil&&[invitations count]>0)
-//        {
-//            for(Invitation* invitation in invitations)
-//                if([invitation.identity.connected_user_id intValue]==app.userid)
-//                    conversationView.identity=invitation.identity;
-//        }
-//        [conversationView.view setHidden:YES];
-//        [self.view addSubview:conversationView.view];
     }
     NSTimeInterval t2=[[NSDate date] timeIntervalSince1970];
     [self initData];
@@ -268,7 +247,8 @@
                               predicateWithFormat:@"user_id = %u", app.userid];
     [request setPredicate:predicate];
 	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-
+    if(cross==nil)
+        cross=[Cross object];
     if(users!=nil && [users count] >0)
     {
         default_user=[users objectAtIndex:0];
@@ -307,8 +287,8 @@
         NSTimeInterval t2=[[NSDate date] timeIntervalSince1970];
 
         [self setDateTime:cross.time];
-        NSDictionary *placedict=[NSDictionary dictionaryWithKeysAndObjects:@"place_id",cross.place.place_id,@"title",cross.place.title,@"description",cross.place.place_description,@"lat",cross.place.lat, @"lng",cross.place.lng,@"external_id",cross.place.external_id,@"provider",cross.place.provider, nil];
-        [self setPlace:placedict];
+//        NSDictionary *placedict=[NSDictionary dictionaryWithKeysAndObjects:@"place_id",cross.place.place_id,@"title",cross.place.title,@"description",cross.place.place_description,@"lat",cross.place.lat, @"lng",cross.place.lng,@"external_id",cross.place.external_id,@"provider",cross.place.provider, nil];
+        [self setPlace:cross.place];
         
         crossdescription.text=cross.cross_description;
         NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES];
@@ -674,22 +654,16 @@
 }
 - (IBAction) Gather:(id) sender{
     [self pullcontainviewDown];
-    Identity *by_identity=[Identity object];
-    by_identity.identity_id=[NSNumber numberWithInt:174];
-    
-    Cross *_cross=[Cross object];
-    _cross.title=crosstitle.text;
-    _cross.cross_description=crossdescription.text;
-    _cross.by_identity=by_identity;
-    _cross.place=place;
-    _cross.time=datetime;
+    cross.by_identity=default_user.default_identity;
+    cross.title=crosstitle.text;
+    cross.cross_description=crossdescription.text;
+    cross.time=datetime;
     Exfee *exfee=[Exfee object];
     for(Invitation *invitation in exfeeIdentities){
         [exfee addInvitationsObject:invitation];
     }
-    _cross.exfee = exfee;
-    
-    [APICrosses GatherCross:_cross delegate:self];
+    cross.exfee = exfee;
+    [APICrosses GatherCross:[cross retain] delegate:self];
 }
 - (void)dealloc {
 	[exfeeIdentities release];
@@ -737,8 +711,8 @@
 - (void) ShowPlaceView{
     PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
     placeViewController.gatherview=self;
-    if(place)
-        [placeViewController setPlace:place];
+    if(cross.place!=nil)
+        [placeViewController setPlace:cross.place];
     [self presentModalViewController:placeViewController animated:YES];
     [placeViewController release];
 }
@@ -781,54 +755,84 @@
 - (int) exfeeIdentitiesCount{
     return [exfeeIdentities count];
 }
-- (void) savePlace:(NSDictionary*)placedict{
-    [self setPlace:placedict];
-    if(viewmode==YES){
-        if(cross!=nil){
-            cross.place=place;
-            [self saveCrossUpdate];
-        }
-    }
+- (void) savePlace:(Place*)place{
+//    [self setPlace:place];
+//    if(viewmode==YES){
+//        if(cross!=nil){
+//            cross=[Cross object];
+//        }
+        cross.place=place;
+        [self setPlace:place];
+        [self saveCrossUpdate];
+//    }
 }
 
-- (void) setPlace:(NSDictionary*)placedict{
-    Place *_place=[Place object];
-    NSNumber *lat=[placedict objectForKey:@"lat"];
-    NSNumber *place_id=[placedict objectForKey:@"place_id"];
-    NSNumber *lng=[NSNumber numberWithDouble:[[placedict objectForKey:@"lng"] doubleValue]];
-        
-    _place.lat= lat;
-    _place.lng= lng;
-    _place.place_id=place_id;
-    _place.title=[placedict objectForKey:@"title"];
-    _place.place_description =[placedict objectForKey:@"description"];
-    _place.external_id=[placedict objectForKey:@"external_id"];
-    _place.provider=[placedict objectForKey:@"provider"];
-    place=_place;
-
-    if([lat isEqualToNumber:[NSNumber numberWithInt:0]] && [lng isEqualToNumber:[NSNumber numberWithInt:0]] && [_place.title isEqualToString:@""] && [_place.place_description isEqualToString:@""])
+- (void) setPlace:(Place*)place{
+    if(place!=nil)
     {
-        _place.title=@"Somewhere";
-        place=nil;
+        cross.place=place;
+//        [self reArrangeViews];
+        if(cross.place!=nil) {
+            CLLocationCoordinate2D location;
+            [map removeAnnotations: map.annotations];
+            location.latitude = [place.lat doubleValue];
+            location.longitude = [place.lng doubleValue];
+            MKCoordinateRegion region;
+            region.center = location;
+            region.span.longitudeDelta = 0.005;
+            region.span.latitudeDelta = 0.005;
+            [map setRegion:region animated:NO];
+            mapbox.image=[UIImage imageNamed:@"map_area.png"];
+            if([place.lat isEqualToNumber:[NSNumber numberWithInt:0]] && [place.lng isEqualToNumber:[NSNumber numberWithInt:0]] && [place.title isEqualToString:@""] && [place.place_description isEqualToString:@""])
+            {
+                place.title=@"Somewhere";
+                place=nil;
+            }
+            placetitle.text=place.title;
+            placedesc.text=place.place_description;
+            [self reArrangeViews];
+        }
     }
-
-    placetitle.text=_place.title;
-    placedesc.text=_place.place_description;
-
-//    if(viewmode==NO)
-    [self reArrangeViews];
-    if(place!=nil) {
-        CLLocationCoordinate2D location;
-        [map removeAnnotations: map.annotations];
-        location.latitude = [_place.lat doubleValue];
-        location.longitude = [_place.lng doubleValue];
-        MKCoordinateRegion region;
-        region.center = location;
-        region.span.longitudeDelta = 0.005;
-        region.span.latitudeDelta = 0.005;
-        [map setRegion:region animated:NO];
-        mapbox.image=[UIImage imageNamed:@"map_area.png"];
-    }
+    
+//    Place *_place=[Place object];
+//    NSNumber *lat=[placedict objectForKey:@"lat"];
+//    NSNumber *place_id=[placedict objectForKey:@"place_id"];
+//    if(place_id==0)
+//        place_id=[NSNumber numberWithInt:0];
+//    NSNumber *lng=[NSNumber numberWithDouble:[[placedict objectForKey:@"lng"] doubleValue]];
+//        
+//    _place.lat= lat;
+//    _place.lng= lng;
+//    _place.place_id=place_id;
+//    _place.title=[placedict objectForKey:@"title"];
+//    _place.place_description =[placedict objectForKey:@"description"];
+//    _place.external_id=[placedict objectForKey:@"external_id"];
+//    _place.provider=[placedict objectForKey:@"provider"];
+//    place=_place;
+//
+//    if([lat isEqualToNumber:[NSNumber numberWithInt:0]] && [lng isEqualToNumber:[NSNumber numberWithInt:0]] && [_place.title isEqualToString:@""] && [_place.place_description isEqualToString:@""])
+//    {
+//        _place.title=@"Somewhere";
+//        place=nil;
+//    }
+//
+//    placetitle.text=_place.title;
+//    placedesc.text=_place.place_description;
+//
+////    if(viewmode==NO)
+//    [self reArrangeViews];
+//    if(place!=nil) {
+//        CLLocationCoordinate2D location;
+//        [map removeAnnotations: map.annotations];
+//        location.latitude = [_place.lat doubleValue];
+//        location.longitude = [_place.lng doubleValue];
+//        MKCoordinateRegion region;
+//        region.center = location;
+//        region.span.longitudeDelta = 0.005;
+//        region.span.latitudeDelta = 0.005;
+//        [map setRegion:region animated:NO];
+//        mapbox.image=[UIImage imageNamed:@"map_area.png"];
+//    }
     
 }
 - (void) saveDateTime:(CrossTime*)crosstime{
@@ -1066,7 +1070,7 @@
         idx++;
     }
     if(isAllAccept==YES)
-        [gathertoolbar replaceButtonImage:[UIImage imageNamed:@"rsvp_accept_toolbar_grey.png"] title:@"Pending" target:self action:@selector(rsvpunaccept) forname:@"accept"];
+        [gathertoolbar replaceButtonImage:[UIImage imageNamed:@"rsvp_pending_toolbar.png"] title:@"Pending" target:self action:@selector(rsvpunaccept) forname:@"accept"];
     else
         [gathertoolbar replaceButtonImage:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] title:@"Accept" target:self action:@selector(rsvpaccept) forname:@"accept"];
     [gathertoolbar setHidden:NO];
@@ -1117,9 +1121,10 @@
     CTParagraphStyleRef linestyle = CTParagraphStyleCreate(linesetting, 1);
     [exfeestr addAttribute:(id)kCTParagraphStyleAttributeName value:(id)linestyle range:NSMakeRange(0,[exfeestr length])];
     exfeenum.attributedText=exfeestr;
-    
-    if([exfeeIdentities count]<3)
-        [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 50+20, 124, 27)];
+    if([exfeeIdentities count]<3 && exfeeedit==YES)
+        [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 50+25, 124, 27)];
+    if([exfeeIdentities count]<5 && exfeeedit==NO)
+        [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 50+25, 124, 27)];
     else
         [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 50, 124, 27)];
     
@@ -1211,6 +1216,24 @@
         else
             [self ShowRsvpButton];
     }
+    if(edit==NO){
+        int all=0;
+        int accept=0;
+
+        Exfee *exfee=[Exfee object];
+        for(Invitation *invitation in exfeeIdentities){
+            all+=[invitation.mates intValue]+1;
+            if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+                accept+=[invitation.mates intValue]+1;
+
+            [exfee addInvitationsObject:invitation];
+        }
+        exfee.total=[NSNumber numberWithInt:all];
+        exfee.accepted=[NSNumber numberWithInt:accept];
+        cross.exfee = exfee;
+        [self saveCrossUpdate];
+    }
+    [self setExfeeNum];
 }
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
@@ -1536,7 +1559,7 @@
                 }
             }
         }
-        if(viewmode==YES)
+        if(viewmode==YES && exfeeedit==NO)
         {
             RKParams* rsvpParams = [RKParams params];
             NSDictionary *exfee_dict=[ObjectToDict ExfeeDict:cross.exfee];

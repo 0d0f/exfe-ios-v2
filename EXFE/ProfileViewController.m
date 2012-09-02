@@ -36,6 +36,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    statusBarHidden = NO;
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [tabview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
@@ -45,6 +46,14 @@
     [APIProfile LoadUsrWithUserId:app.userid delegate:self];
 
 }
+//-(void)viewDidAppear:(BOOL)animated{
+////    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+//    if(statusBarHidden == NO)
+//    {
+//        self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
+//        statusBarHidden = YES;
+//    }
+//}
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
     CGRect useravatarRect=[useravatar frame];

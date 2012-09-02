@@ -22,6 +22,7 @@
 #import "ImgCache.h"
 #import "Util.h"
 
+
 @interface CrossesViewController ()
 
 @end
@@ -40,6 +41,9 @@
 
 - (void)viewDidLoad
 {
+    
+    customStatusBar = [[CustomStatusBar alloc] initWithFrame:CGRectZero];
+    
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[[UIImage imageNamed:@"btn_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 6)]
                                                       forState:UIControlStateNormal
                                                     barMetrics:UIBarMetricsDefault];
@@ -161,6 +165,7 @@
         [cellDateTime release];
         cellDateTime=nil;
     }
+    [customStatusBar release];
     [cellbackimglist release];
     [cellbackimgblanklist release];
     [super dealloc];
@@ -272,12 +277,12 @@
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
     if([objects count]>0)
     {
-//        NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-        
+        [customStatusBar showWithStatusMessage:[NSString stringWithFormat:@"%i updates...",[objects count]]];
+        [customStatusBar performSelector:@selector(hide) withObject:nil afterDelay:2];
+
         Cross *cross=[objects lastObject];
         [[NSUserDefaults standardUserDefaults] setObject:cross.updated_at forKey:@"exfee_updated_at"];
         [[NSUserDefaults standardUserDefaults] synchronize];
-
         [self loadObjectsFromDataStore];
     }
     if ([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"gatherview"]) {
@@ -291,21 +296,19 @@
         gatherViewController.cross=cross;
         [gatherViewController setViewMode];
         [self.navigationController pushViewController:gatherViewController animated:YES];
-
-        NSLog(@"pushtocross %i",[cross_id intValue]);
     }
     else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"pushtoconversation"]) {
         NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-        NSLog(@"pushtoconversation %i",[cross_id intValue]);
-        
         Cross *cross=[self crossWithId:[cross_id intValue]];
         GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
         gatherViewController.cross=cross;
         [gatherViewController setViewMode];
-        [self.navigationController pushViewController:gatherViewController animated:YES];
+        [self.navigationController pushViewController:gatherViewController animated:NO];
         [gatherViewController toconversation];
     }
-    
+    else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossupdateview"]) {
+        [self.tableView reloadData];
+    }
     [self stopLoading];
 }
 
@@ -396,7 +399,6 @@
         else
             cell.time=cross.time.origin;
     }else{
-//        NSDictionary *humanable_date=[Util crossTimeToString:cross.time];
         NSDictionary *humanable_date=[cellDateTime objectAtIndex:indexPath.row];
         cell.time=[humanable_date objectForKey:@"short"];
         cell.showDetailTime=YES;

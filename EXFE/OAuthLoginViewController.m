@@ -9,7 +9,6 @@
 #import "OAuthLoginViewController.h"
 #import "URLParser.h"
 //#define EXFE_OAUTH_LINK @"https://exfe.com/oauth"
-#define EXFE_OAUTH_LINK @"http://local.exfe.com/oauth"
 @interface OAuthLoginViewController ()
 @end
 

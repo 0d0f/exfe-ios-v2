@@ -29,6 +29,7 @@
 }
 
 - (void)SigninDidFinish{
+    
     [self.navigationController dismissModalViewControllerAnimated:YES];
     [delegate SigninDidFinish];
 }
@@ -44,13 +45,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+    [self.view setFrame:[UIScreen mainScreen].bounds];
+
     signindelegate=[[SigninDelegate alloc]init];
     signindelegate.parent=self;
 
     signintoolbar=[[SigninIconToolbarView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-50, self.view.bounds.size.width, 50) style:@"landing" delegate:self];
     signintoolbar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"signinbar_bg.png"]];
     [self.view addSubview:signintoolbar];
-    
 }
 
 - (void)viewDidUnload
