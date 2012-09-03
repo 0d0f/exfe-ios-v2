@@ -41,9 +41,7 @@
 
 - (void)viewDidLoad
 {
-    
     customStatusBar = [[CustomStatusBar alloc] initWithFrame:CGRectZero];
-    
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[[UIImage imageNamed:@"btn_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 6)]
                                                       forState:UIControlStateNormal
                                                     barMetrics:UIBarMetricsDefault];
@@ -69,6 +67,7 @@
         [self initUI];
         [self refreshCrosses:@"crossview"];
     }
+    [self ShowWelcome];
     
 }
 - (void)initUI{
@@ -145,6 +144,15 @@
 //        [navbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"]  forBarMetrics:UIBarMetricsDefault];
 //    }
     [self.navigationController.view setNeedsDisplay];
+    
+}
+- (void) ShowWelcome{
+//    int height=[[UIScreen mainScreen] bounds].size.height;
+    WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:CGRectMake(2, tableView.frame.origin.y+2, self.view.frame.size.width-2-2, 460-44-4)];
+//    [welcome setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5f]];
+    [self.view addSubview:welcome];
+    [self.view bringSubviewToFront:welcome];
+    self.tableView.bounces=NO;
 }
 - (Cross*) crossWithId:(int)cross_id{
     for(Cross *c in _crosses)

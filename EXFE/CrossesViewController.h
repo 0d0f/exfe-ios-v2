@@ -12,6 +12,7 @@
 #import "ImgCache.h"
 #import "EXInnerButton.h"
 #import "CustomStatusBar.h"
+#import "WelcomeView.h"
 
 @interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate>
 {
@@ -36,4 +37,5 @@
 - (void) ShowGatherView;
 - (Cross*) crossWithId:(int)cross_id;
 - (void) refreshTableViewWithCrossId:(int)cross_id;
+- (void) ShowWelcome;
 @end
