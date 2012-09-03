@@ -11,6 +11,8 @@
 @interface SigninIconToolbarView : UIView{
     UIButton *signinbutton;
     UIButton *twitterbutton;
+    UIButton *facebookbutton;
+    UIButton *morebutton;
 }
 - (id)initWithFrame:(CGRect)frame style:(NSString*)style delegate:(id)delegate;
 @end

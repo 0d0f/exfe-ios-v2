@@ -33,7 +33,7 @@
 @interface PullRefreshTableViewController : UITableViewController {
     UIView *refreshHeaderView;
     UILabel *refreshLabel;
-    UIImageView *refreshArrow;
+//    UIImageView *refreshArrow;
     UIActivityIndicatorView *refreshSpinner;
     BOOL isDragging;
     BOOL isLoading;

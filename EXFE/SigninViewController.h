@@ -16,6 +16,7 @@
 #import "ImgCache.h"
 #import "SigninDelegate.h"
 #import "SigninIconToolbarView.h"
+#import "LandingViewController.h"
 
 @interface SigninViewController : UIViewController <RKRequestDelegate> {
     id delegate;
@@ -64,5 +65,6 @@
 - (void) setSigninView;
 - (void) clearIdentity;
 - (void) checkInputIdentity;
+- (void) welcomeButtonPress:(id) sender;
 
 @end

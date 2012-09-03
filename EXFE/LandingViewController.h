@@ -29,4 +29,5 @@
 - (IBAction) SigninButtonPress:(id) sender;
 - (void)TwitterSigninButtonPress:(id)sender;
 - (void)SigninDidFinish;
+- (void)dismissSigninView;
 @end

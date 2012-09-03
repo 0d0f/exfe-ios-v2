@@ -193,7 +193,7 @@
         CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
         if(userInfo!=nil)
         {
-            id arg=[userInfo objectForKey:@"arg"];
+            id arg=[userInfo objectForKey:@"args"];
             if([arg isKindOfClass:[NSDictionary class]])
             {
                 id cid=[arg objectForKey:@"cid"];

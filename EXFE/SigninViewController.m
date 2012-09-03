@@ -247,7 +247,7 @@
     [loginbtn addTarget:self action:@selector(Signin:) forControlEvents:UIControlEventTouchUpInside];
     [loginbtn setTitleShadowColor:[UIColor colorWithRed:21.0/255.0f green:52.0/255.0f blue:84.0/255.0f alpha:1] forState:UIControlStateNormal];
     loginbtn.titleLabel.shadowOffset=CGSizeMake(0, 1);
-    [loginbtn setBackgroundImage:[[UIImage imageNamed:@"btn_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
+    [loginbtn setBackgroundImage:[[UIImage imageNamed:@"btn_light_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 12, 0, 12)] forState:UIControlStateNormal];
 
     [self.view addSubview:loginbtn];
     
@@ -283,7 +283,9 @@
     [setupnewbtn setHidden:NO];
     [loginbtn setHidden:YES];
 }
-
+- (void) welcomeButtonPress:(id) sender{
+    [(LandingViewController*)delegate dismissSigninView];
+}
 
 - (void)viewDidUnload
 {

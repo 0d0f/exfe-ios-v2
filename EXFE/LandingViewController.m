@@ -20,7 +20,28 @@
 - (IBAction) SigninButtonPress:(id) sender{
     SigninViewController *signView=[[[SigninViewController alloc]initWithNibName:@"SigninViewController" bundle:nil] autorelease];
     signView.delegate=self;
+    CGRect inFrame = [signView.view frame];
+    CGRect outFrame = [self.view frame];
+    outFrame.origin.y -= inFrame.size.height;
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.5];
+    [self.view setFrame:outFrame];
+    [UIView commitAnimations];
     [self presentModalViewController:signView animated:YES];
+}
+- (void)dismissSigninView{
+
+//    CGRect inFrame = [signView.view frame];
+    CGRect outFrame = [self.view frame];
+    outFrame.origin.y = 0;
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.5];
+    [self.view setFrame:outFrame];
+    [UIView commitAnimations];
+    [self dismissModalViewControllerAnimated:YES];
+
+    
+    NSLog(@"dismiss");
 }
 - (void)TwitterSigninButtonPress:(id)sender{
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];

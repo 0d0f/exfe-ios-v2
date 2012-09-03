@@ -95,9 +95,9 @@
         NSString *totalstr=[NSString stringWithFormat:@"%u",total];
         
         [FONT_COLOR_98 set];
-        [acceptedstr drawInRect:CGRectMake(278, 9, 19, 12) withFont:[UIFont fontWithName:@"TeluguSangamMN-Bold" size:15] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
-        [totalstr drawInRect:CGRectMake(300, 18, 19, 12) withFont:[UIFont fontWithName:@"TeluguSangamMN" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft];
-        [[UIImage imageNamed:@"slash.png"] drawInRect:CGRectMake(296, 13, 7, 14)]; 
+        [acceptedstr drawInRect:CGRectMake(282, 4, 23, 18) withFont:[UIFont fontWithName:@"Futura-CondensedMedium" size:18] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
+        [totalstr drawInRect:CGRectMake(300, 20, 13, 13) withFont:[UIFont fontWithName:@"Futura-CondensedMedium" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
+        [[UIImage imageNamed:@"xlist_slash"] drawInRect:CGRectMake(297,13, 10, 16)];
         [[UIImage imageNamed:@"location.png"] drawInRect:CGRectMake(10, 43, 24, 24)];
 
         if(hlPlace)

@@ -57,7 +57,7 @@
     [gatherbutton setTitle:@"Gather" forState:UIControlStateNormal];
     [gatherbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     [gatherbutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
-    [gatherbutton setBackgroundImage:[[UIImage imageNamed:@"btn_blue_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
+    [gatherbutton setBackgroundImage:[[UIImage imageNamed:@"btn_blue_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)] forState:UIControlStateNormal];
 
     [gatherbutton addTarget:self action:@selector(Gather:) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:gatherbutton];
@@ -204,26 +204,27 @@
     [containcardview addSubview:crossdescription];
 
     if(viewmode==YES){
-        UIImage *chatimg = [UIImage imageNamed:@"conv_navbarbtn.png"];
         UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [chatButton setImage:chatimg forState:UIControlStateNormal];
-        chatButton.frame = CGRectMake(0, 0, chatimg.size.width, chatimg.size.height);
+        
+        chatButton.frame = CGRectMake(0, 0, 30, 30);
         [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
 
         [chatButton addTarget:self action:@selector(toconversation) forControlEvents:UIControlEventTouchUpInside];
 
         if([cross.conversation_count intValue]>0 && [cross.conversation_count intValue]<9){
+            [chatButton setImage:[UIImage imageNamed:@"conv_navbarbtn.png"] forState:UIControlStateNormal];
+
             ccbuttonText=[[UILabel alloc]initWithFrame:CGRectMake(8, 3, 12, 22)];
-//            [ccbuttonText setText:[cross.conversation_count stringValue]];
             ccbuttonText.textAlignment=UITextAlignmentCenter;
             ccbuttonText.backgroundColor=[UIColor clearColor];
             [ccbuttonText setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:9]];
             ccbuttonText.textColor=[UIColor whiteColor];
             [chatButton addSubview:ccbuttonText];
-        }
-//        else if(conversationCount>9)
-//            [[UIImage imageNamed:@"conversation_badge_full.png"]drawInRect:CGRectMake(279, 70, 30, 26)];
-
+        }else if([cross.conversation_count intValue]==0)
+            [chatButton setImage:[UIImage imageNamed:@"conv_navbarbtn.png"] forState:UIControlStateNormal];
+        else if([cross.conversation_count intValue]>9)
+            [chatButton setImage:[UIImage imageNamed:@"conv_many_navbarbtn.png"] forState:UIControlStateNormal];
+        
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:chatButton];
         self.navigationItem.rightBarButtonItem = barButtonItem;
         [barButtonItem release];
@@ -616,14 +617,14 @@
     popover.Line3=Line3;
     [Line3 release];
 
-    float maxwidth=MAX(Line1coreTextSize.width, Line2coreTextSize.width);
+    float maxwidth=MAX(Line1coreTextSize.width+10, Line2coreTextSize.width+10+19+3);
     float line3width= MAX(150,Line3coreTextSize.width+30);
     
     maxwidth=MAX(maxwidth, line3width);
     maxwidth+=20;
 
-    if(maxwidth>200)
-        maxwidth=200;
+    if(maxwidth>300)
+        maxwidth=300;
     if(framex<0){
         framex=5;
     }else if(framex+maxwidth>containcardview.frame.size.width){
@@ -1389,13 +1390,9 @@
         [self ShowExfeeView];
     }
     else if(index <[exfeeIdentities count]){
-        
         [crosstitle resignFirstResponder];
         [crosstitle endEditing:YES];
-        
         BOOL select_status=[[exfeeSelected objectAtIndex:index] boolValue];
-        
-        
         for( int i=0;i<[exfeeSelected count];i++){
             [exfeeSelected replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:NO]];
         }
@@ -1407,7 +1404,6 @@
                 isSelect=YES;
         }
         if(isSelect){
-
             CGRect f=imageCollectionView.frame;
             float x=f.origin.x+rect.origin.x+rect.size.width/2;
             float y=f.origin.y+rect.origin.y;
@@ -1419,14 +1415,11 @@
             else
                 [self ShowGatherToolBar];
         }
-        else
-        {
+        else {
             if(viewmode==YES&& exfeeedit==NO)
                 [self ShowRsvpButton];
             else if(exfeeedit==YES)
                 [gathertoolbar setHidden:YES];
-                //            else
-//                [self ShowRsvpToolBar];
         }
     }
 }
