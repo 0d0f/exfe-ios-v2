@@ -54,6 +54,8 @@
     [self.tableView addSubview:topview];
     [topview release];
     [super viewDidLoad];
+    
+    self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
 
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     [self loadObjectsFromDataStore];

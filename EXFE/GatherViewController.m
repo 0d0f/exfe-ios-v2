@@ -135,6 +135,7 @@
     [containcardview addSubview:mapbox];
 
     if(viewmode==YES){
+        
         UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(ShowPlaceView)];
         longpress.minimumPressDuration = 1;
         [map addGestureRecognizer:longpress];
@@ -150,12 +151,7 @@
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [containcardview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
-    if(viewmode==YES){
-        UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didlongpress:)];
-        longpress.minimumPressDuration = 1;
-        [containcardview addGestureRecognizer:longpress];
-        [longpress release];
-    }
+
 
     
     [self.view bringSubviewToFront:toolbar];
@@ -198,7 +194,7 @@
     crossdescbackimg=[[UIView alloc] initWithFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y, crossdescription.frame.size.width, 75)];
     crossdescbackimg.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"gather_describe_area.png"]];
 
-    [containcardview addSubview:crossdescbackimg];
+//    [containcardview addSubview:crossdescbackimg];
     [crossdescription setBackgroundColor:[UIColor clearColor]];
     [crossdescription setDelegate:self];
     [containcardview addSubview:crossdescription];
@@ -233,8 +229,25 @@
     [self initData];
     [self reArrangeViews];
     [self setExfeeNum];
+    
+        if(viewmode==YES){
+            for (UIGestureRecognizer *recognizer in crossdescription.gestureRecognizers) {
+                if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]]){
+                    recognizer.enabled = NO;
+                }
+            }
+        
+        UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didlongpress:)];
+        longpress.minimumPressDuration = 1;
+        [containview addGestureRecognizer:longpress];
+        [longpress release];
+    }
+    
     NSTimeInterval t3=[[NSDate date] timeIntervalSince1970];
-    //
+
+
+
+    
     if(viewmode==YES)
         [self ShowRsvpButton];
     NSLog(@"time t1 %f t3 %f",t2-t1,t3-t2);
@@ -288,7 +301,6 @@
         NSTimeInterval t2=[[NSDate date] timeIntervalSince1970];
 
         [self setDateTime:cross.time];
-//        NSDictionary *placedict=[NSDictionary dictionaryWithKeysAndObjects:@"place_id",cross.place.place_id,@"title",cross.place.title,@"description",cross.place.place_description,@"lat",cross.place.lat, @"lng",cross.place.lng,@"external_id",cross.place.external_id,@"provider",cross.place.provider, nil];
         [self setPlace:cross.place];
         
         crossdescription.text=cross.cross_description;
@@ -330,7 +342,6 @@
     return YES;
 }
 - (void) reArrangeViews{
-    NSLog(@"reArrangeViews");
     CGSize timetitleconstraint = CGSizeMake(160,timetitle.frame.size.height);
     CGSize timetitlesize = [timetitle.text sizeWithFont:timetitle.font constrainedToSize:timetitleconstraint lineBreakMode:UILineBreakModeWordWrap];
     [timetitle setFrame:CGRectMake(INNER_MARGIN, exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,timetitlesize.width,24)];
@@ -349,18 +360,36 @@
 
     [map setFrame:CGRectMake(INNER_MARGIN+170+6,exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10+7,115,70)];
     [mapbox setFrame:CGRectMake(INNER_MARGIN+170,exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,126,84)];
-    [crossdescription setFrame:CGRectMake(0,placedesc.frame.origin.y+placedesc.frame.size.height+15,containview.frame.size.width,145)];
-    [crossdescbackimg setFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y-9, crossdescription.frame.size.width, 75)];
+    
+    float height=crossdescription.contentSize.height;
+    if(height<crossdescription.frame.size.height)
+        height=crossdescription.frame.size.height;
+        
+    float crossdescriptionframeheight=crossdescription.frame.size.height;
+    [crossdescription setFrame:CGRectMake(0,placedesc.frame.origin.y+placedesc.frame.size.height+15,containview.frame.size.width,height)];
+    
+    float offset=height-crossdescriptionframeheight;
+    if(offset<0)
+        offset=0;
+    
+    [containview setContentSize:CGSizeMake(containview.frame.size.width, containview.frame.size.height+offset)];
+
+    [crossdescbackimg setFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y-9, crossdescription.frame.size.width, height)];
 
     containview.alwaysBounceVertical=YES;
+    
+    [containcardview setFrame:CGRectMake(containview.frame.origin.x, containview.frame.origin.y, containview.frame.size.width, containview.contentSize.height)];
+
     if(viewmode==YES){
         CGRect backgroundrect=backgroundview.frame;
         if(backgroundrect.origin.y>=0)
         {
             backgroundrect.origin.y=-72;
-            backgroundrect.size.height=self.view.frame.size.height+72-44;
-            [backgroundview setFrame:backgroundrect];
         }
+        if(containview.contentSize.height>containview.frame.size.height)
+            backgroundrect.size.height=containview.contentSize.height;
+        backgroundrect.size.height=backgroundrect.size.height+72;
+        [backgroundview setFrame:backgroundrect];
         [crosstitle resignFirstResponder];
         [toolbar setHidden:YES];
         [crosstitle setHidden:YES];
@@ -370,9 +399,7 @@
         CGRect cardframe=containcardview.frame;
         cardframe.origin.y=0;
         [containcardview setFrame:cardframe];
-//        [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 54, 124, 27)];
         [exfeenum setHidden:NO];
-
         
         containcardview.backgroundimage=nil;
         [crossdescription setEditable:NO];
@@ -384,18 +411,10 @@
         exfeshowframe.origin.x=15-5;
         [exfeeShowview setFrame:exfeshowframe];
 
-//        CGSize constrainedSize = CGSizeMake(500,timetitle.frame.size.height);
-//        CGSize newtimetitleSize = [timetitle.text sizeWithFont:timetitle.font constrainedToSize:constrainedSize lineBreakMode:UILineBreakModeWordWrap];
-
         CGRect timetitleframe=timetitle.frame;
         timetitleframe.origin.x=15;
-//        timetitleframe.size.width=newtimetitleSize.width;
-
-//        if(timetitleframe.size.width>175) // MAX timetitle width=175
-//            timetitleframe.size.width=175;
         
         [timetitle setFrame:timetitleframe];
-
         CGRect timedescframe=timedesc.frame;
         timedescframe.origin.x=15;
         [timedesc setFrame:timedescframe];
@@ -1181,6 +1200,20 @@
         {
             [self setExfeeViewMode:YES];
         }
+        if (CGRectContainsPoint([crosstitle_view frame], location))
+        {
+            NSLog(@"cross title");
+            [crosstitle_view setHidden:YES];
+            [crosstitle setHidden:NO];
+            [title_input_img setHidden:NO];
+            [crosstitle becomeFirstResponder];
+        }
+
+        if (CGRectContainsPoint([crossdescription frame], location))
+        {
+            [crossdescription setEditable:YES];
+            [crossdescription becomeFirstResponder];
+        }
     }
 }
 - (void) setExfeeViewMode:(BOOL)edit{
@@ -1258,6 +1291,20 @@
             [self setExfeeViewMode:NO];
         }
     }
+    if(crosstitle.hidden==NO)
+    {
+        if (!CGRectContainsPoint([crosstitle frame], location)){
+            cross.title = crosstitle.text;
+            crosstitle_view.text=crosstitle.text;
+            [crosstitle setHidden:YES];
+            [crosstitle_view setHidden:NO];
+            [title_input_img setHidden:YES];
+            [self saveCrossUpdate];
+            NSLog(@"save crosstitle");
+//            [self setExfeeViewMode:NO];
+        }
+        
+    }
     if (CGRectContainsPoint([exfeeShowview frame], location))
     {
         [crosstitle resignFirstResponder];
@@ -1291,14 +1338,16 @@
 }
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
     float KEYBOARD_LANDSCAPE=216;
-    if(textView.tag==108)
-    {
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDelay:0];
-        [UIView setAnimationDuration:0.25];
-        float y=crossdescbackimg.frame.origin.y-(self.view.frame.size.height-toolbar.frame.size.height-KEYBOARD_LANDSCAPE-crossdescription.frame.size.height-20);
-        [containview setContentOffset:CGPointMake(0, y)];
-        [UIView commitAnimations];
+    if(viewmode==NO){
+        if(textView.tag==108)
+        {
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDelay:0];
+            [UIView setAnimationDuration:0.25];
+            float y=crossdescbackimg.frame.origin.y-(self.view.frame.size.height-toolbar.frame.size.height-KEYBOARD_LANDSCAPE-crossdescription.frame.size.height-20);
+            [containview setContentOffset:CGPointMake(0, y)];
+            [UIView commitAnimations];
+        }
     }
     return YES;
 }
@@ -1309,8 +1358,11 @@
     {
         [view resignFirstResponder];
     }
-    [crossdescription resignFirstResponder];
-    [containview becomeFirstResponder];
+    if(viewmode==NO )
+    {
+        [crossdescription resignFirstResponder];
+        [containview becomeFirstResponder];
+    }
 }
 #pragma mark RKObjectLoaderDelegate methods
 
