@@ -9,6 +9,7 @@
 #import "WelcomeView.h"
 
 @implementation WelcomeView
+@synthesize parent;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -21,8 +22,23 @@
         [gobutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
         [gobutton addTarget:self action:@selector(goNext) forControlEvents:UIControlEventTouchUpInside];
         [gobutton setFrame:CGRectMake(40, 350, 200, 44)];
+        
+        closebutton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [closebutton setTitle:@"Close" forState:UIControlStateNormal];
+        [closebutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+        [closebutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
+        [closebutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
+        [closebutton addTarget:parent action:@selector(closeWelcome) forControlEvents:UIControlEventTouchUpInside];
+        [closebutton setFrame:CGRectMake(40, 350, 200, 44)];
+        
+        [closebutton setHidden:YES];
         [self addSubview:gobutton];
+        [self addSubview:closebutton];
         [self initWelcome1];
+        [self initWelcome2];
+        self.layer.cornerRadius=5;
+        self.layer.masksToBounds=YES;
+        viewpage=0;
         // Initialization code
     }
     return self;
@@ -67,13 +83,63 @@
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([welcome1 length]-[@".\n\nEXFE your friends." length]-3,3)];
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([welcome1 length]-[@" your friends." length]-4,4)];
     [welcome1 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 15.0, NULL) range:NSMakeRange([welcome1 length]-[@"Gather a ·X·.\n\nEXFE your friends." length],[@"Gather a ·X·" length])];
-
-
-    
-    
-
 }
 
+- (void) drawWelcome2{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    CGContextSetTextMatrix(context, CGAffineTransformIdentity);
+    CGContextTranslateCTM(context, 0, self.bounds.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)welcome2);
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddRect(path, NULL, CGRectMake(6, self.frame.size.height-30-276.5, 308, 276.5));
+    CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [welcome2 length]), path, NULL);
+    CFRelease(framesetter);
+    CFRelease(path);
+    CTFrameDraw(theFrame, context);
+    CFRelease(theFrame);
+    CGContextRestoreGState(context);
+}
+
+- (void) initWelcome2{
+    NSString *str=@"“Rome wasn't built in a day.”\n\nEXFE [ˈɛksfi] is still in pilot stage. We’re building up blocks, consequently some bugs or unfinished pages may happen. Our apologies for any trouble you may encounter. Any feedback, please email feedback@exfe.com. Much appreciated.";
+    
+    welcome2 = [[NSMutableAttributedString alloc] initWithString:str];
+    
+    CTTextAlignment alignment = kCTCenterTextAlignment;
+    float linespaceing=1;
+    float minheight=18;
+    
+    CTParagraphStyleSetting allsetting[3] = {
+        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
+        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
+        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
+    };
+    CTParagraphStyleRef allstyle = CTParagraphStyleCreate(allsetting, 3);
+    [welcome2 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)allstyle range:NSMakeRange(0,[welcome2 length])];
+
+    alignment = kCTLeftTextAlignment;
+
+    CTParagraphStyleSetting psetting[3] = {
+        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
+        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
+        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
+    };
+    CTParagraphStyleRef pstyle = CTParagraphStyleCreate(psetting, 3);
+    [welcome2 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)pstyle range:NSMakeRange([@"“Rome wasn't built in a day.”\n\n" length],[welcome2 length]-[@"“Rome wasn't built in a day.”\n\n" length])];
+
+    
+    [welcome2 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL) range:NSMakeRange(0,[welcome2 length])];
+    
+    [welcome2 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 20.0, NULL) range:NSMakeRange(0,[@"“Rome wasn't built in a day.”" length])];
+    
+    [welcome2 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor whiteColor].CGColor range:NSMakeRange(0,[welcome2 length])];
+
+    [welcome2 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([@"“Rome wasn't built in a day.”\n\n" length],4)];
+}
 - (void) drawWelcome1{
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
@@ -90,6 +156,7 @@
     CFRelease(path);
     CTFrameDraw(theFrame, context);
     CFRelease(theFrame);
+    CGContextRestoreGState(context);
 }
 - (void)drawRect:(CGRect)rect
 {
@@ -108,7 +175,20 @@
     CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);
     CGGradientRelease(gradient), gradient = NULL;
     CGContextRestoreGState(context);
-    [self drawWelcome1];
+    if(viewpage==0)
+        [self drawWelcome1];
+    else if(viewpage==1)
+        [self drawWelcome2];
+}
+- (void) goNext{
+    viewpage=1;
+    [gobutton setHidden:YES];
+    [closebutton setHidden:NO];
+    [self setNeedsDisplay];
+}
+
+- (void) close{
+    
 }
 
 @end

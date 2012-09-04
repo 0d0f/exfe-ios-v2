@@ -29,7 +29,7 @@
         request.params=rsvpParams;
         request.onDidLoadResponse=^(RKResponse *response){
             if (response.statusCode == 200) {
-                [self processResponse:[response.body objectFromJSONData]];
+                [self processResponse:[response.body objectFromJSONData] status:@"signin"];
             }
         };
     }];
@@ -49,7 +49,7 @@
         request.params=rsvpParams;
         request.onDidLoadResponse=^(RKResponse *response){
             if (response.statusCode == 200) {
-                [self processResponse:[response.body objectFromJSONData]];
+                [self processResponse:[response.body objectFromJSONData] status:@"signup"];
             }
         };
     }];
@@ -85,7 +85,7 @@
             NSError *error = nil;
             id jsonParser =[[RKParserRegistry sharedRegistry] parserForMIMEType:RKMIMETypeJSON];
             NSDictionary *parsedResponse = [jsonParser objectFromString:[response bodyAsString] error:&error];
-            [self processResponse:parsedResponse];
+            [self processResponse:parsedResponse status:@""];
         }
     } else if ([request isDELETE]) {
         if ([response isNotFound]) {
@@ -107,7 +107,7 @@
 //    [APIProfile LoadUsrWithUserId:app.userid delegate:self];
 //}
 
-- (void) processResponse:(id)obj{
+- (void) processResponse:(id)obj status:(NSString*)status{
     
     NSLog(@"processResponse..");
     if([obj isKindOfClass:[NSDictionary class]])
@@ -128,6 +128,11 @@
                         NSString *username=[response objectForKey:@"username"];
                         NSLog(@"login success with ");
                         [signindelegate loginSuccessWith:token userid:userid username:username];
+                        if([status isEqualToString:@"signup"])
+                        {
+                            [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"NEWUSER"];
+                            [[NSUserDefaults standardUserDefaults] synchronize];
+                        }
                     }
                 }
                 else{

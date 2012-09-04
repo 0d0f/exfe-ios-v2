@@ -54,7 +54,7 @@
 - (void) Signupnew:(id) sender;
 - (void)SigninDidFinish;
 - (void)SigninCancel;
-- (void) processResponse:(id)obj;
+- (void) processResponse:(id)obj status:(NSString*)status;
 - (IBAction) TwitterLoginButtonPress:(id) sender;
 - (IBAction)showForgetPwd:(id)sender;
 - (IBAction)sendPwd:(id)sender;

@@ -67,9 +67,12 @@
         [self initUI];
         [self refreshCrosses:@"crossview"];
     }
-    [self ShowWelcome];
+    NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
+    if(newuser !=nil && [newuser isEqualToString:@"YES"])
+        [self showWelcome];
     
 }
+
 - (void)initUI{
     UIImage *gatherbtnimg = [UIImage imageNamed:@"gather_button.png"];
     UIButton *gatherButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -146,13 +149,29 @@
     [self.navigationController.view setNeedsDisplay];
     
 }
-- (void) ShowWelcome{
+- (void) showWelcome{
 //    int height=[[UIScreen mainScreen] bounds].size.height;
-    WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:CGRectMake(2, tableView.frame.origin.y+2, self.view.frame.size.width-2-2, 460-44-4)];
+    WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:CGRectMake(4, tableView.frame.origin.y+4, self.view.frame.size.width-4-4, 460-44-4-4)];
 //    [welcome setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5f]];
+    welcome.parent=self;
+
     [self.view addSubview:welcome];
     [self.view bringSubviewToFront:welcome];
     self.tableView.bounces=NO;
+}
+- (void) closeWelcome{
+    for(UIView *view in self.view.subviews)
+    {
+        if([view isKindOfClass:[WelcomeView class]])
+        {
+            [view removeFromSuperview];
+            [view release];
+        }
+    }
+    self.tableView.bounces=YES;
+    [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"NEWUSER"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
 }
 - (Cross*) crossWithId:(int)cross_id{
     for(Cross *c in _crosses)

@@ -37,5 +37,6 @@
 - (void) ShowGatherView;
 - (Cross*) crossWithId:(int)cross_id;
 - (void) refreshTableViewWithCrossId:(int)cross_id;
-- (void) ShowWelcome;
+- (void) showWelcome;
+- (void) closeWelcome;
 @end
