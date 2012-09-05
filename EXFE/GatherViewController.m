@@ -1317,14 +1317,7 @@
         }
         if(crossdescription.editable==YES){
             if (!CGRectContainsPoint([crossdescription frame], location)){
-                NSLog(@"save cross desc!");
-                [crossdescription setEditable:NO];
-                for (UIGestureRecognizer *recognizer in crossdescription.gestureRecognizers)
-                    if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]]){
-                        recognizer.enabled = NO;
-                    }
-
-                [self reArrangeViews];
+                [self saveCrossDesc];
             }
         }
     }
@@ -1340,6 +1333,19 @@
     [map becomeFirstResponder];
     }
 
+}
+- (void) saveCrossDesc{
+    [crossdescription setEditable:NO];
+    for (UIGestureRecognizer *recognizer in crossdescription.gestureRecognizers)
+        if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]]){
+            recognizer.enabled = NO;
+        }
+    
+    [self reArrangeViews];
+    cross.cross_description=crossdescription.text;
+    [self saveCrossUpdate];
+    NSLog(@"save cross desc");
+   
 }
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 
@@ -1361,7 +1367,7 @@
 }
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
     float KEYBOARD_LANDSCAPE=216;
-
+    notUserScroll=YES;
     if(viewmode==YES && textView.tag==108){
         CGRect frame=[crossdescription frame];
         float offset=frame.size.height-144;
@@ -1381,22 +1387,16 @@
         [containcardview setFrame:containcardframe];
 
     }
-
         if(textView.tag==108)
         {
-            NSLog(@"containview height:%f",containview.frame.size.height);
-
             [UIView beginAnimations:nil context:NULL];
             [UIView setAnimationDelay:0];
             [UIView setAnimationDuration:0.25];
             float y=crossdescription.frame.origin.y-15;
-//            float y=containview.contentSize.height-crossdescription.frame.size.height-(self.view.frame.size.height-toolbar.frame.size.height-KEYBOARD_LANDSCAPE-crossdescription.frame.size.height);
-            NSLog(@"crossdesc y:%f scrollto:%f",crossdescription.frame.origin.y,y);
-
-//            float y=crossdescbackimg.frame.origin.y-(self.view.frame.size.height-toolbar.frame.size.height-KEYBOARD_LANDSCAPE-crossdescription.frame.size.height-20);
             [containview setContentOffset:CGPointMake(0, y)];
             [UIView commitAnimations];
         }
+        notUserScroll=NO;
     return YES;
 }
 #pragma mark UIScrollView methods
@@ -1408,10 +1408,14 @@
     {
         [view resignFirstResponder];
     }
+    if(notUserScroll==NO && crossdescription.editable==YES && viewmode==YES)
+        [self saveCrossDesc];
+        
 //    if(viewmode==NO )
 //    {
         [crossdescription resignFirstResponder];
         [containview becomeFirstResponder];
+    
 //    }
 }
 #pragma mark RKObjectLoaderDelegate methods

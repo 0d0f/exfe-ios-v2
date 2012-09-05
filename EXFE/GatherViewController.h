@@ -76,6 +76,7 @@
     BOOL viewmode;
     BOOL exfeeedit;
     BOOL firstLoad;
+    BOOL notUserScroll;
     ConversationViewController *conversationView;
     UILabel *ccbuttonText;
 
@@ -126,4 +127,5 @@
 - (void) buildView;
 - (void) saveCrossUpdate;
 - (void) setExfeeViewMode:(BOOL)edit;
+- (void) saveCrossDesc;
 @end
