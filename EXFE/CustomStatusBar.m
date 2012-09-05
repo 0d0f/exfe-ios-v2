@@ -15,7 +15,7 @@
 //		[self addSubview:backgroundImageView];
 //		[backgroundImageView release];
         UIView *back=[[UIView alloc] initWithFrame:self.frame];
-        back.backgroundColor=[UIColor blackColor];
+        back.backgroundColor=[UIColor clearColor];
         [self addSubview:back];
         [back release];
 //		_indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -25,7 +25,7 @@
 		
 		_statusLabel = [[UILabel alloc] initWithFrame:self.frame];
         _statusLabel.textAlignment=UITextAlignmentRight;
-		_statusLabel.backgroundColor = [UIColor clearColor];
+		_statusLabel.backgroundColor = [UIColor blackColor];
 		_statusLabel.textColor = [UIColor whiteColor];
 		_statusLabel.font = [UIFont boldSystemFontOfSize:10.0f];
 		[self addSubview:_statusLabel];
@@ -44,7 +44,10 @@
 {
 	if (!msg)
 		return;
+    CGSize size=[msg sizeWithFont:_statusLabel.font constrainedToSize:CGSizeMake(self.frame.size.width, self.frame.size.height)];
 	_statusLabel.text = msg;
+    
+    [_statusLabel setFrame:CGRectMake(self.frame.size.width-size.width, _statusLabel.frame.origin.y, size.width, _statusLabel.frame.size.height)];
 //	[_indicator startAnimating];
 	self.hidden = NO;
 }

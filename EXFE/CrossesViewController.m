@@ -46,34 +46,60 @@
                                                       forState:UIControlStateNormal
                                                     barMetrics:UIBarMetricsDefault];
     current_cellrow=-1;
-    self.tableView.backgroundColor=[UIColor colorWithRed:0.27f green:0.33f blue:0.41f alpha:1.00f];
+    self.tableView.backgroundColor=[UIColor colorWithRed:0x1c/255.0f green:0x27/255.0f blue:0x33/255.0f alpha:1.00f];
     UIView *topview = [[UIView alloc] initWithFrame:CGRectMake(0, 0 - 480, 320, 480)];
-    topview.backgroundColor=[UIColor colorWithRed:0.64f green:0.69f blue:0.77f alpha:1.00f];
+    topview.backgroundColor=[UIColor colorWithRed:126/255.0f green:156/255.0f blue:189/255.0f alpha:1.00f];
     [self.tableView addSubview:topview];
     [topview release];
     [super viewDidLoad];
     
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
 
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [self loadObjectsFromDataStore];
-    cellbackimglist=[[NSArray alloc] initWithObjects:[UIImage imageNamed:@"cell_0_card.png"],[UIImage imageNamed:@"cell_1_card.png"],[UIImage imageNamed:@"cell_2_card.png"],[UIImage imageNamed:@"cell_3_card.png"], [UIImage imageNamed:@"cell_4_card.png"], nil ];
-//
-    cellbackimgblanklist=[[NSArray alloc] initWithObjects:[UIImage imageNamed:@"cell_0_null.png"],[UIImage imageNamed:@"cell_1_null.png"],[UIImage imageNamed:@"cell_2_null.png"],[UIImage imageNamed:@"cell_3_null.png"], [UIImage imageNamed:@"cell_4_null.png"], nil];
+    cellbackimglist=[[NSArray alloc] initWithObjects:[UIImage imageNamed:@"xlist_cell0.png"],[UIImage imageNamed:@"xlist_cell1.png"],[UIImage imageNamed:@"xlist_cell2.png"],[UIImage imageNamed:@"xlist_cell3.png"],[UIImage imageNamed:@"xlist_cell4.png"], nil ];
+
+    cellbackimgblanklist=[[NSArray alloc] initWithObjects:[UIImage imageNamed:@"xlist_cell0bg.png"],[UIImage imageNamed:@"xlist_cell1bg.png"],[UIImage imageNamed:@"xlist_cell2bg.png"],[UIImage imageNamed:@"xlist_cell3bg.png"], nil];
     
+    gatherax=[[NSMutableAttributedString alloc] initWithString:@"Gather a ·X·"];
+    CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL);
+    [gatherax addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0,[gatherax length])];
+    CFRelease(fontref);
+    [gatherax addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([gatherax length]-3,3)];
+
+    CTTextAlignment alignment = kCTCenterTextAlignment;
+    float linespaceing=1;
+    float minheight=26;
+    
+    CTParagraphStyleSetting gathersetting[3] = {
+        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
+        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
+        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
+    };
+    CTParagraphStyleRef gatherstyle = CTParagraphStyleCreate(gathersetting, 3);
+    [gatherax addAttribute:(id)kCTParagraphStyleAttributeName value:(id)gatherstyle range:NSMakeRange(0,[gatherax length])];
+    CFRelease(gatherstyle);
+    
+    
+    
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
     BOOL login=[app Checklogin];
-    if(login==YES)
-    {
+    if(login==YES) {
+        [self loadObjectsFromDataStore];
         [self initUI];
         [self refreshCrosses:@"crossview"];
     }
-    NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
-    if(newuser !=nil && [newuser isEqualToString:@"YES"])
-        [self showWelcome];
-    
 }
 
 - (void)initUI{
+//    UIAlertView *alert =
+//    [[UIAlertView alloc] initWithTitle: @"Some Title"
+//                               message: @"You look very nice today."
+//                              delegate: self
+//                     cancelButtonTitle: @"OK"
+//                     otherButtonTitles: nil];
+//    [alert show];
+//    [alert release];
+    
     UIImage *gatherbtnimg = [UIImage imageNamed:@"gather_button.png"];
     UIButton *gatherButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [gatherButton setImage:gatherbtnimg forState:UIControlStateNormal];
@@ -112,6 +138,7 @@
             dispatch_release(imgQueue);
         }
     }
+    [users release];
     UIView *containview=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 32, 44)];
     containview.backgroundColor=[UIColor clearColor];
     UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"i_avatar_effect.png"]];
@@ -131,7 +158,6 @@
     CGRect frame = CGRectMake(0, 0, 400, 44);
     UILabel *label = [[[UILabel alloc] initWithFrame:frame] autorelease];
     label.backgroundColor = [UIColor clearColor];
-    [FONT_COLOR_233 set];
     label.font =[UIFont fontWithName:@"HelveticaNeue-Bold" size:16];
     label.shadowColor = [UIColor colorWithWhite:0 alpha:0.5];
     label.shadowOffset= CGSizeMake(0, -1);
@@ -147,6 +173,10 @@
 //        [navbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"]  forBarMetrics:UIBarMetricsDefault];
 //    }
     [self.navigationController.view setNeedsDisplay];
+    NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
+    if(newuser !=nil && [newuser isEqualToString:@"YES"])
+        [self showWelcome];
+
     
 }
 - (void) showWelcome{
@@ -158,6 +188,7 @@
     [self.view addSubview:welcome];
     [self.view bringSubviewToFront:welcome];
     self.tableView.bounces=NO;
+    [welcome release];
 }
 - (void) closeWelcome{
     for(UIView *view in self.view.subviews)
@@ -194,6 +225,7 @@
         [cellDateTime release];
         cellDateTime=nil;
     }
+    [gatherax release];
     [customStatusBar release];
     [cellbackimglist release];
     [cellbackimgblanklist release];
@@ -224,22 +256,10 @@
     GatherViewController *gatherViewController=[[GatherViewController alloc]initWithNibName:@"GatherViewController" bundle:nil];
     
     [self.navigationController presentModalViewController:gatherViewController animated:YES];
+    [gatherViewController release];
 }
 
 - (void) refreshCrosses:(NSString*)source{
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//
-//    NSString *updated_at=@"";
-//    NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"]; 
-//    if(date_updated_at!=nil)
-//    {
-//        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-//        [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-//        updated_at = [formatter stringFromDate:date_updated_at];
-//        [formatter release];
-//    }
-//    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObject:source forKey:@"name"]];
     [self refreshCrosses:(NSString*)source withCrossId:0];
 }
 - (void) refreshCrosses:(NSString*)source withCrossId:(int)cross_id{
@@ -264,6 +284,8 @@
 }
 
 - (void)loadObjectsFromDataStore {
+//            [[NSUserDefaults standardUserDefaults] setObject:cross.updated_at forKey:@"exfee_updated_at"];
+    NSString *exfee_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
 	[_crosses release];
 	NSFetchRequest* request = [Cross fetchRequest];
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
@@ -282,7 +304,22 @@
                 [cellDateTime addObject:humanable_date];
             }
     }
+    NSDate *last_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
+    for(Cross *cross in _crosses){
+        if(exfee_updated_at==nil)
+            cross.read_at=[NSDate date];
+        
+        if(last_updated_at==nil)
+            last_updated_at=cross.updated_at;
+        else{
+            last_updated_at=[cross.updated_at laterDate:last_updated_at];
+        }
+    }
     
+        [[Cross currentContext] save:nil];
+    [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
     [self.tableView reloadData];
 }
 - (void)refresh
@@ -299,6 +336,7 @@
 
     [_crosses release];
     _crosses=nil;
+    [self.tableView reloadData];
 }
 
 #pragma mark RKObjectLoaderDelegate methods
@@ -310,8 +348,6 @@
         [customStatusBar performSelector:@selector(hide) withObject:nil afterDelay:2];
 
         Cross *cross=[objects lastObject];
-        [[NSUserDefaults standardUserDefaults] setObject:cross.updated_at forKey:@"exfee_updated_at"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
         [self loadObjectsFromDataStore];
     }
     if ([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"gatherview"]) {
@@ -325,6 +361,7 @@
         gatherViewController.cross=cross;
         [gatherViewController setViewMode];
         [self.navigationController pushViewController:gatherViewController animated:YES];
+        [gatherViewController release];
     }
     else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"pushtoconversation"]) {
         NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
@@ -334,52 +371,69 @@
         [gatherViewController setViewMode];
         [self.navigationController pushViewController:gatherViewController animated:NO];
         [gatherViewController toconversation];
+        [gatherViewController release];
     }
-    else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossupdateview"]) {
+    else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossupdateview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview"]) {
+        [self loadObjectsFromDataStore];
         [self.tableView reloadData];
     }
     [self stopLoading];
 }
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
+    
+    NSLog(@"Error %i : %@",error.code,error);
     [self stopLoading];
 }
 
 
 #pragma mark UITableViewDataSource methods
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    if([_crosses count]==0)
+    if(_crosses==nil)
         return 0;
-    if([_crosses count]<4 && [_crosses count]>0)
+    if([_crosses count]<4)
         return 4;
 	return [_crosses count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if(_crosses==nil)
+        return nil;
 	NSString* reuseIdentifier = @"cross Cell";
     CrossCell *cell =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
 	if (nil == cell) {
         cell = [[[CrossCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
 	}
+    cell.isGatherX=NO;
+    cell.removed=NO;
+    cell.isbackground=NO;
+    cell.showNumArea=NO;
     if(indexPath.row>=[_crosses count])
     {
-        cell.backgroundimg=[cellbackimgblanklist objectAtIndex:indexPath.row];
+        if(indexPath.row==[_crosses count]){
+            cell.backgroundimg=[cellbackimglist objectAtIndex:indexPath.row];
+            cell.isGatherX=YES;
+            cell.gatherx=gatherax;
+        }
+        else{
+            cell.backgroundimg=[cellbackimgblanklist objectAtIndex:indexPath.row];
+        }
         cell.isbackground=YES;
         return cell;
     }
-    else if(indexPath.row<=4)
+    else if(indexPath.row<4){
         cell.backgroundimg=[cellbackimglist objectAtIndex:indexPath.row];
-    else if(indexPath.row>4)
+    }
+    else if(indexPath.row>=4)
         cell.backgroundimg=[cellbackimglist objectAtIndex:4];
+    
     Cross *cross=[_crosses objectAtIndex:indexPath.row];
-    cell.removed=NO;
     cell.hlTitle=NO;
     cell.hlPlace=NO;
     cell.hlTime=NO;
     cell.hlExfee=NO;
     cell.hlConversation=NO;
-    
+    cell.showNumArea=YES;
     if(cross.updated!=nil)
     {
         id updated=cross.updated;
@@ -460,7 +514,12 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Cross *cross=[_crosses objectAtIndex:indexPath.row]; 
+    if(indexPath.row==[_crosses count])
+    {
+        [self ShowGatherView];
+        return ;
+    }
+    Cross *cross=[_crosses objectAtIndex:indexPath.row];
     if(cross.updated!=nil)
     {
         id updated=cross.updated;
@@ -494,6 +553,7 @@
     [gatherViewController setViewMode]; 
     
     [self.navigationController pushViewController:gatherViewController animated:YES];
+    [gatherViewController release];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     current_cellrow=indexPath.row;
 }

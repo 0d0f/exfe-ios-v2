@@ -22,7 +22,7 @@
     CTFramesetterRef framesetter=CTFramesetterCreateWithAttributedString(stringref);
     CFRange range;
     CGSize coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [attributedString length]), nil, constraint, &range);
-
+    CFRelease(style);
     CFRelease(framesetter);
     return coreTextSize;
 }

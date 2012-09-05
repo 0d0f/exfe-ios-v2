@@ -48,7 +48,7 @@
     [closebutton setTitle:@"Close" forState:UIControlStateNormal];
     [closebutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     [closebutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
-    [closebutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
+    [closebutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)] forState:UIControlStateNormal];
     [closebutton addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:closebutton];
 
@@ -194,7 +194,7 @@
     crossdescbackimg=[[UIView alloc] initWithFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y, crossdescription.frame.size.width, 75)];
     crossdescbackimg.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"gather_describe_area.png"]];
 
-//    [containcardview addSubview:crossdescbackimg];
+    [containcardview addSubview:crossdescbackimg];
     [crossdescription setBackgroundColor:[UIColor clearColor]];
     [crossdescription setDelegate:self];
     [containcardview addSubview:crossdescription];
@@ -203,7 +203,7 @@
         UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
         
         chatButton.frame = CGRectMake(0, 0, 30, 30);
-        [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
+        [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)] forState:UIControlStateNormal];
 
         [chatButton addTarget:self action:@selector(toconversation) forControlEvents:UIControlEventTouchUpInside];
 
@@ -265,9 +265,9 @@
         cross=[Cross object];
     if(users!=nil && [users count] >0)
     {
-        default_user=[users objectAtIndex:0];
+        default_user=[[users objectAtIndex:0] retain];
     }
-    
+    [users release];
     if(self.cross!=nil && viewmode==YES){
         NSTimeInterval t1=[[NSDate date] timeIntervalSince1970];
 
@@ -455,10 +455,8 @@
         containrect.origin.y=0;
 
     }
-    
-    [containcardview setNeedsDisplay];
-    
 
+    [containcardview setNeedsDisplay];
 }
 - (void) setViewMode{
     viewmode=YES;
@@ -540,8 +538,9 @@
     if([invitation.host boolValue]==YES)
         host=@"Host. ";
     
+    CTFontRef linefontref14= CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 14.0, NULL);
     NSMutableAttributedString *Line1 = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@%@",host,rsvp_status,mate]];
-    [Line1 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 14.0, NULL) range:NSMakeRange(0,[Line1 length])];
+    [Line1 addAttribute:(NSString*)kCTFontAttributeName value:(id)linefontref14 range:NSMakeRange(0,[Line1 length])];
     [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0,[host length])];
     [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[host length],[rsvp_status length])];
     if([mate length]>10){
@@ -549,6 +548,7 @@
         
         [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[host length]+[rsvp_status length]+6,[[invitation.mates stringValue] length])];
     }
+    CFRelease(linefontref14);
     
     float linespaceing=1;
     float minheight=18;
@@ -574,8 +574,11 @@
         identity_name=[@"@" stringByAppendingString:identity_name];
     if(identity_name==nil)
         identity_name=invitation.identity.external_id;
+    
+    CTFontRef linefontref11= CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 11.0, NULL);
+
     NSMutableAttributedString *Line2 = [[NSMutableAttributedString alloc] initWithString:identity_name];
-    [Line2 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 11.0, NULL) range:NSMakeRange(0,[identity_name length])];
+    [Line2 addAttribute:(NSString*)kCTFontAttributeName value:(id)linefontref11 range:NSMakeRange(0,[identity_name length])];
     [Line2 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[identity_name length])];
     linespaceing=1;
     minheight=13;
@@ -593,6 +596,7 @@
     CFRelease(framesetter);
     popover.Line2=Line2;
     [Line2 release];
+    CFRelease(linefontref11);
     
     NSString *by_name=invitation.by_identity.name;
     if(by_name==nil)
@@ -613,8 +617,10 @@
         timestring=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"rsvp" localTime:NO];
     
     NSString *create_at_and_by=[NSString stringWithFormat:@"%@ by %@",timestring,by_name];
+    CTFontRef linefontref11regular= CTFontCreateWithName(CFSTR("HelveticaNeue"), 11.0, NULL);
+
     NSMutableAttributedString *Line3 = [[NSMutableAttributedString alloc] initWithString:create_at_and_by];
-    [Line3 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 11.0, NULL) range:NSMakeRange(0,[Line3 length])];
+    [Line3 addAttribute:(NSString*)kCTFontAttributeName value:(id)linefontref11regular range:NSMakeRange(0,[Line3 length])];
     [Line3 addAttribute:(NSString*)kCTForegroundColorAttributeName value:FONT_COLOR_FA range:NSMakeRange(0,[Line3 length])];
     CTTextAlignment alignment = kCTRightTextAlignment;
     CTLineBreakMode linebreakmode=kCTLineBreakByTruncatingTail;
@@ -632,7 +638,7 @@
     CGSize Line3coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [Line3 length]), nil, CGSizeMake(150, 13), &range);
     CFRelease(line3style);
     CFRelease(framesetter);
-
+    CFRelease(linefontref11regular);
     popover.Line3=Line3;
     [Line3 release];
 
@@ -709,6 +715,7 @@
     [backgroundview release];
     [containcardview release];
     [crossdescbackimg release];
+    [default_user release];
 //    [conversationView release];
     [super dealloc];
 }
@@ -723,6 +730,8 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 - (IBAction) Close:(id) sender{
+    if(cross)
+        [[Cross currentContext] deleteObject:cross];
     [self pullcontainviewDown];
     [self dismissModalViewControllerAnimated:YES];
 }
@@ -748,7 +757,7 @@
     ExfeeInputViewController *exfeeinputViewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
     exfeeinputViewController.gatherview=self;
     [self presentModalViewController:exfeeinputViewController animated:YES];
-    [exfeeinputViewController release];
+//    [exfeeinputViewController release];
 }
 - (NSString*) findProvider:(NSString*)external_id{
     
@@ -898,8 +907,8 @@
                 conversationView.identity=invitation.identity;
     }
     cross.conversation_count=0;
-    NSError *saveError;
-    [[Cross currentContext] save:&saveError];
+//    NSError *saveError;
+//    [[Cross currentContext] save:&saveError];
     NSArray *viewControllers = self.navigationController.viewControllers;
     CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
     [crossViewController refreshTableViewWithCrossId:[cross.cross_id intValue]];
@@ -1122,14 +1131,16 @@
     }
     NSString *total=[[NSNumber numberWithInt:all] stringValue]; //[cross.exfee.total stringValue];
     NSString *accepted=[[NSNumber numberWithInt:accept] stringValue]; //[cross.exfee.accepted stringValue];
-    
-    
     NSMutableAttributedString * exfeestr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ / %@",accepted,total]];
-    
     [exfeestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0,accepted.length)];
-    [exfeestr addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL) range:NSMakeRange(0,accepted.length)];
+    CTFontRef exfeefontref21= CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL);
+    CTFontRef exfeefontref13= CTFontCreateWithName(CFSTR("HelveticaNeue"), 13.0, NULL);
+    
+    [exfeestr addAttribute:(NSString*)kCTFontAttributeName value:(id)exfeefontref21 range:NSMakeRange(0,accepted.length)];
     [exfeestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor blackColor].CGColor range:NSMakeRange(accepted.length,exfeestr.length-accepted.length)];
-    [exfeestr addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 13.0, NULL) range:NSMakeRange(accepted.length,exfeestr.length-accepted.length)];
+    [exfeestr addAttribute:(NSString*)kCTFontAttributeName value:(id)exfeefontref13 range:NSMakeRange(accepted.length,exfeestr.length-accepted.length)];
+    CFRelease(exfeefontref13);
+    CFRelease(exfeefontref21);
 
     CTTextAlignment alignment = kCTRightTextAlignment;
     CTParagraphStyleSetting linesetting[1] = {
@@ -1141,6 +1152,7 @@
     CTParagraphStyleRef linestyle = CTParagraphStyleCreate(linesetting, 1);
     [exfeestr addAttribute:(id)kCTParagraphStyleAttributeName value:(id)linestyle range:NSMakeRange(0,[exfeestr length])];
     exfeenum.attributedText=exfeestr;
+    CFRelease(linestyle);
     if([exfeeIdentities count]<3 && exfeeedit==YES)
         [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 50+25, 124, 27)];
     if([exfeeIdentities count]<5 && exfeeedit==NO)
@@ -1148,10 +1160,9 @@
     else
         [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 50, 124, 27)];
     
-    
+    [exfeestr release];
     [exfeenum setNeedsDisplay];
 }
-
 
 - (void)saveCrossUpdate{
     NSError *error;
@@ -1291,19 +1302,31 @@
             [self setExfeeViewMode:NO];
         }
     }
-    if(crosstitle.hidden==NO)
-    {
-        if (!CGRectContainsPoint([crosstitle frame], location)){
-            cross.title = crosstitle.text;
-            crosstitle_view.text=crosstitle.text;
-            [crosstitle setHidden:YES];
-            [crosstitle_view setHidden:NO];
-            [title_input_img setHidden:YES];
-            [self saveCrossUpdate];
-            NSLog(@"save crosstitle");
-//            [self setExfeeViewMode:NO];
+    if(viewmode==YES){
+        if(crosstitle.hidden==NO)
+        {
+            if (!CGRectContainsPoint([crosstitle frame], location)){
+                cross.title = crosstitle.text;
+                crosstitle_view.text=crosstitle.text;
+                [crosstitle setHidden:YES];
+                [crosstitle_view setHidden:NO];
+                [title_input_img setHidden:YES];
+                [self saveCrossUpdate];
+            }
+            
         }
-        
+        if(crossdescription.editable==YES){
+            if (!CGRectContainsPoint([crossdescription frame], location)){
+                NSLog(@"save cross desc!");
+                [crossdescription setEditable:NO];
+                for (UIGestureRecognizer *recognizer in crossdescription.gestureRecognizers)
+                    if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]]){
+                        recognizer.enabled = NO;
+                    }
+
+                [self reArrangeViews];
+            }
+        }
     }
     if (CGRectContainsPoint([exfeeShowview frame], location))
     {
@@ -1338,31 +1361,58 @@
 }
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
     float KEYBOARD_LANDSCAPE=216;
-    if(viewmode==NO){
+
+    if(viewmode==YES && textView.tag==108){
+        CGRect frame=[crossdescription frame];
+        float offset=frame.size.height-144;
+        frame.size.height=144;
+        [crossdescription setFrame:frame];
+        [crossdescbackimg setFrame:frame];
+        
+        CGSize containsize=[containview contentSize];
+        containsize.height=containsize.height-offset;
+        CGRect containcardframe=[containcardview frame];
+        containcardframe.size.height=containcardframe.size.height-offset;
+
+//        CGRect containcardframe=[containcardview frame];
+//        containcardframe.size.height=containcardframe.size.height-offset;
+        
+        [containview setContentSize:containsize];
+        [containcardview setFrame:containcardframe];
+
+    }
+
         if(textView.tag==108)
         {
+            NSLog(@"containview height:%f",containview.frame.size.height);
+
             [UIView beginAnimations:nil context:NULL];
             [UIView setAnimationDelay:0];
             [UIView setAnimationDuration:0.25];
-            float y=crossdescbackimg.frame.origin.y-(self.view.frame.size.height-toolbar.frame.size.height-KEYBOARD_LANDSCAPE-crossdescription.frame.size.height-20);
+            float y=crossdescription.frame.origin.y-15;
+//            float y=containview.contentSize.height-crossdescription.frame.size.height-(self.view.frame.size.height-toolbar.frame.size.height-KEYBOARD_LANDSCAPE-crossdescription.frame.size.height);
+            NSLog(@"crossdesc y:%f scrollto:%f",crossdescription.frame.origin.y,y);
+
+//            float y=crossdescbackimg.frame.origin.y-(self.view.frame.size.height-toolbar.frame.size.height-KEYBOARD_LANDSCAPE-crossdescription.frame.size.height-20);
             [containview setContentOffset:CGPointMake(0, y)];
             [UIView commitAnimations];
         }
-    }
     return YES;
 }
 #pragma mark UIScrollView methods
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    if(scrollView.tag==108)
+        return;
     for (UIView *view in [containview subviews])
     {
         [view resignFirstResponder];
     }
-    if(viewmode==NO )
-    {
+//    if(viewmode==NO )
+//    {
         [crossdescription resignFirstResponder];
         [containview becomeFirstResponder];
-    }
+//    }
 }
 #pragma mark RKObjectLoaderDelegate methods
 
@@ -1563,7 +1613,7 @@
             [self setExfeeNum];
             [self ShowGatherToolBar];
         }
-
+    [postarray release];
     }
 //    [exfeeShowview reloadData];
 //    [self ShowGatherToolBar];
@@ -1581,10 +1631,10 @@
     }
     if(by_identity_id>0)
     {
-        BOOL selected=NO;
+//        BOOL selected=NO;
         for(int i=0;i< [exfeeSelected count];i++) {
             if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
-                selected=YES;
+//                selected=YES;
                 if(i<[exfeeIdentities count]) {
                     for(Invitation *invitation in exfeeIdentities)
                     {

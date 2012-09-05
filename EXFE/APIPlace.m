@@ -69,12 +69,13 @@
                     if(status!=nil &&[status isEqualToString:@"OK"])
                     {
                         NSArray *results=[body objectForKey:@"results"] ;
-                        NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]] ;
+                        NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]]  ;//autorelease
                         for(NSDictionary *place in results)
                         {
 
                             NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:[place objectForKey:@"name"],@"title",[place objectForKey:@"vicinity"],@"description",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[place objectForKey:@"id"],@"external_id",@"google",@"provider", nil];
                             [local_results addObject:dict];
+                            [dict release];
                         }
                         [(PlaceViewController*)delegate reloadPlaceData:local_results];
                     }

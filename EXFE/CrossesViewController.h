@@ -26,6 +26,7 @@
     NSArray *cellbackimgblanklist;
     NSMutableArray *cellDateTime;
     CustomStatusBar *customStatusBar;
+    NSMutableAttributedString *gatherax;
 }
 - (void) refreshCell;
 - (void) refreshCrosses:(NSString*)source;

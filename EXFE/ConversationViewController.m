@@ -44,7 +44,7 @@
     [chatButton setTitle:@"Chat" forState:UIControlStateNormal];
     [chatButton setImage:chatimg forState:UIControlStateNormal];
     chatButton.frame = CGRectMake(0, 0, chatimg.size.width, chatimg.size.height);
-    [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
+    [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0,6)] forState:UIControlStateNormal];
 
     [chatButton addTarget:self action:@selector(toCross) forControlEvents:UIControlEventTouchUpInside];
     
@@ -177,7 +177,7 @@
 	CGRect frame = self.inputToolbar.frame;
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
-        frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height-44;
+        frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height;
         if(_tableView.contentSize.height>_tableView.frame.size.height)
         {
         CGRect _tableviewrect=_tableView.frame;
@@ -201,7 +201,7 @@
 	[UIView setAnimationDuration:0.3];
 	CGRect frame = self.inputToolbar.frame;
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
-        frame.origin.y = self.view.frame.size.height - frame.size.height-44;
+        frame.origin.y = self.view.frame.size.height - frame.size.height;
         if(_tableView.contentSize.height>_tableView.frame.size.height){
             CGRect _tableviewrect=_tableView.frame;
             _tableviewrect.origin.y=0;
@@ -266,7 +266,6 @@
 
 }
 - (CGSize)textWidthForHeight:(CGFloat)inHeight withAttributedString:(NSAttributedString *)attributedString {
-//    CTLineRef line = CTLineCreateWithAttributedString((CFAttributedStringRef) attributedString);
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef) attributedString);
     int textLength = [attributedString length];
     CFRange range;
@@ -275,7 +274,8 @@
     CGSize constraint = CGSizeMake(maxWidth, maxHeight);
     
     //  checking frame sizes
-    CGSize coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, textLength), nil, constraint, &range); 
+    CGSize coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, textLength), nil, constraint, &range);
+    CFRelease(framesetter);
     return coreTextSize;//CGSizeMake(width, height);
 }
 
@@ -350,7 +350,9 @@
                     [_tableView.layer addSublayer:timetextlayer];
                 }
                 int textheight=14;
-                NSMutableAttributedString *timeattribstring;
+                NSMutableAttributedString *timeattribstring=nil;
+                CTFontRef timefontref= CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL);
+                CTFontRef timefontref9= CTFontCreateWithName(CFSTR("HelveticaNeue"), 9.0, NULL);
 
                 if(showTimeMode==0)
                 {
@@ -363,8 +365,7 @@
                     [dateformat release];
                     NSString *timestring=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:timestring];
-                    
-                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL) range:NSMakeRange(0,[timestring length])];
+                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)timefontref range:NSMakeRange(0,[timestring length])];
                     [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[timestring length])];
                 }
                 else if(showTimeMode==1)
@@ -378,13 +379,16 @@
                     
                     [dateformat_to release];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",datestring,timestring]];
-                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL) range:NSMakeRange(0,[datestring length])];
+                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)timefontref range:NSMakeRange(0,[datestring length])];
                     [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[datestring length])];
 
-                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 9.0, NULL) range:NSMakeRange([datestring length]+1,[timestring length])];
+                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)timefontref9 range:NSMakeRange([datestring length]+1,[timestring length])];
                     [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_CCC.CGColor range:NSMakeRange([datestring length]+1,[timestring length])];
                     textheight=28;
                 }
+                CFRelease(timefontref);
+                CFRelease(timefontref9);
+
                 CGSize timesize=[self textWidthForHeight:textheight withAttributedString:timeattribstring];
                 [CATransaction begin];
                 [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
@@ -478,15 +482,19 @@
             [dateformat_to release];
 
             NSMutableAttributedString *timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",relative,datestring]];
-
-            [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL) range:NSMakeRange(0,[relative length])];
+            CTFontRef timefontref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL);
+            CTFontRef timefontref9=CTFontCreateWithName(CFSTR("HelveticaNeue"), 9.0, NULL);
+            [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)timefontref range:NSMakeRange(0,[relative length])];
             [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[relative length])];
 
-            [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 9.0, NULL) range:NSMakeRange([relative length]+1,[datestring length])];
+            [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)timefontref9 range:NSMakeRange([relative length]+1,[datestring length])];
             [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_CCC.CGColor range:NSMakeRange([relative length]+1,[datestring length])];
+            CFRelease(timefontref);
+            CFRelease(timefontref9);
             CGSize timesize=[self textWidthForHeight:28 withAttributedString:timeattribstring];
             [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width-5-(timesize.width+4*2),0,timesize.width+8,timesize.height+2)];
             [floattimetextlayer setString:timeattribstring];
+            [timeattribstring release];
             topcellPath=path.row;
         }
     }
@@ -507,10 +515,13 @@
     CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN_LEFT +CELL_CONTENT_MARGIN_RIGHT), 20000.0f);
 
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  %@",name,post.content]];
+    CTFontRef boldfontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 14.0, NULL);
+    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)boldfontref range:NSMakeRange(0,[name length])];
+    CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL);
+    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange([name length]+2,[post.content length])];
 
-    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 14.0, NULL) range:NSMakeRange(0,[name length])];
-    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL) range:NSMakeRange([name length]+2,[post.content length])];
-    
+    CFRelease(boldfontref);
+    CFRelease(fontref);
     
     CGSize size= [CTUtil CTSizeOfString:attributedString minLineHeight:20 linespacing:0 constraint:constraint];
     [attributedString release];

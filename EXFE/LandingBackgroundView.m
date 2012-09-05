@@ -147,7 +147,10 @@
     BOOL isring=NO;
     
     NSMutableAttributedString *handy=[[[NSMutableAttributedString alloc] initWithString:@"Handy"] autorelease];
-    [handy addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL) range:NSMakeRange(0,[handy length])];
+    
+    CTFontRef handyfontref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL);
+    [handy addAttribute:(NSString*)kCTFontAttributeName value:(id)handyfontref range:NSMakeRange(0,[handy length])];
+    CFRelease(handyfontref);
     [handy addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:21/255.0f green:52/255.0f blue:84/255.0f alpha:1].CGColor range:NSMakeRange(0,[handy length])];
     if([bigtitlename isEqualToString:@"handy"])
         isring=NO;
@@ -162,7 +165,9 @@
     t_y=l_r*sin(angle/360.0*M_PI*2);
     t_x=l_r*cos(angle/360.0*M_PI*2);
     NSMutableAttributedString *safe=[[[NSMutableAttributedString alloc] initWithString:@"Safe"] autorelease];
-    [safe addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 14.0, NULL) range:NSMakeRange(0,[safe length])];
+    CTFontRef safefontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 14.0, NULL);
+    [safe addAttribute:(NSString*)kCTFontAttributeName value:(id)safefontref range:NSMakeRange(0,[safe length])];
+    CFRelease(safefontref);
     [safe addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:21/255.0f green:52/255.0f blue:84/255.0f alpha:1].CGColor range:NSMakeRange(0,[safe length])];
     if([bigtitlename isEqualToString:@"safe"])
         isring=NO;
@@ -176,7 +181,9 @@
     t_y=l_r*sin(angle/360.0*M_PI*2);
     t_x=l_r*cos(angle/360.0*M_PI*2);
     NSMutableAttributedString *thex=[[[NSMutableAttributedString alloc] initWithString:@"·X·"] autorelease];
-    [thex addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 18.0, NULL) range:NSMakeRange(0,[thex length])];
+    CTFontRef thexfontref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 18.0, NULL) ;
+    [thex addAttribute:(NSString*)kCTFontAttributeName value:(id)thexfontref range:NSMakeRange(0,[thex length])];
+    CFRelease(thexfontref);
     [thex addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0,[thex length])];
     if([bigtitlename isEqualToString:@"thex"])
         isring=NO;
@@ -190,7 +197,9 @@
     t_y=l_r*sin(angle/360.0*M_PI*2);
     t_x=l_r*cos(angle/360.0*M_PI*2);
     NSMutableAttributedString *rsvp=[[[NSMutableAttributedString alloc] initWithString:@"RSVP"] autorelease];
-    [rsvp addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 11.0, NULL) range:NSMakeRange(0,[rsvp length])];
+    CTFontRef rsvpfontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 11.0, NULL);
+    [rsvp addAttribute:(NSString*)kCTFontAttributeName value:(id)rsvpfontref range:NSMakeRange(0,[rsvp length])];
+    CFRelease(rsvpfontref);
     [rsvp addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:21/255.0f green:52/255.0f blue:84/255.0f alpha:1].CGColor range:NSMakeRange(0,[rsvp length])];
     if([bigtitlename isEqualToString:@"rsvp"])
         isring=NO;
@@ -199,20 +208,18 @@
 
     [self drawCircle:CGPointMake(centerx+t_x, centery+t_y) radius:17.0 str:rsvp isRing:isring];
     [circleRects setObject:[NSValue valueWithCGRect:CGRectMake(centerx+t_x-circle_r, centery+t_y-circle_r, 2*circle_r, 2*circle_r)] forKey:@"rsvp"];
-    
     [self drawBigTitle];
-
-//    CGContextRestoreGState(context);
-    
-    
 }
 - (void) initAttributedString{
+    CTFontRef titlefont32ref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 32, NULL);
+    CTFontRef titlefont12ref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 12, NULL);
+    CTFontRef titlefont18ref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 18, NULL);
+    
     if(titleexfe==nil){
         titleexfe=[[NSMutableAttributedString alloc] initWithString:@"EXFE [’ɛksfi]\nA utility for hanging out with friends."];
-        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 32, NULL) range:NSMakeRange(0,5)];
-        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 12, NULL) range:NSMakeRange(6,7)];
-        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 18, NULL) range:NSMakeRange(14,[titleexfe length]-14)];
-        
+        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont32ref range:NSMakeRange(0,5)];
+        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont12ref range:NSMakeRange(6,7)];
+        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont18ref range:NSMakeRange(14,[titleexfe length]-14)];
         [titleexfe addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[titleexfe length])];
         
         
@@ -225,9 +232,9 @@
     }
     if(titlethex==nil){
         titlethex=[[NSMutableAttributedString alloc] initWithString:@"·X· (cross)\nA gathering of people for any intent."];
-        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 32, NULL) range:NSMakeRange(0,4)];
-        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 12, NULL) range:NSMakeRange(5,7)];
-        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 18, NULL) range:NSMakeRange(13,[titlethex length]-13)];
+        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont32ref range:NSMakeRange(0,4)];
+        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont12ref range:NSMakeRange(5,7)];
+        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont18ref range:NSMakeRange(13,[titlethex length]-13)];
         
         [titlethex addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[titlethex length])];
         
@@ -241,7 +248,7 @@
     if(titlesafe==nil)
     {
         titlesafe=[[NSMutableAttributedString alloc] initWithString:@"Private,\nattendee access only."];
-        [titlesafe addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 18, NULL) range:NSMakeRange(0,[titlesafe length])];
+        [titlesafe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont18ref range:NSMakeRange(0,[titlesafe length])];
 
         [titlesafe addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[titlesafe length])];
         
@@ -254,7 +261,7 @@
     }
     if(titlersvp==nil){
         titlersvp=[[NSMutableAttributedString alloc] initWithString:@"No more endless calls,\nemails, messages off-the-point."];
-        [titlersvp addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 18, NULL) range:NSMakeRange(0,[titlersvp length])];
+        [titlersvp addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont18ref range:NSMakeRange(0,[titlersvp length])];
         
         [titlersvp addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[titlersvp length])];
         
@@ -267,7 +274,7 @@
     }
     if(titlehandy==nil){
         titlehandy=[[NSMutableAttributedString alloc] initWithString:@"Connected,\nwith tools & apps you preferred."];
-        [titlehandy addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 18, NULL) range:NSMakeRange(0,[titlehandy length])];
+        [titlehandy addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont18ref range:NSMakeRange(0,[titlehandy length])];
         
         [titlehandy addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[titlehandy length])];
         
@@ -278,7 +285,10 @@
         CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 4);
         [titlehandy addAttribute:(id)kCTParagraphStyleAttributeName value:(id)titlestyle range:NSMakeRange(0,[titlehandy length])];
     }
-    
+    CFRelease(titlefont32ref);
+    CFRelease(titlefont12ref);
+    CFRelease(titlefont18ref);
+ 
     
         
 }

@@ -7,6 +7,7 @@
 //
 
 #import "ABTableViewCell.h"
+#import <CoreText/CoreText.h>
 
 @interface CrossCell : ABTableViewCell{
     NSString *title;
@@ -15,6 +16,7 @@
     NSString *time_month;
     NSString *time_day;
     NSString *place;
+    NSAttributedString *gatherx;
     UIImage *backgroundimg;
     int total;
     int accepted;
@@ -27,6 +29,8 @@
     BOOL hlConversation;
     BOOL isbackground;
     BOOL showDetailTime;
+    BOOL showNumArea;
+    BOOL isGatherX;
 //    NSDictionary *updated;
 //    NSDate *read_at;
 }
@@ -35,6 +39,7 @@
 @property (nonatomic,retain) NSString* place;
 @property (nonatomic,retain) NSString* time_month;
 @property (nonatomic,retain) NSString* time_day;
+@property (nonatomic,retain) NSAttributedString *gatherx;
 @property (nonatomic,retain) UIImage* avatar;
 @property (nonatomic,retain) UIImage* backgroundimg;
 @property BOOL hlTitle;
@@ -45,6 +50,8 @@
 @property BOOL removed;
 @property BOOL isbackground;
 @property BOOL showDetailTime;
+@property (nonatomic) BOOL showNumArea;
+@property (nonatomic) BOOL isGatherX;
 @property (nonatomic) int total;
 @property (nonatomic) int accepted;
 @property (nonatomic) int conversationCount;

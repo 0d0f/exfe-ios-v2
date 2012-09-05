@@ -43,20 +43,20 @@
     int maxRow;
     id <EXImagesCollectionDataSource>  _dataSource;
     id <EXImagesCollectionDelegate> _delegate;
-    UIImage *taghost;
-    UIImage *avatareffect;
-    UIImage *addexfee;
-    UIImage *tagmates;
-    UIImage *tagrsvpaccepted;
+//    UIImage *taghost;
+//    UIImage *avatareffect;
+//    UIImage *addexfee;
+//    UIImage *tagmates;
+//    UIImage *tagrsvpaccepted;
     
-    UIImage *exfee_frame_host;
-    UIImage *exfee_frame_mates;
-    UIImage *exfee_frame;
+//    UIImage *exfee_frame_host;
+//    UIImage *exfee_frame_mates;
+//    UIImage *exfee_frame;
     
-    UIImage *rsvp_accept_badge;
-    UIImage *rsvp_interested_badge;
-    UIImage *rsvp_pending_badge;
-    UIImage *rsvp_unavailable_badge;
+//    UIImage *rsvp_accept_badge;
+//    UIImage *rsvp_interested_badge;
+//    UIImage *rsvp_pending_badge;
+//    UIImage *rsvp_unavailable_badge;
     
     BOOL hiddenAddButton;
     NSMutableDictionary *itemsCache;

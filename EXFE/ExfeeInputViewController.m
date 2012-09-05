@@ -485,7 +485,7 @@
     [self addByInputIdentity:inputtext];
 }
 - (id)customObject:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
-    NSDictionary *dictionary=[[NSDictionary alloc] initWithObjectsAndKeys:input,@"name",@"id",@"id", nil ];
+    NSDictionary *dictionary=[[[NSDictionary alloc] initWithObjectsAndKeys:input,@"name",@"id",@"id", nil ] autorelease];
     return dictionary;
 }
 - (BOOL)isInputValid:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{

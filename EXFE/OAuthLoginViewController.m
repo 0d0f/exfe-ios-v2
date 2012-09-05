@@ -105,19 +105,18 @@
 //    NSLog(@"webview should load request: %@", request);
     NSString *URLString = [[request URL] absoluteString];
     if ([URLString rangeOfString:@"token="].location != NSNotFound && [URLString rangeOfString:@"oauth://handleTwitterLogin"].location != NSNotFound) {
-        URLParser *parser = [[URLParser alloc] initWithURLString:URLString];
+        URLParser *parser = [[[URLParser alloc] initWithURLString:URLString] autorelease];
         NSString *err = [parser valueForVariable:@"err"];
         if(!err)
         {
         NSString *userid = [parser valueForVariable:@"userid"];
         NSString *name = [parser valueForVariable:@"name"];
         name=[Util decodeFromPercentEscapeString:name];
-//        CFStringTransform((CFMutableStringRef)name, NULL, kCFStringTransformToXMLHex, false);            
             
         NSString *token = [parser valueForVariable:@"token"];
         NSString *external_id = [parser valueForVariable:@"external_id"];
-            [self.delegate OAuthloginViewControllerDidSuccess:self userid:userid username:name external_id:external_id token:token];
-        [parser release];
+        [self.delegate OAuthloginViewControllerDidSuccess:self userid:userid username:name external_id:external_id token:token];
+//        [parser release];
         }
         return NO;
     }

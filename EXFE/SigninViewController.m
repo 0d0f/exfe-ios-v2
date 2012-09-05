@@ -136,6 +136,12 @@
                     }
                 }
                 else{
+                    id meta=[obj objectForKey:@"meta"];
+                    if([meta isKindOfClass:[NSDictionary class]])
+                    {
+                        NSString *code=[meta objectForKey:@"code"];
+                        NSLog(@"code: %@",code);
+                    }
                     NSLog(@"%@",obj);
                 }
             }
@@ -433,7 +439,7 @@
         hint_title.text=@"Verification";
         NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"This identity requires verification before using.\nConfirm sending verification to your mailbox?"];
         [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor redColor] range:NSMakeRange(0,50)];
-        hint_desc.text=desc;
+//        hint_desc.text=desc;
         [desc release];
         [hint_title setHidden:NO];
         [hint_desc setHidden:NO];

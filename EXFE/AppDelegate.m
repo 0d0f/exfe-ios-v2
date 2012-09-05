@@ -123,8 +123,8 @@
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
 
-        [(CrossesViewController*)crossviewController refreshCrosses:@"crossview"];
         [(CrossesViewController*)crossviewController initUI];
+        [(CrossesViewController*)crossviewController refreshCrosses:@"crossview"];
         [self.navigationController dismissModalViewControllerAnimated:YES];
     }
 }
@@ -238,27 +238,39 @@
     
     app.userid=0;
     app.accesstoken=@"";
-    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
-//#ifdef RESTKIT_GENERATE_SEED_DB
-//    NSString *seedDatabaseName = nil;
-//    NSString *databaseName = DBNAME;
-//#else
-//    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
-//    NSString *databaseName = DBNAME;
-//#endif
+    [self cleandb];
 
-//    [objectStore deletePersistentStoreUsingSeedDatabaseName:seedDatabaseName];
-    [objectStore deletePersistentStore];
-    [objectStore save:nil];
     
     NSArray *viewControllers = app.navigationController.viewControllers;
     CrossesViewController *rootViewController = [viewControllers objectAtIndex:0];
     [rootViewController emptyView];
+        
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+- (void) cleandb{
+    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
+
+#ifdef RESTKIT_GENERATE_SEED_DB
+    NSString *seedDatabaseName = nil;
+    NSString *databaseName = DBNAME;
+#else
+    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
+    NSString *databaseName = DBNAME;
+#endif
     
+    [objectStore deletePersistentStore];
+    [objectStore save:nil];
+//    objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(observeContextSave:)
+//                                                 name:NSManagedObjectContextDidSaveNotification
+//                                               object:nil];
+//    
 //    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
 //    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
-    
-    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 -(BOOL) Checklogin{
 

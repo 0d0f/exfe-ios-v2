@@ -24,20 +24,20 @@
     if (self) {
     }
     [self initData];
-    taghost=[UIImage imageNamed:@"tag-host.png"];
-    avatareffect=[UIImage imageNamed:@"avatar_effect.png"];
-    addexfee=[UIImage imageNamed:@"gather_add_exfee.png"];
-    tagmates=[UIImage imageNamed:@"tag-mates.png"];
-    tagrsvpaccepted=[UIImage imageNamed:@"rsvpbg-accepted.png"];
+//    taghost=[UIImage imageNamed:@"tag-host.png"];
+//    avatareffect=[UIImage imageNamed:@"avatar_effect.png"];
+//    addexfee=[UIImage imageNamed:@"gather_add_exfee.png"];
+//    tagmates=[UIImage imageNamed:@"tag-mates.png"];
+//    tagrsvpaccepted=[UIImage imageNamed:@"rsvpbg-accepted.png"];
     
-    exfee_frame_host=[UIImage imageNamed:@"exfee_frame_host.png"];
-    exfee_frame_mates=[UIImage imageNamed:@"exfee_frame_mates.png"];
-    exfee_frame=[UIImage imageNamed:@"exfee_frame.png"];
+//    exfee_frame_host=[UIImage imageNamed:@"exfee_frame_host.png"];
+//    exfee_frame_mates=[UIImage imageNamed:@"exfee_frame_mates.png"];
+//    exfee_frame=[UIImage imageNamed:@"exfee_frame.png"];
     
-    rsvp_accept_badge=[UIImage imageNamed:@"rsvp_accept_badge.png"];
-    rsvp_interested_badge=[UIImage imageNamed:@"rsvp_interested_badge.png"];
-    rsvp_pending_badge=[UIImage imageNamed:@"rsvp_pending_badge.png"];
-    rsvp_unavailable_badge=[UIImage imageNamed:@"rsvp_unavailable_badge.png"];
+//    rsvp_accept_badge=[UIImage imageNamed:@"rsvp_accept_badge.png"];
+//    rsvp_interested_badge=[UIImage imageNamed:@"rsvp_interested_badge.png"];
+//    rsvp_pending_badge=[UIImage imageNamed:@"rsvp_pending_badge.png"];
+//    rsvp_unavailable_badge=[UIImage imageNamed:@"rsvp_unavailable_badge.png"];
 
 //    hiddenAddButton=NO;
     itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];

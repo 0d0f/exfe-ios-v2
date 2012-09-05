@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 #define LOCAL
 
 #ifdef DEV
@@ -65,4 +66,5 @@
 -(void)ShowLanding;
 -(BOOL) Checklogin;
 -(void) deviceReg;
+- (void) cleandb;
 @end

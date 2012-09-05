@@ -27,7 +27,7 @@
 {
     [super viewDidLoad];
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-    self.view=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.view=[[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds] autorelease];
     self.view.backgroundColor=[UIColor blackColor];
     imageview=[[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [self.view addSubview:imageview];
@@ -66,7 +66,7 @@
 //    statusBarHidden = YES;
 
     [imageview release];
-    [self.view release];
+//    [self.view release];
     [self dismissModalViewControllerAnimated:YES];
 }
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

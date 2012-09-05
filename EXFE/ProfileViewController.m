@@ -65,6 +65,7 @@
         viewcontroller.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
         viewcontroller.image=useravatar.image;
         [self presentModalViewController:viewcontroller animated:YES];
+        [viewcontroller release];
     }
     else{
         CGPoint location2= [sender locationInView:footerView];
@@ -99,7 +100,6 @@
     
     if(users!=nil && [users count] >0)
     {
-        [user release];
         user=[users objectAtIndex:0];
         username.text=user.name;
         if(identitiesData!=nil)
@@ -142,6 +142,7 @@
         [devices_section release];
         [identities_section release];
     }
+    [users release];
 //    NSLog(@"%@",identitiesData);
     [tabview reloadData];
 //    [inputToolbar setInputEnabled:YES];

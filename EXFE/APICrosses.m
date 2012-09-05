@@ -111,6 +111,8 @@
     RKManagedObjectMapping *crossMapping=[APICrosses getCrossMapping];
     [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.crosses"];
     [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.cross"];
+//    [manager.mappingProvider setObjectMapping:[Mapping getMetaMapping] forKeyPath:@""];
+    
 
     RKManagedObjectMapping* RsvpMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Rsvp" inManagedObjectStore:manager.objectStore];
     [RsvpMapping mapKeyPathsToAttributes:@"identity_id", @"identity_id",

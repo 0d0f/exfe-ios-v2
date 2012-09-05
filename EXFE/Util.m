@@ -13,11 +13,10 @@
 
 @implementation Util
 + (NSString*) decodeFromPercentEscapeString:(NSString*)string{
-    return (NSString *)
-    CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,
-                                                            (CFStringRef) string,
-                                                            CFSTR(""),
-                                                            kCFStringEncodingUTF8);
+    CFStringRef sref = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,(CFStringRef) string,CFSTR(""),kCFStringEncodingUTF8);
+    NSString *s=[NSString stringWithFormat:@"0 Replies. %@", (NSString *)sref];
+    CFRelease(sref);
+    return s;
 }
 
 + (NSString*) encodeToPercentEscapeString:(NSString*)string{
@@ -120,6 +119,7 @@
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     [format setLocale:locale];
+    [locale release];
     [format setDateFormat:@"zzz"];
     NSString *localTimezone = [format stringFromDate:[NSDate date]];
     localTimezone=[localTimezone substringFromIndex:3];
@@ -505,6 +505,7 @@
     NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
     [componentsToSubtract setDay: - ([weekdayComponents weekday] - [gregorian firstWeekday])];
     NSDate *beginningOfWeek = [gregorian dateByAddingComponents:componentsToSubtract toDate:today options:0];
+    [componentsToSubtract release];
     NSDateComponents *components = [gregorian components: (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate: beginningOfWeek];
     beginningOfWeek = [gregorian dateFromComponents: components];
     return beginningOfWeek;
@@ -524,6 +525,7 @@
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     [format setLocale:locale];
+    [locale release];
     [format setDateFormat:@"zzz"];
     NSString *localTimezone = [format stringFromDate:[NSDate date]];
     localTimezone=[localTimezone substringFromIndex:3];

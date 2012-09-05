@@ -370,7 +370,7 @@
 
 #pragma mark MKMapView delegate methods
 - (MKAnnotationView *) mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>) annotation{
-    MKPinAnnotationView *annView=[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"currentloc"];
+    MKPinAnnotationView *annView=[[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"currentloc"] autorelease];
     annView.pinColor = MKPinAnnotationColorGreen;
     annView.animatesDrop=TRUE;
     annView.canShowCallout = YES;
@@ -385,6 +385,8 @@
 }
 - (void) selectPlace:(int)index editing:(BOOL)editing{
     CLLocationCoordinate2D location;
+    location.latitude=0;
+    location.longitude=0;
 
     if(index==-1)
     {
@@ -509,26 +511,27 @@
 
 }
 
-- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
-    if (response.statusCode == 200) {
-        NSDictionary *body=[response.body objectFromJSONData];
-        if([body isKindOfClass:[NSDictionary class]]) {
-            NSString *status=[body objectForKey:@"status"];
-            if(status!=nil &&[status isEqualToString:@"OK"])
-            {
-                NSArray *results=[body objectForKey:@"results"] ;
-                NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]];
-                for(NSDictionary *place in results)
-                {
-                    NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:[place objectForKey:@"name"],@"title",[place objectForKey:@"formatted_address"],@"description",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[place objectForKey:@"id"],@"external_id",@"google",@"provider",nil];
-                    [local_results addObject:dict];
-                }
-                [self reloadPlaceData:local_results];
-            }
-        }
-    }
-    else {
-        //Check Response Body to get Data!
-    }
-}
+//- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
+//    if (response.statusCode == 200) {
+//        NSDictionary *body=[response.body objectFromJSONData];
+//        if([body isKindOfClass:[NSDictionary class]]) {
+//            NSString *status=[body objectForKey:@"status"];
+//            if(status!=nil &&[status isEqualToString:@"OK"])
+//            {
+//                NSArray *results=[body objectForKey:@"results"] ;
+//                NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]] ;
+//                for(NSDictionary *placedict in results)
+//                {
+//                    NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:[placedict objectForKey:@"name"],@"title",[placedict objectForKey:@"formatted_address"],@"description",[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[placedict objectForKey:@"id"],@"external_id",@"google",@"provider",nil];
+//                    [local_results addObject:dict];
+////                    [dict release];
+//                }
+//                [self reloadPlaceData:local_results];
+//            }
+//        }
+//    }
+//    else {
+//        //Check Response Body to get Data!
+//    }
+//}
 @end

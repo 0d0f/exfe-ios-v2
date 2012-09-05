@@ -10,7 +10,7 @@
 
 @implementation ObjectToDict
 + (NSMutableDictionary*) ExfeeDict:(Exfee*)exfee{
-    NSMutableArray *invitations_array=[[NSMutableArray alloc] initWithCapacity:[exfee.invitations count]];
+    NSMutableArray *invitations_array=[[[NSMutableArray alloc] initWithCapacity:[exfee.invitations count]] autorelease];
     NSSet *invitations=exfee.invitations;
     if(invitations !=nil&&[invitations count]>0)
     {

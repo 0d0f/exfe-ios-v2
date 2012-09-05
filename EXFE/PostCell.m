@@ -81,13 +81,17 @@
     };
     CTParagraphStyleRef style = CTParagraphStyleCreate(setting, 2);
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@   %@",identity_name,content]];
+    CTFontRef boldfontref14=CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 14.0, NULL);
+    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)boldfontref14 range:NSMakeRange(0,[identity_name length])];
     
-    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 14.0, NULL) range:NSMakeRange(0,[identity_name length])];
-    
-    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL) range:NSMakeRange([identity_name length]+3,[content length])];
+    CTFontRef fontref14=CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL);
+    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref14 range:NSMakeRange([identity_name length]+3,[content length])];
 
     [attributedString addAttribute:(id)kCTParagraphStyleAttributeName value:(id)style range:NSMakeRange(0,[content length])];
     [attributedString addAttribute:(id)kCTForegroundColorAttributeName value:(id)[FONT_COLOR_FA CGColor] range:NSMakeRange(0,[content length]+[identity_name length]+3)];
+    CFRelease(boldfontref14);
+    CFRelease(fontref14);
+    CFRelease(style);
 
     
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);

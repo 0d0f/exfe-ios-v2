@@ -23,9 +23,6 @@
     [self loginSuccessWith:token userid:userid username:username];
 }
 - (void)loginSuccessWith:(NSString *)token userid:(NSString *)userid username:(NSString *)username {
-    [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"access_token"];
-    [[NSUserDefaults standardUserDefaults] setObject:userid forKey:@"userid"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -51,7 +48,12 @@
         [[NSUserDefaults standardUserDefaults] setObject:user.name forKey:@"username"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         app.username=user.name;
+        [[NSUserDefaults standardUserDefaults] setObject:app.accesstoken forKey:@"access_token"];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%i",app.userid] forKey:@"userid"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+
     }
+    [users release];
     [parent performSelector:@selector(SigninDidFinish)];
 }
 

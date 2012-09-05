@@ -28,7 +28,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    UIBezierPath *framepath;
+    UIBezierPath *framepath=nil;
     transparentPath.usesEvenOddFillRule=YES;
 
     if(self.arrowHeight>0 &&self.cornerRadius>0){
@@ -43,7 +43,8 @@
 
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextBeginPath(currentContext);
-    CGContextAddPath(currentContext, framepath.CGPath);
+    if(framepath!=nil)
+        CGContextAddPath(currentContext, framepath.CGPath);
     CGContextClosePath(currentContext);
     CGContextSaveGState(currentContext);
     CGContextClip(currentContext);
@@ -51,6 +52,8 @@
     {
         CGImageRef imageref = CGImageRetain(backgroundimage.CGImage);
         CGRect image_rect;
+        image_rect.origin.x=0;
+        image_rect.origin.y=0;
         image_rect.size = backgroundimage.size;
         CGContextDrawTiledImage(currentContext, image_rect, imageref);
         CGImageRelease(imageref);
