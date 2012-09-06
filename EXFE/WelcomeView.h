@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Util.h"
+#import "CrossesViewController.h"
 #import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
 

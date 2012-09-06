@@ -47,7 +47,7 @@
     CGSize size=[msg sizeWithFont:_statusLabel.font constrainedToSize:CGSizeMake(self.frame.size.width, self.frame.size.height)];
 	_statusLabel.text = msg;
     
-    [_statusLabel setFrame:CGRectMake(self.frame.size.width-size.width, _statusLabel.frame.origin.y, size.width, _statusLabel.frame.size.height)];
+    [_statusLabel setFrame:CGRectMake(self.frame.size.width-size.width-20, _statusLabel.frame.origin.y, size.width+20, _statusLabel.frame.size.height)];
 //	[_indicator startAnimating];
 	self.hidden = NO;
 }

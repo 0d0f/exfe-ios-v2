@@ -1174,6 +1174,7 @@
         NSString *endpoint = [NSString stringWithFormat:@"/crosses/%u/edit?token=%@",[cross.cross_id intValue],app.accesstoken];
         [client post:endpoint usingBlock:^(RKRequest *request){
             request.method=RKRequestMethodPOST;
+            
             request.params=[RKRequestSerialization serializationWithData:[json dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
             request.onDidLoadResponse=^(RKResponse *response){
                 if (response.statusCode == 200) {
@@ -1408,7 +1409,7 @@
     {
         [view resignFirstResponder];
     }
-    if(notUserScroll==NO && crossdescription.editable==YES && viewmode==YES)
+    if(notUserScroll==NO && crossdescription.editable==YES && viewmode==YES && scrollView.tag==108)
         [self saveCrossDesc];
         
 //    if(viewmode==NO )

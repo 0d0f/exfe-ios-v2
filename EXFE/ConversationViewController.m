@@ -250,6 +250,7 @@
                               predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
                               @"exfee", exfee_id];    
     [request setPredicate:predicate];
+    [request setFetchLimit:50];
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:YES];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
     

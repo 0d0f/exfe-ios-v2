@@ -53,8 +53,6 @@
     [rightbutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
     [rightbutton addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:rightbutton];
-
-    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:inputplace];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editingDidBegan:) name:UITextFieldTextDidBeginEditingNotification object:inputplace];
@@ -325,13 +323,6 @@
         [placeedit resignFirstResponder];
         [map removeAnnotations:[map annotations]];
         place=nil;
-//        [gatherplace setObject:@"" forKey:@"title"];
-//        [gatherplace setObject:@"" forKey:@"description"];
-//        [gatherplace setObject:[NSNumber numberWithInt:0] forKey:@"lat"];
-//        [gatherplace setObject:[NSNumber numberWithInt:0] forKey:@"lng"];
-//        [gatherplace setObject:@"" forKey:@"external_id"];
-//        [gatherplace setObject:@"" forKey:@"provider"];
-        
     }
 }
 
@@ -511,27 +502,27 @@
 
 }
 
-//- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
-//    if (response.statusCode == 200) {
-//        NSDictionary *body=[response.body objectFromJSONData];
-//        if([body isKindOfClass:[NSDictionary class]]) {
-//            NSString *status=[body objectForKey:@"status"];
-//            if(status!=nil &&[status isEqualToString:@"OK"])
-//            {
-//                NSArray *results=[body objectForKey:@"results"] ;
-//                NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]] ;
-//                for(NSDictionary *placedict in results)
-//                {
-//                    NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:[placedict objectForKey:@"name"],@"title",[placedict objectForKey:@"formatted_address"],@"description",[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[placedict objectForKey:@"id"],@"external_id",@"google",@"provider",nil];
-//                    [local_results addObject:dict];
-////                    [dict release];
-//                }
-//                [self reloadPlaceData:local_results];
-//            }
-//        }
-//    }
-//    else {
-//        //Check Response Body to get Data!
-//    }
-//}
+- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
+    if (response.statusCode == 200) {
+        NSDictionary *body=[response.body objectFromJSONData];
+        if([body isKindOfClass:[NSDictionary class]]) {
+            NSString *status=[body objectForKey:@"status"];
+            if(status!=nil &&[status isEqualToString:@"OK"])
+            {
+                NSArray *results=[body objectForKey:@"results"] ;
+                NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]] ;
+                for(NSDictionary *placedict in results)
+                {
+                    NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:[placedict objectForKey:@"name"],@"title",[placedict objectForKey:@"formatted_address"],@"description",[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[placedict objectForKey:@"id"],@"external_id",@"google",@"provider",nil];
+                    [local_results addObject:dict];
+                    [dict release];
+                }
+                [self reloadPlaceData:local_results];
+            }
+        }
+    }
+    else {
+        //Check Response Body to get Data!
+    }
+}
 @end

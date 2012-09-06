@@ -155,7 +155,7 @@
     if(time_word!=nil)
     {
         crosstime.outputformat=[NSNumber numberWithInt:0];
-        crosstime.origin=[NSString stringWithFormat:@"%@ %@",stringFromDate,time_word];
+        crosstime.origin=[NSString stringWithFormat:@"%@ %@",datestr,time_word];
         eftime.time_word=time_word;
     }
     else{
@@ -163,13 +163,16 @@
         eftime.time_word=@"";
     }
     eftime.date=datestr;
-    eftime.time=timestr;
+    if(time_word==nil)
+        eftime.time=timestr;
+    else
+        eftime.time=@"";
     eftime.date_word=@"";
     eftime.timezone=eftimezone;
     crosstime.begin_at=eftime;
-//    [(GatherViewController*)gatherview setDateTime:crosstime];
     [(GatherViewController*)gatherview saveDateTime:crosstime];
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(indexPath.row==0)
@@ -179,8 +182,8 @@
         [self saveDate:timeword];
     }
     [self dismissModalViewControllerAnimated:YES];
-//    [self selectPlace:indexPath.row];
 }
+
 - (void) cleanDate{
     [(GatherViewController*)gatherview setDateTime:nil];
 }

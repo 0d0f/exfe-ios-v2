@@ -28,7 +28,7 @@
         [closebutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
         [closebutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
         [closebutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
-        [closebutton addTarget:parent action:@selector(closeWelcome) forControlEvents:UIControlEventTouchUpInside];
+        [closebutton addTarget:(CrossesViewController*)parent action:@selector(closeWelcome) forControlEvents:UIControlEventTouchUpInside];
         [closebutton setFrame:CGRectMake(40, 350, 200, 44)];
         
         [closebutton setHidden:YES];
@@ -187,8 +187,5 @@
     [self setNeedsDisplay];
 }
 
-- (void) close{
-    
-}
 
 @end

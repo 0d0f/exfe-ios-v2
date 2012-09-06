@@ -586,6 +586,8 @@
 //        Time_word (at) Time (Timezone) Date_word (on) Date
         if(![crosstime.begin_at.time_word isEqualToString:@""] && ![crosstime.begin_at.time isEqualToString:@""])
             timestr=[NSString stringWithFormat:@"%@ at %@",crosstime.begin_at.time_word,crosstime_time];
+        else if(![crosstime.begin_at.time_word isEqualToString:@""] && [crosstime.begin_at.time isEqualToString:@""])
+            timestr=[NSString stringWithFormat:@"%@ at",crosstime.begin_at.time_word];
         else if([crosstime.begin_at.time_word isEqualToString:@""])
             timestr=crosstime_time;
         else if([crosstime.begin_at.time isEqualToString:@""])
@@ -644,21 +646,31 @@
         if(abs(year)==1)
             y_str=@"year";
         
-        if(abs(year)>0) {
-            if(abs(moth)>0) {
-                if(moth>0)
-                    relativeTime=[NSString stringWithFormat:@"In %u %@ %u %@",abs(year),y_str,abs(moth),m_str];
-                else
-                    relativeTime=[NSString stringWithFormat:@"%u %@ %u %@ ago",abs(year),y_str,abs(moth),m_str];
-            }
-            else if(abs(moth)==0){
-                if(year>0)
-                    relativeTime=[NSString stringWithFormat:@"In %u %@",abs(year),y_str];
-                else
-                    relativeTime=[NSString stringWithFormat:@"%u %@ ago",abs(year),y_str];
+//        if(abs(year)>0) {
+        if(abs(day)>=31) {
+            if(abs(year)>0) {
+                if(abs(moth)>0) {
+                    if(moth>0)
+                        relativeTime=[NSString stringWithFormat:@"In %u %@ %u %@",abs(year),y_str,abs(moth),m_str];
+                    else
+                        relativeTime=[NSString stringWithFormat:@"%u %@ %u %@ ago",abs(year),y_str,abs(moth),m_str];
+                }
+                else if(abs(moth)==0){
+                    if(year>0)
+                        relativeTime=[NSString stringWithFormat:@"In %u %@",abs(year),y_str];
+                    else
+                        relativeTime=[NSString stringWithFormat:@"%u %@ ago",abs(year),y_str];
+                }
+            }else if(year==0)
+            {
+                if(moth<0) {
+                        relativeTime=[NSString stringWithFormat:@"%u %@ ago",abs(moth),m_str];
+                }
+
             }
         }
-        else if(abs(year)==0){
+        else{
+//        else if(abs(year)==0){
             if(day<=-3 && day>=-30)
                 relativeTime=[NSString stringWithFormat:@"%u days ago",abs(day)];
             else if(day==-2)
