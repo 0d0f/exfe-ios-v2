@@ -28,7 +28,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated{
-    if([cross.conversation_count intValue]>0 && [cross.conversation_count intValue]<=9){
+    if([cross.conversation_count intValue]>0 && [cross.conversation_count intValue]<=64){
         [ccbuttonText setText:[cross.conversation_count stringValue]];
     }
     else if([cross.conversation_count intValue]==0)
@@ -134,20 +134,20 @@
     mapbox=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_area_null.png"]];
     [containcardview addSubview:mapbox];
 
-    if(viewmode==YES){
-        
-        UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(ShowPlaceView)];
-        longpress.minimumPressDuration = 1;
-        [map addGestureRecognizer:longpress];
-        [longpress release];
-    }else{
+//    if(viewmode==YES){
+//        
+//        UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(ShowPlaceView)];
+//        longpress.minimumPressDuration = 1;
+//        [map addGestureRecognizer:longpress];
+//        [longpress release];
+//    }else{
         WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
         tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
             [self ShowPlaceView];
         };
         [map addGestureRecognizer:tapInterceptor];
         [tapInterceptor release];
-    }
+//    }
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [containcardview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
@@ -207,10 +207,10 @@
 
         [chatButton addTarget:self action:@selector(toconversation) forControlEvents:UIControlEventTouchUpInside];
 
-        if([cross.conversation_count intValue]>0 && [cross.conversation_count intValue]<9){
+        if([cross.conversation_count intValue]>0 && [cross.conversation_count intValue]<=64){
             [chatButton setImage:[UIImage imageNamed:@"conv_navbarbtn.png"] forState:UIControlStateNormal];
 
-            ccbuttonText=[[UILabel alloc]initWithFrame:CGRectMake(8, 3, 12, 22)];
+            ccbuttonText=[[UILabel alloc]initWithFrame:CGRectMake(7, 3, 12, 22)];
             ccbuttonText.textAlignment=UITextAlignmentCenter;
             ccbuttonText.backgroundColor=[UIColor clearColor];
             [ccbuttonText setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:9]];
@@ -218,7 +218,7 @@
             [chatButton addSubview:ccbuttonText];
         }else if([cross.conversation_count intValue]==0)
             [chatButton setImage:[UIImage imageNamed:@"conv_navbarbtn.png"] forState:UIControlStateNormal];
-        else if([cross.conversation_count intValue]>9)
+        else if([cross.conversation_count intValue]>64)
             [chatButton setImage:[UIImage imageNamed:@"conv_many_navbarbtn.png"] forState:UIControlStateNormal];
         
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:chatButton];
@@ -400,7 +400,8 @@
         
         containcardview.backgroundimage=nil;
         [crossdescription setEditable:NO];
-        if(exfeeedit==NO)
+//         exfeeedit
+        if(exfeeShowview.editmode==NO)
             [exfeeShowview HiddenAddButton];
         else
             [exfeeShowview ShowAddButton];
@@ -742,6 +743,7 @@
     placeViewController.gatherview=self;
     if(cross.place!=nil)
         [placeViewController setPlace:cross.place];
+    placeViewController.showdetailview=YES;
     [self presentModalViewController:placeViewController animated:YES];
     [placeViewController release];
 }
@@ -1155,9 +1157,9 @@
     [exfeestr addAttribute:(id)kCTParagraphStyleAttributeName value:(id)linestyle range:NSMakeRange(0,[exfeestr length])];
     exfeenum.attributedText=exfeestr;
     CFRelease(linestyle);
-    if([exfeeIdentities count]<3 && exfeeedit==YES)
+    if([exfeeIdentities count]<3 && exfeeShowview.editmode==YES)
         [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 50+25, 124, 27)];
-    if([exfeeIdentities count]<5 && exfeeedit==NO)
+    if([exfeeIdentities count]<5 && exfeeShowview.editmode==NO)
         [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 50+25, 124, 27)];
     else
         [exfeenum setFrame:CGRectMake(containcardview.frame.size.width-15-124, 50, 124, 27)];
@@ -1198,25 +1200,24 @@
     CGPoint location = [sender locationInView:sender.view];
     if(viewmode==YES)
     {
-        if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
-        {
-            [crosstitle resignFirstResponder];
-            [map becomeFirstResponder];
-            
-            [self ShowPlaceView];
-        }
+//        if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
+//        {
+//            [crosstitle resignFirstResponder];
+//            [map becomeFirstResponder];
+//            
+//            [self ShowPlaceView];
+//        }
         
-        if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))
-        {
-            [self ShowTimeView];
-        }
+//        if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))
+//        {
+//            [self ShowTimeView];
+//        }
         if (CGRectContainsPoint([exfeeShowview frame], location))
         {
             [self setExfeeViewMode:YES];
         }
         if (CGRectContainsPoint([crosstitle_view frame], location))
         {
-            NSLog(@"cross title");
             [crosstitle_view setHidden:YES];
             [crosstitle setHidden:NO];
             [title_input_img setHidden:NO];
@@ -1233,8 +1234,9 @@
 - (void) setExfeeViewMode:(BOOL)edit{
     if(edit==YES)
     {
-        exfeeedit=YES;
+        exfeeShowview.editmode=YES;
         [exfeeShowview ShowAddButton];
+        [exfeeShowview reloadData];
         [rsvptoolbar setHidden:YES];
         [rsvpbutton setHidden:YES];
         [myrsvptoolbar setHidden:YES];
@@ -1247,8 +1249,9 @@
             [self ShowGatherToolBar];
         }
     }else{
-        exfeeedit=NO;
+        exfeeShowview.editmode=NO;
         [exfeeShowview HiddenAddButton];
+        [exfeeShowview reloadData];
         [rsvptoolbar setHidden:YES];
         [rsvpbutton setHidden:YES];
         [myrsvptoolbar setHidden:YES];
@@ -1285,22 +1288,24 @@
 }
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
-    if(viewmode==NO && exfeeedit==NO)
+//    if(viewmode==NO && exfeeShowview.editmode==NO)
+//    {
+//        
+//    }
+    if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
     {
-        if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
-        {
-            [crosstitle resignFirstResponder];
-            [map becomeFirstResponder];
-
-            [self ShowPlaceView];
-        }
+        [crosstitle resignFirstResponder];
+        [map becomeFirstResponder];
         
-        if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))
-        {
-            [self ShowTimeView];
-        }
+        [self ShowPlaceView];
     }
-    if(exfeeedit==YES){
+
+    if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))
+    {
+        [self ShowTimeView];
+    }
+
+    if(exfeeShowview.editmode==YES){
         if (!CGRectContainsPoint([exfeeShowview frame], location)){
             [self setExfeeViewMode:NO];
         }
@@ -1350,24 +1355,24 @@
     NSLog(@"save cross desc");
    
 }
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-
-    UITouch * touch = [touches anyObject];
-    if(touch.phase == UITouchPhaseBegan) {
-        if (CGRectContainsPoint([placetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([placedesc frame], [touch locationInView:self.view]))
-        {
-            [crosstitle resignFirstResponder];
-            [map becomeFirstResponder];
-            [self ShowPlaceView];
-        }
-        if (CGRectContainsPoint([timetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([timedesc frame], [touch locationInView:self.view]))
-        {
-            [crosstitle resignFirstResponder];
-            [timetitle becomeFirstResponder];
-            [self ShowTimeView];
-        }
-    }
-}
+//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+//
+//    UITouch * touch = [touches anyObject];
+//    if(touch.phase == UITouchPhaseBegan) {
+//        if (CGRectContainsPoint([placetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([placedesc frame], [touch locationInView:self.view]))
+//        {
+//            [crosstitle resignFirstResponder];
+//            [map becomeFirstResponder];
+//            [self ShowPlaceView];
+//        }
+//        if (CGRectContainsPoint([timetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([timedesc frame], [touch locationInView:self.view]))
+//        {
+//            [crosstitle resignFirstResponder];
+//            [timetitle becomeFirstResponder];
+//            [self ShowTimeView];
+//        }
+//    }
+//}
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
     float KEYBOARD_LANDSCAPE=216;
     notUserScroll=YES;
@@ -1491,18 +1496,28 @@
     
 }
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
-
+        
+    if(viewmode==YES && exfeeShowview.editmode==NO)
+    {
+        if(height==120 && [exfeeIdentities count]==6)
+            return;
+    }
     [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
     [exfeeShowview calculateColumn];
-    if(viewmode==NO || exfeeedit==YES)
+//    if(viewmode==NO || exfeeShowview.editmode==YES){
         [self reArrangeViews];
+//    }
+    
+//    [exfeeIdentities count]
+
+    
 }
 
 #pragma mark EXImagesCollectionView delegate methods
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
     if(index==[exfeeIdentities count])
     {
-        if(viewmode==YES && exfeeedit==NO)
+        if(viewmode==YES && exfeeShowview.editmode==NO)
             return;
         [self ShowGatherToolBar];
         [self ShowExfeeView];
@@ -1527,16 +1542,16 @@
             float y=f.origin.y+rect.origin.y;
             Invitation *invitation=[exfeeIdentities objectAtIndex:index];
             [self ShowExfeePopOver:invitation pointTo:CGPointMake(x,y) arrowx:rect.origin.x+rect.size.width/2+f.origin.x];
-            if(viewmode==YES && exfeeedit==NO){
+            if(viewmode==YES && exfeeShowview.editmode==NO){
                 [self ShowRsvpToolBar];
             }
             else
                 [self ShowGatherToolBar];
         }
         else {
-            if(viewmode==YES&& exfeeedit==NO)
+            if(viewmode==YES&& exfeeShowview.editmode==NO)
                 [self ShowRsvpButton];
-            else if(exfeeedit==YES)
+            else if(exfeeShowview.editmode==YES)
                 [gathertoolbar setHidden:YES];
         }
     }
@@ -1678,7 +1693,7 @@
                 }
             }
         }
-        if(viewmode==YES && exfeeedit==NO)
+        if(viewmode==YES && exfeeShowview.editmode==NO)
         {
             RKParams* rsvpParams = [RKParams params];
             NSDictionary *exfee_dict=[ObjectToDict ExfeeDict:cross.exfee];

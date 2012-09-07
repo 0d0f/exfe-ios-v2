@@ -562,25 +562,36 @@
             [dateformat setDateFormat:@"yyyy-MM-dd"];
         }
         NSDate *begin_at_date=[dateformat dateFromString:cross_time_server];
+        NSString *week=@"";
         if(begin_at_date!=nil)
         {
             NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
             if(![crosstime.begin_at.time isEqualToString:@""]){
                 [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
-                [dateformat_to setDateFormat:@"h:mm a"];
+                [dateformat_to setDateFormat:@"h:mma"];
                 crosstime_time=[dateformat_to stringFromDate:begin_at_date];
             }
             else
                 crosstime_time=@"";
+            [dateformat_to setDateFormat:@"yyyy"];
+            NSString *y=[dateformat_to stringFromDate:begin_at_date];
+
+            if([y isEqualToString:localYear])
+                [dateformat_to setDateFormat:@"ccc, MMM d"];
+            else
+                [dateformat_to setDateFormat:@"ccc, MMM d, YYYY"];
             
-            [dateformat_to setDateFormat:@"yyyy-MM-dd"];
+//            [dateformat_to setDateFormat:@"yyyy-MM-dd"];
             crosstime_date=[dateformat_to stringFromDate:begin_at_date];
+//            [dateformat_to setDateFormat:@"ccc"];
+//            week=[dateformat_to stringFromDate:begin_at_date];
+            
             [dateformat_to release];
         }
         [dateformat release];
         
-        if([crosstime_date length]>=5 && [localYear isEqualToString:[crosstime_date substringToIndex:4]])
-            crosstime_date=[crosstime_date substringFromIndex:5];
+//        if([crosstime_date length]>=5 && [localYear isEqualToString:[crosstime_date substringToIndex:4]])
+//            crosstime_date=[crosstime_date substringFromIndex:5];
         
         NSString *timestr=@"";
         NSString *datestr=@"";

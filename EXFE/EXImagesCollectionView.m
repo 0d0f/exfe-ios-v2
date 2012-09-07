@@ -17,6 +17,7 @@
 @synthesize imageXmargin;
 @synthesize imageYmargin;
 @synthesize itemsCache;
+@synthesize editmode;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -130,10 +131,18 @@
         int row=1;
         for(int row_idx=0;row_idx<=maxRow;row_idx++)
         {
-            if(maxColumn*row_idx-(count)>0)
-            {
-                row=row_idx;
-                break;
+            if(editmode==YES){
+                if(maxColumn*row_idx-(count)>0)
+                {
+                    row=row_idx;
+                    break;
+                }
+            }else{
+                if(maxColumn*row_idx-(count)>=0)
+                {
+                    row=row_idx;
+                    break;
+                }
             }
         }
         float new_height=imageYmargin+imageHeight+15+(imageYmargin+imageHeight+15)*(row-1);

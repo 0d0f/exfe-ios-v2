@@ -14,6 +14,7 @@
 
 @implementation PlaceViewController
 @synthesize gatherview;
+@synthesize showdetailview;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -130,6 +131,9 @@
     };
     [map addGestureRecognizer:tapInterceptor];
     [tapInterceptor release];
+    
+    if(showdetailview==YES)
+        [self addPlaceEdit:place];
 }
 
 - (void) PlaceEditClose:(id) sender{
@@ -476,7 +480,7 @@
     [self done];
 }
 - (void) getPlace{
-    if(CFAbsoluteTimeGetCurrent()-editinginterval>1.2)
+    if(CFAbsoluteTimeGetCurrent()-editinginterval>0.8)
     {
         [APIPlace GetPlacesFromGoogleByTitle:inputplace.text lat:lat lng:lng delegate:self];
     }

@@ -62,10 +62,25 @@
         if(![lasttime isEqualToString:@""])
             [lasttimebutton setFrame:CGRectMake(0, 44, 320, 44)];
     }
-    [lasttimebutton setTitle:lasttime forState:UIControlStateNormal];
-    [lasttimebutton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [lasttimebutton setTitle:lasttime forState:UIControlStateNormal];
+//    [lasttimebutton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [lasttimebutton addTarget: self action: @selector(uselasttime) forControlEvents: UIControlEventTouchUpInside];
-    [lasttimebutton setBackgroundColor:[UIColor colorWithRed:127.f/255.f green:127.f/255.f blue:127.f/255.f alpha:1.0]];
+    [lasttimebutton setBackgroundColor:[UIColor colorWithRed:127.f/255.f green:127.f/255.f blue:127.f/255.f alpha:0.15]];
+    UILabel *revertto=[[UILabel alloc] initWithFrame:CGRectMake(8, 2, 80, 12)];
+    revertto.text=@"Revert to";
+    revertto.textColor=[UIColor colorWithRed:127/255.f green:127/255.f blue:127/255.f alpha:1];
+    revertto.font=[UIFont fontWithName:@"HelveticaNeue" size:12];
+    revertto.backgroundColor=[UIColor clearColor];
+    [lasttimebutton addSubview:revertto];
+    [revertto release];
+    
+    UILabel *lasttimelabel=[[UILabel alloc] initWithFrame:CGRectMake(8, 2+12+4,320-16 , 18)];
+    lasttimelabel.text=lasttime;
+    lasttimelabel.textColor=[UIColor blackColor];
+    lasttimelabel.font=[UIFont fontWithName:@"HelveticaNeue" size:18];
+    lasttimelabel.backgroundColor=[UIColor clearColor];
+    [lasttimebutton addSubview:lasttimelabel];
+    [lasttimelabel release];
     
     [self.view addSubview:lasttimebutton];
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,44+lasttimebutton.frame.size.height,320,200-lasttimebutton.frame.size.height) style:UITableViewStylePlain];

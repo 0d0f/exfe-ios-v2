@@ -145,13 +145,13 @@
             if(conversationCount>0)
                 timefield_width-=26;
             [time drawInRect:CGRectMake(40, 76, timefield_width, 16) withFont:[UIFont fontWithName:@"MalayalamSangamMN" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft];
-            if(conversationCount>0 && conversationCount<9){
+            if(conversationCount>0 && conversationCount<=64){
                 [FONT_COLOR_88 set];
                 [[UIImage imageNamed:@"conversation_badge_empty.png"]drawInRect:CGRectMake(279, 70, 30, 26)];
                 [[NSString stringWithFormat:@"%u",conversationCount] drawInRect:CGRectMake(280, 74, 20, 15) withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
                 
             }
-            else if(conversationCount>9)
+            else if(conversationCount>64)
                 [[UIImage imageNamed:@"conversation_badge_full.png"]drawInRect:CGRectMake(279, 70, 30, 26)];
         }
     }else{
