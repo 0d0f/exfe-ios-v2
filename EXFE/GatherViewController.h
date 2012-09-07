@@ -88,7 +88,7 @@
 
 - (IBAction) Gather:(id) sender;
 - (IBAction) Close:(id) sender;
-- (void) ShowPlaceView;
+- (void) ShowPlaceView:(NSString*)status;
 - (void) ShowTimeView;
 - (void) ShowExfeeView;
 - (void) ShowGatherToolBar;

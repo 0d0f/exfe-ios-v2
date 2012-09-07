@@ -37,7 +37,7 @@
     backgroundview.layer.cornerRadius=15;
 
     [toolbar addSubview:backgroundview];
-    inputplace=[[UITextField alloc] initWithFrame:CGRectMake(6+10, 7, 240, 30)];
+    inputplace=[[UITextField alloc] initWithFrame:CGRectMake(6+10+10, 7, 240-44-2-10, 30)];
     [inputplace setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     inputplace.delegate=self;
     [inputplace setAutocorrectionType:UITextAutocorrectionTypeNo];
@@ -45,14 +45,32 @@
     inputplace.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     [inputplace setBackgroundColor:[UIColor clearColor]];
     [toolbar addSubview:inputplace];
+    UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(6+4, 13, 18, 18)];
+    icon.image=[UIImage imageNamed:@"place_18.png"];
+    [toolbar addSubview:icon];
+    [icon release];
+
+    if(place!=nil) {
+        UIButton *revert=[UIButton buttonWithType:UIButtonTypeCustom];
+        [revert setFrame:CGRectMake(210, 13, 44, 19)];
+        revert.backgroundColor=[UIColor colorWithRed:191/255.0f green:191/255.0f blue:191/255.0f alpha:1.00f];
+        [revert setTitle:@"Revert" forState:UIControlStateNormal];
+        [revert.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:10]];
+        revert.layer.cornerRadius=10;
+        revert.layer.masksToBounds=YES;
+        [revert setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [revert addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
+        [toolbar addSubview:revert];
+    }
+//    44/19
 
     rightbutton=[UIButton buttonWithType:UIButtonTypeCustom];
     [rightbutton setFrame:CGRectMake(265, 7, 50, 30)];
-    [rightbutton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [rightbutton setTitle:@"Save" forState:UIControlStateNormal];
     [rightbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
-    [rightbutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
-    [rightbutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
-    [rightbutton addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
+    [rightbutton setTitleColor:[UIColor colorWithRed:204.0/255.0f green:229.0/255.0f blue:255.0/255.0f alpha:1] forState:UIControlStateNormal];
+    [rightbutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)] forState:UIControlStateNormal];
+    [rightbutton addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:rightbutton];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:inputplace];
@@ -93,6 +111,7 @@
         region.span.longitudeDelta = 0.02;
         region.span.latitudeDelta = 0.02;
         [map setRegion:region animated:YES];
+        inputplace.text=place.title;
 
     }
     float tableviewx=map.frame.origin.x;
@@ -177,18 +196,9 @@
         
     }
 }
-- (void) setPlace:(Place*)_place{
+- (void) setPlace:(Place*)_place isedit:(BOOL)editstate{
     place=_place;
-//    if(gatherplace==nil)
-//            gatherplace=[[NSMutableDictionary alloc] init];
-//    [gatherplace setObject:_place.place_id forKey:@"place_id"];
-//    [gatherplace setObject:_place.title forKey:@"title"];
-//    [gatherplace setObject:_place.place_description forKey:@"description"];
-//    [gatherplace setObject:_place.lat forKey:@"lat"];
-//    [gatherplace setObject:_place.lng forKey:@"lng"];
-//    [gatherplace setObject:_place.external_id forKey:@"external_id"];
-//    [gatherplace setObject:_place.provider forKey:@"provider"];
-    isedit=YES;
+    isedit=editstate;
     
 }
 - (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer{
@@ -212,29 +222,16 @@
 }
 
 - (void) done{
-//    if(gatherplace){
-//        NSString *provider=[gatherplace objectForKey:@"provider"];
-//        if(provider==nil)
-//           provider=@"exfe";
-//           
-//        if([gatherplace objectForKey:@"place_id"]==nil)
-//            [gatherplace setObject:[NSNumber numberWithInt:0] forKey:@"place_id"];
-//        
-//        NSDictionary *place =[NSDictionary dictionaryWithKeysAndObjects:@"place_id",[gatherplace objectForKey:@"place_id"],@"title",[placeedit getPlaceTitle],@"description",[placeedit getPlaceDesc], @"lat",[gatherplace objectForKey:@"lat"],@"lng",[gatherplace objectForKey:@"lng"],@"provider",provider,@"external_id",[gatherplace objectForKey:@"external_id"], nil];
-    
-    place.title=[placeedit getPlaceTitle];
-    place.place_description=[placeedit getPlaceDesc];
+    if(placeedit.hidden==NO){
+        place.title=[placeedit getPlaceTitle];
+        place.place_description=[placeedit getPlaceDesc];
+    }
     if(isedit==YES)
         [(GatherViewController*)gatherview savePlace:place];
     else
         [(GatherViewController*)gatherview setPlace:place];
         
     [self dismissModalViewControllerAnimated:YES];
-//    }
-//    else{
-//        
-//    }
-//    
 }
 - (void)didReceiveMemoryWarning
 {
@@ -255,7 +252,7 @@
     CLLocationCoordinate2D location;
     location.latitude = newLocation.coordinate.latitude;
     location.longitude = newLocation.coordinate.longitude;
-    if(isedit==NO)
+    if(isedit==NO && place==nil)
     {
         MKCoordinateRegion region;
         region.center = location;
@@ -455,7 +452,7 @@
         region.span.latitudeDelta = 0.02;
         [map setRegion:region animated:YES];
         [placeedit becomeFirstResponder];
-        [self setRightButton:@"done" Selector:@selector(done)];
+//        [self setRightButton:@"done" Selector:@selector(done)];
     }
 }
 
@@ -496,6 +493,8 @@
 }
 - (void) editingDidBegan:(NSNotification*)notification{
     UITextField *textField=(UITextField*)notification.object;
+//    if([textField.text length]>2)
+//        [self performSelector:@selector(getPlace) withObject:self];
 
     [self setViewStyle:EXPlaceViewStyleTableview];
     [textField becomeFirstResponder];

@@ -143,7 +143,7 @@
 //    }else{
         WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
         tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
-            [self ShowPlaceView];
+            [self ShowPlaceView:@"view"];
         };
         [map addGestureRecognizer:tapInterceptor];
         [tapInterceptor release];
@@ -738,12 +738,17 @@
 }
 
 
-- (void) ShowPlaceView{
+- (void) ShowPlaceView:(NSString*)status{
     PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
     placeViewController.gatherview=self;
-    if(cross.place!=nil)
-        [placeViewController setPlace:cross.place];
-    placeViewController.showdetailview=YES;
+    if(cross.place!=nil){
+        if(viewmode==YES)
+            [placeViewController setPlace:cross.place isedit:YES];
+        else
+            [placeViewController setPlace:cross.place isedit:NO];
+    }
+    if([status isEqualToString:@"detail"])
+        placeViewController.showdetailview=YES;
     [self presentModalViewController:placeViewController animated:YES];
     [placeViewController release];
 }
@@ -1171,6 +1176,7 @@
 - (void)saveCrossUpdate{
     NSError *error;
     NSString *json = [[RKObjectSerializer serializerWithObject:cross mapping:[[APICrosses getCrossMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
+    NSLog(@"%@",json);
     if(!error){
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
         RKClient *client = [RKClient sharedClient];
@@ -1181,6 +1187,7 @@
             
             request.params=[RKRequestSerialization serializationWithData:[json dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
             request.onDidLoadResponse=^(RKResponse *response){
+                NSLog(@"%@",response.bodyAsString);
                 if (response.statusCode == 200) {
                     [app CrossUpdateDidFinish];
                 }else {
@@ -1297,7 +1304,7 @@
         [crosstitle resignFirstResponder];
         [map becomeFirstResponder];
         
-        [self ShowPlaceView];
+        [self ShowPlaceView:@"detail"];
     }
 
     if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))

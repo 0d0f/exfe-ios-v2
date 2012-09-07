@@ -44,9 +44,9 @@
 //    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
-    [[[RKClient sharedClient] requestQueue] setConcurrentRequestsLimit:2];
+//    [[[RKClient sharedClient] requestQueue] setConcurrentRequestsLimit:2];
     [[[RKClient sharedClient] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
-    [[[RKObjectManager sharedManager] requestQueue] setConcurrentRequestsLimit:1];
+//    [[[RKObjectManager sharedManager] requestQueue] setConcurrentRequestsLimit:1];
     [[[RKObjectManager sharedManager] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
     
     

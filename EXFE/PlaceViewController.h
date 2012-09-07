@@ -66,7 +66,7 @@ typedef enum {
 - (void) setRightButton:(NSString*) title Selector:(SEL)aSelector;
 - (void) done;
 - (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer;
-- (void) setPlace:(Place*)_place;
+- (void) setPlace:(Place*)_place isedit:(BOOL)editstate;
 - (void) setViewStyle:(EXPlaceViewStyle)style;
 //- (void) addNewPin;
 @end
