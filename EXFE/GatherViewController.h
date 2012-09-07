@@ -36,6 +36,7 @@
 #import "ObjectToDict.h"
 #import "EXAttributedLabel.h"
 #import "EXImagesItem.h"
+#import "ProfileBackgroundView.h"
 
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9

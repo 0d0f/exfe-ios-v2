@@ -31,14 +31,13 @@
     IBOutlet UIView *hintpannel;
     
     SigninIconToolbarView *signintoolbar;
-    
     UIImageView *identitybackimg;
     UIImageView *passwordbackimg;
-    
     UIImageView *identityLeftIcon;
     UIButton *identityRightButton;
     UIImageView *divider;
     UIImageView *avatarview;
+    UIImageView *avatarframeview;
     
     UITextField *textUsername;
     UITextField *textPassword;
@@ -46,6 +45,8 @@
     
     UIButton *loginbtn;
     UIButton *setupnewbtn;
+    
+    UILabel *labelSignError;
 }
 @property (nonatomic, assign) id delegate;
 
@@ -54,6 +55,7 @@
 - (void) Signupnew:(id) sender;
 - (void)SigninDidFinish;
 - (void)SigninCancel;
+- (void) showSignError:(NSString*)error;
 - (void) processResponse:(id)obj status:(NSString*)status;
 - (IBAction) TwitterLoginButtonPress:(id) sender;
 - (IBAction)showForgetPwd:(id)sender;

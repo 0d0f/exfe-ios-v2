@@ -112,19 +112,29 @@
         identitiesData=[[NSMutableArray alloc] initWithCapacity:2];
         
         NSString* imgName = user.avatar_filename; 
-        
-        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-        dispatch_async(imgQueue, ^{
-            UIImage *image=[[ImgCache sharedManager] getImgFrom:imgName];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if(image!=nil && ![image isEqual:[NSNull null]]){
-                    [useravatar setImage:image];
-                    [useravatar setNeedsDisplay];
-                }
 
-            });
-        });
-        dispatch_release(imgQueue);
+        if(imgName!=nil)
+        {
+            UIImage *image=[[ImgCache sharedManager] getImgFromCache:imgName];
+            if(image==nil ||[image isEqual:[NSNull null]]){
+                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                dispatch_async(imgQueue, ^{
+                    UIImage *image=[[ImgCache sharedManager] getImgFrom:imgName];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(image!=nil && ![image isEqual:[NSNull null]]){
+                            [useravatar setImage:image];
+                            [useravatar setNeedsDisplay];
+                        }
+
+                    });
+                });
+                dispatch_release(imgQueue);
+            }else{
+                [useravatar setImage:image];
+                [useravatar setNeedsDisplay];
+
+            }
+        }
 
         
         for (Identity *identity in user.identities)

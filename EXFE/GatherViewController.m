@@ -65,16 +65,15 @@
     [self buildView];
 }
 - (void)buildView{
-    NSTimeInterval t1=[[NSDate date] timeIntervalSince1970];
     [self.view setBackgroundColor:[UIColor grayColor]];
     exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
     exfeeSelected=[[NSMutableArray alloc] initWithCapacity:12];
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     float width=self.view.frame.size.width-VIEW_MARGIN*2;
-    CGRect containviewframe=CGRectMake(self.view.frame.origin.x+VIEW_MARGIN,6+toolbar.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2, self.view.frame.size.height-toolbar.frame.size.height);
+    CGRect containviewframe=CGRectMake(0,toolbar.frame.size.height,self.view.frame.size.width, self.view.frame.size.height-toolbar.frame.size.height);
 
     if(viewmode==YES)
-    containviewframe=CGRectMake(0,self.view.frame.origin.y,self.view.frame.size.width, self.view.frame.size.height-toolbar.frame.size.height);
+        containviewframe=CGRectMake(0,self.view.frame.origin.y,self.view.frame.size.width, self.view.frame.size.height-toolbar.frame.size.height);
     containview=[[UIScrollView alloc] initWithFrame:containviewframe];
     [containview setDelegate:self];
     [self.view addSubview:containview];
@@ -83,17 +82,18 @@
     [backgroundview setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"cross_bg.png"]]];
     [containview addSubview:backgroundview];
 
-    containcardview=[[EXOverlayView alloc] initWithFrame:CGRectMake(0, INNER_MARGIN, containview.frame.size.width, containview.frame.size.height)];
+    containcardview=[[EXOverlayView alloc] initWithFrame:CGRectMake(VIEW_MARGIN, 0, containview.frame.size.width-2*VIEW_MARGIN, containview.frame.size.height)];
+    if(viewmode==YES)
+        [containcardview setFrame:CGRectMake(0, 0, containview.frame.size.width, containview.frame.size.height)];
     containcardview.backgroundimage=[UIImage imageNamed:@"paper_texture.png"];
     containcardview.cornerRadius=5;
-
     [containview addSubview:containcardview];
 
     title_input_img=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gather_title_input_area.png"]];
-    [title_input_img setFrame:CGRectMake(0, 0, 308, 69)];
+    [title_input_img setFrame:CGRectMake(0, 0, containcardview.frame.size.width, 69)];
     [containcardview addSubview:title_input_img];
 
-    crosstitle=[[UITextView alloc] initWithFrame:CGRectMake(INNER_MARGIN+30, 5,containview.frame.size.width-INNER_MARGIN-30, 48)];
+    crosstitle=[[UITextView alloc] initWithFrame:CGRectMake(30, 5,containcardview.frame.size.width-30, 48)];
     crosstitle.tag=101;
 
     [containcardview addSubview:crosstitle];
@@ -224,8 +224,12 @@
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:chatButton];
         self.navigationItem.rightBarButtonItem = barButtonItem;
         [barButtonItem release];
+        ((ProfileBackgroundView*)(self.view)).hideGradient=YES;
     }
-    NSTimeInterval t2=[[NSDate date] timeIntervalSince1970];
+//    else{
+////        self.view.backgroundColor=[UIColor blueColor];
+//    }
+    
     [self initData];
     [self reArrangeViews];
     [self setExfeeNum];
@@ -243,14 +247,8 @@
         [longpress release];
     }
     
-    NSTimeInterval t3=[[NSDate date] timeIntervalSince1970];
-
-
-
-    
     if(viewmode==YES)
         [self ShowRsvpButton];
-    NSLog(@"time t1 %f t3 %f",t2-t1,t3-t2);
 }
 
 - (void) initData{
@@ -269,8 +267,6 @@
     }
     [users release];
     if(self.cross!=nil && viewmode==YES){
-        NSTimeInterval t1=[[NSDate date] timeIntervalSince1970];
-
         crosstitle.text=cross.title;
         [self setExfeeNum];
         NSArray *widgets=cross.widget;
@@ -279,15 +275,20 @@
                 NSString *imgurl=[Util getBackgroundLink:[widget objectForKey:@"image"]];
                 UIImageView *imageview=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, containview.frame.size.width, 180)];
                 imageview.image=nil;
-                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                dispatch_async(imgQueue, ^{
-                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if(backimg!=nil && ![backimg isEqual:[NSNull null]])
-                            imageview.image=backimg;
+                
+                UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:imgurl];
+                if(backimg==nil || [backimg isEqual:[NSNull null]]){
+                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                    dispatch_async(imgQueue, ^{
+                        UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if(backimg!=nil && ![backimg isEqual:[NSNull null]])
+                                imageview.image=backimg;
+                        });
                     });
-                });
-                dispatch_release(imgQueue);
+                    dispatch_release(imgQueue);
+                }else
+                    imageview.image=backimg;
 
                 UIImageView *imagemaskview=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, containview.frame.size.width, 180)];
                 imagemaskview.image=[UIImage imageNamed:@"cross_bgmask.png"];
@@ -298,8 +299,6 @@
                 [imageview release];
             }
         }
-        NSTimeInterval t2=[[NSDate date] timeIntervalSince1970];
-
         [self setDateTime:cross.time];
         [self setPlace:cross.place];
         
@@ -315,8 +314,6 @@
             [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
         }
         [exfeeShowview reloadData];
-        NSTimeInterval t3=[[NSDate date] timeIntervalSince1970];
-        NSLog(@"initdate: 1 %f 2 %f",t2-t1,t3-t2);
 
     }
     else if(viewmode==NO){
@@ -374,13 +371,13 @@
     
     [containview setContentSize:CGSizeMake(containview.frame.size.width, containview.frame.size.height+offset)];
 
-    [crossdescbackimg setFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y-9, crossdescription.frame.size.width, height)];
+    [crossdescbackimg setFrame:CGRectMake(crossdescription.frame.origin.x, crossdescription.frame.origin.y-9, crossdescription.frame.size.width, 75)];
 
     containview.alwaysBounceVertical=YES;
     
-    [containcardview setFrame:CGRectMake(containview.frame.origin.x, containview.frame.origin.y, containview.frame.size.width, containview.contentSize.height)];
 
     if(viewmode==YES){
+        [containcardview setFrame:CGRectMake(containview.frame.origin.x, 0, containview.frame.size.width, containview.contentSize.height)];
         CGRect backgroundrect=backgroundview.frame;
         if(backgroundrect.origin.y>=0)
         {
@@ -396,9 +393,9 @@
         [title_input_img setHidden:YES];
         [crosstitle_view setHidden:NO];
         crosstitle_view.text=crosstitle.text;
-        CGRect cardframe=containcardview.frame;
-        cardframe.origin.y=0;
-        [containcardview setFrame:cardframe];
+//        CGRect cardframe=containcardview.frame;
+//        cardframe.origin.y=0;
+//        [containcardview setFrame:cardframe];
         [exfeenum setHidden:NO];
         
         containcardview.backgroundimage=nil;
@@ -448,7 +445,10 @@
         [triangle addLineToPoint:CGPointMake(0,y)];
 
         containcardview.transparentPath=triangle;
-        CGRect rect=CGRectMake(containcardview.frame.origin.x,0, containcardview.frame.size.width, crossdescription.frame.origin.y+crossdescription.frame.size.height);
+        CGRect rect=CGRectMake(VIEW_MARGIN,0, containview.frame.size.width-2*VIEW_MARGIN, crossdescription.frame.origin.y+crossdescription.frame.size.height);
+        
+        
+
         [containcardview setFrame:rect];
         CGRect containrect=containview.frame;
         
@@ -799,6 +799,8 @@
 - (void) setPlace:(Place*)place{
     if(place!=nil)
     {
+        if([place.lat isEqualToNumber:[NSNumber numberWithInt:0]] && [place.lng isEqualToNumber:[NSNumber numberWithInt:0]] )
+            return;
         cross.place=place;
 //        [self reArrangeViews];
         if(cross.place!=nil) {
@@ -1374,8 +1376,6 @@
         float offset=frame.size.height-144;
         frame.size.height=144;
         [crossdescription setFrame:frame];
-        [crossdescbackimg setFrame:frame];
-        
         CGSize containsize=[containview contentSize];
         containsize.height=containsize.height-offset;
         CGRect containcardframe=[containcardview frame];
@@ -1431,8 +1431,19 @@
 }
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
-    //    [self stopLoading];
+    if(cross){
+        [[Exfee currentContext] deleteObject:cross.exfee];
+        [[Cross currentContext] deleteObject:cross];
+    }
+    
+    NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+    if(error.code==2)
+        errormsg=@"A connection failure has occurred.";
+    else
+        errormsg=@"Could not connect to the server.";
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [alert show];
+    [alert release];
 }
 
 #pragma mark EXImagesCollectionView Datasource methods
@@ -1602,7 +1613,15 @@
 
                 };
                 request.onDidFailLoadWithError=^(NSError *error){
-                    NSLog(@"%@",error);
+                    NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+                    if(error.code==2)
+                        errormsg=@"A connection failure has occurred.";
+                    else
+                        errormsg=@"Could not connect to the server.";
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [alert show];
+                    [alert release];
+                    
                     if(selected==NO)
                         [self ShowMyRsvpToolBar];
                     else
@@ -1689,7 +1708,14 @@
                     
                 };
                 request.onDidFailLoadWithError=^(NSError *error){
-                    NSLog(@"%@",error);
+                    NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+                    if(error.code==2)
+                        errormsg=@"A connection failure has occurred.";
+                    else
+                        errormsg=@"Could not connect to the server.";
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [alert show];
+                    [alert release];
                     
                 };
                 request.delegate=self;

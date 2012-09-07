@@ -401,21 +401,24 @@
             UIImage *icon=[UIImage imageNamed:iconname];
             cell.providerIcon=icon;
         }
-        cell.avatar=[UIImage imageNamed:@"portrait_default.png"];
-    
         if(identity.avatar_filename!=nil) {
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-                UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                        cell.avatar=avatar;
-                    }
-//                    else
-//                        cell.avatar=[UIImage imageNamed:@"portrait_default.png"];
+            UIImage *avatar = [[ImgCache sharedManager] getImgFromCache:identity.avatar_filename];
+            if(avatar==nil || [avatar isEqual:[NSNull null]])
+            {
+                cell.avatar=[UIImage imageNamed:@"portrait_default.png"];
+                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                dispatch_async(imgQueue, ^{
+                    UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+                            cell.avatar=avatar;
+                        }
+                    });
                 });
-            });
-            dispatch_release(imgQueue);        
+                dispatch_release(imgQueue);
+            }
+            else
+                cell.avatar=avatar;
         }
 //    }
     return cell;

@@ -37,13 +37,19 @@
         CGContextAddPath(currentContext, maskPath.CGPath);
         CGContextClosePath(currentContext);
         CGContextClip(currentContext);
+    
+        CGContextTranslateCTM(currentContext, 0, self.bounds.size.height);
+        CGContextScaleCTM(currentContext, 1.0, -1.0);
+        if(![self.rsvp_status isEqualToString:@"ACCEPTED"])
+            CGContextSetAlpha(currentContext, 0.50);
+        
         if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-            [avatar drawInRect:imagerect];
+            CGImageRef ximageref = CGImageRetain(avatar.CGImage);
+            CGContextDrawImage(currentContext,CGRectMake(0, 0+15, rect.size.width, rect.size.height-15) , ximageref);
+            CGImageRelease(ximageref);
         }
 
-        [[UIImage imageNamed:@"avatar_effect.png"] drawInRect:imagerect];
         CGContextRestoreGState(currentContext);
-
 //        if(self.isHost==YES)
 //            [[UIImage imageNamed:@"exfee_frame.png"] drawInRect:CGRectMake(rect.origin.x-1, rect.origin.y-1, 42, 42)];
 //        if(self.mates>0)

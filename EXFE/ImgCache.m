@@ -71,6 +71,16 @@ static NSMutableDictionary *imgs;
     UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
     return imgfromdict;
 }
+- (UIImage*) getImgFromCache:(NSString*)url{
+    NSString *md5key=[ImgCache md5:url];
+    UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
+    if(imgfromdict!=nil)
+        return imgfromdict;
+    NSString *cachefilename=[[ImgCache CachePath] stringByAppendingPathComponent:md5key];
+    UIImage *img=[UIImage imageWithContentsOfFile:cachefilename];
+    return img;
+}
+
 - (UIImage*) getImgFrom:(NSString*)url
 {
     NSString *md5key=[ImgCache md5:url];

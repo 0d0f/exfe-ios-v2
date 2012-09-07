@@ -16,6 +16,7 @@
 @synthesize delegate;
 
 - (IBAction) Signin:(id) sender{
+    [self showSignError:@""];
     RKClient *client = [RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
     NSString *endpoint = [NSString stringWithFormat:@"/users/signin"];
@@ -32,9 +33,21 @@
                 [self processResponse:[response.body objectFromJSONData] status:@"signin"];
             }
         };
+        request.onDidFailLoadWithError=^(NSError *error){
+            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+            if(error.code==2)
+                errormsg=@"A connection failure has occurred.";
+            else
+                errormsg=@"Could not connect to the server.";
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+        };
     }];
 }
+
 - (void) Signupnew:(id) sender{
+    [self showSignError:@""];
     RKClient *client = [RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
     NSString *endpoint = [NSString stringWithFormat:@"/users/signin"];
@@ -91,25 +104,10 @@
         if ([response isNotFound]) {
             NSLog(@"Resource '%@' not exists", [request resourcePath]);
         }
-    }    //    NSLog(@"Response code=%@, token=[%@], userName=[%@]", [[result meta] code], [result token], [[result user] userName]);
+    }
 }
 
-//- (void)loginSuccessWith:(NSString *)token userid:(NSString *)userid username:(NSString *)username {
-//    [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"access_token"];
-//    [[NSUserDefaults standardUserDefaults] setObject:userid forKey:@"userid"];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
-//
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//
-//    app.userid=[userid intValue];
-//    app.accesstoken=token;
-//    NSLog(@"loaduser with userid..");
-//    [APIProfile LoadUsrWithUserId:app.userid delegate:self];
-//}
-
 - (void) processResponse:(id)obj status:(NSString*)status{
-    
-    NSLog(@"processResponse..");
     if([obj isKindOfClass:[NSDictionary class]])
     {
         id meta=[obj objectForKey:@"meta"];
@@ -139,15 +137,16 @@
                     id meta=[obj objectForKey:@"meta"];
                     if([meta isKindOfClass:[NSDictionary class]])
                     {
-                        NSString *code=[meta objectForKey:@"code"];
-                        NSLog(@"code: %@",code);
+                        
+                        NSNumber *code=[meta objectForKey:@"code"];
+                        if([code intValue]==403)
+                            [self showSignError:@"Password incorrect."];
                     }
                     NSLog(@"%@",obj);
                 }
             }
         }
     }
-//    NSLog(@"POST returned a JSON response:%@",obj);
 }
 - (void)request:(RKRequest *)request didFailLoadWithError:(NSError *)error{
     NSLog(@"error:%@",error);   
@@ -249,6 +248,10 @@
     avatarview=[[UIImageView alloc] initWithFrame:CGRectMake(260, 70, 40, 40)];
     avatarview.image=nil;
     [self.view addSubview:avatarview];
+    avatarframeview=[[UIImageView alloc] initWithFrame:CGRectMake(260, 70, 40, 41)];
+    avatarframeview.image=nil;
+    [self.view addSubview:avatarframeview];
+    
 
     loginbtn=[UIButton buttonWithType:UIButtonTypeCustom];
     [loginbtn setFrame:CGRectMake(20, 200, 280, 44)];
@@ -263,7 +266,7 @@
     [self.view addSubview:loginbtn];
     
     setupnewbtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    [setupnewbtn setFrame:CGRectMake(20, 200, 280, 44)];
+    [setupnewbtn setFrame:CGRectMake(20, 210, 280, 44)];
     [setupnewbtn setTitle:@"Set up new account" forState:UIControlStateNormal];
     [setupnewbtn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     [setupnewbtn setTitleColor:[UIColor colorWithRed:204.0/255.0f green:229.0/255.0f blue:255.0/255.0f alpha:1] forState:UIControlStateNormal];
@@ -275,8 +278,19 @@
     [setupnewbtn setHidden:YES];
     [self.view addSubview:setupnewbtn];
     
-    
+    labelSignError=[[UILabel alloc] initWithFrame:CGRectMake(20, 135+40+4, 280, 18)];
+    labelSignError.backgroundColor=[UIColor clearColor];
+    labelSignError.text=@"";
+    labelSignError.textColor=[UIColor colorWithRed:204/255.f green:81/255.f blue:71/255.f alpha:1.0];
+    labelSignError.shadowColor=[UIColor whiteColor];
+    labelSignError.shadowOffset=CGSizeMake(0, 1);
+    [self.view addSubview:labelSignError];
 }
+
+- (void) showSignError:(NSString*)error{
+    labelSignError.text=error;
+}
+
 - (void) setSigninView{
     [passwordbackimg setFrame:CGRectMake(20, 135, 230, 41)];
     [textPassword setFrame:CGRectMake(20, 135, 230, 40)];
@@ -306,12 +320,15 @@
 }
 - (void)dealloc
 {
+    [avatarframeview release];
+    [avatarview release];
     [identitybackimg release];
     [textUsername release];
     [textPassword release];
     [textDisplayname release];
     [signindelegate release];
     [identityLeftIcon release];
+    [labelSignError release];
     [super dealloc];
 
 }
@@ -366,6 +383,8 @@
                                             dispatch_async(dispatch_get_main_queue(), ^{
                                                 if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
                                                     avatarview.image=avatar;
+                                                    avatarframeview.image=[UIImage imageNamed:@"signin_portrait_frame.png"];
+                                                    
                                                 }
                                             });
                                         });
@@ -405,6 +424,7 @@
         }
     } else {
         avatarview.image=nil;
+        avatarframeview.image=nil;
         [identityRightButton setImage:nil forState:UIControlStateNormal];
         identityLeftIcon.image=nil;
     }

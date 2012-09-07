@@ -9,6 +9,7 @@
 #import "ProfileBackgroundView.h"
 
 @implementation ProfileBackgroundView
+@synthesize hideGradient;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -21,6 +22,8 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    if(hideGradient==NO){
+        
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
 
@@ -38,5 +41,6 @@
     CGGradientRelease(gradient), gradient = NULL;
     
     CGContextRestoreGState(context);
+    }
 }
 @end

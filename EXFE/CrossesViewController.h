@@ -21,6 +21,7 @@
     UIBarButtonItem *gatherButtonItem;
     NSArray* _crosses;
     BOOL logoutflag;
+    BOOL alertShowflag;
     int current_cellrow;
     NSArray *cellbackimglist;
     NSArray *cellbackimgblanklist;

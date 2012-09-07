@@ -84,19 +84,14 @@
         [self loadObjectsFromDataStore];
         [self initUI];
         [self refreshCrosses:@"crossupdateview"];
+        NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
+        if(newuser !=nil && [newuser isEqualToString:@"YES"])
+            [self showWelcome];
     }
+
 }
 
 - (void)initUI{
-//    UIAlertView *alert =
-//    [[UIAlertView alloc] initWithTitle: @"Some Title"
-//                               message: @"You look very nice today."
-//                              delegate: self
-//                     cancelButtonTitle: @"OK"
-//                     otherButtonTitles: nil];
-//    [alert show];
-//    [alert release];
-    
     UIImage *gatherbtnimg = [UIImage imageNamed:@"gather_button.png"];
     UIButton *gatherButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [gatherButton setImage:gatherbtnimg forState:UIControlStateNormal];
@@ -113,8 +108,8 @@
     UIImage *settingbtnimg = [UIImage imageNamed:@"portrait_default.png"];
 
     EXInnerButton *settingButton = [[EXInnerButton alloc] initWithFrame:CGRectMake(2, 6, 30, 30)];
-    settingButton.image=settingbtnimg;
     [settingButton addTarget:self action:@selector(ShowProfileView) forControlEvents:UIControlEventTouchUpInside];
+    settingButton.image=settingbtnimg;
     settingButton.layer.cornerRadius=5.5f;
     settingButton.clipsToBounds = YES;
 
@@ -122,17 +117,17 @@
         User *user=[users objectAtIndex:0];
         if(user){
             Identity *identity=user.default_identity;
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-                UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(avatar_img!=nil && ![avatar_img isEqual:[NSNull null]]){
-                        settingButton.image=avatar_img;
-                        [settingButton setNeedsDisplay];
-                    }
+                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                dispatch_async(imgQueue, ^{
+                    UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(avatar_img!=nil && ![avatar_img isEqual:[NSNull null]]){
+                            settingButton.image=avatar_img;
+                            [settingButton setNeedsDisplay];
+                        }
+                    });
                 });
-            });
-            dispatch_release(imgQueue);
+                dispatch_release(imgQueue);
         }
     }
     [users release];
@@ -169,23 +164,20 @@
 //    {
 //        [navbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"]  forBarMetrics:UIBarMetricsDefault];
 //    }
-    [self.navigationController.view setNeedsDisplay];
-    NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
-    if(newuser !=nil && [newuser isEqualToString:@"YES"])
-        [self showWelcome];
 
+    [self.navigationController.view setNeedsDisplay];
     
 }
 - (void) showWelcome{
-//    int height=[[UIScreen mainScreen] bounds].size.height;
     WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:CGRectMake(4, tableView.frame.origin.y+4, self.view.frame.size.width-4-4, 460-44-4-4)];
-//    [welcome setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5f]];
+    [welcome setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5f]];
     welcome.parent=self;
 
     [self.view addSubview:welcome];
     [self.view bringSubviewToFront:welcome];
     self.tableView.bounces=NO;
     [welcome release];
+    
 }
 - (void) closeWelcome{
     for(UIView *view in self.view.subviews)
@@ -193,7 +185,6 @@
         if([view isKindOfClass:[WelcomeView class]])
         {
             [view removeFromSuperview];
-//            [view release];
         }
     }
     self.tableView.bounces=YES;
@@ -282,41 +273,12 @@
 
 - (void)loadObjectsFromDataStore {
 	NSFetchRequest* request = [Cross fetchRequest];
-    [request setFetchLimit:20];
+//    [request setFetchLimit:20];
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
     [_crosses release];
     _crosses=[[Cross objectsWithFetchRequest:request] retain];
     [self.tableView reloadData];
-//    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-//    dispatch_async(imgQueue, ^{
-//        NSArray *array = [[Cross objectsWithFetchRequest:request] retain];
-//        if(array){
-//            [_crosses release];
-//            _crosses=array;
-//        }
-//        dispatch_async(dispatch_get_main_queue(), ^{
-////            if(array){
-////                if(cellDateTime){
-////                    [cellDateTime release];
-////                    cellDateTime=nil;
-////                }
-////                cellDateTime=[[NSMutableArray alloc] initWithCapacity:[_crosses count]];
-////                for(Cross *cross in _crosses)
-////                {
-////                    NSDictionary *humanable_date=[Util crossTimeToString:cross.time];
-////                    [cellDateTime addObject:humanable_date];
-////                }
-////            }
-//
-//            [self.tableView reloadData];
-//        });
-//    });
-//    dispatch_release(imgQueue);
-//
-    
-    
-	
 }
 - (void)refresh
 {
@@ -406,10 +368,23 @@
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     
-    NSLog(@"Error %i : %@",error.code,error);
+    NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+    if(error.code==2)
+        errormsg=@"A connection failure has occurred.";
+    else
+        errormsg=@"Could not connect to the server.";
+    if(alertShowflag==NO){
+        alertShowflag=YES;
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    }
     [self stopLoading];
 }
-
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+//    alertShowflag=NO;
+}
 
 #pragma mark UITableViewDataSource methods
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {

@@ -143,7 +143,6 @@
     [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
     [manager.client setValue:app.accesstoken forHTTPHeaderField:@"token"];
     [manager postObject:cross usingBlock:^(RKObjectLoader *loader){
-        
         loader.delegate=delegate;
     }];
 }

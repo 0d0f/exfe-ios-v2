@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProfileBackgroundView : UIView
-
+@interface ProfileBackgroundView : UIView{
+    BOOL hideGradient;
+}
+@property BOOL hideGradient;
 @end

@@ -131,6 +131,12 @@
 
         [(CrossesViewController*)crossviewController initUI];
         [(CrossesViewController*)crossviewController refreshCrosses:@"crossview"];
+        [(CrossesViewController*)crossviewController loadObjectsFromDataStore];
+
+        NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
+        if(newuser !=nil && [newuser isEqualToString:@"YES"])
+            [(CrossesViewController*)crossviewController showWelcome];
+
         [self.navigationController dismissModalViewControllerAnimated:YES];
     }
 }

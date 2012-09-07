@@ -552,17 +552,23 @@
         cell.separator=cellsepator;
     [cell setShowTime:NO];
     if(post.by_identity.avatar_filename!=nil) {
-        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-        dispatch_async(imgQueue, ^{
-            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:post.by_identity.avatar_filename];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                    cell.avatar=avatar;
-                }
+        
+        UIImage *avatar = [[ImgCache sharedManager] getImgFromCache:post.by_identity.avatar_filename];
+        if(avatar==nil || [avatar isEqual:[NSNull null]]){
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+                UIImage *avatar = [[ImgCache sharedManager] getImgFrom:post.by_identity.avatar_filename];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+                        cell.avatar=avatar;
+                    }
+                });
             });
-        });
-        dispatch_release(imgQueue);        
-    }    
+            dispatch_release(imgQueue);
+        }
+        else
+            cell.avatar=avatar;
+    }
 	return cell;
 }
 
@@ -594,6 +600,18 @@
             }else {
             }
         };
+        request.onDidFailLoadWithError=^(NSError *error){
+            [inputToolbar setInputEnabled:YES];
+            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+            if(error.code==2)
+                errormsg=@"A connection failure has occurred.";
+            else
+                errormsg=@"Could not connect to the server.";
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+        };
+
         request.delegate=self;
     }];
     

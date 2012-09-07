@@ -399,7 +399,8 @@
 }
 + (NSString*) getBackgroundLink:(NSString*)imgname
 {
-    return [NSString stringWithFormat:@"http://%@/xbgimage/%@_ios.jpg",IMG_ROOT,imgname];
+//    https://exfe.com/static/img/xbg/westlake.jpg
+    return [NSString stringWithFormat:@"%@/xbg/%@",IMG_ROOT,imgname];
 }
 
 + (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius{
@@ -633,7 +634,7 @@
     int day=[comps day];
     if(abs(day)>1)
     {
-        int year=round(day/365.25);
+        int year=floor(abs(day)/365.25);
         float f_m=fmod(day,365.25)/30;
         //round 8 away from zero, round 7 towards zero
         int moth=round(f_m+0.2);
@@ -646,38 +647,32 @@
         if(abs(year)==1)
             y_str=@"year";
         
-//        if(abs(year)>0) {
-        if(abs(day)>=31) {
-            if(abs(year)>0) {
-                if(abs(moth)>0) {
-                    if(moth>0)
-                        relativeTime=[NSString stringWithFormat:@"In %u %@ %u %@",abs(year),y_str,abs(moth),m_str];
-                    else
-                        relativeTime=[NSString stringWithFormat:@"%u %@ %u %@ ago",abs(year),y_str,abs(moth),m_str];
-                }
-                else if(abs(moth)==0){
-                    if(year>0)
-                        relativeTime=[NSString stringWithFormat:@"In %u %@",abs(year),y_str];
-                    else
-                        relativeTime=[NSString stringWithFormat:@"%u %@ ago",abs(year),y_str];
-                }
-            }else if(year==0)
-            {
-                if(moth<0) {
-                        relativeTime=[NSString stringWithFormat:@"%u %@ ago",abs(moth),m_str];
-                }
-
+        if(abs(year)>0) {
+            if(abs(moth)>0) {
+                if(moth>0)
+                    relativeTime=[NSString stringWithFormat:@"In %u %@ %u %@",abs(year),y_str,abs(moth),m_str];
+                else
+                    relativeTime=[NSString stringWithFormat:@"%u %@ %u %@ ago",abs(year),y_str,abs(moth),m_str];
+            }
+            else if(abs(moth)==0){
+                if(year>0)
+                    relativeTime=[NSString stringWithFormat:@"In %u %@",abs(year),y_str];
+                else
+                    relativeTime=[NSString stringWithFormat:@"%u %@ ago",abs(year),y_str];
             }
         }
-        else{
-//        else if(abs(year)==0){
+        else if(abs(year)==0){
             if(day<=-3 && day>=-30)
                 relativeTime=[NSString stringWithFormat:@"%u days ago",abs(day)];
             else if(day==-2)
                 relativeTime=[NSString stringWithFormat:@"The day before yesterday"];
             else if(day==2)
                 relativeTime=[NSString stringWithFormat:@"The day after tomorrow"];
-            else if(day>0)
+            else if(day>30)
+                relativeTime=[NSString stringWithFormat:@"In %u %@",abs(moth),m_str];
+            else if(day<-30)
+                relativeTime=[NSString stringWithFormat:@"%u %@ ago",abs(moth),m_str];
+            else if(day>0 && day<=30)
             {
                 NSDateFormatter *weekdayformatter = [[NSDateFormatter alloc] init];
                 [weekdayformatter setDateFormat: @"EEEE"];

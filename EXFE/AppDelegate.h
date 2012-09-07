@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-#define WWW
+#define LOCAL
 
 #ifdef DEV
 #define API_V2_ROOT @"http://api.0d0f.com/v2"
@@ -28,7 +28,7 @@
 
 #ifdef WWW
 #define API_V2_ROOT @"https://www.exfe.com/v2"
-#define IMG_ROOT @"https://img.exfe.com"
+#define IMG_ROOT @"https://exfe.com/static/img"
 #define EXFE_OAUTH_LINK @"https://exfe.com/oAuth"
 #define GOOGLE_API_KEY @"AIzaSyCO_MQfEQI-p0r4tlQ3lj0WKLwbMtR5f3A"
 #endif
