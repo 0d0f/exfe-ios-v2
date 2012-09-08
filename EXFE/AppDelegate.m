@@ -41,7 +41,7 @@
     NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
     NSString *databaseName = DBNAME;
 #endif
-//    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
 //    [[[RKClient sharedClient] requestQueue] setConcurrentRequestsLimit:2];
@@ -235,8 +235,9 @@
     [(CrossesViewController*)crossviewController refreshCrosses:@"gatherview"];
     [self.navigationController dismissModalViewControllerAnimated:YES];
 }
--(void)CrossUpdateDidFinish{
-    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
+-(void)CrossUpdateDidFinish:(int)cross_id{
+//    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
+    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview" withCrossId:cross_id];
     
 }
 -(void)SignoutDidFinish{

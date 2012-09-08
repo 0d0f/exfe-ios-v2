@@ -37,7 +37,8 @@
      @"avatar_filename", @"avatar_filename",
      @"avatar_updated_at", @"avatar_updated_at", 
      @"created_at", @"created_at", 
-     @"updated_at", @"updated_at", 
+     @"updated_at", @"updated_at",
+     @"type", @"type", 
      nil];
     return identityMapping;
 }

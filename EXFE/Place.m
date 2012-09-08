@@ -2,8 +2,8 @@
 //  Place.m
 //  EXFE
 //
-//  Created by ju huo on 5/21/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by huoju on 9/9/12.
+//
 //
 
 #import "Place.h"
@@ -11,14 +11,15 @@
 
 @implementation Place
 
-@dynamic place_id;
-@dynamic place_description;
+@dynamic created_at;
 @dynamic external_id;
 @dynamic lat;
 @dynamic lng;
-@dynamic title;
+@dynamic place_description;
+@dynamic place_id;
 @dynamic provider;
+@dynamic title;
+@dynamic type;
 @dynamic updated_at;
-@dynamic created_at;
 
 @end

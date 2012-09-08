@@ -263,7 +263,7 @@
         CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
         if(meters<0 || meters>500)
         {
-            [APIPlace GetPlacesFromGoogleNearby:location.latitude lng:location.longitude delegate:self];
+            [[APIPlace sharedManager] GetPlacesFromGoogleNearby:location.latitude lng:location.longitude delegate:self];
         }
     }
     lng=location.longitude;
@@ -479,7 +479,7 @@
 - (void) getPlace{
     if(CFAbsoluteTimeGetCurrent()-editinginterval>0.8)
     {
-        [APIPlace GetPlacesFromGoogleByTitle:inputplace.text lat:lat lng:lng delegate:self];
+        [[APIPlace sharedManager] GetPlacesFromGoogleByTitle:inputplace.text lat:lat lng:lng delegate:self];
     }
 }
 - (void)textDidChange:(NSNotification*)notification
@@ -488,7 +488,7 @@
     if([textField.text length]>2)
     {
         editinginterval=CFAbsoluteTimeGetCurrent();
-        [self performSelector:@selector(getPlace) withObject:self afterDelay:1.2];
+        [self performSelector:@selector(getPlace) withObject:self afterDelay:0.8];
     }
 }
 - (void) editingDidBegan:(NSNotification*)notification{

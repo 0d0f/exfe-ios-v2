@@ -300,6 +300,7 @@
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+    int notification=0;
     if([objects count]>0)
     {
         NSString *source=[objectLoader.userData objectForKey:@"name" ];
@@ -308,58 +309,76 @@
         NSDate *last_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
 
         BOOL needsave=NO;
-        for(Cross *cross in objects)
+        BOOL isError=NO;
+        for(id object in objects)
         {
-            if(cross.updated_at!=nil)
-            {
-                if([source isEqualToString:@"crossview"]){
-                    if(exfee_updated_at==nil){
-                        cross.read_at=[NSDate date];
-                        needsave=YES;
-                    }
-                }
-                if(last_updated_at==nil)
-                    last_updated_at=cross.updated_at;
-                else{
-                    last_updated_at=[cross.updated_at laterDate:last_updated_at];
+            if([object isKindOfClass:[Meta class]]){
+                Meta *meta=object;
+                if([meta.code intValue]!=200)
+                {
+                    NSLog(@"%@",meta);
+                    isError=YES;
                 }
             }
-        }
-        if(needsave==YES)
-            [[Cross currentContext] save:nil];
-        [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+            else if([object isKindOfClass:[Cross class]])
+            {
+                notification++;
+                Cross *cross=(Cross*)object;
+                if(cross.updated_at!=nil)
+                {
+                    if([source isEqualToString:@"crossview"]){
+                        if(exfee_updated_at==nil){
+                            cross.read_at=[NSDate date];
+                            needsave=YES;
+                        }
+                    }
+                    if(last_updated_at==nil)
+                        last_updated_at=cross.updated_at;
+                    else{
+                        last_updated_at=[cross.updated_at laterDate:last_updated_at];
+                    }
+                }
+            }
 
-        if(![source isEqualToString:@"crossview"]){
-            [customStatusBar showWithStatusMessage:[NSString stringWithFormat:@"%i updates...",[objects count]]];
-            [customStatusBar performSelector:@selector(hide) withObject:nil afterDelay:2];
         }
-        if ([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"gatherview"]) {
-            AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-            [app.navigationController dismissModalViewControllerAnimated:YES];
-        }
-        else if([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"pushtocross"]) {
-            NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-            Cross *cross=[self crossWithId:[cross_id intValue]];
-            GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-            gatherViewController.cross=cross;
-            [gatherViewController setViewMode];
-            [self.navigationController pushViewController:gatherViewController animated:YES];
-            [gatherViewController release];
-        }
-        else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"pushtoconversation"]) {
-            NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-            Cross *cross=[self crossWithId:[cross_id intValue]];
-            GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-            gatherViewController.cross=cross;
-            [gatherViewController setViewMode];
-            [self.navigationController pushViewController:gatherViewController animated:NO];
-            [gatherViewController toconversation];
-            [gatherViewController release];
-        }
-        else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossupdateview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview"]) {
-            [self loadObjectsFromDataStore];
-            [self.tableView reloadData];
+        if(isError==NO)
+        {
+            if(needsave==YES)
+                [[Cross currentContext] save:nil];
+            [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+
+            if(![source isEqualToString:@"crossview"]){
+                [customStatusBar showWithStatusMessage:[NSString stringWithFormat:@"%i updates...",notification]];
+                [customStatusBar performSelector:@selector(hide) withObject:nil afterDelay:2];
+            }
+            if ([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"gatherview"]) {
+                AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                [app.navigationController dismissModalViewControllerAnimated:YES];
+            }
+            else if([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"pushtocross"]) {
+                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
+                Cross *cross=[self crossWithId:[cross_id intValue]];
+                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+                gatherViewController.cross=cross;
+                [gatherViewController setViewMode];
+                [self.navigationController pushViewController:gatherViewController animated:YES];
+                [gatherViewController release];
+            }
+            else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"pushtoconversation"]) {
+                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
+                Cross *cross=[self crossWithId:[cross_id intValue]];
+                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+                gatherViewController.cross=cross;
+                [gatherViewController setViewMode];
+                [self.navigationController pushViewController:gatherViewController animated:NO];
+                [gatherViewController toconversation];
+                [gatherViewController release];
+            }
+            else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossupdateview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview"]) {
+                [self loadObjectsFromDataStore];
+                [self.tableView reloadData];
+            }
         }
     }
 

@@ -9,6 +9,19 @@
 #import "APIPlace.h"
 
 @implementation APIPlace
+static id sharedManager = nil;
+static RKRequestQueue *queue;
+
++ (id)sharedManager {
+    @synchronized(self)
+    {
+        if (sharedManager == nil) {
+            sharedManager = [[self alloc] init];
+            queue=[RKRequestQueue newRequestQueueWithName:@"place"];
+        }
+    }
+    return sharedManager;
+}
 
 +(void) GetPlaces:(NSString*)keyword lat:(double)lat lng:(double)lng delegate:(id)delegate{
     RKClient *client = [RKClient sharedClient];
@@ -37,9 +50,7 @@
     ];
     
 }
-+(void) GetPlacesFromGoogleByTitle:(NSString*) title lat:(double)lat lng:(double)lng delegate:(id)delegate{
-    
-    RKRequestQueue *queue=[RKRequestQueue requestQueueWithName:@"place"];
+-(void) GetPlacesFromGoogleByTitle:(NSString*) title lat:(double)lat lng:(double)lng delegate:(id)delegate{
     [queue cancelRequestsWithDelegate:delegate];
     NSString * language = [[NSLocale preferredLanguages] objectAtIndex:0];
     RKClient *client=[RKClient sharedClient];
@@ -52,7 +63,7 @@
     [queue start];
 }
 
-+(void) GetPlacesFromGoogleNearby:(double)lat lng:(double)lng delegate:(id)delegate{
+-(void) GetPlacesFromGoogleNearby:(double)lat lng:(double)lng delegate:(id)delegate{
     NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
     RKClient *client=[RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:@"https://maps.googleapis.com"]];

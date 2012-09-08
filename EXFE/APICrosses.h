@@ -11,6 +11,8 @@
 #import "AppDelegate.h"
 #import "Cross.h"
 #import "Invitation.h"
+#import "Exfee.h"
+#import "Meta.h"
 
 @interface APICrosses : NSObject 
 +(void) MappingCross;
@@ -22,5 +24,6 @@
 + (RKManagedObjectMapping*) getPlaceMapping;
 + (RKManagedObjectMapping*) getInvitationMapping;
 + (RKManagedObjectMapping*) getCrossMapping;
++ (RKManagedObjectMapping*) getExfeeMapping;
 
 @end

@@ -33,6 +33,7 @@
         <attribute name="accepted" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="exfee_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="total" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="invitations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Invitation" syncable="YES"/>
     </entity>
     <entity name="Identity" representedClassName="Identity" syncable="YES">
@@ -47,6 +48,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="provider" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Invitation" representedClassName="Invitation" syncable="YES">
@@ -55,6 +57,7 @@
         <attribute name="invitation_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="mates" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="rsvp_status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="via" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
@@ -68,12 +71,13 @@
     <entity name="Place" representedClassName="Place" syncable="YES">
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="external_id" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="lng" optional="YES" attributeType="Double" defaultValueString="0" syncable="YES"/>
+        <attribute name="lat" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lng" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="place_description" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="place_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="provider" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <entity name="Post" representedClassName="Post" syncable="YES">
@@ -108,11 +112,11 @@
         <element name="Cross" positionX="160" positionY="192" width="128" height="285"/>
         <element name="CrossTime" positionX="135" positionY="135" width="128" height="90"/>
         <element name="EFTime" positionX="144" positionY="144" width="128" height="120"/>
-        <element name="Exfee" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="Identity" positionX="160" positionY="267" width="128" height="225"/>
-        <element name="Invitation" positionX="160" positionY="192" width="128" height="180"/>
+        <element name="Exfee" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="Identity" positionX="160" positionY="267" width="128" height="240"/>
+        <element name="Invitation" positionX="160" positionY="192" width="128" height="195"/>
         <element name="Meta" positionX="160" positionY="192" width="128" height="90"/>
-        <element name="Place" positionX="160" positionY="192" width="128" height="180"/>
+        <element name="Place" positionX="160" positionY="192" width="128" height="195"/>
         <element name="Post" positionX="160" positionY="192" width="128" height="135"/>
         <element name="Rsvp" positionX="160" positionY="192" width="128" height="105"/>
         <element name="User" positionX="160" positionY="192" width="128" height="165"/>

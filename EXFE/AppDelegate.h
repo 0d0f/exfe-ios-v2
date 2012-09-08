@@ -62,7 +62,7 @@
 -(void)SigninDidFinish;
 -(void)SignoutDidFinish;
 -(void)GatherCrossDidFinish;
--(void)CrossUpdateDidFinish;
+-(void)CrossUpdateDidFinish:(int)cross_id;
 -(void)ShowLanding;
 -(BOOL) Checklogin;
 -(void) deviceReg;

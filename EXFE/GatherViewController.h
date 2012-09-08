@@ -127,6 +127,8 @@
 - (int) exfeeIdentitiesCount;
 - (void) buildView;
 - (void) saveCrossUpdate;
+- (void) saveExfeeUpdate;
 - (void) setExfeeViewMode:(BOOL)edit;
 - (void) saveCrossDesc;
+- (void) reloadExfeeIdentities;
 @end

@@ -66,8 +66,6 @@
 }
 - (void)buildView{
     [self.view setBackgroundColor:[UIColor grayColor]];
-    exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
-    exfeeSelected=[[NSMutableArray alloc] initWithCapacity:12];
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     float width=self.view.frame.size.width-VIEW_MARGIN*2;
     CGRect containviewframe=CGRectMake(0,toolbar.frame.size.height,self.view.frame.size.width, self.view.frame.size.height-toolbar.frame.size.height);
@@ -303,23 +301,38 @@
         [self setPlace:cross.place];
         
         crossdescription.text=cross.cross_description;
-        NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES];
-        NSArray *invitations=[cross.exfee.invitations sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-        for(Invitation *invitation in invitations) {
-            if([invitation.host boolValue]==YES)
-                [exfeeIdentities insertObject:invitation atIndex:0];
-            else{
-                [exfeeIdentities addObject:invitation];
-            }
-            [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
-        }
-        [exfeeShowview reloadData];
-
+        [self reloadExfeeIdentities];
     }
     else if(viewmode==NO){
+        exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
+        exfeeSelected=[[NSMutableArray alloc] initWithCapacity:12];
+
         [self addDefaultIdentity];
     }
 
+}
+- (void) reloadExfeeIdentities{
+    if(exfeeIdentities!=nil){
+        [exfeeIdentities release];
+        exfeeIdentities=nil;
+        [exfeeSelected release];
+        exfeeSelected=nil;
+    }
+    exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
+    exfeeSelected=[[NSMutableArray alloc] initWithCapacity:12];
+
+    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES];
+    NSArray *invitations=[cross.exfee.invitations sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+    for(Invitation *invitation in invitations) {
+        if([invitation.host boolValue]==YES)
+            [exfeeIdentities insertObject:invitation atIndex:0];
+        else{
+            [exfeeIdentities addObject:invitation];
+        }
+        [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
+    }
+    [exfeeShowview reloadData];
+    
 }
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)aRange replacementText:(NSString*)aText
 {
@@ -464,16 +477,6 @@
 }
     
 - (void) addDefaultIdentity{
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//	NSFetchRequest* request = [User fetchRequest];
-//    NSPredicate *predicate = [NSPredicate
-//                              predicateWithFormat:@"user_id = %u", app.userid];    
-//    [request setPredicate:predicate];
-//	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-//    
-//    if(users!=nil && [users count] >0)
-//    {
-//        User *user=[users objectAtIndex:0];
         User *user=default_user;
         Identity *default_identity=user.default_identity;
         if(user!=nil){
@@ -489,7 +492,6 @@
             [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
             [exfeeShowview reloadData];
         }
-//    }
 }
 
 - (void) refreshExfeePopOver{
@@ -806,7 +808,7 @@
 - (void) setPlace:(Place*)place{
     if(place!=nil)
     {
-        if([place.lat isEqualToNumber:[NSNumber numberWithInt:0]] && [place.lng isEqualToNumber:[NSNumber numberWithInt:0]] )
+        if([place.lat isEqualToString:@""] && [place.lng isEqualToString:@""] && [place.title isEqualToString:@""] && [place.place_description isEqualToString:@""])
             return;
         cross.place=place;
 //        [self reArrangeViews];
@@ -821,11 +823,11 @@
             region.span.latitudeDelta = 0.005;
             [map setRegion:region animated:NO];
             mapbox.image=[UIImage imageNamed:@"map_area.png"];
-            if([place.lat isEqualToNumber:[NSNumber numberWithInt:0]] && [place.lng isEqualToNumber:[NSNumber numberWithInt:0]] && [place.title isEqualToString:@""] && [place.place_description isEqualToString:@""])
-            {
-                place.title=@"Somewhere";
-                place=nil;
-            }
+//            if([place.lat isEqualToNumber:[NSNumber numberWithInt:0]] && [place.lng isEqualToNumber:[NSNumber numberWithInt:0]] && [place.title isEqualToString:@""] && [place.place_description isEqualToString:@""])
+//            {
+//                place.title=@"Somewhere";
+//                place=nil;
+//            }
             placetitle.text=place.title;
             placedesc.text=place.place_description;
             [self reArrangeViews];
@@ -1172,11 +1174,91 @@
     [exfeestr release];
     [exfeenum setNeedsDisplay];
 }
+- (void) saveExfeeUpdate{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    NSError *error;
+    NSString *json = [[RKObjectSerializer serializerWithObject:cross.exfee mapping:[[APICrosses getExfeeMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
+    
+
+    RKParams* rsvpParams = [RKParams params];
+//    NSDictionary *exfee_dict=[ObjectToDict ExfeeDict:cross.exfee];
+    [rsvpParams setValue:json forParam:@"exfee"];
+    [rsvpParams setValue:cross.exfee.exfee_id forParam:@"id"];
+    [rsvpParams setValue:[self getMyInvitation].identity.identity_id forParam:@"by_identity_id"];
+    RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+    NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/edit?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
+    [client post:endpoint usingBlock:^(RKRequest *request){
+        request.method=RKRequestMethodPOST;
+        request.params=rsvpParams;
+        request.onDidLoadResponse=^(RKResponse *response){
+            if (response.statusCode == 200) {
+                NSDictionary *body=[response.body objectFromJSONData];
+                if([body isKindOfClass:[NSDictionary class]]) {
+                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                    if(code)
+                        if([code intValue]==200) {
+                            RKObjectMapper* mapper;
+                            mapper = [RKObjectMapper mapperWithObject:body mappingProvider:[RKObjectManager sharedManager].mappingProvider];
+                            RKObjectMappingResult* result = [mapper performMapping];
+                            id obj=[result asObject];
+                            if([obj isKindOfClass:[Exfee class]]){
+                                cross.exfee=(Exfee*)obj;
+                                [[Cross currentContext] save:nil];
+                                [self reloadExfeeIdentities];
+                            }
+
+                        }else{
+                            
+                        }
+                }
+                
+//                NSLog(@"%@", [result asObject]);
+
+                
+//                RKObjectMapper* mapper;
+//                id mappingResult = [mapper performMappingForObject:body atKeyPath:@"response.exfee" usingMapping:mapping];
+                
+//                NSDictionary *responsedict=[body objectForKey:@"response"];
+//                mapper.targetObject = target;
+//                RKObjectMappingResult* result = [mapper performMapping];
+//                NSLog(@"%@", [result asObject]);
+                
+                
+//                RKObjectMappingProvider* mappingProvider = [RKObjectManager sharedManager].mappingProvider;
+//                RKObjectMapper* mapper = [RKObjectMapper mapperWithObject:responsedict mappingProvider:[RKObjectManager sharedManager].mappingProvider];
+//                RKObjectMappingResult* result = [mapper performMapping];
+//                Exfee *target= [result asObject];
+//                NSLog(@"%@",target);
+//                id exfeeobj=[result asObject];
+//                if([exfeeobj isKindOfClass:[Exfee class]]){
+//                    cross.exfee=(Exfee*)exfeeobj;
+//                    [self reloadExfeeIdentities];
+//                }
+
+            }else {
+                //Check Response Body to get Data!
+            }
+        };
+        request.onDidFailLoadWithError=^(NSError *error){
+            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+            if(error.code==2)
+                errormsg=@"A connection failure has occurred.";
+            else
+                errormsg=@"Could not connect to the server.";
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+            
+        };
+        request.delegate=self;
+    }];
+}
 
 - (void)saveCrossUpdate{
     NSError *error;
     NSString *json = [[RKObjectSerializer serializerWithObject:cross mapping:[[APICrosses getCrossMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
-    NSLog(@"%@",json);
     if(!error){
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
         RKClient *client = [RKClient sharedClient];
@@ -1187,9 +1269,17 @@
             
             request.params=[RKRequestSerialization serializationWithData:[json dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
             request.onDidLoadResponse=^(RKResponse *response){
-                NSLog(@"%@",response.bodyAsString);
                 if (response.statusCode == 200) {
-                    [app CrossUpdateDidFinish];
+                    NSDictionary *body=[response.body objectFromJSONData];
+//
+                    NSDictionary *responsedict=[body objectForKey:@"response"];
+                    NSDictionary *crossdict=[responsedict objectForKey:@"cross" ];
+                    NSNumber *cross_id=[crossdict objectForKey:@"id"];
+                    if(cross_id==cross.cross_id)
+                    {
+                        [app CrossUpdateDidFinish:[cross.cross_id intValue]];
+                    }
+                    
                 }else {
                     //Check Response Body to get Data!
                 }
@@ -1279,6 +1369,7 @@
         int accept=0;
 
         Exfee *exfee=[Exfee object];
+        exfee.exfee_id=cross.exfee.exfee_id;
         for(Invitation *invitation in exfeeIdentities){
             all+=[invitation.mates intValue]+1;
             if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
@@ -1289,7 +1380,8 @@
         exfee.total=[NSNumber numberWithInt:all];
         exfee.accepted=[NSNumber numberWithInt:accept];
         cross.exfee = exfee;
-        [self saveCrossUpdate];
+        [self saveExfeeUpdate];
+//        [self saveCrossUpdate];
     }
     [self setExfeeNum];
 }
@@ -1444,6 +1536,8 @@
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     if(cross){
+        if(cross.place!=nil)
+            [[Place currentContext] deleteObject:cross.place];
         [[Exfee currentContext] deleteObject:cross.exfee];
         [[Cross currentContext] deleteObject:cross];
     }
@@ -1779,18 +1873,20 @@
     [self setMates:-1];
 }
 - (void) rsvpremove{
-    NSMutableIndexSet *mutableIndexSet = [[NSMutableIndexSet alloc] init];
+//    NSMutableIndexSet *mutableIndexSet = [[NSMutableIndexSet alloc] init];
     for(int i=0;i< [exfeeSelected count];i++) {
         if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
             if(i<[exfeeIdentities count]) {
-                [mutableIndexSet addIndex:i];
+                ((Invitation*)[exfeeIdentities objectAtIndex:i]).rsvp_status=@"REMOVED";
+//                [mutableIndexSet addIndex:i];
             }
         }
     }
-    [exfeeIdentities removeObjectsAtIndexes:mutableIndexSet];
-    [exfeeSelected removeObjectsAtIndexes:mutableIndexSet];
+    
+//    [exfeeIdentities removeObjectsAtIndexes:mutableIndexSet];
+//    [exfeeSelected removeObjectsAtIndexes:mutableIndexSet];
 
-    [mutableIndexSet release];
+//    [mutableIndexSet release];
     [exfeeShowview calculateColumn];
     [self refreshExfeePopOver];
 

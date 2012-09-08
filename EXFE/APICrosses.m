@@ -31,6 +31,7 @@
      @"external_id", @"external_id",
      @"created_at", @"created_at",
      @"updated_at", @"updated_at",
+     @"type", @"type",
      nil];
     return placeMapping;
 }
@@ -46,29 +47,38 @@
      @"via", @"via",
      @"updated_at", @"updated_at",
      @"created_at", @"created_at",
+     @"type", @"type",
      nil];
     [invitationMapping mapRelationship:@"identity" withMapping:[Mapping getIdentityMapping]];
     [invitationMapping mapRelationship:@"by_identity" withMapping:[Mapping getIdentityMapping]];
     return invitationMapping;
 }
++ (RKManagedObjectMapping*) getExfeeMapping{
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    RKManagedObjectMapping* invitationMapping=[APICrosses getInvitationMapping];
+    RKManagedObjectMapping* exfeeMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Exfee" inManagedObjectStore:manager.objectStore];
+    exfeeMapping.primaryKeyAttribute=@"exfee_id";
+    [exfeeMapping mapKeyPathsToAttributes:@"id", @"exfee_id",@"total",@"total",@"accepted",@"accepted",@"type",@"type",
+     nil];
+    [exfeeMapping mapRelationship:@"invitations" withMapping:invitationMapping];
+    return exfeeMapping;
+}
 
 + (RKManagedObjectMapping*) getCrossMapping{
-    
     RKObjectManager* manager =[RKObjectManager sharedManager];
     RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
     RKManagedObjectMapping* placeMapping =[APICrosses getPlaceMapping];
     RKManagedObjectMapping* invitationMapping=[APICrosses getInvitationMapping];
+    RKManagedObjectMapping* exfeeMapping=[APICrosses getExfeeMapping];
     
     RKObjectMapping* invitationSerializationMapping = [invitationMapping inverseMapping];
     [manager.mappingProvider setSerializationMapping:invitationSerializationMapping forClass:[Invitation class]];
     [manager.mappingProvider setObjectMapping:invitationSerializationMapping forKeyPath:@"invitation"];
     
+    RKObjectMapping* exfeeSerializationMapping = [exfeeMapping inverseMapping];
+    [manager.mappingProvider setSerializationMapping:exfeeSerializationMapping forClass:[Exfee class]];
+    [manager.mappingProvider setObjectMapping:exfeeSerializationMapping forKeyPath:@"exfee"];
     
-    RKManagedObjectMapping* exfeeMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Exfee" inManagedObjectStore:manager.objectStore];
-    exfeeMapping.primaryKeyAttribute=@"exfee_id";
-    [exfeeMapping mapKeyPathsToAttributes:@"id", @"exfee_id",@"total",@"total",@"accepted",@"accepted",
-     nil];
-    [exfeeMapping mapRelationship:@"invitations" withMapping:invitationMapping];
     
     RKManagedObjectMapping* EFMapping = [RKManagedObjectMapping mappingForEntityWithName:@"EFTime" inManagedObjectStore:manager.objectStore];
     [EFMapping mapKeyPathsToAttributes:@"date", @"date",
@@ -111,8 +121,10 @@
     RKManagedObjectMapping *crossMapping=[APICrosses getCrossMapping];
     [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.crosses"];
     [manager.mappingProvider setObjectMapping:crossMapping forKeyPath:@"response.cross"];
-//    [manager.mappingProvider setObjectMapping:[Mapping getMetaMapping] forKeyPath:@""];
+    [manager.mappingProvider setObjectMapping:[Mapping getMetaMapping] forKeyPath:@"meta"];
     
+    [manager.mappingProvider setObjectMapping:[APICrosses getExfeeMapping] forKeyPath:@"response.exfee"];
+
 
     RKManagedObjectMapping* RsvpMapping = [RKManagedObjectMapping mappingForEntityWithName:@"Rsvp" inManagedObjectStore:manager.objectStore];
     [RsvpMapping mapKeyPathsToAttributes:@"identity_id", @"identity_id",

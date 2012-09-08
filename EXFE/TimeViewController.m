@@ -164,17 +164,24 @@
     NSString *eftimezone=[timezonestr substringFromIndex:3];
     if([eftimezone isEqualToString:@""])
         eftimezone=@"+00:00";
+
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *origin_date=[formatter stringFromDate:date];
+    [formatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+    NSString *origin_datetime=[formatter stringFromDate:date];
+
     [locale release];
     [formatter release];
-    
+
     if(time_word!=nil)
     {
         crosstime.outputformat=[NSNumber numberWithInt:0];
-        crosstime.origin=[NSString stringWithFormat:@"%@ %@",datestr,time_word];
+        crosstime.origin=[NSString stringWithFormat:@"%@ %@",origin_date,time_word];
         eftime.time_word=time_word;
     }
     else{
-        crosstime.origin=stringFromDate;
+        crosstime.origin=origin_datetime;
         eftime.time_word=@"";
     }
     eftime.date=datestr;
