@@ -11,6 +11,7 @@
 #import "EXIconToolBar.h"
 #import "SigninDelegate.h"
 #import "SigninIconToolbarView.h"
+#import "EXSpinView.h"
 
 @interface LandingViewController : UIViewController{
     id delegate;

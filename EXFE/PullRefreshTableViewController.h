@@ -28,13 +28,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EXSpinView.h"
 
 
 @interface PullRefreshTableViewController : UITableViewController {
     UIView *refreshHeaderView;
     UILabel *refreshLabel;
 //    UIImageView *refreshArrow;
-    UIActivityIndicatorView *refreshSpinner;
+    EXSpinView *refreshSpinner;
+    
     BOOL isDragging;
     BOOL isLoading;
     NSString *textPull;
@@ -45,7 +47,7 @@
 @property (nonatomic, retain) UIView *refreshHeaderView;
 @property (nonatomic, retain) UILabel *refreshLabel;
 @property (nonatomic, retain) UIImageView *refreshArrow;
-@property (nonatomic, retain) UIActivityIndicatorView *refreshSpinner;
+@property (nonatomic, retain) EXSpinView *refreshSpinner;
 @property (nonatomic, copy) NSString *textPull;
 @property (nonatomic, copy) NSString *textRelease;
 @property (nonatomic, copy) NSString *textLoading;

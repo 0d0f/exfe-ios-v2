@@ -38,6 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     firstLoad=YES;
     toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
     [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
@@ -688,6 +689,7 @@
     cross.cross_description=crossdescription.text;
     cross.time=datetime;
     Exfee *exfee=[Exfee object];
+    
     for(Invitation *invitation in exfeeIdentities){
         [exfee addInvitationsObject:invitation];
     }
@@ -791,7 +793,13 @@
     [self setExfeeNum];
 }
 - (int) exfeeIdentitiesCount{
-    return [exfeeIdentities count];
+    int i=0;
+    for(Invitation *invitation in exfeeIdentities)
+    {
+        if(![invitation.rsvp_status isEqualToString:@"REMOVED"])
+            i++;
+    }
+    return i;//[exfeeIdentities count];
 }
 - (void) savePlace:(Place*)place{
 //    [self setPlace:place];
@@ -1175,6 +1183,14 @@
     [exfeenum setNeedsDisplay];
 }
 - (void) saveExfeeUpdate{
+    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Saving";
+    hud.mode=MBProgressHUDModeCustomView;
+    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+    [bigspin startAnimating];
+    hud.customView=bigspin;
+    [bigspin release];
+
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 
     NSError *error;
@@ -1213,50 +1229,35 @@
                             
                         }
                 }
-                
-//                NSLog(@"%@", [result asObject]);
-
-                
-//                RKObjectMapper* mapper;
-//                id mappingResult = [mapper performMappingForObject:body atKeyPath:@"response.exfee" usingMapping:mapping];
-                
-//                NSDictionary *responsedict=[body objectForKey:@"response"];
-//                mapper.targetObject = target;
-//                RKObjectMappingResult* result = [mapper performMapping];
-//                NSLog(@"%@", [result asObject]);
-                
-                
-//                RKObjectMappingProvider* mappingProvider = [RKObjectManager sharedManager].mappingProvider;
-//                RKObjectMapper* mapper = [RKObjectMapper mapperWithObject:responsedict mappingProvider:[RKObjectManager sharedManager].mappingProvider];
-//                RKObjectMappingResult* result = [mapper performMapping];
-//                Exfee *target= [result asObject];
-//                NSLog(@"%@",target);
-//                id exfeeobj=[result asObject];
-//                if([exfeeobj isKindOfClass:[Exfee class]]){
-//                    cross.exfee=(Exfee*)exfeeobj;
-//                    [self reloadExfeeIdentities];
-//                }
-
             }else {
                 //Check Response Body to get Data!
             }
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
         };
         request.onDidFailLoadWithError=^(NSError *error){
-            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
-            if(error.code==2)
-                errormsg=@"A connection failure has occurred.";
-            else
-                errormsg=@"Could not connect to the server.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-            
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            NSString *errormsg=@"Could not save this cross.";
+            if(![errormsg isEqualToString:@""]){
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
+                alert.tag=202; // 201 = Save Exfee
+                [alert show];
+                [alert release];
+            }
         };
         request.delegate=self;
     }];
 }
 
 - (void)saveCrossUpdate{
+    
+    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Saving";
+    hud.mode=MBProgressHUDModeCustomView;
+    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+    [bigspin startAnimating];
+    hud.customView=bigspin;
+    [bigspin release];
+    
     NSError *error;
     NSString *json = [[RKObjectSerializer serializerWithObject:cross mapping:[[APICrosses getCrossMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
     if(!error){
@@ -1271,22 +1272,41 @@
             request.onDidLoadResponse=^(RKResponse *response){
                 if (response.statusCode == 200) {
                     NSDictionary *body=[response.body objectFromJSONData];
-//
                     NSDictionary *responsedict=[body objectForKey:@"response"];
                     NSDictionary *crossdict=[responsedict objectForKey:@"cross" ];
                     NSNumber *cross_id=[crossdict objectForKey:@"id"];
-                    if(cross_id==cross.cross_id)
+                    if([cross_id intValue]==[self.cross.cross_id intValue])
                     {
                         [app CrossUpdateDidFinish:[cross.cross_id intValue]];
                     }
                     
                 }else {
-                    //Check Response Body to get Data!
+                    
+                    NSString *errormsg=@"Could not save this cross.";
+                    if(![errormsg isEqualToString:@""]){
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
+                        alert.tag=201; // 201 = Save Cross
+                        [alert show];
+                        [alert release];
+                    }
                 }
-                
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
             };
             request.onDidFailLoadWithError=^(NSError *error){
-//                NSLog(@"%@",error);
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                NSString *errormsg=@"";
+                if(error.code==2)
+                    errormsg=@"A connection failure has occurred.";
+                else
+                    errormsg=@"Could not connect to the server.";
+                if(![errormsg isEqualToString:@""]){
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
+                    alert.tag=201; // 201 = Save Cross
+                    [alert show];
+                    [alert release];
+                }
+                
+//                [Util showConnectError:error delegate:self];
             };
             request.delegate=self;
         }];
@@ -1504,6 +1524,53 @@
         notUserScroll=NO;
     return YES;
 }
+
+- (Cross*) reloadCrossFromStorage{
+    NSFetchRequest* request = [Cross fetchRequest];
+      NSPredicate *predicate = [NSPredicate
+                                predicateWithFormat:@"cross_id = %u", [self.cross.cross_id intValue]];
+      [request setPredicate:predicate];
+    NSArray *crosses = [[Cross objectsWithFetchRequest:request] retain];
+    if ([crosses count]>0)
+        return [crosses objectAtIndex:0];
+    
+    return nil;
+}
+
+#pragma mark UIAlertView methods
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSLog(@"button: %u",buttonIndex);
+    //tag 101: save cross
+    //tag 102: save exfee
+    if(buttonIndex==0)//cancel
+    {
+        if(alertView.tag==201){
+            [[Cross currentContext] rollback];
+            [self setDateTime:cross.time];
+            [self setPlace:cross.place];
+            crosstitle.text=cross.title;
+            crossdescription.text=cross.cross_description;
+        }else if(alertView.tag==202){
+            [[Exfee currentContext] rollback];
+            [[Cross currentContext] rollback];
+            [self reloadExfeeIdentities];
+        }
+    }else if(buttonIndex==1) //retry
+    {
+        if(alertView.tag==201){
+            [self saveCrossUpdate];
+        }else if(alertView.tag==202){
+            [self saveExfeeUpdate];
+        }
+    }
+//    if(buttonIndex==1 && alertView.tag==500){
+//        
+//    }
+}
+
+
 #pragma mark UIScrollView methods
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -1560,6 +1627,8 @@
 - (EXImagesItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
     EXImagesItem *item=[[[EXImagesItem alloc] init] autorelease];
     Invitation *invitation =[exfeeIdentities objectAtIndex:index];
+//    if([invitation.rsvp_status isEqualToString:@"REMOVED"])
+//        return nil;
     Identity *identity=invitation.identity;
     UIImage *img=[[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
     if(img!=nil)

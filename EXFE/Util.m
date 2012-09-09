@@ -771,5 +771,64 @@
     NSArray *domains =[NSArray arrayWithObjects:@"biz",@"com",@"nfo",@"net",@"org",@".us",@".uk",@".jp",@".cn",@".ca",@".au",@".de", nil];
     return [domains containsObject:[domainname lowercaseString]];
 }
++ (void) signout{
+    AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    
+    NSString *udid=[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"];
+    RKParams* rsvpParams = [RKParams params];
+    [rsvpParams setValue:udid forParam:@"udid"];
+    [rsvpParams setValue:@"iOS" forParam:@"os_name"];
+    
+    RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/signout?token=%@",app.userid,app.accesstoken];
+    [client post:endpoint usingBlock:^(RKRequest *request){
+        request.method=RKRequestMethodPOST;
+        request.params=rsvpParams;
+        request.onDidLoadResponse=^(RKResponse *response){
+            if (response.statusCode == 200) {
+            }else {
+                //Check Response Body to get Data!
+            }
+            [app SignoutDidFinish];
+        };
+        request.onDidFailLoadWithError=^(NSError *error){
+            NSLog(@"%@",error);
+            [app SignoutDidFinish];
+        };
+    }];
+}
++ (void) showError:(Meta*)meta delegate:(id)delegate{
+    NSString *errormsg=@"";
+    if([meta.code intValue]==401){
+        errormsg=@"invalid auth";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Sign Out",nil];
+        alert.tag=500;
+        alert.delegate=delegate;
+        [alert show];
+        [alert release];
+        
+    }
+}
++ (void) showConnectError:(NSError*)err delegate:(id)delegate{
+    NSString *errormsg=@"";
+    if(err.code==2)
+        errormsg=@"A connection failure has occurred.";
+    else
+        errormsg=@"Could not connect to the server.";
+    if(![errormsg isEqualToString:@""]){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    }
 
+//    if(alertShowflag==NO){
+//        alertShowflag=YES;
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+//        [alert show];
+//        [alert release];
+//    }
+    
+    
+}
 @end

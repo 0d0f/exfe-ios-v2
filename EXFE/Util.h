@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "CrossTime.h"
 #import "AppDelegate.h"
+#import "Meta.h"
+#import <RestKit/RestKit.h>
 
 #define FONT_COLOR_100 [UIColor colorWithRed:100/255.0f green:100/255.0f blue:100/255.0f alpha:1]
 #define FONT_COLOR_69 [UIColor colorWithRed:69/255.0f green:69/255.0f blue:69/255.0f alpha:1]
@@ -46,5 +48,8 @@
 + (NSString*) getTimeDesc:(CrossTime*)crosstime;
 + (NSDate*) beginningOfWeek:(NSDate*)date;
 + (BOOL) isCommonDomainName:(NSString*)domainname;
++ (void) showError:(Meta*)meta delegate:(id)delegate;
++ (void) showConnectError:(NSError*)err delegate:(id)delegate;
++ (void) signout;
 @end
 

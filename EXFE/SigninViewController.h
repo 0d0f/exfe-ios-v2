@@ -17,6 +17,7 @@
 #import "SigninDelegate.h"
 #import "SigninIconToolbarView.h"
 #import "LandingViewController.h"
+#import "EXSpinView.h"
 
 @interface SigninViewController : UIViewController <RKRequestDelegate> {
     id delegate;
@@ -47,6 +48,7 @@
     UIButton *setupnewbtn;
     
     UILabel *labelSignError;
+    EXSpinView *spin;
 }
 @property (nonatomic, assign) id delegate;
 

@@ -28,7 +28,6 @@
     
     app.userid=[userid intValue];
     app.accesstoken=token;
-    NSLog(@"loaduser with userid..");
     [APIProfile LoadUsrWithUserId:app.userid delegate:self];
 }
 

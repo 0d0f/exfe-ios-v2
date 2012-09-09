@@ -88,7 +88,6 @@
         if(newuser !=nil && [newuser isEqualToString:@"YES"])
             [self showWelcome];
     }
-
 }
 
 - (void)initUI{
@@ -263,6 +262,16 @@
         updated_at = [formatter stringFromDate:date_updated_at];
         [formatter release];
     }
+    if([source isEqualToString:@"crossview_init"]){
+        hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.labelText = @"Loading";
+        hud.mode=MBProgressHUDModeCustomView;
+        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+        [bigspin startAnimating];
+        hud.customView=bigspin;
+        [bigspin release];
+    }
+        
     [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]];
     
 }
@@ -273,7 +282,6 @@
 
 - (void)loadObjectsFromDataStore {
 	NSFetchRequest* request = [Cross fetchRequest];
-//    [request setFetchLimit:20];
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
     [_crosses release];
@@ -316,7 +324,7 @@
                 Meta *meta=object;
                 if([meta.code intValue]!=200)
                 {
-                    NSLog(@"%@",meta);
+                    [Util showError:meta delegate:self];
                     isError=YES;
                 }
             }
@@ -348,7 +356,8 @@
             [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
             [[NSUserDefaults standardUserDefaults] synchronize];
 
-            if(![source isEqualToString:@"crossview"]){
+            if(![source isEqualToString:@"crossview"] && notification>0){
+                
                 [customStatusBar showWithStatusMessage:[NSString stringWithFormat:@"%i updates...",notification]];
                 [customStatusBar performSelector:@selector(hide) withObject:nil afterDelay:2];
             }
@@ -375,7 +384,9 @@
                 [gatherViewController toconversation];
                 [gatherViewController release];
             }
-            else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossupdateview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview"]) {
+            else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossupdateview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview_init"]) {
+                NSString *refresh_cross_id=[objectLoader.userData objectForKey:@"cross_id" ];
+
                 [self loadObjectsFromDataStore];
                 [self.tableView reloadData];
             }
@@ -383,10 +394,11 @@
     }
 
     [self stopLoading];
+    if(hud)
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
 }
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    
     NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
     if(error.code==2)
         errormsg=@"A connection failure has occurred.";
@@ -399,9 +411,20 @@
         [alert release];
     }
     [self stopLoading];
+    if(hud)
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    if(buttonIndex==1 && alertView.tag==500){
+        [Util signout];
+        [app ShowLanding];
+        
+    }
+//    NSLog(@"alert: %i",buttonIndex);
 //    alertShowflag=NO;
 }
 
@@ -594,6 +617,10 @@
                           withRowAnimation: UITableViewRowAnimationNone];
 
     current_cellrow=-1;
+}
+
+- (void) alertsignout{
+    [Util signout];
 }
 
 @end

@@ -15,20 +15,26 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.userInteractionEnabled=YES;
-        self.backgroundColor=[UIColor whiteColor];
+        self.backgroundColor=[UIColor clearColor];
+        UIImageView *backgroundimg=[[UIImageView alloc] initWithFrame:frame];
+        backgroundimg.image=[UIImage imageNamed:@"place_editbg.png"];
+//        backgroundimg.backgroundColor=[UIColor blackColor];
+        [self addSubview:backgroundimg];
+        [backgroundimg release];
 
         CGSize constraint = CGSizeMake(frame.size.width , 20000.0f);
         CGSize size = [@"A" sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:21] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
 
-        PlaceTitle=[[UITextField alloc] initWithFrame:CGRectMake(4, 4, frame.size.width-8, size.height+5)];
+        PlaceTitle=[[UITextField alloc] initWithFrame:CGRectMake(22+4, 14, 260, size.height+5)];
         [PlaceTitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:21]];
         [PlaceTitle setDelegate:self];
 
         PlaceTitle.textColor=[Util getHighlightColor];
 
         CGSize sizedesc = [@"A\nA\nA\nA" sizeWithFont:[UIFont fontWithName:@"HelveticaNeue" size:14] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
-        PlaceDesc=[[UITextView alloc] initWithFrame:CGRectMake(0, 4+size.height+5, frame.size.width-8, sizedesc.height)];
+        PlaceDesc=[[UITextView alloc] initWithFrame:CGRectMake(22, 4+size.height+5, frame.size.width-8, sizedesc.height)];
         [PlaceDesc setFont:[UIFont fontWithName:@"HelveticaNeue" size:14]];
+        PlaceDesc.backgroundColor=[UIColor clearColor];
 
         [self addSubview:PlaceTitle];
         [self addSubview:PlaceDesc];

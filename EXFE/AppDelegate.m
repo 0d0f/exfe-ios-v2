@@ -41,7 +41,7 @@
     NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
     NSString *databaseName = DBNAME;
 #endif
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+//    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
 //    [[[RKClient sharedClient] requestQueue] setConcurrentRequestsLimit:2];
@@ -59,7 +59,8 @@
         [self ShowLanding];
     }
     NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
-    if(!ifdevicetokenSave)
+    
+    if(!ifdevicetokenSave && login==YES)
     {
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
     }
@@ -72,10 +73,7 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
     return YES;
 }
--(void) deviceReg{
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
 
-}
 
 -(void)ShowLanding{
     LandingViewController *landingView=[[[LandingViewController alloc]initWithNibName:@"LandingViewController" bundle:nil]autorelease];
@@ -130,7 +128,7 @@
         self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
 
         [(CrossesViewController*)crossviewController initUI];
-        [(CrossesViewController*)crossviewController refreshCrosses:@"crossview"];
+        [(CrossesViewController*)crossviewController refreshCrosses:@"crossview_init"];
         [(CrossesViewController*)crossviewController loadObjectsFromDataStore];
 
         NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
@@ -146,6 +144,7 @@
     NSString * tokenAsString = [[[deviceToken description] 
                                  stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]]
                                 stringByReplacingOccurrencesOfString:@" " withString:@""];
+    [[NSUserDefaults standardUserDefaults] setObject:tokenAsString forKey:@"udid"];
     RKParams* rsvpParams = [RKParams params];
     [rsvpParams setValue:tokenAsString forParam:@"udid"];
     [rsvpParams setValue:tokenAsString forParam:@"push_token"];
@@ -158,7 +157,6 @@
     [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
     
     NSString *endpoint = [NSString stringWithFormat:@"/users/%u/regdevice?token=%@",self.userid,self.accesstoken];
-    
     [client post:endpoint usingBlock:^(RKRequest *request){
         request.method=RKRequestMethodPOST;
         request.params=rsvpParams;
@@ -230,7 +228,6 @@
     }
 }
 
-
 -(void)GatherCrossDidFinish{
     [(CrossesViewController*)crossviewController refreshCrosses:@"gatherview"];
     [self.navigationController dismissModalViewControllerAnimated:YES];
@@ -245,6 +242,7 @@
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userid"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetoken"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"ifdevicetokenSave"];
     
     [[NSUserDefaults standardUserDefaults] synchronize];
     AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];  

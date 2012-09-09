@@ -166,12 +166,14 @@
         if(item==nil)
         {
             EXImagesItem *item=[_dataSource imageCollectionView:self imageAtIndex:i];
+            if(item!=nil){
             item.isSelected=isSelected;
             [item setFrame:CGRectMake(x, y, imageWidth, imageHeight+15)];
             [item setBackgroundColor:[UIColor clearColor]];
             [itemsCache setObject:item forKey:[NSNumber numberWithInt:i]];
             [self addSubview:item];
             [self sendSubviewToBack:item];
+            }
 
         }
         else{

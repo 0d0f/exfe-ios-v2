@@ -13,8 +13,10 @@
 #import "EXInnerButton.h"
 #import "CustomStatusBar.h"
 #import "WelcomeView.h"
+#import "EXSpinView.h"
+#import "MBProgressHUD.h"
 
-@interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate>
+@interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate>
 {
     IBOutlet UITableView* tableView;
     UIBarButtonItem *profileButtonItem;
@@ -28,6 +30,7 @@
     NSMutableArray *cellDateTime;
     CustomStatusBar *customStatusBar;
     NSMutableAttributedString *gatherax;
+    MBProgressHUD *hud;
 }
 - (void) refreshCell;
 - (void) refreshCrosses:(NSString*)source;
@@ -41,4 +44,5 @@
 - (void) refreshTableViewWithCrossId:(int)cross_id;
 - (void) showWelcome;
 - (void) closeWelcome;
+- (void) alertsignout;
 @end

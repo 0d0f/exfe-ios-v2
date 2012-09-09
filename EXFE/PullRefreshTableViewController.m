@@ -87,11 +87,12 @@
 //                                    (floorf(REFRESH_HEADER_HEIGHT - 44) / 2),
 //                                    27, 44);
 
-    refreshSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    refreshSpinner =[[EXSpinView alloc] initWithPoint:CGPointMake(self.view.frame.size.width/2-10, floorf((REFRESH_HEADER_HEIGHT - 20) / 2)) size:18];
+//    [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 //    floorf(floorf(REFRESH_HEADER_HEIGHT - 20) / 2)
     
-    refreshSpinner.frame = CGRectMake(self.view.frame.size.width/2-10, floorf((REFRESH_HEADER_HEIGHT - 20) / 2), 20, 20);
-    refreshSpinner.hidesWhenStopped = YES;
+//    refreshSpinner.frame = CGRectMake(self.view.frame.size.width/2-10, floorf((REFRESH_HEADER_HEIGHT - 20) / 2), 20, 20);
+//    refreshSpinner.hidesWhenStopped = YES;
 
 //    [refreshHeaderView addSubview:refreshLabel];
 //    [refreshHeaderView addSubview:refreshArrow];
@@ -116,6 +117,7 @@
         [UIView beginAnimations:nil context:NULL];
         if (scrollView.contentOffset.y < -REFRESH_HEADER_HEIGHT) {
             [refreshSpinner startAnimating];
+            [refreshSpinner setHidden:NO];
 
 //            // User is scrolling above the header
 //            refreshLabel.text = self.textRelease;
@@ -148,6 +150,7 @@
 //    refreshArrow.hidden = YES;
     [refreshSpinner startAnimating];
     [UIView commitAnimations];
+    [refreshSpinner setHidden:NO];
 
     // Refresh action!
     [self refresh];
@@ -174,6 +177,7 @@
 //    refreshLabel.text = self.textPull;
 //    refreshArrow.hidden = NO;
     [refreshSpinner stopAnimating];
+    [refreshSpinner setHidden:YES];
 }
 
 - (void)refresh {

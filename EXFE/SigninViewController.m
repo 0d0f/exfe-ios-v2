@@ -25,6 +25,7 @@
     [rsvpParams setValue:provider forParam:@"provider"];
     [rsvpParams setValue:textUsername.text forParam:@"external_username"];
     [rsvpParams setValue:textPassword.text forParam:@"password"];
+    [spin setHidden:NO];
     [client post:endpoint usingBlock:^(RKRequest *request){
         request.method=RKRequestMethodPOST;
         request.params=rsvpParams;
@@ -32,8 +33,10 @@
             if (response.statusCode == 200) {
                 [self processResponse:[response.body objectFromJSONData] status:@"signin"];
             }
+            [spin setHidden:YES];
         };
         request.onDidFailLoadWithError=^(NSError *error){
+            [spin setHidden:YES];
             NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
             if(error.code==2)
                 errormsg=@"A connection failure has occurred.";
@@ -57,6 +60,7 @@
     [rsvpParams setValue:textUsername.text forParam:@"external_username"];
     [rsvpParams setValue:textDisplayname.text forParam:@"name"];
     [rsvpParams setValue:textPassword.text forParam:@"password"];
+    [spin setHidden:NO];
     [client post:endpoint usingBlock:^(RKRequest *request){
         request.method=RKRequestMethodPOST;
         request.params=rsvpParams;
@@ -64,6 +68,18 @@
             if (response.statusCode == 200) {
                 [self processResponse:[response.body objectFromJSONData] status:@"signup"];
             }
+            [spin setHidden:YES];
+        };
+        request.onDidFailLoadWithError=^(NSError *error){
+            [spin setHidden:YES];
+            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+            if(error.code==2)
+                errormsg=@"A connection failure has occurred.";
+            else
+                errormsg=@"Could not connect to the server.";
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            [alert release];
         };
     }];
     
@@ -285,6 +301,13 @@
     labelSignError.shadowColor=[UIColor whiteColor];
     labelSignError.shadowOffset=CGSizeMake(0, 1);
     [self.view addSubview:labelSignError];
+    
+    
+    spin=[[EXSpinView alloc] initWithPoint:CGPointMake([loginbtn frame].size.width-18-10, ([loginbtn frame].size.height-18)/2) size:18];
+    [loginbtn addSubview:spin];
+    [setupnewbtn addSubview:spin];
+    [spin startAnimating];
+    [spin setHidden:YES];
 }
 
 - (void) showSignError:(NSString*)error{
@@ -329,6 +352,7 @@
     [signindelegate release];
     [identityLeftIcon release];
     [labelSignError release];
+    [spin release];
     [super dealloc];
 
 }
@@ -359,7 +383,6 @@
             [client get:endpoint usingBlock:^(RKRequest *request){
                 request.method=RKRequestMethodGET;
                 request.onDidLoadResponse=^(RKResponse *response){
-                    NSLog(@"%@",response.bodyAsString);
                     if (response.statusCode == 200) {
                         NSDictionary *body=[response.body objectFromJSONData];
                         id code=[[body objectForKey:@"meta"] objectForKey:@"code"];

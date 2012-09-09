@@ -92,6 +92,7 @@
 
     if(place==nil) {
         place=[Place object];
+        place.place_id=[NSNumber numberWithInt:-[((GatherViewController*)gatherview).cross.cross_id intValue]];
 //        gatherplace=[[NSMutableDictionary alloc] init];
     }
     else{
@@ -124,7 +125,7 @@
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
    
-    placeedit=[[EXPlaceEditView alloc] initWithFrame:CGRectMake(10, 5, 280, 120)];
+    placeedit=[[EXPlaceEditView alloc] initWithFrame:CGRectMake(10, 5, 304, 140)];
     [placeedit setHidden:YES];
     [map addSubview:placeedit];
     actionsheet=[[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Remove" otherButtonTitles:nil, nil];
@@ -388,8 +389,8 @@
             PlaceAnnotation *annotation=[annotations objectAtIndex:0];
             place.title=annotation.place_title;
             place.place_description=annotation.place_description;
-            place.lat=[NSNumber numberWithDouble:annotation.coordinate.latitude];
-            place.lng=[NSNumber numberWithDouble:annotation.coordinate.longitude];
+            place.lat=[NSString stringWithFormat:@"%f",annotation.coordinate.latitude];
+            place.lng=[NSString stringWithFormat:@"%f",annotation.coordinate.longitude];
             place.external_id=@"";
             place.provider=@"exfe";
 
@@ -410,8 +411,8 @@
         NSDictionary *placedict=[_places objectAtIndex:index];
         place.title=[placedict objectForKey:@"title"];
         place.place_description=[placedict objectForKey:@"description"];
-        place.lat=[placedict objectForKey:@"lat"];
-        place.lng=[placedict objectForKey:@"lng"];
+        place.lat=[[placedict objectForKey:@"lat"] stringValue];
+        place.lng=[[placedict objectForKey:@"lng"] stringValue];
         place.external_id=[placedict objectForKey:@"external_id"];
         place.provider=[placedict objectForKey:@"provider"];
         

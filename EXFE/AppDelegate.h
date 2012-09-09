@@ -65,6 +65,5 @@
 -(void)CrossUpdateDidFinish:(int)cross_id;
 -(void)ShowLanding;
 -(BOOL) Checklogin;
--(void) deviceReg;
 - (void) cleandb;
 @end

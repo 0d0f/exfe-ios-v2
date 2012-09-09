@@ -589,7 +589,7 @@
     
     
     RKParams *params = [RKRequestSerialization serializationWithData:[JSON 
-                                                                      dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
+ dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
     [client post:endpoint usingBlock:^(RKRequest *request){
         request.method=RKRequestMethodPOST;
         request.params=params;

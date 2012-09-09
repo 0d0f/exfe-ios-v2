@@ -41,7 +41,7 @@
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9
 
-@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate,UITextViewDelegate,UIScrollViewDelegate>{
+@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate,UITextViewDelegate,UIScrollViewDelegate,UIAlertViewDelegate>{
     UIView *toolbar;
     UITextView *crosstitle;
     UIImageView *title_input_img;
@@ -131,4 +131,5 @@
 - (void) setExfeeViewMode:(BOOL)edit;
 - (void) saveCrossDesc;
 - (void) reloadExfeeIdentities;
+- (Cross*) reloadCrossFromStorage;
 @end
