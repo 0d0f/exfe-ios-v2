@@ -18,7 +18,6 @@
         self.backgroundColor=[UIColor clearColor];
         UIImageView *backgroundimg=[[UIImageView alloc] initWithFrame:frame];
         backgroundimg.image=[UIImage imageNamed:@"place_editbg.png"];
-//        backgroundimg.backgroundColor=[UIColor blackColor];
         [self addSubview:backgroundimg];
         [backgroundimg release];
 

@@ -746,10 +746,14 @@
     PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
     placeViewController.gatherview=self;
     if(cross.place!=nil){
-        if(viewmode==YES)
+        if(viewmode==YES){
             [placeViewController setPlace:cross.place isedit:YES];
-        else
+        }
+        else{
             [placeViewController setPlace:cross.place isedit:NO];
+        }
+    }else{
+        placeViewController.isaddnew=YES;
     }
     if([status isEqualToString:@"detail"])
         placeViewController.showdetailview=YES;
@@ -1195,7 +1199,6 @@
 
     NSError *error;
     NSString *json = [[RKObjectSerializer serializerWithObject:cross.exfee mapping:[[APICrosses getExfeeMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
-    
 
     RKParams* rsvpParams = [RKParams params];
 //    NSDictionary *exfee_dict=[ObjectToDict ExfeeDict:cross.exfee];
@@ -1224,9 +1227,7 @@
                                 [[Cross currentContext] save:nil];
                                 [self reloadExfeeIdentities];
                             }
-
                         }else{
-                            
                         }
                 }
             }else {

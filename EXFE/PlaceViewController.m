@@ -15,6 +15,7 @@
 @implementation PlaceViewController
 @synthesize gatherview;
 @synthesize showdetailview;
+@synthesize isaddnew;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -37,7 +38,7 @@
     backgroundview.layer.cornerRadius=15;
 
     [toolbar addSubview:backgroundview];
-    inputplace=[[UITextField alloc] initWithFrame:CGRectMake(6+10+10, 7, 240-44-2-10, 30)];
+    inputplace=[[UITextField alloc] initWithFrame:CGRectMake(10+10+10, 7, 240-44-2-10+44, 30)];
     [inputplace setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     inputplace.delegate=self;
     [inputplace setAutocorrectionType:UITextAutocorrectionTypeNo];
@@ -61,9 +62,8 @@
         [revert setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [revert addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
         [toolbar addSubview:revert];
+        [inputplace setFrame:CGRectMake(10+10+10, 7, 240-44-2-10, 30)];
     }
-//    44/19
-
     rightbutton=[UIButton buttonWithType:UIButtonTypeCustom];
     [rightbutton setFrame:CGRectMake(265, 7, 50, 30)];
     [rightbutton setTitle:@"Save" forState:UIControlStateNormal];
@@ -75,7 +75,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:inputplace];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editingDidBegan:) name:UITextFieldTextDidBeginEditingNotification object:inputplace];
-
     
     CGRect inputframe=backgroundview.frame;
     inputbackgroundImage = [[UIImageView alloc] initWithFrame:inputframe];
@@ -93,7 +92,6 @@
     if(place==nil) {
         place=[Place object];
         place.place_id=[NSNumber numberWithInt:-[((GatherViewController*)gatherview).cross.cross_id intValue]];
-//        gatherplace=[[NSMutableDictionary alloc] init];
     }
     else{
         CLLocationCoordinate2D location;
@@ -101,19 +99,15 @@
         location.longitude =[place.lng doubleValue];
         PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:place.title description:place.place_description];
         
-//        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[gatherplace objectForKey:@"title"]  description:[gatherplace objectForKey:@"description"]];
         annotation.index=-1;
         [map addAnnotation:annotation];
         [annotation release];
-
         MKCoordinateRegion region;
-        
         region.center = location;
         region.span.longitudeDelta = 0.02;
         region.span.latitudeDelta = 0.02;
         [map setRegion:region animated:YES];
         inputplace.text=place.title;
-
     }
     float tableviewx=map.frame.origin.x;
     float tableviewy=map.frame.origin.y+map.frame.size.height;
@@ -131,7 +125,7 @@
     actionsheet=[[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Remove" otherButtonTitles:nil, nil];
     
     UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maplongpress:)];
-    longpress.minimumPressDuration = 1;
+    longpress.minimumPressDuration = 0.610;
     [map addGestureRecognizer:longpress];
     [longpress release];
     
@@ -253,7 +247,7 @@
     CLLocationCoordinate2D location;
     location.latitude = newLocation.coordinate.latitude;
     location.longitude = newLocation.coordinate.longitude;
-    if(isedit==NO && place==nil)
+    if( (isedit==NO && place==nil) || isaddnew==YES)
     {
         MKCoordinateRegion region;
         region.center = location;
@@ -338,11 +332,12 @@
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     [self selectPlace:indexPath.row editing:YES];
 }
-//- (UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {
-//    [self selectPlace:indexPath.row];
-//
-//    return UITableViewCellAccessoryDetailDisclosureButton;
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44;
+}
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"place suggest view";
     
@@ -357,24 +352,69 @@
         cell.textLabel.text = [placedict objectForKey:@"title"];
     if([placedict objectForKey:@"description"]!=nil);
     cell.detailTextLabel.text=[placedict objectForKey:@"description"];
+    cell.backgroundColor=FONT_COLOR_250;
+    [[cell textLabel] setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+    [[cell detailTextLabel] setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
+    [[cell textLabel] setTextColor:FONT_COLOR_25];
+    [[cell detailTextLabel] setTextColor:[UIColor colorWithRed:127/255.0f green:127/255.0f blue:127/255.0f alpha:1] ];
     return cell;
     
 }
 
 #pragma mark MKMapView delegate methods
 - (MKAnnotationView *) mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>) annotation{
-    MKPinAnnotationView *annView=[[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"currentloc"] autorelease];
-    annView.pinColor = MKPinAnnotationColorGreen;
-    annView.animatesDrop=TRUE;
+//    MKPinAnnotationView *annView=[[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"currentloc"] autorelease];
+    
+    MKAnnotationView *annView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
+//    annView.animatesDrop=TRUE;
     annView.canShowCallout = YES;
-    annView.calloutOffset = CGPointMake(-5, 5);
-//    annView.image = [UIImage imageNamed:@"arrow.png"];
+//    annView.calloutOffset = CGPointMake(-5, 5);
+    
+//    UIImage *img=[UIImage imageNamed:@"map_pin_red.png"];
+    if(isedit==YES)
+        annView.image=[UIImage imageNamed:@"map_pin_blue.png"];
+    else
+        annView.image=[UIImage imageNamed:@"map_pin_red.png"];
+    
     UIButton* butt = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
     butt.tag=((PlaceAnnotation*)annotation).index;
     [butt addTarget:self action:@selector(selectOnMap:) forControlEvents: UIControlEventTouchUpInside];
     annView.rightCalloutAccessoryView = butt;
     [annView setEnabled:YES];
     return annView;
+}
+-(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    // Annotation is your custom class that holds information about the annotation
+    if ([view.annotation isKindOfClass:[PlaceAnnotation class]]) {
+        NSArray *annotations=[map annotations];
+        if([annotations count]>0)
+        {
+            for(int i=0;i<[annotations count];i++){
+                id annotation=[annotations objectAtIndex:i];
+                MKAnnotationView* annoview = [mapView viewForAnnotation: annotation];
+                if([annoview.image isEqual:[UIImage imageNamed:@"map_pin_blue.png"]])
+                    annoview.image=[UIImage imageNamed:@"map_pin_red.png"];
+            }
+        }
+        view.image=[UIImage imageNamed:@"map_pin_blue.png"];
+
+        
+        PlaceAnnotation *annot = view.annotation;
+        if(annot.index==-1){
+            [self selectPlace:annot.index editing:YES];
+            return;
+        }
+        NSDictionary *placedict=[_places objectAtIndex:annot.index
+];
+        place.title=[placedict objectForKey:@"title"];
+        place.place_description=[placedict objectForKey:@"description"];
+        place.lat=[[placedict objectForKey:@"lat"] stringValue];
+        place.lng=[[placedict objectForKey:@"lng"] stringValue];
+        place.external_id=[placedict objectForKey:@"external_id"];
+        place.provider=[placedict objectForKey:@"provider"];
+
+//        NSInteger index = [self.arrayOfAnnotations indexOfObject:annot];
+    }
 }
 - (void) selectPlace:(int)index editing:(BOOL)editing{
     CLLocationCoordinate2D location;
@@ -394,15 +434,7 @@
             place.external_id=@"";
             place.provider=@"exfe";
 
-//            [gatherplace setObject:annotation.place_title forKey:@"title"];
-//            [gatherplace setObject:annotation.place_description forKey:@"description"];
-//            [gatherplace setObject:[NSNumber numberWithDouble:annotation.coordinate.latitude] forKey:@"lat"];
-//            [gatherplace setObject:[NSNumber numberWithDouble:annotation.coordinate.longitude] forKey:@"lng"];
-//            [gatherplace setObject:@"" forKey:@"external_id"];
-//            [gatherplace setObject:@"exfe" forKey:@"provider"];
             [self addPlaceEdit:place];
-//            lat=annotation.coordinate.latitude;
-//            lng=annotation.coordinate.longitude;
             location.latitude = annotation.coordinate.latitude;
             location.longitude = annotation.coordinate.longitude;
 
@@ -415,15 +447,7 @@
         place.lng=[[placedict objectForKey:@"lng"] stringValue];
         place.external_id=[placedict objectForKey:@"external_id"];
         place.provider=[placedict objectForKey:@"provider"];
-        
-//        [gatherplace setObject:[place objectForKey:@"title"] forKey:@"title"];
-//        [gatherplace setObject:[place objectForKey:@"description"] forKey:@"description"];
-//        [gatherplace setObject:[place objectForKey:@"lat"] forKey:@"lat"];
-//        [gatherplace setObject:[place objectForKey:@"lng"] forKey:@"lng"];
-//        [gatherplace setObject:[place objectForKey:@"external_id"] forKey:@"external_id"];
-//        [gatherplace setObject:[place objectForKey:@"provider"] forKey:@"provider"];
         [self addPlaceEdit:place];
-
         location.latitude = [[placedict objectForKey:@"lat"] doubleValue];
         location.longitude = [[placedict objectForKey:@"lng"] doubleValue];
     }
@@ -453,7 +477,6 @@
         region.span.latitudeDelta = 0.02;
         [map setRegion:region animated:YES];
         [placeedit becomeFirstResponder];
-//        [self setRightButton:@"done" Selector:@selector(done)];
     }
 }
 

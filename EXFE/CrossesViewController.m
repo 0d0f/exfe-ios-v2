@@ -91,10 +91,12 @@
 }
 
 - (void)initUI{
-    UIImage *gatherbtnimg = [UIImage imageNamed:@"gather_button.png"];
+    UIImage *gatherbtnimg = [UIImage imageNamed:@"gather_blue.png"];
     UIButton *gatherButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [gatherButton setImage:gatherbtnimg forState:UIControlStateNormal];
     gatherButton.frame = CGRectMake(0, 0, gatherbtnimg.size.width, gatherbtnimg.size.height);
+    [gatherButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
+
     [gatherButton addTarget:self action:@selector(ShowGatherView) forControlEvents:UIControlEventTouchUpInside];
     gatherButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:gatherButton] autorelease];
     [self.navigationController navigationBar].topItem.rightBarButtonItem=gatherButtonItem;

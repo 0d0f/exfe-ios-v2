@@ -40,6 +40,7 @@ typedef enum {
     UIImageView *inputbackgroundImage;
     UIView *backgroundview;
     BOOL isedit;
+    BOOL isaddnew;
     BOOL showdetailview;
     
     double editinginterval;
@@ -51,6 +52,7 @@ typedef enum {
 
 @property (nonatomic,retain) UIViewController* gatherview;
 @property BOOL showdetailview;
+@property BOOL isaddnew;
     
 - (IBAction) Close:(id) sender;
 - (void) PlaceEditClose:(id) sender;

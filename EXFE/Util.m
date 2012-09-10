@@ -722,24 +722,25 @@
             NSDate *now=[NSDate date];
             NSDateComponents *comps_in_a_day =[calendar components: NSMinuteCalendarUnit fromDate:now toDate:begin_at_date options:0];
             int minute=[comps_in_a_day minute];
+            float f_h=minute/60.0;
+            int hour=round(f_h-0.2);//round 8 away from zero, round 7 towards zero
+
             if(minute>=-1439 && minute<=-720)
-                relativeTime=[NSString stringWithFormat:@"23 hours ago"];
+                relativeTime=[NSString stringWithFormat:@"%u hours ago",abs(hour)];
             else if(minute>=-719 && minute<=-60){
-                float f_h=minute/60.0;
-                int hour=round(f_h-0.2);//round 8 away from zero, round 7 towards zero
                 relativeTime=[NSString stringWithFormat:@"%u hours ago",abs(hour)];
             }
             else if(minute>=-59 && minute<=-31){
                 if([type isEqualToString:@"cross"])
                     relativeTime=[NSString stringWithFormat:@"Just now"];
                 else
-                    relativeTime=[NSString stringWithFormat:@"59 minutes ago"];
+                    relativeTime=[NSString stringWithFormat:@"%u minutes ago",minute];
             }
             else if(minute>=-30 && minute<-1){
                 if([type isEqualToString:@"cross"])
                     relativeTime=[NSString stringWithFormat:@"Now"];
                 else
-                    relativeTime=[NSString stringWithFormat:@"30 minutes ago"];
+                    relativeTime=[NSString stringWithFormat:@"%u minutes ago",minute];
             }
             else if(minute>=-1 && minute<=0){
                 if([type isEqualToString:@"cross"])
@@ -748,7 +749,7 @@
                     relativeTime=[NSString stringWithFormat:@"Seconds ago"];
             }
             else if(minute>=1 && minute<=59)
-                relativeTime=[NSString stringWithFormat:@"In 59 minutes"];
+                relativeTime=[NSString stringWithFormat:@"In %u minutes",minute];
             else if(minute>=60 && minute<=749){
                 float f_h=minute/60.0;
                 int hour=round(f_h+0.2);//round 8 away from zero, round 7 towards zero
