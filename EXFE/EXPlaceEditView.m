@@ -40,9 +40,9 @@
         
         closeButton = [[UIButton alloc]
                                  initWithFrame:CGRectMake(self.frame.size.width-25, self.frame.size.height-25, 25.0f, 25.0f)];
-        [closeButton setBackgroundImage:[UIImage imageNamed:@"closebutton"]
-                               forState:UIControlStateNormal];
-        [self addSubview:closeButton];
+//        [closeButton setBackgroundImage:[UIImage imageNamed:@"closebutton"]
+//                               forState:UIControlStateNormal];
+//        [self addSubview:closeButton];
     }
     return self;
 }

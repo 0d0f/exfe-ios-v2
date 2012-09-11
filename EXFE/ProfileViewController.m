@@ -280,8 +280,10 @@
             useravatar.clipsToBounds = YES;
             [headerView addSubview:useravatar];
             
-            username=[[UILabel alloc] initWithFrame:CGRectMake(100, 16, 160, 52)];
+            username=[[UILabel alloc] initWithFrame:CGRectMake(100, 16, 160, 54)];
             username.backgroundColor=[UIColor clearColor];
+            username.lineBreakMode=UILineBreakModeWordWrap;
+            username.numberOfLines = 0;
             username.textColor=[UIColor whiteColor];
             username.font=[UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
             username.shadowColor=[UIColor blackColor];
@@ -328,35 +330,8 @@
     return footerView;
 }
 
-- (void) Logout
-{
-//    AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-//    
-//    NSString *udid=[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"];
-//    RKParams* rsvpParams = [RKParams params];
-//    [rsvpParams setValue:udid forParam:@"udid"];
-//    [rsvpParams setValue:@"iOS" forParam:@"os_name"];
-//    
-//    RKClient *client = [RKClient sharedClient];
-//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/signout?token=%@",app.userid,app.accesstoken];
-//    [client post:endpoint usingBlock:^(RKRequest *request){
-//        request.method=RKRequestMethodPOST;
-//        request.params=rsvpParams;
-//        request.onDidLoadResponse=^(RKResponse *response){
-//            if (response.statusCode == 200) {
-//            }else {
-//                //Check Response Body to get Data!
-//            }
-//            [app SignoutDidFinish];
-//        };
-//        request.onDidFailLoadWithError=^(NSError *error){
-//            [app SignoutDidFinish];
-//        };
-//    }];
+- (void) Logout {
     [Util signout];
-    
-    
 }
 
 

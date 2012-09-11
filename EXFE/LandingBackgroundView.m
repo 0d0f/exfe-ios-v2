@@ -216,10 +216,11 @@
     CTFontRef titlefont18ref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 18, NULL);
     
     if(titleexfe==nil){
-        titleexfe=[[NSMutableAttributedString alloc] initWithString:@"EXFE [’ɛksfi]\nA utility for hanging out with friends."];
-        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont32ref range:NSMakeRange(0,5)];
-        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont12ref range:NSMakeRange(6,7)];
-        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont18ref range:NSMakeRange(14,[titleexfe length]-14)];
+        titleexfe=[[NSMutableAttributedString alloc] initWithString:@"       EXFE [’ɛksfi]\nA utility for hanging out with friends."];
+        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont12ref range:NSMakeRange(0,7)];
+        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont32ref range:NSMakeRange(0+7,5)];
+        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont12ref range:NSMakeRange(6+7,7)];
+        [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont18ref range:NSMakeRange(14+7,[titleexfe length]-14-7)];
         [titleexfe addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[titleexfe length])];
         
         
@@ -227,14 +228,15 @@
         CTParagraphStyleSetting titlesetting[1] = {
             {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
         };
-        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 4);
+        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 1);
         [titleexfe addAttribute:(id)kCTParagraphStyleAttributeName value:(id)titlestyle range:NSMakeRange(0,[titleexfe length])];
     }
     if(titlethex==nil){
-        titlethex=[[NSMutableAttributedString alloc] initWithString:@"·X· (cross)\nA gathering of people for any intent."];
-        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont32ref range:NSMakeRange(0,4)];
-        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont12ref range:NSMakeRange(5,7)];
-        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont18ref range:NSMakeRange(13,[titlethex length]-13)];
+        titlethex=[[NSMutableAttributedString alloc] initWithString:@"        ·X· (cross)\nA gathering of people for any intent."];
+        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont12ref range:NSMakeRange(0,8)];
+        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont32ref range:NSMakeRange(0+8,4)];
+        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont12ref range:NSMakeRange(5+8,7)];
+        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont18ref range:NSMakeRange(13+8,[titlethex length]-13-8)];
         
         [titlethex addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[titlethex length])];
         
@@ -242,7 +244,7 @@
         CTParagraphStyleSetting titlesetting[1] = {
             {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
         };
-        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 4);
+        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 1);
         [titlethex addAttribute:(id)kCTParagraphStyleAttributeName value:(id)titlestyle range:NSMakeRange(0,[titlethex length])];
     }
     if(titlesafe==nil)
@@ -256,7 +258,7 @@
         CTParagraphStyleSetting titlesetting[1] = {
             {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
         };
-        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 4);
+        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 1);
         [titlesafe addAttribute:(id)kCTParagraphStyleAttributeName value:(id)titlestyle range:NSMakeRange(0,[titlesafe length])];
     }
     if(titlersvp==nil){
@@ -269,7 +271,7 @@
         CTParagraphStyleSetting titlesetting[1] = {
             {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
         };
-        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 4);
+        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 1);
         [titlersvp addAttribute:(id)kCTParagraphStyleAttributeName value:(id)titlestyle range:NSMakeRange(0,[titlersvp length])];
     }
     if(titlehandy==nil){
@@ -282,7 +284,7 @@
         CTParagraphStyleSetting titlesetting[1] = {
             {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
         };
-        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 4);
+        CTParagraphStyleRef titlestyle = CTParagraphStyleCreate(titlesetting, 1);
         [titlehandy addAttribute:(id)kCTParagraphStyleAttributeName value:(id)titlestyle range:NSMakeRange(0,[titlehandy length])];
     }
     CFRelease(titlefont32ref);

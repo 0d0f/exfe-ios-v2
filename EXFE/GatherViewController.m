@@ -63,7 +63,25 @@
     [gatherbutton addTarget:self action:@selector(Gather:) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:gatherbutton];
     
+    if(viewmode==YES){
+        UIButton *homeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [homeButton setFrame:CGRectMake(0, 0, 55, 30)];
+        [homeButton setTitle:@"Home  " forState:UIControlStateNormal];
+        [homeButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+        [homeButton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
+        homeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        [homeButton setBackgroundImage:[[UIImage imageNamed:@"btn_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 6)] forState:UIControlStateNormal];
+        [homeButton addTarget:self action:@selector(toHome) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *leftbarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:homeButton];
+        
+        self.navigationItem.leftBarButtonItem = leftbarButtonItem;
+        [leftbarButtonItem release];
+
+    }
     [self buildView];
+}
+-(void) toHome{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 - (void)buildView{
     [self.view setBackgroundColor:[UIColor grayColor]];
@@ -92,8 +110,10 @@
     [title_input_img setFrame:CGRectMake(0, 0, containcardview.frame.size.width, 69)];
     [containcardview addSubview:title_input_img];
 
-    crosstitle=[[UITextView alloc] initWithFrame:CGRectMake(30, 5,containcardview.frame.size.width-30, 48)];
+    crosstitle=[[UITextView alloc] initWithFrame:CGRectMake(40, 5,containcardview.frame.size.width-40, 48)];
+    [crosstitle setReturnKeyType:UIReturnKeyDone];
     crosstitle.tag=101;
+    crosstitle.delegate=self;
 
     [containcardview addSubview:crosstitle];
     crosstitle.text=[NSString stringWithFormat:@"Meet %@",app.username];
@@ -133,28 +153,18 @@
     mapbox=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_area_null.png"]];
     [containcardview addSubview:mapbox];
 
-//    if(viewmode==YES){
-//        
-//        UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(ShowPlaceView)];
-//        longpress.minimumPressDuration = 1;
-//        [map addGestureRecognizer:longpress];
-//        [longpress release];
-//    }else{
-        WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
-        tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
-            [self ShowPlaceView:@"view"];
-        };
-        [map addGestureRecognizer:tapInterceptor];
-        [tapInterceptor release];
-//    }
+    WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
+    tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
+        [self ShowPlaceView:@"view"];
+    };
+    [map addGestureRecognizer:tapInterceptor];
+    [tapInterceptor release];
+
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [containcardview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
-
-
     
     [self.view bringSubviewToFront:toolbar];
-
     timetitle=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,
                                                         exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10
                                                         ,160,25)];
@@ -241,7 +251,7 @@
             }
         
         UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didlongpress:)];
-        longpress.minimumPressDuration = 1;
+        longpress.minimumPressDuration = 0.610;
         [containview addGestureRecognizer:longpress];
         [longpress release];
     }
@@ -339,6 +349,18 @@
 {
     if(textView.tag==101)
     {
+        if ([aText isEqualToString:@"\n"]) {
+            [textView resignFirstResponder];
+            if(viewmode==YES){
+                cross.title = crosstitle.text;
+                crosstitle_view.text=crosstitle.text;
+                [crosstitle setHidden:YES];
+                [crosstitle_view setHidden:NO];
+                [title_input_img setHidden:YES];
+                [self saveCrossUpdate];
+
+            }
+        }
         NSString* newText = [textView.text stringByReplacingCharactersInRange:aRange withString:aText];
         CGSize tallerSize = CGSizeMake(textView.frame.size.width-15,textView.frame.size.height*2);
         CGSize newSize = [newText sizeWithFont:textView.font constrainedToSize:tallerSize lineBreakMode:UILineBreakModeWordWrap];
@@ -820,8 +842,13 @@
 - (void) setPlace:(Place*)place{
     if(place!=nil)
     {
-        if([place.lat isEqualToString:@""] && [place.lng isEqualToString:@""] && [place.title isEqualToString:@""] && [place.place_description isEqualToString:@""])
+        if([place.lat isEqualToString:@""] && [place.lng isEqualToString:@""] && [place.title isEqualToString:@""] && [place.place_description isEqualToString:@""]){
+            placetitle.text=@"Shomewhere";
+            placedesc.text=@"";
+            [self reArrangeViews];
+            mapbox.image=[UIImage imageNamed:@"map_area_null.png"];
             return;
+        }
         cross.place=place;
 //        [self reArrangeViews];
         if(cross.place!=nil) {
@@ -1506,12 +1533,8 @@
         CGRect containcardframe=[containcardview frame];
         containcardframe.size.height=containcardframe.size.height-offset;
 
-//        CGRect containcardframe=[containcardview frame];
-//        containcardframe.size.height=containcardframe.size.height-offset;
-        
         [containview setContentSize:containsize];
         [containcardview setFrame:containcardframe];
-
     }
         if(textView.tag==108)
         {
@@ -1537,6 +1560,13 @@
     
     return nil;
 }
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if(textField.tag==101){
+        [textField resignFirstResponder];            
+    }
+    return YES;
+}
+
 
 #pragma mark UIAlertView methods
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

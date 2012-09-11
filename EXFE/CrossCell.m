@@ -124,9 +124,18 @@
 
             if(hlPlace)
                 [FONT_COLOR_HL set];
-            else
-                [FONT_COLOR_69 set];
-            [place drawInRect:CGRectMake(40, 49, 320-40-10, 16) withFont:[UIFont fontWithName:@"MalayalamSangamMN" size:13] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+            else{
+                if ([place isEqualToString:@"Somewhere"])
+                    [[UIColor colorWithRed:204/255.0f green:204/255.0f blue:204/255.0f alpha:1] set];
+                else
+                    [FONT_COLOR_69 set];
+            }
+            CGContextRef context = UIGraphicsGetCurrentContext();
+            CGContextSaveGState(context);
+            CGContextSetShadowWithColor(context, CGSizeMake(0, 2.0f), 1.0f, [UIColor whiteColor].CGColor);
+            
+            [place drawInRect:CGRectMake(40, 49, 320-40-10, 16) withFont:[UIFont fontWithName:@"HelveticaNeue" size:13] lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+            CGContextRestoreGState(context);
             
             if(showDetailTime==YES){
                 [[UIImage imageNamed:@"cal_badge.png"]drawInRect:CGRectMake(10, 70, 24, 24)];
@@ -139,12 +148,20 @@
             
             if(hlTime)
                 [FONT_COLOR_HL set];
-            else 
-                [FONT_COLOR_69 set];
+            else {
+                if ([time isEqualToString:@"Sometime"])
+                    [[UIColor colorWithRed:204/255.0f green:204/255.0f blue:204/255.0f alpha:1] set];
+                else
+                    [FONT_COLOR_69 set];
+            }
             int timefield_width=320-40-10;
             if(conversationCount>0)
                 timefield_width-=26;
-            [time drawInRect:CGRectMake(40, 76, timefield_width, 16) withFont:[UIFont fontWithName:@"MalayalamSangamMN" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft];
+            
+            CGContextSaveGState(context);
+            CGContextSetShadowWithColor(context, CGSizeMake(0, 2.0f), 1.0f, [UIColor whiteColor].CGColor);
+            [time drawInRect:CGRectMake(40, 76, timefield_width, 16) withFont:[UIFont fontWithName:@"HelveticaNeue" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft];
+            CGContextRestoreGState(context);
             if(conversationCount>0 && conversationCount<=64){
                 [FONT_COLOR_88 set];
                 [[UIImage imageNamed:@"conversation_badge_empty.png"]drawInRect:CGRectMake(279, 70, 30, 26)];

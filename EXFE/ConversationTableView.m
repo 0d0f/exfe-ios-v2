@@ -27,13 +27,19 @@
     //call didSelectRow of tableView again, by passing the touch to the super class
     [super touchesBegan:touches withEvent:event];
 }
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
-    // Drawing code
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+
+    UIImage *v_line=[UIImage imageNamed:@"conv_line_v.png"];
+    CGImageRef v_line_ref = CGImageRetain(v_line.CGImage);
+    CGContextClipToRect(context, CGRectMake(30, -200, 11, rect.size.height+500));
+    CGContextTranslateCTM(context, 30, v_line.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CGContextDrawTiledImage(context, CGRectMake(0, 0, v_line.size.width, v_line.size.height), v_line_ref);
+    CGImageRelease(v_line_ref);
+    CGContextRestoreGState(context);
 }
-*/
 
 @end

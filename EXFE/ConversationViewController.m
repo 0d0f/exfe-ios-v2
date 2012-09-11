@@ -37,14 +37,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _tableView=[[ConversationTableView alloc] initWithFrame:self.view.frame];
+    _tableView.dataSource=self;
+    _tableView.delegate=self;
+    [self.view addSubview:_tableView];
     [self refreshConversation];
     
-    UIImage *chatimg = [UIImage imageNamed:@"conv_navbarbtn.png"];
+    UIImage *chatimg = [UIImage imageNamed:@"x_navbarbtn"];
     UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [chatButton setTitle:@"Chat" forState:UIControlStateNormal];
     [chatButton setImage:chatimg forState:UIControlStateNormal];
     chatButton.frame = CGRectMake(0, 0, chatimg.size.width, chatimg.size.height);
-    [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0,6)] forState:UIControlStateNormal];
+    [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
 
     [chatButton addTarget:self action:@selector(toCross) forControlEvents:UIControlEventTouchUpInside];
     
@@ -61,12 +65,8 @@
     [homeButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     [homeButton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
     homeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    
     [homeButton setBackgroundImage:[[UIImage imageNamed:@"btn_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 6)] forState:UIControlStateNormal];
     [homeButton addTarget:self action:@selector(toHome) forControlEvents:UIControlEventTouchUpInside];
-
-//    [homeButton addTarget:self action:@selector(toCross) forControlEvents:UIControlEventTouchUpInside];
-    
     UIBarButtonItem *leftbarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:homeButton];
 
     self.navigationItem.leftBarButtonItem = leftbarButtonItem;
@@ -162,6 +162,7 @@
     [cellbackground release];
     [cellsepator release];
     [avatarframe release];
+    [_tableView release];
     [super dealloc];
 }
 

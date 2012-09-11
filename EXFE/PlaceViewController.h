@@ -29,6 +29,8 @@ typedef enum {
     UITextField *inputplace;
 //    IBOutlet UIBarButtonItem *rightbutton;
     UIButton *rightbutton;
+    UIButton *clearbutton;
+    UIButton *revert;
     NSArray* _places;
     NSArray* _annotations;
     UITableView* _tableView;
@@ -42,6 +44,7 @@ typedef enum {
     BOOL isedit;
     BOOL isaddnew;
     BOOL showdetailview;
+    BOOL willUserScroll;
     
     double editinginterval;
 
@@ -70,5 +73,7 @@ typedef enum {
 - (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer;
 - (void) setPlace:(Place*)_place isedit:(BOOL)editstate;
 - (void) setViewStyle:(EXPlaceViewStyle)style;
+- (void) clearplace;
+- (void) cancel;
 //- (void) addNewPin;
 @end

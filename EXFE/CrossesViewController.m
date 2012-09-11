@@ -41,6 +41,8 @@
 
 - (void)viewDidLoad
 {
+    self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
+
     customStatusBar = [[CustomStatusBar alloc] initWithFrame:CGRectZero];
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[[UIImage imageNamed:@"btn_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 6)]
                                                       forState:UIControlStateNormal
@@ -53,7 +55,6 @@
     [topview release];
     [super viewDidLoad];
     
-    self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
 
     cellbackimglist=[[NSArray alloc] initWithObjects:[UIImage imageNamed:@"xlist_cell0.png"],[UIImage imageNamed:@"xlist_cell1.png"],[UIImage imageNamed:@"xlist_cell2.png"],[UIImage imageNamed:@"xlist_cell3.png"],[UIImage imageNamed:@"xlist_cell4.png"], nil ];
 
@@ -447,6 +448,7 @@
 	if (nil == cell) {
         cell = [[[CrossCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
 	}
+    [cell setBackgroundColor:[UIColor colorWithRed:0x1c/255.f green:0x27/255.f blue:0x33/255.f alpha:1]];
     cell.isGatherX=NO;
     cell.removed=NO;
     cell.isbackground=NO;
