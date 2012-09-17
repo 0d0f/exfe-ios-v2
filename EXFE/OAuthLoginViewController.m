@@ -102,7 +102,6 @@
 }
 
 - (BOOL)webView:(UIWebView *)webview shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-//    NSLog(@"webview should load request: %@", request);
     NSString *URLString = [[request URL] absoluteString];
     if ([URLString rangeOfString:@"token="].location != NSNotFound && [URLString rangeOfString:@"oauth://handleTwitterLogin"].location != NSNotFound) {
         URLParser *parser = [[[URLParser alloc] initWithURLString:URLString] autorelease];

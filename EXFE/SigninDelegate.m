@@ -44,6 +44,13 @@
     if(users!=nil && [users count] >0)
     {
         User* user=[users objectAtIndex:0];
+        NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:4];
+        for(Identity *identity in user.identities){
+            [identities addObject:identity.identity_id];
+        }
+        [[NSUserDefaults standardUserDefaults] setObject:identities forKey:@"default_user_identities"];
+        [identities release];
+        
         [[NSUserDefaults standardUserDefaults] setObject:user.name forKey:@"username"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         app.username=user.name;

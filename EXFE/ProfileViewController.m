@@ -36,9 +36,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    statusBarHidden = NO;
+    tableview.backgroundColor = [UIColor clearColor];
+    tableview.opaque = NO;
+    tableview.backgroundView = nil;
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
-    [tabview addGestureRecognizer:gestureRecognizer];
+    [tableview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -106,7 +108,6 @@
         {
             [identitiesData release];
         }
-            
         NSMutableArray* identities_section=[[NSMutableArray alloc] initWithCapacity:10];
         NSMutableArray* devices_section=[[NSMutableArray alloc] initWithCapacity:5];
         identitiesData=[[NSMutableArray alloc] initWithCapacity:2];
@@ -154,7 +155,7 @@
     }
     [users release];
 //    NSLog(@"%@",identitiesData);
-    [tabview reloadData];
+    [tableview reloadData];
 //    [inputToolbar setInputEnabled:YES];
 //    [inputToolbar hidekeyboard];
     

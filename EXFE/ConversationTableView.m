@@ -20,11 +20,6 @@
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"tableview touch began");
-
-    //resignFirstResponder for the UITextView
-    
-    //call didSelectRow of tableView again, by passing the touch to the super class
     [super touchesBegan:touches withEvent:event];
 }
 - (void)drawRect:(CGRect)rect

@@ -88,7 +88,6 @@
     
 }
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    NSLog(@"scrolling");
 }
 
 - (void) changeLeftIconWhite:(BOOL)iswhite{
@@ -265,7 +264,6 @@
     [suggestionTable reloadData];
 }
 - (IBAction)editingDidEnd:(UITextField*)textField{
-    NSLog(@"%@",textField.text);
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
 //    [self addByText];
@@ -349,7 +347,6 @@
             }
         };
         request.onDidFailLoadWithError=^(NSError *error){
-            NSLog(@"%@",error);
         };
         request.delegate=self;
     }];
@@ -459,7 +456,6 @@
 }
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
     //    [self stopLoading];
 }
 

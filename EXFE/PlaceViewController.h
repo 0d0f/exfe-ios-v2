@@ -18,6 +18,7 @@ typedef enum {
     EXPlaceViewStyleDefault,
     EXPlaceViewStyleMap,
     EXPlaceViewStyleTableview,
+    EXPlaceViewStyleBigTableview,
     EXPlaceViewStyleEdit
 } EXPlaceViewStyle;
 
@@ -43,8 +44,10 @@ typedef enum {
     UIView *backgroundview;
     BOOL isedit;
     BOOL isaddnew;
+    BOOL isnotinputplace;
     BOOL showdetailview;
     BOOL willUserScroll;
+    NSMutableDictionary *originplace;
     
     double editinginterval;
 
@@ -57,7 +60,7 @@ typedef enum {
 @property BOOL showdetailview;
 @property BOOL isaddnew;
     
-- (IBAction) Close:(id) sender;
+- (IBAction) doRevert:(id) sender;
 - (void) PlaceEditClose:(id) sender;
 - (void) textDidChange:(NSNotification*)notification;
 - (void) editingDidBegan:(NSNotification*)notification;
@@ -65,7 +68,6 @@ typedef enum {
 - (void) drawMapAnnontations;
 - (void) selectOnMap:(id) sender;
 - (void) selectPlace:(int)index editing:(BOOL)editing;
-//- (void) addPlaceEdit:(NSDictionary*)place;
 - (void) addPlaceEdit:(Place*)_place;
 - (void) getPlace;
 - (void) setRightButton:(NSString*) title Selector:(SEL)aSelector;
@@ -75,5 +77,6 @@ typedef enum {
 - (void) setViewStyle:(EXPlaceViewStyle)style;
 - (void) clearplace;
 - (void) cancel;
-//- (void) addNewPin;
+- (void) initPlaceView;
+- (void) setMapViewToCurrentPlace;
 @end

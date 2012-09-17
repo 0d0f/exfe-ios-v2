@@ -36,6 +36,10 @@
 
 - (void)viewDidLoad
 {
+    CGRect screenframe=[[UIScreen mainScreen] bounds];
+    screenframe.size.height-=20;
+    [self.view setFrame:screenframe];
+
     [super viewDidLoad];
     _tableView=[[ConversationTableView alloc] initWithFrame:self.view.frame];
     _tableView.dataSource=self;
@@ -93,7 +97,7 @@
     cellsepator=[UIImage imageNamed:@"conv_line_h.png"];
     avatarframe=[UIImage imageNamed:@"conv_portrait_frame.png"];
     CGRect _tableviewrect=_tableView.frame;
-    _tableviewrect.size.height=_tableviewrect.size.height-kDefaultToolbarHeight;
+    _tableviewrect.size.height=_tableviewrect.size.height-kDefaultToolbarHeight-44;
     [_tableView setFrame:_tableviewrect];
     _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
@@ -108,12 +112,12 @@
     inputaccessoryview=[[ConversationInputAccessoryView alloc] initWithFrame:CGRectMake(10.0, 0.0, 310.0, 40.0)];
     [inputaccessoryview setBackgroundColor:[UIColor lightGrayColor]];
     [inputaccessoryview setAlpha: 0.8];
-
+//    [Flurry logEvent:@"VIEW_CONVERSATION"];
 //    floatTime=[[UILabel alloc] initWithFrame:CGRectMake(0, 80, 60, 26)];
 //    floatTime.text=@"label time";
 //    [self.view addSubview:floatTime];
     
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
 
 - (void) toCross{
@@ -176,6 +180,7 @@
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.3];
 	CGRect frame = self.inputToolbar.frame;
+    keyboardheight=keyboardEndFrame.size.height;
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
         frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height;
@@ -213,6 +218,8 @@
     else {
         frame.origin.y = self.view.frame.size.width - frame.size.height;
     }
+    keyboardheight=0;
+
 	self.inputToolbar.frame = frame;
 	[UIView commitAnimations];
 //    keyboardIsVisible = NO;
@@ -271,7 +278,7 @@
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef) attributedString);
     int textLength = [attributedString length];
     CFRange range;
-    CGFloat maxWidth  = 100.0f;
+    CGFloat maxWidth  = 200.0f;
     CGFloat maxHeight = 10000.0f;
     CGSize constraint = CGSizeMake(maxWidth, maxHeight);
     
@@ -308,15 +315,22 @@
     
 }
 
+- (void) statusbarResize{
+    CGRect screenframe=[[UIScreen mainScreen] bounds];
+    CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
+    screenframe.size.height-=statusframe.size.height;
+
+    CGRect toolbarframe=[inputToolbar frame];
+    toolbarframe.origin.y=screenframe.size.height-toolbarframe.size.height-kNavBarHeight-keyboardheight;
+    [inputToolbar setFrame:toolbarframe];
+    
+}
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:self.view];
-//    NSLog(@"touch: %f %f",location.x,location.y);
     CGRect showTimeRect=[self.view frame];
     
 // TODO: right 60px for touch area
-//    showTimeRect.origin.x=showTimeRect.size.width-60;
-//    showTimeRect.size.width=60;
     if(CGRectContainsPoint(showTimeRect, location))
     {
         CGPoint point=_tableView.contentOffset;
@@ -579,6 +593,8 @@
     [inputToolbar hidekeyboard];
 }
 - (void) addPost:(NSString*)content{
+//    [Flurry logEvent:@"SEND_CONVERSATION"];
+
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:identity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
     

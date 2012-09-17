@@ -718,6 +718,8 @@
             else
                 [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            if([timestr isEqualToString:@""])
+                [dateformat setDateFormat:@"yyyy-MM-dd"];    
             begin_at_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ %@",datestr,timestr]];
             NSDate *now=[NSDate date];
             NSDateComponents *comps_in_a_day =[calendar components: NSMinuteCalendarUnit fromDate:now toDate:begin_at_date options:0];
@@ -794,7 +796,6 @@
             [app SignoutDidFinish];
         };
         request.onDidFailLoadWithError=^(NSError *error){
-            NSLog(@"%@",error);
             [app SignoutDidFinish];
         };
     }];
@@ -811,6 +812,21 @@
         
     }
 }
++ (void) showErrorWithMetaDict:(NSDictionary*)meta delegate:(id)delegate{
+    NSString *errormsg=@"";
+    if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]])
+    {
+        if([(NSNumber*)[meta objectForKey:@"code"] intValue]==401){
+            errormsg=@"invalid auth";
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Sign Out",nil];
+            alert.tag=500;
+            alert.delegate=delegate;
+            [alert show];
+            [alert release];
+        }
+    }
+}
+
 + (void) showConnectError:(NSError*)err delegate:(id)delegate{
     NSString *errormsg=@"";
     if(err.code==2)
@@ -822,67 +838,6 @@
         [alert show];
         [alert release];
     }
-
-//    if(alertShowflag==NO){
-//        alertShowflag=YES;
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-//        [alert show];
-//        [alert release];
-//    }
 }
 
-+ (MKCoordinateSpan)coordinateSpanWithMapView:(MKMapView *)mapView
-                             centerCoordinate:(CLLocationCoordinate2D)centerCoordinate
-                                 andZoomLevel:(NSUInteger)zoomLevel
-{
-    // convert center coordiate to pixel space
-    double centerPixelX = [self longitudeToPixelSpaceX:centerCoordinate.longitude];
-    double centerPixelY = [self latitudeToPixelSpaceY:centerCoordinate.latitude];
-    
-    // determine the scale value from the zoom level
-    NSInteger zoomExponent = 20 - zoomLevel;
-    double zoomScale = pow(2, zoomExponent);
-    
-    // scale the map’s size in pixel space
-    CGSize mapSizeInPixels = mapView.bounds.size;
-    double scaledMapWidth = mapSizeInPixels.width * zoomScale;
-    double scaledMapHeight = mapSizeInPixels.height * zoomScale;
-    
-    // figure out the position of the top-left pixel
-    double topLeftPixelX = centerPixelX - (scaledMapWidth / 2);
-    double topLeftPixelY = centerPixelY - (scaledMapHeight / 2);
-    
-    // find delta between left and right longitudes
-    CLLocationDegrees minLng = [Util pixelSpaceXToLongitude:topLeftPixelX];
-    CLLocationDegrees maxLng = [self pixelSpaceXToLongitude:topLeftPixelX + scaledMapWidth];
-    CLLocationDegrees longitudeDelta = maxLng - minLng;
-    
-    // find delta between top and bottom latitudes
-    CLLocationDegrees minLat = [self pixelSpaceYToLatitude:topLeftPixelY];
-    CLLocationDegrees maxLat = [self pixelSpaceYToLatitude:topLeftPixelY + scaledMapHeight];
-    CLLocationDegrees latitudeDelta = -1 * (maxLat - minLat);
-    
-    // create and return the lat/lng span
-    MKCoordinateSpan span = MKCoordinateSpanMake(latitudeDelta, longitudeDelta);
-    return span;
-}
-+ (double)longitudeToPixelSpaceX:(double)longitude
-{
-    return round(MERCATOR_OFFSET + MERCATOR_RADIUS * longitude * M_PI / 180.0);
-}
-
-+ (double)latitudeToPixelSpaceY:(double)latitude
-{
-    return round(MERCATOR_OFFSET - MERCATOR_RADIUS * logf((1 + sinf(latitude * M_PI / 180.0)) / (1 - sinf(latitude * M_PI / 180.0))) / 2.0);
-}
-
-+ (double)pixelSpaceXToLongitude:(double)pixelX
-{
-    return ((round(pixelX) - MERCATOR_OFFSET) / MERCATOR_RADIUS) * 180.0 / M_PI;
-}
-
-+ (double)pixelSpaceYToLatitude:(double)pixelY
-{
-    return (M_PI / 2.0 - 2.0 * atan(exp((round(pixelY) - MERCATOR_OFFSET) / MERCATOR_RADIUS))) * 180.0 / M_PI;
-}
 @end

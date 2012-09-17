@@ -42,6 +42,7 @@
     int showTimeMode; //0 relativetime 1 time
     int topcellPath;
     BOOL showfloattime;
+    float keyboardheight;
     
 }
 
@@ -59,5 +60,6 @@
 - (void) hiddenTimeNow;
 - (void) toCross;
 - (void) toHome;
+- (void) statusbarResize;
 
 @end

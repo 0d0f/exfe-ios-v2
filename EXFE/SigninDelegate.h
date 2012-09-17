@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "APIProfile.h"
 #import "User.h"
+#import "Identity.h"
 
 @interface SigninDelegate : NSObject<RKRequestDelegate,OAuthLoginViewControllerDelegate,RKObjectLoaderDelegate>{
     UIViewController *modalview;

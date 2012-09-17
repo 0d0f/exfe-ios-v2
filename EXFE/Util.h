@@ -55,14 +55,8 @@
 + (NSDate*) beginningOfWeek:(NSDate*)date;
 + (BOOL) isCommonDomainName:(NSString*)domainname;
 + (void) showError:(Meta*)meta delegate:(id)delegate;
++ (void) showErrorWithMetaDict:(NSDictionary*)meta delegate:(id)delegate;
 + (void) showConnectError:(NSError*)err delegate:(id)delegate;
 + (void) signout;
-+ (MKCoordinateSpan)coordinateSpanWithMapView:(MKMapView *)mapView
-                             centerCoordinate:(CLLocationCoordinate2D)centerCoordinate
-                                 andZoomLevel:(NSUInteger)zoomLevel;
-+ (double)longitudeToPixelSpaceX:(double)longitude;
-+ (double)latitudeToPixelSpaceY:(double)latitude;
-+ (double)pixelSpaceXToLongitude:(double)pixelX;
-+ (double)pixelSpaceYToLatitude:(double)pixelY;
 @end
 

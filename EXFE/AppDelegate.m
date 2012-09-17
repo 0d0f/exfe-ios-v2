@@ -30,6 +30,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+//    [Flurry startSession:@"8R2R8KZG35DK6S6MDHGS"];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(observeContextSave:)
                                                  name:NSManagedObjectContextDidSaveNotification
@@ -48,7 +50,6 @@
     [[[RKClient sharedClient] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
 //    [[[RKObjectManager sharedManager] requestQueue] setConcurrentRequestsLimit:1];
     [[[RKObjectManager sharedManager] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
-    
     
     [APICrosses MappingCross];
     [APIConversation MappingConversation];
@@ -71,6 +72,9 @@
     [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
+    if(login==YES)
+    [APIProfile LoadUsrWithUserId:userid delegate:self];
+    
     return YES;
 }
 
@@ -169,8 +173,6 @@
                         if([code intValue]==200) {
                             //TODO: make sure the api response is ok.
                             [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"ifdevicetokenSave"];
-//                            [self refreshExfeePopOver];
-//                            [exfeeShowview reloadData];
                         }
                 }
             }else {
@@ -179,8 +181,6 @@
             
         };
         request.onDidFailLoadWithError=^(NSError *error){
-            NSLog(@"%@",error);
-            
         };
     }];
 }
@@ -240,6 +240,7 @@
 -(void)SignoutDidFinish{
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"access_token"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userid"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"default_user_identities"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetoken"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"ifdevicetokenSave"];
@@ -274,7 +275,6 @@
 //    objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
-    
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(observeContextSave:)
 //                                                 name:NSManagedObjectContextDidSaveNotification
@@ -306,4 +306,29 @@
     RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
     [[objectStore managedObjectContextForCurrentThread] mergeChangesFromContextDidSaveNotification:notification];
 }
+
+- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+	NSFetchRequest* request = [User fetchRequest];
+    NSPredicate *predicate = [NSPredicate
+                              predicateWithFormat:@"user_id = %u", userid];
+    [request setPredicate:predicate];
+	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    
+    if(users!=nil && [users count] >0)
+    {
+        User* user=[users objectAtIndex:0];
+        NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:4];
+        for(Identity *identity in user.identities){
+            [identities addObject:identity.identity_id];
+        }
+        [[NSUserDefaults standardUserDefaults] setObject:identities forKey:@"default_user_identities"];
+        [identities release];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    [users release];
+}
+- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+    NSLog(@"Error!:%@",error);
+}
+
 @end

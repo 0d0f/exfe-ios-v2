@@ -41,19 +41,11 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"/users/%u?token=%@",app.userid, app.accesstoken];
     RKObjectManager* manager =[RKObjectManager sharedManager];
-    NSLog(@"load, manager: %@",manager);
-    
-    
     [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
 
     [manager loadObjectsAtResourcePath:endpoint usingBlock:^(RKObjectLoader *loader) {
-        NSLog(@"LoadUsrWithUserId in block: %@",delegate );
-        
-//        if([delegate isKindOfClass:[ProfileCellView class]])
-//        {
         loader.userData = [NSNumber numberWithInt:user_id];
         loader.delegate = delegate;
-//        }
     }];
     
 }

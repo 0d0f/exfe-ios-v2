@@ -41,7 +41,7 @@
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9
 
-@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate,UITextViewDelegate,UIScrollViewDelegate,UIAlertViewDelegate>{
+@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate,UITextViewDelegate,UIScrollViewDelegate,UIAlertViewDelegate,UIGestureRecognizerDelegate>{
     UIView *toolbar;
     UITextView *crosstitle;
     UIImageView *title_input_img;
@@ -80,6 +80,7 @@
     BOOL notUserScroll;
     ConversationViewController *conversationView;
     UILabel *ccbuttonText;
+    BOOL crosschangeflag;
 
 }
 @property (retain,nonatomic) Cross* cross;
@@ -126,6 +127,7 @@
 - (void) didlongpress:(UILongPressGestureRecognizer*)sender;
 - (void) hiddenPopover;
 - (int) exfeeIdentitiesCount;
+- (NSArray*) getReducedExfeeIdentities;
 - (void) buildView;
 - (void) saveCrossUpdate;
 - (void) saveExfeeUpdate;
@@ -134,4 +136,7 @@
 - (void) reloadExfeeIdentities;
 - (void) toHome;
 - (Cross*) reloadCrossFromStorage;
+- (void) setRandomBackground;
+- (void) statusbarResize;
+- (void) updateMapImage;
 @end

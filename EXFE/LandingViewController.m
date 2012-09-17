@@ -39,9 +39,6 @@
     [self.view setFrame:outFrame];
     [UIView commitAnimations];
     [self dismissModalViewControllerAnimated:YES];
-
-    
-    NSLog(@"dismiss");
 }
 - (void)TwitterSigninButtonPress:(id)sender{
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];

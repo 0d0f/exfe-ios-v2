@@ -30,21 +30,6 @@ static RKRequestQueue *queue;
     [client get:endpoint usingBlock:^(RKRequest *request) {
         request.method=RKRequestMethodGET;
         request.onDidLoadResponse=^(RKResponse *response){
-            NSLog(@"%@",[response bodyAsString]);
-//            if (response.statusCode == 200) {
-//                NSDictionary *body=[response.body objectFromJSONData];
-//                if([body isKindOfClass:[NSDictionary class]]) {
-//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                    if(code)
-//                        if([code intValue]==200) {
-//                            NSArray *places=[[body objectForKey:@"places"] retain];
-//                            [(PlaceViewController*)delegate reloadPlaceData:places];
-//                        }
-//                }
-//            }
-//            else {
-//                //Check Response Body to get Data!
-//            }
         };
     }
     ];

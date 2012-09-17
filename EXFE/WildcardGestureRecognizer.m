@@ -3,6 +3,8 @@
 
 @implementation WildcardGestureRecognizer
 @synthesize touchesBeganCallback;
+@synthesize touchesEndCallback;
+@synthesize touchesMoveCallback;
 
 -(id) init{
     if (self = [super init])
@@ -24,10 +26,14 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    if (touchesEndCallback)
+        touchesEndCallback(touches, event);
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    if (touchesMoveCallback)
+        touchesMoveCallback(touches, event);
 }
 
 - (void)reset

@@ -160,12 +160,6 @@
 }
      
 +(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source{
-//    [[[RKObjectManager sharedManager] requestQueue] cancelRequestsWithDelegate:delegate];
-//    [[[RKObjectManager sharedManager] requestQueue] cancelAllRequests];
-//    [[[RKClient sharedClient] requestQueue] cancelAllRequests];
-//    NSLog(@"manager queue: %i",[RKObjectManager sharedManager].requestQueue.loadingCount );
-//    NSLog(@"client queue: %i",[RKClient sharedClient].requestQueue.loadingCount  );
-    
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
         updatedtime=[Util encodeToPercentEscapeString:updatedtime];

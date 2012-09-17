@@ -14,10 +14,14 @@
     UITextView *PlaceDesc;
     UIButton* closeButton;
 }
-- (void) setPlaceTitle:(NSString*)title;
-- (void) setPlaceDesc:(NSString*)desc;
 
-- (NSString*) getPlaceTitle;
-- (NSString*) getPlaceDesc;
+@property (nonatomic,retain) UITextField* PlaceTitle;
+@property (nonatomic,retain) UITextView *PlaceDesc;
+
+- (void) setPlaceTitleText:(NSString*)title;
+- (void) setPlaceDescText:(NSString*)desc;
+
+- (NSString*) getPlaceTitleText;
+- (NSString*) getPlaceDescText;
 - (CGRect) getCloseButtonFrame;
 @end

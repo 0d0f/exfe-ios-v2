@@ -45,4 +45,5 @@
 - (void) showWelcome;
 - (void) closeWelcome;
 - (void) alertsignout;
+- (BOOL) isIdentityBelongsMe:(int)identity_id;
 @end

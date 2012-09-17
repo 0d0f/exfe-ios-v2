@@ -17,7 +17,7 @@
     IBOutlet UIToolbar* toolbar;
     UIImageView* useravatar;
     UILabel* username;
-    IBOutlet UITableView* tabview;
+    IBOutlet UITableView* tableview;
     IBOutlet ProfileCellView *tblCell;
 //    BOOL statusBarHidden;
     

@@ -38,7 +38,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    CGRect screenframe=[[UIScreen mainScreen] bounds];
     
+    CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
+    screenframe.size.height-=statusframe.size.height;
+    [self.view setFrame:screenframe];
+
     firstLoad=YES;
     toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
     [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
@@ -64,6 +69,7 @@
     [toolbar addSubview:gatherbutton];
     
     if(viewmode==YES){
+//        [Flurry logEvent:@"VIEW_CROSS"];
         UIButton *homeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [homeButton setFrame:CGRectMake(0, 0, 55, 30)];
         [homeButton setTitle:@"Home  " forState:UIControlStateNormal];
@@ -76,10 +82,32 @@
         
         self.navigationItem.leftBarButtonItem = leftbarButtonItem;
         [leftbarButtonItem release];
-
+    }else{
+//        [Flurry logEvent:@"GATHER_CROSS"];
     }
     [self buildView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
+- (void) statusbarResize{
+    CGRect screenframe=[[UIScreen mainScreen] bounds];
+    CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
+    screenframe.size.height-=statusframe.size.height;
+
+    CGRect myrsvptoolbarframe=[myrsvptoolbar frame];
+    myrsvptoolbarframe.origin.y=screenframe.size.height-44-50;
+    [myrsvptoolbar setFrame:myrsvptoolbarframe];
+    
+    [rsvpbutton setFrame:CGRectMake(self.view.frame.size.width/2-30, screenframe.size.height-44-33, 60, 44)];
+    
+    CGRect gatherframe=[gathertoolbar frame];
+    gatherframe.origin.y=screenframe.size.height-50;
+    [gathertoolbar setFrame:gatherframe];
+    
+    CGRect rsvpframe=[rsvptoolbar frame];
+    rsvpframe.origin.y=screenframe.size.height-44-50;
+    [rsvptoolbar setFrame:rsvpframe];
+}
+
 -(void) toHome{
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -97,13 +125,17 @@
 
     backgroundview=[[UIView alloc] initWithFrame:containview.frame];
     [backgroundview setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"cross_bg.png"]]];
-    [containview addSubview:backgroundview];
+    if(viewmode==YES)
+        [containview addSubview:backgroundview];
+    
+    containcardview=[[EXOverlayView alloc] initWithFrame:CGRectMake(VIEW_MARGIN, 0, containview.frame.size.width-2*VIEW_MARGIN, containview.frame.size.height-6)];
+    
 
-    containcardview=[[EXOverlayView alloc] initWithFrame:CGRectMake(VIEW_MARGIN, 0, containview.frame.size.width-2*VIEW_MARGIN, containview.frame.size.height)];
     if(viewmode==YES)
         [containcardview setFrame:CGRectMake(0, 0, containview.frame.size.width, containview.frame.size.height)];
     containcardview.backgroundimage=[UIImage imageNamed:@"paper_texture.png"];
     containcardview.cornerRadius=5;
+//    containcardview.backgroundColor=[UIColor blackColor];
     [containview addSubview:containcardview];
 
     title_input_img=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gather_title_input_area.png"]];
@@ -150,16 +182,30 @@
 
     map=[[MKMapView alloc] initWithFrame:CGRectMake(INNER_MARGIN+160,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+5,130,80)];
     [containcardview addSubview:map];
+    
+//    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(showPan)];
+//    panGesture.delegate = self;
+//    [map addGestureRecognizer:panGesture];
+//    [panGesture release];
+    
     mapbox=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_area_null.png"]];
     [containcardview addSubview:mapbox];
 
     WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
-    tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
+    tapInterceptor.touchesEndCallback = ^(NSSet * touches, UIEvent * event) {
         [self ShowPlaceView:@"view"];
     };
+    tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
+//        [self ShowPlaceView:@"view"];
+    };
+//    tapInterceptor.touchesMoveCallback = ^(NSSet * touches, UIEvent * event) {
+////        NSLog(@"move");
+//        //        [self ShowPlaceView:@"view"];
+//    };
     [map addGestureRecognizer:tapInterceptor];
     [tapInterceptor release];
-
+    
+    
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [containcardview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
@@ -172,7 +218,7 @@
     timetitle.text=@"Sometime";
     [timetitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     timetitle.textColor=[Util getHighlightColor];
-
+    
     [containcardview addSubview:timetitle];
 
     timedesc=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,timetitle.frame.origin.y+timetitle.frame.size.height,160,18)];
@@ -181,11 +227,13 @@
     [timedesc setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
     [containcardview addSubview:timedesc];
 
-    placetitle=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15,160,24)];
+    placetitle=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15,160,48)];
+    placetitle.lineBreakMode=UILineBreakModeWordWrap;
     [placetitle setBackgroundColor:[UIColor clearColor]];
     placetitle.text=@"Somwhere";
     [placetitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     placetitle.textColor=[Util getHighlightColor];
+    placetitle.numberOfLines=2;
     [containcardview addSubview:placetitle];
 
     placedesc=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15+placetitle.frame.size.height,self.view.frame.size.width-VIEW_MARGIN*2,18)];
@@ -235,11 +283,11 @@
         [barButtonItem release];
         ((ProfileBackgroundView*)(self.view)).hideGradient=YES;
     }
-//    else{
-////        self.view.backgroundColor=[UIColor blueColor];
-//    }
     
     [self initData];
+    if(viewmode==NO){
+    }
+
     [self reArrangeViews];
     [self setExfeeNum];
     
@@ -259,7 +307,14 @@
     if(viewmode==YES)
         [self ShowRsvpButton];
 }
-
+//- (void)showPan
+//{
+//    NSLog(@"pan!");
+//}
+//
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+//    return YES;
+//}
 - (void) initData{
 
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -322,6 +377,37 @@
     }
 
 }
+- (void) updateMapImage{
+//    UIGraphicsBeginImageContextWithOptions(map.bounds.size, map.opaque, 0.0);
+//    [map.layer renderInContext:UIGraphicsGetCurrentContext()];
+//    UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    mapbox.image=img;
+//    [map setHidden:YES];
+    
+    UIGraphicsBeginImageContext(map.frame.size);
+    [map.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    mapbox.image=viewImage;
+    [map setHidden:YES];
+    
+}
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
+    NSLog(@"regionDidChangeAnimated");
+//    [self updateMapImage];
+}
+- (void)mapViewWillStartLoadingMap:(MKMapView *)mapView{
+//    [self updateMapImage];
+    NSLog(@"mapViewWillStartLoadingMap");
+}
+- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView{
+//    [self updateMapImage];
+    NSLog(@"mapViewDidFinishLoadingMap");
+}
+- (void)mapViewDidFailLoadingMap:(MKMapView *)mapView withError:(NSError *)error{
+    NSLog(@"mapViewDidFailLoadingMap");
+}
 - (void) reloadExfeeIdentities{
     if(exfeeIdentities!=nil){
         [exfeeIdentities release];
@@ -358,7 +444,6 @@
                 [crosstitle_view setHidden:NO];
                 [title_input_img setHidden:YES];
                 [self saveCrossUpdate];
-
             }
         }
         NSString* newText = [textView.text stringByReplacingCharactersInRange:aRange withString:aText];
@@ -377,15 +462,15 @@
 - (void) reArrangeViews{
     CGSize timetitleconstraint = CGSizeMake(160,timetitle.frame.size.height);
     CGSize timetitlesize = [timetitle.text sizeWithFont:timetitle.font constrainedToSize:timetitleconstraint lineBreakMode:UILineBreakModeWordWrap];
-    [timetitle setFrame:CGRectMake(INNER_MARGIN, exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+10,timetitlesize.width,24)];
+    [timetitle setFrame:CGRectMake(INNER_MARGIN, exfeeShowview.frame.origin.y+exfeeShowview.frame.size.height+15,timetitlesize.width,24)];
     
     CGSize timedescconstraint = CGSizeMake(160,timedesc.frame.size.height);
     CGSize timedescsize = [timedesc.text sizeWithFont:timedesc.font constrainedToSize:timedescconstraint lineBreakMode:UILineBreakModeWordWrap];
     [timedesc setFrame:CGRectMake(INNER_MARGIN,timetitle.frame.origin.y+timetitle.frame.size.height,timedescsize.width,18)];
 
-    CGSize placetitleconstraint = CGSizeMake(160,placetitle.frame.size.height);
+    CGSize placetitleconstraint = CGSizeMake(160,48);
     CGSize placetitlesize = [placetitle.text sizeWithFont:placetitle.font constrainedToSize:placetitleconstraint lineBreakMode:UILineBreakModeTailTruncation];
-    [placetitle setFrame:CGRectMake(INNER_MARGIN,timedesc.frame.origin.y+timedesc.frame.size.height+15,placetitlesize.width,placetitle.frame.size.height)];
+    [placetitle setFrame:CGRectMake(INNER_MARGIN,timedesc.frame.origin.y+timedesc.frame.size.height+15,placetitlesize.width,placetitlesize.height)];
     
     CGSize placedescconstraint = CGSizeMake(containcardview.frame.size.width-INNER_MARGIN*2,400);
     CGSize placedescsize = [placedesc.text sizeWithFont:placedesc.font constrainedToSize:placedescconstraint lineBreakMode:UILineBreakModeWordWrap];
@@ -397,9 +482,15 @@
     float height=crossdescription.contentSize.height;
     if(height<crossdescription.frame.size.height)
         height=crossdescription.frame.size.height;
-        
+    
     float crossdescriptionframeheight=crossdescription.frame.size.height;
-    [crossdescription setFrame:CGRectMake(0,placedesc.frame.origin.y+placedesc.frame.size.height+15,containview.frame.size.width,height)];
+    float crossdescriptoiny=placedesc.frame.origin.y+placedesc.frame.size.height+9;
+    if(map.frame.origin.y+map.frame.size.height+9>placedesc.frame.origin.y+placedesc.frame.size.height+9)
+        crossdescriptoiny=map.frame.origin.y+map.frame.size.height+9;
+    
+    height=containcardview.frame.size.height-crossdescriptoiny;
+
+    [crossdescription setFrame:CGRectMake(0,crossdescriptoiny,containview.frame.size.width,height)];
     
     float offset=height-crossdescriptionframeheight;
     if(offset<0)
@@ -429,9 +520,6 @@
         [title_input_img setHidden:YES];
         [crosstitle_view setHidden:NO];
         crosstitle_view.text=crosstitle.text;
-//        CGRect cardframe=containcardview.frame;
-//        cardframe.origin.y=0;
-//        [containcardview setFrame:cardframe];
         [exfeenum setHidden:NO];
         
         containcardview.backgroundimage=nil;
@@ -464,7 +552,7 @@
     }else{
         [containview setContentSize:CGSizeMake(containview.frame.size.width, containcardview.frame.size.height+20)];
 
-        [backgroundview setHidden:YES];
+//        [backgroundview setHidden:YES];
         
         float triheight=4;
         float y=timetitle.frame.origin.y+timetitle.frame.size.height/2-triheight;
@@ -483,16 +571,11 @@
 
         containcardview.transparentPath=triangle;
         CGRect rect=CGRectMake(VIEW_MARGIN,0, containview.frame.size.width-2*VIEW_MARGIN, crossdescription.frame.origin.y+crossdescription.frame.size.height);
-        
-        
-
-        [containcardview setFrame:rect];
+//        [containcardview setFrame:rect];
         CGRect containrect=containview.frame;
-        
         containrect.origin.y=0;
-
     }
-
+    
     [containcardview setNeedsDisplay];
 }
 - (void) setViewMode{
@@ -716,6 +799,7 @@
         [exfee addInvitationsObject:invitation];
     }
     cross.exfee = exfee;
+//    [Flurry logEvent:@"GATHER_SEND"];
     [APICrosses GatherCross:[cross retain] delegate:self];
 }
 - (void)dealloc {
@@ -825,18 +909,30 @@
         if(![invitation.rsvp_status isEqualToString:@"REMOVED"])
             i++;
     }
-    return i;//[exfeeIdentities count];
+    return i;
+}
+- (NSArray*) getReducedExfeeIdentities{
+    NSMutableArray *arr=[[NSMutableArray alloc] initWithCapacity:12];
+    for(Invitation *invitation in exfeeIdentities){
+        if(![invitation.rsvp_status isEqualToString:@"REMOVED"]){
+            [arr addObject:invitation];
+        }
+    }
+    return arr;
 }
 - (void) savePlace:(Place*)place{
-//    [self setPlace:place];
-//    if(viewmode==YES){
-//        if(cross!=nil){
-//            cross=[Cross object];
-//        }
+    
+//    if([place.external_id isEqualToString:cross.place.external_id]&&
+//       [place.lat isEqualToString:cross.place.lat]&&
+//       [place.lng isEqualToString:cross.place.lng]&&
+//       [place.place_description isEqualToString:cross.place.place_description]&&
+//       [place.provider isEqualToString:cross.place.provider]&&
+//       [place.title isEqualToString:cross.place.title]){
+//        return;
+//    }
         cross.place=place;
         [self setPlace:place];
         [self saveCrossUpdate];
-//    }
 }
 
 - (void) setPlace:(Place*)place{
@@ -850,69 +946,30 @@
             return;
         }
         cross.place=place;
-//        [self reArrangeViews];
         if(cross.place!=nil) {
+            float delta=0.005;
             CLLocationCoordinate2D location;
             [map removeAnnotations: map.annotations];
             location.latitude = [place.lat doubleValue];
             location.longitude = [place.lng doubleValue];
             MKCoordinateRegion region;
+            
+            
             region.center = location;
-            region.span.longitudeDelta = 0.005;
-            region.span.latitudeDelta = 0.005;
+            region.span.longitudeDelta = delta;
+            region.span.latitudeDelta = delta;
             [map setRegion:region animated:NO];
-            mapbox.image=[UIImage imageNamed:@"map_area.png"];
-//            if([place.lat isEqualToNumber:[NSNumber numberWithInt:0]] && [place.lng isEqualToNumber:[NSNumber numberWithInt:0]] && [place.title isEqualToString:@""] && [place.place_description isEqualToString:@""])
-//            {
-//                place.title=@"Somewhere";
-//                place=nil;
-//            }
+            
+            if([place.lat isEqualToString:@""] && [place.lng isEqualToString:@""])
+                mapbox.image=[UIImage imageNamed:@"map_area_null.png"];
+            else
+                mapbox.image=[UIImage imageNamed:@"map_area.png"];
+//            [self updateMapImage];
             placetitle.text=place.title;
             placedesc.text=place.place_description;
             [self reArrangeViews];
         }
     }
-    
-//    Place *_place=[Place object];
-//    NSNumber *lat=[placedict objectForKey:@"lat"];
-//    NSNumber *place_id=[placedict objectForKey:@"place_id"];
-//    if(place_id==0)
-//        place_id=[NSNumber numberWithInt:0];
-//    NSNumber *lng=[NSNumber numberWithDouble:[[placedict objectForKey:@"lng"] doubleValue]];
-//        
-//    _place.lat= lat;
-//    _place.lng= lng;
-//    _place.place_id=place_id;
-//    _place.title=[placedict objectForKey:@"title"];
-//    _place.place_description =[placedict objectForKey:@"description"];
-//    _place.external_id=[placedict objectForKey:@"external_id"];
-//    _place.provider=[placedict objectForKey:@"provider"];
-//    place=_place;
-//
-//    if([lat isEqualToNumber:[NSNumber numberWithInt:0]] && [lng isEqualToNumber:[NSNumber numberWithInt:0]] && [_place.title isEqualToString:@""] && [_place.place_description isEqualToString:@""])
-//    {
-//        _place.title=@"Somewhere";
-//        place=nil;
-//    }
-//
-//    placetitle.text=_place.title;
-//    placedesc.text=_place.place_description;
-//
-////    if(viewmode==NO)
-//    [self reArrangeViews];
-//    if(place!=nil) {
-//        CLLocationCoordinate2D location;
-//        [map removeAnnotations: map.annotations];
-//        location.latitude = [_place.lat doubleValue];
-//        location.longitude = [_place.lng doubleValue];
-//        MKCoordinateRegion region;
-//        region.center = location;
-//        region.span.longitudeDelta = 0.005;
-//        region.span.latitudeDelta = 0.005;
-//        [map setRegion:region animated:NO];
-//        mapbox.image=[UIImage imageNamed:@"map_area.png"];
-//    }
-    
 }
 - (void) saveDateTime:(CrossTime*)crosstime{
     [self setDateTime:crosstime];
@@ -974,7 +1031,11 @@
 }
 - (void) ShowMyRsvpToolBar{
     if(myrsvptoolbar==nil){
-        myrsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, 460-44-50) buttonsize:CGSizeMake(20, 20) delegate:self];
+        CGRect screenframe=[[UIScreen mainScreen] bounds];
+        CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
+        screenframe.size.height-=statusframe.size.height;
+
+        myrsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, screenframe.size.height-44-50) buttonsize:CGSizeMake(20, 20) delegate:self];
 
         EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"I'm in" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(0, 0, 107, 50)];
         [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
@@ -1002,7 +1063,11 @@
 
 - (void) ShowRsvpToolBar{
     if(rsvptoolbar==nil){
-        rsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, 460-44-50) buttonsize:CGSizeMake(20, 20) delegate:self];
+        CGRect screenframe=[[UIScreen mainScreen] bounds];
+        CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
+        screenframe.size.height-=statusframe.size.height;
+
+        rsvptoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, screenframe.size.height-44-50) buttonsize:CGSizeMake(20, 20) delegate:self];
 
         EXButton *submate=[[EXButton alloc] initWithName:@"submate" title:@"-1 mate" image:[UIImage imageNamed:@"rsvp_mates_minus_toolbar.png"] inFrame:CGRectMake(0, 0, 44+14, 50)];
         [submate setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
@@ -1057,11 +1122,16 @@
 }
 
 - (void) ShowRsvpButton{
+
     [rsvptoolbar setHidden:YES];
     if(rsvpbutton){
         [rsvpbutton removeFromSuperview];
         [rsvpbutton release];
     }
+    CGRect screenframe=[[UIScreen mainScreen] bounds];
+    CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
+    screenframe.size.height-=statusframe.size.height;
+
     Invitation *myInvitation=[self getMyInvitation];
     if(myInvitation && ![myInvitation.rsvp_status isEqualToString:@"NORESPONSE"])
     {
@@ -1073,16 +1143,16 @@
         else if([myInvitation.rsvp_status isEqualToString:@"DECLINED"])
             buttonimgname=@"rsvp_unavailable_toolbar.png";
         
-        rsvpbutton=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:buttonimgname] inFrame:CGRectMake(self.view.frame.size.width/2-30, 460-44, 60, 44)];
-        CGRect rect=[rsvpbutton frame];
-        float y=460-44-30;
+        rsvpbutton=[[EXButton alloc] initWithName:@"accept" title:@"" image:[UIImage imageNamed:buttonimgname] inFrame:CGRectMake(self.view.frame.size.width/2-30, screenframe.size.height-44-33, 60, 44)];
+//        CGRect rect=[rsvpbutton frame];
+//        float y=self.view.frame.size.height-44-rect.size.height;
         [rsvpbutton setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"toolbar_bg.png"]]];
         [rsvpbutton addTarget:self action:@selector(ShowMyRsvpToolBar) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:rsvpbutton];
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.3];
-        rect.origin.y=y;
-        [rsvpbutton setFrame:rect];
+//        rect.origin.y=y;
+//        [rsvpbutton setFrame:rect];
         [UIView commitAnimations];
 
         [myrsvptoolbar setHidden:YES];
@@ -1103,7 +1173,11 @@
     if(rsvptoolbar)
         [rsvptoolbar setHidden:YES];
     if(gathertoolbar==nil){
-        gathertoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, self.view.frame.size.height-50) buttonsize:CGSizeMake(20, 20) delegate:self];
+        CGRect screenframe=[[UIScreen mainScreen] bounds];
+        CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
+        screenframe.size.height-=statusframe.size.height;
+
+        gathertoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, screenframe.size.height-50) buttonsize:CGSizeMake(20, 20) delegate:self];
         
         EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(35, 0, 44, 50)];
         [accept addTarget:self action:@selector(rsvpaccept) forControlEvents:UIControlEventTouchUpInside];
@@ -1221,14 +1295,13 @@
     [bigspin startAnimating];
     hud.customView=bigspin;
     [bigspin release];
-
+    cross.by_identity=default_user.default_identity;
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 
     NSError *error;
     NSString *json = [[RKObjectSerializer serializerWithObject:cross.exfee mapping:[[APICrosses getExfeeMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
 
     RKParams* rsvpParams = [RKParams params];
-//    NSDictionary *exfee_dict=[ObjectToDict ExfeeDict:cross.exfee];
     [rsvpParams setValue:json forParam:@"exfee"];
     [rsvpParams setValue:cross.exfee.exfee_id forParam:@"id"];
     [rsvpParams setValue:[self getMyInvitation].identity.identity_id forParam:@"by_identity_id"];
@@ -1254,8 +1327,8 @@
                                 [[Cross currentContext] save:nil];
                                 [self reloadExfeeIdentities];
                             }
-                        }else{
-                        }
+                        }else
+                            [Util showErrorWithMetaDict:[body objectForKey:@"meta"] delegate:self];
                 }
             }else {
                 //Check Response Body to get Data!
@@ -1286,6 +1359,8 @@
     hud.customView=bigspin;
     [bigspin release];
     
+    cross.by_identity=default_user.default_identity;
+    
     NSError *error;
     NSString *json = [[RKObjectSerializer serializerWithObject:cross mapping:[[APICrosses getCrossMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
     if(!error){
@@ -1300,16 +1375,22 @@
             request.onDidLoadResponse=^(RKResponse *response){
                 if (response.statusCode == 200) {
                     NSDictionary *body=[response.body objectFromJSONData];
-                    NSDictionary *responsedict=[body objectForKey:@"response"];
-                    NSDictionary *crossdict=[responsedict objectForKey:@"cross" ];
-                    NSNumber *cross_id=[crossdict objectForKey:@"id"];
-                    if([cross_id intValue]==[self.cross.cross_id intValue])
+                    NSDictionary *meta=[body objectForKey:@"meta"];
+                    if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]])
                     {
-                        [app CrossUpdateDidFinish:[cross.cross_id intValue]];
+                        if([(NSNumber*)[meta objectForKey:@"code"] intValue]==200){
+                            NSDictionary *responsedict=[body objectForKey:@"response"];
+                            NSDictionary *crossdict=[responsedict objectForKey:@"cross" ];
+                            NSNumber *cross_id=[crossdict objectForKey:@"id"];
+                            if([cross_id intValue]==[self.cross.cross_id intValue])
+                            {
+                                [app CrossUpdateDidFinish:[cross.cross_id intValue]];
+                            }
+                        }else{
+                            [Util showErrorWithMetaDict:meta delegate:self];
+                        }
                     }
-                    
                 }else {
-                    
                     NSString *errormsg=@"Could not save this cross.";
                     if(![errormsg isEqualToString:@""]){
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
@@ -1345,18 +1426,6 @@
     CGPoint location = [sender locationInView:sender.view];
     if(viewmode==YES)
     {
-//        if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
-//        {
-//            [crosstitle resignFirstResponder];
-//            [map becomeFirstResponder];
-//            
-//            [self ShowPlaceView];
-//        }
-        
-//        if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))
-//        {
-//            [self ShowTimeView];
-//        }
         if (CGRectContainsPoint([exfeeShowview frame], location))
         {
             [self setExfeeViewMode:YES];
@@ -1429,16 +1498,11 @@
         exfee.accepted=[NSNumber numberWithInt:accept];
         cross.exfee = exfee;
         [self saveExfeeUpdate];
-//        [self saveCrossUpdate];
     }
     [self setExfeeNum];
 }
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
-//    if(viewmode==NO && exfeeShowview.editmode==NO)
-//    {
-//        
-//    }
     if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
     {
         [crosstitle resignFirstResponder];
@@ -1499,8 +1563,6 @@
     [self reArrangeViews];
     cross.cross_description=crossdescription.text;
     [self saveCrossUpdate];
-    NSLog(@"save cross desc");
-   
 }
 //- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 //
@@ -1571,8 +1633,6 @@
 #pragma mark UIAlertView methods
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSLog(@"button: %u",buttonIndex);
     //tag 101: save cross
     //tag 102: save exfee
     if(buttonIndex==0)//cancel
@@ -1653,13 +1713,12 @@
 #pragma mark EXImagesCollectionView Datasource methods
 
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
-    return [exfeeIdentities count];
+    return [self exfeeIdentitiesCount];
 }
 - (EXImagesItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
     EXImagesItem *item=[[[EXImagesItem alloc] init] autorelease];
-    Invitation *invitation =[exfeeIdentities objectAtIndex:index];
-//    if([invitation.rsvp_status isEqualToString:@"REMOVED"])
-//        return nil;
+    NSArray *arr=[self getReducedExfeeIdentities];
+    Invitation *invitation =[arr objectAtIndex:index];
     Identity *identity=invitation.identity;
     UIImage *img=[[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
     if(img!=nil)
@@ -1690,6 +1749,7 @@
     if(name==nil)
         name=identity.external_id;
     item.name=name;
+    [arr release];
     return item;
 }
 - (NSArray *) selectedOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
@@ -1815,7 +1875,6 @@
                                     [self refreshExfeePopOver];
                                     [exfeeShowview reloadData];
                                     [self setExfeeNum];
-//                                    NSLog(@"send rsvp ok!");
                                 }
                         }
                         //We got an error!
@@ -1994,6 +2053,63 @@
     
 }
 
+- (void) setRandomBackground{
+    RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+    NSString *endpoint = [NSString stringWithFormat:@"/Backgrounds/getAvailableBackgrounds"];
+    [client post:endpoint usingBlock:^(RKRequest *request){
+        request.method=RKRequestMethodPOST;
+        request.onDidLoadResponse=^(RKResponse *response){
+            if (response.statusCode == 200) {
+                NSDictionary *body=[response.body objectFromJSONData];
+                if([body isKindOfClass:[NSDictionary class]]) {
+                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                    if(code)
+                        if([code intValue]==200) {
+                            NSDictionary* response=[body objectForKey:@"response"];
+                            if([response isKindOfClass:[NSDictionary class]]) {
+                                NSArray *backgrounds=[response objectForKey:@"backgrounds"];
+                                int randNum = rand() % ([backgrounds count]);
+                                NSString *imgname=[backgrounds objectAtIndex:randNum];
+                                NSString *imgurl=[Util getBackgroundLink:imgname];
+                                NSDictionary *widget=[NSDictionary dictionaryWithObjectsAndKeys:imgname,@"image",@"Background",@"type", nil];
+                                if(cross.widget==nil)
+                                    cross.widget=[[NSMutableArray alloc] initWithCapacity:1];
+                                [cross.widget addObject:widget];
+                                UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:imgurl];
+                                UIImageView *imageview=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, containview.frame.size.width, 180)];
+                                imageview.image=nil;
+
+                                if(backimg==nil || [backimg isEqual:[NSNull null]]){
+                                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                                    dispatch_async(imgQueue, ^{
+                                        UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            if(backimg!=nil && ![backimg isEqual:[NSNull null]])
+                                                imageview.image=backimg;
+                                        });
+                                    });
+                                    dispatch_release(imgQueue);
+                                }else
+                                    imageview.image=backimg;
+                                UIImageView *imagemaskview=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, containview.frame.size.width, 180)];
+                                imagemaskview.image=[UIImage imageNamed:@"cross_bgmask.png"];
+                                [backgroundview addSubview:imageview];
+                                [backgroundview addSubview:imagemaskview];
+                                [imagemaskview release];
+                                [imageview release];
+                                
+
+                            }
+                        }
+                }
+            }else {
+                //Check Response Body to get Data!
+            }
+        };
+    }];
+    
+}
 
 
 @end

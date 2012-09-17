@@ -118,7 +118,6 @@
         }
     } else if ([request isDELETE]) {
         if ([response isNotFound]) {
-            NSLog(@"Resource '%@' not exists", [request resourcePath]);
         }
     }
 }
@@ -140,7 +139,6 @@
                         NSString *token=[response objectForKey:@"token"];
                         NSString *userid=[response objectForKey:@"user_id"];
                         NSString *username=[response objectForKey:@"username"];
-                        NSLog(@"login success with ");
                         [signindelegate loginSuccessWith:token userid:userid username:username];
                         if([status isEqualToString:@"signup"])
                         {
@@ -158,7 +156,6 @@
                         if([code intValue]==403)
                             [self showSignError:@"Password incorrect."];
                     }
-                    NSLog(@"%@",obj);
                 }
             }
         }
@@ -367,8 +364,6 @@
 }
 
 - (IBAction)editingDidBegan:(UITextField*)textField{
-    NSLog(@"editing did");
-    
 }
 - (void) getUser{
 //    if(CFAbsoluteTimeGetCurrent()-editinginterval>1.2)
@@ -455,7 +450,6 @@
 
 - (IBAction)showForgetPwd:(id)sender{
     [self setHintView:@"forgetpassword"];
-    NSLog(@"forget password");
 }
 - (void) setHintView:(NSString*)hintname{
     [textUsername resignFirstResponder];

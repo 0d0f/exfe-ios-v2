@@ -41,6 +41,10 @@
 
 - (void)viewDidLoad
 {
+    CGRect screenframe=[[UIScreen mainScreen] bounds];
+    screenframe.size.height-=20;
+    [self.view setFrame:screenframe];
+
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
 
     customStatusBar = [[CustomStatusBar alloc] initWithFrame:CGRectZero];
@@ -307,7 +311,14 @@
     _crosses=nil;
     [self.tableView reloadData];
 }
-
+- (BOOL) isIdentityBelongsMe:(int)identity_id{
+    NSArray *identities=[[NSUserDefaults standardUserDefaults] objectForKey:@"default_user_identities"];
+    for (NSNumber *_identity_id in identities)
+        if([_identity_id intValue]==identity_id)
+            return YES;
+    
+    return NO;
+}
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
@@ -323,6 +334,7 @@
         BOOL isError=NO;
         for(id object in objects)
         {
+            
             if([object isKindOfClass:[Meta class]]){
                 Meta *meta=object;
                 if([meta.code intValue]!=200)
@@ -333,10 +345,43 @@
             }
             else if([object isKindOfClass:[Cross class]])
             {
-                notification++;
+                
                 Cross *cross=(Cross*)object;
+                
+                id updated=cross.updated;
+                if([updated isKindOfClass:[NSDictionary class]]){
+                    NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
+                    NSString *key=nil;
+                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                    
+                    while (key = [enumerator nextObject]){
+                        NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
+                        NSString *updated_at_str=[obj objectForKey:@"updated_at"];
+                        NSDate *updated_at =[NSDate date];
+                        if([updated_at_str isKindOfClass:[NSString class]])
+                        {
+                            if([updated_at_str length]>19)
+                                updated_at_str=[updated_at_str substringToIndex:19];
+                            updated_at = [formatter dateFromString:updated_at_str];
+                        if([updated_at compare: cross.updated_at] == NSOrderedDescending || [updated_at compare: cross.updated_at] == NSOrderedSame) {
+                            if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]])
+                            {
+                                NSNumber *identity_id=[obj objectForKey:@"identity_id"];
+                                if([self isIdentityBelongsMe:[identity_id intValue]]==NO)
+                                    notification++;
+
+                            }
+                        }
+                    }
+                    }
+                    [formatter release];
+                }
+                
                 if(cross.updated_at!=nil)
                 {
+                    
                     if([source isEqualToString:@"crossview"]){
                         if(exfee_updated_at==nil){
                             cross.read_at=[NSDate date];
@@ -493,8 +538,11 @@
                 NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
                 NSString *updated_at_str=[obj objectForKey:@"updated_at"];
                 NSDate *updated_at =[NSDate date];
-                if([updated_at_str isKindOfClass:[NSString class]])
+                if([updated_at_str isKindOfClass:[NSString class]]){
+                    if([updated_at_str length]>19)
+                        updated_at_str=[updated_at_str substringToIndex:19];
                     updated_at = [formatter dateFromString:updated_at_str];
+                }
                 if([updated_at compare: cross.read_at] == NSOrderedDescending || cross.read_at==nil) {
                     if([key isEqualToString:@"title"])
                         cell.hlTitle=YES;
@@ -575,6 +623,8 @@
             while (key = [enumerator nextObject]){
                 NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
                 NSString *updated_at_str=[obj objectForKey:@"updated_at"];
+                if(updated_at_str!=nil && [updated_at_str length]>19)
+                    updated_at_str=[updated_at_str substringToIndex:19];
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                 [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
                 [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
