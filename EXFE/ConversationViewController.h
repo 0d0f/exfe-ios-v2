@@ -43,12 +43,14 @@
     int topcellPath;
     BOOL showfloattime;
     float keyboardheight;
+    NSString *cross_title;
     
 }
 
 @property int exfee_id;
 @property (retain,nonatomic) Identity* identity;
 @property (retain,nonatomic) UIInputToolbar* inputToolbar;
+@property (retain,nonatomic) NSString* cross_title;
 
 -(void) refreshConversation;
 - (void)loadObjectsFromDataStore;

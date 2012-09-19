@@ -30,7 +30,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-//    [Flurry startSession:@"8R2R8KZG35DK6S6MDHGS"];
+    [Flurry startSession:@"8R2R8KZG35DK6S6MDHGS"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(observeContextSave:)
@@ -44,8 +44,11 @@
     NSString *databaseName = DBNAME;
 #endif
 //    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+    
+    RKLogConfigureByName("*", RKLogLevelOff);
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
+
 //    [[[RKClient sharedClient] requestQueue] setConcurrentRequestsLimit:2];
     [[[RKClient sharedClient] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
 //    [[[RKObjectManager sharedManager] requestQueue] setConcurrentRequestsLimit:1];
@@ -65,10 +68,11 @@
     {
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
     }
-
     crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
 	self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
+
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    self.window.rootViewController=self.navigationController;
     [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];

@@ -55,15 +55,12 @@
     [toolbar addSubview:doneButton];
     lasttimebutton=[[UIButton alloc] initWithFrame:CGRectMake(0, 44, 320, 0)];
     NSString *lasttime=@"";
-    
     if(_crosstime){
         lasttime=[[Util getTimeDesc:_crosstime] stringByTrimmingCharactersInSet:
          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if(![lasttime isEqualToString:@""])
             [lasttimebutton setFrame:CGRectMake(0, 44, 320, 44)];
     }
-//    [lasttimebutton setTitle:lasttime forState:UIControlStateNormal];
-//    [lasttimebutton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [lasttimebutton addTarget: self action: @selector(uselasttime) forControlEvents: UIControlEventTouchUpInside];
     [lasttimebutton setBackgroundColor:[UIColor colorWithRed:127.f/255.f green:127.f/255.f blue:127.f/255.f alpha:0.15]];
     UILabel *revertto=[[UILabel alloc] initWithFrame:CGRectMake(8, 2, 80, 12)];
@@ -91,7 +88,48 @@
     NSLocale *locale = [NSLocale currentLocale];
     NSCalendar *cal = [NSCalendar currentCalendar];
     [cal setLocale:locale];
+    
     datepicker.calendar=cal;
+    [datepicker setTimeZone:[NSTimeZone localTimeZone]];
+    [datepicker addTarget:self action:@selector(dateChanged:)
+     forControlEvents:UIControlEventValueChanged];
+//    if(_crosstime!=nil){
+//        NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
+//        NSString *datetimestr=@"";
+//        NSString *timeword=@"";
+//        [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+//        [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//        if(![_crosstime.begin_at.date isEqualToString:@""] &&![_crosstime.begin_at.time isEqualToString:@""]){
+//            datetimestr=[NSString stringWithFormat:@"%@ %@",_crosstime.begin_at.date,_crosstime.begin_at.time];
+//            NSDate *date=[dateformat dateFromString:datetimestr];
+//            if(date)
+//                [datepicker setDate:date];
+//        }
+//        else  if(![_crosstime.begin_at.date isEqualToString:@""]){
+//            datetimestr=[NSString stringWithFormat:@"%@ 00:00:00",_crosstime.begin_at.date];
+//            timeword=_crosstime.begin_at.time_word;
+//            NSDate *_date=[dateformat dateFromString:datetimestr];
+//            [dateformat setDateFormat:@"yyyy-MM-dd"];
+//            [dateformat setTimeZone:[NSTimeZone localTimeZone]];
+//            NSString *localdatestr=[dateformat stringFromDate:_date];
+//            [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//            datetimestr=[NSString stringWithFormat:@"%@ 10:00:00",localdatestr];
+//            _date=[dateformat dateFromString:datetimestr];
+//            if(_date)
+//                [datepicker setDate:_date];
+//            for(int i=0;i<[_times count];i++){
+//                if([(NSString*)[_times objectAtIndex:i] isEqualToString:timeword]){
+//                    [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+//                }
+//            }
+//        }
+//        [dateformat release];
+//        
+//    }
+
+}
+- (void) dateChanged:(id) sender{
+    datechanged=YES;
 }
 - (void) setDateTime:(CrossTime*)crosstime{
     if(crosstime!=nil) {
@@ -135,7 +173,8 @@
     
 }
 - (IBAction) Done:(id) sender{
-    [self saveDate:nil];
+    if(datechanged==YES)
+        [self saveDate:nil];
     [self dismissModalViewControllerAnimated:YES];
 }
 

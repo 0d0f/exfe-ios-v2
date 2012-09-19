@@ -44,18 +44,12 @@
     [gestureRecognizer release];
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [tableview reloadData];
     [self loadObjectsFromDataStore];
-    [APIProfile LoadUsrWithUserId:app.userid delegate:self];
 
+    [APIProfile LoadUsrWithUserId:app.userid delegate:self];
 }
-//-(void)viewDidAppear:(BOOL)animated{
-////    [[UIApplication sharedApplication] setStatusBarHidden:YES];
-//    if(statusBarHidden == NO)
-//    {
-//        self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
-//        statusBarHidden = YES;
-//    }
-//}
+
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
     CGRect useravatarRect=[useravatar frame];
@@ -113,11 +107,12 @@
         identitiesData=[[NSMutableArray alloc] initWithCapacity:2];
         
         NSString* imgName = user.avatar_filename; 
-
+        usernametext=imgName;
         if(imgName!=nil)
         {
             UIImage *image=[[ImgCache sharedManager] getImgFromCache:imgName];
             if(image==nil ||[image isEqual:[NSNull null]]){
+                useravatar.image=[UIImage imageNamed:@"portrait_default.png"];
                 dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
                 dispatch_async(imgQueue, ^{
                     UIImage *image=[[ImgCache sharedManager] getImgFrom:imgName];
@@ -131,12 +126,12 @@
                 });
                 dispatch_release(imgQueue);
             }else{
+                useravatarimg=image;
                 [useravatar setImage:image];
+//                useravatar.image=[UIImage imageNamed:@"portrait_default.png"];
                 [useravatar setNeedsDisplay];
-
             }
         }
-
         
         for (Identity *identity in user.identities)
         {
@@ -154,11 +149,7 @@
         [identities_section release];
     }
     [users release];
-//    NSLog(@"%@",identitiesData);
     [tableview reloadData];
-//    [inputToolbar setInputEnabled:YES];
-//    [inputToolbar hidekeyboard];
-    
 }
 
 
@@ -274,9 +265,19 @@
 {
     if(section == 0){
         if(headerView==nil){
+            AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+            NSFetchRequest* request = [User fetchRequest];
+            NSPredicate *predicate = [NSPredicate
+                                      predicateWithFormat:@"user_id = %u", app.userid];
+            [request setPredicate:predicate];
+            NSArray *users = [[User objectsWithFetchRequest:request] retain];
+            
+            
+            
             headerView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 111)];
             useravatar=[[UIImageView alloc] initWithFrame:CGRectMake(20, 16, 64, 64)];
-            useravatar.image=[UIImage imageNamed:@"portrait_default.png"];
+
             useravatar.layer.cornerRadius=2;
             useravatar.clipsToBounds = YES;
             [headerView addSubview:useravatar];
@@ -290,6 +291,23 @@
             username.shadowColor=[UIColor blackColor];
             username.shadowOffset=CGSizeMake(0, -1);
             [headerView addSubview:username];
+            if(users!=nil && [users count] >0)
+            {
+                User *_user=[users objectAtIndex:0];
+                NSString* imgName = _user.avatar_filename;
+                if(imgName!=nil)
+                {
+                    UIImage *image=[[ImgCache sharedManager] getImgFromCache:imgName];
+                    if(image==nil ||[image isEqual:[NSNull null]])
+                        useravatar.image=[UIImage imageNamed:@"portrait_default.png"];
+                    else
+                        useravatar.image=image;
+                }
+                username.text=_user.name;
+            }
+            else
+                useravatar.image=[UIImage imageNamed:@"portrait_default.png"];
+
             
         }
         return headerView;

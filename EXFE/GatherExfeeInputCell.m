@@ -58,7 +58,7 @@
     [title drawInRect:CGRectMake(5+30+5, 6, self.frame.size.width-(5+30+5+5), 20) withFont:[UIFont fontWithName:@"HelveticaNeue" size:18] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
     [subtitle drawInRect:CGRectMake(5+30+5, 6+22, self.frame.size.width-(5+30+5+5), 18) withFont:[UIFont fontWithName:@"HelveticaNeue" size:12] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
     [avatar drawInRect:CGRectMake(5, 5, 30, 30)];
-    [providerIcon drawInRect:CGRectMake(self.frame.size.width-18-10, 6, 18, 18)];
+    [providerIcon drawInRect:CGRectMake(self.frame.size.width-18-10, 13, 18, 18)];
 //    CGContextRef context = UIGraphicsGetCurrentContext();
 //    CGContextSaveGState(context);
     

@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
 
-//#import "Flurry.h"
+#import "Flurry.h"
 
-#define WWW
+#define LOCAL
 
 #ifdef DEV
 #define API_V2_ROOT @"http://api.0d0f.com/v2"

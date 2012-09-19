@@ -26,6 +26,8 @@
     UIView *footerView;
     UIButton *buttonsignout;
     User *user;
+    NSString *usernametext;
+    UIImage *useravatarimg;
 }
 - (void)touchesBegan:(UITapGestureRecognizer*)sender;
 - (void)loadObjectsFromDataStore;

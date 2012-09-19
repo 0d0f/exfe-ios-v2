@@ -21,7 +21,7 @@
         [gobutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
         [gobutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
         [gobutton addTarget:self action:@selector(goNext) forControlEvents:UIControlEventTouchUpInside];
-        [gobutton setFrame:CGRectMake(50, 350, 200, 44)];
+        [gobutton setFrame:CGRectMake(50, self.frame.size.height-30-44, 200, 44)];
         
         closebutton = [UIButton buttonWithType:UIButtonTypeCustom];
         [closebutton setTitle:@"Close" forState:UIControlStateNormal];
@@ -29,7 +29,7 @@
         [closebutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
         [closebutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
         [closebutton addTarget:(CrossesViewController*)parent action:@selector(closeWelcome) forControlEvents:UIControlEventTouchUpInside];
-        [closebutton setFrame:CGRectMake(50, 350, 200, 44)];
+        [closebutton setFrame:CGRectMake(50, self.frame.size.height-30-44, 200, 44)];
         self.backgroundColor=[UIColor clearColor];
         [closebutton setHidden:YES];
         [self addSubview:gobutton];
@@ -94,14 +94,13 @@
     
     UIImage *rome=[UIImage imageNamed:@"rome.jpg"];
     CGImageRef romeref = CGImageRetain(rome.CGImage);
-    CGContextDrawImage(context,CGRectMake(73, self.frame.size.height-276.5+120+20, 160, 120) , romeref);
+    CGContextDrawImage(context,CGRectMake(73, self.frame.size.height-276.5+120+10, 160, 120) , romeref);
     CGImageRelease(romeref);
 
-    
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)welcome2);
     
     CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, NULL, CGRectMake(6+20, self.frame.size.height-30-276.5-120, 308-20*2, 276.5));
+    CGPathAddRect(path, NULL, CGRectMake(6+20, self.frame.size.height-40-276.5-120, 308-20*2, 276.5));
     CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [welcome2 length]), path, NULL);
     CFRelease(framesetter);
     CFRelease(path);

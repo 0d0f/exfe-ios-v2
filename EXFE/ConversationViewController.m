@@ -22,6 +22,7 @@
 @synthesize exfee_id;
 @synthesize identity;
 @synthesize inputToolbar;
+@synthesize cross_title;
 
 
 
@@ -46,8 +47,9 @@
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
     [self refreshConversation];
+    self.navigationItem.title=cross_title;
     
-    UIImage *chatimg = [UIImage imageNamed:@"x_navbarbtn"];
+    UIImage *chatimg = [UIImage imageNamed:@"x_navbarbtn.png"];
     UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [chatButton setTitle:@"Chat" forState:UIControlStateNormal];
     [chatButton setImage:chatimg forState:UIControlStateNormal];
@@ -112,7 +114,7 @@
     inputaccessoryview=[[ConversationInputAccessoryView alloc] initWithFrame:CGRectMake(10.0, 0.0, 310.0, 40.0)];
     [inputaccessoryview setBackgroundColor:[UIColor lightGrayColor]];
     [inputaccessoryview setAlpha: 0.8];
-//    [Flurry logEvent:@"VIEW_CONVERSATION"];
+    [Flurry logEvent:@"VIEW_CONVERSATION"];
 //    floatTime=[[UILabel alloc] initWithFrame:CGRectMake(0, 80, 60, 26)];
 //    floatTime.text=@"label time";
 //    [self.view addSubview:floatTime];
@@ -593,7 +595,7 @@
     [inputToolbar hidekeyboard];
 }
 - (void) addPost:(NSString*)content{
-//    [Flurry logEvent:@"SEND_CONVERSATION"];
+    [Flurry logEvent:@"SEND_CONVERSATION"];
 
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:identity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];

@@ -88,6 +88,10 @@
             bigtitle=titlesafe;
             y=self.frame.size.height-30-64-(64-50);
         }
+        else if([bigtitlename isEqualToString:@"exfe"]){
+            bigtitle=titleexfe;
+            y=self.frame.size.height-30-64;
+        }
     }
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
@@ -132,7 +136,8 @@
     UIImage *ximg=[UIImage imageNamed:@"exfe_170.png"];
     CGImageRef ximageref = CGImageRetain(ximg.CGImage);
     float logo_y=self.frame.size.height-164-182;
-    CGContextDrawImage(context,CGRectMake(69,logo_y, 182, 182) , ximageref);
+    logorect=CGRectMake(69,logo_y, 182, 182);
+    CGContextDrawImage(context,logorect , ximageref);
     CGImageRelease(ximageref);
     CGContextRestoreGState(context);
 
@@ -314,7 +319,12 @@
                     [self touch_handy];
                 else if([key isEqualToString:@"safe"])
                     [self touch_safe];
+                return;
             }
+        }
+        if(CGRectContainsPoint(logorect, location)){
+            bigtitlename=@"exfe";
+            [self setNeedsDisplay];
         }
     }
         

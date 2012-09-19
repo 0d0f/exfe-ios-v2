@@ -677,8 +677,10 @@
                 relativeTime=[NSString stringWithFormat:@"%u days ago",abs(day)];
             else if(day==-2)
                 relativeTime=[NSString stringWithFormat:@"The day before yesterday"];
-            else if(day==2)
-                relativeTime=[NSString stringWithFormat:@"The day after tomorrow"];
+            else if(day==2){
+//                relativeTime=[NSString stringWithFormat:@"The day after tomorrow"];
+                relativeTime=[NSString stringWithFormat:@"2 days ago"];
+            }
             else if(day>30)
                 relativeTime=[NSString stringWithFormat:@"In %u %@",abs(moth),m_str];
             else if(day<-30)
@@ -696,7 +698,7 @@
                 if(beginingofweek_tobegin_at_day<=13)
                     relativeTime=[NSString stringWithFormat:@"Next %@",weekdaysymbol];
                 if(beginingofweek_tobegin_at_day>=14)
-                    relativeTime=[NSString stringWithFormat:@"In %u days",day];
+                    relativeTime=[NSString stringWithFormat:@"In %u days",abs(day)];
             }
         }
     }
@@ -736,13 +738,13 @@
                 if([type isEqualToString:@"cross"])
                     relativeTime=[NSString stringWithFormat:@"Just now"];
                 else
-                    relativeTime=[NSString stringWithFormat:@"%u minutes ago",minute];
+                    relativeTime=[NSString stringWithFormat:@"%u minutes ago",abs(minute)];
             }
             else if(minute>=-30 && minute<-1){
                 if([type isEqualToString:@"cross"])
                     relativeTime=[NSString stringWithFormat:@"Now"];
                 else
-                    relativeTime=[NSString stringWithFormat:@"%u minutes ago",minute];
+                    relativeTime=[NSString stringWithFormat:@"%u minutes ago",abs(minute)];
             }
             else if(minute>=-1 && minute<=0){
                 if([type isEqualToString:@"cross"])
@@ -751,11 +753,11 @@
                     relativeTime=[NSString stringWithFormat:@"Seconds ago"];
             }
             else if(minute>=1 && minute<=59)
-                relativeTime=[NSString stringWithFormat:@"In %u minutes",minute];
+                relativeTime=[NSString stringWithFormat:@"In %u minutes",abs(minute)];
             else if(minute>=60 && minute<=749){
                 float f_h=minute/60.0;
                 int hour=round(f_h+0.2);//round 8 away from zero, round 7 towards zero
-                relativeTime=[NSString stringWithFormat:@"In %u hours",hour];
+                relativeTime=[NSString stringWithFormat:@"In %u hours",abs(hour)];
             }
         }
         
@@ -803,7 +805,7 @@
 + (void) showError:(Meta*)meta delegate:(id)delegate{
     NSString *errormsg=@"";
     if([meta.code intValue]==401){
-        errormsg=@"invalid auth";
+        errormsg=@"Authentication failed due to security concerns, please sign in again.";
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Sign Out",nil];
         alert.tag=500;
         alert.delegate=delegate;
@@ -817,7 +819,7 @@
     if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]])
     {
         if([(NSNumber*)[meta objectForKey:@"code"] intValue]==401){
-            errormsg=@"invalid auth";
+            errormsg=@"Authentication failed due to security concerns, please sign in again.";
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Sign Out",nil];
             alert.tag=500;
             alert.delegate=delegate;

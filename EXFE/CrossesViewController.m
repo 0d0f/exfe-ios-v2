@@ -121,11 +121,12 @@
 
     if(users!=nil && [users count] >0){
         User *user=[users objectAtIndex:0];
+        
         if(user){
             Identity *identity=user.default_identity;
                 dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
                 dispatch_async(imgQueue, ^{
-                    UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
+                    UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:user.avatar_filename];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if(avatar_img!=nil && ![avatar_img isEqual:[NSNull null]]){
                             settingButton.image=avatar_img;
@@ -175,7 +176,7 @@
     
 }
 - (void) showWelcome{
-    WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:CGRectMake(4, tableView.frame.origin.y+4, self.view.frame.size.width-4-4, 460-44-4-4)];
+    WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:CGRectMake(4, tableView.frame.origin.y+4, self.view.frame.size.width-4-4, self.view.frame.size.height-44-4-4)];
     [welcome setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5f]];
     welcome.parent=self;
 

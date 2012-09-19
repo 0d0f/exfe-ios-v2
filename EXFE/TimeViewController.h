@@ -24,6 +24,7 @@
     UIView *lasttimeview;
     CrossTime *_crosstime;
     UIButton *lasttimebutton;
+    BOOL datechanged;
 }
 @property (nonatomic,retain) UIViewController* gatherview;
 
@@ -32,5 +33,6 @@
 - (void) setDateTime:(CrossTime*)crosstime;
 - (void) cleanDate;
 - (void) uselasttime;
+- (void) dateChanged:(id) sender;
 //- (void) updateDate;
 @end

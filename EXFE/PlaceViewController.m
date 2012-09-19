@@ -49,10 +49,6 @@
             [placeedit setHidden:YES];
             [placeedit resignFirstResponder];
         }
-//        if (CGRectContainsPoint([placeedit getCloseButtonFrame], [touch locationInView:map]))
-//        {
-//            [actionsheet showInView:self.view];
-//        }
         [self setViewStyle:EXPlaceViewStyleMap];
     };
     [map addGestureRecognizer:tapInterceptor];
@@ -130,6 +126,11 @@
 
     if(place==nil) {
         place=[Place object];
+        place.title=@"";
+        place.place_description=@"";
+        place.lat=@"";
+        place.lng=@"";
+
     }
     else{
         [originplace setObject:place.external_id forKey:@"external_id"];
@@ -305,27 +306,29 @@
         [placeedit becomeFirstResponder];
         [self setViewStyle:EXPlaceViewStyleEdit];
     }
-    CLLocationCoordinate2D location;
-    location.latitude = [place.lat doubleValue];
-    location.longitude = [place.lng doubleValue];
-    CGPoint point=[map convertCoordinate:location toPointToView:map];
-
-    float editheight=placeedit.frame.origin.y+placeedit.frame.size.height;
-    point.y+=(map.frame.size.height-editheight)/2-100;
-    CLLocationCoordinate2D newll =[map convertPoint:point toCoordinateFromView:map];
-    MKCoordinateRegion region;
-    region.center = newll;
-    float delta=0.02;
-    if([place.lat isEqualToString:@""] && [place.lng isEqualToString:@""]){
-        delta=120;
-        CLLocationCoordinate2D location_center;
-        location_center.latitude =33.431441;
-        location_center.longitude =-41.484375;
-        region.center=location_center;
-    }
-    region.span.longitudeDelta = delta;
-    region.span.latitudeDelta = delta;
-    [map setRegion:region animated:YES];
+    [map removeAnnotations:[map annotations]];
+    [self initPlaceView];
+//    CLLocationCoordinate2D location;
+//    location.latitude = [place.lat doubleValue];
+//    location.longitude = [place.lng doubleValue];
+//    CGPoint point=[map convertCoordinate:location toPointToView:map];
+//
+//    float editheight=placeedit.frame.origin.y+placeedit.frame.size.height;
+//    point.y+=(map.frame.size.height-editheight)/2-100;
+//    CLLocationCoordinate2D newll =[map convertPoint:point toCoordinateFromView:map];
+//    MKCoordinateRegion region;
+//    region.center = newll;
+//    float delta=0.02;
+//    if([place.lat isEqualToString:@""] && [place.lng isEqualToString:@""]){
+//        delta=120;
+//        CLLocationCoordinate2D location_center;
+//        location_center.latitude =33.431441;
+//        location_center.longitude =-41.484375;
+//        region.center=location_center;
+//    }
+//    region.span.longitudeDelta = delta;
+//    region.span.latitudeDelta = delta;
+//    [map setRegion:region animated:YES];
     isnotinputplace=NO;
     if(place==nil)
         [self setViewStyle:EXPlaceViewStyleTableview];
