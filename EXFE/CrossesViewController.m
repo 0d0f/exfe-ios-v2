@@ -123,7 +123,6 @@
         User *user=[users objectAtIndex:0];
         
         if(user){
-            Identity *identity=user.default_identity;
                 dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
                 dispatch_async(imgQueue, ^{
                     UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:user.avatar_filename];
@@ -473,8 +472,6 @@
         [app ShowLanding];
         
     }
-//    NSLog(@"alert: %i",buttonIndex);
-//    alertShowflag=NO;
 }
 
 #pragma mark UITableViewDataSource methods

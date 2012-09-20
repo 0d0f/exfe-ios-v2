@@ -123,7 +123,6 @@
 - (void) refreshExfeePopOver;
 
 - (void) touchesBegan:(UITapGestureRecognizer*)sender;
-- (void) tableviewtouchesBegan:(UITapGestureRecognizer*)sender;
 - (void) didlongpress:(UILongPressGestureRecognizer*)sender;
 - (void) hiddenPopover;
 - (int) exfeeIdentitiesCount;

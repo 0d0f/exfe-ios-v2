@@ -56,7 +56,6 @@
 - (IBAction) Signin:(id) sender;
 - (void) Signupnew:(id) sender;
 - (void)SigninDidFinish;
-- (void)SigninCancel;
 - (void) showSignError:(NSString*)error;
 - (void) processResponse:(id)obj status:(NSString*)status;
 - (IBAction) TwitterLoginButtonPress:(id) sender;
@@ -68,7 +67,6 @@
 - (void) setSignupView;
 - (void) setSigninView;
 - (void) clearIdentity;
-- (void) checkInputIdentity;
 - (void) welcomeButtonPress:(id) sender;
 
 @end

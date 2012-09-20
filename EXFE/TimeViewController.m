@@ -27,6 +27,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    CGRect screenframe=[[UIScreen mainScreen] bounds];
+    
+    CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
+    screenframe.size.height-=statusframe.size.height;
+    [self.view setFrame:screenframe];
+
     toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
     [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
     [self.view addSubview:toolbar];
@@ -80,7 +86,8 @@
     [lasttimelabel release];
     
     [self.view addSubview:lasttimebutton];
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,44+lasttimebutton.frame.size.height,320,200-lasttimebutton.frame.size.height) style:UITableViewStylePlain];
+    
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,44+lasttimebutton.frame.size.height,320,self.view.frame.size.height-datepicker.frame.size.height-lasttimebutton.frame.size.height-44) style:UITableViewStylePlain];
     _tableView.dataSource=self;
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
@@ -189,16 +196,15 @@
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     [formatter setLocale:locale];
-    
-    [formatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-    NSString *stringFromDate = [formatter stringFromDate:date];
+//    [formatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+//    NSString *stringFromDate = [formatter stringFromDate:date];
     [formatter setDateFormat:@"yyyy-MM-dd"];
     NSString *datestr=[formatter stringFromDate:date];
     [formatter setDateFormat:@"HH:mm:ss"];
     NSString *timestr=[formatter stringFromDate:date];
 
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    [formatter setDateFormat:@"z"];
+    [formatter setDateFormat:@"ZZZZ"];
     NSString *timezonestr=[formatter stringFromDate:date];
     NSString *eftimezone=[timezonestr substringFromIndex:3];
     if([eftimezone isEqualToString:@""])
@@ -207,7 +213,7 @@
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
     [formatter setDateFormat:@"yyyy-MM-dd"];
     NSString *origin_date=[formatter stringFromDate:date];
-    [formatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *origin_datetime=[formatter stringFromDate:date];
 
     [locale release];

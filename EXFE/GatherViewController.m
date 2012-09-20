@@ -118,8 +118,6 @@
     CGRect containviewframe=CGRectMake(0,toolbar.frame.size.height,self.view.frame.size.width, self.view.frame.size.height-44);
 
     if(viewmode==YES){
-//        NSLog(@"%f",self.view.frame.origin.y);
-//        NSLog(@"%f",toolbar.frame.size.height);
         containviewframe=CGRectMake(0,self.view.frame.origin.y,self.view.frame.size.width, self.view.frame.size.height-44);
     }
     
@@ -152,7 +150,6 @@
 
     [containcardview addSubview:crosstitle];
     crosstitle.text=[NSString stringWithFormat:@"Meet %@",app.username];
-    [crosstitle setSelectedRange:NSMakeRange(0, [crosstitle.text length])];
     [crosstitle setDelegate:self];
     [crosstitle setBackgroundColor:[UIColor clearColor]];
     [crosstitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
@@ -200,12 +197,7 @@
         [self ShowPlaceView:@"view"];
     };
     tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
-//        [self ShowPlaceView:@"view"];
     };
-//    tapInterceptor.touchesMoveCallback = ^(NSSet * touches, UIEvent * event) {
-////        NSLog(@"move");
-//        //        [self ShowPlaceView:@"view"];
-//    };
     [map addGestureRecognizer:tapInterceptor];
     [tapInterceptor release];
     
@@ -290,8 +282,6 @@
     }
     
     [self initData];
-    if(viewmode==NO){
-    }
 
     [self reArrangeViews];
     [self setExfeeNum];
@@ -313,17 +303,12 @@
         [self ShowRsvpButton];
         self.navigationItem.title=cross.title;
     }
-}
-//- (void)showPan
-//{
-//    NSLog(@"pan!");
-//}
-//
-//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-//    return YES;
-//}
-- (void) initData{
+    if(viewmode==NO){
+        [crosstitle setSelectedRange:NSMakeRange(0, [crosstitle.text length])];
+    }
 
+}
+- (void) initData{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSFetchRequest* request = [User fetchRequest];
     NSPredicate *predicate = [NSPredicate
@@ -400,21 +385,7 @@
     [map setHidden:YES];
     
 }
-- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
-    NSLog(@"regionDidChangeAnimated");
-//    [self updateMapImage];
-}
-- (void)mapViewWillStartLoadingMap:(MKMapView *)mapView{
-//    [self updateMapImage];
-    NSLog(@"mapViewWillStartLoadingMap");
-}
-- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView{
-//    [self updateMapImage];
-    NSLog(@"mapViewDidFinishLoadingMap");
-}
-- (void)mapViewDidFailLoadingMap:(MKMapView *)mapView withError:(NSError *)error{
-    NSLog(@"mapViewDidFailLoadingMap");
-}
+
 - (void) reloadExfeeIdentities{
     if(exfeeIdentities!=nil){
         [exfeeIdentities release];
@@ -495,7 +466,10 @@
     if(map.frame.origin.y+map.frame.size.height+9>placedesc.frame.origin.y+placedesc.frame.size.height+9)
         crossdescriptoiny=map.frame.origin.y+map.frame.size.height+9+15;
     
+//    float a=containcardview.frame.size.height;
+//    NSLog(@"a cross desc height %f",a);
     height=containcardview.frame.size.height-crossdescriptoiny;
+//    NSLog(@"cross desc height %f",height);
 
     [crossdescription setFrame:CGRectMake(0,crossdescriptoiny,containview.frame.size.width,height)];
     
@@ -577,12 +551,19 @@
         [triangle addLineToPoint:CGPointMake(0,y)];
 
         containcardview.transparentPath=triangle;
-        CGRect rect=CGRectMake(VIEW_MARGIN,0, containview.frame.size.width-2*VIEW_MARGIN, crossdescription.frame.origin.y+crossdescription.frame.size.height);
         CGRect containrect=containview.frame;
         containrect.origin.y=0;
     }
+    CGRect containframe=containcardview.frame;
+    float containcardheight=crossdescription.frame.origin.y+crossdescription.frame.size.height;
+    if(containcardheight<containframe.size.height)
+        containframe.size.height=containcardheight;
     
+    [containcardview setFrame:containframe];
+    //containview setFrame
     [containcardview setNeedsDisplay];
+    
+//    NSLog(@"result cross desc height %f",crossdescription.frame.size.height);
 }
 - (void) setViewMode{
     viewmode=YES;
@@ -590,7 +571,7 @@
     
 - (void) addDefaultIdentity{
         User *user=default_user;
-        Identity *default_identity=user.default_identity;
+        Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
         if(user!=nil){
             Invitation *invitation=[Invitation object];
             invitation.rsvp_status=@"ACCEPTED";
@@ -656,12 +637,12 @@
     CTFontRef linefontref14= CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 14.0, NULL);
     NSMutableAttributedString *Line1 = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@%@",host,rsvp_status,mate]];
     [Line1 addAttribute:(NSString*)kCTFontAttributeName value:(id)linefontref14 range:NSMakeRange(0,[Line1 length])];
-    [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0,[host length])];
-    [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[host length],[rsvp_status length])];
+    [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id) [UIColor colorWithRed:0x62/255.0f green:0x9b/255.0f blue:0xd8/255.0f alpha:1].CGColor range:NSMakeRange(0,[host length])];
+    [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:0x62/255.0f green:0x9b/255.0f blue:0xd8/255.0f alpha:1].CGColor range:NSMakeRange(0+[host length],[rsvp_status length])];
     if([mate length]>10){
         [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor whiteColor].CGColor range:NSMakeRange(0+[host length]+[rsvp_status length],[mate length])];
         
-        [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[host length]+[rsvp_status length]+6,[[invitation.mates stringValue] length])];
+        [Line1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:0x62/255.0f green:0x9b/255.0f blue:0xd8/255.0f alpha:1].CGColor range:NSMakeRange(0+[host length]+[rsvp_status length]+6,[[invitation.mates stringValue] length])];
     }
     CFRelease(linefontref14);
     
@@ -795,7 +776,8 @@
 }
 - (IBAction) Gather:(id) sender{
     [self pullcontainviewDown];
-    cross.by_identity=default_user.default_identity;
+    
+    cross.by_identity=[[default_user.identities allObjects] objectAtIndex:0];
     cross.title=crosstitle.text;
     cross.cross_description=crossdescription.text;
     cross.time=datetime;
@@ -833,7 +815,8 @@
     [containcardview release];
     [crossdescbackimg release];
     [default_user release];
-//    [conversationView release];
+    if(conversationView)
+        [conversationView release];
     [super dealloc];
 }
 - (void)didReceiveMemoryWarning
@@ -1009,7 +992,8 @@
     }
 }
 - (void) toconversation{
-    conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
+    if(conversationView==nil)
+        conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
     conversationView.exfee_id=[cross.exfee.exfee_id intValue];
     conversationView.cross_title=cross.title;
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -1233,16 +1217,6 @@
     else
         [gathertoolbar replaceButtonImage:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] title:@"Accept" target:self action:@selector(rsvpaccept) forname:@"accept"];
     [gathertoolbar setHidden:NO];
-    NSLog(@"view height %f y %f",self.view.frame.size.height,self.view.frame.origin.y);
-    NSLog(@"toolbar y %f",gathertoolbar.frame.origin.y);
-
-//    CGRect screenframe=[[UIScreen mainScreen] bounds];
-//    CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
-//    screenframe.size.height-=statusframe.size.height;
-//
-//    CGRect gatherframe=[gathertoolbar frame];
-//    gatherframe.origin.y=screenframe.size.height-50-50;
-//    [gathertoolbar setFrame:gatherframe];
 }
 
 - (void) updateButtonFrame:(NSString*)name frame:(CGRect)rect{
@@ -1311,7 +1285,7 @@
     [bigspin startAnimating];
     hud.customView=bigspin;
     [bigspin release];
-    cross.by_identity=default_user.default_identity;
+    cross.by_identity=[self getMyInvitation].identity;
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 
     NSError *error;
@@ -1375,7 +1349,7 @@
     hud.customView=bigspin;
     [bigspin release];
     
-    cross.by_identity=default_user.default_identity;
+    cross.by_identity=[self getMyInvitation].identity;
     
     NSError *error;
     NSString *json = [[RKObjectSerializer serializerWithObject:cross mapping:[[APICrosses getCrossMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
@@ -1682,7 +1656,7 @@
 #pragma mark UIScrollView methods
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if(scrollView.tag==108)
+    if(scrollView.tag==108 ||scrollView.tag==101)
         return;
     for (UIView *view in [containview subviews])
     {
@@ -1838,14 +1812,14 @@
 
 - (void) sendrsvp:(NSString*)status{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    NSNumber *by_identity_id=[NSNumber numberWithInt:0];
-    for (Invitation* invitation in cross.exfee.invitations )
-    {
-        if([invitation.identity.connected_user_id intValue] == app.userid)
-            by_identity_id=invitation.identity.identity_id;
-    }
-    if(by_identity_id>0)
+    Identity *by_identity=[self getMyInvitation].identity;
+//    NSNumber *by_identity_id=[NSNumber numberWithInt:0];
+//    for (Invitation* invitation in cross.exfee.invitations )
+//    {
+//        if([invitation.identity.connected_user_id intValue] == app.userid)
+//            by_identity_id=invitation.identity.identity_id;
+//    }
+    if(by_identity.identity_id>0)
     {
         NSMutableArray *postarray= [[NSMutableArray alloc] initWithCapacity:12];
         BOOL selected=NO;
@@ -1855,7 +1829,9 @@
                     if(i<[exfeeIdentities count]) {
                         Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
                         invitation.rsvp_status=status;
-                        NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",by_identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
+                        invitation.by_identity=by_identity;
+
+                        NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",by_identity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
                         [postarray addObject:rsvpdict];
                     }
                 }
@@ -1866,7 +1842,7 @@
                 Invitation *invitation=[self getMyInvitation];
                 if(invitation!=nil) {
                     invitation.rsvp_status=status;
-                    NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",by_identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
+                    NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",by_identity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
                     [postarray addObject:rsvpdict];
             }
         }
@@ -1938,14 +1914,13 @@
     NSError* error = nil;
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-
-    NSNumber *by_identity_id=[NSNumber numberWithInt:0];
-    for (Invitation* invitation in cross.exfee.invitations )
-    {
-        if([invitation.identity.connected_user_id intValue] == app.userid)
-            by_identity_id=invitation.identity.identity_id;
-    }
-    if(by_identity_id>0)
+    Identity *by_identity=[self getMyInvitation].identity;
+//    for (Invitation* invitation in cross.exfee.invitations )
+//    {
+//        if([invitation.identity.connected_user_id intValue] == app.userid)
+//            by_identity_id=invitation.identity.identity_id;
+//    }
+    if([by_identity.identity_id intValue]>0)
     {
 //        BOOL selected=NO;
         for(int i=0;i< [exfeeSelected count];i++) {
@@ -1967,9 +1942,11 @@
                                     if(mates_result<0)
                                         mates_result=0;
                                     invitation.mates= [NSNumber numberWithInt:mates_result];
+                                    invitation.by_identity=by_identity;
                                 }
                                 else
                                     invitation.mates=0;
+                            
                         }
                     }
                 }
@@ -1980,7 +1957,7 @@
             RKParams* rsvpParams = [RKParams params];
             NSDictionary *exfee_dict=[ObjectToDict ExfeeDict:cross.exfee];
             [rsvpParams setValue:[exfee_dict JSONString] forParam:@"exfee"];
-            [rsvpParams setValue:[self getMyInvitation].identity.identity_id forParam:@"by_identity_id"];
+            [rsvpParams setValue:by_identity.identity_id forParam:@"by_identity_id"];
             RKClient *client = [RKClient sharedClient];
             [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
             NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/edit?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
@@ -1997,6 +1974,15 @@
                                     [self refreshExfeePopOver];
                                     [exfeeShowview reloadData];
                                     [self setExfeeNum];
+
+//                                    RKObjectMapper* mapper;
+//                                    mapper = [RKObjectMapper mapperWithObject:body mappingProvider:[RKObjectManager sharedManager].mappingProvider];
+//                                    RKObjectMappingResult* result = [mapper performMapping];
+//                                    id obj=[result asObject];
+//                                    if([obj isKindOfClass:[Exfee class]]){
+//                                        cross.exfee=(Exfee*)obj;
+//                                        [[Cross currentContext] save:nil];
+//                                    }
                                 }
                         }
                     }else {

@@ -676,10 +676,12 @@
             if(day<=-3 && day>=-30)
                 relativeTime=[NSString stringWithFormat:@"%u days ago",abs(day)];
             else if(day==-2)
-                relativeTime=[NSString stringWithFormat:@"The day before yesterday"];
+                relativeTime=[NSString stringWithFormat:@"In Two days"];
+
+//                relativeTime=[NSString stringWithFormat:@"The day before yesterday"];
             else if(day==2){
 //                relativeTime=[NSString stringWithFormat:@"The day after tomorrow"];
-                relativeTime=[NSString stringWithFormat:@"2 days ago"];
+                relativeTime=[NSString stringWithFormat:@"Two days ago"];
             }
             else if(day>30)
                 relativeTime=[NSString stringWithFormat:@"In %u %@",abs(moth),m_str];
@@ -804,8 +806,17 @@
 }
 + (void) showError:(Meta*)meta delegate:(id)delegate{
     NSString *errormsg=@"";
+    
+    for (UIWindow* window in [UIApplication sharedApplication].windows) {
+        NSArray* subviews = window.subviews;
+        if ([subviews count] > 0)
+            if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
+                return;
+    }
+    
     if([meta.code intValue]==401){
         errormsg=@"Authentication failed due to security concerns, please sign in again.";
+
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Sign Out",nil];
         alert.tag=500;
         alert.delegate=delegate;
@@ -815,6 +826,13 @@
     }
 }
 + (void) showErrorWithMetaDict:(NSDictionary*)meta delegate:(id)delegate{
+    for (UIWindow* window in [UIApplication sharedApplication].windows) {
+        NSArray* subviews = window.subviews;
+        if ([subviews count] > 0)
+            if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
+                return;
+    }
+
     NSString *errormsg=@"";
     if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]])
     {

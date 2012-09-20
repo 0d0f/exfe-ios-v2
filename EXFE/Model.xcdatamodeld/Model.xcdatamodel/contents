@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1487" systemVersion="12A269" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1810" systemVersion="12A269" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Cross" representedClassName="Cross" syncable="YES">
         <attribute name="conversation_count" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
@@ -102,7 +102,6 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timezone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="user_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <relationship name="default_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
         <relationship name="identities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
     </entity>
     <entity name="Widget" syncable="YES">
@@ -119,7 +118,7 @@
         <element name="Place" positionX="160" positionY="192" width="128" height="195"/>
         <element name="Post" positionX="160" positionY="192" width="128" height="135"/>
         <element name="Rsvp" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="User" positionX="160" positionY="192" width="128" height="165"/>
+        <element name="User" positionX="160" positionY="192" width="128" height="150"/>
         <element name="Widget" positionX="160" positionY="192" width="128" height="60"/>
     </elements>
 </model>

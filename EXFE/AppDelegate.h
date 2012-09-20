@@ -11,7 +11,7 @@
 
 #import "Flurry.h"
 
-#define LOCAL
+#define WWW
 
 #ifdef DEV
 #define API_V2_ROOT @"http://api.0d0f.com/v2"

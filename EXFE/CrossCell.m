@@ -30,6 +30,7 @@
 @synthesize conversationCount;
 @synthesize showNumArea;
 @synthesize isGatherX;
+@synthesize gatherx;
 
 - (void)dealloc {
 	[title release];

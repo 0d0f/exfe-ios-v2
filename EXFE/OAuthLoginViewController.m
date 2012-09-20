@@ -28,12 +28,13 @@
 {
     if(firstLoading==YES)
     {
-//        NSLog(@"web start load");
-//        MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.webView animated:YES];
-        
-//        MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
-//        hud.labelText = @"Loading";
-        
+        MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.webView animated:YES];
+        hud.mode=MBProgressHUDModeCustomView;
+        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+        [bigspin startAnimating];
+        hud.customView=bigspin;
+        [bigspin release];
+        hud.labelText = @"Loading";
     }
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
@@ -41,8 +42,7 @@
     if(firstLoading==YES)
     {
         firstLoading=NO;
-//        [MBProgressHUD hideHUDForView:self.webView animated:YES];
-//        NSLog(@"web stop load");
+        [MBProgressHUD hideHUDForView:self.webView animated:YES];
     }
     
 }
@@ -51,8 +51,7 @@
     if(firstLoading==YES)
     {
         firstLoading=NO;
-//        [MBProgressHUD hideHUDForView:self.webView animated:YES];
-//        NSLog(@"web stop load");
+        [MBProgressHUD hideHUDForView:self.webView animated:YES];
     }
 }
 - (void)viewDidLoad {
@@ -92,7 +91,6 @@
     NSString *callback=@"oauth://handleTwitterLogin";
     NSString *urlstr=[NSString stringWithFormat:@"%@/TwitterAuthenticate?device=iOS&device_callback=%@",EXFE_OAUTH_LINK,callback];
     
-//    NSString *urlstr=[NSString stringWithFormat:@"https://exfe.com/oAuth/twitterRedirect?device=iOS&device_callback=%@",callback];
     firstLoading=YES;
     [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstr]]];
 }

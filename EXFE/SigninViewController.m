@@ -107,7 +107,6 @@
     
     if ([request isGET]) {
         if ([response isOK]) {
-//            NSLog(@"Data returned: %@", [response bodyAsString]);
         }
     } else if ([request isPOST]) {
         if ([response isJSON]) {

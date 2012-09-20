@@ -266,28 +266,10 @@
 - (IBAction)editingDidEnd:(UITextField*)textField{
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-//    [self addByText];
     return NO;
 }
 
-//- (void) addByText{
-//    NSCharacterSet *split=[NSCharacterSet characterSetWithCharactersInString:@",;"];
-//    NSArray *identity_list=[exfeeInput.text componentsSeparatedByCharactersInSet:split];
-//    NSString *json=@"";
-//    for(NSString *identity_input in identity_list) {
-//        NSString *provider=[Util findProvider:identity_input];
-//        if(![provider isEqualToString:@""]) {
-//            if(![json isEqualToString:@""])
-//                json=[json stringByAppendingString:@","];
-//            json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,identity_input];
-//        }
-//    }
-//    json=[NSString stringWithFormat:@"[%@]",json];
-//    [self getIdentity:json];
-//}
-
 - (void) addByInputIdentity:(NSString*)input{
-
     NSString *json=@"";
     NSString *provider=[Util findProvider:input];
     if(![provider isEqualToString:@""]) {
@@ -336,7 +318,12 @@
                                 Invitation *invitation =[Invitation object];
                                 invitation.rsvp_status=@"NORESPONSE";
                                 invitation.identity=identity;
-                                invitation.by_identity=((GatherViewController*)gatherview).default_user.default_identity;
+                                Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
+                                if(myinvitation!=nil)
+                                    invitation.by_identity=myinvitation.identity;
+                                else
+                                    invitation.by_identity=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+                                
                                 [exfeeList addBubble:input customObject:invitation];
                                 if([exfeeList bubblecount]>0)
                                     [self changeLeftIconWhite:YES];
@@ -427,7 +414,12 @@
     Invitation *invitation =[Invitation object];
     invitation.rsvp_status=@"NORESPONSE";
     invitation.identity=identity;
-    invitation.by_identity=((GatherViewController*)gatherview).default_user.default_identity;
+    Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
+    if(myinvitation!=nil)
+        invitation.by_identity=myinvitation.identity;
+    else
+        invitation.by_identity=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+
 
 
     NSString *identity_name=identity.nickname;

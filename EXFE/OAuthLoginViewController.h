@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "Util.h"
+#import "MBProgressHUD.h"
+#import "EXSpinView.h"
 
 @protocol OAuthLoginViewControllerDelegate;
 @interface OAuthLoginViewController : UIViewController

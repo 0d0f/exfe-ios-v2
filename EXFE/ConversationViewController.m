@@ -437,9 +437,6 @@
 
 #pragma mark UIScrollView methods
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-//    CGPoint point=_tableView.contentOffset;
-//    NSLog(@"drag: %f",point.y);
-//    if(point.y>0)
     showfloattime=YES;
    [inputToolbar hidekeyboard];
 }
@@ -640,8 +637,6 @@
 }
 #pragma Mark - RKRequestDelegate
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    NSLog(@"success:%@",objects);
-
     if(objectLoader.isGET) {
         if([objects count]>0)
         {

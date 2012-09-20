@@ -76,7 +76,5 @@ typedef enum {
 - (void) setPlace:(Place*)_place isedit:(BOOL)editstate;
 - (void) setViewStyle:(EXPlaceViewStyle)style;
 - (void) clearplace;
-- (void) cancel;
 - (void) initPlaceView;
-- (void) setMapViewToCurrentPlace;
 @end

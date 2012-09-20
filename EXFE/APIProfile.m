@@ -25,7 +25,6 @@
      @"timezone", @"timezone", 
      nil];
     RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
-    [userMapping mapRelationship:@"default_identity" withMapping:identityMapping];
     [userMapping mapRelationship:@"identities" withMapping:identityMapping];
     
     [manager.mappingProvider setObjectMapping:userMapping forKeyPath:@"response.user"];    

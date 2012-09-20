@@ -26,5 +26,4 @@
 - (void) drawWelcome2;
 - (void) initWelcome2;
 - (void) goNext;
-- (void) close;
 @end
