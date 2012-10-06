@@ -24,6 +24,7 @@
         
         input=[[UITextField alloc] initWithFrame:CGRectMake(6+18+4, 0, self.frame.size.width, 30)];
         [input setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+        [input setReturnKeyType:UIReturnKeySearch];
         
         input.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         CGRect inputframe=input.frame;
@@ -98,6 +99,12 @@
 
 -(BOOL) addBubble:(NSString*)title customObject:(id)customobject{
 
+    if([title isEqualToString:@""])
+       return NO;
+    for (EXBubbleButton *_bubble in bubbles){
+        if([_bubble.customObject isEqual:customobject])
+            return NO;
+    }
     if(customobject==nil){
         BOOL isinputvalid=[_exdelegate isInputValid:self input:title];
         if(isinputvalid==NO)

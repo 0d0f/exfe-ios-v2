@@ -17,7 +17,7 @@
 #import "Util.h"
 
 @interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,RKObjectLoaderDelegate,UITableViewDelegate,UITableViewDataSource,EXBubbleScrollViewDelegate,UIScrollViewDelegate>{
-    IBOutlet UITextField *exfeeInput;
+    UITextField *exfeeInput;
     UIView *toolbar;
     NSMutableArray *suggestIdentities;
     UIViewController *gatherview;
@@ -30,11 +30,14 @@
     UIView *errorHint;
     UIImageView *errorHinticon;
     UILabel *errorHintLabel;
+    BOOL ifAddExfeeSend;
 }
 @property (nonatomic,retain) UIViewController* gatherview;
 
 - (void) done:(id)sender;
 - (IBAction) Close:(id) sender;
+- (Identity*) getIdentityFromLocal:(NSString*)input;
+- (void) addBubbleByIdentity:(Identity*)identity input:(NSString*)input;
 - (IBAction)textDidChange:(UITextField*)textField;
 - (IBAction)editingDidBegan:(UITextField*)textField;
 - (IBAction)editingDidEnd:(UITextField*)textField;

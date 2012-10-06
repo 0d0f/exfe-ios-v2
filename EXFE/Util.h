@@ -58,5 +58,6 @@
 + (void) showErrorWithMetaDict:(NSDictionary*)meta delegate:(id)delegate;
 + (void) showConnectError:(NSError*)err delegate:(id)delegate;
 + (void) signout;
++ (int)daysBetween:(NSDate *)dt1 and:(NSDate *)dt2;
 @end
 

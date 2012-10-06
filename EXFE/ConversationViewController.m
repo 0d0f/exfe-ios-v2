@@ -86,8 +86,10 @@
     inputToolbar.textView.delegate=self;
     [inputToolbar.textView.internalTextView setReturnKeyType:UIReturnKeySend];
     [self.view addSubview:inputToolbar];
+    [self statusbarResize];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+
     
 #ifdef __IPHONE_5_0
     float version = [[[UIDevice currentDevice] systemVersion] floatValue];
@@ -149,6 +151,7 @@
     [super viewDidUnload];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
     
 #ifdef __IPHONE_5_0
     float version = [[[UIDevice currentDevice] systemVersion] floatValue];
@@ -389,12 +392,16 @@
                 else if(showTimeMode==1)
                 {
                     NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
+                    NSLocale *locale_to=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+                    [dateformat_to setLocale:locale_to];
+
+                    
                     [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
                     [dateformat_to setDateFormat:@"ccc, MMM d"];
                     NSString *datestring=[dateformat_to stringFromDate:post.created_at];
                     [dateformat_to setDateFormat:@"h:mm a"];
                     NSString *timestring=[dateformat_to stringFromDate:post.created_at];
-                    
+                    [locale_to release];
                     [dateformat_to release];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",datestring,timestring]];
                     [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)timefontref range:NSMakeRange(0,[datestring length])];

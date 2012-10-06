@@ -226,7 +226,7 @@
     placetitle=[[UILabel alloc] initWithFrame:CGRectMake(INNER_MARGIN,toolbar.frame.size.height+6+crosstitle.frame.size.height+15+exfeenum.frame.size.height+8+exfeeShowview.frame.size.height+15+timetitle.frame.size.height+timedesc.frame.size.height+15,160,48)];
     placetitle.lineBreakMode=UILineBreakModeWordWrap;
     [placetitle setBackgroundColor:[UIColor clearColor]];
-    placetitle.text=@"Somwhere";
+    placetitle.text=@"Somewhere";
     [placetitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     placetitle.textColor=[Util getHighlightColor];
     placetitle.numberOfLines=2;
@@ -777,6 +777,9 @@
 - (IBAction) Gather:(id) sender{
     [self pullcontainviewDown];
     
+    if([crossdescription.text isEqualToString:@"Write some notes here."]){
+        crossdescription.text=@"";
+    }
     cross.by_identity=[[default_user.identities allObjects] objectAtIndex:0];
     cross.title=crosstitle.text;
     cross.cross_description=crossdescription.text;
@@ -1597,6 +1600,10 @@
             float y=crossdescription.frame.origin.y-15;
             [containview setContentOffset:CGPointMake(0, y)];
             [UIView commitAnimations];
+            if([crossdescription.text isEqualToString:@"Write some notes here."]){
+                crossdescription.text=@"";
+            }
+
         }
         notUserScroll=NO;
     return YES;

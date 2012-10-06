@@ -196,13 +196,17 @@
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     [formatter setLocale:locale];
-//    [formatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-//    NSString *stringFromDate = [formatter stringFromDate:date];
     [formatter setDateFormat:@"yyyy-MM-dd"];
     NSString *datestr=[formatter stringFromDate:date];
     [formatter setDateFormat:@"HH:mm:ss"];
     NSString *timestr=[formatter stringFromDate:date];
-
+    if(time_word!=nil){
+        [formatter setTimeZone:[NSTimeZone localTimeZone]];
+        [formatter setDateFormat:@"yyyy-MM-dd"];
+        datestr=[formatter stringFromDate:date];
+        timestr=@"";
+        [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    }
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
     [formatter setDateFormat:@"ZZZZ"];
     NSString *timezonestr=[formatter stringFromDate:date];

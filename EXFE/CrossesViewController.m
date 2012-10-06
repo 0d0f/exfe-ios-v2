@@ -106,37 +106,17 @@
     gatherButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:gatherButton] autorelease];
     [self.navigationController navigationBar].topItem.rightBarButtonItem=gatherButtonItem;
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];    
-    [request setPredicate:predicate];
-	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    
     UIImage *settingbtnimg = [UIImage imageNamed:@"portrait_default.png"];
 
-    EXInnerButton *settingButton = [[EXInnerButton alloc] initWithFrame:CGRectMake(2, 6, 30, 30)];
+    settingButton = [[EXInnerButton alloc] initWithFrame:CGRectMake(2, 6, 30, 30)];
     [settingButton addTarget:self action:@selector(ShowProfileView) forControlEvents:UIControlEventTouchUpInside];
     settingButton.image=settingbtnimg;
     settingButton.layer.cornerRadius=5.5f;
     settingButton.clipsToBounds = YES;
 
-    if(users!=nil && [users count] >0){
-        User *user=[users objectAtIndex:0];
-        
-        if(user){
-                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                dispatch_async(imgQueue, ^{
-                    UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:user.avatar_filename];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if(avatar_img!=nil && ![avatar_img isEqual:[NSNull null]]){
-                            settingButton.image=avatar_img;
-                            [settingButton setNeedsDisplay];
-                        }
-                    });
-                });
-                dispatch_release(imgQueue);
-        }
-    }
-    [users release];
+    [self refreshPortrait];
+    
     UIView *containview=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 32, 44)];
     containview.backgroundColor=[UIColor clearColor];
     UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"i_avatar_effect.png"]];
@@ -150,7 +130,6 @@
     [self.navigationController navigationBar].topItem.leftBarButtonItem=profileButtonItem;
     
     [shadowImageView release];
-    [settingButton release];
     [containview release];
     
     CGRect frame = CGRectMake(0, 0, 400, 44);
@@ -173,6 +152,35 @@
 
     [self.navigationController.view setNeedsDisplay];
     
+}
+
+- (void) refreshPortrait{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    NSFetchRequest* request = [User fetchRequest];
+    NSPredicate *predicate = [NSPredicate
+                              predicateWithFormat:@"user_id = %u", app.userid];
+    [request setPredicate:predicate];
+	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    
+    if(users!=nil && [users count] >0){
+        User *user=[users objectAtIndex:0];
+        
+        if(user){
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+                UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:user.avatar_filename];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(avatar_img!=nil && ![avatar_img isEqual:[NSNull null]]){
+                        settingButton.image=avatar_img;
+                        [settingButton setNeedsDisplay];
+                    }
+                });
+            });
+            dispatch_release(imgQueue);
+        }
+    }
+    [users release];
 }
 - (void) showWelcome{
     WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:CGRectMake(4, tableView.frame.origin.y+4, self.view.frame.size.width-4-4, self.view.frame.size.height-44-4-4)];
@@ -219,6 +227,7 @@
 //        [cellDateTime release];
 //        cellDateTime=nil;
 //    }
+    [settingButton release];
     [gatherax release];
     [customStatusBar release];
     [cellbackimglist release];
@@ -233,6 +242,7 @@
     BOOL login=[app Checklogin];
     if(login==YES)
     {
+        [self refreshPortrait];
         [self refreshCrosses:@"crossupdateview"];
     }
     else {
@@ -573,7 +583,7 @@
         else
             cell.time=cross.time.origin;
     }else{
-        NSDictionary *humanable_date=[Util crossTimeToString:cross.time];//[cellDateTime objectAtIndex:indexPath.row];
+        NSDictionary *humanable_date=[Util crossTimeToString:cross.time];
         cell.time=[humanable_date objectForKey:@"short"];
         cell.showDetailTime=YES;
         if([humanable_date objectForKey:@"day"]== nil || [humanable_date objectForKey:@"month"]==nil)

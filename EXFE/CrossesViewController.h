@@ -31,6 +31,7 @@
     CustomStatusBar *customStatusBar;
     NSMutableAttributedString *gatherax;
     MBProgressHUD *hud;
+    EXInnerButton *settingButton;
 }
 - (void) refreshCell;
 - (void) refreshCrosses:(NSString*)source;
@@ -46,4 +47,5 @@
 - (void) closeWelcome;
 - (void) alertsignout;
 - (BOOL) isIdentityBelongsMe:(int)identity_id;
+- (void) refreshPortrait;
 @end

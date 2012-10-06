@@ -174,6 +174,11 @@
     }
     [inputplace setReturnKeyType:UIReturnKeySearch];
     map.showsUserLocation = YES;
+//    [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, 44+self.view.frame.size.height, _tableView.frame.size.width, _tableView.frame.size.height)];
+    [_tableView setHidden:YES];
+    [map setFrame:CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height-44)];
+
+//    [self setViewStyle:EXPlaceViewStyleMap];
 }
 
 - (void) initPlaceView{
@@ -227,13 +232,15 @@
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDelay:0];
         [UIView setAnimationDuration:0.25];
-        
-        [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, self.view.frame.size.height, _tableView.frame.size.width, _tableView.frame.size.height)];
+        [_tableView setHidden:YES];
+//        [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, self.view.frame.size.height, _tableView.frame.size.width, _tableView.frame.size.height)];
         [map setFrame:CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height-44)];
         [UIView commitAnimations];
         [inputplace resignFirstResponder];
         [map becomeFirstResponder];
     } else if(style== EXPlaceViewStyleTableview){
+        [_tableView setHidden:NO];
+
         [placeedit setHidden:YES];
         [placeedit resignFirstResponder];
         [UIView beginAnimations:nil context:NULL];
@@ -244,6 +251,8 @@
         [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, 44+85, _tableView.frame.size.width, self.view.frame.size.height-44-85)];
         [UIView commitAnimations];
     } else if(style== EXPlaceViewStyleBigTableview){
+        [_tableView setHidden:NO];
+
         [placeedit setHidden:YES];
         [placeedit resignFirstResponder];
         [UIView beginAnimations:nil context:NULL];
@@ -255,6 +264,8 @@
         [UIView commitAnimations];
         
     } else if(style== EXPlaceViewStyleEdit){
+        [_tableView setHidden:NO];
+
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDelay:0];
         [UIView setAnimationDuration:0.25];

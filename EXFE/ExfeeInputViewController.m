@@ -223,6 +223,16 @@
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
+- (Identity*) getIdentityFromLocal:(NSString*)input{
+    
+    NSFetchRequest* request = [Identity fetchRequest];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(external_username == %@)",input];
+    [request setPredicate:predicate];
+    NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
+    if([suggestwithselected count]>0)
+        return (Identity*)[suggestwithselected objectAtIndex:0];
+    return nil;
+}
 
 - (void)loadIdentitiesFromDataStore:(NSString*)input{
     [suggestIdentities release];
@@ -253,23 +263,48 @@
                 continue;
             }
         }
-
-        
         if(flag==NO)
             [temp addObject:identity];
     }
-    
     suggestIdentities=[temp retain];
     [temp release];
     [suggestionTable reloadData];
 }
+
 - (IBAction)editingDidEnd:(UITextField*)textField{
 }
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     return NO;
 }
+- (void) addBubbleByIdentity:(Identity*)identity input:(NSString*)input{
 
+    Invitation *invitation =[Invitation object];
+    invitation.rsvp_status=@"NORESPONSE";
+    invitation.identity=identity;
+    Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
+    if(myinvitation!=nil)
+        invitation.by_identity=myinvitation.identity;
+    else
+        invitation.by_identity=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+    
+    [exfeeList addBubble:input customObject:invitation];
+    if([exfeeList bubblecount]>0)
+        [self changeLeftIconWhite:YES];
+    
+}
 - (void) addByInputIdentity:(NSString*)input{
+    if(ifAddExfeeSend==YES)
+        return;
+
+    ifAddExfeeSend=YES;
+    Identity* identity=[self getIdentityFromLocal:input];
+    if(identity!=nil){
+        [self addBubbleByIdentity:identity input:input];
+        ifAddExfeeSend=NO;
+        return;
+    }
+    
     NSString *json=@"";
     NSString *provider=[Util findProvider:input];
     if(![provider isEqualToString:@""]) {
@@ -298,6 +333,15 @@
                     id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                     if(code)
                         if([code intValue]==200) {
+
+                            Identity* identity=[self getIdentityFromLocal:input];
+                            if(identity!=nil){
+                                [self addBubbleByIdentity:identity input:input];
+                                ifAddExfeeSend=NO;
+
+                                return;
+                            }
+
                             NSDictionary* response = [body objectForKey:@"response"];
                             NSArray *identities = [response objectForKey:@"identities"];
                             for (NSDictionary *identitydict in identities) {
@@ -307,33 +351,28 @@
                                 NSString *identity_id=[identitydict objectForKey:@"id"];
                                 NSString *name=[identitydict objectForKey:@"name"];
                                 NSString *nickname=[identitydict objectForKey:@"nickname"];
+                                NSString *external_username=[identitydict objectForKey:@"external_username"];
+                                
                                 
                                 Identity *identity=[Identity object];
                                 identity.external_id=external_id;
                                 identity.provider=provider;
                                 identity.avatar_filename=avatar_filename;
                                 identity.name=name;
+                                identity.external_username=external_username;
                                 identity.nickname=nickname;
                                 identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
-                                Invitation *invitation =[Invitation object];
-                                invitation.rsvp_status=@"NORESPONSE";
-                                invitation.identity=identity;
-                                Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
-                                if(myinvitation!=nil)
-                                    invitation.by_identity=myinvitation.identity;
-                                else
-                                    invitation.by_identity=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
-                                
-                                [exfeeList addBubble:input customObject:invitation];
-                                if([exfeeList bubblecount]>0)
-                                    [self changeLeftIconWhite:YES];
-
+                                [self addBubbleByIdentity:identity input:input];
+                                ifAddExfeeSend=NO;
                             }
                         }
                 }
             }
+            ifAddExfeeSend=NO;
+
         };
         request.onDidFailLoadWithError=^(NSError *error){
+            ifAddExfeeSend=NO;
         };
         request.delegate=self;
     }];
@@ -341,7 +380,6 @@
 }
 
 #pragma mark UITableView Datasource methods
-
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
 //    int input=0;
 //    if(showInputinSuggestion==YES)
