@@ -185,11 +185,22 @@
 - (IBAction) Close:(id) sender{
     [self dismissModalViewControllerAnimated:YES];    
 }
-- (void) done:(id)sender{
+
+- (void) addExfeeToCross{
     NSArray *customobjects=[exfeeList bubbleCustomObjects];
     for(Invitation* invitation in customobjects)
         [(GatherViewController*)gatherview addExfee:invitation];
-    [self dismissModalViewControllerAnimated:YES];    
+    
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void) done:(id)sender{
+    NSString *inputtext=[exfeeList getInput];
+    if(![inputtext isEqualToString:@""])
+        [self addByInputIdentity:inputtext dismiss:YES];
+    else{
+        [self addExfeeToCross];
+    }
 }
 - (IBAction)textDidChange:(UITextField*)textField{
     if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
@@ -293,7 +304,7 @@
         [self changeLeftIconWhite:YES];
     
 }
-- (void) addByInputIdentity:(NSString*)input{
+- (void) addByInputIdentity:(NSString*)input dismiss:(BOOL)shoulddismiss{
     if(ifAddExfeeSend==YES)
         return;
 
@@ -305,21 +316,32 @@
         return;
     }
     
+    NSArray* inputs=[input componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@", "]];
+    
     NSString *json=@"";
-    NSString *provider=[Util findProvider:input];
-    if(![provider isEqualToString:@""]) {
-        if(![json isEqualToString:@""])
-            json=[json stringByAppendingString:@","];
-        json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,input];
+    for(input in inputs){
+        NSString *provider=[Util findProvider:input];
+        if(![provider isEqualToString:@""]) {
+            if(![json isEqualToString:@""])
+                json=[json stringByAppendingString:@","];
+            json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,input];
+        }
     }
     json=[NSString stringWithFormat:@"[%@]",json];
-    
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     RKClient *client = [RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
 
-    NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
+    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Adding...";
+    hud.mode=MBProgressHUDModeCustomView;
+    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+    [bigspin startAnimating];
+    hud.customView=bigspin;
+    [bigspin release];
+
     
+    NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
     RKParams* rsvpParams = [RKParams params];
     [rsvpParams setValue:json forParam:@"identities"];
     [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
@@ -327,6 +349,8 @@
         request.method=RKRequestMethodPOST;
         request.params=rsvpParams;
         request.onDidLoadResponse=^(RKResponse *response){
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+
             if (response.statusCode == 200) {
                 NSDictionary *body=[response.body objectFromJSONData];
                 if([body isKindOfClass:[NSDictionary class]]) {
@@ -338,7 +362,6 @@
                             if(identity!=nil){
                                 [self addBubbleByIdentity:identity input:input];
                                 ifAddExfeeSend=NO;
-
                                 return;
                             }
 
@@ -362,9 +385,11 @@
                                 identity.external_username=external_username;
                                 identity.nickname=nickname;
                                 identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
-                                [self addBubbleByIdentity:identity input:input];
+                                [self addBubbleByIdentity:identity input:name];
                                 ifAddExfeeSend=NO;
                             }
+                            if(shoulddismiss==YES)
+                                [self addExfeeToCross];
                         }
                 }
             }
@@ -372,6 +397,8 @@
 
         };
         request.onDidFailLoadWithError=^(NSError *error){
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+
             ifAddExfeeSend=NO;
         };
         request.delegate=self;
@@ -507,11 +534,10 @@
 //        [self changeLeftIconWhite:NO];
 }
 - (void)OnInputConfirm:(EXBubbleScrollView *)bubbleScrollView textField:(UITextField*)textfield{
-//    [self getIdentity:json];
     NSString *inputtext=[textfield.text stringByTrimmingCharactersInSet:
                          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-    [self addByInputIdentity:inputtext];
+    [self addByInputIdentity:inputtext dismiss:NO];
 }
 - (id)customObject:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
     NSDictionary *dictionary=[[[NSDictionary alloc] initWithObjectsAndKeys:input,@"name",@"id",@"id", nil ] autorelease];
