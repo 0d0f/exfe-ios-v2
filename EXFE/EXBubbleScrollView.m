@@ -15,10 +15,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         
-        UIView *leftview = [[UIView alloc] initWithFrame:CGRectMake(-320, 0, 320, 30)];
-        leftview.backgroundColor=[UIColor whiteColor];
+        leftview = [[UIView alloc] initWithFrame:CGRectMake(-320, 0, 320, self.frame.size.height)];
+        leftview.backgroundColor=FONT_COLOR_HL;
         [self addSubview:leftview];
-        [leftview release];
         
         self.backgroundColor=[UIColor whiteColor];
         
@@ -36,11 +35,11 @@
         inputbackgroundImage.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
         
         backgroundview=[[UIView alloc] initWithFrame:inputframe];
-        backgroundview.backgroundColor=[UIColor whiteColor];
+//        backgroundview.backgroundColor=[UIColor whiteColor];
         [self addSubview:backgroundview];
         bubbles=[[NSMutableArray alloc] initWithCapacity:12];
         
-        input.delegate=self;
+        input.delegate=self; 
         [input setAutocorrectionType:UITextAutocorrectionTypeNo];
         [input setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [input setText:@" "];
@@ -63,6 +62,7 @@
     [bubbles release];
     [input release];
     [backgroundview release];
+    [leftview release];
 	[super dealloc];
 }
 - (void) deleteLastBubble:(EXBubbleScrollView *)bubbleScrollView deletedbubble:(EXBubbleButton*)bubble{
@@ -86,7 +86,8 @@
     backframe.size.width=inputframe.origin.x+inputframe.size.width;
     [backgroundview setFrame:backframe];
     [self deleteLastBubble:self deletedbubble:(EXBubbleButton*)lastbubble];
-    if(inputframe.origin.x+inputframe.size.width<self.contentSize.width){
+    //        if(inputframe.origin.x+inputframe.size.width<self.contentSize.width)
+    if(inputframe.origin.x>self.contentSize.width/3*2) {
         [self setContentSize:CGSizeMake(inputframe.origin.x+input.frame.size.width, self.contentSize.height)];
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.3];
@@ -132,9 +133,8 @@
         int newx=lastbubble.frame.origin.x+lastbubble.frame.size.width;
         rect.origin.x=newx;
     }else{
-        rect.origin.x=0;//6+18+4;
+        rect.origin.x=6+18+4;
     }
-    
     [button setFrame:rect];
     [bubbles addObject:button];
     [backgroundview addSubview:button];
@@ -145,19 +145,22 @@
     if(inputframe.size.width<INPUT_MIN_WIDTH)
         inputframe.size.width=INPUT_MIN_WIDTH;
     [input setFrame:inputframe];
-    
+
     CGRect backframe=backgroundview.frame;
     backframe.size.width=inputframe.origin.x+inputframe.size.width;
     [backgroundview setFrame:backframe];
 
-    if(inputframe.origin.x+inputframe.size.width>self.contentSize.width){
+    if(inputframe.origin.x>self.contentSize.width/3*2){
         [self setContentSize:CGSizeMake(inputframe.origin.x+input.frame.size.width, self.contentSize.height)];
         float offset=self.contentSize.width-self.frame.size.width;
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.3];
         [self setContentOffset:CGPointMake(offset, 0)];
         [UIView commitAnimations];
-        
+        CGRect leftframe=CGRectMake(-320, 0, 320+18+6+6, self.frame.size.height);
+        [leftview setFrame:leftframe];
+        NSLog(@"leftview: %f",leftframe.size.width);
+//        leftview = [[UIView alloc] initWithFrame:CGRectMake(-320, 0, 320, self.frame.size.height)];
     }
     input.text=@" ";
     return YES;

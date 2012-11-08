@@ -66,11 +66,6 @@
     exfeeList.layer.cornerRadius=15;
     [self changeLeftIconWhite:NO];
   
-    UIView *leftestview = [[UIView alloc] initWithFrame:CGRectMake(0-320, 0, 320,exfeeList.frame.size.height)];
-    leftestview.backgroundColor=FONT_COLOR_HL;
-    [exfeeList addSubview:leftestview];
-    [leftestview release];
-    
     UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];
     UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(255+5+5, 7, 50, 31)];
     backimg.image=btn_dark;
