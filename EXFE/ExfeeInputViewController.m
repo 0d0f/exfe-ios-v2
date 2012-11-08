@@ -66,11 +66,6 @@
     exfeeList.layer.cornerRadius=15;
     [self changeLeftIconWhite:NO];
   
-    UIView *leftestview = [[UIView alloc] initWithFrame:CGRectMake(0-320, 0, 320,exfeeList.frame.size.height)];
-    leftestview.backgroundColor=FONT_COLOR_HL;
-    [exfeeList addSubview:leftestview];
-    [leftestview release];
-    
     UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];
     UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(255+5+5, 7, 50, 31)];
     backimg.image=btn_dark;
@@ -188,9 +183,14 @@
 
 - (void) addExfeeToCross{
     NSArray *customobjects=[exfeeList bubbleCustomObjects];
-    for(Invitation* invitation in customobjects)
-        [(GatherViewController*)gatherview addExfee:invitation];
-    
+    NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:[customobjects count]];
+    for(Invitation* invitation in customobjects){
+        if(![dict objectForKey:invitation.identity.identity_id]){
+            [dict setObject:@"" forKey:invitation.identity.identity_id];
+            [(GatherViewController*)gatherview addExfee:invitation];
+        }
+    }
+    [dict release];
     [self dismissModalViewControllerAnimated:YES];
 }
 
@@ -332,6 +332,14 @@
     RKClient *client = [RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
 
+    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Adding...";
+    hud.mode=MBProgressHUDModeCustomView;
+    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+    [bigspin startAnimating];
+    hud.customView=bigspin;
+    [bigspin release];
+
     NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
     RKParams* rsvpParams = [RKParams params];
     [rsvpParams setValue:json forParam:@"identities"];
@@ -340,6 +348,8 @@
         request.method=RKRequestMethodPOST;
         request.params=rsvpParams;
         request.onDidLoadResponse=^(RKResponse *response){
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+
             if (response.statusCode == 200) {
                 NSDictionary *body=[response.body objectFromJSONData];
                 if([body isKindOfClass:[NSDictionary class]]) {
@@ -386,6 +396,8 @@
 
         };
         request.onDidFailLoadWithError=^(NSError *error){
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+
             ifAddExfeeSend=NO;
         };
         request.delegate=self;

@@ -1773,14 +1773,15 @@
 
 #pragma mark EXImagesCollectionView delegate methods
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
-    if(index==[exfeeIdentities count])
+    NSArray* reducedExfeeIdentities=[self getReducedExfeeIdentities];
+    if(index==[reducedExfeeIdentities count])
     {
         if(viewmode==YES && exfeeShowview.editmode==NO)
             return;
         [self ShowGatherToolBar];
         [self ShowExfeeView];
     }
-    else if(index <[exfeeIdentities count]){
+    else if(index <[reducedExfeeIdentities count]){
         [crosstitle resignFirstResponder];
         [crosstitle endEditing:YES];
         BOOL select_status=[[exfeeSelected objectAtIndex:index] boolValue];
@@ -1798,7 +1799,7 @@
             CGRect f=imageCollectionView.frame;
             float x=f.origin.x+rect.origin.x+rect.size.width/2;
             float y=f.origin.y+rect.origin.y;
-            Invitation *invitation=[exfeeIdentities objectAtIndex:index];
+            Invitation *invitation=[reducedExfeeIdentities objectAtIndex:index];
             [self ShowExfeePopOver:invitation pointTo:CGPointMake(x,y) arrowx:rect.origin.x+rect.size.width/2+f.origin.x];
             if(viewmode==YES && exfeeShowview.editmode==NO){
                 [self ShowRsvpToolBar];

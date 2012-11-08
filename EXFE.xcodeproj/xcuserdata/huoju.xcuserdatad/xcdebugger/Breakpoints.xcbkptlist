@@ -494,7 +494,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "468"
          endingLineNumber = "468"
-         landmarkName = "-tableView:didSelectRowAtIndexPath:"
+         landmarkName = "-addExfeeToCross"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1209,7 +1209,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "254"
          endingLineNumber = "254"
-         landmarkName = "-loadIdentitiesFromDataStore:"
+         landmarkName = "-addExfeeToCross"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1495,7 +1495,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "330"
          endingLineNumber = "330"
-         landmarkName = "-addByInputIdentity:dismiss:"
+         landmarkName = "-addExfeeToCross"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1508,7 +1508,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "524"
          endingLineNumber = "524"
-         landmarkName = "-OnInputConfirm:textField:"
+         landmarkName = "-addExfeeToCross"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

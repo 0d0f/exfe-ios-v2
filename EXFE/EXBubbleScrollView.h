@@ -28,7 +28,7 @@
     NSMutableArray *bubbles;
     UITextField *input;
     UIImageView *inputbackgroundImage;
-//    UIImageView *icon;
+    UIView *leftview;
     UIView *backgroundview;
     id <EXBubbleScrollViewDelegate> _exdelegate;
 }
