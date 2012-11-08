@@ -42,9 +42,10 @@
 - (IBAction)editingDidBegan:(UITextField*)textField;
 - (IBAction)editingDidEnd:(UITextField*)textField;
 //- (void) addByText;
-- (void) addByInputIdentity:(NSString*)input;
+- (void) addByInputIdentity:(NSString*)input dismiss:(BOOL)shoulddismiss;
 - (void) loadIdentitiesFromDataStore:(NSString*)input;
 - (void) changeLeftIconWhite:(BOOL)iswhite;
 - (void) ErrorHint:(BOOL)hidden content:(NSString*)content;
 - (BOOL) showErrorHint;
+- (void) addExfeeToCross;
 @end

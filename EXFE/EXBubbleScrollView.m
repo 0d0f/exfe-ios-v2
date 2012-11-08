@@ -24,7 +24,7 @@
         
         input=[[UITextField alloc] initWithFrame:CGRectMake(6+18+4, 0, self.frame.size.width, 30)];
         [input setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
-        [input setReturnKeyType:UIReturnKeySearch];
+        [input setReturnKeyType:UIReturnKeyDefault];
         
         input.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         CGRect inputframe=input.frame;
