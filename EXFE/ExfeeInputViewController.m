@@ -183,8 +183,13 @@
 
 - (void) addExfeeToCross{
     NSArray *customobjects=[exfeeList bubbleCustomObjects];
-    for(Invitation* invitation in customobjects)
-        [(GatherViewController*)gatherview addExfee:invitation];
+    NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:[customobjects count]];
+    for(Invitation* invitation in customobjects){
+        if(![dict objectForKey:invitation.identity.identity_id]){
+            [dict setObject:@"" forKey:invitation.identity.identity_id];
+            [(GatherViewController*)gatherview addExfee:invitation];
+        }
+    }
     
     [self dismissModalViewControllerAnimated:YES];
 }
