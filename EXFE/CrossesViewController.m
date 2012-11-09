@@ -381,7 +381,6 @@
                                 NSNumber *identity_id=[obj objectForKey:@"identity_id"];
                                 if([self isIdentityBelongsMe:[identity_id intValue]]==NO)
                                     notification++;
-
                             }
                         }
                     }

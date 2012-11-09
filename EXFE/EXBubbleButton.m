@@ -32,8 +32,8 @@
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextSaveGState(currentContext);
     CGContextBeginPath(currentContext);
-    CGContextMoveToPoint(currentContext, rect.size.width, 0);
-    CGContextAddLineToPoint(currentContext, rect.size.width, rect.size.height);
+    CGContextMoveToPoint(currentContext, rect.size.width-0.5, 0);
+    CGContextAddLineToPoint(currentContext, rect.size.width-0.5, rect.size.height);
     CGContextSetLineWidth(currentContext, 1);
     CGContextStrokePath(currentContext);
     CGContextRestoreGState(currentContext);
@@ -41,8 +41,8 @@
     [[UIColor colorWithRed:1 green:1 blue:1 alpha:0.25] set];
     CGContextSaveGState(currentContext);
     CGContextBeginPath(currentContext);
-    CGContextMoveToPoint(currentContext, 0, 0);
-    CGContextAddLineToPoint(currentContext, 0, rect.size.height);
+    CGContextMoveToPoint(currentContext, 0.5, 0);
+    CGContextAddLineToPoint(currentContext, 0.5, rect.size.height);
     CGContextSetLineWidth(currentContext, 1);
     CGContextStrokePath(currentContext);
     CGContextRestoreGState(currentContext);
