@@ -39,4 +39,5 @@
 - (void)inputTextChange:(NSNotification *)notification;
 - (NSString*)getInput;
 - (int) bubblecount;
+- (void) hiddenkeyboard;
 @end

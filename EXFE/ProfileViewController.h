@@ -12,8 +12,9 @@
 #import "User.h"
 #import "Util.h"
 #import "FullScreenViewController.h"
+#import "AddIdentityViewController.h"
 
-@interface ProfileViewController : UIViewController{
+@interface ProfileViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
     IBOutlet UIToolbar* toolbar;
     UIImageView* useravatar;
     UILabel* username;
@@ -32,4 +33,5 @@
 - (void)touchesBegan:(UITapGestureRecognizer*)sender;
 - (void)loadObjectsFromDataStore;
 - (void) Logout;
+- (void) refreshIdentities;
 @end

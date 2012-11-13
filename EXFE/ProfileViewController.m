@@ -40,13 +40,24 @@
     tableview.opaque = NO;
     tableview.backgroundView = nil;
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
+    [gestureRecognizer setCancelsTouchesInView:NO];
     [tableview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
     
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     [tableview reloadData];
+    tableview.delegate=self;
+    tableview.dataSource=self;
     [self loadObjectsFromDataStore];
+    [self refreshIdentities];
+//    [APIProfile LoadUsrWithUserId:app.userid delegate:self];
+//    tableview.delegate=self;
+//    tableview.dataSource=self;
+    
+}
 
+- (void) refreshIdentities{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     [APIProfile LoadUsrWithUserId:app.userid delegate:self];
 }
 
@@ -135,12 +146,15 @@
         
         for (Identity *identity in user.identities)
         {
-            if([identity.provider isEqualToString:@"iOSAPN"]|| [identity.provider isEqualToString:@"Android"])
+            if([identity.status isEqualToString:@"CONNECTED"] || [identity.status isEqualToString:@"VERIFYING"])
             {
-                [devices_section addObject:identity];
-            }
-            else {
-                [identities_section addObject:identity];
+                if([identity.provider isEqualToString:@"iOSAPN"]|| [identity.provider isEqualToString:@"Android"])
+                {
+                    [devices_section addObject:identity];
+                }
+                else {
+                    [identities_section addObject:identity];
+                }
             }
         }
         [identitiesData addObject:identities_section];
@@ -171,7 +185,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[identitiesData objectAtIndex:section] count];
+    int count=[[identitiesData objectAtIndex:section] count];
+    if(section==0)
+        count=count+1;
+    return count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -183,20 +200,17 @@
         [[NSBundle mainBundle] loadNibNamed:@"ProfileCellView" owner:self options:nil];
         cell = tblCell;
     }
+    if([indexPath section]==0 && indexPath.row==[[identitiesData objectAtIndex:0] count]){
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"addidentitybutton"];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"addidentitybutton"] autorelease];
+        }
+        cell.textLabel.text=@"Add identity...";
+        return cell;
+    }
     Identity *identity=[[identitiesData objectAtIndex:[indexPath section]]  objectAtIndex:indexPath.row];
-//    Identity *identity=[[user.identities allObjects] objectAtIndex:indexPath.row];
-//    if(![identity.name isEqualToString:@""])
-//        [cell setLabelName:identity.name];
-//    else
-//        [cell setLabelName:identity.external_username];
-//
-//    if([identity.provider isEqualToString:@"email"])
-//        [cell setLabelIdentity:identity.external_id];
-//    else{
-//        [cell setLabelIdentity:[NSString stringWithFormat:@"%@@%@",identity.external_username,identity.provider]];
-//    }
-//
-//    [cell setLabelStatus:1];
+    
     if([indexPath section]==0)
     {
         if(identity.avatar_filename==nil || [identity.avatar_filename isEqualToString:@""] )
@@ -228,8 +242,14 @@
             UIImage *icon=[UIImage imageNamed:iconname];
             [cell setProvider:icon];
         }
-
         
+        
+        if(![identity.status isEqualToString:@"CONNECTED"])
+        {
+            NSString *statusname=[NSString stringWithFormat:@"Icon.png"];
+            UIImage *statusnameicon=[UIImage imageNamed:statusname];
+            [cell setStatus:statusnameicon];
+        }
         return cell;
     }
     else
@@ -348,6 +368,24 @@
     //return the view for the footer
     return footerView;
 }
+
+#pragma mark UITableViewDelegate methods
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    int count=[[identitiesData objectAtIndex:indexPath.section] count];
+    if(indexPath.section==0 && count==indexPath.row){
+        AddIdentityViewController *addidentityView=[[[AddIdentityViewController alloc]initWithNibName:@"AddIdentityViewController" bundle:nil] autorelease];
+//        CGRect inFrame = [addidentityView.view frame];
+//        CGRect outFrame = [self.view frame];
+//        outFrame.origin.y -= inFrame.size.height;
+        addidentityView.profileview=self;
+        [self.navigationController pushViewController:addidentityView animated:YES];
+
+//        [self presentModalViewController:addidentityView animated:YES];
+
+    }
+}
+
 
 - (void) Logout {
     [Util signout];

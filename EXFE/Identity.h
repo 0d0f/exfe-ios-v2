@@ -2,8 +2,8 @@
 //  Identity.h
 //  EXFE
 //
-//  Created by ju huo on 5/30/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by huoju on 11/13/12.
+//
 //
 
 #import <Foundation/Foundation.h>
@@ -23,6 +23,8 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * nickname;
 @property (nonatomic, retain) NSString * provider;
+@property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSString * updated_at;
+@property (nonatomic, retain) NSString * status;
 
 @end

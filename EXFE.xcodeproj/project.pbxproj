@@ -16,6 +16,11 @@
 		780D4CF51609D68800D4D080 /* x_navbarbtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 780D4CF31609D66000D4D080 /* x_navbarbtn.png */; };
 		780D4CF61609D68800D4D080 /* x_navbarbtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780D4CF41609D67200D4D080 /* x_navbarbtn@2x.png */; };
 		780D4CF81609D9AA00D4D080 /* portrait_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780D4CF71609D99700D4D080 /* portrait_default@2x.png */; };
+		780EAC151650D94A00953D75 /* AddIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 780EAC131650D94900953D75 /* AddIdentityViewController.m */; };
+		780EAC161650D94A00953D75 /* AddIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 780EAC141650D94900953D75 /* AddIdentityViewController.xib */; };
+		780EAC27165215E800953D75 /* OAuthAddIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 780EAC25165215E700953D75 /* OAuthAddIdentityViewController.m */; };
+		780EAC28165215E800953D75 /* OAuthAddIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 780EAC26165215E700953D75 /* OAuthAddIdentityViewController.xib */; };
+		780EAC2F165224F100953D75 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 780EAC2E165224F100953D75 /* Identity.m */; };
 		7811789F15DA81E900A4BBCF /* identity_email_18_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 7811787915DA81E900A4BBCF /* identity_email_18_grey.png */; };
 		781178A015DA81E900A4BBCF /* identity_email_18_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7811787A15DA81E900A4BBCF /* identity_email_18_grey@2x.png */; };
 		781178A115DA81E900A4BBCF /* identity_email_18.png in Resources */ = {isa = PBXBuildFile; fileRef = 7811787B15DA81E900A4BBCF /* identity_email_18.png */; };
@@ -153,7 +158,6 @@
 		7872822515FDE7660024EC17 /* gather_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 7872822215FDE7660024EC17 /* gather_blue.png */; };
 		7872822615FDE7660024EC17 /* gather_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7872822315FDE7660024EC17 /* gather_blue@2x.png */; };
 		7876512E1575F23100E3DFD9 /* x_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 7876512C1575F23100E3DFD9 /* x_background.png */; };
-		7876513415760A4900E3DFD9 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 7876513315760A4800E3DFD9 /* Identity.m */; };
 		7879869E15DA85F500AA631B /* portrait_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7879869D15DA85F500AA631B /* portrait_default.png */; };
 		787986A815DA86F000AA631B /* exfee_frame_host.png in Resources */ = {isa = PBXBuildFile; fileRef = 787986A015DA86F000AA631B /* exfee_frame_host.png */; };
 		787986A915DA86F000AA631B /* exfee_frame_host@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 787986A115DA86F000AA631B /* exfee_frame_host@2x.png */; };
@@ -402,6 +406,14 @@
 		780D4CF31609D66000D4D080 /* x_navbarbtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_navbarbtn.png; sourceTree = "<group>"; };
 		780D4CF41609D67200D4D080 /* x_navbarbtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x_navbarbtn@2x.png"; sourceTree = "<group>"; };
 		780D4CF71609D99700D4D080 /* portrait_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_default@2x.png"; sourceTree = "<group>"; };
+		780EAC121650D94900953D75 /* AddIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddIdentityViewController.h; sourceTree = "<group>"; };
+		780EAC131650D94900953D75 /* AddIdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddIdentityViewController.m; sourceTree = "<group>"; };
+		780EAC141650D94900953D75 /* AddIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddIdentityViewController.xib; sourceTree = "<group>"; };
+		780EAC24165215E700953D75 /* OAuthAddIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthAddIdentityViewController.h; sourceTree = "<group>"; };
+		780EAC25165215E700953D75 /* OAuthAddIdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthAddIdentityViewController.m; sourceTree = "<group>"; };
+		780EAC26165215E700953D75 /* OAuthAddIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAuthAddIdentityViewController.xib; sourceTree = "<group>"; };
+		780EAC2D165224F000953D75 /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
+		780EAC2E165224F100953D75 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		7811787915DA81E900A4BBCF /* identity_email_18_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity_email_18_grey.png; sourceTree = "<group>"; };
 		7811787A15DA81E900A4BBCF /* identity_email_18_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity_email_18_grey@2x.png"; sourceTree = "<group>"; };
 		7811787B15DA81E900A4BBCF /* identity_email_18.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity_email_18.png; sourceTree = "<group>"; };
@@ -570,8 +582,6 @@
 		7876512C1575F23100E3DFD9 /* x_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_background.png; sourceTree = "<group>"; };
 		7876512F1576093500E3DFD9 /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
 		787651301576093500E3DFD9 /* Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
-		7876513215760A4800E3DFD9 /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
-		7876513315760A4800E3DFD9 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		7879869D15DA85F500AA631B /* portrait_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_default.png; sourceTree = "<group>"; };
 		787986A015DA86F000AA631B /* exfee_frame_host.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exfee_frame_host.png; sourceTree = "<group>"; };
 		787986A115DA86F000AA631B /* exfee_frame_host@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfee_frame_host@2x.png"; sourceTree = "<group>"; };
@@ -831,6 +841,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		780EAC29165215EE00953D75 /* AddIdentity */ = {
+			isa = PBXGroup;
+			children = (
+				780EAC24165215E700953D75 /* OAuthAddIdentityViewController.h */,
+				780EAC25165215E700953D75 /* OAuthAddIdentityViewController.m */,
+				780EAC26165215E700953D75 /* OAuthAddIdentityViewController.xib */,
+				780EAC121650D94900953D75 /* AddIdentityViewController.h */,
+				780EAC131650D94900953D75 /* AddIdentityViewController.m */,
+				780EAC141650D94900953D75 /* AddIdentityViewController.xib */,
+			);
+			name = AddIdentity;
+			sourceTree = "<group>";
+		};
 		7811787815DA81CE00A4BBCF /* identity */ = {
 			isa = PBXGroup;
 			children = (
@@ -900,6 +923,7 @@
 		782B3CC7156B918B00721150 /* User */ = {
 			isa = PBXGroup;
 			children = (
+				780EAC29165215EE00953D75 /* AddIdentity */,
 				78CAE88C15F51E6E00C2BAF2 /* WelcomeView.h */,
 				78CAE88D15F51E6E00C2BAF2 /* WelcomeView.m */,
 				782B3CB4156B809F00721150 /* LandingViewController.h */,
@@ -1266,14 +1290,14 @@
 				78920EBB157CB0E1004F3901 /* Rsvp.m */,
 				780D27A2157F368800402460 /* Post.h */,
 				780D27A3157F368900402460 /* Post.m */,
-				7876513215760A4800E3DFD9 /* Identity.h */,
-				7876513315760A4800E3DFD9 /* Identity.m */,
 				7876512F1576093500E3DFD9 /* Invitation.h */,
 				787651301576093500E3DFD9 /* Invitation.m */,
 				782B3C9A156A519D00721150 /* Exfee.h */,
 				782B3C9B156A519D00721150 /* Exfee.m */,
 				78AF496215FBAF09004B1EBB /* Place.h */,
 				78AF496315FBAF09004B1EBB /* Place.m */,
+				780EAC2D165224F000953D75 /* Identity.h */,
+				780EAC2E165224F100953D75 /* Identity.m */,
 			);
 			name = Class;
 			sourceTree = "<group>";
@@ -1870,6 +1894,8 @@
 				780D4CF51609D68800D4D080 /* x_navbarbtn.png in Resources */,
 				780D4CF61609D68800D4D080 /* x_navbarbtn@2x.png in Resources */,
 				780D4CF81609D9AA00D4D080 /* portrait_default@2x.png in Resources */,
+				780EAC161650D94A00953D75 /* AddIdentityViewController.xib in Resources */,
+				780EAC28165215E800953D75 /* OAuthAddIdentityViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1895,7 +1921,6 @@
 				7840917915732A91006DF115 /* ConversationViewController.m in Sources */,
 				788312A815738D6100D67103 /* CrossCell.m in Sources */,
 				788312AB1574A63600D67103 /* ImgCache.m in Sources */,
-				7876513415760A4900E3DFD9 /* Identity.m in Sources */,
 				78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */,
 				78920EBC157CB0E1004F3901 /* Rsvp.m in Sources */,
 				780D27A4157F368900402460 /* Post.m in Sources */,
@@ -1951,6 +1976,9 @@
 				78AF496415FBAF0A004B1EBB /* Place.m in Sources */,
 				7852709C15FC7A1E001AF618 /* EXSpinView.m in Sources */,
 				78B46B6E15FC89DB006738D7 /* MBProgressHUD.m in Sources */,
+				780EAC151650D94A00953D75 /* AddIdentityViewController.m in Sources */,
+				780EAC27165215E800953D75 /* OAuthAddIdentityViewController.m in Sources */,
+				780EAC2F165224F100953D75 /* Identity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

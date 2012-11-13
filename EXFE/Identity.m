@@ -2,8 +2,8 @@
 //  Identity.m
 //  EXFE
 //
-//  Created by ju huo on 5/30/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by huoju on 11/13/12.
+//
 //
 
 #import "Identity.h"
@@ -22,6 +22,8 @@
 @dynamic name;
 @dynamic nickname;
 @dynamic provider;
+@dynamic type;
 @dynamic updated_at;
+@dynamic status;
 
 @end

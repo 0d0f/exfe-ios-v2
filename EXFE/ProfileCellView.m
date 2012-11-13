@@ -44,7 +44,7 @@
     cellIdentity.text=_text;
 }
 
-- (void)setCellStatus:(UIImage *)_img
+- (void)setStatus:(UIImage *)_img
 {
     cellStatus.image =_img;
 }

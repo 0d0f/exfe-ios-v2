@@ -86,16 +86,17 @@
     backframe.size.width=inputframe.origin.x+inputframe.size.width;
     [backgroundview setFrame:backframe];
     [self deleteLastBubble:self deletedbubble:(EXBubbleButton*)lastbubble];
-    //        if(inputframe.origin.x+inputframe.size.width<self.contentSize.width)
-    if(inputframe.origin.x>self.contentSize.width/3*2) {
+//    if(inputframe.origin.x>self.contentSize.width/3*2) {
         [self setContentSize:CGSizeMake(inputframe.origin.x+input.frame.size.width, self.contentSize.height)];
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.3];
         float offset=self.contentSize.width-self.frame.size.width;
         [self setContentOffset:CGPointMake(offset, 0)];
         [UIView commitAnimations];
+//    }
+    if([bubbles count]==0){
+        leftview.backgroundColor=[UIColor clearColor];
     }
-
 }
 
 -(BOOL) addBubble:(NSString*)title customObject:(id)customobject{
@@ -207,5 +208,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [_exdelegate scrollViewDidScroll:scrollView];
 }
-
+- (void) hiddenkeyboard{
+    [input resignFirstResponder];
+}
 @end

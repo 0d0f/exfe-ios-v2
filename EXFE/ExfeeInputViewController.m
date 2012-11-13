@@ -83,6 +83,7 @@
     
 }
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [exfeeList hiddenkeyboard];
 }
 
 - (void) changeLeftIconWhite:(BOOL)iswhite{

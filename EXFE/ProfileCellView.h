@@ -19,7 +19,7 @@
 }
 - (void)setLabelName:(NSString *)_text;
 - (void)setLabelIdentity:(NSString *)_text;
-- (void)setCellStatus:(UIImage *)_img;
+- (void)setStatus:(UIImage *)_img;
 - (void)setAvartar:(UIImage*)_img;
 - (void)setLabelStatus:(int)type;
 - (void)IsThisDevice:(NSString*)devicename;
