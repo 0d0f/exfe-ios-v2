@@ -32,10 +32,10 @@
     
     signintoolbar=[[SigninIconToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 50) style:@"signin" delegate:self];
     signintoolbar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"signinbar_bg.png"]];
-    [self.view addSubview:signintoolbar];
+//    [self.view addSubview:signintoolbar];
     
     UIImage *textfieldback = [UIImage imageNamed:@"textfield_bg_rect.png"];
-    identitybackimg=[[UIImageView alloc] initWithFrame:CGRectMake(20, 70, 230, 41)];
+    identitybackimg=[[UIImageView alloc] initWithFrame:CGRectMake(60, 18, 230, 41)];
     identitybackimg.image=textfieldback;
     identitybackimg.contentMode=UIViewContentModeScaleToFill;
     identitybackimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
@@ -47,7 +47,7 @@
     divider.contentMode=UIViewContentModeScaleToFill;
     divider.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
     [divider setHidden:YES];
-    [self.view addSubview:divider];
+//    [self.view addSubview:divider];
     
     
     identityLeftIcon=[[UIImageView alloc] initWithFrame:CGRectMake(6, 12, 18, 18)];
@@ -55,11 +55,11 @@
     [identitybackimg addSubview:identityLeftIcon];
     
     identityRightButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    [identityRightButton setFrame:CGRectMake(identitybackimg.frame.origin.x+230-18-6, 81, 18, 18)];
+    [identityRightButton setFrame:CGRectMake(identitybackimg.frame.origin.x+230-18-6, 18+11.5, 18, 18)];
     [identityRightButton addTarget:self action:@selector(clearIdentity) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:identityRightButton];
     
-    textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 70, 230-(6+18+6)*2, 40)];
+    textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 18, 230-(6+18+6)*2, 40)];
     textUsername.placeholder=@"Enter your email";
     textUsername.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     textUsername.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
@@ -72,10 +72,10 @@
     [self.view addSubview:textUsername];
     [textUsername becomeFirstResponder];
     
-    avatarview=[[UIImageView alloc] initWithFrame:CGRectMake(260, 70, 40, 40)];
+    avatarview=[[UIImageView alloc] initWithFrame:CGRectMake(20, 18, 40, 40)];
     avatarview.image=nil;
     [self.view addSubview:avatarview];
-    avatarframeview=[[UIImageView alloc] initWithFrame:CGRectMake(260, 70, 40, 41)];
+    avatarframeview=[[UIImageView alloc] initWithFrame:CGRectMake(20, 18, 40, 41)];
     avatarframeview.image=nil;
     [self.view addSubview:avatarframeview];
     
@@ -159,6 +159,7 @@
 //                [MBProgressHUD hideHUDForView:self.view animated:YES];
                 if (response.statusCode == 200) {
                     NSDictionary *body=[response.body objectFromJSONData];
+                    NSLog(@"%@",body);
                     if([body isKindOfClass:[NSDictionary class]]) {
                         id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                         if(code)
@@ -226,6 +227,8 @@
             //                [MBProgressHUD hideHUDForView:self.view animated:YES];
             if (response.statusCode == 200) {
                 NSDictionary *body=[response.body objectFromJSONData];
+//                NSLog(@"%@",response.bodyAsString);
+
                 if([body isKindOfClass:[NSDictionary class]]) {
                     id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                     if(code){
@@ -233,7 +236,6 @@
                             NSDictionary *responseobj=[body objectForKey:@"response"];
                             if([responseobj isKindOfClass:[NSDictionary class]]){
                                 if([responseobj objectForKey:@"url"]!=nil){
-                                    NSLog(@"redirect_to_oauthurl: %@",[responseobj objectForKey:@"url"]);
                                     OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
                                     oauth.parentView=self;
                                     oauth.oauth_url=[responseobj objectForKey:@"url"];
@@ -243,7 +245,6 @@
 
                                     [((ProfileViewController*)profileview) refreshIdentities];
                                     [self.navigationController popViewControllerAnimated:YES];
-//                                    [self dismissModalViewControllerAnimated:YES];
                                 }
                             }
                         }
@@ -270,9 +271,58 @@
 }
 
 - (void) TwitterSigninButtonPress:(id)sender{
-    OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
-    [self presentModalViewController:oauth animated:YES];
-    [oauth release];
+    RKParams* rsvpParams = [RKParams params];
+    NSString *provider=@"twitter";
+    
+    [rsvpParams setValue:@"" forParam:@"external_username"];
+    NSString *callback=@"oauth://handleOAuthAddIdentity";
+    [rsvpParams setValue:callback forParam:@"device_callback"];
+    [rsvpParams setValue:@"iOS" forParam:@"device"];
+    [rsvpParams setValue:provider forParam:@"provider"];
+
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/addIdentity",app.userid];
+
+    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+    [client post:endpoint usingBlock:^(RKRequest *request){
+        request.method=RKRequestMethodPOST;
+        request.params=rsvpParams;
+        request.onDidLoadResponse=^(RKResponse *response){
+            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            if (response.statusCode == 200) {
+                NSDictionary *body=[response.body objectFromJSONData];
+                if([body isKindOfClass:[NSDictionary class]]) {
+                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                    if(code){
+                        if([code intValue]==200) {
+                            NSDictionary *responseobj=[body objectForKey:@"response"];
+                            if([responseobj isKindOfClass:[NSDictionary class]]){
+                                if([responseobj objectForKey:@"url"]!=nil){
+                                    OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
+                                    oauth.parentView=self;
+                                    oauth.oauth_url=[responseobj objectForKey:@"url"];
+                                    [self presentModalViewController:oauth animated:YES];
+                                }
+                            }
+                        }
+                        else{
+                            if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
+                                NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
+                            }
+                        }
+                    }
+                }
+            }
+            
+        };
+        request.onDidFailLoadWithError=^(NSError *error){
+            NSLog(@"error %@",error);
+            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
+        };
+    }];
+
 }
 
 - (void)didReceiveMemoryWarning

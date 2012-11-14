@@ -497,6 +497,11 @@
     if([twitterTest evaluateWithObject:external_id]==YES)
         return @"twitter";
     
+    NSString *facebookRegex = @"[A-Z0-9a-z._%+-]+@facebook";
+    NSPredicate *facebookTest = [NSPredicate predicateWithFormat:@"SELF MATCHES[c] %@", facebookRegex];
+    if([facebookTest evaluateWithObject:external_id]==YES)
+        return @"facebook";
+    
     return @"";
 }
 + (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime{

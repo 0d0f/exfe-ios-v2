@@ -20,6 +20,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        
         // Custom initialization
     }
     return self;
@@ -52,7 +53,7 @@
     [toolbar addSubview:cancelbutton];
     
     titlelabel=[[UILabel alloc] initWithFrame:CGRectMake(65, 10, 230, 24)];
-    titlelabel.text=@"Twitter Authorization";
+    titlelabel.text=@"Authorization";
     titlelabel.backgroundColor=[UIColor clearColor];
     titlelabel.textAlignment=UITextAlignmentCenter;
     [titlelabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:20]];
@@ -61,8 +62,8 @@
     [titlelabel setTextColor:[UIColor whiteColor]];
     [toolbar addSubview:titlelabel];
     [self.view addSubview:toolbar];
+    
     [webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:oauth_url]]];
-        
 }
 
 - (BOOL)webView:(UIWebView *)webview shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
