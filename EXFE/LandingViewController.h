@@ -29,6 +29,7 @@
 
 - (IBAction) SigninButtonPress:(id) sender;
 - (void)TwitterSigninButtonPress:(id)sender;
+- (void)FacebookSigninButtonPress:(id)sender;
 - (void)SigninDidFinish;
 - (void)dismissSigninView;
 @end

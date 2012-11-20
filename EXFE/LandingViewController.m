@@ -42,6 +42,14 @@
 }
 - (void)TwitterSigninButtonPress:(id)sender{
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+    oauth.provider=@"twitter";
+    oauth.delegate=signindelegate;
+    [self presentModalViewController:oauth animated:YES];
+}
+
+- (void)FacebookSigninButtonPress:(id)sender{
+    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+    oauth.provider=@"facebook";
     oauth.delegate=signindelegate;
     [self presentModalViewController:oauth animated:YES];
 }

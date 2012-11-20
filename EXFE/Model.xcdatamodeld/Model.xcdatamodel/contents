@@ -47,6 +47,7 @@
         <attribute name="identity_id" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="provider" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
@@ -113,7 +114,7 @@
         <element name="CrossTime" positionX="135" positionY="135" width="128" height="90"/>
         <element name="EFTime" positionX="144" positionY="144" width="128" height="120"/>
         <element name="Exfee" positionX="160" positionY="192" width="128" height="120"/>
-        <element name="Identity" positionX="160" positionY="267" width="128" height="255"/>
+        <element name="Identity" positionX="160" positionY="267" width="128" height="270"/>
         <element name="Invitation" positionX="160" positionY="192" width="128" height="195"/>
         <element name="Meta" positionX="160" positionY="192" width="128" height="90"/>
         <element name="Place" positionX="160" positionY="192" width="128" height="195"/>

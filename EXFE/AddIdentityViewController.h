@@ -15,7 +15,7 @@
 #import "OAuthAddIdentityViewController.h"
 #import "EXSpinView.h"
 #import "ImgCache.h"
-
+#import "MBProgressHUD.h"
 
 @interface AddIdentityViewController : UIViewController{
     SigninIconToolbarView *signintoolbar;
@@ -38,12 +38,17 @@
     EXSpinView *spin;
     
     UIViewController *profileview;
+    IBOutlet UILabel *identityhint;
 }
 @property (nonatomic,retain) UIViewController* profileview;
 
 - (void) getUser;
 - (void) addIdentity:(id) sender;
 - (void) TwitterSigninButtonPress:(id)sender;
+- (void) FacebookSigninButtonPress:(id)sender;
 - (void) oauthSuccess;
+- (void) clearIdentity;
+- (void) doOAuth:(NSString*)provider;
+- (void) MoreButtonPress:(id)sender;
 
 @end

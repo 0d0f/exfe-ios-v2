@@ -20,9 +20,11 @@
     bool firstLoading;
     UIButton *cancelbutton;
     UILabel *titlelabel;
+    NSString *provider;
 }
 @property (nonatomic, assign) id <OAuthLoginViewControllerDelegate> delegate;
 @property (nonatomic, assign)  UIWebView* webView;
+@property (nonatomic,retain) NSString *provider;
 
 
 @end

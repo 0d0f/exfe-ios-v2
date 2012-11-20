@@ -9,6 +9,7 @@
 #import "ProfileCellView.h"
 
 @implementation ProfileCellView
+@synthesize identity_id;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -46,7 +47,9 @@
 
 - (void)setStatus:(UIImage *)_img
 {
-    cellStatus.image =_img;
+//    cellStatus.image =_img;
+    [verify setImage:_img forState:UIControlStateNormal];
+    verify.tag=self.identity_id;
 }
 - (void)setLabelStatus:(int)type
 {
@@ -62,4 +65,14 @@
         isThisDevice.text=devicename;
     [isThisDevice setHidden:NO];
 }
+- (void)setVerifyAction:(id)target action:(SEL)action{
+    [verify addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)setStatusText:(NSString*)_text{
+    statustext.text=_text;
+}
+//- (IBAction)verify:(id)sender{
+//    NSLog(@"verify");
+//}
 @end

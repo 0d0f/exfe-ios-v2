@@ -12,7 +12,7 @@
 #import "APIProfile.h"
 #import "CrossesViewController.h"
 #import "LandingViewController.h"
-#define DBNAME @"exfe_v2_0.sqlite"
+#define DBNAME @"exfe_v2_2.sqlite"
 
 @implementation AppDelegate
 @synthesize userid;
@@ -36,6 +36,16 @@
                                              selector:@selector(observeContextSave:)
                                                  name:NSManagedObjectContextDidSaveNotification
                                                object:nil];
+    NSNumber* db_version=[[NSUserDefaults standardUserDefaults] objectForKey:@"db_version"];
+    
+    if(db_version==nil || [db_version intValue]<APP_DB_VERSION){
+        
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
+    }
+
+
+    
 #ifdef RESTKIT_GENERATE_SEED_DB
     NSString *seedDatabaseName = nil;
     NSString *databaseName = DBNAME;
@@ -108,7 +118,9 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
+    if(self.userid>0){
+        [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
+    }
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

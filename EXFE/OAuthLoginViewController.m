@@ -15,6 +15,7 @@
 @implementation OAuthLoginViewController
 @synthesize webView;
 @synthesize delegate;
+@synthesize provider;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -78,7 +79,11 @@
     [toolbar addSubview:cancelbutton];
     
     titlelabel=[[UILabel alloc] initWithFrame:CGRectMake(65, 10, 230, 24)];
-    titlelabel.text=@"Twitter Authorization";
+    if([provider isEqualToString:@"twitter"])
+        titlelabel.text=@"Twitter Authorization";
+    if([provider isEqualToString:@"facebook"])
+        titlelabel.text=@"Facebook Authorization";
+    
     titlelabel.backgroundColor=[UIColor clearColor];
     titlelabel.textAlignment=UITextAlignmentCenter;
     [titlelabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:20]];
@@ -89,7 +94,13 @@
     [self.view addSubview:toolbar];
     
     NSString *callback=@"oauth://handleTwitterLogin";
-    NSString *urlstr=[NSString stringWithFormat:@"%@/TwitterAuthenticate?device=iOS&device_callback=%@",EXFE_OAUTH_LINK,callback];
+    NSString *urlstr=[NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=twitter",EXFE_OAUTH_LINK,callback];
+    
+    if([provider isEqualToString:@"facebook"]){
+        callback=@"oauth://handleFacebookLogin";
+        urlstr=[NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=facebook",EXFE_OAUTH_LINK,callback];
+    }
+
     
     firstLoading=YES;
     [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstr]]];
@@ -101,7 +112,7 @@
 
 - (BOOL)webView:(UIWebView *)webview shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     NSString *URLString = [[request URL] absoluteString];
-    if ([URLString rangeOfString:@"token="].location != NSNotFound && [URLString rangeOfString:@"oauth://handleTwitterLogin"].location != NSNotFound) {
+    if ([URLString rangeOfString:@"token="].location != NSNotFound && ([URLString rangeOfString:@"oauth://handleTwitterLogin"].location != NSNotFound || [URLString rangeOfString:@"oauth://handleFacebookLogin"].location != NSNotFound)) {
         URLParser *parser = [[[URLParser alloc] initWithURLString:URLString] autorelease];
         NSString *err = [parser valueForVariable:@"err"];
         if(!err)

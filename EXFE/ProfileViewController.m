@@ -36,6 +36,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"x_bg.png"]]];
+
     tableview.backgroundColor = [UIColor clearColor];
     tableview.opaque = NO;
     tableview.backgroundView = nil;
@@ -157,7 +159,13 @@
                 }
             }
         }
-        [identitiesData addObject:identities_section];
+        NSArray *sorted_identities_section;
+        sorted_identities_section = [identities_section sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            
+            return [[(Identity*)a order] compare:[(Identity*)b order]];
+        }];
+        
+        [identitiesData addObject:[[sorted_identities_section mutableCopy] autorelease]  ];
         [identitiesData addObject:devices_section];
         [devices_section release];
         [identities_section release];
@@ -243,12 +251,19 @@
             [cell setProvider:icon];
         }
         
-        
+        [cell setStatusText:@""];
+
+        cell.identity_id=[identity.identity_id intValue];
         if(![identity.status isEqualToString:@"CONNECTED"])
         {
-            NSString *statusname=[NSString stringWithFormat:@"Icon.png"];
+            NSString *statusname=[NSString stringWithFormat:@"exclamation.png"];
             UIImage *statusnameicon=[UIImage imageNamed:statusname];
             [cell setStatus:statusnameicon];
+            [cell setVerifyAction:self action:@selector(showAlert:)];
+            if([identity.status isEqualToString:@"VERIFYING"])
+                [cell setStatusText:@"Verifying..."];
+            else
+                [cell setStatusText:@"revoked"];
         }
         return cell;
     }
@@ -306,10 +321,10 @@
             username.backgroundColor=[UIColor clearColor];
             username.lineBreakMode=UILineBreakModeWordWrap;
             username.numberOfLines = 0;
-            username.textColor=[UIColor whiteColor];
+            username.textColor=FONT_COLOR_51;
             username.font=[UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
-            username.shadowColor=[UIColor blackColor];
-            username.shadowOffset=CGSizeMake(0, -1);
+            username.shadowColor=[UIColor whiteColor];
+            username.shadowOffset=CGSizeMake(0, 1);
             [headerView addSubview:username];
             if(users!=nil && [users count] >0)
             {
@@ -356,7 +371,7 @@
         [buttonsignout setTitle:@"Sign Out" forState:UIControlStateNormal];
         [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
         [buttonsignout setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
-        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
+        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
 
         
         [buttonsignout setFrame:CGRectMake(200, 10, 100, 44)];
@@ -375,21 +390,219 @@
     int count=[[identitiesData objectAtIndex:indexPath.section] count];
     if(indexPath.section==0 && count==indexPath.row){
         AddIdentityViewController *addidentityView=[[[AddIdentityViewController alloc]initWithNibName:@"AddIdentityViewController" bundle:nil] autorelease];
-//        CGRect inFrame = [addidentityView.view frame];
-//        CGRect outFrame = [self.view frame];
-//        outFrame.origin.y -= inFrame.size.height;
         addidentityView.profileview=self;
         [self.navigationController pushViewController:addidentityView animated:YES];
-
-//        [self presentModalViewController:addidentityView animated:YES];
-
     }
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        if(indexPath.section==0){
+            Identity *identity=[[identitiesData objectAtIndex:[indexPath section]]  objectAtIndex:indexPath.row];
+            [self deleteIdentity:[identity.identity_id intValue]];
+        }
+    }
+}
 
+- (NSIndexPath*) getIndexById:(int)identity_id{
+    NSInteger section=0;
+    for(NSArray *identitysection in identitiesData)
+    {
+        NSInteger idx=0;
+        for(Identity *identity in identitysection){
+            if([identity.identity_id intValue] ==identity_id){
+                NSIndexPath *path=[NSIndexPath indexPathForRow:idx inSection:section];
+                return path;
+            }
+            idx++;
+        }
+        section++;
+    }
+    return nil;
+}
+
+- (void) deleteIdentityUI:(int)identity_id{
+    NSIndexPath *path=[self getIndexById:identity_id];
+    [((NSMutableArray*)[identitiesData objectAtIndex:path.section]) removeObjectAtIndex:path.row];
+    [tableview beginUpdates];
+    [tableview deleteRowsAtIndexPaths:[NSArray arrayWithObject:path]  withRowAnimation:UITableViewRowAnimationFade];
+    [tableview endUpdates];
+}
+
+- (void) deleteIdentity:(int)identity_id{
+    
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/deleteIdentity",app.userid];
+    
+    RKParams* rsvpParams = [RKParams params];
+    [rsvpParams setValue:[NSNumber numberWithInt:identity_id] forParam:@"identity_id"];
+    
+    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+    [client post:endpoint usingBlock:^(RKRequest *request){
+        request.method=RKRequestMethodPOST;
+        request.params=rsvpParams;
+        request.onDidLoadResponse=^(RKResponse *response){
+//            [spin setHidden:YES];
+            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            if (response.statusCode == 200) {
+                NSDictionary *body=[response.body objectFromJSONData];
+                if([body isKindOfClass:[NSDictionary class]]) {
+                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                    if(code){
+                        if([code intValue]==200) {
+                            NSDictionary *responseobj=[body objectForKey:@"response"];
+                            if([responseobj isKindOfClass:[NSDictionary class]]){
+                                NSString *identity_id_str=[responseobj objectForKey:@"identity_id"];
+                                NSString *user_id_str=[responseobj objectForKey:@"user_id"];
+                                if(identity_id_str!=nil && user_id_str!=nil){
+                                    int response_identity_id=[identity_id_str intValue];
+                                    int response_user_id=[user_id_str intValue];
+                                    if(response_identity_id==identity_id && response_user_id==app.userid){
+                                        [self deleteIdentityUI:identity_id];
+                                    }
+                                }
+                                
+                            }
+                        }
+                        
+                    }
+                }
+
+            }
+            
+        };
+        request.onDidFailLoadWithError=^(NSError *error){
+//            [spin setHidden:YES];
+            
+            NSLog(@"error %@",error);
+            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
+        };
+    }];
+    
+}
 - (void) Logout {
     [Util signout];
 }
 
+- (Identity*) getIdentityById:(int)identity_id{
+        for(NSArray *identitysection in identitiesData)
+        {
+            for(Identity *identity in identitysection){
+                if([identity.identity_id intValue] ==identity_id)
+                    return identity;
+            }
+        }
+    return nil;
+}
+
+- (void) showAlert:(id)sender{
+//    api.local.exfe.com/v2/users/VerifyUserIdentity?token=xxxxxxxxxx identity_id=233
+    
+    UIButton *button=(UIButton*)sender;
+    int identity_id=button.tag;
+    Identity *identity=[self getIdentityById:identity_id];
+    if(identity_id>0 && identity!=nil) {
+        
+        if([identity.provider isEqualToString:@"twitter"] || [identity.provider isEqualToString:@"facebook"]){
+            NSString *msg=@"Identity authorization has been revoked, please re-authorize.";
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Identity Verification" message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Re-authorize",nil];
+            alert.tag=identity_id;
+            [alert show];
+            [alert release];
+        }else{
+            NSString *msg=@"Unverified identity, please check your email for instructions.\nRe-send verification email?";
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Identity Verification" message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send",nil];
+            alert.tag=identity_id;
+            [alert show];
+            [alert release];
+            
+        }
+    }
+}
+
+- (void) doVerify:(int)identity_id{
+    RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+    NSString *endpoint = [NSString stringWithFormat:@"/users/VerifyUserIdentity"];
+    
+    RKParams* rsvpParams = [RKParams params];
+    [rsvpParams setValue:[NSNumber numberWithInt:identity_id] forParam:@"identity_id"];
+    NSString *callback=@"oauth://handleOAuthAddIdentity";
+    [rsvpParams setValue:callback forParam:@"device_callback"];
+    [rsvpParams setValue:@"iOS" forParam:@"device"];
+    
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+    
+    [client post:endpoint usingBlock:^(RKRequest *request){
+        request.method=RKRequestMethodPOST;
+        request.params=rsvpParams;
+        request.onDidLoadResponse=^(RKResponse *response){
+            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            if (response.statusCode == 200) {
+                NSDictionary *body=[response.body objectFromJSONData];
+                NSLog(@"%@",response.bodyAsString);
+                
+                if([body isKindOfClass:[NSDictionary class]]) {
+                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                    if(code){
+                        if([code intValue]==200) {
+                            NSDictionary *responseobj=[body objectForKey:@"response"];
+                            if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"])
+                            {
+//                                NSLog(@"url: %@",[responseobj objectForKey:@"url"]);
+                                OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
+                                oauth.parentView=self;
+                                oauth.oauth_url=[responseobj objectForKey:@"url"];
+                                [self presentModalViewController:oauth animated:YES];
+
+                            }
+                            //                                if([responseobj isKindOfClass:[NSDictionary class]]){
+                            //                                    if([responseobj objectForKey:@"url"]!=nil){
+                            //                                        OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
+                            //                                        oauth.parentView=self;
+                            //                                        oauth.oauth_url=[responseobj objectForKey:@"url"];
+                            //                                        [self presentModalViewController:oauth animated:YES];
+                            //                                    }else{
+                            //                                        [self.navigationController popViewControllerAnimated:YES];
+                            //                                    }
+                            //                                }
+                        }
+                        else{
+                            //                                if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
+                            //                                    NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
+                            //                                }
+                        }
+                    }
+                }
+            }
+            
+        };
+        request.onDidFailLoadWithError=^(NSError *error){
+            NSLog(@"error %@",error);
+            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
+        };
+    }];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    //tag 101: save cross
+    //tag 102: save exfee
+    NSLog(@"button idx:%i id:%i",buttonIndex,alertView.tag);
+    if(buttonIndex==0)//cancel
+    {
+    }else if(buttonIndex==1) //retry
+    {
+        int identity_id=alertView.tag;
+        if(identity_id>0) {
+            [self doVerify:identity_id];
+        }
+    }
+}
 
 @end

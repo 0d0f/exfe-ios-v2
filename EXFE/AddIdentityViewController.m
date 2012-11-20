@@ -27,15 +27,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    signindelegate=[[SigninDelegate alloc]init];
-//    signindelegate.parent=self;
-    
-    signintoolbar=[[SigninIconToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 50) style:@"signin" delegate:self];
-    signintoolbar.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"signinbar_bg.png"]];
-//    [self.view addSubview:signintoolbar];
     
     UIImage *textfieldback = [UIImage imageNamed:@"textfield_bg_rect.png"];
-    identitybackimg=[[UIImageView alloc] initWithFrame:CGRectMake(60, 18, 230, 41)];
+    identitybackimg=[[UIImageView alloc] initWithFrame:CGRectMake(20, 18, 280, 41)];
     identitybackimg.image=textfieldback;
     identitybackimg.contentMode=UIViewContentModeScaleToFill;
     identitybackimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
@@ -47,19 +41,17 @@
     divider.contentMode=UIViewContentModeScaleToFill;
     divider.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
     [divider setHidden:YES];
-//    [self.view addSubview:divider];
-    
     
     identityLeftIcon=[[UIImageView alloc] initWithFrame:CGRectMake(6, 12, 18, 18)];
     identityLeftIcon.image=nil;//[UIImage imageNamed:@"identity_email_18_grey.png"];
     [identitybackimg addSubview:identityLeftIcon];
     
     identityRightButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    [identityRightButton setFrame:CGRectMake(identitybackimg.frame.origin.x+230-18-6, 18+11.5, 18, 18)];
+    [identityRightButton setFrame:CGRectMake(identitybackimg.frame.origin.x+230-18-6+50, 18+11.5, 18, 18)];
     [identityRightButton addTarget:self action:@selector(clearIdentity) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:identityRightButton];
     
-    textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 18, 230-(6+18+6)*2, 40)];
+    textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 18, 230-(6+18+6)*2+50, 40)];
     textUsername.placeholder=@"Enter your email";
     textUsername.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     textUsername.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
@@ -81,15 +73,34 @@
     
     
     addbtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    [addbtn setFrame:CGRectMake(20, 140, 280, 44)];
-    [addbtn setTitle:@"Add" forState:UIControlStateNormal];
-    [addbtn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
-    [addbtn setTitleColor:[UIColor colorWithRed:204.0/255.0f green:229.0/255.0f blue:255.0/255.0f alpha:1] forState:UIControlStateNormal];
+    [addbtn setFrame:CGRectMake(20, 18+50, 280, 44)];
+    [addbtn setTitle:@"Add to verify" forState:UIControlStateNormal];
+    [addbtn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18]];
+    
+    [addbtn setTitleColor:FONT_COLOR_51 forState:UIControlStateNormal];
     [addbtn addTarget:self action:@selector(addIdentity:) forControlEvents:UIControlEventTouchUpInside];
-    [addbtn setTitleShadowColor:[UIColor colorWithRed:21.0/255.0f green:52.0/255.0f blue:84.0/255.0f alpha:1] forState:UIControlStateNormal];
-    addbtn.titleLabel.shadowOffset=CGSizeMake(0, 1);
+//    [addbtn setTitleShadowColor:[UIColor colorWithRed:21.0/255.0f green:52.0/255.0f blue:84.0/255.0f alpha:1] forState:UIControlStateNormal];
+//    addbtn.titleLabel.shadowOffset=CGSizeMake(0, 1);
     [addbtn setBackgroundImage:[[UIImage imageNamed:@"btn_light_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 12, 0, 12)] forState:UIControlStateNormal];
     [self.view addSubview:addbtn];
+    
+    UIView *signinbgview=[[UIView alloc] initWithFrame:CGRectMake(0, 18+50+65, self.view.bounds.size.width, 76)];
+    signinbgview.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"gather_describe_area.png"]];
+    [self.view addSubview:signinbgview];
+    [signinbgview release];
+    
+    signintoolbar=[[SigninIconToolbarView alloc] initWithFrame:CGRectMake(0, 18+50+65, self.view.bounds.size.width, 75  ) style:@"addidentity" delegate:self];
+    signintoolbar.backgroundColor=[UIColor clearColor];//[UIColor colorWithPatternImage:[UIImage imageNamed:@"cross_bg.png"]];
+    [self.view addSubview:signintoolbar];
+    
+    
+    identityhint.text=@"More identity providers\nsupport coming…";
+    identityhint.numberOfLines=0;
+    [identityhint sizeToFit];
+    
+    
+
+//gather_describe_area.png
     
     labelSignError=[[UILabel alloc] initWithFrame:CGRectMake(20, 135+40+4, 280, 18)];
     labelSignError.backgroundColor=[UIColor clearColor];
@@ -99,6 +110,8 @@
     labelSignError.shadowOffset=CGSizeMake(0, 1);
     [self.view addSubview:labelSignError];
     
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"cross_bg.png"]]];
+
     
     spin=[[EXSpinView alloc] initWithPoint:CGPointMake([addbtn frame].size.width-18-10, ([addbtn frame].size.height-18)/2) size:18];
     [addbtn addSubview:spin];
@@ -126,6 +139,14 @@
         [identityRightButton setImage:nil forState:UIControlStateNormal];
         identityLeftIcon.image=nil;
     }
+}
+
+- (void) clearIdentity{
+    [textUsername setText:@""];
+    identityLeftIcon.image=nil;
+    avatarview.image=nil;
+    avatarframeview.image=nil;
+    
 }
 
 - (void) getUser{
@@ -199,8 +220,7 @@
 }
 
 - (void) addIdentity:(id) sender{
-    
-//    api.local.exfe.com/v2/users/208/addIdentity?token=764ca290b978ddc65e1364e50b3692575c9460c764a1dd6a798d78db93aec13e external_username='xxx@leaskh.com' provider='email'
+    [spin setHidden:NO];
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     RKClient *client = [RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
@@ -224,6 +244,7 @@
         request.method=RKRequestMethodPOST;
         request.params=rsvpParams;
         request.onDidLoadResponse=^(RKResponse *response){
+                [spin setHidden:YES];
             //                [MBProgressHUD hideHUDForView:self.view animated:YES];
             if (response.statusCode == 200) {
                 NSDictionary *body=[response.body objectFromJSONData];
@@ -259,6 +280,8 @@
             
         };
         request.onDidFailLoadWithError=^(NSError *error){
+            [spin setHidden:YES];
+
             NSLog(@"error %@",error);
             //                [MBProgressHUD hideHUDForView:self.view animated:YES];
         };
@@ -269,28 +292,34 @@
     [((ProfileViewController*)profileview) refreshIdentities];
     [self.navigationController popViewControllerAnimated:YES];
 }
+- (void) doOAuth:(NSString*)provider{
+    [textUsername resignFirstResponder];
+    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode=MBProgressHUDModeCustomView;
+    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+    [bigspin startAnimating];
+    hud.customView=bigspin;
+    [bigspin release];
+    hud.labelText = @"Loading";
 
-- (void) TwitterSigninButtonPress:(id)sender{
     RKParams* rsvpParams = [RKParams params];
-    NSString *provider=@"twitter";
-    
     [rsvpParams setValue:@"" forParam:@"external_username"];
     NSString *callback=@"oauth://handleOAuthAddIdentity";
     [rsvpParams setValue:callback forParam:@"device_callback"];
     [rsvpParams setValue:@"iOS" forParam:@"device"];
     [rsvpParams setValue:provider forParam:@"provider"];
-
+    
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     RKClient *client = [RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
     NSString *endpoint = [NSString stringWithFormat:@"/users/%u/addIdentity",app.userid];
-
+    
     [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
     [client post:endpoint usingBlock:^(RKRequest *request){
         request.method=RKRequestMethodPOST;
         request.params=rsvpParams;
         request.onDidLoadResponse=^(RKResponse *response){
-            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
             if (response.statusCode == 200) {
                 NSDictionary *body=[response.body objectFromJSONData];
                 if([body isKindOfClass:[NSDictionary class]]) {
@@ -319,12 +348,22 @@
         };
         request.onDidFailLoadWithError=^(NSError *error){
             NSLog(@"error %@",error);
-            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
         };
     }];
-
+    
+}
+- (void) FacebookSigninButtonPress:(id)sender{
+    [self doOAuth:@"facebook"];
 }
 
+- (void) TwitterSigninButtonPress:(id)sender{
+    [self doOAuth:@"twitter"];
+
+}
+- (void) MoreButtonPress:(id)sender{
+    [textUsername resignFirstResponder];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

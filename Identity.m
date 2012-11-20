@@ -2,7 +2,7 @@
 //  Identity.m
 //  EXFE
 //
-//  Created by huoju on 11/13/12.
+//  Created by huoju on 11/19/12.
 //
 //
 
@@ -22,8 +22,9 @@
 @dynamic name;
 @dynamic nickname;
 @dynamic provider;
+@dynamic status;
 @dynamic type;
 @dynamic updated_at;
-@dynamic status;
+@dynamic order;
 
 @end

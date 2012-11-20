@@ -879,6 +879,20 @@
         [alert release];
     }
 }
+
++ (NSString*) cleanInputName:(NSString*)username provider:(NSString*)provider{
+    if([provider isEqualToString:@"twitter"]){
+        if([username hasPrefix:@"@"])
+            username=[username stringByReplacingOccurrencesOfString:@"@" withString:@""];
+    }
+    if([provider isEqualToString:@"facebook"]){
+        
+        if([username hasSuffix:@"@facebook"])
+            username=[username stringByReplacingOccurrencesOfString:@"@facebook" withString:@""];
+    }
+    return username;
+}
+
 + (void) showErrorWithMetaDict:(NSDictionary*)meta delegate:(id)delegate{
     for (UIWindow* window in [UIApplication sharedApplication].windows) {
         NSArray* subviews = window.subviews;

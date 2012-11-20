@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "AddIdentityViewController.h"
+#import "MBProgressHUD.h"
 
 @interface OAuthAddIdentityViewController : UIViewController{
     IBOutlet UIWebView *webview;
@@ -20,6 +21,7 @@
 
 @property (nonatomic,retain) NSString* oauth_url;
 @property (nonatomic,retain) UIViewController* parentView;
+@property (nonatomic,retain) UIWebView* webview;
 
 - (void)cancel;
 

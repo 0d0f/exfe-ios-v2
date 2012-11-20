@@ -11,12 +11,14 @@
 
 #import "Flurry.h"
 
-#define DEV
+#define APP_DB_VERSION 202
+
+#define WWW
 
 #ifdef DEV
 #define API_V2_ROOT @"http://api.white.0d0f.com/v2"
 #define IMG_ROOT @"http://img.white.0d0f.com/static/img"
-#define EXFE_OAUTH_LINK @"http://white.0d0f.com/oauth"
+#define EXFE_OAUTH_LINK @"http://white.0d0f.com/OAuth"
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 #endif
 
@@ -31,16 +33,18 @@
 #ifdef LOCAL
 #define API_V2_ROOT @"http://api.local.exfe.com/v2"
 #define IMG_ROOT @"http://local.exfe.com/static/img"
-#define EXFE_OAUTH_LINK @"http://local.exfe.com/oauth"
+#define EXFE_OAUTH_LINK @"http://local.exfe.com/OAuth"
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 #endif
 
 #ifdef WWW
 #define API_V2_ROOT @"https://www.exfe.com/v2"
 #define IMG_ROOT @"https://exfe.com/static/img"
-#define EXFE_OAUTH_LINK @"https://exfe.com/oAuth"
+#define EXFE_OAUTH_LINK @"https://exfe.com/OAuth"
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 #endif
+
+
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,RKObjectLoaderDelegate>{
     int userid;

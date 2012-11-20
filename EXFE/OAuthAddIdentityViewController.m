@@ -15,6 +15,7 @@
 @implementation OAuthAddIdentityViewController
 @synthesize oauth_url;
 @synthesize parentView;
+@synthesize webview;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -62,15 +63,28 @@
     [titlelabel setTextColor:[UIColor whiteColor]];
     [toolbar addSubview:titlelabel];
     [self.view addSubview:toolbar];
-    
+
+    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.webview animated:YES];
+    hud.mode=MBProgressHUDModeCustomView;
+    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+    [bigspin startAnimating];
+    hud.customView=bigspin;
+    [bigspin release];
+    hud.labelText = @"Loading";
+
     [webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:oauth_url]]];
 }
 
 - (BOOL)webView:(UIWebView *)webview shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     NSString *URLString = [[request URL] absoluteString];
-    NSLog(@"start load:%@",URLString);
+    NSLog(@"%@",URLString);
     if ([URLString rangeOfString:@"token="].location != NSNotFound && [URLString rangeOfString:@"oauth://handleOAuthAddIdentity"].location != NSNotFound) {
-        [((AddIdentityViewController*)parentView) oauthSuccess];
+        if([parentView isKindOfClass:[AddIdentityViewController class]])
+            [((AddIdentityViewController*)parentView) oauthSuccess];
+        if([parentView isKindOfClass:[ProfileViewController class]])
+            [((ProfileViewController*)parentView) refreshIdentities];
+
+        [MBProgressHUD hideHUDForView:self.webview animated:YES];
         [self dismissModalViewControllerAnimated:YES];
     }
     return YES;
@@ -83,6 +97,24 @@
 
 - (void)cancel {
     [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+//    if(firstLoading==YES)
+//    {
+//        firstLoading=NO;
+        [MBProgressHUD hideHUDForView:self.webview animated:YES];
+//    }
+    
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+//    if(firstLoading==YES)
+//    {
+//        firstLoading=NO;
+        [MBProgressHUD hideHUDForView:self.webview animated:YES];
+//    }
 }
 
 

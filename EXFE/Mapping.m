@@ -39,6 +39,7 @@
      @"created_at", @"created_at", 
      @"updated_at", @"updated_at",
      @"type", @"type", 
+     @"order", @"order",
      @"status", @"status",
      nil];
     return identityMapping;

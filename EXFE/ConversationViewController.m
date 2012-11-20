@@ -263,7 +263,7 @@
                               predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
                               @"exfee", exfee_id];    
     [request setPredicate:predicate];
-    [request setFetchLimit:50];
+//    [request setFetchLimit:50];
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:YES];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
     
@@ -274,7 +274,10 @@
         showfloattime=NO;
         [_tableView setContentOffset:bottomOffset animated:NO];
     }
-    
+//    NSLog(@"%@",_posts);
+//    for (Post *post in _posts){
+//        NSLog(@"%@",post.content);
+//    }
     [inputToolbar setInputEnabled:YES];
     [inputToolbar hidekeyboard];
 
@@ -645,8 +648,15 @@
 #pragma Mark - RKRequestDelegate
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
     if(objectLoader.isGET) {
+
         if([objects count]>0)
         {
+//            for(Post *post in objects)
+//            {
+//                if([post isKindOfClass:[Post class]])
+//                    
+//                    NSLog(@"%@",post.content);
+//            }
             [self loadObjectsFromDataStore];
         }
     }

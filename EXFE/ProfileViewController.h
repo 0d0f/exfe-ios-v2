@@ -14,7 +14,7 @@
 #import "FullScreenViewController.h"
 #import "AddIdentityViewController.h"
 
-@interface ProfileViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
+@interface ProfileViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
     IBOutlet UIToolbar* toolbar;
     UIImageView* useravatar;
     UILabel* username;
@@ -34,4 +34,10 @@
 - (void)loadObjectsFromDataStore;
 - (void) Logout;
 - (void) refreshIdentities;
+- (void) test:(id)sender;
+- (void) doVerify:(int)identity_id;
+- (Identity*) getIdentityById:(int)identity_id;
+- (NSIndexPath*) getIndexById:(int)identity_id;
+- (void) deleteIdentity:(int)identity_id;
+- (void) deleteIdentityUI:(int)identity_id;
 @end

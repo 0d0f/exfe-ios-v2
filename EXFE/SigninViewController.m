@@ -23,7 +23,8 @@
     RKParams* rsvpParams = [RKParams params];
     NSString *provider=[Util findProvider:textUsername.text];
     [rsvpParams setValue:provider forParam:@"provider"];
-    [rsvpParams setValue:textUsername.text forParam:@"external_username"];
+    NSString *username=[Util cleanInputName:textUsername.text provider:provider];
+    [rsvpParams setValue:username forParam:@"external_username"];
     [rsvpParams setValue:textPassword.text forParam:@"password"];
     [spin setHidden:NO];
     [client post:endpoint usingBlock:^(RKRequest *request){

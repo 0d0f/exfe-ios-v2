@@ -41,25 +41,48 @@
             signinbutton.titleLabel.shadowOffset=CGSizeMake(1, 1);
             [self addSubview:signinbutton];
         }
-        facebookbutton =[UIButton buttonWithType:UIButtonTypeCustom];
-        [facebookbutton setFrame:CGRectMake(14+126+14+13, 10, 32, 32)];
-        [facebookbutton setBackgroundImage:[UIImage imageNamed:@"identity_facebook_32.png"] forState:UIControlStateNormal];
-        [facebookbutton setEnabled:NO];
-        [self addSubview:facebookbutton];
+        else if([style isEqualToString:@"addidentity"]){
+            
+        }
+        if(![style isEqualToString:@"addidentity"]){
+            facebookbutton =[UIButton buttonWithType:UIButtonTypeCustom];
+            [facebookbutton setFrame:CGRectMake(14+126+14+13, 10, 32, 32)];
+            [facebookbutton setBackgroundImage:[UIImage imageNamed:@"identity_facebook_32.png"] forState:UIControlStateNormal];
+            [facebookbutton addTarget:delegate action:@selector(FacebookSigninButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:facebookbutton];
 
-        twitterbutton=[UIButton buttonWithType:UIButtonTypeCustom];
-        [twitterbutton setFrame:CGRectMake(212+13, 10, 32, 32)];
-        [twitterbutton setBackgroundImage:[UIImage imageNamed:@"identity_twitter_32.png"] forState:UIControlStateNormal];
-        [twitterbutton addTarget:delegate action:@selector(TwitterSigninButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:twitterbutton];
-        
-        morebutton =[UIButton buttonWithType:UIButtonTypeCustom];
-        [morebutton setFrame:CGRectMake(270+9, 10, 32, 32)];
-        [morebutton setBackgroundImage:[UIImage imageNamed:@"identity_more_32.png"] forState:UIControlStateNormal];
-        [morebutton setEnabled:NO];
-        [self addSubview:morebutton];
-        
-        
+            twitterbutton=[UIButton buttonWithType:UIButtonTypeCustom];
+            [twitterbutton setFrame:CGRectMake(212+13, 10, 32, 32)];
+            [twitterbutton setBackgroundImage:[UIImage imageNamed:@"identity_twitter_32.png"] forState:UIControlStateNormal];
+            [twitterbutton addTarget:delegate action:@selector(TwitterSigninButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:twitterbutton];
+            
+            morebutton =[UIButton buttonWithType:UIButtonTypeCustom];
+            [morebutton setFrame:CGRectMake(270+9, 10, 32, 32)];
+            [morebutton setBackgroundImage:[UIImage imageNamed:@"identity_more_32.png"] forState:UIControlStateNormal];
+            [morebutton setEnabled:NO];
+            [self addSubview:morebutton];
+        }
+        else if([style isEqualToString:@"addidentity"]){
+            twitterbutton=[UIButton buttonWithType:UIButtonTypeCustom];
+            [twitterbutton setFrame:CGRectMake(116, 14, 40, 40)];
+            [twitterbutton setBackgroundImage:[UIImage imageNamed:@"identity_twitter_40.png"] forState:UIControlStateNormal];
+            [twitterbutton addTarget:delegate action:@selector(TwitterSigninButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:twitterbutton];
+            
+            facebookbutton =[UIButton buttonWithType:UIButtonTypeCustom];
+            [facebookbutton setFrame:CGRectMake(116+72, 14, 40, 40)];
+            [facebookbutton setBackgroundImage:[UIImage imageNamed:@"identity_facebook_40.png"] forState:UIControlStateNormal];
+            [facebookbutton addTarget:delegate action:@selector(FacebookSigninButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:facebookbutton];
+            
+            morebutton =[UIButton buttonWithType:UIButtonTypeCustom];
+            [morebutton setFrame:CGRectMake(116+72+72, 14, 40, 40)];
+            [morebutton setBackgroundImage:[UIImage imageNamed:@"identity_more_40.png"] forState:UIControlStateNormal];
+            [morebutton addTarget:delegate action:@selector(MoreButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+//            [morebutton setEnabled:NO];
+            [self addSubview:morebutton];
+        }
         // Initialization code
     }
     return self;
