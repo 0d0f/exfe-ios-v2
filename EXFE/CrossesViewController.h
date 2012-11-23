@@ -48,4 +48,6 @@
 - (void) alertsignout;
 - (BOOL) isIdentityBelongsMe:(int)identity_id;
 - (void) refreshPortrait;
+- (BOOL) PushToCross:(int)cross_id;
+- (BOOL) PushToConversation:(int)cross_id;
 @end

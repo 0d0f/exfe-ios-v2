@@ -180,7 +180,7 @@
 //                [MBProgressHUD hideHUDForView:self.view animated:YES];
                 if (response.statusCode == 200) {
                     NSDictionary *body=[response.body objectFromJSONData];
-                    NSLog(@"%@",body);
+//                    NSLog(@"%@",body);
                     if([body isKindOfClass:[NSDictionary class]]) {
                         id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                         if(code)

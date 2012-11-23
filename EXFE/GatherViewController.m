@@ -1008,8 +1008,6 @@
                 conversationView.identity=invitation.identity;
     }
     cross.conversation_count=0;
-//    NSError *saveError;
-//    [[Cross currentContext] save:&saveError];
     NSArray *viewControllers = self.navigationController.viewControllers;
     CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
     [crossViewController refreshTableViewWithCrossId:[cross.cross_id intValue]];

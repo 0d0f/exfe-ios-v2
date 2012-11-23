@@ -442,7 +442,7 @@
                 [gatherViewController release];
             }
             else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossupdateview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview_init"]) {
-                NSString *refresh_cross_id=[objectLoader.userData objectForKey:@"cross_id" ];
+//                NSString *refresh_cross_id=[objectLoader.userData objectForKey:@"cross_id" ];
 
                 [self loadObjectsFromDataStore];
                 [self.tableView reloadData];
@@ -682,6 +682,35 @@
 
 - (void) alertsignout{
     [Util signout];
+}
+
+#pragma mark View Push methods
+- (BOOL) PushToCross:(int)cross_id{
+    Cross *cross=[self crossWithId:cross_id];
+    if(cross!=nil){
+        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+        gatherViewController.cross=cross;
+        [gatherViewController setViewMode];
+        [self.navigationController pushViewController:gatherViewController animated:YES];
+        [gatherViewController release];
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL) PushToConversation:(int)cross_id{
+    Cross *cross=[self crossWithId:cross_id];
+    if(cross!=nil){
+        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+        
+        gatherViewController.cross=cross;
+        [gatherViewController setViewMode];
+        [self.navigationController pushViewController:gatherViewController animated:YES];
+        [gatherViewController toconversation];
+        [gatherViewController release];
+        return YES;
+    }
+    return NO;
 }
 
 @end

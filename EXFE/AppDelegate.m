@@ -212,6 +212,39 @@
     [self ReceivePushData:userInfo RunOnForeground:isForeground];
 }
 
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+    NSString *host=[url host];
+    NSArray *pathComponents=[url pathComponents];
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+
+    if([host isEqualToString:@"crosses"]){
+        if([pathComponents count]==2 ){
+            int cross_id= [[pathComponents objectAtIndex:1] intValue];
+            if(cross_id>0)
+            {
+                if([crossViewController PushToCross:cross_id]==NO)
+                    [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+            }
+        }
+    }
+    else if([host isEqualToString:@"conversation"]){
+        if([pathComponents count]==2 ){
+            int cross_id= [[pathComponents objectAtIndex:1] intValue];
+            if(cross_id>0)
+            {
+//                if([crossViewController PushToConversation:cross_id]==NO)
+//                    [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+            }
+        }
+    }
+    else if([host isEqualToString:@"profile"]){
+        [crossViewController ShowProfileView];
+    }
+    
+    return YES;
+}
+
 - (void)ReceivePushData:(NSDictionary*)userInfo RunOnForeground:(BOOL)isForeground
 {
     if(isForeground==NO){

@@ -77,7 +77,7 @@
 
 - (BOOL)webView:(UIWebView *)webview shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     NSString *URLString = [[request URL] absoluteString];
-    NSLog(@"%@",URLString);
+//    NSLog(@"%@",URLString);
     if ([URLString rangeOfString:@"token="].location != NSNotFound && [URLString rangeOfString:@"oauth://handleOAuthAddIdentity"].location != NSNotFound) {
         if([parentView isKindOfClass:[AddIdentityViewController class]])
             [((AddIdentityViewController*)parentView) oauthSuccess];
