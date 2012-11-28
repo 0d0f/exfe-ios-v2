@@ -303,6 +303,9 @@
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
     [_crosses release];
     _crosses=[[Cross objectsWithFetchRequest:request] retain];
+//    for(Cross *c in _crosses){
+//        NSLog(@"%@",c.title);
+//    }
     [self.tableView reloadData];
 }
 - (void)refresh
@@ -357,7 +360,6 @@
             {
                 
                 Cross *cross=(Cross*)object;
-                
                 id updated=cross.updated;
                 if([updated isKindOfClass:[NSDictionary class]]){
                     NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
@@ -608,10 +610,12 @@
 //    }
 	return cell;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 104;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(indexPath.row==[_crosses count])

@@ -31,10 +31,19 @@
 	avatar = [a copy];
 	[self setNeedsDisplay]; 
 }
+
 - (void) setProviderIcon:(UIImage *)a{
 	[providerIcon release];
 	providerIcon = [a copy];
 	[self setNeedsDisplay]; 
+}
+
+- (void) setProviderIconSet:(NSArray *)s{
+    if(providerIconSet!=nil)
+        [providerIconSet release];
+    providerIconSet = [s copy];
+    [self setNeedsDisplay];
+    
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -58,7 +67,16 @@
     [title drawInRect:CGRectMake(5+30+5, 6, self.frame.size.width-(5+30+5+5), 20) withFont:[UIFont fontWithName:@"HelveticaNeue" size:18] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
     [subtitle drawInRect:CGRectMake(5+30+5, 6+22, self.frame.size.width-(5+30+5+5), 18) withFont:[UIFont fontWithName:@"HelveticaNeue" size:12] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
     [avatar drawInRect:CGRectMake(5, 5, 30, 30)];
-    [providerIcon drawInRect:CGRectMake(self.frame.size.width-18-10, 13, 18, 18)];
+    if(providerIconSet!=nil)
+    {
+        int i=1;
+        for(UIImage *icon in providerIconSet){
+            [icon drawInRect:CGRectMake(self.frame.size.width-(18+10)*i, 13, 18, 18)];
+            i++;
+        }
+    }
+    else if(providerIcon!=nil)
+        [providerIcon drawInRect:CGRectMake(self.frame.size.width-18-10, 13, 18, 18)];
 //    CGContextRef context = UIGraphicsGetCurrentContext();
 //    CGContextSaveGState(context);
     

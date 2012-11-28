@@ -160,8 +160,6 @@
         [UIView commitAnimations];
         CGRect leftframe=CGRectMake(-320, 0, 320+18+6+6, self.frame.size.height);
         [leftview setFrame:leftframe];
-        NSLog(@"leftview: %f",leftframe.size.width);
-//        leftview = [[UIView alloc] initWithFrame:CGRectMake(-320, 0, 320, self.frame.size.height)];
     }
     input.text=@" ";
     return YES;

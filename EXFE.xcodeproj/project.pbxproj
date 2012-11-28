@@ -296,6 +296,8 @@
 		78C4750D1608379C000B69F2 /* map_nil@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C475091608379C000B69F2 /* map_nil@2x.png */; };
 		78C4750E1608379C000B69F2 /* map_nil.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C4750A1608379C000B69F2 /* map_nil.png */; };
 		78C4751316084C56000B69F2 /* libFlurry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C4751216084B8A000B69F2 /* libFlurry.a */; };
+		78C6B9FF166349A600483D23 /* AddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C6B9FE166349A600483D23 /* AddressBook.m */; };
+		78C6BA0116634C6F00483D23 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C6BA0016634C6F00483D23 /* AddressBook.framework */; };
 		78C8E9A315EAA7D1001E495B /* exfee_inputfield.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C8E9A115EAA7D1001E495B /* exfee_inputfield.png */; };
 		78C8E9A415EAA7D1001E495B /* exfee_inputfield@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78C8E9A215EAA7D1001E495B /* exfee_inputfield@2x.png */; };
 		78CA7C1C15ECD3E700AAD1DF /* time_18@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CA7C1A15ECD3E700AAD1DF /* time_18@2x.png */; };
@@ -570,8 +572,8 @@
 		785FD58F158079970056590D /* toolbarbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbarbg~iphone.png"; sourceTree = "<group>"; };
 		78615B3A15788BCC003CF68A /* ABTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABTableViewCell.h; sourceTree = "<group>"; };
 		78615B3B15788BCD003CF68A /* ABTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABTableViewCell.m; sourceTree = "<group>"; };
-		7865CD7A165A246E00D0E86A /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
-		7865CD7B165A246E00D0E86A /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
+		7865CD7A165A246E00D0E86A /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Identity.h; path = ../Identity.h; sourceTree = "<group>"; };
+		7865CD7B165A246E00D0E86A /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Identity.m; path = ../Identity.m; sourceTree = "<group>"; };
 		7865CD7D165A3C0300D0E86A /* x_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_bg.png; sourceTree = "<group>"; };
 		7865CD7E165A3C0300D0E86A /* x_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x_bg@2x.png"; sourceTree = "<group>"; };
 		7865CD81165A3DCF00D0E86A /* btn_red_44.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_red_44.png; sourceTree = "<group>"; };
@@ -759,6 +761,9 @@
 		78C4750A1608379C000B69F2 /* map_nil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_nil.png; sourceTree = "<group>"; };
 		78C4751116084B8A000B69F2 /* Flurry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
 		78C4751216084B8A000B69F2 /* libFlurry.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurry.a; sourceTree = "<group>"; };
+		78C6B9FD166349A600483D23 /* AddressBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressBook.h; sourceTree = "<group>"; };
+		78C6B9FE166349A600483D23 /* AddressBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressBook.m; sourceTree = "<group>"; };
+		78C6BA0016634C6F00483D23 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		78C8E9A115EAA7D1001E495B /* exfee_inputfield.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exfee_inputfield.png; sourceTree = "<group>"; };
 		78C8E9A215EAA7D1001E495B /* exfee_inputfield@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfee_inputfield@2x.png"; sourceTree = "<group>"; };
 		78CA7C1A15ECD3E700AAD1DF /* time_18@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "time_18@2x.png"; sourceTree = "<group>"; };
@@ -835,7 +840,7 @@
 		78FB6B8C15D6C64000EF83B3 /* EXBubbleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXBubbleScrollView.m; sourceTree = "<group>"; };
 		78FB79E615D0ECFC00DF9D73 /* ConversationInputAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationInputAccessoryView.h; sourceTree = "<group>"; };
 		78FB79E715D0ECFC00DF9D73 /* ConversationInputAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationInputAccessoryView.m; sourceTree = "<group>"; };
-		78FC07DE15D224FC004BB482 /* CTUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTUtil.h; sourceTree = "<group>"; };
+		78FC07DE15D224FC004BB482 /* CTUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTUtil.h; sourceTree = "<group>"; wrapsLines = 0; };
 		78FC07DF15D224FC004BB482 /* CTUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTUtil.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -844,6 +849,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78C6BA0116634C6F00483D23 /* AddressBook.framework in Frameworks */,
 				78199C94160A626700A560F7 /* libRestKit.a in Frameworks */,
 				78AA793615CFB94C00883025 /* CoreText.framework in Frameworks */,
 				78F058041599C30200F360F2 /* CoreLocation.framework in Frameworks */,
@@ -1217,8 +1223,6 @@
 		78A98E7C1560F832009E0806 = {
 			isa = PBXGroup;
 			children = (
-				7865CD7A165A246E00D0E86A /* Identity.h */,
-				7865CD7B165A246E00D0E86A /* Identity.m */,
 				78A98ED615611028009E0806 /* RestKit.xcodeproj */,
 				78A98E911560F832009E0806 /* EXFE */,
 				78A98E8A1560F832009E0806 /* Frameworks */,
@@ -1237,6 +1241,7 @@
 		78A98E8A1560F832009E0806 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				78C6BA0016634C6F00483D23 /* AddressBook.framework */,
 				78AA793515CFB94C00883025 /* CoreText.framework */,
 				78F058031599C30200F360F2 /* CoreLocation.framework */,
 				78F058011599B1BD00F360F2 /* MapKit.framework */,
@@ -1270,6 +1275,8 @@
 				7840916B156F6AA5006DF115 /* Util.m */,
 				78D0A5FE158CFAD200401BCA /* URLParser.h */,
 				78D0A5FF158CFAD200401BCA /* URLParser.m */,
+				78C6B9FD166349A600483D23 /* AddressBook.h */,
+				78C6B9FE166349A600483D23 /* AddressBook.m */,
 				788312A91574A5DE00D67103 /* ImgCache.h */,
 				788312AA1574A5DE00D67103 /* ImgCache.m */,
 				782B3CCB156B946100721150 /* Resource */,
@@ -1304,6 +1311,8 @@
 		78A98EFC1561169E009E0806 /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				7865CD7A165A246E00D0E86A /* Identity.h */,
+				7865CD7B165A246E00D0E86A /* Identity.m */,
 				7820A0B215CA8DE5008D0BB5 /* Invitation.h */,
 				7820A0B315CA8DE5008D0BB5 /* Invitation.m */,
 				78B0181115B812F300778192 /* Cross.h */,
@@ -2027,6 +2036,7 @@
 				780EAC151650D94A00953D75 /* AddIdentityViewController.m in Sources */,
 				780EAC27165215E800953D75 /* OAuthAddIdentityViewController.m in Sources */,
 				7865CD7C165A246F00D0E86A /* Identity.m in Sources */,
+				78C6B9FF166349A600483D23 /* AddressBook.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

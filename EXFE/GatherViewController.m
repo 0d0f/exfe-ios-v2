@@ -1715,7 +1715,10 @@
     NSArray *arr=[self getReducedExfeeIdentities];
     Invitation *invitation =[arr objectAtIndex:index];
     Identity *identity=invitation.identity;
-    UIImage *img=[[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
+    UIImage *img=nil;
+    if(identity.avatar_filename!=nil)
+        img=[[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
+    
     if(img!=nil)
         item.avatar=img;
     else{

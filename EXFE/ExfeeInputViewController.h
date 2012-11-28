@@ -15,6 +15,10 @@
 #import "GatherViewController.h"
 #import "EXBubbleScrollView.h"
 #import "Util.h"
+#import "AddressBook.h"
+
+#define LOCAL_ADDRESSBOOK 0
+#define EXFE_ADDRESSBOOK 1
 
 @interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,RKObjectLoaderDelegate,UITableViewDelegate,UITableViewDataSource,EXBubbleScrollViewDelegate,UIScrollViewDelegate>{
     UITextField *exfeeInput;
@@ -31,6 +35,9 @@
     UIImageView *errorHinticon;
     UILabel *errorHintLabel;
     BOOL ifAddExfeeSend;
+    NSArray *localcontacts;
+    int addressbookType;
+    int selectedRowIndex;
 }
 @property (nonatomic,retain) UIViewController* gatherview;
 
@@ -48,4 +55,7 @@
 - (void) ErrorHint:(BOOL)hidden content:(NSString*)content;
 - (BOOL) showErrorHint;
 - (void) addExfeeToCross;
+- (void) reloadLocalAddressBook;
+- (void) reloadExfeAddressBook;
+- (NSString*) getDefaultSubTitleFromLocalPerson:(NSDictionary*)person;
 @end

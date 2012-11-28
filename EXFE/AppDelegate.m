@@ -89,6 +89,17 @@
     if(login==YES)
     [APIProfile LoadUsrWithUserId:userid delegate:self];
     
+//TEST:
+//    NSFetchRequest* request = [Identity fetchRequest];
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(provider == %@)",@"localaddress"];
+//    [request setPredicate:predicate];
+//    NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
+//    for(Identity *iden in suggestwithselected)
+//    {
+//        NSLog(@"%i %i %@ %@",[iden.identity_id intValue], [iden.connected_user_id intValue] , iden.provider, iden.external_id);
+//    }
+
+    
     return YES;
 }
 
