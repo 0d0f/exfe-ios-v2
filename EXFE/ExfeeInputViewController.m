@@ -15,6 +15,7 @@
 @implementation ExfeeInputViewController
 @synthesize gatherview;
 
+static char identitykey;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -28,26 +29,33 @@
 {
     [super viewDidLoad];
     toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
-    [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
+//    [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
     [self.view addSubview:toolbar];
 
     UIButton *btnLocal=[UIButton buttonWithType:UIButtonTypeCustom];
     
-    [btnLocal setFrame:CGRectMake(0, 50, 100, 20)];
+    [btnLocal setFrame:CGRectMake(28, 44, 120, 22)];
     [btnLocal addTarget:self action:@selector(reloadLocalAddressBook) forControlEvents:UIControlEventTouchUpInside];
-    [btnLocal setTitle:@"AddressBook" forState:UIControlStateNormal];
-    [btnLocal setBackgroundColor:[UIColor blackColor]];
+    [btnLocal setTitle:@"Phone contacts" forState:UIControlStateNormal];
+    [btnLocal.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+
+    [btnLocal setBackgroundImage:[[UIImage imageNamed:@"btn_blue_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
+
     [self.view addSubview:btnLocal];
 
     UIButton *btnEXFE=[UIButton buttonWithType:UIButtonTypeCustom];
-    [btnEXFE setFrame:CGRectMake(160, 50, 60, 20)];
+    [btnEXFE setFrame:CGRectMake(171, 44, 60, 22)];
     [btnEXFE addTarget:self action:@selector(reloadExfeAddressBook) forControlEvents:UIControlEventTouchUpInside];
-    [btnEXFE setTitle:@"EXFE" forState:UIControlStateNormal];
-    [btnEXFE setBackgroundColor:[UIColor blackColor]];
+    [btnEXFE setTitle:@"Exfees" forState:UIControlStateNormal];
+    [btnEXFE.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+
+//    [btnEXFE setBackgroundColor:[UIColor blackColor]];
+    [btnEXFE setBackgroundImage:[[UIImage imageNamed:@"btn_blue_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
+
     [self.view addSubview:btnEXFE];
     
     selectedRowIndex=-1;
-    suggestionTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 70, 320, 460-70) style:UITableViewStylePlain];
+    suggestionTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 74, 320, 460-74) style:UITableViewStylePlain];
     suggestionTable.dataSource=self;
     suggestionTable.delegate=self;
     [self.view addSubview:suggestionTable];
@@ -60,7 +68,6 @@
     
     inputleftmask=[[UIImageView alloc] initWithFrame:CGRectMake(exfeeList.frame.origin.x,exfeeList.frame.origin.y , 40, 30)];
     inputleftmask.image=[UIImage imageNamed:@"exfee_inputfield.png"];
-
     
     CAShapeLayer *maskLayer = [CAShapeLayer layer];
     UIBezierPath *roundedPath =
@@ -90,17 +97,19 @@
     [backimg release];
     
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [doneButton setTitle:@"Save" forState:UIControlStateNormal];
     [doneButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     doneButton.frame = CGRectMake(255+5+5, 7, 50, 30);
     [doneButton addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
+    [doneButton setBackgroundImage:[[UIImage imageNamed:@"btn_blue_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
+
     [toolbar addSubview:doneButton];
 
     addressbookType=LOCAL_ADDRESSBOOK;
 
     AddressBook *address=[[AddressBook alloc] init];
     localcontacts=[address UpdatePeople:nil];
-    
+    filteredlocalcontacts=[localcontacts retain];
 }
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [exfeeList hiddenkeyboard];
@@ -126,15 +135,14 @@
 - (void) reloadLocalAddressBook{
     addressbookType=LOCAL_ADDRESSBOOK;
     [suggestionTable reloadData];
-    NSLog(@"localaddressbook");
+//    NSLog(@"localaddressbook");
 }
 
 - (void) reloadExfeAddressBook{
     addressbookType=EXFE_ADDRESSBOOK;
     [self loadIdentitiesFromDataStore:@""];
     [suggestionTable reloadData];
-
-    NSLog(@"exfeaddressbook");
+//    NSLog(@"exfeaddressbook");
     
 }
 
@@ -232,28 +240,45 @@
 - (void) done:(id)sender{
     NSString *inputtext=[exfeeList getInput];
     if(![inputtext isEqualToString:@""])
-        [self addByInputIdentity:inputtext dismiss:YES];
+        [self addByInputIdentity:inputtext provider:@"" dismiss:YES];
     else{
         [self addExfeeToCross];
     }
 }
 - (IBAction)textDidChange:(UITextField*)textField{
-    if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
-        //[exfeeList bubblecount]+
-        
-        showInputinSuggestion=YES;
-        [APIProfile LoadSuggest:exfeeInput.text delegate:self];
-        [self loadIdentitiesFromDataStore:exfeeInput.text];
-    }
-    if(exfeeInput.text==nil || [exfeeInput.text isEqualToString:@""])
-    {
-        if(suggestIdentities!=nil){
-            [suggestIdentities release];
-            suggestIdentities=nil;
-            [suggestionTable reloadData];
+    if(addressbookType== EXFE_ADDRESSBOOK){
+        if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
+            showInputinSuggestion=YES;
+            [APIProfile LoadSuggest:exfeeInput.text delegate:self];
+            [self loadIdentitiesFromDataStore:exfeeInput.text];
         }
-    }
+        if(exfeeInput.text==nil || [exfeeInput.text isEqualToString:@""])
+        {
+            if(suggestIdentities!=nil){
+                [suggestIdentities release];
+                suggestIdentities=nil;
+                [suggestionTable reloadData];
+            }
+        }
+    }else if(addressbookType== LOCAL_ADDRESSBOOK){
 
+//        NSArray *data = [NSArray arrayWithObject:[NSMutableDictionary dictionaryWithObject:@"foo" forKey:@"BAR"]];
+//        NSArray *filtered = [data filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(BAR == %@)", @"foo"]];
+        
+        NSLog(@"%@",localcontacts);
+//        NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",input];
+//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((name like[c] %@) OR (external_username like[c] %@) OR (external_id like[c] %@) OR (nickname like[c] %@)) AND provider != %@ AND provider != %@ AND connected_user_id != 0",inputpredicate,inputpredicate,inputpredicate,inputpredicate,@"iOSAPN",@"android"];
+//        
+//        if([input isEqualToString:@""]) {
+//            predicate = [NSPredicate predicateWithFormat:@"provider != %@ AND provider != %@ AND connected_user_id !=0",@"iOSAPN",@"android"];
+//        }
+        
+        //
+//        NSMutableArray *temp=[[NSMutableArray alloc]initWithCapacity:10];
+//        NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
+
+    }
+    
 }
 - (IBAction)editingDidBegan:(UITextField*)textField{
     
@@ -269,10 +294,10 @@
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
-- (Identity*) getIdentityFromLocal:(NSString*)input{
+- (Identity*) getIdentityFromLocal:(NSString*)input provider:(NSString*)provider{
     
     NSFetchRequest* request = [Identity fetchRequest];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(external_username == %@)",input];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((external_username == %@) AND (provider== %@))",input];
     [request setPredicate:predicate];
     NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
     if([suggestwithselected count]>0)
@@ -346,12 +371,12 @@
         [self changeLeftIconWhite:YES];
     
 }
-- (void) addByInputIdentity:(NSString*)input dismiss:(BOOL)shoulddismiss{
+- (void) addByInputIdentity:(NSString*)input provider:(NSString*)provider dismiss:(BOOL)shoulddismiss{
     if(ifAddExfeeSend==YES)
         return;
 
     ifAddExfeeSend=YES;
-    Identity* identity=[self getIdentityFromLocal:input];
+    Identity* identity=[self getIdentityFromLocal:input provider:provider];
     if(identity!=nil){
         [self addBubbleByIdentity:identity input:input];
         ifAddExfeeSend=NO;
@@ -360,9 +385,18 @@
     
     NSArray* inputs=[input componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@", "]];
     
+    NSArray* providers=[provider componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@", "]];
+    
     NSString *json=@"";
+    int idx=0;
     for(input in inputs){
-        NSString *provider=[Util findProvider:input];
+        NSString *provider=@"";
+        if([providers count]>=idx+1)
+            provider=[providers objectAtIndex:idx];
+        if([provider isEqualToString:@""])
+            provider=[Util findProvider:input];
+        
+            
         if(![provider isEqualToString:@""]) {
             if(![json isEqualToString:@""])
                 json=[json stringByAppendingString:@","];
@@ -399,12 +433,12 @@
                     if(code)
                         if([code intValue]==200) {
 
-                            Identity* identity=[self getIdentityFromLocal:input];
-                            if(identity!=nil){
-                                [self addBubbleByIdentity:identity input:input];
-                                ifAddExfeeSend=NO;
-                                return;
-                            }
+//                            Identity* identity=[self getIdentityFromLocal:input provider:provider];
+//                            if(identity!=nil){
+//                                [self addBubbleByIdentity:identity input:input];
+//                                ifAddExfeeSend=NO;
+//                                return;
+//                            }
 
                             NSDictionary* response = [body objectForKey:@"response"];
                             NSArray *identities = [response objectForKey:@"identities"];
@@ -450,7 +484,7 @@
 #pragma mark UITableView Datasource methods
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
     if(addressbookType==LOCAL_ADDRESSBOOK)
-        return [localcontacts count];
+        return [filteredlocalcontacts count];
     else{
         if(suggestIdentities)
         {
@@ -469,7 +503,7 @@
     }
     if(addressbookType==LOCAL_ADDRESSBOOK)
     {
-        NSDictionary *person=[localcontacts objectAtIndex:indexPath.row];
+        NSDictionary *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
         cell.title = [person objectForKey:@"name"];
 
         UIImage *avatar=[person objectForKey:@"avatar"];
@@ -503,11 +537,21 @@
         if([person objectForKey:@"emails"]!=nil && [[person objectForKey:@"emails"] isKindOfClass: [NSArray class]]){
             [iconset addObject:[UIImage imageNamed:@"identity_email_18_grey.png"]];
         }
-        
-        cell.subtitle=[AddressBook getDefaultIdentity:person];
+        NSDictionary *persondict=[AddressBook getDefaultIdentity:person];
+        NSString *username=[persondict objectForKey:@"external_id"];
+        cell.subtitle=username;
         
         cell.providerIconSet=iconset;
-        
+        cell.providerIcon=nil;
+
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        if([iconset count]>1){
+            CGRect frame = CGRectMake(0.0, 0.0, (18+10)*([iconset count]+1), 110);
+            button.frame = frame;
+//            [button setBackgroundColor:[UIColor blackColor]];
+            [button addTarget:self action:@selector(checkButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryView = button;
+        }
     }else{
         int row=indexPath.row;
         Identity *identity=[suggestIdentities objectAtIndex:row];
@@ -525,6 +569,7 @@
             NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",identity.provider];
             UIImage *icon=[UIImage imageNamed:iconname];
             cell.providerIcon=icon;
+            cell.providerIconSet=nil;
         }
         if(identity.avatar_filename!=nil) {
             UIImage *avatar = [[ImgCache sharedManager] getImgFromCache:identity.avatar_filename];
@@ -545,47 +590,49 @@
             else
                 cell.avatar=avatar;
         }
+        
     }
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(selectedRowIndex==indexPath.row)
-        return 100;
+    if(selectedRowIndex==indexPath.row){
+//        NSLog(@"expandCellHeight %i",expandCellHeight);
+        return expandCellHeight;
+    }
     return 44;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
-    Invitation *invitation =[Invitation object];
-    invitation.rsvp_status=@"NORESPONSE";
-    invitation.identity=identity;
-    Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
-    if(myinvitation!=nil)
-        invitation.by_identity=myinvitation.identity;
-    else
-        invitation.by_identity=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+    if(addressbookType==LOCAL_ADDRESSBOOK){
+        NSDictionary *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
+        [self addByInputIdentity:[[AddressBook getDefaultIdentity:person] objectForKey:@"external_id"] provider:[[AddressBook getDefaultIdentity:person] objectForKey:@"provider"] dismiss:NO];
+    }else{
+        Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
+        Invitation *invitation =[Invitation object];
+        invitation.rsvp_status=@"NORESPONSE";
+        invitation.identity=identity;
+        Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
+        if(myinvitation!=nil)
+            invitation.by_identity=myinvitation.identity;
+        else
+            invitation.by_identity=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
 
-    NSString *identity_name=identity.nickname;
-    if(identity_name==nil || [identity_name isEqualToString:@""])
-        identity_name=identity.name;
-    if(identity_name==nil || [identity_name isEqualToString:@""])
-        identity_name=identity.external_username;
-    if(identity_name==nil || [identity_name isEqualToString:@""])
-        identity_name=identity.external_id;
-    
-    [exfeeList addBubble:identity_name customObject:invitation];
-    if([exfeeList bubblecount]>0)
-        [self changeLeftIconWhite:YES];
+        NSString *identity_name=identity.nickname;
+        if(identity_name==nil || [identity_name isEqualToString:@""])
+            identity_name=identity.name;
+        if(identity_name==nil || [identity_name isEqualToString:@""])
+            identity_name=identity.external_username;
+        if(identity_name==nil || [identity_name isEqualToString:@""])
+            identity_name=identity.external_id;
+        
+        [exfeeList addBubble:identity_name customObject:invitation];
+        if([exfeeList bubblecount]>0)
+            [self changeLeftIconWhite:YES];
+    }
 
-    selectedRowIndex=indexPath.row;
-    [tableView beginUpdates];
-//    [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    [tableView endUpdates];
-//    [self ErrorHint:NO content:@"12 exfees maximum"];
-//    [self changeLeftIcon];
 }
 #pragma mark RKObjectLoaderDelegate methods
 
@@ -622,7 +669,7 @@
     NSString *inputtext=[textfield.text stringByTrimmingCharactersInSet:
                          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-    [self addByInputIdentity:inputtext dismiss:NO];
+    [self addByInputIdentity:inputtext provider:@"" dismiss:NO];
 }
 - (id)customObject:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
     NSDictionary *dictionary=[[[NSDictionary alloc] initWithObjectsAndKeys:input,@"name",@"id",@"id", nil ] autorelease];
@@ -643,25 +690,131 @@
     return NO;
 }
 - (BOOL) inputTextChange:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
-    if(input!=nil && input.length>=1) {
-        if([self showErrorHint]==YES)
-            return YES;
-        showInputinSuggestion=YES;
-        [APIProfile LoadSuggest:input delegate:self];
-        [self loadIdentitiesFromDataStore:input];
-    }
-    if(input==nil || [input isEqualToString:@""])
-    {
-        if(suggestIdentities!=nil){
-            [suggestIdentities release];
-            suggestIdentities=nil;
-            [suggestionTable reloadData];
+    expandCellHeight=44;
+    [expandExfeeView setHidden:YES];
+
+    if(addressbookType== EXFE_ADDRESSBOOK){
+        if(input!=nil && input.length>=1) {
+            if([self showErrorHint]==YES)
+                return YES;
+            showInputinSuggestion=YES;
+            [APIProfile LoadSuggest:input delegate:self];
+            [self loadIdentitiesFromDataStore:input];
         }
+        if(input==nil || [input isEqualToString:@""])
+        {
+            if(suggestIdentities!=nil){
+                [suggestIdentities release];
+                suggestIdentities=nil;
+                [suggestionTable reloadData];
+            }
+        }
+    }else if(addressbookType == LOCAL_ADDRESSBOOK){
+        NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",input];
+        if(filteredlocalcontacts!=nil){
+            [filteredlocalcontacts release];
+            filteredlocalcontacts=nil;
+        }
+        filteredlocalcontacts = [[localcontacts filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(indexfield like[c] %@)", inputpredicate]] retain];
+        [suggestionTable reloadData];
     }
     return YES;
 }
 
-- (NSString*) getDefaultSubTitleFromLocalPerson:(NSDictionary*)person{
-    return @"";
+
+- (void)checkButtonTapped:(id)sender event:(id)event
+{
+    NSSet *touches = [event allTouches];
+    UITouch *touch = [touches anyObject];
+    CGPoint currentTouchPosition = [touch locationInView:suggestionTable];
+    NSIndexPath *indexPath = [suggestionTable indexPathForRowAtPoint: currentTouchPosition];
+    if (indexPath != nil)
+    {
+        if(selectedRowIndex==indexPath.row)
+            selectedRowIndex=-1;
+        else{
+            selectedRowIndex=indexPath.row;
+        }
+        NSDictionary *dict=[filteredlocalcontacts objectAtIndex:indexPath.row];
+        NSArray* useridentities=[AddressBook getLocalIdentityObjects:dict];
+        expandCellHeight=44+[useridentities count]/2*44+([useridentities count]%2)*44;
+        
+        [[suggestionTable cellForRowAtIndexPath:indexPath] setNeedsDisplay];
+        [suggestionTable reloadData];
+        UITableViewCell *cell = [suggestionTable cellForRowAtIndexPath:indexPath];
+        if([cell frame].size.height>44) {
+            if(expandExfeeView==nil) {
+                expandExfeeView=[[UIView alloc] init];
+                [suggestionTable addSubview:expandExfeeView];
+            }else{
+                NSArray *subviews=[expandExfeeView subviews];
+                for(UIView *subview in subviews){
+                    [subview removeFromSuperview];
+                    [subview release];
+                }
+            }
+            [expandExfeeView setFrame:CGRectMake(0, [cell frame].origin.y+44, cell.frame.size.width, cell.frame.size.height-44)];
+            [expandExfeeView setBackgroundColor:[UIColor colorWithRed:111/255.f green:118/255.f blue:125/255.f alpha:1]];
+            int idx=0;
+            float cellwidth=cell.frame.size.width/2;
+            for(NSDictionary *identity in useridentities)
+            {
+                UIBorderView *identitycell=[[UIBorderView alloc] initWithFrame:CGRectMake(idx%2*cellwidth, idx/2*44, cellwidth, 44)];
+                UILabel *labelusername=[[[UILabel alloc] initWithFrame:CGRectMake(5, 0,  cellwidth-6-18-6,44)] autorelease];
+                labelusername.numberOfLines = 0;
+                [labelusername setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:16]];
+                [labelusername setTextColor:[UIColor whiteColor]];
+
+                [labelusername setText:[identity objectForKey:@"external_id"]];
+                [labelusername setLineBreakMode:NSLineBreakByCharWrapping];
+                labelusername.backgroundColor=[UIColor clearColor];
+                [identitycell addSubview:labelusername];
+
+                NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",[identity objectForKey:@"provider"]];
+                UIImage *icon=[UIImage imageNamed:iconname];
+                
+                UIImageView *imgprovider=[[[UIImageView alloc] initWithFrame:CGRectMake(cellwidth-6-18, (44-18)/2, icon.size.width, icon.size.height)] autorelease];
+                imgprovider.backgroundColor=[UIColor clearColor];
+                imgprovider.image=icon;
+                [identitycell addSubview:imgprovider];
+                
+                UIButton *identitycellbtn=[UIButton buttonWithType:UIButtonTypeCustom];
+                [identitycellbtn setFrame:CGRectMake(0, 0, cellwidth, 44)];
+                [identitycellbtn setBackgroundColor:[UIColor clearColor]];
+                
+                [identitycellbtn setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateHighlighted];
+
+
+
+                SEL selector = @selector(selectidentity:);
+                [identitycellbtn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+                objc_setAssociatedObject (identitycellbtn, &identitykey, identity,OBJC_ASSOCIATION_RETAIN);
+                [identitycell addSubview:identitycellbtn];
+                
+//              if((idx+1)/2%2==0 )
+                    [identitycell setBackgroundColor:[UIColor colorWithRed:111/255.f green:118/255.f blue:125/255.f alpha:1]];
+//              else
+//                  [identitycell setBackgroundColor:[UIColor colorWithRed:58/255.f green:110/255.f blue:165/255.f alpha:1]];
+                [expandExfeeView addSubview:identitycell];
+                idx++;
+            }
+            if([useridentities count]%2==1){
+                UIBorderView *identitycell=[[UIBorderView alloc] initWithFrame:CGRectMake([useridentities count]%2*cellwidth, [useridentities count]/2*44, cellwidth, 44)];
+                [identitycell setBackgroundColor:[UIColor colorWithRed:111/255.f green:118/255.f blue:125/255.f alpha:1]];
+                [expandExfeeView addSubview:identitycell];
+
+            }
+            
+            [expandExfeeView setHidden:NO];
+        }
+        else{
+            expandCellHeight=44;
+            [expandExfeeView setHidden:YES];
+        }
+    }
+}
+- (void) selectidentity:(id)sender{
+    NSDictionary *identity = (NSDictionary *)objc_getAssociatedObject(sender, &identitykey);
+    [self addByInputIdentity:[identity objectForKey:@"external_id"] provider:[identity objectForKey:@"provider"] dismiss:NO];
 }
 @end

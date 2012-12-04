@@ -81,7 +81,7 @@
     ConversationViewController *conversationView;
     UILabel *ccbuttonText;
     BOOL crosschangeflag;
-
+    BOOL iscrossneedsave;
 }
 @property (retain,nonatomic) Cross* cross;
 @property (retain,readonly) NSMutableArray *exfeeIdentities;

@@ -14,5 +14,6 @@
 }
 - (NSArray*) UpdatePeople:(NSDate*)lastsaved;
 - (NSArray*) CopyAllPeople:(ABAddressBookRef)addressbook;
-+ (NSString*) getDefaultIdentity:(NSDictionary*)person;
++ (NSDictionary*) getDefaultIdentity:(NSDictionary*)person;
++ (NSArray*) getLocalIdentityObjects:(NSDictionary*) person;
 @end

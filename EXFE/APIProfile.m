@@ -29,6 +29,7 @@
     
     [manager.mappingProvider setObjectMapping:userMapping forKeyPath:@"response.user"];    
 }
+
 +(void) MappingSuggest{
     RKObjectManager* manager =[RKObjectManager sharedManager];
     RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];

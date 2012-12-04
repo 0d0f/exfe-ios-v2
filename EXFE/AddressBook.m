@@ -104,13 +104,13 @@
     return contacts;
 }
 
-+ (NSString*) getDefaultIdentity:(NSDictionary*)person{
++ (NSDictionary*) getDefaultIdentity:(NSDictionary*)person{
 //    cell.subtitle=@"";
     NSString *username=@"";
     int type=0;
 #define TWITTER_TYPE 1
 #define FACEBOOK_TYPE 2
-#define EMAIL_TYPE 2
+#define EMAIL_TYPE 3
     
     if([person objectForKey:@"social"]!=nil && [[person objectForKey:@"social"] isKindOfClass: [NSArray class]]){
         for (NSDictionary *socialdict in [person objectForKey:@"social"]) {
@@ -136,9 +136,48 @@
     
     if([person objectForKey:@"emails"]!=nil && [[person objectForKey:@"emails"] isKindOfClass: [NSArray class]]){
         NSString *email=[[person objectForKey:@"emails"] objectAtIndex:0];
-        if([username isEqualToString:@""] && type!=FACEBOOK_TYPE )
+        if([username isEqualToString:@""] || type!=FACEBOOK_TYPE ){
             username=email;
+            type=EMAIL_TYPE;
+        }
     }
-    return username;
+    NSString *provider=@"";
+    if(type==TWITTER_TYPE)
+        provider=@"twitter";
+    else if(type==FACEBOOK_TYPE)
+        provider=@"facebook";
+    else if(type==EMAIL_TYPE)
+        provider=@"email";
+    return [NSDictionary dictionaryWithObjectsAndKeys:provider,@"provider",username,@"external_id", nil] ;
+}
+
++ (NSArray*) getLocalIdentityObjects:(NSDictionary*) person{
+    NSMutableArray *identities=[[[NSMutableArray alloc] initWithCapacity:4] autorelease];
+    if([person objectForKey:@"social"]!=nil && [[person objectForKey:@"social"] isKindOfClass: [NSArray class]]){
+        for (NSDictionary *socialdict in [person objectForKey:@"social"]) {
+            if([[socialdict objectForKey:@"service"] isEqualToString:@"twitter"] ||[[socialdict objectForKey:@"service"] isEqualToString:@"facebook"] ){
+                NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:[socialdict objectForKey:@"username"],@"external_id",[socialdict objectForKey:@"service"],@"provider", nil];
+                [identities addObject:dict];
+            }
+        }
+    }
+    
+    if([person objectForKey:@"im"]!=nil && [[person objectForKey:@"im"] isKindOfClass: [NSArray class]]){
+        for (NSDictionary *imdict in [person objectForKey:@"im"]) {
+            if([[imdict objectForKey:@"service"] isEqualToString:@"Facebook"]){
+                NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:[imdict objectForKey:@"username"],@"external_id",@"facebook",@"provider", nil];
+                [identities addObject:dict];
+            }
+        }
+    }
+    
+    if([person objectForKey:@"emails"]!=nil && [[person objectForKey:@"emails"] isKindOfClass: [NSArray class]]){
+        
+        for (NSString *email in [person objectForKey:@"emails"]) {
+            NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:email,@"external_id",@"email",@"provider", nil];
+            [identities addObject:dict];
+        }
+        }
+    return identities;
 }
 @end

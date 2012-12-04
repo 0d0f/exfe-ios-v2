@@ -16,6 +16,8 @@
 #import "EXBubbleScrollView.h"
 #import "Util.h"
 #import "AddressBook.h"
+#import "UIBorderView.h"
+#import <objc/runtime.h>
 
 #define LOCAL_ADDRESSBOOK 0
 #define EXFE_ADDRESSBOOK 1
@@ -36,20 +38,23 @@
     UILabel *errorHintLabel;
     BOOL ifAddExfeeSend;
     NSArray *localcontacts;
+    NSArray *filteredlocalcontacts;
+    UIView *expandExfeeView;
     int addressbookType;
     int selectedRowIndex;
+    int expandCellHeight;
 }
 @property (nonatomic,retain) UIViewController* gatherview;
 
 - (void) done:(id)sender;
 - (IBAction) Close:(id) sender;
-- (Identity*) getIdentityFromLocal:(NSString*)input;
+- (Identity*) getIdentityFromLocal:(NSString*)input provider:(NSString*)provider;
 - (void) addBubbleByIdentity:(Identity*)identity input:(NSString*)input;
 - (IBAction)textDidChange:(UITextField*)textField;
 - (IBAction)editingDidBegan:(UITextField*)textField;
 - (IBAction)editingDidEnd:(UITextField*)textField;
 //- (void) addByText;
-- (void) addByInputIdentity:(NSString*)input dismiss:(BOOL)shoulddismiss;
+- (void) addByInputIdentity:(NSString*)input provider:(NSString*)provider dismiss:(BOOL)shoulddismiss;
 - (void) loadIdentitiesFromDataStore:(NSString*)input;
 - (void) changeLeftIconWhite:(BOOL)iswhite;
 - (void) ErrorHint:(BOOL)hidden content:(NSString*)content;
@@ -57,5 +62,7 @@
 - (void) addExfeeToCross;
 - (void) reloadLocalAddressBook;
 - (void) reloadExfeAddressBook;
-- (NSString*) getDefaultSubTitleFromLocalPerson:(NSDictionary*)person;
+- (void) checkButtonTapped:(id)sender event:(id)event;
+- (void) selectidentity:(id)sender;
+
 @end

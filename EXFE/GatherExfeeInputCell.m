@@ -69,19 +69,17 @@
     [avatar drawInRect:CGRectMake(5, 5, 30, 30)];
     if(providerIconSet!=nil)
     {
+        [providerIcon drawInRect:CGRectMake(self.frame.size.width-18-10, 13, 18, 18)];
         int i=1;
         for(UIImage *icon in providerIconSet){
             [icon drawInRect:CGRectMake(self.frame.size.width-(18+10)*i, 13, 18, 18)];
             i++;
         }
     }
-    else if(providerIcon!=nil)
+    else if(providerIcon!=nil){
         [providerIcon drawInRect:CGRectMake(self.frame.size.width-18-10, 13, 18, 18)];
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-//    CGContextSaveGState(context);
-    
-//    CGContextRestoreGState(context);
-
-    
+        
+        [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width-(18+10)*3, 13, 18*3, 18)];
+    }
 }
 @end

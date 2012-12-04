@@ -65,6 +65,7 @@
 		7820A0B715CB8E37008D0BB5 /* toolbar_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7820A0B515CB8E37008D0BB5 /* toolbar_bg.png */; };
 		7820A0B815CB8E37008D0BB5 /* toolbar_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7820A0B615CB8E37008D0BB5 /* toolbar_bg@2x.png */; };
 		7820A0BA15CB8E42008D0BB5 /* toolbar_btndown_bg_TEST@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7820A0B915CB8E42008D0BB5 /* toolbar_btndown_bg_TEST@2x.png */; };
+		78240AA11668935700738B7B /* UIBorderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78240AA01668935700738B7B /* UIBorderView.m */; };
 		7826673215ABE3C300CD29C4 /* TimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7826673015ABE3C300CD29C4 /* TimeViewController.m */; };
 		7826673315ABE3C300CD29C4 /* TimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7826673115ABE3C300CD29C4 /* TimeViewController.xib */; };
 		7827823815EF5332008D6F09 /* toolbar_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 7827823615EF5332008D6F09 /* toolbar_pressed.png */; };
@@ -472,6 +473,8 @@
 		7820A0B515CB8E37008D0BB5 /* toolbar_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = toolbar_bg.png; sourceTree = "<group>"; };
 		7820A0B615CB8E37008D0BB5 /* toolbar_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbar_bg@2x.png"; sourceTree = "<group>"; };
 		7820A0B915CB8E42008D0BB5 /* toolbar_btndown_bg_TEST@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbar_btndown_bg_TEST@2x.png"; sourceTree = "<group>"; };
+		78240A9F1668935700738B7B /* UIBorderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBorderView.h; sourceTree = "<group>"; };
+		78240AA01668935700738B7B /* UIBorderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBorderView.m; sourceTree = "<group>"; };
 		7826672F15ABE3C300CD29C4 /* TimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeViewController.h; sourceTree = "<group>"; };
 		7826673015ABE3C300CD29C4 /* TimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeViewController.m; sourceTree = "<group>"; };
 		7826673115ABE3C300CD29C4 /* TimeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimeViewController.xib; sourceTree = "<group>"; };
@@ -1522,6 +1525,8 @@
 				785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */,
 				7852709A15FC7A1E001AF618 /* EXSpinView.h */,
 				7852709B15FC7A1E001AF618 /* EXSpinView.m */,
+				78240A9F1668935700738B7B /* UIBorderView.h */,
+				78240AA01668935700738B7B /* UIBorderView.m */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -2037,6 +2042,7 @@
 				780EAC27165215E800953D75 /* OAuthAddIdentityViewController.m in Sources */,
 				7865CD7C165A246F00D0E86A /* Identity.m in Sources */,
 				78C6B9FF166349A600483D23 /* AddressBook.m in Sources */,
+				78240AA11668935700738B7B /* UIBorderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
