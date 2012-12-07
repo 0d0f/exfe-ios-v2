@@ -177,10 +177,8 @@
             request.method=RKRequestMethodPOST;
             request.params=rsvpParams;
             request.onDidLoadResponse=^(RKResponse *response){
-//                [MBProgressHUD hideHUDForView:self.view animated:YES];
                 if (response.statusCode == 200) {
                     NSDictionary *body=[response.body objectFromJSONData];
-//                    NSLog(@"%@",body);
                     if([body isKindOfClass:[NSDictionary class]]) {
                         id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                         if(code)
@@ -248,7 +246,6 @@
             //                [MBProgressHUD hideHUDForView:self.view animated:YES];
             if (response.statusCode == 200) {
                 NSDictionary *body=[response.body objectFromJSONData];
-//                NSLog(@"%@",response.bodyAsString);
 
                 if([body isKindOfClass:[NSDictionary class]]) {
                     id code=[[body objectForKey:@"meta"] objectForKey:@"code"];

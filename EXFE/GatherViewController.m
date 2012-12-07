@@ -398,9 +398,6 @@
 
     NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES];
     NSArray *invitations=[cross.exfee.invitations sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-    for(Invitation *invitation in cross.exfee.invitations){
-        NSLog(@"%@",invitation.invitation_id);
-    }
     for(Invitation *invitation in invitations) {
         if([invitation.host boolValue]==YES)
             [exfeeIdentities insertObject:invitation atIndex:0];
@@ -469,11 +466,7 @@
     if(map.frame.origin.y+map.frame.size.height+9>placedesc.frame.origin.y+placedesc.frame.size.height+9)
         crossdescriptoiny=map.frame.origin.y+map.frame.size.height+9+15;
     
-//    float a=containcardview.frame.size.height;
-//    NSLog(@"a cross desc height %f",a);
     height=containcardview.frame.size.height-crossdescriptoiny;
-//    NSLog(@"cross desc height %f",height);
-
     [crossdescription setFrame:CGRectMake(0,crossdescriptoiny,containview.frame.size.width,height)];
     
     float offset=height-crossdescriptionframeheight;
@@ -565,8 +558,6 @@
     [containcardview setFrame:containframe];
     //containview setFrame
     [containcardview setNeedsDisplay];
-    
-//    NSLog(@"result cross desc height %f",crossdescription.frame.size.height);
 }
 - (void) setViewMode{
     viewmode=YES;
@@ -891,12 +882,28 @@
     return @"";
 }
 
-- (void) addExfee:(Invitation*) invitation{
+//- (void) addExfee:(Invitation*) invitation{
+- (void) addExfee:(NSArray*) invitations{
     iscrossneedsave=YES;
-    [exfeeIdentities addObject:invitation];
-    [cross.exfee addInvitationsObject:invitation];
-    [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
-    [self saveExfeeUpdate];
+    BOOL isgather=NO;
+    if(cross.exfee==nil){
+        cross.exfee=[Exfee object];
+        isgather=YES;
+    }
+
+    for(Invitation *invitation in invitations)
+    {
+        [exfeeIdentities addObject:invitation];
+        [exfeeSelected addObject:[NSNumber numberWithBool:NO]];
+        [cross.exfee addInvitationsObject:invitation];
+    }
+    if(isgather==NO)
+        [self saveExfeeUpdate];
+    
+    [exfeeShowview reloadData];
+    [self setExfeeNum];
+
+
 }
 - (int) exfeeIdentitiesCount{
     int i=0;
@@ -1295,7 +1302,6 @@
 
     NSError *error;
     NSString *json = [[RKObjectSerializer serializerWithObject:cross.exfee mapping:[[APICrosses getExfeeMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
-    NSLog(@"saveExfeeUpdate %@",json);
     RKParams* rsvpParams = [RKParams params];
     [rsvpParams setValue:json forParam:@"exfee"];
     [rsvpParams setValue:cross.exfee.exfee_id forParam:@"id"];
@@ -2069,7 +2075,6 @@
             if(i<[exfeeIdentities count]) {
                 Invitation* selected_invitation=((Invitation*)[exfeeIdentities objectAtIndex:i]);
                 for (Invitation *invitation in cross.exfee.invitations){
-                    NSLog(@"invitation %i selected_invitation %i",[invitation.invitation_id intValue],[selected_invitation.invitation_id intValue]);
                     if([invitation.invitation_id intValue]==[selected_invitation.invitation_id intValue]){
                         origin_status=[invitation.rsvp_status copy];
                         invitation.rsvp_status=@"REMOVED";
@@ -2089,7 +2094,7 @@
                 AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
                 NSError *error;
                 NSString *json = [[RKObjectSerializer serializerWithObject:cross.exfee mapping:[[APICrosses getExfeeMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
-                NSLog(@"%@",json);
+//                NSLog(@"%@",json);
                 
                 RKParams* rsvpParams = [RKParams params];
                 [rsvpParams setValue:json forParam:@"exfee"];
@@ -2104,7 +2109,7 @@
                     request.onDidLoadResponse=^(RKResponse *response){
                         if (response.statusCode == 200) {
                             NSDictionary *body=[response.body objectFromJSONData];
-                            NSLog(@"%@",body);
+//                            NSLog(@"%@",body);
                             
                             if([body isKindOfClass:[NSDictionary class]]) {
                                 id code=[[body objectForKey:@"meta"] objectForKey:@"code"];

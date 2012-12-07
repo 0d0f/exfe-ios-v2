@@ -17,6 +17,7 @@
 #import "Util.h"
 #import "AddressBook.h"
 #import "UIBorderView.h"
+#import "EXGradientToolbarView.h"
 #import <objc/runtime.h>
 
 #define LOCAL_ADDRESSBOOK 0
@@ -24,7 +25,7 @@
 
 @interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,RKObjectLoaderDelegate,UITableViewDelegate,UITableViewDataSource,EXBubbleScrollViewDelegate,UIScrollViewDelegate>{
     UITextField *exfeeInput;
-    UIView *toolbar;
+    EXGradientToolbarView *toolbar;
     NSMutableArray *suggestIdentities;
     UIViewController *gatherview;
     UITableView *suggestionTable;
@@ -40,14 +41,17 @@
     NSArray *localcontacts;
     NSArray *filteredlocalcontacts;
     UIView *expandExfeeView;
+    UIView *expandExfeeViewShadow;
     int addressbookType;
     int selectedRowIndex;
     int expandCellHeight;
+    UIButton *btnEXFE;
+    UIButton *btnLocal;
 }
 @property (nonatomic,retain) UIViewController* gatherview;
 
 - (void) done:(id)sender;
-- (IBAction) Close:(id) sender;
+- (void) Close;
 - (Identity*) getIdentityFromLocal:(NSString*)input provider:(NSString*)provider;
 - (void) addBubbleByIdentity:(Identity*)identity input:(NSString*)input;
 - (IBAction)textDidChange:(UITextField*)textField;

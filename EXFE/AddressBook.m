@@ -38,12 +38,10 @@
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople( addressbook );
     CFIndex count= CFArrayGetCount(allPeople);
     NSMutableArray *contacts=[[NSMutableArray alloc] initWithCapacity:count];
-    for(int i=0;i<count;i++){
-        ABRecordRef ref = CFArrayGetValueAtIndex( allPeople, i );
+    for(int ai=0;ai<count;ai++){
+        ABRecordRef ref = CFArrayGetValueAtIndex( allPeople, ai );
         ABRecordType reftype = ABRecordGetRecordType(ref);
         if(reftype==0){
-            
-//            CFDateRef modifyDate = ABRecordCopyValue(ref, kABPersonModificationDateProperty);
 
             ABMultiValueRef multi_email = ABRecordCopyValue(ref, kABPersonEmailProperty);
             ABMultiValueRef multi_socialprofile = ABRecordCopyValue(ref, kABPersonSocialProfileProperty);
@@ -73,25 +71,27 @@
                 if([emails_array count]>0)
                     [person setObject:emails_array forKey:@"emails"];
             }
+            NSMutableArray *social_array=[[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_socialprofile)] autorelease];
             for (CFIndex i = 0; i < ABMultiValueGetCount(multi_socialprofile); i++) {
-                NSMutableArray *social_array=[[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_socialprofile)] autorelease];
                 NSDictionary* socialprofile =( NSDictionary*) ABMultiValueCopyValueAtIndex(multi_socialprofile, i);
+
                 if([[socialprofile objectForKey:@"service"] isEqualToString:@"twitter"] ||  [[socialprofile objectForKey:@"service"] isEqualToString:@"facebook"]){
                     [social_array addObject:socialprofile];
                     
                     indexfield=[indexfield stringByAppendingFormat:@" %@",[socialprofile objectForKey:@"username"]];
                 }
-            if([social_array count]>0)
-                [person setObject:social_array forKey:@"social"];
             }
+            if([social_array count]>0)
+                    [person setObject:social_array forKey:@"social"];
+
             for (CFIndex i = 0; i < ABMultiValueGetCount(multi_im); i++) {
                 NSMutableArray *im_array=[[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_im)] autorelease];
+
                 NSDictionary* personim =(NSDictionary*) ABMultiValueCopyValueAtIndex(multi_im, i);
+
             if([[personim objectForKey:@"service"] isEqualToString:@"Facebook"]){
                 [im_array addObject:personim];
-                
                 indexfield=[indexfield stringByAppendingFormat:@" %@",[personim objectForKey:@"username"]];
-
             }
             if([im_array count]>0)
                 [person setObject:im_array forKey:@"im"];

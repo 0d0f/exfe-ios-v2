@@ -11,7 +11,7 @@
 @implementation GatherExfeeInputCell
 @synthesize avatar;
 @synthesize title;
-@synthesize subtitle;
+//@synthesize subtitle;
 @synthesize providerIcon;
 
 
@@ -20,11 +20,11 @@
 	title = [s copy];
 	[self setNeedsDisplay]; 
 }
-- (void)setSubtitle:(NSString *)s {
-	[subtitle release];
-	subtitle = [s copy];
-	[self setNeedsDisplay]; 
-}
+//- (void)setSubtitle:(NSString *)s {
+//	[subtitle release];
+//	subtitle = [s copy];
+//	[self setNeedsDisplay]; 
+//}
 
 - (void)setAvatar:(UIImage *)a {
 	[avatar release];
@@ -64,8 +64,8 @@
 
 - (void)drawContentView:(CGRect)r{
     
-    [title drawInRect:CGRectMake(5+30+5, 6, self.frame.size.width-(5+30+5+5), 20) withFont:[UIFont fontWithName:@"HelveticaNeue" size:18] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
-    [subtitle drawInRect:CGRectMake(5+30+5, 6+22, self.frame.size.width-(5+30+5+5), 18) withFont:[UIFont fontWithName:@"HelveticaNeue" size:12] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
+    [title drawInRect:CGRectMake(5+30+5, 11, self.frame.size.width-(5+30+5+5), 20) withFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
+//    [subtitle drawInRect:CGRectMake(5+30+5, 6+22, self.frame.size.width-(5+30+5+5), 18) withFont:[UIFont fontWithName:@"HelveticaNeue" size:12] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
     [avatar drawInRect:CGRectMake(5, 5, 30, 30)];
     if(providerIconSet!=nil)
     {

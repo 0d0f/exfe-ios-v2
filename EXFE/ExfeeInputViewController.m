@@ -28,64 +28,86 @@ static char identitykey;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
-//    [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
-    [self.view addSubview:toolbar];
+    CGRect screenframe=[[UIScreen mainScreen] bounds];
+    screenframe.size.height-=20;
+    [self.view setFrame:screenframe];
 
-    UIButton *btnLocal=[UIButton buttonWithType:UIButtonTypeCustom];
-    
-    [btnLocal setFrame:CGRectMake(28, 44, 120, 22)];
-    [btnLocal addTarget:self action:@selector(reloadLocalAddressBook) forControlEvents:UIControlEventTouchUpInside];
-    [btnLocal setTitle:@"Phone contacts" forState:UIControlStateNormal];
-    [btnLocal.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
-
-    [btnLocal setBackgroundImage:[[UIImage imageNamed:@"btn_blue_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
-
-    [self.view addSubview:btnLocal];
-
-    UIButton *btnEXFE=[UIButton buttonWithType:UIButtonTypeCustom];
-    [btnEXFE setFrame:CGRectMake(171, 44, 60, 22)];
-    [btnEXFE addTarget:self action:@selector(reloadExfeAddressBook) forControlEvents:UIControlEventTouchUpInside];
-    [btnEXFE setTitle:@"Exfees" forState:UIControlStateNormal];
-    [btnEXFE.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
-
-//    [btnEXFE setBackgroundColor:[UIColor blackColor]];
-    [btnEXFE setBackgroundImage:[[UIImage imageNamed:@"btn_blue_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
-
-    [self.view addSubview:btnEXFE];
-    
-    selectedRowIndex=-1;
-    suggestionTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 74, 320, 460-74) style:UITableViewStylePlain];
+    suggestionTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 77, 320, self.view.frame.size.height-77) style:UITableViewStylePlain];
     suggestionTable.dataSource=self;
     suggestionTable.delegate=self;
     [self.view addSubview:suggestionTable];
+
     
-    exfeeList=[[EXBubbleScrollView alloc] initWithFrame:CGRectMake(5, 7, 255, 30)];
+    
+    toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 77)];
+    [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
+    [toolbar.layer setShadowOpacity:0.8];
+    [toolbar.layer setShadowRadius:3.0];
+    [toolbar.layer setShadowOffset:CGSizeMake(0, 0)];
+
+    [self.view addSubview:toolbar];
+
+    [self.view setBackgroundColor:[UIColor colorWithRed:221/255.0f green:221/255.0f blue:221/255.0f alpha:1]];
+    btnLocal=[UIButton buttonWithType:UIButtonTypeCustom];
+    
+    [btnLocal setFrame:CGRectMake(0, 38, self.view.frame.size.width/2, 46)];
+    [btnLocal addTarget:self action:@selector(reloadLocalAddressBook) forControlEvents:UIControlEventTouchUpInside];
+    [btnLocal setTitle:@"Phone contacts" forState:UIControlStateNormal];
+    [btnLocal.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+    [btnLocal setTitleColor:FONT_COLOR_51 forState:UIControlStateNormal];
+
+    
+    [btnLocal setBackgroundImage:[[UIImage imageNamed:@"tab_pressed.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10, 0,10)] forState:UIControlStateNormal];
+
+    [self.view addSubview:btnLocal];
+
+    btnEXFE=[UIButton buttonWithType:UIButtonTypeCustom];
+    [btnEXFE setFrame:CGRectMake(self.view.frame.size.width/2, 38, self.view.frame.size.width/2, 46)];
+    [btnEXFE addTarget:self action:@selector(reloadExfeAddressBook) forControlEvents:UIControlEventTouchUpInside];
+    [btnEXFE setTitle:@"Exfees" forState:UIControlStateNormal];
+    [btnEXFE.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+    [btnEXFE setTitleColor:FONT_COLOR_51 forState:UIControlStateNormal];
+    [btnEXFE setBackgroundImage:nil forState:UIControlStateNormal];
+    [self.view addSubview:btnEXFE];
+    
+    selectedRowIndex=-1;
+    
+    exfeeList=[[EXBubbleScrollView alloc] initWithFrame:CGRectMake(28, 7, 232, 31)];
     [exfeeList setContentSize:CGSizeMake(exfeeList.frame.size.width, 30)];
     [exfeeList setEXBubbleDelegate:self];
     
+    inputframeview=[[UIImageView alloc] initWithFrame:exfeeList.frame];
+    inputframeview.image=[UIImage imageNamed:@"textfield.png"];
+    inputframeview.contentMode    = UIViewContentModeScaleToFill;
+    inputframeview.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+    [toolbar addSubview:inputframeview];
     [toolbar addSubview:exfeeList];
+    
+    UIButton *btncancel=[UIButton buttonWithType:UIButtonTypeCustom];
+    
+    [btncancel setBackgroundColor:[UIColor colorWithRed:25/255.0f green:25/255.0f blue:25/255.0f alpha:0.5]];
+    
+    [btncancel setBackgroundImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btncancel setFrame:CGRectMake(0, 0, 20, 44)];
+    [btncancel addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside];
+    
+    [toolbar addSubview:btncancel];
     
     inputleftmask=[[UIImageView alloc] initWithFrame:CGRectMake(exfeeList.frame.origin.x,exfeeList.frame.origin.y , 40, 30)];
     inputleftmask.image=[UIImage imageNamed:@"exfee_inputfield.png"];
     
     CAShapeLayer *maskLayer = [CAShapeLayer layer];
     UIBezierPath *roundedPath =
-    [UIBezierPath bezierPathWithRoundedRect:inputleftmask.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerBottomLeft cornerRadii:CGSizeMake(15.f, 15.f)];
+    [UIBezierPath bezierPathWithRoundedRect:inputleftmask.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerBottomLeft cornerRadii:CGSizeMake(5.f, 5.f)];
     maskLayer.path = [roundedPath CGPath];
     inputleftmask.layer.mask=maskLayer;
     inputleftmask.layer.masksToBounds = YES;
-    [inputleftmask setHidden:YES];
+    [inputleftmask setHidden:NO];
     [toolbar addSubview:inputleftmask];
 
+
     
-    inputframeview=[[UIImageView alloc] initWithFrame:exfeeList.frame];
-    inputframeview.image=[UIImage imageNamed:@"textfield_navbar_frame.png"];
-    inputframeview.contentMode    = UIViewContentModeScaleToFill;
-    inputframeview.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
-    
-    [toolbar addSubview:inputframeview];
-    exfeeList.layer.cornerRadius=15;
+    exfeeList.layer.cornerRadius=5;
     [self changeLeftIconWhite:NO];
   
     UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];
@@ -133,12 +155,19 @@ static char identitykey;
 
 }
 - (void) reloadLocalAddressBook{
+    [btnLocal setBackgroundImage:[[UIImage imageNamed:@"tab_pressed.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10, 0,10)] forState:UIControlStateNormal];
+    [btnEXFE setBackgroundImage:nil forState:UIControlStateNormal];
+
     addressbookType=LOCAL_ADDRESSBOOK;
     [suggestionTable reloadData];
 //    NSLog(@"localaddressbook");
 }
 
 - (void) reloadExfeAddressBook{
+    
+    [btnEXFE setBackgroundImage:[[UIImage imageNamed:@"tab_pressed.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10, 0,10)] forState:UIControlStateNormal];
+    [btnLocal setBackgroundImage:nil forState:UIControlStateNormal];
+
     addressbookType=EXFE_ADDRESSBOOK;
     [self loadIdentitiesFromDataStore:@""];
     [suggestionTable reloadData];
@@ -220,19 +249,24 @@ static char identitykey;
 }
 
 
-- (IBAction) Close:(id) sender{
+- (void) Close{
     [self dismissModalViewControllerAnimated:YES];    
 }
 
 - (void) addExfeeToCross{
     NSArray *customobjects=[exfeeList bubbleCustomObjects];
+    NSMutableArray *invitations=[[[NSMutableArray alloc] initWithCapacity:[customobjects count]] autorelease];
     NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:[customobjects count]];
     for(Invitation* invitation in customobjects){
-        if(![dict objectForKey:invitation.identity.identity_id]){
-            [dict setObject:@"" forKey:invitation.identity.identity_id];
-            [(GatherViewController*)gatherview addExfee:invitation];
+        NSString *key=[invitation.identity.provider stringByAppendingString:invitation.identity.external_id];
+        if(![dict objectForKey:key]){
+            [dict setObject:@"" forKey:key];
+            [invitations addObject:invitation];
         }
     }
+    
+    [(GatherViewController*)gatherview addExfee:invitations];
+
     [dict release];
     [self dismissModalViewControllerAnimated:YES];
 }
@@ -265,7 +299,7 @@ static char identitykey;
 //        NSArray *data = [NSArray arrayWithObject:[NSMutableDictionary dictionaryWithObject:@"foo" forKey:@"BAR"]];
 //        NSArray *filtered = [data filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(BAR == %@)", @"foo"]];
         
-        NSLog(@"%@",localcontacts);
+//        NSLog(@"%@",localcontacts);
 //        NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",input];
 //        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((name like[c] %@) OR (external_username like[c] %@) OR (external_id like[c] %@) OR (nickname like[c] %@)) AND provider != %@ AND provider != %@ AND connected_user_id != 0",inputpredicate,inputpredicate,inputpredicate,inputpredicate,@"iOSAPN",@"android"];
 //        
@@ -297,7 +331,7 @@ static char identitykey;
 - (Identity*) getIdentityFromLocal:(NSString*)input provider:(NSString*)provider{
     
     NSFetchRequest* request = [Identity fetchRequest];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((external_username == %@) AND (provider== %@))",input];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((external_username == %@) AND (provider== %@))",input,provider];
     [request setPredicate:predicate];
     NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
     if([suggestwithselected count]>0)
@@ -323,27 +357,33 @@ static char identitykey;
     [request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
     NSMutableArray *temp=[[NSMutableArray alloc]initWithCapacity:10];
     NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
+    NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:[suggestwithselected count]];
+    
 //    NSSet * uniquesuggestwithselected = [NSSet setWithArray:[suggestwithselected valueForKey:@"identity_id"]];
     for (Identity *identity in suggestwithselected){
         BOOL flag=NO;
-        
-        for (Invitation *selected in ((GatherViewController*)gatherview).exfeeIdentities){
-            if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
-            {
-                flag=YES;
-                continue;
+        NSString *key=[identity.provider stringByAppendingString:identity.external_id];
+        if([dict objectForKey:key]==nil){
+            for (Invitation *selected in ((GatherViewController*)gatherview).exfeeIdentities){
+                if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
+                {
+                    flag=YES;
+                    continue;
+                }
             }
-        }
-        for (Invitation *selected in exfeeList.bubbleCustomObjects){
-            if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
-            {
-                flag=YES;
-                continue;
+            for (Invitation *selected in exfeeList.bubbleCustomObjects){
+                if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
+                {
+                    flag=YES;
+                    continue;
+                }
             }
+            if(flag==NO)
+                [temp addObject:identity];
+            [dict setObject:@"" forKey:key];
         }
-        if(flag==NO)
-            [temp addObject:identity];
     }
+    [dict release];
     suggestIdentities=[temp retain];
     [temp release];
     [suggestionTable reloadData];
@@ -539,8 +579,7 @@ static char identitykey;
         }
         NSDictionary *persondict=[AddressBook getDefaultIdentity:person];
         NSString *username=[persondict objectForKey:@"external_id"];
-        cell.subtitle=username;
-        
+//        cell.subtitle=username;
         cell.providerIconSet=iconset;
         cell.providerIcon=nil;
 
@@ -548,7 +587,6 @@ static char identitykey;
         if([iconset count]>1){
             CGRect frame = CGRectMake(0.0, 0.0, (18+10)*([iconset count]+1), 110);
             button.frame = frame;
-//            [button setBackgroundColor:[UIColor blackColor]];
             [button addTarget:self action:@selector(checkButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = button;
         }
@@ -559,11 +597,11 @@ static char identitykey;
         if(cell.title==nil || [cell.title isEqualToString:@""])
             cell.title = identity.external_username;
         
-        if([identity.provider isEqualToString:@"twitter"])
-            cell.subtitle =[NSString stringWithFormat:@"@%@",identity.external_username];
-        else
-            cell.subtitle =identity.external_id;
-    
+//        if([identity.provider isEqualToString:@"twitter"])
+//            cell.subtitle =[NSString stringWithFormat:@"@%@",identity.external_username];
+//        else
+//            cell.subtitle =identity.external_id;
+//    
         if(identity.provider!=nil && ![identity.provider isEqualToString:@""]){
 
             NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",identity.provider];
@@ -724,6 +762,8 @@ static char identitykey;
 
 - (void)checkButtonTapped:(id)sender event:(id)event
 {
+    if(addressbookType== EXFE_ADDRESSBOOK)
+        return;
     NSSet *touches = [event allTouches];
     UITouch *touch = [touches anyObject];
     CGPoint currentTouchPosition = [touch locationInView:suggestionTable];
@@ -737,7 +777,7 @@ static char identitykey;
         }
         NSDictionary *dict=[filteredlocalcontacts objectAtIndex:indexPath.row];
         NSArray* useridentities=[AddressBook getLocalIdentityObjects:dict];
-        expandCellHeight=44+[useridentities count]/2*44+([useridentities count]%2)*44;
+        expandCellHeight=44+[useridentities count]/2*40+([useridentities count]%2)*40;
         
         [[suggestionTable cellForRowAtIndexPath:indexPath] setNeedsDisplay];
         [suggestionTable reloadData];
@@ -753,36 +793,42 @@ static char identitykey;
                     [subview release];
                 }
             }
+            expandExfeeViewShadow=[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 4)];
+            
+            [expandExfeeViewShadow setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"shadow.png"]]];
+
             [expandExfeeView setFrame:CGRectMake(0, [cell frame].origin.y+44, cell.frame.size.width, cell.frame.size.height-44)];
             [expandExfeeView setBackgroundColor:[UIColor colorWithRed:111/255.f green:118/255.f blue:125/255.f alpha:1]];
             int idx=0;
             float cellwidth=cell.frame.size.width/2;
             for(NSDictionary *identity in useridentities)
             {
-                UIBorderView *identitycell=[[UIBorderView alloc] initWithFrame:CGRectMake(idx%2*cellwidth, idx/2*44, cellwidth, 44)];
-                UILabel *labelusername=[[[UILabel alloc] initWithFrame:CGRectMake(5, 0,  cellwidth-6-18-6,44)] autorelease];
+                UIBorderView *identitycell=[[UIBorderView alloc] initWithFrame:CGRectMake(idx%2*cellwidth, idx/2*40, cellwidth, 40)];
+
+                NSString *iconname=[NSString stringWithFormat:@"identity_%@_18.png",[identity objectForKey:@"provider"]];
+                UIImage *icon=[UIImage imageNamed:iconname];
+                
+                UIImageView *imgprovider=[[[UIImageView alloc] initWithFrame:CGRectMake(6, (44-18)/2, icon.size.width, icon.size.height)] autorelease];
+                imgprovider.backgroundColor=[UIColor clearColor];
+                imgprovider.image=icon;
+                [identitycell addSubview:imgprovider];
+                
+                UILabel *labelusername=[[[UILabel alloc] initWithFrame:CGRectMake(6+18+6, 0,  cellwidth-6-18-6,40)] autorelease];
                 labelusername.numberOfLines = 0;
                 [labelusername setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:16]];
                 [labelusername setTextColor:[UIColor whiteColor]];
-
+                
                 [labelusername setText:[identity objectForKey:@"external_id"]];
                 [labelusername setLineBreakMode:NSLineBreakByCharWrapping];
                 labelusername.backgroundColor=[UIColor clearColor];
                 [identitycell addSubview:labelusername];
 
-                NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",[identity objectForKey:@"provider"]];
-                UIImage *icon=[UIImage imageNamed:iconname];
-                
-                UIImageView *imgprovider=[[[UIImageView alloc] initWithFrame:CGRectMake(cellwidth-6-18, (44-18)/2, icon.size.width, icon.size.height)] autorelease];
-                imgprovider.backgroundColor=[UIColor clearColor];
-                imgprovider.image=icon;
-                [identitycell addSubview:imgprovider];
                 
                 UIButton *identitycellbtn=[UIButton buttonWithType:UIButtonTypeCustom];
-                [identitycellbtn setFrame:CGRectMake(0, 0, cellwidth, 44)];
+                [identitycellbtn setFrame:CGRectMake(0, 0, cellwidth, 40)];
                 [identitycellbtn setBackgroundColor:[UIColor clearColor]];
                 
-                [identitycellbtn setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateHighlighted];
+                [identitycellbtn setBackgroundImage:[[UIImage imageNamed:@"cell_selected_40.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0,0)] forState:UIControlStateHighlighted];
 
 
 
@@ -792,19 +838,21 @@ static char identitykey;
                 [identitycell addSubview:identitycellbtn];
                 
 //              if((idx+1)/2%2==0 )
-                    [identitycell setBackgroundColor:[UIColor colorWithRed:111/255.f green:118/255.f blue:125/255.f alpha:1]];
+                
+                    [identitycell setBackgroundColor:FONT_COLOR_51];
 //              else
 //                  [identitycell setBackgroundColor:[UIColor colorWithRed:58/255.f green:110/255.f blue:165/255.f alpha:1]];
                 [expandExfeeView addSubview:identitycell];
                 idx++;
             }
             if([useridentities count]%2==1){
-                UIBorderView *identitycell=[[UIBorderView alloc] initWithFrame:CGRectMake([useridentities count]%2*cellwidth, [useridentities count]/2*44, cellwidth, 44)];
-                [identitycell setBackgroundColor:[UIColor colorWithRed:111/255.f green:118/255.f blue:125/255.f alpha:1]];
+                UIBorderView *identitycell=[[UIBorderView alloc] initWithFrame:CGRectMake([useridentities count]%2*cellwidth, [useridentities count]/2*40, cellwidth, 40)];
+                [identitycell setBackgroundColor:FONT_COLOR_51];
                 [expandExfeeView addSubview:identitycell];
 
             }
-            
+            [expandExfeeView addSubview:expandExfeeViewShadow];
+//            [expandExfeeViewShadow release];
             [expandExfeeView setHidden:NO];
         }
         else{

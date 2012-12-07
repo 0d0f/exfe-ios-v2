@@ -14,12 +14,10 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
-        leftview = [[UIView alloc] initWithFrame:CGRectMake(-320, 0, 320, self.frame.size.height)];
+        [self setBackgroundColor:[UIColor clearColor]];
+        leftview = [[UIView alloc] initWithFrame:CGRectMake(-320, 0, 320, 30)];
         leftview.backgroundColor=FONT_COLOR_HL;
         [self addSubview:leftview];
-        
-        self.backgroundColor=[UIColor whiteColor];
         
         input=[[UITextField alloc] initWithFrame:CGRectMake(6+18+4, 0, self.frame.size.width, 30)];
         [input setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
@@ -29,13 +27,13 @@
         CGRect inputframe=input.frame;
         inputframe.origin.x=0;
         inputframe.origin.y=0;
-        inputbackgroundImage = [[UIImageView alloc] initWithFrame:inputframe];
-        inputbackgroundImage.image = [UIImage imageNamed:@"textfield_navbar_frame.png"];
-        inputbackgroundImage.contentMode    = UIViewContentModeScaleToFill;
-        inputbackgroundImage.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+//        inputbackgroundImage = [[UIImageView alloc] initWithFrame:inputframe];
+//        inputbackgroundImage.image = [UIImage imageNamed:@"textfield_navbar_frame.png"];
+//        inputbackgroundImage.contentMode    = UIViewContentModeScaleToFill;
+//        inputbackgroundImage.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
         
         backgroundview=[[UIView alloc] initWithFrame:inputframe];
-//        backgroundview.backgroundColor=[UIColor whiteColor];
+        backgroundview.backgroundColor=[UIColor clearColor];
         [self addSubview:backgroundview];
         bubbles=[[NSMutableArray alloc] initWithCapacity:12];
         
@@ -158,7 +156,7 @@
         [UIView setAnimationDuration:0.3];
         [self setContentOffset:CGPointMake(offset, 0)];
         [UIView commitAnimations];
-        CGRect leftframe=CGRectMake(-320, 0, 320+18+6+6, self.frame.size.height);
+        CGRect leftframe=CGRectMake(-320, 0, 320+18+6+6, 30);
         [leftview setFrame:leftframe];
     }
     input.text=@" ";

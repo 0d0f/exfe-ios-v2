@@ -545,7 +545,6 @@
             //                [MBProgressHUD hideHUDForView:self.view animated:YES];
             if (response.statusCode == 200) {
                 NSDictionary *body=[response.body objectFromJSONData];
-                NSLog(@"%@",response.bodyAsString);
                 
                 if([body isKindOfClass:[NSDictionary class]]) {
                     id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
@@ -593,7 +592,6 @@
 {
     //tag 101: save cross
     //tag 102: save exfee
-    NSLog(@"button idx:%i id:%i",buttonIndex,alertView.tag);
     if(buttonIndex==0)//cancel
     {
     }else if(buttonIndex==1) //retry

@@ -117,7 +117,8 @@
 - (void) sendrsvp:(NSString*)status;
 - (void) setMates:(int)mates;
 - (void) setViewMode;
-- (void) addExfee:(Invitation*) invitation;
+//- (void) addExfee:(Invitation*) invitation;
+- (void) addExfee:(NSArray*) invitations;
 - (void) initData;
 - (void) ShowExfeePopOver:(Invitation*) invitation pointTo:(CGPoint)point arrowx:(float)arrowx;
 - (void) refreshExfeePopOver;
