@@ -77,8 +77,10 @@
 
                 if([[socialprofile objectForKey:@"service"] isEqualToString:@"twitter"] ||  [[socialprofile objectForKey:@"service"] isEqualToString:@"facebook"]){
                     [social_array addObject:socialprofile];
-                    
-                    indexfield=[indexfield stringByAppendingFormat:@" %@",[socialprofile objectForKey:@"username"]];
+                    NSString *social_username=[socialprofile objectForKey:@"username"];
+                    if([[socialprofile objectForKey:@"service"] isEqualToString:@"twitter"])
+                        social_username=[@"@" stringByAppendingString:social_username];
+                    indexfield=[indexfield stringByAppendingFormat:@" %@",social_username];
                 }
             }
             if([social_array count]>0)

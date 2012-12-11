@@ -315,8 +315,10 @@
                               predicateWithFormat:@"user_id = %u", app.userid];
     [request setPredicate:predicate];
 	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    if(cross==nil)
+    if(cross==nil){
         cross=[Cross object];
+//        cross.time
+    }
     if(users!=nil && [users count] >0)
     {
         default_user=[[users objectAtIndex:0] retain];
@@ -774,9 +776,38 @@
     if([crossdescription.text isEqualToString:@"Write some notes here."]){
         crossdescription.text=@"";
     }
-    cross.by_identity=[[default_user.identities allObjects] objectAtIndex:0];
+    
+    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
+    NSArray *orderedIdentities=[default_user.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+
+    cross.by_identity=[orderedIdentities objectAtIndex:0];
     cross.title=crosstitle.text;
     cross.cross_description=crossdescription.text;
+    if(datetime==nil){
+        datetime=[CrossTime object];
+        datetime.begin_at=[EFTime object];
+        
+        NSDate *date=[NSDate date];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
+        NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+        [formatter setLocale:locale];
+        [formatter setDateFormat:@"Z"];
+
+        NSString *timezonestr=[formatter stringFromDate:date];
+        NSMutableString *str=[timezonestr mutableCopy];
+        [str insertString:@":" atIndex:3];
+        datetime.begin_at.timezone=str;
+        [str release];
+        
+        [formatter release];
+//        NSString *eftimezone=[timezonestr substringFromIndex:3];
+//        if([eftimezone isEqualToString:@""])
+//            eftimezone=@"+00:00";
+
+        
+//        datetime.begin_at.timezone=@"";
+    }
     cross.time=datetime;
     Exfee *exfee=[Exfee object];
     
@@ -839,7 +870,14 @@
     placeViewController.gatherview=self;
     if(cross.place!=nil){
         if(viewmode==YES){
-            [placeViewController setPlace:cross.place isedit:YES];
+            
+            
+            
+            if(![cross.place.title isEqualToString:@""] || ( ![cross.place.lat isEqualToString:@""] || ![cross.place.lng isEqualToString:@""])){
+                [placeViewController setPlace:cross.place isedit:YES];
+            }
+            else
+                placeViewController.isaddnew=YES;
         }
         else{
             [placeViewController setPlace:cross.place isedit:NO];
@@ -847,8 +885,9 @@
     }else{
         placeViewController.isaddnew=YES;
     }
-    if([status isEqualToString:@"detail"])
+    if([status isEqualToString:@"detail"]){
         placeViewController.showdetailview=YES;
+    }
     [self presentModalViewController:placeViewController animated:YES];
     [placeViewController release];
 }
@@ -2075,94 +2114,94 @@
             if(i<[exfeeIdentities count]) {
                 Invitation* selected_invitation=((Invitation*)[exfeeIdentities objectAtIndex:i]);
                 for (Invitation *invitation in cross.exfee.invitations){
-                    if([invitation.invitation_id intValue]==[selected_invitation.invitation_id intValue]){
+                    
+                    
+                    if([invitation.identity.external_id isEqualToString:selected_invitation.identity.external_id] ){
                         origin_status=[invitation.rsvp_status copy];
                         invitation.rsvp_status=@"REMOVED";
                         selected_invitation.rsvp_status=@"REMOVED";
                     }
                 }
                 //((Invitation*)[exfeeIdentities objectAtIndex:i]).rsvp_status=@"REMOVED";
-                
-                MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.labelText = @"Saving";
-                hud.mode=MBProgressHUDModeCustomView;
-                EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-                [bigspin startAnimating];
-                hud.customView=bigspin;
-                [bigspin release];
-                cross.by_identity=[self getMyInvitation].identity;
-                AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-                NSError *error;
-                NSString *json = [[RKObjectSerializer serializerWithObject:cross.exfee mapping:[[APICrosses getExfeeMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
-//                NSLog(@"%@",json);
-                
-                RKParams* rsvpParams = [RKParams params];
-                [rsvpParams setValue:json forParam:@"exfee"];
-                [rsvpParams setValue:cross.exfee.exfee_id forParam:@"id"];
-                [rsvpParams setValue:[self getMyInvitation].identity.identity_id forParam:@"by_identity_id"];
-                RKClient *client = [RKClient sharedClient];
-                [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-                NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/edit?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
-                [client post:endpoint usingBlock:^(RKRequest *request){
-                    request.method=RKRequestMethodPOST;
-                    request.params=rsvpParams;
-                    request.onDidLoadResponse=^(RKResponse *response){
-                        if (response.statusCode == 200) {
-                            NSDictionary *body=[response.body objectFromJSONData];
-//                            NSLog(@"%@",body);
-                            
-                            if([body isKindOfClass:[NSDictionary class]]) {
-                                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                                if(code){
-                                    if([code intValue]==200) {
-                                        [exfeeShowview calculateColumn];
-                                        [self refreshExfeePopOver];
-                                        [exfeeShowview reloadData];
+                if([cross.cross_id intValue]>0){
+                    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                    hud.labelText = @"Saving";
+                    hud.mode=MBProgressHUDModeCustomView;
+                    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+                    [bigspin startAnimating];
+                    hud.customView=bigspin;
+                    [bigspin release];
+                    cross.by_identity=[self getMyInvitation].identity;
+                    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                    NSError *error;
+                    NSString *json = [[RKObjectSerializer serializerWithObject:cross.exfee mapping:[[APICrosses getExfeeMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
+                    
+                    RKParams* rsvpParams = [RKParams params];
+                    [rsvpParams setValue:json forParam:@"exfee"];
+                    [rsvpParams setValue:cross.exfee.exfee_id forParam:@"id"];
+                    [rsvpParams setValue:[self getMyInvitation].identity.identity_id forParam:@"by_identity_id"];
+                    RKClient *client = [RKClient sharedClient];
+                    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+                    NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/edit?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
+                    [client post:endpoint usingBlock:^(RKRequest *request){
+                        request.method=RKRequestMethodPOST;
+                        request.params=rsvpParams;
+                        request.onDidLoadResponse=^(RKResponse *response){
+                            if (response.statusCode == 200) {
+                                NSDictionary *body=[response.body objectFromJSONData];
+                                
+                                if([body isKindOfClass:[NSDictionary class]]) {
+                                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                                    if(code){
+                                        if([code intValue]==200) {
+                                            [exfeeShowview calculateColumn];
+                                            [self refreshExfeePopOver];
+                                            [exfeeShowview reloadData];
+                                            [self hiddenPopover];
+                                        }
                                     }
                                 }
+                            }else {
+                                //Check Response Body to get Data!
                             }
-                        }else {
-                            //Check Response Body to get Data!
-                        }
-                        [MBProgressHUD hideHUDForView:self.view animated:YES];
-                    };
-                    request.onDidFailLoadWithError=^(NSError *error){
-                        [MBProgressHUD hideHUDForView:self.view animated:YES];
-                        NSString *errormsg=@"Could not save this cross.";
-                        for(int i=0;i< [exfeeSelected count];i++) {
-                            if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
-                                if(i<[exfeeIdentities count]) {
-                                    Invitation* selected_invitation=((Invitation*)[exfeeIdentities objectAtIndex:i]);
-                                    for (Invitation *invitation in cross.exfee.invitations){
-                                        if([invitation.invitation_id intValue]==[selected_invitation.invitation_id intValue]){
-                                            invitation.rsvp_status=origin_status;
-                                            selected_invitation.rsvp_status=origin_status;
+                            [MBProgressHUD hideHUDForView:self.view animated:YES];
+                        };
+                        request.onDidFailLoadWithError=^(NSError *error){
+                            [MBProgressHUD hideHUDForView:self.view animated:YES];
+                            NSString *errormsg=@"Could not save this cross.";
+                            for(int i=0;i< [exfeeSelected count];i++) {
+                                if([[exfeeSelected objectAtIndex:i] boolValue]==YES) {
+                                    if(i<[exfeeIdentities count]) {
+                                        Invitation* selected_invitation=((Invitation*)[exfeeIdentities objectAtIndex:i]);
+                                        for (Invitation *invitation in cross.exfee.invitations){
+                                            if([invitation.invitation_id intValue]==[selected_invitation.invitation_id intValue]){
+                                                invitation.rsvp_status=origin_status;
+                                                selected_invitation.rsvp_status=origin_status;
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        if(![errormsg isEqualToString:@""]){
-                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
-                            alert.tag=202; // 201 = Save Exfee
-                            [alert show];
-                            [alert release];
-                        }
-                    };
-                    request.delegate=self;
-                }];
-                
+                            if(![errormsg isEqualToString:@""]){
+                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
+                                alert.tag=202; // 201 = Save Exfee
+                                [alert show];
+                                [alert release];
+                            }
+                        };
+                        request.delegate=self;
+                    }];
+                }else{
+                    [exfeeShowview calculateColumn];
+                    [self refreshExfeePopOver];
+                    [exfeeShowview reloadData];
+                    [self hiddenPopover];
+                }
             }
         }
     }
-    
-    
-//    NSLog(@"invitation %i",[cross.exfee.invitations count]);
-//    for (Invitation *invitation in cross.exfee.invitations){
-//        NSLog(@"%@",invitation.identity);
-//    }
-    
+
 }
 
 - (void) setRandomBackground{

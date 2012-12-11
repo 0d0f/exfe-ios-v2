@@ -72,7 +72,4 @@
 - (void)setStatusText:(NSString*)_text{
     statustext.text=_text;
 }
-//- (IBAction)verify:(id)sender{
-//    NSLog(@"verify");
-//}
 @end

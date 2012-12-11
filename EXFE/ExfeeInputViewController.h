@@ -54,6 +54,8 @@
 - (void) Close;
 - (Identity*) getIdentityFromLocal:(NSString*)input provider:(NSString*)provider;
 - (void) addBubbleByIdentity:(Identity*)identity input:(NSString*)input;
+- (void) addBubbleByInputString:(NSString*)input provider:(NSString*)provider;
+
 - (IBAction)textDidChange:(UITextField*)textField;
 - (IBAction)editingDidBegan:(UITextField*)textField;
 - (IBAction)editingDidEnd:(UITextField*)textField;

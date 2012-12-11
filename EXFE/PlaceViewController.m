@@ -221,6 +221,9 @@
         region.span.latitudeDelta = delta;
         [map setRegion:region animated:YES];
         [self addPlaceEdit:place];
+        [map becomeFirstResponder];
+        [inputplace resignFirstResponder];
+        [placeedit resignFirstResponder];
     }
 }
 - (void) PlaceEditClose:(id) sender{
@@ -636,7 +639,7 @@
     CLLocationCoordinate2D location;
     location.latitude=0;
     location.longitude=0;
-
+    isedit=editing;
     if(index==-2)
     {
         NSArray *annotations=[map annotations];
@@ -711,7 +714,7 @@
         [placeedit setHidden:NO];
         [placeedit becomeFirstResponder];
     }
-//    isedit=YES;
+//
 }
 
 - (void) selectOnMap:(id) sender

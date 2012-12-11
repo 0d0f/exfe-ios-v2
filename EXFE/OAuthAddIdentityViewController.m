@@ -30,8 +30,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    [webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:oauth_url]]];
-//    NSLog(@"oauth url:%@",oauth_url);
     
     toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
     [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];

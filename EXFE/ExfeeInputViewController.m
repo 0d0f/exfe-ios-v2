@@ -50,7 +50,7 @@ static char identitykey;
     [self.view setBackgroundColor:[UIColor colorWithRed:221/255.0f green:221/255.0f blue:221/255.0f alpha:1]];
     btnLocal=[UIButton buttonWithType:UIButtonTypeCustom];
     
-    [btnLocal setFrame:CGRectMake(0, 38, self.view.frame.size.width/2, 46)];
+    [btnLocal setFrame:CGRectMake(0, 38, self.view.frame.size.width/2, 39)];
     [btnLocal addTarget:self action:@selector(reloadLocalAddressBook) forControlEvents:UIControlEventTouchUpInside];
     [btnLocal setTitle:@"Phone contacts" forState:UIControlStateNormal];
     [btnLocal.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
@@ -62,7 +62,7 @@ static char identitykey;
     [self.view addSubview:btnLocal];
 
     btnEXFE=[UIButton buttonWithType:UIButtonTypeCustom];
-    [btnEXFE setFrame:CGRectMake(self.view.frame.size.width/2, 38, self.view.frame.size.width/2, 46)];
+    [btnEXFE setFrame:CGRectMake(self.view.frame.size.width/2, 38, self.view.frame.size.width/2, 39)];
     [btnEXFE addTarget:self action:@selector(reloadExfeAddressBook) forControlEvents:UIControlEventTouchUpInside];
     [btnEXFE setTitle:@"Exfees" forState:UIControlStateNormal];
     [btnEXFE.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
@@ -159,8 +159,9 @@ static char identitykey;
     [btnEXFE setBackgroundImage:nil forState:UIControlStateNormal];
 
     addressbookType=LOCAL_ADDRESSBOOK;
+    [expandExfeeView setHidden:YES];
+    expandCellHeight=44;
     [suggestionTable reloadData];
-//    NSLog(@"localaddressbook");
 }
 
 - (void) reloadExfeAddressBook{
@@ -170,9 +171,9 @@ static char identitykey;
 
     addressbookType=EXFE_ADDRESSBOOK;
     [self loadIdentitiesFromDataStore:@""];
+    [expandExfeeView setHidden:YES];
+    expandCellHeight=44;
     [suggestionTable reloadData];
-//    NSLog(@"exfeaddressbook");
-    
 }
 
 - (void) ErrorHint:(BOOL)hidden content:(NSString*)content{
@@ -256,19 +257,133 @@ static char identitykey;
 - (void) addExfeeToCross{
     NSArray *customobjects=[exfeeList bubbleCustomObjects];
     NSMutableArray *invitations=[[[NSMutableArray alloc] initWithCapacity:[customobjects count]] autorelease];
-    NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:[customobjects count]];
-    for(Invitation* invitation in customobjects){
-        NSString *key=[invitation.identity.provider stringByAppendingString:invitation.identity.external_id];
-        if(![dict objectForKey:key]){
-            [dict setObject:@"" forKey:key];
-            [invitations addObject:invitation];
+    NSMutableDictionary *dict=[[[NSMutableDictionary alloc] initWithCapacity:[customobjects count]] autorelease];
+    
+    NSMutableArray *inputobjs=[[[NSMutableArray alloc] initWithCapacity:[customobjects count]] autorelease];
+    
+    for(id inputobj in customobjects){
+        if([inputobj isKindOfClass:[Invitation class]]){
+            Invitation *invitation=(Invitation*)inputobj;
+            NSString *key=[invitation.identity.provider stringByAppendingString:invitation.identity.external_id];
+            if(![dict objectForKey:key]){
+                [dict setObject:@"" forKey:key];
+                [invitations addObject:invitation];
+            }
+        }
+        else if([inputobj isKindOfClass:[NSDictionary class]]){
+            [inputobjs addObject:(NSDictionary*)inputobj];
         }
     }
-    
-    [(GatherViewController*)gatherview addExfee:invitations];
+    if([inputobjs count]==0){
+        [(GatherViewController*)gatherview addExfee:invitations];
+        [self dismissModalViewControllerAnimated:YES];
+    }
+    else{
+        NSString *json=@"";
 
-    [dict release];
-    [self dismissModalViewControllerAnimated:YES];
+        for(NSDictionary *inputobj in inputobjs){
+            NSString *input=[inputobj objectForKey:@"input"];
+            NSString *provider=[inputobj objectForKey:@"provider"];
+            if([provider isEqualToString:@""])
+                provider=[Util findProvider:input];
+            
+            if(![provider isEqualToString:@""]) {
+                if(![json isEqualToString:@""])
+                    json=[json stringByAppendingString:@","];
+                json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,input];
+            }
+        }
+        json=[NSString stringWithFormat:@"[%@]",json];
+        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+        RKClient *client = [RKClient sharedClient];
+        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+        
+        MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.labelText = @"Adding...";
+        hud.mode=MBProgressHUDModeCustomView;
+        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+        [bigspin startAnimating];
+        hud.customView=bigspin;
+        [bigspin release];
+        
+        NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
+        RKParams* rsvpParams = [RKParams params];
+        [rsvpParams setValue:json forParam:@"identities"];
+        [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+        [client post:endpoint usingBlock:^(RKRequest *request){
+            request.method=RKRequestMethodPOST;
+            request.params=rsvpParams;
+            request.onDidLoadResponse=^(RKResponse *response){
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                if (response.statusCode == 200) {
+                    NSDictionary *body=[response.body objectFromJSONData];
+                    if([body isKindOfClass:[NSDictionary class]]) {
+                        id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                        if(code)
+                            if([code intValue]==200) {
+                                NSDictionary* response = [body objectForKey:@"response"];
+                                NSArray *identities = [response objectForKey:@"identities"];
+                                for (NSDictionary *identitydict in identities) {
+                                    NSString *external_id=[identitydict objectForKey:@"external_id"];
+                                    NSString *provider=[identitydict objectForKey:@"provider"];
+                                    NSString *avatar_filename=[identitydict objectForKey:@"avatar_filename"];
+                                    NSString *identity_id=[identitydict objectForKey:@"id"];
+                                    NSString *name=[identitydict objectForKey:@"name"];
+                                    NSString *nickname=[identitydict objectForKey:@"nickname"];
+                                    NSString *external_username=[identitydict objectForKey:@"external_username"];
+
+                                    Identity *identity=[Identity object];
+                                    identity.external_id=external_id;
+                                    identity.provider=provider;
+                                    identity.avatar_filename=avatar_filename;
+                                    identity.name=name;
+                                    identity.external_username=external_username;
+                                    identity.nickname=nickname;
+                                    identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
+                                    
+                                    Invitation *invitation =[Invitation object];
+                                    invitation.rsvp_status=@"NORESPONSE";
+                                    invitation.identity=identity;
+                                    Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
+                                    if(myinvitation!=nil)
+                                        invitation.by_identity=myinvitation.identity;
+                                    else
+                                        invitation.by_identity=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+                                    [invitations addObject:invitation];
+        //                                [self addBubbleByIdentity:identity input:name];
+        //                                ifAddExfeeSend=NO;
+                                }
+                                [(GatherViewController*)gatherview addExfee:invitations];
+                                [self dismissModalViewControllerAnimated:YES];
+        //                            if(shoulddismiss==YES)
+        //                                [self addExfeeToCross];
+                            }
+                    }
+                }
+        //            ifAddExfeeSend=NO;
+        //
+            };
+            request.onDidFailLoadWithError=^(NSError *error){
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            
+//                ifAddExfeeSend=NO;
+            };
+            request.delegate=self;
+        }];
+        
+    }
+//    for(Invitation* invitation in customobjects){
+//        NSString *key=[invitation.identity.provider stringByAppendingString:invitation.identity.external_id];
+//        if(![dict objectForKey:key]){
+//            [dict setObject:@"" forKey:key];
+//            [invitations addObject:invitation];
+//        }
+//    }
+//    
+//    [(GatherViewController*)gatherview addExfee:invitations];
+//
+//    [dict release];
+//    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void) done:(id)sender{
@@ -295,21 +410,6 @@ static char identitykey;
             }
         }
     }else if(addressbookType== LOCAL_ADDRESSBOOK){
-
-//        NSArray *data = [NSArray arrayWithObject:[NSMutableDictionary dictionaryWithObject:@"foo" forKey:@"BAR"]];
-//        NSArray *filtered = [data filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(BAR == %@)", @"foo"]];
-        
-//        NSLog(@"%@",localcontacts);
-//        NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",input];
-//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((name like[c] %@) OR (external_username like[c] %@) OR (external_id like[c] %@) OR (nickname like[c] %@)) AND provider != %@ AND provider != %@ AND connected_user_id != 0",inputpredicate,inputpredicate,inputpredicate,inputpredicate,@"iOSAPN",@"android"];
-//        
-//        if([input isEqualToString:@""]) {
-//            predicate = [NSPredicate predicateWithFormat:@"provider != %@ AND provider != %@ AND connected_user_id !=0",@"iOSAPN",@"android"];
-//        }
-        
-        //
-//        NSMutableArray *temp=[[NSMutableArray alloc]initWithCapacity:10];
-//        NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
 
     }
     
@@ -344,8 +444,7 @@ static char identitykey;
     suggestIdentities=nil;
     NSFetchRequest* request = [Identity fetchRequest];
     NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:NO];
-    
-    NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",input];
+    NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",[input stringByReplacingOccurrencesOfString:@" " withString:@"*"]];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((name like[c] %@) OR (external_username like[c] %@) OR (external_id like[c] %@) OR (nickname like[c] %@)) AND provider != %@ AND provider != %@ AND connected_user_id != 0",inputpredicate,inputpredicate,inputpredicate,inputpredicate,@"iOSAPN",@"android"];
     
     if([input isEqualToString:@""]) {
@@ -371,12 +470,24 @@ static char identitykey;
                     continue;
                 }
             }
-            for (Invitation *selected in exfeeList.bubbleCustomObjects){
-                if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
+            for (id selected in exfeeList.bubbleCustomObjects){
+                if([selected isKindOfClass:[Invitation class]])
                 {
-                    flag=YES;
-                    continue;
+//                if(Invitation *selected
+                    if([((Invitation*)selected).identity.identity_id intValue]==[identity.identity_id intValue])
+                    {
+                        flag=YES;
+                        continue;
+                    }
                 }
+//                else if([selected isKindOfClass:[NSDictionary class]]){
+//                    if([(identity.identity_id intValue]==[identity.identity_id intValue])
+//                    {
+//                        flag=YES;
+//                        continue;
+//                    }
+//                    
+//                }
             }
             if(flag==NO)
                 [temp addObject:identity];
@@ -411,113 +522,116 @@ static char identitykey;
         [self changeLeftIconWhite:YES];
     
 }
-- (void) addByInputIdentity:(NSString*)input provider:(NSString*)provider dismiss:(BOOL)shoulddismiss{
-    if(ifAddExfeeSend==YES)
-        return;
 
-    ifAddExfeeSend=YES;
+- (void) addBubbleByInputString:(NSString*)input provider:(NSString*)provider{
+    NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:input,@"input",provider,@"provider", nil];
+    [exfeeList addBubble:input customObject:dict];
+    if([exfeeList bubblecount]>0)
+        [self changeLeftIconWhite:YES];
+    
+}
+
+- (void) addByInputIdentity:(NSString*)input provider:(NSString*)provider dismiss:(BOOL)shoulddismiss{
+//    if(ifAddExfeeSend==YES)
+//        return;
+//    ifAddExfeeSend=YES;
     Identity* identity=[self getIdentityFromLocal:input provider:provider];
     if(identity!=nil){
         [self addBubbleByIdentity:identity input:input];
-        ifAddExfeeSend=NO;
+//        ifAddExfeeSend=NO;
         return;
     }
     
     NSArray* inputs=[input componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@", "]];
-    
-    NSArray* providers=[provider componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@", "]];
-    
-    NSString *json=@"";
-    int idx=0;
     for(input in inputs){
-        NSString *provider=@"";
-        if([providers count]>=idx+1)
-            provider=[providers objectAtIndex:idx];
-        if([provider isEqualToString:@""])
-            provider=[Util findProvider:input];
-        
-            
-        if(![provider isEqualToString:@""]) {
-            if(![json isEqualToString:@""])
-                json=[json stringByAppendingString:@","];
-            json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,input];
-        }
+        [self addBubbleByInputString:input provider:@""];
     }
-    json=[NSString stringWithFormat:@"[%@]",json];
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-
-    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"Adding...";
-    hud.mode=MBProgressHUDModeCustomView;
-    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-    [bigspin startAnimating];
-    hud.customView=bigspin;
-    [bigspin release];
-
-    NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
-    RKParams* rsvpParams = [RKParams params];
-    [rsvpParams setValue:json forParam:@"identities"];
-    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        request.onDidLoadResponse=^(RKResponse *response){
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-
-            if (response.statusCode == 200) {
-                NSDictionary *body=[response.body objectFromJSONData];
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code)
-                        if([code intValue]==200) {
-
-//                            Identity* identity=[self getIdentityFromLocal:input provider:provider];
-//                            if(identity!=nil){
-//                                [self addBubbleByIdentity:identity input:input];
+    
+//    NSArray* providers=[provider componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@", "]];
+//    
+//    NSString *json=@"";
+//    int idx=0;
+//    for(input in inputs){
+//        NSString *provider=@"";
+//        if([providers count]>=idx+1)
+//            provider=[providers objectAtIndex:idx];
+//        if([provider isEqualToString:@""])
+//            provider=[Util findProvider:input];
+//        
+//            
+//        if(![provider isEqualToString:@""]) {
+//            if(![json isEqualToString:@""])
+//                json=[json stringByAppendingString:@","];
+//            json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,input];
+//        }
+//    }
+//    json=[NSString stringWithFormat:@"[%@]",json];
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    RKClient *client = [RKClient sharedClient];
+//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//
+//    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    hud.labelText = @"Adding...";
+//    hud.mode=MBProgressHUDModeCustomView;
+//    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+//    [bigspin startAnimating];
+//    hud.customView=bigspin;
+//    [bigspin release];
+//
+//    NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
+//    RKParams* rsvpParams = [RKParams params];
+//    [rsvpParams setValue:json forParam:@"identities"];
+//    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+//    [client post:endpoint usingBlock:^(RKRequest *request){
+//        request.method=RKRequestMethodPOST;
+//        request.params=rsvpParams;
+//        request.onDidLoadResponse=^(RKResponse *response){
+//            [MBProgressHUD hideHUDForView:self.view animated:YES];
+//
+//            if (response.statusCode == 200) {
+//                NSDictionary *body=[response.body objectFromJSONData];
+//                if([body isKindOfClass:[NSDictionary class]]) {
+//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                    if(code)
+//                        if([code intValue]==200) {
+//                            NSDictionary* response = [body objectForKey:@"response"];
+//                            NSArray *identities = [response objectForKey:@"identities"];
+//                            for (NSDictionary *identitydict in identities) {
+//                                NSString *external_id=[identitydict objectForKey:@"external_id"];
+//                                NSString *provider=[identitydict objectForKey:@"provider"];
+//                                NSString *avatar_filename=[identitydict objectForKey:@"avatar_filename"];
+//                                NSString *identity_id=[identitydict objectForKey:@"id"];
+//                                NSString *name=[identitydict objectForKey:@"name"];
+//                                NSString *nickname=[identitydict objectForKey:@"nickname"];
+//                                NSString *external_username=[identitydict objectForKey:@"external_username"];
+//                                
+//                                
+//                                Identity *identity=[Identity object];
+//                                identity.external_id=external_id;
+//                                identity.provider=provider;
+//                                identity.avatar_filename=avatar_filename;
+//                                identity.name=name;
+//                                identity.external_username=external_username;
+//                                identity.nickname=nickname;
+//                                identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
+//                                [self addBubbleByIdentity:identity input:name]; 
 //                                ifAddExfeeSend=NO;
-//                                return;
 //                            }
-
-                            NSDictionary* response = [body objectForKey:@"response"];
-                            NSArray *identities = [response objectForKey:@"identities"];
-                            for (NSDictionary *identitydict in identities) {
-                                NSString *external_id=[identitydict objectForKey:@"external_id"];
-                                NSString *provider=[identitydict objectForKey:@"provider"];
-                                NSString *avatar_filename=[identitydict objectForKey:@"avatar_filename"];
-                                NSString *identity_id=[identitydict objectForKey:@"id"];
-                                NSString *name=[identitydict objectForKey:@"name"];
-                                NSString *nickname=[identitydict objectForKey:@"nickname"];
-                                NSString *external_username=[identitydict objectForKey:@"external_username"];
-                                
-                                
-                                Identity *identity=[Identity object];
-                                identity.external_id=external_id;
-                                identity.provider=provider;
-                                identity.avatar_filename=avatar_filename;
-                                identity.name=name;
-                                identity.external_username=external_username;
-                                identity.nickname=nickname;
-                                identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
-                                [self addBubbleByIdentity:identity input:name]; 
-                                ifAddExfeeSend=NO;
-                            }
-                            if(shoulddismiss==YES)
-                                [self addExfeeToCross];
-                        }
-                }
-            }
-            ifAddExfeeSend=NO;
-
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-
-            ifAddExfeeSend=NO;
-        };
-        request.delegate=self;
-    }];
+//                            if(shoulddismiss==YES)
+//                                [self addExfeeToCross];
+//                        }
+//                }
+//            }
+//            ifAddExfeeSend=NO;
+//
+//        };
+//        request.onDidFailLoadWithError=^(NSError *error){
+//            [MBProgressHUD hideHUDForView:self.view animated:YES];
+//
+//            ifAddExfeeSend=NO;
+//        };
+//        request.delegate=self;
+//    }];
     
 }
 
@@ -636,7 +750,6 @@ static char identitykey;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(selectedRowIndex==indexPath.row){
-//        NSLog(@"expandCellHeight %i",expandCellHeight);
         return expandCellHeight;
     }
     return 44;
@@ -748,7 +861,8 @@ static char identitykey;
             }
         }
     }else if(addressbookType == LOCAL_ADDRESSBOOK){
-        NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",input];
+        
+        NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",[input stringByReplacingOccurrencesOfString:@" " withString:@"*"]];
         if(filteredlocalcontacts!=nil){
             [filteredlocalcontacts release];
             filteredlocalcontacts=nil;
