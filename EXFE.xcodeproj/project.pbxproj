@@ -2336,8 +2336,8 @@
 		78EC9BE715E7FC42005EAA4B /* Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: EXFE HOLDINGS";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: EXFE HOLDINGS";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
@@ -2352,8 +2352,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3D2797FB-1756-4602-94D7-09DCD96D0D3A";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3D2797FB-1756-4602-94D7-09DCD96D0D3A";
+				PROVISIONING_PROFILE = "C8EF135C-E2E6-401B-B213-C576E7F7A7C0";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C8EF135C-E2E6-401B-B213-C576E7F7A7C0";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
