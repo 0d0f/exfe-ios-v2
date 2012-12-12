@@ -8,10 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import <AddressBook/AddressBook.h>
+#import "EXSpinView.h"
+#import "MBProgressHUD.h"
+
 
 @interface AddressBook : NSObject{
-    
+    UIView *parentview;
 }
+
+@property (nonatomic,retain) UIView *parentview;
 - (NSArray*) UpdatePeople:(NSDate*)lastsaved;
 - (NSArray*) CopyAllPeople:(ABAddressBookRef)addressbook;
 + (NSDictionary*) getDefaultIdentity:(NSDictionary*)person;

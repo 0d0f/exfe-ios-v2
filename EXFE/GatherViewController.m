@@ -870,14 +870,15 @@
     placeViewController.gatherview=self;
     if(cross.place!=nil){
         if(viewmode==YES){
-            
-            
-            
             if(![cross.place.title isEqualToString:@""] || ( ![cross.place.lat isEqualToString:@""] || ![cross.place.lng isEqualToString:@""])){
                 [placeViewController setPlace:cross.place isedit:YES];
             }
-            else
+            else{
                 placeViewController.isaddnew=YES;
+                placeViewController.showtableview=YES;
+                status=@"search";
+
+            }
         }
         else{
             [placeViewController setPlace:cross.place isedit:NO];
@@ -887,6 +888,8 @@
     }
     if([status isEqualToString:@"detail"]){
         placeViewController.showdetailview=YES;
+    }else if([status isEqualToString:@"search"]){
+        placeViewController.showtableview=YES;
     }
     [self presentModalViewController:placeViewController animated:YES];
     [placeViewController release];
@@ -1558,8 +1561,11 @@
     {
         [crosstitle resignFirstResponder];
         [map becomeFirstResponder];
-        
-        [self ShowPlaceView:@"detail"];
+        if(viewmode==YES)
+            [self ShowPlaceView:@"detail"];
+        else{
+            [self ShowPlaceView:@"search"];
+        }
     }
 
     if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))

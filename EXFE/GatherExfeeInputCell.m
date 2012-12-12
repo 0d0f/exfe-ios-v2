@@ -64,9 +64,9 @@
 
 - (void)drawContentView:(CGRect)r{
     
-    [title drawInRect:CGRectMake(5+30+5, 11, self.frame.size.width-(5+30+5+5), 20) withFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
+    [title drawInRect:CGRectMake(50, 11, 190, 20) withFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
 //    [subtitle drawInRect:CGRectMake(5+30+5, 6+22, self.frame.size.width-(5+30+5+5), 18) withFont:[UIFont fontWithName:@"HelveticaNeue" size:12] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
-    [avatar drawInRect:CGRectMake(5, 5, 30, 30)];
+    [avatar drawInRect:CGRectMake(0, 0, 44, 44)];
     if(providerIconSet!=nil)
     {
         [providerIcon drawInRect:CGRectMake(self.frame.size.width-18-10, 13, 18, 18)];

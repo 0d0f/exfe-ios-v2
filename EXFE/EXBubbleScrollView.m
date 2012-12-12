@@ -194,6 +194,7 @@
     _exdelegate=delegate;
 }
 - (NSString*)getInput{
+    NSLog(@"%@",input.text);
     NSString *inputtext=[input.text stringByTrimmingCharactersInSet:
                          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     return inputtext;

@@ -9,6 +9,8 @@
 #import "AddressBook.h"
 
 @implementation AddressBook
+@synthesize parentview;
+
 - (NSArray*) UpdatePeople:(NSDate*)lastsaved{
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
     __block BOOL accessGranted = NO;
@@ -27,9 +29,17 @@
         accessGranted = YES;
     }
     
-    
     if (accessGranted) {
-        return [self CopyAllPeople:addressBook];
+//        MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:parentview animated:YES];
+//        hud.mode=MBProgressHUDModeCustomView;
+//        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+//        [bigspin startAnimating];
+//        hud.customView=bigspin;
+//        [bigspin release];
+//        hud.labelText = @"Loading";
+        NSArray *contacts= [self CopyAllPeople:addressBook];
+//        [MBProgressHUD hideHUDForView:parentview animated:YES];
+        return contacts;
     }
     return nil;
 }
@@ -103,11 +113,11 @@
             }
         }
     }
-    return contacts;
+    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+    return [contacts sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
 }
 
 + (NSDictionary*) getDefaultIdentity:(NSDictionary*)person{
-//    cell.subtitle=@"";
     NSString *username=@"";
     int type=0;
 #define TWITTER_TYPE 1

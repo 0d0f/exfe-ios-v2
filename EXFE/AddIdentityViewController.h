@@ -14,8 +14,8 @@
 #import "SigninIconToolbarView.h"
 #import "OAuthAddIdentityViewController.h"
 #import "EXSpinView.h"
-#import "ImgCache.h"
 #import "MBProgressHUD.h"
+#import "ImgCache.h"
 
 @interface AddIdentityViewController : UIViewController{
     SigninIconToolbarView *signintoolbar;

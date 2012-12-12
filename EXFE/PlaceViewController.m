@@ -16,6 +16,7 @@
 @synthesize gatherview;
 @synthesize showdetailview;
 @synthesize isaddnew;
+@synthesize showtableview;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -178,7 +179,12 @@
     [_tableView setHidden:YES];
     [map setFrame:CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height-44)];
 
-//    [self setViewStyle:EXPlaceViewStyleMap];
+    if(showtableview==YES){
+        [self setViewStyle:EXPlaceViewStyleBigTableview];
+        [inputplace becomeFirstResponder];
+    }
+    
+//
 }
 
 - (void) initPlaceView{

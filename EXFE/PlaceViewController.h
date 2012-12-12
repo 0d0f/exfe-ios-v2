@@ -46,6 +46,7 @@ typedef enum {
     BOOL isaddnew;
     BOOL isnotinputplace;
     BOOL showdetailview;
+    BOOL showtableview;
     BOOL willUserScroll;
     NSMutableDictionary *originplace;
     
@@ -58,6 +59,7 @@ typedef enum {
 
 @property (nonatomic,retain) UIViewController* gatherview;
 @property BOOL showdetailview;
+@property BOOL showtableview;
 @property BOOL isaddnew;
     
 - (IBAction) doRevert:(id) sender;
