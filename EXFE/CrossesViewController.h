@@ -15,6 +15,7 @@
 #import "WelcomeView.h"
 #import "EXSpinView.h"
 #import "MBProgressHUD.h"
+#import "ProfileCard.h"
 
 @interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate>
 {
@@ -25,13 +26,12 @@
     BOOL logoutflag;
     BOOL alertShowflag;
     int current_cellrow;
-    NSArray *cellbackimglist;
-    NSArray *cellbackimgblanklist;
     NSMutableArray *cellDateTime;
     CustomStatusBar *customStatusBar;
     NSMutableAttributedString *gatherax;
     MBProgressHUD *hud;
     EXInnerButton *settingButton;
+    ProfileCard *headerView;
 }
 - (void) refreshCell;
 - (void) refreshCrosses:(NSString*)source;

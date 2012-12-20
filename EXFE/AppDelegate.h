@@ -13,22 +13,22 @@
 
 #define APP_DB_VERSION 202
     
-#define WWW
-
-#ifdef DEV
-#define API_V2_ROOT @"http://api.white.0d0f.com/v2"
-#define IMG_ROOT @"http://img.white.0d0f.com/static/img"
-#define EXFE_OAUTH_LINK @"http://white.0d0f.com/OAuth"
-#define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
-#endif
-
+#define DEV
 
 //#ifdef DEV
-//#define API_V2_ROOT @"http://api.0d0f.com/v2"
-//#define IMG_ROOT @"http://img.0d0f.com/static/img"
-//#define EXFE_OAUTH_LINK @"http://dev.0d0f.com/oauth"
+//#define API_V2_ROOT @"http://api.white.0d0f.com/v2"
+//#define IMG_ROOT @"http://img.white.0d0f.com/static/img"
+//#define EXFE_OAUTH_LINK @"http://white.0d0f.com/OAuth"
 //#define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 //#endif
+
+
+#ifdef DEV
+#define API_V2_ROOT @"http://api.0d0f.com/v2"
+#define IMG_ROOT @"http://0d0f.com/static/img"
+#define EXFE_OAUTH_LINK @"http://dev.0d0f.com/oauth"
+#define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
+#endif
 
 #ifdef LOCAL
 #define API_V2_ROOT @"http://api.local.exfe.com/v2"
