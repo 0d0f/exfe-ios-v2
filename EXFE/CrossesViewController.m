@@ -9,6 +9,7 @@
 #import "CrossesViewController.h"
 #import "ProfileViewController.h"
 #import "GatherViewController.h"
+#import "CrossDetailViewController.h"
 #import "APICrosses.h"
 #import "Cross.h"
 #import "Place.h"
@@ -18,7 +19,7 @@
 #import "EFTime.h"
 #import "CrossTime.h"
 #import "Rsvp.h"
-#import "CrossCell.h"
+#import "CrossCard.h"
 #import "ImgCache.h"
 #import "Util.h"
 
@@ -52,17 +53,12 @@
                                                       forState:UIControlStateNormal
                                                     barMetrics:UIBarMetricsDefault];
     current_cellrow=-1;
-    self.tableView.backgroundColor=[UIColor colorWithRed:0x1c/255.0f green:0x27/255.0f blue:0x33/255.0f alpha:1.00f];
+    self.tableView.backgroundColor=[UIColor colorWithRed:0xfa/255.0f green:0xfa/255.0f blue:0xfa/255.0f alpha:1.00f];
     UIView *topview = [[UIView alloc] initWithFrame:CGRectMake(0, 0 - 480, 320, 480)];
-    topview.backgroundColor=[UIColor colorWithRed:126/255.0f green:156/255.0f blue:189/255.0f alpha:1.00f];
+    topview.backgroundColor=[UIColor colorWithRed:0xfa/255.0f green:0xfa/255.0f blue:0xfa/255.0f alpha:1.00f];
     [self.tableView addSubview:topview];
     [topview release];
     [super viewDidLoad];
-    
-
-    cellbackimglist=[[NSArray alloc] initWithObjects:[UIImage imageNamed:@"xlist_cell0.png"],[UIImage imageNamed:@"xlist_cell1.png"],[UIImage imageNamed:@"xlist_cell2.png"],[UIImage imageNamed:@"xlist_cell3.png"],[UIImage imageNamed:@"xlist_cell4.png"], nil ];
-
-    cellbackimgblanklist=[[NSArray alloc] initWithObjects:[UIImage imageNamed:@"xlist_cell0bg.png"],[UIImage imageNamed:@"xlist_cell1bg.png"],[UIImage imageNamed:@"xlist_cell2bg.png"],[UIImage imageNamed:@"xlist_cell3bg.png"], nil];
     
     gatherax=[[NSMutableAttributedString alloc] initWithString:@"Gather a ·X·"];
     CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL);
@@ -149,7 +145,7 @@
 //    {
 //        [navbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"]  forBarMetrics:UIBarMetricsDefault];
 //    }
-
+    //[self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.navigationController.view setNeedsDisplay];
     
 }
@@ -230,8 +226,6 @@
     [settingButton release];
     [gatherax release];
     [customStatusBar release];
-    [cellbackimglist release];
-    [cellbackimgblanklist release];
     [super dealloc];
 }
 
@@ -313,12 +307,6 @@
     [self refreshCrosses:@"crossupdateview"];
 }
 - (void)emptyView{
-    
-    NSArray *cells=self.tableView.visibleCells;
-    for (CrossCell* cell in cells) {
-        cell.removed=YES;
-        cell.title =@"";
-    }
 
     [_crosses release];
     _crosses=nil;
@@ -486,181 +474,230 @@
 }
 
 #pragma mark UITableViewDataSource methods
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 2;
+}
+
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    if(_crosses==nil)
+    
+    if (section == 0){
+        return 1;
+    }else if (section == 1){
+        if(_crosses == nil){
+            return 0;
+        }else{
+            return [_crosses count];
+        }
+    }else {
         return 0;
-    if([_crosses count]<4)
-        return 4;
-	return [_crosses count];
+    }
+}
+
+- (void)gotoCrossDetail{
+    CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
+    
+    [self.navigationController presentModalViewController:viewController animated:YES];
+    [viewController release];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(_crosses==nil)
-        return nil;
-	NSString* reuseIdentifier = @"cross Cell";
-    CrossCell *cell =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-	if (nil == cell) {
-        cell = [[[CrossCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
-	}
-    [cell setBackgroundColor:[UIColor colorWithRed:0x1c/255.f green:0x27/255.f blue:0x33/255.f alpha:1]];
-    cell.isGatherX=NO;
-    cell.removed=NO;
-    cell.isbackground=NO;
-    cell.showNumArea=NO;
-    if(indexPath.row>=[_crosses count])
-    {
-        if(indexPath.row==[_crosses count]){
-            cell.backgroundimg=[cellbackimglist objectAtIndex:indexPath.row];
-            cell.isGatherX=YES;
-            cell.gatherx=gatherax;
-        }
-        else{
-            cell.backgroundimg=[cellbackimgblanklist objectAtIndex:indexPath.row];
-        }
-        cell.isbackground=YES;
-        return cell;
-    }
-    else if(indexPath.row<4){
-        cell.backgroundimg=[cellbackimglist objectAtIndex:indexPath.row];
-    }
-    else if(indexPath.row>=4)
-        cell.backgroundimg=[cellbackimglist objectAtIndex:4];
     
-    Cross *cross=[_crosses objectAtIndex:indexPath.row];
-    cell.hlTitle=NO;
-    cell.hlPlace=NO;
-    cell.hlTime=NO;
-    cell.hlExfee=NO;
-    cell.hlConversation=NO;
-    cell.showNumArea=YES;
-    if(cross.updated!=nil)
-    {
-        id updated=cross.updated;
-        if([updated isKindOfClass:[NSDictionary class]]){
-            NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
-            NSString *key=nil;
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-
-            while (key = [enumerator nextObject]){
-                NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
-                NSString *updated_at_str=[obj objectForKey:@"updated_at"];
-                NSDate *updated_at =[NSDate date];
-                if([updated_at_str isKindOfClass:[NSString class]]){
-                    if([updated_at_str length]>19)
-                        updated_at_str=[updated_at_str substringToIndex:19];
-                    updated_at = [formatter dateFromString:updated_at_str];
-                }
-                if([updated_at compare: cross.read_at] == NSOrderedDescending || cross.read_at==nil) {
-                    if([key isEqualToString:@"title"])
-                        cell.hlTitle=YES;
-                    else if([key isEqualToString:@"place"])
-                        cell.hlPlace=YES;
-                    else if([key isEqualToString:@"time"])
-                        cell.hlTime=YES;
-                    else if([key isEqualToString:@"exfee"])
-                        cell.hlExfee=YES;
-                    else if([key isEqualToString:@"conversation"])
-                        cell.hlConversation=YES;
+    if (indexPath.section == 0){
+        if(headerView==nil){
+            AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+            
+            NSFetchRequest* request = [User fetchRequest];
+            NSPredicate *predicate = [NSPredicate
+                                      predicateWithFormat:@"user_id = %u", app.userid];
+            [request setPredicate:predicate];
+            NSArray *users = [[User objectsWithFetchRequest:request] retain];
+            
+            headerView = [[ProfileCard alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Profile"];
+            //headerView = [[ProfileCard alloc] initWithFrame:CGRectMake(0,0,tableView.frame.size.width,66)];
+            
+            if(users != nil && [users count] > 0){
+                User *_user = [users objectAtIndex:0];
+                NSString* imgName = _user.avatar_filename;
+                if(imgName != nil){
+                    UIImage *image = [[ImgCache sharedManager] getImgFromCache:imgName];
+                    if(image==nil ||[image isEqual:[NSNull null]]){
+                        headerView.avatar = [UIImage imageNamed:@"portrait_default.png"];
+                    }else{
+                        headerView.avatar = image;
+                    }
                 }
             }
-            [formatter release];
+            [headerView addGatherTarget:self action:@selector(ShowGatherView)];
+            //[headerView addProfileTarget:self action:@selector(ShowProfileView)];
+            [headerView addProfileTarget:self action:@selector(gotoCrossDetail)];
         }
-    }
-    cell.title=cross.title;
-    cell.conversationCount=[cross.conversation_count intValue];
-    if(cross.place.title == nil || [cross.place.title isEqualToString:@""])
-        cell.place=@"Somewhere";
-    else
-        cell.place=cross.place.title;
-    cell.accepted=[cross.exfee.accepted intValue];
-    cell.total=[cross.exfee.total intValue];
-    if([cross.time.begin_at.date isEqualToString:@""])
-    {
-        cell.showDetailTime=NO;
-        if([cross.time.origin isEqualToString:@""])
-            cell.time=@"Sometime";
-        else
-            cell.time=cross.time.origin;
+        return headerView;
+    }else if (indexPath.section == 1){
+        if(_crosses==nil){
+            return nil;
+        }
+        NSString* reuseIdentifier = @"Card Cell";
+        CrossCard *cell =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+        if (nil == cell) {
+            cell = [[[CrossCard alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
+        }
+        [cell setBackgroundColor:[UIColor colorWithRed:0x1c/255.f green:0x27/255.f blue:0x33/255.f alpha:1]];
+        
+        Cross *cross=[_crosses objectAtIndex:indexPath.row ];
+        cell.hlTitle = NO;
+        cell.hlPlace = NO;
+        cell.hlTime = NO;
+        cell.hlConversation = NO;
+        if(cross.updated != nil)
+        {
+            id updated=cross.updated;
+            if([updated isKindOfClass:[NSDictionary class]]){
+                NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
+                NSString *key=nil;
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                
+                while (key = [enumerator nextObject]){
+                    NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
+                    NSString *updated_at_str=[obj objectForKey:@"updated_at"];
+                    NSDate *updated_at =[NSDate date];
+                    if([updated_at_str isKindOfClass:[NSString class]]){
+                        if([updated_at_str length]>19)
+                            updated_at_str=[updated_at_str substringToIndex:19];
+                        updated_at = [formatter dateFromString:updated_at_str];
+                    }
+                    if([updated_at compare: cross.read_at] == NSOrderedDescending || cross.read_at==nil) {
+                        if([key isEqualToString:@"title"])
+                            cell.hlTitle=YES;
+                        else if([key isEqualToString:@"place"])
+                            cell.hlPlace=YES;
+                        else if([key isEqualToString:@"time"])
+                            cell.hlTime=YES;
+                        else if([key isEqualToString:@"conversation"])
+                            cell.hlConversation=YES;
+                    }
+                }
+                [formatter release];
+            }
+        }
+        cell.title=cross.title;
+        cell.conversationCount=[cross.conversation_count intValue];
+        if(cross.place == nil || cross.place.title == nil || [cross.place.title isEqualToString:@""]){
+            cell.place = @"";
+        }else{
+            cell.place = cross.place.title;
+        }
+        if([cross.time.begin_at.date isEqualToString:@""])
+        {
+            if([cross.time.origin isEqualToString:@""]){
+                cell.time = @"";
+            }else{
+                cell.time = cross.time.origin;
+            }
+        }else{
+            NSDictionary *humanable_date = [Util crossTimeToString:cross.time];
+            cell.time = [humanable_date objectForKey:@"short"];
+        }
+        
+        cell.avatar = nil;
+        if(cross.by_identity.avatar_filename!=nil) {
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+                UIImage *avatar = [[ImgCache sharedManager] getImgFrom:cross.by_identity.avatar_filename];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+                        cell.avatar=avatar;
+                    }
+                });
+            });
+            dispatch_release(imgQueue);
+        }else{
+            cell.avatar = nil;
+            [cell setNeedsDisplay];
+        }
+        
+        cell.bannerimg = nil;
+        NSArray *widgets = cross.widget;
+        for(NSDictionary *widget in widgets) {
+            if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+                NSString *imgurl=[Util getBackgroundLink:[widget objectForKey:@"image"]];
+                UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:imgurl];
+                if(backimg == nil || [backimg isEqual:[NSNull null]]){
+                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                    dispatch_async(imgQueue, ^{
+                        UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if(backimg!=nil && ![backimg isEqual:[NSNull null]])
+                                cell.bannerimg = backimg;
+                        });
+                    });
+                    dispatch_release(imgQueue);
+                }else{
+                    cell.bannerimg = backimg;
+                }
+                break;
+            }
+        }
+        
+        return cell;
     }else{
-        NSDictionary *humanable_date=[Util crossTimeToString:cross.time];
-        cell.time=[humanable_date objectForKey:@"short"];
-        cell.showDetailTime=YES;
-        if([humanable_date objectForKey:@"day"]== nil || [humanable_date objectForKey:@"month"]==nil)
-            cell.showDetailTime=NO;
-        else{
-        cell.time_day=[humanable_date objectForKey:@"day"];
-        cell.time_month=[humanable_date objectForKey:@"month"];
-        }
+        return nil;
     }
-
-//TODO:Add avatar
-//    if(cross.by_identity.avatar_filename!=nil) {
-//        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-//        dispatch_async(imgQueue, ^{
-//            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:cross.by_identity.avatar_filename];
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-//                    cell.avatar=avatar;
-//                }
-//            });
-//        });
-//        dispatch_release(imgQueue);        
-//    }
-	return cell;
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 104;
+    if(indexPath.section == 0){
+        return 66;
+    }else {
+        return 90.0;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.row==[_crosses count])
-    {
-        [self ShowGatherView];
-        return ;
-    }
-    Cross *cross=[_crosses objectAtIndex:indexPath.row];
-    if(cross.updated!=nil)
-    {
-        id updated=cross.updated;
-        if([updated isKindOfClass:[NSDictionary class]]){
-            NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
-            NSString *key=nil;
-            
-            while (key = [enumerator nextObject]){
-                NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
-                NSString *updated_at_str=[obj objectForKey:@"updated_at"];
-                if(updated_at_str!=nil && [updated_at_str length]>19)
-                    updated_at_str=[updated_at_str substringToIndex:19];
-                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-                NSDate *updated_at = [formatter dateFromString:updated_at_str];
-                [formatter release];
-                if(cross.read_at==nil)
-                    cross.read_at=updated_at;
-                else
-                    cross.read_at=[cross.read_at laterDate:updated_at];
+    if (indexPath.section == 1){
+        Cross *cross=[_crosses objectAtIndex:indexPath.row];
+        if(cross.updated!=nil)
+        {
+            id updated=cross.updated;
+            if([updated isKindOfClass:[NSDictionary class]]){
+                NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
+                NSString *key=nil;
+                
+                while (key = [enumerator nextObject]){
+                    NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
+                    NSString *updated_at_str=[obj objectForKey:@"updated_at"];
+                    if(updated_at_str!=nil && [updated_at_str length]>19)
+                        updated_at_str=[updated_at_str substringToIndex:19];
+                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                    NSDate *updated_at = [formatter dateFromString:updated_at_str];
+                    [formatter release];
+                    if(cross.read_at==nil)
+                        cross.read_at=updated_at;
+                    else
+                        cross.read_at=[cross.read_at laterDate:updated_at];
+                }
+                NSError *saveError;
+                [[Cross currentContext] save:&saveError];
+                [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: indexPath]
+                                      withRowAnimation: UITableViewRowAnimationNone];
             }
-            NSError *saveError;
-            [[Cross currentContext] save:&saveError];
-            [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: indexPath]
-                             withRowAnimation: UITableViewRowAnimationNone];
+            
         }
+        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+        gatherViewController.cross=cross;
+        [gatherViewController setViewMode];
+        
+        [self.navigationController pushViewController:gatherViewController animated:YES];
+        [gatherViewController release];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        current_cellrow = indexPath.row;
     }
-
-    GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-    gatherViewController.cross=cross;
-    [gatherViewController setViewMode]; 
-    
-    [self.navigationController pushViewController:gatherViewController animated:YES];
-    [gatherViewController release];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    current_cellrow=indexPath.row;
 }
 - (void) refreshTableViewWithCrossId:(int)cross_id{
     for(int i=0;i<[_crosses count];i++)

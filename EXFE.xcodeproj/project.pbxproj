@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F0597961682B9FA00F9CE10 /* CrossDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0597941682B9FA00F9CE10 /* CrossDetailViewController.m */; };
+		4F0597971682B9FA00F9CE10 /* CrossDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F0597951682B9FA00F9CE10 /* CrossDetailViewController.xib */; };
+		4F14689C167F1C0700872F9D /* ProfileCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F14689B167F1C0600872F9D /* ProfileCard.m */; };
+		4F14689F168048E700872F9D /* xlist_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F14689D168048E600872F9D /* xlist_mask.png */; };
+		4F1468A0168048E700872F9D /* xlist_mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F14689E168048E700872F9D /* xlist_mask@2x.png */; };
+		4FBF2485167AE89D007C04E2 /* CrossCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF2484167AE89D007C04E2 /* CrossCard.m */; };
+		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
+		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
+		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
 		7803EB8B15AD801500291B69 /* EXButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7803EB8A15AD801500291B69 /* EXButton.m */; };
 		7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 780961FF15BDB70B0071E9D0 /* EXOverlayView.m */; };
 		780D27A4157F368900402460 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A3157F368900402460 /* Post.m */; };
@@ -424,6 +433,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F0597931682B9FA00F9CE10 /* CrossDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossDetailViewController.h; sourceTree = "<group>"; };
+		4F0597941682B9FA00F9CE10 /* CrossDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossDetailViewController.m; sourceTree = "<group>"; };
+		4F0597951682B9FA00F9CE10 /* CrossDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossDetailViewController.xib; sourceTree = "<group>"; };
+		4F14689A167F1C0600872F9D /* ProfileCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileCard.h; sourceTree = "<group>"; };
+		4F14689B167F1C0600872F9D /* ProfileCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileCard.m; sourceTree = "<group>"; };
+		4F14689D168048E600872F9D /* xlist_mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xlist_mask.png; sourceTree = "<group>"; };
+		4F14689E168048E700872F9D /* xlist_mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xlist_mask@2x.png"; sourceTree = "<group>"; };
+		4FBF2483167AE89D007C04E2 /* CrossCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossCard.h; sourceTree = "<group>"; };
+		4FBF2484167AE89D007C04E2 /* CrossCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossCard.m; sourceTree = "<group>"; };
+		4FE8D3C51681926C00222420 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
+		4FE8D3C61681926C00222420 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
+		4FE8D3C71681926C00222420 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
+		4FE8D3C81681926C00222420 /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
+		4FE8D3C91681926C00222420 /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
+		4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
 		7803EB8915AD801500291B69 /* EXButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXButton.h; sourceTree = "<group>"; };
 		7803EB8A15AD801500291B69 /* EXButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXButton.m; sourceTree = "<group>"; };
 		780961FE15BDB70B0071E9D0 /* EXOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXOverlayView.h; sourceTree = "<group>"; };
@@ -1117,6 +1141,9 @@
 				7840917615732A90006DF115 /* ConversationViewController.h */,
 				7840917715732A90006DF115 /* ConversationViewController.m */,
 				7840917815732A91006DF115 /* ConversationViewController.xib */,
+				4F0597931682B9FA00F9CE10 /* CrossDetailViewController.h */,
+				4F0597941682B9FA00F9CE10 /* CrossDetailViewController.m */,
+				4F0597951682B9FA00F9CE10 /* CrossDetailViewController.xib */,
 			);
 			name = Cross;
 			sourceTree = "<group>";
@@ -1124,6 +1151,12 @@
 		785FD54E158065610056590D /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				4FE8D3C51681926C00222420 /* UIImage+Alpha.h */,
+				4FE8D3C61681926C00222420 /* UIImage+Alpha.m */,
+				4FE8D3C71681926C00222420 /* UIImage+Resize.h */,
+				4FE8D3C81681926C00222420 /* UIImage+Resize.m */,
+				4FE8D3C91681926C00222420 /* UIImage+RoundedCorner.h */,
+				4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */,
 				78313BB9160033F100188E54 /* Flurry */,
 				78B46B6C15FC87DB006738D7 /* MBProgressHUD.m */,
 				78B46B6D15FC87DB006738D7 /* MBProgressHUD.h */,
@@ -1196,8 +1229,12 @@
 		788312A515738D2600D67103 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				4F14689A167F1C0600872F9D /* ProfileCard.h */,
+				4F14689B167F1C0600872F9D /* ProfileCard.m */,
 				78615B3A15788BCC003CF68A /* ABTableViewCell.h */,
 				78615B3B15788BCD003CF68A /* ABTableViewCell.m */,
+				4FBF2483167AE89D007C04E2 /* CrossCard.h */,
+				4FBF2484167AE89D007C04E2 /* CrossCard.m */,
 				788312A615738D6100D67103 /* CrossCell.h */,
 				788312A715738D6100D67103 /* CrossCell.m */,
 				780D27A5157F4AB100402460 /* PostCell.h */,
@@ -1402,6 +1439,8 @@
 		78AFB5FA15B321B70069B139 /* cell */ = {
 			isa = PBXGroup;
 			children = (
+				4F14689D168048E600872F9D /* xlist_mask.png */,
+				4F14689E168048E700872F9D /* xlist_mask@2x.png */,
 				78964B6315F72E090084C85E /* xlist_cell_number_area.png */,
 				78964B6415F72E090084C85E /* xlist_cell_number_area@2x.png */,
 				78964B6515F72E090084C85E /* xlist_cell0.png */,
@@ -2024,6 +2063,9 @@
 				783F52E616774C4100331746 /* btn_blue.png in Resources */,
 				783F52E716774C4100331746 /* btn_blue@2x.png in Resources */,
 				783F52E91677777600331746 /* back@2x.png in Resources */,
+				4F14689F168048E700872F9D /* xlist_mask.png in Resources */,
+				4F1468A0168048E700872F9D /* xlist_mask@2x.png in Resources */,
+				4F0597971682B9FA00F9CE10 /* CrossDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2111,6 +2153,12 @@
 				78240AA11668935700738B7B /* UIBorderView.m in Sources */,
 				78A94BCB16707F2200B72DC8 /* EXGradientToolbarView.m in Sources */,
 				78A0C1B116807F750073CCE5 /* CustomAttributedTextView.m in Sources */,
+				4FBF2485167AE89D007C04E2 /* CrossCard.m in Sources */,
+				4F14689C167F1C0700872F9D /* ProfileCard.m in Sources */,
+				4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */,
+				4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */,
+				4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */,
+				4F0597961682B9FA00F9CE10 /* CrossDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
