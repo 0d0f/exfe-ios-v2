@@ -26,6 +26,9 @@
     NSString *username=[Util cleanInputName:textUsername.text provider:provider];
     [rsvpParams setValue:username forParam:@"external_username"];
     [rsvpParams setValue:textPassword.text forParam:@"password"];
+
+    [spin removeFromSuperview];
+    [loginbtn addSubview:spin];
     [spin setHidden:NO];
     [client post:endpoint usingBlock:^(RKRequest *request){
         request.method=RKRequestMethodPOST;
@@ -61,6 +64,9 @@
     [rsvpParams setValue:textUsername.text forParam:@"external_username"];
     [rsvpParams setValue:textDisplayname.text forParam:@"name"];
     [rsvpParams setValue:textPassword.text forParam:@"password"];
+    
+    [spin removeFromSuperview];
+    [setupnewbtn addSubview:spin];
     [spin setHidden:NO];
     [client post:endpoint usingBlock:^(RKRequest *request){
         request.method=RKRequestMethodPOST;
@@ -161,6 +167,7 @@
         }
     }
 }
+
 - (void)request:(RKRequest *)request didFailLoadWithError:(NSError *)error{
     NSLog(@"error:%@",error);   
 }
@@ -299,12 +306,12 @@
     labelSignError.shadowOffset=CGSizeMake(0, 1);
     [self.view addSubview:labelSignError];
     
-    
     spin=[[EXSpinView alloc] initWithPoint:CGPointMake([loginbtn frame].size.width-18-10, ([loginbtn frame].size.height-18)/2) size:18];
+    [spin removeFromSuperview];
     [loginbtn addSubview:spin];
-    [setupnewbtn addSubview:spin];
     [spin startAnimating];
     [spin setHidden:YES];
+    
 }
 
 - (void) showSignError:(NSString*)error{
@@ -350,6 +357,8 @@
     [identityLeftIcon release];
     [labelSignError release];
     [spin release];
+    if(hint_title!=nil)
+      [hint_title release];
     [super dealloc];
 
 }
@@ -362,6 +371,21 @@
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
+
+- (void)TwitterSigninButtonPress:(id)sender{
+    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+    oauth.provider=@"twitter";
+    oauth.delegate=signindelegate;
+    [self presentModalViewController:oauth animated:YES];
+}
+
+- (void)FacebookSigninButtonPress:(id)sender{
+    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+    oauth.provider=@"facebook";
+    oauth.delegate=signindelegate;
+    [self presentModalViewController:oauth animated:YES];
+}
+
 
 - (IBAction)editingDidBegan:(UITextField*)textField{
 }
@@ -412,9 +436,9 @@
                                 else if([registration_flag isEqualToString:@"SIGN_UP"] ){
                                     [self setSignupView];
                                 }
-                                
                                 else if([registration_flag isEqualToString:@"VERIFY"] )
                                 {
+                                    [self setSigninView];
                                     [self setHintView:@"verification"];
                                 }
                             }
@@ -454,61 +478,158 @@
 - (void) setHintView:(NSString*)hintname{
     [textUsername resignFirstResponder];
     [textPassword resignFirstResponder];
+    if(hint_title==nil){
+        hint_title=[[UILabel alloc] initWithFrame:CGRectMake(20, 200+44+21, 280, 21)];
+        [hint_title setBackgroundColor:[UIColor clearColor]];
+        [hint_title setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+        [hint_title setTextColor:[UIColor whiteColor]];
+        [hint_title setShadowColor:[UIColor blackColor]];
+        [hint_title setShadowOffset:CGSizeMake(0, 1)];
+        [self.view addSubview:hint_title];
+    }
+    if(hint_desc==nil){
+//        hint_desc=[[UITextView alloc] initWithFrame:CGRectMake(18, 200+44+21+36, 280, 55)];
+//        [hint_desc setBackgroundColor:[UIColor clearColor]];
+//        [hint_desc setFont:[UIFont fontWithName:@"HelveticaNeue" size:16]];
+        hint_desc = [[CustomAttributedTextView alloc] initWithFrame:CGRectMake(20, 200+44+21+21
+                                                                               +15, 280, 60)];
+        [hint_desc setBackgroundColor:[UIColor clearColor]];
+        [self.view addSubview:hint_desc];
+    }
+    if(sendbtn==nil){
+        sendbtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        [sendbtn setFrame:CGRectMake(20, 200+44+21+36+96, 280, 44)];
+        [sendbtn setTitle:@"Send" forState:UIControlStateNormal];
+        [sendbtn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+        [sendbtn setTitleColor:[UIColor colorWithRed:204.0/255.0f green:229.0/255.0f blue:255.0/255.0f alpha:1] forState:UIControlStateNormal];
+        [sendbtn addTarget:self action:@selector(Signin:) forControlEvents:UIControlEventTouchUpInside];
+        [sendbtn setTitleShadowColor:[UIColor colorWithRed:21.0/255.0f green:52.0/255.0f blue:84.0/255.0f alpha:1] forState:UIControlStateNormal];
+        sendbtn.titleLabel.shadowOffset=CGSizeMake(0, 1);
+        [sendbtn setBackgroundImage:[[UIImage imageNamed:@"btn_light_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 12, 0, 12)] forState:UIControlStateNormal];
+        
+        [self.view addSubview:sendbtn];
+        
+    }
     
     if([hintname isEqualToString:@"forgetpassword"]){
         hint_title.text=@"Forgot Password";
         NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"You can reset your EXFE password through this identity. Confirm sending reset token to your mailbox?"];
-    
         [desc addAttribute:(NSString*)kCTForegroundColorAttributeName  value:(id)[UIColor blackColor].CGColor range:NSMakeRange(0,19)];
-
         [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL range:NSMakeRange(19,4)];
-//        hint_desc.text=desc;
-
         [desc release];
         [hint_title setHidden:NO];
         [hint_desc setHidden:NO];
-        [Send removeTarget:self action:@selector(sendVerify:) forControlEvents:UIControlEventTouchUpInside];
-        [Send addTarget:self action:@selector(sendPwd:) forControlEvents:UIControlEventTouchUpInside];
         
-        [Send setHidden:NO];
+        [sendbtn removeTarget:self action:@selector(sendVerify:) forControlEvents:UIControlEventTouchUpInside];
+        [sendbtn addTarget:self action:@selector(sendPwd:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [sendbtn setHidden:NO];
     }
     else if([hintname isEqualToString:@"verification"]){
         hint_title.text=@"Verification";
-        NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"This identity requires verification before using.\nConfirm sending verification to your mailbox?"];
-        [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor redColor] range:NSMakeRange(0,50)];
-//        hint_desc.text=desc;
+        NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"This identity requires verification before using. Confirm sending verification to your mailbox?"];
+        
+        [desc addAttribute:NSForegroundColorAttributeName value:(id)[UIColor colorWithRed:255/255.0 green:240/255.0 blue:243/255.0 alpha:1.0] range:NSMakeRange(0,49)];
+        [desc addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_250 range:NSMakeRange(49,[desc length]-49)];
+
+        [desc addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:16] range:NSMakeRange(0,[desc length])];
+
+        NSShadow *shadowDic=[[NSShadow alloc] init];
+        [shadowDic setShadowBlurRadius:1];
+        [shadowDic setShadowColor:[UIColor redColor]];
+        [shadowDic setShadowOffset:CGSizeMake(0, 1)];
+        [desc addAttribute:NSShadowAttributeName value:shadowDic range:NSMakeRange(0,49)];
+        [shadowDic release];
+
+        NSShadow *shadowDicblack=[[NSShadow alloc] init];
+        [shadowDicblack setShadowBlurRadius:1];
+        [shadowDicblack setShadowColor:[UIColor blackColor]];
+        [shadowDicblack setShadowOffset:CGSizeMake(0, 1)];
+        [desc addAttribute:NSShadowAttributeName value:shadowDicblack range:NSMakeRange(49,[desc length]-49)];
+        [shadowDicblack release];
+        [hint_desc setText:desc];
+        
         [desc release];
         [hint_title setHidden:NO];
         [hint_desc setHidden:NO];
-        [Send removeTarget:self action:@selector(sendPwd:) forControlEvents:UIControlEventTouchUpInside];
-        [Send addTarget:self action:@selector(sendVerify:) forControlEvents:UIControlEventTouchUpInside];
-        [Send setHidden:NO];
+        [sendbtn setTitle:@"Send" forState:UIControlStateNormal];
+//        [sendbtn setEnabled:YES];
+        [sendbtn removeTarget:self action:@selector(sendPwd:) forControlEvents:UIControlEventTouchUpInside];
+        [sendbtn addTarget:self action:@selector(sendVerify:) forControlEvents:UIControlEventTouchUpInside];
+        [sendbtn setHidden:NO];
         
     }
 }
-- (void)TwitterSigninButtonPress:(id)sender{
-    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-    oauth.delegate=signindelegate;
-    [self presentModalViewController:oauth animated:YES];
+- (void) backLandingView:(id)sender{
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (IBAction)sendVerify:(id)sender{
     RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
     NSString *provider=[Util findProvider:textUsername.text];
-    NSString *endpoint = [NSString stringWithFormat:@"/users/VerifyIdentity?provider=%@&external_username=%@",provider,textUsername.text];
+    NSString *endpoint = @"/users/VerifyIdentity";
     
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-    [client get:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodGET;
+    RKParams* params = [RKParams params];
+    [params setValue:provider forParam:@"provider"];
+    [params setValue:textUsername.text forParam:@"external_username"];
+
+//    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+    [spin removeFromSuperview];
+    [sendbtn addSubview:spin];
+    [spin setHidden:NO];
+
+    [client post:endpoint usingBlock:^(RKRequest *request){
+        request.params=params;
+        request.onDidFailLoadWithError=^(NSError *error){
+            [spin setHidden:YES];
+        };
         request.onDidLoadResponse=^(RKResponse *response){
             if (response.statusCode == 200) {
-                [hint_desc setText:@"Verification sent, it should arrive in minutes. Please check your mailbox and follow the instruction."];
-                [Send setHidden:YES];
+                [spin setHidden:YES];
+
+                NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"Verification sent, it should arrive in minutes. Please check your mailbox and follow the instruction."];
+                [desc addAttribute:NSForegroundColorAttributeName value:(id)[UIColor colorWithRed:255/255.0 green:240/255.0 blue:243/255.0 alpha:1.0] range:NSMakeRange(0,50)];
+
+                [desc addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:16] range:NSMakeRange(0,[desc length])];
+
+                [desc addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_250 range:NSMakeRange(0,[desc length])];
+                
+                NSShadow *shadowDicblack=[[NSShadow alloc] init];
+                [shadowDicblack setShadowBlurRadius:1];
+                [shadowDicblack setShadowColor:[UIColor blackColor]];
+                [shadowDicblack setShadowOffset:CGSizeMake(0, 1)];
+                [desc addAttribute:NSShadowAttributeName value:shadowDicblack range:NSMakeRange(0,[desc length])];
+                [shadowDicblack release];
+                [hint_desc setText:desc];
+                [desc release];
+//                [sendbtn setHidden:YES];
+                [sendbtn setTitle:@"Done" forState:UIControlStateNormal];
+                [sendbtn removeTarget:self action:@selector(sendVerify:) forControlEvents:UIControlEventTouchUpInside];
+                [sendbtn addTarget:self action:@selector(backLandingView:) forControlEvents:UIControlEventTouchUpInside];
+//                [sendbtn setEnabled:NO];
+//                sendbtn.tag=60;
+//                NSTimer *countdown=[NSTimer timerWithTimeInterval:1 target:self selector:@selector(countdownResend:) userInfo:nil repeats:YES];
+//                [[NSRunLoop mainRunLoop] addTimer:countdown forMode:NSDefaultRunLoopMode];
             }
         };
-    }];}
+    }];
+}
+
+- (void) countdownResend:(NSTimer*)theTimer{
+    sendbtn.tag=sendbtn.tag-1;
+    
+    [sendbtn setTitle:[NSString stringWithFormat:@"Resend in %u seconds",sendbtn.tag] forState:UIControlStateNormal];
+
+    if(sendbtn.tag==0)
+    {
+        [theTimer invalidate];
+        [sendbtn setTitle:@"Send" forState:UIControlStateNormal];
+        [sendbtn removeTarget:self action:@selector(sendPwd:) forControlEvents:UIControlEventTouchUpInside];
+        [sendbtn addTarget:self action:@selector(sendVerify:) forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
 - (IBAction)sendPwd:(id)sender{
     RKClient *client = [RKClient sharedClient];
     NSString *endpoint = [NSString stringWithFormat:@"/users/forgotpassword"];
@@ -526,35 +647,12 @@
         request.params=rsvpParams;
         request.onDidLoadResponse=^(RKResponse *response){
             if (response.statusCode == 200) {
-                [hint_desc setText:@"Password sent, it should arrive in minutes. Please check your mailbox and follow the instruction."];
-                [Send setHidden:YES];
+//                [hint_desc setText:@"Password sent, it should arrive in minutes. Please check your mailbox and follow the instruction."];
+                [sendbtn setHidden:YES];
             }
         };
     }];
 }
 //#pragma mark RKObjectLoaderDelegate methods
-
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//	NSFetchRequest* request = [User fetchRequest];
-//    NSPredicate *predicate = [NSPredicate
-//                              predicateWithFormat:@"user_id = %u", app.userid];    
-//    [request setPredicate:predicate];
-//	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-//    
-//    if(users!=nil && [users count] >0)
-//    {
-//        User* user=[users objectAtIndex:0];
-//        [[NSUserDefaults standardUserDefaults] setObject:user.name forKey:@"username"];
-//        [[NSUserDefaults standardUserDefaults] synchronize];
-//        app.username=user.name;
-//    }
-//    [delegate SigninDidFinish];
-//}
-//
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-//    NSLog(@"Error!:%@",error);
-//    //    [self stopLoading];
-//}
 
 @end

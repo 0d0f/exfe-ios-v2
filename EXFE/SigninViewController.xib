@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
-		<int key="IBDocument.SystemTarget">1296</int>
-		<string key="IBDocument.SystemVersion">12A269</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2549</string>
-		<string key="IBDocument.AppKitVersion">1187</string>
-		<string key="IBDocument.HIToolboxVersion">624.00</string>
+		<int key="IBDocument.SystemTarget">1536</int>
+		<string key="IBDocument.SystemVersion">12C2034</string>
+		<string key="IBDocument.InterfaceBuilderVersion">2843</string>
+		<string key="IBDocument.AppKitVersion">1187.34</string>
+		<string key="IBDocument.HIToolboxVersion">625.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-			<string key="NS.object.0">1498</string>
+			<string key="NS.object.0">1929</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>IBProxyObject</string>
@@ -99,7 +99,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">35</int>
+			<int key="maxID">38</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -117,9 +117,11 @@
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="Signin:">id</string>
 						<string key="TwitterLoginButtonPress:">id</string>
+						<string key="editingDidBegan:">UITextField</string>
 						<string key="sendPwd:">id</string>
 						<string key="sendVerify:">id</string>
 						<string key="showForgetPwd:">id</string>
+						<string key="textDidChange:">UITextField</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="Signin:">
@@ -129,6 +131,10 @@
 						<object class="IBActionInfo" key="TwitterLoginButtonPress:">
 							<string key="name">TwitterLoginButtonPress:</string>
 							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="editingDidBegan:">
+							<string key="name">editingDidBegan:</string>
+							<string key="candidateClassName">UITextField</string>
 						</object>
 						<object class="IBActionInfo" key="sendPwd:">
 							<string key="name">sendPwd:</string>
@@ -142,18 +148,18 @@
 							<string key="name">showForgetPwd:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="textDidChange:">
+							<string key="name">textDidChange:</string>
+							<string key="candidateClassName">UITextField</string>
+						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="Send">UIButton</string>
 						<string key="activityIndicatorview">UIActivityIndicatorView</string>
-						<string key="avatarview">UIImageView</string>
 						<string key="hint">UILabel</string>
 						<string key="hint_desc">UITextView</string>
 						<string key="hint_title">UILabel</string>
 						<string key="hintpannel">UIView</string>
-						<string key="loginbtn">UIButton</string>
-						<string key="textPassword">UITextField</string>
-						<string key="textUsername">UITextField</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="Send">
@@ -163,10 +169,6 @@
 						<object class="IBToOneOutletInfo" key="activityIndicatorview">
 							<string key="name">activityIndicatorview</string>
 							<string key="candidateClassName">UIActivityIndicatorView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="avatarview">
-							<string key="name">avatarview</string>
-							<string key="candidateClassName">UIImageView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="hint">
 							<string key="name">hint</string>
@@ -184,18 +186,6 @@
 							<string key="name">hintpannel</string>
 							<string key="candidateClassName">UIView</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="loginbtn">
-							<string key="name">loginbtn</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="textPassword">
-							<string key="name">textPassword</string>
-							<string key="candidateClassName">UITextField</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="textUsername">
-							<string key="name">textUsername</string>
-							<string key="candidateClassName">UITextField</string>
-						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -208,10 +198,10 @@
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.iPhoneOS</string>
-			<real value="1296" key="NS.object.0"/>
+			<real value="1536" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
-		<string key="IBCocoaTouchPluginVersion">1498</string>
+		<string key="IBCocoaTouchPluginVersion">1929</string>
 	</data>
 </archive>

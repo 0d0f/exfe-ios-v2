@@ -24,8 +24,8 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
     CGFloat colors [] = {
-        72/255.0f, 101/255.0f, 133/255.0f, 0.95,
-        173/255.0f, 204/255.0f, 237/255.0f, 0.95
+        173/255.0f, 204/255.0f, 237/255.0f, 0.95,
+        72/255.0f, 101/255.0f, 133/255.0f, 0.95
     };
     CGColorSpaceRef baseSpace = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColorComponents(baseSpace, colors, NULL, 2);

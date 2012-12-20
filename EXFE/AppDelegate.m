@@ -21,6 +21,10 @@
 @synthesize window = _window;
 @synthesize navigationController=_navigationController;
 
+static char alertobject;
+static char handleurlobject;
+
+
 - (void)dealloc
 {
     [_window release];
@@ -88,18 +92,6 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
     if(login==YES)
     [APIProfile LoadUsrWithUserId:userid delegate:self];
-    
-//TEST:
-//    NSFetchRequest* request = [Identity fetchRequest];
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(provider == %@)",@"localaddress"];
-//    [request setPredicate:predicate];
-//    NSArray *suggestwithselected=[[Identity objectsWithFetchRequest:request] retain];
-//    for(Identity *iden in suggestwithselected)
-//    {
-//        NSLog(@"%i %i %@ %@",[iden.identity_id intValue], [iden.connected_user_id intValue] , iden.provider, iden.external_id);
-//    }
-
-    
     return YES;
 }
 
@@ -224,14 +216,112 @@
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    NSArray *url_components=[url.absoluteString componentsSeparatedByString:@"?"];
+    if([url_components count] ==2){
+        
+        for (NSString *param in [[url_components objectAtIndex:1] componentsSeparatedByString:@"&"]) {
+            NSArray *elts = [param componentsSeparatedByString:@"="];
+            if([elts count] < 2) continue;
+            [params setObject:[elts objectAtIndex:1] forKey:[elts objectAtIndex:0]];
+        }
+    }
+    NSString *token=[params objectForKey:@"token"];
+    NSString *user_id=[params objectForKey:@"user_id"];
+    NSString *identity_id=[params objectForKey:@"identity_id"];
+    
+    token_formerge=@"";
+    if([params objectForKey:@"token"] !=nil)
+        token_formerge=[token_formerge stringByAppendingString:[params objectForKey:@"token"]];
+    
+    [params release];
+    if(![token isEqualToString:@""]&& [user_id intValue]>0){
+        [APIProfile LoadUsrWithUserId:[user_id intValue] token:token usingBlock:^(RKRequest *request) {
+            request.method=RKRequestMethodGET;
+            request.onDidLoadResponse=^(RKResponse *response){
+                if (response.statusCode == 200) {
+                    NSDictionary *body=[response.body objectFromJSONData];
+                    if([body isKindOfClass:[NSDictionary class]]) {
+                        id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                        if(code)
+                            if([code intValue]==200) {
+                                NSString *ids_formerge=@"";
+                                RKObjectMapper* mapper;
+                                mapper = [RKObjectMapper mapperWithObject:body mappingProvider:[RKObjectManager sharedManager].mappingProvider];
+                                RKObjectMappingResult* result = [mapper performMapping];
+                                NSDictionary *obj=[result asDictionary];
+                                User *user=[obj objectForKey:@"response.user"];
+                                for (Identity *_identity in user.identities){
+                                    if([ids_formerge isEqualToString:@""])
+                                        ids_formerge = [ids_formerge stringByAppendingFormat:@"%u",
+                                                        [_identity.identity_id intValue]];
+                                    else
+                                        ids_formerge = [ids_formerge stringByAppendingFormat:@",%u",
+                                                    [_identity.identity_id intValue]];
+                                }
+                                ids_formerge=[NSString stringWithFormat:@"[%@]",ids_formerge];
+
+                                if([self Checklogin]==NO){
+                                    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                                    app.userid=[user_id intValue];
+                                    app.accesstoken=token;
+
+                                    [SigninDelegate saveSigninData:user];
+                                    [self SigninDidFinish];
+                                    [self processUrlHandler:url];
+                                }else{
+                                    if([identity_id intValue] >0  && [user_id intValue] != self.userid)
+                                    {
+//                                        
+                                        
+                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Merge accounts" message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?",user.name] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Merge",nil];
+                                        alert.tag=400;
+                                        objc_setAssociatedObject (alert, &alertobject, ids_formerge,OBJC_ASSOCIATION_RETAIN);
+                                        objc_setAssociatedObject (alert, &handleurlobject, url,OBJC_ASSOCIATION_RETAIN);
+                                        
+
+                                        [alert show];
+                                        [alert release];
+                                    }else{
+                                        [self processUrlHandler:url];
+                                    }
+                                }
+                                
+                            }
+
+                    }
+                }
+            };
+        }];
+    }else{
+        [self processUrlHandler:url];
+    }
+
+    
+    
+    return YES;
+}
+
+- (void) processUrlHandler:(NSURL*)url{
     NSString *host=[url host];
-    NSArray *pathComponents=[url pathComponents];
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    NSArray *url_components=[url.absoluteString componentsSeparatedByString:@"?"];
+    if([url_components count] ==2){
+        
+        for (NSString *param in [[url_components objectAtIndex:1] componentsSeparatedByString:@"&"]) {
+            NSArray *elts = [param componentsSeparatedByString:@"="];
+            if([elts count] < 2) continue;
+            [params setObject:[elts objectAtIndex:1] forKey:[elts objectAtIndex:0]];
+        }
+    }
+    
     NSArray *viewControllers = self.navigationController.viewControllers;
     CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
-
+    
     if([host isEqualToString:@"crosses"]){
-        if([pathComponents count]==2 ){
-            int cross_id= [[pathComponents objectAtIndex:1] intValue];
+        if([params objectForKey:@"cross_id"]){
+            int cross_id=[[params objectForKey:@"cross_id"] intValue] ;
             if(cross_id>0)
             {
                 if([crossViewController PushToCross:cross_id]==NO)
@@ -240,20 +330,19 @@
         }
     }
     else if([host isEqualToString:@"conversation"]){
-        if([pathComponents count]==2 ){
-            int cross_id= [[pathComponents objectAtIndex:1] intValue];
+        if([params objectForKey:@"cross_id"]){
+            int cross_id=[[params objectForKey:@"cross_id"] intValue] ;
             if(cross_id>0)
             {
-//                if([crossViewController PushToConversation:cross_id]==NO)
-//                    [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+                //                if([crossViewController PushToConversation:cross_id]==NO)
+                //                    [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
             }
         }
     }
     else if([host isEqualToString:@"profile"]){
         [crossViewController ShowProfileView];
     }
-    
-    return YES;
+    [params release];
 }
 
 - (void)ReceivePushData:(NSDictionary*)userInfo RunOnForeground:(BOOL)isForeground
@@ -389,6 +478,46 @@
 }
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     NSLog(@"Error!:%@",error);
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    if(buttonIndex==1 && alertView.tag==400){
+        
+        NSString *merge_identity = (NSString *)objc_getAssociatedObject(alertView, &alertobject);
+        [APIProfile MergeIdentities:token_formerge Identities_ids:merge_identity usingBlock:^(RKRequest *request){
+            request.method=RKRequestMethodPOST;
+            request.onDidLoadResponse=^(RKResponse *response){
+                if (response.statusCode == 200) {
+                    NSDictionary *body=[response.body objectFromJSONData];
+                    if([body isKindOfClass:[NSDictionary class]]){
+                        NSDictionary *meta=[body objectForKey:@"meta"];
+                        if([meta isKindOfClass:[NSDictionary class]]){
+                            if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]]){
+                                if([[meta objectForKey:@"code"] intValue]==200){
+                                    [APIProfile LoadUsrWithUserId:app.userid token:app.accesstoken usingBlock:^(RKRequest *drequest) {
+                                        request.method=RKRequestMethodGET;
+                                        request.onDidLoadResponse=^(RKResponse *response){
+                                            if (response.statusCode == 200) {
+                                                NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
+                                                [self processUrlHandler:url];
+                                            }
+                                        };
+                                    }];
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            request.onDidFailLoadWithError=^(NSError *error){
+//                [spin setHidden:YES];
+                NSLog(@"error %@",error);
+            };
+        }];
+    }
 }
 
 @end

@@ -241,6 +241,7 @@
 		78973F3815DA779700C11D4B /* exfee_18_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78973F3415DA779600C11D4B /* exfee_18_white@2x.png */; };
 		789C8CAD1591D9B700580624 /* EXImagesCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 789C8CAC1591D9B700580624 /* EXImagesCollectionView.m */; };
 		789FBD8515F0980000E3BE80 /* EXCollectionMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 789FBD8415F0980000E3BE80 /* EXCollectionMask.m */; };
+		78A0C1B116807F750073CCE5 /* CustomAttributedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A0C1B016807F740073CCE5 /* CustomAttributedTextView.m */; };
 		78A834091588BBDC0019FDF5 /* ProfileCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A834081588BBDB0019FDF5 /* ProfileCellView.m */; };
 		78A8340B1588BBEE0019FDF5 /* ProfileCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A8340A1588BBEE0019FDF5 /* ProfileCellView.xib */; };
 		78A9158315B91ED1008D1F11 /* i_avatar_effect.png in Resources */ = {isa = PBXBuildFile; fileRef = 78A9158115B91ED1008D1F11 /* i_avatar_effect.png */; };
@@ -704,6 +705,8 @@
 		789C8CAC1591D9B700580624 /* EXImagesCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXImagesCollectionView.m; sourceTree = "<group>"; };
 		789FBD8315F0980000E3BE80 /* EXCollectionMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCollectionMask.h; sourceTree = "<group>"; };
 		789FBD8415F0980000E3BE80 /* EXCollectionMask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCollectionMask.m; sourceTree = "<group>"; };
+		78A0C1AF16807F740073CCE5 /* CustomAttributedTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomAttributedTextView.h; sourceTree = "<group>"; };
+		78A0C1B016807F740073CCE5 /* CustomAttributedTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAttributedTextView.m; sourceTree = "<group>"; };
 		78A834071588BBDB0019FDF5 /* ProfileCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileCellView.h; sourceTree = "<group>"; };
 		78A834081588BBDB0019FDF5 /* ProfileCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileCellView.m; sourceTree = "<group>"; };
 		78A8340A1588BBEE0019FDF5 /* ProfileCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileCellView.xib; sourceTree = "<group>"; };
@@ -1574,6 +1577,8 @@
 				78240AA01668935700738B7B /* UIBorderView.m */,
 				78A94BC916707F2200B72DC8 /* EXGradientToolbarView.h */,
 				78A94BCA16707F2200B72DC8 /* EXGradientToolbarView.m */,
+				78A0C1AF16807F740073CCE5 /* CustomAttributedTextView.h */,
+				78A0C1B016807F740073CCE5 /* CustomAttributedTextView.m */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -2105,6 +2110,7 @@
 				78C6B9FF166349A600483D23 /* AddressBook.m in Sources */,
 				78240AA11668935700738B7B /* UIBorderView.m in Sources */,
 				78A94BCB16707F2200B72DC8 /* EXGradientToolbarView.m in Sources */,
+				78A0C1B116807F750073CCE5 /* CustomAttributedTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

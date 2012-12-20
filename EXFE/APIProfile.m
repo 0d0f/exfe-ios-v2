@@ -49,6 +49,33 @@
     }];
     
 }
++(void) LoadUsrWithUserId:(int)user_id token:(NSString*)token usingBlock:(void (^)(RKRequest *request))block {
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSString *endpoint = [NSString stringWithFormat:@"/users/%u?token=%@",user_id, token];
+    RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+    [client setValue:token forHTTPHeaderField:@"token"];
+    [client get:endpoint usingBlock:block];
+}
+
++(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids usingBlock:(void (^)(RKRequest *request))block{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/mergeIdentities?token=%@",app.userid, app.accesstoken];
+    RKClient *client = [RKClient sharedClient];
+    RKParams* rsvpParams = [RKParams params];
+    [rsvpParams setValue:browsing_identity_token forParam:@"browsing_identity_token"];
+    [rsvpParams setValue:ids forParam:@"identity_ids"];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+    [client post:endpoint usingBlock:^(RKRequest *request) {
+        request.method = RKRequestMethodPOST;
+        request.params=rsvpParams;
+        block(request);
+    }];
+
+    
+}
 
 + (void) LoadSuggest:(NSString*)key delegate:(id)delegate{
 

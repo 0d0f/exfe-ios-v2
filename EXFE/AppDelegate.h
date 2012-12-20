@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
-
 #import "Flurry.h"
+#import <objc/runtime.h>
 
 #define APP_DB_VERSION 202
     
@@ -46,11 +46,13 @@
 
 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,RKObjectLoaderDelegate>{
+@interface AppDelegate : UIResponder <UIApplicationDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate>{
     int userid;
     NSString *accesstoken;
     NSString *username;
     UIViewController* crossviewController;
+    NSString *token_formerge;
+//    NSString *ids_formerge;
 }
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, retain) UINavigationController *navigationController;
@@ -65,4 +67,5 @@
 -(void)ShowLanding;
 -(BOOL) Checklogin;
 - (void) cleandb;
+- (void) processUrlHandler:(NSURL*)url;
 @end

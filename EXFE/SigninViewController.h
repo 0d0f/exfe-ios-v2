@@ -18,6 +18,7 @@
 #import "SigninIconToolbarView.h"
 #import "LandingViewController.h"
 #import "EXSpinView.h"
+#import "CustomAttributedTextView.h"
 
 @interface SigninViewController : UIViewController <RKRequestDelegate> {
     id delegate;
@@ -26,8 +27,11 @@
     IBOutlet UILabel *hint;
     IBOutlet UIActivityIndicatorView* activityIndicatorview;
     IBOutlet UILabel *hint_title;
-    IBOutlet UITextView *hint_desc;
-    IBOutlet UIButton *Send;
+//    IBOutlet UITextView *hint_desc;
+    CustomAttributedTextView *hint_desc;
+    
+    IBOutlet UIButton *sendbtn;
+    UIButton *resendbtn;
     double editinginterval;
     IBOutlet UIView *hintpannel;
     
@@ -62,11 +66,13 @@
 - (IBAction)showForgetPwd:(id)sender;
 - (IBAction)sendPwd:(id)sender;
 - (IBAction)sendVerify:(id)sender;
+- (void) backLandingView:(id)sender;
 - (void) setHintView:(NSString*)hintname;
 - (void) TwitterSigninButtonPress:(id)sender;
 - (void) setSignupView;
 - (void) setSigninView;
 - (void) clearIdentity;
 - (void) welcomeButtonPress:(id) sender;
+- (void) countdownResend:(NSTimer*)theTimer;
 
 @end

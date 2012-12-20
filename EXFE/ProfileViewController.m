@@ -46,15 +46,11 @@
     [tableview addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
     
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     [tableview reloadData];
     tableview.delegate=self;
     tableview.dataSource=self;
     [self loadObjectsFromDataStore];
     [self refreshIdentities];
-//    [APIProfile LoadUsrWithUserId:app.userid delegate:self];
-//    tableview.delegate=self;
-//    tableview.dataSource=self;
     
 }
 
@@ -134,7 +130,6 @@
                             [useravatar setImage:image];
                             [useravatar setNeedsDisplay];
                         }
-
                     });
                 });
                 dispatch_release(imgQueue);

@@ -23,5 +23,6 @@
 @property(retain,nonatomic)UIViewController *parent;
 
 - (void)loginSuccessWith:(NSString *)token userid:(NSString *)userid username:(NSString *)username;
++ (void)saveSigninData:(User*)user;
 
 @end
