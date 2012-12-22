@@ -26,20 +26,20 @@
     }
     [self initData];
     itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
-    maskview=[[EXCollectionMask alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
-    [maskview setBackgroundColor:[UIColor clearColor]];
-    maskview.imageWidth=imageWidth;
-    maskview.imageHeight=imageHeight;
-    maskview.nameHeight=nameHeight;
-    maskview.imageXmargin=imageXmargin;
-    maskview.imageYmargin=imageYmargin;
-    maskview.maxColumn=maxColumn;
-    maskview.maxRow=maxRow;
-    maskview.hiddenAddButton=NO;
+//    maskview=[[EXCollectionMask alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+//    [maskview setBackgroundColor:[UIColor clearColor]];
+//    maskview.imageWidth=imageWidth;
+//    maskview.imageHeight=imageHeight;
+//    maskview.nameHeight=nameHeight;
+//    maskview.imageXmargin=imageXmargin;
+//    maskview.imageYmargin=imageYmargin;
+//    maskview.maxColumn=maxColumn;
+//    maskview.maxRow=maxRow;
+//    maskview.hiddenAddButton=NO;
     
     
-    [self addSubview:maskview];
-    [self bringSubviewToFront:maskview];
+//    [self addSubview:maskview];
+//    [self bringSubviewToFront:maskview];
     return self;
 }
 
@@ -51,9 +51,9 @@
 
 - (void) initData{
     self.userInteractionEnabled=YES;
-    imageWidth=40;
-    imageHeight=40;
-    nameHeight=15;
+    imageWidth=50;
+    imageHeight=50;
+    nameHeight=0;
     imageXmargin=5;
     imageYmargin=5;
     [self calculateColumn];
@@ -97,24 +97,24 @@
 }
 - (void) setFrame:(CGRect)frame{
     [super setFrame:frame];
-    [maskview setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+//    [maskview setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 }
 - (void)drawRect:(CGRect)rect
 {
 
 }
 - (void) HiddenAddButton{
-    maskview.hiddenAddButton=YES;
-    [maskview setNeedsDisplay];
+//    maskview.hiddenAddButton=YES;
+//    [maskview setNeedsDisplay];
 }
 - (void) ShowAddButton{
-    maskview.hiddenAddButton=NO;
-    [maskview setNeedsDisplay];
+//    maskview.hiddenAddButton=NO;
+//    [maskview setNeedsDisplay];
     
 }
 - (void) reloadData{
     for(UIView *view in self.subviews){
-        if([view isKindOfClass:[EXImagesItem class]])
+        if([view isKindOfClass:[EXInvitationItem class]])
             [view removeFromSuperview];
     }
     [itemsCache removeAllObjects];
@@ -152,7 +152,7 @@
 
     int x_count=0;
     int y_count=0;
-    NSArray *selected=[_dataSource selectedOfimageCollectionView:self];
+//    NSArray *selected=[_dataSource selectedOfimageCollectionView:self];
     for(int i=0;i<count;i++)
     {
         if( x_count==maxColumn){
@@ -161,20 +161,21 @@
         }
         int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
         int y=y_count*(imageHeight+15+imageYmargin)+imageYmargin;
-        BOOL isSelected=[[selected objectAtIndex:i] boolValue];
-        EXImagesItem *item=[itemsCache objectForKey:[NSNumber numberWithInt:i]];
+//        BOOL isSelected=[[selected objectAtIndex:i] boolValue];
+        EXInvitationItem *item=[itemsCache objectForKey:[NSNumber numberWithInt:i]];
         if(item==nil)
         {
-            EXImagesItem *item=[_dataSource imageCollectionView:self imageAtIndex:i];
+            EXInvitationItem *item=[_dataSource imageCollectionView:self itemAtIndex:i];
+//            NSLog(@"%@",item.invitation);
+
             if(item!=nil){
-            item.isSelected=isSelected;
-            [item setFrame:CGRectMake(x, y, imageWidth, imageHeight+15)];
-            [item setBackgroundColor:[UIColor clearColor]];
+//            item.isSelected=isSelected;
+            [item setFrame:CGRectMake(x, y, imageWidth+10, imageHeight+10)];
+//            [item setBackgroundColor:[UIColor clearColor]];
             [itemsCache setObject:item forKey:[NSNumber numberWithInt:i]];
             [self addSubview:item];
-            [self sendSubviewToBack:item];
+//            [self sendSubviewToBack:item];
             }
-
         }
         else{
             [item setNeedsDisplay];
@@ -189,37 +190,37 @@
     }
     //
     [self setNeedsDisplay];
-    maskview.itemsCache=itemsCache;
-    [maskview setNeedsDisplay];
+//    maskview.itemsCache=itemsCache;
+//    [maskview setNeedsDisplay];
     
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UITouch *touch in touches) {
         CGPoint touchPoint = [touch locationInView:self];
-        [self onImageTouch:touchPoint];
+//        [self onImageTouch:touchPoint];
     }
 }
 
-- (void) onImageTouch:(CGPoint) point{
-    int x_count=0;
-    int y_count=0;
-
-    for (int i=0;i<[grid count];i++)
-    {
-        if( x_count==maxColumn){
-            x_count=0;
-            y_count++;
-        }
-
-        CGRect rect=[(NSValue*)[grid objectAtIndex:i] CGRectValue];
-        BOOL inrect=CGRectContainsPoint(rect,point);
-        if(inrect==YES){
-            [_delegate imageCollectionView:self didSelectRowAtIndex:i row:y_count col:x_count frame:rect];
-        }
-        x_count++;
-    }
-}
-
+//- (void) onImageTouch:(CGPoint) point{
+//    int x_count=0;
+//    int y_count=0;
+//
+//    for (int i=0;i<[grid count];i++)
+//    {
+//        if( x_count==maxColumn){
+//            x_count=0;
+//            y_count++;
+//        }
+//
+//        CGRect rect=[(NSValue*)[grid objectAtIndex:i] CGRectValue];
+//        BOOL inrect=CGRectContainsPoint(rect,point);
+//        if(inrect==YES){
+//            [_delegate imageCollectionView:self didSelectRowAtIndex:i row:y_count col:x_count frame:rect];
+//        }
+//        x_count++;
+//    }
+//}
+//
 - (void)dealloc {
 	[grid release];
     [super dealloc];

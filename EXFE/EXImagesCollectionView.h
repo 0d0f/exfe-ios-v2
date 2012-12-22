@@ -11,7 +11,7 @@
 #import "Identity.h"
 #import "Invitation.h"
 #import "Util.h"
-#import "EXImagesItem.h"
+#import "EXInvitationItem.h"
 #import "EXCollectionMask.h"
 
 @class EXImagesCollectionView;
@@ -21,7 +21,7 @@
 
 @required
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView;
-- (EXImagesItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index;
+- (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index;
 - (NSArray *) selectedOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView;
 @end
 
@@ -70,7 +70,7 @@
 - (void) reloadData;
 - (void) initData;
 - (void) calculateColumn;
-- (void) onImageTouch:(CGPoint) point;
+//- (void) onImageTouch:(CGPoint) point;
 
 //- (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 
