@@ -7,9 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EXCurveImageView.h"
 
-@interface CrossDetailViewController : UIViewController
+@interface CrossDetailViewController : UIViewController <UITextViewDelegate>{
+    UIScrollView *container;
+    EXCurveImageView *dectorView;
+    UITextView *descView;
+    UIView *exfee_root;
+    UITextField *timeRelView;
+    UITextField *timeAbsView;
+    UITextField *timeZoneView;
+    UITextView *placeTitleView;
+    UITextView *placeDescView;
+    UIImageView *mapView;
+}
 
 
 - (void)initUI;
+- (void)relayoutUI;
+
+#pragma mark UITextViewDelegate
+- (void)textViewDidChange:(UITextView *)textView;
+
 @end
