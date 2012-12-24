@@ -44,7 +44,7 @@
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 #endif
 
-
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate>{
     int userid;

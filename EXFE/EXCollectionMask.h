@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EXImagesItem.h"
+#import "EXInvitationItem.h"
 
 @interface EXCollectionMask : UIView{
     NSMutableDictionary *itemsCache;

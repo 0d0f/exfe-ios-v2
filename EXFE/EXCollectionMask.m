@@ -45,7 +45,7 @@
             }
             int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
             int y=y_count*(imageHeight+15+imageYmargin)+imageYmargin;
-            EXImagesItem *item=[itemsCache objectForKey:[NSNumber numberWithInt:i]];
+            EXInvitationItem *item=[itemsCache objectForKey:[NSNumber numberWithInt:i]];
             if(item.isHost==YES)
                 [[UIImage imageNamed:@"exfee_frame.png"] drawInRect:CGRectMake(x-1, y-1, 42, 42)];
             if(item.mates>0)

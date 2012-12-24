@@ -1602,7 +1602,7 @@
         [crosstitle resignFirstResponder];
         [exfeeShowview becomeFirstResponder];
         CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
-        [exfeeShowview onImageTouch:exfeeviewlocation];
+//        [exfeeShowview onImageTouch:exfeeviewlocation];
     }
     else{
     [crosstitle resignFirstResponder];
@@ -1775,23 +1775,34 @@
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
     return [self exfeeIdentitiesCount];
 }
-- (EXImagesItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView imageAtIndex:(int)index{
-    EXImagesItem *item=[[[EXImagesItem alloc] init] autorelease];
+- (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+//    EXInvitationItem *item=[[[EXInvitationItem alloc] init] autorelease];
+
     NSArray *arr=[self getReducedExfeeIdentities];
     Invitation *invitation =[arr objectAtIndex:index];
+
+    EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
+    
+    if(app.userid ==[invitation.identity.connected_user_id intValue]){
+        item.isMe=YES;
+    }
+
+//    item.invitation=invitation;
     Identity *identity=invitation.identity;
     UIImage *img=nil;
     if(identity.avatar_filename!=nil)
         img=[[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
-    
-    if(img!=nil)
+    if(img!=nil && ![img isEqual:[NSNull null]]){
         item.avatar=img;
+    }
     else{
         item.avatar=[UIImage imageNamed:@"portrait_default.png"];
         if(identity.avatar_filename!=nil) {
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(imgQueue, ^{
-                UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
+                __block UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
                         item.avatar=avatar;
@@ -1802,16 +1813,15 @@
             dispatch_release(imgQueue);
         }
     }
-    
     item.isHost=[invitation.host boolValue];
     item.mates=[invitation.mates intValue];
     item.rsvp_status=invitation.rsvp_status;
-    NSString *name=identity.name;
-    if(name==nil)
-        name=identity.external_username;
-    if(name==nil)
-        name=identity.external_id;
-    item.name=name;
+//    NSString *name=identity.name;
+//    if(name==nil)
+//        name=identity.external_username;
+//    if(name==nil)
+//        name=identity.external_id;
+//    item.name=name;
     [arr release];
     return item;
 }

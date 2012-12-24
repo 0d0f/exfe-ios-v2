@@ -35,8 +35,9 @@
 #import "EXInvitationQuoteView.h"
 #import "ObjectToDict.h"
 #import "EXAttributedLabel.h"
-#import "EXImagesItem.h"
+#import "EXInvitationItem.h"
 #import "ProfileBackgroundView.h"
+#import "UIImage+RoundedCorner.h"
 
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9

@@ -190,11 +190,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/EXImagesCollectionView.m"
-         timestampString = "368877800.357728"
+         timestampString = "377689666.488001"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "198"
-         endingLineNumber = "198"
+         startingLineNumber = "199"
+         endingLineNumber = "199"
          landmarkName = "-touchesBegan:withEvent:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -235,19 +235,6 @@
          startingLineNumber = "266"
          endingLineNumber = "266"
          landmarkName = "+formattedLongDateRelativeToNowWiteDate:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/GatherViewController.m"
-         timestampString = "376925162.703181"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1802"
-         endingLineNumber = "1802"
-         landmarkName = "-imageCollectionView:imageAtIndex:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -372,11 +359,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "376925162.703181"
+         timestampString = "377772204.322321"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "2111"
-         endingLineNumber = "2111"
+         startingLineNumber = "2121"
+         endingLineNumber = "2121"
          landmarkName = "-rsvpaddmate"
          landmarkType = "5">
       </FileBreakpoint>
@@ -385,11 +372,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "376925162.703181"
+         timestampString = "377772204.322321"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1852"
-         endingLineNumber = "1852"
+         startingLineNumber = "1862"
+         endingLineNumber = "1862"
          landmarkName = "-imageCollectionView:didSelectRowAtIndex:row:col:frame:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -931,11 +918,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "376925162.703181"
+         timestampString = "377772204.322321"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1881"
-         endingLineNumber = "1881"
+         startingLineNumber = "1891"
+         endingLineNumber = "1891"
          landmarkName = "-imageCollectionView:didSelectRowAtIndex:row:col:frame:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -944,11 +931,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "376925162.703181"
+         timestampString = "377772204.322321"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1958"
-         endingLineNumber = "1958"
+         startingLineNumber = "1968"
+         endingLineNumber = "1968"
          landmarkName = "-sendrsvp:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -957,11 +944,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "376925162.703181"
+         timestampString = "377772204.322321"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "2064"
-         endingLineNumber = "2064"
+         startingLineNumber = "2074"
+         endingLineNumber = "2074"
          landmarkName = "-setMates:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -970,11 +957,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "376925162.703181"
+         timestampString = "377772204.322321"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "2030"
-         endingLineNumber = "2030"
+         startingLineNumber = "2040"
+         endingLineNumber = "2040"
          landmarkName = "-setMates:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -983,11 +970,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "376925162.703181"
+         timestampString = "377772204.322321"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "2011"
-         endingLineNumber = "2011"
+         startingLineNumber = "2021"
+         endingLineNumber = "2021"
          landmarkName = "-setMates:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1659,11 +1646,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/GatherViewController.m"
-         timestampString = "376925162.703181"
+         timestampString = "377772204.322321"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "2117"
-         endingLineNumber = "2117"
+         startingLineNumber = "2127"
+         endingLineNumber = "2127"
          landmarkName = "-rsvpremove"
          landmarkType = "5">
       </FileBreakpoint>

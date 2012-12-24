@@ -514,7 +514,7 @@
     if([hintname isEqualToString:@"forgetpassword"]){
         hint_title.text=@"Forgot Password";
         NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"You can reset your EXFE password through this identity. Confirm sending reset token to your mailbox?"];
-        [desc addAttribute:(NSString*)kCTForegroundColorAttributeName  value:(id)[UIColor blackColor].CGColor range:NSMakeRange(0,19)];
+        [desc addAttribute:(NSString*)kCTForegroundColorAttributeName  value:(id)[UIColor colorWithRed:0xff/255.0 green:0x7e/255.0 blue:0x98/255.0 alpha:1].CGColor range:NSMakeRange(0,19)];
         [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL range:NSMakeRange(19,4)];
         [desc release];
         [hint_title setHidden:NO];
@@ -528,25 +528,27 @@
     else if([hintname isEqualToString:@"verification"]){
         hint_title.text=@"Verification";
         NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"This identity requires verification before using. Confirm sending verification to your mailbox?"];
+        [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:0xff/255.0 green:0x7e/255.0 blue:0x98/255.0 alpha:1].CGColor range:NSMakeRange(0,[desc length])];
         
-        [desc addAttribute:NSForegroundColorAttributeName value:(id)[UIColor colorWithRed:255/255.0 green:240/255.0 blue:243/255.0 alpha:1.0] range:NSMakeRange(0,49)];
-        [desc addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_250 range:NSMakeRange(49,[desc length]-49)];
+//        [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:255/255.0 green:240/255.0 blue:243/255.0 alpha:1.0].CGColor range:NSMakeRange(0,[desc length])];
+        [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_250.CGColor range:NSMakeRange(49,[desc length]-49)];
+        CTFontRef fontref16= CTFontCreateWithName(CFSTR("HelveticaNeue"), 16.0, NULL);
+        [desc addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref16 range:NSMakeRange(0,[desc length])];
+        CFRelease(fontref16);
 
-        [desc addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:16] range:NSMakeRange(0,[desc length])];
+//        NSShadow *shadowDic=[[NSShadow alloc] init];
+//        [shadowDic setShadowBlurRadius:1];
+//        [shadowDic setShadowColor:[UIColor redColor]];
+//        [shadowDic setShadowOffset:CGSizeMake(0, 1)];
+//        [desc addAttribute:NSShadowAttributeName value:shadowDic range:NSMakeRange(0,49)];
+//        [shadowDic release];
 
-        NSShadow *shadowDic=[[NSShadow alloc] init];
-        [shadowDic setShadowBlurRadius:1];
-        [shadowDic setShadowColor:[UIColor redColor]];
-        [shadowDic setShadowOffset:CGSizeMake(0, 1)];
-        [desc addAttribute:NSShadowAttributeName value:shadowDic range:NSMakeRange(0,49)];
-        [shadowDic release];
-
-        NSShadow *shadowDicblack=[[NSShadow alloc] init];
-        [shadowDicblack setShadowBlurRadius:1];
-        [shadowDicblack setShadowColor:[UIColor blackColor]];
-        [shadowDicblack setShadowOffset:CGSizeMake(0, 1)];
-        [desc addAttribute:NSShadowAttributeName value:shadowDicblack range:NSMakeRange(49,[desc length]-49)];
-        [shadowDicblack release];
+//        NSShadow *shadowDicblack=[[NSShadow alloc] init];
+//        [shadowDicblack setShadowBlurRadius:1];
+//        [shadowDicblack setShadowColor:[UIColor blackColor]];
+//        [shadowDicblack setShadowOffset:CGSizeMake(0, 1)];
+//        [desc addAttribute:NSShadowAttributeName value:shadowDicblack range:NSMakeRange(49,[desc length]-49)];
+//        [shadowDicblack release];
         [hint_desc setText:desc];
         
         [desc release];
@@ -589,18 +591,24 @@
                 [spin setHidden:YES];
 
                 NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"Verification sent, it should arrive in minutes. Please check your mailbox and follow the instruction."];
-                [desc addAttribute:NSForegroundColorAttributeName value:(id)[UIColor colorWithRed:255/255.0 green:240/255.0 blue:243/255.0 alpha:1.0] range:NSMakeRange(0,50)];
+//                [desc addAttribute:NSForegroundColorAttributeName value:(id)[UIColor colorWithRed:255/255.0 green:240/255.0 blue:243/255.0 alpha:1.0] range:NSMakeRange(0,50)];
 
-                [desc addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:16] range:NSMakeRange(0,[desc length])];
+//                [desc addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:16] range:NSMakeRange(0,[desc length])];
 
-                [desc addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_250 range:NSMakeRange(0,[desc length])];
+//                [desc addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_250 range:NSMakeRange(0,[desc length])];
                 
-                NSShadow *shadowDicblack=[[NSShadow alloc] init];
-                [shadowDicblack setShadowBlurRadius:1];
-                [shadowDicblack setShadowColor:[UIColor blackColor]];
-                [shadowDicblack setShadowOffset:CGSizeMake(0, 1)];
-                [desc addAttribute:NSShadowAttributeName value:shadowDicblack range:NSMakeRange(0,[desc length])];
-                [shadowDicblack release];
+//                NSShadow *shadowDicblack=[[NSShadow alloc] init];
+//                [shadowDicblack setShadowBlurRadius:1];
+//                [shadowDicblack setShadowColor:[UIColor blackColor]];
+//                [shadowDicblack setShadowOffset:CGSizeMake(0, 1)];
+//                [desc addAttribute:NSShadowAttributeName value:shadowDicblack range:NSMakeRange(0,[desc length])];
+//                [shadowDicblack release];
+                [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_250.CGColor range:NSMakeRange(0,[desc length])];
+                
+                CTFontRef fontref16= CTFontCreateWithName(CFSTR("HelveticaNeue"), 16.0, NULL);
+                [desc addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref16 range:NSMakeRange(0,[desc length])];
+                CFRelease(fontref16);
+
                 [hint_desc setText:desc];
                 [desc release];
 //                [sendbtn setHidden:YES];
