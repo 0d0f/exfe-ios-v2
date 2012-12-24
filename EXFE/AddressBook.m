@@ -12,7 +12,16 @@
 @synthesize parentview;
 
 - (NSArray*) UpdatePeople:(NSDate*)lastsaved{
-    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
+    ABAddressBookRef addressBook;
+
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
+        addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
+    }
+    else if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")){
+        addressBook = ABAddressBookCreate();
+    }else
+        return nil;
+    
     __block BOOL accessGranted = NO;
     if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
         dispatch_semaphore_t sema = dispatch_semaphore_create(0);

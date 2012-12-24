@@ -10,6 +10,7 @@
 #import <AddressBook/AddressBook.h>
 #import "EXSpinView.h"
 #import "MBProgressHUD.h"
+#import "AppDelegate.h"
 
 
 @interface AddressBook : NSObject{
