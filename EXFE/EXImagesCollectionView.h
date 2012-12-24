@@ -13,6 +13,7 @@
 #import "Util.h"
 #import "EXInvitationItem.h"
 #import "EXCollectionMask.h"
+#import "ExfeeNumberView.h"
 
 @class EXImagesCollectionView;
 @protocol EXImagesCollectionDataSource;

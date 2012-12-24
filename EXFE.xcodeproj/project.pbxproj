@@ -328,6 +328,7 @@
 		78B5EF5515E4F69B00F0E858 /* exfe_170.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B5EF5315E4F69B00F0E858 /* exfe_170.png */; };
 		78B5EF5615E4F69B00F0E858 /* exfe_170@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B5EF5415E4F69B00F0E858 /* exfe_170@2x.png */; };
 		78B5EF5915E4F85300F0E858 /* LandingBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B5EF5815E4F85200F0E858 /* LandingBackgroundView.m */; };
+		78B91DD916882BE400BB98B1 /* ExfeeNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B91DD816882BE400BB98B1 /* ExfeeNumberView.m */; };
 		78B9FCF115B4680F00F5E4D3 /* EXInnerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FCF015B4680F00F5E4D3 /* EXInnerButton.m */; };
 		78B9FCF815B5346D00F5E4D3 /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FCF715B5346D00F5E4D3 /* Exfee.m */; };
 		78B9FD3315B5498200F5E4D3 /* EXNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FD3215B5498200F5E4D3 /* EXNavigationBar.m */; };
@@ -828,6 +829,8 @@
 		78B5EF5415E4F69B00F0E858 /* exfe_170@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfe_170@2x.png"; sourceTree = "<group>"; };
 		78B5EF5715E4F85100F0E858 /* LandingBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandingBackgroundView.h; sourceTree = "<group>"; };
 		78B5EF5815E4F85200F0E858 /* LandingBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandingBackgroundView.m; sourceTree = "<group>"; };
+		78B91DD716882BE400BB98B1 /* ExfeeNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExfeeNumberView.h; sourceTree = "<group>"; };
+		78B91DD816882BE400BB98B1 /* ExfeeNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExfeeNumberView.m; sourceTree = "<group>"; };
 		78B9FCEF15B4680F00F5E4D3 /* EXInnerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXInnerButton.h; sourceTree = "<group>"; };
 		78B9FCF015B4680F00F5E4D3 /* EXInnerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXInnerButton.m; sourceTree = "<group>"; };
 		78B9FCF615B5346D00F5E4D3 /* Exfee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exfee.h; sourceTree = "<group>"; };
@@ -1321,6 +1324,8 @@
 				789FBD8415F0980000E3BE80 /* EXCollectionMask.m */,
 				789C8CAB1591D9B700580624 /* EXImagesCollectionView.h */,
 				789C8CAC1591D9B700580624 /* EXImagesCollectionView.m */,
+				78B91DD716882BE400BB98B1 /* ExfeeNumberView.h */,
+				78B91DD816882BE400BB98B1 /* ExfeeNumberView.m */,
 			);
 			name = control;
 			sourceTree = "<group>";
@@ -2191,6 +2196,7 @@
 				4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */,
 				4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */,
 				4F0597961682B9FA00F9CE10 /* CrossDetailViewController.m in Sources */,
+				78B91DD916882BE400BB98B1 /* ExfeeNumberView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -153,7 +153,7 @@
     int x_count=0;
     int y_count=0;
 //    NSArray *selected=[_dataSource selectedOfimageCollectionView:self];
-    for(int i=0;i<count;i++)
+    for(int i=0;i<=count;i++)
     {
         if( x_count==maxColumn){
             x_count=0;
@@ -161,26 +161,36 @@
         }
         int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
         int y=y_count*(imageHeight+15+imageYmargin)+imageYmargin;
-//        BOOL isSelected=[[selected objectAtIndex:i] boolValue];
-        EXInvitationItem *item=[itemsCache objectForKey:[NSNumber numberWithInt:i]];
-        if(item==nil)
-        {
-            EXInvitationItem *item=[_dataSource imageCollectionView:self itemAtIndex:i];
-//            NSLog(@"%@",item.invitation);
+        
+        if(i<count){
+    //        BOOL isSelected=[[selected objectAtIndex:i] boolValue];
+            EXInvitationItem *item=[itemsCache objectForKey:[NSNumber numberWithInt:i]];
+            if(item==nil)
+            {
+                EXInvitationItem *item=[_dataSource imageCollectionView:self itemAtIndex:i];
+    //            NSLog(@"%@",item.invitation);
 
-            if(item!=nil){
-//            item.isSelected=isSelected;
-            [item setFrame:CGRectMake(x, y, imageWidth+10, imageHeight+10)];
-//            [item setBackgroundColor:[UIColor clearColor]];
-            [itemsCache setObject:item forKey:[NSNumber numberWithInt:i]];
-            [self addSubview:item];
-//            [self sendSubviewToBack:item];
+                if(item!=nil){
+    //            item.isSelected=isSelected;
+                [item setFrame:CGRectMake(x, y, imageWidth+10, imageHeight+10)];
+    //            [item setBackgroundColor:[UIColor clearColor]];
+                [itemsCache setObject:item forKey:[NSNumber numberWithInt:i]];
+                [self addSubview:item];
+    //            [self sendSubviewToBack:item];
+                }
+            }
+            else{
+                [item setNeedsDisplay];
             }
         }
         else{
-            [item setNeedsDisplay];
+            ExfeeNumberView *exfeecount=[[ExfeeNumberView alloc] initWithFrame:CGRectMake(x+5, y+5, 52, 52)];
+            exfeecount.backgroundColor=[UIColor whiteColor];
+            [self addSubview:exfeecount];
+            NSLog(@"last one:%i %i",x,y);
+            [exfeecount release];
         }
-  
+
         x_count++;
     }
     //

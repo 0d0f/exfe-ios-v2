@@ -957,10 +957,16 @@
     return i;
 }
 - (NSArray*) getReducedExfeeIdentities{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
     NSMutableArray *arr=[[NSMutableArray alloc] initWithCapacity:12];
     for(Invitation *invitation in exfeeIdentities){
         if(![invitation.rsvp_status isEqualToString:@"REMOVED"]){
-            [arr addObject:invitation];
+            if([invitation.identity.connected_user_id intValue] == app.userid){
+                [arr insertObject:invitation atIndex:0];
+            }
+            else
+                [arr addObject:invitation];
         }
     }
     return arr;

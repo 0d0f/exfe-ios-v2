@@ -85,17 +85,35 @@
         CGContextDrawImage(currentContext,CGRectMake(rect.size.width-13-5, rect.size.height-5-13, 13, 13) , triimageref);
         CGImageRelease(triimageref);
         
-    }
-    
+        CTFontRef matesfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 10.0, NULL);
 
-    
+        NSMutableAttributedString *matesattribstring=[[NSMutableAttributedString alloc] initWithString:[invitation.mates stringValue]];
+        [matesattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)matesfontref range:NSMakeRange(0,[matesattribstring length])];
+        [matesattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor whiteColor].CGColor range:NSMakeRange(0,[matesattribstring length])];
+        
+        CTTextAlignment alignment = kCTCenterTextAlignment;
+        CTParagraphStyleSetting setting[1] = {
+            {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
+        };
+        CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(setting, 1);
+        [matesattribstring addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,[matesattribstring length])];
+        CFRelease(paragraphstyle);
+        
+        
+        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)matesattribstring);
+        CGMutablePathRef path = CGPathCreateMutable();
+        CGPathAddRect(path, NULL, CGRectMake(rect.size.width-13, rect.size.height-3-13, 13, 13));
+        CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [matesattribstring length]), path, NULL);
+        CFRelease(framesetter);
+        CFRelease(path);
+        CFRelease(matesfontref);
+        CTFrameDraw(theFrame, currentContext);
+        [matesattribstring release];
+    }
+
     CGContextRestoreGState(currentContext);
     
-    if([invitation.mates intValue]>0){
-        [[UIColor whiteColor] set];
-        UIFont *font=[UIFont fontWithName:@"HelveticaNeue" size:11];
-        [[invitation.mates stringValue] drawInRect:CGRectMake(rect.size.width-13-5, 5, 13, 13) withFont:font lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
-    }
+
 
     if(!isMe){
         NSString *name=invitation.identity.name;
