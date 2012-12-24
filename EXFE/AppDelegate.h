@@ -11,7 +11,7 @@
 #import "Flurry.h"
 #import <objc/runtime.h>
 
-#define APP_DB_VERSION 202
+#define APP_DB_VERSION 203
     
 #define DEV
 

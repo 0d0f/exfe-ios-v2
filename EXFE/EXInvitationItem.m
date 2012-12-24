@@ -64,10 +64,22 @@
             if(isMe){
                 avatar=[avatar roundedCornerImage:40 borderSize:0];
             }
-            
             CGImageRef ximageref = CGImageRetain(avatar.CGImage);
             CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , ximageref);
             CGImageRelease(ximageref);
+            if(isMe){
+                UIImage *rsvpicon;
+                if ([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+                    rsvpicon=[UIImage imageNamed:@"rsvp_accepted_stroke_26blue.png"];
+                else if ([invitation.rsvp_status isEqualToString:@"INTERESTED"])
+                    rsvpicon=[UIImage imageNamed:@"rsvp_pending_stroke_26g5.png"];
+                else if ([invitation.rsvp_status isEqualToString:@"DECLINED"])
+                    rsvpicon=[UIImage imageNamed:@"rsvp_unavailable_stroke_26g5.png"];
+                
+                CGImageRef ximageref = CGImageRetain(rsvpicon.CGImage);
+                CGContextDrawImage(currentContext,CGRectMake(rect.size.width-26, 0, 26,26   ) , ximageref);
+                CGImageRelease(ximageref);
+            }
 
         }
     if(!isMe){
@@ -79,6 +91,13 @@
         CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , frameimageref);
         CGImageRelease(frameimageref);
     }
+    if([invitation.identity.unreachable boolValue]==YES){
+        CGImageRef frameimageref = CGImageRetain([UIImage imageNamed:@"exfee_unreachable.png"].CGImage);
+        CGContextDrawImage(currentContext,CGRectMake(rect.size.width-20, 0, 20,20) , frameimageref);
+        CGImageRelease(frameimageref);
+        
+    }
+    
 
     if([invitation.mates intValue]>0){
         CGImageRef triimageref = CGImageRetain([UIImage imageNamed:@"portrait_tri_26"].CGImage);

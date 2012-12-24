@@ -40,6 +40,7 @@
      @"updated_at", @"updated_at",
      @"type", @"type", 
      @"order", @"order",
+     @"unreachable", @"unreachable",
      @"status", @"status",
      nil];
     return identityMapping;

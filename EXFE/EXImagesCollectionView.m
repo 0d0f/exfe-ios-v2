@@ -153,6 +153,7 @@
     int x_count=0;
     int y_count=0;
 //    NSArray *selected=[_dataSource selectedOfimageCollectionView:self];
+    int acceptednum=0;
     for(int i=0;i<=count;i++)
     {
         if( x_count==maxColumn){
@@ -168,7 +169,6 @@
             if(item==nil)
             {
                 EXInvitationItem *item=[_dataSource imageCollectionView:self itemAtIndex:i];
-    //            NSLog(@"%@",item.invitation);
 
                 if(item!=nil){
     //            item.isSelected=isSelected;
@@ -176,6 +176,9 @@
     //            [item setBackgroundColor:[UIColor clearColor]];
                 [itemsCache setObject:item forKey:[NSNumber numberWithInt:i]];
                 [self addSubview:item];
+                    if([item.invitation.rsvp_status isEqualToString:@"ACCEPTED"]){
+                        acceptednum += 1;
+                    }
     //            [self sendSubviewToBack:item];
                 }
             }
@@ -185,9 +188,11 @@
         }
         else{
             ExfeeNumberView *exfeecount=[[ExfeeNumberView alloc] initWithFrame:CGRectMake(x+5, y+5, 52, 52)];
+            exfeecount.acceptednumber=acceptednum;
+            exfeecount.allnumber=count-1;
+
             exfeecount.backgroundColor=[UIColor whiteColor];
             [self addSubview:exfeecount];
-            NSLog(@"last one:%i %i",x,y);
             [exfeecount release];
         }
 

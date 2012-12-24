@@ -92,8 +92,8 @@
     }];
 }
 
-+(void) getIdentity:(NSString*)identity_json{
-    
-}
+//+(void) getIdentity:(NSString*)identity_json{
+//    
+//}
 
 @end

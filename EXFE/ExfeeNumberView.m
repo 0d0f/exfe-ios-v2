@@ -9,6 +9,8 @@
 #import "ExfeeNumberView.h"
 
 @implementation ExfeeNumberView
+@synthesize acceptednumber;
+@synthesize allnumber;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -34,7 +36,8 @@
     CGContextStrokePath(currentContext);
     
     CTFontRef acceptedfontref= CTFontCreateWithName(CFSTR("HelveticaNeue"), 24.0, NULL);
-    NSMutableAttributedString *acceptedattribstring=[[NSMutableAttributedString alloc] initWithString:@"55"];
+    
+    NSMutableAttributedString *acceptedattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%i",acceptednumber]];
     [acceptedattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)acceptedfontref range:NSMakeRange(0,[acceptedattribstring length])];
     [acceptedattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0,[acceptedattribstring length])];
     
@@ -62,7 +65,7 @@
 
     
     CTFontRef allfontref= CTFontCreateWithName(CFSTR("HelveticaNeue"), 24.0, NULL);
-    NSMutableAttributedString *allattribstring=[[NSMutableAttributedString alloc] initWithString:@"88"];
+    NSMutableAttributedString *allattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%i",allnumber]];
     [allattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)allfontref range:NSMakeRange(0,[allattribstring length])];
     [allattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_51.CGColor range:NSMakeRange(0,[allattribstring length])];
     

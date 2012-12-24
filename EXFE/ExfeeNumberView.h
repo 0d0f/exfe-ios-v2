@@ -10,6 +10,12 @@
 #import <CoreText/CoreText.h>
 #import "Util.h"
 
-@interface ExfeeNumberView : UIView
+@interface ExfeeNumberView : UIView{
+    int acceptednumber;
+    int allnumber;
+}
+
+@property int acceptednumber;
+@property int allnumber;
 
 @end

@@ -12,7 +12,7 @@
 #import "APIProfile.h"
 #import "CrossesViewController.h"
 #import "LandingViewController.h"
-#define DBNAME @"exfe_v2_2.sqlite"
+#define DBNAME @"exfe_v2_3.sqlite"
 
 @implementation AppDelegate
 @synthesize userid;
