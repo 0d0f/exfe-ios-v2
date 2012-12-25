@@ -119,10 +119,14 @@
     
 }
 - (void) reloadData{
+
     for(UIView *view in self.subviews){
         if([view isKindOfClass:[EXInvitationItem class]])
             [view removeFromSuperview];
     }
+    if(acceptlabel!=nil)
+        [acceptlabel removeFromSuperview];
+    
     [itemsCache removeAllObjects];
     [itemsCache release];
     itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
@@ -158,8 +162,10 @@
 
     int x_count=0;
     int y_count=0;
+    int y_start_offset=12;
 //    NSArray *selected=[_dataSource selectedOfimageCollectionView:self];
     int acceptednum=0;
+    BOOL acceptflag=NO;
     for(int i=0;i<=count;i++)
     {
         if( x_count==maxColumn){
@@ -167,7 +173,8 @@
             y_count++;
         }
         int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
-        int y=y_count*(imageHeight+15+imageYmargin)+imageYmargin;
+        int y=y_count*(imageHeight+imageYmargin*2)+y_start_offset;
+        NSLog(@"y_count :%i y:%i",y_count,y);
         
         if(i<count){
     //        BOOL isSelected=[[selected objectAtIndex:i] boolValue];
@@ -175,17 +182,26 @@
             if(item==nil)
             {
                 EXInvitationItem *item=[_dataSource imageCollectionView:self itemAtIndex:i];
-
                 if(item!=nil){
-    //            item.isSelected=isSelected;
-                [item setFrame:CGRectMake(x, y, imageWidth+10, imageHeight+10)];
-    //            [item setBackgroundColor:[UIColor clearColor]];
-                [itemsCache setObject:item forKey:[NSNumber numberWithInt:i]];
-                [self addSubview:item];
+        //            item.isSelected=isSelected;
+                    [item setFrame:CGRectMake(x, y, imageWidth+10, imageHeight+10)];
+        //            [item setBackgroundColor:[UIColor clearColor]];
+                    [itemsCache setObject:item forKey:[NSNumber numberWithInt:i]];
+                    [self addSubview:item];
                     if([item.invitation.rsvp_status isEqualToString:@"ACCEPTED"]){
                         acceptednum += 1;
+                        if(acceptlabel==nil){
+                            acceptlabel=[[UILabel alloc] initWithFrame:CGRectMake(x, y-12, 50, 12)];
+                            [acceptlabel setBackgroundColor:[UIColor colorWithRed:58.0/255.0f green:110.0/255.0f blue:165.0/255.0f alpha:0.2]];
+                            acceptlabel.text=@"Accepted";
+                            [acceptlabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
+                            [acceptlabel setTextColor:[UIColor colorWithRed:103/255.0 green:127/255.0 blue:153/255.0 alpha:1]];
+                            [acceptlabel setTextAlignment:NSTextAlignmentCenter];
+                            [self addSubview:acceptlabel];
+                        }
+//                        acceptflag=YES;
                     }
-    //            [self sendSubviewToBack:item];
+        //            [self sendSubviewToBack:item];
                 }
             }
             else{
@@ -196,7 +212,6 @@
             ExfeeNumberView *exfeecount=[[ExfeeNumberView alloc] initWithFrame:CGRectMake(x+5, y+5, 52, 52)];
             exfeecount.acceptednumber=acceptednum;
             exfeecount.allnumber=count-1;
-
             exfeecount.backgroundColor=[UIColor whiteColor];
             [self addSubview:exfeecount];
             [exfeecount release];
@@ -204,16 +219,13 @@
 
         x_count++;
     }
-    //
     if( x_count==maxColumn){
         x_count=0;
         y_count++;
     }
-    //
     [self setNeedsDisplay];
 //    maskview.itemsCache=itemsCache;
 //    [maskview setNeedsDisplay];
-    
 }
 //-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
 //    NSLog(@"click");

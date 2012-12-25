@@ -49,6 +49,7 @@
     BOOL editmode;
     NSMutableDictionary *itemsCache;
     EXCollectionMask *maskview;
+    UILabel *acceptlabel;
 }
 @property int maxColumn;
 @property int maxRow;

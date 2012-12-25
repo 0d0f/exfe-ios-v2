@@ -172,7 +172,7 @@
 
     //TODO: workaround for a responder chain bug
     exfeeShowview =[[EXImagesCollectionView alloc] initWithFrame:CGRectMake(INNER_MARGIN, crosstitle.frame.origin.x+crosstitle.frame.size.height, width, 120)];
-    [exfeeShowview setFrame:CGRectMake(INNER_MARGIN-6, 69, width, 40+15+4)];
+    [exfeeShowview setFrame:CGRectMake(INNER_MARGIN-6, 69, width, 60+12)];
     [exfeeShowview calculateColumn];
     [exfeeShowview setBackgroundColor:[UIColor clearColor]];
 
