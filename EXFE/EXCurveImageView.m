@@ -8,15 +8,17 @@
 
 #import "EXCurveImageView.h"
 #import "UIImage+Alpha.h"
+#import "UIImage+RoundedCorner.h"
 
 @implementation EXCurveImageView
 @synthesize CurveFrame;
+@synthesize image;
 
+- (void)setCurveFrame:(CGRect)frame{
+    CurveFrame = frame;
+    [self setNeedsDisplay]; 
+}
 
-//- (void)setCurveFrame:(CGRect)frame{
-//    CurveFrame = frame;
-//    [self setNeedsDisplay]; 
-//}
 
 - (id)initWithFrame:(CGRect)frame withCurveFrame:(CGRect)curveFrame
 {
@@ -39,16 +41,18 @@
         return;
     }
     
-    UIImage *image = [self.image imageWithAlpha];
+    //UIImage *roundedImage = [self.image roundedCornerImage:CurveFrame.size.height borderSize:0];
+    
+    UIImage *imageAlpha = [self.image imageWithAlpha];
     
     // Build a context that's the same dimensions as the new size
     CGContextRef context = CGBitmapContextCreate(NULL,
                                                  self.frame.size.width,
                                                  self.frame.size.height,
-                                                 CGImageGetBitsPerComponent(image.CGImage),
+                                                 CGImageGetBitsPerComponent(imageAlpha.CGImage),
                                                  0,
-                                                 CGImageGetColorSpace(image.CGImage),
-                                                 CGImageGetBitmapInfo(image.CGImage));
+                                                 CGImageGetColorSpace(imageAlpha.CGImage),
+                                                 CGImageGetBitmapInfo(imageAlpha.CGImage));
     
     // Create a clipping path with rounded corners
     CGContextBeginPath(context);
@@ -57,20 +61,33 @@
         CGContextSaveGState(context);
         CGRect rr = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
         CGContextTranslateCTM(context, CGRectGetMinX(rr), CGRectGetMinY(rr));
-        int ovalWidth = self.frame.size.width / 4;
-        int ovalHeight = self.frame.size.height / 4;
+//        int ovalWidth = self.frame.size.width / 4;
+//        int ovalHeight = self.frame.size.height / 4;
+        int ovalWidth = self.frame.size.width;
+        int ovalHeight = self.frame.size.height;
+
         CGContextScaleCTM(context, ovalWidth, ovalHeight);
         CGFloat fw = CGRectGetWidth(rr) / ovalWidth;
         CGFloat fh = CGRectGetHeight(rr) / ovalHeight;
         
-        CGContextMoveToPoint(context, fw, fh/2);
-        CGContextAddArcToPoint(context, fw, fh, fw/2, fh, 1);
-        CGContextAddArcToPoint(context, 0, fh, 0, fh/2, 1);
-        CGContextAddArcToPoint(context, 0, 0, fw/2, 0, 1);
-        CGContextAddArcToPoint(context, fw, 0, fw, fh/2, 1);
+        CGFloat x0 = fw / CGRectGetWidth(rr) * (CurveFrame.origin.x + CurveFrame.size.width * 0.0f);
+        CGFloat y0 = fh / CGRectGetHeight(rr) * (CGRectGetHeight(rr) - CurveFrame.origin.y - CurveFrame.size.height * 0.0f);
+        CGFloat x1 = fw / CGRectGetWidth(rr) * (CurveFrame.origin.x + CurveFrame.size.width * 0.7f);
+        CGFloat y1 = fh / CGRectGetHeight(rr) * (CGRectGetHeight(rr) - CurveFrame.origin.y - CurveFrame.size.height * 0.0f);
+        CGFloat x2 = fw / CGRectGetWidth(rr) * (CurveFrame.origin.x + CurveFrame.size.width * 0.3f);
+        CGFloat y2 = fh / CGRectGetHeight(rr) *(CGRectGetHeight(rr) - CurveFrame.origin.y - CurveFrame.size.height * 1.0f);
+        CGFloat x3 = fw / CGRectGetWidth(rr) * (CurveFrame.origin.x + CurveFrame.size.width * 1.0f);
+        CGFloat y3 = fh / CGRectGetHeight(rr) *(CGRectGetHeight(rr) - CurveFrame.origin.y - CurveFrame.size.height * 1.0f);
+        
+        CGContextMoveToPoint(context, 0, fh);
+        CGContextAddLineToPoint(context, 0,  y0);
+        CGContextAddLineToPoint(context, x0, y0);
+        
+        CGContextAddCurveToPoint(context, x1, y1, x2, y2, x3, y3);
+        
+        CGContextAddLineToPoint(context, fw , y3);
+        CGContextAddLineToPoint(context, fw , fh);
         CGContextClosePath(context);
-        
-        
         CGContextRestoreGState(context);
     }
     

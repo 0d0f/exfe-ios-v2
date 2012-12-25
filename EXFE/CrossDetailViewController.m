@@ -7,6 +7,9 @@
 //
 
 #import "CrossDetailViewController.h"
+#import "Util.h"
+#import "EFTime.h"
+#import "ImgCache.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -21,6 +24,8 @@
 #define CONTAINER_TOP_MARGIN             (DECTOR_HEIGHT - OVERLAP)
 #define CONTAINER_TOP_PADDING            (DECTOR_HEIGHT_EXTRA + DECTOR_MARGIN + OVERLAP)
 #define CONTAINER_VERTICAL_PADDING       (8)
+#define DESC_MIN_HEIGHT                  (18)
+#define DESC_MAX_HEIGHT                  (90)
 #define DESC_BOTTOM_MARGIN               (LARGE_SLOT)
 #define EXFEE_HORIZON_PADDING            (SMAILL_SLOT)
 #define EXFEE_HEIGHT                     (50)
@@ -34,20 +39,28 @@
 #define PLACE_TITLE_HEIGHT               (MAIN_TEXT_HIEGHT)
 #define PLACE_TITLE_BOTTOM_MARGIN        (SMALL_SLOT)
 #define PLACE_DESC_HEIGHT                (ALTERNATIVE_TEXT_HIEGHT * 4)
+#define PLACE_DESC_MIN_HEIGHT            (20)
+#define PLACE_DESC_MAX_HEIGHT            (90)
 #define PLACE_DESC_BOTTOM_MARGIN         (LARGE_SLOT)
+#define TITLE_HORIZON_MARGIN             (SMALL_SLOT)
+#define TITLE_VERTICAL_MARGIN            (18)
+
 
 @interface CrossDetailViewController ()
 
 @end
 
 @implementation CrossDetailViewController
+@synthesize cross;
+@synthesize default_user;
+
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        [self initUI];
     }
     return self;
 }
@@ -61,49 +74,63 @@
         
         int left = CONTAINER_VERTICAL_PADDING;
         descView = [[UITextView alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 40)];
+        descView.editable = NO;
+        descView.textColor = [UIColor COLOR_RGB(0x33, 0x33, 0x33)];
         descView.delegate = self;
-        descView.backgroundColor = [UIColor brownColor];
+        descView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
+        descView.backgroundColor = [UIColor lightGrayColor];
         [container addSubview:descView];
-        //[descView release];
         
         int line = 2;
         exfee_root = [[UIView alloc]initWithFrame:CGRectMake(left, descView.frame.origin.y + descView.frame.size.height + DESC_BOTTOM_MARGIN, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 60 * line)];
-        exfee_root.backgroundColor = [UIColor redColor];
+        exfee_root.backgroundColor = [UIColor grayColor];
         [container addSubview:exfee_root];
-        //[exfee_root release];
         
-        timeRelView = [[UITextField alloc] initWithFrame:CGRectMake(left, exfee_root.frame.origin.y + exfee_root.frame.size.height + EXFEE_BOTTOM_MARGIN, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, TIME_RELATIVE_HEIGHT)];
-        timeRelView.backgroundColor = [UIColor brownColor];
+        timeRelView = [[UILabel alloc] initWithFrame:CGRectMake(left, exfee_root.frame.origin.y + exfee_root.frame.size.height + EXFEE_BOTTOM_MARGIN, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, TIME_RELATIVE_HEIGHT)];
+        timeRelView.textColor = [UIColor COLOR_RGB(0x3A, 0x6E, 0xA5)];
+        timeRelView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+        timeRelView.shadowColor = [UIColor whiteColor];
+        timeRelView.shadowOffset = CGSizeMake(0.0f, 1.0f);
+        timeRelView.backgroundColor = [UIColor lightGrayColor];
         [container addSubview:timeRelView];
-        //[timeRelView release];
         
-        timeAbsView= [[UITextField alloc] initWithFrame:CGRectMake(left, timeRelView.frame.origin.y + timeRelView.frame.size.height + TIME_RELATIVE_BOTTOM_MARGIN, c.size.width /2 -  CONTAINER_VERTICAL_PADDING, TIME_ABSOLUTE_HEIGHT)];
-        timeAbsView.backgroundColor = [UIColor redColor];
+        timeAbsView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeRelView.frame.origin.y + timeRelView.frame.size.height + TIME_RELATIVE_BOTTOM_MARGIN, c.size.width /2 -  CONTAINER_VERTICAL_PADDING, TIME_ABSOLUTE_HEIGHT)];
+        timeAbsView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
+        timeAbsView.shadowColor = [UIColor whiteColor];
+        timeAbsView.shadowOffset = CGSizeMake(0.0f, 1.0f);
+        timeAbsView.backgroundColor = [UIColor lightGrayColor];
         [container addSubview:timeAbsView];
-        //[timeAbsView release];
         
-        timeZoneView= [[UITextField alloc] initWithFrame:CGRectMake(left + timeAbsView.frame.size.width + TIME_ABSOLUTE_RIGHT_MARGIN, timeAbsView.frame.origin.y, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 - timeAbsView.frame.size.width  - TIME_ABSOLUTE_RIGHT_MARGIN , TIME_ZONE_HEIGHT)];
+        timeZoneView= [[UILabel alloc] initWithFrame:CGRectMake(left + timeAbsView.frame.size.width + TIME_ABSOLUTE_RIGHT_MARGIN, timeAbsView.frame.origin.y, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 - timeAbsView.frame.size.width  - TIME_ABSOLUTE_RIGHT_MARGIN , TIME_ZONE_HEIGHT)];
+        timeZoneView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         timeZoneView.backgroundColor = [UIColor greenColor];
         [container addSubview:timeZoneView];
-        //[timeZoneView release];
         
-        placeTitleView= [[UITextView alloc] initWithFrame:CGRectMake(left, timeAbsView.frame.origin.y + timeAbsView.frame.size.height + TIME_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_TITLE_HEIGHT)];
-        placeTitleView.backgroundColor = [UIColor brownColor];
+        placeTitleView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeAbsView.frame.origin.y + timeAbsView.frame.size.height + TIME_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_TITLE_HEIGHT)];
+        placeTitleView.textColor = [UIColor COLOR_RGB(0x3A, 0x6E, 0xA5)];
+        placeTitleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+        placeTitleView.shadowColor = [UIColor whiteColor];
+        placeTitleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
+        placeTitleView.preferredMaxLayoutWidth = c.size.width  -  CONTAINER_VERTICAL_PADDING * 2;
+        placeTitleView.numberOfLines = 2;
+        placeTitleView.backgroundColor = [UIColor lightGrayColor];
         [container addSubview:placeTitleView];
-        //[placeTitleView release];
         
-        placeDescView= [[UITextView alloc] initWithFrame:CGRectMake(left, placeTitleView.frame.origin.y + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_DESC_HEIGHT)];
-        placeDescView.backgroundColor = [UIColor brownColor];
+        placeDescView= [[UILabel alloc] initWithFrame:CGRectMake(left, placeTitleView.frame.origin.y + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_DESC_HEIGHT)];
+        placeDescView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
+        placeDescView.shadowColor = [UIColor whiteColor];
+        placeDescView.shadowOffset = CGSizeMake(0.0f, 1.0f);
+        placeDescView.preferredMaxLayoutWidth = c.size.width  -  CONTAINER_VERTICAL_PADDING * 2;
+        placeDescView.numberOfLines = 4;
+        placeDescView.lineBreakMode = NSLineBreakByWordWrapping;
+        placeDescView.backgroundColor = [UIColor lightGrayColor];
         [container addSubview:placeDescView];
-        //[placeDescView release];
-        
         
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
-        int b = (placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + c.origin.y + OVERLAP + DECTOR_HEIGHT_EXTRA);
-        mapView = [[UIImageView alloc] initWithFrame:CGRectMake(0, placeDescView.frame.origin.y + placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b)];
+        int b = (placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + c.origin.y + OVERLAP /*+ DECTOR_HEIGHT_EXTRA*/);
+        mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, placeDescView.frame.origin.y + placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b)];
         mapView.backgroundColor = [UIColor lightGrayColor];
         [container addSubview:mapView];
-        //[mapView release];
         
         CGSize s = container.contentSize;
         if (mapView.hidden){
@@ -114,31 +141,187 @@
         container.contentSize = s;
         
     }
-    container.backgroundColor = [UIColor blueColor];
+    container.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:container];
-    [container release];
     
-    dectorView = [[EXCurveImageView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width / 2,  f.origin.y +  DECTOR_HEIGHT, 20, DECTOR_HEIGHT_EXTRA) ];
-    dectorView.backgroundColor = [UIColor colorWithWhite:1 alpha:0x77/255.0f];
-    dectorView.image = [UIImage imageNamed:@"iTunesArtwork.png"];
+    dectorView = [[EXCurveImageView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width * 0.6,  f.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
+    dectorView.backgroundColor = [UIColor COLOR_WA(0x00, 0)];
     [self.view addSubview:dectorView];
-    [descView release];
+    
+    btnBack = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 24, DECTOR_HEIGHT - 20 * 2)];
+    btnBack.backgroundColor = [UIColor lightGrayColor];
+    [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btnBack];
+   
+    
+    titleView = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - 24 - TITLE_HORIZON_MARGIN * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+    titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
+    titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+    titleView.backgroundColor = [UIColor clearColor];
+    titleView.lineBreakMode = UILineBreakModeWordWrap;
+    titleView.numberOfLines = 2;
+    titleView.shadowColor = [UIColor blackColor];
+    titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
+    [self.view addSubview:titleView];
+    self.view.backgroundColor = [UIColor grayColor];
     
 }
 
+
+- (void)refreshUI{
+    [self fillCross:self.cross];
+}
+
 - (void)relayoutUI{
-    
+    if (layoutDirty == YES){
+        CGRect f = self.view.frame;
+        CGRect c = container.frame;
+        
+        float left = CONTAINER_VERTICAL_PADDING;
+        float width = c.size.width - CONTAINER_VERTICAL_PADDING * 2;
+        
+        float baseX = CONTAINER_VERTICAL_PADDING;
+        float baseY = CONTAINER_TOP_PADDING;
+        
+        // Description
+        float descHeight = descView.contentSize.height;
+        if (descHeight  < DESC_MIN_HEIGHT){
+            descHeight = DESC_MIN_HEIGHT;
+        }else if ( descHeight > DESC_MAX_HEIGHT){
+            descHeight = DESC_MAX_HEIGHT;
+        }
+        descView.frame = CGRectMake(0, baseY, c.size.width, descHeight);
+        
+        if (descView.hidden == NO) {
+            baseX = CGRectGetMinX(descView.frame);
+            baseY = CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN;
+        }
+        
+        // Exfee
+        int line = 2;
+        exfee_root.frame = CGRectMake(left, baseY, width, 60 * line);
+        
+        baseX = CGRectGetMinX(exfee_root.frame);
+        if (exfee_root.hidden == NO) {
+            baseY = CGRectGetMaxY(exfee_root.frame) + EXFEE_BOTTOM_MARGIN;
+        }
+        
+        // Time
+        if (timeRelView.hidden == NO){
+            CGSize timeRelSize = [timeRelView.text sizeWithFont:timeRelView.font];
+            NSLog(@"time Rel Size: %@, font 21, %f * %f" ,timeRelView.text, timeRelSize.width, timeRelSize.height);
+            timeRelView.frame = CGRectMake(left, baseY, timeRelSize.width, timeRelSize.height);
+            if (timeRelView.hidden == NO) {
+                baseX = CGRectGetMinX(timeRelView.frame);
+                baseY = CGRectGetMaxY(timeRelView.frame);
+                
+            }
+        }
+        
+        if (timeAbsView.hidden == NO){
+            baseY += TIME_RELATIVE_BOTTOM_MARGIN;
+        }
+        CGSize timeAbsSize = [timeAbsView.text sizeWithFont:timeAbsView.font];
+        timeAbsView.frame = CGRectMake(left, baseY, timeAbsSize.width, timeAbsSize.height);
+        
+        if (timeZoneView.hidden == NO){
+            CGSize timeZoneSize = CGSizeZero;
+            timeZoneSize = [timeZoneView.text sizeWithFont:timeZoneView.font];
+            if (baseX + timeZoneSize.width <= width){
+                baseX = CGRectGetMaxX(timeAbsView.frame) + TIME_ABSOLUTE_RIGHT_MARGIN;
+                baseY = CGRectGetMinY(timeAbsView.frame);
+                timeZoneView.frame = CGRectMake(baseX, baseY, timeZoneSize.width, timeZoneSize.height);
+                baseX = CGRectGetMinX(timeAbsView.frame);
+                baseY = CGRectGetMaxY(timeAbsView.frame);
+            }else{
+                baseX = CGRectGetMinX(timeAbsView.frame);
+                baseY = CGRectGetMaxY(timeAbsView.frame) + SMALL_SLOT;
+                timeZoneView.frame = CGRectMake(baseX, baseY, timeZoneSize.width, timeZoneSize.height);
+                baseX = CGRectGetMinX(timeZoneView.frame);
+                baseY = CGRectGetMaxY(timeZoneView.frame);
+            }
+        }else if (timeAbsView.hidden == NO){
+            baseX = CGRectGetMinX(timeAbsView.frame);
+            baseY = CGRectGetMaxY(timeAbsView.frame);
+        }
+        
+        if (timeAbsView.hidden == NO || timeRelView.hidden == NO || timeZoneView.hidden == NO){
+            baseY += TIME_BOTTOM_MARGIN;
+        }
+        
+        //Place
+        if (placeTitleView.hidden == NO){
+            CGSize placeTitleSize = [placeTitleView.text sizeWithFont:placeTitleView.font forWidth:placeTitleView.frame.size.width lineBreakMode:NSLineBreakByWordWrapping];
+            placeTitleView.frame = CGRectMake(baseX, baseY, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , placeTitleSize.height);
+            baseX = CGRectGetMinX(placeTitleView.frame);
+            baseY = CGRectGetMaxY(placeTitleView.frame);
+        }
+        
+        if (placeTitleView.hidden == NO && placeDescView.hidden == NO) {
+            baseY += PLACE_TITLE_BOTTOM_MARGIN;
+        }
+        
+        if (placeDescView.hidden == NO){
+            CGSize constraintSize;
+            constraintSize.width = width;
+            constraintSize.height = MAXFLOAT;
+            CGSize placeDescSize = [placeDescView.text sizeWithFont:placeDescView.font constrainedToSize:constraintSize lineBreakMode:placeDescView.lineBreakMode];
+            CGFloat ph = placeDescSize.height;
+            if (ph < PLACE_DESC_MIN_HEIGHT){
+                ph = PLACE_DESC_MIN_HEIGHT;
+            }else if (ph > PLACE_DESC_MAX_HEIGHT){
+                ph = PLACE_DESC_MAX_HEIGHT;
+            }
+            placeDescView.frame = CGRectMake(baseX, baseY, width, ph);
+        }
+        
+        // Map
+        int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
+        int b = (placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + c.origin.y + OVERLAP /*+ SMALL_SLOT */);
+        mapView.frame = CGRectMake(0, placeDescView.frame.origin.y + placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b);
+        
+        CGSize s = container.contentSize;
+        if (mapView.hidden){
+            s.height = container.frame.origin.y + placeDescView.frame.origin.y + placeDescView.frame.size.height;
+        }else{
+            s.height = container.frame.origin.y + mapView.frame.origin.y + mapView.frame.size.height;
+        }
+        container.contentSize = s;
+        
+        [self clearLayoutDirty];
+    }
+}
+
+- (void)setLayoutDirty{
+    layoutDirty = YES;
+}
+
+- (void)clearLayoutDirty{
+    layoutDirty = NO;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [descView setText:@"agefaegefjeaiojgieoafjieoa;pgjieoa;gjvieaow;gjiewaofpjeiawop;fjeiwaopjgiewoapfjieawopjgieowapjfiewao"];
-    
+    [self initUI];
+    [self refreshUI];
 }
 
 - (void)dealloc {
+    
+    [descView release];
+    [exfee_root release];
+    [timeRelView release];
+    [timeAbsView release];
+    [timeZoneView release];
+    [placeTitleView release];
+    [placeDescView release];
+    [mapView release];
+    [container release];
+    [dectorView release];
+    [btnBack release];
+    [titleView release];
     
     [super dealloc];
 }
@@ -155,7 +338,131 @@
     CGRect frame = textView.frame;
     frame.size.height = [textView contentSize].height;
     textView.frame = frame;
-    
+    [self setLayoutDirty];
+    [self relayoutUI];
+}
+
+- (void)gotoBack:(UIButton*)sender{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+- (void)fillCross:(Cross*) x{
+    NSLog(@"fill cross from viewDidLoad %i", x == nil);
+    if (x != nil){
+        [titleView setText:x.title];
+        [self setLayoutDirty];
+        
+        if (x.cross_description == nil || x.cross_description.length == 0){
+            [descView setText:@"(Tap to add description...)"];
+            [self setLayoutDirty];
+        }else{
+            [descView setText:x.cross_description];
+            [self setLayoutDirty];
+        }
+        
+        [self fillBackground:x.widget];
+        [self fillExfee];
+        [self fillTime:x.time];
+        [self fillPlace:x.place];   
+    }
+    [self relayoutUI];
+}
+
+- (void) fillBackground:(NSArray*)widgets{
+    BOOL flag = NO;
+    for(NSDictionary *widget in widgets) {
+        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+            NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+            UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
+            if(backimg == nil || [backimg isEqual:[NSNull null]]){
+                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                dispatch_async(imgQueue, ^{
+                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
+                            dectorView.image = backimg;
+                            //[self setLayoutDirty];
+                        }
+                    });
+                });
+                dispatch_release(imgQueue);
+            }else{
+                dectorView.image = backimg;
+                //[self setLayoutDirty];
+            }
+            flag = YES;
+            if (dectorView.hidden == YES){
+                dectorView.hidden = NO;
+            }
+            break;
+        }
+    }
+    if (flag == NO){
+        dectorView.hidden = YES;
+    }
+}
+
+- (void)fillExfee{
+
+}
+
+- (void)fillTime:(CrossTime*)time{
+    if (time != nil){
+        timeRelView.text = [Util getTimeTitle:time localTime:NO];
+        timeAbsView.text = [Util getTimeDesc:time];
+        timeAbsView.hidden = false;
+        timeZoneView.hidden = false;
+        timeZoneView.text = time.begin_at.timezone;
+    }else{
+        timeRelView.text = @"Sometime";
+        timeAbsView.text = @"";
+        timeAbsView.hidden = YES;
+        timeZoneView.text = @"";
+        timeZoneView.hidden = YES;
+    }
+    [self setLayoutDirty];
+}
+
+- (void)fillPlace:(Place*)place{
+    if([Util placeIsEmpty:place]){
+        placeTitleView.text = @"Shomewhere";
+        placeDescView.text = @"";
+        //mapView.image=[UIImage imageNamed:@"map_nil.png"];
+        mapView.hidden = YES;
+        [self setLayoutDirty];
+    }else {
+        
+        if ([Util placeHasTitle:place]){
+            placeTitleView.text = place.title;
+        }else{
+            placeTitleView.text = @"Shomewhere";
+        }
+        
+        if ([Util placeHasDescription:place]){
+            placeDescView.text = place.place_description;
+        }else{
+            placeDescView.text = @"";
+        }
+        
+        if ([Util placeHasGeo:place]){
+            mapView.hidden = NO;
+            //mapView.image = [UIImage imageNamed:@"map_framepin.png"];
+        }else{
+            mapView.hidden = YES;;
+            float delta = 0.005;
+            CLLocationCoordinate2D location;
+            [mapView removeAnnotations: mapView.annotations];
+            location.latitude = [place.lat doubleValue];
+            location.longitude = [place.lng doubleValue];
+            
+            MKCoordinateRegion region;
+            region.center = location;
+            region.span.longitudeDelta = delta;
+            region.span.latitudeDelta = delta;
+            [mapView setRegion:region animated:NO];
+        }
+        [self setLayoutDirty];
+    }
 }
 
 @end

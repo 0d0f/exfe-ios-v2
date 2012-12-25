@@ -145,7 +145,7 @@
 //    {
 //        [navbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"]  forBarMetrics:UIBarMetricsDefault];
 //    }
-    //[self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.navigationController.view setNeedsDisplay];
     
 }
@@ -493,13 +493,6 @@
     }
 }
 
-- (void)gotoCrossDetail{
-    CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-    
-    [self.navigationController presentModalViewController:viewController animated:YES];
-    [viewController release];
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0){
@@ -528,8 +521,8 @@
                 }
             }
             [headerView addGatherTarget:self action:@selector(ShowGatherView)];
-            //[headerView addProfileTarget:self action:@selector(ShowProfileView)];
-            [headerView addProfileTarget:self action:@selector(gotoCrossDetail)];
+            [headerView addProfileTarget:self action:@selector(ShowProfileView)];
+            //[headerView addProfileTarget:self action:@selector(gotoCrossDetail)];
         }
         return headerView;
     }else if (indexPath.section == 1){
@@ -689,12 +682,18 @@
             }
             
         }
-        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-        gatherViewController.cross=cross;
-        [gatherViewController setViewMode];
+//        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+//        gatherViewController.cross=cross;
+//        [gatherViewController setViewMode];
+//        [self.navigationController pushViewController:gatherViewController animated:YES];
+//        [gatherViewController release];
+        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
+        NSLog(@"CrossDetailViewController created");
+        viewController.cross = cross;
+        NSLog(@"set cross to CrossDetailViewController");
+        [self.navigationController pushViewController:viewController animated:YES];
+        [viewController release];
         
-        [self.navigationController pushViewController:gatherViewController animated:YES];
-        [gatherViewController release];
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         current_cellrow = indexPath.row;
     }
@@ -724,10 +723,16 @@
     [Util signout];
 }
 
+- (void)gotoCrossDetail{
+    CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
+    [self.navigationController pushViewController:viewController animated:YES];
+    [viewController release];
+}
+
 #pragma mark View Push methods
 - (BOOL) PushToCross:(int)cross_id{
-    Cross *cross=[self crossWithId:cross_id];
-    if(cross!=nil){
+    Cross *cross = [self crossWithId:cross_id];
+    if(cross != nil){
         GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
         gatherViewController.cross=cross;
         [gatherViewController setViewMode];
