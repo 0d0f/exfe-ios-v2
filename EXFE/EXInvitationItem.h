@@ -12,6 +12,7 @@
 #import "UIImage+RoundedCorner.h"
 #import "AppDelegate.h"
 #import "Util.h"
+#import <CoreText/CoreText.h>
 
 @interface EXInvitationItem : UIView{
     Invitation *invitation;

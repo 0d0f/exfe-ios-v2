@@ -13,6 +13,7 @@
 #import "Util.h"
 #import "EXInvitationItem.h"
 #import "EXCollectionMask.h"
+#import "ExfeeNumberView.h"
 
 @class EXImagesCollectionView;
 @protocol EXImagesCollectionDataSource;
@@ -48,6 +49,7 @@
     BOOL editmode;
     NSMutableDictionary *itemsCache;
     EXCollectionMask *maskview;
+    UILabel *acceptlabel;
 }
 @property int maxColumn;
 @property int maxRow;
@@ -70,7 +72,8 @@
 - (void) reloadData;
 - (void) initData;
 - (void) calculateColumn;
-//- (void) onImageTouch:(CGPoint) point;
+//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void) onImageTouch:(CGPoint) point;
 
 //- (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 

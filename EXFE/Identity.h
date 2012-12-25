@@ -2,7 +2,7 @@
 //  Identity.h
 //  EXFE
 //
-//  Created by huoju on 11/19/12.
+//  Created by huoju on 12/24/12.
 //
 //
 
@@ -22,10 +22,11 @@
 @property (nonatomic, retain) NSNumber * identity_id;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * nickname;
+@property (nonatomic, retain) NSNumber * order;
 @property (nonatomic, retain) NSString * provider;
 @property (nonatomic, retain) NSString * status;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSString * updated_at;
-@property (nonatomic, retain) NSNumber * order;
+@property (nonatomic, retain) NSNumber * unreachable;
 
 @end

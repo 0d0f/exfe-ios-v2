@@ -64,10 +64,22 @@
             if(isMe){
                 avatar=[avatar roundedCornerImage:40 borderSize:0];
             }
-            
             CGImageRef ximageref = CGImageRetain(avatar.CGImage);
             CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , ximageref);
             CGImageRelease(ximageref);
+            if(isMe){
+                UIImage *rsvpicon;
+                if ([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+                    rsvpicon=[UIImage imageNamed:@"rsvp_accepted_stroke_26blue.png"];
+                else if ([invitation.rsvp_status isEqualToString:@"INTERESTED"])
+                    rsvpicon=[UIImage imageNamed:@"rsvp_pending_stroke_26g5.png"];
+                else if ([invitation.rsvp_status isEqualToString:@"DECLINED"])
+                    rsvpicon=[UIImage imageNamed:@"rsvp_unavailable_stroke_26g5.png"];
+                
+                CGImageRef ximageref = CGImageRetain(rsvpicon.CGImage);
+                CGContextDrawImage(currentContext,CGRectMake(rect.size.width-26, 0, 26,26   ) , ximageref);
+                CGImageRelease(ximageref);
+            }
 
         }
     if(!isMe){
@@ -79,23 +91,48 @@
         CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , frameimageref);
         CGImageRelease(frameimageref);
     }
+    if([invitation.identity.unreachable boolValue]==YES){
+        CGImageRef frameimageref = CGImageRetain([UIImage imageNamed:@"exfee_unreachable.png"].CGImage);
+        CGContextDrawImage(currentContext,CGRectMake(rect.size.width-20, 0, 20,20) , frameimageref);
+        CGImageRelease(frameimageref);
+        
+    }
+    
 
     if([invitation.mates intValue]>0){
         CGImageRef triimageref = CGImageRetain([UIImage imageNamed:@"portrait_tri_26"].CGImage);
         CGContextDrawImage(currentContext,CGRectMake(rect.size.width-13-5, rect.size.height-5-13, 13, 13) , triimageref);
         CGImageRelease(triimageref);
         
-    }
-    
+        CTFontRef matesfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 10.0, NULL);
 
-    
+        NSMutableAttributedString *matesattribstring=[[NSMutableAttributedString alloc] initWithString:[invitation.mates stringValue]];
+        [matesattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)matesfontref range:NSMakeRange(0,[matesattribstring length])];
+        [matesattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor whiteColor].CGColor range:NSMakeRange(0,[matesattribstring length])];
+        
+        CTTextAlignment alignment = kCTCenterTextAlignment;
+        CTParagraphStyleSetting setting[1] = {
+            {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
+        };
+        CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(setting, 1);
+        [matesattribstring addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,[matesattribstring length])];
+        CFRelease(paragraphstyle);
+        
+        
+        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)matesattribstring);
+        CGMutablePathRef path = CGPathCreateMutable();
+        CGPathAddRect(path, NULL, CGRectMake(rect.size.width-13, rect.size.height-3-13, 13, 13));
+        CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [matesattribstring length]), path, NULL);
+        CFRelease(framesetter);
+        CFRelease(path);
+        CFRelease(matesfontref);
+        CTFrameDraw(theFrame, currentContext);
+        [matesattribstring release];
+    }
+
     CGContextRestoreGState(currentContext);
     
-    if([invitation.mates intValue]>0){
-        [[UIColor whiteColor] set];
-        UIFont *font=[UIFont fontWithName:@"HelveticaNeue" size:11];
-        [[invitation.mates stringValue] drawInRect:CGRectMake(rect.size.width-13-5, 5, 13, 13) withFont:font lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
-    }
+
 
     if(!isMe){
         NSString *name=invitation.identity.name;

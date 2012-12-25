@@ -172,7 +172,7 @@
 
     //TODO: workaround for a responder chain bug
     exfeeShowview =[[EXImagesCollectionView alloc] initWithFrame:CGRectMake(INNER_MARGIN, crosstitle.frame.origin.x+crosstitle.frame.size.height, width, 120)];
-    [exfeeShowview setFrame:CGRectMake(INNER_MARGIN-6, 69, width, 40+15+4)];
+    [exfeeShowview setFrame:CGRectMake(INNER_MARGIN-6, 69, width, 60+12)];
     [exfeeShowview calculateColumn];
     [exfeeShowview setBackgroundColor:[UIColor clearColor]];
 
@@ -957,10 +957,16 @@
     return i;
 }
 - (NSArray*) getReducedExfeeIdentities{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+
     NSMutableArray *arr=[[NSMutableArray alloc] initWithCapacity:12];
     for(Invitation *invitation in exfeeIdentities){
         if(![invitation.rsvp_status isEqualToString:@"REMOVED"]){
-            [arr addObject:invitation];
+            if([invitation.identity.connected_user_id intValue] == app.userid){
+                [arr insertObject:invitation atIndex:0];
+            }
+            else
+                [arr addObject:invitation];
         }
     }
     return arr;
@@ -1602,7 +1608,7 @@
         [crosstitle resignFirstResponder];
         [exfeeShowview becomeFirstResponder];
         CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
-//        [exfeeShowview onImageTouch:exfeeviewlocation];
+        [exfeeShowview onImageTouch:exfeeviewlocation];
     }
     else{
     [crosstitle resignFirstResponder];
@@ -1621,24 +1627,7 @@
     cross.cross_description=crossdescription.text;
     [self saveCrossUpdate];
 }
-//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-//
-//    UITouch * touch = [touches anyObject];
-//    if(touch.phase == UITouchPhaseBegan) {
-//        if (CGRectContainsPoint([placetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([placedesc frame], [touch locationInView:self.view]))
-//        {
-//            [crosstitle resignFirstResponder];
-//            [map becomeFirstResponder];
-//            [self ShowPlaceView];
-//        }
-//        if (CGRectContainsPoint([timetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([timedesc frame], [touch locationInView:self.view]))
-//        {
-//            [crosstitle resignFirstResponder];
-//            [timetitle becomeFirstResponder];
-//            [self ShowTimeView];
-//        }
-//    }
-//}
+
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
     float KEYBOARD_LANDSCAPE=216;
     notUserScroll=YES;
