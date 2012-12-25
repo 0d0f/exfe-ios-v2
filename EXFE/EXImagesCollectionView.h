@@ -71,7 +71,8 @@
 - (void) reloadData;
 - (void) initData;
 - (void) calculateColumn;
-//- (void) onImageTouch:(CGPoint) point;
+//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void) onImageTouch:(CGPoint) point;
 
 //- (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 

@@ -1608,7 +1608,7 @@
         [crosstitle resignFirstResponder];
         [exfeeShowview becomeFirstResponder];
         CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
-//        [exfeeShowview onImageTouch:exfeeviewlocation];
+        [exfeeShowview onImageTouch:exfeeviewlocation];
     }
     else{
     [crosstitle resignFirstResponder];
@@ -1627,24 +1627,7 @@
     cross.cross_description=crossdescription.text;
     [self saveCrossUpdate];
 }
-//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-//
-//    UITouch * touch = [touches anyObject];
-//    if(touch.phase == UITouchPhaseBegan) {
-//        if (CGRectContainsPoint([placetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([placedesc frame], [touch locationInView:self.view]))
-//        {
-//            [crosstitle resignFirstResponder];
-//            [map becomeFirstResponder];
-//            [self ShowPlaceView];
-//        }
-//        if (CGRectContainsPoint([timetitle frame], [touch locationInView:self.view]) || CGRectContainsPoint([timedesc frame], [touch locationInView:self.view]))
-//        {
-//            [crosstitle resignFirstResponder];
-//            [timetitle becomeFirstResponder];
-//            [self ShowTimeView];
-//        }
-//    }
-//}
+
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
     float KEYBOARD_LANDSCAPE=216;
     notUserScroll=YES;

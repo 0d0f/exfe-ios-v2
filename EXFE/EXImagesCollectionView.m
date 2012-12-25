@@ -26,6 +26,7 @@
     }
     [self initData];
     itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
+    self.userInteractionEnabled = YES;
 //    maskview=[[EXCollectionMask alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 //    [maskview setBackgroundColor:[UIColor clearColor]];
 //    maskview.imageWidth=imageWidth;
@@ -40,6 +41,11 @@
     
 //    [self addSubview:maskview];
 //    [self bringSubviewToFront:maskview];
+
+//    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
+//    [self addGestureRecognizer:gestureRecognizer];
+//    [gestureRecognizer release];
+
     return self;
 }
 
@@ -209,33 +215,40 @@
 //    [maskview setNeedsDisplay];
     
 }
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    for (UITouch *touch in touches) {
-        CGPoint touchPoint = [touch locationInView:self];
-//        [self onImageTouch:touchPoint];
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+//    NSLog(@"click");
+//    for (UITouch *touch in touches) {
+//        CGPoint touchPoint = [touch locationInView:self];
+////        [self onImageTouch:touchPoint];
+//    }
+//}
+
+- (void) onImageTouch:(CGPoint) point{
+    int x_count=0;
+    int y_count=0;
+    int countidx=0;
+    int allcount=[_dataSource numberOfimageCollectionView:self];
+    for (int i=0;i<[grid count];i++)
+    {
+        if( x_count==maxColumn){
+            x_count=0;
+            y_count++;
+        }
+        countidx+=1;
+        CGRect rect=[(NSValue*)[grid objectAtIndex:i] CGRectValue];
+        BOOL inrect=CGRectContainsPoint(rect,point);
+        if(inrect==YES){
+            if(countidx<=allcount){
+                [_delegate imageCollectionView:self didSelectRowAtIndex:i row:y_count col:x_count frame:rect];
+            }
+            else if (countidx==allcount+1){
+                NSLog(@"click the sum grid");
+            }
+        }
+        x_count++;
     }
 }
 
-//- (void) onImageTouch:(CGPoint) point{
-//    int x_count=0;
-//    int y_count=0;
-//
-//    for (int i=0;i<[grid count];i++)
-//    {
-//        if( x_count==maxColumn){
-//            x_count=0;
-//            y_count++;
-//        }
-//
-//        CGRect rect=[(NSValue*)[grid objectAtIndex:i] CGRectValue];
-//        BOOL inrect=CGRectContainsPoint(rect,point);
-//        if(inrect==YES){
-//            [_delegate imageCollectionView:self didSelectRowAtIndex:i row:y_count col:x_count frame:rect];
-//        }
-//        x_count++;
-//    }
-//}
-//
 - (void)dealloc {
 	[grid release];
     [super dealloc];
