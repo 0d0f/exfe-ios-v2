@@ -102,7 +102,7 @@
 }
 - (void) calculateColumn{
     maxColumn=(self.frame.size.width-imageWidth)/(imageWidth+imageXmargin*2)+1;
-    maxRow=(self.frame.size.height-(imageHeight+nameHeight))/(imageHeight+nameHeight+imageYmargin*2)+1;
+    maxRow=(self.frame.size.height-y_start_offset)/(imageHeight+imageYmargin*2)+1;
 }
 - (void) setFrame:(CGRect)frame{
     [super setFrame:frame];
@@ -136,12 +136,11 @@
     int count=[_dataSource numberOfimageCollectionView:self];
     if(count >maxColumn*maxRow-1)
     {
-        int new_column=(int)count/maxRow;
+        int new_column=ceil((float)count/maxColumn);
+        
         int new_height=new_column*(imageHeight+imageYmargin*2)+y_start_offset;
         if(new_height!=self.frame.size.height)
             [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
-
-//        float new_height=imageYmargin+imageHeight+15+(imageYmargin+imageHeight+15)*maxRow;
     }
     else{
         int row=1;
