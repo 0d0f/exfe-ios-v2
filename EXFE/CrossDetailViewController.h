@@ -22,8 +22,8 @@
     UIScrollView *container;
     EXCurveImageView *dectorView;
     UITextView *descView;
-    //EXImagesCollectionView *exfeeShowview;
-    UIView *exfeeShowview;
+    EXImagesCollectionView *exfeeShowview;
+    //UIView *exfeeShowview;
     UILabel *timeRelView;
     UILabel *timeAbsView;
     UILabel *timeZoneView;
@@ -38,7 +38,7 @@
     
     BOOL layoutDirty;
     
-    NSMutableArray *exfeeIdentities;
+    NSArray *exfeeInvitations;
 }
 @property (retain,nonatomic) Cross* cross;
 @property (retain,readonly) NSMutableArray *exfeeIdentities;

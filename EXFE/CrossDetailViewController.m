@@ -27,6 +27,7 @@
 #define DESC_MIN_HEIGHT                  (18)
 #define DESC_MAX_HEIGHT                  (90)
 #define DESC_BOTTOM_MARGIN               (LARGE_SLOT)
+#define EXFEE_OVERLAP                    (12)
 #define EXFEE_HORIZON_PADDING            (SMAILL_SLOT)
 #define EXFEE_HEIGHT                     (50)
 #define EXFEE_BOTTOM_MARGIN              (LARGE_SLOT - SMALL_SLOT)
@@ -82,11 +83,11 @@
         [container addSubview:descView];
         
         int line = 2;
-        exfeeShowview = [[UIView alloc]initWithFrame:CGRectMake(left, descView.frame.origin.y + descView.frame.size.height + DESC_BOTTOM_MARGIN, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 60 * line)];
+        exfeeShowview = [[EXImagesCollectionView alloc]initWithFrame:CGRectMake(c.origin.x, CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN - EXFEE_OVERLAP, c.size.width, 60 * line)];
         exfeeShowview.backgroundColor = [UIColor grayColor];
-//        [exfeeShowview calculateColumn];
-//        [exfeeShowview setDataSource:self];
-//        [exfeeShowview setDelegate:self];
+        [exfeeShowview calculateColumn];
+        [exfeeShowview setDataSource:self];
+        [exfeeShowview setDelegate:self];
         [container addSubview:exfeeShowview];
         
         timeRelView = [[UILabel alloc] initWithFrame:CGRectMake(left, exfeeShowview.frame.origin.y + exfeeShowview.frame.size.height + EXFEE_BOTTOM_MARGIN, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, TIME_RELATIVE_HEIGHT)];
@@ -277,22 +278,35 @@
 }
 
 - (void)fillExfee{
-    if(exfeeIdentities!=nil){
-        [exfeeIdentities release];
-        exfeeIdentities=nil;
-    }
-    exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES];
+    NSMutableArray *exfee = [[NSMutableArray alloc]  initWithCapacity:12];
+
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES];
     NSArray *invitations=[cross.exfee.invitations sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+    int myself = 0;
+    int accepts = 0;
+    
+    NSLog(@"We have %i in all", invitations.count);
     for(Invitation *invitation in invitations) {
-        if([invitation.host boolValue]==YES)
-            [exfeeIdentities insertObject:invitation atIndex:0];
-        else{
-            [exfeeIdentities addObject:invitation];
+        if ([invitation.identity.connected_user_id intValue]== app.userid) {
+            [exfee insertObject:invitation atIndex:myself];
+            myself ++;
+        }else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
+            [exfee insertObject:invitation atIndex:(myself + accepts)];
+            accepts ++;
+        }else if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO){
+            [exfee addObject:invitation];
         }
     }
-//    [exfeeShowview reloadData];
+    
+    if(exfeeInvitations != nil){
+        [exfeeInvitations release];
+        exfeeInvitations = nil;
+    }
+    exfeeInvitations = [[NSArray alloc] initWithArray:exfee];
+    [exfee release];
+    [exfeeShowview reloadData];
 }
 
 - (void)fillTime:(CrossTime*)time{
@@ -366,7 +380,7 @@
 #pragma mark Relayout methods
 - (void)relayoutUI{
     if (layoutDirty == YES){
-        CGRect f = self.view.frame;
+        //CGRect f = self.view.frame;
         CGRect c = container.frame;
         
         float left = CONTAINER_VERTICAL_PADDING;
@@ -391,7 +405,7 @@
         
         // Exfee
         int line = 2;
-        exfeeShowview.frame = CGRectMake(left, baseY, width, 60 * line);
+        exfeeShowview.frame = CGRectMake(CGRectGetMinX(c), baseY - EXFEE_OVERLAP, CGRectGetWidth(c), 60 * line + EXFEE_OVERLAP);
         
         baseX = CGRectGetMinX(exfeeShowview.frame);
         if (exfeeShowview.hidden == NO) {
@@ -491,68 +505,60 @@
     layoutDirty = NO;
 }
 
-//#pragma mark EXImagesCollectionView Datasource methods
-//
-//- (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
-//    return cross.exfee.invitations.count;
-//    //return [self exfeeIdentitiesCount];
-//}
-//- (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index{
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    
-//    //    EXInvitationItem *item=[[[EXInvitationItem alloc] init] autorelease];
-//    
-//    NSArray *arr=[self getReducedExfeeIdentities];
-//    Invitation *invitation =[arr objectAtIndex:index];
-//    
-//    EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
-//    
-//    if(app.userid ==[invitation.identity.connected_user_id intValue]){
-//        item.isMe=YES;
-//    }
-//    
-//    //    item.invitation=invitation;
-//    Identity *identity=invitation.identity;
-//    UIImage *img=nil;
-//    if(identity.avatar_filename!=nil)
-//        img=[[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
-//    if(img!=nil && ![img isEqual:[NSNull null]]){
-//        item.avatar=img;
-//    }
-//    else{
-//        item.avatar=[UIImage imageNamed:@"portrait_default.png"];
-//        if(identity.avatar_filename!=nil) {
-//            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-//            dispatch_async(imgQueue, ^{
-//                __block UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-//                        item.avatar=avatar;
-//                        [item setNeedsDisplay];
-//                    }
-//                });
-//            });
-//            dispatch_release(imgQueue);
-//        }
-//    }
-//    item.isHost=[invitation.host boolValue];
-//    item.mates=[invitation.mates intValue];
-//    item.rsvp_status=invitation.rsvp_status;
-//    //    NSString *name=identity.name;
-//    //    if(name==nil)
-//    //        name=identity.external_username;
-//    //    if(name==nil)
-//    //        name=identity.external_id;
-//    //    item.name=name;
-//    [arr release];
-//    return item;
-//}
-//- (NSArray *) selectedOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
-//    return exfeeSelected;
-//    
-//}
-//- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
-//    
+#pragma mark EXImagesCollectionView Datasource methods
+
+- (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
+    return [exfeeInvitations count];
+}
+- (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index{
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    Invitation *invitation =[exfeeInvitations objectAtIndex:index];
+    
+    EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
+    
+    if(app.userid ==[invitation.identity.connected_user_id intValue]){
+        item.isMe = YES;
+    }
+    
+    Identity *identity = invitation.identity;
+    UIImage *img = nil;
+    if(identity.avatar_filename != nil)
+        img = [[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
+    if(img != nil && ![img isEqual:[NSNull null]]){
+        item.avatar = img;
+    }
+    else{
+        item.avatar = [UIImage imageNamed:@"portrait_default.png"];
+        if(identity.avatar_filename != nil) {
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+                __block UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+                        item.avatar = avatar;
+                        [item setNeedsDisplay];
+                    }
+                });
+            });
+            dispatch_release(imgQueue);
+        }
+    }
+//    item.isHost = [invitation.host boolValue];
+//    item.mates = [invitation.mates intValue];
+//    item.rsvp_status = invitation.rsvp_status;
+    //    NSString *name=identity.name;
+    //    if(name==nil)
+    //        name=identity.external_username;
+    //    if(name==nil)
+    //        name=identity.external_id;
+    //    item.name=name;
+    //[arr release];
+    return item;
+}
+
+- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
+    
 //    if(viewmode==YES && exfeeShowview.editmode==NO)
 //    {
 //        if(height==120 && [exfeeIdentities count]==6)
@@ -560,17 +566,18 @@
 //    }
 //    [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
 //    [exfeeShowview calculateColumn];
-//    //    if(viewmode==NO || exfeeShowview.editmode==YES){
+    //    if(viewmode==NO || exfeeShowview.editmode==YES){
 //    [self reArrangeViews];
-//    //    }
-//    
-//    //    [exfeeIdentities count]
-//    
-//    
-//}
-//
-//#pragma mark EXImagesCollectionView delegate methods
-//- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
+    //    }
+    
+    //    [exfeeIdentities count]
+    [self setLayoutDirty];
+    [self relayoutUI];
+    
+}
+
+#pragma mark EXImagesCollectionView delegate methods
+- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
 //    NSArray* reducedExfeeIdentities=[self getReducedExfeeIdentities];
 //    if(index==[reducedExfeeIdentities count])
 //    {
@@ -613,7 +620,7 @@
 //            
 //        }
 //    }
-//}
+}
 
 
 @end
