@@ -15,6 +15,8 @@
 #import "EXCollectionMask.h"
 #import "ExfeeNumberView.h"
 
+#define y_start_offset 12
+
 @class EXImagesCollectionView;
 @protocol EXImagesCollectionDataSource;
 
@@ -23,7 +25,7 @@
 @required
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView;
 - (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index;
-- (NSArray *) selectedOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView;
+//- (NSArray *) selectedOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView;
 @end
 
 @protocol EXImagesCollectionDelegate<NSObject>
@@ -31,6 +33,7 @@
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect;
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height;
 @end
+
 
 
 @interface EXImagesCollectionView : UIView{

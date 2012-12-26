@@ -1841,45 +1841,65 @@
     NSArray* reducedExfeeIdentities=[self getReducedExfeeIdentities];
     if(index==[reducedExfeeIdentities count])
     {
-        if(viewmode==YES && exfeeShowview.editmode==NO)
-            return;
-        [self ShowGatherToolBar];
-        [self ShowExfeeView];
+//        if(viewmode==YES && exfeeShowview.editmode==NO)
+//            return;
+//        [self ShowGatherToolBar];
+//        [self ShowExfeeView];
     }
     else if(index <[reducedExfeeIdentities count]){
-        [crosstitle resignFirstResponder];
-        [crosstitle endEditing:YES];
-        BOOL select_status=[[exfeeSelected objectAtIndex:index] boolValue];
-        for( int i=0;i<[exfeeSelected count];i++){
-            [exfeeSelected replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:NO]];
+        
+        int x=exfeeShowview.frame.origin.x+(col+1)*(50+5*2)+5;
+        int y=exfeeShowview.frame.origin.y+row*(50+5*2)+y_start_offset;
+        
+        if(x+180 > self.view.frame.size.width){
+            x= x-180;
         }
-        [exfeeSelected replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:!select_status]];
-        [exfeeShowview reloadData];
-        BOOL isSelect=NO;
-        for(NSNumber *number in exfeeSelected){
-            if([number boolValue]==YES)
-                isSelect=YES;
+        if(rsvpstatusview==nil){
+            rsvpstatusview=[[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-44, 180, 44)];
+            [self.view addSubview:rsvpstatusview];
+        }else{
+            [rsvpstatusview setFrame:CGRectMake(x, y-44, 180, 44)];
         }
-        if(isSelect){
-            CGRect f=imageCollectionView.frame;
-            float x=f.origin.x+rect.origin.x+rect.size.width/2;
-            float y=f.origin.y+rect.origin.y;
-            Invitation *invitation=[reducedExfeeIdentities objectAtIndex:index];
-            [self ShowExfeePopOver:invitation pointTo:CGPointMake(x,y) arrowx:rect.origin.x+rect.size.width/2+f.origin.x];
-            if(viewmode==YES && exfeeShowview.editmode==NO){
-                [self ShowRsvpToolBar];
-            }
-            else
-                [self ShowGatherToolBar];
-        }
-        else {
-            if(viewmode==YES&& exfeeShowview.editmode==NO)
-                [self ShowRsvpButton];
-            else //if(exfeeShowview.editmode==YES)
-                [gathertoolbar setHidden:YES];
-            
-        }
+        NSArray *arr=[self getReducedExfeeIdentities];
+        Invitation *invitation =[arr objectAtIndex:index];
+
+        rsvpstatusview.invitation=invitation;
+        [rsvpstatusview setNeedsDisplay];
+        NSLog(@"click:%i",index);
     }
+//        [crosstitle resignFirstResponder];
+//        [crosstitle endEditing:YES];
+//        BOOL select_status=[[exfeeSelected objectAtIndex:index] boolValue];
+//        for( int i=0;i<[exfeeSelected count];i++){
+//            [exfeeSelected replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:NO]];
+//        }
+//        [exfeeSelected replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:!select_status]];
+//        [exfeeShowview reloadData];
+//        BOOL isSelect=NO;
+//        for(NSNumber *number in exfeeSelected){
+//            if([number boolValue]==YES)
+//                isSelect=YES;
+//        }
+//        if(isSelect){
+//            CGRect f=imageCollectionView.frame;
+//            float x=f.origin.x+rect.origin.x+rect.size.width/2;
+//            float y=f.origin.y+rect.origin.y;
+//            Invitation *invitation=[reducedExfeeIdentities objectAtIndex:index];
+//            [self ShowExfeePopOver:invitation pointTo:CGPointMake(x,y) arrowx:rect.origin.x+rect.size.width/2+f.origin.x];
+//            if(viewmode==YES && exfeeShowview.editmode==NO){
+//                [self ShowRsvpToolBar];
+//            }
+//            else
+//                [self ShowGatherToolBar];
+//        }
+//        else {
+//            if(viewmode==YES&& exfeeShowview.editmode==NO)
+//                [self ShowRsvpButton];
+//            else //if(exfeeShowview.editmode==YES)
+//                [gathertoolbar setHidden:YES];
+//            
+//        }
+//    }
 }
 
 
