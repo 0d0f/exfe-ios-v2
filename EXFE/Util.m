@@ -949,4 +949,21 @@
 }
 
 
+#pragma mark Entity Helper
++ (BOOL) placeIsEmpty:(Place*)place{
+    return place == nil || (![Util placeHasTitle:place] && ![Util placeHasGeo:place]);
+}
+
++ (BOOL) placeHasTitle:(Place*)place{
+    return place != nil && place.title != nil && place.title.length > 0;
+}
+
++ (BOOL) placeHasDescription:(Place*)place{
+    return [Util placeHasTitle:place] && place.description != nil && place.description.length > 0;
+}
+
++ (BOOL) placeHasGeo:(Place*)place{
+    return place != nil && place.lat != nil && place.lng != nil && place.lat.length > 0 && place.lng.length > 0;
+}
+
 @end

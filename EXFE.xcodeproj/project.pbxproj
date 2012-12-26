@@ -12,6 +12,7 @@
 		4F14689C167F1C0700872F9D /* ProfileCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F14689B167F1C0600872F9D /* ProfileCard.m */; };
 		4F14689F168048E700872F9D /* xlist_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F14689D168048E600872F9D /* xlist_mask.png */; };
 		4F1468A0168048E700872F9D /* xlist_mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F14689E168048E700872F9D /* xlist_mask@2x.png */; };
+		4F81C848168309E9007284DF /* EXCurveImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F81C847168309E9007284DF /* EXCurveImageView.m */; };
 		4FBF2485167AE89D007C04E2 /* CrossCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF2484167AE89D007C04E2 /* CrossCard.m */; };
 		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
@@ -454,6 +455,8 @@
 		4F14689B167F1C0600872F9D /* ProfileCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileCard.m; sourceTree = "<group>"; };
 		4F14689D168048E600872F9D /* xlist_mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xlist_mask.png; sourceTree = "<group>"; };
 		4F14689E168048E700872F9D /* xlist_mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xlist_mask@2x.png"; sourceTree = "<group>"; };
+		4F81C846168309E9007284DF /* EXCurveImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCurveImageView.h; sourceTree = "<group>"; };
+		4F81C847168309E9007284DF /* EXCurveImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCurveImageView.m; sourceTree = "<group>"; };
 		4FBF2483167AE89D007C04E2 /* CrossCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossCard.h; sourceTree = "<group>"; };
 		4FBF2484167AE89D007C04E2 /* CrossCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossCard.m; sourceTree = "<group>"; };
 		4FE8D3C51681926C00222420 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
@@ -1687,6 +1690,8 @@
 				78A94BCA16707F2200B72DC8 /* EXGradientToolbarView.m */,
 				78A0C1AF16807F740073CCE5 /* CustomAttributedTextView.h */,
 				78A0C1B016807F740073CCE5 /* CustomAttributedTextView.m */,
+				4F81C846168309E9007284DF /* EXCurveImageView.h */,
+				4F81C847168309E9007284DF /* EXCurveImageView.m */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -2240,6 +2245,7 @@
 				4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */,
 				4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */,
 				4F0597961682B9FA00F9CE10 /* CrossDetailViewController.m in Sources */,
+				4F81C848168309E9007284DF /* EXCurveImageView.m in Sources */,
 				78B91DD916882BE400BB98B1 /* ExfeeNumberView.m in Sources */,
 				78B91DEA1688577200BB98B1 /* Identity.m in Sources */,
 				78B91DED168AB0F600BB98B1 /* EXRSVPStatusView.m in Sources */,
