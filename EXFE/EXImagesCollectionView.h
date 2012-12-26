@@ -64,8 +64,6 @@
 @property float imageYmargin;
 @property (nonatomic,retain) NSMutableDictionary *itemsCache;
 
-
-
 - (void) setImageWidth:(float)width height:(float)height;
 - (void) setImageXMargin:(float)xmargin YMargin:(float)ymargin;
 - (void) setDataSource:(id) dataSource;
