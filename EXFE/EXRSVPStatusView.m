@@ -15,7 +15,9 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor=[UIColor blueColor];
+        self.backgroundColor=[UIColor whiteColor];
+        self.layer.cornerRadius=5.0;
+        self.layer.masksToBounds=YES;
         // Initialization code
     }
     return self;

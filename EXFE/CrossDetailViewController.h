@@ -17,6 +17,7 @@
 #import "CrossTime.h"
 #import "Place.h"
 #import "EXImagesCollectionView.h"
+#import "EXRSVPStatusView.h"
 
 @interface CrossDetailViewController : UIViewController <UITextViewDelegate, EXImagesCollectionDataSource, EXImagesCollectionDelegate>{
     UIScrollView *container;
@@ -39,6 +40,8 @@
     BOOL layoutDirty;
     
     NSArray *exfeeInvitations;
+    EXRSVPStatusView *rsvpstatusview;
+
 }
 @property (retain,nonatomic) Cross* cross;
 @property (retain,readonly) NSMutableArray *exfeeIdentities;

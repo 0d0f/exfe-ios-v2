@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Invitation.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface EXRSVPStatusView : UIView{
     Invitation *invitation;

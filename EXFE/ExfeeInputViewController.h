@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
-
 #import "APIProfile.h"
 #import "Identity.h"
 #import "Invitation.h"
