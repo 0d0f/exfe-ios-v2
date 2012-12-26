@@ -660,7 +660,9 @@
         }
         if(rsvpstatusview==nil){
             rsvpstatusview=[[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-44, 180, 44)];
-            [self.view addSubview:rsvpstatusview];
+//            UIBezierPath *path = [UIBezierPath bezierPathWithRect:rsvpstatusview.bounds];
+//            rsvpstatusview.layer.shadowPath = path.CGPath;
+            [container addSubview:rsvpstatusview];
         }else{
             [rsvpstatusview setFrame:CGRectMake(x, y-44, 180, 44)];
         }
@@ -669,7 +671,6 @@
         
         rsvpstatusview.invitation=invitation;
         [rsvpstatusview setNeedsDisplay];
-        NSLog(@"click:%i",index);
     }
     //        [crosstitle resignFirstResponder];
     //        [crosstitle endEditing:YES];
