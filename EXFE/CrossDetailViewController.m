@@ -82,11 +82,14 @@
         [container addSubview:descView];
         
         int line = 2;
-        exfee_root = [[UIView alloc]initWithFrame:CGRectMake(left, descView.frame.origin.y + descView.frame.size.height + DESC_BOTTOM_MARGIN, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 60 * line)];
-        exfee_root.backgroundColor = [UIColor grayColor];
-        [container addSubview:exfee_root];
+        exfeeShowview = [[UIView alloc]initWithFrame:CGRectMake(left, descView.frame.origin.y + descView.frame.size.height + DESC_BOTTOM_MARGIN, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 60 * line)];
+        exfeeShowview.backgroundColor = [UIColor grayColor];
+//        [exfeeShowview calculateColumn];
+//        [exfeeShowview setDataSource:self];
+//        [exfeeShowview setDelegate:self];
+        [container addSubview:exfeeShowview];
         
-        timeRelView = [[UILabel alloc] initWithFrame:CGRectMake(left, exfee_root.frame.origin.y + exfee_root.frame.size.height + EXFEE_BOTTOM_MARGIN, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, TIME_RELATIVE_HEIGHT)];
+        timeRelView = [[UILabel alloc] initWithFrame:CGRectMake(left, exfeeShowview.frame.origin.y + exfeeShowview.frame.size.height + EXFEE_BOTTOM_MARGIN, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, TIME_RELATIVE_HEIGHT)];
         timeRelView.textColor = [UIColor COLOR_RGB(0x3A, 0x6E, 0xA5)];
         timeRelView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         timeRelView.shadowColor = [UIColor whiteColor];
@@ -167,11 +170,200 @@
     
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    [self initUI];
+    [self refreshUI];
+}
 
+- (void)dealloc {
+    
+    [descView release];
+    [exfeeShowview release];
+    [timeRelView release];
+    [timeAbsView release];
+    [timeZoneView release];
+    [placeTitleView release];
+    [placeDescView release];
+    [mapView release];
+    [container release];
+    [dectorView release];
+    [btnBack release];
+    [titleView release];
+    
+    [super dealloc];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+#pragma mark UITextViewDelegate
+- (void)textViewDidChange:(UITextView *)textView{
+    CGRect frame = textView.frame;
+    frame.size.height = [textView contentSize].height;
+    textView.frame = frame;
+    [self setLayoutDirty];
+    [self relayoutUI];
+}
+
+- (void)gotoBack:(UIButton*)sender{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+#pragma mark Refresh UI content methods
 - (void)refreshUI{
     [self fillCross:self.cross];
 }
 
+- (void)fillCross:(Cross*) x{
+    if (x != nil){
+        [titleView setText:x.title];
+        [self setLayoutDirty];
+        
+        if (x.cross_description == nil || x.cross_description.length == 0){
+            [descView setText:@"(Tap to add description...)"];
+            [self setLayoutDirty];
+        }else{
+            [descView setText:x.cross_description];
+            [self setLayoutDirty];
+        }
+        
+        [self fillBackground:x.widget];
+        [self fillExfee];
+        [self fillTime:x.time];
+        [self fillPlace:x.place];   
+    }
+    [self relayoutUI];
+}
+
+- (void) fillBackground:(NSArray*)widgets{
+    BOOL flag = NO;
+    for(NSDictionary *widget in widgets) {
+        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+            NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+            UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
+            if(backimg == nil || [backimg isEqual:[NSNull null]]){
+                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                dispatch_async(imgQueue, ^{
+                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
+                            dectorView.image = backimg;
+                            //[self setLayoutDirty];
+                        }
+                    });
+                });
+                dispatch_release(imgQueue);
+            }else{
+                dectorView.image = backimg;
+                //[self setLayoutDirty];
+            }
+            flag = YES;
+            if (dectorView.hidden == YES){
+                dectorView.hidden = NO;
+            }
+            break;
+        }
+    }
+    if (flag == NO){
+        dectorView.hidden = YES;
+    }
+}
+
+- (void)fillExfee{
+    if(exfeeIdentities!=nil){
+        [exfeeIdentities release];
+        exfeeIdentities=nil;
+    }
+    exfeeIdentities=[[NSMutableArray alloc] initWithCapacity:12];
+    
+    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES];
+    NSArray *invitations=[cross.exfee.invitations sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+    for(Invitation *invitation in invitations) {
+        if([invitation.host boolValue]==YES)
+            [exfeeIdentities insertObject:invitation atIndex:0];
+        else{
+            [exfeeIdentities addObject:invitation];
+        }
+    }
+//    [exfeeShowview reloadData];
+}
+
+- (void)fillTime:(CrossTime*)time{
+    if (time != nil){
+        timeRelView.text = [Util getTimeTitle:time localTime:NO];
+        NSString* desc = [Util getTimeDesc:time];
+        if(desc != nil && desc.length > 0){
+            timeAbsView.text = desc;
+            timeAbsView.hidden = false;
+            timeZoneView.hidden = false;
+            timeZoneView.text = time.begin_at.timezone;
+        }else{
+            timeAbsView.text = @"";
+            timeAbsView.hidden = YES;
+            timeZoneView.hidden = YES;
+            timeZoneView.text = @"";
+        }
+       
+    }else{
+        timeRelView.text = @"Sometime";
+        timeAbsView.text = @"";
+        timeAbsView.hidden = YES;
+        timeZoneView.text = @"";
+        timeZoneView.hidden = YES;
+    }
+    [self setLayoutDirty];
+}
+
+- (void)fillPlace:(Place*)place{
+    if([Util placeIsEmpty:place]){
+        placeTitleView.text = @"Shomewhere";
+        placeDescView.text = @"";
+        //mapView.image=[UIImage imageNamed:@"map_nil.png"];
+        mapView.hidden = YES;
+        [self setLayoutDirty];
+    }else {
+        
+        if ([Util placeHasTitle:place]){
+            placeTitleView.text = place.title;
+        }else{
+            placeTitleView.text = @"Shomewhere";
+        }
+        
+        if ([Util placeHasDescription:place]){
+            placeDescView.text = place.place_description;
+        }else{
+            placeDescView.text = @"";
+        }
+        
+        if ([Util placeHasGeo:place]){
+            mapView.hidden = NO;
+            float delta = 0.005;
+            CLLocationCoordinate2D location;
+            [mapView removeAnnotations: mapView.annotations];
+            location.latitude = [place.lat doubleValue];
+            location.longitude = [place.lng doubleValue];
+            
+            MKCoordinateRegion region;
+            region.center = location;
+            region.span.longitudeDelta = delta;
+            region.span.latitudeDelta = delta;
+            [mapView setRegion:region animated:NO];
+        }else{
+            mapView.hidden = YES;
+            //mapView.image = [UIImage imageNamed:@"map_framepin.png"];
+        }
+        [self setLayoutDirty];
+    }
+}
+
+#pragma mark Relayout methods
 - (void)relayoutUI{
     if (layoutDirty == YES){
         CGRect f = self.view.frame;
@@ -199,17 +391,16 @@
         
         // Exfee
         int line = 2;
-        exfee_root.frame = CGRectMake(left, baseY, width, 60 * line);
+        exfeeShowview.frame = CGRectMake(left, baseY, width, 60 * line);
         
-        baseX = CGRectGetMinX(exfee_root.frame);
-        if (exfee_root.hidden == NO) {
-            baseY = CGRectGetMaxY(exfee_root.frame) + EXFEE_BOTTOM_MARGIN;
+        baseX = CGRectGetMinX(exfeeShowview.frame);
+        if (exfeeShowview.hidden == NO) {
+            baseY = CGRectGetMaxY(exfeeShowview.frame) + EXFEE_BOTTOM_MARGIN;
         }
         
         // Time
         if (timeRelView.hidden == NO){
             CGSize timeRelSize = [timeRelView.text sizeWithFont:timeRelView.font];
-            NSLog(@"time Rel Size: %@, font 21, %f * %f" ,timeRelView.text, timeRelSize.width, timeRelSize.height);
             timeRelView.frame = CGRectMake(left, baseY, timeRelSize.width, timeRelSize.height);
             if (timeRelView.hidden == NO) {
                 baseX = CGRectGetMinX(timeRelView.frame);
@@ -300,169 +491,129 @@
     layoutDirty = NO;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    [self initUI];
-    [self refreshUI];
-}
+//#pragma mark EXImagesCollectionView Datasource methods
+//
+//- (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
+//    return cross.exfee.invitations.count;
+//    //return [self exfeeIdentitiesCount];
+//}
+//- (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index{
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    
+//    //    EXInvitationItem *item=[[[EXInvitationItem alloc] init] autorelease];
+//    
+//    NSArray *arr=[self getReducedExfeeIdentities];
+//    Invitation *invitation =[arr objectAtIndex:index];
+//    
+//    EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
+//    
+//    if(app.userid ==[invitation.identity.connected_user_id intValue]){
+//        item.isMe=YES;
+//    }
+//    
+//    //    item.invitation=invitation;
+//    Identity *identity=invitation.identity;
+//    UIImage *img=nil;
+//    if(identity.avatar_filename!=nil)
+//        img=[[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
+//    if(img!=nil && ![img isEqual:[NSNull null]]){
+//        item.avatar=img;
+//    }
+//    else{
+//        item.avatar=[UIImage imageNamed:@"portrait_default.png"];
+//        if(identity.avatar_filename!=nil) {
+//            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+//            dispatch_async(imgQueue, ^{
+//                __block UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+//                        item.avatar=avatar;
+//                        [item setNeedsDisplay];
+//                    }
+//                });
+//            });
+//            dispatch_release(imgQueue);
+//        }
+//    }
+//    item.isHost=[invitation.host boolValue];
+//    item.mates=[invitation.mates intValue];
+//    item.rsvp_status=invitation.rsvp_status;
+//    //    NSString *name=identity.name;
+//    //    if(name==nil)
+//    //        name=identity.external_username;
+//    //    if(name==nil)
+//    //        name=identity.external_id;
+//    //    item.name=name;
+//    [arr release];
+//    return item;
+//}
+//- (NSArray *) selectedOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
+//    return exfeeSelected;
+//    
+//}
+//- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
+//    
+//    if(viewmode==YES && exfeeShowview.editmode==NO)
+//    {
+//        if(height==120 && [exfeeIdentities count]==6)
+//            return;
+//    }
+//    [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
+//    [exfeeShowview calculateColumn];
+//    //    if(viewmode==NO || exfeeShowview.editmode==YES){
+//    [self reArrangeViews];
+//    //    }
+//    
+//    //    [exfeeIdentities count]
+//    
+//    
+//}
+//
+//#pragma mark EXImagesCollectionView delegate methods
+//- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
+//    NSArray* reducedExfeeIdentities=[self getReducedExfeeIdentities];
+//    if(index==[reducedExfeeIdentities count])
+//    {
+//        if(viewmode==YES && exfeeShowview.editmode==NO)
+//            return;
+//        [self ShowGatherToolBar];
+//        [self ShowExfeeView];
+//    }
+//    else if(index <[reducedExfeeIdentities count]){
+//        [crosstitle resignFirstResponder];
+//        [crosstitle endEditing:YES];
+//        BOOL select_status=[[exfeeSelected objectAtIndex:index] boolValue];
+//        for( int i=0;i<[exfeeSelected count];i++){
+//            [exfeeSelected replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:NO]];
+//        }
+//        [exfeeSelected replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:!select_status]];
+//        [exfeeShowview reloadData];
+//        BOOL isSelect=NO;
+//        for(NSNumber *number in exfeeSelected){
+//            if([number boolValue]==YES)
+//                isSelect=YES;
+//        }
+//        if(isSelect){
+//            CGRect f=imageCollectionView.frame;
+//            float x=f.origin.x+rect.origin.x+rect.size.width/2;
+//            float y=f.origin.y+rect.origin.y;
+//            Invitation *invitation=[reducedExfeeIdentities objectAtIndex:index];
+//            [self ShowExfeePopOver:invitation pointTo:CGPointMake(x,y) arrowx:rect.origin.x+rect.size.width/2+f.origin.x];
+//            if(viewmode==YES && exfeeShowview.editmode==NO){
+//                [self ShowRsvpToolBar];
+//            }
+//            else
+//                [self ShowGatherToolBar];
+//        }
+//        else {
+//            if(viewmode==YES&& exfeeShowview.editmode==NO)
+//                [self ShowRsvpButton];
+//            else //if(exfeeShowview.editmode==YES)
+//                [gathertoolbar setHidden:YES];
+//            
+//        }
+//    }
+//}
 
-- (void)dealloc {
-    
-    [descView release];
-    [exfee_root release];
-    [timeRelView release];
-    [timeAbsView release];
-    [timeZoneView release];
-    [placeTitleView release];
-    [placeDescView release];
-    [mapView release];
-    [container release];
-    [dectorView release];
-    [btnBack release];
-    [titleView release];
-    
-    [super dealloc];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
-#pragma mark UITextViewDelegate
-- (void)textViewDidChange:(UITextView *)textView{
-    CGRect frame = textView.frame;
-    frame.size.height = [textView contentSize].height;
-    textView.frame = frame;
-    [self setLayoutDirty];
-    [self relayoutUI];
-}
-
-- (void)gotoBack:(UIButton*)sender{
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-- (void)fillCross:(Cross*) x{
-    NSLog(@"fill cross from viewDidLoad %i", x == nil);
-    if (x != nil){
-        [titleView setText:x.title];
-        [self setLayoutDirty];
-        
-        if (x.cross_description == nil || x.cross_description.length == 0){
-            [descView setText:@"(Tap to add description...)"];
-            [self setLayoutDirty];
-        }else{
-            [descView setText:x.cross_description];
-            [self setLayoutDirty];
-        }
-        
-        [self fillBackground:x.widget];
-        [self fillExfee];
-        [self fillTime:x.time];
-        [self fillPlace:x.place];   
-    }
-    [self relayoutUI];
-}
-
-- (void) fillBackground:(NSArray*)widgets{
-    BOOL flag = NO;
-    for(NSDictionary *widget in widgets) {
-        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-            NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
-            UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
-            if(backimg == nil || [backimg isEqual:[NSNull null]]){
-                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                dispatch_async(imgQueue, ^{
-                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
-                            dectorView.image = backimg;
-                            //[self setLayoutDirty];
-                        }
-                    });
-                });
-                dispatch_release(imgQueue);
-            }else{
-                dectorView.image = backimg;
-                //[self setLayoutDirty];
-            }
-            flag = YES;
-            if (dectorView.hidden == YES){
-                dectorView.hidden = NO;
-            }
-            break;
-        }
-    }
-    if (flag == NO){
-        dectorView.hidden = YES;
-    }
-}
-
-- (void)fillExfee{
-
-}
-
-- (void)fillTime:(CrossTime*)time{
-    if (time != nil){
-        timeRelView.text = [Util getTimeTitle:time localTime:NO];
-        timeAbsView.text = [Util getTimeDesc:time];
-        timeAbsView.hidden = false;
-        timeZoneView.hidden = false;
-        timeZoneView.text = time.begin_at.timezone;
-    }else{
-        timeRelView.text = @"Sometime";
-        timeAbsView.text = @"";
-        timeAbsView.hidden = YES;
-        timeZoneView.text = @"";
-        timeZoneView.hidden = YES;
-    }
-    [self setLayoutDirty];
-}
-
-- (void)fillPlace:(Place*)place{
-    if([Util placeIsEmpty:place]){
-        placeTitleView.text = @"Shomewhere";
-        placeDescView.text = @"";
-        //mapView.image=[UIImage imageNamed:@"map_nil.png"];
-        mapView.hidden = YES;
-        [self setLayoutDirty];
-    }else {
-        
-        if ([Util placeHasTitle:place]){
-            placeTitleView.text = place.title;
-        }else{
-            placeTitleView.text = @"Shomewhere";
-        }
-        
-        if ([Util placeHasDescription:place]){
-            placeDescView.text = place.place_description;
-        }else{
-            placeDescView.text = @"";
-        }
-        
-        if ([Util placeHasGeo:place]){
-            mapView.hidden = NO;
-            //mapView.image = [UIImage imageNamed:@"map_framepin.png"];
-        }else{
-            mapView.hidden = YES;;
-            float delta = 0.005;
-            CLLocationCoordinate2D location;
-            [mapView removeAnnotations: mapView.annotations];
-            location.latitude = [place.lat doubleValue];
-            location.longitude = [place.lng doubleValue];
-            
-            MKCoordinateRegion region;
-            region.center = location;
-            region.span.longitudeDelta = delta;
-            region.span.latitudeDelta = delta;
-            [mapView setRegion:region animated:NO];
-        }
-        [self setLayoutDirty];
-    }
-}
 
 @end

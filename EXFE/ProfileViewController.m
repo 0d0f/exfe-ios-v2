@@ -373,6 +373,15 @@
         [buttonsignout setBackgroundColor:[UIColor clearColor]];
         [buttonsignout addTarget:self action:@selector(Logout) forControlEvents:UIControlEventTouchUpInside];
         [footerView addSubview:buttonsignout];
+        
+        UIButton* back = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [back setTitle:@"Back" forState:UIControlStateNormal];
+        [back.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:17]];
+        [back setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [back setFrame:CGRectMake(20, 10, 100,44)];
+        [back setBackgroundColor:[UIColor clearColor]];
+        [back addTarget:self action:@selector(gotoBack) forControlEvents:UIControlEventTouchUpInside];
+        [footerView addSubview:back];
     }
     
     //return the view for the footer
@@ -481,6 +490,10 @@
 }
 - (void) Logout {
     [Util signout];
+}
+
+- (void) gotoBack {
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (Identity*) getIdentityById:(int)identity_id{

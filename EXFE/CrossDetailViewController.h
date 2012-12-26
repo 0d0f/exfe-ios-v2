@@ -16,12 +16,14 @@
 #import "Invitation.h"
 #import "CrossTime.h"
 #import "Place.h"
+#import "EXImagesCollectionView.h"
 
-@interface CrossDetailViewController : UIViewController <UITextViewDelegate>{
+@interface CrossDetailViewController : UIViewController <UITextViewDelegate, EXImagesCollectionDataSource, EXImagesCollectionDelegate>{
     UIScrollView *container;
     EXCurveImageView *dectorView;
     UITextView *descView;
-    UIView *exfee_root;
+    //EXImagesCollectionView *exfeeShowview;
+    UIView *exfeeShowview;
     UILabel *timeRelView;
     UILabel *timeAbsView;
     UILabel *timeZoneView;
@@ -35,6 +37,8 @@
     User* default_user;
     
     BOOL layoutDirty;
+    
+    NSMutableArray *exfeeIdentities;
 }
 @property (retain,nonatomic) Cross* cross;
 @property (retain,readonly) NSMutableArray *exfeeIdentities;
