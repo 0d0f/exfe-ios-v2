@@ -688,9 +688,7 @@
 //        [self.navigationController pushViewController:gatherViewController animated:YES];
 //        [gatherViewController release];
         CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-        NSLog(@"CrossDetailViewController created");
         viewController.cross = cross;
-        NSLog(@"set cross to CrossDetailViewController");
         [self.navigationController pushViewController:viewController animated:YES];
         [viewController release];
         

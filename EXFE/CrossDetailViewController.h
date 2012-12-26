@@ -31,6 +31,8 @@
     UILabel *placeTitleView;
     UILabel *placeDescView;
     MKMapView *mapView;
+    UIImageView *mapPin;
+    
     UIButton *btnBack;
     UILabel *titleView;
     
@@ -41,6 +43,7 @@
     
     NSArray *exfeeInvitations;
     EXRSVPStatusView *rsvpstatusview;
+    CGFloat exfeeSuggestHeight;
 
 }
 @property (retain,nonatomic) Cross* cross;

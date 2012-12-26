@@ -82,8 +82,8 @@
         descView.backgroundColor = [UIColor lightGrayColor];
         [container addSubview:descView];
         
-        int line = 2;
-        exfeeShowview = [[EXImagesCollectionView alloc]initWithFrame:CGRectMake(c.origin.x, CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN - EXFEE_OVERLAP, c.size.width, 60 * line)];
+        exfeeSuggestHeight = 70;
+        exfeeShowview = [[EXImagesCollectionView alloc]initWithFrame:CGRectMake(c.origin.x, CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN - EXFEE_OVERLAP, c.size.width, exfeeSuggestHeight + EXFEE_OVERLAP)];
         exfeeShowview.backgroundColor = [UIColor grayColor];
         [exfeeShowview calculateColumn];
         [exfeeShowview setDataSource:self];
@@ -135,6 +135,11 @@
         mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, placeDescView.frame.origin.y + placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b)];
         mapView.backgroundColor = [UIColor lightGrayColor];
         [container addSubview:mapView];
+        UIImage *pin = [UIImage imageNamed:@"map_pin_blue.png"];
+        CGRect pinRect = CGRectMake(mapView.center.x, mapView.center.y, pin.size.width, pin.size.height);
+        mapPin = [[UIImageView alloc] initWithFrame: CGRectOffset(pinRect, pin.size.width / -2, pin.size.height * -1)];
+        mapPin.image = pin;
+        [container addSubview:mapPin];
         
         CGSize s = container.contentSize;
         if (mapView.hidden){
@@ -195,6 +200,7 @@
     [placeTitleView release];
     [placeDescView release];
     [mapView release];
+    [mapPin release];
     [container release];
     [dectorView release];
     [btnBack release];
@@ -351,7 +357,6 @@
     int myself = 0;
     int accepts = 0;
     
-    NSLog(@"We have %i in all", invitations.count);
     for(Invitation *invitation in invitations) {
         if ([invitation.identity.connected_user_id intValue]== app.userid) {
             [exfee insertObject:invitation atIndex:myself];
@@ -403,8 +408,8 @@
     if([Util placeIsEmpty:place]){
         placeTitleView.text = @"Shomewhere";
         placeDescView.text = @"";
-        //mapView.image=[UIImage imageNamed:@"map_nil.png"];
         mapView.hidden = YES;
+        mapPin.hidden = YES;
         [self setLayoutDirty];
     }else {
         
@@ -422,6 +427,7 @@
         
         if ([Util placeHasGeo:place]){
             mapView.hidden = NO;
+            mapPin.hidden = NO;
             float delta = 0.005;
             CLLocationCoordinate2D location;
             [mapView removeAnnotations: mapView.annotations];
@@ -435,6 +441,7 @@
             [mapView setRegion:region animated:NO];
         }else{
             mapView.hidden = YES;
+            mapPin.hidden = YES;
             //mapView.image = [UIImage imageNamed:@"map_framepin.png"];
         }
         [self setLayoutDirty];
@@ -468,8 +475,7 @@
         }
         
         // Exfee
-        int line = 2;
-        exfeeShowview.frame = CGRectMake(CGRectGetMinX(c), baseY - EXFEE_OVERLAP, CGRectGetWidth(c), 60 * line + EXFEE_OVERLAP);
+        exfeeShowview.frame = CGRectMake(CGRectGetMinX(c), baseY - EXFEE_OVERLAP, CGRectGetWidth(c), exfeeSuggestHeight + EXFEE_OVERLAP);
         
         baseX = CGRectGetMinX(exfeeShowview.frame);
         if (exfeeShowview.hidden == NO) {
@@ -548,6 +554,10 @@
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
         int b = (placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + c.origin.y + OVERLAP /*+ SMALL_SLOT */);
         mapView.frame = CGRectMake(0, placeDescView.frame.origin.y + placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b);
+        
+        UIImage *pin = mapPin.image;
+        CGRect pinRect = CGRectMake(mapView.center.x, mapView.center.y, pin.size.width, pin.size.height);
+        mapPin.frame = CGRectOffset(pinRect, pin.size.width / -2, pin.size.height * -1);
         
         CGSize s = container.contentSize;
         if (mapView.hidden){
@@ -635,6 +645,10 @@
     //    }
     
     //    [exfeeIdentities count]
+    NSLog(@"Exfee Collection should resize to %f", height);
+    if (height > 0){
+        exfeeSuggestHeight = height;
+    }
     [self setLayoutDirty];
     [self relayoutUI];
     
