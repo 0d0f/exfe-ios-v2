@@ -335,6 +335,7 @@
 		78B91DE416884F1800BB98B1 /* rsvp_unavailable_stroke_26g5.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B91DDE16884F1800BB98B1 /* rsvp_unavailable_stroke_26g5.png */; };
 		78B91DE516884F1800BB98B1 /* rsvp_unavailable_stroke_26g5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B91DDF16884F1800BB98B1 /* rsvp_unavailable_stroke_26g5@2x.png */; };
 		78B91DEA1688577200BB98B1 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B91DE91688577100BB98B1 /* Identity.m */; };
+		78B91DED168AB0F600BB98B1 /* EXRSVPStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B91DEC168AB0F600BB98B1 /* EXRSVPStatusView.m */; };
 		78B9FCF115B4680F00F5E4D3 /* EXInnerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FCF015B4680F00F5E4D3 /* EXInnerButton.m */; };
 		78B9FCF815B5346D00F5E4D3 /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FCF715B5346D00F5E4D3 /* Exfee.m */; };
 		78B9FD3315B5498200F5E4D3 /* EXNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FD3215B5498200F5E4D3 /* EXNavigationBar.m */; };
@@ -843,6 +844,8 @@
 		78B91DDF16884F1800BB98B1 /* rsvp_unavailable_stroke_26g5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rsvp_unavailable_stroke_26g5@2x.png"; sourceTree = "<group>"; };
 		78B91DE81688577000BB98B1 /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
 		78B91DE91688577100BB98B1 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
+		78B91DEB168AB0F500BB98B1 /* EXRSVPStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXRSVPStatusView.h; sourceTree = "<group>"; };
+		78B91DEC168AB0F600BB98B1 /* EXRSVPStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXRSVPStatusView.m; sourceTree = "<group>"; };
 		78B9FCEF15B4680F00F5E4D3 /* EXInnerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXInnerButton.h; sourceTree = "<group>"; };
 		78B9FCF015B4680F00F5E4D3 /* EXInnerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXInnerButton.m; sourceTree = "<group>"; };
 		78B9FCF615B5346D00F5E4D3 /* Exfee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exfee.h; sourceTree = "<group>"; };
@@ -1339,6 +1342,8 @@
 				789C8CAC1591D9B700580624 /* EXImagesCollectionView.m */,
 				78B91DD716882BE400BB98B1 /* ExfeeNumberView.h */,
 				78B91DD816882BE400BB98B1 /* ExfeeNumberView.m */,
+				78B91DEB168AB0F500BB98B1 /* EXRSVPStatusView.h */,
+				78B91DEC168AB0F600BB98B1 /* EXRSVPStatusView.m */,
 			);
 			name = control;
 			sourceTree = "<group>";
@@ -2237,6 +2242,7 @@
 				4F0597961682B9FA00F9CE10 /* CrossDetailViewController.m in Sources */,
 				78B91DD916882BE400BB98B1 /* ExfeeNumberView.m in Sources */,
 				78B91DEA1688577200BB98B1 /* Identity.m in Sources */,
+				78B91DED168AB0F600BB98B1 /* EXRSVPStatusView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

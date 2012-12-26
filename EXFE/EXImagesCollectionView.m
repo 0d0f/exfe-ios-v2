@@ -73,8 +73,11 @@
             x_count=0;
             y_count++;
         }
-        int x=x_count*(imageWidth+imageXmargin*2);
-        int y=y_count*(imageHeight+nameHeight+imageYmargin*2);
+//        int x=x_count*(imageWidth+imageXmargin*2);
+//        int y=y_count*(imageHeight+nameHeight+imageYmargin*2);
+        int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
+        int y=y_count*(imageHeight+imageYmargin*2)+y_start_offset;
+        
         CGRect rect=CGRectMake(x,y,imageWidth,imageHeight);
         [grid addObject:[NSValue valueWithCGRect:rect]];
         x_count++;
@@ -133,9 +136,12 @@
     int count=[_dataSource numberOfimageCollectionView:self];
     if(count >maxColumn*maxRow-1)
     {
-        float new_height=imageYmargin+imageHeight+15+(imageYmargin+imageHeight+15)*maxRow;
+        int new_column=(int)count/maxRow;
+        int new_height=new_column*(imageHeight+imageYmargin*2)+y_start_offset;
         if(new_height!=self.frame.size.height)
             [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
+
+//        float new_height=imageYmargin+imageHeight+15+(imageYmargin+imageHeight+15)*maxRow;
     }
     else{
         int row=1;
@@ -162,10 +168,11 @@
 
     int x_count=0;
     int y_count=0;
-    int y_start_offset=12;
+    
 //    NSArray *selected=[_dataSource selectedOfimageCollectionView:self];
     int acceptednum=0;
-    BOOL acceptflag=NO;
+    int allnum=0;
+//    BOOL acceptflag=NO;
     for(int i=0;i<=count;i++)
     {
         if( x_count==maxColumn){
@@ -174,8 +181,7 @@
         }
         int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
         int y=y_count*(imageHeight+imageYmargin*2)+y_start_offset;
-        NSLog(@"y_count :%i y:%i",y_count,y);
-        
+
         if(i<count){
     //        BOOL isSelected=[[selected objectAtIndex:i] boolValue];
             EXInvitationItem *item=[itemsCache objectForKey:[NSNumber numberWithInt:i]];
@@ -201,17 +207,19 @@
                         }
 //                        acceptflag=YES;
                     }
+                    allnum+=1+[item.invitation.mates intValue];
         //            [self sendSubviewToBack:item];
                 }
             }
             else{
                 [item setNeedsDisplay];
             }
+            
         }
         else{
             ExfeeNumberView *exfeecount=[[ExfeeNumberView alloc] initWithFrame:CGRectMake(x+5, y+5, 52, 52)];
             exfeecount.acceptednumber=acceptednum;
-            exfeecount.allnumber=count-1;
+            exfeecount.allnumber=allnum;
             exfeecount.backgroundColor=[UIColor whiteColor];
             [self addSubview:exfeecount];
             [exfeecount release];
@@ -254,7 +262,7 @@
                 [_delegate imageCollectionView:self didSelectRowAtIndex:i row:y_count col:x_count frame:rect];
             }
             else if (countidx==allcount+1){
-                NSLog(@"click the sum grid");
+                NSLog(@"click the sum grid: x=%i y=%i count=%i",x_count,y_count,allcount);
             }
         }
         x_count++;

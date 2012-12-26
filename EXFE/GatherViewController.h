@@ -38,6 +38,7 @@
 #import "EXInvitationItem.h"
 #import "ProfileBackgroundView.h"
 #import "UIImage+RoundedCorner.h"
+#import "EXRSVPStatusView.h"
 
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9
@@ -83,6 +84,7 @@
     UILabel *ccbuttonText;
     BOOL crosschangeflag;
     BOOL iscrossneedsave;
+    EXRSVPStatusView *rsvpstatusview;
 }
 @property (retain,nonatomic) Cross* cross;
 @property (retain,readonly) NSMutableArray *exfeeIdentities;
