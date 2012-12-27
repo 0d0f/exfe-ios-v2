@@ -19,6 +19,7 @@
 #import "EXImagesCollectionView.h"
 #import "EXRSVPStatusView.h"
 #import "EXRSVPMenuView.h"
+#import "APICrosses.h"
 
 
 @interface CrossDetailViewController : UIViewController <UITextViewDelegate, EXImagesCollectionDataSource, EXImagesCollectionDelegate,EXRSVPMenuDelegate>{
@@ -56,6 +57,8 @@
 - (void)initUI;
 - (void)relayoutUI;
 - (void)refreshUI;
+- (void)hideMenu;
+- (void)hideStatusView;
 
 #pragma mark UITextViewDelegate
 - (void)textViewDidChange:(UITextView *)textView;

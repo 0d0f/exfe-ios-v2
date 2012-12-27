@@ -211,6 +211,7 @@
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
+
 //    if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
 //    {
 //        [crosstitle resignFirstResponder];
@@ -257,7 +258,11 @@
         [exfeeShowview becomeFirstResponder];
         CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
         [exfeeShowview onImageTouch:exfeeviewlocation];
+    }else{
+        [self hideMenu];
+        [self hideStatusView];
     }
+    
 //    else{
 //        [crosstitle resignFirstResponder];
 //        [map becomeFirstResponder];
@@ -678,16 +683,20 @@
             x= x-180;
         }
         if(rsvpstatusview==nil){
-            if(app.userid ==[invitation.identity.connected_user_id intValue]){
-                [self showMenu:invitation];
-            }else{
                 rsvpstatusview=[[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-44, 180, 44) withDelegate:self];
                 [container addSubview:rsvpstatusview];
-            }
-        }else{
-            [rsvpstatusview setFrame:CGRectMake(x, y-44, 180, 44)];
         }
-        [rsvpstatusview setNeedsDisplay];
+        if(app.userid ==[invitation.identity.connected_user_id intValue]){
+            [self showMenu:invitation];
+            [self hideStatusView];
+            [rsvpstatusview setHidden:YES];
+        }else{
+            [rsvpstatusview setHidden:NO];
+            [rsvpstatusview setFrame:CGRectMake(x, y-44, 180, 44)];
+            [rsvpstatusview setNeedsDisplay];
+            [self hideMenu];
+        }
+    
     }
     //        [crosstitle resignFirstResponder];
     //        [crosstitle endEditing:YES];
@@ -738,8 +747,28 @@
     NSLog(@"menu");
 }
 
+- (void)hideMenu{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3];
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, 41, 125, 152)];
+    [UIView commitAnimations];
+}
+
+- (void)hideStatusView{
+    [rsvpstatusview setHidden:YES];
+}
+
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu{
     NSLog(@"RSVPAcceptedMenuView:%@",menu.invitation);
+    
+//    menu.invitation.rsvp_status=@"Accepted";
+    NSError *error;
+//    for(Invitation *invitation in exfeeInvitations){
+//        if([invitation.invitation_id intValue]==[menu.invitation.invitation_id intValue]){
+//            
+//        }
+//        NSString *json = [[RKObjectSerializer serializerWithObject:menu.invitation mapping:[[APICrosses getInvitationMapping] inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
+//    }
 //    RKParams* rsvpParams = [RKParams params];
 //    [rsvpParams setValue:[postarray JSONString] forParam:@"rsvp"];
 //    RKClient *client = [RKClient sharedClient];
@@ -747,29 +776,17 @@
 //    
 //    NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/rsvp?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
 
-    
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, 41, 125, 152)];
-    [UIView commitAnimations];
-
+    NSString *json = [[RKObjectSerializer serializerWithObject:menu.invitation mapping:[[APICrosses getInvitationMapping] inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
+    NSLog(@"%@",json);
+    [self hideMenu];
 }
 - (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu{
     NSLog(@"RSVPUnavailableMenuView");
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, 41, 125, 152)];
-    [UIView commitAnimations];
-    
+    [self hideMenu];
 }
 - (void)RSVPPendinMenuView:(EXRSVPMenuView *) menu{
     NSLog(@"RSVPPendinMenuView");
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, 41, 125, 152)];
-    [UIView commitAnimations];
-    
+    [self hideMenu];
 }
 
 
