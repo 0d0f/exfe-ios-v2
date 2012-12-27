@@ -11,10 +11,11 @@
 @implementation EXRSVPStatusView
 @synthesize invitation;
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CGRect)frame withDelegate:(id)_delegate
 {
     self = [super initWithFrame:frame];
     if (self) {
+        delegate=_delegate;
         self.backgroundColor=[UIColor whiteColor];
         self.layer.shadowColor=[UIColor blackColor].CGColor;
         self.layer.shadowOpacity = 1;
@@ -23,7 +24,7 @@
         
         [next setFrame:CGRectMake(165.0f, 7.0f, 10.0f, 30.0f)];
         [next setBackgroundColor:[UIColor greenColor]];
-//        [next addTarget:self action:@selector(doneTyping) forControlEvents:UIControlEventTouchUpInside];
+        [next addTarget:delegate action:@selector(showMenu) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:next];
         
         namelabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 5, 155, 20)];
@@ -47,12 +48,14 @@
     return self;
 }
 
+- (void) setDelegate:(id)_delegate{
+    delegate=_delegate;
+}
+
 - (void) setInvitation:(Invitation *)_invitation{
     invitation=_invitation;
     namelabel.text=invitation.identity.name;
     [namelabel setNeedsDisplay];
-
-    
     
     UIImage *rsvpicon=nil;
     NSString *rsvpstatustext=@"";
@@ -78,11 +81,13 @@
     
     
 }
-
-- (void)drawRect:(CGRect)rect
-{
-    NSLog(@"%@",invitation);
-    // Drawing code
-}
+//- (void) showMenu{
+//    if(rsvpmenu==nil){
+//        
+//        rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(20, 20, 125, 152)];
+//        [self addSubview:rsvpmenu];
+//    }
+//    NSLog(@"menu");
+//}
 
 @end

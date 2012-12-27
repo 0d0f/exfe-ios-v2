@@ -18,8 +18,10 @@
 #import "Place.h"
 #import "EXImagesCollectionView.h"
 #import "EXRSVPStatusView.h"
+#import "EXRSVPMenuView.h"
 
-@interface CrossDetailViewController : UIViewController <UITextViewDelegate, EXImagesCollectionDataSource, EXImagesCollectionDelegate>{
+
+@interface CrossDetailViewController : UIViewController <UITextViewDelegate, EXImagesCollectionDataSource, EXImagesCollectionDelegate,EXRSVPMenuDelegate>{
     UIScrollView *container;
     EXCurveImageView *dectorView;
     UITextView *descView;
@@ -44,7 +46,7 @@
     NSArray *exfeeInvitations;
     EXRSVPStatusView *rsvpstatusview;
     CGFloat exfeeSuggestHeight;
-
+    EXRSVPMenuView *rsvpmenu;
 }
 @property (retain,nonatomic) Cross* cross;
 @property (retain,readonly) NSMutableArray *exfeeIdentities;
@@ -57,5 +59,11 @@
 
 #pragma mark UITextViewDelegate
 - (void)textViewDidChange:(UITextView *)textView;
+- (void) showMenu:(Invitation*)_invitation;
+
+#pragma mark EXRSVPMenuViewDelegate
+- (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu;
+- (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu;
+- (void)RSVPPendinMenuView:(EXRSVPMenuView *) menu;
 
 @end
