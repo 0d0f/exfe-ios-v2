@@ -68,11 +68,6 @@
 + (int)daysBetween:(NSDate *)dt1 and:(NSDate *)dt2;
 + (NSString*) cleanInputName:(NSString*)username provider:(NSString*)provider ;
 
-#pragma mark Entity Helper
-+ (BOOL) placeIsEmpty:(Place*)place;
-+ (BOOL) placeHasTitle:(Place*)place;
-+ (BOOL) placeHasDescription:(Place*)place;
-+ (BOOL) placeHasGeo:(Place*)place;
 
 @end
 

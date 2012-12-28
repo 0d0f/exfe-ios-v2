@@ -15,6 +15,7 @@
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
 		4F81C848168309E9007284DF /* EXCurveImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F81C847168309E9007284DF /* EXCurveImageView.m */; };
 		4FBF2485167AE89D007C04E2 /* CrossCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF2484167AE89D007C04E2 /* CrossCard.m */; };
+		4FC8FCE8168D7E5700409779 /* Place+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCE7168D7E5700409779 /* Place+Helper.m */; };
 		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
@@ -463,6 +464,8 @@
 		4F81C847168309E9007284DF /* EXCurveImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCurveImageView.m; sourceTree = "<group>"; };
 		4FBF2483167AE89D007C04E2 /* CrossCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossCard.h; sourceTree = "<group>"; };
 		4FBF2484167AE89D007C04E2 /* CrossCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossCard.m; sourceTree = "<group>"; };
+		4FC8FCE6168D7E5700409779 /* Place+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Place+Helper.h"; sourceTree = "<group>"; };
+		4FC8FCE7168D7E5700409779 /* Place+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Place+Helper.m"; sourceTree = "<group>"; };
 		4FE8D3C51681926C00222420 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4FE8D3C61681926C00222420 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		4FE8D3C71681926C00222420 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
@@ -1480,6 +1483,8 @@
 				782B3C9B156A519D00721150 /* Exfee.m */,
 				78AF496215FBAF09004B1EBB /* Place.h */,
 				78AF496315FBAF09004B1EBB /* Place.m */,
+				4FC8FCE6168D7E5700409779 /* Place+Helper.h */,
+				4FC8FCE7168D7E5700409779 /* Place+Helper.m */,
 			);
 			name = Class;
 			sourceTree = "<group>";
@@ -2261,6 +2266,7 @@
 				78B91DED168AB0F600BB98B1 /* EXRSVPStatusView.m in Sources */,
 				4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */,
 				784D3710168C22C900987B6C /* EXRSVPMenuView.m in Sources */,
+				4FC8FCE8168D7E5700409779 /* Place+Helper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,6 +11,7 @@
 #import "EFTime.h"
 #import "ImgCache.h"
 #import "MapPin.h"
+#import "Place+Helper.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -414,7 +415,7 @@
 }
 
 - (void)fillPlace:(Place*)place{
-    if([Util placeIsEmpty:place]){
+    if(place == nil || [place isEmpty]){
         placeTitleView.text = @"Shomewhere";
         placeDescView.text = @"";
         placeDescView.hidden = YES;
@@ -422,13 +423,13 @@
         [self setLayoutDirty];
     }else {
         
-        if ([Util placeHasTitle:place]){
+        if ([place hasTitle]){
             placeTitleView.text = place.title;
         }else{
             placeTitleView.text = @"Shomewhere";
         }
         
-        if ([Util placeHasDescription:place]){
+        if ([place hasDescription]){
             placeDescView.text = place.place_description;
             placeDescView.hidden = NO;
             [placeDescView sizeToFit];
@@ -437,7 +438,7 @@
             placeDescView.hidden = YES;
         }
         
-        if ([Util placeHasGeo:place]){
+        if ([place hasGeo]){
             mapView.hidden = NO;
             float delta = 0.005;
             CLLocationCoordinate2D location;
