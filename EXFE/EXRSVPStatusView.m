@@ -20,12 +20,16 @@
         self.layer.shadowColor=[UIColor blackColor].CGColor;
         self.layer.shadowOpacity = 1;
         self.layer.shadowOffset = CGSizeMake(0.0f, 3.0f);
-        UIButton *next=[UIButton buttonWithType:UIButtonTypeCustom];
+//        UIButton *next=[UIButton buttonWithType:UIButtonTypeCustom];
+//        
+//        [next setFrame:CGRectMake(165.0f, 7.0f, 10.0f, 30.0f)];
+//        [next setBackgroundColor:[UIColor greenColor]];
+//        [next addTarget:delegate action:@selector(showMenu:) forControlEvents:UIControlEventTouchUpInside];
+//        [self addSubview:next];
         
-        [next setFrame:CGRectMake(165.0f, 7.0f, 10.0f, 30.0f)];
-        [next setBackgroundColor:[UIColor greenColor]];
-        [next addTarget:delegate action:@selector(showMenu:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:next];
+        UIImageView *arrow=[[UIImageView alloc] initWithFrame:CGRectMake(165.0f, (frame.size.height-15)/2, 12, 15)];
+        arrow.image=[UIImage imageNamed:@"arrow.png"];
+        [self addSubview:arrow];
         
         namelabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 5, 155, 20)];
         [namelabel setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:18]];
@@ -41,6 +45,10 @@
         [rsvplabel setTextColor:FONT_COLOR_HL];
         [rsvplabel setTextAlignment:NSTextAlignmentLeft];
         [self addSubview:rsvplabel];
+
+        UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu)];
+        [self addGestureRecognizer:gestureRecognizer];
+        [gestureRecognizer release];
 
         
         // Initialization code
@@ -82,4 +90,8 @@
     
 }
 
+- (void) showMenu{
+    [delegate showMenu:invitation];
+//    NSLog(@"showMenu");
+}
 @end
