@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import <RestKit/JSONKit.h>
+#import <RestKit/RestKit.h>
 #import "EXCurveImageView.h"
 #import "Cross.h"
 #import "Identity.h"
@@ -20,6 +22,7 @@
 #import "EXRSVPStatusView.h"
 #import "EXRSVPMenuView.h"
 #import "APICrosses.h"
+
 
 
 @interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate>{
@@ -71,5 +74,8 @@
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu;
 - (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu;
 - (void)RSVPPendinMenuView:(EXRSVPMenuView *) menu;
+
+- (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation;
+- (Invitation*) getMyInvitation;
 
 @end

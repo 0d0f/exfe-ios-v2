@@ -104,7 +104,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "464"
          endingLineNumber = "464"
-         landmarkName = "-relayoutUI"
+         landmarkName = "-fillPlace:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1951,19 +1951,6 @@
          startingLineNumber = "52"
          endingLineNumber = "52"
          landmarkName = "-setDelegate:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/CrossDetailViewController.m"
-         timestampString = "378289970.527609"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "689"
-         endingLineNumber = "689"
-         landmarkName = "-imageCollectionView:didSelectRowAtIndex:row:col:frame:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
