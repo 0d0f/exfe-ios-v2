@@ -174,4 +174,20 @@
     	[loader send];
 }
 
+
++(void) LoadCrossWithCrossId:(int)corss_id updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
+        updatedtime=[Util encodeToPercentEscapeString:updatedtime];
+    
+    NSString *endpoint = [NSString stringWithFormat:@"/crosses/%u?updated_at=%@&token=%@",corss_id,updatedtime,app.accesstoken];
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+    RKObjectLoader *loader = [manager loaderWithResourcePath:endpoint];
+    loader.delegate = delegate;
+    loader.method = RKRequestMethodGET;
+    loader.userData=source;
+    [loader send];
+}
+
 @end

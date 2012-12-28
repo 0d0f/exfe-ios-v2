@@ -741,6 +741,8 @@
     return NO;
 }
 
+
+
 - (BOOL) PushToConversation:(int)cross_id{
     Cross *cross=[self crossWithId:cross_id];
     if(cross!=nil){

@@ -848,14 +848,16 @@
                     if(code)
                         if([code intValue]==200) {
                             
-                            for(Invitation *invitation in exfeeInvitations)
-                            {
-                                if([invitation.invitation_id intValue] == [_invitation.invitation_id intValue]){
-                                    invitation.rsvp_status=status;
-                                    invitation.by_identity=myidentity;
-                                }
-                            }
-                            [exfeeShowview reloadData];
+//                            for(Invitation *invitation in exfeeInvitations)
+//                            {
+//                                if([invitation.invitation_id intValue] == [_invitation.invitation_id intValue]){
+//                                    invitation.rsvp_status=status;
+//                                    invitation.by_identity=myidentity;
+//                                }
+//                            }
+//                            [exfeeShowview reloadData];
+                            [APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
+
                         }
                 }
                 //We got an error!
@@ -887,5 +889,15 @@
     return nil;
 }
 
+
+- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+    if([objects count]>0){
+        [exfeeShowview reloadData];
+    }
+
+}
+- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+        NSLog(@"%@",error);
+}
 
 @end
