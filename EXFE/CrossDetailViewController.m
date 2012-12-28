@@ -81,12 +81,12 @@
         descView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         descView.shadowColor = [UIColor whiteColor];
         descView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-        descView.backgroundColor = [UIColor lightGrayColor];
+        descView.backgroundColor = [UIColor clearColor];
         [container addSubview:descView];
         
         exfeeSuggestHeight = 70;
         exfeeShowview = [[EXImagesCollectionView alloc]initWithFrame:CGRectMake(c.origin.x, CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN - EXFEE_OVERLAP, c.size.width, exfeeSuggestHeight + EXFEE_OVERLAP)];
-        exfeeShowview.backgroundColor = [UIColor grayColor];
+        exfeeShowview.backgroundColor = [UIColor clearColor];
         [exfeeShowview calculateColumn];
         [exfeeShowview setDataSource:self];
         [exfeeShowview setDelegate:self];
@@ -97,14 +97,14 @@
         timeRelView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         timeRelView.shadowColor = [UIColor whiteColor];
         timeRelView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-        timeRelView.backgroundColor = [UIColor lightGrayColor];
+        timeRelView.backgroundColor = [UIColor clearColor];
         [container addSubview:timeRelView];
         
         timeAbsView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeRelView.frame.origin.y + timeRelView.frame.size.height + TIME_RELATIVE_BOTTOM_MARGIN, c.size.width /2 -  CONTAINER_VERTICAL_PADDING, TIME_ABSOLUTE_HEIGHT)];
         timeAbsView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         timeAbsView.shadowColor = [UIColor whiteColor];
         timeAbsView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-        timeAbsView.backgroundColor = [UIColor lightGrayColor];
+        timeAbsView.backgroundColor = [UIColor clearColor];
         [container addSubview:timeAbsView];
         
         timeZoneView= [[UILabel alloc] initWithFrame:CGRectMake(left + timeAbsView.frame.size.width + TIME_ABSOLUTE_RIGHT_MARGIN, timeAbsView.frame.origin.y, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 - timeAbsView.frame.size.width  - TIME_ABSOLUTE_RIGHT_MARGIN , TIME_ZONE_HEIGHT)];
@@ -118,7 +118,7 @@
         placeTitleView.shadowColor = [UIColor whiteColor];
         placeTitleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         placeTitleView.numberOfLines = 2;
-        placeTitleView.backgroundColor = [UIColor lightGrayColor];
+        placeTitleView.backgroundColor = [UIColor clearColor];
         [container addSubview:placeTitleView];
         
         placeDescView= [[UILabel alloc] initWithFrame:CGRectMake(left, placeTitleView.frame.origin.y + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_DESC_HEIGHT)];
@@ -127,7 +127,7 @@
         placeDescView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         placeDescView.numberOfLines = 4;
         placeDescView.lineBreakMode = NSLineBreakByWordWrapping;
-        placeDescView.backgroundColor = [UIColor lightGrayColor];
+        placeDescView.backgroundColor = [UIColor clearColor];
         [container addSubview:placeDescView];
         
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
