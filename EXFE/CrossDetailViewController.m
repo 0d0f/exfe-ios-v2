@@ -210,13 +210,13 @@
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
     
-    if (rsvpstatusview.hidden == NO){
-        if (CGRectContainsPoint(rsvpstatusview.frame, location)) {
-            NSLog(@"click to set rsvp");
-        }else{
-            rsvpstatusview.hidden = YES;
-        }
-    }
+//    if (rsvpstatusview.hidden == NO){
+//        if (CGRectContainsPoint(rsvpstatusview.frame, location)) {
+//            NSLog(@"click to set rsvp");
+//        }else{
+//            rsvpstatusview.hidden = YES;
+//        }
+//    }
     
     
     if (descView.hidden == NO && CGRectContainsPoint(descView.frame, location)) {
@@ -697,26 +697,9 @@
         if(x + 180 > self.view.frame.size.width){
             x = x - 180;
         }
-        if(rsvpstatusview == nil){
-            rsvpstatusview = [[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y - 44, 180, 44)];
-//            UIBezierPath *path = [UIBezierPath bezierPathWithRect:rsvpstatusview.bounds];
-//            rsvpstatusview.layer.shadowPath = path.CGPath;
-            [self.view addSubview:rsvpstatusview];
-        }else{
-            [rsvpstatusview setFrame:CGRectMake(x, y - 44, 180, 44)];
-        }
-        if (rsvpstatusview.hidden == YES){
-            rsvpstatusview.hidden = NO;
-        }
-        
-        NSArray *arr=exfeeInvitations;//[self getReducedExfeeIdentities];
-        Invitation *invitation =[arr objectAtIndex:index];
-        
-        rsvpstatusview.invitation=invitation;
-        [rsvpstatusview setNeedsDisplay];
         if(rsvpstatusview==nil){
                 rsvpstatusview=[[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-44, 180, 44) withDelegate:self];
-                [container addSubview:rsvpstatusview];
+                [self.view addSubview:rsvpstatusview];
         }
         if(app.userid ==[invitation.identity.connected_user_id intValue]){
             [self showMenu:invitation];
@@ -778,7 +761,7 @@
         if ( pinView == nil ){
             pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID];
             pinView.canShowCallout = YES;
-            pinView.image = [UIImage imageNamed:@"map_pin_blue.png"];    //as suggested by Squatch
+            pinView.image = [UIImage imageNamed:@"map_pin_blue.png"];
             
             UIButton *btnNav = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
             [btnNav addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
