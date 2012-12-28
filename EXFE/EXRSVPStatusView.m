@@ -24,7 +24,7 @@
         
         [next setFrame:CGRectMake(165.0f, 7.0f, 10.0f, 30.0f)];
         [next setBackgroundColor:[UIColor greenColor]];
-        [next addTarget:delegate action:@selector(showMenu) forControlEvents:UIControlEventTouchUpInside];
+        [next addTarget:delegate action:@selector(showMenu:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:next];
         
         namelabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 5, 155, 20)];
@@ -81,13 +81,5 @@
     
     
 }
-//- (void) showMenu{
-//    if(rsvpmenu==nil){
-//        
-//        rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(20, 20, 125, 152)];
-//        [self addSubview:rsvpmenu];
-//    }
-//    NSLog(@"menu");
-//}
 
 @end
