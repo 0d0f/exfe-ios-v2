@@ -121,13 +121,13 @@
     CGRect b = [self bounds];
     // Rect caculation
     int cardMargin = 13;
-    CGRect barnnerRect = CGRectMake(b.origin.x + cardMargin, b.origin.y + 17, b.size.width - cardMargin * 2, 40);
+    CGRect barnnerRect = CGRectMake(cardMargin, 17, b.size.width - cardMargin * 2, 40);
     int avatarWidth = 40;
     CGRect avatarRect = CGRectMake(barnnerRect.origin.x, barnnerRect.origin.y, avatarWidth, barnnerRect.size.height);
     
     int paddingH = 8;
     
-    int titlePaddingV = 4;
+    int titlePaddingV = 6;
     CGRect titleRect = CGRectMake(avatarRect.origin.x + avatarRect.size.width + paddingH, barnnerRect.origin.y + titlePaddingV, barnnerRect.size.width - avatarWidth - paddingH, barnnerRect.size.height - titlePaddingV * 2);
     // card background
     //[backgroundimg drawInRect:r];
@@ -137,13 +137,37 @@
     [avatar drawInRect:avatarRect];
     
     [[UIColor COLOR_RGB(0x00, 0x00,0x00)] set];
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(currentContext);
+    CGContextTranslateCTM(currentContext, 0, self.bounds.size.height);
+    CGContextScaleCTM(currentContext, 1.0, -1.0);
     NSString * gather = @"Gather a ·X·";
     
     NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:gather];
-    [string addAttribute:(NSString*)kCTFontAttributeName  value:[UIFont fontWithName:@"HelveticaNeue" size:23] range:NSMakeRange(0,[string length])];
-    [string addAttribute:NSForegroundColorAttributeName value:[UIColor COLOR_RGB(0x00, 0x00,0xFF)] range:NSMakeRange(9,3)];
-    CGRect titlenewRect = CGRectMake(titleRect.origin.x + titleRect.size.width - string.size.width, titleRect.origin.y, string.size.width, titleRect.size.height);
-    [string drawInRect:titlenewRect];
+    CTFontRef fontRef= CTFontCreateWithName(CFSTR("HelveticaNeue"), 24.0, NULL);
+    [string addAttribute:(NSString*)kCTFontAttributeName  value:(id)fontRef range:NSMakeRange(0,[string length])];
+    CFRelease(fontRef);
+    
+    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_RGB(0x00, 0x00,0xFF)].CGColor range:NSMakeRange(9,3)];
+    
+    CTTextAlignment alignment = kCTRightTextAlignment;
+    CTParagraphStyleSetting setting[1] = {
+        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
+    };
+    CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(setting, 1);
+    [string addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,[string length])];
+    CFRelease(paragraphstyle);
+    
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)string);
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddRect(path, NULL, CGRectOffset(titleRect, 0, -titlePaddingV));
+    CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [string length]), path, NULL);
+    CFRelease(framesetter);
+    CFRelease(path);
+    CTFrameDraw(theFrame, currentContext);
+    CFRelease(theFrame);
+    [string release];
+    CGContextRestoreGState(currentContext);
     
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

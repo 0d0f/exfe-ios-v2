@@ -23,5 +23,4 @@
 @property (nonatomic,retain) Invitation *invitation;
 - (id)initWithFrame:(CGRect)frame withDelegate:(id)_delegate;
 //- (void) setDelegate:(id)_delegate;
-- (void) showMenu;
 @end

@@ -117,7 +117,6 @@
         placeTitleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         placeTitleView.shadowColor = [UIColor whiteColor];
         placeTitleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-        placeTitleView.preferredMaxLayoutWidth = c.size.width  -  CONTAINER_VERTICAL_PADDING * 2;
         placeTitleView.numberOfLines = 2;
         placeTitleView.backgroundColor = [UIColor lightGrayColor];
         [container addSubview:placeTitleView];
@@ -126,7 +125,6 @@
         placeDescView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         placeDescView.shadowColor = [UIColor whiteColor];
         placeDescView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-        placeDescView.preferredMaxLayoutWidth = c.size.width  -  CONTAINER_VERTICAL_PADDING * 2;
         placeDescView.numberOfLines = 4;
         placeDescView.lineBreakMode = NSLineBreakByWordWrapping;
         placeDescView.backgroundColor = [UIColor lightGrayColor];
