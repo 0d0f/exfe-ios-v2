@@ -215,8 +215,6 @@
 //            rsvpstatusview.hidden = YES;
 //        }
 //    }
-    
-    
     if (descView.hidden == NO && CGRectContainsPoint(descView.frame, location)) {
         [self showDescriptionFullContent: (descView.numberOfLines != 0)];
     }
@@ -260,8 +258,7 @@
 //            }
 //        }
 //    }
-    if (CGRectContainsPoint([exfeeShowview frame], location))
-    {
+    if (CGRectContainsPoint([exfeeShowview frame], location)) {
 //        [crosstitle resignFirstResponder];
         [exfeeShowview becomeFirstResponder];
         CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
@@ -687,7 +684,6 @@
         NSArray *arr=exfeeInvitations;//[self getReducedExfeeIdentities];
         Invitation *invitation =[arr objectAtIndex:index];
         
-        rsvpstatusview.invitation=invitation;
 
         int x=exfeeShowview.frame.origin.x+(col+1)*(50+5*2)+5;
         int y=exfeeShowview.frame.origin.y+row*(50+5*2)+y_start_offset;
@@ -697,8 +693,11 @@
         }
         if(rsvpstatusview==nil){
                 rsvpstatusview=[[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-44, 180, 44) withDelegate:self];
+
                 [self.view addSubview:rsvpstatusview];
         }
+        rsvpstatusview.invitation=invitation;
+
         if(app.userid ==[invitation.identity.connected_user_id intValue]){
             [self showMenu:invitation];
             [self hideStatusView];
@@ -788,9 +787,11 @@
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
     [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, 41, 125, 152)];
+    if(rsvpstatusview!=nil)
+       [rsvpstatusview setHidden:YES];
+    
     [UIView commitAnimations];
 
-    NSLog(@"menu");
 }
 
 - (void)hideMenu{
@@ -846,15 +847,6 @@
                     id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                     if(code)
                         if([code intValue]==200) {
-                            
-//                            for(Invitation *invitation in exfeeInvitations)
-//                            {
-//                                if([invitation.invitation_id intValue] == [_invitation.invitation_id intValue]){
-//                                    invitation.rsvp_status=status;
-//                                    invitation.by_identity=myidentity;
-//                                }
-//                            }
-//                            [exfeeShowview reloadData];
                             [APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
 
                         }

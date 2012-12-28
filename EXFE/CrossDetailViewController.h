@@ -62,6 +62,7 @@
 - (void)refreshUI;
 - (void)hideMenu;
 - (void)hideStatusView;
+- (void)reloadStatusview:(Invitation*)_invitation;
 
 
 #pragma mark MKMapViewDelegate
