@@ -222,7 +222,6 @@
     if (descView.hidden == NO && CGRectContainsPoint(descView.frame, location)) {
         [self showDescriptionFullContent: (descView.numberOfLines != 0)];
     }
-    
 //    if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
 //    {
 //        [crosstitle resignFirstResponder];
@@ -269,7 +268,11 @@
         [exfeeShowview becomeFirstResponder];
         CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
         [exfeeShowview onImageTouch:exfeeviewlocation];
+    }else{
+        [self hideMenu];
+        [self hideStatusView];
     }
+    
 //    else{
 //        [crosstitle resignFirstResponder];
 //        [map becomeFirstResponder];
@@ -682,9 +685,14 @@
         //        [self ShowExfeeView];
     }
     else if(index < [reducedExfeeIdentities count]){
+        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSArray *arr=exfeeInvitations;//[self getReducedExfeeIdentities];
+        Invitation *invitation =[arr objectAtIndex:index];
         
-        int x = exfeeShowview.frame.origin.x + (col + 1) * (50 + 5 * 2) + 5;
-        int y = exfeeShowview.frame.origin.y + row * (50 + 5 * 2) + y_start_offset;
+        rsvpstatusview.invitation=invitation;
+
+        int x=exfeeShowview.frame.origin.x+(col+1)*(50+5*2)+5;
+        int y=exfeeShowview.frame.origin.y+row*(50+5*2)+y_start_offset;
         
         if(x + 180 > self.view.frame.size.width){
             x = x - 180;
@@ -706,6 +714,20 @@
         
         rsvpstatusview.invitation=invitation;
         [rsvpstatusview setNeedsDisplay];
+        if(rsvpstatusview==nil){
+                rsvpstatusview=[[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-44, 180, 44) withDelegate:self];
+                [container addSubview:rsvpstatusview];
+        }
+        if(app.userid ==[invitation.identity.connected_user_id intValue]){
+            [self showMenu:invitation];
+            [self hideStatusView];
+            [rsvpstatusview setHidden:YES];
+        }else{
+            [rsvpstatusview setHidden:NO];
+            [rsvpstatusview setFrame:CGRectMake(x, y-44, 180, 44)];
+            [rsvpstatusview setNeedsDisplay];
+            [self hideMenu];
+        }
     }
     //        [crosstitle resignFirstResponder];
     //        [crosstitle endEditing:YES];
@@ -774,6 +796,64 @@
 
 - (void)onClick:(id)sender{
     NSLog(@"Click to Navigation");
+}
+    
+- (void) showMenu:(Invitation*)_invitation{
+    if(rsvpmenu==nil){
+        rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 41, 125, 152) withDelegate:self ];
+        [self.view addSubview:rsvpmenu];
+    }
+    rsvpmenu.invitation=_invitation;
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3];
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, 41, 125, 152)];
+    [UIView commitAnimations];
+
+    NSLog(@"menu");
+}
+
+- (void)hideMenu{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3];
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, 41, 125, 152)];
+    [UIView commitAnimations];
+}
+
+- (void)hideStatusView{
+    [rsvpstatusview setHidden:YES];
+}
+
+- (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu{
+    NSLog(@"RSVPAcceptedMenuView:%@",menu.invitation);
+    
+//    menu.invitation.rsvp_status=@"Accepted";
+    NSError *error;
+//    for(Invitation *invitation in exfeeInvitations){
+//        if([invitation.invitation_id intValue]==[menu.invitation.invitation_id intValue]){
+//            
+//        }
+//        NSString *json = [[RKObjectSerializer serializerWithObject:menu.invitation mapping:[[APICrosses getInvitationMapping] inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
+//    }
+//    RKParams* rsvpParams = [RKParams params];
+//    [rsvpParams setValue:[postarray JSONString] forParam:@"rsvp"];
+//    RKClient *client = [RKClient sharedClient];
+//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//    
+//    NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/rsvp?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
+
+    NSString *json = [[RKObjectSerializer serializerWithObject:menu.invitation mapping:[[APICrosses getInvitationMapping] inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
+    NSLog(@"%@",json);
+    [self hideMenu];
+}
+
+- (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu{
+    NSLog(@"RSVPUnavailableMenuView");
+    [self hideMenu];
+}
+
+- (void)RSVPPendinMenuView:(EXRSVPMenuView *) menu{
+    NSLog(@"RSVPPendinMenuView");
+    [self hideMenu];
 }
 
 

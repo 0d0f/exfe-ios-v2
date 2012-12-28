@@ -18,8 +18,12 @@
 #import "Place.h"
 #import "EXImagesCollectionView.h"
 #import "EXRSVPStatusView.h"
+#import "EXRSVPMenuView.h"
+#import "APICrosses.h"
 
-@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate>{
+
+@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate>{
+
     UIScrollView *container;
     EXCurveImageView *dectorView;
     UILabel *descView;
@@ -43,7 +47,7 @@
     NSArray *exfeeInvitations;
     EXRSVPStatusView *rsvpstatusview;
     CGFloat exfeeSuggestHeight;
-
+    EXRSVPMenuView *rsvpmenu;
 }
 @property (retain,nonatomic) Cross* cross;
 @property (retain,readonly) NSMutableArray *exfeeIdentities;
@@ -53,9 +57,19 @@
 - (void)initUI;
 - (void)relayoutUI;
 - (void)refreshUI;
+- (void)hideMenu;
+- (void)hideStatusView;
+
 
 #pragma mark MKMapViewDelegate
 - (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated;
 - (MKAnnotationView *)mapView:(MKMapView *)map viewForAnnotation:(id < MKAnnotation >)annotation;
+
+- (void) showMenu:(Invitation*)_invitation;
+
+#pragma mark EXRSVPMenuViewDelegate
+- (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu;
+- (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu;
+- (void)RSVPPendinMenuView:(EXRSVPMenuView *) menu;
 
 @end
