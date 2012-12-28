@@ -10,6 +10,7 @@
 #import "Util.h"
 #import "EFTime.h"
 #import "ImgCache.h"
+#import "MapPin.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -20,7 +21,7 @@
 #define DECTOR_HEIGHT                    (88)
 #define DECTOR_HEIGHT_EXTRA              (LARGE_SLOT)
 #define DECTOR_MARGIN                    (SMALL_SLOT)
-#define OVERLAP                          (0)
+#define OVERLAP                          (DECTOR_HEIGHT)
 #define CONTAINER_TOP_MARGIN             (DECTOR_HEIGHT - OVERLAP)
 #define CONTAINER_TOP_PADDING            (DECTOR_HEIGHT_EXTRA + DECTOR_MARGIN + OVERLAP)
 #define CONTAINER_VERTICAL_PADDING       (8)
@@ -74,11 +75,12 @@
     {
         
         int left = CONTAINER_VERTICAL_PADDING;
-        descView = [[UITextView alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 40)];
-        descView.editable = NO;
+        descView = [[UILabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 40)];
         descView.textColor = [UIColor COLOR_RGB(0x33, 0x33, 0x33)];
-        descView.delegate = self;
+        descView.numberOfLines = 4;
         descView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
+        descView.shadowColor = [UIColor whiteColor];
+        descView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         descView.backgroundColor = [UIColor lightGrayColor];
         [container addSubview:descView];
         
@@ -134,12 +136,8 @@
         int b = (placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + c.origin.y + OVERLAP /*+ DECTOR_HEIGHT_EXTRA*/);
         mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, placeDescView.frame.origin.y + placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b)];
         mapView.backgroundColor = [UIColor lightGrayColor];
+        mapView.delegate = self;
         [container addSubview:mapView];
-        UIImage *pin = [UIImage imageNamed:@"map_pin_blue.png"];
-        CGRect pinRect = CGRectMake(mapView.center.x, mapView.center.y, pin.size.width, pin.size.height);
-        mapPin = [[UIImageView alloc] initWithFrame: CGRectOffset(pinRect, pin.size.width / -2, pin.size.height * -1)];
-        mapPin.image = pin;
-        [container addSubview:mapPin];
         
         CGSize s = container.contentSize;
         if (mapView.hidden){
@@ -163,12 +161,13 @@
     [self.view addSubview:btnBack];
    
     
-    titleView = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - 24 - TITLE_HORIZON_MARGIN * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+    titleView = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - (CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN) * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
     titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
     titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
     titleView.backgroundColor = [UIColor clearColor];
     titleView.lineBreakMode = UILineBreakModeWordWrap;
     titleView.numberOfLines = 2;
+    titleView.textAlignment = NSTextAlignmentCenter;
     titleView.shadowColor = [UIColor blackColor];
     titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
     [self.view addSubview:titleView];
@@ -200,7 +199,6 @@
     [placeTitleView release];
     [placeDescView release];
     [mapView release];
-    [mapPin release];
     [container release];
     [dectorView release];
     [btnBack release];
@@ -211,6 +209,20 @@
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
+    
+    if (rsvpstatusview.hidden == NO){
+        if (CGRectContainsPoint(rsvpstatusview.frame, location)) {
+            NSLog(@"click to set rsvp");
+        }else{
+            rsvpstatusview.hidden = YES;
+        }
+    }
+    
+    
+    if (descView.hidden == NO && CGRectContainsPoint(descView.frame, location)) {
+        [self showDescriptionFullContent: (descView.numberOfLines != 0)];
+    }
+    
 //    if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
 //    {
 //        [crosstitle resignFirstResponder];
@@ -271,18 +283,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-
-
-
-#pragma mark UITextViewDelegate
-- (void)textViewDidChange:(UITextView *)textView{
-    CGRect frame = textView.frame;
-    frame.size.height = [textView contentSize].height;
-    textView.frame = frame;
-    [self setLayoutDirty];
-    [self relayoutUI];
-}
-
 - (void)gotoBack:(UIButton*)sender{
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -294,23 +294,29 @@
 
 - (void)fillCross:(Cross*) x{
     if (x != nil){
-        [titleView setText:x.title];
-        [self setLayoutDirty];
-        
-        if (x.cross_description == nil || x.cross_description.length == 0){
-            [descView setText:@"(Tap to add description...)"];
-            [self setLayoutDirty];
-        }else{
-            [descView setText:x.cross_description];
-            [self setLayoutDirty];
-        }
-        
+        [self fillTitleAndDescription:x];
         [self fillBackground:x.widget];
         [self fillExfee];
         [self fillTime:x.time];
         [self fillPlace:x.place];   
     }
     [self relayoutUI];
+}
+
+- (void) fillTitleAndDescription:(Cross*)x{
+    [titleView setText:x.title];
+    [self setLayoutDirty];
+    
+    if (x.cross_description == nil || x.cross_description.length == 0){
+        descView.hidden = YES;
+        descView.text = @"";
+        [self setLayoutDirty];
+    }else{
+        descView.text = x.cross_description;
+        descView.hidden = NO;
+        [descView sizeToFit];
+        [self setLayoutDirty];
+    }
 }
 
 - (void) fillBackground:(NSArray*)widgets{
@@ -384,9 +390,11 @@
         NSString* desc = [Util getTimeDesc:time];
         if(desc != nil && desc.length > 0){
             timeAbsView.text = desc;
-            timeAbsView.hidden = false;
-            timeZoneView.hidden = false;
+            timeAbsView.hidden = NO;
+            [timeAbsView sizeToFit];
+            timeZoneView.hidden = NO;
             timeZoneView.text = time.begin_at.timezone;
+            [timeZoneView sizeToFit];
         }else{
             timeAbsView.text = @"";
             timeAbsView.hidden = YES;
@@ -408,8 +416,8 @@
     if([Util placeIsEmpty:place]){
         placeTitleView.text = @"Shomewhere";
         placeDescView.text = @"";
+        placeDescView.hidden = YES;
         mapView.hidden = YES;
-        mapPin.hidden = YES;
         [self setLayoutDirty];
     }else {
         
@@ -421,13 +429,15 @@
         
         if ([Util placeHasDescription:place]){
             placeDescView.text = place.place_description;
+            placeDescView.hidden = NO;
+            [placeDescView sizeToFit];
         }else{
             placeDescView.text = @"";
+            placeDescView.hidden = YES;
         }
         
         if ([Util placeHasGeo:place]){
             mapView.hidden = NO;
-            mapPin.hidden = NO;
             float delta = 0.005;
             CLLocationCoordinate2D location;
             [mapView removeAnnotations: mapView.annotations];
@@ -439,13 +449,33 @@
             region.span.longitudeDelta = delta;
             region.span.latitudeDelta = delta;
             [mapView setRegion:region animated:NO];
+            
+            [mapView removeAnnotations:mapView.annotations];
+            MapPin *pin = [[MapPin alloc] initWithCoordinates:region.center placeName:place.title description:@""];
+            [mapView addAnnotation:pin];
+            
         }else{
             mapView.hidden = YES;
-            mapPin.hidden = YES;
-            //mapView.image = [UIImage imageNamed:@"map_framepin.png"];
         }
         [self setLayoutDirty];
     }
+}
+
+- (void)showDescriptionFullContent:(BOOL)needfull{
+    if (needfull){
+        if (descView.numberOfLines != 0){
+            descView.numberOfLines = 0;
+            [descView sizeToFit];
+            [self setLayoutDirty];
+        }
+    }else{
+        if (descView.numberOfLines == 0){
+            descView.numberOfLines = 4;
+            [descView sizeToFit];
+            [self setLayoutDirty];
+        }
+    }
+    [self relayoutUI];
 }
 
 #pragma mark Relayout methods
@@ -461,29 +491,23 @@
         float baseY = CONTAINER_TOP_PADDING;
         
         // Description
-        float descHeight = descView.contentSize.height;
-        if (descHeight  < DESC_MIN_HEIGHT){
-            descHeight = DESC_MIN_HEIGHT;
-        }else if ( descHeight > DESC_MAX_HEIGHT){
-            descHeight = DESC_MAX_HEIGHT;
-        }
-        descView.frame = CGRectMake(0, baseY, c.size.width, descHeight);
-        
         if (descView.hidden == NO) {
-            baseX = CGRectGetMinX(descView.frame);
-            baseY = CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN;
+            descView.frame = CGRectOffset(descView.frame, left - CGRectGetMinX(descView.frame), baseY - CGRectGetMinY(descView.frame));
+            baseX = CGRectGetMaxX(descView.frame);
+            baseY = CGRectGetMaxY(descView.frame) ;
         }
         
         // Exfee
-        exfeeShowview.frame = CGRectMake(CGRectGetMinX(c), baseY - EXFEE_OVERLAP, CGRectGetWidth(c), exfeeSuggestHeight + EXFEE_OVERLAP);
-        
-        baseX = CGRectGetMinX(exfeeShowview.frame);
-        if (exfeeShowview.hidden == NO) {
-            baseY = CGRectGetMaxY(exfeeShowview.frame) + EXFEE_BOTTOM_MARGIN;
+        if (exfeeShowview.hidden == NO){
+            baseY += DESC_BOTTOM_MARGIN;
+            exfeeShowview.frame = CGRectMake(CGRectGetMinX(c), baseY - EXFEE_OVERLAP, CGRectGetWidth(c), exfeeSuggestHeight + EXFEE_OVERLAP);
+            baseX = CGRectGetMaxX(exfeeShowview.frame);
+            baseY = CGRectGetMaxY(exfeeShowview.frame);
         }
         
         // Time
         if (timeRelView.hidden == NO){
+            baseY += EXFEE_BOTTOM_MARGIN;
             CGSize timeRelSize = [timeRelView.text sizeWithFont:timeRelView.font];
             timeRelView.frame = CGRectMake(left, baseY, timeRelSize.width, timeRelSize.height);
             if (timeRelView.hidden == NO) {
@@ -491,41 +515,38 @@
                 baseY = CGRectGetMaxY(timeRelView.frame);
                 
             }
-        }
-        
-        if (timeAbsView.hidden == NO){
-            baseY += TIME_RELATIVE_BOTTOM_MARGIN;
-        }
-        CGSize timeAbsSize = [timeAbsView.text sizeWithFont:timeAbsView.font];
-        timeAbsView.frame = CGRectMake(left, baseY, timeAbsSize.width, timeAbsSize.height);
-        
-        if (timeZoneView.hidden == NO){
-            CGSize timeZoneSize = CGSizeZero;
-            timeZoneSize = [timeZoneView.text sizeWithFont:timeZoneView.font];
-            if (baseX + timeZoneSize.width <= width){
-                baseX = CGRectGetMaxX(timeAbsView.frame) + TIME_ABSOLUTE_RIGHT_MARGIN;
-                baseY = CGRectGetMinY(timeAbsView.frame);
-                timeZoneView.frame = CGRectMake(baseX, baseY, timeZoneSize.width, timeZoneSize.height);
-                baseX = CGRectGetMinX(timeAbsView.frame);
-                baseY = CGRectGetMaxY(timeAbsView.frame);
-            }else{
-                baseX = CGRectGetMinX(timeAbsView.frame);
-                baseY = CGRectGetMaxY(timeAbsView.frame) + SMALL_SLOT;
-                timeZoneView.frame = CGRectMake(baseX, baseY, timeZoneSize.width, timeZoneSize.height);
-                baseX = CGRectGetMinX(timeZoneView.frame);
-                baseY = CGRectGetMaxY(timeZoneView.frame);
+            
+            if (timeAbsView.hidden == NO){
+                baseY += TIME_RELATIVE_BOTTOM_MARGIN;
             }
-        }else if (timeAbsView.hidden == NO){
-            baseX = CGRectGetMinX(timeAbsView.frame);
-            baseY = CGRectGetMaxY(timeAbsView.frame);
-        }
-        
-        if (timeAbsView.hidden == NO || timeRelView.hidden == NO || timeZoneView.hidden == NO){
-            baseY += TIME_BOTTOM_MARGIN;
+            CGSize timeAbsSize = [timeAbsView.text sizeWithFont:timeAbsView.font];
+            timeAbsView.frame = CGRectMake(left, baseY, timeAbsSize.width, timeAbsSize.height);
+            
+            if (timeZoneView.hidden == NO){
+                CGSize timeZoneSize = CGSizeZero;
+                timeZoneSize = [timeZoneView.text sizeWithFont:timeZoneView.font];
+                if (baseX + timeZoneSize.width <= width){
+                    baseX = CGRectGetMaxX(timeAbsView.frame) + TIME_ABSOLUTE_RIGHT_MARGIN;
+                    baseY = CGRectGetMinY(timeAbsView.frame);
+                    timeZoneView.frame = CGRectMake(baseX, baseY, timeZoneSize.width, timeZoneSize.height);
+                    baseX = CGRectGetMinX(timeAbsView.frame);
+                    baseY = CGRectGetMaxY(timeAbsView.frame);
+                }else{
+                    baseX = CGRectGetMinX(timeAbsView.frame);
+                    baseY = CGRectGetMaxY(timeAbsView.frame) + SMALL_SLOT;
+                    timeZoneView.frame = CGRectMake(baseX, baseY, timeZoneSize.width, timeZoneSize.height);
+                    baseX = CGRectGetMinX(timeZoneView.frame);
+                    baseY = CGRectGetMaxY(timeZoneView.frame);
+                }
+            }else if (timeAbsView.hidden == NO){
+                baseX = CGRectGetMaxX(timeAbsView.frame);
+                baseY = CGRectGetMaxY(timeAbsView.frame);
+            }
         }
         
         //Place
         if (placeTitleView.hidden == NO){
+            baseY += TIME_BOTTOM_MARGIN;
             CGSize placeTitleSize = [placeTitleView.text sizeWithFont:placeTitleView.font forWidth:placeTitleView.frame.size.width lineBreakMode:NSLineBreakByWordWrapping];
             placeTitleView.frame = CGRectMake(baseX, baseY, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , placeTitleSize.height);
             baseX = CGRectGetMinX(placeTitleView.frame);
@@ -554,10 +575,6 @@
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
         int b = (placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + c.origin.y + OVERLAP /*+ SMALL_SLOT */);
         mapView.frame = CGRectMake(0, placeDescView.frame.origin.y + placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b);
-        
-        UIImage *pin = mapPin.image;
-        CGRect pinRect = CGRectMake(mapView.center.x, mapView.center.y, pin.size.width, pin.size.height);
-        mapPin.frame = CGRectOffset(pinRect, pin.size.width / -2, pin.size.height * -1);
         
         CGSize s = container.contentSize;
         if (mapView.hidden){
@@ -657,29 +674,33 @@
 #pragma mark EXImagesCollectionView delegate methods
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
     NSArray* reducedExfeeIdentities=exfeeInvitations;//[self getReducedExfeeIdentities];
-    if(index==[reducedExfeeIdentities count])
+    if(index == [reducedExfeeIdentities count])
     {
         //        if(viewmode==YES && exfeeShowview.editmode==NO)
         //            return;
         //        [self ShowGatherToolBar];
         //        [self ShowExfeeView];
     }
-    else if(index <[reducedExfeeIdentities count]){
+    else if(index < [reducedExfeeIdentities count]){
         
-        int x=exfeeShowview.frame.origin.x+(col+1)*(50+5*2)+5;
-        int y=exfeeShowview.frame.origin.y+row*(50+5*2)+y_start_offset;
+        int x = exfeeShowview.frame.origin.x + (col + 1) * (50 + 5 * 2) + 5;
+        int y = exfeeShowview.frame.origin.y + row * (50 + 5 * 2) + y_start_offset;
         
-        if(x+180 > self.view.frame.size.width){
-            x= x-180;
+        if(x + 180 > self.view.frame.size.width){
+            x = x - 180;
         }
-        if(rsvpstatusview==nil){
-            rsvpstatusview=[[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-44, 180, 44)];
+        if(rsvpstatusview == nil){
+            rsvpstatusview = [[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y - 44, 180, 44)];
 //            UIBezierPath *path = [UIBezierPath bezierPathWithRect:rsvpstatusview.bounds];
 //            rsvpstatusview.layer.shadowPath = path.CGPath;
-            [container addSubview:rsvpstatusview];
+            [self.view addSubview:rsvpstatusview];
         }else{
-            [rsvpstatusview setFrame:CGRectMake(x, y-44, 180, 44)];
+            [rsvpstatusview setFrame:CGRectMake(x, y - 44, 180, 44)];
         }
+        if (rsvpstatusview.hidden == YES){
+            rsvpstatusview.hidden = NO;
+        }
+        
         NSArray *arr=exfeeInvitations;//[self getReducedExfeeIdentities];
         Invitation *invitation =[arr objectAtIndex:index];
         
@@ -719,6 +740,40 @@
     //            
     //        }
     //    }
+}
+
+#pragma mark MKMapViewDelegate
+- (void)mapView:(MKMapView *)map didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated{
+    
+}
+
+- (MKAnnotationView *)mapView:(MKMapView *)map viewForAnnotation:(id < MKAnnotation >)annotation{
+    MKAnnotationView *pinView = nil;
+    if(annotation != nil)
+    {
+        static NSString *defaultPinID = @"com.exfe.pin";
+        pinView = (MKAnnotationView *)[map dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
+        if ( pinView == nil ){
+            pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID];
+            pinView.canShowCallout = YES;
+            pinView.image = [UIImage imageNamed:@"map_pin_blue.png"];    //as suggested by Squatch
+            
+            UIButton *btnNav = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            [btnNav addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+            pinView.leftCalloutAccessoryView = btnNav;
+        }else{
+            pinView.annotation = annotation;
+        }
+    }
+    return pinView;
+}
+
+- (void)mapView:(MKMapView *)map didSelectAnnotationView:(MKAnnotationView *)view{
+    NSLog(@"Click on the annotation");
+}
+
+- (void)onClick:(id)sender{
+    NSLog(@"Click to Navigation");
 }
 
 

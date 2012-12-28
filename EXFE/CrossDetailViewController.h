@@ -19,10 +19,10 @@
 #import "EXImagesCollectionView.h"
 #import "EXRSVPStatusView.h"
 
-@interface CrossDetailViewController : UIViewController <UITextViewDelegate, EXImagesCollectionDataSource, EXImagesCollectionDelegate>{
+@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate>{
     UIScrollView *container;
     EXCurveImageView *dectorView;
-    UITextView *descView;
+    UILabel *descView;
     EXImagesCollectionView *exfeeShowview;
     //UIView *exfeeShowview;
     UILabel *timeRelView;
@@ -31,7 +31,6 @@
     UILabel *placeTitleView;
     UILabel *placeDescView;
     MKMapView *mapView;
-    UIImageView *mapPin;
     
     UIButton *btnBack;
     UILabel *titleView;
@@ -55,7 +54,8 @@
 - (void)relayoutUI;
 - (void)refreshUI;
 
-#pragma mark UITextViewDelegate
-- (void)textViewDidChange:(UITextView *)textView;
+#pragma mark MKMapViewDelegate
+- (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated;
+- (MKAnnotationView *)mapView:(MKMapView *)map viewForAnnotation:(id < MKAnnotation >)annotation;
 
 @end
