@@ -313,7 +313,6 @@
     }else{
         descView.text = x.cross_description;
         descView.hidden = NO;
-        [descView sizeToFit];
         [self setLayoutDirty];
     }
 }
@@ -491,7 +490,8 @@
         
         // Description
         if (descView.hidden == NO) {
-            descView.frame = CGRectOffset(descView.frame, left - CGRectGetMinX(descView.frame), baseY - CGRectGetMinY(descView.frame));
+            descView.frame = CGRectMake(left , baseY, width, 300);
+            [descView sizeToFit];
             baseX = CGRectGetMaxX(descView.frame);
             baseY = CGRectGetMaxY(descView.frame) ;
         }
@@ -568,18 +568,20 @@
                 ph = PLACE_DESC_MAX_HEIGHT;
             }
             placeDescView.frame = CGRectMake(baseX, baseY, width, ph);
+        }else{
+            placeDescView.frame = CGRectMake(baseX, baseY, 0, 0);
         }
         
         // Map
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
-        int b = (placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + c.origin.y + OVERLAP /*+ SMALL_SLOT */);
-        mapView.frame = CGRectMake(0, placeDescView.frame.origin.y + placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b);
+        int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + container.frame.origin.y  + OVERLAP /*+ SMALL_SLOT */);
+        mapView.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b);
         
         CGSize s = container.contentSize;
         if (mapView.hidden){
-            s.height = container.frame.origin.y + placeDescView.frame.origin.y + placeDescView.frame.size.height;
+            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(placeDescView.frame) + OVERLAP;
         }else{
-            s.height = container.frame.origin.y + mapView.frame.origin.y + mapView.frame.size.height;
+            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(mapView.frame) + OVERLAP;
         }
         container.contentSize = s;
         

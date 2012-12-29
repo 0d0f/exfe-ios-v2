@@ -139,7 +139,7 @@
     // card cover
     [[UIImage imageNamed:@"xlist_mask.png"] drawInRect:b];
     
-    UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue" size:17];
+    UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
     // text info
     if (hlTime){
         [[UIColor COLOR_RGB(0x00, 0x00,0x00)] set];
