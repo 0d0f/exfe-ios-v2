@@ -76,13 +76,15 @@
     {
         
         int left = CONTAINER_VERTICAL_PADDING;
-        descView = [[UILabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 40)];
+        descView = [[EXLabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 80)];
         descView.textColor = [UIColor COLOR_RGB(0x33, 0x33, 0x33)];
         descView.numberOfLines = 4;
         descView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         descView.shadowColor = [UIColor whiteColor];
         descView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         descView.backgroundColor = [UIColor clearColor];
+        descView.lineBreakMode = NSLineBreakByWordWrapping;
+        NSLog(@"init descView: (%f, %f), [%f * %f]", descView.frame.origin.x, descView.frame.origin.y, descView.frame.size.width, descView.frame.size.height);
         [container addSubview:descView];
         
         exfeeSuggestHeight = 70;
@@ -217,6 +219,7 @@
 //        }
 //    }
     if (descView.hidden == NO && CGRectContainsPoint(descView.frame, location)) {
+        NSLog(@"click detected descView: (%f, %f), [%f * %f]", descView.frame.origin.x, descView.frame.origin.y, descView.frame.size.width, descView.frame.size.height);
         [self showDescriptionFullContent: (descView.numberOfLines != 0)];
     }
 //    if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
@@ -315,6 +318,7 @@
         descView.hidden = NO;
         [self setLayoutDirty];
     }
+    NSLog(@"fill content descView:  (%f, %f), [%f * %f]", descView.frame.origin.x, descView.frame.origin.y, descView.frame.size.width, descView.frame.size.height);
 }
 
 - (void) fillBackground:(NSArray*)widgets{
@@ -463,13 +467,13 @@
     if (needfull){
         if (descView.numberOfLines != 0){
             descView.numberOfLines = 0;
-            [descView sizeToFit];
+            NSLog(@"auto length descView: (%f, %f), [%f * %f]", descView.frame.origin.x, descView.frame.origin.y, descView.frame.size.width, descView.frame.size.height);
             [self setLayoutDirty];
         }
     }else{
         if (descView.numberOfLines == 0){
             descView.numberOfLines = 4;
-            [descView sizeToFit];
+            NSLog(@"set to 4 lines descView: (%f, %f), [%f * %f]", descView.frame.origin.x, descView.frame.origin.y, descView.frame.size.width, descView.frame.size.height);
             [self setLayoutDirty];
         }
     }
@@ -490,8 +494,18 @@
         
         // Description
         if (descView.hidden == NO) {
-            descView.frame = CGRectMake(left , baseY, width, 300);
+//            CGSize rect = CGSizeMake(width, INFINITY);
+//            NSString* four_lines = @"M\nM\nM\nM";
+//            CGSize fit4 = [four_lines sizeWithFont:descView.font constrainedToSize:rect lineBreakMode:descView.lineBreakMode];
+//            CGSize fitFull = [descView.text sizeWithFont:descView.font constrainedToSize:rect lineBreakMode:descView.lineBreakMode];
+//            CGFloat bestHeight = fitFull.height;
+//            if (descView.numberOfLines == 4){
+//                bestHeight = MIN(fit4.height, fitFull.height);
+//            }
+//            descView.frame = CGRectMake(left , baseY, width, bestHeight);
+            descView.frame = CGRectMake(left , baseY, width, 80);
             [descView sizeToFit];
+            NSLog(@"relayoutUI descView: (%f, %f), [%f * %f]", descView.frame.origin.x, descView.frame.origin.y, descView.frame.size.width, descView.frame.size.height);
             baseX = CGRectGetMaxX(descView.frame);
             baseY = CGRectGetMaxY(descView.frame) ;
         }
