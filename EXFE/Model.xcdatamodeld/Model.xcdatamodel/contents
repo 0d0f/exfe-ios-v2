@@ -63,8 +63,9 @@
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="via" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="by_identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
         <relationship name="identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
+        <relationship name="invitated_by" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
+        <relationship name="updated_by" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
     </entity>
     <entity name="Meta" representedClassName="Meta" syncable="YES">
         <attribute name="code" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -116,7 +117,7 @@
         <element name="EFTime" positionX="144" positionY="144" width="128" height="120"/>
         <element name="Exfee" positionX="160" positionY="192" width="128" height="120"/>
         <element name="Identity" positionX="160" positionY="267" width="128" height="285"/>
-        <element name="Invitation" positionX="160" positionY="192" width="128" height="195"/>
+        <element name="Invitation" positionX="160" positionY="192" width="128" height="210"/>
         <element name="Meta" positionX="160" positionY="192" width="128" height="90"/>
         <element name="Place" positionX="160" positionY="192" width="128" height="195"/>
         <element name="Post" positionX="160" positionY="192" width="128" height="135"/>

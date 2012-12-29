@@ -2,7 +2,7 @@
 //  Invitation.m
 //  EXFE
 //
-//  Created by huoju on 8/2/12.
+//  Created by huoju on 12/29/12.
 //
 //
 
@@ -17,9 +17,11 @@
 @dynamic invitation_id;
 @dynamic mates;
 @dynamic rsvp_status;
+@dynamic type;
 @dynamic updated_at;
 @dynamic via;
-@dynamic by_identity;
 @dynamic identity;
+@dynamic invitated_by;
+@dynamic updated_by;
 
 @end

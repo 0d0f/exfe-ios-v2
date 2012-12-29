@@ -2,7 +2,7 @@
 //  Invitation.h
 //  EXFE
 //
-//  Created by huoju on 8/2/12.
+//  Created by huoju on 12/29/12.
 //
 //
 
@@ -18,9 +18,11 @@
 @property (nonatomic, retain) NSNumber * invitation_id;
 @property (nonatomic, retain) NSNumber * mates;
 @property (nonatomic, retain) NSString * rsvp_status;
+@property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSString * via;
-@property (nonatomic, retain) Identity *by_identity;
 @property (nonatomic, retain) Identity *identity;
+@property (nonatomic, retain) Identity *invitated_by;
+@property (nonatomic, retain) Identity *updated_by;
 
 @end

@@ -23,7 +23,7 @@
 }
 + (NSMutableDictionary*) InvitationDict:(Invitation*)invitation{
     NSMutableDictionary *identity=[ObjectToDict IdentityDict:invitation.identity];
-    NSMutableDictionary *by_identity=[ObjectToDict IdentityDict:invitation.by_identity];
+    NSMutableDictionary *by_identity=[ObjectToDict IdentityDict:invitation.updated_by];
     
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     [format setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];

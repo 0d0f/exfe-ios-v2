@@ -574,7 +574,7 @@
             invitation.host=[NSNumber numberWithBool:YES];
             invitation.mates=0;
             invitation.identity=default_identity;
-            invitation.by_identity=default_identity;
+            invitation.updated_by=default_identity;
             invitation.updated_at=[NSDate date];
             invitation.created_at=[NSDate date];
             [exfeeIdentities addObject:invitation];
@@ -690,11 +690,11 @@
     [Line2 release];
     CFRelease(linefontref11);
     
-    NSString *by_name=invitation.by_identity.name;
+    NSString *by_name=invitation.updated_by.name;
     if(by_name==nil)
-        by_name=invitation.by_identity.external_username;
+        by_name=invitation.updated_by.external_username;
     if(by_name==nil)
-        by_name=invitation.by_identity.external_id;
+        by_name=invitation.updated_by.external_id;
 
     NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
     [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
@@ -1922,7 +1922,7 @@
                     if(i<[exfeeIdentities count]) {
                         Invitation *invitation=(Invitation*)[exfeeIdentities objectAtIndex:i];
                         invitation.rsvp_status=status;
-                        invitation.by_identity=by_identity;
+                        invitation.updated_by=by_identity;
 
                         NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",by_identity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
                         [postarray addObject:rsvpdict];
@@ -2035,7 +2035,7 @@
                                     if(mates_result<0)
                                         mates_result=0;
                                     invitation.mates= [NSNumber numberWithInt:mates_result];
-                                    invitation.by_identity=by_identity;
+                                    invitation.updated_by=by_identity;
                                 }
                                 else
                                     invitation.mates=0;

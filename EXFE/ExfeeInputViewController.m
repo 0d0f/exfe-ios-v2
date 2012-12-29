@@ -393,9 +393,9 @@ static char identitykey;
                                     invitation.identity=identity;
                                     Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
                                     if(myinvitation!=nil)
-                                        invitation.by_identity=myinvitation.identity;
+                                        invitation.updated_by=myinvitation.identity;
                                     else
-                                        invitation.by_identity=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+                                        invitation.updated_by=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
                                     [invitations addObject:invitation];
                                 }
                                 [(GatherViewController*)gatherview addExfee:invitations];
@@ -528,9 +528,9 @@ static char identitykey;
     invitation.identity=identity;
     Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
     if(myinvitation!=nil)
-        invitation.by_identity=myinvitation.identity;
+        invitation.updated_by=myinvitation.identity;
     else
-        invitation.by_identity=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+        invitation.updated_by=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
     
     [exfeeList addBubble:input customObject:invitation];
     if([exfeeList bubblecount]>0)
@@ -691,9 +691,9 @@ static char identitykey;
         invitation.identity=identity;
         Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
         if(myinvitation!=nil)
-            invitation.by_identity=myinvitation.identity;
+            invitation.updated_by=myinvitation.identity;
         else
-            invitation.by_identity=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+            invitation.updated_by=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
 
         NSString *identity_name=identity.nickname;
         if(identity_name==nil || [identity_name isEqualToString:@""])
