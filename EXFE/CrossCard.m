@@ -9,6 +9,8 @@
 #import "CrossCard.h"
 #import "Util.h"
 
+#define CARD_VERTICAL_MARGIN      (13)
+
 @implementation CrossCard
 @synthesize title;
 @synthesize avatar;
@@ -20,6 +22,48 @@
 @synthesize hlTime;
 @synthesize hlPlace;
 @synthesize hlConversation;
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    if(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]){
+        UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+        gestureRecognizer.delegate = self;
+        [self addGestureRecognizer:gestureRecognizer];
+        [gestureRecognizer release];
+        
+        barnnerRect = CGRectZero;
+        textbarRect = CGRectZero;
+        titleRect = CGRectZero;
+        avatarRect = CGRectZero;
+        timeRect = CGRectZero;
+        convRect = CGRectZero;
+        placeRect = CGRectZero;
+    }
+    return self;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+    CGPoint location = [gestureRecognizer locationInView:gestureRecognizer.view];
+    
+    if (conversationCount > 0) {
+        if (CGRectContainsPoint(convRect, location)) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (void)handleTap:(UITapGestureRecognizer*)gestureRecognizer{
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        CGPoint location = [gestureRecognizer locationInView:gestureRecognizer.view];
+        
+        if (conversationCount > 0) {
+            if (CGRectContainsPoint(convRect, location)) {
+                NSLog(@"CrossCard hit conversation");
+            }
+        }
+    }
+}
 
 - (void)dealloc {
 	[title release];
@@ -61,7 +105,8 @@
         [self setNeedsDisplay];
     }
     if (image != nil) {
-        CGSize targetSize = CGSizeMake(320 - 13 * 2, 45);
+        NSLog(@"CrossCard setBannerimg");
+        CGSize targetSize = CGSizeMake(320 - CARD_VERTICAL_MARGIN * 2, 45);
                 
         //If scaleFactor is not touched, no scaling will occur
         CGFloat scaleFactor = 1.0;
@@ -90,31 +135,36 @@
 }
 
 - (void)layoutSubviews{
+    NSLog(@"CrossCard layoutSubviews");
 	CGRect b = [self bounds];
 	[contentView setFrame:b];
-    [super layoutSubviews];
-}
-- (void)drawContentView:(CGRect)rect{
-    CGRect b = [self bounds];
-    // Rect caculation
-    int cardMargin = 13;
-    CGRect barnnerRect = CGRectMake(b.origin.x + cardMargin, b.origin.y + 8, b.size.width - cardMargin * 2, 45);
-    CGRect textbarRect = CGRectMake(b.origin.x + cardMargin, barnnerRect.origin.y + barnnerRect.size.height, b.size.width - cardMargin * 2, 28);
+     [super layoutSubviews];
+    
+    barnnerRect = CGRectMake(b.origin.x + CARD_VERTICAL_MARGIN, b.origin.y + 8, b.size.width - CARD_VERTICAL_MARGIN * 2, 45);
+    textbarRect = CGRectMake(b.origin.x + CARD_VERTICAL_MARGIN, barnnerRect.origin.y + barnnerRect.size.height, b.size.width - CARD_VERTICAL_MARGIN * 2, 28);
     
     int paddingH = 8;
     int avatarWidth = 45;
     int titlePaddingV = 10;
-    CGRect titleRect = CGRectMake(barnnerRect.origin.x + paddingH, barnnerRect.origin.y + titlePaddingV, barnnerRect.size.width - avatarWidth - paddingH, barnnerRect.size.height - titlePaddingV * 2);
-    CGRect avatarRect = CGRectMake(titleRect.origin.x + titleRect.size.width, barnnerRect.origin.y, avatarWidth, barnnerRect.size.height);
+    titleRect = CGRectMake(barnnerRect.origin.x + paddingH, barnnerRect.origin.y + titlePaddingV, barnnerRect.size.width - avatarWidth - paddingH, barnnerRect.size.height - titlePaddingV * 2);
+    avatarRect = CGRectMake(titleRect.origin.x + titleRect.size.width, barnnerRect.origin.y, avatarWidth, barnnerRect.size.height);
     
     int convw = 0;
     int textPaddingV = 4;
-    CGRect timeRect = CGRectMake(textbarRect.origin.x + paddingH, textbarRect.origin.y + textPaddingV, 102, textbarRect.size.height - textPaddingV * 2);
-    CGRect convRect = CGRectMake(textbarRect.origin.x + textbarRect.size.width - 33, textbarRect.origin.y , 33, textbarRect.size.height);
+    timeRect = CGRectMake(textbarRect.origin.x + paddingH, textbarRect.origin.y + textPaddingV, 102, textbarRect.size.height - textPaddingV * 2);
+    convRect = CGRectMake(textbarRect.origin.x + textbarRect.size.width - 33, textbarRect.origin.y , 33, textbarRect.size.height);
     if (conversationCount > 0) {
         convw = convRect.size.width;
     }
-    CGRect placeRect = CGRectMake(timeRect.origin.x + timeRect.size.width + paddingH * 2, textbarRect.origin.y + textPaddingV, textbarRect.size.width - ( timeRect.size.width + paddingH * 3) - convw, textbarRect.size.height - textPaddingV * 2);
+    placeRect = CGRectMake(timeRect.origin.x + timeRect.size.width + paddingH * 2, textbarRect.origin.y + textPaddingV, textbarRect.size.width - ( timeRect.size.width + paddingH * 3) - convw, textbarRect.size.height - textPaddingV * 2);
+    
+   
+}
+
+- (void)drawContentView:(CGRect)rect{
+    CGRect b = [self bounds];
+    // Rect caculation
+    
     // backgound
     [[UIColor blackColor] setFill];
     UIRectFill(b);
@@ -130,7 +180,7 @@
     }
     
     if (hlTitle){
-        [[UIColor COLOR_RGB(0xff, 0xff,0xff)] set];
+        [[UIColor COLOR_RGB(58, 110, 165)] set];
     }else{
         [[UIColor COLOR_RGB(0xff, 0xff,0xff)] set];
     }
@@ -142,7 +192,7 @@
     UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
     // text info
     if (hlTime){
-        [[UIColor COLOR_RGB(0x00, 0x00,0x00)] set];
+        [[UIColor COLOR_RGB(58, 110, 165)] set];
     }else{
         [[UIColor COLOR_RGB(0x00, 0x00,0x00)] set];
     }
@@ -152,7 +202,7 @@
         [time drawInRect:timeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     }
     if (hlPlace){
-        [[UIColor COLOR_RGB(0x00, 0x00,0x00)] set];
+        [[UIColor COLOR_RGB(58, 110, 165)] set];
     }else{
         [[UIColor COLOR_RGB(0x00, 0x00,0x00)] set];
     }
@@ -162,20 +212,25 @@
         [place drawInRect:placeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     }
     
-    if(conversationCount > 0){
-        if( conversationCount <= 64){
+    if (conversationCount > 0){
+        if (conversationCount <= 64) {
             [FONT_COLOR_88 set];
             [[UIImage imageNamed:@"conversation_badge_empty.png"] drawInRect:convRect];
-            [[UIColor COLOR_RGB(0x00, 0x00,0xFF)] set];
-            [[NSString stringWithFormat:@"%u",conversationCount] drawInRect:convRect withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
             
-        } else
+            [[UIColor COLOR_RGB(0x37, 0x84,0xD5)] set];
+            NSString * convCount = [NSString stringWithFormat:@"%u",conversationCount];
+            CGSize numSize = [convCount sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13]];
+            CGRect numRect = CGRectMake(CGRectGetMidX(convRect) - numSize.width / 2 - 4, CGRectGetMidY(convRect) - numSize.height / 2, numSize.width, numSize.height);
+            [convCount drawInRect:numRect withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
+        } else {
             [[UIImage imageNamed:@"conversation_badge_full.png"]drawInRect:convRect];
+        }
     }
     
    
     
 }
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
 //    UIView *view = [[UIView alloc] initWithFrame:self.frame];

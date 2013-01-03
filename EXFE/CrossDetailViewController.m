@@ -25,7 +25,7 @@
 #define OVERLAP                          (DECTOR_HEIGHT)
 #define CONTAINER_TOP_MARGIN             (DECTOR_HEIGHT - OVERLAP)
 #define CONTAINER_TOP_PADDING            (DECTOR_HEIGHT_EXTRA + DECTOR_MARGIN + OVERLAP)
-#define CONTAINER_VERTICAL_PADDING       (8)
+#define CONTAINER_VERTICAL_PADDING       (15)
 #define DESC_MIN_HEIGHT                  (18)
 #define DESC_MAX_HEIGHT                  (90)
 #define DESC_BOTTOM_MARGIN               (LARGE_SLOT)
@@ -111,7 +111,7 @@
         
         timeZoneView= [[UILabel alloc] initWithFrame:CGRectMake(left + timeAbsView.frame.size.width + TIME_ABSOLUTE_RIGHT_MARGIN, timeAbsView.frame.origin.y, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 - timeAbsView.frame.size.width  - TIME_ABSOLUTE_RIGHT_MARGIN , TIME_ZONE_HEIGHT)];
         timeZoneView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-        timeZoneView.backgroundColor = [UIColor greenColor];
+        timeZoneView.backgroundColor = [UIColor clearColor];
         [container addSubview:timeZoneView];
         
         placeTitleView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeAbsView.frame.origin.y + timeAbsView.frame.size.height + TIME_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_TITLE_HEIGHT)];

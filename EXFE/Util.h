@@ -33,6 +33,8 @@
 #define COLOR_RGB(r,g,b) colorWithRed:COLOR255(r) green:COLOR255(g) blue:COLOR255(b) alpha:1
 #define COLOR_WA(w,a) colorWithWhite:COLOR255(w)  alpha:COLOR255(a)
 
+#define COLOR_EXFEE_BLUE COLOR_RGB(0x37, 0x84,0xD5)
+
 
 #define MERCATOR_OFFSET 268435456
 #define MERCATOR_RADIUS 85445659.44705395

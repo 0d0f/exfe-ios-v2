@@ -7,6 +7,7 @@
 //
 
 #import "EXLabel.h"
+#import "Util.h"
 
 @implementation EXLabel
 
@@ -30,12 +31,18 @@
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         
         CGContextBeginPath(ctx);
-        CGContextMoveToPoint   (ctx, CGRectGetMaxX(self.bounds), CGRectGetMaxY(self.bounds) - 10 );  // top left
-        CGContextAddLineToPoint(ctx, CGRectGetMaxX(self.bounds), CGRectGetMaxY(self.bounds));  // mid right
-        CGContextAddLineToPoint(ctx, CGRectGetMaxX(self.bounds) - 10, CGRectGetMaxY(self.bounds));  // bottom left
+        if (isExpended) {
+            CGContextMoveToPoint   (ctx, CGRectGetMaxX(self.bounds), CGRectGetMaxY(self.bounds) - 5 ); 
+            CGContextAddLineToPoint(ctx, CGRectGetMaxX(self.bounds) - 5, CGRectGetMaxY(self.bounds) - 5); 
+            CGContextAddLineToPoint(ctx, CGRectGetMaxX(self.bounds) - 5, CGRectGetMaxY(self.bounds)); 
+        }else{
+            CGContextMoveToPoint   (ctx, CGRectGetMaxX(self.bounds), CGRectGetMaxY(self.bounds) - 5 );  
+            CGContextAddLineToPoint(ctx, CGRectGetMaxX(self.bounds), CGRectGetMaxY(self.bounds)); 
+            CGContextAddLineToPoint(ctx, CGRectGetMaxX(self.bounds) - 5, CGRectGetMaxY(self.bounds));
+        }
         CGContextClosePath(ctx);
         
-        CGContextSetRGBFillColor(ctx, 0, 0, 0, 1);
+        CGContextSetRGBFillColor(ctx, COLOR255(0x7F), COLOR255(0x7F), COLOR255(0x7F), 1);
         CGContextFillPath(ctx);
     }
 }
@@ -48,16 +55,13 @@
     NSString* four_lines = @"M\nM\nM\nM"; // 4 lines
     CGSize fit4 = [four_lines sizeWithFont:self.font constrainedToSize:rect lineBreakMode:self.lineBreakMode];
     CGSize fitFull = [self.text sizeWithFont:self.font constrainedToSize:rect lineBreakMode:self.lineBreakMode];
+    hasMore = fitFull.height > fit4.height;
     CGFloat bestHeight = fitFull.height;
     if (self.numberOfLines > 0){
-        if (fit4.height < bestHeight){
-            bestHeight = fit4.height;
-            hasMore = YES;
-        }else{
-            hasMore = NO;
-        }
+        bestHeight = MIN(fit4.height, bestHeight);
+        isExpended = NO;
     }else{
-        hasMore = NO;
+        isExpended = YES;
     }
     
     self.frame = CGRectMake(CGRectGetMinX(self.frame) , CGRectGetMinY(self.frame), ow, bestHeight);

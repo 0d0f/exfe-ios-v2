@@ -10,6 +10,7 @@
 
 @interface EXLabel : UILabel{
     BOOL hasMore;
+    BOOL isExpended;
 }
 
 @end

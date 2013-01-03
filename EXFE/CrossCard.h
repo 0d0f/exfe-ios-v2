@@ -9,7 +9,7 @@
 #import "ABTableViewCell.h"
 #import <CoreText/CoreText.h>
 
-@interface CrossCard : ABTableViewCell{
+@interface CrossCard : ABTableViewCell<UIGestureRecognizerDelegate>{
     NSString *title;
     UIImage *avatar;
     NSString *time;
@@ -20,6 +20,15 @@
     BOOL hlTime;
     BOOL hlPlace;
     BOOL hlConversation;
+    
+    
+    CGRect barnnerRect;
+    CGRect textbarRect;
+    CGRect titleRect;
+    CGRect avatarRect;
+    CGRect timeRect;
+    CGRect convRect;
+    CGRect placeRect;
 }
 @property (nonatomic, copy) NSString* title;
 @property (nonatomic, retain) NSString* time;

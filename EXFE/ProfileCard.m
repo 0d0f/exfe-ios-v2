@@ -148,7 +148,7 @@
     [string addAttribute:(NSString*)kCTFontAttributeName  value:(id)fontRef range:NSMakeRange(0,[string length])];
     CFRelease(fontRef);
     
-    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_RGB(0x00, 0x00,0xFF)].CGColor range:NSMakeRange(9,3)];
+    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_EXFEE_BLUE].CGColor range:NSMakeRange(9,3)];
     
     CTTextAlignment alignment = kCTRightTextAlignment;
     CTParagraphStyleSetting setting[1] = {
