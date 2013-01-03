@@ -11,6 +11,7 @@
 #import "EFTime.h"
 #import "ImgCache.h"
 #import "MapPin.h"
+#import "Place+Helper.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -24,7 +25,7 @@
 #define OVERLAP                          (DECTOR_HEIGHT)
 #define CONTAINER_TOP_MARGIN             (DECTOR_HEIGHT - OVERLAP)
 #define CONTAINER_TOP_PADDING            (DECTOR_HEIGHT_EXTRA + DECTOR_MARGIN + OVERLAP)
-#define CONTAINER_VERTICAL_PADDING       (8)
+#define CONTAINER_VERTICAL_PADDING       (15)
 #define DESC_MIN_HEIGHT                  (18)
 #define DESC_MAX_HEIGHT                  (90)
 #define DESC_BOTTOM_MARGIN               (LARGE_SLOT)
@@ -75,18 +76,19 @@
     {
         
         int left = CONTAINER_VERTICAL_PADDING;
-        descView = [[UILabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 40)];
+        descView = [[EXLabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 80)];
         descView.textColor = [UIColor COLOR_RGB(0x33, 0x33, 0x33)];
         descView.numberOfLines = 4;
         descView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         descView.shadowColor = [UIColor whiteColor];
         descView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-        descView.backgroundColor = [UIColor lightGrayColor];
+        descView.backgroundColor = [UIColor clearColor];
+        descView.lineBreakMode = NSLineBreakByWordWrapping;
         [container addSubview:descView];
         
         exfeeSuggestHeight = 70;
         exfeeShowview = [[EXImagesCollectionView alloc]initWithFrame:CGRectMake(c.origin.x, CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN - EXFEE_OVERLAP, c.size.width, exfeeSuggestHeight + EXFEE_OVERLAP)];
-        exfeeShowview.backgroundColor = [UIColor grayColor];
+        exfeeShowview.backgroundColor = [UIColor clearColor];
         [exfeeShowview calculateColumn];
         [exfeeShowview setDataSource:self];
         [exfeeShowview setDelegate:self];
@@ -97,19 +99,19 @@
         timeRelView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         timeRelView.shadowColor = [UIColor whiteColor];
         timeRelView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-        timeRelView.backgroundColor = [UIColor lightGrayColor];
+        timeRelView.backgroundColor = [UIColor clearColor];
         [container addSubview:timeRelView];
         
         timeAbsView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeRelView.frame.origin.y + timeRelView.frame.size.height + TIME_RELATIVE_BOTTOM_MARGIN, c.size.width /2 -  CONTAINER_VERTICAL_PADDING, TIME_ABSOLUTE_HEIGHT)];
         timeAbsView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         timeAbsView.shadowColor = [UIColor whiteColor];
         timeAbsView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-        timeAbsView.backgroundColor = [UIColor lightGrayColor];
+        timeAbsView.backgroundColor = [UIColor clearColor];
         [container addSubview:timeAbsView];
         
         timeZoneView= [[UILabel alloc] initWithFrame:CGRectMake(left + timeAbsView.frame.size.width + TIME_ABSOLUTE_RIGHT_MARGIN, timeAbsView.frame.origin.y, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 - timeAbsView.frame.size.width  - TIME_ABSOLUTE_RIGHT_MARGIN , TIME_ZONE_HEIGHT)];
         timeZoneView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-        timeZoneView.backgroundColor = [UIColor greenColor];
+        timeZoneView.backgroundColor = [UIColor clearColor];
         [container addSubview:timeZoneView];
         
         placeTitleView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeAbsView.frame.origin.y + timeAbsView.frame.size.height + TIME_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_TITLE_HEIGHT)];
@@ -118,7 +120,7 @@
         placeTitleView.shadowColor = [UIColor whiteColor];
         placeTitleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         placeTitleView.numberOfLines = 2;
-        placeTitleView.backgroundColor = [UIColor lightGrayColor];
+        placeTitleView.backgroundColor = [UIColor clearColor];
         [container addSubview:placeTitleView];
         
         placeDescView= [[UILabel alloc] initWithFrame:CGRectMake(left, placeTitleView.frame.origin.y + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_DESC_HEIGHT)];
@@ -127,7 +129,7 @@
         placeDescView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         placeDescView.numberOfLines = 4;
         placeDescView.lineBreakMode = NSLineBreakByWordWrapping;
-        placeDescView.backgroundColor = [UIColor lightGrayColor];
+        placeDescView.backgroundColor = [UIColor clearColor];
         [container addSubview:placeDescView];
         
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
@@ -217,6 +219,7 @@
 //    }
     if (descView.hidden == NO && CGRectContainsPoint(descView.frame, location)) {
         [self showDescriptionFullContent: (descView.numberOfLines != 0)];
+        return;
     }
 //    if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
 //    {
@@ -312,7 +315,6 @@
     }else{
         descView.text = x.cross_description;
         descView.hidden = NO;
-        [descView sizeToFit];
         [self setLayoutDirty];
     }
 }
@@ -411,7 +413,7 @@
 }
 
 - (void)fillPlace:(Place*)place{
-    if([Util placeIsEmpty:place]){
+    if(place == nil || [place isEmpty]){
         placeTitleView.text = @"Shomewhere";
         placeDescView.text = @"";
         placeDescView.hidden = YES;
@@ -419,13 +421,13 @@
         [self setLayoutDirty];
     }else {
         
-        if ([Util placeHasTitle:place]){
+        if ([place hasTitle]){
             placeTitleView.text = place.title;
         }else{
             placeTitleView.text = @"Shomewhere";
         }
         
-        if ([Util placeHasDescription:place]){
+        if ([place hasDescription]){
             placeDescView.text = place.place_description;
             placeDescView.hidden = NO;
             [placeDescView sizeToFit];
@@ -434,7 +436,7 @@
             placeDescView.hidden = YES;
         }
         
-        if ([Util placeHasGeo:place]){
+        if ([place hasGeo]){
             mapView.hidden = NO;
             float delta = 0.005;
             CLLocationCoordinate2D location;
@@ -463,13 +465,11 @@
     if (needfull){
         if (descView.numberOfLines != 0){
             descView.numberOfLines = 0;
-            [descView sizeToFit];
             [self setLayoutDirty];
         }
     }else{
         if (descView.numberOfLines == 0){
             descView.numberOfLines = 4;
-            [descView sizeToFit];
             [self setLayoutDirty];
         }
     }
@@ -490,7 +490,17 @@
         
         // Description
         if (descView.hidden == NO) {
-            descView.frame = CGRectOffset(descView.frame, left - CGRectGetMinX(descView.frame), baseY - CGRectGetMinY(descView.frame));
+//            CGSize rect = CGSizeMake(width, INFINITY);
+//            NSString* four_lines = @"M\nM\nM\nM";
+//            CGSize fit4 = [four_lines sizeWithFont:descView.font constrainedToSize:rect lineBreakMode:descView.lineBreakMode];
+//            CGSize fitFull = [descView.text sizeWithFont:descView.font constrainedToSize:rect lineBreakMode:descView.lineBreakMode];
+//            CGFloat bestHeight = fitFull.height;
+//            if (descView.numberOfLines == 4){
+//                bestHeight = MIN(fit4.height, fitFull.height);
+//            }
+//            descView.frame = CGRectMake(left , baseY, width, bestHeight);
+            descView.frame = CGRectMake(left , baseY, width, 80);
+            [descView sizeToFit];
             baseX = CGRectGetMaxX(descView.frame);
             baseY = CGRectGetMaxY(descView.frame) ;
         }
@@ -567,18 +577,20 @@
                 ph = PLACE_DESC_MAX_HEIGHT;
             }
             placeDescView.frame = CGRectMake(baseX, baseY, width, ph);
+        }else{
+            placeDescView.frame = CGRectMake(baseX, baseY, 0, 0);
         }
         
         // Map
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
-        int b = (placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + c.origin.y + OVERLAP /*+ SMALL_SLOT */);
-        mapView.frame = CGRectMake(0, placeDescView.frame.origin.y + placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b);
+        int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + container.frame.origin.y  + OVERLAP /*+ SMALL_SLOT */);
+        mapView.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b);
         
         CGSize s = container.contentSize;
         if (mapView.hidden){
-            s.height = container.frame.origin.y + placeDescView.frame.origin.y + placeDescView.frame.size.height;
+            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(placeDescView.frame) + OVERLAP;
         }else{
-            s.height = container.frame.origin.y + mapView.frame.origin.y + mapView.frame.size.height;
+            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(mapView.frame) + OVERLAP;
         }
         container.contentSize = s;
         

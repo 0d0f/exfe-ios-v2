@@ -22,7 +22,7 @@
 #import "EXRSVPStatusView.h"
 #import "EXRSVPMenuView.h"
 #import "APICrosses.h"
-
+#import "EXLabel.h"
 
 
 @interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate>{
