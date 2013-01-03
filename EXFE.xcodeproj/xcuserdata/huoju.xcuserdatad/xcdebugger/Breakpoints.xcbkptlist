@@ -1906,11 +1906,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/EXImagesCollectionView.m"
-         timestampString = "378208895.036702"
+         timestampString = "378451811.49074"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "199"
-         endingLineNumber = "199"
+         startingLineNumber = "208"
+         endingLineNumber = "208"
          landmarkName = "-reloadData"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1919,11 +1919,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/EXImagesCollectionView.m"
-         timestampString = "378208895.036702"
+         timestampString = "378451811.49074"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "264"
-         endingLineNumber = "264"
+         startingLineNumber = "270"
+         endingLineNumber = "270"
          landmarkName = "-onImageTouch:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1951,6 +1951,45 @@
          startingLineNumber = "60"
          endingLineNumber = "60"
          landmarkName = "-setDelegate:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/CrossDetailViewController.m"
+         timestampString = "378376265.453402"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "686"
+         endingLineNumber = "686"
+         landmarkName = "-imageCollectionView:didSelectRowAtIndex:row:col:frame:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/CrossDetailViewController.m"
+         timestampString = "378898344.532857"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "950"
+         endingLineNumber = "950"
+         landmarkName = "-objectLoader:didFailWithError:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/EXImagesCollectionView.m"
+         timestampString = "378451339.324147"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "131"
+         endingLineNumber = "131"
+         landmarkName = "-reloadData"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

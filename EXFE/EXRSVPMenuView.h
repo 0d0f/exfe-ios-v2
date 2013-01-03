@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import "Util.h"
 #import "Invitation.h"
 #import "Identity.h"

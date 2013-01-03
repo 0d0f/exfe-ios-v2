@@ -49,18 +49,10 @@
 //        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:imagerect cornerRadius:3];
         CGContextRef currentContext = UIGraphicsGetCurrentContext();
         CGContextSaveGState(currentContext);
-//        CGContextBeginPath(currentContext);
-//        CGContextAddPath(currentContext, maskPath.CGPath);
-//        CGContextClosePath(currentContext);
-//        CGContextClip(currentContext);
-//    
         CGContextTranslateCTM(currentContext, 0, self.bounds.size.height);
         CGContextScaleCTM(currentContext, 1.0, -1.0);
-//        if(![self.rsvp_status isEqualToString:@"ACCEPTED"])
-//            CGContextSetAlpha(currentContext, 0.50);
 
         if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-//            if(app.userid ==[invitation.identity.connected_user_id intValue]){
             if(isMe){
                 avatar=[avatar roundedCornerImage:40 borderSize:0];
             }
@@ -93,12 +85,7 @@
         CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , frameimageref);
         CGImageRelease(frameimageref);
     }
-    if([invitation.identity.unreachable boolValue]==YES){
-        CGImageRef frameimageref = CGImageRetain([UIImage imageNamed:@"exfee_unreachable.png"].CGImage);
-        CGContextDrawImage(currentContext,CGRectMake(rect.size.width-20, 0, 20,20) , frameimageref);
-        CGImageRelease(frameimageref);
-        
-    }
+
     
 
     if([invitation.mates intValue]>0){
@@ -149,7 +136,13 @@
         }
     }
     
-
+    if([invitation.identity.unreachable boolValue]==YES){
+        CGContextTranslateCTM(currentContext, 0, self.bounds.size.height);
+        CGContextScaleCTM(currentContext, 1.0, -1.0);
+        CGImageRef frameimageref = CGImageRetain([UIImage imageNamed:@"exfee_unreachable.png"].CGImage);
+        CGContextDrawImage(currentContext,CGRectMake(rect.size.width-20, 0, 20,20) , frameimageref);
+        CGImageRelease(frameimageref);
+    }
 
 //        if(self.isHost==YES)
 //            [[UIImage imageNamed:@"exfee_frame.png"] drawInRect:CGRectMake(rect.origin.x-1, rect.origin.y-1, 42, 42)];
