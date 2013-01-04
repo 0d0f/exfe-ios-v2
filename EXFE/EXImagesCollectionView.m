@@ -126,9 +126,11 @@
     for(UIView *view in self.subviews){
         if([view isKindOfClass:[EXInvitationItem class]])
             [view removeFromSuperview];
+//        [view release];
     }
-    if(acceptlabel!=nil)
-        [acceptlabel removeFromSuperview];
+    if(acceptlabel!=nil){
+        [acceptlabel setHidden:YES];
+    }
     
     [itemsCache removeAllObjects];
     [itemsCache release];
@@ -195,14 +197,18 @@
                     [self addSubview:item];
                     if([item.invitation.rsvp_status isEqualToString:@"ACCEPTED"]){
                         acceptednum += 1;
+                        if( acceptednum==1){
                         if(acceptlabel==nil){
                             acceptlabel=[[UILabel alloc] initWithFrame:CGRectMake(x, y-12, 50, 12)];
                             [acceptlabel setBackgroundColor:[UIColor colorWithRed:58.0/255.0f green:110.0/255.0f blue:165.0/255.0f alpha:0.2]];
-                            acceptlabel.text=@"Accepted";
                             [acceptlabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
                             [acceptlabel setTextColor:[UIColor colorWithRed:103/255.0 green:127/255.0 blue:153/255.0 alpha:1]];
                             [acceptlabel setTextAlignment:NSTextAlignmentCenter];
                             [self addSubview:acceptlabel];
+                        }
+                        [acceptlabel setFrame:CGRectMake(x, y-12, 50, 12)];
+                        acceptlabel.text=@"Accepted";
+                        [acceptlabel setHidden:NO];
                         }
 //                        acceptflag=YES;
                     }
@@ -270,6 +276,7 @@
 
 - (void)dealloc {
 	[grid release];
+    [acceptlabel release];
     [super dealloc];
 }
 @end

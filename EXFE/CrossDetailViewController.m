@@ -705,18 +705,74 @@
         }
         if(rsvpstatusview==nil){
                 rsvpstatusview=[[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-44, 180, 44) withDelegate:self];
-
                 [self.view addSubview:rsvpstatusview];
         }
         rsvpstatusview.invitation=invitation;
 
+        
+        float avatar_center=rect.origin.x+rect.size.width/2;
+        int rsvpstatus_x=avatar_center-rsvpstatusview.frame.size.width/2;
+        if(rsvpstatus_x<0)
+            rsvpstatus_x=0;
+        if(rsvpstatus_x+rsvpstatusview.frame.size.width>self.view.frame.size.width)
+            rsvpstatus_x=self.view.frame.size.width-rsvpstatusview.frame.size.width;
+        
         if(app.userid ==[invitation.identity.connected_user_id intValue]){
             [self showMenu:invitation];
             [self hideStatusView];
             [rsvpstatusview setHidden:YES];
         }else{
             [rsvpstatusview setHidden:NO];
-            [rsvpstatusview setFrame:CGRectMake(x, y-44, 180, 44)];
+//            CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:
+//                                                 @"transform.scale"];
+//            scaleAnimation.duration= 1;
+//            scaleAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+//            scaleAnimation.fromValue = [NSNumber numberWithFloat:0.5];
+//            scaleAnimation.toValue = [NSNumber numberWithFloat:1.0];
+//            [[rsvpstatusview layer] addAnimation:scaleAnimation forKey:@"scaleAnimation"];
+
+            
+            NSLog(@"from %f to %i position %f",rsvpstatusview.frame.origin.x,rsvpstatus_x,[rsvpstatusview layer].position.x);
+            
+            [rsvpstatusview setFrame:CGRectMake(rsvpstatus_x, y-rsvpstatusview.frame.size.height, rsvpstatusview.frame.size.width, rsvpstatusview.frame.size.height)];
+            
+//            [[rsvpstatusview layer] setValue:[NSNumber numberWithInt:y-rsvpstatusview.frame.size.height+30-rsvpstatusview.frame.origin.y] forKeyPath:@"transform.translation.y"];
+//
+            rsvpstatus_x-=rsvpstatusview.frame.origin.x;
+            CABasicAnimation *moveAnimation = [CABasicAnimation animationWithKeyPath:
+                                                @"transform.translation.y"];
+            moveAnimation.duration= 0.233;
+            moveAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+            
+            moveAnimation.fromValue =[NSNumber numberWithFloat:y-rsvpstatusview.frame.size.height+30-rsvpstatusview.frame.origin.y];
+            moveAnimation.toValue =[NSNumber numberWithFloat:y-rsvpstatusview.frame.size.height-rsvpstatusview.frame.origin.y];
+            moveAnimation.removedOnCompletion = NO;
+            moveAnimation.fillMode = kCAFillModeForwards;
+            [[rsvpstatusview layer] addAnimation:moveAnimation forKey:@"moveAnimation"];
+            
+            CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:
+                                               @"transform.scale"];
+            scaleAnimation.duration= 0.2;
+            scaleAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+            
+            scaleAnimation.fromValue =[NSNumber numberWithInt:0.1];
+            scaleAnimation.toValue =[NSNumber numberWithInt:1];
+            scaleAnimation.removedOnCompletion = NO;
+            scaleAnimation.fillMode = kCAFillModeForwards;
+            [[rsvpstatusview layer] addAnimation:scaleAnimation forKey:@"scaleAnimation"];
+
+            CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:
+                                                @"opacity"];
+            opacityAnimation.duration= 0.3;
+            opacityAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+            
+            opacityAnimation.fromValue =[NSNumber numberWithInt:0];
+            opacityAnimation.toValue =[NSNumber numberWithInt:1];
+            opacityAnimation.removedOnCompletion = NO;
+            opacityAnimation.fillMode = kCAFillModeForwards;
+            [[rsvpstatusview layer] addAnimation:opacityAnimation forKey:@"opacityAnimation"];
+
+            
             [rsvpstatusview setNeedsDisplay];
             [self hideMenu];
         }
@@ -792,13 +848,14 @@
     
 - (void) showMenu:(Invitation*)_invitation{
     if(rsvpmenu==nil){
-        rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 41, 125, 152) withDelegate:self ];
+        rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 152) withDelegate:self ];
         [self.view addSubview:rsvpmenu];
     }
     rsvpmenu.invitation=_invitation;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, 41, 125, 152)];
+    
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y-20, 125, 152)];
     if(rsvpstatusview!=nil)
        [rsvpstatusview setHidden:YES];
     
@@ -809,7 +866,8 @@
 - (void)hideMenu{
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, 41, 125, 152)];
+    
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, rsvpmenu.frame.origin.y, 125, 152)];
     [UIView commitAnimations];
 }
 
@@ -892,10 +950,11 @@
     return nil;
 }
 
+#pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
     if([objects count]>0){
-        [exfeeShowview reloadData];
+        [self fillExfee];
     }
 
 }

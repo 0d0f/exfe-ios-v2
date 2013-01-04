@@ -91,7 +91,8 @@
 }
 
 - (void) showMenu{
-    [delegate showMenu:invitation];
+    [self setHidden:YES];
+//    [delegate showMenu:invitation];
 //    NSLog(@"showMenu");
 }
 @end
