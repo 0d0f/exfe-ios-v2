@@ -876,20 +876,16 @@
 }
 
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu{
-    NSLog(@"RSVPAcceptedMenuView:%@",menu.invitation);
     [self sendrsvp:@"ACCEPTED" invitation:menu.invitation];
-//    NSLog(@"%@",json);
     [self hideMenu];
 }
 
 - (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu{
-    NSLog(@"RSVPUnavailableMenuView");
     [self sendrsvp:@"DECLINED" invitation:menu.invitation];
     [self hideMenu];
 }
 
 - (void)RSVPPendinMenuView:(EXRSVPMenuView *) menu{
-    NSLog(@"RSVPPendinMenuView");
     [self sendrsvp:@"INTERESTED" invitation:menu.invitation];
     [self hideMenu];
 }
@@ -935,6 +931,11 @@
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             [alert release];
+            
+//            EXAlertView *alertview=[EXAlertView showAlertTo:self.view frame:CGRectMake(10, 10, self.view.frame.size.width-20, 22) message:@"alert" animated:YES];
+//            [alertview setBackgroundColor:[UIColor colorWithRed:255/255.0 green:255/255.0 blue:204/255.0 alpha:0.9]];
+//            [EXAlertView hideAlertFrom:self.view animated:YES delay:2 ];
+
         };
     }];
     

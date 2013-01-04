@@ -23,6 +23,7 @@
 #import "EXRSVPMenuView.h"
 #import "APICrosses.h"
 #import "EXLabel.h"
+#import "EXAlertView.h"
 
 
 @interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate>{

@@ -91,6 +91,8 @@
 		782B3CDA156B997200721150 /* SigninViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CD8156B997200721150 /* SigninViewController.xib */; };
 		7832B666158DAEAA007A052D /* GatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7832B664158DAEAA007A052D /* GatherViewController.m */; };
 		7832B667158DAEAA007A052D /* GatherViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7832B665158DAEAA007A052D /* GatherViewController.xib */; };
+		78335FAC1695912B00ADFE10 /* EXAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78335FAB1695912B00ADFE10 /* EXAlertView.m */; };
+		78335FAF16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m in Sources */ = {isa = PBXBuildFile; fileRef = 78335FAE16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m */; };
 		783662D115E37C1E00F4AEAC /* exclamation.png in Resources */ = {isa = PBXBuildFile; fileRef = 783662CF15E37C1E00F4AEAC /* exclamation.png */; };
 		783662D215E37C1E00F4AEAC /* exclamation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783662D015E37C1E00F4AEAC /* exclamation@2x.png */; };
 		783662D515E3EC9600F4AEAC /* ProfileBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 783662D415E3EC9600F4AEAC /* ProfileBackgroundView.m */; };
@@ -565,6 +567,10 @@
 		7832B663158DAEAA007A052D /* GatherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GatherViewController.h; sourceTree = "<group>"; };
 		7832B664158DAEAA007A052D /* GatherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GatherViewController.m; sourceTree = "<group>"; };
 		7832B665158DAEAA007A052D /* GatherViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GatherViewController.xib; sourceTree = "<group>"; };
+		78335FAA1695912B00ADFE10 /* EXAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAlertView.h; sourceTree = "<group>"; };
+		78335FAB1695912B00ADFE10 /* EXAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAlertView.m; sourceTree = "<group>"; };
+		78335FAD16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PerformBlockAfterDelay.h"; sourceTree = "<group>"; };
+		78335FAE16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PerformBlockAfterDelay.m"; sourceTree = "<group>"; };
 		783662CF15E37C1E00F4AEAC /* exclamation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exclamation.png; sourceTree = "<group>"; };
 		783662D015E37C1E00F4AEAC /* exclamation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exclamation@2x.png"; sourceTree = "<group>"; };
 		783662D315E3EC9600F4AEAC /* ProfileBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileBackgroundView.h; sourceTree = "<group>"; };
@@ -1208,12 +1214,14 @@
 				4FE8D3C81681926C00222420 /* UIImage+Resize.m */,
 				4FE8D3C91681926C00222420 /* UIImage+RoundedCorner.h */,
 				4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */,
-				78313BB9160033F100188E54 /* Flurry */,
-				78B46B6C15FC87DB006738D7 /* MBProgressHUD.m */,
 				78B46B6D15FC87DB006738D7 /* MBProgressHUD.h */,
+				78B46B6C15FC87DB006738D7 /* MBProgressHUD.m */,
+				78313BB9160033F100188E54 /* Flurry */,
 				785F6F791585A5A200BF8EA0 /* PullRefreshTableViewController.h */,
 				785F6F7A1585A5A200BF8EA0 /* PullRefreshTableViewController.m */,
 				785FD54F158065820056590D /* UIInputToolbar */,
+				78335FAD16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.h */,
+				78335FAE16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m */,
 			);
 			name = lib;
 			sourceTree = "<group>";
@@ -1368,6 +1376,8 @@
 				4F3355CF168C4F4700D398C0 /* MapPin.m */,
 				784D370E168C22C900987B6C /* EXRSVPMenuView.h */,
 				784D370F168C22C900987B6C /* EXRSVPMenuView.m */,
+				78335FAA1695912B00ADFE10 /* EXAlertView.h */,
+				78335FAB1695912B00ADFE10 /* EXAlertView.m */,
 			);
 			name = control;
 			sourceTree = "<group>";
@@ -2283,6 +2293,8 @@
 				4FC8FCEB168D912E00409779 /* EFTime+Helper.m in Sources */,
 				784D3741168EAE6E00987B6C /* Invitation.m in Sources */,
 				4F266F02168EC49900BDB9D5 /* EXLabel.m in Sources */,
+				78335FAC1695912B00ADFE10 /* EXAlertView.m in Sources */,
+				78335FAF16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
