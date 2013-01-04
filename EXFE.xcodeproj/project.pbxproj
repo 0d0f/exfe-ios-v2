@@ -174,6 +174,8 @@
 		785FD594158079970056590D /* toolbarbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58E158079970056590D /* toolbarbg@2x~iphone.png */; };
 		785FD595158079970056590D /* toolbarbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785FD58F158079970056590D /* toolbarbg~iphone.png */; };
 		78606CDE1696D6EE0014806A /* EXImagesCollectionGatherView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78606CDD1696D6EE0014806A /* EXImagesCollectionGatherView.m */; };
+		78606CE21696DA3F0014806A /* NewGatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78606CE01696DA3F0014806A /* NewGatherViewController.m */; };
+		78606CE31696DA3F0014806A /* NewGatherViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78606CE11696DA3F0014806A /* NewGatherViewController.xib */; };
 		78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78615B3B15788BCD003CF68A /* ABTableViewCell.m */; };
 		78615B401578CC22003CF68A /* ConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7840917815732A91006DF115 /* ConversationViewController.xib */; };
 		7865CD7F165A3C0300D0E86A /* x_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7865CD7D165A3C0300D0E86A /* x_bg.png */; };
@@ -678,6 +680,9 @@
 		785FD58F158079970056590D /* toolbarbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbarbg~iphone.png"; sourceTree = "<group>"; };
 		78606CDC1696D6EE0014806A /* EXImagesCollectionGatherView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXImagesCollectionGatherView.h; sourceTree = "<group>"; };
 		78606CDD1696D6EE0014806A /* EXImagesCollectionGatherView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXImagesCollectionGatherView.m; sourceTree = "<group>"; };
+		78606CDF1696DA3F0014806A /* NewGatherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewGatherViewController.h; sourceTree = "<group>"; };
+		78606CE01696DA3F0014806A /* NewGatherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewGatherViewController.m; sourceTree = "<group>"; };
+		78606CE11696DA3F0014806A /* NewGatherViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewGatherViewController.xib; sourceTree = "<group>"; };
 		78615B3A15788BCC003CF68A /* ABTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABTableViewCell.h; sourceTree = "<group>"; };
 		78615B3B15788BCD003CF68A /* ABTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABTableViewCell.m; sourceTree = "<group>"; };
 		7865CD7D165A3C0300D0E86A /* x_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_bg.png; sourceTree = "<group>"; };
@@ -1075,6 +1080,9 @@
 				78CEBFED15BFE7BE002BCA27 /* ExfeeInputViewController.h */,
 				78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */,
 				78CEBFEF15BFE7BE002BCA27 /* ExfeeInputViewController.xib */,
+				78606CDF1696DA3F0014806A /* NewGatherViewController.h */,
+				78606CE01696DA3F0014806A /* NewGatherViewController.m */,
+				78606CE11696DA3F0014806A /* NewGatherViewController.xib */,
 			);
 			name = gather;
 			sourceTree = "<group>";
@@ -2202,6 +2210,7 @@
 				78B91DE516884F1800BB98B1 /* rsvp_unavailable_stroke_26g5@2x.png in Resources */,
 				784D3720168DA3EA00987B6C /* arrow.png in Resources */,
 				784D3721168DA3EA00987B6C /* arrow@2x.png in Resources */,
+				78606CE31696DA3F0014806A /* NewGatherViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2307,6 +2316,7 @@
 				78335FAF16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m in Sources */,
 				4FAD642716968C7F001870FF /* CrossTime+Helper.m in Sources */,
 				78606CDE1696D6EE0014806A /* EXImagesCollectionGatherView.m in Sources */,
+				78606CE21696DA3F0014806A /* NewGatherViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

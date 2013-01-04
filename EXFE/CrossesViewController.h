@@ -16,6 +16,7 @@
 #import "EXSpinView.h"
 #import "MBProgressHUD.h"
 #import "ProfileCard.h"
+#import "NewGatherViewController.h"
 
 @interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate>
 {
