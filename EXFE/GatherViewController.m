@@ -171,7 +171,7 @@
     [exfeenum setHidden:YES];
 
     //TODO: workaround for a responder chain bug
-    exfeeShowview =[[EXImagesCollectionView alloc] initWithFrame:CGRectMake(INNER_MARGIN, crosstitle.frame.origin.x+crosstitle.frame.size.height, width, 120)];
+    exfeeShowview =[[EXImagesCollectionGatherView alloc] initWithFrame:CGRectMake(INNER_MARGIN, crosstitle.frame.origin.x+crosstitle.frame.size.height, width, 120)];
     [exfeeShowview setFrame:CGRectMake(INNER_MARGIN-6, 69, width, 60+12)];
     [exfeeShowview calculateColumn];
     [exfeeShowview setBackgroundColor:[UIColor clearColor]];
@@ -1759,12 +1759,12 @@
     [alert release];
 }
 
-#pragma mark EXImagesCollectionView Datasource methods
+#pragma mark EXImagesCollectionGatherView Datasource methods
 
-- (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
+- (NSInteger) numberOfimageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView{
     return [self exfeeIdentitiesCount];
 }
-- (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index{
+- (EXInvitationItem *)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView itemAtIndex:(int)index{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 
 //    EXInvitationItem *item=[[[EXInvitationItem alloc] init] autorelease];
@@ -1814,11 +1814,11 @@
     [arr release];
     return item;
 }
-- (NSArray *) selectedOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
+- (NSArray *) selectedOfimageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView{
     return exfeeSelected;
     
 }
-- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
+- (void)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView shouldResizeHeightTo:(float)height{
         
     if(viewmode==YES && exfeeShowview.editmode==NO)
     {
@@ -1836,15 +1836,15 @@
     
 }
 
-#pragma mark EXImagesCollectionView delegate methods
-- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
+#pragma mark EXImagesCollectionGatherView delegate methods
+- (void)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
     NSArray* reducedExfeeIdentities=[self getReducedExfeeIdentities];
     if(index==[reducedExfeeIdentities count])
     {
 //        if(viewmode==YES && exfeeShowview.editmode==NO)
 //            return;
-//        [self ShowGatherToolBar];
-//        [self ShowExfeeView];
+        [self ShowGatherToolBar];
+        [self ShowExfeeView];
     }
     else if(index <[reducedExfeeIdentities count]){
         
@@ -1867,51 +1867,13 @@
         [rsvpstatusview setNeedsDisplay];
         NSLog(@"click:%i",index);
     }
-//        [crosstitle resignFirstResponder];
-//        [crosstitle endEditing:YES];
-//        BOOL select_status=[[exfeeSelected objectAtIndex:index] boolValue];
-//        for( int i=0;i<[exfeeSelected count];i++){
-//            [exfeeSelected replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:NO]];
-//        }
-//        [exfeeSelected replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:!select_status]];
-//        [exfeeShowview reloadData];
-//        BOOL isSelect=NO;
-//        for(NSNumber *number in exfeeSelected){
-//            if([number boolValue]==YES)
-//                isSelect=YES;
-//        }
-//        if(isSelect){
-//            CGRect f=imageCollectionView.frame;
-//            float x=f.origin.x+rect.origin.x+rect.size.width/2;
-//            float y=f.origin.y+rect.origin.y;
-//            Invitation *invitation=[reducedExfeeIdentities objectAtIndex:index];
-//            [self ShowExfeePopOver:invitation pointTo:CGPointMake(x,y) arrowx:rect.origin.x+rect.size.width/2+f.origin.x];
-//            if(viewmode==YES && exfeeShowview.editmode==NO){
-//                [self ShowRsvpToolBar];
-//            }
-//            else
-//                [self ShowGatherToolBar];
-//        }
-//        else {
-//            if(viewmode==YES&& exfeeShowview.editmode==NO)
-//                [self ShowRsvpButton];
-//            else //if(exfeeShowview.editmode==YES)
-//                [gathertoolbar setHidden:YES];
-//            
-//        }
-//    }
+
 }
 
 
 - (void) sendrsvp:(NSString*)status{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     Identity *by_identity=[self getMyInvitation].identity;
-//    NSNumber *by_identity_id=[NSNumber numberWithInt:0];
-//    for (Invitation* invitation in cross.exfee.invitations )
-//    {
-//        if([invitation.identity.connected_user_id intValue] == app.userid)
-//            by_identity_id=invitation.identity.identity_id;
-//    }
     if(by_identity.identity_id>0)
     {
         NSMutableArray *postarray= [[NSMutableArray alloc] initWithCapacity:12];

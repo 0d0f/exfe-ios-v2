@@ -1,14 +1,15 @@
 //
-//  EXIconCollectionView.m
-//  IconListView
+//  EXImagesCollectionGatherView.m
+//  EXFE
 //
-//  Created by huoju on 6/20/12.
-//  Copyright (c) 2012 huoju. All rights reserved.
+//  Created by huoju on 1/4/13.
+//
 //
 
-#import "EXImagesCollectionView.h"
+#import "EXImagesCollectionGatherView.h"
 
-@implementation EXImagesCollectionView
+@implementation EXImagesCollectionGatherView
+
 @synthesize maxColumn;
 @synthesize maxRow;
 @synthesize imageWidth;
@@ -54,8 +55,8 @@
             x_count=0;
             y_count++;
         }
-//        int x=x_count*(imageWidth+imageXmargin*2);
-//        int y=y_count*(imageHeight+nameHeight+imageYmargin*2);
+        //        int x=x_count*(imageWidth+imageXmargin*2);
+        //        int y=y_count*(imageHeight+nameHeight+imageYmargin*2);
         int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
         int y=y_count*(imageHeight+imageYmargin*2)+y_start_offset;
         
@@ -87,27 +88,27 @@
 }
 - (void) setFrame:(CGRect)frame{
     [super setFrame:frame];
-//    [maskview setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+    //    [maskview setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 }
 - (void)drawRect:(CGRect)rect
 {
-
+    
 }
 - (void) HiddenAddButton{
-//    maskview.hiddenAddButton=YES;
-//    [maskview setNeedsDisplay];
+    //    maskview.hiddenAddButton=YES;
+    //    [maskview setNeedsDisplay];
 }
 - (void) ShowAddButton{
-//    maskview.hiddenAddButton=NO;
-//    [maskview setNeedsDisplay];
+    //    maskview.hiddenAddButton=NO;
+    //    [maskview setNeedsDisplay];
     
 }
 - (void) reloadData{
-
+    
     for(UIView *view in self.subviews){
         if([view isKindOfClass:[EXInvitationItem class]])
             [view removeFromSuperview];
-//        [view release];
+        //        [view release];
     }
     if(acceptlabel!=nil){
         [acceptlabel setHidden:YES];
@@ -147,14 +148,14 @@
         if(new_height!=self.frame.size.height)
             [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
     }
-
+    
     int x_count=0;
     int y_count=0;
     
-//    NSArray *selected=[_dataSource selectedOfimageCollectionView:self];
+    //    NSArray *selected=[_dataSource selectedOfimageCollectionView:self];
     int acceptednum=0;
     int allnum=0;
-//    BOOL acceptflag=NO;
+    //    BOOL acceptflag=NO;
     for(int i=0;i<=count;i++)
     {
         if( x_count==maxColumn){
@@ -163,38 +164,38 @@
         }
         int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
         int y=y_count*(imageHeight+imageYmargin*2)+y_start_offset;
-
+        
         if(i<count){
-    //        BOOL isSelected=[[selected objectAtIndex:i] boolValue];
+            //        BOOL isSelected=[[selected objectAtIndex:i] boolValue];
             EXInvitationItem *item=[itemsCache objectForKey:[NSNumber numberWithInt:i]];
             if(item==nil)
             {
                 EXInvitationItem *item=[_dataSource imageCollectionView:self itemAtIndex:i];
                 if(item!=nil){
-        //            item.isSelected=isSelected;
+                    //            item.isSelected=isSelected;
                     [item setFrame:CGRectMake(x, y, imageWidth+10, imageHeight+10)];
-        //            [item setBackgroundColor:[UIColor clearColor]];
+                    //            [item setBackgroundColor:[UIColor clearColor]];
                     [itemsCache setObject:item forKey:[NSNumber numberWithInt:i]];
                     [self addSubview:item];
                     if([item.invitation.rsvp_status isEqualToString:@"ACCEPTED"]){
                         acceptednum += 1;
                         if( acceptednum==1){
-                        if(acceptlabel==nil){
-                            acceptlabel=[[UILabel alloc] initWithFrame:CGRectMake(x, y-12, 50, 12)];
-                            [acceptlabel setBackgroundColor:[UIColor colorWithRed:58.0/255.0f green:110.0/255.0f blue:165.0/255.0f alpha:0.2]];
-                            [acceptlabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
-                            [acceptlabel setTextColor:[UIColor colorWithRed:103/255.0 green:127/255.0 blue:153/255.0 alpha:1]];
-                            [acceptlabel setTextAlignment:NSTextAlignmentCenter];
-                            [self addSubview:acceptlabel];
+                            if(acceptlabel==nil){
+                                acceptlabel=[[UILabel alloc] initWithFrame:CGRectMake(x, y-12, 50, 12)];
+                                [acceptlabel setBackgroundColor:[UIColor colorWithRed:58.0/255.0f green:110.0/255.0f blue:165.0/255.0f alpha:0.2]];
+                                [acceptlabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
+                                [acceptlabel setTextColor:[UIColor colorWithRed:103/255.0 green:127/255.0 blue:153/255.0 alpha:1]];
+                                [acceptlabel setTextAlignment:NSTextAlignmentCenter];
+                                [self addSubview:acceptlabel];
+                            }
+                            [acceptlabel setFrame:CGRectMake(x, y-12, 50, 12)];
+                            acceptlabel.text=@"Accepted";
+                            [acceptlabel setHidden:NO];
                         }
-                        [acceptlabel setFrame:CGRectMake(x, y-12, 50, 12)];
-                        acceptlabel.text=@"Accepted";
-                        [acceptlabel setHidden:NO];
-                        }
-//                        acceptflag=YES;
+                        //                        acceptflag=YES;
                     }
                     allnum+=1+[item.invitation.mates intValue];
-        //            [self sendSubviewToBack:item];
+                    //            [self sendSubviewToBack:item];
                 }
             }
             else{
@@ -203,14 +204,22 @@
             
         }
         else{
-            ExfeeNumberView *exfeecount=[[ExfeeNumberView alloc] initWithFrame:CGRectMake(x+5, y+5, 52, 52)];
-            exfeecount.acceptednumber=acceptednum;
-            exfeecount.allnumber=allnum;
-            exfeecount.backgroundColor=[UIColor whiteColor];
-            [self addSubview:exfeecount];
-            [exfeecount release];
+//            ExfeeNumberView *exfeecount=[[ExfeeNumberView alloc] initWithFrame:CGRectMake(x+5, y+5, 52, 52)];
+//            exfeecount.acceptednumber=acceptednum;
+//            exfeecount.allnumber=allnum;
+//            exfeecount.backgroundColor=[UIColor whiteColor];
+            if(addview==nil){
+                addview=[[UIView alloc] initWithFrame:CGRectMake(x+5, y+5, 52, 52)];
+                addview.backgroundColor=[UIColor blueColor];
+                [self addSubview:addview];
+                [addview release];
+            }
+            else{
+                [addview setFrame:CGRectMake(x+5, y+5, 52, 52)];
+            }
+//            [exfeecount release];
         }
-
+        
         x_count++;
     }
     if( x_count==maxColumn){
@@ -218,8 +227,8 @@
         y_count++;
     }
     [self setNeedsDisplay];
-//    maskview.itemsCache=itemsCache;
-//    [maskview setNeedsDisplay];
+    //    maskview.itemsCache=itemsCache;
+    //    [maskview setNeedsDisplay];
 }
 //-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
 //    NSLog(@"click");
@@ -244,12 +253,12 @@
         CGRect rect=[(NSValue*)[grid objectAtIndex:i] CGRectValue];
         BOOL inrect=CGRectContainsPoint(rect,point);
         if(inrect==YES){
-            if(countidx<=allcount){
+            if(countidx<=allcount+1){
                 [_delegate imageCollectionView:self didSelectRowAtIndex:i row:y_count col:x_count frame:rect];
             }
-            else if (countidx==allcount+1){
-                NSLog(@"click the sum grid: x=%i y=%i count=%i",x_count,y_count,allcount);
-            }
+//            else if (countidx==allcount+1){
+//                NSLog(@"click the sum grid: x=%i y=%i count=%i",x_count,y_count,allcount);
+//            }
         }
         x_count++;
     }
@@ -260,4 +269,5 @@
     [acceptlabel release];
     [super dealloc];
 }
+
 @end
