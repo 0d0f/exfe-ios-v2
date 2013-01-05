@@ -87,7 +87,7 @@
         [container addSubview:descView];
         
         exfeeSuggestHeight = 70;
-        exfeeShowview = [[EXImagesCollectionView alloc]initWithFrame:CGRectMake(c.origin.x, CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN - EXFEE_OVERLAP, c.size.width, exfeeSuggestHeight + EXFEE_OVERLAP)];
+        exfeeShowview = [[EXImagesCollectionGatherView alloc]initWithFrame:CGRectMake(c.origin.x, CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN - EXFEE_OVERLAP, c.size.width, exfeeSuggestHeight + EXFEE_OVERLAP)];
         exfeeShowview.backgroundColor = [UIColor clearColor];
         [exfeeShowview calculateColumn];
         [exfeeShowview setDataSource:self];
@@ -107,6 +107,7 @@
         timeAbsView.shadowColor = [UIColor whiteColor];
         timeAbsView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         timeAbsView.backgroundColor = [UIColor clearColor];
+        
         [container addSubview:timeAbsView];
         
         timeZoneView= [[UILabel alloc] initWithFrame:CGRectMake(left + timeAbsView.frame.size.width + TIME_ABSOLUTE_RIGHT_MARGIN, timeAbsView.frame.origin.y, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 - timeAbsView.frame.size.width  - TIME_ABSOLUTE_RIGHT_MARGIN , TIME_ZONE_HEIGHT)];
@@ -180,6 +181,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self initUI];
+    [self initData];
     [self refreshUI];
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
@@ -187,6 +189,54 @@
     [gestureRecognizer release];
     
     
+}
+
+- (void) initData{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSFetchRequest* request = [User fetchRequest];
+    NSPredicate *predicate = [NSPredicate
+                              predicateWithFormat:@"user_id = %u", app.userid];
+    [request setPredicate:predicate];
+	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    if(cross==nil){
+        cross=[Cross object];
+    }
+    if(users!=nil && [users count] >0)
+    {
+        default_user=[[users objectAtIndex:0] retain];
+    }
+    [users release];
+    
+
+    exfeeInvitations = [[NSMutableArray alloc] initWithCapacity:12];
+    cross=[Cross object];
+    cross.title=@".X.";
+    cross.cross_description=@"Take some note";
+
+    NSDictionary *widget=[NSDictionary dictionaryWithObjectsAndKeys:@"",@"image",@"Background",@"type", nil];
+    if(cross.widget==nil)
+        cross.widget=[[NSMutableArray alloc] initWithCapacity:1];
+    [cross.widget addObject:widget];
+    
+    [self addDefaultIdentity];
+//    cross.exfee.invitations
+}
+
+- (void) addDefaultIdentity{
+    User *user=default_user;
+    Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
+    if(user!=nil){
+        Invitation *invitation=[Invitation object];
+        invitation.rsvp_status=@"ACCEPTED";
+        invitation.host=[NSNumber numberWithBool:YES];
+        invitation.mates=0;
+        invitation.identity=default_identity;
+        invitation.updated_by=default_identity;
+        invitation.updated_at=[NSDate date];
+        invitation.created_at=[NSDate date];
+        [exfeeInvitations addObject:invitation];
+        [exfeeShowview reloadData];
+    }
 }
 
 - (void)dealloc {
@@ -301,7 +351,6 @@
     if (x != nil){
         [self fillTitleAndDescription:x];
         [self fillBackground:x.widget];
-        [self fillExfee];
         [self fillTime:x.time];
         [self fillPlace:x.place];
     }
@@ -383,7 +432,7 @@
         [exfeeInvitations release];
         exfeeInvitations = nil;
     }
-    exfeeInvitations = [[NSArray alloc] initWithArray:exfee];
+    exfeeInvitations = [[NSMutableArray alloc] initWithArray:exfee];
     [exfee release];
     [exfeeShowview reloadData];
 }
@@ -408,8 +457,8 @@
         
     }else{
         timeRelView.text = @"Sometime";
-        timeAbsView.text = @"";
-        timeAbsView.hidden = YES;
+        timeAbsView.text = @"Pick a time";
+//        timeAbsView.hidden = YES;
         timeZoneView.text = @"";
         timeZoneView.hidden = YES;
     }
@@ -419,8 +468,8 @@
 - (void)fillPlace:(Place*)place{
     if(place == nil || [place isEmpty]){
         placeTitleView.text = @"Shomewhere";
-        placeDescView.text = @"";
-        placeDescView.hidden = YES;
+        placeDescView.text = @"Choose a place";
+//        placeDescView.hidden = YES;
         mapView.hidden = YES;
         [self setLayoutDirty];
     }else {
@@ -560,7 +609,7 @@
         if (placeTitleView.hidden == NO){
             baseY += TIME_BOTTOM_MARGIN;
             CGSize placeTitleSize = [placeTitleView.text sizeWithFont:placeTitleView.font forWidth:placeTitleView.frame.size.width lineBreakMode:NSLineBreakByWordWrapping];
-            placeTitleView.frame = CGRectMake(baseX, baseY, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , placeTitleSize.height);
+            placeTitleView.frame = CGRectMake(CONTAINER_VERTICAL_PADDING, baseY, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , placeTitleSize.height);
             baseX = CGRectGetMinX(placeTitleView.frame);
             baseY = CGRectGetMaxY(placeTitleView.frame);
         }
@@ -612,10 +661,10 @@
 
 #pragma mark EXImagesCollectionView Datasource methods
 
-- (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
+- (NSInteger) numberOfimageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView{
     return [exfeeInvitations count];
 }
-- (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index{
+- (EXInvitationItem *)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView itemAtIndex:(int)index{
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     Invitation *invitation =[exfeeInvitations objectAtIndex:index];
@@ -662,7 +711,7 @@
     return item;
 }
 
-- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
+- (void)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView shouldResizeHeightTo:(float)height{
     
     //    if(viewmode==YES && exfeeShowview.editmode==NO)
     //    {
@@ -686,14 +735,19 @@
 }
 
 #pragma mark EXImagesCollectionView delegate methods
-- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
+- (void)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
     NSArray* reducedExfeeIdentities=exfeeInvitations;//[self getReducedExfeeIdentities];
     if(index == [reducedExfeeIdentities count])
     {
+        NSLog(@"add new");
+        ExfeeInputViewController *exfeeinputViewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
+        exfeeinputViewController.gatherview=self;
+        [self presentModalViewController:exfeeinputViewController animated:YES];
+
         //        if(viewmode==YES && exfeeShowview.editmode==NO)
         //            return;
-        //        [self ShowGatherToolBar];
-        //        [self ShowExfeeView];
+//        [self ShowGatherToolBar];
+//        [self ShowExfeeView];
     }
     else if(index < [reducedExfeeIdentities count]){
         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];

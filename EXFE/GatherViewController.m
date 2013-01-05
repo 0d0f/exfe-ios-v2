@@ -317,7 +317,6 @@
 	NSArray *users = [[User objectsWithFetchRequest:request] retain];
     if(cross==nil){
         cross=[Cross object];
-//        cross.time
     }
     if(users!=nil && [users count] >0)
     {
@@ -843,8 +842,8 @@
     [containcardview release];
     [crossdescbackimg release];
     [default_user release];
-    if(conversationView)
-        [conversationView release];
+//    if(conversationView)
+//        [conversationView release];
     [super dealloc];
 }
 - (void)didReceiveMemoryWarning
@@ -1054,31 +1053,31 @@
     }
 }
 - (void) toconversation{
-    if(conversationView==nil)
-        conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
-    conversationView.exfee_id=[cross.exfee.exfee_id intValue];
-    conversationView.cross_title=cross.title;
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSSet *invitations=cross.exfee.invitations;
-    if(invitations !=nil&&[invitations count]>0)
-    {
-        for(Invitation* invitation in invitations)
-            if([invitation.identity.connected_user_id intValue]==app.userid)
-                conversationView.identity=invitation.identity;
-    }
-    cross.conversation_count=0;
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
-    [crossViewController refreshTableViewWithCrossId:[cross.cross_id intValue]];
-    
-    [UIView beginAnimations:@"View Flip" context:nil];
-    [UIView setAnimationDuration:0.80];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [UIView setAnimationTransition:
-     UIViewAnimationTransitionFlipFromRight
-                           forView:self.navigationController.view cache:NO];
-    [self.navigationController pushViewController:conversationView animated:NO];
-    [UIView commitAnimations];
+//    if(conversationView==nil)
+//        conversationView=[[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
+//    conversationView.exfee_id=[cross.exfee.exfee_id intValue];
+//    conversationView.cross_title=cross.title;
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    NSSet *invitations=cross.exfee.invitations;
+//    if(invitations !=nil&&[invitations count]>0)
+//    {
+//        for(Invitation* invitation in invitations)
+//            if([invitation.identity.connected_user_id intValue]==app.userid)
+//                conversationView.identity=invitation.identity;
+//    }
+//    cross.conversation_count=0;
+//    NSArray *viewControllers = self.navigationController.viewControllers;
+//    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+//    [crossViewController refreshTableViewWithCrossId:[cross.cross_id intValue]];
+//    
+//    [UIView beginAnimations:@"View Flip" context:nil];
+//    [UIView setAnimationDuration:0.80];
+//    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+//    [UIView setAnimationTransition:
+//     UIViewAnimationTransitionFlipFromRight
+//                           forView:self.navigationController.view cache:NO];
+//    [self.navigationController pushViewController:conversationView animated:NO];
+//    [UIView commitAnimations];
 }
 - (void) ShowMyRsvpToolBar{
     if(myrsvptoolbar==nil){
@@ -1224,9 +1223,6 @@
     if(rsvptoolbar)
         [rsvptoolbar setHidden:YES];
     if(gathertoolbar==nil){
-//        CGRect screenframe=[[UIScreen mainScreen] bounds];
-//        CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
-//        screenframe.size.height-=statusframe.size.height;
         gathertoolbar=[[EXIconToolBar alloc] initWithPoint:CGPointMake(0, self.view.frame.size.height-50) buttonsize:CGSizeMake(20, 20) delegate:self];
         
         EXButton *accept=[[EXButton alloc] initWithName:@"accept" title:@"Accept" image:[UIImage imageNamed:@"rsvp_accept_toolbar.png"] inFrame:CGRectMake(35, 0, 44, 50)];

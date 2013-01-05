@@ -80,7 +80,7 @@
     BOOL exfeeedit;
     BOOL firstLoad;
     BOOL notUserScroll;
-    ConversationViewController *conversationView;
+//    ConversationViewController *conversationView;
     UILabel *ccbuttonText;
     BOOL crosschangeflag;
     BOOL iscrossneedsave;

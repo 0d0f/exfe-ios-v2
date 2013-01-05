@@ -18,20 +18,21 @@
 #import "Invitation.h"
 #import "CrossTime.h"
 #import "Place.h"
-#import "EXImagesCollectionView.h"
+#import "EXImagesCollectionGatherView.h"
 #import "EXRSVPStatusView.h"
 #import "EXRSVPMenuView.h"
 #import "APICrosses.h"
 #import "EXLabel.h"
 #import "EXAlertView.h"
+#import "ExfeeInputViewController.h"
 
 
-@interface NewGatherViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate>{
+@interface NewGatherViewController : UIViewController <EXImagesCollectionGatherDataSource, EXImagesCollectionGatherDelegate, MKMapViewDelegate, EXRSVPMenuDelegate>{
     
     UIScrollView *container;
     EXCurveImageView *dectorView;
     UILabel *descView;
-    EXImagesCollectionView *exfeeShowview;
+    EXImagesCollectionGatherView *exfeeShowview;
     //UIView *exfeeShowview;
     UILabel *timeRelView;
     UILabel *timeAbsView;
@@ -48,7 +49,7 @@
     
     BOOL layoutDirty;
     
-    NSArray *exfeeInvitations;
+    NSMutableArray *exfeeInvitations;
     EXRSVPStatusView *rsvpstatusview;
     CGFloat exfeeSuggestHeight;
     EXRSVPMenuView *rsvpmenu;
@@ -59,6 +60,7 @@
 
 
 - (void)initUI;
+- (void)initData;
 - (void)relayoutUI;
 - (void)refreshUI;
 - (void)hideMenu;
@@ -79,5 +81,6 @@
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation;
 - (Invitation*) getMyInvitation;
+- (void) addDefaultIdentity;
 
 @end
