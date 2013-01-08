@@ -176,6 +176,8 @@
 		78606CDE1696D6EE0014806A /* EXImagesCollectionGatherView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78606CDD1696D6EE0014806A /* EXImagesCollectionGatherView.m */; };
 		78606CE21696DA3F0014806A /* NewGatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78606CE01696DA3F0014806A /* NewGatherViewController.m */; };
 		78606CE31696DA3F0014806A /* NewGatherViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78606CE11696DA3F0014806A /* NewGatherViewController.xib */; };
+		78606CE7169AD2920014806A /* TitleDescEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78606CE5169AD2900014806A /* TitleDescEditViewController.m */; };
+		78606CE8169AD2920014806A /* TitleDescEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78606CE6169AD2910014806A /* TitleDescEditViewController.xib */; };
 		78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78615B3B15788BCD003CF68A /* ABTableViewCell.m */; };
 		78615B401578CC22003CF68A /* ConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7840917815732A91006DF115 /* ConversationViewController.xib */; };
 		7865CD7F165A3C0300D0E86A /* x_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7865CD7D165A3C0300D0E86A /* x_bg.png */; };
@@ -683,6 +685,9 @@
 		78606CDF1696DA3F0014806A /* NewGatherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewGatherViewController.h; sourceTree = "<group>"; };
 		78606CE01696DA3F0014806A /* NewGatherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewGatherViewController.m; sourceTree = "<group>"; };
 		78606CE11696DA3F0014806A /* NewGatherViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewGatherViewController.xib; sourceTree = "<group>"; };
+		78606CE4169AD2900014806A /* TitleDescEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleDescEditViewController.h; sourceTree = "<group>"; };
+		78606CE5169AD2900014806A /* TitleDescEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleDescEditViewController.m; sourceTree = "<group>"; };
+		78606CE6169AD2910014806A /* TitleDescEditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleDescEditViewController.xib; sourceTree = "<group>"; };
 		78615B3A15788BCC003CF68A /* ABTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABTableViewCell.h; sourceTree = "<group>"; };
 		78615B3B15788BCD003CF68A /* ABTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABTableViewCell.m; sourceTree = "<group>"; };
 		7865CD7D165A3C0300D0E86A /* x_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_bg.png; sourceTree = "<group>"; };
@@ -1215,6 +1220,9 @@
 				4F0597931682B9FA00F9CE10 /* CrossDetailViewController.h */,
 				4F0597941682B9FA00F9CE10 /* CrossDetailViewController.m */,
 				4F0597951682B9FA00F9CE10 /* CrossDetailViewController.xib */,
+				78606CE4169AD2900014806A /* TitleDescEditViewController.h */,
+				78606CE5169AD2900014806A /* TitleDescEditViewController.m */,
+				78606CE6169AD2910014806A /* TitleDescEditViewController.xib */,
 			);
 			name = Cross;
 			sourceTree = "<group>";
@@ -2211,6 +2219,7 @@
 				784D3720168DA3EA00987B6C /* arrow.png in Resources */,
 				784D3721168DA3EA00987B6C /* arrow@2x.png in Resources */,
 				78606CE31696DA3F0014806A /* NewGatherViewController.xib in Resources */,
+				78606CE8169AD2920014806A /* TitleDescEditViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2317,6 +2326,7 @@
 				4FAD642716968C7F001870FF /* CrossTime+Helper.m in Sources */,
 				78606CDE1696D6EE0014806A /* EXImagesCollectionGatherView.m in Sources */,
 				78606CE21696DA3F0014806A /* NewGatherViewController.m in Sources */,
+				78606CE7169AD2920014806A /* TitleDescEditViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

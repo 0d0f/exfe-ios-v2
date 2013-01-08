@@ -11,12 +11,13 @@
 #import "APIProfile.h"
 #import "Identity.h"
 #import "Invitation.h"
-#import "GatherViewController.h"
+#import "NewGatherViewController.h"
 #import "EXBubbleScrollView.h"
 #import "Util.h"
 #import "AddressBook.h"
 #import "UIBorderView.h"
 #import "EXGradientToolbarView.h"
+#import "GatherExfeeInputCell.h"
 #import <objc/runtime.h>
 
 #define LOCAL_ADDRESSBOOK 0

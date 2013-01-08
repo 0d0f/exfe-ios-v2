@@ -1,0 +1,195 @@
+//
+//  TitleDescEditViewController.m
+//  EXFE
+//
+//  Created by huoju on 1/7/13.
+//
+//
+
+#import "TitleDescEditViewController.h"
+
+@interface TitleDescEditViewController ()
+
+@end
+
+@implementation TitleDescEditViewController
+@synthesize gatherview;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
+    [toolbar.layer setShadowOpacity:0.8];
+    [toolbar.layer setShadowRadius:3.0];
+    [toolbar.layer setShadowOffset:CGSizeMake(0, 0)];
+    
+    [self.view addSubview:toolbar];
+    
+    UIButton *btncancel=[UIButton buttonWithType:UIButtonTypeCustom];
+    [btncancel setBackgroundColor:[UIColor colorWithRed:25/255.0f green:25/255.0f blue:25/255.0f alpha:0.5]];
+    [btncancel setBackgroundImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btncancel setFrame:CGRectMake(0, 0, 20, 44)];
+    [btncancel addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside];
+    
+    [toolbar addSubview:btncancel];
+
+    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [doneButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+    doneButton.frame = CGRectMake(255+5+5, 7, 50, 30);
+    [doneButton addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
+    [doneButton setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
+    
+    [toolbar addSubview:doneButton];
+
+    
+    dectorView = [[EXCurveImageView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(0+ self.view.frame.size.width * 0.6,  self.view.frame.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
+    
+    [self.view addSubview:dectorView];
+
+    titleView = [[UITextView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btncancel.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN+toolbar.frame.size.height, self.view.frame.size.width - (CGRectGetMaxX(btncancel.frame) + TITLE_HORIZON_MARGIN) * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+    
+    titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
+    titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+    titleView.backgroundColor = [UIColor clearColor];
+    titleView.textAlignment = NSTextAlignmentCenter;
+    titleView.backgroundColor=[UIColor clearColor];
+//    titleView.layer.shadowColor = [UIColor blackColor].CGColor;
+//    titleView.layer.shadowOffset= CGSizeMake(0.0f, 1.0f);
+//    titleView.layer.MasksToBounds = false;
+    [self.view addSubview:titleView];
+
+    descView = [[UITextView alloc] initWithFrame:CGRectMake(0, dectorView.frame.origin.y+dectorView.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-(dectorView.frame.origin.y+dectorView.frame.size.height))];
+    descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+    descView.backgroundColor = [UIColor clearColor];
+    descView.textAlignment = NSTextAlignmentLeft;
+    descView.backgroundColor=[UIColor whiteColor];
+    
+    [self.view addSubview:descView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+    
+#ifdef __IPHONE_5_0
+    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (version >= 5.0) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    }
+#endif
+    
+    // Do any additional setup after loading the view from its nib.
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    CGRect keyboardEndFrame;
+    
+    [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+    
+    /* Move the toolbar to above the keyboard */
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.3];
+//	CGRect frame = self.inputToolbar.frame;
+    keyboardheight=keyboardEndFrame.size.height;
+    
+//    descView = [[UITextView alloc] initWithFrame:CGRectMake(0, dectorView.frame.origin.y+dectorView.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-(dectorView.frame.origin.y+dectorView.frame.size.height))];
+//    [self.view addSubview:descView];
+    CGRect rect = descView.frame;
+    rect.size.height=self.view.frame.size.height-(dectorView.frame.origin.y+dectorView.frame.size.height)-keyboardheight;
+    [descView setFrame:rect];
+    
+//    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+//        frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height;
+//        if(_tableView.contentSize.height>_tableView.frame.size.height)
+//        {
+//            CGRect _tableviewrect=_tableView.frame;
+//            _tableviewrect.origin.y=-keyboardEndFrame.size.height;
+//            [_tableView setFrame:_tableviewrect];
+//        }
+        
+//    }
+//    else {
+//        frame.origin.y = self.view.frame.size.width - frame.size.height - keyboardEndFrame.size.height - kStatusBarHeight;
+//        
+//    }
+//	self.inputToolbar.frame = frame;
+	[UIView commitAnimations];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    /* Move the toolbar back to bottom of the screen */
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.3];
+    
+//	CGRect frame = self.inputToolbar.frame;
+//    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+//        frame.origin.y = self.view.frame.size.height - frame.size.height;
+//        if(_tableView.contentSize.height>_tableView.frame.size.height){
+//            CGRect _tableviewrect=_tableView.frame;
+//            _tableviewrect.origin.y=0;
+//            [_tableView setFrame:_tableviewrect];
+//        }
+//        
+//    }
+//    else {
+//        frame.origin.y = self.view.frame.size.width - frame.size.height;
+//    }
+    keyboardheight=0;
+    CGRect rect = descView.frame;
+    rect.size.height=self.view.frame.size.height-(dectorView.frame.origin.y+dectorView.frame.size.height);
+    [descView setFrame:rect];
+    
+    
+//	self.inputToolbar.frame = frame;
+	[UIView commitAnimations];
+    //    keyboardIsVisible = NO;
+}
+
+- (void) setBackground:(NSString *)imgurl{
+//    if(imgurl!=nil && ![imgurl isEqualToString:@""]){
+//            UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
+//            if(backimg == nil || [backimg isEqual:[NSNull null]]){
+//                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+//                dispatch_async(imgQueue, ^{
+//                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
+//                            dectorView.image = backimg;
+//                            //[self setLayoutDirty];
+//                        }
+//                    });
+//                });
+//                dispatch_release(imgQueue);
+//            }else{
+//                dectorView.image = backimg;
+//            }
+//    }
+}
+
+- (void) Close{
+    [self dismissModalViewControllerAnimated:YES];
+}
+- (void) done:(id)sender{
+    [(NewGatherViewController*)gatherview setTitle:titleView.text Description:descView.text];
+    [self dismissModalViewControllerAnimated:YES];
+}
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+@end

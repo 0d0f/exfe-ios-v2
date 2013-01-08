@@ -185,9 +185,15 @@
     [self refreshUI];
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
-    [container addGestureRecognizer:gestureRecognizer];
+    [self.view addGestureRecognizer:gestureRecognizer];
+    
     [gestureRecognizer release];
     
+//    UITapGestureRecognizer *gestureRecognizertitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
+//    [titleView addGestureRecognizer:gestureRecognizertitle];
+//    [gestureRecognizertitle release];
+    
+
     
 }
 
@@ -258,7 +264,7 @@
 }
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
-    CGPoint location = [sender locationInView:sender.view];
+    CGPoint location = [sender locationInView:self.view];
     
     //    if (rsvpstatusview.hidden == NO){
     //        if (CGRectContainsPoint(rsvpstatusview.frame, location)) {
@@ -271,21 +277,34 @@
         [self showDescriptionFullContent: (descView.numberOfLines != 0)];
         return;
     }
-    //    if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
-    //    {
-    //        [crosstitle resignFirstResponder];
-    //        [map becomeFirstResponder];
-    //        if(viewmode==YES)
-    //            [self ShowPlaceView:@"detail"];
-    //        else{
-    //            [self ShowPlaceView:@"search"];
-    //        }
-    //    }
-    
-    //    if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))
-    //    {
-    //        [self ShowTimeView];
-    //    }
+    if (CGRectContainsPoint([titleView frame], location) || CGRectContainsPoint([descView frame], location)){
+        TitleDescEditViewController *titleViewController=[[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
+        titleViewController.gatherview=self;
+        NSString *imgurl;
+        for(NSDictionary *widget in (NSArray*)cross.widget) {
+            if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+                imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+            }
+        }
+        [titleViewController setBackground:imgurl];
+//        timeViewController.gatherview=self;
+//        [titleViewController setDateTime:cross.time];
+        [self presentModalViewController:titleViewController animated:YES];
+        [titleViewController release];
+    }
+
+    if (CGRectContainsPoint([timeRelView frame], location) || CGRectContainsPoint([timeAbsView frame], location)|| CGRectContainsPoint([timeZoneView frame], location))
+    {
+        TimeViewController *timeViewController=[[TimeViewController alloc] initWithNibName:@"TimeViewController" bundle:nil];
+        timeViewController.gatherview=self;
+        [timeViewController setDateTime:cross.time];
+        [self presentModalViewController:timeViewController animated:YES];
+        [timeViewController release];
+    }
+    if (CGRectContainsPoint([placeTitleView frame], location) || CGRectContainsPoint([placeDescView frame], location))
+    {
+        [self ShowPlaceView:@"search"];
+    }
     
     //    if(exfeeShowview.editmode==YES){
     //        if (!CGRectContainsPoint([exfeeShowview frame], location)){
@@ -328,6 +347,7 @@
     
 }
 
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -340,6 +360,49 @@
         [[Cross currentContext] deleteObject:cross];
     [self dismissModalViewControllerAnimated:YES];
 
+}
+
+- (void) addExfee:(NSArray*) invitations{
+    if(exfeeInvitations==nil)
+        exfeeInvitations = [[NSMutableArray alloc] initWithArray:invitations];
+    else{
+        for(Invitation *invitation in invitations){
+            [exfeeInvitations addObject:invitation];
+        }
+    }
+    [exfeeShowview reloadData];
+}
+
+- (void) setTitle:(NSString*)title Description:(NSString*)desc{
+    cross.title=title;
+    cross.cross_description=desc;
+    [self fillTitleAndDescription:cross];
+    [self relayoutUI];
+}
+
+- (void) ShowPlaceView:(NSString*)status{
+    PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
+    placeViewController.gatherview=self;
+    if(cross.place!=nil){
+            if(![cross.place.title isEqualToString:@""] || ( ![cross.place.lat isEqualToString:@""] || ![cross.place.lng isEqualToString:@""])){
+                [placeViewController setPlace:cross.place isedit:YES];
+            }
+            else{
+                placeViewController.isaddnew=YES;
+                placeViewController.showtableview=YES;
+                status=@"search";
+                
+            }
+    }else{
+        placeViewController.isaddnew=YES;
+    }
+    if([status isEqualToString:@"detail"]){
+        placeViewController.showdetailview=YES;
+    }else if([status isEqualToString:@"search"]){
+        placeViewController.showtableview=YES;
+    }
+    [self presentModalViewController:placeViewController animated:YES];
+    [placeViewController release];
 }
 
 #pragma mark Refresh UI content methods
@@ -435,6 +498,17 @@
     exfeeInvitations = [[NSMutableArray alloc] initWithArray:exfee];
     [exfee release];
     [exfeeShowview reloadData];
+}
+
+- (void) setTime:(CrossTime*)time{
+    cross.time=time;
+    [self fillTime:time];
+}
+
+- (void) setPlace:(Place*)place{
+    cross.place=place;
+    [self fillPlace:place];
+    
 }
 
 - (void)fillTime:(CrossTime*)time{
@@ -739,15 +813,10 @@
     NSArray* reducedExfeeIdentities=exfeeInvitations;//[self getReducedExfeeIdentities];
     if(index == [reducedExfeeIdentities count])
     {
-        NSLog(@"add new");
         ExfeeInputViewController *exfeeinputViewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
         exfeeinputViewController.gatherview=self;
         [self presentModalViewController:exfeeinputViewController animated:YES];
 
-        //        if(viewmode==YES && exfeeShowview.editmode==NO)
-        //            return;
-//        [self ShowGatherToolBar];
-//        [self ShowExfeeView];
     }
     else if(index < [reducedExfeeIdentities count]){
         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];

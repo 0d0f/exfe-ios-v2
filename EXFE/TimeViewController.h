@@ -10,6 +10,7 @@
 #import <RestKit/JSONKit.h>
 #import <RestKit/RestKit.h>
 #import "GatherViewController.h"
+#import "NewGatherViewController.h"
 #import "CrossTime.h"
 #import "EFTime.h"
 
