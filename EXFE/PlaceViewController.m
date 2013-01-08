@@ -182,8 +182,7 @@
     if(showtableview==YES){
         [self setViewStyle:EXPlaceViewStyleBigTableview];
         [inputplace becomeFirstResponder];
-    }
-    
+    }    
 //
 }
 

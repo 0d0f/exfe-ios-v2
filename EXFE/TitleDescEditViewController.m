@@ -36,6 +36,34 @@
     
     [self.view addSubview:toolbar];
     
+    EXAttributedLabel *viewtitle=[[EXAttributedLabel alloc] initWithFrame:CGRectMake(30, (44-30)/2, self.view.frame.size.width-30-60, 30)];
+    viewtitle.backgroundColor=[UIColor clearColor];
+
+    NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Edit ·X·"];
+    
+    CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
+    [titlestr addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0, 8)];
+    [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_51.CGColor range:NSMakeRange(0,4)];
+    [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(5,3)];
+
+    
+    CTTextAlignment alignment = kCTCenterTextAlignment;
+    float linespaceing=1;
+    float minheight=26;
+
+    CTParagraphStyleSetting paragraphsetting[3] = {
+        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
+        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
+        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
+    };
+    CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(paragraphsetting, 3);
+    [titlestr addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,8)];
+    CFRelease(paragraphstyle);
+    CFRelease(fontref);
+    viewtitle.attributedText=titlestr;
+    [self.view addSubview:viewtitle];
+    [titlestr release];
+    [viewtitle release];
     UIButton *btncancel=[UIButton buttonWithType:UIButtonTypeCustom];
     [btncancel setBackgroundColor:[UIColor colorWithRed:25/255.0f green:25/255.0f blue:25/255.0f alpha:0.5]];
     [btncancel setBackgroundImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];

@@ -174,6 +174,22 @@
     [self.view addSubview:titleView];
     self.view.backgroundColor = [UIColor grayColor];
     
+    CGRect screenframe=[[UIScreen mainScreen] bounds];
+    UIView *pannel=[[UIView alloc] initWithFrame:CGRectMake(0,screenframe.size.height-44-20, self.view.frame.size.width, 44)];
+    [pannel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.33]];
+    UIButton *btngather=[UIButton buttonWithType:UIButtonTypeCustom];
+    [btngather setFrame:CGRectMake(85, 6.5, 150, 31)];
+    [btngather setTitle:@"Gather" forState:UIControlStateNormal];
+    [btngather.titleLabel setShadowColor:[UIColor blackColor]];
+    [btngather.titleLabel setShadowOffset:CGSizeMake(0, -1)];
+    btngather.layer.cornerRadius=2;
+    [btngather addTarget:self action:@selector(Gather:) forControlEvents:UIControlEventTouchUpInside];
+
+    [btngather setBackgroundColor:[UIColor blueColor]];
+    [pannel addSubview:btngather];
+    [self.view addSubview:pannel];
+    [pannel release];
+    
 }
 
 - (void)viewDidLoad
@@ -185,18 +201,19 @@
     [self refreshUI];
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
+    gestureRecognizer.delegate=self;
     [self.view addGestureRecognizer:gestureRecognizer];
     
     [gestureRecognizer release];
     
-//    UITapGestureRecognizer *gestureRecognizertitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
-//    [titleView addGestureRecognizer:gestureRecognizertitle];
-//    [gestureRecognizertitle release];
-    
-
-    
 }
-
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([touch.view isKindOfClass:[UIButton class]]) {
+        // we touched a button, slider, or other UIControl
+        return NO; // ignore the touch
+    }
+    return YES; // handle the touch
+}
 - (void) initData{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSFetchRequest* request = [User fetchRequest];
@@ -265,19 +282,14 @@
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:self.view];
+
+//    if (descView.hidden == NO && CGRectContainsPoint(descView.frame, location)) {
+//        [self showDescriptionFullContent: (descView.numberOfLines != 0)];
+//        return;
+//    }
     
-    //    if (rsvpstatusview.hidden == NO){
-    //        if (CGRectContainsPoint(rsvpstatusview.frame, location)) {
-    //            NSLog(@"click to set rsvp");
-    //        }else{
-    //            rsvpstatusview.hidden = YES;
-    //        }
-    //    }
-    if (descView.hidden == NO && CGRectContainsPoint(descView.frame, location)) {
-        [self showDescriptionFullContent: (descView.numberOfLines != 0)];
-        return;
-    }
-    if (CGRectContainsPoint([titleView frame], location) || CGRectContainsPoint([descView frame], location)){
+    if (CGRectContainsPoint([titleView frame], location) || CGRectContainsPoint([descView frame], location)||
+        CGRectContainsPoint([descView frame], location) || CGRectContainsPoint([descView frame], location)){
         TitleDescEditViewController *titleViewController=[[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
         titleViewController.gatherview=self;
         NSString *imgurl;
@@ -378,6 +390,55 @@
     cross.cross_description=desc;
     [self fillTitleAndDescription:cross];
     [self relayoutUI];
+}
+
+- (IBAction) Gather:(id) sender{
+//    [self pullcontainviewDown];
+    
+//    if([crossdescription.text isEqualToString:@"Write some notes here."]){
+//        crossdescription.text=@"";
+//    }
+    
+    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
+    NSArray *orderedIdentities=[default_user.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+  
+    cross.by_identity=[orderedIdentities objectAtIndex:0];
+//    cross.title=crosstitle.text;
+//    cross.cross_description=crossdescription.text;
+    if(cross.time==nil){
+        cross.time=[CrossTime object];
+        cross.time.begin_at=[EFTime object];
+//
+        NSDate *date=[NSDate date];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
+        NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+        [formatter setLocale:locale];
+        [formatter setDateFormat:@"Z"];
+//
+        NSString *timezonestr=[formatter stringFromDate:date];
+        NSMutableString *str=[timezonestr mutableCopy];
+        [str insertString:@":" atIndex:3];
+        cross.time.begin_at.timezone=str;
+        [str release];
+//
+//        [formatter release];
+//        //        NSString *eftimezone=[timezonestr substringFromIndex:3];
+//        //        if([eftimezone isEqualToString:@""])
+//        //            eftimezone=@"+00:00";
+//        
+//        
+//        //        datetime.begin_at.timezone=@"";
+    }
+//    cross.time=datetime;
+    Exfee *exfee=[Exfee object];
+    
+    for(Invitation *invitation in exfeeInvitations){
+        [exfee addInvitationsObject:invitation];
+    }
+    cross.exfee = exfee;
+    [Flurry logEvent:@"GATHER_SEND"];
+    [APICrosses GatherCross:[cross retain] delegate:self];
 }
 
 - (void) ShowPlaceView:(NSString*)status{
@@ -503,12 +564,13 @@
 - (void) setTime:(CrossTime*)time{
     cross.time=time;
     [self fillTime:time];
+    [self relayoutUI];
 }
 
 - (void) setPlace:(Place*)place{
     cross.place=place;
     [self fillPlace:place];
-    
+    [self relayoutUI];
 }
 
 - (void)fillTime:(CrossTime*)time{
@@ -1081,6 +1143,7 @@
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+    NSLog(@"%@",objects);
     if([objects count]>0){
         [self fillExfee];
     }

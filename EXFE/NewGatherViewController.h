@@ -30,7 +30,7 @@
 #import "TimeViewController.h"
 
 
-@interface NewGatherViewController : UIViewController <EXImagesCollectionGatherDataSource, EXImagesCollectionGatherDelegate, MKMapViewDelegate, EXRSVPMenuDelegate>{
+@interface NewGatherViewController : UIViewController <EXImagesCollectionGatherDataSource, EXImagesCollectionGatherDelegate, MKMapViewDelegate, EXRSVPMenuDelegate,UIGestureRecognizerDelegate>{
     
     UIScrollView *container;
     EXCurveImageView *dectorView;
@@ -92,5 +92,6 @@
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation;
 - (Invitation*) getMyInvitation;
 - (void) addDefaultIdentity;
+- (IBAction) Gather:(id) sender;
 
 @end
