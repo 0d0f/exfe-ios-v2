@@ -22,6 +22,8 @@
 @synthesize hlTime;
 @synthesize hlPlace;
 @synthesize hlConversation;
+@synthesize cross_id;
+@synthesize delegate;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -60,6 +62,9 @@
         if (conversationCount > 0) {
             if (CGRectContainsPoint(convRect, location)) {
                 NSLog(@"CrossCard hit conversation");
+                if (delegate) {
+                    [delegate onClickConversation:self];
+                }
             }
         }
     }

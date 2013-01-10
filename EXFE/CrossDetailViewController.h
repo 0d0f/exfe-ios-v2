@@ -82,4 +82,7 @@
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation;
 - (Invitation*) getMyInvitation;
 
+
+- (void) toConversationAnimated:(BOOL)isAnimated;
+
 @end

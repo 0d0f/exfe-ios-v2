@@ -16,8 +16,9 @@
 #import "EXSpinView.h"
 #import "MBProgressHUD.h"
 #import "ProfileCard.h"
+#import "CrossCard.h"
 
-@interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate>
+@interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate, CrossCardDelegate>
 {
     IBOutlet UITableView* tableView;
     UIBarButtonItem *profileButtonItem;
@@ -50,4 +51,5 @@
 - (void) refreshPortrait;
 - (BOOL) PushToCross:(int)cross_id;
 - (BOOL) PushToConversation:(int)cross_id;
+- (void) onClickConversation:(UIView*)card;
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "CrossDetailViewController.h"
+#import "ConversationViewController.h"
 #import "Util.h"
 #import "EFTime.h"
 #import "ImgCache.h"
@@ -1047,6 +1048,44 @@
 }
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
         NSLog(@"%@",error);
+}
+
+#pragma mark Navigation
+- (void) toConversationAnimated:(BOOL)isAnimated{
+    ConversationViewController * conversationView = nil;
+    if(conversationView == nil){
+        conversationView = [[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
+    }
+    
+    // prepare data for conversation
+    conversationView.exfee_id = [cross.exfee.exfee_id intValue];
+    conversationView.cross_title = cross.title;
+    Invitation* myInv = [self getMyInvitation];
+    if (myInv != nil){
+        conversationView.identity = myInv.identity;
+    }
+    
+    // clean up data
+    cross.conversation_count = 0;
+    
+    // update cross list
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+    [crossViewController refreshTableViewWithCrossId:[cross.cross_id intValue]];
+    
+    // animation
+    if (isAnimated){
+        [UIView beginAnimations:@"View Flip" context:nil];
+        [UIView setAnimationDuration:0.80];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+        [UIView setAnimationTransition:
+         UIViewAnimationTransitionFlipFromRight
+                               forView:self.navigationController.view cache:NO];
+    }
+    [self.navigationController pushViewController:conversationView animated:NO];
+    if (isAnimated){
+        [UIView commitAnimations];
+    }
 }
 
 @end
