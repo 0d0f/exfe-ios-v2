@@ -22,6 +22,7 @@
 #import "CrossCard.h"
 #import "ImgCache.h"
 #import "Util.h"
+#import "CrossTime+Helper.h"
 
 
 @interface CrossesViewController ()
@@ -581,6 +582,24 @@
         }else{
             cell.place = cross.place.title;
         }
+        
+//        if (cross.time != nil){
+//            //cell.time = @"Sometime";
+//            
+//            NSString *time = [cross.time getTimeSingleLine];
+//            if (time == nil || time.length == 0) {
+//                cell.time = @"Sometime";
+//                NSLog(@"cell time: %@ for cell title: %@", time, cell.title);
+//            }else{
+//                NSLog(@"cell time: %@ for cell title: %@", time, cell.title);
+//                //[time retain];
+//                cell.time = time;
+//            }
+//        }else{
+//            cell.time = @"Sometime";
+//        }
+        
+        
         if([cross.time.begin_at.date isEqualToString:@""])
         {
             if([cross.time.origin isEqualToString:@""]){

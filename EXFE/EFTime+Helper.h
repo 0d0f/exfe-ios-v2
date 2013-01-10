@@ -12,13 +12,20 @@
 
 - (BOOL)hasDate;
 - (BOOL)hasTime;
-- (void) setLocalDate:(NSString*)date andTime:(NSString*)time;
-- (NSString*) getLocalDate;
-- (NSString*) getLocalTime;
+- (BOOL)hasDateWord;
+- (BOOL)hasTimeWord;
+
+- (void)setLocalDate:(NSString*)date andTime:(NSString*)time;
+- (void)setLocalDateComponents:(NSDateComponents *)datetime;
+- (NSDateComponents*)getUTCDateComponent;
+- (NSDateComponents*)getLocalDateComponent;
+- (NSDateComponents*)getDateComponent:(NSTimeZone*)localTimeZone;
+
 - (NSTimeZone*) getTargetTimeZone;
 - (NSTimeZone*) getTargetTimeZoneWithDST;
 - (NSTimeZone*) getLocalTimeZone;
 - (NSTimeZone*) getLocalTimeZoneWithDST;
 
+- (NSString*) getHumanReadableString;
 
 @end

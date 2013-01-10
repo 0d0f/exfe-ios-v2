@@ -52,6 +52,8 @@
     EXRSVPStatusView *rsvpstatusview;
     CGFloat exfeeSuggestHeight;
     EXRSVPMenuView *rsvpmenu;
+    BOOL isWidgetShown;
+    
 }
 @property (retain,nonatomic) Cross* cross;
 @property (retain,readonly) NSMutableArray *exfeeIdentities;

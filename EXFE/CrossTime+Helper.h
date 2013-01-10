@@ -10,4 +10,8 @@
 
 @interface CrossTime (Helper)
 
+- (NSString*) getTimeTitle;
+- (NSString*) getTimeDescription;
+- (NSString*) getTimeSingleLine;
+
 @end

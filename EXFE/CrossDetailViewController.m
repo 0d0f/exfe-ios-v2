@@ -12,6 +12,8 @@
 #import "ImgCache.h"
 #import "MapPin.h"
 #import "Place+Helper.h"
+#import "CrossTime+Helper.h"
+#import "EFTime+Helper.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -64,6 +66,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        isWidgetShown = NO;
     }
     return self;
 }
@@ -171,8 +174,63 @@
     titleView.shadowColor = [UIColor blackColor];
     titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
     [self.view addSubview:titleView];
-    self.view.backgroundColor = [UIColor grayColor];
     
+    UIButton * widgetBar = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    widgetBar.frame = CGRectMake(CGRectGetMaxX(dectorView.frame) - 48 - 5, CGRectGetMaxY(dectorView.frame) - 24 - 5, 48, 24);
+    [widgetBar addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:widgetBar];
+    
+    self.view.backgroundColor = [UIColor grayColor];
+}
+
+- (void)widgetClick:(id)sender{
+    UIView * view = sender;
+    
+    CGPoint endPoint;
+    if (isWidgetShown) {
+        endPoint = CGPointMake(CGRectGetMaxX(dectorView.frame) - 48 / 2 - 5, CGRectGetMaxY(dectorView.frame) - 24 / 2 - 5);
+    }else{
+        endPoint = CGPointMake(CGRectGetMidX(dectorView.frame), CGRectGetMidY(dectorView.frame));
+    }
+    isWidgetShown = !isWidgetShown;
+    [self animateWidget:view to:endPoint];
+}
+
+- (void)animateWidget:(UIView*)view to:(CGPoint)endPoint{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3];
+    [view setCenter:endPoint];
+    [UIView commitAnimations];
+}
+
+- (void)moveWidget:(UIView*)view to:(CGPoint)endPoint{
+    // Set up path movement
+    CAKeyframeAnimation *pathAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    pathAnimation.calculationMode = kCAAnimationPaced;
+    pathAnimation.fillMode = kCAFillModeForwards;
+    pathAnimation.removedOnCompletion = NO;
+    
+    //Setting Endpoint of the animation
+    CGMutablePathRef curvedPath = CGPathCreateMutable();
+    CGPathMoveToPoint(curvedPath, NULL, view.frame.origin.x, view.frame.origin.y);
+    CGPathAddLineToPoint(curvedPath, NULL, endPoint.x, endPoint.y);
+    pathAnimation.path = curvedPath;
+    CGPathRelease(curvedPath);
+    
+    CAAnimationGroup *group = [CAAnimationGroup animation];
+    group.fillMode = kCAFillModeForwards;
+    group.removedOnCompletion = NO;
+    [group setAnimations:[NSArray arrayWithObjects:pathAnimation, nil]];
+    group.duration = 0.7f;
+    group.delegate = self;
+    [group setValue:view forKey:@"imageViewBeingAnimated"];
+    
+    [view.layer addAnimation:group forKey:@"savingAnimation"];
+    
+    
+    [UIView beginAnimations:@"asd" context:nil];
+    
+    //[viewForAnimation release];
 }
 
 - (void)viewDidLoad
@@ -386,6 +444,32 @@
 
 - (void)fillTime:(CrossTime*)time{
     if (time != nil){
+//        NSString *title = [[time getTimeTitle] copy];
+//        [title retain];
+//        if (title == nil || title.length == 0) {
+//            timeRelView.text = @"Sometime";
+//        }else{
+//            timeRelView.text = title;
+//        }
+//        [title release];
+//        
+//        NSString* desc = [[time getTimeDescription] copy];
+//        [desc retain];
+//        if(desc != nil && desc.length > 0){
+//            timeAbsView.text = desc;
+//            timeAbsView.hidden = NO;
+//            [timeAbsView sizeToFit];
+//            timeZoneView.hidden = NO;
+//            timeZoneView.text = time.begin_at.timezone;
+//            [timeZoneView sizeToFit];
+//        }else{
+//            timeAbsView.text = @"";
+//            timeAbsView.hidden = YES;
+//            timeZoneView.hidden = YES;
+//            timeZoneView.text = @"";
+//        }
+//        [desc release];
+        
         timeRelView.text = [Util getTimeTitle:time localTime:NO];
         NSString* desc = [Util getTimeDesc:time];
         if(desc != nil && desc.length > 0){
@@ -401,7 +485,7 @@
             timeZoneView.hidden = YES;
             timeZoneView.text = @"";
         }
-       
+        
     }else{
         timeRelView.text = @"Sometime";
         timeAbsView.text = @"";
@@ -479,6 +563,7 @@
 #pragma mark Relayout methods
 - (void)relayoutUI{
     if (layoutDirty == YES){
+        NSLog(@"relayoutUI");
         //CGRect f = self.view.frame;
         CGRect c = container.frame;
         
@@ -595,6 +680,7 @@
         container.contentSize = s;
         
         [self clearLayoutDirty];
+         NSLog(@"relayoutUI done");
     }
 }
 
