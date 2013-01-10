@@ -209,11 +209,11 @@
 }
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     if ([touch.view isKindOfClass:[UIButton class]]) {
-        // we touched a button, slider, or other UIControl
-        return NO; // ignore the touch
+        return NO; 
     }
-    return YES; // handle the touch
+    return YES;
 }
+
 - (void) initData{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSFetchRequest* request = [User fetchRequest];
@@ -1143,10 +1143,17 @@
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    NSLog(@"%@",objects);
-    if([objects count]>0){
-        [self fillExfee];
+    if([objects count]>0)
+    {
+        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+        [app GatherCrossDidFinish];
     }
+
+//    NSLog(@"%@",objects);
+//    if([objects count]>0){
+//        
+//        [self fillExfee];
+//    }
     
 }
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {

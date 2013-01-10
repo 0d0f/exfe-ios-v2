@@ -400,8 +400,8 @@
         {
             if(needsave==YES)
                 [[Cross currentContext] save:nil];
-            [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+//            [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
+//            [[NSUserDefaults standardUserDefaults] synchronize];
 
             if(![source isEqualToString:@"crossview"] && notification>0){
                 
