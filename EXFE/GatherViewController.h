@@ -17,7 +17,7 @@
 #import "Exfee.h"
 #import "User.h"
 #import "Invitation.h"
-#import "EXImagesCollectionView.h"
+#import "EXImagesCollectionGatherView.h"
 #import "ImgCache.h"
 #import "APIProfile.h"
 #import "Invitation.h"
@@ -43,7 +43,7 @@
 #define VIEW_MARGIN 6
 #define INNER_MARGIN 9
 
-@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionDelegate,UITextFieldDelegate,MKMapViewDelegate,UITextViewDelegate,UIScrollViewDelegate,UIAlertViewDelegate,UIGestureRecognizerDelegate>{
+@interface GatherViewController : UIViewController <RKRequestDelegate,RKObjectLoaderDelegate,EXImagesCollectionGatherDataSource,UITableViewDataSource,UITableViewDelegate,EXImagesCollectionGatherDelegate,UITextFieldDelegate,MKMapViewDelegate,UITextViewDelegate,UIScrollViewDelegate,UIAlertViewDelegate,UIGestureRecognizerDelegate>{
     UIView *toolbar;
     UITextView *crosstitle;
     UIImageView *title_input_img;
@@ -68,7 +68,7 @@
 //    Place *place;
     CrossTime *datetime;
     int boardoffset;
-    EXImagesCollectionView *exfeeShowview;
+    EXImagesCollectionGatherView *exfeeShowview;
     UILabel *timetitle;
     UILabel *timedesc;
     UILabel *placetitle;
@@ -80,7 +80,7 @@
     BOOL exfeeedit;
     BOOL firstLoad;
     BOOL notUserScroll;
-    ConversationViewController *conversationView;
+//    ConversationViewController *conversationView;
     UILabel *ccbuttonText;
     BOOL crosschangeflag;
     BOOL iscrossneedsave;

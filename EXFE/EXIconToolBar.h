@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "EXButton.h"
+#import "Util.h"
 
 #define DEFAULT_BUTTON_WIDTH 36
 #define DEFAULT_BUTTON_HEIGHT 30
-#define FONT_COLOR_250 [UIColor colorWithRed:250/255.0f green:250/255.0f blue:250/255.0f alpha:1]
 
 @interface EXIconToolBar : UIView{
     float button_width;

@@ -100,39 +100,6 @@
     [datepicker setTimeZone:[NSTimeZone localTimeZone]];
     [datepicker addTarget:self action:@selector(dateChanged:)
      forControlEvents:UIControlEventValueChanged];
-//    if(_crosstime!=nil){
-//        NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
-//        NSString *datetimestr=@"";
-//        NSString *timeword=@"";
-//        [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-//        [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        if(![_crosstime.begin_at.date isEqualToString:@""] &&![_crosstime.begin_at.time isEqualToString:@""]){
-//            datetimestr=[NSString stringWithFormat:@"%@ %@",_crosstime.begin_at.date,_crosstime.begin_at.time];
-//            NSDate *date=[dateformat dateFromString:datetimestr];
-//            if(date)
-//                [datepicker setDate:date];
-//        }
-//        else  if(![_crosstime.begin_at.date isEqualToString:@""]){
-//            datetimestr=[NSString stringWithFormat:@"%@ 00:00:00",_crosstime.begin_at.date];
-//            timeword=_crosstime.begin_at.time_word;
-//            NSDate *_date=[dateformat dateFromString:datetimestr];
-//            [dateformat setDateFormat:@"yyyy-MM-dd"];
-//            [dateformat setTimeZone:[NSTimeZone localTimeZone]];
-//            NSString *localdatestr=[dateformat stringFromDate:_date];
-//            [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//            datetimestr=[NSString stringWithFormat:@"%@ 10:00:00",localdatestr];
-//            _date=[dateformat dateFromString:datetimestr];
-//            if(_date)
-//                [datepicker setDate:_date];
-//            for(int i=0;i<[_times count];i++){
-//                if([(NSString*)[_times objectAtIndex:i] isEqualToString:timeword]){
-//                    [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-//                }
-//            }
-//        }
-//        [dateformat release];
-//        
-//    }
 
 }
 - (void) dateChanged:(id) sender{
@@ -142,6 +109,40 @@
     if(crosstime!=nil) {
         _crosstime=crosstime;
     }
+    if(_crosstime!=nil){
+        NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
+        NSString *datetimestr=@"";
+        NSString *timeword=@"";
+        [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        if(![_crosstime.begin_at.date isEqualToString:@""] &&![_crosstime.begin_at.time isEqualToString:@""]){
+            datetimestr=[NSString stringWithFormat:@"%@ %@",_crosstime.begin_at.date,_crosstime.begin_at.time];
+            NSDate *date=[dateformat dateFromString:datetimestr];
+            if(date)
+                [datepicker setDate:date];
+        }
+        else  if(![_crosstime.begin_at.date isEqualToString:@""]){
+            datetimestr=[NSString stringWithFormat:@"%@ 00:00:00",_crosstime.begin_at.date];
+            timeword=_crosstime.begin_at.time_word;
+            NSDate *_date=[dateformat dateFromString:datetimestr];
+            [dateformat setDateFormat:@"yyyy-MM-dd"];
+            [dateformat setTimeZone:[NSTimeZone localTimeZone]];
+            NSString *localdatestr=[dateformat stringFromDate:_date];
+            [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            datetimestr=[NSString stringWithFormat:@"%@ 10:00:00",localdatestr];
+            _date=[dateformat dateFromString:datetimestr];
+            if(_date)
+                [datepicker setDate:_date];
+            for(int i=0;i<[_times count];i++){
+                if([(NSString*)[_times objectAtIndex:i] isEqualToString:timeword]){
+                    [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+                }
+            }
+        }
+        [dateformat release];
+        
+    }
+
 }
 - (void) uselasttime{
     [self dismissModalViewControllerAnimated:YES];
@@ -241,7 +242,7 @@
     eftime.date_word=@"";
     eftime.timezone=eftimezone;
     crosstime.begin_at=eftime;
-    [(GatherViewController*)gatherview saveDateTime:crosstime];
+    [(NewGatherViewController*)gatherview setTime:crosstime];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

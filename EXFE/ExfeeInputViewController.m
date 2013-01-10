@@ -140,7 +140,7 @@ static char identitykey;
     
     NSDate *localaddressbook_read_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"localaddressbook_read_at"];
     int offset=[[NSDate date] timeIntervalSince1970]-[localaddressbook_read_at timeIntervalSince1970];
-    offset=100000;
+//    offset=100000;
     if(localcontacts==nil || offset > 1*24*60*60){
         MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode=MBProgressHUDModeCustomView;
@@ -283,16 +283,17 @@ static char identitykey;
     [super dealloc];
 }
 - (BOOL) showErrorHint{
-    if([(GatherViewController*)gatherview exfeeIdentitiesCount]+[exfeeList bubblecount]>=12){
-        if(errorHint==nil||[errorHint isHidden]==YES){
-            [self ErrorHint:NO content:@"12 exfees maximum"];
-        }
-        return YES;
-    }
-    else{
-        if(errorHint!=nil && [errorHint isHidden]==NO)
-            [self ErrorHint:YES content:@""];
-    }
+    //TODO: replace with new alert view
+//    if([(NewGatherViewController*)gatherview exfeeIdentitiesCount]+[exfeeList bubblecount]>=12){
+//        if(errorHint==nil||[errorHint isHidden]==YES){
+//            [self ErrorHint:NO content:@"12 exfees maximum"];
+//        }
+//        return YES;
+//    }
+//    else{
+//        if(errorHint!=nil && [errorHint isHidden]==NO)
+//            [self ErrorHint:YES content:@""];
+//    }
     return NO;
 }
 
@@ -322,7 +323,7 @@ static char identitykey;
         }
     }
     if([inputobjs count]==0){
-        [(GatherViewController*)gatherview addExfee:invitations];
+        [(NewGatherViewController*)gatherview addExfee:invitations];
         [self dismissModalViewControllerAnimated:YES];
     }
     else{
@@ -391,14 +392,14 @@ static char identitykey;
                                     Invitation *invitation =[Invitation object];
                                     invitation.rsvp_status=@"NORESPONSE";
                                     invitation.identity=identity;
-                                    Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
+                                    Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
                                     if(myinvitation!=nil)
                                         invitation.updated_by=myinvitation.identity;
                                     else
-                                        invitation.updated_by=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+                                        invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
                                     [invitations addObject:invitation];
                                 }
-                                [(GatherViewController*)gatherview addExfee:invitations];
+                                [(NewGatherViewController*)gatherview addExfee:invitations];
                                 [self dismissModalViewControllerAnimated:YES];
                             }
                     }
@@ -488,7 +489,7 @@ static char identitykey;
         BOOL flag=NO;
         NSString *key=[identity.provider stringByAppendingString:identity.external_id];
         if([dict objectForKey:key]==nil){
-            for (Invitation *selected in ((GatherViewController*)gatherview).exfeeIdentities){
+            for (Invitation *selected in ((NewGatherViewController*)gatherview).exfeeIdentities){
                 if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
                 {
                     flag=YES;
@@ -526,11 +527,11 @@ static char identitykey;
     Invitation *invitation =[Invitation object];
     invitation.rsvp_status=@"NORESPONSE";
     invitation.identity=identity;
-    Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
+    Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
     if(myinvitation!=nil)
         invitation.updated_by=myinvitation.identity;
     else
-        invitation.updated_by=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+        invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
     
     [exfeeList addBubble:input customObject:invitation];
     if([exfeeList bubblecount]>0)
@@ -689,11 +690,11 @@ static char identitykey;
         Invitation *invitation =[Invitation object];
         invitation.rsvp_status=@"NORESPONSE";
         invitation.identity=identity;
-        Invitation *myinvitation=[((GatherViewController*)gatherview) getMyInvitation];
+        Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
         if(myinvitation!=nil)
             invitation.updated_by=myinvitation.identity;
         else
-            invitation.updated_by=[[((GatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+            invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
 
         NSString *identity_name=identity.nickname;
         if(identity_name==nil || [identity_name isEqualToString:@""])

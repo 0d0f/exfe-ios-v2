@@ -252,7 +252,7 @@
     
 }
 - (void)ShowGatherView{
-    GatherViewController *gatherViewController=[[GatherViewController alloc]initWithNibName:@"GatherViewController" bundle:nil];
+    NewGatherViewController *gatherViewController=[[NewGatherViewController alloc]initWithNibName:@"NewGatherViewController" bundle:nil];
     
     [self.navigationController presentModalViewController:gatherViewController animated:YES];
     [gatherViewController release];
@@ -401,8 +401,8 @@
         {
             if(needsave==YES)
                 [[Cross currentContext] save:nil];
-            [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+//            [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
+//            [[NSUserDefaults standardUserDefaults] synchronize];
 
             if(![source isEqualToString:@"crossview"] && notification>0){
                 

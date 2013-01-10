@@ -17,6 +17,7 @@
 #import "MBProgressHUD.h"
 #import "ProfileCard.h"
 #import "CrossCard.h"
+#import "NewGatherViewController.h"
 
 @interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate, CrossCardDelegate>
 {

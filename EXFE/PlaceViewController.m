@@ -144,7 +144,7 @@
         [self initPlaceView];
     }
     if([place.place_id intValue]==0)
-        place.place_id=[NSNumber numberWithInt:-[((GatherViewController*)gatherview).cross.cross_id intValue]];
+        place.place_id=[NSNumber numberWithInt:-[((NewGatherViewController*)gatherview).cross.cross_id intValue]];
 
     float tableviewx=map.frame.origin.x;
     float tableviewy=map.frame.origin.y+map.frame.size.height;
@@ -182,8 +182,7 @@
     if(showtableview==YES){
         [self setViewStyle:EXPlaceViewStyleBigTableview];
         [inputplace becomeFirstResponder];
-    }
-    
+    }    
 //
 }
 
@@ -357,25 +356,25 @@
 }
 
 - (void) done{
-    if(placeedit.hidden==NO){
-        place.title=[placeedit getPlaceTitleText];
-        place.place_description=[placeedit getPlaceDescText];
-    }
-    if(isedit==YES){
-       if([[originplace objectForKey:@"external_id"] isEqualToString:place.external_id] &&
-          [[originplace objectForKey:@"lat"] isEqualToString:place.lat] &&
-          [[originplace objectForKey:@"lng"] isEqualToString:place.lng] &&
-          [[originplace objectForKey:@"place_description"] isEqualToString:place.place_description] &&
-          [[originplace objectForKey:@"provider"] isEqualToString:place.provider] &&
-          [[originplace objectForKey:@"title"] isEqualToString:place.title]
-          ){
-           [(GatherViewController*)gatherview setPlace:place];
-       }
-       else
-        [(GatherViewController*)gatherview savePlace:place];
-    }
-    else
-        [(GatherViewController*)gatherview setPlace:place];
+//    if(placeedit.hidden==NO){
+//        place.title=[placeedit getPlaceTitleText];
+//        place.place_description=[placeedit getPlaceDescText];
+//    }
+//    if(isedit==YES){
+//       if([[originplace objectForKey:@"external_id"] isEqualToString:place.external_id] &&
+//          [[originplace objectForKey:@"lat"] isEqualToString:place.lat] &&
+//          [[originplace objectForKey:@"lng"] isEqualToString:place.lng] &&
+//          [[originplace objectForKey:@"place_description"] isEqualToString:place.place_description] &&
+//          [[originplace objectForKey:@"provider"] isEqualToString:place.provider] &&
+//          [[originplace objectForKey:@"title"] isEqualToString:place.title]
+//          ){
+//           [(NewGatherViewController*)gatherview fillPlace:place];
+//       }
+//       else
+//        [(NewGatherViewController*)gatherview fillPlace:place];
+//    }
+//    else
+        [(NewGatherViewController*)gatherview setPlace:place];
     [self dismissModalViewControllerAnimated:YES];
 }
 - (void)didReceiveMemoryWarning

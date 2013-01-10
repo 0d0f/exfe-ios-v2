@@ -11,8 +11,10 @@
 #import <CoreLocation/CoreLocation.h>
 #import "APIPlace.h"
 #import "PlaceAnnotation.h"
-#import "GatherViewController.h"
+#import "NewGatherViewController.h"
 #import "EXPlaceEditView.h"
+#import "WildcardGestureRecognizer.h"
+#import "Util.h"
 
 typedef enum {
     EXPlaceViewStyleDefault,
