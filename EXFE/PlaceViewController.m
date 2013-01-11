@@ -61,17 +61,41 @@
     [super viewDidLoad];
     originplace=[[NSMutableDictionary alloc] initWithCapacity:5];
     
-    toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
-    [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
+//    toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
+//    [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
+//    [self.view addSubview:toolbar];
+//    
+//    backgroundview=[[UIView alloc] initWithFrame:CGRectMake(6, 7, 255, 30)];
+//    backgroundview.backgroundColor=[UIColor whiteColor];
+//    backgroundview.layer.cornerRadius=15;
+//
+//    [toolbar addSubview:backgroundview];
+    toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
+    [toolbar.layer setShadowOpacity:0.8];
+    [toolbar.layer setShadowRadius:3.0];
+    [toolbar.layer setShadowOffset:CGSizeMake(0, 0)];
     [self.view addSubview:toolbar];
-    
-    backgroundview=[[UIView alloc] initWithFrame:CGRectMake(6, 7, 255, 30)];
-    backgroundview.backgroundColor=[UIColor whiteColor];
-    backgroundview.layer.cornerRadius=15;
 
-    [toolbar addSubview:backgroundview];
-    inputplace=[[UITextField alloc] initWithFrame:CGRectMake(10+10+10, 7, 240-44-2-10+44, 30)];
+    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
+    [btnBack setFrame:CGRectMake(0, 0, 20, 44)];
+    btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btnBack addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside];
+    [toolbar addSubview:btnBack];
+
+    
+    
+    
+    UIImageView *inputframeview=[[UIImageView alloc] initWithFrame:CGRectMake(28, 7, 229, 31)];
+    inputframeview.image=[UIImage imageNamed:@"textfield.png"];
+    inputframeview.contentMode    = UIViewContentModeScaleToFill;
+    inputframeview.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+    [toolbar addSubview:inputframeview];
+    
+    inputplace=[[UITextField alloc] initWithFrame:CGRectMake(54, 13.5, 195-18, 18.5)];
     inputplace.tag=401;
+    inputplace.placeholder=@"Search place";
     [inputplace setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     inputplace.delegate=self;
     [inputplace setAutocorrectionType:UITextAutocorrectionTypeNo];
@@ -79,34 +103,38 @@
     inputplace.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     [inputplace setBackgroundColor:[UIColor clearColor]];
     [toolbar addSubview:inputplace];
-    UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(6+4, 13, 18, 18)];
+    inputplace.text=@"";
+    
+    UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(33, 13.5, 18, 18)];
     icon.image=[UIImage imageNamed:@"place_18.png"];
     [toolbar addSubview:icon];
     [icon release];
 
-    if(place!=nil) {
-        revert=[UIButton buttonWithType:UIButtonTypeCustom];
-        [revert setFrame:CGRectMake(210, 13, 44, 19)];
-        revert.backgroundColor=[UIColor colorWithRed:191/255.0f green:191/255.0f blue:191/255.0f alpha:1.00f];
-        [revert setTitle:@"Revert" forState:UIControlStateNormal];
-        [revert.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:10]];
-        revert.layer.cornerRadius=10;
-        revert.layer.masksToBounds=YES;
-        [revert setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [revert addTarget:self action:@selector(doRevert:) forControlEvents:UIControlEventTouchUpInside];
-        [toolbar addSubview:revert];
-        [inputplace setFrame:CGRectMake(10+10+10, 7, 240-44-2-10, 30)];
-    }
+//    if(place!=nil) {
+//        revert=[UIButton buttonWithType:UIButtonTypeCustom];
+//        [revert setFrame:CGRectMake(210, 13, 44, 19)];
+//        revert.backgroundColor=[UIColor colorWithRed:191/255.0f green:191/255.0f blue:191/255.0f alpha:1.00f];
+//        [revert setTitle:@"Revert" forState:UIControlStateNormal];
+//        [revert.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:10]];
+//        revert.layer.cornerRadius=10;
+//        revert.layer.masksToBounds=YES;
+//        [revert setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        [revert addTarget:self action:@selector(doRevert:) forControlEvents:UIControlEventTouchUpInside];
+//        [toolbar addSubview:revert];
+//        [inputplace setFrame:CGRectMake(10+10+10, 7, 240-44-2-10, 30)];
+//    }
     
     rightbutton=[UIButton buttonWithType:UIButtonTypeCustom];
     [rightbutton setFrame:CGRectMake(265, 7, 50, 30)];
     [rightbutton setTitle:@"Done" forState:UIControlStateNormal];
     [rightbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
-    [rightbutton setTitleColor:[UIColor colorWithRed:204.0/255.0f green:229.0/255.0f blue:255.0/255.0f alpha:1] forState:UIControlStateNormal];
+    [rightbutton setTitleColor:[UIColor colorWithRed:25/255.0f green:25/255.0f blue:25/255.0f alpha:1] forState:UIControlStateNormal];
+    rightbutton.titleLabel.shadowColor=[UIColor whiteColor];
+    rightbutton.titleLabel.shadowOffset=CGSizeMake(0, 1);
+    
     [rightbutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)] forState:UIControlStateNormal];
     [rightbutton addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:rightbutton];
-    
     [self regObserver];
     
     CGRect inputframe=backgroundview.frame;
@@ -168,10 +196,10 @@
     
     if([inputplace.text length]>1){
         [clearbutton setHidden:NO];
-        [revert setHidden:YES];
+//        [revert setHidden:YES];
     }else if([inputplace.text isEqualToString:@""] || place==nil){
         [clearbutton setHidden:YES];
-        [revert setHidden:YES];
+//        [revert setHidden:YES];
     }
     [inputplace setReturnKeyType:UIReturnKeySearch];
     map.showsUserLocation = YES;
@@ -231,8 +259,15 @@
         [placeedit resignFirstResponder];
     }
 }
+
 - (void) PlaceEditClose:(id) sender{
 }
+
+- (void) Close{
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+
 - (void) setViewStyle:(EXPlaceViewStyle)style{
     if(style== EXPlaceViewStyleDefault){
         
@@ -303,7 +338,7 @@
         [map addAnnotation:annotation];
         [annotation release];
         [clearbutton setHidden:YES];
-        [revert setHidden:NO];
+//        [revert setHidden:NO];
         [placeedit setPlaceTitleText:@"Somewhere"];
         [placeedit setPlaceDescText:@""];
     }
@@ -472,7 +507,7 @@
     [placeedit resignFirstResponder];
     [inputplace becomeFirstResponder];
     inputplace.text=@"";
-    [revert setHidden:NO];
+//    [revert setHidden:NO];
     [clearbutton setHidden:YES];
     isnotinputplace=NO;
     [_tableView reloadData];
@@ -760,7 +795,7 @@
     }
     if(![textField.text isEqualToString:@""] && ![textField.text isEqualToString:place.title] && place.title!=nil){
         [clearbutton setHidden:YES];
-        [revert setHidden:NO];
+//        [revert setHidden:NO];
     }
     
     [_tableView reloadData];
@@ -785,7 +820,6 @@
 - (void) setRightButton:(NSString*) title Selector:(SEL)aSelector{
     [rightbutton setTitle:title forState:UIControlStateNormal];
     [rightbutton addTarget:self action:aSelector forControlEvents:UIControlEventTouchUpInside];
-
 }
 
 - (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {

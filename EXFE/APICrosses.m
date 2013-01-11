@@ -137,8 +137,8 @@
 
     RKObjectMapping* crossSerializationMapping = [crossMapping inverseMapping];
     [manager.mappingProvider setSerializationMapping:crossSerializationMapping forClass:[Cross class]];
-    
     manager.serializationMIMEType = RKMIMETypeJSON;
+    
     NSString *endpoint = [NSString stringWithFormat:@"/crosses/gather"];
     [manager.router routeClass:[Cross class] toResourcePath:endpoint forMethod:RKRequestMethodPOST];
 
