@@ -8,7 +8,7 @@
 
 #import "CrossesViewController.h"
 #import "ProfileViewController.h"
-#import "GatherViewController.h"
+//#import "GatherViewController.h"
 #import "CrossDetailViewController.h"
 #import "APICrosses.h"
 #import "Cross.h"
@@ -414,23 +414,23 @@
                 [app.navigationController dismissModalViewControllerAnimated:YES];
             }
             else if([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"pushtocross"]) {
-                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-                Cross *cross=[self crossWithId:[cross_id intValue]];
-                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-                gatherViewController.cross=cross;
-                [gatherViewController setViewMode];
-                [self.navigationController pushViewController:gatherViewController animated:YES];
-                [gatherViewController release];
+//                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
+//                Cross *cross=[self crossWithId:[cross_id intValue]];
+//                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+//                gatherViewController.cross=cross;
+//                [gatherViewController setViewMode];
+//                [self.navigationController pushViewController:gatherViewController animated:YES];
+//                [gatherViewController release];
             }
             else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"pushtoconversation"]) {
-                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-                Cross *cross=[self crossWithId:[cross_id intValue]];
-                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-                gatherViewController.cross=cross;
-                [gatherViewController setViewMode];
-                [self.navigationController pushViewController:gatherViewController animated:NO];
-                [gatherViewController toconversation];
-                [gatherViewController release];
+//                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
+//                Cross *cross=[self crossWithId:[cross_id intValue]];
+//                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+//                gatherViewController.cross=cross;
+//                [gatherViewController setViewMode];
+//                [self.navigationController pushViewController:gatherViewController animated:NO];
+//                [gatherViewController toconversation];
+//                [gatherViewController release];
             }
             else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossupdateview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview_init"]) {
 //                NSString *refresh_cross_id=[objectLoader.userData objectForKey:@"cross_id" ];
@@ -753,11 +753,11 @@
 - (BOOL) PushToCross:(int)cross_id{
     Cross *cross = [self crossWithId:cross_id];
     if(cross != nil){
-        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-        gatherViewController.cross=cross;
-        [gatherViewController setViewMode];
-        [self.navigationController pushViewController:gatherViewController animated:YES];
-        [gatherViewController release];
+//        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+//        gatherViewController.cross=cross;
+//        [gatherViewController setViewMode];
+//        [self.navigationController pushViewController:gatherViewController animated:YES];
+//        [gatherViewController release];
         return YES;
     }
     return NO;
@@ -768,13 +768,13 @@
 - (BOOL) PushToConversation:(int)cross_id{
     Cross *cross=[self crossWithId:cross_id];
     if(cross!=nil){
-        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-        
-        gatherViewController.cross=cross;
-        [gatherViewController setViewMode];
-        [self.navigationController pushViewController:gatherViewController animated:YES];
-        [gatherViewController toconversation];
-        [gatherViewController release];
+//        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+//        
+//        gatherViewController.cross=cross;
+//        [gatherViewController setViewMode];
+//        [self.navigationController pushViewController:gatherViewController animated:YES];
+//        [gatherViewController toconversation];
+//        [gatherViewController release];
         return YES;
     }
     return NO;

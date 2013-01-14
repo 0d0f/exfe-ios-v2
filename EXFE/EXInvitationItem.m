@@ -15,7 +15,7 @@
 @synthesize mates;
 @synthesize rsvp_status;
 @synthesize isMe;
-//@synthesize name;
+@synthesize isGather;
 @synthesize invitation;
 
 
@@ -59,7 +59,7 @@
             CGImageRef ximageref = CGImageRetain(avatar.CGImage);
             CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , ximageref);
             CGImageRelease(ximageref);
-            if(isMe){
+            if(isMe && !isGather){
                 UIImage *rsvpicon = nil;
                 if ([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
                     rsvpicon=[UIImage imageNamed:@"rsvp_accepted_stroke_26blue.png"];

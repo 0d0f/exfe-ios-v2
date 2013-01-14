@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "EXGradientToolbarView.h"
+#import "EXAttributedLabel.h"
 #import "EXCurveImageView.h"
 #import "ImgCache.h"
 #import "Util.h"
@@ -16,7 +17,9 @@
 
 @interface TitleDescEditViewController : UIViewController{
     EXGradientToolbarView *toolbar;
-    EXCurveImageView *dectorView;
+    EXCurveView *headview;
+    UIImageView *dectorView;
+    
     UITextView *titleView;
     UITextView *descView;
     UIViewController *gatherview;

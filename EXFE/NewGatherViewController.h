@@ -10,7 +10,7 @@
 #import <MapKit/MapKit.h>
 #import <RestKit/JSONKit.h>
 #import <RestKit/RestKit.h>
-#import "EXCurveImageView.h"
+#import "EXCurveView.h"
 #import "Cross.h"
 #import "Identity.h"
 #import "Exfee.h"
@@ -33,7 +33,9 @@
 @interface NewGatherViewController : UIViewController <EXImagesCollectionGatherDataSource, EXImagesCollectionGatherDelegate, MKMapViewDelegate, EXRSVPMenuDelegate,UIGestureRecognizerDelegate>{
     
     UIScrollView *container;
-    EXCurveImageView *dectorView;
+//    EXCurveImageView *dectorView;
+    EXCurveView *headview;
+    UIImageView *dectorView;
     UILabel *descView;
     EXImagesCollectionGatherView *exfeeShowview;
     //UIView *exfeeShowview;

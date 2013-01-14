@@ -19,6 +19,7 @@
     UIImage *avatar;
     BOOL isHost;
     BOOL isSelected;
+    BOOL isGather;
     int mates;
     NSString *rsvp_status;
     BOOL isMe;
@@ -29,6 +30,7 @@
 @property BOOL isHost;
 @property BOOL isSelected;
 @property BOOL isMe;
+@property BOOL isGather;
 @property int mates;
 @property (nonatomic,retain) NSString *rsvp_status;
 //@property (nonatomic,retain) NSString *name;
