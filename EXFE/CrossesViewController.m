@@ -726,7 +726,7 @@
         
         
         if([c.cross_id intValue]==cross_id)
-            [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: [NSIndexPath indexPathForRow:i inSection:0]]
+            [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: [NSIndexPath indexPathForRow:i inSection:1]]
                                   withRowAnimation: UITableViewRowAnimationNone];
     }
 }
@@ -790,7 +790,7 @@
     if(cross != nil){
         CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
         viewController.cross = cross;
-        [self.navigationController pushViewController:viewController animated:YES];
+        [self.navigationController pushViewController:viewController animated:NO];
         [viewController toConversationAnimated:NO];
         [viewController release];
     }

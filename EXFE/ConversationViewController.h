@@ -22,7 +22,7 @@
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20
-#define kDefaultToolbarHeight 42
+#define kDefaultToolbarHeight 0
 #define kKeyboardHeightPortrait 216
 #define kKeyboardHeightLandscape 140
 
@@ -34,6 +34,7 @@
     UIImage *cellbackground;
     UIImage *cellsepator;
     UIImage *avatarframe;
+    NSDictionary *headImgDict;
     ConversationInputAccessoryView *inputaccessoryview;
     CATextLayer *timetextlayer;
     CATextLayer *floattimetextlayer;
@@ -51,8 +52,9 @@
 @property (retain,nonatomic) Identity* identity;
 @property (retain,nonatomic) UIInputToolbar* inputToolbar;
 @property (retain,nonatomic) NSString* cross_title;
+@property (nonatomic, copy) NSDictionary *headImgDict;
 
--(void) refreshConversation;
+- (void) refreshConversation;
 - (void)loadObjectsFromDataStore;
 - (void) addPost:(NSString*)content;
 - (void)touchesBegan:(UITapGestureRecognizer*)sender;

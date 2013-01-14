@@ -14,16 +14,6 @@
 #import "Util.h"
 #import "NewGatherViewController.h"
 
-#define LARGE_SLOT                       (16)
-#define SMALL_SLOT                      (5)
-
-#define DECTOR_HEIGHT                    (88)
-#define DECTOR_HEIGHT_EXTRA              (LARGE_SLOT)
-#define DECTOR_MARGIN                    (SMALL_SLOT)
-#define TITLE_HORIZON_MARGIN             (SMALL_SLOT)
-#define TITLE_VERTICAL_MARGIN            (18)
-
-
 @interface TitleDescEditViewController : UIViewController{
     EXGradientToolbarView *toolbar;
     EXCurveImageView *dectorView;

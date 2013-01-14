@@ -15,6 +15,7 @@
 #import "Place+Helper.h"
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
+#import "EXCurveView.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -155,33 +156,43 @@
     container.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:container];
     
-    dectorView = [[EXCurveImageView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width * 0.6,  f.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
-    dectorView.backgroundColor = [UIColor COLOR_WA(0x00, 0)];
-    [self.view addSubview:dectorView];
     
-    btnBack = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 24, DECTOR_HEIGHT - 20 * 2)];
-    btnBack.backgroundColor = [UIColor lightGrayColor];
-    [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btnBack];
-   
     
-    titleView = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - (CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN) * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
-    titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
-    titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
-    titleView.backgroundColor = [UIColor clearColor];
-    titleView.lineBreakMode = UILineBreakModeWordWrap;
-    titleView.numberOfLines = 2;
-    titleView.textAlignment = NSTextAlignmentCenter;
-    titleView.shadowColor = [UIColor blackColor];
-    titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-    [self.view addSubview:titleView];
-    
-    UIButton * widgetBar = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    widgetBar.frame = CGRectMake(CGRectGetMaxX(dectorView.frame) - 48 - 5, CGRectGetMaxY(dectorView.frame) - 24 - 5, 48, 24);
-    [widgetBar addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:widgetBar];
+    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width * 0.8,  f.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
+    headerView.backgroundColor = [UIColor COLOR_WA(0x7F, 0xFF)];
+    {
+        dectorView = [[UIImageView alloc] initWithFrame:headerView.bounds];
+        [headerView addSubview:dectorView];
+        
+        btnBack = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 24, DECTOR_HEIGHT - 20 * 2)];
+        btnBack.backgroundColor = [UIColor lightGrayColor];
+        [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
+        [headerView addSubview:btnBack];
+        
+        titleView = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - (CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN) * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+        titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
+        titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+        titleView.backgroundColor = [UIColor clearColor];
+        titleView.lineBreakMode = UILineBreakModeWordWrap;
+        titleView.numberOfLines = 2;
+        titleView.textAlignment = NSTextAlignmentCenter;
+        titleView.shadowColor = [UIColor blackColor];
+        titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
+        [headerView addSubview:titleView];
+        
+        UIButton * widgetBar = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        widgetBar.frame = CGRectMake(CGRectGetMaxX(headerView.frame) - 48 - 5, CGRectGetMaxY(headerView.frame) - 24 - 5, 48, 24);
+        [widgetBar addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
+        [widgetBar addTarget:self action:@selector(widgetPress:) forControlEvents:UIControlEventTouchUpOutside];
+        [headerView addSubview:widgetBar];
+    }
+    [self.view addSubview:headerView];
     
     self.view.backgroundColor = [UIColor grayColor];
+}
+
+- (void)widgetPress:(id)sender{
+    [self toConversationAnimated:YES];
 }
 
 - (void)widgetClick:(id)sender{
@@ -259,9 +270,11 @@
     [placeDescView release];
     [mapView release];
     [container release];
+    
     [dectorView release];
     [btnBack release];
     [titleView release];
+    [headerView release];
     
     [super dealloc];
 }
@@ -759,7 +772,7 @@
     //    }
     
     //    [exfeeIdentities count]
-    NSLog(@"Exfee Collection should resize to %f", height);
+    //NSLog(@"Exfee Collection should resize to %f", height);
     if (height > 0){
         exfeeSuggestHeight = height;
     }
@@ -1060,6 +1073,12 @@
     // prepare data for conversation
     conversationView.exfee_id = [cross.exfee.exfee_id intValue];
     conversationView.cross_title = cross.title;
+    for(NSDictionary *widget in cross.widget) {
+        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+            conversationView.headImgDict = widget;
+            break;
+        }
+    }
     Invitation* myInv = [self getMyInvitation];
     if (myInv != nil){
         conversationView.identity = myInv.identity;
@@ -1081,11 +1100,11 @@
         [UIView setAnimationTransition:
          UIViewAnimationTransitionFlipFromRight
                                forView:self.navigationController.view cache:NO];
-    }
-    [self.navigationController pushViewController:conversationView animated:NO];
-    if (isAnimated){
         [UIView commitAnimations];
+        
     }
+    [self.navigationController pushViewController:conversationView animated:!isAnimated];
+    [conversationView release];
 }
 
 @end
