@@ -152,9 +152,11 @@
     container.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:container];
     
-    dectorView = [[EXCurveImageView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width * 0.6,  f.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
-    dectorView.backgroundColor = [UIColor COLOR_WA(0x00, 0)];
-    [self.view addSubview:dectorView];
+    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width * 0.6,  f.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
+    headview.backgroundColor=[UIColor grayColor];
+    dectorView=[[UIImageView alloc] initWithFrame:headview.bounds];
+    [headview addSubview:dectorView];
+    [self.view addSubview:headview];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
     [btnBack setFrame:CGRectMake(0, 20, 24, DECTOR_HEIGHT - 20 * 2)];
@@ -235,7 +237,6 @@
 
     exfeeInvitations = [[NSMutableArray alloc] initWithCapacity:12];
     cross=[Cross object];
-    cross.title=@".X.";
     cross.cross_description=@"Take some note";
 
     NSDictionary *widget=[NSDictionary dictionaryWithObjectsAndKeys:@"",@"image",@"Background",@"type", nil];
@@ -244,6 +245,11 @@
     [cross.widget addObject:widget];
     
     [self addDefaultIdentity];
+    User *user=default_user;
+    Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
+
+    cross.title=[NSString stringWithFormat:@".X. with %@",default_identity.name];
+
 //    cross.exfee.invitations
 }
 
@@ -276,6 +282,7 @@
     [mapView release];
     [container release];
     [dectorView release];
+    [headview release];
 //    [btnBack release];
     [titleView release];
     
@@ -510,15 +517,16 @@
                     UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
+
                             dectorView.image = backimg;
-                            //[self setLayoutDirty];
+                            [self setLayoutDirty];
                         }
                     });
                 });
                 dispatch_release(imgQueue);
             }else{
                 dectorView.image = backimg;
-                //[self setLayoutDirty];
+                [self setLayoutDirty];
             }
             flag = YES;
             if (dectorView.hidden == YES){
@@ -808,6 +816,8 @@
     Invitation *invitation =[exfeeInvitations objectAtIndex:index];
     
     EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
+    item.backgroundColor=[UIColor clearColor];
+    item.isGather=YES;
     
     if(app.userid ==[invitation.identity.connected_user_id intValue]){
         item.isMe = YES;

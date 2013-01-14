@@ -307,9 +307,9 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (void) cleanDate{
-    [(GatherViewController*)gatherview setDateTime:nil];
-}
+//- (void) cleanDate{
+//    [(GatherViewController*)gatherview setDateTime:nil];
+//}
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [inputtimeword resignFirstResponder];
     [_tableView becomeFirstResponder];

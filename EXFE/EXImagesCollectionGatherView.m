@@ -110,9 +110,9 @@
             [view removeFromSuperview];
         //        [view release];
     }
-    if(acceptlabel!=nil){
-        [acceptlabel setHidden:YES];
-    }
+//    if(acceptlabel!=nil){
+//        [acceptlabel setHidden:YES];
+//    }
     
     [itemsCache removeAllObjects];
     [itemsCache release];
@@ -179,19 +179,19 @@
                     [self addSubview:item];
                     if([item.invitation.rsvp_status isEqualToString:@"ACCEPTED"]){
                         acceptednum += 1;
-                        if( acceptednum==1){
-                            if(acceptlabel==nil){
-                                acceptlabel=[[UILabel alloc] initWithFrame:CGRectMake(x, y-12, 50, 12)];
-                                [acceptlabel setBackgroundColor:[UIColor colorWithRed:58.0/255.0f green:110.0/255.0f blue:165.0/255.0f alpha:0.2]];
-                                [acceptlabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
-                                [acceptlabel setTextColor:[UIColor colorWithRed:103/255.0 green:127/255.0 blue:153/255.0 alpha:1]];
-                                [acceptlabel setTextAlignment:NSTextAlignmentCenter];
-                                [self addSubview:acceptlabel];
-                            }
-                            [acceptlabel setFrame:CGRectMake(x, y-12, 50, 12)];
-                            acceptlabel.text=@"Accepted";
-                            [acceptlabel setHidden:NO];
-                        }
+//                        if( acceptednum==1){
+//                            if(acceptlabel==nil){
+//                                acceptlabel=[[UILabel alloc] initWithFrame:CGRectMake(x, y-12, 50, 12)];
+//                                [acceptlabel setBackgroundColor:[UIColor colorWithRed:58.0/255.0f green:110.0/255.0f blue:165.0/255.0f alpha:0.2]];
+//                                [acceptlabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
+//                                [acceptlabel setTextColor:[UIColor colorWithRed:103/255.0 green:127/255.0 blue:153/255.0 alpha:1]];
+//                                [acceptlabel setTextAlignment:NSTextAlignmentCenter];
+//                                [self addSubview:acceptlabel];
+//                            }
+//                            [acceptlabel setFrame:CGRectMake(x, y-12, 50, 12)];
+//                            acceptlabel.text=@"Accepted";
+//                            [acceptlabel setHidden:NO];
+//                        }
                         //                        acceptflag=YES;
                     }
                     allnum+=1+[item.invitation.mates intValue];
@@ -210,9 +210,29 @@
 //            exfeecount.backgroundColor=[UIColor whiteColor];
             if(addview==nil){
                 addview=[[UIView alloc] initWithFrame:CGRectMake(x+5, y+5, 52, 52)];
-                addview.backgroundColor=[UIColor blueColor];
+                UIImageView *addimg=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 52, 52)];
+                addimg.image=[UIImage imageNamed:@"gather_add.png"];
+                [addview addSubview:addimg];
+                UILabel *invited_num=[[UILabel alloc] initWithFrame:CGRectMake(0, 2, 18, 10)];
+                invited_num.font=[UIFont fontWithName:@"HelveticaNeue" size:14];
+                invited_num.textColor=FONT_COLOR_51;
+                invited_num.text=[NSString stringWithFormat:@"%i",allnum];
+                invited_num.backgroundColor=[UIColor clearColor];
+                invited_num.textAlignment=NSTextAlignmentCenter;
+                [addview addSubview:invited_num];
+                
+                UILabel *invitedstr=[[UILabel alloc] initWithFrame:CGRectMake(18, 4, 52-18, 10)];
+                invitedstr.font=[UIFont fontWithName:@"HelveticaNeue" size:10];
+                invitedstr.textColor=FONT_COLOR_51;
+                invitedstr.text=@"invited";
+                invitedstr.backgroundColor=[UIColor clearColor];
+                invitedstr.textAlignment=NSTextAlignmentLeft;
+                [addview addSubview:invitedstr];
+                
                 [self addSubview:addview];
+                [addimg release];
                 [addview release];
+                [invited_num release];
             }
             else{
                 [addview setFrame:CGRectMake(x+5, y+5, 52, 52)];
@@ -266,7 +286,7 @@
 
 - (void)dealloc {
 	[grid release];
-    [acceptlabel release];
+//    [acceptlabel release];
     [super dealloc];
 }
 

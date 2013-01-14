@@ -50,6 +50,7 @@
      @"type", @"type",
      nil];
     [invitationMapping mapRelationship:@"identity" withMapping:[Mapping getIdentityMapping]];
+    [invitationMapping mapRelationship:@"invitated_by" withMapping:[Mapping getIdentityMapping]];
     [invitationMapping mapRelationship:@"updated_by" withMapping:[Mapping getIdentityMapping]];
     return invitationMapping;
 }

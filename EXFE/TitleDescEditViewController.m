@@ -89,25 +89,33 @@
     [doneButton setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
     
     [toolbar addSubview:doneButton];
+//    [toolbar setHidden:YES];
 
     
-    dectorView = [[EXCurveImageView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(0+ self.view.frame.size.width * 0.6,  self.view.frame.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
-    
-    [self.view addSubview:dectorView];
+    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(0+ self.view.frame.size.width * 0.6,  self.view.frame.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
 
-    titleView = [[UITextView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btncancel.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN+toolbar.frame.size.height, self.view.frame.size.width - (CGRectGetMaxX(btncancel.frame) + TITLE_HORIZON_MARGIN) * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+    headview.backgroundColor=[UIColor grayColor];
+    dectorView=[[UIImageView alloc] initWithFrame:headview.bounds];
+    [headview addSubview:dectorView];
+    [self.view addSubview:headview];
     
-    titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
-    titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+    titleView = [[UITextView alloc] initWithFrame:CGRectMake(25.5,20.5,263,47)];
+    titleView.textColor = [UIColor blackColor];
+    titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
     titleView.backgroundColor = [UIColor clearColor];
     titleView.textAlignment = NSTextAlignmentCenter;
     titleView.backgroundColor=[UIColor clearColor];
 //    titleView.layer.shadowColor = [UIColor blackColor].CGColor;
 //    titleView.layer.shadowOffset= CGSizeMake(0.0f, 1.0f);
 //    titleView.layer.MasksToBounds = false;
-    [self.view addSubview:titleView];
+    
+    UIImageView *imageback=[[UIImageView alloc] initWithFrame:CGRectMake(25.5,20.5,263,47)];
+    imageback.image=[[UIImage imageNamed:@"xedit_textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(4,4,4,4)];
+    [headview addSubview:imageback];
+    [imageback release];
+    [headview addSubview:titleView];
 
-    descView = [[UITextView alloc] initWithFrame:CGRectMake(0, dectorView.frame.origin.y+dectorView.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-(dectorView.frame.origin.y+dectorView.frame.size.height))];
+    descView = [[UITextView alloc] initWithFrame:CGRectMake(0, headview.frame.origin.y+headview.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-(headview.frame.origin.y+headview.frame.size.height))];
     descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
     descView.backgroundColor = [UIColor clearColor];
     descView.textAlignment = NSTextAlignmentLeft;
@@ -214,6 +222,11 @@
 //                dectorView.image = backimg;
 //            }
 //    }
+}
+
+- (void) dealloc{
+    [dectorView release];
+    [headview release];
 }
 
 - (void) Close{
