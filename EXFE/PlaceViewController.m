@@ -85,8 +85,6 @@
     [toolbar addSubview:btnBack];
 
     
-    
-    
     UIImageView *inputframeview=[[UIImageView alloc] initWithFrame:CGRectMake(28, 7, 229, 31)];
     inputframeview.image=[UIImage imageNamed:@"textfield.png"];
     inputframeview.contentMode    = UIViewContentModeScaleToFill;
