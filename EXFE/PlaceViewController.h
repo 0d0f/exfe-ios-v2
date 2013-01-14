@@ -14,6 +14,7 @@
 #import "NewGatherViewController.h"
 #import "EXPlaceEditView.h"
 #import "WildcardGestureRecognizer.h"
+#import "EXGradientToolbarView.h"
 #import "Util.h"
 
 typedef enum {
@@ -27,7 +28,7 @@ typedef enum {
 
 @interface PlaceViewController : UIViewController <CLLocationManagerDelegate,UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,UITextFieldDelegate,UIActionSheetDelegate>{
     CLLocationManager *locationManager;
-    UIView *toolbar;
+    EXGradientToolbarView *toolbar;
     IBOutlet MKMapView *map;
     UITextField *inputplace;
 //    IBOutlet UIBarButtonItem *rightbutton;

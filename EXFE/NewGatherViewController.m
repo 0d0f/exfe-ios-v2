@@ -156,9 +156,11 @@
     dectorView.backgroundColor = [UIColor COLOR_WA(0x00, 0)];
     [self.view addSubview:dectorView];
     
-    btnBack = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 24, DECTOR_HEIGHT - 20 * 2)];
-    btnBack.backgroundColor = [UIColor lightGrayColor];
-    [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
+    btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
+    [btnBack setFrame:CGRectMake(0, 20, 24, DECTOR_HEIGHT - 20 * 2)];
+    btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btnBack addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnBack];
     
     
@@ -274,7 +276,7 @@
     [mapView release];
     [container release];
     [dectorView release];
-    [btnBack release];
+//    [btnBack release];
     [titleView release];
     
     [super dealloc];
@@ -366,7 +368,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)gotoBack:(UIButton*)sender{
+- (void)Close:(UIButton*)sender{
 //    [self.navigationController popToRootViewControllerAnimated:YES];
     if(cross)
         [[Cross currentContext] deleteObject:cross];
@@ -1143,10 +1145,13 @@
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+    
     if([objects count]>0)
     {
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
         [app GatherCrossDidFinish];
+    }else{
+        NSLog(@"gather error");
     }
 
 //    NSLog(@"%@",objects);

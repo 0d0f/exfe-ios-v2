@@ -21,11 +21,13 @@
     UITableView *_tableView;
     IBOutlet UIDatePicker *datepicker;
     NSArray* _times;
-    UIView *toolbar;
+    EXGradientToolbarView *toolbar;
     UIView *lasttimeview;
     CrossTime *_crosstime;
     UIButton *lasttimebutton;
     BOOL datechanged;
+    UITextField *timeInput;
+    
 }
 @property (nonatomic,retain) UIViewController* gatherview;
 
@@ -35,5 +37,6 @@
 - (void) cleanDate;
 - (void) uselasttime;
 - (void) dateChanged:(id) sender;
+- (void) Close;
 //- (void) updateDate;
 @end

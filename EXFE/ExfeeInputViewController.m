@@ -105,7 +105,6 @@ static char identitykey;
     [inputleftmask setHidden:NO];
     [toolbar addSubview:inputleftmask];
 
-
     
     exfeeList.layer.cornerRadius=5;
     [self changeLeftIconWhite:NO];
