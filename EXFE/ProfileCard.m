@@ -39,7 +39,8 @@
         [self setNeedsDisplay];
     }
     if (a != nil) {
-        avatar = [a roundedCornerImage:40 borderSize:0];
+        //avatar = [a roundedCornerImage:40 borderSize:0];
+        avatar = a;
         [avatar retain];
         [self setNeedsDisplay];
     }
@@ -121,22 +122,25 @@
     CGRect b = [self bounds];
     // Rect caculation
     int cardMargin = 13;
-    CGRect barnnerRect = CGRectMake(cardMargin, 17, b.size.width - cardMargin * 2, 40);
+    CGRect barnnerRect = CGRectMake(cardMargin, 16, b.size.width - cardMargin * 2, 40);
+    
     int avatarWidth = 40;
-    CGRect avatarRect = CGRectMake(barnnerRect.origin.x, barnnerRect.origin.y, avatarWidth, barnnerRect.size.height);
+    int avatarHeight = 40;
+    CGRect avatarRect = CGRectMake(barnnerRect.origin.x + 1, barnnerRect.origin.y, avatarWidth, avatarHeight);
     
     int paddingH = 8;
-    
-    int titlePaddingV = 6;
-    CGRect titleRect = CGRectMake(avatarRect.origin.x + avatarRect.size.width + paddingH, barnnerRect.origin.y + titlePaddingV, barnnerRect.size.width - avatarWidth - paddingH, barnnerRect.size.height - titlePaddingV * 2);
+    int paddingH2 = 22;
+    int titlePaddingV = 8;
+    CGRect titleRect = CGRectMake(CGRectGetMaxX(avatarRect) + paddingH, barnnerRect.origin.y + titlePaddingV, barnnerRect.size.width - avatarWidth - paddingH - paddingH2, barnnerRect.size.height - titlePaddingV * 2);
     // card background
     //[backgroundimg drawInRect:r];
-    [[UIColor lightGrayColor] setFill];
+    [[UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)] setFill];
     UIRectFill(b);
-    
     [avatar drawInRect:avatarRect];
     
-    [[UIColor COLOR_RGB(0x00, 0x00,0x00)] set];
+    [[UIImage imageNamed:@"xlist_top.png"] drawInRect:CGRectMake(0, 9, CGRectGetWidth(b), CGRectGetHeight(b) - 9)];
+    
+    [[UIColor greenColor] set];
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextSaveGState(currentContext);
     CGContextTranslateCTM(currentContext, 0, self.bounds.size.height);
@@ -144,10 +148,10 @@
     NSString * gather = @"Gather a ·X·";
     
     NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:gather];
-    CTFontRef fontRef= CTFontCreateWithName(CFSTR("HelveticaNeue"), 24.0, NULL);
+    CTFontRef fontRef= CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
     [string addAttribute:(NSString*)kCTFontAttributeName  value:(id)fontRef range:NSMakeRange(0,[string length])];
     CFRelease(fontRef);
-    
+    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor darkGrayColor].CGColor range:NSMakeRange(0,9)];
     [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_EXFEE_BLUE].CGColor range:NSMakeRange(9,3)];
     
     CTTextAlignment alignment = kCTRightTextAlignment;

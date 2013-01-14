@@ -9,7 +9,7 @@
 #import "CrossCard.h"
 #import "Util.h"
 
-#define CARD_VERTICAL_MARGIN      (13)
+#define CARD_VERTICAL_MARGIN      (15)
 
 @implementation CrossCard
 @synthesize title;
@@ -147,19 +147,24 @@
     textbarRect = CGRectMake(b.origin.x + CARD_VERTICAL_MARGIN, barnnerRect.origin.y + barnnerRect.size.height, b.size.width - CARD_VERTICAL_MARGIN * 2, 28);
     
     int paddingH = 8;
-    int avatarWidth = 45;
+    int avatarWidth = 22;
+    int avatarHeight = 22;
     int titlePaddingV = 10;
-    titleRect = CGRectMake(barnnerRect.origin.x + paddingH, barnnerRect.origin.y + titlePaddingV, barnnerRect.size.width - avatarWidth - paddingH, barnnerRect.size.height - titlePaddingV * 2);
-    avatarRect = CGRectMake(titleRect.origin.x + titleRect.size.width, barnnerRect.origin.y, avatarWidth, barnnerRect.size.height);
     
     int convw = 0;
-    int textPaddingV = 4;
-    timeRect = CGRectMake(textbarRect.origin.x + paddingH, textbarRect.origin.y + textPaddingV, 102, textbarRect.size.height - textPaddingV * 2);
-    convRect = CGRectMake(textbarRect.origin.x + textbarRect.size.width - 33, textbarRect.origin.y , 33, textbarRect.size.height);
+    convRect = CGRectMake(CGRectGetMaxX(barnnerRect) - 44, CGRectGetMinY(barnnerRect) , 44, CGRectGetHeight(barnnerRect));
     if (conversationCount > 0) {
         convw = convRect.size.width;
     }
-    placeRect = CGRectMake(timeRect.origin.x + timeRect.size.width + paddingH * 2, textbarRect.origin.y + textPaddingV, textbarRect.size.width - ( timeRect.size.width + paddingH * 3) - convw, textbarRect.size.height - textPaddingV * 2);
+    titleRect = CGRectMake(CGRectGetMinX(barnnerRect) + paddingH, CGRectGetMinY(barnnerRect) + titlePaddingV, CGRectGetWidth(barnnerRect) - convw - paddingH, CGRectGetHeight(barnnerRect) - titlePaddingV * 2);
+    
+    
+    int textPaddingV = 6;
+    timeRect = CGRectMake(textbarRect.origin.x + paddingH, textbarRect.origin.y + textPaddingV, 112, textbarRect.size.height - textPaddingV * 2);
+    
+    avatarRect = CGRectMake(CGRectGetMaxX(textbarRect) - avatarWidth - 3, CGRectGetMinY(textbarRect) + (CGRectGetHeight(textbarRect) - avatarHeight) / 2, avatarWidth, avatarHeight);
+   
+    placeRect = CGRectMake(CGRectGetMaxX(timeRect) + paddingH, textbarRect.origin.y + textPaddingV, textbarRect.size.width - (CGRectGetMaxX(timeRect) + paddingH) - avatarWidth - 3, textbarRect.size.height - textPaddingV * 2);
     
    
 }
@@ -180,17 +185,23 @@
     }
     if (avatar != nil) {
         [avatar drawInRect:avatarRect];
+    }else{
+        [[UIColor redColor] setFill];
+        UIRectFill(avatarRect);
+        
     }
+    
+    // card cover
+    [[UIImage imageNamed:@"xlist_cell.png"] drawInRect:b];
     
     if (hlTitle){
         [[UIColor COLOR_RGB(58, 110, 165)] set];
     }else{
         [[UIColor COLOR_RGB(0xff, 0xff,0xff)] set];
     }
-    [title drawInRect:titleRect withFont:[UIFont fontWithName:@"HelveticaNeue" size:21] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
+    [title drawInRect:titleRect withFont:[UIFont fontWithName:@"HelveticaNeue" size:21] lineBreakMode:UILineBreakModeCharacterWrap alignment:UITextAlignmentLeft ];
     
-    // card cover
-    [[UIImage imageNamed:@"xlist_mask.png"] drawInRect:b];
+    
     
     UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
     // text info
@@ -202,13 +213,14 @@
     if (time == nil || time.length == 0) {
         [@"Sometime" drawInRect:timeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     }else{
-        [time drawInRect:timeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+        [time drawInRect:timeRect withFont:font17 lineBreakMode:UILineBreakModeCharacterWrap alignment:UITextAlignmentLeft];
     }
     if (hlPlace){
         [[UIColor COLOR_RGB(58, 110, 165)] set];
     }else{
         [[UIColor COLOR_RGB(0x00, 0x00,0x00)] set];
     }
+    
     if (place == nil || place.length == 0) {
         [@"Somewhere" drawInRect:placeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     }else{
