@@ -18,6 +18,7 @@
 		4F63E24E169BFCD5003354D7 /* DateTimeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24D169BFCD4003354D7 /* DateTimeUtil.m */; };
 		4F81C848168309E9007284DF /* EXCurveImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F81C847168309E9007284DF /* EXCurveImageView.m */; };
 		4FAD642716968C7F001870FF /* CrossTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD642616968C7F001870FF /* CrossTime+Helper.m */; };
+		4FB501A0169FC504005328BE /* EXCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5019F169FC504005328BE /* EXCurveView.m */; };
 		4FBF2485167AE89D007C04E2 /* CrossCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF2484167AE89D007C04E2 /* CrossCard.m */; };
 		4FC8FCE8168D7E5700409779 /* Place+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCE7168D7E5700409779 /* Place+Helper.m */; };
 		4FC8FCEB168D912E00409779 /* EFTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCEA168D912E00409779 /* EFTime+Helper.m */; };
@@ -484,6 +485,8 @@
 		4F81C847168309E9007284DF /* EXCurveImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCurveImageView.m; sourceTree = "<group>"; };
 		4FAD642516968C7F001870FF /* CrossTime+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CrossTime+Helper.h"; sourceTree = "<group>"; };
 		4FAD642616968C7F001870FF /* CrossTime+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CrossTime+Helper.m"; sourceTree = "<group>"; };
+		4FB5019E169FC503005328BE /* EXCurveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCurveView.h; sourceTree = "<group>"; };
+		4FB5019F169FC504005328BE /* EXCurveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCurveView.m; sourceTree = "<group>"; };
 		4FBF2483167AE89D007C04E2 /* CrossCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossCard.h; sourceTree = "<group>"; };
 		4FBF2484167AE89D007C04E2 /* CrossCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossCard.m; sourceTree = "<group>"; };
 		4FC8FCE6168D7E5700409779 /* Place+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Place+Helper.h"; sourceTree = "<group>"; };
@@ -1727,44 +1730,46 @@
 		78C25AB7159D81ED002AED1E /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
-				78C25AB8159D8211002AED1E /* EXPlaceEditView.h */,
-				78C25AB9159D8211002AED1E /* EXPlaceEditView.m */,
-				7841389815AD36C2002E1030 /* EXIconToolBar.h */,
-				7841389915AD36C2002E1030 /* EXIconToolBar.m */,
-				7803EB8915AD801500291B69 /* EXButton.h */,
-				7803EB8A15AD801500291B69 /* EXButton.m */,
-				78B9FCEF15B4680F00F5E4D3 /* EXInnerButton.h */,
-				78B9FCF015B4680F00F5E4D3 /* EXInnerButton.m */,
-				78B9FD3115B5498200F5E4D3 /* EXNavigationBar.h */,
-				78B9FD3215B5498200F5E4D3 /* EXNavigationBar.m */,
-				780961FE15BDB70B0071E9D0 /* EXOverlayView.h */,
-				780961FF15BDB70B0071E9D0 /* EXOverlayView.m */,
+				78A0C1AF16807F740073CCE5 /* CustomAttributedTextView.h */,
+				78A0C1B016807F740073CCE5 /* CustomAttributedTextView.m */,
+				785659F915F3ACD60003CDF8 /* CustomStatusBar.h */,
+				785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */,
+				78BDEB4715ED26210083D75B /* EXAttributedLabel.h */,
+				78BDEB4815ED26210083D75B /* EXAttributedLabel.m */,
+				78867BB515E78F0C0091A47C /* EXBackgroundView.h */,
+				78867BB615E78F0D0091A47C /* EXBackgroundView.m */,
 				78FB6B8915D6C63F00EF83B3 /* EXBubbleButton.h */,
 				78FB6B8A15D6C63F00EF83B3 /* EXBubbleButton.m */,
 				78FB6B8B15D6C64000EF83B3 /* EXBubbleScrollView.h */,
 				78FB6B8C15D6C64000EF83B3 /* EXBubbleScrollView.m */,
-				78B2AF6615DEAB5F00451EA2 /* EXQuoteView.h */,
-				78B2AF6715DEAB5F00451EA2 /* EXQuoteView.m */,
+				7803EB8915AD801500291B69 /* EXButton.h */,
+				7803EB8A15AD801500291B69 /* EXButton.m */,
+				4F81C846168309E9007284DF /* EXCurveImageView.h */,
+				4F81C847168309E9007284DF /* EXCurveImageView.m */,
+				4FB5019E169FC503005328BE /* EXCurveView.h */,
+				4FB5019F169FC504005328BE /* EXCurveView.m */,
+				78A94BC916707F2200B72DC8 /* EXGradientToolbarView.h */,
+				78A94BCA16707F2200B72DC8 /* EXGradientToolbarView.m */,
+				7841389815AD36C2002E1030 /* EXIconToolBar.h */,
+				7841389915AD36C2002E1030 /* EXIconToolBar.m */,
+				78B9FCEF15B4680F00F5E4D3 /* EXInnerButton.h */,
+				78B9FCF015B4680F00F5E4D3 /* EXInnerButton.m */,
 				78B22F9515DF4E5B008BEA47 /* EXInvitationQuoteView.h */,
 				78B22F9615DF4E5B008BEA47 /* EXInvitationQuoteView.m */,
-				78867BB515E78F0C0091A47C /* EXBackgroundView.h */,
-				78867BB615E78F0D0091A47C /* EXBackgroundView.m */,
-				78BDEB4715ED26210083D75B /* EXAttributedLabel.h */,
-				78BDEB4815ED26210083D75B /* EXAttributedLabel.m */,
-				785659F915F3ACD60003CDF8 /* CustomStatusBar.h */,
-				785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */,
+				4F266F00168EC49900BDB9D5 /* EXLabel.h */,
+				4F266F01168EC49900BDB9D5 /* EXLabel.m */,
+				78B9FD3115B5498200F5E4D3 /* EXNavigationBar.h */,
+				78B9FD3215B5498200F5E4D3 /* EXNavigationBar.m */,
+				780961FE15BDB70B0071E9D0 /* EXOverlayView.h */,
+				780961FF15BDB70B0071E9D0 /* EXOverlayView.m */,
+				78C25AB8159D8211002AED1E /* EXPlaceEditView.h */,
+				78C25AB9159D8211002AED1E /* EXPlaceEditView.m */,
+				78B2AF6615DEAB5F00451EA2 /* EXQuoteView.h */,
+				78B2AF6715DEAB5F00451EA2 /* EXQuoteView.m */,
 				7852709A15FC7A1E001AF618 /* EXSpinView.h */,
 				7852709B15FC7A1E001AF618 /* EXSpinView.m */,
 				78240A9F1668935700738B7B /* UIBorderView.h */,
 				78240AA01668935700738B7B /* UIBorderView.m */,
-				78A94BC916707F2200B72DC8 /* EXGradientToolbarView.h */,
-				78A94BCA16707F2200B72DC8 /* EXGradientToolbarView.m */,
-				78A0C1AF16807F740073CCE5 /* CustomAttributedTextView.h */,
-				78A0C1B016807F740073CCE5 /* CustomAttributedTextView.m */,
-				4F81C846168309E9007284DF /* EXCurveImageView.h */,
-				4F81C847168309E9007284DF /* EXCurveImageView.m */,
-				4F266F00168EC49900BDB9D5 /* EXLabel.h */,
-				4F266F01168EC49900BDB9D5 /* EXLabel.m */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -2339,6 +2344,7 @@
 				78606CDE1696D6EE0014806A /* EXImagesCollectionGatherView.m in Sources */,
 				78606CE21696DA3F0014806A /* NewGatherViewController.m in Sources */,
 				78606CE7169AD2920014806A /* TitleDescEditViewController.m in Sources */,
+				4FB501A0169FC504005328BE /* EXCurveView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

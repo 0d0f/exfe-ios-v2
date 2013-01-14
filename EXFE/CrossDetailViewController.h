@@ -24,12 +24,14 @@
 #import "APICrosses.h"
 #import "EXLabel.h"
 #import "EXAlertView.h"
+#import "EXCurveView.h"
 
 
 @interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate>{
 
     UIScrollView *container;
-    EXCurveImageView *dectorView;
+    UIImageView *dectorView;
+    EXCurveView *headerView;
     UILabel *descView;
     EXImagesCollectionView *exfeeShowview;
     //UIView *exfeeShowview;

@@ -110,7 +110,6 @@
         [self setNeedsDisplay];
     }
     if (image != nil) {
-        NSLog(@"CrossCard setBannerimg");
         CGSize targetSize = CGSizeMake(320 - CARD_VERTICAL_MARGIN * 2, 45);
                 
         //If scaleFactor is not touched, no scaling will occur
@@ -140,7 +139,6 @@
 }
 
 - (void)layoutSubviews{
-    NSLog(@"CrossCard layoutSubviews");
 	CGRect b = [self bounds];
 	[contentView setFrame:b];
      [super layoutSubviews];
