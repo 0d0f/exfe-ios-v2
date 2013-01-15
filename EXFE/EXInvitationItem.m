@@ -80,13 +80,10 @@
         NSString *portrait_frame=@"portrait_frame_50.png";
         if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
             portrait_frame=@"portrait_frame_accept_50.png";
-            
         CGImageRef frameimageref = CGImageRetain([UIImage imageNamed:portrait_frame].CGImage);
         CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , frameimageref);
         CGImageRelease(frameimageref);
     }
-
-    
 
     if([invitation.mates intValue]>0){
         CGImageRef triimageref = CGImageRetain([UIImage imageNamed:@"portrait_tri_26"].CGImage);

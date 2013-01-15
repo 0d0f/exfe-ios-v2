@@ -108,20 +108,6 @@
     [toolbar addSubview:icon];
     [icon release];
 
-//    if(place!=nil) {
-//        revert=[UIButton buttonWithType:UIButtonTypeCustom];
-//        [revert setFrame:CGRectMake(210, 13, 44, 19)];
-//        revert.backgroundColor=[UIColor colorWithRed:191/255.0f green:191/255.0f blue:191/255.0f alpha:1.00f];
-//        [revert setTitle:@"Revert" forState:UIControlStateNormal];
-//        [revert.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:10]];
-//        revert.layer.cornerRadius=10;
-//        revert.layer.masksToBounds=YES;
-//        [revert setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//        [revert addTarget:self action:@selector(doRevert:) forControlEvents:UIControlEventTouchUpInside];
-//        [toolbar addSubview:revert];
-//        [inputplace setFrame:CGRectMake(10+10+10, 7, 240-44-2-10, 30)];
-//    }
-    
     rightbutton=[UIButton buttonWithType:UIButtonTypeCustom];
     [rightbutton setFrame:CGRectMake(265, 7, 50, 30)];
     [rightbutton setTitle:@"Done" forState:UIControlStateNormal];
@@ -194,14 +180,12 @@
     
     if([inputplace.text length]>1){
         [clearbutton setHidden:NO];
-//        [revert setHidden:YES];
     }else if([inputplace.text isEqualToString:@""] || place==nil){
         [clearbutton setHidden:YES];
-//        [revert setHidden:YES];
     }
     [inputplace setReturnKeyType:UIReturnKeySearch];
     map.showsUserLocation = YES;
-//    [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, 44+self.view.frame.size.height, _tableView.frame.size.width, _tableView.frame.size.height)];
+
     [_tableView setHidden:YES];
     [map setFrame:CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height-44)];
 
@@ -336,57 +320,11 @@
         [map addAnnotation:annotation];
         [annotation release];
         [clearbutton setHidden:YES];
-//        [revert setHidden:NO];
         [placeedit setPlaceTitleText:@"Somewhere"];
         [placeedit setPlaceDescText:@""];
     }
 }
 
-- (IBAction) doRevert:(id) sender{
-    isnotinputplace=YES;
-    [[Cross currentContext] rollback];
-    [[Place currentContext] rollback];
-    [self initPlaceView];
-    [revert setHidden:YES];
-    [clearbutton setHidden:NO];
-    if(place==nil){
-        [inputplace resignFirstResponder];
-        [self setViewStyle:EXPlaceViewStyleTableview];
-    }
-    else{
-        [inputplace resignFirstResponder];
-        [placeedit becomeFirstResponder];
-        [self setViewStyle:EXPlaceViewStyleEdit];
-    }
-    [map removeAnnotations:[map annotations]];
-    [self initPlaceView];
-//    CLLocationCoordinate2D location;
-//    location.latitude = [place.lat doubleValue];
-//    location.longitude = [place.lng doubleValue];
-//    CGPoint point=[map convertCoordinate:location toPointToView:map];
-//
-//    float editheight=placeedit.frame.origin.y+placeedit.frame.size.height;
-//    point.y+=(map.frame.size.height-editheight)/2-100;
-//    CLLocationCoordinate2D newll =[map convertPoint:point toCoordinateFromView:map];
-//    MKCoordinateRegion region;
-//    region.center = newll;
-//    float delta=0.02;
-//    if([place.lat isEqualToString:@""] && [place.lng isEqualToString:@""]){
-//        delta=120;
-//        CLLocationCoordinate2D location_center;
-//        location_center.latitude =33.431441;
-//        location_center.longitude =-41.484375;
-//        region.center=location_center;
-//    }
-//    region.span.longitudeDelta = delta;
-//    region.span.latitudeDelta = delta;
-//    [map setRegion:region animated:YES];
-    isnotinputplace=NO;
-    if(place==nil)
-        [self setViewStyle:EXPlaceViewStyleTableview];
-    else
-        [self setViewStyle:EXPlaceViewStyleEdit];
-}
 
 - (void) done{
 //    if(placeedit.hidden==NO){

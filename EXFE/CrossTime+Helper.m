@@ -45,7 +45,6 @@
         }
     }else{
         if ([self.begin_at hasDate]){
-            //return @"Human Readable String";
             return [self.begin_at getHumanReadableString];
         }else{
             return @"";

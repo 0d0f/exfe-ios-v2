@@ -17,7 +17,7 @@
 }
 
 - (BOOL)hasTime{
-    return self.time != nil && self.date.length > 0;
+    return self.time != nil && self.time.length > 0;
 }
 
 - (BOOL)hasDateWord{

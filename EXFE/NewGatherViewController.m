@@ -56,7 +56,7 @@
 @implementation NewGatherViewController
 @synthesize cross;
 @synthesize default_user;
-
+@synthesize title_be_edit;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -152,9 +152,11 @@
     container.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:container];
     
-    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width * 0.6,  f.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
+    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width * 0.6, f.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
     headview.backgroundColor=[UIColor grayColor];
     dectorView=[[UIImageView alloc] initWithFrame:headview.bounds];
+    dectorView.image=[UIImage imageNamed:@"x_title_bg.png"];
+
     [headview addSubview:dectorView];
     [self.view addSubview:headview];
     
@@ -250,6 +252,7 @@
 
     cross.title=[NSString stringWithFormat:@".X. with %@",default_identity.name];
 
+    title_be_edit=NO;
 //    cross.exfee.invitations
 }
 
@@ -311,6 +314,8 @@
 //        timeViewController.gatherview=self;
 //        [titleViewController setDateTime:cross.time];
         [self presentModalViewController:titleViewController animated:YES];
+        [titleViewController setCrossTitle:cross.title desc:cross.cross_description];
+
         [titleViewController release];
     }
 
@@ -391,10 +396,21 @@
             [exfeeInvitations addObject:invitation];
         }
     }
+    NSString *newtitle=@".X. with ";
+    if(title_be_edit==NO){
+        for(Invitation *invitation in exfeeInvitations){
+            newtitle=[newtitle stringByAppendingFormat:@"%@ ",invitation.identity.name];
+        }
+        cross.title=newtitle;
+        titleView.text=newtitle;
+    }
+    
     [exfeeShowview reloadData];
 }
 
 - (void) setTitle:(NSString*)title Description:(NSString*)desc{
+    if(cross.title!=title)
+        title_be_edit=YES;
     cross.title=title;
     cross.cross_description=desc;
     [self fillTitleAndDescription:cross];

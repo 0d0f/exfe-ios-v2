@@ -65,7 +65,6 @@ typedef enum {
 @property BOOL showtableview;
 @property BOOL isaddnew;
     
-- (IBAction) doRevert:(id) sender;
 - (void) PlaceEditClose:(id) sender;
 - (void) textDidChange:(NSNotification*)notification;
 - (void) editingDidBegan:(NSNotification*)notification;
