@@ -616,13 +616,13 @@
         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         for(Invitation *invitation in cross.exfee.invitations) {
             if ([invitation.identity.connected_user_id intValue]== app.userid) {
-                if(invitation && invitation.invitated_by &&
-                   invitation.invitated_by.avatar_filename ) {
-                    UIImage *avatarImg=[[ImgCache sharedManager] getImgFromCache:invitation.invitated_by.avatar_filename];
+                if(invitation && invitation.invited_by &&
+                   invitation.invited_by.avatar_filename ) {
+                    UIImage *avatarImg=[[ImgCache sharedManager] getImgFromCache:invitation.invited_by.avatar_filename];
                     if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
                         dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
                         dispatch_async(imgQueue, ^{
-                            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:invitation.invitated_by.avatar_filename];
+                            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:invitation.invited_by.avatar_filename];
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
                                     cell.avatar=avatar;

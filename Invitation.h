@@ -22,7 +22,7 @@
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSString * via;
 @property (nonatomic, retain) Identity *identity;
-@property (nonatomic, retain) Identity *invitated_by;
+@property (nonatomic, retain) Identity *invited_by;
 @property (nonatomic, retain) Identity *updated_by;
 
 @end

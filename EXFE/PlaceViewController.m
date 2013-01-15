@@ -494,7 +494,7 @@
         tipline=1;
 //    isedit=YES;
     [self selectPlace:indexPath.row-tipline editing:NO];
-    [self done];
+//    [self done];
 }
 
 #pragma mark UITableView Datasource methods

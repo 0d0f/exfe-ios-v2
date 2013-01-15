@@ -21,7 +21,7 @@
 @dynamic updated_at;
 @dynamic via;
 @dynamic identity;
-@dynamic invitated_by;
+@dynamic invited_by;
 @dynamic updated_by;
 
 @end
