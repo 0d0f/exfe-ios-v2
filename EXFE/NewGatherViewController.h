@@ -53,7 +53,7 @@
     User* default_user;
     
     BOOL layoutDirty;
-    
+    BOOL title_be_edit;
     NSMutableArray *exfeeInvitations;
     EXRSVPStatusView *rsvpstatusview;
     CGFloat exfeeSuggestHeight;
@@ -62,7 +62,7 @@
 @property (retain,nonatomic) Cross* cross;
 @property (retain,readonly) NSMutableArray *exfeeIdentities;
 @property (retain,nonatomic) User* default_user;
-
+@property BOOL title_be_edit;
 
 - (void) initUI;
 - (void) initData;

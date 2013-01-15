@@ -458,23 +458,23 @@
 
 - (void)fillTime:(CrossTime*)time{
     if (time != nil){
-//        NSString *title = [[time getTimeTitle] copy];
-//        [title retain];
-//        if (title == nil || title.length == 0) {
-//            timeRelView.text = @"Sometime";
-//        }else{
-//            timeRelView.text = title;
-//        }
-//        [title release];
-//        
-//        NSString* desc = [[time getTimeDescription] copy];
-//        [desc retain];
+        NSString *title = [[time getTimeTitle] copy];
+        [title retain];
+        if (title == nil || title.length == 0) {
+            timeRelView.text = @"Sometime";
+        }else{
+            timeRelView.text = title;
+        }
+        [title release];
+        
+//        NSString* desc = [time getTimeDescription];//[[time getTimeDescription] copy];
+////        [desc retain];
 //        if(desc != nil && desc.length > 0){
 //            timeAbsView.text = desc;
 //            timeAbsView.hidden = NO;
 //            [timeAbsView sizeToFit];
 //            timeZoneView.hidden = NO;
-//            timeZoneView.text = time.begin_at.timezone;
+////            timeZoneView.text = time.begin_at.timezone;
 //            [timeZoneView sizeToFit];
 //        }else{
 //            timeAbsView.text = @"";

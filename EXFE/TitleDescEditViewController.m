@@ -96,6 +96,7 @@
 
     headview.backgroundColor=[UIColor grayColor];
     dectorView=[[UIImageView alloc] initWithFrame:headview.bounds];
+    dectorView.image=[UIImage imageNamed:@"x_title_bg.png"];
     [headview addSubview:dectorView];
     [self.view addSubview:headview];
     
@@ -105,6 +106,7 @@
     titleView.backgroundColor = [UIColor clearColor];
     titleView.textAlignment = NSTextAlignmentCenter;
     titleView.backgroundColor=[UIColor clearColor];
+    
 //    titleView.layer.shadowColor = [UIColor blackColor].CGColor;
 //    titleView.layer.shadowOffset= CGSizeMake(0.0f, 1.0f);
 //    titleView.layer.MasksToBounds = false;
@@ -225,6 +227,7 @@
 }
 
 - (void) dealloc{
+    [super dealloc];
     [dectorView release];
     [headview release];
 }
@@ -236,6 +239,12 @@
     [(NewGatherViewController*)gatherview setTitle:titleView.text Description:descView.text];
     [self dismissModalViewControllerAnimated:YES];
 }
+
+- (void) setCrossTitle:(NSString*)title desc:(NSString*)desc{
+    titleView.text=title;
+    descView.text=desc;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

@@ -19,7 +19,6 @@
     EXGradientToolbarView *toolbar;
     EXCurveView *headview;
     UIImageView *dectorView;
-    
     UITextView *titleView;
     UITextView *descView;
     UIViewController *gatherview;
@@ -28,6 +27,7 @@
 
 @property (nonatomic,retain) UIViewController* gatherview;
 
+- (void) setCrossTitle:(NSString*)title desc:(NSString*)desc;
 - (void) done:(id)sender;
 - (void) setBackground:(NSString *)imgurl;
 @end
