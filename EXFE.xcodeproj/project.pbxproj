@@ -243,8 +243,6 @@
 		78867BC715E794260091A47C /* textfield_divider@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78867BC115E794260091A47C /* textfield_divider@2x.png */; };
 		7889C7BC15F46A3500609B12 /* xlist_slash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7889C7BA15F46A3500609B12 /* xlist_slash@2x.png */; };
 		7889C7BD15F46A3500609B12 /* xlist_slash.png in Resources */ = {isa = PBXBuildFile; fileRef = 7889C7BB15F46A3500609B12 /* xlist_slash.png */; };
-		788A69F316A3E293003EA9ED /* gather_add.png in Resources */ = {isa = PBXBuildFile; fileRef = 788A69F116A3E293003EA9ED /* gather_add.png */; };
-		788A69F416A3E293003EA9ED /* gather_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 788A69F216A3E293003EA9ED /* gather_add@2x.png */; };
 		788A69F716A403AC003EA9ED /* xedit_textfield.png in Resources */ = {isa = PBXBuildFile; fileRef = 788A69F516A403AC003EA9ED /* xedit_textfield.png */; };
 		788A69F816A403AC003EA9ED /* xedit_textfield@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 788A69F616A403AC003EA9ED /* xedit_textfield@2x.png */; };
 		788A69FB16A4123F003EA9ED /* gather_add.png in Resources */ = {isa = PBXBuildFile; fileRef = 788A69F916A4123E003EA9ED /* gather_add.png */; };
@@ -753,8 +751,6 @@
 		78867BC115E794260091A47C /* textfield_divider@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textfield_divider@2x.png"; sourceTree = "<group>"; };
 		7889C7BA15F46A3500609B12 /* xlist_slash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xlist_slash@2x.png"; sourceTree = "<group>"; };
 		7889C7BB15F46A3500609B12 /* xlist_slash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xlist_slash.png; sourceTree = "<group>"; };
-		788A69F116A3E293003EA9ED /* gather_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gather_add.png; path = "../../../../Dropbox/0d0f/Product/2x 产品设计/m2A UI Design/ iOS slicing/gather_add.png"; sourceTree = "<group>"; };
-		788A69F216A3E293003EA9ED /* gather_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gather_add@2x.png"; path = "../../../../Dropbox/0d0f/Product/2x 产品设计/m2A UI Design/ iOS slicing/gather_add@2x.png"; sourceTree = "<group>"; };
 		788A69F516A403AC003EA9ED /* xedit_textfield.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xedit_textfield.png; sourceTree = "<group>"; };
 		788A69F616A403AC003EA9ED /* xedit_textfield@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xedit_textfield@2x.png"; sourceTree = "<group>"; };
 		788A69F916A4123E003EA9ED /* gather_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gather_add.png; sourceTree = "<group>"; };
@@ -1275,8 +1271,6 @@
 				78ED689C16845462006DBDDD /* portrait_frame_accept_50@2x.png */,
 				78993993168463A70013DBC4 /* portrait_tri_26.png */,
 				78993994168463A70013DBC4 /* portrait_tri_26@2x.png */,
-				788A69F116A3E293003EA9ED /* gather_add.png */,
-				788A69F216A3E293003EA9ED /* gather_add@2x.png */,
 				788A69F516A403AC003EA9ED /* xedit_textfield.png */,
 				788A69F616A403AC003EA9ED /* xedit_textfield@2x.png */,
 			);
@@ -2188,8 +2182,6 @@
 				4FB514DC16A3F4230096F182 /* xlist_fadeout@2x.png in Resources */,
 				4FB514DD16A3F4230096F182 /* xlist_top.png in Resources */,
 				4FB514DE16A3F4230096F182 /* xlist_top@2x.png in Resources */,
-				788A69F316A3E293003EA9ED /* gather_add.png in Resources */,
-				788A69F416A3E293003EA9ED /* gather_add@2x.png in Resources */,
 				788A69F716A403AC003EA9ED /* xedit_textfield.png in Resources */,
 				788A69F816A403AC003EA9ED /* xedit_textfield@2x.png in Resources */,
 				788A69FB16A4123F003EA9ED /* gather_add.png in Resources */,

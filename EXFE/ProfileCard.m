@@ -124,9 +124,9 @@
     int cardMargin = 13;
     CGRect barnnerRect = CGRectMake(cardMargin, 16, b.size.width - cardMargin * 2, 40);
     
-    int avatarWidth = 40;
-    int avatarHeight = 40;
-    CGRect avatarRect = CGRectMake(barnnerRect.origin.x + 1, barnnerRect.origin.y, avatarWidth, avatarHeight);
+    int avatarWidth = 42;
+    int avatarHeight = 42;
+    CGRect avatarRect = CGRectMake(barnnerRect.origin.x, barnnerRect.origin.y, avatarWidth, avatarHeight);
     
     int paddingH = 8;
     int paddingH2 = 22;
@@ -151,8 +151,8 @@
     CTFontRef fontRef= CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
     [string addAttribute:(NSString*)kCTFontAttributeName  value:(id)fontRef range:NSMakeRange(0,[string length])];
     CFRelease(fontRef);
-    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor darkGrayColor].CGColor range:NSMakeRange(0,9)];
-    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_EXFEE_BLUE].CGColor range:NSMakeRange(9,3)];
+    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLACK].CGColor range:NSMakeRange(0,9)];
+    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:NSMakeRange(9,3)];
     
     CTTextAlignment alignment = kCTRightTextAlignment;
     CTParagraphStyleSetting setting[1] = {

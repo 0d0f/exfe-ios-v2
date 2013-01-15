@@ -35,8 +35,20 @@
 #define COLOR_RGB(r,g,b) colorWithRed:COLOR255(r) green:COLOR255(g) blue:COLOR255(b) alpha:1
 #define COLOR_WA(w,a) colorWithWhite:COLOR255(w)  alpha:COLOR255(a)
 
-#define COLOR_EXFEE_BLUE COLOR_RGB(0x37, 0x84,0xD5)
+#define COLOR_EXFEE_BLUE          COLOR_RGB(0x37, 0x84,0xD5)
 
+#define COLOR_WHITE               COLOR_RGB(0xFF, 0xFF, 0xFF)
+#define COLOR_SNOW                COLOR_RGB(0xFA, 0xFA, 0xFA)
+#define COLOR_IRON                COLOR_RGB(0xDD, 0xDD, 0xDD)
+#define COLOR_ALUMINUM            COLOR_RGB(0xAA, 0xAA, 0xAA)
+#define COLOR_GREY                COLOR_RGB(0x80, 0x80, 0x80)
+#define COLOR_CARBON              COLOR_RGB(0x33, 0x33, 0x33)
+#define COLOR_BLACK               COLOR_RGB(0x00, 0x00, 0x00)
+
+#define COLOR_BLUE_EXFE           COLOR_RGB(0x3A, 0x6E, 0xA5)
+#define COLOR_BLUE_SEA            COLOR_RGB(0x37, 0x84, 0xD5)
+#define COLOR_BLUE_LAKE           COLOR_RGB(0x60, 0xAD, 0xFF)
+#define COLOR_BLUE_AQUA           COLOR_RGB(0xA9, 0xD3, 0xFF)
 
 #define MERCATOR_OFFSET 268435456
 #define MERCATOR_RADIUS 85445659.44705395

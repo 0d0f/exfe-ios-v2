@@ -35,6 +35,8 @@
     CGRect timeRect;
     CGRect convRect;
     CGRect placeRect;
+    CGRect timeFadingRect;
+    CGRect placeFadingRect;
     
     id<CrossCardDelegate> delegate;
 }

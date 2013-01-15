@@ -40,6 +40,8 @@
         timeRect = CGRectZero;
         convRect = CGRectZero;
         placeRect = CGRectZero;
+        timeFadingRect = CGRectZero;
+        placeFadingRect = CGRectZero;
     }
     return self;
 }
@@ -146,15 +148,17 @@
     barnnerRect = CGRectMake(b.origin.x + CARD_VERTICAL_MARGIN, b.origin.y + 8, b.size.width - CARD_VERTICAL_MARGIN * 2, 45);
     textbarRect = CGRectMake(b.origin.x + CARD_VERTICAL_MARGIN, barnnerRect.origin.y + barnnerRect.size.height, b.size.width - CARD_VERTICAL_MARGIN * 2, 28);
     
-    int paddingH = 8;
+    int paddingH = 6;
     int avatarWidth = 22;
     int avatarHeight = 22;
     int titlePaddingV = 10;
     
     int convw = 0;
-    convRect = CGRectMake(CGRectGetMaxX(barnnerRect) - 44, CGRectGetMinY(barnnerRect) , 44, CGRectGetHeight(barnnerRect));
+    int conv_width = 36;
+    int conv_height = 33;
+    convRect = CGRectMake(CGRectGetMaxX(barnnerRect) - conv_width - 4, CGRectGetMidY(barnnerRect) - conv_height / 2 - 1, conv_width, conv_height );
     if (conversationCount > 0) {
-        convw = convRect.size.width;
+        convw = 44;
     }
     titleRect = CGRectMake(CGRectGetMinX(barnnerRect) + paddingH, CGRectGetMinY(barnnerRect) + titlePaddingV, CGRectGetWidth(barnnerRect) - convw - paddingH, CGRectGetHeight(barnnerRect) - titlePaddingV * 2);
     
@@ -164,7 +168,7 @@
     
     avatarRect = CGRectMake(CGRectGetMaxX(textbarRect) - avatarWidth - 3, CGRectGetMinY(textbarRect) + (CGRectGetHeight(textbarRect) - avatarHeight) / 2, avatarWidth, avatarHeight);
    
-    placeRect = CGRectMake(CGRectGetMaxX(timeRect) + paddingH, textbarRect.origin.y + textPaddingV, textbarRect.size.width - (CGRectGetMaxX(timeRect) + paddingH) - avatarWidth - 3, textbarRect.size.height - textPaddingV * 2);
+    placeRect = CGRectMake(CGRectGetMaxX(timeRect) + paddingH, textbarRect.origin.y + textPaddingV, 140, textbarRect.size.height - textPaddingV * 2);
     
    
 }
@@ -186,54 +190,54 @@
     if (avatar != nil) {
         [avatar drawInRect:avatarRect];
     }else{
-        [[UIColor redColor] setFill];
-        UIRectFill(avatarRect);
-        
+        [[UIImage imageNamed:@"portrait_default.png"] drawInRect:avatarRect];
     }
     
     // card cover
     [[UIImage imageNamed:@"xlist_cell.png"] drawInRect:b];
     
     if (hlTitle){
-        [[UIColor COLOR_RGB(58, 110, 165)] set];
+        [[UIColor COLOR_BLUE_SEA] set];
     }else{
-        [[UIColor COLOR_RGB(0xff, 0xff,0xff)] set];
+        [[UIColor COLOR_WHITE] set];
     }
     [title drawInRect:titleRect withFont:[UIFont fontWithName:@"HelveticaNeue" size:21] lineBreakMode:UILineBreakModeCharacterWrap alignment:UITextAlignmentLeft ];
     
     
     
-    UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
+    UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue-Light" size:15];
     // text info
-    if (hlTime){
-        [[UIColor COLOR_RGB(58, 110, 165)] set];
-    }else{
-        [[UIColor COLOR_RGB(0x00, 0x00,0x00)] set];
-    }
+    
     if (time == nil || time.length == 0) {
+        [[UIColor COLOR_ALUMINUM] set];
         [@"Sometime" drawInRect:timeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     }else{
+        if (hlTime){
+            [[UIColor COLOR_BLUE_SEA] set];
+        }else{
+            [[UIColor COLOR_BLACK] set];
+        }
         [time drawInRect:timeRect withFont:font17 lineBreakMode:UILineBreakModeCharacterWrap alignment:UITextAlignmentLeft];
-    }
-    if (hlPlace){
-        [[UIColor COLOR_RGB(58, 110, 165)] set];
-    }else{
-        [[UIColor COLOR_RGB(0x00, 0x00,0x00)] set];
     }
     
     if (place == nil || place.length == 0) {
+        [[UIColor COLOR_ALUMINUM] set];
         [@"Somewhere" drawInRect:placeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     }else{
-        [place drawInRect:placeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+        if (hlPlace){
+            [[UIColor COLOR_BLUE_SEA] set];
+        }else{
+            [[UIColor COLOR_BLACK] set];
+        }
+        [place drawInRect:placeRect withFont:font17 lineBreakMode:UILineBreakModeCharacterWrap alignment:UITextAlignmentLeft];
     }
     
     if (conversationCount > 0){
         if (conversationCount <= 64) {
-            [FONT_COLOR_88 set];
-            [[UIImage imageNamed:@"conversation_badge_empty.png"] drawInRect:convRect];
+            [[UIImage imageNamed:@"xlist_conv_badge.png"] drawInRect:convRect];
             
-            [[UIColor COLOR_RGB(0x37, 0x84,0xD5)] set];
-            NSString * convCount = [NSString stringWithFormat:@"%u",conversationCount];
+            [[UIColor COLOR_WHITE] set];
+            NSString * convCount = [NSString stringWithFormat:@"%u", conversationCount];
             CGSize numSize = [convCount sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13]];
             CGRect numRect = CGRectMake(CGRectGetMidX(convRect) - numSize.width / 2 - 4, CGRectGetMidY(convRect) - numSize.height / 2, numSize.width, numSize.height);
             [convCount drawInRect:numRect withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
