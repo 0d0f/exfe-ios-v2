@@ -657,12 +657,22 @@
         location.longitude = [[placedict objectForKey:@"lng"] doubleValue];
 
         NSArray *annotations=[map annotations];
-        [map removeAnnotations:annotations];
 
-        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[placedict objectForKey:@"title"]  description:[placedict objectForKey:@"description"]];
-        annotation.external_id=[placedict objectForKey:@"external_id"];
-        annotation.index=index;
-        [map addAnnotation:annotation];
+        for (PlaceAnnotation* annotation in annotations){
+            if([annotation isKindOfClass:[PlaceAnnotation class]]){
+                MKAnnotationView* annoview = [map viewForAnnotation: annotation];
+                if([annotation.external_id isEqualToString:place.external_id])
+                    annoview.image=[UIImage imageNamed:@"map_pin_blue.png"];
+                else
+                    annoview.image=[UIImage imageNamed:@"map_pin_red.png"];
+            }
+        }
+//        [map removeAnnotations:annotations];
+//        [self drawMapAnnontations];
+//        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[placedict objectForKey:@"title"]  description:[placedict objectForKey:@"description"]];
+//        annotation.external_id=[placedict objectForKey:@"external_id"];
+//        annotation.index=index;
+//        [map addAnnotation:annotation];
     }
     
     if(editing==YES){
