@@ -497,34 +497,48 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0){
-        if(headerView==nil){
-            AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-            
-            NSFetchRequest* request = [User fetchRequest];
-            NSPredicate *predicate = [NSPredicate
-                                      predicateWithFormat:@"user_id = %u", app.userid];
-            [request setPredicate:predicate];
-            NSArray *users = [[User objectsWithFetchRequest:request] retain];
-            
+        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        NSFetchRequest* request = [User fetchRequest];
+        NSPredicate *predicate = [NSPredicate
+                                  predicateWithFormat:@"user_id = %u", app.userid];
+        [request setPredicate:predicate];
+        NSArray *users = [[User objectsWithFetchRequest:request] retain];
+
+        NSString* reuseIdentifier = @"Profile";
+        ProfileCard *headerView =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+        if (nil == headerView) {
             headerView = [[ProfileCard alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Profile"];
-            //headerView = [[ProfileCard alloc] initWithFrame:CGRectMake(0,0,tableView.frame.size.width,66)];
-            
-            if(users != nil && [users count] > 0){
-                User *_user = [users objectAtIndex:0];
-                NSString* imgName = _user.avatar_filename;
-                if(imgName != nil){
-                    UIImage *image = [[ImgCache sharedManager] getImgFromCache:imgName];
-                    if(image==nil ||[image isEqual:[NSNull null]]){
-                        headerView.avatar = [UIImage imageNamed:@"portrait_default.png"];
-                    }else{
-                        headerView.avatar = image;
-                    }
+        }
+        
+        if(users != nil && [users count] > 0){
+            User *_user = [users objectAtIndex:0];
+            NSString* imgName = _user.avatar_filename;
+            headerView.avatar = nil;
+            if(imgName && imgName.length > 0){
+                UIImage *avatarImg=[[ImgCache sharedManager] getImgFromCache:imgName];
+                if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
+                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                    dispatch_async(imgQueue, ^{
+                        NSLog(@"fetch profile img");
+                        UIImage *avatar = [[ImgCache sharedManager] getImgFrom:imgName];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
+                                NSLog(@"fetched profile img");
+                                headerView.avatar = avatar;
+                                [headerView setNeedsDisplay];
+                            }
+                        });
+                    });
+                    dispatch_release(imgQueue);
+                }else{
+                    NSLog(@"Cache profile img");
+                    headerView.avatar = avatarImg;
                 }
             }
-            [headerView addGatherTarget:self action:@selector(ShowGatherView)];
-            [headerView addProfileTarget:self action:@selector(ShowProfileView)];
-            //[headerView addProfileTarget:self action:@selector(gotoCrossDetail)];
         }
+        [headerView addGatherTarget:self action:@selector(ShowGatherView)];
+        [headerView addProfileTarget:self action:@selector(ShowProfileView)];
         return headerView;
     }else if (indexPath.section == 1){
         if(_crosses==nil){
@@ -535,16 +549,14 @@
         if (nil == cell) {
             cell = [[[CrossCard alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
         }
-        [cell setBackgroundColor:[UIColor colorWithRed:0x1c/255.f green:0x27/255.f blue:0x33/255.f alpha:1]];
         
         Cross *cross=[_crosses objectAtIndex:indexPath.row ];
         cell.hlTitle = NO;
         cell.hlPlace = NO;
         cell.hlTime = NO;
         cell.hlConversation = NO;
-        if(cross.updated != nil)
-        {
-            id updated=cross.updated;
+        if (cross.updated != nil){
+            id updated = cross.updated;
             if([updated isKindOfClass:[NSDictionary class]]){
                 NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
                 NSString *key=nil;
