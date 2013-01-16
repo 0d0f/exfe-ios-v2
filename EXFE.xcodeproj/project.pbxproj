@@ -28,6 +28,7 @@
 		4FBF2485167AE89D007C04E2 /* CrossCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF2484167AE89D007C04E2 /* CrossCard.m */; };
 		4FC8FCE8168D7E5700409779 /* Place+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCE7168D7E5700409779 /* Place+Helper.m */; };
 		4FC8FCEB168D912E00409779 /* EFTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCEA168D912E00409779 /* EFTime+Helper.m */; };
+		4FD4DD7416A68674003F1A55 /* EXWidgetTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */; };
 		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
@@ -489,6 +490,8 @@
 		4FC8FCE7168D7E5700409779 /* Place+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Place+Helper.m"; sourceTree = "<group>"; };
 		4FC8FCE9168D912E00409779 /* EFTime+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFTime+Helper.h"; sourceTree = "<group>"; };
 		4FC8FCEA168D912E00409779 /* EFTime+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFTime+Helper.m"; sourceTree = "<group>"; };
+		4FD4DD7216A68674003F1A55 /* EXWidgetTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXWidgetTabBar.h; sourceTree = "<group>"; };
+		4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXWidgetTabBar.m; sourceTree = "<group>"; };
 		4FE8D3C51681926C00222420 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4FE8D3C61681926C00222420 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		4FE8D3C71681926C00222420 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
@@ -1738,6 +1741,8 @@
 				7852709B15FC7A1E001AF618 /* EXSpinView.m */,
 				78240A9F1668935700738B7B /* UIBorderView.h */,
 				78240AA01668935700738B7B /* UIBorderView.m */,
+				4FD4DD7216A68674003F1A55 /* EXWidgetTabBar.h */,
+				4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -2303,6 +2308,7 @@
 				78606CE21696DA3F0014806A /* NewGatherViewController.m in Sources */,
 				78606CE7169AD2920014806A /* TitleDescEditViewController.m in Sources */,
 				4FB501A0169FC504005328BE /* EXCurveView.m in Sources */,
+				4FD4DD7416A68674003F1A55 /* EXWidgetTabBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

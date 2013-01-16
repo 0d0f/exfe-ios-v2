@@ -154,14 +154,17 @@
     
     headview = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width * 0.6, f.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
     headview.backgroundColor=[UIColor grayColor];
-    dectorView=[[UIImageView alloc] initWithFrame:headview.bounds];
+    
+    CGFloat scale = CGRectGetWidth(headview.bounds) / 880.0f;
+    CGFloat startY = 0 - 198 * scale;
+    dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, 880 * scale, 495 * scale)];
     dectorView.image=[UIImage imageNamed:@"x_title_bg.png"];
 
     [headview addSubview:dectorView];
     [self.view addSubview:headview];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
-    [btnBack setFrame:CGRectMake(0, 20, 24, DECTOR_HEIGHT - 20 * 2)];
+    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 /2, 20, 44)];
     btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btnBack addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
