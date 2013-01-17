@@ -50,6 +50,8 @@
 
 - (void)viewDidLoad
 {
+    CGRect f = self.view.frame;
+    CGRect b = self.view.bounds;
     CGRect screenframe=[[UIScreen mainScreen] bounds];
     screenframe.size.height-=20;
     [self.view setFrame:screenframe];
@@ -94,10 +96,12 @@
     [gestureRecognizer release];
     
     CGFloat width = CGRectGetWidth(self.view.bounds);
-    EXCurveView *headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, width, 59) withCurveFrame:CGRectMake(0 + width * 0.8, DECTOR_HEIGHT, 40, 15)];
+    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, width, 59) withCurveFrame:CGRectMake(0 + width * 0.8, DECTOR_HEIGHT, 40, 15)];
     headerView.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     {
-        UIImageView *dectorView = [[UIImageView alloc] initWithFrame:headerView.bounds];
+        CGFloat scale = CGRectGetWidth(headerView.bounds) / HEADER_BACKGROUND_WIDTH;
+        CGFloat startY = 0 - HEADER_BACKGROUND_Y_OFFSET * scale;
+        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, HEADER_BACKGROUND_WIDTH * scale, HEADER_BACKGFOUND_HEIGHT * scale)];
         if (self.headImgDict) {
             BOOL flag = NO;
             NSString *imgurl = [Util getBackgroundLink:[self.headImgDict objectForKey:@"image"]];
@@ -125,24 +129,17 @@
             }
         }
         [headerView addSubview:dectorView];
-        [dectorView release];
         
-        UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-        [btnBack setFrame:CGRectMake(0, 0, 25, 48)];
-        //[btnBack setTitle:@"Home  " forState:UIControlStateNormal];
-        [btnBack.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
-        [btnBack setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
-        btnBack.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        [btnBack setBackgroundImage:[[UIImage imageNamed:@"btn_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 6)] forState:UIControlStateNormal];
-        btnBack.backgroundColor = [UIColor COLOR_WA(0xFF, 1)];
-        [btnBack addTarget:self action:@selector(toHome) forControlEvents:UIControlEventTouchUpInside];
-        [headerView addSubview:btnBack];
+        UIView* dectorMask = [[UIView alloc] initWithFrame:headerView.bounds];
+        dectorMask.backgroundColor = [UIColor COLOR_WA(0x00, 0x55)];
+        [headerView addSubview:dectorMask];
+        [dectorMask release];
         
-        UILabel* titleView = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, headerView.bounds.size.width - (CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN) * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+        titleView = [[UILabel alloc] initWithFrame:CGRectMake(25, 10, 290, 25)];
         titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
         titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         titleView.backgroundColor = [UIColor clearColor];
-        titleView.lineBreakMode = UILineBreakModeTailTruncation;
+        titleView.lineBreakMode = UILineBreakModeClip;
         titleView.numberOfLines = 1;
         titleView.textAlignment = NSTextAlignmentCenter;
         titleView.shadowColor = [UIColor blackColor];
@@ -154,16 +151,27 @@
         UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [chatButton setTitle:@"Chat" forState:UIControlStateNormal];
         [chatButton setImage:chatimg forState:UIControlStateNormal];
-        chatButton.frame = CGRectMake(0, 0, chatimg.size.width, chatimg.size.height);
+        chatButton.frame = CGRectMake(CGRectGetMaxX(headerView.frame) - 48 - 5, CGRectGetMaxY(headerView.frame) - 24 - 5, chatimg.size.width, chatimg.size.height);
         [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
-        
         [chatButton addTarget:self action:@selector(toCross) forControlEvents:UIControlEventTouchUpInside];
+        [headerView addSubview:chatButton];
         
-        //[btnBack release];
-        //[titleView release];
     }
     [self.view addSubview:headerView];
-    [headerView release];
+    
+    tabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 45, CGRectGetWidth(f), 59)];
+    NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"x_navbarbtn.png"], [UIImage imageNamed:@"x_navbarbtn.png"], [UIImage imageNamed:@"x_navbarbtn.png"], nil];
+    tabBar.widgets = imgs;
+    [tabBar addTarget:self action:@selector(widgetJump:with:)];
+    tabBar.hidden = YES;
+    [self.view  addSubview:tabBar];
+    
+    btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
+    btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btnBack addTarget:self action:@selector(toHome) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btnBack];
     
     istimehidden=YES;
     showTimeMode=0;
@@ -228,6 +236,10 @@
     [cellsepator release];
     [avatarframe release];
     [_tableView release];
+    
+    [dectorView release];
+    [titleView release];
+    [headerView release];
     [super dealloc];
 }
 

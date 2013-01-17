@@ -19,6 +19,7 @@
 #import "GatherExfeeInputCell.h"
 #import "CTUtil.h"
 #import "CrossesViewController.h"
+#import "EXWidgetTabBar.h"
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20
@@ -34,6 +35,13 @@
     UIImage *cellbackground;
     UIImage *cellsepator;
     UIImage *avatarframe;
+    
+    EXCurveView *headerView;
+    UIImageView *dectorView;
+    UIButton *btnBack;
+    UILabel *titleView;
+    EXWidgetTabBar *tabBar;
+    
     NSDictionary *headImgDict;
     ConversationInputAccessoryView *inputaccessoryview;
     CATextLayer *timetextlayer;

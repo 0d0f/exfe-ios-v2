@@ -160,9 +160,9 @@
     headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width * 0.8,  f.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
     headerView.backgroundColor = [UIColor COLOR_WA(0x7F, 0xFF)];
     {
-        CGFloat scale = CGRectGetWidth(headerView.bounds) / 880.0f;
-        CGFloat startY = 0 - 198 * scale;
-        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, 880 * scale, 495 * scale)];
+        CGFloat scale = CGRectGetWidth(headerView.bounds) / HEADER_BACKGROUND_WIDTH;
+        CGFloat startY = 0 - HEADER_BACKGROUND_Y_OFFSET * scale;
+        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, HEADER_BACKGROUND_WIDTH * scale, HEADER_BACKGFOUND_HEIGHT * scale)];
         [headerView addSubview:dectorView];
         
         UIView* dectorMask = [[UIView alloc] initWithFrame:headerView.bounds];
