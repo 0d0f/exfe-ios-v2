@@ -151,15 +151,16 @@
         UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [chatButton setTitle:@"Chat" forState:UIControlStateNormal];
         [chatButton setImage:chatimg forState:UIControlStateNormal];
-        chatButton.frame = CGRectMake(CGRectGetMaxX(headerView.frame) - 48 - 5, CGRectGetMaxY(headerView.frame) - 24 - 5, chatimg.size.width, chatimg.size.height);
+        chatButton.frame = CGRectMake(CGRectGetMaxX(headerView.frame) - chatimg.size.width - 5, CGRectGetMaxY(headerView.frame) - chatimg.size.height - 5, chatimg.size.width, chatimg.size.height);
         [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
-        [chatButton addTarget:self action:@selector(toCross) forControlEvents:UIControlEventTouchUpInside];
+        //toCross
+        [chatButton addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
         [headerView addSubview:chatButton];
         
     }
     [self.view addSubview:headerView];
     
-    tabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 45, CGRectGetWidth(f), 59)];
+    tabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(f), 59)];
     NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"x_navbarbtn.png"], [UIImage imageNamed:@"x_navbarbtn.png"], [UIImage imageNamed:@"x_navbarbtn.png"], nil];
     tabBar.widgets = imgs;
     [tabBar addTarget:self action:@selector(widgetJump:with:)];
@@ -188,6 +189,32 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
 
+- (void)widgetJump:(id)sender with:(NSNumber*)index
+{
+    NSInteger idx = [index integerValue];
+    tabBar.hidden = YES;
+    if (idx == 0){
+        
+    }else
+        if (idx == 1){
+            [self toCross];
+        }
+}
+
+- (void)widgetClick:(id)sender{
+    tabBar.hidden = NO;
+    //    UIView * view = sender;
+    //
+    //    CGPoint endPoint;
+    //    if (isWidgetShown) {
+    //        endPoint = CGPointMake(CGRectGetMaxX(dectorView.frame) - 48 / 2 - 5, CGRectGetMaxY(dectorView.frame) - 24 / 2 - 5);
+    //    }else{
+    //        endPoint = CGPointMake(CGRectGetMidX(dectorView.frame), CGRectGetMidY(dectorView.frame));
+    //    }
+    //    isWidgetShown = !isWidgetShown;
+    //    [self animateWidget:view to:endPoint];
+}
+
 - (void) toCross{
     [UIView beginAnimations:@"View Flip" context:nil];
     [UIView setAnimationDuration:0.80];
@@ -199,14 +226,15 @@
     [UIView commitAnimations];
 }
 - (void) toHome{
-    [UIView beginAnimations:@"View Flip" context:nil];
-    [UIView setAnimationDuration:0.80];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [UIView setAnimationTransition:
-     UIViewAnimationTransitionFlipFromLeft
-                           forView:self.navigationController.view cache:NO];
-    [self.navigationController popToRootViewControllerAnimated:NO];
-    [UIView commitAnimations];
+//    [UIView beginAnimations:@"View Flip" context:nil];
+//    [UIView setAnimationDuration:0.80];
+//    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+//    [UIView setAnimationTransition:
+//     UIViewAnimationTransitionFlipFromLeft
+//                           forView:self.navigationController.view cache:NO];
+//    [self.navigationController popToRootViewControllerAnimated:NO];
+//    [UIView commitAnimations];
+    [self.navigationController popToRootViewControllerAnimated:YES];
     
 }
 

@@ -208,9 +208,10 @@
 
 - (void)widgetJump:(id)sender with:(NSNumber*)index
 {
+    tabBar.hidden = YES;
     NSInteger idx = [index integerValue];
     if (idx == 0){
-        tabBar.hidden = YES;
+        
     }else
     if (idx == 1){
         [self toConversationAnimated:YES];
