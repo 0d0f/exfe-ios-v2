@@ -27,49 +27,12 @@
     return self;
 }
 
-- (void)regObserver
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:inputplace];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editingDidBegan:) name:UITextFieldTextDidBeginEditingNotification object:inputplace];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:placeedit.PlaceTitle];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:placeedit.PlaceDesc];
-}
-
-- (void)regEvent
-{
-    UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maplongpress:)];
-    longpress.minimumPressDuration = 0.610;
-    [map addGestureRecognizer:longpress];
-    [longpress release];
-    
-    WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
-    tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
-        UITouch * touch = [touches anyObject];
-        if (!CGRectContainsPoint([placeedit frame], [touch locationInView:map]))
-        {
-            [placeedit setHidden:YES];
-            [placeedit resignFirstResponder];
-        }
-        [self setViewStyle:EXPlaceViewStyleMap];
-    };
-    [map addGestureRecognizer:tapInterceptor];
-    [tapInterceptor release];
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     originplace=[[NSMutableDictionary alloc] initWithCapacity:5];
-    
-//    toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
-//    [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
-//    [self.view addSubview:toolbar];
-//    
-//    backgroundview=[[UIView alloc] initWithFrame:CGRectMake(6, 7, 255, 30)];
-//    backgroundview.backgroundColor=[UIColor whiteColor];
-//    backgroundview.layer.cornerRadius=15;
-//
-//    [toolbar addSubview:backgroundview];
+
     toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
     [toolbar.layer setShadowOpacity:0.8];
@@ -133,7 +96,7 @@
     locationManager.distanceFilter = 100.0f;
     locationManager.desiredAccuracy = kCLLocationAccuracyBest; // 100 m
     [locationManager startUpdatingLocation];
-    placeedit=[[EXPlaceEditView alloc] initWithFrame:CGRectMake(13, 5, 294, 124)];
+    placeedit=[[EXPlaceEditView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 110)];
     [placeedit setHidden:YES];
     [map addSubview:placeedit];
 
@@ -152,7 +115,7 @@
         [originplace setObject:place.place_description forKey:@"place_description"];
         [originplace setObject:place.provider forKey:@"provider"];
         [originplace setObject:place.title forKey:@"title"];
-        
+        showtableview=NO;
         [self initPlaceView];
     }
     if([place.place_id intValue]==0)
@@ -193,7 +156,6 @@
         [self setViewStyle:EXPlaceViewStyleBigTableview];
         [inputplace becomeFirstResponder];
     }    
-//
 }
 
 - (void) initPlaceView{
@@ -220,27 +182,58 @@
         location_center.latitude =33.431441;
         location_center.longitude =-41.484375;
         region.center=location_center;
+        [self setViewStyle:EXPlaceViewStyleMap];
     }
     region.span.longitudeDelta = delta;
     region.span.latitudeDelta = delta;
     [map setRegion:region animated:YES];
     inputplace.text=place.title;
     
-    if(showdetailview==YES){
-        CGPoint point=[map convertCoordinate:location toPointToView:map];
-        point.y+=18;
-        CLLocationCoordinate2D newll =[map convertPoint:point toCoordinateFromView:map];
-        MKCoordinateRegion region;
-        region.center = newll;
-        region.span.longitudeDelta = delta;
-        region.span.latitudeDelta = delta;
-        [map setRegion:region animated:YES];
-        [self addPlaceEdit:place];
-        [map becomeFirstResponder];
-        [inputplace resignFirstResponder];
-        [placeedit resignFirstResponder];
-    }
+//    if(showdetailview==YES){
+//        CGPoint point=[map convertCoordinate:location toPointToView:map];
+//        point.y+=18;
+//        CLLocationCoordinate2D newll =[map convertPoint:point toCoordinateFromView:map];
+//        MKCoordinateRegion region;
+//        region.center = newll;
+//        region.span.longitudeDelta = delta;
+//        region.span.latitudeDelta = delta;
+//        [map setRegion:region animated:YES];
+//        [self addPlaceEdit:place];
+//        [map becomeFirstResponder];
+//        [inputplace resignFirstResponder];
+//        [placeedit resignFirstResponder];
+//    }
 }
+
+- (void)regObserver
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:inputplace];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editingDidBegan:) name:UITextFieldTextDidBeginEditingNotification object:inputplace];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:placeedit.PlaceTitle];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:placeedit.PlaceDesc];
+}
+
+- (void)regEvent
+{
+    UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maplongpress:)];
+    longpress.minimumPressDuration = 0.610;
+    [map addGestureRecognizer:longpress];
+    [longpress release];
+    
+    WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
+    tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
+        UITouch * touch = [touches anyObject];
+        if (!CGRectContainsPoint([placeedit frame], [touch locationInView:map]))
+        {
+            [placeedit setHidden:YES];
+            [placeedit resignFirstResponder];
+        }
+        [self setViewStyle:EXPlaceViewStyleMap];
+    };
+    [map addGestureRecognizer:tapInterceptor];
+    [tapInterceptor release];
+}
+
 
 - (void) PlaceEditClose:(id) sender{
 }
@@ -265,26 +258,22 @@
         [map becomeFirstResponder];
     } else if(style== EXPlaceViewStyleTableview){
         [_tableView setHidden:NO];
-
         [placeedit setHidden:YES];
         [placeedit resignFirstResponder];
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDelay:0];
         [UIView setAnimationDuration:0.25];
         [map setFrame:CGRectMake(0, 44, self.view.frame.size.width,85)];
-//        [map setFrame:CGRectMake(0, 44, self.view.frame.size.width,230)];
         [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, 44+85, _tableView.frame.size.width, self.view.frame.size.height-44-85)];
         [UIView commitAnimations];
     } else if(style== EXPlaceViewStyleBigTableview){
         [_tableView setHidden:NO];
-
         [placeedit setHidden:YES];
         [placeedit resignFirstResponder];
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDelay:0];
         [UIView setAnimationDuration:0.25];
         [map setFrame:CGRectMake(0, 44, self.view.frame.size.width,140)];
-//        [map setFrame:CGRectMake(0, 44, self.view.frame.size.width,230)];
         [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, 44+140, _tableView.frame.size.width, self.view.frame.size.height-44-140)];
         [UIView commitAnimations];
         
@@ -296,9 +285,19 @@
         [UIView setAnimationDuration:0.25];
         
         [map setFrame:CGRectMake(0, 44, self.view.frame.size.width,self.view.frame.size.height-44-216)];
-        [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, map.frame.size.height+44, _tableView.frame.size.width, self.view.frame.size.height-44-85)];
+        [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, 44+85, _tableView.frame.size.width, self.view.frame.size.height-44-85)];
         [UIView commitAnimations];
         
+    }else if(style==EXPlaceViewStyleShowPlaceDetail){
+        [_tableView setHidden:NO];
+        [placeedit setHidden:YES];
+        [placeedit resignFirstResponder];
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDelay:0];
+        [UIView setAnimationDuration:0.25];
+        [map setFrame:CGRectMake(0, 44, self.view.frame.size.width,140)];
+        [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, 44+140, _tableView.frame.size.width, self.view.frame.size.height-44-140)];
+        [UIView commitAnimations];
     }
 }
 - (void) setPlace:(Place*)_place isedit:(BOOL)editstate{
@@ -327,25 +326,7 @@
 
 
 - (void) done{
-//    if(placeedit.hidden==NO){
-//        place.title=[placeedit getPlaceTitleText];
-//        place.place_description=[placeedit getPlaceDescText];
-//    }
-//    if(isedit==YES){
-//       if([[originplace objectForKey:@"external_id"] isEqualToString:place.external_id] &&
-//          [[originplace objectForKey:@"lat"] isEqualToString:place.lat] &&
-//          [[originplace objectForKey:@"lng"] isEqualToString:place.lng] &&
-//          [[originplace objectForKey:@"place_description"] isEqualToString:place.place_description] &&
-//          [[originplace objectForKey:@"provider"] isEqualToString:place.provider] &&
-//          [[originplace objectForKey:@"title"] isEqualToString:place.title]
-//          ){
-//           [(NewGatherViewController*)gatherview fillPlace:place];
-//       }
-//       else
-//        [(NewGatherViewController*)gatherview fillPlace:place];
-//    }
-//    else
-        [(NewGatherViewController*)gatherview setPlace:place];
+    [(NewGatherViewController*)gatherview setPlace:place];
     [self dismissModalViewControllerAnimated:YES];
 }
 - (void)didReceiveMemoryWarning
@@ -494,6 +475,7 @@
         tipline=1;
 //    isedit=YES;
     [self selectPlace:indexPath.row-tipline editing:NO];
+    [self setViewStyle:EXPlaceViewStyleShowPlaceDetail];
 //    [self done];
 }
 
@@ -579,7 +561,7 @@
     return annView;
 }
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-    // Annotation is your custom class that holds information about the annotation
+
     if ([view.annotation isKindOfClass:[PlaceAnnotation class]]) {
         NSArray *annotations=[map annotations];
         if([annotations count]>0)
@@ -600,8 +582,7 @@
             [self selectPlace:annot.index editing:YES];
             return;
         }
-        NSDictionary *placedict=[_places objectAtIndex:annot.index
-];
+        NSDictionary *placedict=[_places objectAtIndex:annot.index];
         place.title=[placedict objectForKey:@"title"];
         place.place_description=[placedict objectForKey:@"description"];
         place.lat=[[placedict objectForKey:@"lat"] stringValue];
@@ -661,19 +642,22 @@
         for (PlaceAnnotation* annotation in annotations){
             if([annotation isKindOfClass:[PlaceAnnotation class]]){
                 MKAnnotationView* annoview = [map viewForAnnotation: annotation];
-                if([annotation.external_id isEqualToString:place.external_id])
+                if([annotation.external_id isEqualToString:place.external_id]){
                     annoview.image=[UIImage imageNamed:@"map_pin_blue.png"];
+                    [annoview.superview bringSubviewToFront:annoview];
+//                    [annoview bringSubviewToFront:map];
+                }
                 else
                     annoview.image=[UIImage imageNamed:@"map_pin_red.png"];
+
             }
         }
-//        [map removeAnnotations:annotations];
-//        [self drawMapAnnontations];
-//        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[placedict objectForKey:@"title"]  description:[placedict objectForKey:@"description"]];
-//        annotation.external_id=[placedict objectForKey:@"external_id"];
-//        annotation.index=index;
-//        [map addAnnotation:annotation];
     }
+        MKCoordinateRegion region;
+        region.center = location;
+        region.span.longitudeDelta = 0.02;
+        region.span.latitudeDelta = 0.02;
+        [map setRegion:region animated:YES];
     
     if(editing==YES){
         
@@ -728,6 +712,7 @@
     [[APIPlace sharedManager] GetPlacesFromGoogleByTitle:inputplace.text lat:lat lng:lng delegate:self];
     return YES;
 }
+
 - (void)textDidChange:(NSNotification*)notification
 {
     if(isnotinputplace==YES){
@@ -745,6 +730,7 @@
     }
     
     [_tableView reloadData];
+    [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
 
 }
 - (void) editingDidBegan:(NSNotification*)notification{

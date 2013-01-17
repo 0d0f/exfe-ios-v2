@@ -33,13 +33,6 @@
     screenframe.size.height-=statusframe.size.height;
     [self.view setFrame:screenframe];
 
-//    toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
-//    [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
-//    [self.view addSubview:toolbar];
-//    UIImageView *lefticon=[[UIImageView alloc] initWithFrame:CGRectMake(11, 13, 18, 18)];
-//    lefticon.image= [UIImage imageNamed:@"time_18.png"];
-//    [toolbar addSubview:lefticon];
-//    [lefticon release];
     toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
     [toolbar.layer setShadowOpacity:0.8];
@@ -48,13 +41,6 @@
     
     [self.view addSubview:toolbar];
 
-//    UIButton *btncancel=[UIButton buttonWithType:UIButtonTypeCustom];
-//    [btncancel setBackgroundColor:[UIColor colorWithRed:25/255.0f green:25/255.0f blue:25/255.0f alpha:0.5]];
-//    [btncancel setBackgroundImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-//    [btncancel setFrame:CGRectMake(0, 0, 20, 44)];
-//    [btncancel addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside];
-//    [toolbar addSubview:btncancel];
-    
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
     [btnBack setFrame:CGRectMake(0, 0, 20, 44)];
     btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
@@ -62,16 +48,20 @@
     [btnBack addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:btnBack];
 
+    timeInput =[[UITextField alloc] initWithFrame:CGRectMake(54, 13.5, 195-18, 18.5)];
     
-
-    timeInput =[[UITextField alloc] initWithFrame:CGRectMake(0+20+8, 7, 229, 31)];
-    
-    UIImageView *inputframeview=[[UIImageView alloc] initWithFrame:timeInput.frame];
+    UIImageView *inputframeview=[[UIImageView alloc] initWithFrame:CGRectMake(28, 7, 229, 31)];
     inputframeview.image=[UIImage imageNamed:@"textfield.png"];
     inputframeview.contentMode    = UIViewContentModeScaleToFill;
     inputframeview.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
     [toolbar addSubview:inputframeview];
     [toolbar addSubview:timeInput];
+
+    UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(33, 13.5, 18, 18)];
+    icon.image=[UIImage imageNamed:@"time_18.png"];
+    [toolbar addSubview:icon];
+    [icon release];
+
     
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [doneButton setTitle:@"Save" forState:UIControlStateNormal];
@@ -82,56 +72,6 @@
     
     [toolbar addSubview:doneButton];
 
-    
-    
-//    UILabel *titleLabel =[[UILabel alloc] initWithFrame:CGRectMake(11+18+8, 7, 80, 33)];
-//    titleLabel.text=@"Time";
-//    titleLabel.backgroundColor=[UIColor clearColor];
-//    [titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:20]];
-//    [titleLabel setTextColor:FONT_COLOR_FA];
-//    [titleLabel setShadowColor:[UIColor blackColor]];
-//    [titleLabel setShadowOffset:CGSizeMake(0, 1)];
-//    [toolbar addSubview:titleLabel];
-//    [titleLabel release];
-//    
-//    UIButton *doneButton=[UIButton buttonWithType:UIButtonTypeCustom];
-//    [doneButton setFrame:CGRectMake(265, 7, 50, 30)];
-//    [doneButton setTitle:@"Save" forState:UIControlStateNormal];
-//    [doneButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
-//    [doneButton setTitleColor:[UIColor colorWithRed:204.0/255.0f green:229.0/255.0f blue:255.0/255.0f alpha:1] forState:UIControlStateNormal];
-//    [doneButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)] forState:UIControlStateNormal];
-//    [doneButton addTarget:self action:@selector(Done:) forControlEvents:UIControlEventTouchUpInside];
-//    [toolbar addSubview:doneButton];
-
-//    lasttimebutton=[[UIButton alloc] initWithFrame:CGRectMake(0, 44, 320, 0)];
-//    NSString *lasttime=@"";
-//    if(_crosstime){
-//        lasttime=[[Util getTimeDesc:_crosstime] stringByTrimmingCharactersInSet:
-//         [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-//        if(![lasttime isEqualToString:@""])
-//            [lasttimebutton setFrame:CGRectMake(0, 44, 320, 44)];
-//    }
-//    [lasttimebutton addTarget: self action: @selector(uselasttime) forControlEvents: UIControlEventTouchUpInside];
-//    [lasttimebutton setBackgroundColor:[UIColor colorWithRed:127.f/255.f green:127.f/255.f blue:127.f/255.f alpha:0.15]];
-//    UILabel *revertto=[[UILabel alloc] initWithFrame:CGRectMake(8, 2, 80, 12)];
-//    revertto.text=@"Revert to";
-//    revertto.textColor=[UIColor colorWithRed:127/255.f green:127/255.f blue:127/255.f alpha:1];
-//    revertto.font=[UIFont fontWithName:@"HelveticaNeue" size:12];
-//    revertto.backgroundColor=[UIColor clearColor];
-//    [lasttimebutton addSubview:revertto];
-//    [revertto release];
-    
-//    UILabel *lasttimelabel=[[UILabel alloc] initWithFrame:CGRectMake(8, 2+12+4,320-16 , 18)];
-//    lasttimelabel.text=lasttime;
-//    lasttimelabel.textColor=[UIColor blackColor];
-//    lasttimelabel.font=[UIFont fontWithName:@"HelveticaNeue" size:18];
-//    lasttimelabel.backgroundColor=[UIColor clearColor];
-//    [lasttimebutton addSubview:lasttimelabel];
-//    [lasttimelabel release];
-//    
-//    [self.view addSubview:lasttimebutton];
-    
-//    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,44+lasttimebutton.frame.size.height,320,self.view.frame.size.height-datepicker.frame.size.height-lasttimebutton.frame.size.height-44) style:UITableViewStylePlain];
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,toolbar.frame.size.height,320,self.view.frame.size.height-datepicker.frame.size.height-toolbar.frame.size.height) style:UITableViewStylePlain];
 
     _tableView.dataSource=self;
@@ -146,11 +86,92 @@
     [datepicker setTimeZone:[NSTimeZone localTimeZone]];
     [datepicker addTarget:self action:@selector(dateChanged:)
      forControlEvents:UIControlEventValueChanged];
-
+    [self regObserver];
 }
+
+- (void)regObserver
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:timeInput];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:inputplace];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editingDidBegan:) name:UITextFieldTextDidBeginEditingNotification object:inputplace];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:placeedit.PlaceTitle];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:placeedit.PlaceDesc];
+}
+
+- (void)textDidChange:(NSNotification*)notification
+{
+
+    if([timeInput.text length]>2)
+    {
+        editinginterval=CFAbsoluteTimeGetCurrent();
+        [self performSelector:@selector(getTimeFromAPI) withObject:self afterDelay:0.8];
+    }
+}
+
+- (void) getTimeFromAPI{
+    if(CFAbsoluteTimeGetCurrent()-editinginterval>0.8)
+    {
+        NSString *params_timezone=[DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];        
+        RKParams* rsvpParams = [RKParams params];
+        [rsvpParams setValue:params_timezone forParam:@"timezone"];
+        [rsvpParams setValue:timeInput.text forParam:@"time_string"];
+        RKClient *client = [RKClient sharedClient];
+        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+        NSString *endpoint = [NSString stringWithFormat:@"/time/Recognize"];
+        [client post:endpoint usingBlock:^(RKRequest *request){
+            request.method=RKRequestMethodPOST;
+            request.params=rsvpParams;
+            request.onDidLoadResponse=^(RKResponse *response){
+                if (response.statusCode == 200) {
+                    NSDictionary *body=[response.body objectFromJSONData];
+                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                    if(code){
+                        if([code intValue]==200) {
+                            NSLog(@"%@",[body objectForKey:@"response"]);
+                            NSDictionary *cross_time=[[body objectForKey:@"response"] objectForKey:@"cross_time"];
+                            NSDictionary *begin_at=[cross_time objectForKey:@"begin_at"];
+//                            if(_crosstime==nil){
+//                                _crosstime=[CrossTime object];
+//                                _crosstime.begin_at=[EFTime object];
+//                                
+//                            }
+                            CrossTime *crosstime=[CrossTime object];
+                            crosstime.begin_at=[EFTime object];
+                            
+                            crosstime.origin=[cross_time objectForKey:@"origin"];
+                            crosstime.outputformat=[NSNumber numberWithBool:[[cross_time objectForKey:@"outputformat"] boolValue]];
+                            crosstime.begin_at.date=[begin_at objectForKey:@"date"];
+                            crosstime.begin_at.date_word=[begin_at objectForKey:@"date_word"];
+                            crosstime.begin_at.time=[begin_at objectForKey:@"time"];
+                            crosstime.begin_at.time_word=[begin_at objectForKey:@"time_word"];
+                            crosstime.begin_at.timezone=[begin_at objectForKey:@"timezone"];
+                            [self setDateTime:crosstime];
+                            datechanged=YES;
+                        }
+
+                    }
+
+                }
+            };
+            request.onDidFailLoadWithError=^(NSError *error){
+        //            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+        //            if(error.code==2)
+        //                errormsg=@"A connection failure has occurred.";
+        //            else
+        //                errormsg=@"Could not connect to the server.";
+        //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        //            [alert show];
+        //            [alert release];
+            };
+        }];
+    }
+    
+}
+
 - (void) dateChanged:(id) sender{
     datechanged=YES;
 }
+
 - (void) setDateTime:(CrossTime*)crosstime{
     if(crosstime!=nil) {
         _crosstime=crosstime;
@@ -275,13 +296,12 @@
     [locale release];
     [formatter release];
 
-    if(time_word!=nil)
-    {
+    if(time_word!=nil) {
         crosstime.outputformat=[NSNumber numberWithInt:0];
         crosstime.origin=[NSString stringWithFormat:@"%@ %@",origin_date,time_word];
         eftime.time_word=time_word;
     }
-    else{
+    else {
         crosstime.origin=origin_datetime;
         eftime.time_word=@"";
     }

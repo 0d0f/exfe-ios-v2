@@ -241,7 +241,15 @@
     cross=[Cross object];
     cross.cross_description=@"Take some note";
 
-    NSDictionary *widget=[NSDictionary dictionaryWithObjectsAndKeys:@"",@"image",@"Background",@"type", nil];
+    NSArray *cross_default_backgrounds=[[NSUserDefaults standardUserDefaults] objectForKey:@"cross_default_backgrounds"];
+    NSString *default_background=@"";
+    
+    if(cross_default_backgrounds!=nil && [cross_default_backgrounds count]>0){
+        int idx=arc4random()%[cross_default_backgrounds count];
+        default_background=[cross_default_backgrounds objectAtIndex:idx];
+    }
+
+    NSDictionary *widget=[NSDictionary dictionaryWithObjectsAndKeys:default_background,@"image",@"Background",@"type", nil];
     if(cross.widget==nil)
         cross.widget=[[NSMutableArray alloc] initWithCapacity:1];
     [cross.widget addObject:widget];
@@ -1113,8 +1121,6 @@
     Identity *myidentity=[self getMyInvitation].identity;
     NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:_invitation.identity.identity_id,@"identity_id",myidentity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
     
-    NSLog(@"%@",[rsvpdict JSONString]);
-    
     RKParams* rsvpParams = [RKParams params];
     [rsvpParams setValue:[NSString stringWithFormat:@"[%@]",[rsvpdict JSONString]] forParam:@"rsvp"];
     RKClient *client = [RKClient sharedClient];
@@ -1148,11 +1154,6 @@
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             [alert release];
-            
-            //            EXAlertView *alertview=[EXAlertView showAlertTo:self.view frame:CGRectMake(10, 10, self.view.frame.size.width-20, 22) message:@"alert" animated:YES];
-            //            [alertview setBackgroundColor:[UIColor colorWithRed:255/255.0 green:255/255.0 blue:204/255.0 alpha:0.9]];
-            //            [EXAlertView hideAlertFrom:self.view animated:YES delay:2 ];
-            
         };
     }];
     

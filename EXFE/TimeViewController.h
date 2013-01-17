@@ -13,9 +13,10 @@
 #import "NewGatherViewController.h"
 #import "CrossTime.h"
 #import "EFTime.h"
+#import "DateTimeUtil.h"
 
 
-@interface TimeViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>{
+@interface TimeViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>{
     IBOutlet UITextField *inputtimeword;
     UIViewController *gatherview;
     UITableView *_tableView;
@@ -27,6 +28,7 @@
     UIButton *lasttimebutton;
     BOOL datechanged;
     UITextField *timeInput;
+    double editinginterval;
     
 }
 @property (nonatomic,retain) UIViewController* gatherview;
@@ -38,5 +40,7 @@
 - (void) uselasttime;
 - (void) dateChanged:(id) sender;
 - (void) Close;
+- (void) textDidChange:(NSNotification*)notification;
+- (void) getTimeFromAPI;
 //- (void) updateDate;
 @end
