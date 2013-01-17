@@ -112,21 +112,23 @@
         [self setNeedsDisplay];
     }
     if (image != nil) {
-        CGSize targetSize = CGSizeMake(320 - CARD_VERTICAL_MARGIN * 2, 45);
+        
+        
+        CGSize targetSize = CGSizeMake((320 - CARD_VERTICAL_MARGIN * 2) * [UIScreen mainScreen].scale, 44 * [UIScreen mainScreen].scale);
                 
         //If scaleFactor is not touched, no scaling will occur
         CGFloat scaleFactor = 1.0;
         
         //Deciding which factor to use to scale the image (factor = targetSize / imageSize)
-        if (image.size.width > targetSize.width || image.size.height > targetSize.height)
-            if (!((scaleFactor = (targetSize.width / image.size.width)) > (targetSize.height / image.size.height))) //scale to fit width, or
-                scaleFactor = targetSize.height / image.size.height; // scale to fit heigth.
+        if (image.size.width > targetSize.width || image.size.height > targetSize.height){
+            scaleFactor = MAX((targetSize.width / image.size.width), (targetSize.height / image.size.height));
+        }
         
         UIGraphicsBeginImageContext(targetSize);
         
         //Creating the rect where the scaled image is drawn in
-        CGRect rect = CGRectMake((targetSize.width - image.size.width * scaleFactor) / 2,
-                                 (targetSize.height -  image.size.height * scaleFactor) / 2,
+        CGRect rect = CGRectMake((targetSize.width / 2 - image.size.width / 2 * scaleFactor),
+                                 (0 - image.size.height * 198.0f / 495.0f * scaleFactor),
                                  image.size.width * scaleFactor, image.size.height * scaleFactor);
         
         //Draw the image into the rect
@@ -162,13 +164,14 @@
     }
     titleRect = CGRectMake(CGRectGetMinX(barnnerRect) + paddingH, CGRectGetMinY(barnnerRect) + titlePaddingV, CGRectGetWidth(barnnerRect) - convw - paddingH, CGRectGetHeight(barnnerRect) - titlePaddingV * 2);
     
-    
     int textPaddingV = 6;
     timeRect = CGRectMake(textbarRect.origin.x + paddingH, textbarRect.origin.y + textPaddingV, 112, textbarRect.size.height - textPaddingV * 2);
+    timeFadingRect = CGRectMake(CGRectGetMaxX(timeRect) - 12, CGRectGetMidY(timeRect) - 11, 20, 22);
     
     avatarRect = CGRectMake(CGRectGetMaxX(textbarRect) - avatarWidth - 3, CGRectGetMinY(textbarRect) + (CGRectGetHeight(textbarRect) - avatarHeight) / 2, avatarWidth, avatarHeight);
    
     placeRect = CGRectMake(CGRectGetMaxX(timeRect) + paddingH, textbarRect.origin.y + textPaddingV, 140, textbarRect.size.height - textPaddingV * 2);
+    placeFadingRect = CGRectMake(CGRectGetMaxX(placeRect) - 20, CGRectGetMidY(placeRect) - 11, 20, 22);
     
    
 }
@@ -219,6 +222,7 @@
         }
         [time drawInRect:timeRect withFont:font17 lineBreakMode:UILineBreakModeCharacterWrap alignment:UITextAlignmentLeft];
     }
+    [[UIImage imageNamed:@"xlist_fadeout.png"] drawInRect:timeFadingRect];
     
     if (place == nil || place.length == 0) {
         [[UIColor COLOR_ALUMINUM] set];
@@ -231,6 +235,7 @@
         }
         [place drawInRect:placeRect withFont:font17 lineBreakMode:UILineBreakModeCharacterWrap alignment:UITextAlignmentLeft];
     }
+    [[UIImage imageNamed:@"xlist_fadeout.png"] drawInRect:placeFadingRect];
     
     if (conversationCount > 0){
         if (conversationCount <= 64) {

@@ -33,7 +33,7 @@
     NSMutableAttributedString *gatherax;
     MBProgressHUD *hud;
     EXInnerButton *settingButton;
-    ProfileCard *headerView;
+    //ProfileCard *headerView;
 }
 - (void) refreshCell;
 - (void) refreshCrosses:(NSString*)source;

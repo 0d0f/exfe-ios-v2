@@ -25,6 +25,7 @@
 #import "EXLabel.h"
 #import "EXAlertView.h"
 #import "EXCurveView.h"
+#import "EXWidgetTabBar.h"
 
 
 @interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate>{
@@ -44,6 +45,7 @@
     
     UIButton *btnBack;
     UILabel *titleView;
+    EXWidgetTabBar *tabBar;
     
     Cross* cross;
     User* default_user;

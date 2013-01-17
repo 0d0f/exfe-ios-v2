@@ -104,7 +104,7 @@
     
     if (recognizer.state == UIGestureRecognizerStateEnded){
         CGPoint location = [recognizer locationInView:self];
-        if (location.x - self.frame.origin.x < self.frame.size.width / 2){
+        if (location.x - self.frame.origin.x < self.frame.size.width / 3){
             [self performProfileClick];
         }else{
             [self performGatherClick];
@@ -112,12 +112,12 @@
     }
 }
 
-
 - (void)layoutSubviews{
 	CGRect b = [self bounds];
 	[contentView setFrame:b];
     [super layoutSubviews];
 }
+
 - (void)drawContentView:(CGRect)r{
     CGRect b = [self bounds];
     // Rect caculation
@@ -136,7 +136,12 @@
     //[backgroundimg drawInRect:r];
     [[UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)] setFill];
     UIRectFill(b);
-    [avatar drawInRect:avatarRect];
+    
+    if (avatar) {
+        [avatar drawInRect:avatarRect];
+    }else{
+        [[UIImage imageNamed:@"portrait_default.png"] drawInRect:avatarRect];
+    }
     
     [[UIImage imageNamed:@"xlist_top.png"] drawInRect:CGRectMake(0, 9, CGRectGetWidth(b), CGRectGetHeight(b) - 9)];
     

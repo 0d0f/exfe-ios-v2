@@ -15,7 +15,6 @@
 #import "Place+Helper.h"
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
-#import "EXCurveView.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -161,15 +160,17 @@
     headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width * 0.8,  f.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
     headerView.backgroundColor = [UIColor COLOR_WA(0x7F, 0xFF)];
     {
-        dectorView = [[UIImageView alloc] initWithFrame:headerView.bounds];
+        CGFloat scale = CGRectGetWidth(headerView.bounds) / 880.0f;
+        CGFloat startY = 0 - 198 * scale;
+        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, 880 * scale, 495 * scale)];
         [headerView addSubview:dectorView];
         
-        btnBack = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 24, DECTOR_HEIGHT - 20 * 2)];
-        btnBack.backgroundColor = [UIColor lightGrayColor];
-        [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
-        [headerView addSubview:btnBack];
+        UIView* dectorMask = [[UIView alloc] initWithFrame:headerView.bounds];
+        dectorMask.backgroundColor = [UIColor COLOR_WA(0x00, 0x55)];
+        [headerView addSubview:dectorMask];
+        [dectorMask release];
         
-        titleView = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - (CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN) * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+        titleView = [[UILabel alloc] initWithFrame:CGRectMake(25, 19, 290, 50)];
         titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
         titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         titleView.backgroundColor = [UIColor clearColor];
@@ -180,32 +181,54 @@
         titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         [headerView addSubview:titleView];
         
-        UIButton * widgetBar = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        widgetBar.frame = CGRectMake(CGRectGetMaxX(headerView.frame) - 48 - 5, CGRectGetMaxY(headerView.frame) - 24 - 5, 48, 24);
-        [widgetBar addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
-        [widgetBar addTarget:self action:@selector(widgetPress:) forControlEvents:UIControlEventTouchUpOutside];
-        [headerView addSubview:widgetBar];
+        UIButton * widgetTrigger = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        widgetTrigger.frame = CGRectMake(CGRectGetMaxX(headerView.frame) - 48 - 5, CGRectGetMaxY(headerView.frame) - 24 - 5, 48, 24);
+        [widgetTrigger addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
+        [headerView addSubview:widgetTrigger];
     }
     [self.view addSubview:headerView];
+    
+    
+    tabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 45, CGRectGetWidth(f), 59)];
+    NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"x_navbarbtn.png"], [UIImage imageNamed:@"x_navbarbtn.png"], [UIImage imageNamed:@"x_navbarbtn.png"], nil];
+    tabBar.widgets = imgs;
+    [tabBar addTarget:self action:@selector(widgetJump:with:)];
+    tabBar.hidden = YES;
+    [self.view  addSubview:tabBar];
+    
+    btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
+    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
+    btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view  addSubview:btnBack];
     
     self.view.backgroundColor = [UIColor grayColor];
 }
 
-- (void)widgetPress:(id)sender{
-    [self toConversationAnimated:YES];
+- (void)widgetJump:(id)sender with:(NSNumber*)index
+{
+    NSInteger idx = [index integerValue];
+    if (idx == 0){
+        tabBar.hidden = YES;
+    }else
+    if (idx == 1){
+        [self toConversationAnimated:YES];
+    }
 }
 
 - (void)widgetClick:(id)sender{
-    UIView * view = sender;
-    
-    CGPoint endPoint;
-    if (isWidgetShown) {
-        endPoint = CGPointMake(CGRectGetMaxX(dectorView.frame) - 48 / 2 - 5, CGRectGetMaxY(dectorView.frame) - 24 / 2 - 5);
-    }else{
-        endPoint = CGPointMake(CGRectGetMidX(dectorView.frame), CGRectGetMidY(dectorView.frame));
-    }
-    isWidgetShown = !isWidgetShown;
-    [self animateWidget:view to:endPoint];
+     tabBar.hidden = NO;
+//    UIView * view = sender;
+//    
+//    CGPoint endPoint;
+//    if (isWidgetShown) {
+//        endPoint = CGPointMake(CGRectGetMaxX(dectorView.frame) - 48 / 2 - 5, CGRectGetMaxY(dectorView.frame) - 24 / 2 - 5);
+//    }else{
+//        endPoint = CGPointMake(CGRectGetMidX(dectorView.frame), CGRectGetMidY(dectorView.frame));
+//    }
+//    isWidgetShown = !isWidgetShown;
+//    [self animateWidget:view to:endPoint];
 }
 
 - (void)animateWidget:(UIView*)view to:(CGPoint)endPoint{
@@ -255,8 +278,6 @@
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [container addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
-
-    
 }
 
 - (void)dealloc {
@@ -272,9 +293,11 @@
     [container release];
     
     [dectorView release];
-    [btnBack release];
+    //[btnBack release];
     [titleView release];
     [headerView release];
+    
+    [tabBar release];
     
     [super dealloc];
 }
@@ -395,33 +418,38 @@
     BOOL flag = NO;
     for(NSDictionary *widget in widgets) {
         if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-            NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
-            UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
-            if(backimg == nil || [backimg isEqual:[NSNull null]]){
-                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                dispatch_async(imgQueue, ^{
-                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
-                            dectorView.image = backimg;
-                            //[self setLayoutDirty];
-                        }
+            NSString* url = [widget objectForKey:@"image"];
+            if (url && url.length > 0) {
+                NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+                UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
+                if(backimg == nil || [backimg isEqual:[NSNull null]]){
+                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                    dispatch_async(imgQueue, ^{
+                        dectorView.image = [UIImage imageNamed:@"x_title_bg.png"];
+                        UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
+                                dectorView.image = backimg;
+                                //[self setLayoutDirty];
+                            }
+                        });
                     });
-                });
-                dispatch_release(imgQueue);
-            }else{
-                dectorView.image = backimg;
-                //[self setLayoutDirty];
+                    dispatch_release(imgQueue);
+                }else{
+                    dectorView.image = backimg;
+                    //[self setLayoutDirty];
+                }
+                flag = YES;
+//            if (dectorView.hidden == YES){
+//                dectorView.hidden = NO;
+//            }
+                break;
             }
-            flag = YES;
-            if (dectorView.hidden == YES){
-                dectorView.hidden = NO;
-            }
-            break;
         }
     }
     if (flag == NO){
-        dectorView.hidden = YES;
+        dectorView.image = [UIImage imageNamed:@"x_title_bg.png"];
+//        dectorView.hidden = YES;
     }
 }
 
