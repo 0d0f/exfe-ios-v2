@@ -46,6 +46,7 @@ static char handleurlobject;
         [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
     }
+    
 
 
     
@@ -90,6 +91,32 @@ static char handleurlobject;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
     if(login==YES)
     [APIProfile LoadUsrWithUserId:userid delegate:self];
+    RKClient *client = [RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+    
+    NSString *endpoint = [NSString stringWithFormat:@"/Backgrounds/GetAvailableBackgrounds?token=%@",self.accesstoken];
+    [client get:endpoint usingBlock:^(RKRequest *request){
+        request.method=RKRequestMethodPOST;
+        request.onDidLoadResponse=^(RKResponse *response){
+            if (response.statusCode == 200) {
+                NSDictionary *body=[response.body objectFromJSONData];
+                if([body isKindOfClass:[NSDictionary class]]) {
+                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                    if(code)
+                        if([code intValue]==200) {
+                            NSArray *backgrounds=[[body objectForKey:@"response"] objectForKey:@"backgrounds"];
+                            [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
+                        }
+                }
+            }else {
+                //Check Response Body to get Data!
+            }
+            
+        };
+        request.onDidFailLoadWithError=^(NSError *error){
+        };
+    }];
+    NSLog(@"load background image");
     return YES;
 }
 

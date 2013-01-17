@@ -19,7 +19,8 @@
         self.userInteractionEnabled=YES;
         self.backgroundColor=[UIColor clearColor];
         UIImageView *backgroundimg=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
-        backgroundimg.image=[UIImage imageNamed:@"place_editbg.png"];
+        backgroundimg.image=[[UIImage imageNamed:@"map_edit_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0,0)];
+//        
         [self addSubview:backgroundimg];
         [backgroundimg release];
 
@@ -28,22 +29,20 @@
 
         PlaceTitle=[[UITextField alloc] initWithFrame:CGRectMake(17, 9, 260, 24)];
         [PlaceTitle setFont:[UIFont fontWithName:@"HelveticaNeue" size:21]];
+        PlaceTitle.textColor=[UIColor whiteColor];
         [PlaceTitle setDelegate:self];
-
-        PlaceTitle.textColor=[Util getHighlightColor];
 
         PlaceDesc=[[UITextView alloc] initWithFrame:CGRectMake(17-6, 9+24+6, 270, 72)];
         [PlaceDesc setFont:[UIFont fontWithName:@"HelveticaNeue" size:14]];
         PlaceDesc.backgroundColor=[UIColor clearColor];
+        PlaceDesc.textColor=[UIColor whiteColor];
 
         [self addSubview:PlaceTitle];
         [self addSubview:PlaceDesc];
         
         closeButton = [[UIButton alloc]
                                  initWithFrame:CGRectMake(self.frame.size.width-25, self.frame.size.height-25, 25.0f, 25.0f)];
-//        [closeButton setBackgroundImage:[UIImage imageNamed:@"closebutton"]
-//                               forState:UIControlStateNormal];
-//        [self addSubview:closeButton];
+//        
     }
     return self;
 }
@@ -82,13 +81,29 @@
 	[super resignFirstResponder];
 	return [PlaceTitle resignFirstResponder] && [PlaceDesc resignFirstResponder];
 }
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
+//
+//- (void)drawRect:(CGRect)rect
+//{
+//    UIBezierPath *framepath =[UIBezierPath bezierPathWithRect:rect];
+//    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+//    CGContextBeginPath(currentContext);
+//    CGContextAddPath(currentContext, framepath.CGPath);
+//    CGContextClosePath(currentContext);
+//    CGContextSaveGState(currentContext);
+//    
+//    CGFloat colors [] = {
+//        0/255.0f, 0/255.0f, 0/255.0f, 0.5,
+//        0/255.0f, 0/255.0f, 0/255.0f, 0.33
+//    };
+//    CGColorSpaceRef baseSpace = CGColorSpaceCreateDeviceRGB();
+//    CGGradientRef gradient = CGGradientCreateWithColorComponents(baseSpace, colors, NULL, 2);
+//    CGColorSpaceRelease(baseSpace);
+//    baseSpace = NULL;
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    CGPoint startPoint = CGPointMake(CGRectGetMidX(rect), CGRectGetMinY(rect));
+//    CGPoint endPoint = CGPointMake(CGRectGetMidX(rect), CGRectGetMaxY(rect));
+//    CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);
+//    CGGradientRelease(gradient), gradient = NULL;
+//}
 
 @end

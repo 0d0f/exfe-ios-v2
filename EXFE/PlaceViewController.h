@@ -16,13 +16,15 @@
 #import "WildcardGestureRecognizer.h"
 #import "EXGradientToolbarView.h"
 #import "Util.h"
+#import <QuartzCore/QuartzCore.h>
 
 typedef enum {
     EXPlaceViewStyleDefault,
     EXPlaceViewStyleMap,
     EXPlaceViewStyleTableview,
     EXPlaceViewStyleBigTableview,
-    EXPlaceViewStyleEdit
+    EXPlaceViewStyleEdit,
+    EXPlaceViewStyleShowPlaceDetail
 } EXPlaceViewStyle;
 
 

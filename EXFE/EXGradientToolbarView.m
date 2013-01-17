@@ -21,7 +21,6 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    
     UIBezierPath *framepath =[UIBezierPath bezierPathWithRect:rect];
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextBeginPath(currentContext);
@@ -42,12 +41,6 @@
     CGPoint endPoint = CGPointMake(CGRectGetMidX(rect), CGRectGetMaxY(rect));
     CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);
     CGGradientRelease(gradient), gradient = NULL;
-    
-
-//    CGContextSetShadowWithColor(currentContext, CGSizeMake(3, -3), 2, [UIColor blackColor].CGColor);
-//    CGContextSetShadow(currentContext, CGSizeMake(4,4), 3);
-//    CGContextFillPath(currentContext);
-
 }
 
 @end
