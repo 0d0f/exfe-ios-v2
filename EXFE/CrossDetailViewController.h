@@ -56,6 +56,8 @@
     EXRSVPStatusView *rsvpstatusview;
     CGFloat exfeeSuggestHeight;
     EXRSVPMenuView *rsvpmenu;
+    UIButton *timeEditMenu;
+    UIButton *placeEditMenu;
     BOOL isWidgetShown;
     
 }
@@ -67,7 +69,7 @@
 - (void)initUI;
 - (void)relayoutUI;
 - (void)refreshUI;
-- (void)hideMenu;
+- (void)hideMenuWithAnimation:(BOOL)animated;
 - (void)hideStatusView;
 - (void)reloadStatusview:(Invitation*)_invitation;
 
