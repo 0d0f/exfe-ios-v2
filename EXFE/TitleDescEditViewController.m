@@ -95,8 +95,18 @@
     headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(0+ self.view.frame.size.width * 0.6,  self.view.frame.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
 
     headview.backgroundColor=[UIColor grayColor];
-    dectorView=[[UIImageView alloc] initWithFrame:headview.bounds];
+    
+    CGFloat scale = CGRectGetWidth(headview.bounds) / HEADER_BACKGROUND_WIDTH;
+    CGFloat startY = 0 - HEADER_BACKGROUND_Y_OFFSET * scale;
+    dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, HEADER_BACKGROUND_WIDTH * scale, HEADER_BACKGFOUND_HEIGHT * scale)];
+    //dectorView=[[UIImageView alloc] initWithFrame:headview.bounds];
     dectorView.image=[UIImage imageNamed:@"x_title_bg.png"];
+    
+    UIView* dectorMask = [[UIView alloc] initWithFrame:headview.bounds];
+    dectorMask.backgroundColor = [UIColor COLOR_WA(0x00, 0x55)];
+    [headview addSubview:dectorMask];
+    [dectorMask release];
+    
     [headview addSubview:dectorView];
     [self.view addSubview:headview];
     
@@ -106,6 +116,7 @@
     titleView.backgroundColor = [UIColor clearColor];
     titleView.textAlignment = NSTextAlignmentCenter;
     titleView.backgroundColor=[UIColor clearColor];
+    [headview addSubview:titleView];
     
 //    titleView.layer.shadowColor = [UIColor blackColor].CGColor;
 //    titleView.layer.shadowOffset= CGSizeMake(0.0f, 1.0f);
@@ -115,7 +126,7 @@
     imageback.image=[[UIImage imageNamed:@"xedit_textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(4,4,4,4)];
     [headview addSubview:imageback];
     [imageback release];
-    [headview addSubview:titleView];
+    
 
     descView = [[UITextView alloc] initWithFrame:CGRectMake(0, headview.frame.origin.y+headview.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-(headview.frame.origin.y+headview.frame.size.height))];
     descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];

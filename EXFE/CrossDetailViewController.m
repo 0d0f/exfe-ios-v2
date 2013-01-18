@@ -208,9 +208,10 @@
 
 - (void)widgetJump:(id)sender with:(NSNumber*)index
 {
+    tabBar.hidden = YES;
     NSInteger idx = [index integerValue];
     if (idx == 0){
-        tabBar.hidden = YES;
+        
     }else
     if (idx == 1){
         [self toConversationAnimated:YES];
@@ -219,16 +220,6 @@
 
 - (void)widgetClick:(id)sender{
      tabBar.hidden = NO;
-//    UIView * view = sender;
-//    
-//    CGPoint endPoint;
-//    if (isWidgetShown) {
-//        endPoint = CGPointMake(CGRectGetMaxX(dectorView.frame) - 48 / 2 - 5, CGRectGetMaxY(dectorView.frame) - 24 / 2 - 5);
-//    }else{
-//        endPoint = CGPointMake(CGRectGetMidX(dectorView.frame), CGRectGetMidY(dectorView.frame));
-//    }
-//    isWidgetShown = !isWidgetShown;
-//    [self animateWidget:view to:endPoint];
 }
 
 - (void)animateWidget:(UIView*)view to:(CGPoint)endPoint{
@@ -305,6 +296,12 @@
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
     
+    
+    [self hideMenuWithAnimation:YES];
+    [self hideStatusView];
+    [self hideTimeEditMenuWithAnimation:YES];
+    [self hidePlaceEditMenuWithAnimation:YES];
+    
 //    if (rsvpstatusview.hidden == NO){
 //        if (CGRectContainsPoint(rsvpstatusview.frame, location)) {
 //            NSLog(@"click to set rsvp");
@@ -317,7 +314,7 @@
         return;
     }
 //    if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
-//    {
+//    {e
 //        [crosstitle resignFirstResponder];
 //        [map becomeFirstResponder];
 //        if(viewmode==YES)
@@ -361,10 +358,23 @@
         [exfeeShowview becomeFirstResponder];
         CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
         [exfeeShowview onImageTouch:exfeeviewlocation];
-    }else{
-        [self hideMenu];
-        [self hideStatusView];
+        return;
     }
+    
+    if (timeRelView.hidden == NO && CGRectContainsPoint(timeRelView.frame, location)){
+        [self showTimeEditMenu:timeRelView];
+        return;
+    }else if (timeAbsView.hidden == NO && CGRectContainsPoint(timeAbsView.frame, location)) {
+        [self showTimeEditMenu:timeAbsView];
+        return;
+    }
+    
+    if (placeTitleView.hidden == NO && CGRectContainsPoint(placeTitleView.frame, location)){
+        [self showPlaceEditMenu:placeTitleView];
+    }else if (placeDescView.hidden == NO && CGRectContainsPoint(placeDescView.frame, location)){
+        [self showPlaceEditMenu:placeDescView];
+    }
+    
     
 //    else{
 //        [crosstitle resignFirstResponder];
@@ -900,7 +910,7 @@
 
             
             [rsvpstatusview setNeedsDisplay];
-            [self hideMenu];
+            [self hideMenuWithAnimation:YES];
         }
     }
     //        [crosstitle resignFirstResponder];
@@ -971,51 +981,201 @@
 - (void)onClick:(id)sender{
     NSLog(@"Click to Navigation");
 }
+
+- (void)clickforTimeEdit:(id)sender{
+    [self hideTimeEditMenuNow];
+    NSLog(@"Click to Edit Time");
+    //[self showTimeView];
+}
+
+- (void)clickforPlaceEdit:(id)sender{
+    [self hidePlaceEditMenuNow];
+    NSLog(@"Click to Edit Place");
+    //[self ShowPlaceView:@"search"];
+}
+
+#pragma mark Edit Menu API
+- (void) showTimeEditMenu:(UIView*)sender{
+    if (timeEditMenu == nil) {
+        timeEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
+        timeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
+        [timeEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
+        timeEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
+        [timeEditMenu addTarget:self action:@selector(clickforTimeEdit:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:timeEditMenu];
+    }
+    timeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
+    timeEditMenu.hidden = NO;
+}
+
+
+- (void) hideTimeEditMenuWithAnimation:(BOOL)animated{
+    if (animated) {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.3];
+        [timeEditMenu setFrame:CGRectOffset(timeEditMenu.frame, CGRectGetWidth(self.view.frame) - CGRectGetWidth(timeEditMenu.frame), 0)];
+        [UIView setAnimationDidStopSelector:@selector(hideTimeEditMenuNow)];
+        [UIView commitAnimations];
+    }else{
+        [self hideTimeEditMenuNow];
+    }
+}
+
+- (void)hideTimeEditMenuNow{
+    if (timeEditMenu != nil && timeEditMenu.hidden == NO) {
+        timeEditMenu.hidden = YES;
+    }
+}
+
+- (void) showPlaceEditMenu:(UIView*)sender{
+    if (placeEditMenu == nil) {
+        placeEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
+        placeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
+        [placeEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
+        placeEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
+        [placeEditMenu addTarget:self action:@selector(clickforPlaceEdit:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:placeEditMenu];
+    }
+    placeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
+    placeEditMenu.hidden = NO;
     
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3];
+    [placeEditMenu setFrame:CGRectOffset(placeEditMenu.frame, 0 - CGRectGetWidth(placeEditMenu.frame), 0)];
+    [UIView commitAnimations];
+}
+
+- (void) hidePlaceEditMenuWithAnimation:(BOOL)animated{
+    if (animated) {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.3];
+        [placeEditMenu setFrame:CGRectOffset(placeEditMenu.frame, CGRectGetWidth(self.view.frame) - CGRectGetWidth(placeEditMenu.frame), 0)];
+        [UIView setAnimationDidStopSelector:@selector(hidePlaceEditMenuNow)];
+        [UIView commitAnimations];
+    }else{
+        [self hidePlaceEditMenuNow];
+    }
+}
+
+- (void)hidePlaceEditMenuNow{
+    if (placeEditMenu != nil && placeEditMenu.hidden == NO) {
+        placeEditMenu.hidden = YES;
+    }
+}
+
+
 - (void) showMenu:(Invitation*)_invitation items:(NSArray*)itemslist{
-    if(rsvpmenu==nil){
+    if(rsvpmenu == nil){
         rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44) withDelegate:self items:itemslist showTitleBar:YES];
         [self.view addSubview:rsvpmenu];
     }
-    rsvpmenu.invitation=_invitation;
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44)];
+
+    rsvpmenu.invitation = _invitation;
+    rsvpmenu.hidden = NO;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
     
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44)];
     if(rsvpstatusview!=nil)
        [rsvpstatusview setHidden:YES];
     
     [UIView commitAnimations];
 
 }
-
-- (void)hideMenu{
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
     
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, rsvpmenu.frame.origin.y, 125, 152)];
-    [UIView commitAnimations];
+
+        
+
+- (void)hideMenuWithAnimation:(BOOL)animated{
+    if (animated) {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.3];
+        [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, rsvpmenu.frame.origin.y, 125, 152)];
+        [UIView setAnimationDidStopSelector:@selector(hideMenuNow)];
+        [UIView commitAnimations];
+    }else{
+        [self hideMenuNow];
+    }
+    
+}
+
+- (void)hideMenuNow{
+    if (rsvpmenu != nil && rsvpmenu.hidden == NO) {
+        rsvpmenu.hidden = YES;
+    }
 }
 
 - (void)hideStatusView{
-    [rsvpstatusview setHidden:YES];
+    if(rsvpstatusview != nil && rsvpstatusview.hidden == NO){
+        [rsvpstatusview setHidden:YES];
+    }
 }
 
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu{
     [self sendrsvp:@"ACCEPTED" invitation:menu.invitation];
-    [self hideMenu];
+    [self hideMenuWithAnimation:YES];
 }
 
 - (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu{
     [self sendrsvp:@"DECLINED" invitation:menu.invitation];
-    [self hideMenu];
+    [self hideMenuWithAnimation:YES];
 }
 
 - (void)RSVPPendingMenuView:(EXRSVPMenuView *) menu{
     [self sendrsvp:@"INTERESTED" invitation:menu.invitation];
-    [self hideMenu];
+    [self hideMenuWithAnimation:YES];
 }
 
+#pragma mark show Edit View Controller
+- (void) showTitleAndDescView{
+    TitleDescEditViewController *titleViewController=[[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
+    titleViewController.gatherview=self;
+    NSString *imgurl;
+    for(NSDictionary *widget in (NSArray*)cross.widget) {
+        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+            imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+        }
+    }
+    [titleViewController setBackground:imgurl];
+    [self presentModalViewController:titleViewController animated:YES];
+    [titleViewController setCrossTitle:cross.title desc:cross.cross_description];
+    [titleViewController release];
+}
+
+- (void) showTimeView{
+    TimeViewController *timeViewController=[[TimeViewController alloc] initWithNibName:@"TimeViewController" bundle:nil];
+    timeViewController.gatherview=self;
+    [timeViewController setDateTime:cross.time];
+    [self presentModalViewController:timeViewController animated:YES];
+    [timeViewController release];
+}
+
+- (void) ShowPlaceView:(NSString*)status{
+    PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
+    placeViewController.gatherview=self;
+    if(cross.place!=nil){
+        if(![cross.place.title isEqualToString:@""] || ( ![cross.place.lat isEqualToString:@""] || ![cross.place.lng isEqualToString:@""])){
+            [placeViewController setPlace:cross.place isedit:YES];
+        }
+        else{
+            placeViewController.isaddnew=YES;
+            placeViewController.showtableview=YES;
+            status=@"search";
+            
+        }
+    }else{
+        placeViewController.isaddnew=YES;
+    }
+    if([status isEqualToString:@"detail"]){
+        placeViewController.showdetailview=YES;
+    }else if([status isEqualToString:@"search"]){
+        placeViewController.showtableview=YES;
+    }
+    [self presentModalViewController:placeViewController animated:YES];
+    [placeViewController release];
+}
+
+#pragma mark API request for modification.
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
 //    NSError *error;
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];

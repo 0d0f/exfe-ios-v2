@@ -155,13 +155,29 @@
     
     headview = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width * 0.6, f.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
     headview.backgroundColor=[UIColor grayColor];
-    
-    CGFloat scale = CGRectGetWidth(headview.bounds) / 880.0f;
-    CGFloat startY = 0 - 198 * scale;
-    dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, 880 * scale, 495 * scale)];
-    dectorView.image=[UIImage imageNamed:@"x_title_bg.png"];
-
-    [headview addSubview:dectorView];
+    {
+        CGFloat scale = CGRectGetWidth(headview.bounds) / 880.0f;
+        CGFloat startY = 0 - 198 * scale;
+        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, 880 * scale, 495 * scale)];
+        dectorView.image=[UIImage imageNamed:@"x_title_bg.png"];
+        [headview addSubview:dectorView];
+        
+        UIView* dectorMask = [[UIView alloc] initWithFrame:headview.bounds];
+        dectorMask.backgroundColor = [UIColor COLOR_WA(0x00, 0x55)];
+        [headview addSubview:dectorMask];
+        [dectorMask release];
+        
+        titleView = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - (CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN) * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+        titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
+        titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+        titleView.backgroundColor = [UIColor clearColor];
+        titleView.lineBreakMode = UILineBreakModeWordWrap;
+        titleView.numberOfLines = 2;
+        titleView.textAlignment = NSTextAlignmentCenter;
+        titleView.shadowColor = [UIColor blackColor];
+        titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
+        [headview addSubview:titleView];
+    }
     [self.view addSubview:headview];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
@@ -171,18 +187,8 @@
     [btnBack addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnBack];
     
-    
-    titleView = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - (CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN) * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
-    titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
-    titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
-    titleView.backgroundColor = [UIColor clearColor];
-    titleView.lineBreakMode = UILineBreakModeWordWrap;
-    titleView.numberOfLines = 2;
-    titleView.textAlignment = NSTextAlignmentCenter;
-    titleView.shadowColor = [UIColor blackColor];
-    titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-    [self.view addSubview:titleView];
     self.view.backgroundColor = [UIColor grayColor];
+    
     
     CGRect screenframe=[[UIScreen mainScreen] bounds];
     UIView *pannel=[[UIView alloc] initWithFrame:CGRectMake(0,screenframe.size.height-44-20, self.view.frame.size.width, 44)];
@@ -1042,8 +1048,7 @@
 - (void)hideMenu{
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
-    
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, rsvpmenu.frame.origin.y, 125, 152)];
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, rsvpmenu.frame.origin.y, self.view.frame.size.width, rsvpmenu.frame.size.height)];
     [UIView commitAnimations];
 }
 
@@ -1067,6 +1072,7 @@
 }
 
 - (void)RSVPRemoveMenuView:(EXRSVPMenuView *) menu{
+    [self hideMenu];
     for (Invitation *invitation in exfeeInvitations) {
         if([invitation.identity.identity_id isEqualToNumber:menu.invitation.identity.identity_id])
         {
@@ -1075,6 +1081,7 @@
             return;
         }
     }
+
 //    menu.invitation
 }
 
