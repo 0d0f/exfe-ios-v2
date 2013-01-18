@@ -199,14 +199,37 @@
     // card cover
     [[UIImage imageNamed:@"xlist_cell.png"] drawInRect:b];
     
+    UIColor * color = [UIColor clearColor];
     if (hlTitle){
-        [[UIColor COLOR_BLUE_SEA] set];
+        color = [UIColor COLOR_BLUE_SEA];
     }else{
-        [[UIColor COLOR_WHITE] set];
+        color = [UIColor COLOR_WHITE];
     }
-    [title drawInRect:titleRect withFont:[UIFont fontWithName:@"HelveticaNeue" size:21] lineBreakMode:UILineBreakModeCharacterWrap alignment:UITextAlignmentLeft ];
-    
-    
+    [color set];
+    {
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSaveGState(context);
+        CGContextSetTextMatrix(context, CGAffineTransformIdentity);
+        CGContextTranslateCTM(context, 0, (CGRectGetHeight(self.bounds)  - CGRectGetMidY(titleRect)));
+        CGContextScaleCTM(context, 1.0, -1.0);
+
+        CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor blackColor].CGColor);
+        
+        CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL);
+        NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:title];
+        [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
+        [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)color.CGColor range:NSMakeRange(0,[textstring length])];
+        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)textstring);
+        CGMutablePathRef path = CGPathCreateMutable();
+        CGPathAddRect(path, NULL, titleRect);
+        CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [title length]), path, NULL);
+        CFRelease(framesetter);
+        CFRelease(path);
+        CTFrameDraw(theFrame, context);
+        CFRelease(theFrame);
+        CGContextRestoreGState(context);
+    }
+    //[title drawInRect:titleRect withFont:[UIFont fontWithName:@"HelveticaNeue" size:21] lineBreakMode:UILineBreakModeCharacterWrap alignment:UITextAlignmentLeft ];
     
     UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue-Light" size:15];
     // text info
