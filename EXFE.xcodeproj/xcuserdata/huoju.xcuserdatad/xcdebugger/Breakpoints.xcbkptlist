@@ -91,7 +91,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "442"
          endingLineNumber = "442"
-         landmarkName = "-fillExfee"
+         landmarkName = "-fillBackground:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -346,11 +346,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/PlaceViewController.m"
-         timestampString = "380020550.740883"
+         timestampString = "380175768.323255"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "335"
-         endingLineNumber = "335"
+         startingLineNumber = "339"
+         endingLineNumber = "339"
          landmarkName = "-didReceiveMemoryWarning"
          landmarkType = "5">
       </FileBreakpoint>
@@ -749,11 +749,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/PlaceViewController.m"
-         timestampString = "380024339.615231"
+         timestampString = "380175768.323255"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "748"
-         endingLineNumber = "748"
+         startingLineNumber = "755"
+         endingLineNumber = "755"
          landmarkName = "-editingDidBegan:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -840,11 +840,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/TimeViewController.m"
-         timestampString = "380095062.060389"
+         timestampString = "380095711.458347"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "288"
-         endingLineNumber = "288"
+         startingLineNumber = "251"
+         endingLineNumber = "251"
          landmarkName = "-Done:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -962,8 +962,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "504"
          endingLineNumber = "504"
-         landmarkName = "@implementation ConversationViewController"
-         landmarkType = "3">
+         landmarkName = "-touchesBegan:"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -975,7 +975,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "383"
          endingLineNumber = "383"
-         landmarkName = "-statusbarResize"
+         landmarkName = "-hiddenTimeNow"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -988,7 +988,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "398"
          endingLineNumber = "398"
-         landmarkName = "-touchesBegan:"
+         landmarkName = "-statusbarResize"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1196,7 +1196,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "238"
          endingLineNumber = "238"
-         landmarkName = "-keyboardWillShow:"
+         landmarkName = "-dealloc"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1421,19 +1421,6 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/PlaceViewController.m"
-         timestampString = "380021497.428351"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "687"
-         endingLineNumber = "687"
-         landmarkName = "-selectPlace:editing:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
@@ -1603,19 +1590,6 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/CrossDetailViewController.m"
-         timestampString = "378984104.20882"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "951"
-         endingLineNumber = "951"
-         landmarkName = "-showMenu:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
@@ -1698,11 +1672,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/NewGatherViewController.m"
-         timestampString = "380018039.931695"
+         timestampString = "380182773.843032"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "474"
-         endingLineNumber = "474"
+         startingLineNumber = "525"
+         endingLineNumber = "525"
          landmarkName = "-Gather:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1711,51 +1685,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/NewGatherViewController.m"
-         timestampString = "380088502.355696"
+         timestampString = "380182773.843032"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1176"
-         endingLineNumber = "1176"
-         landmarkName = "-objectLoader:didLoadObjects:"
-         landmarkType = "5">
+         startingLineNumber = "1228"
+         endingLineNumber = "1228"
+         landmarkName = "@implementation NewGatherViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/NewGatherViewController.m"
-         timestampString = "380018039.931695"
+         timestampString = "380182773.843032"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "400"
-         endingLineNumber = "400"
+         startingLineNumber = "471"
+         endingLineNumber = "471"
          landmarkName = "-addExfee:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/NewGatherViewController.m"
-         timestampString = "380018039.931695"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "408"
-         endingLineNumber = "408"
-         landmarkName = "-addExfee:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/NewGatherViewController.m"
-         timestampString = "380018039.931695"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "420"
-         endingLineNumber = "420"
-         landmarkName = "-setTitle:Description:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1815,24 +1763,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/PlaceViewController.m"
-         timestampString = "380021497.428351"
+         timestampString = "380175768.323255"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "644"
-         endingLineNumber = "644"
-         landmarkName = "-selectPlace:editing:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/PlaceViewController.m"
-         timestampString = "380021497.428351"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "599"
-         endingLineNumber = "599"
+         startingLineNumber = "651"
+         endingLineNumber = "651"
          landmarkName = "-selectPlace:editing:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1841,11 +1776,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/TimeViewController.m"
-         timestampString = "380095062.060389"
+         timestampString = "380095711.458347"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "213"
-         endingLineNumber = "213"
+         startingLineNumber = "176"
+         endingLineNumber = "176"
          landmarkName = "-setDateTime:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1867,11 +1802,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/TimeViewController.m"
-         timestampString = "380095062.060389"
+         timestampString = "380095711.458347"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "299"
-         endingLineNumber = "299"
+         startingLineNumber = "262"
+         endingLineNumber = "262"
          landmarkName = "-saveDate:"
          landmarkType = "5">
       </FileBreakpoint>

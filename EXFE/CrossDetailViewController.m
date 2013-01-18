@@ -864,8 +864,6 @@
             
             [rsvpstatusview setFrame:CGRectMake(rsvpstatus_x, y-rsvpstatusview.frame.size.height, rsvpstatusview.frame.size.width, rsvpstatusview.frame.size.height)];
             
-//            [[rsvpstatusview layer] setValue:[NSNumber numberWithInt:y-rsvpstatusview.frame.size.height+30-rsvpstatusview.frame.origin.y] forKeyPath:@"transform.translation.y"];
-//
             rsvpstatus_x-=rsvpstatusview.frame.origin.x;
             CABasicAnimation *moveAnimation = [CABasicAnimation animationWithKeyPath:
                                                 @"transform.translation.y"];

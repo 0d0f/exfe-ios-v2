@@ -222,6 +222,10 @@
 		7882F80316A68372004309DF /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882F80216A68372004309DF /* CoreImage.framework */; };
 		7882F80616A68B52004309DF /* map_edit_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7882F80416A68B52004309DF /* map_edit_bg.png */; };
 		7882F80716A68B52004309DF /* map_edit_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7882F80516A68B52004309DF /* map_edit_bg@2x.png */; };
+		7882F81716A90B3C004309DF /* glassbar_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 7882F81516A90B3C004309DF /* glassbar_light.png */; };
+		7882F81816A90B3C004309DF /* glassbar_light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7882F81616A90B3C004309DF /* glassbar_light@2x.png */; };
+		7882F81B16A91045004309DF /* btn_glass_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 7882F81916A91043004309DF /* btn_glass_blue.png */; };
+		7882F81C16A91045004309DF /* btn_glass_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7882F81A16A91043004309DF /* btn_glass_blue@2x.png */; };
 		788312A815738D6100D67103 /* CrossCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 788312A715738D6100D67103 /* CrossCell.m */; };
 		788312AB1574A63600D67103 /* ImgCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 788312AA1574A5DE00D67103 /* ImgCache.m */; };
 		7884C4CC15DCEB8B00DBD294 /* rsvp_unavailable_badge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7884C4C415DCEB8B00DBD294 /* rsvp_unavailable_badge@2x.png */; };
@@ -732,6 +736,10 @@
 		7882F80216A68372004309DF /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		7882F80416A68B52004309DF /* map_edit_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_edit_bg.png; sourceTree = "<group>"; };
 		7882F80516A68B52004309DF /* map_edit_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_edit_bg@2x.png"; sourceTree = "<group>"; };
+		7882F81516A90B3C004309DF /* glassbar_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glassbar_light.png; sourceTree = "<group>"; };
+		7882F81616A90B3C004309DF /* glassbar_light@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glassbar_light@2x.png"; sourceTree = "<group>"; };
+		7882F81916A91043004309DF /* btn_glass_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_glass_blue.png; sourceTree = "<group>"; };
+		7882F81A16A91043004309DF /* btn_glass_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_glass_blue@2x.png"; sourceTree = "<group>"; };
 		788312A615738D6100D67103 /* CrossCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossCell.h; sourceTree = "<group>"; };
 		788312A715738D6100D67103 /* CrossCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossCell.m; sourceTree = "<group>"; };
 		788312A91574A5DE00D67103 /* ImgCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgCache.h; sourceTree = "<group>"; };
@@ -1291,6 +1299,8 @@
 				788A69F616A403AC003EA9ED /* xedit_textfield@2x.png */,
 				7882F80416A68B52004309DF /* map_edit_bg.png */,
 				7882F80516A68B52004309DF /* map_edit_bg@2x.png */,
+				7882F81516A90B3C004309DF /* glassbar_light.png */,
+				7882F81616A90B3C004309DF /* glassbar_light@2x.png */,
 			);
 			name = gatherAndcross;
 			sourceTree = "<group>";
@@ -1620,6 +1630,8 @@
 		78B1FCE415DCB9E100DD1C56 /* button */ = {
 			isa = PBXGroup;
 			children = (
+				7882F81916A91043004309DF /* btn_glass_blue.png */,
+				7882F81A16A91043004309DF /* btn_glass_blue@2x.png */,
 				783F52E416774C4100331746 /* btn_blue.png */,
 				783F52E516774C4100331746 /* btn_blue@2x.png */,
 				785659FD15F3B26A0003CDF8 /* btn_blue_dark.png */,
@@ -2211,6 +2223,10 @@
 				788A6A0016A415FB003EA9ED /* x_title_bg@2x.png in Resources */,
 				7882F80616A68B52004309DF /* map_edit_bg.png in Resources */,
 				7882F80716A68B52004309DF /* map_edit_bg@2x.png in Resources */,
+				7882F81716A90B3C004309DF /* glassbar_light.png in Resources */,
+				7882F81816A90B3C004309DF /* glassbar_light@2x.png in Resources */,
+				7882F81B16A91045004309DF /* btn_glass_blue.png in Resources */,
+				7882F81C16A91045004309DF /* btn_glass_blue@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
