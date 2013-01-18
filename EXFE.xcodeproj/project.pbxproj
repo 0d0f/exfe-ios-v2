@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4F0597961682B9FA00F9CE10 /* CrossDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0597941682B9FA00F9CE10 /* CrossDetailViewController.m */; };
 		4F0597971682B9FA00F9CE10 /* CrossDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F0597951682B9FA00F9CE10 /* CrossDetailViewController.xib */; };
+		4F0E159B16A95C390086AC4A /* edit_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159916A95C390086AC4A /* edit_30.png */; };
+		4F0E159C16A95C390086AC4A /* edit_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159A16A95C390086AC4A /* edit_30@2x.png */; };
 		4F14689C167F1C0700872F9D /* ProfileCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F14689B167F1C0600872F9D /* ProfileCard.m */; };
 		4F266F02168EC49900BDB9D5 /* EXLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F266F01168EC49900BDB9D5 /* EXLabel.m */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
@@ -467,6 +469,8 @@
 		4F0597931682B9FA00F9CE10 /* CrossDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossDetailViewController.h; sourceTree = "<group>"; };
 		4F0597941682B9FA00F9CE10 /* CrossDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossDetailViewController.m; sourceTree = "<group>"; };
 		4F0597951682B9FA00F9CE10 /* CrossDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossDetailViewController.xib; sourceTree = "<group>"; };
+		4F0E159916A95C390086AC4A /* edit_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30.png; sourceTree = "<group>"; };
+		4F0E159A16A95C390086AC4A /* edit_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30@2x.png"; sourceTree = "<group>"; };
 		4F14689A167F1C0600872F9D /* ProfileCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileCard.h; sourceTree = "<group>"; };
 		4F14689B167F1C0600872F9D /* ProfileCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileCard.m; sourceTree = "<group>"; };
 		4F266F00168EC49900BDB9D5 /* EXLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXLabel.h; sourceTree = "<group>"; };
@@ -1131,6 +1135,8 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				4F0E159916A95C390086AC4A /* edit_30.png */,
+				4F0E159A16A95C390086AC4A /* edit_30@2x.png */,
 				78B91DE616884F2500BB98B1 /* M2A */,
 				7872821015FCFC700024EC17 /* place */,
 				78CA7C1915ECD0A000AAD1DF /* appstore */,
@@ -2227,6 +2233,8 @@
 				7882F81816A90B3C004309DF /* glassbar_light@2x.png in Resources */,
 				7882F81B16A91045004309DF /* btn_glass_blue.png in Resources */,
 				7882F81C16A91045004309DF /* btn_glass_blue@2x.png in Resources */,
+				4F0E159B16A95C390086AC4A /* edit_30.png in Resources */,
+				4F0E159C16A95C390086AC4A /* edit_30@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
