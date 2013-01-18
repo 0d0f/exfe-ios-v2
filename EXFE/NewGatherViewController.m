@@ -742,6 +742,7 @@
     [self relayoutUI];
 }
 
+
 #pragma mark Relayout methods
 - (void)relayoutUI{
     if (layoutDirty == YES){
@@ -956,6 +957,7 @@
     {
         ExfeeInputViewController *exfeeinputViewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
         exfeeinputViewController.gatherview=self;
+        [self hideMenu];
         [self presentModalViewController:exfeeinputViewController animated:YES];
 
     }
@@ -964,120 +966,16 @@
         NSArray *arr=exfeeInvitations;//[self getReducedExfeeIdentities];
         Invitation *invitation =[arr objectAtIndex:index];
         
-        
-        int x=exfeeShowview.frame.origin.x+(col+1)*(50+5*2)+5;
-        int y=exfeeShowview.frame.origin.y+row*(50+5*2)+y_start_offset;
-        
-        if(x + 180 > self.view.frame.size.width){
-            x = x - 180;
-        }
-        if(rsvpstatusview==nil){
-            rsvpstatusview=[[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-44, 180, 44) withDelegate:self];
-            [self.view addSubview:rsvpstatusview];
-        }
-        rsvpstatusview.invitation=invitation;
-        
-        
-        float avatar_center=rect.origin.x+rect.size.width/2;
-        int rsvpstatus_x=avatar_center-rsvpstatusview.frame.size.width/2;
-        if(rsvpstatus_x<0)
-            rsvpstatus_x=0;
-        if(rsvpstatus_x+rsvpstatusview.frame.size.width>self.view.frame.size.width)
-            rsvpstatus_x=self.view.frame.size.width-rsvpstatusview.frame.size.width;
-        
         if(app.userid ==[invitation.identity.connected_user_id intValue]){
-            [self showMenu:invitation];
-            [self hideStatusView];
-            [rsvpstatusview setHidden:YES];
-        }else{
-            [rsvpstatusview setHidden:NO];
-            //            CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:
-            //                                                 @"transform.scale"];
-            //            scaleAnimation.duration= 1;
-            //            scaleAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            //            scaleAnimation.fromValue = [NSNumber numberWithFloat:0.5];
-            //            scaleAnimation.toValue = [NSNumber numberWithFloat:1.0];
-            //            [[rsvpstatusview layer] addAnimation:scaleAnimation forKey:@"scaleAnimation"];
+            [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Pending", nil]];
+
+        }
+        else{
+            [self showMenu:invitation items:[NSArray arrayWithObjects:@"Delete", nil]];
             
-            
-            NSLog(@"from %f to %i position %f",rsvpstatusview.frame.origin.x,rsvpstatus_x,[rsvpstatusview layer].position.x);
-            
-            [rsvpstatusview setFrame:CGRectMake(rsvpstatus_x, y-rsvpstatusview.frame.size.height, rsvpstatusview.frame.size.width, rsvpstatusview.frame.size.height)];
-            
-            //            [[rsvpstatusview layer] setValue:[NSNumber numberWithInt:y-rsvpstatusview.frame.size.height+30-rsvpstatusview.frame.origin.y] forKeyPath:@"transform.translation.y"];
-            //
-            rsvpstatus_x-=rsvpstatusview.frame.origin.x;
-            CABasicAnimation *moveAnimation = [CABasicAnimation animationWithKeyPath:
-                                               @"transform.translation.y"];
-            moveAnimation.duration= 0.233;
-            moveAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-            
-            moveAnimation.fromValue =[NSNumber numberWithFloat:y-rsvpstatusview.frame.size.height+30-rsvpstatusview.frame.origin.y];
-            moveAnimation.toValue =[NSNumber numberWithFloat:y-rsvpstatusview.frame.size.height-rsvpstatusview.frame.origin.y];
-            moveAnimation.removedOnCompletion = NO;
-            moveAnimation.fillMode = kCAFillModeForwards;
-            [[rsvpstatusview layer] addAnimation:moveAnimation forKey:@"moveAnimation"];
-            
-            CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:
-                                                @"transform.scale"];
-            scaleAnimation.duration= 0.2;
-            scaleAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-            
-            scaleAnimation.fromValue =[NSNumber numberWithInt:0.1];
-            scaleAnimation.toValue =[NSNumber numberWithInt:1];
-            scaleAnimation.removedOnCompletion = NO;
-            scaleAnimation.fillMode = kCAFillModeForwards;
-            [[rsvpstatusview layer] addAnimation:scaleAnimation forKey:@"scaleAnimation"];
-            
-            CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:
-                                                  @"opacity"];
-            opacityAnimation.duration= 0.3;
-            opacityAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-            
-            opacityAnimation.fromValue =[NSNumber numberWithInt:0];
-            opacityAnimation.toValue =[NSNumber numberWithInt:1];
-            opacityAnimation.removedOnCompletion = NO;
-            opacityAnimation.fillMode = kCAFillModeForwards;
-            [[rsvpstatusview layer] addAnimation:opacityAnimation forKey:@"opacityAnimation"];
-            
-            
-            [rsvpstatusview setNeedsDisplay];
-            [self hideMenu];
         }
     }
-    //        [crosstitle resignFirstResponder];
-    //        [crosstitle endEditing:YES];
-    //        BOOL select_status=[[exfeeSelected objectAtIndex:index] boolValue];
-    //        for( int i=0;i<[exfeeSelected count];i++){
-    //            [exfeeSelected replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:NO]];
-    //        }
-    //        [exfeeSelected replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:!select_status]];
-    //        [exfeeShowview reloadData];
-    //        BOOL isSelect=NO;
-    //        for(NSNumber *number in exfeeSelected){
-    //            if([number boolValue]==YES)
-    //                isSelect=YES;
-    //        }
-    //        if(isSelect){
-    //            CGRect f=imageCollectionView.frame;
-    //            float x=f.origin.x+rect.origin.x+rect.size.width/2;
-    //            float y=f.origin.y+rect.origin.y;
-    //            Invitation *invitation=[reducedExfeeIdentities objectAtIndex:index];
-    //            [self ShowExfeePopOver:invitation pointTo:CGPointMake(x,y) arrowx:rect.origin.x+rect.size.width/2+f.origin.x];
-    //            if(viewmode==YES && exfeeShowview.editmode==NO){
-    //                [self ShowRsvpToolBar];
-    //            }
-    //            else
-    //                [self ShowGatherToolBar];
-    //        }
-    //        else {
-    //            if(viewmode==YES&& exfeeShowview.editmode==NO)
-    //                [self ShowRsvpButton];
-    //            else //if(exfeeShowview.editmode==YES)
-    //                [gathertoolbar setHidden:YES];
-    //
-    //        }
-    //    }
+
 }
 
 #pragma mark MKMapViewDelegate
@@ -1114,16 +1012,26 @@
     NSLog(@"Click to Navigation");
 }
 
-- (void) showMenu:(Invitation*)_invitation{
-    if(rsvpmenu==nil){
-        rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 152) withDelegate:self ];
-        [self.view addSubview:rsvpmenu];
+- (void) showMenu:(Invitation*)_invitation items:(NSArray*)itemslist{
+    if(rsvpmenu!=nil){
+        [rsvpmenu removeFromSuperview];
+        [rsvpmenu release];
     }
+    BOOL showtitlebar=YES;
+    float titlebarheight=20;
+    if([itemslist count]==1){
+        showtitlebar=NO;
+        titlebarheight=0;
+    }
+    
+    rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 44*[itemslist count]+titlebarheight) withDelegate:self items:itemslist showTitleBar:showtitlebar];
+    [self.view addSubview:rsvpmenu];
     rsvpmenu.invitation=_invitation;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
     
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y-20, 125, 152)];
+    
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y-20, 125, 44*[itemslist count]+titlebarheight)];
     if(rsvpstatusview!=nil)
         [rsvpstatusview setHidden:YES];
     
@@ -1153,10 +1061,23 @@
     [self hideMenu];
 }
 
-- (void)RSVPPendinMenuView:(EXRSVPMenuView *) menu{
+- (void)RSVPPendingMenuView:(EXRSVPMenuView *) menu{
     [self sendrsvp:@"INTERESTED" invitation:menu.invitation];
     [self hideMenu];
 }
+
+- (void)RSVPRemoveMenuView:(EXRSVPMenuView *) menu{
+    for (Invitation *invitation in exfeeInvitations) {
+        if([invitation.identity.identity_id isEqualToNumber:menu.invitation.identity.identity_id])
+        {
+            [exfeeInvitations removeObject:invitation];
+            [exfeeShowview reloadData];
+            return;
+        }
+    }
+//    menu.invitation
+}
+
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
     //    NSError *error;

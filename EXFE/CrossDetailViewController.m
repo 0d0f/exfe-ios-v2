@@ -846,7 +846,7 @@
             rsvpstatus_x=self.view.frame.size.width-rsvpstatusview.frame.size.width;
         
         if(app.userid ==[invitation.identity.connected_user_id intValue]){
-            [self showMenu:invitation];
+            [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Pending", nil]];
             [self hideStatusView];
             [rsvpstatusview setHidden:YES];
         }else{
@@ -972,16 +972,16 @@
     NSLog(@"Click to Navigation");
 }
     
-- (void) showMenu:(Invitation*)_invitation{
+- (void) showMenu:(Invitation*)_invitation items:(NSArray*)itemslist{
     if(rsvpmenu==nil){
-        rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 152) withDelegate:self ];
+        rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44) withDelegate:self items:itemslist showTitleBar:YES];
         [self.view addSubview:rsvpmenu];
     }
     rsvpmenu.invitation=_invitation;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
     
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y-20, 125, 152)];
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44)];
     if(rsvpstatusview!=nil)
        [rsvpstatusview setHidden:YES];
     
@@ -1011,7 +1011,7 @@
     [self hideMenu];
 }
 
-- (void)RSVPPendinMenuView:(EXRSVPMenuView *) menu{
+- (void)RSVPPendingMenuView:(EXRSVPMenuView *) menu{
     [self sendrsvp:@"INTERESTED" invitation:menu.invitation];
     [self hideMenu];
 }
