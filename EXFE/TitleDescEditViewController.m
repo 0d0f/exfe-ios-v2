@@ -133,6 +133,7 @@
     descView.backgroundColor = [UIColor clearColor];
     descView.textAlignment = NSTextAlignmentLeft;
     descView.backgroundColor=[UIColor whiteColor];
+    descView.text=@"Take some note";
     
     [self.view addSubview:descView];
     
@@ -167,6 +168,8 @@
     CGRect rect = descView.frame;
     rect.size.height=self.view.frame.size.height-(dectorView.frame.origin.y+dectorView.frame.size.height)-keyboardheight;
     [descView setFrame:rect];
+    if([descView.text isEqualToString:@"Take some note"])
+        descView.text=@"";
     
 //    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
 //        frame.origin.y = self.view.frame.size.height - frame.size.height - keyboardEndFrame.size.height;
@@ -253,7 +256,8 @@
 
 - (void) setCrossTitle:(NSString*)title desc:(NSString*)desc{
     titleView.text=title;
-    descView.text=desc;
+    if(desc!=nil && desc.length>0)
+        descView.text=desc;
 }
 
 - (void)didReceiveMemoryWarning

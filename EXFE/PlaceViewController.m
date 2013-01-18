@@ -189,6 +189,10 @@
     [map setRegion:region animated:YES];
     inputplace.text=place.title;
     
+    if(place!=nil){
+        [self addPlaceEdit:place];
+    }
+    
 //    if(showdetailview==YES){
 //        CGPoint point=[map convertCoordinate:location toPointToView:map];
 //        point.y+=18;
@@ -369,7 +373,7 @@
     [_places release];
     _places=places;
     [_tableView reloadData];
-    [self drawMapAnnontations];
+    [self drawMapAnnontations:-1];
 }
 
 - (void)dealloc {
@@ -386,21 +390,23 @@
     [super dealloc];
 }
 
-- (void) drawMapAnnontations{
+- (void) drawMapAnnontations:(int)idx{
 
     NSMutableArray *annotations=[[NSMutableArray alloc] initWithCapacity:[_places count]];
     int i=0;
     for(NSDictionary *placedict in _places)
     {
-        CLLocationCoordinate2D location;
-        
-        location.latitude = [[placedict objectForKey:@"lat"] doubleValue];
-        location.longitude = [[placedict objectForKey:@"lng"] doubleValue];
-        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[placedict objectForKey:@"title"]  description:[placedict objectForKey:@"description"]];
-        annotation.external_id=[placedict objectForKey:@"external_id"];
-        annotation.index=i;
-        [annotations addObject:annotation];
-        [annotation release];
+        if (i==idx || idx<0){
+            CLLocationCoordinate2D location;
+            
+            location.latitude = [[placedict objectForKey:@"lat"] doubleValue];
+            location.longitude = [[placedict objectForKey:@"lng"] doubleValue];
+            PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[placedict objectForKey:@"title"]  description:[placedict objectForKey:@"description"]];
+            annotation.external_id=[placedict objectForKey:@"external_id"];
+            annotation.index=i;
+            [annotations addObject:annotation];
+            [annotation release];
+        }
         i++;
     }
     if(_annotations!=nil){
@@ -495,6 +501,7 @@
     if([inputplace.text length]>0 )
         tipline=1;
     [self selectPlace:indexPath.row-tipline editing:YES];
+    [self drawMapAnnontations:indexPath.row];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -746,8 +753,10 @@
 //    if([textField.text length]>2)
 //        [self performSelector:@selector(getPlace) withObject:self];
 
+    [self drawMapAnnontations:-1];
     [self setViewStyle:EXPlaceViewStyleTableview];
     [textField becomeFirstResponder];
+    
 }
 - (void) setRightButton:(NSString*) title Selector:(SEL)aSelector{
     [rightbutton setTitle:title forState:UIControlStateNormal];

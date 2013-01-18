@@ -84,6 +84,7 @@
         descView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         descView.backgroundColor = [UIColor clearColor];
         descView.lineBreakMode = NSLineBreakByWordWrapping;
+        descView.text=@"Take some note";
         [container addSubview:descView];
         
         exfeeSuggestHeight = 70;
@@ -192,19 +193,56 @@
     CGRect screenframe=[[UIScreen mainScreen] bounds];
     UIView *pannel=[[UIView alloc] initWithFrame:CGRectMake(0,screenframe.size.height-44-20, self.view.frame.size.width, 44)];
     [pannel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.33]];
+
     UIButton *btngather=[UIButton buttonWithType:UIButtonTypeCustom];
-    [btngather setFrame:CGRectMake(85, 6.5, 150, 31)];
+    [btngather setFrame:CGRectMake(99, 8.5, 122, 32)];
     [btngather setTitle:@"Gather" forState:UIControlStateNormal];
     [btngather.titleLabel setShadowColor:[UIColor blackColor]];
     [btngather.titleLabel setShadowOffset:CGSizeMake(0, -1)];
     btngather.layer.cornerRadius=2;
     [btngather addTarget:self action:@selector(Gather:) forControlEvents:UIControlEventTouchUpInside];
 
-    [btngather setBackgroundColor:[UIColor blueColor]];
+    [btngather setBackgroundImage:[[UIImage imageNamed:@"btn_glass_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
     [pannel addSubview:btngather];
     [self.view addSubview:pannel];
     [pannel release];
+
+    pannellight=[[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height-44-20, self.view.frame.size.width, 44)];
+    pannellight.image=[UIImage imageNamed:@"glassbar_light.png"];
+    [self.view addSubview:pannellight];
+    [self GlassBarlightAnimation];
+}
+
+- (void) GlassBarlightAnimation{
+
+    CABasicAnimation *opacityAnimation_out = [CABasicAnimation animationWithKeyPath:
+                                          @"opacity"];
+    opacityAnimation_out.duration= 1;
+    opacityAnimation_out.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
+    opacityAnimation_out.fromValue =[NSNumber numberWithInt:1];
+    opacityAnimation_out.toValue =[NSNumber numberWithInt:0];
+    opacityAnimation_out.removedOnCompletion = NO;
+    opacityAnimation_out.fillMode = kCAFillModeForwards;
+
+    CABasicAnimation *opacityAnimation_in = [CABasicAnimation animationWithKeyPath:
+                                          @"opacity"];
+    opacityAnimation_in.duration= 1;
+    opacityAnimation_in.beginTime=1;
+    opacityAnimation_in.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    opacityAnimation_in.fromValue =[NSNumber numberWithInt:0];
+    opacityAnimation_in.toValue =[NSNumber numberWithInt:1];
+    opacityAnimation_in.removedOnCompletion = NO;
+    opacityAnimation_in.fillMode = kCAFillModeForwards;
+    
+    CAAnimationGroup *group = [CAAnimationGroup animation];
+    group.animations=[NSArray arrayWithObjects:opacityAnimation_out,opacityAnimation_in, nil];
+    group.duration=2;
+    group.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    group.repeatCount=FLT_MAX;
+                      
+    [[pannellight layer] addAnimation:group forKey:@"opacityAnimation"];
 }
 
 - (void)viewDidLoad
@@ -248,7 +286,7 @@
 
     exfeeInvitations = [[NSMutableArray alloc] initWithCapacity:12];
     cross=[Cross object];
-    cross.cross_description=@"Take some note";
+//    cross.cross_description=@"Take some note";
 
     NSArray *cross_default_backgrounds=[[NSUserDefaults standardUserDefaults] objectForKey:@"cross_default_backgrounds"];
     NSString *default_background=@"";
@@ -303,6 +341,7 @@
     [container release];
     [dectorView release];
     [headview release];
+    [pannellight release];
 //    [btnBack release];
     [titleView release];
     
@@ -528,11 +567,12 @@
     [self setLayoutDirty];
     
     if (x.cross_description == nil || x.cross_description.length == 0){
-        descView.hidden = YES;
-        descView.text = @"";
+//        descView.hidden = YES;
+//        descView.text = @"";
         [self setLayoutDirty];
     }else{
-        descView.text = x.cross_description;
+        if ([x.cross_description length]>0)
+            descView.text = x.cross_description;
         descView.hidden = NO;
         [self setLayoutDirty];
     }

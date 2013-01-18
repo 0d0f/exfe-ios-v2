@@ -58,6 +58,7 @@
     EXRSVPStatusView *rsvpstatusview;
     CGFloat exfeeSuggestHeight;
     EXRSVPMenuView *rsvpmenu;
+    UIImageView *pannellight;
 }
 @property (retain,nonatomic) Cross* cross;
 @property (retain,readonly) NSMutableArray *exfeeIdentities;
@@ -78,7 +79,7 @@
 - (void) setTitle:(NSString*)title Description:(NSString*)desc;
 - (void) setTime:(CrossTime*)time;
 - (void) setPlace:(Place*)place;
-
+- (void) GlassBarlightAnimation;
 
 #pragma mark MKMapViewDelegate
 - (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated;
