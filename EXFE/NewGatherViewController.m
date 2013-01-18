@@ -205,52 +205,40 @@
     pannellight.image=[UIImage imageNamed:@"glassbar_light.png"];
     [self.view addSubview:pannellight];
     [self GlassBarlightAnimation];
-    
 }
 
 - (void) GlassBarlightAnimation{
-//    [UIView beginAnimations:@"galssbar light" context:NULL];
-//    [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:pannellight cache:YES];
-//    [UIView setAnimationRepeatAutoreverses:YES];
-//    [UIView setAnimationDelegate:self];
-//    [UIView setAnimationDuration:1];
-//    [pannellight setAlpha:0];
-//    [UIView setAnimationDuration:1];
-//    [pannellight setAlpha:1];
-//    [UIView commitAnimations];
-    
-//    [CATransaction begin];
+
     CABasicAnimation *opacityAnimation_out = [CABasicAnimation animationWithKeyPath:
                                           @"opacity"];
-    opacityAnimation_out.duration= 2;
+    opacityAnimation_out.duration= 1;
     opacityAnimation_out.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
     opacityAnimation_out.fromValue =[NSNumber numberWithInt:1];
     opacityAnimation_out.toValue =[NSNumber numberWithInt:0];
     opacityAnimation_out.removedOnCompletion = NO;
     opacityAnimation_out.fillMode = kCAFillModeForwards;
-    [[pannellight layer] addAnimation:opacityAnimation_out forKey:@"opacityAnimation"];
 
     CABasicAnimation *opacityAnimation_in = [CABasicAnimation animationWithKeyPath:
                                           @"opacity"];
-    opacityAnimation_in.duration= 2;
+    opacityAnimation_in.duration= 1;
+    opacityAnimation_in.beginTime=1;
     opacityAnimation_in.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
     opacityAnimation_in.fromValue =[NSNumber numberWithInt:0];
     opacityAnimation_in.toValue =[NSNumber numberWithInt:1];
     opacityAnimation_in.removedOnCompletion = NO;
     opacityAnimation_in.fillMode = kCAFillModeForwards;
-    [[pannellight layer] addAnimation:opacityAnimation_in forKey:@"opacityAnimation"];
-//    [CATransaction commit];
     
+    CAAnimationGroup *group = [CAAnimationGroup animation];
+    group.animations=[NSArray arrayWithObjects:opacityAnimation_out,opacityAnimation_in, nil];
+    group.duration=2;
+    group.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    group.repeatCount=FLT_MAX;
+                      
+    [[pannellight layer] addAnimation:group forKey:@"opacityAnimation"];
 }
 
--(void) animationDidStop: (NSString *) animationID finished:(NSNumber *)finished context:(void *)context{
-    
-    if([animationID isEqualToString:@"galssbar light"]){
-        [self GlassBarlightAnimation];
-    }
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
