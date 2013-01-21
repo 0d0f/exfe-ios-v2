@@ -839,7 +839,7 @@
             rsvpstatus_x=self.view.frame.size.width-rsvpstatusview.frame.size.width;
         
         if(app.userid ==[invitation.identity.connected_user_id intValue]){
-            [self showMenu:invitation];
+            [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Pending", nil]];
             [self hideStatusView];
             [rsvpstatusview setHidden:YES];
         }else{
@@ -989,12 +989,8 @@
     }
     timeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
     timeEditMenu.hidden = NO;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
-    [timeEditMenu setFrame:CGRectOffset(timeEditMenu.frame, 0 - CGRectGetWidth(timeEditMenu.frame), 0)];
-    [UIView commitAnimations];
 }
+
 
 - (void) hideTimeEditMenuWithAnimation:(BOOL)animated{
     if (animated) {
@@ -1051,23 +1047,27 @@
 }
 
 
-- (void) showMenu:(Invitation*)_invitation{
+- (void) showMenu:(Invitation*)_invitation items:(NSArray*)itemslist{
     if(rsvpmenu == nil){
-        rsvpmenu = [[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y - 20, 125, 152) withDelegate:self ];
+        rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44) withDelegate:self items:itemslist showTitleBar:YES];
         [self.view addSubview:rsvpmenu];
     }
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44)];
+
     rsvpmenu.invitation = _invitation;
     rsvpmenu.hidden = NO;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
     
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width - 125, exfeeShowview.frame.origin.y - 20, 125, 152)];
-    
-    [self hideStatusView];
+    if(rsvpstatusview!=nil)
+       [rsvpstatusview setHidden:YES];
     
     [UIView commitAnimations];
 
 }
+    
+
+        
 
 - (void)hideMenuWithAnimation:(BOOL)animated{
     if (animated) {
@@ -1104,7 +1104,7 @@
     [self hideMenuWithAnimation:YES];
 }
 
-- (void)RSVPPendinMenuView:(EXRSVPMenuView *) menu{
+- (void)RSVPPendingMenuView:(EXRSVPMenuView *) menu{
     [self sendrsvp:@"INTERESTED" invitation:menu.invitation];
     [self hideMenuWithAnimation:YES];
 }

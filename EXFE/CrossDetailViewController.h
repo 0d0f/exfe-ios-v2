@@ -78,12 +78,12 @@
 - (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated;
 - (MKAnnotationView *)mapView:(MKMapView *)map viewForAnnotation:(id < MKAnnotation >)annotation;
 
-- (void) showMenu:(Invitation*)_invitation;
+- (void) showMenu:(Invitation*)_invitation items:(NSArray*)itemslist;
 
 #pragma mark EXRSVPMenuViewDelegate
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu;
 - (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu;
-- (void)RSVPPendinMenuView:(EXRSVPMenuView *) menu;
+- (void)RSVPPendingMenuView:(EXRSVPMenuView *) menu;
 
 #pragma mark EditCrossDelegate
 - (void) addExfee:(NSArray*) invitations;

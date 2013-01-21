@@ -15,10 +15,11 @@
 @class EXRSVPMenuView;
 
 @protocol EXRSVPMenuDelegate<NSObject>
-@required
+@optional
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu;
 - (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu;
-- (void)RSVPPendinMenuView:(EXRSVPMenuView *) menu;
+- (void)RSVPPendingMenuView:(EXRSVPMenuView *) menu;
+- (void)RSVPRemoveMenuView:(EXRSVPMenuView *) menu;
 @end
 
 
@@ -29,8 +30,10 @@
 
 @property (nonatomic,retain) Invitation *invitation;
 
-- (id)initWithFrame:(CGRect)frame withDelegate:(id)_delegate;
+- (id)initWithFrame:(CGRect)frame withDelegate:(id)_delegate items:(NSArray*)itemlist showTitleBar:(BOOL)showtitlebar;
 - (void) setRsvpAccepted;
 - (void) setRsvpUnavailable;
 - (void) setRsvpPending;
+- (void) setRsvpRemove;
+- (BOOL) Itemscontain:(NSArray*)items string:(NSString*)item;
 @end
