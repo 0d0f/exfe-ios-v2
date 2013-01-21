@@ -76,15 +76,14 @@
         if ([self hasTime]) {
             NSString * fullDateTimeStr = [NSString stringWithFormat:@"%@ %@", self.date, self.time];
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             [formatter setTimeZone:localTimeZone];
             NSDate *datePartial = [formatter dateFromString:fullDateTimeStr];
             [formatter release];
-            [fullDateTimeStr release];
             NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
             NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit |NSTimeZoneCalendarUnit) fromDate:datePartial];
+            [comps retain];
             [gregorian release];
-            [datePartial release];
             return [comps autorelease];
         }else{
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -94,8 +93,8 @@
             [formatter release];
             NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
             NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSTimeZoneCalendarUnit) fromDate:datePartial];
+            [comps retain];
             [gregorian release];
-            [datePartial release];
             return [comps autorelease];
         }
     }else{
@@ -106,11 +105,10 @@
             [formatter setTimeZone:localTimeZone];
             NSDate *timePartial = [formatter dateFromString:fullTimeStr];
             [formatter release];
-            [fullTimeStr release];
             NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
             NSDateComponents *comps = [gregorian components:(NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:timePartial];
+            [comps retain];
             [gregorian release];
-            [timePartial release];
             return [comps autorelease];
         }else{
             return nil;
@@ -161,11 +159,14 @@
     NSString * dateFmt = @"EEEE, MMMM d"; // "EEE, MMM d" // "MMM d"
     NSString * timeFmt = @"H:mma"; // HH:mm // H:mm
     
-    NSString * datestr = [self date];
-    NSString * timestr = [self time];
+    NSString * datestr = [[self date] copy];
+    [datestr retain];
+    NSString * timestr = [[self time] copy];
+    [timestr retain];
     
     if ([self hasTime]){
         NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        [gregorian retain];
         NSDateComponents *comps = [self getLocalDateComponent];
         [comps retain];
         NSDate* localDate = [gregorian dateFromComponents:comps];
@@ -173,19 +174,28 @@
         [gregorian release];
         if ([self hasDate]) {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter retain];
             [formatter setDateFormat:dateFmt];
+            [datestr release];
             datestr = [formatter stringFromDate:localDate];
+            [datestr retain];
             [formatter setDateFormat:timeFmt];
+            [timestr release];
             timestr = [formatter stringFromDate:localDate];
+            [timestr retain];
             [formatter release];
         }else{
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter retain];
             [formatter setDateFormat:timeFmt];
+            [timestr release];
             timestr = [formatter stringFromDate:localDate];
+            [timestr retain];
             [formatter release];
         }
     } else {
         NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        [gregorian retain];
         NSDateComponents *comps = [self getUTCDateComponent];
         [comps retain];
         NSDate *date = [gregorian dateFromComponents:comps];
@@ -193,37 +203,39 @@
         [comps release];
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:dateFmt];
+        [datestr release];
         datestr = [formatter stringFromDate:date];
+        [datestr retain];
         [formatter release];
     }
-    NSLog(@"getHumanReadableString");
+    NSString* result = nil;
     if ([self hasDate]) {
         if ([self hasDateWord]) {
             if ([self hasTime]) {
                 if ([self hasTimeWord]) {
-                    return [NSString stringWithFormat:@"%@ %@ %@ %@", self.time_word, timestr, datestr, self.date_word];
+                    result =  [NSString stringWithFormat:@"%@ %@ %@ %@", self.time_word, timestr, datestr, self.date_word];
                 }else{
-                    return [NSString stringWithFormat:@"%@ %@ %@", timestr, datestr, self.date_word];
+                    result =  [NSString stringWithFormat:@"%@ %@ %@", timestr, datestr, self.date_word];
                 }
             }else{
                 if ([self hasTimeWord]) {
-                    return [NSString stringWithFormat:@"%@, %@ %@", self.time_word, datestr, self.date_word];
+                    result =  [NSString stringWithFormat:@"%@, %@ %@", self.time_word, datestr, self.date_word];
                 }else{
-                    return [NSString stringWithFormat:@"%@ %@", datestr, self.date_word];
+                    result =  [NSString stringWithFormat:@"%@ %@", datestr, self.date_word];
                 }
             }
         }else{
             if ([self hasTime]) {
                 if ([self hasTimeWord]) {
-                    return [NSString stringWithFormat:@"%@ %@ %@", self.time_word, timestr, datestr];
+                    result =  [NSString stringWithFormat:@"%@ %@ %@", self.time_word, timestr, datestr];
                 }else{
-                    return [NSString stringWithFormat:@"%@ %@", timestr, datestr];
+                    result =  [NSString stringWithFormat:@"%@ %@", timestr, datestr];
                 }
             }else{
                 if ([self hasTimeWord]) {
-                    return [NSString stringWithFormat:@"%@, %@", self.time_word, datestr];
+                    result =  [NSString stringWithFormat:@"%@, %@", self.time_word, datestr];
                 }else{
-                    return [NSString stringWithFormat:@"%@", datestr];
+                    result =  [NSString stringWithFormat:@"%@", datestr];
                 }
             }
         }
@@ -231,33 +243,36 @@
         if ([self hasDateWord]) {
             if ([self hasTime]) {
                 if ([self hasTimeWord]) {
-                    return [NSString stringWithFormat:@"%@ %@, %@", self.time_word, timestr, self.date_word];
+                    result =  [NSString stringWithFormat:@"%@ %@, %@", self.time_word, timestr, self.date_word];
                 }else{
-                    return [NSString stringWithFormat:@"%@, %@", timestr, self.date_word];
+                    result =  [NSString stringWithFormat:@"%@, %@", timestr, self.date_word];
                 }
             }else{
                 if ([self hasTimeWord]) {
-                    return [NSString stringWithFormat:@"%@, %@", self.time_word, self.date_word];
+                    result =  [NSString stringWithFormat:@"%@, %@", self.time_word, self.date_word];
                 }else{
-                    return [NSString stringWithFormat:@"%@", self.date_word];
+                    result =  [NSString stringWithFormat:@"%@", self.date_word];
                 }
             }
         }else{
             if ([self hasTime]) {
                 if ([self hasTimeWord]) {
-                    return [NSString stringWithFormat:@"%@ %@", self.time_word, timestr];
+                    result =  [NSString stringWithFormat:@"%@ %@", self.time_word, timestr];
                 }else{
-                    return [NSString stringWithFormat:@"%@", timestr];
+                    result =  [NSString stringWithFormat:@"%@", timestr];
                 }
             }else{
                 if ([self hasTimeWord]) {
-                    return [NSString stringWithFormat:@"%@", self.time_word];
+                    result =  [NSString stringWithFormat:@"%@", self.time_word];
                 }else{
-                    return [NSString stringWithFormat:@""];
+                    result =  [NSString stringWithFormat:@""];
                 }
             }
         }
     }
+    [datestr release];
+    [timestr release];
+    return result;
 }
 
 - (NSString*) getTimeZoneString{

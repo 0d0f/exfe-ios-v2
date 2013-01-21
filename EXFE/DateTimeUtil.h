@@ -23,26 +23,5 @@
 + (NSString*) timezoneString:(NSTimeZone*)tz;
 + (NSInteger) secondsOffsetFromGMT:(NSString*)zoneString;
 
-// CrossTime Helper
-+ (NSString*) getTimeTitle:(CrossTime*) ct;
-+ (NSString*) getTimeDescription:(CrossTime*) ct;
-+ (NSString*) getTimeSingleLine:(CrossTime*) ct;
-
-// EFTime Helper
-+ (BOOL)hasDate:(EFTime*)eftime;
-+ (BOOL)hasTime:(EFTime*)eftime;
-+ (BOOL)hasDateWord:(EFTime*)eftime;
-+ (BOOL)hasTimeWord:(EFTime*)eftime;
-+ (void)setLocalDateComponents:(NSDateComponents *)datetime to:(EFTime*)eftime;
-+ (NSDateComponents*)getUTCDateComponent:(EFTime*)eftime;
-+ (NSDateComponents*)getLocalDateComponent:(EFTime*)eftime;
-+ (NSDateComponents*)getDateComponent:(NSTimeZone*)localTimeZone from:(EFTime*)eftime;
-+ (void) setLocalDate:(NSDateComponents*)date andTime:(NSDateComponents*)time to:(EFTime*)eftime;
-+ (NSTimeZone*) getTargetTimeZone:(EFTime*)eftime;
-+ (NSTimeZone*) getTargetTimeZoneWithDST:(EFTime*)eftime;
-+ (NSTimeZone*) getLocalTimeZone:(EFTime*)eftime;
-+ (NSTimeZone*) getLocalTimeZoneWithDST:(EFTime*)eftime;
-+ (NSString*) getHumanReadableString:(EFTime*)eftime;
-+ (NSString*) getTimeZoneString:(EFTime*)eftime;
 
 @end

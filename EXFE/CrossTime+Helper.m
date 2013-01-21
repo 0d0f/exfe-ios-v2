@@ -20,8 +20,7 @@
         return self.origin;
     }else{
         if ([self.begin_at hasDate]){
-            return @"Relative Time";
-            //return [DateTimeUtil GetRelativeTime:[self.begin_at getLocalDateComponent] format:0];
+            return [DateTimeUtil GetRelativeTime:[self.begin_at getLocalDateComponent] format:0];
         }else{
             if ([self.begin_at hasTime]) {
                 return [self.begin_at getHumanReadableString];

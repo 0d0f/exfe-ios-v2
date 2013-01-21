@@ -496,40 +496,23 @@
 
 - (void)fillTime:(CrossTime*)time{
     if (time != nil){
-        NSString *title = [[time getTimeTitle] copy];
+        NSString *title = [time getTimeTitle];
         [title retain];
         if (title == nil || title.length == 0) {
             timeRelView.text = @"Sometime";
         }else{
-            timeRelView.text = title;
+            timeRelView.text = [title copy];
         }
         [title release];
         
-//        NSString* desc = [time getTimeDescription];//[[time getTimeDescription] copy];
-////        [desc retain];
-//        if(desc != nil && desc.length > 0){
-//            timeAbsView.text = desc;
-//            timeAbsView.hidden = NO;
-//            [timeAbsView sizeToFit];
-//            timeZoneView.hidden = NO;
-////            timeZoneView.text = time.begin_at.timezone;
-//            [timeZoneView sizeToFit];
-//        }else{
-//            timeAbsView.text = @"";
-//            timeAbsView.hidden = YES;
-//            timeZoneView.hidden = YES;
-//            timeZoneView.text = @"";
-//        }
-//        [desc release];
-        
-        timeRelView.text = [Util getTimeTitle:time localTime:NO];
-        NSString* desc = [Util getTimeDesc:time];
+        NSString* desc = [time getTimeDescription];//[[time getTimeDescription] copy];
+        [desc retain];
         if(desc != nil && desc.length > 0){
             timeAbsView.text = desc;
             timeAbsView.hidden = NO;
             [timeAbsView sizeToFit];
             timeZoneView.hidden = NO;
-            timeZoneView.text = time.begin_at.timezone;
+//            timeZoneView.text = time.begin_at.timezone;
             [timeZoneView sizeToFit];
         }else{
             timeAbsView.text = @"";
@@ -537,7 +520,7 @@
             timeZoneView.hidden = YES;
             timeZoneView.text = @"";
         }
-        
+        [desc release];
     }else{
         timeRelView.text = @"Sometime";
         timeAbsView.text = @"";

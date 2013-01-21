@@ -595,34 +595,33 @@
             cell.place = cross.place.title;
         }
         
-//        if (cross.time != nil){
-//            //cell.time = @"Sometime";
-//            
-//            NSString *time = [cross.time getTimeSingleLine];
-//            if (time == nil || time.length == 0) {
-//                cell.time = @"Sometime";
-//                NSLog(@"cell time: %@ for cell title: %@", time, cell.title);
-//            }else{
-//                NSLog(@"cell time: %@ for cell title: %@", time, cell.title);
-//                //[time retain];
-//                cell.time = time;
-//            }
-//        }else{
-//            cell.time = @"Sometime";
-//        }
-        
-        
-        if([cross.time.begin_at.date isEqualToString:@""])
-        {
-            if([cross.time.origin isEqualToString:@""]){
+        if (cross.time != nil){
+            //cell.time = @"Sometime";
+            NSString *time = [cross.time getTimeSingleLine];
+            [time retain];
+            if (time == nil || time.length == 0) {
                 cell.time = @"";
             }else{
-                cell.time = cross.time.origin;
+                //[time retain];
+                cell.time = [time copy];
             }
+            [time release];
         }else{
-            NSDictionary *humanable_date = [Util crossTimeToString:cross.time];
-            cell.time = [humanable_date objectForKey:@"short"];
+            cell.time = @"";
         }
+        
+        
+//        if([cross.time.begin_at.date isEqualToString:@""])
+//        {
+//            if([cross.time.origin isEqualToString:@""]){
+//                cell.time = @"";
+//            }else{
+//                cell.time = cross.time.origin;
+//            }
+//        }else{
+//            NSDictionary *humanable_date = [Util crossTimeToString:cross.time];
+//            cell.time = [humanable_date objectForKey:@"short"];
+//        }
         
         cell.avatar = nil;
         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
