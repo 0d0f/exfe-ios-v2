@@ -21,11 +21,11 @@
     UIImageView *dectorView;
     UITextView *titleView;
     UITextView *descView;
-    UIViewController *gatherview;
+    id delegate;
     float keyboardheight;
 }
 
-@property (nonatomic,retain) UIViewController* gatherview;
+@property (nonatomic,retain) id delegate;
 
 - (void) setCrossTitle:(NSString*)title desc:(NSString*)desc;
 - (void) done:(id)sender;

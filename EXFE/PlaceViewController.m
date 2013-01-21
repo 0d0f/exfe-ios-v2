@@ -13,7 +13,7 @@
 @end
 
 @implementation PlaceViewController
-@synthesize gatherview;
+@synthesize delegate;
 @synthesize showdetailview;
 @synthesize isaddnew;
 @synthesize showtableview;
@@ -118,8 +118,10 @@
         showtableview=NO;
         [self initPlaceView];
     }
-    if([place.place_id intValue]==0)
-        place.place_id=[NSNumber numberWithInt:-[((NewGatherViewController*)gatherview).cross.cross_id intValue]];
+    // TODO PLACEID
+    if([place.place_id intValue]==0){
+       // place.place_id=[NSNumber numberWithInt:-[((NewGatherViewController*)gatherview).cross.cross_id intValue]];
+    }
 
     float tableviewx=map.frame.origin.x;
     float tableviewy=map.frame.origin.y+map.frame.size.height;
@@ -330,7 +332,7 @@
 
 
 - (void) done{
-    [(NewGatherViewController*)gatherview setPlace:place];
+    [delegate setPlace:place];
     [self dismissModalViewControllerAnimated:YES];
 }
 - (void)didReceiveMemoryWarning

@@ -13,7 +13,7 @@
 @end
 
 @implementation TimeViewController
-@synthesize gatherview;
+@synthesize delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -313,7 +313,7 @@
     eftime.date_word=@"";
     eftime.timezone=eftimezone;
     crosstime.begin_at=eftime;
-    [(NewGatherViewController*)gatherview setTime:crosstime];
+    [delegate setTime:crosstime];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

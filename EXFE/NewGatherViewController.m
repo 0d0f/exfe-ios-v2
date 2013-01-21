@@ -359,7 +359,7 @@
     if (CGRectContainsPoint([titleView frame], location) || CGRectContainsPoint([descView frame], location)||
         CGRectContainsPoint([descView frame], location) || CGRectContainsPoint([descView frame], location)){
         TitleDescEditViewController *titleViewController=[[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
-        titleViewController.gatherview=self;
+        titleViewController.delegate=self;
         NSString *imgurl;
         for(NSDictionary *widget in (NSArray*)cross.widget) {
             if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
@@ -378,7 +378,7 @@
     if (CGRectContainsPoint([timeRelView frame], location) || CGRectContainsPoint([timeAbsView frame], location)|| CGRectContainsPoint([timeZoneView frame], location))
     {
         TimeViewController *timeViewController=[[TimeViewController alloc] initWithNibName:@"TimeViewController" bundle:nil];
-        timeViewController.gatherview=self;
+        timeViewController.delegate=self;
         [timeViewController setDateTime:cross.time];
         [self presentModalViewController:timeViewController animated:YES];
         [timeViewController release];
@@ -489,27 +489,7 @@
     if(cross.time==nil){
         cross.time=[CrossTime object];
         cross.time.begin_at=[EFTime object];
-//
-        NSDate *date=[NSDate date];
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
-        NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-        [formatter setLocale:locale];
-        [formatter setDateFormat:@"Z"];
-//
-        NSString *timezonestr=[formatter stringFromDate:date];
-        NSMutableString *str=[timezonestr mutableCopy];
-        [str insertString:@":" atIndex:3];
-        cross.time.begin_at.timezone=str;
-        [str release];
-//
-//        [formatter release];
-//        //        NSString *eftimezone=[timezonestr substringFromIndex:3];
-//        //        if([eftimezone isEqualToString:@""])
-//        //            eftimezone=@"+00:00";
-//        
-//        
-//        //        datetime.begin_at.timezone=@"";
+        cross.time.begin_at.timezone = [DateTimeUtil timezoneString:[NSTimeZone defaultTimeZone]];
     }
 //    cross.time=datetime;
     Exfee *exfee=[Exfee object];
@@ -524,7 +504,7 @@
 
 - (void) ShowPlaceView:(NSString*)status{
     PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
-    placeViewController.gatherview=self;
+    placeViewController.delegate=self;
     if(cross.place!=nil){
             if(![cross.place.title isEqualToString:@""] || ( ![cross.place.lat isEqualToString:@""] || ![cross.place.lng isEqualToString:@""])){
                 [placeViewController setPlace:cross.place isedit:YES];

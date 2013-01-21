@@ -22,7 +22,7 @@
 @end
 
 @implementation TitleDescEditViewController
-@synthesize gatherview;
+@synthesize delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -250,7 +250,7 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 - (void) done:(id)sender{
-    [(NewGatherViewController*)gatherview setTitle:titleView.text Description:descView.text];
+    [delegate setTitle:titleView.text Description:descView.text];
     [self dismissModalViewControllerAnimated:YES];
 }
 

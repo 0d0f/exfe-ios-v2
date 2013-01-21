@@ -17,6 +17,7 @@
 #import "EXGradientToolbarView.h"
 #import "Util.h"
 #import <QuartzCore/QuartzCore.h>
+#import "EditCrossDelegate.h"
 
 typedef enum {
     EXPlaceViewStyleDefault,
@@ -42,7 +43,8 @@ typedef enum {
     UITableView* _tableView;
 //    NSMutableDictionary* gatherplace;
     Place *place;
-    UIViewController *gatherview;
+    //UIViewController *gatherview;
+    id delegate;
     EXPlaceEditView *placeedit;
     UIActionSheet *actionsheet;
     UIImageView *inputbackgroundImage;
@@ -62,7 +64,8 @@ typedef enum {
 }
 
 
-@property (nonatomic,retain) UIViewController* gatherview;
+//@property (nonatomic,retain) UIViewController* gatherview;
+@property (nonatomic,retain) id delegate;
 @property BOOL showdetailview;
 @property BOOL showtableview;
 @property BOOL isaddnew;
