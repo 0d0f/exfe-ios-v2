@@ -77,7 +77,7 @@
     _tableView.dataSource=self;
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
-    _times=[[NSArray alloc] initWithObjects:@"Sometime",@"Anytime",@"All-day",@"Breakfast",@"Morning", @"Brunch", @"Lunch", @"Noon", @"Afternoon", @"Tea-time", @"Dinner", @"Evening", @"Night", @"Midnight", @"Daybreak", nil];
+    _times=[[NSArray alloc] initWithObjects:@"Sometime",@"Anytime",@"All-day",@"Breakfast",@"Morning", @"Brunch", @"Lunch", @"Noon", @"Afternoon", @"Tea-break", @"Dinner", @"Evening", @"Night", @"Midnight", @"Daybreak", nil];
     NSLocale *locale = [NSLocale currentLocale];
     NSCalendar *cal = [NSCalendar currentCalendar];
     [cal setLocale:locale];
@@ -330,8 +330,11 @@
 //- (void) cleanDate{
 //    [(GatherViewController*)gatherview setDateTime:nil];
 //}
+#pragma mark UIScrollView methods
+
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [inputtimeword resignFirstResponder];
+    [timeInput resignFirstResponder];
     [_tableView becomeFirstResponder];
 }
 - (void)dealloc {

@@ -1057,17 +1057,17 @@
 }
 
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu{
-    [self sendrsvp:@"ACCEPTED" invitation:menu.invitation];
+    [self setrsvp:@"ACCEPTED" invitation:menu.invitation];
     [self hideMenu];
 }
 
 - (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu{
-    [self sendrsvp:@"DECLINED" invitation:menu.invitation];
+    [self setrsvp:@"DECLINED" invitation:menu.invitation];
     [self hideMenu];
 }
 
 - (void)RSVPPendingMenuView:(EXRSVPMenuView *) menu{
-    [self sendrsvp:@"INTERESTED" invitation:menu.invitation];
+    [self setrsvp:@"INTERESTED" invitation:menu.invitation];
     [self hideMenu];
 }
 
@@ -1085,6 +1085,20 @@
 //    menu.invitation
 }
 
+- (void) setrsvp:(NSString*)status invitation:(Invitation*)_invitation{
+    int i=0;
+    for (Invitation *invitation in exfeeInvitations) {
+        if([invitation.identity.identity_id isEqualToNumber:_invitation.identity.identity_id])
+        {
+            ((Invitation*)[exfeeInvitations objectAtIndex:i]).rsvp_status=status;
+//            [exfeeInvitations removeObject:invitation];
+            [exfeeShowview reloadData];
+            return;
+        }
+        i++;
+    }
+    
+}
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
     //    NSError *error;
@@ -1108,7 +1122,6 @@
                     if(code)
                         if([code intValue]==200) {
                             [APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
-                            
                         }
                 }
                 //We got an error!

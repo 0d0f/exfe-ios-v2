@@ -94,6 +94,7 @@
 - (void)RSVPRemoveMenuView:(EXRSVPMenuView *) menu;
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation;
+- (void) setrsvp:(NSString*)status invitation:(Invitation*)_invitation;
 - (Invitation*) getMyInvitation;
 - (void) addDefaultIdentity;
 - (IBAction) Gather:(id) sender;
