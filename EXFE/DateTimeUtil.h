@@ -12,6 +12,14 @@
 
 @interface DateTimeUtil : NSObject
 
++ (NSDate*) dateNow;
++ (void)setNow:(NSDate*)now;
++ (void)clearNow;
++ (void)setAppDefaultTimeZone:(NSTimeZone*)tz;
++ (void)clearAppDefaultTimeZone;
+
++ (NSDictionary*)datetimeTemplate:(NSUInteger)type;
+
 + (NSInteger)daysWithinEraFromDate:(NSDate *) startDate toDate:(NSDate *) endDate;
 + (BOOL)isSameTimezone:(NSTimeZone*) timezoneA with:(NSTimeZone*)timezoneB;
 + (NSDateComponents*) convert:(NSDateComponents*)comp toTimeZone:(NSTimeZone*)timezone;

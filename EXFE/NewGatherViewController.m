@@ -489,7 +489,7 @@
     if(cross.time==nil){
         cross.time=[CrossTime object];
         cross.time.begin_at=[EFTime object];
-        cross.time.begin_at.timezone = [DateTimeUtil timezoneString:[NSTimeZone defaultTimeZone]];
+        cross.time.begin_at.timezone = [DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];
     }
 //    cross.time=datetime;
     Exfee *exfee=[Exfee object];

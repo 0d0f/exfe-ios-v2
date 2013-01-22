@@ -2827,6 +2827,7 @@
 				4F1142E816AE40B000C30179 /* appstore */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		78A98E811560F832009E0806 /* Build configuration list for PBXProject "EXFE" */ = {
 			isa = XCConfigurationList;
