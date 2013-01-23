@@ -468,9 +468,19 @@
             timeAbsView.text = desc;
             timeAbsView.hidden = NO;
             [timeAbsView sizeToFit];
-            timeZoneView.hidden = NO;
-//            timeZoneView.text = time.begin_at.timezone;
-            [timeZoneView sizeToFit];
+            
+            NSString* tz = [time getTimeZoneLine];
+            [tz retain];
+            if (tz != nil && tz.length > 0) {
+                timeZoneView.hidden = NO;
+                timeZoneView.text = [tz copy];
+                [timeZoneView sizeToFit];
+            }else{
+                timeZoneView.hidden = YES;
+                timeZoneView.text = @"";
+            }
+            [tz release];
+            
         }else{
             timeAbsView.text = @"";
             timeAbsView.hidden = YES;

@@ -59,6 +59,13 @@
     }
 }
 
+- (NSString*) getTimeZoneLine{
+    if (self.begin_at != nil) {
+        return [self.begin_at getTimeZoneString];
+    }
+    return nil;
+}
+
 + (BOOL)isQuated:(NSString*)str{
     if (str != nil && [str length] > 1) {
         unichar first = [str characterAtIndex:0];

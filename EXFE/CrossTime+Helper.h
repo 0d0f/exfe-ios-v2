@@ -13,5 +13,6 @@
 - (NSString*) getTimeTitle;
 - (NSString*) getTimeDescription;
 - (NSString*) getTimeSingleLine;
+- (NSString*) getTimeZoneLine;
 
 @end

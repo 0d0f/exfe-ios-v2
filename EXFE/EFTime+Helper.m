@@ -20,6 +20,13 @@
     return self.time != nil && self.time.length > 0;
 }
 
+- (BOOL)isTimeWithTimeZone{
+    if ([self hasTime]) {
+        
+    }
+    return NO;
+}
+
 - (BOOL)hasDateWord{
     return self.date_word != nil && self.date_word.length > 0;
 }
@@ -40,7 +47,8 @@
             [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             [formatter setDateFormat:@"yyyy-MM-dd"];
             self.date = [formatter stringFromDate:date];
-            [formatter setDateFormat:@"hh:mm:ss"];
+            // TODO need "+00:00"
+            [formatter setDateFormat:@"hh:mm:ss"];  
             self.time = [formatter stringFromDate:date];
             [formatter release];
         }else{
@@ -49,6 +57,7 @@
         }
     }else{
         if ([datetime hasTime]) {
+            // TODO need "+00:00"
             self.time = [NSString stringWithFormat:@"%.2i:%.2i:%.2i", datetime.hour, datetime.minute, datetime.second];
             self.date = @"";
         }else{
@@ -137,6 +146,7 @@
         [comps setHour:[time hour]];
         [comps setMinute:[time minute]];
         [comps setSecond:[time second]];
+        [comps setTimeZone:[time timeZone]];
     }
     [self setLocalDateComponents:comps];
     [comps release];
