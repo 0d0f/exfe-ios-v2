@@ -9,12 +9,66 @@
 #import "DateTimeUtil.h"
 #import "NSDateComponents+Helper.h"
 
+static NSDate* s_Now = nil;
+
 @implementation DateTimeUtil
+
++ (NSDate*) dateNow{
+    if (s_Now) {
+        return s_Now;
+    }else{
+        return [NSDate date];
+    }
+}
+
++ (void)setNow:(NSDate*)now{
+    [s_Now release];
+    s_Now = now;
+    [s_Now retain];
+}
+
++ (void)clearNow{
+    [s_Now release];
+    s_Now = nil;
+}
+
++ (void)setAppDefaultTimeZone:(NSTimeZone*)tz{
+    [NSTimeZone setDefaultTimeZone:tz];
+}
+
++ (void)clearAppDefaultTimeZone{
+    [NSTimeZone setDefaultTimeZone:[NSTimeZone systemTimeZone]];
+}
+
++ (NSDictionary*)datetimeTemplate:(NSUInteger)type{
+    NSDictionary *result = nil;
+    switch (type) {
+        case 0: // ISO 8601 
+            result = [NSDictionary dictionaryWithObjectsAndKeys:@"MM-dd", @"date", @"yyyy-MM-dd", @"dateWithYear", @"HH:mm:ss", @"time", nil];
+            break;
+        case 1: // Long
+            result = [NSDictionary dictionaryWithObjectsAndKeys:@"EEEE, MMMM d", @"date", @"EEEE, MMMM d yyyy", @"dateWithYear", @"HH:mm", @"time", nil];
+            break;
+        case 2: // Mid
+            result = [NSDictionary dictionaryWithObjectsAndKeys:@"EEE, MMM d", @"date", @"EEE, MMM d yyyy", @"dateWithYear", @"h:mma", @"time", nil];
+            break;
+        case 3 : // Short
+            result = [NSDictionary dictionaryWithObjectsAndKeys:@"MMM d", @"date", @"MMM d yyyy", @"dateWithYear", @"h:mm", @"time", nil];
+            break;
+        default:
+            break;
+    }
+    return result;
+}
 
 + (NSInteger)daysWithinEraFromDate:(NSDate *) startDate toDate:(NSDate *) endDate{
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSInteger startDay = [gregorian ordinalityOfUnit:NSDayCalendarUnit inUnit: NSEraCalendarUnit forDate:startDate];
-    NSInteger endDay = [gregorian ordinalityOfUnit:NSDayCalendarUnit inUnit: NSEraCalendarUnit forDate:endDate];
+    NSTimeZone* tz = [NSTimeZone localTimeZone];
+    NSInteger offset = tz.secondsFromGMT;
+    NSDate *sDate = [NSDate dateWithTimeInterval:offset sinceDate:startDate];
+    NSDate *eDate = [NSDate dateWithTimeInterval:offset sinceDate:endDate];
+    NSInteger startDay = [gregorian ordinalityOfUnit:NSDayCalendarUnit inUnit: NSEraCalendarUnit forDate:sDate];
+    NSInteger endDay = [gregorian ordinalityOfUnit:NSDayCalendarUnit inUnit: NSEraCalendarUnit forDate:eDate];
     [gregorian release];
     return endDay - startDay;
 }
@@ -58,19 +112,17 @@
 }
 
 + (NSString*) GetRelativeTime:(NSDateComponents*)targetTime baseOn:(NSTimeZone*)targetTimeZone format:(int)type{
-    NSDate *today = [[NSDate alloc] init];
-    NSString* result = [DateTimeUtil GetRelativeTime:targetTime fromDate:today baseOn:targetTimeZone format:type];
-    [today release];
+    NSString* result = [DateTimeUtil GetRelativeTime:targetTime fromDate:[DateTimeUtil dateNow] baseOn:targetTimeZone format:type];
     return result;
 }
 
 + (NSString*) GetRelativeTime:(NSDateComponents*)targetTime fromDate:(NSDate*)baseDateTime baseOn:(NSTimeZone*)targetTimeZone format:(int)type{
     
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSDateComponents *baseTime = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit) fromDate:baseDateTime];
+    [gregorian retain];
+    NSDateComponents *baseTime = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:baseDateTime];
     [gregorian release];
     NSString* result = [DateTimeUtil GetRelativeTime:targetTime from:baseTime baseOn:targetTimeZone format:type];
-    [baseTime release];
     return result;
 }
 
@@ -99,22 +151,22 @@
             return @"Today";
         }else{
             // Normalize date time
-            if (![targetTime hasTime]){
+            if ([targetTime hasTime]){
                 targetTime.hour = 0;
                 targetTime.minute = 0;
                 targetTime.second = 0;
             }
-            if (![baseTime hasTime]){
+            if ([baseTime hasTime]){
                 baseTime.hour = 0;
                 baseTime.minute = 0;
                 baseTime.second = 0;
             }
-            
         }
     }
     
     // get minutes
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    [gregorian retain];
     NSDate* target = [gregorian dateFromComponents:targetTime];
     NSDate* base = [gregorian dateFromComponents:baseTime];
     [gregorian release];
@@ -145,7 +197,7 @@
         }else if (m >= 60 && m < 82){
             return @"An hour ago";
         }else if (m >= 82 && m <  108){
-            return @"1.5 hour ago";
+            return @"1.5 hours ago";
         }else if (m >= 108 && m < 720){
             int h = (m + 12) / 60;
             return [NSString stringWithFormat:@"%i hours ago", h];
@@ -212,8 +264,11 @@
             return @"In one hour";
         }else if (m >= 82 && m < 108){
             return @"In 1.5 hours";
-        }else if (m >= 108 && m < 43200){
-            NSInteger dateSpan = [DateTimeUtil daysWithinEraFromDate:target toDate:base];
+        }else if (m >= 108 && m < 720){
+            int h = (m + 12) / 60;
+            return [NSString stringWithFormat:@"In %i hours", h];
+        }else if (m >= 720 && m < 43200){
+            NSInteger dateSpan = [DateTimeUtil daysWithinEraFromDate:base toDate:target];
             if (m >= 720 && m < 1440){
                 if (dateSpan == 1){
                     return @"Tomorrow";

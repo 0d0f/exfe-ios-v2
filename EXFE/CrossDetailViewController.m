@@ -496,40 +496,23 @@
 
 - (void)fillTime:(CrossTime*)time{
     if (time != nil){
-        NSString *title = [[time getTimeTitle] copy];
+        NSString *title = [time getTimeTitle];
         [title retain];
         if (title == nil || title.length == 0) {
             timeRelView.text = @"Sometime";
         }else{
-            timeRelView.text = title;
+            timeRelView.text = [title copy];
         }
         [title release];
         
-//        NSString* desc = [time getTimeDescription];//[[time getTimeDescription] copy];
-////        [desc retain];
-//        if(desc != nil && desc.length > 0){
-//            timeAbsView.text = desc;
-//            timeAbsView.hidden = NO;
-//            [timeAbsView sizeToFit];
-//            timeZoneView.hidden = NO;
-////            timeZoneView.text = time.begin_at.timezone;
-//            [timeZoneView sizeToFit];
-//        }else{
-//            timeAbsView.text = @"";
-//            timeAbsView.hidden = YES;
-//            timeZoneView.hidden = YES;
-//            timeZoneView.text = @"";
-//        }
-//        [desc release];
-        
-        timeRelView.text = [Util getTimeTitle:time localTime:NO];
-        NSString* desc = [Util getTimeDesc:time];
+        NSString* desc = [time getTimeDescription];//[[time getTimeDescription] copy];
+        [desc retain];
         if(desc != nil && desc.length > 0){
             timeAbsView.text = desc;
             timeAbsView.hidden = NO;
             [timeAbsView sizeToFit];
             timeZoneView.hidden = NO;
-            timeZoneView.text = time.begin_at.timezone;
+//            timeZoneView.text = time.begin_at.timezone;
             [timeZoneView sizeToFit];
         }else{
             timeAbsView.text = @"";
@@ -537,7 +520,7 @@
             timeZoneView.hidden = YES;
             timeZoneView.text = @"";
         }
-        
+        [desc release];
     }else{
         timeRelView.text = @"Sometime";
         timeAbsView.text = @"";
@@ -985,13 +968,13 @@
 - (void)clickforTimeEdit:(id)sender{
     [self hideTimeEditMenuNow];
     NSLog(@"Click to Edit Time");
-    //[self showTimeView];
+    [self showTimeView];
 }
 
 - (void)clickforPlaceEdit:(id)sender{
     [self hidePlaceEditMenuNow];
     NSLog(@"Click to Edit Place");
-    //[self ShowPlaceView:@"search"];
+    [self ShowPlaceView:@"search"];
 }
 
 #pragma mark Edit Menu API
@@ -1129,7 +1112,7 @@
 #pragma mark show Edit View Controller
 - (void) showTitleAndDescView{
     TitleDescEditViewController *titleViewController=[[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
-    titleViewController.gatherview=self;
+    titleViewController.delegate=self;
     NSString *imgurl;
     for(NSDictionary *widget in (NSArray*)cross.widget) {
         if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
@@ -1144,7 +1127,7 @@
 
 - (void) showTimeView{
     TimeViewController *timeViewController=[[TimeViewController alloc] initWithNibName:@"TimeViewController" bundle:nil];
-    timeViewController.gatherview=self;
+    timeViewController.delegate=self;
     [timeViewController setDateTime:cross.time];
     [self presentModalViewController:timeViewController animated:YES];
     [timeViewController release];
@@ -1152,7 +1135,7 @@
 
 - (void) ShowPlaceView:(NSString*)status{
     PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
-    placeViewController.gatherview=self;
+    placeViewController.delegate=self;
     if(cross.place!=nil){
         if(![cross.place.title isEqualToString:@""] || ( ![cross.place.lat isEqualToString:@""] || ![cross.place.lng isEqualToString:@""])){
             [placeViewController setPlace:cross.place isedit:YES];
@@ -1227,16 +1210,6 @@
     
 }
 
-- (Invitation*) getMyInvitation{
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    for(Invitation *invitation in exfeeInvitations)
-    {
-        if([invitation.identity.connected_user_id intValue] == app.userid)
-            return invitation;
-    }
-    return nil;
-}
-
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
@@ -1292,5 +1265,134 @@
     [self.navigationController pushViewController:conversationView animated:!isAnimated];
     [conversationView release];
 }
+
+#pragma mark EditCrossDelegate
+- (Invitation*) getMyInvitation{
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    for(Invitation *invitation in exfeeInvitations)
+    {
+        if([invitation.identity.connected_user_id intValue] == app.userid)
+            return invitation;
+    }
+    return nil;
+}
+
+- (void) addExfee:(NSArray*) invitations{
+    if(exfeeInvitations==nil)
+        exfeeInvitations = [[NSMutableArray alloc] initWithArray:invitations];
+    else{
+        for(Invitation *invitation in invitations){
+            [exfeeInvitations addObject:invitation];
+        }
+    }
+//    NSString *newtitle=@".X. with ";
+//    if(title_be_edit==NO){
+//        for(Invitation *invitation in exfeeInvitations){
+//            newtitle=[newtitle stringByAppendingFormat:@"%@ ",invitation.identity.name];
+//        }
+//        cross.title=newtitle;
+//        titleView.text=newtitle;
+//    }
+    
+    [exfeeShowview reloadData];
+}
+
+- (void) setTime:(CrossTime*)time{
+   // [APICrosses
+    
+    
+    cross.time=time;
+    [self fillTime:time];
+    [self relayoutUI];
+}
+
+- (void) setPlace:(Place*)place{
+    cross.place=place;
+    [self fillPlace:place];
+    [self relayoutUI];
+}
+
+- (void) setTitle:(NSString*)title Description:(NSString*)desc{
+    if(cross.title!=title){
+        //title_be_edit=YES;
+    }
+    cross.title=title;
+    cross.cross_description=desc;
+    [self fillTitleAndDescription:cross];
+    [self relayoutUI];
+}
+
+- (void)submitEditCross:(Cross*)cross_diff{
+//    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    hud.labelText = @"Saving";
+//    hud.mode=MBProgressHUDModeCustomView;
+//    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+//    [bigspin startAnimating];
+//    hud.customView=bigspin;
+//    [bigspin release];
+    
+    cross.by_identity=[self getMyInvitation].identity;
+    
+    NSError *error;
+    NSString *json = [[RKObjectSerializer serializerWithObject:cross mapping:[[APICrosses getCrossMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
+    if(!error){
+        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+        RKClient *client = [RKClient sharedClient];
+        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+        NSString *endpoint = [NSString stringWithFormat:@"/crosses/%u/edit?token=%@",[cross.cross_id intValue],app.accesstoken];
+        [client post:endpoint usingBlock:^(RKRequest *request){
+            request.method=RKRequestMethodPOST;
+            
+            request.params=[RKRequestSerialization serializationWithData:[json dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
+            request.onDidLoadResponse=^(RKResponse *response){
+                if (response.statusCode == 200) {
+                    NSDictionary *body=[response.body objectFromJSONData];
+                    NSDictionary *meta=[body objectForKey:@"meta"];
+                    if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]])
+                    {
+                        if([(NSNumber*)[meta objectForKey:@"code"] intValue]==200){
+                            NSDictionary *responsedict=[body objectForKey:@"response"];
+                            NSDictionary *crossdict=[responsedict objectForKey:@"cross" ];
+                            NSNumber *cross_id=[crossdict objectForKey:@"id"];
+                            if([cross_id intValue]==[self.cross.cross_id intValue])
+                            {
+                                [app CrossUpdateDidFinish:[cross.cross_id intValue]];
+                            }
+                        }else{
+                            [Util showErrorWithMetaDict:meta delegate:self];
+                        }
+                    }
+                }else {
+                    NSString *errormsg=@"Could not save this cross.";
+                    if(![errormsg isEqualToString:@""]){
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
+                        alert.tag=201; // 201 = Save Cross
+                        [alert show];
+                        [alert release];
+                    }
+                }
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            };
+            request.onDidFailLoadWithError=^(NSError *error){
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                NSString *errormsg=@"";
+                if(error.code==2)
+                    errormsg=@"A connection failure has occurred.";
+                else
+                    errormsg=@"Could not connect to the server.";
+                if(![errormsg isEqualToString:@""]){
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
+                    alert.tag=201; // 201 = Save Cross
+                    [alert show];
+                    [alert release];
+                }
+                
+                //                [Util showConnectError:error delegate:self];
+            };
+            request.delegate=self;
+        }];
+    }
+}
+     
 
 @end

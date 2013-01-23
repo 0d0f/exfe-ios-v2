@@ -1807,7 +1807,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "697"
          endingLineNumber = "697"
-         landmarkName = "-setTime:"
+         landmarkName = "-fillExfee"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1833,19 +1833,6 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "571"
          endingLineNumber = "571"
-         landmarkName = "-Gather:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/NewGatherViewController.m"
-         timestampString = "380624814.331512"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "567"
-         endingLineNumber = "567"
          landmarkName = "-Gather:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1963,7 +1950,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "937"
          endingLineNumber = "937"
-         landmarkName = "-imageCollectionView:itemAtIndex:"
+         landmarkName = "-numberOfimageCollectionView:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1976,8 +1963,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "934"
          endingLineNumber = "934"
-         landmarkName = "-numberOfimageCollectionView:"
-         landmarkType = "5">
+         landmarkName = "@implementation NewGatherViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"

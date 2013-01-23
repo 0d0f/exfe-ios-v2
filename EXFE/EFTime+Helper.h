@@ -27,5 +27,6 @@
 - (NSTimeZone*) getLocalTimeZoneWithDST;
 
 - (NSString*) getHumanReadableString;
+- (NSString*) getTimeZoneString;
 
 @end

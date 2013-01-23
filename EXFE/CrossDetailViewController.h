@@ -26,9 +26,9 @@
 #import "EXAlertView.h"
 #import "EXCurveView.h"
 #import "EXWidgetTabBar.h"
+#import "EditCrossDelegate.h"
 
-
-@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate>{
+@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate>{
 
     UIScrollView *container;
     UIImageView *dectorView;
@@ -85,9 +85,14 @@
 - (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu;
 - (void)RSVPPendingMenuView:(EXRSVPMenuView *) menu;
 
-- (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation;
+#pragma mark EditCrossDelegate
+- (void) addExfee:(NSArray*) invitations;
 - (Invitation*) getMyInvitation;
+- (void) setTitle:(NSString*)title Description:(NSString*)desc;
+- (void) setTime:(CrossTime*)time;
+- (void) setPlace:(Place*)place;
 
+- (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation;
 
 - (void) toConversationAnimated:(BOOL)isAnimated;
 

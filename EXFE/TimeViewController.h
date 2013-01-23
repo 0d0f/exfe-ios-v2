@@ -18,7 +18,7 @@
 
 @interface TimeViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>{
     IBOutlet UITextField *inputtimeword;
-    UIViewController *gatherview;
+    id delegate;
     UITableView *_tableView;
     IBOutlet UIDatePicker *datepicker;
     NSArray* _times;
@@ -31,7 +31,7 @@
     double editinginterval;
     
 }
-@property (nonatomic,retain) UIViewController* gatherview;
+@property (nonatomic,retain) id delegate;
 
 - (IBAction) Done:(id) sender;
 - (void) saveDate:(NSString*) time_word;

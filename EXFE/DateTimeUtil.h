@@ -7,8 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CrossTime.h"
+#import "EFTime.h"
 
 @interface DateTimeUtil : NSObject
+
++ (NSDate*) dateNow;
++ (void)setNow:(NSDate*)now;
++ (void)clearNow;
++ (void)setAppDefaultTimeZone:(NSTimeZone*)tz;
++ (void)clearAppDefaultTimeZone;
+
++ (NSDictionary*)datetimeTemplate:(NSUInteger)type;
 
 + (NSInteger)daysWithinEraFromDate:(NSDate *) startDate toDate:(NSDate *) endDate;
 + (BOOL)isSameTimezone:(NSTimeZone*) timezoneA with:(NSTimeZone*)timezoneB;
@@ -20,5 +30,6 @@
 
 + (NSString*) timezoneString:(NSTimeZone*)tz;
 + (NSInteger) secondsOffsetFromGMT:(NSString*)zoneString;
+
 
 @end

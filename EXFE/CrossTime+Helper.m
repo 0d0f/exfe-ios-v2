@@ -17,11 +17,10 @@
 
 - (NSString*) getTimeTitle{
     if( [self.outputformat intValue] == 1) { //use origin
-        return self.origin;
+        return [CrossTime getRaw:self.origin];
     }else{
         if ([self.begin_at hasDate]){
-            return @"Relative Time";
-            //return [DateTimeUtil GetRelativeTime:[self.begin_at getLocalDateComponent] format:0];
+            return [DateTimeUtil GetRelativeTime:[self.begin_at getLocalDateComponent] format:0];
         }else{
             if ([self.begin_at hasTime]) {
                 return [self.begin_at getHumanReadableString];
@@ -54,14 +53,28 @@
 
 - (NSString*) getTimeSingleLine{
     if( [self.outputformat intValue] == 1) { //use origin
-        return self.origin;
+        return [CrossTime getRaw:self.origin];
     }else{
         return [self.begin_at getHumanReadableString];
     }
 }
 
++ (BOOL)isQuated:(NSString*)str{
+    if (str != nil && [str length] > 1) {
+        unichar first = [str characterAtIndex:0];
+        unichar last = [str characterAtIndex:[str length] - 1];
+        if (first == last) {
+            return first == '\'' || first == '"';
+        }
+    }
+    return NO;
+}
 
-
-
++ (NSString*) getRaw:(NSString*)orginal{
+    if ([CrossTime isQuated:orginal]) {
+        return [orginal substringWithRange:NSMakeRange(1, [orginal length] - 2)];
+    }
+    return orginal;
+}
 
 @end

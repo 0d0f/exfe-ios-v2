@@ -11,6 +11,11 @@
 		4F0597971682B9FA00F9CE10 /* CrossDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F0597951682B9FA00F9CE10 /* CrossDetailViewController.xib */; };
 		4F0E159B16A95C390086AC4A /* edit_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159916A95C390086AC4A /* edit_30.png */; };
 		4F0E159C16A95C390086AC4A /* edit_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159A16A95C390086AC4A /* edit_30@2x.png */; };
+		4F1142D716AE40B000C30179 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1142D616AE40B000C30179 /* SenTestingKit.framework */; };
+		4F1142D816AE40B000C30179 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
+		4F1142D916AE40B000C30179 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8D1560F832009E0806 /* Foundation.framework */; };
+		4F1142DF16AE40B000C30179 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F1142DD16AE40B000C30179 /* InfoPlist.strings */; };
+		4F1142E216AE40B000C30179 /* EXFETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1142E116AE40B000C30179 /* EXFETests.m */; };
 		4F14689C167F1C0700872F9D /* ProfileCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F14689B167F1C0600872F9D /* ProfileCard.m */; };
 		4F266F02168EC49900BDB9D5 /* EXLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F266F01168EC49900BDB9D5 /* EXLabel.m */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
@@ -421,6 +426,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4F1142E916AE41B400C30179 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78A98E7E1560F832009E0806 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 78A98E861560F832009E0806;
+			remoteInfo = EXFE;
+		};
 		789C8D6015931BF100580624 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78A98ED615611028009E0806 /* RestKit.xcodeproj */;
@@ -471,12 +483,20 @@
 		4F0597951682B9FA00F9CE10 /* CrossDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossDetailViewController.xib; sourceTree = "<group>"; };
 		4F0E159916A95C390086AC4A /* edit_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30.png; sourceTree = "<group>"; };
 		4F0E159A16A95C390086AC4A /* edit_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30@2x.png"; sourceTree = "<group>"; };
+		4F1142D516AE40B000C30179 /* EXFETests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EXFETests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F1142D616AE40B000C30179 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		4F1142DC16AE40B000C30179 /* EXFETests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EXFETests-Info.plist"; sourceTree = "<group>"; };
+		4F1142DE16AE40B000C30179 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4F1142E016AE40B000C30179 /* EXFETests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXFETests.h; sourceTree = "<group>"; };
+		4F1142E116AE40B000C30179 /* EXFETests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EXFETests.m; sourceTree = "<group>"; };
+		4F1142E316AE40B000C30179 /* EXFETests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EXFETests-Prefix.pch"; sourceTree = "<group>"; };
 		4F14689A167F1C0600872F9D /* ProfileCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileCard.h; sourceTree = "<group>"; };
 		4F14689B167F1C0600872F9D /* ProfileCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileCard.m; sourceTree = "<group>"; };
 		4F266F00168EC49900BDB9D5 /* EXLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXLabel.h; sourceTree = "<group>"; };
 		4F266F01168EC49900BDB9D5 /* EXLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXLabel.m; sourceTree = "<group>"; };
 		4F3355CE168C4F4700D398C0 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
+		4F3C6D8016ACEE670095AA50 /* EditCrossDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditCrossDelegate.h; sourceTree = "<group>"; };
 		4F63E249169AD2B2003354D7 /* NSDateComponents+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateComponents+Helper.h"; sourceTree = "<group>"; };
 		4F63E24A169AD2B2003354D7 /* NSDateComponents+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateComponents+Helper.m"; sourceTree = "<group>"; };
 		4F63E24C169BFCD4003354D7 /* DateTimeUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateTimeUtil.h; sourceTree = "<group>"; };
@@ -987,6 +1007,16 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4F1142D116AE40B000C30179 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F1142D716AE40B000C30179 /* SenTestingKit.framework in Frameworks */,
+				4F1142D816AE40B000C30179 /* UIKit.framework in Frameworks */,
+				4F1142D916AE40B000C30179 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		78A98E841560F832009E0806 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1014,6 +1044,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F1142DA16AE40B000C30179 /* EXFETests */ = {
+			isa = PBXGroup;
+			children = (
+				4F1142E016AE40B000C30179 /* EXFETests.h */,
+				4F1142E116AE40B000C30179 /* EXFETests.m */,
+				4F1142DB16AE40B000C30179 /* Supporting Files */,
+			);
+			path = EXFETests;
+			sourceTree = "<group>";
+		};
+		4F1142DB16AE40B000C30179 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4F1142DC16AE40B000C30179 /* EXFETests-Info.plist */,
+				4F1142DD16AE40B000C30179 /* InfoPlist.strings */,
+				4F1142E316AE40B000C30179 /* EXFETests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		780EAC29165215EE00953D75 /* AddIdentity */ = {
 			isa = PBXGroup;
 			children = (
@@ -1232,6 +1282,7 @@
 				78606CE4169AD2900014806A /* TitleDescEditViewController.h */,
 				78606CE5169AD2900014806A /* TitleDescEditViewController.m */,
 				78606CE6169AD2910014806A /* TitleDescEditViewController.xib */,
+				4F3C6D8016ACEE670095AA50 /* EditCrossDelegate.h */,
 			);
 			name = Cross;
 			sourceTree = "<group>";
@@ -1429,6 +1480,7 @@
 				7882F80216A68372004309DF /* CoreImage.framework */,
 				78A98ED615611028009E0806 /* RestKit.xcodeproj */,
 				78A98E911560F832009E0806 /* EXFE */,
+				4F1142DA16AE40B000C30179 /* EXFETests */,
 				78A98E8A1560F832009E0806 /* Frameworks */,
 				78A98E881560F832009E0806 /* Products */,
 			);
@@ -1438,6 +1490,7 @@
 			isa = PBXGroup;
 			children = (
 				78A98E871560F832009E0806 /* EXFE.app */,
+				4F1142D516AE40B000C30179 /* EXFETests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1459,6 +1512,7 @@
 				78A98E8B1560F832009E0806 /* UIKit.framework */,
 				78A98E8D1560F832009E0806 /* Foundation.framework */,
 				78A98E8F1560F832009E0806 /* CoreGraphics.framework */,
+				4F1142D616AE40B000C30179 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1849,6 +1903,25 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4F1142D416AE40B000C30179 /* EXFETests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F1142E416AE40B000C30179 /* Build configuration list for PBXNativeTarget "EXFETests" */;
+			buildPhases = (
+				4F1142D016AE40B000C30179 /* Sources */,
+				4F1142D116AE40B000C30179 /* Frameworks */,
+				4F1142D216AE40B000C30179 /* Resources */,
+				4F1142D316AE40B000C30179 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4F1142EA16AE41B400C30179 /* PBXTargetDependency */,
+			);
+			name = EXFETests;
+			productName = EXFETests;
+			productReference = 4F1142D516AE40B000C30179 /* EXFETests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 		78A98E861560F832009E0806 /* EXFE */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 78A98E9F1560F832009E0806 /* Build configuration list for PBXNativeTarget "EXFE" */;
@@ -1894,6 +1967,7 @@
 			projectRoot = "";
 			targets = (
 				78A98E861560F832009E0806 /* EXFE */,
+				4F1142D416AE40B000C30179 /* EXFETests */,
 			);
 		};
 /* End PBXProject section */
@@ -1937,6 +2011,14 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4F1142D216AE40B000C30179 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F1142DF16AE40B000C30179 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		78A98E851560F832009E0806 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2240,7 +2322,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4F1142D316AE40B000C30179 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		4F1142D016AE40B000C30179 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F1142E216AE40B000C30179 /* EXFETests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		78A98E831560F832009E0806 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2351,6 +2457,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4F1142EA16AE41B400C30179 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 78A98E861560F832009E0806 /* EXFE */;
+			targetProxy = 4F1142E916AE41B400C30179 /* PBXContainerItemProxy */;
+		};
 		78A98EEC156110C6009E0806 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RestKit;
@@ -2359,6 +2470,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		4F1142DD16AE40B000C30179 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4F1142DE16AE40B000C30179 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		78A98E941560F832009E0806 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2370,6 +2489,103 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4F1142E516AE40B000C30179 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EXFE.app/EXFE";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "EXFETests/EXFETests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4F1142E616AE40B000C30179 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EXFE.app/EXFE";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				INFOPLIST_FILE = "EXFETests/EXFETests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		4F1142E716AE40B000C30179 /* Adhoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EXFE.app/EXFE";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				INFOPLIST_FILE = "EXFETests/EXFETests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Adhoc;
+		};
+		4F1142E816AE40B000C30179 /* appstore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EXFE.app/EXFE";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EXFETests/EXFETests-Prefix.pch";
+				INFOPLIST_FILE = "EXFETests/EXFETests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = appstore;
+		};
 		78199C8E160A554600A560F7 /* appstore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2576,6 +2792,17 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4F1142E416AE40B000C30179 /* Build configuration list for PBXNativeTarget "EXFETests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F1142E516AE40B000C30179 /* Debug */,
+				4F1142E616AE40B000C30179 /* Release */,
+				4F1142E716AE40B000C30179 /* Adhoc */,
+				4F1142E816AE40B000C30179 /* appstore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		78A98E811560F832009E0806 /* Build configuration list for PBXProject "EXFE" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

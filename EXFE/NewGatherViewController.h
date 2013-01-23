@@ -28,9 +28,10 @@
 #import "TitleDescEditViewController.h"
 #import "PlaceViewController.h"
 #import "TimeViewController.h"
+#import "EditCrossDelegate.h"
 
 
-@interface NewGatherViewController : UIViewController <EXImagesCollectionGatherDataSource, EXImagesCollectionGatherDelegate, MKMapViewDelegate, EXRSVPMenuDelegate,UIGestureRecognizerDelegate,UIPickerViewDataSource,UIPickerViewDelegate>{
+@interface NewGatherViewController : UIViewController <EXImagesCollectionGatherDataSource, EXImagesCollectionGatherDelegate, MKMapViewDelegate, EXRSVPMenuDelegate,UIGestureRecognizerDelegate,EditCrossDelegate,UIPickerViewDataSource,UIPickerViewDelegate>{
     
     UIScrollView *container;
 //    EXCurveImageView *dectorView;
@@ -75,13 +76,10 @@
 - (void) hideMenu;
 - (void) hideStatusView;
 - (void) reloadStatusview:(Invitation*)_invitation;
-- (void) addExfee:(NSArray*) invitations;
 - (void) fillTime:(CrossTime*)time;
 - (void) fillPlace:(Place*)place;
 - (void) ShowPlaceView:(NSString*)status;
-- (void) setTitle:(NSString*)title Description:(NSString*)desc;
-- (void) setTime:(CrossTime*)time;
-- (void) setPlace:(Place*)place;
+
 - (void) GlassBarlightAnimation;
 
 #pragma mark MKMapViewDelegate
@@ -103,6 +101,11 @@
 - (void) replaceDefaultIdentity:(int)idx;
 - (IBAction) Gather:(id) sender;
 
-
+#pragma mark EditCrossDelegate
+- (void) addExfee:(NSArray*) invitations;
+- (Invitation*) getMyInvitation;
+- (void) setTitle:(NSString*)title Description:(NSString*)desc;
+- (void) setTime:(CrossTime*)time;
+- (void) setPlace:(Place*)place;
 
 @end
