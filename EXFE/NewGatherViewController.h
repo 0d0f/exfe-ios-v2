@@ -30,7 +30,7 @@
 #import "TimeViewController.h"
 
 
-@interface NewGatherViewController : UIViewController <EXImagesCollectionGatherDataSource, EXImagesCollectionGatherDelegate, MKMapViewDelegate, EXRSVPMenuDelegate,UIGestureRecognizerDelegate>{
+@interface NewGatherViewController : UIViewController <EXImagesCollectionGatherDataSource, EXImagesCollectionGatherDelegate, MKMapViewDelegate, EXRSVPMenuDelegate,UIGestureRecognizerDelegate,UIPickerViewDataSource,UIPickerViewDelegate>{
     
     UIScrollView *container;
 //    EXCurveImageView *dectorView;
@@ -59,6 +59,9 @@
     CGFloat exfeeSuggestHeight;
     EXRSVPMenuView *rsvpmenu;
     UIImageView *pannellight;
+    UIPickerView *identitypicker;
+    UIView *pickertoolbar;
+    NSMutableArray *orderedIdentities;
 }
 @property (retain,nonatomic) Cross* cross;
 @property (retain,readonly) NSMutableArray *exfeeIdentities;
@@ -96,7 +99,8 @@
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation;
 - (void) setrsvp:(NSString*)status invitation:(Invitation*)_invitation;
 - (Invitation*) getMyInvitation;
-- (void) addDefaultIdentity;
+- (void) addDefaultIdentity:(int)idx;
+- (void) replaceDefaultIdentity:(int)idx;
 - (IBAction) Gather:(id) sender;
 
 

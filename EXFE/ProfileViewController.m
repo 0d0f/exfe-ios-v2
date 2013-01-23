@@ -157,7 +157,7 @@
         NSArray *sorted_identities_section;
         sorted_identities_section = [identities_section sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
             
-            return [[(Identity*)a order] compare:[(Identity*)b order]];
+            return [[(Identity*)a a_order] compare:[(Identity*)b a_order]];
         }];
         
         [identitiesData addObject:[[sorted_identities_section mutableCopy] autorelease]  ];
@@ -172,8 +172,12 @@
 
 #pragma Mark - RKRequestDelegate
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-   
-        [self loadObjectsFromDataStore];
+//    NSDictionary *a=[objects objectAtIndex:1];
+//    NSArray *b=[a objectForKey:@"identities"];
+    [[User currentContext] save:nil];
+    [[Invitation currentContext] save:nil];
+    [[Identity currentContext] save:nil];
+    [self loadObjectsFromDataStore];
 }
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {

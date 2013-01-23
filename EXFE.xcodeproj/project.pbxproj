@@ -169,6 +169,7 @@
 		785659FC15F3AD660003CDF8 /* CustomStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */; };
 		785659FF15F3B26A0003CDF8 /* btn_blue_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 785659FD15F3B26A0003CDF8 /* btn_blue_dark.png */; };
 		78565A0015F3B26A0003CDF8 /* btn_blue_dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 785659FE15F3B26A0003CDF8 /* btn_blue_dark@2x.png */; };
+		785662F816AFC6B4007C7CD3 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 785662F716AFC6B4007C7CD3 /* Identity.m */; };
 		785F6F541581DE4C00BF8EA0 /* APIProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F531581DE4C00BF8EA0 /* APIProfile.m */; };
 		785F6F60158204FE00BF8EA0 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F5F158204FE00BF8EA0 /* User.m */; };
 		785F6F6415820A0000BF8EA0 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F6215820A0000BF8EA0 /* ProfileViewController.m */; };
@@ -353,7 +354,6 @@
 		78B91DE316884F1800BB98B1 /* rsvp_pending_stroke_26g5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B91DDD16884F1800BB98B1 /* rsvp_pending_stroke_26g5@2x.png */; };
 		78B91DE416884F1800BB98B1 /* rsvp_unavailable_stroke_26g5.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B91DDE16884F1800BB98B1 /* rsvp_unavailable_stroke_26g5.png */; };
 		78B91DE516884F1800BB98B1 /* rsvp_unavailable_stroke_26g5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B91DDF16884F1800BB98B1 /* rsvp_unavailable_stroke_26g5@2x.png */; };
-		78B91DEA1688577200BB98B1 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B91DE91688577100BB98B1 /* Identity.m */; };
 		78B91DED168AB0F600BB98B1 /* EXRSVPStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B91DEC168AB0F600BB98B1 /* EXRSVPStatusView.m */; };
 		78B9FCF115B4680F00F5E4D3 /* EXInnerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FCF015B4680F00F5E4D3 /* EXInnerButton.m */; };
 		78B9FCF815B5346D00F5E4D3 /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FCF715B5346D00F5E4D3 /* Exfee.m */; };
@@ -675,6 +675,8 @@
 		785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomStatusBar.m; sourceTree = "<group>"; };
 		785659FD15F3B26A0003CDF8 /* btn_blue_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_blue_dark.png; sourceTree = "<group>"; };
 		785659FE15F3B26A0003CDF8 /* btn_blue_dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_blue_dark@2x.png"; sourceTree = "<group>"; };
+		785662F616AFC6B4007C7CD3 /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
+		785662F716AFC6B4007C7CD3 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		785F6F521581DE4C00BF8EA0 /* APIProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIProfile.h; sourceTree = "<group>"; };
 		785F6F531581DE4C00BF8EA0 /* APIProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIProfile.m; sourceTree = "<group>"; };
 		785F6F5E158204FE00BF8EA0 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -893,8 +895,6 @@
 		78B91DDD16884F1800BB98B1 /* rsvp_pending_stroke_26g5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rsvp_pending_stroke_26g5@2x.png"; sourceTree = "<group>"; };
 		78B91DDE16884F1800BB98B1 /* rsvp_unavailable_stroke_26g5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rsvp_unavailable_stroke_26g5.png; sourceTree = "<group>"; };
 		78B91DDF16884F1800BB98B1 /* rsvp_unavailable_stroke_26g5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rsvp_unavailable_stroke_26g5@2x.png"; sourceTree = "<group>"; };
-		78B91DE81688577000BB98B1 /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
-		78B91DE91688577100BB98B1 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		78B91DEB168AB0F500BB98B1 /* EXRSVPStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXRSVPStatusView.h; sourceTree = "<group>"; };
 		78B91DEC168AB0F600BB98B1 /* EXRSVPStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXRSVPStatusView.m; sourceTree = "<group>"; };
 		78B9FCEF15B4680F00F5E4D3 /* EXInnerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXInnerButton.h; sourceTree = "<group>"; };
@@ -1517,8 +1517,8 @@
 		78A98EFC1561169E009E0806 /* Class */ = {
 			isa = PBXGroup;
 			children = (
-				78B91DE81688577000BB98B1 /* Identity.h */,
-				78B91DE91688577100BB98B1 /* Identity.m */,
+				785662F616AFC6B4007C7CD3 /* Identity.h */,
+				785662F716AFC6B4007C7CD3 /* Identity.m */,
 				784D373F168EAE6E00987B6C /* Invitation.h */,
 				784D3740168EAE6E00987B6C /* Invitation.m */,
 				78B0181115B812F300778192 /* Cross.h */,
@@ -2327,7 +2327,6 @@
 				4F0597961682B9FA00F9CE10 /* CrossDetailViewController.m in Sources */,
 				4F81C848168309E9007284DF /* EXCurveImageView.m in Sources */,
 				78B91DD916882BE400BB98B1 /* ExfeeNumberView.m in Sources */,
-				78B91DEA1688577200BB98B1 /* Identity.m in Sources */,
 				78B91DED168AB0F600BB98B1 /* EXRSVPStatusView.m in Sources */,
 				4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */,
 				784D3710168C22C900987B6C /* EXRSVPMenuView.m in Sources */,
@@ -2345,6 +2344,7 @@
 				78606CE7169AD2920014806A /* TitleDescEditViewController.m in Sources */,
 				4FB501A0169FC504005328BE /* EXCurveView.m in Sources */,
 				4FD4DD7416A68674003F1A55 /* EXWidgetTabBar.m in Sources */,
+				785662F816AFC6B4007C7CD3 /* Identity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2493,8 +2493,8 @@
 		78A98EA01560F832009E0806 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
@@ -2509,8 +2509,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "A2050D0F-250D-4661-B257-A0B8E34A9C9C";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A2050D0F-250D-4661-B257-A0B8E34A9C9C";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2535,8 +2535,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3D2797FB-1756-4602-94D7-09DCD96D0D3A";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3D2797FB-1756-4602-94D7-09DCD96D0D3A";
+				PROVISIONING_PROFILE = "4E990391-0487-442C-8895-02041454B755";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4E990391-0487-442C-8895-02041454B755";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2573,32 +2573,6 @@
 			};
 			name = Adhoc;
 		};
-		78EC9BE715E7FC42005EAA4B /* Adhoc */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: EXFE HOLDINGS";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: EXFE HOLDINGS";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
-				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/EXFE/Flurry\"",
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3D2797FB-1756-4602-94D7-09DCD96D0D3A";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3D2797FB-1756-4602-94D7-09DCD96D0D3A";
-				TARGETED_DEVICE_FAMILY = 1;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Adhoc;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2618,7 +2592,6 @@
 			buildConfigurations = (
 				78A98EA01560F832009E0806 /* Debug */,
 				78A98EA11560F832009E0806 /* Release */,
-				78EC9BE715E7FC42005EAA4B /* Adhoc */,
 				78199C8F160A554600A560F7 /* appstore */,
 			);
 			defaultConfigurationIsVisible = 0;

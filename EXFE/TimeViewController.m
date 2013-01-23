@@ -54,14 +54,44 @@
     inputframeview.image=[UIImage imageNamed:@"textfield.png"];
     inputframeview.contentMode    = UIViewContentModeScaleToFill;
     inputframeview.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
-    [toolbar addSubview:inputframeview];
-    [toolbar addSubview:timeInput];
+//    [toolbar addSubview:inputframeview];
+//    [toolbar addSubview:timeInput];
 
     UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(33, 13.5, 18, 18)];
     icon.image=[UIImage imageNamed:@"time_18.png"];
-    [toolbar addSubview:icon];
+//    [toolbar addSubview:icon];
     [icon release];
 
+    EXAttributedLabel *viewtitle=[[EXAttributedLabel alloc] initWithFrame:CGRectMake(30, (44-30)/2, self.view.frame.size.width-30-60, 30)];
+    viewtitle.backgroundColor=[UIColor clearColor];
+    
+    NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Edit Time"];
+    CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
+    [titlestr addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0, [titlestr length])];
+    
+    [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_51.CGColor range:NSMakeRange(0,[titlestr length])];
+//    [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(5,3)];
+    
+    
+    CTTextAlignment alignment = kCTCenterTextAlignment;
+    float linespaceing=1;
+    float minheight=26;
+    
+    CTParagraphStyleSetting paragraphsetting[3] = {
+        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
+        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
+        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
+    };
+    CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(paragraphsetting, 3);
+    [titlestr addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,[titlestr length])];
+    CFRelease(paragraphstyle);
+    CFRelease(fontref);
+    viewtitle.attributedText=titlestr;
+    [self.view addSubview:viewtitle];
+    [titlestr release];
+    [viewtitle release];
+    
+    
     
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [doneButton setTitle:@"Save" forState:UIControlStateNormal];
@@ -77,7 +107,7 @@
     _tableView.dataSource=self;
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
-    _times=[[NSArray alloc] initWithObjects:@"Sometime",@"Anytime",@"All-day",@"Breakfast",@"Morning", @"Brunch", @"Lunch", @"Noon", @"Afternoon", @"Tea-break", @"Dinner", @"Evening", @"Night", @"Midnight", @"Daybreak", nil];
+    _times=[[NSArray alloc] initWithObjects:@"Clear Time",@"All-day",@"Breakfast",@"Morning", @"Brunch", @"Lunch", @"Noon", @"Afternoon", @"Tea-break", @"Dinner", @"Evening", @"Night", @"Midnight", @"Daybreak", nil];
     NSLocale *locale = [NSLocale currentLocale];
     NSCalendar *cal = [NSCalendar currentCalendar];
     [cal setLocale:locale];
@@ -87,6 +117,7 @@
     [datepicker addTarget:self action:@selector(dateChanged:)
      forControlEvents:UIControlEventValueChanged];
     [self regObserver];
+    [self refreshUI];
 }
 
 - (void)regObserver
@@ -172,10 +203,7 @@
     datechanged=YES;
 }
 
-- (void) setDateTime:(CrossTime*)crosstime{
-    if(crosstime!=nil) {
-        _crosstime=crosstime;
-    }
+- (void) refreshUI{
     if(_crosstime!=nil){
         NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
         NSString *datetimestr=@"";
@@ -185,8 +213,10 @@
         if(![_crosstime.begin_at.date isEqualToString:@""] &&![_crosstime.begin_at.time isEqualToString:@""]){
             datetimestr=[NSString stringWithFormat:@"%@ %@",_crosstime.begin_at.date,_crosstime.begin_at.time];
             NSDate *date=[dateformat dateFromString:datetimestr];
-            if(date)
+            if(date){
+                NSLog(@"set datepicker %@",date);
                 [datepicker setDate:date];
+            }
         }
         else  if(![_crosstime.begin_at.date isEqualToString:@""]){
             datetimestr=[NSString stringWithFormat:@"%@ 00:00:00",_crosstime.begin_at.date];
@@ -209,6 +239,12 @@
         [dateformat release];
         
     }
+}
+- (void) setDateTime:(CrossTime*)crosstime{
+    if(crosstime!=nil) {
+        _crosstime=crosstime;
+    }
+    [self refreshUI];
 
 }
 - (void) uselasttime{
@@ -327,9 +363,10 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-//- (void) cleanDate{
-//    [(GatherViewController*)gatherview setDateTime:nil];
-//}
+- (void) cleanDate{
+    [(NewGatherViewController*)gatherview setTime:nil];
+}
+
 #pragma mark UIScrollView methods
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
