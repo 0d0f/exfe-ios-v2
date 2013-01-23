@@ -364,7 +364,7 @@
 }
 
 - (void) cleanDate{
-    [(NewGatherViewController*)gatherview setTime:nil];
+    [(NewGatherViewController*)delegate setTime:nil];
 }
 
 #pragma mark UIScrollView methods
