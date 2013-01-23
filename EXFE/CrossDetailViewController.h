@@ -28,7 +28,7 @@
 #import "EXWidgetTabBar.h"
 #import "EditCrossDelegate.h"
 
-@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate>{
+@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, UIGestureRecognizerDelegate>{
 
     UIScrollView *container;
     UIImageView *dectorView;

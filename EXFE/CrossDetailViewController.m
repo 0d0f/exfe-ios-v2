@@ -266,7 +266,8 @@
     [self initUI];
     [self refreshUI];
 
-    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
+    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    gestureRecognizer.delegate = self;
     [container addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
 }
@@ -293,7 +294,15 @@
     [super dealloc];
 }
 
-- (void)touchesBegan:(UITapGestureRecognizer*)sender{
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+//    [self hideMenuWithAnimation:YES];
+//    [self hideStatusView];
+//    [self hideTimeEditMenuWithAnimation:YES];
+//    [self hidePlaceEditMenuWithAnimation:YES];
+    return YES;
+}
+
+- (void)handleTap:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
     
     
@@ -302,85 +311,38 @@
     [self hideTimeEditMenuWithAnimation:YES];
     [self hidePlaceEditMenuWithAnimation:YES];
     
-//    if (rsvpstatusview.hidden == NO){
-//        if (CGRectContainsPoint(rsvpstatusview.frame, location)) {
-//            NSLog(@"click to set rsvp");
-//        }else{
-//            rsvpstatusview.hidden = YES;
-//        }
-//    }
-    if (descView.hidden == NO && CGRectContainsPoint(descView.frame, location)) {
-        [self showDescriptionFullContent: (descView.numberOfLines != 0)];
-        return;
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        //UIView *tappedView = [sender.view hitTest:[sender locationInView:sender.view] withEvent:nil];
+
+        
+        if (descView.hidden == NO && CGRectContainsPoint(descView.frame, location)) {
+            [self showDescriptionFullContent: (descView.numberOfLines != 0)];
+            return;
+        }
+        if (CGRectContainsPoint([exfeeShowview frame], location)) {
+            //        [crosstitle resignFirstResponder];
+            [exfeeShowview becomeFirstResponder];
+            CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
+            [exfeeShowview onImageTouch:exfeeviewlocation];
+            return;
+        }
+        
+        if (timeRelView.hidden == NO && CGRectContainsPoint(timeRelView.frame, location)){
+            [self showTimeEditMenu:timeRelView];
+            return;
+        }else if (timeAbsView.hidden == NO && CGRectContainsPoint(timeAbsView.frame, location)) {
+            [self showTimeEditMenu:timeAbsView];
+            return;
+        }
+        
+        if (placeTitleView.hidden == NO && CGRectContainsPoint(placeTitleView.frame, location)){
+            [self showPlaceEditMenu:placeTitleView];
+            return;
+        }else if (placeDescView.hidden == NO && CGRectContainsPoint(placeDescView.frame, location)){
+            [self showPlaceEditMenu:placeDescView];
+            return;
+        }
     }
-//    if (CGRectContainsPoint([placetitle frame], location) || CGRectContainsPoint([placedesc frame], location))
-//    {e
-//        [crosstitle resignFirstResponder];
-//        [map becomeFirstResponder];
-//        if(viewmode==YES)
-//            [self ShowPlaceView:@"detail"];
-//        else{
-//            [self ShowPlaceView:@"search"];
-//        }
-//    }
-    
-//    if (CGRectContainsPoint([timetitle frame], location) || CGRectContainsPoint([timedesc frame], location))
-//    {
-//        [self ShowTimeView];
-//    }
-    
-//    if(exfeeShowview.editmode==YES){
-//        if (!CGRectContainsPoint([exfeeShowview frame], location)){
-//            [self setExfeeViewMode:NO];
-//        }
-//    }
-//    if(viewmode==YES){
-//        if(crosstitle.hidden==NO)
-//        {
-//            if (!CGRectContainsPoint([crosstitle frame], location)){
-//                cross.title = crosstitle.text;
-//                crosstitle_view.text=crosstitle.text;
-//                [crosstitle setHidden:YES];
-//                [crosstitle_view setHidden:NO];
-//                [title_input_img setHidden:YES];
-//                [self saveCrossUpdate];
-//            }
-//            
-//        }
-//        if(crossdescription.editable==YES){
-//            if (!CGRectContainsPoint([crossdescription frame], location)){
-//                [self saveCrossDesc];
-//            }
-//        }
-//    }
-    if (CGRectContainsPoint([exfeeShowview frame], location)) {
-//        [crosstitle resignFirstResponder];
-        [exfeeShowview becomeFirstResponder];
-        CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
-        [exfeeShowview onImageTouch:exfeeviewlocation];
-        return;
-    }
-    
-    if (timeRelView.hidden == NO && CGRectContainsPoint(timeRelView.frame, location)){
-        [self showTimeEditMenu:timeRelView];
-        return;
-    }else if (timeAbsView.hidden == NO && CGRectContainsPoint(timeAbsView.frame, location)) {
-        [self showTimeEditMenu:timeAbsView];
-        return;
-    }
-    
-    if (placeTitleView.hidden == NO && CGRectContainsPoint(placeTitleView.frame, location)){
-        [self showPlaceEditMenu:placeTitleView];
-    }else if (placeDescView.hidden == NO && CGRectContainsPoint(placeDescView.frame, location)){
-        [self showPlaceEditMenu:placeDescView];
-    }
-    
-    
-//    else{
-//        [crosstitle resignFirstResponder];
-//        [map becomeFirstResponder];
-//    }
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -594,7 +556,6 @@
 - (void)relayoutUI{
     if (layoutDirty == YES){
         NSLog(@"relayoutUI");
-        //CGRect f = self.view.frame;
         CGRect c = container.frame;
         
         float left = CONTAINER_VERTICAL_PADDING;
@@ -605,15 +566,6 @@
         
         // Description
         if (descView.hidden == NO) {
-//            CGSize rect = CGSizeMake(width, INFINITY);
-//            NSString* four_lines = @"M\nM\nM\nM";
-//            CGSize fit4 = [four_lines sizeWithFont:descView.font constrainedToSize:rect lineBreakMode:descView.lineBreakMode];
-//            CGSize fitFull = [descView.text sizeWithFont:descView.font constrainedToSize:rect lineBreakMode:descView.lineBreakMode];
-//            CGFloat bestHeight = fitFull.height;
-//            if (descView.numberOfLines == 4){
-//                bestHeight = MIN(fit4.height, fitFull.height);
-//            }
-//            descView.frame = CGRectMake(left , baseY, width, bestHeight);
             descView.frame = CGRectMake(left , baseY, width, 80);
             [descView sizeToFit];
             baseX = CGRectGetMaxX(descView.frame);
@@ -707,10 +659,12 @@
         }else{
             s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(mapView.frame) + OVERLAP;
         }
+        if (s.height < CGRectGetHeight(self.view.bounds)){
+            s.height = CGRectGetHeight(self.view.bounds) + 1;
+        }
         container.contentSize = s;
         
         [self clearLayoutDirty];
-         NSLog(@"relayoutUI done");
     }
 }
 
@@ -982,8 +936,14 @@
         [timeEditMenu addTarget:self action:@selector(clickforTimeEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:timeEditMenu];
     }
-    timeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
+    CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
+    timeEditMenu.frame = CGRectOffset(original, container.contentOffset.x, 0 - container.contentOffset.y);
     timeEditMenu.hidden = NO;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3];
+    [timeEditMenu setFrame:CGRectOffset(timeEditMenu.frame, 0 - CGRectGetWidth(timeEditMenu.frame), 0)];
+    [UIView commitAnimations];
 }
 
 
@@ -1014,7 +974,8 @@
         [placeEditMenu addTarget:self action:@selector(clickforPlaceEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:placeEditMenu];
     }
-    placeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
+    CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
+    placeEditMenu.frame = CGRectOffset(original, container.contentOffset.x, 0 - container.contentOffset.y);
     placeEditMenu.hidden = NO;
     
     [UIView beginAnimations:nil context:NULL];

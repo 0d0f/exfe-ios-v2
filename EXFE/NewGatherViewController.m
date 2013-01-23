@@ -845,6 +845,9 @@
         }else{
             s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(mapView.frame) + OVERLAP;
         }
+        if (s.height < CGRectGetHeight(self.view.bounds)){
+            s.height = CGRectGetHeight(self.view.bounds) + 1;
+        }
         container.contentSize = s;
         
         [self clearLayoutDirty];
