@@ -49,7 +49,6 @@
     viewtitle.backgroundColor=[UIColor clearColor];
 
     NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Edit ·X·"];
-    
     CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
     [titlestr addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0, 8)];
     [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_51.CGColor range:NSMakeRange(0,4)];
@@ -110,6 +109,11 @@
     [headview addSubview:dectorView];
     [self.view addSubview:headview];
     
+    UIImageView *imageback=[[UIImageView alloc] initWithFrame:CGRectMake(25.5,20.5,263,47)];
+    imageback.image=[[UIImage imageNamed:@"xedit_textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(4,4,4,4)];
+    [headview addSubview:imageback];
+    [imageback release];
+
     titleView = [[UITextView alloc] initWithFrame:CGRectMake(25.5,20.5,263,47)];
     titleView.textColor = [UIColor blackColor];
     titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
@@ -118,14 +122,6 @@
     titleView.backgroundColor=[UIColor clearColor];
     [headview addSubview:titleView];
     
-//    titleView.layer.shadowColor = [UIColor blackColor].CGColor;
-//    titleView.layer.shadowOffset= CGSizeMake(0.0f, 1.0f);
-//    titleView.layer.MasksToBounds = false;
-    
-    UIImageView *imageback=[[UIImageView alloc] initWithFrame:CGRectMake(25.5,20.5,263,47)];
-    imageback.image=[[UIImage imageNamed:@"xedit_textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(4,4,4,4)];
-    [headview addSubview:imageback];
-    [imageback release];
     
 
     descView = [[UITextView alloc] initWithFrame:CGRectMake(0, headview.frame.origin.y+headview.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-(headview.frame.origin.y+headview.frame.size.height))];

@@ -37,6 +37,7 @@
         <relationship name="invitations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Invitation" syncable="YES"/>
     </entity>
     <entity name="Identity" representedClassName="Identity" syncable="YES">
+        <attribute name="a_order" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="avatar_filename" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="avatar_updated_at" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="bio" optional="YES" attributeType="String" syncable="YES"/>
@@ -47,7 +48,6 @@
         <attribute name="identity_id" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="provider" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>

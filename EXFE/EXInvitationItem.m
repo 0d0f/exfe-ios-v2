@@ -53,9 +53,9 @@
         CGContextScaleCTM(currentContext, 1.0, -1.0);
 
         if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-            if(isMe){
-                avatar=[avatar roundedCornerImage:40 borderSize:0];
-            }
+//            if(isMe){
+//                avatar=[avatar roundedCornerImage:40 borderSize:0];
+//            }
             CGImageRef ximageref = CGImageRetain(avatar.CGImage);
             CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , ximageref);
             CGImageRelease(ximageref);

@@ -119,7 +119,7 @@
     int count=[_dataSource numberOfimageCollectionView:self];
     if(count >maxColumn*maxRow-1)
     {
-        int new_column=ceil((float)count/maxColumn);
+        int new_column=ceil((float)(count+1)/maxColumn);
         
         int new_height=new_column*(imageHeight+imageYmargin*2)+y_start_offset;
         if(new_height!=self.frame.size.height)
@@ -129,19 +129,19 @@
         int row=1;
         for(int row_idx=0;row_idx<=maxRow;row_idx++)
         {
-            if(editmode==YES){
-                if(maxColumn*row_idx-(count)>0)
+//            if(editmode==YES){
+//                if(maxColumn*row_idx-(count)>0)
+//                {
+//                    row=row_idx;
+//                    break;
+//                }
+//            }else{
+                if(maxColumn*row_idx-(count+1)>=0)
                 {
                     row=row_idx;
                     break;
                 }
-            }else{
-                if(maxColumn*row_idx-(count)>=0)
-                {
-                    row=row_idx;
-                    break;
-                }
-            }
+//            }
         }
         float new_height=imageYmargin+imageHeight+15+(imageYmargin+imageHeight+15)*(row-1);
         if(new_height!=self.frame.size.height)

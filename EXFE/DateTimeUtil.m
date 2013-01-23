@@ -340,11 +340,11 @@ static NSDate* s_Now = nil;
     NSString* abbrviation = [tz abbreviation];
     NSRange range = [abbrviation rangeOfString:@"GMT"];
     NSString* abbr = nil;
-    if (NSEqualRanges(range, NSMakeRange(0, 3))) {
+//    if (NSEqualRanges(range, NSMakeRange(0, 3))) {
         abbr = [NSString stringWithFormat:@"%+.2i:%.2i", hh, mm];
-    }else{
-        abbr = [NSString stringWithFormat:@"%+.2i:%.2i %@", hh, mm, abbr];
-    }
+//    }else{
+//        abbr = [NSString stringWithFormat:@"%+.2i:%.2i %@", hh, mm, abbrviation];
+//    }
     return abbr;
 }
 

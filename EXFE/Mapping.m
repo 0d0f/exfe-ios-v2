@@ -39,7 +39,7 @@
      @"created_at", @"created_at", 
      @"updated_at", @"updated_at",
      @"type", @"type", 
-     @"order", @"order",
+     @"order", @"a_order",
      @"unreachable", @"unreachable",
      @"status", @"status",
      nil];

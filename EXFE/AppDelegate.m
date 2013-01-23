@@ -58,13 +58,11 @@ static char handleurlobject;
     NSString *databaseName = DBNAME;
 #endif
     RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-    RKLogConfigureByName("*", RKLogLevelOff);
+//    RKLogConfigureByName("*", RKLogLevelOff);
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
 
-//    [[[RKClient sharedClient] requestQueue] setConcurrentRequestsLimit:2];
     [[[RKClient sharedClient] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
-//    [[[RKObjectManager sharedManager] requestQueue] setConcurrentRequestsLimit:1];
     [[[RKObjectManager sharedManager] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
     
     [APICrosses MappingCross];
@@ -77,10 +75,10 @@ static char handleurlobject;
     }
     NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
     
-    if(!ifdevicetokenSave && login==YES)
-    {
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
-    }
+//    if(!ifdevicetokenSave && login==YES)
+//    {
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
+//    }
     crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
 	self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
 
@@ -90,7 +88,7 @@ static char handleurlobject;
     [self.window makeKeyAndVisible];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
     if(login==YES)
-    [APIProfile LoadUsrWithUserId:userid delegate:self];
+        [APIProfile LoadUsrWithUserId:userid delegate:self];
     RKClient *client = [RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
     
@@ -116,7 +114,6 @@ static char handleurlobject;
         request.onDidFailLoadWithError=^(NSError *error){
         };
     }];
-    NSLog(@"load background image");
     return YES;
 }
 
@@ -189,10 +186,15 @@ static char handleurlobject;
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     
-    NSString * tokenAsString = [[[deviceToken description] 
+    NSString * tokenAsString = [[[deviceToken description]
                                  stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]]
                                 stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
+        return;
+    
     [[NSUserDefaults standardUserDefaults] setObject:tokenAsString forKey:@"udid"];
+    
     RKParams* rsvpParams = [RKParams params];
     [rsvpParams setValue:tokenAsString forParam:@"udid"];
     [rsvpParams setValue:tokenAsString forParam:@"push_token"];

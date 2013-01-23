@@ -36,6 +36,7 @@
 - (IBAction) Done:(id) sender;
 - (void) saveDate:(NSString*) time_word;
 - (void) setDateTime:(CrossTime*)crosstime;
+- (void) refreshUI;
 - (void) cleanDate;
 - (void) uselasttime;
 - (void) dateChanged:(id) sender;

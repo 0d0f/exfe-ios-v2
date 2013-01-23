@@ -31,7 +31,7 @@
 #import "EditCrossDelegate.h"
 
 
-@interface NewGatherViewController : UIViewController <EXImagesCollectionGatherDataSource, EXImagesCollectionGatherDelegate, MKMapViewDelegate, EXRSVPMenuDelegate,UIGestureRecognizerDelegate, EditCrossDelegate>{
+@interface NewGatherViewController : UIViewController <EXImagesCollectionGatherDataSource, EXImagesCollectionGatherDelegate, MKMapViewDelegate, EXRSVPMenuDelegate,UIGestureRecognizerDelegate,EditCrossDelegate,UIPickerViewDataSource,UIPickerViewDelegate>{
     
     UIScrollView *container;
 //    EXCurveImageView *dectorView;
@@ -60,6 +60,9 @@
     CGFloat exfeeSuggestHeight;
     EXRSVPMenuView *rsvpmenu;
     UIImageView *pannellight;
+    UIPickerView *identitypicker;
+    UIView *pickertoolbar;
+    NSMutableArray *orderedIdentities;
 }
 @property (retain,nonatomic) Cross* cross;
 @property (retain,readonly) NSMutableArray *exfeeIdentities;
@@ -92,8 +95,10 @@
 - (void)RSVPRemoveMenuView:(EXRSVPMenuView *) menu;
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation;
-
-- (void) addDefaultIdentity;
+- (void) setrsvp:(NSString*)status invitation:(Invitation*)_invitation;
+- (Invitation*) getMyInvitation;
+- (void) addDefaultIdentity:(int)idx;
+- (void) replaceDefaultIdentity:(int)idx;
 - (IBAction) Gather:(id) sender;
 
 #pragma mark EditCrossDelegate

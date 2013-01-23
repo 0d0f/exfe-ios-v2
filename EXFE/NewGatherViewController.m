@@ -211,6 +211,38 @@
     pannellight.image=[UIImage imageNamed:@"glassbar_light.png"];
     [self.view addSubview:pannellight];
     [self GlassBarlightAnimation];
+    identitypicker=[[UIPickerView alloc] initWithFrame:CGRectMake(0, screenframe.size.height-216-[UIApplication sharedApplication].statusBarFrame.size.height, self.view.frame.size.width, 216)];
+    identitypicker.dataSource=self;
+    identitypicker.delegate=self;
+    identitypicker.showsSelectionIndicator = YES;
+    [identitypicker setHidden:YES];
+    
+    [self.view addSubview:identitypicker];
+    
+//    UIView *test=[[UIView alloc] initWithFrame:CGRectMake(50, 50, 200, 200)];
+//    test.tag=1222;
+//    [test setBackgroundColor:[UIColor blackColor]];
+//    [self.view addSubview:test];
+    
+    pickertoolbar = [[UIView alloc] initWithFrame:CGRectMake(0, screenframe.size.height-216-[UIApplication sharedApplication].statusBarFrame.size.height-44, self.view.frame.size.width, 44)];
+    [pickertoolbar setBackgroundColor:[UIColor blackColor]];
+    pickertoolbar.tag=1200;
+
+    UIButton *pickdone=[UIButton buttonWithType:UIButtonTypeCustom];
+    [pickdone setFrame:CGRectMake(265, 7, 50, 30)];
+    [pickdone setTitle:@"Done" forState:UIControlStateNormal];
+    [pickdone.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+    [pickdone setTitleColor:[UIColor colorWithRed:25/255.0f green:25/255.0f blue:25/255.0f alpha:1] forState:UIControlStateNormal];
+    pickdone.titleLabel.shadowColor=[UIColor whiteColor];
+    pickdone.titleLabel.shadowOffset=CGSizeMake(0, 1);
+    
+    [pickdone setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)] forState:UIControlStateNormal];
+    [pickdone addTarget:self action:@selector(pickdone) forControlEvents:UIControlEventTouchUpInside];
+    [pickertoolbar addSubview:pickdone];
+
+    [self.view addSubview:pickertoolbar];
+    [pickertoolbar setHidden:YES];
+    
 }
 
 - (void) GlassBarlightAnimation{
@@ -249,9 +281,10 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self initUI];
     [self initData];
+    [self initUI];
     [self refreshUI];
+    [exfeeShowview reloadData];
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     gestureRecognizer.delegate=self;
@@ -276,6 +309,7 @@
 	NSArray *users = [[User objectsWithFetchRequest:request] retain];
     if(cross==nil){
         cross=[Cross object];
+        cross.cross_description=@"";
     }
     if(users!=nil && [users count] >0)
     {
@@ -285,7 +319,7 @@
     
 
     exfeeInvitations = [[NSMutableArray alloc] initWithCapacity:12];
-    cross=[Cross object];
+//    cross=[Cross object];
 //    cross.cross_description=@"Take some note";
 
     NSArray *cross_default_backgrounds=[[NSUserDefaults standardUserDefaults] objectForKey:@"cross_default_backgrounds"];
@@ -301,19 +335,30 @@
         cross.widget=[[NSMutableArray alloc] initWithCapacity:1];
     [cross.widget addObject:widget];
     
-    [self addDefaultIdentity];
     User *user=default_user;
     Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
 
     cross.title=[NSString stringWithFormat:@".X. with %@",default_identity.name];
 
     title_be_edit=NO;
+
+    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"a_order" ascending:YES]
+    ;
+    
+    orderedIdentities=[[NSMutableArray alloc] initWithCapacity:[default_user.identities count]];
+    NSArray *identities=[default_user.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+    for(Identity *identity in identities){
+        [orderedIdentities addObject:identity];
+    }
+    [self addDefaultIdentity:0];
+
 //    cross.exfee.invitations
 }
 
-- (void) addDefaultIdentity{
+- (void) addDefaultIdentity:(int)idx{
     User *user=default_user;
-    Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
+    Identity *default_identity=[orderedIdentities objectAtIndex:idx];
+//    [[user.identities allObjects] objectAtIndex:idx];
     if(user!=nil){
         Invitation *invitation=[Invitation object];
         invitation.rsvp_status=@"ACCEPTED";
@@ -326,6 +371,24 @@
         [exfeeInvitations addObject:invitation];
         [exfeeShowview reloadData];
     }
+}
+
+- (void) replaceDefaultIdentity:(int)idx{
+    User *user=default_user;
+    Identity *default_identity=[[user.identities allObjects] objectAtIndex:idx];
+    if(user!=nil){
+        Invitation *invitation=[Invitation object];
+        invitation.rsvp_status=@"ACCEPTED";
+        invitation.host=[NSNumber numberWithBool:YES];
+        invitation.mates=0;
+        invitation.identity=default_identity;
+        invitation.updated_by=default_identity;
+        invitation.updated_at=[NSDate date];
+        invitation.created_at=[NSDate date];
+        [exfeeInvitations replaceObjectAtIndex:0 withObject:invitation];
+        [exfeeShowview reloadData];
+    }
+    
 }
 
 - (void)dealloc {
@@ -342,6 +405,7 @@
     [dectorView release];
     [headview release];
     [pannellight release];
+    [orderedIdentities release]; 
 //    [btnBack release];
     [titleView release];
     
@@ -355,6 +419,14 @@
 //        [self showDescriptionFullContent: (descView.numberOfLines != 0)];
 //        return;
 //    }
+    if ((CGRectContainsPoint([identitypicker frame], location) && identitypicker.hidden==NO )|| (CGRectContainsPoint([pickertoolbar frame], location) && pickertoolbar.hidden==NO)){
+        return;
+    }
+    else{
+        [identitypicker setHidden:YES];
+        [pickertoolbar setHidden:YES];
+    }
+
     
     if (CGRectContainsPoint([titleView frame], location) || CGRectContainsPoint([descView frame], location)||
         CGRectContainsPoint([descView frame], location) || CGRectContainsPoint([descView frame], location)){
@@ -367,11 +439,8 @@
             }
         }
         [titleViewController setBackground:imgurl];
-//        timeViewController.gatherview=self;
-//        [titleViewController setDateTime:cross.time];
         [self presentModalViewController:titleViewController animated:YES];
         [titleViewController setCrossTitle:cross.title desc:cross.cross_description];
-
         [titleViewController release];
     }
 
@@ -387,7 +456,6 @@
     {
         [self ShowPlaceView:@"search"];
     }
-    
     //    if(exfeeShowview.editmode==YES){
     //        if (!CGRectContainsPoint([exfeeShowview frame], location)){
     //            [self setExfeeViewMode:NO];
@@ -474,24 +542,15 @@
 }
 
 - (IBAction) Gather:(id) sender{
-//    [self pullcontainviewDown];
-    
-//    if([crossdescription.text isEqualToString:@"Write some notes here."]){
-//        crossdescription.text=@"";
-//    }
-    
-    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
-    NSArray *orderedIdentities=[default_user.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+//    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"a_order" ascending:YES];
+//    NSArray *orderedIdentities=[default_user.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
   
     cross.by_identity=[orderedIdentities objectAtIndex:0];
-//    cross.title=crosstitle.text;
-//    cross.cross_description=crossdescription.text;
     if(cross.time==nil){
         cross.time=[CrossTime object];
         cross.time.begin_at=[EFTime object];
         cross.time.begin_at.timezone = [DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];
     }
-//    cross.time=datetime;
     Exfee *exfee=[Exfee object];
     
     for(Invitation *invitation in exfeeInvitations){
@@ -889,6 +948,7 @@
     }
     else{
         item.avatar = [UIImage imageNamed:@"portrait_default.png"];
+        
         if(identity.avatar_filename != nil) {
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(imgQueue, ^{
@@ -903,16 +963,6 @@
             dispatch_release(imgQueue);
         }
     }
-    //    item.isHost = [invitation.host boolValue];
-    //    item.mates = [invitation.mates intValue];
-    //    item.rsvp_status = invitation.rsvp_status;
-    //    NSString *name=identity.name;
-    //    if(name==nil)
-    //        name=identity.external_username;
-    //    if(name==nil)
-    //        name=identity.external_id;
-    //    item.name=name;
-    //[arr release];
     return item;
 }
 
@@ -956,7 +1006,10 @@
         Invitation *invitation =[arr objectAtIndex:index];
         
         if(app.userid ==[invitation.identity.connected_user_id intValue]){
-            [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Pending", nil]];
+            [identitypicker setHidden:NO];
+            [pickertoolbar setHidden:NO];
+
+//            [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Pending", nil]];
 
         }
         else{
@@ -1040,17 +1093,17 @@
 }
 
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu{
-    [self sendrsvp:@"ACCEPTED" invitation:menu.invitation];
+    [self setrsvp:@"ACCEPTED" invitation:menu.invitation];
     [self hideMenu];
 }
 
 - (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu{
-    [self sendrsvp:@"DECLINED" invitation:menu.invitation];
+    [self setrsvp:@"DECLINED" invitation:menu.invitation];
     [self hideMenu];
 }
 
 - (void)RSVPPendingMenuView:(EXRSVPMenuView *) menu{
-    [self sendrsvp:@"INTERESTED" invitation:menu.invitation];
+    [self setrsvp:@"INTERESTED" invitation:menu.invitation];
     [self hideMenu];
 }
 
@@ -1068,6 +1121,20 @@
 //    menu.invitation
 }
 
+- (void) setrsvp:(NSString*)status invitation:(Invitation*)_invitation{
+    int i=0;
+    for (Invitation *invitation in exfeeInvitations) {
+        if([invitation.identity.identity_id isEqualToNumber:_invitation.identity.identity_id])
+        {
+            ((Invitation*)[exfeeInvitations objectAtIndex:i]).rsvp_status=status;
+//            [exfeeInvitations removeObject:invitation];
+            [exfeeShowview reloadData];
+            return;
+        }
+        i++;
+    }
+    
+}
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
     //    NSError *error;
@@ -1091,7 +1158,6 @@
                     if(code)
                         if([code intValue]==200) {
                             [APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
-                            
                         }
                 }
                 //We got an error!
@@ -1144,6 +1210,61 @@
 }
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     NSLog(@"%@",error);
+}
+
+#pragma mark UIPickerviewDatasource methods
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)thePickerView numberOfRowsInComponent:(NSInteger)component {
+    return [default_user.identities count];
+}
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
+    return 200;
+    
+}
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
+    return 40;
+}
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
+    NSString *external_id=((Identity*)[orderedIdentities objectAtIndex:row]).external_id;
+    NSString *provider=((Identity*)[orderedIdentities objectAtIndex:row]).provider;
+    
+    CGRect rowFrame = CGRectMake(0.0f, 0.0f, 200, 40);
+    
+    UIView *rowview=[[[UIView alloc] initWithFrame:rowFrame] autorelease];
+    UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(30, 0,200-30,40)];
+    
+    label.text=external_id;
+    label.backgroundColor=[UIColor clearColor];
+    
+    rowview.backgroundColor=[UIColor clearColor];
+    [rowview addSubview:label];
+    [label release];
+    
+    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18.png",provider];
+    UIImage *icon=[UIImage imageNamed:iconname];
+    
+    UIImageView *imgprovider=[[UIImageView alloc] initWithFrame:CGRectMake(6, (40-18)/2, icon.size.width, icon.size.height)];
+    imgprovider.backgroundColor=[UIColor clearColor];
+    imgprovider.image=icon;
+    [rowview addSubview:imgprovider];
+    [imgprovider release];
+    return rowview;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
+    NSLog(@"select %i",row);
+}
+
+- (void) pickdone{
+    int idx=[identitypicker selectedRowInComponent:0];
+    [self replaceDefaultIdentity:idx];
+    [identitypicker setHidden:YES];
+    [pickertoolbar setHidden:YES];
 }
 
 @end
