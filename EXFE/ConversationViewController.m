@@ -109,6 +109,7 @@
             if(backimg == nil || [backimg isEqual:[NSNull null]]){
                 dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
                 dispatch_async(imgQueue, ^{
+                    dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
                     UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
@@ -121,11 +122,8 @@
                 dectorView.image = backimg;
             }
             flag = YES;
-            if (dectorView.hidden == YES){
-                dectorView.hidden = NO;
-            }
             if (flag == NO){
-                dectorView.hidden = YES;
+                dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
             }
         }
         [headerView addSubview:dectorView];

@@ -104,40 +104,17 @@
 
 - (void)setBannerimg:(UIImage *)image {
     if (bannerimg == image){
-        
+        return;
     }
     if (bannerimg != nil){
         [bannerimg release];
         bannerimg = nil;
         [self setNeedsDisplay];
     }
+    
+    bannerimg = image;
+    [bannerimg retain];
     if (image != nil) {
-        
-        
-        CGSize targetSize = CGSizeMake((320 - CARD_VERTICAL_MARGIN * 2) * [UIScreen mainScreen].scale, 44 * [UIScreen mainScreen].scale);
-                
-        //If scaleFactor is not touched, no scaling will occur
-        CGFloat scaleFactor = 1.0;
-        
-        //Deciding which factor to use to scale the image (factor = targetSize / imageSize)
-        if (image.size.width > targetSize.width || image.size.height > targetSize.height){
-            scaleFactor = MAX((targetSize.width / image.size.width), (targetSize.height / image.size.height));
-        }
-        
-        UIGraphicsBeginImageContext(targetSize);
-        
-        //Creating the rect where the scaled image is drawn in
-        CGRect rect = CGRectMake((targetSize.width / 2 - image.size.width / 2 * scaleFactor),
-                                 (0 - image.size.height * 198.0f / 495.0f * scaleFactor),
-                                 image.size.width * scaleFactor, image.size.height * scaleFactor);
-        
-        //Draw the image into the rect
-        [image drawInRect:rect];
-        
-        //Saving the image, ending image context
-        bannerimg = UIGraphicsGetImageFromCurrentImageContext();
-        [bannerimg retain];
-        UIGraphicsEndImageContext();
         [self setNeedsDisplay];
     }
 }
@@ -150,27 +127,33 @@
     barnnerRect = CGRectMake(b.origin.x + CARD_VERTICAL_MARGIN, b.origin.y + 8, b.size.width - CARD_VERTICAL_MARGIN * 2, 45);
     textbarRect = CGRectMake(b.origin.x + CARD_VERTICAL_MARGIN, barnnerRect.origin.y + barnnerRect.size.height, b.size.width - CARD_VERTICAL_MARGIN * 2, 28);
     
-    int paddingH = 6;
-    int avatarWidth = 22;
-    int avatarHeight = 22;
-    int titlePaddingV = 10;
+    CGFloat fh = CGRectGetWidth(barnnerRect) * 495 / 880.0f;
     
-    int convw = 0;
-    int conv_width = 36;
-    int conv_height = 33;
-    convRect = CGRectMake(CGRectGetMaxX(barnnerRect) - conv_width - 4, CGRectGetMidY(barnnerRect) - conv_height / 2 - 1, conv_width, conv_height );
+    bannerImgRect = CGRectMake(CGRectGetMinX(barnnerRect), CGRectGetMinY(barnnerRect) - fh * 0.4, CGRectGetWidth(barnnerRect), fh);
+    
+    CGFloat paddingH = 8;
+    CGFloat paddingHM = 6;
+    CGFloat avatarWidth = 22;
+    CGFloat avatarHeight = 22;
+    CGFloat titlePaddingV = 13;
+    
+    CGFloat convw = 0;
+    CGFloat conv_width = 36;
+    CGFloat conv_height = 33;
+    CGFloat titlePaddingRight = 4;
+    convRect = CGRectMake(CGRectGetMaxX(barnnerRect) - conv_width - titlePaddingRight, CGRectGetMidY(barnnerRect) - conv_height / 2 + 1, conv_width, conv_height );
     if (conversationCount > 0) {
-        convw = 44;
+        convw = conv_width + titlePaddingRight;
     }
-    titleRect = CGRectMake(CGRectGetMinX(barnnerRect) + paddingH, CGRectGetMinY(barnnerRect) + titlePaddingV, CGRectGetWidth(barnnerRect) - convw - paddingH, CGRectGetHeight(barnnerRect) - titlePaddingV * 2);
+    titleRect = CGRectMake(CGRectGetMinX(barnnerRect) + paddingH, CGRectGetMinY(barnnerRect) + titlePaddingV, CGRectGetWidth(barnnerRect) - convw - paddingH, CGRectGetHeight(barnnerRect) );
     
-    int textPaddingV = 6;
+    CGFloat textPaddingV = 4.5;
     timeRect = CGRectMake(textbarRect.origin.x + paddingH, textbarRect.origin.y + textPaddingV, 112, textbarRect.size.height - textPaddingV * 2);
     timeFadingRect = CGRectMake(CGRectGetMaxX(timeRect) - 12, CGRectGetMidY(timeRect) - 11, 20, 22);
     
     avatarRect = CGRectMake(CGRectGetMaxX(textbarRect) - avatarWidth - 3, CGRectGetMinY(textbarRect) + (CGRectGetHeight(textbarRect) - avatarHeight) / 2, avatarWidth, avatarHeight);
    
-    placeRect = CGRectMake(CGRectGetMaxX(timeRect) + paddingH, textbarRect.origin.y + textPaddingV, 140, textbarRect.size.height - textPaddingV * 2);
+    placeRect = CGRectMake(CGRectGetMaxX(timeRect) + paddingHM, textbarRect.origin.y + textPaddingV, 140, textbarRect.size.height - textPaddingV * 2);
     placeFadingRect = CGRectMake(CGRectGetMaxX(placeRect) - 20, CGRectGetMidY(placeRect) - 11, 20, 22);
     
    
@@ -188,8 +171,12 @@
     [[UIColor grayColor] setFill];
     UIRectFill(barnnerRect);
     if (bannerimg != nil){
-        [bannerimg drawInRect:barnnerRect];
+        [bannerimg drawInRect:bannerImgRect];
+    }else{
+        [[UIImage imageNamed:@"x_titlebg_default.jpg"] drawInRect:bannerImgRect];
     }
+    
+    
     if (avatar != nil) {
         [avatar drawInRect:avatarRect];
     }else{
@@ -210,8 +197,9 @@
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextSaveGState(context);
         CGContextSetTextMatrix(context, CGAffineTransformIdentity);
-        CGContextTranslateCTM(context, 0, (CGRectGetHeight(self.bounds)  - CGRectGetMidY(titleRect)));
+        CGContextTranslateCTM(context, 0, CGRectGetMidY(titleRect));
         CGContextScaleCTM(context, 1.0, -1.0);
+        CGContextTranslateCTM(context, 0, 0 - CGRectGetMidY(titleRect));
 
         CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor blackColor].CGColor);
         
@@ -219,6 +207,13 @@
         NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:title];
         [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
         [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)color.CGColor range:NSMakeRange(0,[textstring length])];
+        CTLineBreakMode lineBreakMode = kCTLineBreakByCharWrapping;
+        CTParagraphStyleSetting gathersetting[3] = {
+            {kCTParagraphStyleSpecifierLineBreakMode, sizeof(lineBreakMode), &lineBreakMode}
+        };
+        CTParagraphStyleRef pstyle = CTParagraphStyleCreate(gathersetting, 3);
+        [textstring addAttribute:(id)kCTParagraphStyleAttributeName value:(id)pstyle range:NSMakeRange(0,[textstring length])];
+        
         CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)textstring);
         CGMutablePathRef path = CGPathCreateMutable();
         CGPathAddRect(path, NULL, titleRect);
@@ -229,7 +224,6 @@
         CFRelease(theFrame);
         CGContextRestoreGState(context);
     }
-    //[title drawInRect:titleRect withFont:[UIFont fontWithName:@"HelveticaNeue" size:21] lineBreakMode:UILineBreakModeCharacterWrap alignment:UITextAlignmentLeft ];
     
     UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue-Light" size:15];
     // text info
@@ -266,11 +260,37 @@
             
             [[UIColor COLOR_WHITE] set];
             NSString * convCount = [NSString stringWithFormat:@"%u", conversationCount];
-            CGSize numSize = [convCount sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13]];
-            CGRect numRect = CGRectMake(CGRectGetMidX(convRect) - numSize.width / 2 - 4, CGRectGetMidY(convRect) - numSize.height / 2, numSize.width, numSize.height);
-            [convCount drawInRect:numRect withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
+            CGSize numSize = [convCount sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:13]];
+            CGRect numRect = CGRectMake(CGRectGetMidX(convRect) - numSize.width / 2 - 3.5, CGRectGetMidY(convRect) - numSize.height / 2, numSize.width, numSize.height);
+            
+            {
+                CGContextRef context = UIGraphicsGetCurrentContext();
+                CGContextSaveGState(context);
+                CGContextSetTextMatrix(context, CGAffineTransformIdentity);
+                CGContextTranslateCTM(context, 0, CGRectGetMidY(numRect));
+                CGContextScaleCTM(context, 1.0, -1.0);
+                CGContextTranslateCTM(context, 0, 0 - CGRectGetMidY(numRect));
+                
+                CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor COLOR_WA(0x77, 0xFF)].CGColor);
+                
+                CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 13.0, NULL);
+                NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:convCount];
+                [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
+                [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_WA(0xFF, 0xFF)].CGColor range:NSMakeRange(0,[textstring length])];
+                
+                CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)textstring);
+                CGMutablePathRef path = CGPathCreateMutable();
+                CGPathAddRect(path, NULL, numRect);
+                CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [textstring length]), path, NULL);
+                CFRelease(framesetter);
+                CFRelease(path);
+                CTFrameDraw(theFrame, context);
+                CFRelease(theFrame);
+                CGContextRestoreGState(context);
+            }
+            //[convCount drawInRect:numRect withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
         } else {
-            [[UIImage imageNamed:@"conversation_badge_full.png"]drawInRect:convRect];
+            [[UIImage imageNamed:@"xlist_conv_badge_many.png"]drawInRect:convRect];
         }
     }
     

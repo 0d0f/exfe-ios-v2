@@ -100,7 +100,7 @@
     CGFloat startY = 0 - HEADER_BACKGROUND_Y_OFFSET * scale;
     dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, HEADER_BACKGROUND_WIDTH * scale, HEADER_BACKGFOUND_HEIGHT * scale)];
     //dectorView=[[UIImageView alloc] initWithFrame:headview.bounds];
-    dectorView.image=[UIImage imageNamed:@"x_title_bg.png"];
+    dectorView.image=[UIImage imageNamed:@"x_titlebg_default.jpg"];
     
     UIView* dectorMask = [[UIView alloc] initWithFrame:headview.bounds];
     dectorMask.backgroundColor = [UIColor COLOR_WA(0x00, 0x55)];

@@ -44,8 +44,9 @@
 - (void)viewDidLoad
 {
     CGRect screenframe=[[UIScreen mainScreen] bounds];
-    screenframe.size.height-=20;
-    [self.view setFrame:screenframe];
+    CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
+    [self.view setFrame:appFrame];
+    self.view.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
 
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
 
@@ -54,9 +55,10 @@
                                                       forState:UIControlStateNormal
                                                     barMetrics:UIBarMetricsDefault];
     current_cellrow=-1;
-    self.tableView.backgroundColor=[UIColor colorWithRed:0xfa/255.0f green:0xfa/255.0f blue:0xfa/255.0f alpha:1.00f];
-    UIView *topview = [[UIView alloc] initWithFrame:CGRectMake(0, 0 - 480, 320, 480)];
-    topview.backgroundColor=[UIColor colorWithRed:0xfa/255.0f green:0xfa/255.0f blue:0xfa/255.0f alpha:1.00f];
+    self.tableView.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
+    //UIView *topview = [[UIView alloc] initWithFrame:CGRectOffset(screenframe, 0, CGRectGetHeight(screenframe))];
+    UIView *topview = [[UIView alloc] initWithFrame:CGRectMake(0, -480, 320, 480)];
+    topview.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
     [self.tableView addSubview:topview];
     [topview release];
     [super viewDidLoad];
@@ -588,7 +590,7 @@
             }
         }
         cell.title=cross.title;
-        cell.conversationCount=[cross.conversation_count intValue];
+        cell.conversationCount = [cross.conversation_count intValue];
         if(cross.place == nil || cross.place.title == nil || [cross.place.title isEqualToString:@""]){
             cell.place = @"";
         }else{

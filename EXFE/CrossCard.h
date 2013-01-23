@@ -30,6 +30,7 @@
     
     CGRect barnnerRect;
     CGRect textbarRect;
+    CGRect bannerImgRect;
     CGRect titleRect;
     CGRect avatarRect;
     CGRect timeRect;

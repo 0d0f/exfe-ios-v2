@@ -159,7 +159,7 @@
         CGFloat scale = CGRectGetWidth(headview.bounds) / 880.0f;
         CGFloat startY = 0 - 198 * scale;
         dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, 880 * scale, 495 * scale)];
-        dectorView.image=[UIImage imageNamed:@"x_title_bg.png"];
+        dectorView.image=[UIImage imageNamed:@"x_titlebg_default.jpg"];
         [headview addSubview:dectorView];
         
         UIView* dectorMask = [[UIView alloc] initWithFrame:headview.bounds];
@@ -562,34 +562,34 @@
     BOOL flag = NO;
     for(NSDictionary *widget in widgets) {
         if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-            NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
-            UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
-            if(backimg == nil || [backimg isEqual:[NSNull null]]){
-                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                dispatch_async(imgQueue, ^{
-                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
-
-                            dectorView.image = backimg;
-                            [self setLayoutDirty];
-                        }
+            NSString* url = [widget objectForKey:@"image"];
+            if (url && url.length > 0) {
+                NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+                UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
+                if(backimg == nil || [backimg isEqual:[NSNull null]]){
+                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                    dispatch_async(imgQueue, ^{
+                        dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+                        UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
+                                dectorView.image = backimg;
+                                //[self setLayoutDirty];
+                            }
+                        });
                     });
-                });
-                dispatch_release(imgQueue);
-            }else{
-                dectorView.image = backimg;
-                [self setLayoutDirty];
+                    dispatch_release(imgQueue);
+                }else{
+                    dectorView.image = backimg;
+                    //[self setLayoutDirty];
+                }
+                flag = YES;
+                break;
             }
-            flag = YES;
-            if (dectorView.hidden == YES){
-                dectorView.hidden = NO;
-            }
-            break;
         }
     }
     if (flag == NO){
-        dectorView.hidden = YES;
+        dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
     }
 }
 
