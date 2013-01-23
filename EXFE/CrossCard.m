@@ -135,7 +135,7 @@
     CGFloat paddingHM = 6;
     CGFloat avatarWidth = 22;
     CGFloat avatarHeight = 22;
-    CGFloat titlePaddingV = 13;
+    CGFloat titlePaddingV = 12;
     
     CGFloat convw = 0;
     CGFloat conv_width = 36;
@@ -201,7 +201,7 @@
         CGContextScaleCTM(context, 1.0, -1.0);
         CGContextTranslateCTM(context, 0, 0 - CGRectGetMidY(titleRect));
 
-        CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor blackColor].CGColor);
+        CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor COLOR_WA(0x00, 0x5A)].CGColor);
         
         CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL);
         NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:title];
@@ -260,7 +260,7 @@
             
             [[UIColor COLOR_WHITE] set];
             NSString * convCount = [NSString stringWithFormat:@"%u", conversationCount];
-            CGSize numSize = [convCount sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:13]];
+            CGSize numSize = [convCount sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:13]];
             CGRect numRect = CGRectMake(CGRectGetMidX(convRect) - numSize.width / 2 - 3.5, CGRectGetMidY(convRect) - numSize.height / 2, numSize.width, numSize.height);
             
             {
@@ -271,9 +271,9 @@
                 CGContextScaleCTM(context, 1.0, -1.0);
                 CGContextTranslateCTM(context, 0, 0 - CGRectGetMidY(numRect));
                 
-                CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor COLOR_WA(0x77, 0xFF)].CGColor);
+                CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor COLOR_WA(0x00, 0x5A)].CGColor);
                 
-                CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 13.0, NULL);
+                CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Medium"), 13.0, NULL);
                 NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:convCount];
                 [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
                 [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_WA(0xFF, 0xFF)].CGColor range:NSMakeRange(0,[textstring length])];

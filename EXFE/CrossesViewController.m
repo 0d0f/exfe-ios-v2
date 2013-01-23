@@ -8,21 +8,20 @@
 
 #import "CrossesViewController.h"
 #import "ProfileViewController.h"
-//#import "GatherViewController.h"
 #import "CrossDetailViewController.h"
 #import "APICrosses.h"
 #import "Cross.h"
 #import "Place.h"
 #import "Exfee.h"
 #import "Identity.h"
-#import "CrossTime.h"
-#import "EFTime.h"
-#import "CrossTime.h"
+//#import "CrossTime.h"
+//#import "EFTime.h"
 #import "Rsvp.h"
 #import "CrossCard.h"
 #import "ImgCache.h"
 #import "Util.h"
 #import "CrossTime+Helper.h"
+#import "EFTime+Helper.h"
 
 
 @interface CrossesViewController ()
@@ -598,32 +597,22 @@
         }
         
         if (cross.time != nil){
-            //cell.time = @"Sometime";
             NSString *time = [cross.time getTimeSingleLine];
-            [time retain];
+            //[time retain];
             if (time == nil || time.length == 0) {
                 cell.time = @"";
             }else{
-                //[time retain];
-                cell.time = [time copy];
+                NSString *tz = [cross.time.begin_at getTimeZoneString];
+                if (tz != nil && tz.length > 0) {
+                    cell.time = [NSString stringWithFormat:@"%@ %@", time, tz];
+                }else{
+                    cell.time = [NSString stringWithFormat:@"%@", time];;
+                }
             }
-            [time release];
+            //[time release];
         }else{
             cell.time = @"";
         }
-        
-        
-//        if([cross.time.begin_at.date isEqualToString:@""])
-//        {
-//            if([cross.time.origin isEqualToString:@""]){
-//                cell.time = @"";
-//            }else{
-//                cell.time = cross.time.origin;
-//            }
-//        }else{
-//            NSDictionary *humanable_date = [Util crossTimeToString:cross.time];
-//            cell.time = [humanable_date objectForKey:@"short"];
-//        }
         
         cell.avatar = nil;
         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];

@@ -355,12 +355,11 @@ static NSDate* s_Now = nil;
     NSTextCheckingResult* tcResult = [regex firstMatchInString:zoneString options:0 range:NSMakeRange(0, [zoneString length])];
     if (!NSEqualRanges([tcResult range], NSMakeRange(NSNotFound, 0))) {
         
-        NSString *matchedString = [zoneString substringWithRange:[tcResult range]];
-        NSLog(@"mached: %@", matchedString);
+        //NSString *matchedString = [zoneString substringWithRange:[tcResult range]];
+        //NSLog(@"mached: %@", matchedString);
         
         NSString * hstr = [zoneString substringWithRange:[tcResult rangeAtIndex:1]];
         NSString * mstr = [zoneString substringWithRange:[tcResult rangeAtIndex:2]];
-        NSLog(@"parsed: %@ %@", hstr, mstr);
         
         NSInteger hh = [hstr integerValue];
         NSInteger mm = [mstr integerValue];
