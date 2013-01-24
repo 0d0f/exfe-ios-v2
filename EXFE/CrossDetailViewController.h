@@ -28,7 +28,7 @@
 #import "EXWidgetTabBar.h"
 #import "EditCrossDelegate.h"
 
-@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, UIGestureRecognizerDelegate>{
+@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate>{
 
     UIScrollView *container;
     UIImageView *dectorView;
@@ -95,5 +95,5 @@
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation;
 
 - (void) toConversationAnimated:(BOOL)isAnimated;
-
+- (void)saveCrossUpdate;
 @end

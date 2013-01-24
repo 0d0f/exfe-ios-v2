@@ -1265,6 +1265,7 @@
 
 - (void) setTime:(CrossTime*)time{
     cross.time=time;
+    [self saveCrossUpdate];
     [self fillTime:time];
     [self relayoutUI];
 }
@@ -1356,6 +1357,111 @@
         }];
     }
 }
-     
+
+- (void)saveCrossUpdate{
+    
+    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Saving";
+    hud.mode=MBProgressHUDModeCustomView;
+    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+    [bigspin startAnimating];
+    hud.customView=bigspin;
+    [bigspin release];
+    
+    cross.by_identity=[self getMyInvitation].identity;
+    
+    NSError *error;
+    NSString *json = [[RKObjectSerializer serializerWithObject:cross mapping:[[APICrosses getCrossMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
+    if(!error){
+        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+        RKClient *client = [RKClient sharedClient];
+        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+        NSString *endpoint = [NSString stringWithFormat:@"/crosses/%u/edit?token=%@",[cross.cross_id intValue],app.accesstoken];
+        [client post:endpoint usingBlock:^(RKRequest *request){
+            request.method=RKRequestMethodPOST;
+            
+            request.params=[RKRequestSerialization serializationWithData:[json dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
+            request.onDidLoadResponse=^(RKResponse *response){
+                if (response.statusCode == 200) {
+                    NSDictionary *body=[response.body objectFromJSONData];
+                    NSDictionary *meta=[body objectForKey:@"meta"];
+                    if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]])
+                    {
+                        if([(NSNumber*)[meta objectForKey:@"code"] intValue]==200){
+                            NSDictionary *responsedict=[body objectForKey:@"response"];
+                            NSDictionary *crossdict=[responsedict objectForKey:@"cross" ];
+                            NSNumber *cross_id=[crossdict objectForKey:@"id"];
+                            if([cross_id intValue]==[self.cross.cross_id intValue])
+                            {
+                                [app CrossUpdateDidFinish:[cross.cross_id intValue]];
+                            }
+                        }else{
+                            [Util showErrorWithMetaDict:meta delegate:self];
+                        }
+                    }
+                }else {
+                    NSString *errormsg=@"Could not save this cross.";
+                    if(![errormsg isEqualToString:@""]){
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
+                        alert.tag=201; // 201 = Save Cross
+                        [alert show];
+                        [alert release];
+                    }
+                }
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            };
+            request.onDidFailLoadWithError=^(NSError *error){
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                NSString *errormsg=@"";
+                if(error.code==2)
+                    errormsg=@"A connection failure has occurred.";
+                else
+                    errormsg=@"Could not connect to the server.";
+                if(![errormsg isEqualToString:@""]){
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
+                    alert.tag=201; // 201 = Save Cross
+                    [alert show];
+                    [alert release];
+                }
+                
+                //                [Util showConnectError:error delegate:self];
+            };
+            request.delegate=self;
+        }];
+    }
+}
+
+#pragma mark UIAlertView methods
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    //tag 101: save cross
+    //tag 102: save exfee
+    if(buttonIndex==0)//cancel
+    {
+        if(alertView.tag==201){
+            [[Cross currentContext] rollback];
+            [self fillTime:cross.time];
+            [self fillPlace:cross.place];
+            [self relayoutUI];
+
+//            [self setTime:cross.time];
+//            [self setPlace:cross.place];
+//            crosstitle.text=cross.title;
+//            crossdescription.text=cross.cross_description;
+        }else if(alertView.tag==202){
+//            [[Exfee currentContext] rollback];
+//            [[Cross currentContext] rollback];
+//            [self reloadExfeeIdentities];
+        }
+    }else if(buttonIndex==1) //retry
+    {
+        if(alertView.tag==201){
+            [self saveCrossUpdate];
+        }else if(alertView.tag==202){
+//            [self saveExfeeUpdate];
+        }
+    }
+}
+
 
 @end

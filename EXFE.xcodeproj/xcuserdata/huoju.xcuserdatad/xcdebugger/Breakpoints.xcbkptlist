@@ -1646,19 +1646,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/EFTime+Helper.m"
-         timestampString = "379929423.111581"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "167"
-         endingLineNumber = "167"
-         landmarkName = "@implementation EFTime(Helper)"
-         landmarkType = "3">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/EFTime+Helper.m"
          timestampString = "379929945.359903"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
@@ -1945,13 +1932,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossDetailViewController.m"
-         timestampString = "380704805.678396"
+         timestampString = "380706109.496626"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1271"
-         endingLineNumber = "1271"
-         landmarkName = "-setTime:"
-         landmarkType = "5">
+         startingLineNumber = "1272"
+         endingLineNumber = "1272"
+         landmarkName = "@implementation CrossDetailViewController"
+         landmarkType = "3">
       </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>
