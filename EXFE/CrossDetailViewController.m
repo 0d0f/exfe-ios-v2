@@ -1272,6 +1272,7 @@
 
 - (void) setPlace:(Place*)place{
     cross.place=place;
+    [self saveCrossUpdate];
     [self fillPlace:place];
     [self relayoutUI];
 }

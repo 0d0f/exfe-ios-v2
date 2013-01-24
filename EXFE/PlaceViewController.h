@@ -87,4 +87,5 @@ typedef enum {
 - (void) setViewStyle:(EXPlaceViewStyle)style;
 - (void) clearplace;
 - (void) initPlaceView;
+- (BOOL) isPlaceNull;
 @end

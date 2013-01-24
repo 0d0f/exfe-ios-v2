@@ -315,18 +315,30 @@
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
     }
     else {
+        
         CGPoint touchPoint = [gestureRecognizer locationInView:map];
         CLLocationCoordinate2D touchMapCoordinate =
         [map convertPoint:touchPoint toCoordinateFromView:map];
         [map removeAnnotations: map.annotations];
-        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:touchMapCoordinate withTitle:@"Somewhere" description:@""];
+
+        if([place.title isEqualToString:@""]){
+            place.title=@"Somewhere";
+            [placeedit setPlaceTitleText:@"Somewhere"];
+        }
+        if([place.place_description isEqualToString:@""] )
+            [placeedit setPlaceDescText:@""];
+
+        
+        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:touchMapCoordinate withTitle:place.title description:place.place_description];
         if([[map annotations] count]==0)
             annotation.index=-2;
         [map addAnnotation:annotation];
         [annotation release];
         [clearbutton setHidden:YES];
-        [placeedit setPlaceTitleText:@"Somewhere"];
-        [placeedit setPlaceDescText:@""];
+        
+        place.lat=[NSString stringWithFormat:@"%f",annotation.coordinate.latitude];
+        place.lng=[NSString stringWithFormat:@"%f",annotation.coordinate.longitude];
+        place.provider=@"";
     }
 }
 
@@ -437,7 +449,11 @@
     isnotinputplace=NO;
     [_tableView reloadData];
 }
-
+- (BOOL) isPlaceNull{
+    if([place.title isEqualToString:@""] && [place.place_description isEqualToString:@""] && [place.lat isEqualToString:@""] && [place.lng isEqualToString:@""])
+        return YES;
+    return NO;
+}
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
     MKAnnotationView *aV;
     for (aV in views) {
@@ -617,7 +633,7 @@
             place.lat=[NSString stringWithFormat:@"%f",annotation.coordinate.latitude];
             place.lng=[NSString stringWithFormat:@"%f",annotation.coordinate.longitude];
             place.external_id=@"";
-            place.provider=@"exfe";
+            place.provider=@"";
 
             [self addPlaceEdit:place];
             location.latitude = annotation.coordinate.latitude;
@@ -633,7 +649,7 @@
         place.lat=@"";
         place.lng=@"";
         place.external_id=@"";
-        place.provider=@"exfe";
+        place.provider=@"";
     }else{
         NSDictionary *placedict=[_places objectAtIndex:index];
         place.title=[placedict objectForKey:@"title"];
