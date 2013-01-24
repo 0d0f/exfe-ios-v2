@@ -14,11 +14,11 @@
 #import "CrossTime.h"
 #import "EFTime.h"
 #import "DateTimeUtil.h"
-
+#import "EditCrossDelegate.h"
 
 @interface TimeViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>{
     IBOutlet UITextField *inputtimeword;
-    id delegate;
+    id<EditCrossDelegate> delegate;
     UITableView *_tableView;
     IBOutlet UIDatePicker *datepicker;
     NSArray* _times;
@@ -29,7 +29,6 @@
     BOOL datechanged;
     UITextField *timeInput;
     double editinginterval;
-    
 }
 @property (nonatomic,retain) id delegate;
 

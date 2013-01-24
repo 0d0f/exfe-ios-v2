@@ -23,6 +23,7 @@
 
 @implementation TitleDescEditViewController
 @synthesize delegate;
+@synthesize imgurl;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -143,8 +144,8 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
     }
 #endif
-    
-    // Do any additional setup after loading the view from its nib.
+
+    [self setBackground:imgurl];
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification
@@ -216,24 +217,24 @@
 }
 
 - (void) setBackground:(NSString *)imgurl{
-//    if(imgurl!=nil && ![imgurl isEqualToString:@""]){
-//            UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
-//            if(backimg == nil || [backimg isEqual:[NSNull null]]){
-//                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-//                dispatch_async(imgQueue, ^{
-//                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
-//                    dispatch_async(dispatch_get_main_queue(), ^{
-//                        if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
-//                            dectorView.image = backimg;
-//                            //[self setLayoutDirty];
-//                        }
-//                    });
-//                });
-//                dispatch_release(imgQueue);
-//            }else{
-//                dectorView.image = backimg;
-//            }
-//    }
+    if(imgurl!=nil && ![imgurl isEqualToString:@""]){
+            UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
+            if(backimg == nil || [backimg isEqual:[NSNull null]]){
+                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                dispatch_async(imgQueue, ^{
+                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
+                            dectorView.image = backimg;
+                            //[self setLayoutDirty];
+                        }
+                    });
+                });
+                dispatch_release(imgQueue);
+            }else{
+                dectorView.image = backimg;
+            }
+    }
 }
 
 - (void) dealloc{

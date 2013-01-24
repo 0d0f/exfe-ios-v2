@@ -23,9 +23,11 @@
     UITextView *descView;
     id delegate;
     float keyboardheight;
+    NSString *imgurl;
 }
 
 @property (nonatomic,retain) id delegate;
+@property (nonatomic,retain) NSString *imgurl;
 
 - (void) setCrossTitle:(NSString*)title desc:(NSString*)desc;
 - (void) done:(id)sender;

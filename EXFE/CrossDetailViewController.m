@@ -1264,9 +1264,6 @@
 }
 
 - (void) setTime:(CrossTime*)time{
-   // [APICrosses
-    
-    
     cross.time=time;
     [self fillTime:time];
     [self relayoutUI];
