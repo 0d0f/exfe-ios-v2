@@ -116,6 +116,7 @@
         timeZoneView= [[UILabel alloc] initWithFrame:CGRectMake(left + timeAbsView.frame.size.width + TIME_ABSOLUTE_RIGHT_MARGIN, timeAbsView.frame.origin.y, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 - timeAbsView.frame.size.width  - TIME_ABSOLUTE_RIGHT_MARGIN , TIME_ZONE_HEIGHT)];
         timeZoneView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         timeZoneView.backgroundColor = [UIColor clearColor];
+        timeZoneView.hidden = YES;
         [container addSubview:timeZoneView];
         
         placeTitleView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeAbsView.frame.origin.y + timeAbsView.frame.size.height + TIME_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_TITLE_HEIGHT)];
@@ -624,7 +625,6 @@
                     baseY = CGRectGetMaxY(timeZoneView.frame);
                 }
             }else if (timeAbsView.hidden == NO){
-                baseX = CGRectGetMaxX(timeAbsView.frame);
                 baseY = CGRectGetMaxY(timeAbsView.frame);
             }
         }

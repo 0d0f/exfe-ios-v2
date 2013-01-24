@@ -42,26 +42,24 @@
     [super tearDown];
 }
 
-- (void)testExample
+- (void)testOnce
 {
-    
-//    NSDate* today = [NSDate date];
-//    NSDate* target = [NSDate dateWithTimeInterval:-1 sinceDate:today];
-//    NSDateFormatter* fmt = [[NSDateFormatter alloc] init];
-//    EFTime* eftime = [EFTime object];
-//    [fmt setDateFormat:@"yyyy-MM-dd"];
-//    eftime.date = [fmt stringFromDate:target];
-//    [fmt setDateFormat:@"HH:mm:ss"];
-//    eftime.time = [fmt stringFromDate:target];
-//    eftime.timezone = [DateTimeUtil timezoneString: fmt.timeZone];  
-    
-//    EFTime* eftime = [EFTime object];
-//    eftime.date = @"2013-01-12";
-//    eftime.time = @"14:20:04";
-//    eftime.timezone = @"+08:00 CST";
-//
-//    STAssertEqualObjects([eftime getHumanReadableString], @"2:20PM Sat, Jan 12", @"Date time");
-    
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    [fmt setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+    NSDate *now = [fmt dateFromString:@"2013-01-13 08:41:00 +0800"];
+    NSDate *then = [NSDate dateWithTimeInterval:20 * 3600 sinceDate:now];
+    NSLog(@"%@", [fmt stringFromDate:now]);
+    NSLog(@"%@", [fmt stringFromDate:then]);
+    int a = [DateTimeUtil daysWithinEraFromDate:now toDate:then];
+    NSLog(@"fun1: %i by offset", a);
+    int b = [DateTimeUtil daysWithinEraFromDate:now toDate:then baseTimeZone:[NSTimeZone localTimeZone]];
+    NSLog(@"fun2: %i %@", b, [NSTimeZone localTimeZone]);
+    int c = [DateTimeUtil daysWithinEraFromDate:now toDate:then baseTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    NSLog(@"fun3: %i UTC", c);
+    int d = [DateTimeUtil daysWithinEraFromDate:now toDate:then baseTimeZone:[NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+    NSLog(@"fun4: %i Asia/Shanghai", d );
+    int e = [DateTimeUtil daysWithinEraFromDate:now toDate:then baseTimeZone:[NSTimeZone timeZoneWithName:@"PST8PDT"]];
+    NSLog(@"fun4: %i PST8PDT", e );
     STAssertTrue(YES, @"ok");
     
     //STFail(@"Unit tests are not implemented yet in EXFETests");
@@ -75,20 +73,10 @@
     [DateTimeUtil setNow:now];
 }
 
-- (void)checkTimeTile:(CrossTime*)xt with:(NSString*)expected description:(NSString*)desc{
-    STAssertEqualObjects([xt getTimeTitle], expected, desc);
-}
-
-- (void)checkTimeDescription:(CrossTime*)xt with:(NSString*)expected description:(NSString*)desc{
-    STAssertEqualObjects([xt getTimeDescription], expected, desc);
-}
-
-- (void)checkTimeSingleLine:(CrossTime*)xt with:(NSString*)expected description:(NSString*)desc{
-    STAssertEqualObjects([xt getTimeSingleLine], expected, desc);
-}
-
 - (void)testThisYearFullDateTime
 {
+    [self setNow:@"2013-01-12 14:23:05"];
+    
     EFTime* eftime = [EFTime object];
     eftime.date = @"2013-01-12";
     eftime.time = @"06:20:04";
@@ -99,6 +87,8 @@
 
 - (void)testLastYearFullDateTime
 {
+    [self setNow:@"2013-01-12 14:23:05"];
+    
     EFTime* eftime = [EFTime object];
     eftime.date = @"2012-01-12";
     eftime.time = @"06:20:04";
@@ -399,6 +389,30 @@
     STAssertEqualObjects([eftime getTimeZoneString], @"+09:00 JST", @"TimeZone");
 }
 
+- (void)testEFTimeExtendSuite
+{
+    [self setNow:@"2013-01-12 14:23:05"];
+    
+    EFTime *eftime = [EFTime object];
+    eftime.timezone = @"+08:00 CST";
+    
+    // Valid Date & Time
+    eftime.date = @"2013-01-12";
+    eftime.date_word = @"";
+    eftime.time = @"06:23:00 +0000";
+    eftime.time_word = @"";
+    STAssertEqualObjects([eftime getHumanReadableString], @"2:23PM Sat, Jan 12", @"Title");
+    STAssertEqualObjects([eftime getTimeZoneString], @"", @"TimeZone");
+    
+    // Valid Date & Time
+    eftime.date = @"";
+    eftime.date_word = @"";
+    eftime.time = @"14:23:00 +0800";
+    eftime.time_word = @"";
+    STAssertEqualObjects([eftime getHumanReadableString], @"2:23PM", @"Title");
+    STAssertEqualObjects([eftime getTimeZoneString], @"", @"TimeZone");
+}
+
 - (void)testXRelativeTimeFullSuite
 {
     [self setNow:@"2013-01-12 14:23:05"];
@@ -629,6 +643,8 @@
     STAssertEqualObjects([xt getTimeDescription], @"Fri, Jan 11", @"Description");
     STAssertEqualObjects([xt getTimeSingleLine], @"Fri, Jan 11", @"One Line");
 }
+
+
 
 
 @end

@@ -21,6 +21,7 @@
 + (NSDictionary*)datetimeTemplate:(NSUInteger)type;
 
 + (NSInteger)daysWithinEraFromDate:(NSDate *) startDate toDate:(NSDate *) endDate;
++ (NSInteger)daysWithinEraFromDate:(NSDate *) startDate toDate:(NSDate *) endDate baseTimeZone:(NSTimeZone*)tz;
 + (BOOL)isSameTimezone:(NSTimeZone*) timezoneA with:(NSTimeZone*)timezoneB;
 + (NSDateComponents*) convert:(NSDateComponents*)comp toTimeZone:(NSTimeZone*)timezone;
 + (NSString*) GetRelativeTime:(NSDateComponents*)targetTime format:(int)type;
@@ -30,6 +31,7 @@
 
 + (NSString*) timezoneString:(NSTimeZone*)tz;
 + (NSInteger) secondsOffsetFromGMT:(NSString*)zoneString;
++ (NSString*) ThreeLettersAbbr:(NSTimeZone*)tz;
 
 
 @end

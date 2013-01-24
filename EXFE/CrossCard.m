@@ -163,19 +163,11 @@
     CGRect b = [self bounds];
     // Rect caculation
     
-    // backgound
-    [[UIColor blackColor] setFill];
-    UIRectFill(b);
-    
-    // barnner
-    [[UIColor grayColor] setFill];
-    UIRectFill(barnnerRect);
     if (bannerimg != nil){
         [bannerimg drawInRect:bannerImgRect];
     }else{
         [[UIImage imageNamed:@"x_titlebg_default.jpg"] drawInRect:bannerImgRect];
     }
-    
     
     if (avatar != nil) {
         [avatar drawInRect:avatarRect];

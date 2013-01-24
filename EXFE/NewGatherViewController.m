@@ -859,7 +859,6 @@
                     baseY = CGRectGetMaxY(timeZoneView.frame);
                 }
             }else if (timeAbsView.hidden == NO){
-                baseX = CGRectGetMaxX(timeAbsView.frame);
                 baseY = CGRectGetMaxY(timeAbsView.frame);
             }
         }
