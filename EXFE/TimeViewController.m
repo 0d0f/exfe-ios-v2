@@ -287,6 +287,7 @@
     if(datechanged==YES)
         [self saveDate:nil];
     [self dismissModalViewControllerAnimated:YES];
+//    
 }
 
 - (void) Close{
@@ -349,6 +350,7 @@
     eftime.date_word=@"";
     eftime.timezone=eftimezone;
     crosstime.begin_at=eftime;
+//    [delegate setTime:crosstime];
     [delegate setTime:crosstime];
 }
 
