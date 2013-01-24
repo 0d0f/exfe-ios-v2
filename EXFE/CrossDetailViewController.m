@@ -9,7 +9,6 @@
 #import "CrossDetailViewController.h"
 #import "ConversationViewController.h"
 #import "Util.h"
-#import "EFTime.h"
 #import "ImgCache.h"
 #import "MapPin.h"
 #import "Place+Helper.h"
@@ -23,7 +22,7 @@
 #define SMALL_SLOT                      (5)
 
 #define DECTOR_HEIGHT                    (88)
-#define DECTOR_HEIGHT_EXTRA              (LARGE_SLOT)
+#define DECTOR_HEIGHT_EXTRA              (15)
 #define DECTOR_MARGIN                    (SMALL_SLOT)
 #define OVERLAP                          (DECTOR_HEIGHT)
 #define CONTAINER_TOP_MARGIN             (DECTOR_HEIGHT - OVERLAP)
@@ -116,6 +115,7 @@
         timeZoneView= [[UILabel alloc] initWithFrame:CGRectMake(left + timeAbsView.frame.size.width + TIME_ABSOLUTE_RIGHT_MARGIN, timeAbsView.frame.origin.y, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 - timeAbsView.frame.size.width  - TIME_ABSOLUTE_RIGHT_MARGIN , TIME_ZONE_HEIGHT)];
         timeZoneView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         timeZoneView.backgroundColor = [UIColor clearColor];
+        timeZoneView.hidden = YES;
         [container addSubview:timeZoneView];
         
         placeTitleView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeAbsView.frame.origin.y + timeAbsView.frame.size.height + TIME_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_TITLE_HEIGHT)];
@@ -157,7 +157,7 @@
     
     
     
-    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(f.origin.x + f.size.width * 0.8,  f.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
+    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetMaxX(f) - 90,  f.origin.y +  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
     headerView.backgroundColor = [UIColor COLOR_WA(0x7F, 0xFF)];
     {
         CGFloat scale = CGRectGetWidth(headerView.bounds) / HEADER_BACKGROUND_WIDTH;
@@ -181,20 +181,24 @@
         titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         [headerView addSubview:titleView];
         
-        UIButton * widgetTrigger = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        widgetTrigger.frame = CGRectMake(CGRectGetMaxX(headerView.frame) - 48 - 5, CGRectGetMaxY(headerView.frame) - 24 - 5, 48, 24);
-        [widgetTrigger addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
-        [headerView addSubview:widgetTrigger];
+        CGFloat tabW = 60 * 2;
+        CGFloat tabH = 30;
+        tabBar = [[EXTabBar alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headerView.frame) - tabW - 5, CGRectGetMaxY(headerView.frame) - tabH - 2, tabW, tabH)];
+        NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30"], [UIImage imageNamed:@"widget_conv_30.png"], nil];
+        tabBar.widgets = imgs;
+        tabBar.contents = [NSArray arrayWithObjects:@"", @"5", @"", nil];
+        [tabBar addTarget:self action:@selector(widgetClick:)];
+        [headerView addSubview:tabBar];
     }
     [self.view addSubview:headerView];
     
     
-    tabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 45, CGRectGetWidth(f), 59)];
-    NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"x_navbarbtn.png"], [UIImage imageNamed:@"x_navbarbtn.png"], [UIImage imageNamed:@"x_navbarbtn.png"], nil];
-    tabBar.widgets = imgs;
-    [tabBar addTarget:self action:@selector(widgetJump:with:)];
-    tabBar.hidden = YES;
-    [self.view  addSubview:tabBar];
+    widgetTabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(f), 103) withCurveFrame:CGRectMake(CGRectGetWidth(f) - 90, 103 - 15, 78, 15)];
+    NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"dock_x_30refl.png"], [UIImage imageNamed:@"dock_conv_30refl.png"], nil];
+    widgetTabBar.widgets = imgs;
+    [widgetTabBar addTarget:self action:@selector(widgetJump:with:)];
+    widgetTabBar.hidden = YES;
+    [self.view  addSubview:widgetTabBar];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
     [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
@@ -208,7 +212,8 @@
 
 - (void)widgetJump:(id)sender with:(NSNumber*)index
 {
-    tabBar.hidden = YES;
+    widgetTabBar.hidden = YES;
+    tabBar.hidden = NO;
     NSInteger idx = [index integerValue];
     if (idx == 0){
         
@@ -219,14 +224,17 @@
 }
 
 - (void)widgetClick:(id)sender{
-     tabBar.hidden = NO;
-}
-
-- (void)animateWidget:(UIView*)view to:(CGPoint)endPoint{
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
-    [view setCenter:endPoint];
-    [UIView commitAnimations];
+    widgetTabBar.alpha = 0;
+    widgetTabBar.hidden = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        widgetTabBar.alpha = 1;
+        tabBar.alpha = 0;
+        tabBar.frame = CGRectOffset(tabBar.frame, 0, -10);
+    } completion:^(BOOL finished){
+        tabBar.hidden = YES;
+        tabBar.alpha = 1;
+        tabBar.frame = CGRectOffset(tabBar.frame, 0, 10);
+    }];
 }
 
 - (void)moveWidget:(UIView*)view to:(CGPoint)endPoint{
@@ -289,6 +297,7 @@
     [titleView release];
     [headerView release];
     
+    [widgetTabBar release];
     [tabBar release];
     
     [super dealloc];
@@ -624,7 +633,6 @@
                     baseY = CGRectGetMaxY(timeZoneView.frame);
                 }
             }else if (timeAbsView.hidden == NO){
-                baseX = CGRectGetMaxX(timeAbsView.frame);
                 baseY = CGRectGetMaxY(timeAbsView.frame);
             }
         }
@@ -1218,16 +1226,16 @@
     [crossViewController refreshTableViewWithCrossId:[cross.cross_id intValue]];
     
     // animation
-    if (isAnimated){
-        [UIView beginAnimations:@"View Flip" context:nil];
-        [UIView setAnimationDuration:0.80];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        [UIView setAnimationTransition:
-         UIViewAnimationTransitionFlipFromRight
-                               forView:self.navigationController.view cache:NO];
-        [UIView commitAnimations];
-        
-    }
+//    if (isAnimated){
+//        [UIView beginAnimations:@"View Flip" context:nil];
+//        [UIView setAnimationDuration:0.80];
+//        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+//        [UIView setAnimationTransition:
+//         UIViewAnimationTransitionFlipFromRight
+//                               forView:self.navigationController.view cache:NO];
+//        [UIView commitAnimations];
+//        
+//    }
     [self.navigationController pushViewController:conversationView animated:!isAnimated];
     [conversationView release];
 }

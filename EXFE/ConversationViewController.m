@@ -96,7 +96,7 @@
     [gestureRecognizer release];
     
     CGFloat width = CGRectGetWidth(self.view.bounds);
-    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, width, 59) withCurveFrame:CGRectMake(0 + width * 0.8, DECTOR_HEIGHT, 40, 15)];
+    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, width, 59) withCurveFrame:CGRectMake(CGRectGetMaxX(f) - 90,  f.origin.y +  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA)];
     headerView.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     {
         CGFloat scale = CGRectGetWidth(headerView.bounds) / HEADER_BACKGROUND_WIDTH;
@@ -145,25 +145,24 @@
         [headerView addSubview:titleView];
         titleView.text = cross_title;
         
-        UIImage *chatimg = [UIImage imageNamed:@"x_navbarbtn.png"];
-        UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [chatButton setTitle:@"Chat" forState:UIControlStateNormal];
-        [chatButton setImage:chatimg forState:UIControlStateNormal];
-        chatButton.frame = CGRectMake(CGRectGetMaxX(headerView.frame) - chatimg.size.width - 5, CGRectGetMaxY(headerView.frame) - chatimg.size.height - 5, chatimg.size.width, chatimg.size.height);
-        [chatButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
-        //toCross
-        [chatButton addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
-        [headerView addSubview:chatButton];
+        CGFloat tabW = 60 * 2;
+        CGFloat tabH = 30;
+        tabBar = [[EXTabBar alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headerView.frame) - tabW - 5, CGRectGetMaxY(headerView.frame) - tabH - 2, tabW, tabH)];
+        NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_conv_30.png"], [UIImage imageNamed:@"widget_x_30"], nil];
+        tabBar.widgets = imgs;
+        tabBar.contents = [NSArray arrayWithObjects:@"5", @"", @"", nil];
+        [tabBar addTarget:self action:@selector(widgetClick:)];
+        [headerView addSubview:tabBar];
         
     }
     [self.view addSubview:headerView];
     
-    tabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(f), 59)];
-    NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"x_navbarbtn.png"], [UIImage imageNamed:@"x_navbarbtn.png"], [UIImage imageNamed:@"x_navbarbtn.png"], nil];
-    tabBar.widgets = imgs;
-    [tabBar addTarget:self action:@selector(widgetJump:with:)];
-    tabBar.hidden = YES;
-    [self.view  addSubview:tabBar];
+    widgetTabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, -44, CGRectGetWidth(f), 103)  withCurveFrame:CGRectMake(CGRectGetWidth(f) - 90, 103 - 15, 78, 15)];
+    NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"dock_conv_30refl.png"], [UIImage imageNamed:@"dock_x_30refl.png"],  nil];
+    widgetTabBar.widgets = imgs;
+    [widgetTabBar addTarget:self action:@selector(widgetJump:with:)];
+    widgetTabBar.hidden = YES;
+    [self.view  addSubview:widgetTabBar];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
@@ -190,7 +189,8 @@
 - (void)widgetJump:(id)sender with:(NSNumber*)index
 {
     NSInteger idx = [index integerValue];
-    tabBar.hidden = YES;
+    widgetTabBar.hidden = YES;
+    tabBar.hidden = NO;
     if (idx == 0){
         
     }else
@@ -200,38 +200,25 @@
 }
 
 - (void)widgetClick:(id)sender{
-    tabBar.hidden = NO;
-    //    UIView * view = sender;
-    //
-    //    CGPoint endPoint;
-    //    if (isWidgetShown) {
-    //        endPoint = CGPointMake(CGRectGetMaxX(dectorView.frame) - 48 / 2 - 5, CGRectGetMaxY(dectorView.frame) - 24 / 2 - 5);
-    //    }else{
-    //        endPoint = CGPointMake(CGRectGetMidX(dectorView.frame), CGRectGetMidY(dectorView.frame));
-    //    }
-    //    isWidgetShown = !isWidgetShown;
-    //    [self animateWidget:view to:endPoint];
+    
+    widgetTabBar.alpha = 0;
+    widgetTabBar.hidden = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        widgetTabBar.alpha = 1;
+        tabBar.alpha = 0;
+        tabBar.frame = CGRectOffset(tabBar.frame, 0, -10);
+    } completion:^(BOOL finished){
+        tabBar.hidden = YES;
+        tabBar.alpha = 1;
+        tabBar.frame = CGRectOffset(tabBar.frame, 0, 10);
+    }];
 }
 
 - (void) toCross{
-    [UIView beginAnimations:@"View Flip" context:nil];
-    [UIView setAnimationDuration:0.80];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [UIView setAnimationTransition:
-     UIViewAnimationTransitionFlipFromLeft
-                           forView:self.navigationController.view cache:NO];
-    [self.navigationController popViewControllerAnimated:NO];
-    [UIView commitAnimations];
+    [self.navigationController popViewControllerAnimated:YES];
 }
+
 - (void) toHome{
-//    [UIView beginAnimations:@"View Flip" context:nil];
-//    [UIView setAnimationDuration:0.80];
-//    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-//    [UIView setAnimationTransition:
-//     UIViewAnimationTransitionFlipFromLeft
-//                           forView:self.navigationController.view cache:NO];
-//    [self.navigationController popToRootViewControllerAnimated:NO];
-//    [UIView commitAnimations];
     [self.navigationController popToRootViewControllerAnimated:YES];
     
 }
@@ -266,6 +253,8 @@
     [dectorView release];
     [titleView release];
     [headerView release];
+    [widgetTabBar release];
+    [tabBar release];
     [super dealloc];
 }
 

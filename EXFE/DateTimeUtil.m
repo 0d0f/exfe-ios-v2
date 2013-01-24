@@ -62,8 +62,11 @@ static NSDate* s_Now = nil;
 }
 
 + (NSInteger)daysWithinEraFromDate:(NSDate *) startDate toDate:(NSDate *) endDate{
+    return [DateTimeUtil daysWithinEraFromDate:startDate toDate:endDate baseTimeZone:[NSTimeZone localTimeZone]];
+}
+
++ (NSInteger)daysWithinEraFromDate:(NSDate *) startDate toDate:(NSDate *) endDate baseTimeZone:(NSTimeZone*)tz{
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSTimeZone* tz = [NSTimeZone localTimeZone];
     NSInteger offset = tz.secondsFromGMT;
     NSDate *sDate = [NSDate dateWithTimeInterval:offset sinceDate:startDate];
     NSDate *eDate = [NSDate dateWithTimeInterval:offset sinceDate:endDate];
@@ -72,6 +75,15 @@ static NSDate* s_Now = nil;
     [gregorian release];
     return endDay - startDay;
 }
+
+//+ (NSInteger)daysWithinEraFromDate:(NSDate *) startDate toDate:(NSDate *) endDate baseTimeZone:(NSTimeZone*)tz{
+//    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+//    [gregorian setTimeZone:tz];
+//    NSInteger startDay = [gregorian ordinalityOfUnit:NSDayCalendarUnit inUnit: NSEraCalendarUnit forDate:startDate];
+//    NSInteger endDay = [gregorian ordinalityOfUnit:NSDayCalendarUnit inUnit: NSEraCalendarUnit forDate:endDate];
+//    [gregorian release];
+//    return endDay - startDay;
+//}
 
 + (BOOL)isSameTimezone:(NSTimeZone*) timezoneA with:(NSTimeZone*)timezoneB{
     return [timezoneA secondsFromGMT] == [timezoneB secondsFromGMT];;
@@ -332,25 +344,26 @@ static NSDate* s_Now = nil;
     return @""; //ERROR
 }
 
++ (NSString*) ThreeLettersAbbr:(NSTimeZone*)tz{
+    NSDate* date = [NSDate date];
+    NSDateFormatter* fmt = [[NSDateFormatter alloc] init];
+    [fmt setTimeZone:tz];
+    [fmt setDateFormat:@"z"];
+    NSString * abbr = [fmt stringFromDate:date];
+    NSLog(@"%@", abbr);
+    return abbr;
+}
 
 + (NSString*) timezoneString:(NSTimeZone*)tz{
     NSInteger seconds = [tz secondsFromGMT];
     NSInteger hh = seconds / 3600;
     NSInteger mm = (seconds - hh * 3600) / 60;
-    NSString* abbrviation = [tz abbreviation];
-    NSRange range = [abbrviation rangeOfString:@"GMT"];
-    NSString* abbr = nil;
-//    if (NSEqualRanges(range, NSMakeRange(0, 3))) {
-        abbr = [NSString stringWithFormat:@"%+.2i:%.2i", hh, mm];
-//    }else{
-//        abbr = [NSString stringWithFormat:@"%+.2i:%.2i %@", hh, mm, abbrviation];
-//    }
-    return abbr;
+    return [NSString stringWithFormat:@"%+.2i:%.2i", hh, mm]; //ISO 8601
 }
 
 + (NSInteger) secondsOffsetFromGMT:(NSString*)zoneString{
     NSError *error = NULL;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([+-]\\d{1,2}):?(\\d{2})" options:NSRegularExpressionCaseInsensitive error:&error];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([+-]\\d{1,2}):?(\\d{2})" options:NSRegularExpressionCaseInsensitive error:&error]; // BOth ISO 8601 and RFC 822
     
     NSTextCheckingResult* tcResult = [regex firstMatchInString:zoneString options:0 range:NSMakeRange(0, [zoneString length])];
     if (!NSEqualRanges([tcResult range], NSMakeRange(NSNotFound, 0))) {

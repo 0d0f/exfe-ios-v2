@@ -22,7 +22,11 @@
 
 - (BOOL)isTimeWithTimeZone{
     if ([self hasTime]) {
+        NSError *error = NULL;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([+-]\\d{1,2})(\\d{2})" options:NSRegularExpressionCaseInsensitive error:&error];
         
+        NSTextCheckingResult* tcResult = [regex firstMatchInString:self.time options:0 range:NSMakeRange(0, [self.time length])];
+        return [tcResult range].length > 0;
     }
     return NO;
 }
@@ -85,10 +89,16 @@
 - (NSDateComponents*)getDateComponent:(NSTimeZone*)localTimeZone{
     if ([self hasDate]) {
         if ([self hasTime]) {
-            NSString * fullDateTimeStr = [NSString stringWithFormat:@"%@ %@", self.date, self.time];
+            NSString *template = nil;
+            if ([self isTimeWithTimeZone]) {
+                template = @"%@ %@";
+            }else{
+                template = @"%@ %@ +0000";
+            }
+            NSString * fullDateTimeStr = [NSString stringWithFormat:template, self.date, self.time];
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+            //[formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             NSDate *datePartial = [formatter dateFromString:fullDateTimeStr];
             [formatter release];
             NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
@@ -112,10 +122,16 @@
         }
     }else{
         if ([self hasTime]){
-            NSString* fullTimeStr = [NSString stringWithFormat:@"2013-01-01 %@", self.time];
+            NSString *template = nil;
+            if ([self isTimeWithTimeZone]) {
+                template = @"2013-01-01 %@";
+            }else{
+                template = @"2013-01-01 %@ +0000";
+            }
+            NSString* fullTimeStr = [NSString stringWithFormat:template, self.time];
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+            //[formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             NSDate *timePartial = [formatter dateFromString:fullTimeStr];
             [formatter release];
             NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];

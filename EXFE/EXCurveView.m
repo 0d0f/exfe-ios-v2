@@ -34,9 +34,9 @@
     
     CGFloat x0 = (CurveFrame.origin.x + CurveFrame.size.width * 0.0f);
     CGFloat y0 = (CurveFrame.origin.y + CurveFrame.size.height * 0.0f);
-    CGFloat x1 = (CurveFrame.origin.x + CurveFrame.size.width * 0.7f);
+    CGFloat x1 = (CurveFrame.origin.x + 32);
     CGFloat y1 = (CurveFrame.origin.y + CurveFrame.size.height * 0.0f);
-    CGFloat x2 = (CurveFrame.origin.x + CurveFrame.size.width * 0.3f);
+    CGFloat x2 = (CurveFrame.origin.x + 78 - 32);
     CGFloat y2 = (CurveFrame.origin.y + CurveFrame.size.height * 1.0f);
     CGFloat x3 = (CurveFrame.origin.x + CurveFrame.size.width * 1.0f);
     CGFloat y3 = (CurveFrame.origin.y + CurveFrame.size.height * 1.0f);
