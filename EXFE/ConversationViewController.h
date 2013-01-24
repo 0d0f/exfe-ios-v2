@@ -20,6 +20,7 @@
 #import "CTUtil.h"
 #import "CrossesViewController.h"
 #import "EXWidgetTabBar.h"
+#import "EXTabBar.h"
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20
@@ -40,7 +41,8 @@
     UIImageView *dectorView;
     UIButton *btnBack;
     UILabel *titleView;
-    EXWidgetTabBar *tabBar;
+    EXWidgetTabBar *widgetTabBar;
+    EXTabBar *tabBar;
     
     NSDictionary *headImgDict;
     ConversationInputAccessoryView *inputaccessoryview;
