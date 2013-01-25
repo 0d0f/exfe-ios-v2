@@ -1172,7 +1172,7 @@
             imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
         }
     }
-    [titleViewController setBackground:imgurl];
+    titleViewController.imgurl=imgurl;
     [self presentModalViewController:titleViewController animated:YES];
     [titleViewController setCrossTitle:cross.title desc:cross.cross_description];
     [titleViewController release];
@@ -1370,6 +1370,7 @@
     }
     cross.title=title;
     cross.cross_description=desc;
+    [self saveCrossUpdate];
     [self fillTitleAndDescription:cross];
     [self relayoutUI];
 }
