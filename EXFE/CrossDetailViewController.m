@@ -153,9 +153,8 @@
         
     }
     container.backgroundColor = [UIColor whiteColor];
+    container.delegate = self;
     [self.view addSubview:container];
-    
-    
     
     headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetMaxX(f) - 90,  f.origin.y +  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
     headerView.backgroundColor = [UIColor COLOR_WA(0x7F, 0xFF)];
@@ -210,10 +209,14 @@
     self.view.backgroundColor = [UIColor grayColor];
 }
 
-- (void)widgetJump:(id)sender with:(NSNumber*)index
-{
+- (void)hideWidgetTabBar{
     widgetTabBar.hidden = YES;
     tabBar.hidden = NO;
+}
+
+- (void)widgetJump:(id)sender with:(NSNumber*)index
+{
+    [self hideWidgetTabBar];
     NSInteger idx = [index integerValue];
     if (idx == 0){
         
@@ -226,15 +229,18 @@
 - (void)widgetClick:(id)sender{
     widgetTabBar.alpha = 0;
     widgetTabBar.hidden = NO;
-    [UIView animateWithDuration:0.3 animations:^{
-        widgetTabBar.alpha = 1;
+    [UIView animateWithDuration:0.144 animations:^{
         tabBar.alpha = 0;
-        tabBar.frame = CGRectOffset(tabBar.frame, 0, -10);
+        tabBar.frame = CGRectOffset(tabBar.frame, 0, -15);
     } completion:^(BOOL finished){
-        tabBar.hidden = YES;
         tabBar.alpha = 1;
-        tabBar.frame = CGRectOffset(tabBar.frame, 0, 10);
+        tabBar.hidden = YES;
+        tabBar.frame = CGRectOffset(tabBar.frame, 0, 15);
     }];
+    
+    [UIView animateWithDuration:0.233 animations:^{
+        widgetTabBar.alpha = 1;
+    } completion:nil];
 }
 
 - (void)moveWidget:(UIView*)view to:(CGPoint)endPoint{
@@ -278,6 +284,10 @@
     gestureRecognizer.delegate = self;
     [container addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
+    
+    UITapGestureRecognizer *headTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderTap:)];
+    [headerView addGestureRecognizer:headTapRecognizer];
+    [headTapRecognizer release];
 }
 
 - (void)dealloc {
@@ -311,14 +321,33 @@
     return YES;
 }
 
-- (void)handleTap:(UITapGestureRecognizer*)sender{
+- (void)hidePopupIfShown{
+    [self hideMenuWithAnimation:YES];
+    [self hideStatusView];
+    [self hideTitleAndDescEditMenuWithAnimation:YES];
+    [self hideTimeEditMenuWithAnimation:YES];
+    [self hidePlaceEditMenuWithAnimation:YES];
+    [self hideWidgetTabBar];
+}
+
+- (void)handleHeaderTap:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
     
     
-    [self hideMenuWithAnimation:YES];
-    [self hideStatusView];
-    [self hideTimeEditMenuWithAnimation:YES];
-    [self hidePlaceEditMenuWithAnimation:YES];
+    [self hidePopupIfShown];
+    
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        if (titleView.hidden == NO && CGRectContainsPoint(titleView.frame, location)){
+            [self showTtitleAndDescEditMenu:titleView];
+            return;
+        }
+    }
+}
+
+- (void)handleTap:(UITapGestureRecognizer*)sender{
+    CGPoint location = [sender locationInView:sender.view];
+
+    [self hidePopupIfShown];
     
     if (sender.state == UIGestureRecognizerStateEnded) {
         //UIView *tappedView = [sender.view hitTest:[sender locationInView:sender.view] withEvent:nil];
@@ -466,41 +495,45 @@
         [title retain];
         if (title == nil || title.length == 0) {
             timeRelView.text = @"Sometime";
+            timeAbsView.text = @"Pick a time";
+            timeAbsView.hidden = NO;
+            timeZoneView.text = @"";
+            timeZoneView.hidden = YES;
         }else{
             timeRelView.text = [title copy];
-        }
-        [title release];
-        
-        NSString* desc = [time getTimeDescription];//[[time getTimeDescription] copy];
-        [desc retain];
-        if(desc != nil && desc.length > 0){
-            timeAbsView.text = desc;
-            timeAbsView.hidden = NO;
-            [timeAbsView sizeToFit];
             
-            NSString* tz = [time getTimeZoneLine];
-            [tz retain];
-            if (tz != nil && tz.length > 0) {
-                timeZoneView.hidden = NO;
-                timeZoneView.text = [tz copy];
-                [timeZoneView sizeToFit];
+            NSString* desc = [time getTimeDescription];
+            [desc retain];
+            if(desc != nil && desc.length > 0){
+                timeAbsView.text = desc;
+                timeAbsView.hidden = NO;
+                [timeAbsView sizeToFit];
+                
+                NSString* tz = [time getTimeZoneLine];
+                [tz retain];
+                if (tz != nil && tz.length > 0) {
+                    timeZoneView.hidden = NO;
+                    timeZoneView.text = [tz copy];
+                    [timeZoneView sizeToFit];
+                }else{
+                    timeZoneView.hidden = YES;
+                    timeZoneView.text = @"";
+                }
+                [tz release];
+                
             }else{
+                timeAbsView.text = @"";
+                timeAbsView.hidden = YES;
                 timeZoneView.hidden = YES;
                 timeZoneView.text = @"";
             }
-            [tz release];
-            
-        }else{
-            timeAbsView.text = @"";
-            timeAbsView.hidden = YES;
-            timeZoneView.hidden = YES;
-            timeZoneView.text = @"";
+            [desc release];
         }
-        [desc release];
+        [title release];
     }else{
         timeRelView.text = @"Sometime";
-        timeAbsView.text = @"";
-        timeAbsView.hidden = YES;
+        timeAbsView.text = @"Pick a time";
+        timeAbsView.hidden = NO;
         timeZoneView.text = @"";
         timeZoneView.hidden = YES;
     }
@@ -932,6 +965,13 @@
     NSLog(@"Click to Navigation");
 }
 
+
+- (void)clickforTitleAndDescEdit:(id)sender{
+    [self hideTitleAndDescEditMenuNow];
+    NSLog(@"Click to Edit Time");
+    [self showTitleAndDescView];
+}
+
 - (void)clickforTimeEdit:(id)sender{
     [self hideTimeEditMenuNow];
     NSLog(@"Click to Edit Time");
@@ -945,6 +985,45 @@
 }
 
 #pragma mark Edit Menu API
+- (void) showTtitleAndDescEditMenu:(UIView*)sender{
+    if (titleAndDescEditMenu == nil) {
+        titleAndDescEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
+        titleAndDescEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
+        [titleAndDescEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
+        titleAndDescEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
+        [titleAndDescEditMenu addTarget:self action:@selector(clickforTitleAndDescEdit:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:titleAndDescEditMenu];
+    }
+    CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
+    titleAndDescEditMenu.frame = original;
+    titleAndDescEditMenu.hidden = NO;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3];
+    [titleAndDescEditMenu setFrame:CGRectOffset(titleAndDescEditMenu.frame, 0 - CGRectGetWidth(titleAndDescEditMenu.frame), 0)];
+    [UIView commitAnimations];
+}
+
+
+- (void) hideTitleAndDescEditMenuWithAnimation:(BOOL)animated{
+    if (animated) {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.3];
+        [titleAndDescEditMenu setFrame:CGRectOffset(titleAndDescEditMenu.frame, CGRectGetWidth(self.view.frame) - CGRectGetWidth(titleAndDescEditMenu.frame), 0)];
+        [UIView setAnimationDidStopSelector:@selector(hideTitleAndDescEditMenuNow)];
+        [UIView commitAnimations];
+    }else{
+        [self hideTitleAndDescEditMenuNow];
+    }
+}
+
+- (void)hideTitleAndDescEditMenuNow{
+    if (titleAndDescEditMenu != nil && titleAndDescEditMenu.hidden == NO) {
+        titleAndDescEditMenu.hidden = YES;
+    }
+}
+
+
 - (void) showTimeEditMenu:(UIView*)sender{
     if (timeEditMenu == nil) {
         timeEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -1472,5 +1551,9 @@
     }
 }
 
+#pragma mark UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [self hidePopupIfShown];
+}
 
 @end

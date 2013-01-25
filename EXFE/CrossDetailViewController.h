@@ -29,7 +29,7 @@
 #import "EditCrossDelegate.h"
 #import "EXTabBar.h"
 
-@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate>{
+@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate>{
 
     UIScrollView *container;
     UIImageView *dectorView;
@@ -60,6 +60,7 @@
     EXRSVPMenuView *rsvpmenu;
     UIButton *timeEditMenu;
     UIButton *placeEditMenu;
+    UIButton *titleAndDescEditMenu;
     BOOL isWidgetShown;
     
 }
@@ -75,6 +76,8 @@
 - (void)hideStatusView;
 - (void)reloadStatusview:(Invitation*)_invitation;
 
+#pragma mark UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView;
 
 #pragma mark MKMapViewDelegate
 - (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated;
