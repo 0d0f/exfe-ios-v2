@@ -590,86 +590,86 @@
             }
         }
         cell.title=cross.title;
-//        cell.conversationCount = [cross.conversation_count intValue];
-//        if(cross.place == nil || cross.place.title == nil || [cross.place.title isEqualToString:@""]){
-//            cell.place = @"";
-//        }else{
-//            cell.place = cross.place.title;
-//        }
+////        cell.conversationCount = [cross.conversation_count intValue];
+////        if(cross.place == nil || cross.place.title == nil || [cross.place.title isEqualToString:@""]){
+////            cell.place = @"";
+////        }else{
+////            cell.place = cross.place.title;
+////        }
+////        
+////        if (cross.time != nil){
+////            NSString *time = [cross.time getTimeSingleLine];
+////            //[time retain];
+////            if (time == nil || time.length == 0) {
+////                cell.time = @"";
+////            }else{
+////                NSString *tz = [cross.time.begin_at getTimeZoneString];
+////                if (tz != nil && tz.length > 0) {
+////                    cell.time = [NSString stringWithFormat:@"%@ %@", time, tz];
+////                }else{
+////                    cell.time = [NSString stringWithFormat:@"%@", time];;
+////                }
+////            }
+////            //[time release];
+////        }else{
+////            cell.time = @"";
+////        }
 //        
-//        if (cross.time != nil){
-//            NSString *time = [cross.time getTimeSingleLine];
-//            //[time retain];
-//            if (time == nil || time.length == 0) {
-//                cell.time = @"";
-//            }else{
-//                NSString *tz = [cross.time.begin_at getTimeZoneString];
-//                if (tz != nil && tz.length > 0) {
-//                    cell.time = [NSString stringWithFormat:@"%@ %@", time, tz];
-//                }else{
-//                    cell.time = [NSString stringWithFormat:@"%@", time];;
-//                }
-//            }
-//            //[time release];
-//        }else{
-//            cell.time = @"";
-//        }
-        
-//        cell.avatar = nil;
-//        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-//        for(Invitation *invitation in cross.exfee.invitations) {
-//            if ([invitation.identity.connected_user_id intValue]== app.userid) {
-//                if(invitation && invitation.invited_by &&
-//                   invitation.invited_by.avatar_filename ) {
-//                    UIImage *avatarImg=[[ImgCache sharedManager] getImgFromCache:invitation.invited_by.avatar_filename];
-//                    if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
-//                        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-//                        dispatch_async(imgQueue, ^{
-//                            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:invitation.invited_by.avatar_filename];
-//                            dispatch_async(dispatch_get_main_queue(), ^{
-//                                if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
-//                                    cell.avatar=avatar;
-//                                    [cell setNeedsDisplay];
-//                                }
-//                            });
-//                        });
-//                        dispatch_release(imgQueue);
-//                    }else{
-//                        cell.avatar = avatarImg;
-//                        [cell setNeedsDisplay];
-//                    }
-//                }else{
-//                    cell.avatar = nil;
-//                    [cell setNeedsDisplay];
-//                }
-//                break;
-//            }
-//        }
-//        
-//
-//        
+////        cell.avatar = nil;
+////        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+////        for(Invitation *invitation in cross.exfee.invitations) {
+////            if ([invitation.identity.connected_user_id intValue]== app.userid) {
+////                if(invitation && invitation.invited_by &&
+////                   invitation.invited_by.avatar_filename ) {
+////                    UIImage *avatarImg=[[ImgCache sharedManager] getImgFromCache:invitation.invited_by.avatar_filename];
+////                    if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
+////                        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+////                        dispatch_async(imgQueue, ^{
+////                            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:invitation.invited_by.avatar_filename];
+////                            dispatch_async(dispatch_get_main_queue(), ^{
+////                                if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
+////                                    cell.avatar=avatar;
+////                                    [cell setNeedsDisplay];
+////                                }
+////                            });
+////                        });
+////                        dispatch_release(imgQueue);
+////                    }else{
+////                        cell.avatar = avatarImg;
+////                        [cell setNeedsDisplay];
+////                    }
+////                }else{
+////                    cell.avatar = nil;
+////                    [cell setNeedsDisplay];
+////                }
+////                break;
+////            }
+////        }
+////        
+////
+////        
         cell.bannerimg = default_background;//[UIImage imageNamed:@"x_titlebg_default.jpg"];
-//        NSArray *widgets = cross.widget;
-//        for(NSDictionary *widget in widgets) {
-//            if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-//                NSString *imgurl=[Util getBackgroundLink:[widget objectForKey:@"image"]];
-//                UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:imgurl];
-//                if(backimg == nil || [backimg isEqual:[NSNull null]]){
-//                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-//                    dispatch_async(imgQueue, ^{
-//                        UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
-//                        dispatch_async(dispatch_get_main_queue(), ^{
-//                            if(backimg!=nil && ![backimg isEqual:[NSNull null]])
-//                                cell.bannerimg = backimg;
-//                        });
-//                    });
-//                    dispatch_release(imgQueue);
-//                }else{
-//                    cell.bannerimg = backimg;
-//                }
-//                break;
-//            }
-//        }
+        NSArray *widgets = cross.widget;
+        for(NSDictionary *widget in widgets) {
+            if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+                NSString *imgurl=[Util getBackgroundLink:[widget objectForKey:@"image"]];
+                UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:imgurl];
+                if(backimg == nil || [backimg isEqual:[NSNull null]]){
+                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                    dispatch_async(imgQueue, ^{
+                        UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if(backimg!=nil && ![backimg isEqual:[NSNull null]])
+                                cell.bannerimg = backimg;
+                        });
+                    });
+                    dispatch_release(imgQueue);
+                }else{
+                    cell.bannerimg = backimg;
+                }
+                break;
+            }
+        }
         
         cell.delegate = self;
         cell.cross_id = cross.cross_id;
