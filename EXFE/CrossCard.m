@@ -159,15 +159,15 @@
     CGRect b = [self bounds];
     // Rect caculation
     
-    if (bannerimg != nil){
-        [bannerimg drawInRect:bannerImgRect];
-    }
+//    if (bannerimg != nil){
+//        [bannerimg drawInRect:bannerImgRect];
+//    }
     
-    if (avatar != nil) {
-        [avatar drawInRect:avatarRect];
-    }else{
-        [[UIImage imageNamed:@"portrait_default.png"] drawInRect:avatarRect];
-    }
+//    if (avatar != nil) {
+//        [avatar drawInRect:avatarRect];
+//    }else{
+//        [[UIImage imageNamed:@"portrait_default.png"] drawInRect:avatarRect];
+//    }
     
     // card cover
     [[UIImage imageNamed:@"xlist_cell.png"] drawInRect:b];
@@ -179,14 +179,23 @@
         color = [UIColor COLOR_WHITE];
     }
     [color set];
-    {
+//    {
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextSaveGState(context);
         CGContextSetTextMatrix(context, CGAffineTransformIdentity);
         CGContextTranslateCTM(context, 0, CGRectGetMidY(titleRect));
         CGContextScaleCTM(context, 1.0, -1.0);
         CGContextTranslateCTM(context, 0, 0 - CGRectGetMidY(titleRect));
+    
+    if(bannerimg!=nil){
+        CGImageRef bannerimgref = CGImageRetain(bannerimg.CGImage);
+        CGContextDrawImage(context,bannerImgRect, bannerimgref);
+        CGImageRelease(bannerimgref);
+        CGContextRestoreGState(context);
+    }
 
+    
+    
         CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor COLOR_WA(0x00, 0x5A)].CGColor);
         
         CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL);
@@ -211,7 +220,7 @@
         CTFrameDraw(theFrame, context);
         CFRelease(theFrame);
         CGContextRestoreGState(context);
-    }
+//    }
     
     UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue-Light" size:15];
     // text info
