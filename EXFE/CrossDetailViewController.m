@@ -222,7 +222,7 @@
         
     }else
     if (idx == 1){
-        [self toConversationAnimated:YES];
+        [self toConversationAnimated:NO];
     }
 }
 

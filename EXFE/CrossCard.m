@@ -145,7 +145,7 @@
     if (conversationCount > 0) {
         convw = conv_width + titlePaddingRight;
     }
-    titleRect = CGRectMake(CGRectGetMinX(barnnerRect) + paddingH, CGRectGetMinY(barnnerRect) + titlePaddingV, CGRectGetWidth(barnnerRect) - convw - paddingH, CGRectGetHeight(barnnerRect) );
+    titleRect = CGRectMake(CGRectGetMinX(barnnerRect) + paddingH, CGRectGetMinY(barnnerRect) + titlePaddingV, CGRectGetWidth(barnnerRect) - convw - paddingH, CGRectGetHeight(barnnerRect) - titlePaddingV );
     
     CGFloat textPaddingV = 4.5;
     timeRect = CGRectMake(textbarRect.origin.x + paddingH, textbarRect.origin.y + textPaddingV, 100, textbarRect.size.height - textPaddingV * 2);
@@ -196,8 +196,9 @@
         CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor COLOR_WA(0x00, 0x5A)].CGColor);
         
         CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL);
-        if(title==nil)
-            title=@"";
+        if(title == nil){
+            title = @"";
+        }
         NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:title];
         [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
         [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)color.CGColor range:NSMakeRange(0,[textstring length])];
