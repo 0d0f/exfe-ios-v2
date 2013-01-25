@@ -33,6 +33,7 @@
     NSMutableAttributedString *gatherax;
     MBProgressHUD *hud;
     EXInnerButton *settingButton;
+    UIImage *default_background;
     //ProfileCard *headerView;
 }
 - (void) refreshCell;
