@@ -148,12 +148,12 @@
     titleRect = CGRectMake(CGRectGetMinX(barnnerRect) + paddingH, CGRectGetMinY(barnnerRect) + titlePaddingV, CGRectGetWidth(barnnerRect) - convw - paddingH, CGRectGetHeight(barnnerRect) );
     
     CGFloat textPaddingV = 4.5;
-    timeRect = CGRectMake(textbarRect.origin.x + paddingH, textbarRect.origin.y + textPaddingV, 112, textbarRect.size.height - textPaddingV * 2);
+    timeRect = CGRectMake(textbarRect.origin.x + paddingH, textbarRect.origin.y + textPaddingV, 100, textbarRect.size.height - textPaddingV * 2);
     timeFadingRect = CGRectMake(CGRectGetMaxX(timeRect) - 12, CGRectGetMidY(timeRect) - 11, 20, 22);
     
     avatarRect = CGRectMake(CGRectGetMaxX(textbarRect) - avatarWidth - 3, CGRectGetMinY(textbarRect) + (CGRectGetHeight(textbarRect) - avatarHeight) / 2, avatarWidth, avatarHeight);
    
-    placeRect = CGRectMake(CGRectGetMaxX(timeRect) + paddingHM, textbarRect.origin.y + textPaddingV, 140, textbarRect.size.height - textPaddingV * 2);
+    placeRect = CGRectMake(CGRectGetMaxX(timeRect) + paddingHM, textbarRect.origin.y + textPaddingV, 150, textbarRect.size.height - textPaddingV * 2);
     placeFadingRect = CGRectMake(CGRectGetMaxX(placeRect) - 20, CGRectGetMidY(placeRect) - 11, 20, 22);
     
    
