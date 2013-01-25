@@ -31,5 +31,5 @@
 
 - (void) setCrossTitle:(NSString*)title desc:(NSString*)desc;
 - (void) done:(id)sender;
-- (void) setBackground:(NSString *)imgurl;
+- (void) setBackground:(NSString *)_imgurl;
 @end

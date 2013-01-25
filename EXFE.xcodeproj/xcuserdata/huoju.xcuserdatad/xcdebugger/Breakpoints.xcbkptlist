@@ -77,7 +77,9 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "324"
-         endingLineNumber = "324">
+         endingLineNumber = "324"
+         landmarkName = "-hidePopupIfShown"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -88,7 +90,9 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "442"
-         endingLineNumber = "442">
+         endingLineNumber = "442"
+         landmarkName = "-fillBackground:"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1619,7 +1623,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "264"
          endingLineNumber = "264"
-         landmarkName = "-refreshCrosses:withCrossId:"
+         landmarkName = "-refreshCrosses:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1709,7 +1713,9 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "984"
-         endingLineNumber = "984">
+         endingLineNumber = "984"
+         landmarkName = "-clickforPlaceEdit:"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
@@ -1933,23 +1939,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossDetailViewController.m"
-         timestampString = "380706109.496626"
+         timestampString = "380780065.427121"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1272"
-         endingLineNumber = "1272">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/CrossDetailViewController.m"
-         timestampString = "380710271.396792"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1440"
-         endingLineNumber = "1440"
-         landmarkName = "-alertView:clickedButtonAtIndex:"
+         endingLineNumber = "1272"
+         landmarkName = "-objectLoader:didLoadObjects:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1957,12 +1952,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossDetailViewController.m"
-         timestampString = "380710271.396792"
+         timestampString = "380779878.979319"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1422"
-         endingLineNumber = "1422"
-         landmarkName = "-saveCrossUpdate"
+         startingLineNumber = "1441"
+         endingLineNumber = "1441"
+         landmarkName = "-submitEditCross:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1970,12 +1965,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossDetailViewController.m"
-         timestampString = "380710271.396792"
+         timestampString = "380779878.979319"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1423"
+         endingLineNumber = "1423"
+         landmarkName = "-submitEditCross:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/CrossDetailViewController.m"
+         timestampString = "380780065.427121"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1364"
          endingLineNumber = "1364"
-         landmarkName = "-saveCrossUpdate"
+         landmarkName = "-setPlace:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint

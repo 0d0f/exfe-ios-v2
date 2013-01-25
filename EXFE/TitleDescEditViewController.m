@@ -216,13 +216,13 @@
     //    keyboardIsVisible = NO;
 }
 
-- (void) setBackground:(NSString *)imgurl{
-    if(imgurl!=nil && ![imgurl isEqualToString:@""]){
-            UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
+- (void) setBackground:(NSString *)_imgurl{
+    if(_imgurl!=nil && ![_imgurl isEqualToString:@""]){
+            UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:_imgurl];
             if(backimg == nil || [backimg isEqual:[NSNull null]]){
                 dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
                 dispatch_async(imgQueue, ^{
-                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
+                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:_imgurl];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
                             dectorView.image = backimg;
