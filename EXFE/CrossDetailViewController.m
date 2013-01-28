@@ -74,7 +74,8 @@
 - (void)initUI{
    
     CGRect f = self.view.frame;
-    CGRect c = CGRectMake(f.origin.x, f.origin.y + CONTAINER_TOP_MARGIN, f.size.width, f.size.height - f.origin.y - CONTAINER_TOP_MARGIN);
+    CGRect a = [UIScreen mainScreen].applicationFrame;
+    CGRect c = CGRectMake(CGRectGetMinX(a), CGRectGetMinY(a) + CONTAINER_TOP_MARGIN, CGRectGetWidth(a), CGRectGetHeight(a) - CONTAINER_TOP_MARGIN);
     container = [[UIScrollView alloc] initWithFrame:c];
     {
         
@@ -142,6 +143,9 @@
         mapView.backgroundColor = [UIColor lightGrayColor];
         mapView.delegate = self;
         [container addSubview:mapView];
+        mapShadow = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(mapView.frame), CGRectGetMinY(mapView.frame), CGRectGetWidth(mapView.frame), 4)];
+        [mapShadow setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"shadow_4.png"]]];
+        [container addSubview:mapShadow];
         
         CGSize s = container.contentSize;
         if (mapView.hidden){
@@ -185,7 +189,6 @@
         tabBar = [[EXTabBar alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headerView.frame) - tabW, CGRectGetMaxY(headerView.frame) - tabH - 2, tabW, tabH)];
         NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30"], [UIImage imageNamed:@"widget_conv_30.png"], nil];
         tabBar.widgets = imgs;
-        tabBar.contents = [NSArray arrayWithObjects:@"", @"5", @"", nil];
         [tabBar addTarget:self action:@selector(widgetClick:with:)];
         [headerView addSubview:tabBar];
     }
@@ -391,7 +394,8 @@
         [self fillBackground:x.widget];
         [self fillExfee];
         [self fillTime:x.time];
-        [self fillPlace:x.place];   
+        [self fillPlace:x.place];
+        [self fillConversationCount:x.conversation_count];
     }
     [self relayoutUI];
 }
@@ -580,6 +584,16 @@
     }
 }
 
+- (void)fillConversationCount:(NSNumber*)count{
+    if ([count intValue] > 0){
+        widgetTabBar.contents = [NSArray arrayWithObjects:@"", [count stringValue], nil];
+        tabBar.contents = [NSArray arrayWithObjects:@"", [count stringValue], nil];
+    }else{
+        widgetTabBar.contents = nil;
+        tabBar.contents = nil;
+    }
+}
+
 - (void)showDescriptionFullContent:(BOOL)needfull{
     if (needfull){
         if (descView.numberOfLines != 0){
@@ -693,13 +707,15 @@
         // Map
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
         int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + container.frame.origin.y  + OVERLAP + 8 /*+ SMALL_SLOT */);
-        mapView.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b);
+        mapView.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width , a - b);
+        mapShadow.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width , 4);
+        mapShadow.hidden = mapView.hidden;
         
         CGSize s = container.contentSize;
         if (mapView.hidden){
-            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(placeDescView.frame) + OVERLAP;
+            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(placeDescView.frame);
         }else{
-            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(mapView.frame) + OVERLAP;
+            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(mapView.frame);
         }
         if (s.height < CGRectGetHeight(self.view.bounds)){
             s.height = CGRectGetHeight(self.view.bounds) + 1;
@@ -1289,6 +1305,7 @@
     
     // clean up data
     cross.conversation_count = 0;
+    [self fillConversationCount:0];
     
     // update cross list
     NSArray *viewControllers = self.navigationController.viewControllers;

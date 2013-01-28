@@ -43,6 +43,7 @@
     UILabel *placeTitleView;
     UILabel *placeDescView;
     MKMapView *mapView;
+    UIView *mapShadow;
     
     UIButton *btnBack;
     UILabel *titleView;
