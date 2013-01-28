@@ -147,11 +147,10 @@
         
         CGFloat tabW = 60 * 2;
         CGFloat tabH = 30;
-        tabBar = [[EXTabBar alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headerView.frame) - tabW - 5, CGRectGetMaxY(headerView.frame) - tabH - 2, tabW, tabH)];
-        NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_conv_30.png"], [UIImage imageNamed:@"widget_x_30"], nil];
+        tabBar = [[EXTabBar alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headerView.frame) - tabW, CGRectGetMaxY(headerView.frame) - tabH - 2, tabW, tabH)];
+        NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_conv_30.png"], nil];
         tabBar.widgets = imgs;
-        tabBar.contents = [NSArray arrayWithObjects:@"5", @"", @"", nil];
-        [tabBar addTarget:self action:@selector(widgetClick:)];
+        [tabBar addTarget:self action:@selector(widgetClick:with:)];
         [headerView addSubview:tabBar];
         
     }
@@ -186,32 +185,55 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
 
-- (void)widgetJump:(id)sender with:(NSNumber*)index
-{
-    NSInteger idx = [index integerValue];
+- (void)hideWidgetTabBar{
     widgetTabBar.hidden = YES;
     tabBar.hidden = NO;
-    if (idx == 0){
-        
-    }else
-        if (idx == 1){
-            [self toCross];
-        }
 }
 
-- (void)widgetClick:(id)sender{
+- (void)widgetJump:(id)sender with:(NSNumber*)index
+{
     
-    widgetTabBar.alpha = 0;
-    widgetTabBar.hidden = NO;
-    [UIView animateWithDuration:0.3 animations:^{
-        widgetTabBar.alpha = 1;
-        tabBar.alpha = 0;
-        tabBar.frame = CGRectOffset(tabBar.frame, 0, -10);
-    } completion:^(BOOL finished){
-        tabBar.hidden = YES;
-        tabBar.alpha = 1;
-        tabBar.frame = CGRectOffset(tabBar.frame, 0, 10);
-    }];
+    NSInteger idx = [index integerValue];
+    switch (idx) {
+        case 0:
+            [self hideWidgetTabBar];
+            break;
+        case 1:
+            [self hideWidgetTabBar];
+            [self toCross];
+            break;
+        default:
+            [self hideWidgetTabBar];
+            break;
+    }
+}
+
+- (void)widgetClick:(id)sender with:(NSNumber*)index{
+    
+    NSInteger idx = [index integerValue];
+    switch (idx) {
+        case 0:
+            widgetTabBar.alpha = 0;
+            widgetTabBar.hidden = NO;
+            [UIView animateWithDuration:0.144 animations:^{
+                tabBar.alpha = 0;
+                tabBar.frame = CGRectOffset(tabBar.frame, 0, -15);
+            } completion:^(BOOL finished){
+                tabBar.alpha = 1;
+                tabBar.hidden = YES;
+                tabBar.frame = CGRectOffset(tabBar.frame, 0, 15);
+            }];
+            
+            [UIView animateWithDuration:0.233 animations:^{
+                widgetTabBar.alpha = 1;
+            } completion:nil];
+            break;
+        case 1:
+            [self toCross];
+            break;
+        default:
+            break;
+    }
 }
 
 - (void) toCross{
@@ -533,7 +555,8 @@
 #pragma mark UIScrollView methods
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     showfloattime=YES;
-   [inputToolbar hidekeyboard];
+    [inputToolbar hidekeyboard];
+    [self hideWidgetTabBar];
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {

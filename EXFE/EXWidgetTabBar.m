@@ -8,11 +8,13 @@
 
 #import "EXWidgetTabBar.h"
 #import <QuartzCore/QuartzCore.h>
+#import <CoreText/CoreText.h>
 #import "Util.h"
 
 @implementation EXWidgetTabBar
 @synthesize CurveFrame;
 @synthesize widgets;
+@synthesize contents;
 
 - (void)setCurveFrame:(CGRect)frame{
     CurveFrame = frame;
@@ -63,7 +65,6 @@
         CGPoint location = [recognizer locationInView:self];
         NSInteger index = [self hitIndex:location];
         if (index >= 0) {
-            NSLog(@"tap");
             if (tar != nil && act != nil){
                 [tar performSelector:act withObject:self withObject:[NSNumber numberWithInteger:index]];
             }
@@ -88,12 +89,51 @@
     
     UIImage* img = [UIImage imageNamed:@"dock.png"];
     [img drawInRect:b];
-    
     NSInteger count = 0;
     if (widgets) {
+        UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:13];
+        [[UIColor COLOR_SNOW] set];
         for (UIImage* img in widgets) {
             CGRect rect = [self getRectByIndex:count];
             [img drawInRect:rect];
+            if (contents) {
+                id obj = [self.contents objectAtIndex:count];
+                if (obj) {
+                    NSString* ct = (NSString *)obj;
+                    if (ct.length > 0) {
+                        
+                        CGSize numSize = [ct sizeWithFont:font];
+                        CGPoint orginal = CGPointMake(CGRectGetMidX(rect) - 3 - numSize.width / 2 , CGRectGetMidY(rect) - 5 - numSize.height / 2);
+                        CGRect numRect = CGRectMake(orginal.x, orginal.y, numSize.width, numSize.height);
+                        {
+                            CGContextRef context = UIGraphicsGetCurrentContext();
+                            CGContextSaveGState(context);
+                            CGContextSetTextMatrix(context, CGAffineTransformIdentity);
+                            CGContextTranslateCTM(context, 0, CGRectGetMidY(numRect));
+                            CGContextScaleCTM(context, 1.0, -1.0);
+                            CGContextTranslateCTM(context, 0, 0 - CGRectGetMidY(numRect));
+                            
+                            CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor COLOR_WA(0x00, 0xAF)].CGColor);
+                            
+                            CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Medium"), 13.0, NULL);
+                            NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:ct];
+                            [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
+                            [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_WA(0xFF, 0xFF)].CGColor range:NSMakeRange(0,[textstring length])];
+                            
+                            CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)textstring);
+                            CGMutablePathRef path = CGPathCreateMutable();
+                            CGPathAddRect(path, NULL, numRect);
+                            CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [textstring length]), path, NULL);
+                            CFRelease(framesetter);
+                            CFRelease(path);
+                            CTFrameDraw(theFrame, context);
+                            CFRelease(theFrame);
+                            CGContextRestoreGState(context);
+                        }
+                        
+                    }
+                }
+            }
             count ++;
         }
     }
@@ -135,16 +175,6 @@
     [curvePath addLineToPoint:CGPointMake(bounds.size.width, 0)];
     [curvePath closePath];
     maskLayer.path = [curvePath CGPath];
-    
-    //    CGMutablePathRef path = CGPathCreateMutable();
-    //    CGPathMoveToPoint(path, NULL, 0, 0);
-    //    CGPathAddLineToPoint(path, NULL, 0, y0);
-    //    CGPathAddLineToPoint(path, NULL, x0, y0);
-    //    CGPathAddCurveToPoint(path, NULL, x1, y1, x2, y2, x3, y3);
-    //    CGPathAddLineToPoint(path, NULL, bounds.size.width, y3);
-    //    CGPathAddLineToPoint(path, NULL, bounds.size.width, 0);
-    //    CGPathCloseSubpath(path);
-    //    maskLayer.path = path ;
     
     self.layer.mask = maskLayer;
     self.layer.masksToBounds = YES;
