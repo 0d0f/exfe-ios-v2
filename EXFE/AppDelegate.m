@@ -58,7 +58,7 @@ static char handleurlobject;
     NSString *databaseName = DBNAME;
 #endif
     RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-//    RKLogConfigureByName("*", RKLogLevelOff);
+    RKLogConfigureByName("*", RKLogLevelOff);
     RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
     manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
 

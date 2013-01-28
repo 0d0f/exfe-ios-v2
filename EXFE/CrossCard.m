@@ -46,8 +46,8 @@
         
         barnnerRect = CGRectMake(b.origin.x + CARD_VERTICAL_MARGIN, b.origin.y + 8, b.size.width - CARD_VERTICAL_MARGIN * 2, 45);
         textbarRect = CGRectMake(b.origin.x + CARD_VERTICAL_MARGIN, barnnerRect.origin.y + barnnerRect.size.height, b.size.width - CARD_VERTICAL_MARGIN * 2, 28);
-        CGFloat fh = CGRectGetWidth(barnnerRect) * 495 / 880.0f;
-        bannerImgRect = CGRectMake(CGRectGetMinX(barnnerRect), CGRectGetMinY(barnnerRect) - fh * 0.4, CGRectGetWidth(barnnerRect), fh);
+//        CGFloat fh = CGRectGetWidth(barnnerRect) * 495 / 880.0f;
+//        bannerImgRect = CGRectMake(CGRectGetMinX(barnnerRect), CGRectGetMinY(barnnerRect) - fh * 0.4, CGRectGetWidth(barnnerRect), fh);
         CGFloat paddingH = 8;
         CGFloat paddingHM = 6;
         CGFloat avatarWidth = 22;
@@ -159,15 +159,15 @@
     CGRect b = [self bounds];
     // Rect caculation
     
-//    if (bannerimg != nil){
-//        [bannerimg drawInRect:bannerImgRect];
-//    }
+    if (bannerimg != nil){
+        [bannerimg drawInRect:barnnerRect];
+    }
     
-//    if (avatar != nil) {
-//        [avatar drawInRect:avatarRect];
-//    }else{
-//        [[UIImage imageNamed:@"portrait_default.png"] drawInRect:avatarRect];
-//    }
+    if (avatar != nil) {
+        [avatar drawInRect:avatarRect];
+    }else{
+        [[UIImage imageNamed:@"portrait_default.png"] drawInRect:avatarRect];
+    }
     
     // card cover
     [[UIImage imageNamed:@"xlist_cell.png"] drawInRect:b];
@@ -186,15 +186,6 @@
         CGContextTranslateCTM(context, 0, CGRectGetMidY(titleRect));
         CGContextScaleCTM(context, 1.0, -1.0);
         CGContextTranslateCTM(context, 0, 0 - CGRectGetMidY(titleRect));
-    
-    if(bannerimg!=nil){
-        CGImageRef bannerimgref = CGImageRetain(bannerimg.CGImage);
-        CGContextDrawImage(context,bannerImgRect, bannerimgref);
-        CGImageRelease(bannerimgref);
-        CGContextRestoreGState(context);
-    }
-
-    
     
         CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor COLOR_WA(0x00, 0x5A)].CGColor);
         

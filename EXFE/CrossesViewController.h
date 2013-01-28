@@ -19,6 +19,8 @@
 #import "CrossCard.h"
 #import "NewGatherViewController.h"
 
+#define CARD_VERTICAL_MARGIN      (15)
+
 @interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate, CrossCardDelegate>
 {
     IBOutlet UITableView* tableView;
