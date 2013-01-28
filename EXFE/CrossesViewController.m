@@ -11,17 +11,15 @@
 #import "CrossDetailViewController.h"
 #import "APICrosses.h"
 #import "Cross.h"
-#import "Place.h"
 #import "Exfee.h"
 #import "Identity.h"
-//#import "CrossTime.h"
-//#import "EFTime.h"
 #import "Rsvp.h"
 #import "CrossCard.h"
 #import "ImgCache.h"
 #import "Util.h"
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
+#import "Place+Helper.h"
 
 
 @interface CrossesViewController ()
@@ -591,8 +589,14 @@
         }
         cell.title=cross.title;
         cell.conversationCount = [cross.conversation_count intValue];
-        if(cross.place == nil || cross.place.title == nil || [cross.place.title isEqualToString:@""]){
+        if(cross.place == nil){
             cell.place = @"";
+        }else if (cross.place.title == nil || [cross.place.title isEqualToString:@""]){
+            if ([cross.place hasGeo]) {
+                cell.place = @"Somewhere"; // We did have location without title
+            }else{
+                cell.place = @"";
+            }
         }else{
             cell.place = cross.place.title;
         }

@@ -30,6 +30,11 @@
 
 - (void)changeLayer{
     
+    if (CGRectIsNull(CurveFrame)) {
+        self.layer.masksToBounds = NO;
+        return;
+    }
+    
     CGRect bounds = self.bounds;
     
     CGFloat x0 = (CurveFrame.origin.x + CurveFrame.size.width * 0.0f);
@@ -52,16 +57,6 @@
     [curvePath addLineToPoint:CGPointMake(bounds.size.width, 0)];
     [curvePath closePath];
     maskLayer.path = [curvePath CGPath];
-    
-//    CGMutablePathRef path = CGPathCreateMutable();
-//    CGPathMoveToPoint(path, NULL, 0, 0);
-//    CGPathAddLineToPoint(path, NULL, 0, y0);
-//    CGPathAddLineToPoint(path, NULL, x0, y0);
-//    CGPathAddCurveToPoint(path, NULL, x1, y1, x2, y2, x3, y3);
-//    CGPathAddLineToPoint(path, NULL, bounds.size.width, y3);
-//    CGPathAddLineToPoint(path, NULL, bounds.size.width, 0);
-//    CGPathCloseSubpath(path);
-//    maskLayer.path = path ;
    
     self.layer.mask = maskLayer;
     self.layer.masksToBounds = YES;

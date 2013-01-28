@@ -13,17 +13,24 @@
 #import "Util.h"
 #import "FullScreenViewController.h"
 #import "AddIdentityViewController.h"
+#import "EXCurveView.h"
+#import "CustomAttributedTextView.h"
 
 @interface ProfileViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
     IBOutlet UIToolbar* toolbar;
+    
+    
     UIImageView* useravatar;
     UILabel* username;
+    EXCurveView *headerView;
+    UIButton *btnBack;
+    
     IBOutlet UITableView* tableview;
     IBOutlet ProfileCellView *tblCell;
 //    BOOL statusBarHidden;
     
     NSMutableArray *identitiesData;
-    UIView *headerView;
+    //UIView *headerView;
     UIView *footerView;
     UIButton *buttonsignout;
     User *user;

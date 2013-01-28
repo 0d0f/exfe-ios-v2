@@ -13,6 +13,9 @@
 #import "CrossesViewController.h"
 #import "AppDelegate.h"
 
+
+#define DECTOR_HEIGHT                    (100)
+
 @interface ProfileViewController ()
 
 @end
@@ -24,6 +27,37 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, 320, DECTOR_HEIGHT) withCurveFrame:CGRectNull];
+        //headerView.backgroundColor = [UIColor blueColor];
+        
+        useravatar = [[UIImageView alloc] initWithFrame:CGRectMake(233, 18, 64, 64)];
+        useravatar.layer.cornerRadius = 2;
+        useravatar.clipsToBounds = YES;
+        [headerView addSubview:useravatar];
+        
+        UIImageView * mask = [[UIImageView alloc] initWithFrame:headerView.bounds];
+        mask.image = [UIImage imageNamed:@"profile_title_mask.png"];
+        [headerView addSubview:mask];
+        
+        username = [[UILabel alloc] initWithFrame:CGRectMake(40, DECTOR_HEIGHT / 2 - 56 / 2, 180, 56)];
+        username.backgroundColor = [UIColor clearColor];
+        username.lineBreakMode = UILineBreakModeWordWrap;
+        username.numberOfLines = 2;
+        username.textColor = [UIColor COLOR_SNOW];
+        username.font=[UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
+        username.shadowColor = [UIColor blackColor];
+        username.shadowOffset = CGSizeMake(0, -1);
+        [headerView addSubview:username];
+        
+        [self.view addSubview:headerView];
+        
+        btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
+        [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
+        btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+        [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+        [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view  addSubview:btnBack];
+        
     }
     return self;
 }
@@ -37,6 +71,32 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"x_bg.png"]]];
+    
+    
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSFetchRequest* request = [User fetchRequest];
+    NSPredicate *predicate = [NSPredicate
+                              predicateWithFormat:@"user_id = %u", app.userid];
+    [request setPredicate:predicate];
+    NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    if(users != nil && [users count] > 0)
+    {
+        User *_user = [users objectAtIndex:0];
+        NSString* imgName = _user.avatar_filename;
+        if(imgName!=nil)
+        {
+            UIImage *image=[[ImgCache sharedManager] getImgFromCache:imgName];
+            if(image==nil ||[image isEqual:[NSNull null]]){
+                useravatar.image = [UIImage imageNamed:@"portrait_default.png"];
+            }else{
+                useravatar.image = image;
+            }
+        }
+        username.text =_user.name;
+    }
+    else{
+        useravatar.image=[UIImage imageNamed:@"portrait_default.png"];
+    }
 
     tableview.backgroundColor = [UIColor clearColor];
     tableview.opaque = NO;
@@ -52,6 +112,10 @@
     [self loadObjectsFromDataStore];
     [self refreshIdentities];
     
+}
+
+- (void)gotoBack:(UIButton*)sender{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void) refreshIdentities{
@@ -295,65 +359,7 @@
 {
     return 44;
 }
--(UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if(section == 0){
-        if(headerView==nil){
-            AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 
-            NSFetchRequest* request = [User fetchRequest];
-            NSPredicate *predicate = [NSPredicate
-                                      predicateWithFormat:@"user_id = %u", app.userid];
-            [request setPredicate:predicate];
-            NSArray *users = [[User objectsWithFetchRequest:request] retain];
-            
-            
-            
-            headerView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 111)];
-            useravatar=[[UIImageView alloc] initWithFrame:CGRectMake(20, 16, 64, 64)];
-
-            useravatar.layer.cornerRadius=2;
-            useravatar.clipsToBounds = YES;
-            [headerView addSubview:useravatar];
-            
-            username=[[UILabel alloc] initWithFrame:CGRectMake(100, 16, 160, 54)];
-            username.backgroundColor=[UIColor clearColor];
-            username.lineBreakMode=UILineBreakModeWordWrap;
-            username.numberOfLines = 0;
-            username.textColor=FONT_COLOR_51;
-            username.font=[UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
-            username.shadowColor=[UIColor whiteColor];
-            username.shadowOffset=CGSizeMake(0, 1);
-            [headerView addSubview:username];
-            if(users!=nil && [users count] >0)
-            {
-                User *_user=[users objectAtIndex:0];
-                NSString* imgName = _user.avatar_filename;
-                if(imgName!=nil)
-                {
-                    UIImage *image=[[ImgCache sharedManager] getImgFromCache:imgName];
-                    if(image==nil ||[image isEqual:[NSNull null]])
-                        useravatar.image=[UIImage imageNamed:@"portrait_default.png"];
-                    else
-                        useravatar.image=image;
-                }
-                username.text=_user.name;
-            }
-            else
-                useravatar.image=[UIImage imageNamed:@"portrait_default.png"];
-
-            
-        }
-        return headerView;
-    }
-    return nil;
-}
--(CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section
-{
-    if(section == 0)
-        return 111.0;
-    return 15.0;
-}
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     if(section == [identitiesData count]-1)
         return 60;
@@ -377,15 +383,6 @@
         [buttonsignout setBackgroundColor:[UIColor clearColor]];
         [buttonsignout addTarget:self action:@selector(Logout) forControlEvents:UIControlEventTouchUpInside];
         [footerView addSubview:buttonsignout];
-        
-        UIButton* back = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [back setTitle:@"Back" forState:UIControlStateNormal];
-        [back.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:17]];
-        [back setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [back setFrame:CGRectMake(20, 10, 100,44)];
-        [back setBackgroundColor:[UIColor clearColor]];
-        [back addTarget:self action:@selector(gotoBack) forControlEvents:UIControlEventTouchUpInside];
-        [footerView addSubview:back];
     }
     
     //return the view for the footer
@@ -494,10 +491,6 @@
 }
 - (void) Logout {
     [Util signout];
-}
-
-- (void) gotoBack {
-    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (Identity*) getIdentityById:(int)identity_id{

@@ -100,7 +100,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "321"
          endingLineNumber = "321"
-         landmarkName = "-emptyView"
+         landmarkName = "-isIdentityBelongsMe:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -464,8 +464,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "494"
          endingLineNumber = "494"
-         landmarkName = "@implementation CrossesViewController"
-         landmarkType = "3">
+         landmarkName = "-tableView:numberOfRowsInSection:"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1619,8 +1619,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "265"
          endingLineNumber = "265"
-         landmarkName = "@implementation CrossesViewController"
-         landmarkType = "3">
+         landmarkName = "-refreshCrosses:withCrossId:"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
@@ -2051,7 +2051,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "665"
          endingLineNumber = "665"
-         landmarkName = "-refreshTableViewWithCrossId:"
+         landmarkName = "-tableView:cellForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint

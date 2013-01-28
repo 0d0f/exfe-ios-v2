@@ -222,7 +222,7 @@
         
     }else
     if (idx == 1){
-        [self toConversationAnimated:YES];
+        [self toConversationAnimated:NO];
     }
 }
 
@@ -543,25 +543,27 @@
 - (void)fillPlace:(Place*)place{
     if(place == nil || [place isEmpty]){
         placeTitleView.text = @"Shomewhere";
-        placeDescView.text = @"";
-        placeDescView.hidden = YES;
+        placeDescView.text = @"Choose a place";
+        placeDescView.hidden = NO;
         mapView.hidden = YES;
         [self setLayoutDirty];
     }else {
         
         if ([place hasTitle]){
             placeTitleView.text = place.title;
+            
+            if ([place hasDescription]){
+                placeDescView.text = place.place_description;
+                placeDescView.hidden = NO;
+                [placeDescView sizeToFit];
+            }else{
+                placeDescView.text = @"";
+                placeDescView.hidden = YES;
+            }
         }else{
             placeTitleView.text = @"Shomewhere";
-        }
-        
-        if ([place hasDescription]){
-            placeDescView.text = place.place_description;
-            placeDescView.hidden = NO;
-            [placeDescView sizeToFit];
-        }else{
-            placeDescView.text = @"";
             placeDescView.hidden = YES;
+            mapView.hidden = YES;
         }
         
         if ([place hasGeo]){
@@ -585,6 +587,8 @@
         }else{
             mapView.hidden = YES;
         }
+        
+        
         [self setLayoutDirty];
     }
 }
@@ -701,7 +705,7 @@
         
         // Map
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
-        int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + container.frame.origin.y  + OVERLAP /*+ SMALL_SLOT */);
+        int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + container.frame.origin.y  + OVERLAP + 8 /*+ SMALL_SLOT */);
         mapView.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b);
         
         CGSize s = container.contentSize;
