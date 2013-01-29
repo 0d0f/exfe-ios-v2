@@ -160,6 +160,8 @@
     
     if (bannerimg != nil){
         [bannerimg drawInRect:barnnerRect];
+    }else{
+//        [[UIImage imageNamed:@"x_titlebg_default.jpg"] drawInRect:barnnerRect];
     }
     
     if (avatar != nil) {
@@ -185,6 +187,18 @@
         CGContextTranslateCTM(context, 0, CGRectGetMidY(titleRect));
         CGContextScaleCTM(context, 1.0, -1.0);
         CGContextTranslateCTM(context, 0, 0 - CGRectGetMidY(titleRect));
+        if (bannerimg == nil){
+            CGContextBeginPath(context);
+            
+//            
+            CGRect fillrect=CGRectMake(barnnerRect.origin.x,13+timeRect.size.height , barnnerRect.size.width, barnnerRect.size.height);
+            CGContextAddRect(context, fillrect);
+            CGContextClosePath(context);
+            CGContextSetRGBFillColor(context, COLOR255(58), COLOR255(110), COLOR255(165), 1);
+            CGContextFillPath(context);
+
+        }
+    
     
         CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor COLOR_WA(0x00, 0x5A)].CGColor);
         

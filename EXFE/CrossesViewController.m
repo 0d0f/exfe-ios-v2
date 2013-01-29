@@ -90,6 +90,19 @@
             [self showWelcome];
     }
     default_background=[UIImage imageNamed:@"x_titlebg_default.jpg"];
+
+    CGFloat scaleFactor = 1.0;
+    CGSize targetSize = CGSizeMake((320 - CARD_VERTICAL_MARGIN * 2) * [UIScreen mainScreen].scale, 44 * [UIScreen mainScreen].scale);
+
+    if (default_background.size.width > targetSize.width || default_background.size.height > targetSize.height){
+        scaleFactor = MAX((targetSize.width / default_background.size.width), (targetSize.height / default_background.size.height));
+    }
+    
+    UIGraphicsBeginImageContext(targetSize);
+    
+    CGRect rect = CGRectMake((targetSize.width / 2 - default_background.size.width / 2 * scaleFactor),(0 - default_background.size.height * 198.0f / 495.0f * scaleFactor),default_background.size.width * scaleFactor,default_background.size.height * scaleFactor);
+    [default_background drawInRect:rect];
+    default_background = UIGraphicsGetImageFromCurrentImageContext();
 }
 
 - (void)initUI{
@@ -549,7 +562,6 @@
         if (nil == cell) {
             cell = [[[CrossCard alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
         }
-        
         Cross *cross=[_crosses objectAtIndex:indexPath.row ];
         cell.hlTitle = NO;
         cell.hlPlace = NO;
@@ -658,7 +670,7 @@
                 UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:imgurl withSize:targetSize];
                 if(backimg == nil || [backimg isEqual:[NSNull null]]){
                     cell.bannerimg=nil;
-                    cell.bannerimg = default_background;
+//                    cell.bannerimg = default_background;
                 }
                 
 //                if(backimg == nil || [backimg isEqual:[NSNull null]]){
@@ -667,12 +679,9 @@
                             UIImage *image=[[ImgCache sharedManager] getImgFrom:imgurl withSize:targetSize];
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 if(image!=nil && ![image isEqual:[NSNull null]]){
-                                    NSLog(@"banner %@",imgurl);
                                     cell.bannerimg = image;
                                 }else{
-                                    NSLog(@"banner nil");
-//                                    cell.bannerimg=nil;
-                                    cell.bannerimg = default_background;
+                                    cell.bannerimg=nil;
                                 }
                             });
                         });

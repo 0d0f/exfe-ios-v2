@@ -113,12 +113,8 @@ static NSMutableDictionary *imgs;
             UIGraphicsBeginImageContext(size);
             
             CGRect rect = CGRectMake((size.width / 2 - image.size.width / 2 * scaleFactor),(0 - image.size.height * 198.0f / 495.0f * scaleFactor),image.size.width * scaleFactor,image.size.height * scaleFactor);
-    //        
-    //        CGRect rect = CGRectMake(0,0,size.width, size.height);
             [image drawInRect:rect];
             UIImage *backimg = UIGraphicsGetImageFromCurrentImageContext();
-            
-    //        [data writeToFile:cachefilename atomically:YES];
             [UIImageJPEGRepresentation(backimg, 1.0) writeToFile:cachefilename atomically:YES];
             return backimg;
         }
