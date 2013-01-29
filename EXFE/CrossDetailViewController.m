@@ -14,6 +14,7 @@
 #import "Place+Helper.h"
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
+#import "APICrosses.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -141,6 +142,7 @@
         int b = (placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + c.origin.y + OVERLAP /*+ DECTOR_HEIGHT_EXTRA*/);
         mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, placeDescView.frame.origin.y + placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b)];
         mapView.backgroundColor = [UIColor lightGrayColor];
+        mapView.scrollEnabled = NO;
         mapView.delegate = self;
         [container addSubview:mapView];
         mapShadow = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(mapView.frame), CGRectGetMinY(mapView.frame), CGRectGetWidth(mapView.frame), 4)];
@@ -196,7 +198,7 @@
     
     
     widgetTabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(f), 103) withCurveFrame:CGRectMake(CGRectGetWidth(f) - 90, 103 - 15, 78, 15)];
-    NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"dock_x_30refl.png"], [UIImage imageNamed:@"dock_conv_30refl.png"], nil];
+    NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30refl.png"], [UIImage imageNamed:@"widget_conv_30refl.png"], nil];
     widgetTabBar.widgets = imgs;
     [widgetTabBar addTarget:self action:@selector(widgetJump:with:)];
     widgetTabBar.hidden = YES;
@@ -278,6 +280,11 @@
     UITapGestureRecognizer *headTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderTap:)];
     [headerView addGestureRecognizer:headTapRecognizer];
     [headTapRecognizer release];
+    
+    
+    //[APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
+    
+    //[APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:<#(NSDictionary *)#>]
 }
 
 - (void)dealloc {
@@ -602,7 +609,11 @@
             [mapView setRegion:region animated:NO];
             
             [mapView removeAnnotations:mapView.annotations];
-            MapPin *pin = [[MapPin alloc] initWithCoordinates:region.center placeName:place.title description:@""];
+            NSString *placeTitle = place.title;
+            if (placeTitle == nil || place.title.length == 0) {
+                placeTitle = @"Somewhere";
+            }
+            MapPin *pin = [[MapPin alloc] initWithCoordinates:region.center placeName:placeTitle description:@""];
             [mapView addAnnotation:pin];
             mapView.showsUserLocation = YES;
             
@@ -990,9 +1001,10 @@
             pinView.canShowCallout = YES;
             pinView.image = [UIImage imageNamed:@"map_pin_blue.png"];
             
-            UIButton *btnNav = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-            [btnNav addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
-            pinView.leftCalloutAccessoryView = btnNav;
+            UIButton *btnNav = [UIButton buttonWithType:UIButtonTypeCustom];
+            btnNav.frame = CGRectMake(0, 0, 30, 30);
+            [btnNav setImage:[UIImage imageNamed:@"navi_btn.png"] forState:UIControlStateNormal];
+            pinView.rightCalloutAccessoryView = btnNav;
         }else{
             pinView.annotation = annotation;
         }
@@ -1000,30 +1012,59 @@
     return pinView;
 }
 
-- (void)mapView:(MKMapView *)map didSelectAnnotationView:(MKAnnotationView *)view{
-    NSLog(@"Click on the annotation");
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
+    NSLog(@"Click to Navigation");
+//    id<MKAnnotation> annotation = view.annotation;
+//    NSString *title = annotation.title;
+//    CLLocationDegrees latitude = annotation.coordinate.latitude;
+//    CLLocationDegrees longitude = annotation.coordinate.longitude;
+//    int zoom = 13;
+//    
+////    {
+////        CLLocationCoordinate2D endingCoord = annotation.coordinate;
+////        MKPlacemark *endLocation = [[MKPlacemark alloc] initWithCoordinate:endingCoord addressDictionary:nil];
+////        MKMapItem *endingItem = [[MKMapItem alloc] initWithPlacemark:endLocation];
+////
+////        NSMutableDictionary *launchOptions = [[NSMutableDictionary alloc] init];
+////        [launchOptions setObject:MKLaunchOptionsDirectionsModeDriving forKey:MKLaunchOptionsDirectionsModeKey];
+////
+////        [endingItem openInMapsWithLaunchOptions:launchOptions];
+////    }
+//    
+//    //NSString * query = [NSString stringWithFormat:@"q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
+//    NSString * query = [NSString stringWithFormat:@"q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
+//    
+//    NSString *mapurl = [NSString stringWithFormat:@"maps://maps?%@", query];
+//    NSString *url4google = [NSString stringWithFormat:@"http://maps.google.com/maps?%@", query];
+//    NSString *url4apple = [NSString stringWithFormat:@"http://maps.apple.com/?%@", query];
+//    NSURL *url = [NSURL URLWithString:mapurl];
+//    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+//        [[UIApplication sharedApplication] openURL:url];
+//    }else{
+//        url = [NSURL URLWithString:url4google];
+//        [[UIApplication sharedApplication] openURL:url];
+//    }
 }
 
 - (void)onClick:(id)sender{
-    NSLog(@"Click to Navigation");
+    
 }
+
+
 
 
 - (void)clickforTitleAndDescEdit:(id)sender{
     [self hideTitleAndDescEditMenuNow];
-    NSLog(@"Click to Edit Time");
     [self showTitleAndDescView];
 }
 
 - (void)clickforTimeEdit:(id)sender{
     [self hideTimeEditMenuNow];
-    NSLog(@"Click to Edit Time");
     [self showTimeView];
 }
 
 - (void)clickforPlaceEdit:(id)sender{
     [self hidePlaceEditMenuNow];
-    NSLog(@"Click to Edit Place");
     [self ShowPlaceView:@"search"];
 }
 
@@ -1309,7 +1350,10 @@
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    if([objects count]>0){
+    
+    
+    
+    if([objects count] > 0){
         [self fillExfee];
     }
 
@@ -1588,6 +1632,16 @@
 #pragma mark UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [self hidePopupIfShown];
+    
+    if (mapView.hidden == NO) {
+        CGPoint offset = scrollView.contentOffset;
+        CGSize size = scrollView.contentSize;
+        if (size.height - offset.y <= CGRectGetHeight(scrollView.bounds) + 5) {
+            mapView.scrollEnabled = YES;
+        }else{
+            mapView.scrollEnabled = NO;
+        }
+    }
 }
 
 @end

@@ -157,7 +157,7 @@
     [self.view addSubview:headerView];
     
     widgetTabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, -44, CGRectGetWidth(f), 103)  withCurveFrame:CGRectMake(CGRectGetWidth(f) - 90, 103 - 15, 78, 15)];
-    NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"dock_conv_30refl.png"], [UIImage imageNamed:@"dock_x_30refl.png"],  nil];
+    NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_conv_30refl.png"], [UIImage imageNamed:@"widget_x_30refl.png"],  nil];
     widgetTabBar.widgets = imgs;
     [widgetTabBar addTarget:self action:@selector(widgetJump:with:)];
     widgetTabBar.hidden = YES;
