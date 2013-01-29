@@ -26,8 +26,9 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        CGRect b = self.view.bounds;
         // Custom initialization
-        headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, 320, DECTOR_HEIGHT) withCurveFrame:CGRectNull];
+        headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), DECTOR_HEIGHT) withCurveFrame:CGRectNull];
         //headerView.backgroundColor = [UIColor blueColor];
         
         useravatar = [[UIImageView alloc] initWithFrame:CGRectMake(233, 18, 64, 64)];
@@ -71,7 +72,8 @@
 {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"x_bg.png"]]];
-    
+    CGRect b = self.view.bounds;
+    CGRect f = self.view.frame;
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSFetchRequest* request = [User fetchRequest];
@@ -101,6 +103,7 @@
     tableview.backgroundColor = [UIColor clearColor];
     tableview.opaque = NO;
     tableview.backgroundView = nil;
+    tableview.frame = CGRectMake(0, DECTOR_HEIGHT, CGRectGetWidth(b), CGRectGetHeight(b) - DECTOR_HEIGHT);
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [gestureRecognizer setCancelsTouchesInView:NO];
     [tableview addGestureRecognizer:gestureRecognizer];

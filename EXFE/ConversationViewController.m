@@ -17,7 +17,7 @@
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
-#define LARGE_SLOT                       (16)
+#define LARGE_SLOT                       (15)
 #define SMALL_SLOT                      (5)
 
 #define DECTOR_HEIGHT                    (44)
@@ -64,7 +64,7 @@
     [self refreshConversation];
     
     CGRect screenFrame = [self.view frame];
-    CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight-kNavBarHeight, screenFrame.size.width, kDefaultToolbarHeight);
+    CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight-DECTOR_HEIGHT-DECTOR_HEIGHT_EXTRA, screenFrame.size.width, kDefaultToolbarHeight);
     
     inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
     inputToolbar.delegate = self;
@@ -86,7 +86,7 @@
     cellsepator=[UIImage imageNamed:@"conv_line_h.png"];
     avatarframe=[UIImage imageNamed:@"conv_portrait_frame.png"];
     CGRect _tableviewrect=_tableView.frame;
-    _tableviewrect.size.height=_tableviewrect.size.height-44-44;
+    _tableviewrect.size.height=_tableviewrect.size.height-44-kDefaultToolbarHeight-44;
     [_tableView setFrame:_tableviewrect];
     _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
@@ -96,7 +96,7 @@
     [gestureRecognizer release];
     
     CGFloat width = CGRectGetWidth(self.view.bounds);
-    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, width, 59) withCurveFrame:CGRectMake(CGRectGetMaxX(f) - 90,  f.origin.y +  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA)];
+    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetMaxX(f) - 90,  f.origin.y +  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA)];
     headerView.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     {
         CGFloat scale = CGRectGetWidth(headerView.bounds) / HEADER_BACKGROUND_WIDTH;
@@ -147,11 +147,10 @@
         
         CGFloat tabW = 60 * 2;
         CGFloat tabH = 30;
-        tabBar = [[EXTabBar alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headerView.frame) - tabW - 5, CGRectGetMaxY(headerView.frame) - tabH - 2, tabW, tabH)];
-        NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_conv_30.png"], [UIImage imageNamed:@"widget_x_30"], nil];
+        tabBar = [[EXTabBar alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headerView.frame) - tabW, CGRectGetMaxY(headerView.frame) - tabH - 2, tabW, tabH)];
+        NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_conv_30.png"], nil];
         tabBar.widgets = imgs;
-        tabBar.contents = [NSArray arrayWithObjects:@"5", @"", @"", nil];
-        [tabBar addTarget:self action:@selector(widgetClick:)];
+        [tabBar addTarget:self action:@selector(widgetClick:with:)];
         [headerView addSubview:tabBar];
         
     }
@@ -186,32 +185,55 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
 
-- (void)widgetJump:(id)sender with:(NSNumber*)index
-{
-    NSInteger idx = [index integerValue];
+- (void)hideWidgetTabBar{
     widgetTabBar.hidden = YES;
     tabBar.hidden = NO;
-    if (idx == 0){
-        
-    }else
-        if (idx == 1){
-            [self toCross];
-        }
 }
 
-- (void)widgetClick:(id)sender{
+- (void)widgetJump:(id)sender with:(NSNumber*)index
+{
     
-    widgetTabBar.alpha = 0;
-    widgetTabBar.hidden = NO;
-    [UIView animateWithDuration:0.3 animations:^{
-        widgetTabBar.alpha = 1;
-        tabBar.alpha = 0;
-        tabBar.frame = CGRectOffset(tabBar.frame, 0, -10);
-    } completion:^(BOOL finished){
-        tabBar.hidden = YES;
-        tabBar.alpha = 1;
-        tabBar.frame = CGRectOffset(tabBar.frame, 0, 10);
-    }];
+    NSInteger idx = [index integerValue];
+    switch (idx) {
+        case 0:
+            [self hideWidgetTabBar];
+            break;
+        case 1:
+            [self hideWidgetTabBar];
+            [self toCross];
+            break;
+        default:
+            [self hideWidgetTabBar];
+            break;
+    }
+}
+
+- (void)widgetClick:(id)sender with:(NSNumber*)index{
+    
+    NSInteger idx = [index integerValue];
+    switch (idx) {
+        case 0:
+            widgetTabBar.alpha = 0;
+            widgetTabBar.hidden = NO;
+            [UIView animateWithDuration:0.144 animations:^{
+                tabBar.alpha = 0;
+                tabBar.frame = CGRectOffset(tabBar.frame, 0, -15);
+            } completion:^(BOOL finished){
+                tabBar.alpha = 1;
+                tabBar.hidden = YES;
+                tabBar.frame = CGRectOffset(tabBar.frame, 0, 15);
+            }];
+            
+            [UIView animateWithDuration:0.233 animations:^{
+                widgetTabBar.alpha = 1;
+            } completion:nil];
+            break;
+        case 1:
+            [self toCross];
+            break;
+        default:
+            break;
+    }
 }
 
 - (void) toCross{
@@ -418,7 +440,9 @@
 }
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
-    CGPoint location = [sender locationInView:_tableView];
+    //CGPoint location = [sender locationInView:_tableView];
+    CGPoint location = [sender locationInView:self.view];
+    location.y = location.y - CGRectGetMinY(_tableView.frame);
     CGRect showTimeRect=[self.view frame];
     
 // TODO: right 60px for touch area
@@ -531,7 +555,8 @@
 #pragma mark UIScrollView methods
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     showfloattime=YES;
-   [inputToolbar hidekeyboard];
+    [inputToolbar hidekeyboard];
+    [self hideWidgetTabBar];
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
@@ -600,7 +625,7 @@
             CFRelease(timefontref);
             CFRelease(timefontref9);
             CGSize timesize=[self textWidthForHeight:28 withAttributedString:timeattribstring];
-            [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width-5-(timesize.width+4*2),0,timesize.width+8,timesize.height+2)];
+            [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width-5-(timesize.width+4*2),DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA,timesize.width+8,timesize.height+2)];
             [floattimetextlayer setString:timeattribstring];
             [timeattribstring release];
             topcellPath=path.row;

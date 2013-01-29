@@ -140,6 +140,9 @@
         mapView.backgroundColor = [UIColor lightGrayColor];
         mapView.delegate = self;
         [container addSubview:mapView];
+        mapShadow = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(mapView.frame), CGRectGetMinY(mapView.frame), CGRectGetWidth(mapView.frame), 4)];
+        [mapShadow setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"shadow_4.png"]]];
+        [container addSubview:mapShadow];
         
         CGSize s = container.contentSize;
         if (mapView.hidden){
@@ -897,12 +900,14 @@
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
         int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + container.frame.origin.y  + OVERLAP /*+ SMALL_SLOT */);
         mapView.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b);
+        mapShadow.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width , 4);
+        mapShadow.hidden = mapView.hidden;
         
         CGSize s = container.contentSize;
         if (mapView.hidden){
-            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(placeDescView.frame) + OVERLAP;
+            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(placeDescView.frame);
         }else{
-            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(mapView.frame) + OVERLAP;
+            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(mapView.frame);
         }
         if (s.height < CGRectGetHeight(self.view.bounds)){
             s.height = CGRectGetHeight(self.view.bounds) + 1;
