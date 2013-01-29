@@ -89,7 +89,9 @@
 + (void) signout;
 + (int)daysBetween:(NSDate *)dt1 and:(NSDate *)dt2;
 + (NSString*) cleanInputName:(NSString*)username provider:(NSString*)provider ;
-
++ (CGRect)expandRect:(CGRect)rect;
++ (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2;
++ (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2  with:(CGRect)rect3;
 
 @end
 

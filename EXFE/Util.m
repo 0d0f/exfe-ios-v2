@@ -60,7 +60,7 @@
     }
     return @"";
 }
-    
+
 + (NSString*) formattedShortDate:(CrossTime*)crosstime{
     NSString *shortdate=@"Sometime";
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
@@ -68,8 +68,8 @@
     [format setTimeZone:timezone];
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     [format setLocale:locale];
-
-//    NSTimeZone *timezone=[NSTimeZone localTimeZone];
+    
+    //    NSTimeZone *timezone=[NSTimeZone localTimeZone];
     //[self getTimeZoneWithCrossTime:crosstime];//[NSTimeZone timeZoneWithName:@"GMT"];
     
     NSString *formatstr=@"";
@@ -97,7 +97,7 @@
                 [format setDateFormat:@"h:mma ccc, MMM d"];
             else
                 [format setDateFormat:@"h:mma ccc, MMM d, YYYY"];
-
+            
         }
         else if(crosstime.begin_at.date!=nil&& ![crosstime.begin_at.date isEqualToString:@""]){
             if([y isEqualToString:nowy])
@@ -106,7 +106,7 @@
                 [format setDateFormat:@"ccc, MMM d, YYYY"];
         }
         shortdate=[format stringFromDate:date];
-    
+        
         NSTimeZone *timezone=[NSTimeZone localTimeZone];
         [format setTimeZone:timezone];
         [format setDateFormat:@"ZZZZ"];
@@ -120,7 +120,7 @@
             is_same_timezone=true;
         if(is_same_timezone == false)
             shortdate=[shortdate stringByAppendingFormat:@" (%@)",localTimezone];
-
+        
     }
     [locale release];
     [format release];
@@ -136,7 +136,7 @@
         [result setObject:@"Sometime" forKey:@"short"];
         return result;
     }
-
+    
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     [format setLocale:locale];
@@ -145,7 +145,7 @@
     localTimezone=[localTimezone substringFromIndex:3];
     [format setDateFormat:@"yyyy"];
     NSString *localYear = [format stringFromDate:[NSDate date]];
-
+    
     [locale release];
     [format release];
     NSString* cross_timezone=@"";
@@ -154,15 +154,15 @@
     BOOL is_same_timezone=false;
     if([cross_timezone isEqualToString:localTimezone])
         is_same_timezone=true;
-//    [result setObject:@"" forKey:@"relative"];
-
-//    if(![crosstime.begin_at.date isEqualToString:@""] && ![crosstime.begin_at.timezone isEqualToString:@""])
-//    {
-//        NSString *relative=[self formattedLongDateRelativeToNow:[crosstime.begin_at.date stringByAppendingFormat:@" %@ %@",crosstime.begin_at.time,[[crosstime.begin_at.timezone substringToIndex:3] stringByAppendingString:[crosstime.begin_at.timezone substringWithRange:NSMakeRange(4,2)]]]];
-//        [result setObject:relative forKey:@"relative"];
-//    }
+    //    [result setObject:@"" forKey:@"relative"];
+    
+    //    if(![crosstime.begin_at.date isEqualToString:@""] && ![crosstime.begin_at.timezone isEqualToString:@""])
+    //    {
+    //        NSString *relative=[self formattedLongDateRelativeToNow:[crosstime.begin_at.date stringByAppendingFormat:@" %@ %@",crosstime.begin_at.time,[[crosstime.begin_at.timezone substringToIndex:3] stringByAppendingString:[crosstime.begin_at.timezone substringWithRange:NSMakeRange(4,2)]]]];
+    //        [result setObject:relative forKey:@"relative"];
+    //    }
     [result setObject:[self formattedShortDate:crosstime] forKey:@"short"];
-
+    
     if( [crosstime.outputformat intValue]==1) {
         NSString *datestr=@"";
         datestr=[datestr stringByAppendingString:crosstime.origin];
@@ -173,7 +173,7 @@
     }
     else {
         NSString *crosstime_date=crosstime.begin_at.date;
-        NSString *crosstime_time=crosstime.begin_at.time;     
+        NSString *crosstime_time=crosstime.begin_at.time;
         NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
         [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
@@ -191,28 +191,28 @@
         NSDate *begin_at_date=[dateformat dateFromString:cross_time_server];
         if(begin_at_date!=nil)
         {
-//            if([[result objectForKey:@"relative"] isEqualToString:@""])
-//            {
-//                NSString *relative=[self formattedDateRelativeToNow:begin_at_date];
-//                [result setObject:relative forKey:@"relative"];
-//            }
+            //            if([[result objectForKey:@"relative"] isEqualToString:@""])
+            //            {
+            //                NSString *relative=[self formattedDateRelativeToNow:begin_at_date];
+            //                [result setObject:relative forKey:@"relative"];
+            //            }
             NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
             NSLocale *locale_to=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
             [dateformat_to setLocale:locale_to];
-
+            
             if(![crosstime.begin_at.time isEqualToString:@""])
             {
                 [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
                 [dateformat_to setDateFormat:@"h:mm a"];
                 crosstime_time=[dateformat_to stringFromDate:begin_at_date];
-//                NSLog(@"time :%@",crosstime_time);
+                //                NSLog(@"time :%@",crosstime_time);
             }
             else
                 crosstime_time=@"";
             
             [dateformat_to setDateFormat:@"yyyy-MM-dd"];
             crosstime_date=[dateformat_to stringFromDate:begin_at_date];
-
+            
             [dateformat_to setDateFormat:@"d"];
             NSString *day_str=[dateformat_to stringFromDate:begin_at_date];
             [dateformat_to setDateFormat:@"MMM"];
@@ -227,19 +227,19 @@
         
         if([crosstime_date length]>=5 && [localYear isEqualToString:[crosstime_date substringToIndex:4]])
             crosstime_date=[crosstime_date substringFromIndex:5];
-
+        
         NSString *timestr=@"";
         NSString *datestr=@"";
         if(![crosstime.begin_at.time_word isEqualToString:@""] && ![crosstime.begin_at.time isEqualToString:@""])
             timestr=crosstime.begin_at.time_word;
         else
             timestr=[timestr stringByAppendingFormat:@"%@%@",crosstime.begin_at.time_word,crosstime_time];
-
+        
         if(![crosstime.begin_at.date_word isEqualToString:@""] && ![crosstime.begin_at.date isEqualToString:@""])
             datestr=[datestr stringByAppendingFormat:@"%@ at %@",crosstime.begin_at.date_word,crosstime_date];
         else
             datestr=[datestr stringByAppendingFormat:@"%@%@",crosstime.begin_at.date_word,crosstime_date];
-
+        
         
         if([timestr isEqualToString:@""]) {
             [result setObject:datestr forKey:@"date"];
@@ -250,7 +250,7 @@
                 [result setObject:[timestr stringByAppendingFormat:@" on %@",datestr] forKey:@"date"];
             else
                 [result setObject:datestr forKey:@"date"];
-
+            
             return result;
         }
     }
@@ -318,10 +318,10 @@
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     [dateFormat setLocale:locale];
-
+    
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
-    NSDate *date = [dateFormat dateFromString:datestr]; 
-
+    NSDate *date = [dateFormat dateFromString:datestr];
+    
     [locale release];
     [dateFormat release];
     if(date==nil)
@@ -368,7 +368,7 @@
     else if(isNegative==YES)
         relativeString = [relativeString stringByAppendingString:@" later"];
     
-    return relativeString;      
+    return relativeString;
 }
 
 + (NSString *) formattedDateRelativeToNow:(NSDate*)date
@@ -378,7 +378,7 @@
     const int HOUR = 60 * MINUTE;
     const int DAY = 24 * HOUR;
     const int MONTH = 30 * DAY;
-        
+    
     NSDate *now = [NSDate date];
     NSTimeInterval delta = [date timeIntervalSinceDate:now] * -1.0;
     
@@ -391,47 +391,47 @@
     if (delta < 0) {
         delta=-delta;
         //        relativeString = @"!n the future!";
-    }// else 
+    }// else
     
     if (delta < 1 * MINUTE) {
         relativeString = (components.second == 1) ? @"One second ago" : [NSString stringWithFormat:@"%d seconds ago",components.second];
-//        relativeString =[NSString stringWithFormat:@"%ds",components.second];
+        //        relativeString =[NSString stringWithFormat:@"%ds",components.second];
         
     } else if (delta < 2 * MINUTE) {
         relativeString =  @"a minute ago";
-//        relativeString =  @"1m";
+        //        relativeString =  @"1m";
         
     } else if (delta < 45 * MINUTE) {
         relativeString = [NSString stringWithFormat:@"%d minutes ago",components.minute];
         
     } else if (delta < 90 * MINUTE) {
         relativeString = @"an hour ago";
-//        relativeString = @"1h";
+        //        relativeString = @"1h";
         
     } else if (delta < 24 * HOUR) {
         relativeString = [NSString stringWithFormat:@"%d hours ago",components.hour];
         
     } else if (delta < 48 * HOUR) {
         relativeString = @"yesterday";
-//        relativeString = @"1d";
+        //        relativeString = @"1d";
         
     } else if (delta < 30 * DAY) {
         relativeString = [NSString stringWithFormat:@"%d days ago",components.day];
-//        relativeString = [NSString stringWithFormat:@"%dd",components.day];
+        //        relativeString = [NSString stringWithFormat:@"%dd",components.day];
         
     } else if (delta < 12 * MONTH) {
         relativeString = (components.month <= 1) ? @"one month ago" : [NSString stringWithFormat:@"%d months ago",components.month];
-//        relativeString = [NSString stringWithFormat:@"%dm",components.month];
+        //        relativeString = [NSString stringWithFormat:@"%dm",components.month];
         
     } else {
         relativeString = (components.year <= 1) ? @"one year ago" : [NSString stringWithFormat:@"%d years ago",components.year];
-//        relativeString = [NSString stringWithFormat:@"%dy",components.year];
+        //        relativeString = [NSString stringWithFormat:@"%dy",components.year];
     }
-    return relativeString;  
+    return relativeString;
 }
 + (NSString*) getBackgroundLink:(NSString*)imgname
 {
-//    https://exfe.com/static/img/xbg/westlake.jpg
+    //    https://exfe.com/static/img/xbg/westlake.jpg
     return [NSString stringWithFormat:@"%@/xbg/%@",IMG_ROOT,imgname];
 }
 
@@ -440,17 +440,17 @@
     CGContextSetFillColorWithColor(context, color.CGColor);
     CGContextMoveToPoint(context, rect.origin.x, rect.origin.y + radius);
     CGContextAddLineToPoint(context, rect.origin.x, rect.origin.y + rect.size.height - radius);
-    CGContextAddArc(context, rect.origin.x + radius, rect.origin.y + rect.size.height - radius, 
+    CGContextAddArc(context, rect.origin.x + radius, rect.origin.y + rect.size.height - radius,
                     radius, M_PI, M_PI / 2, 1); //STS fixed
-    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width - radius, 
+    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width - radius,
                             rect.origin.y + rect.size.height);
-    CGContextAddArc(context, rect.origin.x + rect.size.width - radius, 
+    CGContextAddArc(context, rect.origin.x + rect.size.width - radius,
                     rect.origin.y + rect.size.height - radius, radius, M_PI / 2, 0.0f, 1);
     CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y + radius);
-    CGContextAddArc(context, rect.origin.x + rect.size.width - radius, rect.origin.y + radius, 
+    CGContextAddArc(context, rect.origin.x + rect.size.width - radius, rect.origin.y + radius,
                     radius, 0.0f, -M_PI / 2, 1);
     CGContextAddLineToPoint(context, rect.origin.x + radius, rect.origin.y);
-    CGContextAddArc(context, rect.origin.x + radius, rect.origin.y + radius, radius, 
+    CGContextAddArc(context, rect.origin.x + radius, rect.origin.y + radius, radius,
                     -M_PI / 2, M_PI, 1);
     CGContextFillPath(context);
 }
@@ -486,7 +486,7 @@
 
 + (NSString*) findProvider:(NSString*)external_id{
     
-    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"; 
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     
     if([emailTest evaluateWithObject:external_id]==YES)
@@ -514,7 +514,7 @@
     NSString *localTimezone = [format stringFromDate:[NSDate date]];
     localTimezone=[localTimezone substringFromIndex:3];
     [format setDateFormat:@"yyyy"];
-
+    
     NSString* cross_timezone=@"";
     if(crosstime.begin_at.timezone.length>=6 )
         cross_timezone=[crosstime.begin_at.timezone substringToIndex:6];
@@ -522,10 +522,10 @@
         is_same_timezone=YES;
     [locale release];
     [format release];
-
+    
     if(is_same_timezone==YES)
         return [NSTimeZone localTimeZone];
-        
+    
     if([crosstime.begin_at.timezone length]==6)
     {
         NSString *hh=[crosstime.begin_at.timezone substringWithRange:NSMakeRange(1, 2)];
@@ -585,7 +585,7 @@
     }
     else {
         NSString *crosstime_date=crosstime.begin_at.date;
-        NSString *crosstime_time=crosstime.begin_at.time;     
+        NSString *crosstime_time=crosstime.begin_at.time;
         NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
         NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
         [dateformat setLocale:locale];
@@ -602,7 +602,7 @@
             [dateformat setDateFormat:@"yyyy-MM-dd"];
         }
         NSDate *begin_at_date=[dateformat dateFromString:cross_time_server];
-//        NSString *week=@"";
+        //        NSString *week=@"";
         if(begin_at_date!=nil)
         {
             NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
@@ -618,27 +618,27 @@
                 crosstime_time=@"";
             [dateformat_to setDateFormat:@"yyyy"];
             NSString *y=[dateformat_to stringFromDate:begin_at_date];
-
+            
             if([y isEqualToString:localYear])
                 [dateformat_to setDateFormat:@"ccc, MMM d"];
             else
                 [dateformat_to setDateFormat:@"ccc, MMM d, YYYY"];
-//            [dateformat_to setDateFormat:@"yyyy-MM-dd"];
+            //            [dateformat_to setDateFormat:@"yyyy-MM-dd"];
             crosstime_date=[dateformat_to stringFromDate:begin_at_date];
-//            [dateformat_to setDateFormat:@"ccc"];
-//            week=[dateformat_to stringFromDate:begin_at_date];
+            //            [dateformat_to setDateFormat:@"ccc"];
+            //            week=[dateformat_to stringFromDate:begin_at_date];
             [locale_to release];
             [dateformat_to release];
         }
         [locale release];
         [dateformat release];
         
-//        if([crosstime_date length]>=5 && [localYear isEqualToString:[crosstime_date substringToIndex:4]])
-//            crosstime_date=[crosstime_date substringFromIndex:5];
+        //        if([crosstime_date length]>=5 && [localYear isEqualToString:[crosstime_date substringToIndex:4]])
+        //            crosstime_date=[crosstime_date substringFromIndex:5];
         
         NSString *timestr=@"";
         NSString *datestr=@"";
-//        Time_word (at) Time (Timezone) Date_word (on) Date
+        //        Time_word (at) Time (Timezone) Date_word (on) Date
         if(![crosstime.begin_at.time_word isEqualToString:@""] && ![crosstime.begin_at.time isEqualToString:@""])
             timestr=[NSString stringWithFormat:@"%@ at %@",crosstime.begin_at.time_word,crosstime_time];
         else if(![crosstime.begin_at.time_word isEqualToString:@""] && [crosstime.begin_at.time isEqualToString:@""])
@@ -647,9 +647,9 @@
             timestr=crosstime_time;
         else if([crosstime.begin_at.time isEqualToString:@""])
             timestr=crosstime.begin_at.time;
-            
-//            timestr=[timestr stringByAppendingFormat:@" %@",crosstime.begin_at.timezone];
-            
+        
+        //            timestr=[timestr stringByAppendingFormat:@" %@",crosstime.begin_at.timezone];
+        
         if(![crosstime.begin_at.date_word isEqualToString:@""] && ![crosstime.begin_at.date isEqualToString:@""])
             datestr=[datestr stringByAppendingFormat:@"%@ on %@",crosstime.begin_at.date_word,crosstime_date];
         else if([crosstime.begin_at.date_word isEqualToString:@""])
@@ -690,14 +690,14 @@
     NSDate *now_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ 00:00:00 ",nowdate_str]];
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
-//    NSDateComponents *comps =[calendar components: NSDayCalendarUnit fromDate:now_date toDate:begin_at_date options:0];
+    //    NSDateComponents *comps =[calendar components: NSDayCalendarUnit fromDate:now_date toDate:begin_at_date options:0];
     NSDate *beginingofweek=[self beginningOfWeek:now_date];
     
     NSDateComponents *comps_firstdayofweek =[calendar components: NSDayCalendarUnit fromDate:beginingofweek toDate:begin_at_date options:0];
     NSString *relativeTime=@"";
     
     int day=[Util daysBetween:begin_at_date  and:now_date];
-//    int day=[comps day];
+    //    int day=[comps day];
     if(abs(day)>1)
     {
         int year=floor(abs(day)/365.25);
@@ -732,10 +732,10 @@
                 relativeTime=[NSString stringWithFormat:@"%u days ago",abs(day)];
             else if(day==-2)
                 relativeTime=[NSString stringWithFormat:@"Two days ago"];
-
-//                relativeTime=[NSString stringWithFormat:@"The day before yesterday"];
+            
+            //                relativeTime=[NSString stringWithFormat:@"The day before yesterday"];
             else if(day==2){
-//                relativeTime=[NSString stringWithFormat:@"The day after tomorrow"];
+                //                relativeTime=[NSString stringWithFormat:@"The day after tomorrow"];
                 relativeTime=[NSString stringWithFormat:@"In two days"];
             }
             else if(day>30)
@@ -778,14 +778,14 @@
                 [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             if([timestr isEqualToString:@""])
-                [dateformat setDateFormat:@"yyyy-MM-dd"];    
+                [dateformat setDateFormat:@"yyyy-MM-dd"];
             begin_at_date=[dateformat dateFromString:[NSString stringWithFormat:@"%@ %@",datestr,timestr]];
             NSDate *now=[NSDate date];
             NSDateComponents *comps_in_a_day =[calendar components: NSMinuteCalendarUnit fromDate:now toDate:begin_at_date options:0];
             int minute=[comps_in_a_day minute];
             float f_h=minute/60.0;
             int hour=round(f_h-0.2);//round 8 away from zero, round 7 towards zero
-
+            
             if(minute>=-1439 && minute<=-720)
                 relativeTime=[NSString stringWithFormat:@"%u hours ago",abs(hour)];
             else if(minute>=-719 && minute<=-60){
@@ -822,7 +822,7 @@
     
     [dateformat release];
     return relativeTime;
-
+    
 }
 
 + (NSString*) EXRelative:(CrossTime*)crosstime type:(NSString*)type localTime:(BOOL)localtime{
@@ -871,7 +871,7 @@
     
     if([meta.code intValue]==401){
         errormsg=@"Authentication failed due to security concerns, please sign in again.";
-
+        
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Sign Out",nil];
         alert.tag=500;
         alert.delegate=delegate;
@@ -900,7 +900,7 @@
             if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
                 return;
     }
-
+    
     NSString *errormsg=@"";
     if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]])
     {
@@ -931,21 +931,51 @@
 + (int)daysBetween:(NSDate *)dt1 and:(NSDate *)dt2{
     
     NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
-
+    
     [dateformat setDateFormat:@"yyyy-MM-dd"];
     NSString *date1=[dateformat stringFromDate:dt1];
     NSString *date2=[dateformat stringFromDate:dt2];
     
     NSDate *dt1_n=[dateformat dateFromString:date1];
     NSDate *dt2_n=[dateformat dateFromString:date2];
-
+    
     
     NSCalendar* calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [calendar components:NSDayCalendarUnit fromDate:dt2_n toDate:dt1_n options:0];
     [dateformat release];
     return [components day];
-//    NSInteger daysBetween = abs([components day]);
-//    return daysBetween+1;
+    //    NSInteger daysBetween = abs([components day]);
+    //    return daysBetween+1;
+}
+
++ (CGRect)expandRect:(CGRect)rect{
+    return [Util expandRect:rect with:CGRectNull];
+}
+
++ (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2{
+    CGFloat minY = 0;
+    CGFloat maxY = 0;
+    if (CGRectIsNull(rect1)) {
+        if (CGRectIsNull(rect2)) {
+            return CGRectNull;
+        }else{
+            minY = CGRectGetMinY(rect2);
+            maxY = CGRectGetMaxY(rect2);
+        }
+    }else{
+        if (CGRectIsNull(rect2)) {
+            minY = CGRectGetMinY(rect1);
+            maxY = CGRectGetMaxY(rect1);
+        }else{
+            minY = MIN(CGRectGetMinY(rect1), CGRectGetMinY(rect2));
+            maxY = MAX(CGRectGetMaxY(rect1), CGRectGetMaxY(rect2));
+        }
+    }
+    return CGRectMake(0, minY, 320, maxY - minY);
+}
+
++ (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2  with:(CGRect)rect3{
+    return [Util expandRect:rect1 with:[Util expandRect:rect2 with:rect3]];
 }
 
 @end
