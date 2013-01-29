@@ -343,11 +343,11 @@
         //UIView *tappedView = [sender.view hitTest:[sender locationInView:sender.view] withEvent:nil];
 
         
-        if (descView.hidden == NO && CGRectContainsPoint(descView.frame, location)) {
+        if (descView.hidden == NO && CGRectContainsPoint([Util expandRect:descView.frame], location)) {
             [self showDescriptionFullContent: (descView.numberOfLines != 0)];
             return;
         }
-        if (CGRectContainsPoint([exfeeShowview frame], location)) {
+        if (CGRectContainsPoint([Util expandRect:[exfeeShowview frame]], location)) {
             //        [crosstitle resignFirstResponder];
             [exfeeShowview becomeFirstResponder];
             CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
@@ -355,21 +355,50 @@
             return;
         }
         
-        if (timeRelView.hidden == NO && CGRectContainsPoint(timeRelView.frame, location)){
+        CGRect r1 = CGRectNull;
+        CGRect r2 = CGRectNull;
+        CGRect r3 = CGRectNull;
+        if (timeRelView.hidden == NO) {
+            r1 = timeRelView.frame;
+        }
+        if (timeAbsView.hidden == NO) {
+            r2 = timeAbsView.frame;
+        }
+        if (timeZoneView.hidden == NO) {
+            r3 = timeZoneView.frame;
+        }
+        if (CGRectContainsPoint([Util expandRect:r1 with:r2 with:r3], location)) {
             [self showTimeEditMenu:timeRelView];
-            return;
-        }else if (timeAbsView.hidden == NO && CGRectContainsPoint(timeAbsView.frame, location)) {
-            [self showTimeEditMenu:timeAbsView];
             return;
         }
         
-        if (placeTitleView.hidden == NO && CGRectContainsPoint(placeTitleView.frame, location)){
+//        if (timeRelView.hidden == NO && CGRectContainsPoint(timeRelView.frame, location)){
+//            [self showTimeEditMenu:timeRelView];
+//            return;
+//        }else if (timeAbsView.hidden == NO && CGRectContainsPoint(timeAbsView.frame, location)) {
+//            [self showTimeEditMenu:timeAbsView];
+//            return;
+//        }
+        
+        r1 = CGRectNull;
+        r2 = CGRectNull;
+        if (placeTitleView.hidden == NO) {
+            r1 = placeTitleView.frame;
+        }
+        if (placeDescView.hidden == NO) {
+            r2 = placeDescView.frame;
+        }
+        if (CGRectContainsPoint([Util expandRect:r1 with:r2], location)) {
             [self showPlaceEditMenu:placeTitleView];
             return;
-        }else if (placeDescView.hidden == NO && CGRectContainsPoint(placeDescView.frame, location)){
-            [self showPlaceEditMenu:placeDescView];
-            return;
         }
+//        if (placeTitleView.hidden == NO && CGRectContainsPoint(placeTitleView.frame, location)){
+//            [self showPlaceEditMenu:placeTitleView];
+//            return;
+//        }else if (placeDescView.hidden == NO && CGRectContainsPoint(placeDescView.frame, location)){
+//            [self showPlaceEditMenu:placeDescView];
+//            return;
+//        }
     }
 }
 
@@ -1041,7 +1070,7 @@
         [self.view addSubview:timeEditMenu];
     }
     CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
-    timeEditMenu.frame = CGRectOffset(original, container.contentOffset.x, 0 - container.contentOffset.y);
+    timeEditMenu.frame = CGRectOffset(original, container.contentOffset.x, 25 - container.contentOffset.y);
     timeEditMenu.hidden = NO;
     
     [UIView beginAnimations:nil context:NULL];
@@ -1079,7 +1108,7 @@
         [self.view addSubview:placeEditMenu];
     }
     CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
-    placeEditMenu.frame = CGRectOffset(original, container.contentOffset.x, 0 - container.contentOffset.y);
+    placeEditMenu.frame = CGRectOffset(original, container.contentOffset.x, 25 - container.contentOffset.y);
     placeEditMenu.hidden = NO;
     
     [UIView beginAnimations:nil context:NULL];
