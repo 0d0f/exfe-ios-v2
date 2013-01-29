@@ -75,7 +75,7 @@
    
     CGRect f = self.view.frame;
     CGRect a = [UIScreen mainScreen].applicationFrame;
-    CGRect c = CGRectMake(CGRectGetMinX(a), CGRectGetMinY(a) + CONTAINER_TOP_MARGIN, CGRectGetWidth(a), CGRectGetHeight(a) - CONTAINER_TOP_MARGIN);
+    CGRect c = CGRectMake(0, CONTAINER_TOP_MARGIN, CGRectGetWidth(a), CGRectGetHeight(a) - CONTAINER_TOP_MARGIN);
     container = [[UIScrollView alloc] initWithFrame:c];
     {
         
@@ -345,6 +345,7 @@
         
         if (descView.hidden == NO && CGRectContainsPoint([Util expandRect:descView.frame], location)) {
             [self showDescriptionFullContent: (descView.numberOfLines != 0)];
+            [self showTtitleAndDescEditMenu:titleView];
             return;
         }
         if (CGRectContainsPoint([Util expandRect:[exfeeShowview frame]], location)) {
@@ -1030,7 +1031,7 @@
         [titleAndDescEditMenu addTarget:self action:@selector(clickforTitleAndDescEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:titleAndDescEditMenu];
     }
-    CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
+    CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame) + SMALL_SLOT, 50, 44);
     titleAndDescEditMenu.frame = original;
     titleAndDescEditMenu.hidden = NO;
     
@@ -1069,8 +1070,8 @@
         [timeEditMenu addTarget:self action:@selector(clickforTimeEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:timeEditMenu];
     }
-    CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
-    timeEditMenu.frame = CGRectOffset(original, container.contentOffset.x, 25 - container.contentOffset.y);
+    CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame) + SMALL_SLOT, 50, 44);
+    timeEditMenu.frame = CGRectOffset(original, container.contentOffset.x, 0 - container.contentOffset.y);
     timeEditMenu.hidden = NO;
     
     [UIView beginAnimations:nil context:NULL];
@@ -1107,8 +1108,8 @@
         [placeEditMenu addTarget:self action:@selector(clickforPlaceEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:placeEditMenu];
     }
-    CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
-    placeEditMenu.frame = CGRectOffset(original, container.contentOffset.x, 25 - container.contentOffset.y);
+    CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame) + SMALL_SLOT, 50, 44);
+    placeEditMenu.frame = CGRectOffset(original, container.contentOffset.x, 0 - container.contentOffset.y);
     placeEditMenu.hidden = NO;
     
     [UIView beginAnimations:nil context:NULL];
