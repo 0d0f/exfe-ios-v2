@@ -2,7 +2,7 @@
 //  Exfee.h
 //  EXFE
 //
-//  Created by huoju on 7/17/12.
+//  Created by huoju on 1/29/13.
 //
 //
 
@@ -13,9 +13,10 @@
 
 @interface Exfee : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * accepted;
 @property (nonatomic, retain) NSNumber * exfee_id;
 @property (nonatomic, retain) NSNumber * total;
-@property (nonatomic, retain) NSNumber * accepted;
+@property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSSet *invitations;
 @end
 

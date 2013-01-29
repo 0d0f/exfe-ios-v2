@@ -2,7 +2,7 @@
 //  Cross.h
 //  EXFE
 //
-//  Created by huoju on 7/19/12.
+//  Created by huoju on 1/29/13.
 //
 //
 
@@ -13,6 +13,7 @@
 
 @interface Cross : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * conversation_count;
 @property (nonatomic, retain) NSDate * created_at;
 @property (nonatomic, retain) NSString * cross_description;
 @property (nonatomic, retain) NSNumber * cross_id;
@@ -22,7 +23,6 @@
 @property (nonatomic, retain) id updated;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) id widget;
-@property (nonatomic, retain) NSNumber * conversation_count;
 @property (nonatomic, retain) Identity *by_identity;
 @property (nonatomic, retain) Exfee *exfee;
 @property (nonatomic, retain) Identity *host_identity;

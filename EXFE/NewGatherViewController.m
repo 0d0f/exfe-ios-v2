@@ -74,15 +74,14 @@
     CGRect c = CGRectMake(f.origin.x, f.origin.y + CONTAINER_TOP_MARGIN, f.size.width, f.size.height - f.origin.y - CONTAINER_TOP_MARGIN);
     container = [[UIScrollView alloc] initWithFrame:c];
     {
-        
         int left = CONTAINER_VERTICAL_PADDING;
-        descView = [[EXLabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 80)];
-        descView.textColor = [UIColor COLOR_RGB(0x33, 0x33, 0x33)];
+        descView = [[EXLabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 44)];
+        descView.textColor = [UIColor COLOR_RGB(127, 127, 127)];
         descView.numberOfLines = 4;
         descView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         descView.shadowColor = [UIColor whiteColor];
         descView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-        descView.backgroundColor = [UIColor clearColor];
+        descView.backgroundColor = [UIColor colorWithWhite:0.96 alpha:1];
         descView.lineBreakMode = NSLineBreakByWordWrapping;
         descView.text=@"Take some note";
         [container addSubview:descView];
@@ -340,12 +339,12 @@
     
     User *user=default_user;
     Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
-
+ 
     cross.title=[NSString stringWithFormat:@".X. with %@",default_identity.name];
 
     title_be_edit=NO;
 
-    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"a_order" ascending:YES]
+    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"identity_id" ascending:YES]
     ;
     
     orderedIdentities=[[NSMutableArray alloc] initWithCapacity:[default_user.identities count]];
@@ -526,8 +525,14 @@
     }
     NSString *newtitle=@".X. with ";
     if(title_be_edit==NO){
+        int count=0;
         for(Invitation *invitation in exfeeInvitations){
+            if(count==3)
+                break;
             newtitle=[newtitle stringByAppendingFormat:@"%@ ",invitation.identity.name];
+            count++;
+            if(count<3)
+                newtitle=[newtitle stringByAppendingString:@","];
         }
         cross.title=newtitle;
         titleView.text=newtitle;
@@ -815,8 +820,8 @@
             //                bestHeight = MIN(fit4.height, fitFull.height);
             //            }
             //            descView.frame = CGRectMake(left , baseY, width, bestHeight);
-            descView.frame = CGRectMake(left , baseY, width, 80);
-            [descView sizeToFit];
+            descView.frame = CGRectMake(left , baseY, width, 44);
+//            [descView sizeToFit];
             baseX = CGRectGetMaxX(descView.frame);
             baseY = CGRectGetMaxY(descView.frame) ;
         }

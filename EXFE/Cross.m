@@ -2,7 +2,7 @@
 //  Cross.m
 //  EXFE
 //
-//  Created by huoju on 7/19/12.
+//  Created by huoju on 1/29/13.
 //
 //
 
@@ -15,6 +15,7 @@
 
 @implementation Cross
 
+@dynamic conversation_count;
 @dynamic created_at;
 @dynamic cross_description;
 @dynamic cross_id;
@@ -24,7 +25,6 @@
 @dynamic updated;
 @dynamic updated_at;
 @dynamic widget;
-@dynamic conversation_count;
 @dynamic by_identity;
 @dynamic exfee;
 @dynamic host_identity;
