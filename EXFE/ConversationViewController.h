@@ -24,7 +24,7 @@
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20
-#define kDefaultToolbarHeight 0
+#define kDefaultToolbarHeight 42
 #define kKeyboardHeightPortrait 216
 #define kKeyboardHeightLandscape 140
 

@@ -52,7 +52,6 @@
     self.textView = [[[UIExpandingTextView alloc] initWithFrame:CGRectMake(10, 7, 300, 26)] autorelease];
     self.textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(4.0f, 0.0f, 10.0f, 0.0f);
     self.textView.delegate = self;
-    self.textView.backgroundColor=[UIColor blueColor];
     [self addSubview:self.textView];
     
     /* Right align the toolbar button */
@@ -100,9 +99,9 @@
 - (void)drawRect:(CGRect)rect 
 {
     /* Draw custon toolbar background */
-//    UIImage *backgroundImage = [UIImage imageNamed:@"toolbarbg.png"];
-//    backgroundImage = [backgroundImage stretchableImageWithLeftCapWidth:floorf(backgroundImage.size.width/2) topCapHeight:floorf(backgroundImage.size.height/2)];
-//    [backgroundImage drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+    UIImage *backgroundImage = [UIImage imageNamed:@"toolbarbg.png"];
+    backgroundImage = [backgroundImage stretchableImageWithLeftCapWidth:floorf(backgroundImage.size.width/2) topCapHeight:floorf(backgroundImage.size.height/2)];
+    [backgroundImage drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     
     CGRect i = self.inputButton.customView.frame;
     i.origin.y = self.frame.size.height - i.size.height - 7;

@@ -51,28 +51,25 @@
 - (void)viewDidLoad
 {
     CGRect f = self.view.frame;
-    CGRect b = self.view.bounds;
     CGRect screenframe=[[UIScreen mainScreen] bounds];
     screenframe.size.height-=20;
     [self.view setFrame:screenframe];
 
     [super viewDidLoad];
-    _tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds))];
+    _tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, DECTOR_HEIGHT, CGRectGetWidth(self.view.bounds), self.view.frame.size.height-DECTOR_HEIGHT-kDefaultToolbarHeight)];
     _tableView.dataSource=self;
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
     [self refreshConversation];
     
-    CGRect screenFrame = [self.view frame];
-    CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight-DECTOR_HEIGHT-DECTOR_HEIGHT_EXTRA, screenFrame.size.width, kDefaultToolbarHeight);
+    CGRect toolbarframe=CGRectMake(0, screenframe.size.height-kDefaultToolbarHeight, screenframe.size.width, kDefaultToolbarHeight);
     
     inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
     inputToolbar.delegate = self;
     inputToolbar.textView.delegate=self;
     [inputToolbar.textView.internalTextView setReturnKeyType:UIReturnKeySend];
     [self.view addSubview:inputToolbar];
-    [inputToolbar setInputEnabled:YES];
-    [self statusbarResize];
+//    [self statusbarResize];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 
@@ -86,9 +83,9 @@
     cellbackground=[UIImage imageNamed:@"conv_bg.png"];
     cellsepator=[UIImage imageNamed:@"conv_line_h.png"];
     avatarframe=[UIImage imageNamed:@"conv_portrait_frame.png"];
-    CGRect _tableviewrect=_tableView.frame;
-    _tableviewrect.size.height=_tableviewrect.size.height-44-kDefaultToolbarHeight-44;
-    [_tableView setFrame:_tableviewrect];
+//    CGRect _tableviewrect=_tableView.frame;
+//    _tableviewrect.size.height=_tableviewrect.size.height-kDefaultToolbarHeight-44;
+//    [_tableView setFrame:_tableviewrect];
     _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
 
@@ -298,10 +295,10 @@
         if(_tableView.contentSize.height>_tableView.frame.size.height)
         {
         CGRect _tableviewrect=_tableView.frame;
-            _tableviewrect.origin.y=-keyboardEndFrame.size.height;
+            _tableviewrect.origin.y=-keyboardEndFrame.size.height+DECTOR_HEIGHT;
+//            _tableviewrect.size.height=-keyboardEndFrame.size.height;
             [_tableView setFrame:_tableviewrect];
         }
-        
     }
     else {
         frame.origin.y = self.view.frame.size.width - frame.size.height - keyboardEndFrame.size.height - kStatusBarHeight;
@@ -321,7 +318,7 @@
         frame.origin.y = self.view.frame.size.height - frame.size.height;
         if(_tableView.contentSize.height>_tableView.frame.size.height){
             CGRect _tableviewrect=_tableView.frame;
-            _tableviewrect.origin.y=0;
+            _tableviewrect.origin.y=DECTOR_HEIGHT;
             [_tableView setFrame:_tableviewrect];
         }
 
@@ -380,10 +377,6 @@
         showfloattime=NO;
         [_tableView setContentOffset:bottomOffset animated:NO];
     }
-//    NSLog(@"%@",_posts);
-//    for (Post *post in _posts){
-//        NSLog(@"%@",post.content);
-//    }
     [inputToolbar setInputEnabled:YES];
     [inputToolbar hidekeyboard];
 
@@ -434,8 +427,11 @@
     CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
     screenframe.size.height-=statusframe.size.height;
 
-    CGRect toolbarframe=[inputToolbar frame];
-    toolbarframe.origin.y=screenframe.size.height-toolbarframe.size.height-kNavBarHeight-keyboardheight;
+//    CGRect toolbarframe=[inputToolbar frame];
+//    toolbarframe.origin.y=screenframe.size.height-toolbarframe.size.height-kNavBarHeight-keyboardheight;
+    
+    CGRect toolbarframe=CGRectMake(0, screenframe.size.height-kDefaultToolbarHeight-DECTOR_HEIGHT-DECTOR_HEIGHT_EXTRA, screenframe.size.width, kDefaultToolbarHeight);
+
     [inputToolbar setFrame:toolbarframe];
     
 }
