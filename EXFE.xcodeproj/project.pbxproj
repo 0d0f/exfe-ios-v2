@@ -2705,8 +2705,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: EXFE HOLDINGS";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: EXFE HOLDINGS";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2724,7 +2724,8 @@
 					"-ObjC",
 					"-all_load",
 				);
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "D329007A-D20F-450C-AED4-75B260C77FB9";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D329007A-D20F-450C-AED4-75B260C77FB9";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2734,8 +2735,9 @@
 		78199C8F160A554600A560F7 /* appstore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: EXFE HOLDINGS";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: EXFE HOLDINGS";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
@@ -2750,9 +2752,10 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D329007A-D20F-450C-AED4-75B260C77FB9";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D329007A-D20F-450C-AED4-75B260C77FB9";
+				PROVISIONING_PROFILE = "DA7D96C7-578C-4997-967D-93AC35D568CC";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DA7D96C7-578C-4997-967D-93AC35D568CC";
 				TARGETED_DEVICE_FAMILY = 1;
+				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = appstore;
@@ -2823,8 +2826,9 @@
 		78A98EA01560F832009E0806 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
@@ -2839,9 +2843,10 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "A2050D0F-250D-4661-B257-A0B8E34A9C9C";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A2050D0F-250D-4661-B257-A0B8E34A9C9C";
+				PROVISIONING_PROFILE = "DA7D96C7-578C-4997-967D-93AC35D568CC";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DA7D96C7-578C-4997-967D-93AC35D568CC";
 				TARGETED_DEVICE_FAMILY = 1;
+				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2849,8 +2854,9 @@
 		78A98EA11560F832009E0806 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: EXFE HOLDINGS";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: EXFE HOLDINGS";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
@@ -2865,9 +2871,10 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4E990391-0487-442C-8895-02041454B755";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4E990391-0487-442C-8895-02041454B755";
+				PROVISIONING_PROFILE = "DA7D96C7-578C-4997-967D-93AC35D568CC";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DA7D96C7-578C-4997-967D-93AC35D568CC";
 				TARGETED_DEVICE_FAMILY = 1;
+				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

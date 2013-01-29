@@ -71,6 +71,16 @@ static NSMutableDictionary *imgs;
     UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
     return imgfromdict;
 }
+- (UIImage*) getImgFromCache:(NSString*)url withSize:(CGSize)size{
+    NSString *md5key=[ImgCache md5:[NSString stringWithFormat:@"%@_%f_%f",url,size.width,size.height]];
+    UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
+    if(imgfromdict!=nil)
+        return imgfromdict;
+    NSString *cachefilename=[[ImgCache CachePath] stringByAppendingPathComponent:md5key];
+    UIImage *img=[UIImage imageWithContentsOfFile:cachefilename];
+    return img;
+}
+
 - (UIImage*) getImgFromCache:(NSString*)url{
     NSString *md5key=[ImgCache md5:url];
     UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
@@ -79,6 +89,42 @@ static NSMutableDictionary *imgs;
     NSString *cachefilename=[[ImgCache CachePath] stringByAppendingPathComponent:md5key];
     UIImage *img=[UIImage imageWithContentsOfFile:cachefilename];
     return img;
+}
+
+- (UIImage*) getImgFrom:(NSString*)url withSize:(CGSize)size{
+    NSString *md5key=[ImgCache md5:[NSString stringWithFormat:@"%@_%f_%f",url,size.width,size.height]];
+    UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
+    if(imgfromdict!=nil)
+        return imgfromdict;
+    NSString *cachefilename=[[ImgCache CachePath] stringByAppendingPathComponent:md5key];
+    UIImage *image=[UIImage imageWithContentsOfFile:cachefilename];
+    if(image==nil)
+    {
+
+        NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+        image = [UIImage imageWithData:data];
+        if(image!=nil && ![image isEqual:[NSNull null]]){
+            CGFloat scaleFactor = 1.0;
+            
+            if (image.size.width > size.width || image.size.height > size.height){
+                scaleFactor = MAX((size.width / image.size.width), (size.height / image.size.height));
+            }
+            
+            UIGraphicsBeginImageContext(size);
+            
+            CGRect rect = CGRectMake((size.width / 2 - image.size.width / 2 * scaleFactor),(0 - image.size.height * 198.0f / 495.0f * scaleFactor),image.size.width * scaleFactor,image.size.height * scaleFactor);
+            [image drawInRect:rect];
+            UIImage *backimg = UIGraphicsGetImageFromCurrentImageContext();
+            [UIImageJPEGRepresentation(backimg, 1.0) writeToFile:cachefilename atomically:YES];
+            return backimg;
+        }
+
+    }
+//    if(image!=nil)
+//        [imgs setObject:image forKey:md5key];
+//    else
+//        [imgs setObject:[NSNull null] forKey:md5key];
+    return image;
 }
 
 - (UIImage*) getImgFrom:(NSString*)url

@@ -19,9 +19,12 @@
 + (NSString *) md5:(NSString *)str;
 + (NSString *) getImgName:(NSString *)url;
 - (UIImage*) getImgFrom:(NSString*)url;
+- (UIImage*) getImgFrom:(NSString*)url withSize:(CGSize)size;
 - (UIImage*) getImgFromCache:(NSString*)url;
+- (UIImage*) getImgFromCache:(NSString*)url withSize:(CGSize)size;
 
 - (UIImage*) checkImgFrom:(NSString*)url;
 + (NSString *) getImgUrl:(NSString*)imgName;
+
 + (UIImage *) getDefaultImage;
 @end

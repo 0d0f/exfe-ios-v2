@@ -89,6 +89,20 @@
         if(newuser !=nil && [newuser isEqualToString:@"YES"])
             [self showWelcome];
     }
+    default_background=[UIImage imageNamed:@"x_titlebg_default.jpg"];
+
+    CGFloat scaleFactor = 1.0;
+    CGSize targetSize = CGSizeMake((320 - CARD_VERTICAL_MARGIN * 2) * [UIScreen mainScreen].scale, 44 * [UIScreen mainScreen].scale);
+
+    if (default_background.size.width > targetSize.width || default_background.size.height > targetSize.height){
+        scaleFactor = MAX((targetSize.width / default_background.size.width), (targetSize.height / default_background.size.height));
+    }
+    
+    UIGraphicsBeginImageContext(targetSize);
+    
+    CGRect rect = CGRectMake((targetSize.width / 2 - default_background.size.width / 2 * scaleFactor),(0 - default_background.size.height * 198.0f / 495.0f * scaleFactor),default_background.size.width * scaleFactor,default_background.size.height * scaleFactor);
+    [default_background drawInRect:rect];
+    default_background = UIGraphicsGetImageFromCurrentImageContext();
 }
 
 - (void)initUI{
@@ -548,7 +562,6 @@
         if (nil == cell) {
             cell = [[[CrossCard alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
         }
-        
         Cross *cross=[_crosses objectAtIndex:indexPath.row ];
         cell.hlTitle = NO;
         cell.hlPlace = NO;
@@ -617,7 +630,7 @@
         }else{
             cell.time = @"";
         }
-        
+//
         cell.avatar = nil;
         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         for(Invitation *invitation in cross.exfee.invitations) {
@@ -632,7 +645,6 @@
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
                                     cell.avatar=avatar;
-                                    [cell setNeedsDisplay];
                                 }
                             });
                         });
@@ -643,37 +655,46 @@
                     }
                 }else{
                     cell.avatar = nil;
-                    [cell setNeedsDisplay];
                 }
                 break;
             }
         }
         
-        
-        
-        cell.bannerimg = nil;
         NSArray *widgets = cross.widget;
+        BOOL hasBackImage=NO;
         for(NSDictionary *widget in widgets) {
             if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
                 NSString *imgurl=[Util getBackgroundLink:[widget objectForKey:@"image"]];
-                UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:imgurl];
+                hasBackImage=YES;
+                CGSize targetSize = CGSizeMake((320 - CARD_VERTICAL_MARGIN * 2) * [UIScreen mainScreen].scale, 44 * [UIScreen mainScreen].scale);
+                UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:imgurl withSize:targetSize];
                 if(backimg == nil || [backimg isEqual:[NSNull null]]){
-                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                    dispatch_async(imgQueue, ^{
-                        UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if(backimg!=nil && ![backimg isEqual:[NSNull null]])
-                                cell.bannerimg = backimg;
-                        });
-                    });
-                    dispatch_release(imgQueue);
-                }else{
-                    cell.bannerimg = backimg;
+                    cell.bannerimg=nil;
+//                    cell.bannerimg = default_background;
                 }
-                break;
+                
+//                if(backimg == nil || [backimg isEqual:[NSNull null]]){
+                        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                        dispatch_async(imgQueue, ^{
+                            UIImage *image=[[ImgCache sharedManager] getImgFrom:imgurl withSize:targetSize];
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                if(image!=nil && ![image isEqual:[NSNull null]]){
+                                    cell.bannerimg = image;
+                                }else{
+                                    cell.bannerimg=nil;
+                                }
+                            });
+                        });
+                        dispatch_release(imgQueue);
+//                    }else{
+//                        cell.bannerimg = backimg;
+//                    }
+                    break;
             }
         }
-        
+//        if(hasBackImage==NO){
+//            cell.bannerimg = default_background;//[UIImage imageNamed:@"x_titlebg_default.jpg"];
+//        }
         cell.delegate = self;
         cell.cross_id = cross.cross_id;
         
