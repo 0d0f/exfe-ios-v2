@@ -604,8 +604,10 @@
             [mapView removeAnnotations:mapView.annotations];
             MapPin *pin = [[MapPin alloc] initWithCoordinates:region.center placeName:place.title description:@""];
             [mapView addAnnotation:pin];
+            mapView.showsUserLocation = YES;
             
         }else{
+            mapView.showsUserLocation = NO;
             mapView.hidden = YES;
         }
         
@@ -977,6 +979,10 @@
     MKAnnotationView *pinView = nil;
     if(annotation != nil)
     {
+        if ([annotation class] == MKUserLocation.class) {
+            return nil;
+        }
+        
         static NSString *defaultPinID = @"com.exfe.pin";
         pinView = (MKAnnotationView *)[map dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
         if ( pinView == nil ){
