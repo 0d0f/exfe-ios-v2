@@ -71,6 +71,7 @@
     inputToolbar.textView.delegate=self;
     [inputToolbar.textView.internalTextView setReturnKeyType:UIReturnKeySend];
     [self.view addSubview:inputToolbar];
+    [inputToolbar setInputEnabled:YES];
     [self statusbarResize];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
