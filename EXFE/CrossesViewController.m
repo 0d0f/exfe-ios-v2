@@ -414,8 +414,8 @@
         {
             if(needsave==YES)
                 [[Cross currentContext] save:nil];
-//            [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
-//            [[NSUserDefaults standardUserDefaults] synchronize];
+            [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
 
             if(![source isEqualToString:@"crossview"] && notification>0){
                 
@@ -567,6 +567,7 @@
         cell.hlPlace = NO;
         cell.hlTime = NO;
         cell.hlConversation = NO;
+        NSLog(@"%@",cross.updated);
         if (cross.updated != nil){
             id updated = cross.updated;
             if([updated isKindOfClass:[NSDictionary class]]){

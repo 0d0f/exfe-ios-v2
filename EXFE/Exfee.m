@@ -2,7 +2,7 @@
 //  Exfee.m
 //  EXFE
 //
-//  Created by huoju on 7/17/12.
+//  Created by huoju on 1/29/13.
 //
 //
 
@@ -12,9 +12,10 @@
 
 @implementation Exfee
 
+@dynamic accepted;
 @dynamic exfee_id;
 @dynamic total;
-@dynamic accepted;
+@dynamic type;
 @dynamic invitations;
 
 @end
