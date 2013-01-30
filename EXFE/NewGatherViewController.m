@@ -72,7 +72,8 @@
 - (void)initUI{
     
     CGRect f = self.view.frame;
-    CGRect c = CGRectMake(f.origin.x, f.origin.y + CONTAINER_TOP_MARGIN, f.size.width, f.size.height - f.origin.y - CONTAINER_TOP_MARGIN);
+    CGRect a = [UIScreen mainScreen].applicationFrame;
+    CGRect c = CGRectMake(0, CONTAINER_TOP_MARGIN, CGRectGetWidth(a), CGRectGetHeight(a) - CONTAINER_TOP_MARGIN);
     container = [[UIScrollView alloc] initWithFrame:c];
     {
         int left = CONTAINER_VERTICAL_PADDING;
@@ -836,6 +837,7 @@
 #pragma mark Relayout methods
 - (void)relayoutUI{
     if (layoutDirty == YES){
+        NSLog(@"relayoutUI");
         //CGRect f = self.view.frame;
         CGRect c = container.frame;
         
@@ -847,15 +849,6 @@
         
         // Description
         if (descView.hidden == NO) {
-            //            CGSize rect = CGSizeMake(width, INFINITY);
-            //            NSString* four_lines = @"M\nM\nM\nM";
-            //            CGSize fit4 = [four_lines sizeWithFont:descView.font constrainedToSize:rect lineBreakMode:descView.lineBreakMode];
-            //            CGSize fitFull = [descView.text sizeWithFont:descView.font constrainedToSize:rect lineBreakMode:descView.lineBreakMode];
-            //            CGFloat bestHeight = fitFull.height;
-            //            if (descView.numberOfLines == 4){
-            //                bestHeight = MIN(fit4.height, fitFull.height);
-            //            }
-            //            descView.frame = CGRectMake(left , baseY, width, bestHeight);
             descView.frame = CGRectMake(left , baseY, width, 44);
 //            [descView sizeToFit];
             baseX = CGRectGetMaxX(descView.frame);
@@ -939,7 +932,7 @@
         
         // Map
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
-        int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + container.frame.origin.y  + OVERLAP /*+ SMALL_SLOT */);
+        int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + container.frame.origin.y  + OVERLAP + 8/*+ SMALL_SLOT */);
         mapView.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b);
         mapShadow.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width , 4);
         mapShadow.hidden = mapView.hidden;
