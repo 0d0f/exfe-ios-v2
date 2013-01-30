@@ -27,13 +27,33 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    CGRect a = [UIScreen mainScreen].applicationFrame;
+    
+    UIView *contentLayer = [[UIView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(a), CGRectGetHeight(a) - 44)];
+    [self.view addSubview:contentLayer];
+    
+    toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
+    [toolbar.layer setShadowOpacity:0.8];
+    [toolbar.layer setShadowRadius:3.0];
+    [toolbar.layer setShadowOffset:CGSizeMake(0, 0)];
+    
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, CGRectGetWidth(toolbar.bounds) - 20, CGRectGetHeight(toolbar.bounds))];
+    title.text = @"Add identity";
+    title.textAlignment = NSTextAlignmentCenter;
+    title.textColor = [UIColor COLOR_CARBON];
+    title.shadowColor = [UIColor COLOR_WHITE];
+    title.shadowOffset = CGSizeMake(0, 1);
+    title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
+    [toolbar addSubview:title];
+    [self.view addSubview:toolbar];
     
     UIImage *textfieldback = [UIImage imageNamed:@"textfield_bg_rect.png"];
     identitybackimg=[[UIImageView alloc] initWithFrame:CGRectMake(20, 18, 280, 41)];
     identitybackimg.image=textfieldback;
     identitybackimg.contentMode=UIViewContentModeScaleToFill;
     identitybackimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
-    [self.view addSubview:identitybackimg];
+    [contentLayer addSubview:identitybackimg];
     
     UIImage *dividerback = [UIImage imageNamed:@"textfield_divider.png"];
     divider=[[UIImageView alloc] initWithFrame:CGRectMake(21, 120+40, 230-2, 2)];
@@ -49,7 +69,7 @@
     identityRightButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [identityRightButton setFrame:CGRectMake(identitybackimg.frame.origin.x+230-18-6+50, 18+11.5, 18, 18)];
     [identityRightButton addTarget:self action:@selector(clearIdentity) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:identityRightButton];
+    [contentLayer addSubview:identityRightButton];
     
     textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 18, 230-(6+18+6)*2+50, 40)];
     textUsername.placeholder=@"Enter your email";
@@ -61,15 +81,15 @@
     [textUsername setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:18]];
     [textUsername setTextColor:FONT_COLOR_25];
     [textUsername addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventEditingChanged];
-    [self.view addSubview:textUsername];
+    [contentLayer addSubview:textUsername];
     [textUsername becomeFirstResponder];
     
     avatarview=[[UIImageView alloc] initWithFrame:CGRectMake(20, 18, 40, 40)];
     avatarview.image=nil;
-    [self.view addSubview:avatarview];
+    [contentLayer addSubview:avatarview];
     avatarframeview=[[UIImageView alloc] initWithFrame:CGRectMake(20, 18, 40, 41)];
     avatarframeview.image=nil;
-    [self.view addSubview:avatarframeview];
+    [contentLayer addSubview:avatarframeview];
     
     
     addbtn=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -82,16 +102,16 @@
 //    [addbtn setTitleShadowColor:[UIColor colorWithRed:21.0/255.0f green:52.0/255.0f blue:84.0/255.0f alpha:1] forState:UIControlStateNormal];
 //    addbtn.titleLabel.shadowOffset=CGSizeMake(0, 1);
     [addbtn setBackgroundImage:[[UIImage imageNamed:@"btn_light_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 12, 0, 12)] forState:UIControlStateNormal];
-    [self.view addSubview:addbtn];
+    [contentLayer addSubview:addbtn];
     
     UIView *signinbgview=[[UIView alloc] initWithFrame:CGRectMake(0, 18+50+65, self.view.bounds.size.width, 76)];
     signinbgview.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"gather_describe_area.png"]];
-    [self.view addSubview:signinbgview];
+    [contentLayer addSubview:signinbgview];
     [signinbgview release];
     
     signintoolbar=[[SigninIconToolbarView alloc] initWithFrame:CGRectMake(0, 18+50+65, self.view.bounds.size.width, 75  ) style:@"addidentity" delegate:self];
     signintoolbar.backgroundColor=[UIColor clearColor];//[UIColor colorWithPatternImage:[UIImage imageNamed:@"cross_bg.png"]];
-    [self.view addSubview:signintoolbar];
+    [contentLayer addSubview:signintoolbar];
     
     
     identityhint.text=@"More identity providers\nsupport coming…";
@@ -108,9 +128,9 @@
     labelSignError.textColor=[UIColor colorWithRed:204/255.f green:81/255.f blue:71/255.f alpha:1.0];
     labelSignError.shadowColor=[UIColor whiteColor];
     labelSignError.shadowOffset=CGSizeMake(0, 1);
-    [self.view addSubview:labelSignError];
+    [contentLayer addSubview:labelSignError];
     
-    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"cross_bg.png"]]];
+    [contentLayer setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"cross_bg.png"]]];
 
     
     spin=[[EXSpinView alloc] initWithPoint:CGPointMake([addbtn frame].size.width-18-10, ([addbtn frame].size.height-18)/2) size:18];
@@ -118,6 +138,18 @@
     [setupnewbtn addSubview:spin];
     [spin startAnimating];
     [spin setHidden:YES];
+    
+    
+    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
+    [btnBack setFrame:CGRectMake(0, 0, 20, 44)];
+    btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view  addSubview:btnBack];
+}
+
+- (void)gotoBack:(UIButton*)sender{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)textDidChange:(UITextField*)textField{

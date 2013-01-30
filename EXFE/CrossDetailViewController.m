@@ -20,7 +20,8 @@
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
 #define LARGE_SLOT                       (16)
-#define SMALL_SLOT                      (5)
+#define SMALL_SLOT                       (5)
+#define ADDITIONAL_SLOT                  (8)
 
 #define DECTOR_HEIGHT                    (88)
 #define DECTOR_HEIGHT_EXTRA              (15)
@@ -691,11 +692,12 @@
             if (timeRelView.hidden == NO) {
                 baseX = CGRectGetMinX(timeRelView.frame);
                 baseY = CGRectGetMaxY(timeRelView.frame);
-                
             }
             
             if (timeAbsView.hidden == NO){
                 baseY += TIME_RELATIVE_BOTTOM_MARGIN;
+            }else{
+                baseY += ADDITIONAL_SLOT;
             }
             CGSize timeAbsSize = [timeAbsView.text sizeWithFont:timeAbsView.font];
             timeAbsView.frame = CGRectMake(left, baseY, timeAbsSize.width, timeAbsSize.height);
@@ -747,7 +749,7 @@
             }
             placeDescView.frame = CGRectMake(baseX, baseY, width, ph);
         }else{
-            placeDescView.frame = CGRectMake(baseX, baseY, 0, 0);
+            placeDescView.frame = CGRectMake(baseX, baseY, 0, ADDITIONAL_SLOT);
         }
         
         // Map
