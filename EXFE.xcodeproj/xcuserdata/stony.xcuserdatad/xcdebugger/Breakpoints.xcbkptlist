@@ -52,7 +52,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "148"
          endingLineNumber = "148"
-         landmarkName = "-layoutSubviews"
+         landmarkName = "-setBannerimg:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -222,19 +222,6 @@
          startingLineNumber = "661"
          endingLineNumber = "661"
          landmarkName = "-relayoutUI"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/CrossDetailViewController.m"
-         timestampString = "381146763.146561"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1038"
-         endingLineNumber = "1038"
-         landmarkName = "-onClick:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
