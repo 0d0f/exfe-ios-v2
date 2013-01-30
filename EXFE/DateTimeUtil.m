@@ -305,7 +305,7 @@ static NSDate* s_Now = nil;
                     [dateFormatter setLocale:usLocale];
                     [usLocale release];
                     NSString *weekday = [dateFormatter stringFromDate:target];
-                    return [NSString stringWithFormat:@"%@., in %i days", weekday, dateSpan];
+                    return [NSString stringWithFormat:@"%@. in %i days", weekday, dateSpan];
                 }
             }
         }else{

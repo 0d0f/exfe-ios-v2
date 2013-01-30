@@ -238,6 +238,7 @@
 }
 
 - (void)widgetClick:(id)sender with:(NSNumber*)index{
+    [self hidePopupIfShown];
     NSInteger idx = [index integerValue];
     switch (idx) {
         case 0:
@@ -523,6 +524,7 @@
         [title retain];
         if (title == nil || title.length == 0) {
             timeRelView.text = @"Sometime";
+            timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
             timeAbsView.text = @"Pick a time";
             timeAbsView.hidden = NO;
             timeZoneView.text = @"";
@@ -530,6 +532,7 @@
         }else{
             timeRelView.text = [title copy];
             
+            timeAbsView.textColor = [UIColor COLOR_WA(0x00, 0xFF)];
             NSString* desc = [time getTimeDescription];
             [desc retain];
             if(desc != nil && desc.length > 0){
@@ -560,6 +563,7 @@
         [title release];
     }else{
         timeRelView.text = @"Sometime";
+        timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
         timeAbsView.text = @"Pick a time";
         timeAbsView.hidden = NO;
         timeZoneView.text = @"";
@@ -571,12 +575,13 @@
 - (void)fillPlace:(Place*)place{
     if(place == nil || [place isEmpty]){
         placeTitleView.text = @"Shomewhere";
+        placeDescView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
         placeDescView.text = @"Choose a place";
         placeDescView.hidden = NO;
         mapView.hidden = YES;
         [self setLayoutDirty];
     }else {
-        
+        placeDescView.textColor = [UIColor COLOR_WA(0x00, 0xFF)];
         if ([place hasTitle]){
             placeTitleView.text = place.title;
             
@@ -591,7 +596,7 @@
         }else{
             placeTitleView.text = @"Shomewhere";
             placeDescView.hidden = YES;
-            mapView.hidden = YES;
+            //mapView.hidden = YES;
         }
         
         if ([place hasGeo]){
@@ -621,8 +626,6 @@
             mapView.showsUserLocation = NO;
             mapView.hidden = YES;
         }
-        
-        
         [self setLayoutDirty];
     }
 }
