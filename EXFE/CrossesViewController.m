@@ -567,6 +567,7 @@
         cell.hlPlace = NO;
         cell.hlTime = NO;
         cell.hlConversation = NO;
+        NSLog(@"%@",cross.updated);
         if (cross.updated != nil){
             id updated = cross.updated;
             if([updated isKindOfClass:[NSDictionary class]]){

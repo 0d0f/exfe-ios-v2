@@ -160,8 +160,6 @@
     
     if (bannerimg != nil){
         [bannerimg drawInRect:barnnerRect];
-    }else{
-//        [[UIImage imageNamed:@"x_titlebg_default.jpg"] drawInRect:barnnerRect];
     }
     
     if (avatar != nil) {
@@ -170,8 +168,6 @@
         [[UIImage imageNamed:@"portrait_default.png"] drawInRect:avatarRect];
     }
     
-    // card cover
-    [[UIImage imageNamed:@"xlist_cell.png"] drawInRect:b];
     
     UIColor * color = [UIColor clearColor];
     if (hlTitle){
@@ -180,52 +176,49 @@
         color = [UIColor COLOR_WHITE];
     }
     [color set];
-//    {
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSaveGState(context);
-        CGContextSetTextMatrix(context, CGAffineTransformIdentity);
-        CGContextTranslateCTM(context, 0, CGRectGetMidY(titleRect));
-        CGContextScaleCTM(context, 1.0, -1.0);
-        CGContextTranslateCTM(context, 0, 0 - CGRectGetMidY(titleRect));
-        if (bannerimg == nil){
-            CGContextBeginPath(context);
-            
-//            
-            CGRect fillrect=CGRectMake(barnnerRect.origin.x,13+timeRect.size.height , barnnerRect.size.width, barnnerRect.size.height);
-            CGContextAddRect(context, fillrect);
-            CGContextClosePath(context);
-            CGContextSetRGBFillColor(context, COLOR255(58), COLOR255(110), COLOR255(165), 1);
-            CGContextFillPath(context);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    if (bannerimg == nil){
+        CGContextBeginPath(context);
+        CGRect fillrect=CGRectMake(barnnerRect.origin.x, 8 , barnnerRect.size.width, barnnerRect.size.height);
+        CGContextAddRect(context, fillrect);
+        CGContextClosePath(context);
+        CGContextSetRGBFillColor(context, COLOR255(58), COLOR255(110), COLOR255(165), 1);
+        CGContextFillPath(context);
+    }
+    
+    [[UIImage imageNamed:@"xlist_cell.png"] drawInRect:b];
 
-        }
+    CGContextSetTextMatrix(context, CGAffineTransformIdentity);
+    CGContextTranslateCTM(context, 0, CGRectGetMidY(titleRect));
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CGContextTranslateCTM(context, 0, 0 - CGRectGetMidY(titleRect));
+    CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor COLOR_WA(0x00, 0x5A)].CGColor);
     
+    CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL);
+    if(title == nil){
+        title = @"";
+    }
+    NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:title];
+    [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
+    [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)color.CGColor range:NSMakeRange(0,[textstring length])];
+    CTLineBreakMode lineBreakMode = kCTLineBreakByCharWrapping;
+    CTParagraphStyleSetting gathersetting[3] = {
+        {kCTParagraphStyleSpecifierLineBreakMode, sizeof(lineBreakMode), &lineBreakMode}
+    };
+    CTParagraphStyleRef pstyle = CTParagraphStyleCreate(gathersetting, 3);
+    [textstring addAttribute:(id)kCTParagraphStyleAttributeName value:(id)pstyle range:NSMakeRange(0,[textstring length])];
     
-        CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor COLOR_WA(0x00, 0x5A)].CGColor);
-        
-        CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL);
-        if(title == nil){
-            title = @"";
-        }
-        NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:title];
-        [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
-        [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)color.CGColor range:NSMakeRange(0,[textstring length])];
-        CTLineBreakMode lineBreakMode = kCTLineBreakByCharWrapping;
-        CTParagraphStyleSetting gathersetting[3] = {
-            {kCTParagraphStyleSpecifierLineBreakMode, sizeof(lineBreakMode), &lineBreakMode}
-        };
-        CTParagraphStyleRef pstyle = CTParagraphStyleCreate(gathersetting, 3);
-        [textstring addAttribute:(id)kCTParagraphStyleAttributeName value:(id)pstyle range:NSMakeRange(0,[textstring length])];
-        
-        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)textstring);
-        CGMutablePathRef path = CGPathCreateMutable();
-        CGPathAddRect(path, NULL, titleRect);
-        CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [title length]), path, NULL);
-        CFRelease(framesetter);
-        CFRelease(path);
-        CTFrameDraw(theFrame, context);
-        CFRelease(theFrame);
-        CGContextRestoreGState(context);
-//    }
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)textstring);
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddRect(path, NULL, titleRect);
+    CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [title length]), path, NULL);
+    CFRelease(framesetter);
+    CFRelease(path);
+    CTFrameDraw(theFrame, context);
+    CFRelease(theFrame);
+    CGContextRestoreGState(context);
     
     UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue-Light" size:15];
     // text info

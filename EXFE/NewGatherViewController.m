@@ -523,6 +523,11 @@
             [exfeeInvitations addObject:invitation];
         }
     }
+    [self reFormatTitle];
+    [exfeeShowview reloadData];
+}
+
+- (void) reFormatTitle{
     NSString *newtitle=@".X. with ";
     if(title_be_edit==NO){
         int count=0;
@@ -537,8 +542,6 @@
         cross.title=newtitle;
         titleView.text=newtitle;
     }
-    
-    [exfeeShowview reloadData];
 }
 
 - (void) setTitle:(NSString*)title Description:(NSString*)desc{
@@ -1267,7 +1270,7 @@
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
-    NSLog(@"select %i",row);
+//    NSLog(@"select %i",row);
 }
 
 - (void) pickdone{
@@ -1275,6 +1278,7 @@
     [self replaceDefaultIdentity:idx];
     [identitypicker setHidden:YES];
     [pickertoolbar setHidden:YES];
+    [self reFormatTitle];
 }
 
 @end
