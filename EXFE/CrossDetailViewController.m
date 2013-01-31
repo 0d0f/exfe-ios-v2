@@ -931,9 +931,11 @@
             rsvpstatus_x=self.view.frame.size.width-rsvpstatusview.frame.size.width;
         
         if(app.userid ==[invitation.identity.connected_user_id intValue]){
-            [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Pending", nil]];
-            [self hideStatusView];
-            [rsvpstatusview setHidden:YES];
+            NSInteger ctrlId = popupCtrolId;
+            [self hidePopupIfShown:kPopupTypeEditStatus];
+            if (ctrlId != kPopupTypeEditStatus) {
+                [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Pending", nil]];
+            }
         }else{
             [rsvpstatusview setHidden:NO];
 //            CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:
@@ -985,7 +987,7 @@
 
             
             [rsvpstatusview setNeedsDisplay];
-            [self hideMenuWithAnimation:YES];
+            [self hidePopupIfShown:kPopupTypeVewStatus];
         }
     }
     //        [crosstitle resignFirstResponder];
