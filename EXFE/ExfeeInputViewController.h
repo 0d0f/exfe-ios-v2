@@ -19,6 +19,7 @@
 #import "EXGradientToolbarView.h"
 #import "GatherExfeeInputCell.h"
 #import <objc/runtime.h>
+#import "LocalContact.h"
 
 #define LOCAL_ADDRESSBOOK 0
 #define EXFE_ADDRESSBOOK 1
@@ -47,6 +48,7 @@
     int expandCellHeight;
     UIButton *btnEXFE;
     UIButton *btnLocal;
+    AddressBook *address;
 }
 @property (nonatomic,retain) UIViewController* gatherview;
 
@@ -70,5 +72,6 @@
 - (void) reloadExfeAddressBook;
 - (void) checkButtonTapped:(id)sender event:(id)event;
 - (void) selectidentity:(id)sender;
+- (void) copyMoreContactsFromIdx:(int)idx;
 
 @end

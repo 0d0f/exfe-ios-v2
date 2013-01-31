@@ -211,7 +211,7 @@
     [self.view addSubview:pannel];
     [pannel release];
 
-    pannellight=[[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height-44-20, self.view.frame.size.width, 44)];
+    pannellight=[[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height-44-20, self.view.frame.size.width, 46)];
     pannellight.image=[UIImage imageNamed:@"glassbar_light.png"];
     [self.view addSubview:pannellight];
     [self GlassBarlightAnimation];

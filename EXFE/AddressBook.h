@@ -11,15 +11,19 @@
 #import "EXSpinView.h"
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
-
+#import "LocalContact.h"
 
 @interface AddressBook : NSObject{
     UIView *parentview;
+    ABAddressBookRef addressBook;
+    int contactscount;
 }
 
 @property (nonatomic,retain) UIView *parentview;
-- (NSArray*) UpdatePeople:(NSDate*)lastsaved;
-- (NSArray*) CopyAllPeople:(ABAddressBookRef)addressbook;
-+ (NSDictionary*) getDefaultIdentity:(NSDictionary*)person;
-+ (NSArray*) getLocalIdentityObjects:(NSDictionary*) person;
+@property int contactscount;
+
+- (void) UpdatePeople:(NSDate*)lastsaved;
+- (void) CopyAllPeopleFrom:(int)idx;
++ (NSDictionary*) getDefaultIdentity:(LocalContact*) person;
++ (NSArray*) getLocalIdentityObjects:(LocalContact*) person;
 @end
