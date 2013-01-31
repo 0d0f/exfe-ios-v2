@@ -16,9 +16,11 @@
 #import "EXSpinView.h"
 #import "MBProgressHUD.h"
 #import "ImgCache.h"
+#import "EXGradientToolbarView.h"
 
 @interface AddIdentityViewController : UIViewController{
     SigninIconToolbarView *signintoolbar;
+    EXGradientToolbarView *toolbar;
     UIImageView *identitybackimg;
     UIImageView *passwordbackimg;
     UIImageView *identityLeftIcon;

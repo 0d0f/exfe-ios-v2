@@ -20,7 +20,8 @@
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
 #define LARGE_SLOT                       (16)
-#define SMALL_SLOT                      (5)
+#define SMALL_SLOT                       (5)
+#define ADDITIONAL_SLOT                  (8)
 
 #define DECTOR_HEIGHT                    (88)
 #define DECTOR_HEIGHT_EXTRA              (15)
@@ -238,6 +239,7 @@
 }
 
 - (void)widgetClick:(id)sender with:(NSNumber*)index{
+    [self hidePopupIfShown];
     NSInteger idx = [index integerValue];
     switch (idx) {
         case 0:
@@ -523,6 +525,7 @@
         [title retain];
         if (title == nil || title.length == 0) {
             timeRelView.text = @"Sometime";
+            timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
             timeAbsView.text = @"Pick a time";
             timeAbsView.hidden = NO;
             timeZoneView.text = @"";
@@ -530,6 +533,7 @@
         }else{
             timeRelView.text = [title copy];
             
+            timeAbsView.textColor = [UIColor COLOR_WA(0x00, 0xFF)];
             NSString* desc = [time getTimeDescription];
             [desc retain];
             if(desc != nil && desc.length > 0){
@@ -560,6 +564,7 @@
         [title release];
     }else{
         timeRelView.text = @"Sometime";
+        timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
         timeAbsView.text = @"Pick a time";
         timeAbsView.hidden = NO;
         timeZoneView.text = @"";
@@ -571,12 +576,13 @@
 - (void)fillPlace:(Place*)place{
     if(place == nil || [place isEmpty]){
         placeTitleView.text = @"Shomewhere";
+        placeDescView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
         placeDescView.text = @"Choose a place";
         placeDescView.hidden = NO;
         mapView.hidden = YES;
         [self setLayoutDirty];
     }else {
-        
+        placeDescView.textColor = [UIColor COLOR_WA(0x00, 0xFF)];
         if ([place hasTitle]){
             placeTitleView.text = place.title;
             
@@ -591,7 +597,7 @@
         }else{
             placeTitleView.text = @"Shomewhere";
             placeDescView.hidden = YES;
-            mapView.hidden = YES;
+            //mapView.hidden = YES;
         }
         
         if ([place hasGeo]){
@@ -621,8 +627,6 @@
             mapView.showsUserLocation = NO;
             mapView.hidden = YES;
         }
-        
-        
         [self setLayoutDirty];
     }
 }
@@ -688,11 +692,12 @@
             if (timeRelView.hidden == NO) {
                 baseX = CGRectGetMinX(timeRelView.frame);
                 baseY = CGRectGetMaxY(timeRelView.frame);
-                
             }
             
             if (timeAbsView.hidden == NO){
                 baseY += TIME_RELATIVE_BOTTOM_MARGIN;
+            }else{
+                baseY += ADDITIONAL_SLOT;
             }
             CGSize timeAbsSize = [timeAbsView.text sizeWithFont:timeAbsView.font];
             timeAbsView.frame = CGRectMake(left, baseY, timeAbsSize.width, timeAbsSize.height);
@@ -744,7 +749,7 @@
             }
             placeDescView.frame = CGRectMake(baseX, baseY, width, ph);
         }else{
-            placeDescView.frame = CGRectMake(baseX, baseY, 0, 0);
+            placeDescView.frame = CGRectMake(baseX, baseY, 0, ADDITIONAL_SLOT);
         }
         
         // Map
@@ -1014,36 +1019,73 @@
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
     NSLog(@"Click to Navigation");
-//    id<MKAnnotation> annotation = view.annotation;
-//    NSString *title = annotation.title;
-//    CLLocationDegrees latitude = annotation.coordinate.latitude;
-//    CLLocationDegrees longitude = annotation.coordinate.longitude;
-//    int zoom = 13;
-//    
-////    {
-////        CLLocationCoordinate2D endingCoord = annotation.coordinate;
-////        MKPlacemark *endLocation = [[MKPlacemark alloc] initWithCoordinate:endingCoord addressDictionary:nil];
-////        MKMapItem *endingItem = [[MKMapItem alloc] initWithPlacemark:endLocation];
-////
-////        NSMutableDictionary *launchOptions = [[NSMutableDictionary alloc] init];
-////        [launchOptions setObject:MKLaunchOptionsDirectionsModeDriving forKey:MKLaunchOptionsDirectionsModeKey];
-////
-////        [endingItem openInMapsWithLaunchOptions:launchOptions];
-////    }
-//    
-//    //NSString * query = [NSString stringWithFormat:@"q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
-//    NSString * query = [NSString stringWithFormat:@"q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
-//    
-//    NSString *mapurl = [NSString stringWithFormat:@"maps://maps?%@", query];
-//    NSString *url4google = [NSString stringWithFormat:@"http://maps.google.com/maps?%@", query];
-//    NSString *url4apple = [NSString stringWithFormat:@"http://maps.apple.com/?%@", query];
-//    NSURL *url = [NSURL URLWithString:mapurl];
-//    if ([[UIApplication sharedApplication] canOpenURL:url]) {
-//        [[UIApplication sharedApplication] openURL:url];
+    id<MKAnnotation> annotation = view.annotation;
+    NSString *title = annotation.title;
+    CLLocationDegrees latitude = annotation.coordinate.latitude;
+    CLLocationDegrees longitude = annotation.coordinate.longitude;
+    int zoom = 13;
+    
+//    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
+//        MKPlacemark *endLocation = [[MKPlacemark alloc] initWithCoordinate:annotation.coordinate addressDictionary:nil];
+//        MKMapItem *endingItem = [[MKMapItem alloc] initWithPlacemark:endLocation];
+//        NSMutableDictionary *launchOptions = [[NSMutableDictionary alloc] init];
+//        [launchOptions setObject:MKLaunchOptionsDirectionsModeDriving forKey:MKLaunchOptionsDirectionsModeKey];
+//        [endingItem openInMapsWithLaunchOptions:launchOptions];
+//        [launchOptions release];
+//        [endLocation release];
+//        [endingItem release];
 //    }else{
-//        url = [NSURL URLWithString:url4google];
-//        [[UIApplication sharedApplication] openURL:url];
+//        //NSString * query = [NSString stringWithFormat:@"q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
+//        NSString * query = [NSString stringWithFormat:@"q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
+//        
+//        NSString *mapurl = [NSString stringWithFormat:@"maps://maps?%@", query];
+//        NSString *url4google = [NSString stringWithFormat:@"http://maps.google.com/maps?%@", query];
+//        NSString *url4apple = [NSString stringWithFormat:@"http://maps.apple.com/?%@", query];
+//        NSURL *url = [NSURL URLWithString:mapurl];
+//        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+//            [[UIApplication sharedApplication] openURL:url];
+//        }else{
+//            url = [NSURL URLWithString:url4google];
+//            [[UIApplication sharedApplication] openURL:url];
+//        }
 //    }
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0"))
+    {
+        //using iOS6 native maps app
+        //first create latitude longitude object
+        CLLocationCoordinate2D coordinate = annotation.coordinate; //CLLocationCoordinate2DMake(latitude,longitude);
+        
+        //create MKMapItem out of coordinates
+        MKPlacemark* placeMark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil];
+        MKMapItem* destination =  [[MKMapItem alloc] initWithPlacemark:placeMark];
+//        // Open in own app
+//        [destination openInMapsWithLaunchOptions:@{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving}];
+        // Open in map app
+        [MKMapItem openMapsWithItems:[NSArray arrayWithObject:destination] launchOptions:@{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving}];
+        [destination release];
+        [placeMark release];
+    } else{
+        
+        //using iOS 5 which has the Google Maps application
+        NSString* mapurl = [NSString stringWithFormat: @"maps://maps?saddr=Current+Location&daddr=Destination@%f,%f", latitude, longitude];
+        // hide saddr=My+Location for web
+        NSString* mapurl4google = [NSString stringWithFormat: @"http://maps.google.com/maps?daddr=Destination@%f,%f", latitude, longitude];
+//        //add place title
+//        // title need encoding: invalide char->%xx & space->+
+//        // also change maps.google.com to maps.apple.com        
+//        NSString *t = [title stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+//        NSString* url = [NSString stringWithFormat: @"http://maps.google.com/maps?daddr=%@@%f,%f", t, latitude, longitude];
+        NSURL *url = [NSURL URLWithString:mapurl];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            [[UIApplication sharedApplication] openURL:url];
+        }else{
+            url = [NSURL URLWithString:mapurl4google];
+            [[UIApplication sharedApplication] openURL:url];
+        }
+    }
+    
+    
 }
 
 - (void)onClick:(id)sender{

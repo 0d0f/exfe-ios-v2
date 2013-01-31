@@ -8,10 +8,11 @@
 
 #import "NewGatherViewController.h"
 #import "Util.h"
-#import "EFTime.h"
 #import "ImgCache.h"
 #import "MapPin.h"
 #import "Place+Helper.h"
+#import "CrossTime+Helper.h"
+#import "EFTime+Helper.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -71,7 +72,8 @@
 - (void)initUI{
     
     CGRect f = self.view.frame;
-    CGRect c = CGRectMake(f.origin.x, f.origin.y + CONTAINER_TOP_MARGIN, f.size.width, f.size.height - f.origin.y - CONTAINER_TOP_MARGIN);
+    CGRect a = [UIScreen mainScreen].applicationFrame;
+    CGRect c = CGRectMake(0, CONTAINER_TOP_MARGIN, CGRectGetWidth(a), CGRectGetHeight(a) - CONTAINER_TOP_MARGIN);
     container = [[UIScrollView alloc] initWithFrame:c];
     {
         int left = CONTAINER_VERTICAL_PADDING;
@@ -709,26 +711,52 @@
 
 - (void)fillTime:(CrossTime*)time{
     if (time != nil){
-        timeRelView.text = [Util getTimeTitle:time localTime:NO];
-        NSString* desc = [Util getTimeDesc:time];
-        if(desc != nil && desc.length > 0){
-            timeAbsView.text = desc;
+        NSString *title = [time getTimeTitle];
+        [title retain];
+        if (title == nil || title.length == 0) {
+            timeRelView.text = @"Sometime";
+            timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
+            timeAbsView.text = @"Pick a time";
             timeAbsView.hidden = NO;
-            [timeAbsView sizeToFit];
-            timeZoneView.hidden = NO;
-            timeZoneView.text = time.begin_at.timezone;
-            [timeZoneView sizeToFit];
-        }else{
-            timeAbsView.text = @"";
-            timeAbsView.hidden = YES;
-            timeZoneView.hidden = YES;
             timeZoneView.text = @"";
+            timeZoneView.hidden = YES;
+        }else{
+            timeRelView.text = [title copy];
+            
+            timeAbsView.textColor = [UIColor COLOR_WA(0x00, 0xFF)];
+            NSString* desc = [time getTimeDescription];
+            [desc retain];
+            if(desc != nil && desc.length > 0){
+                timeAbsView.text = desc;
+                timeAbsView.hidden = NO;
+                [timeAbsView sizeToFit];
+                
+                NSString* tz = [time getTimeZoneLine];
+                [tz retain];
+                if (tz != nil && tz.length > 0) {
+                    timeZoneView.hidden = NO;
+                    timeZoneView.text = [tz copy];
+                    [timeZoneView sizeToFit];
+                }else{
+                    timeZoneView.hidden = YES;
+                    timeZoneView.text = @"";
+                }
+                [tz release];
+                
+            }else{
+                timeAbsView.text = @"";
+                timeAbsView.hidden = YES;
+                timeZoneView.hidden = YES;
+                timeZoneView.text = @"";
+            }
+            [desc release];
         }
-        
+        [title release];
     }else{
         timeRelView.text = @"Sometime";
+        timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
         timeAbsView.text = @"Pick a time";
-//        timeAbsView.hidden = YES;
+        timeAbsView.hidden = NO;
         timeZoneView.text = @"";
         timeZoneView.hidden = YES;
     }
@@ -738,24 +766,26 @@
 - (void)fillPlace:(Place*)place{
     if(place == nil || [place isEmpty]){
         placeTitleView.text = @"Shomewhere";
+        placeDescView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
         placeDescView.text = @"Choose a place";
-//        placeDescView.hidden = YES;
+        placeDescView.hidden = NO;
         mapView.hidden = YES;
         [self setLayoutDirty];
     }else {
-        
+        placeDescView.textColor = [UIColor COLOR_WA(0x00, 0xFF)];
         if ([place hasTitle]){
             placeTitleView.text = place.title;
+            
+            if ([place hasDescription]){
+                placeDescView.text = place.place_description;
+                placeDescView.hidden = NO;
+                [placeDescView sizeToFit];
+            }else{
+                placeDescView.text = @"";
+                placeDescView.hidden = YES;
+            }
         }else{
             placeTitleView.text = @"Shomewhere";
-        }
-        
-        if ([place hasDescription]){
-            placeDescView.text = place.place_description;
-            placeDescView.hidden = NO;
-            [placeDescView sizeToFit];
-        }else{
-            placeDescView.text = @"";
             placeDescView.hidden = YES;
         }
         
@@ -774,6 +804,10 @@
             [mapView setRegion:region animated:NO];
             
             [mapView removeAnnotations:mapView.annotations];
+            NSString *placeTitle = place.title;
+            if (placeTitle == nil || place.title.length == 0) {
+                placeTitle = @"Somewhere";
+            }
             MapPin *pin = [[MapPin alloc] initWithCoordinates:region.center placeName:place.title description:@""];
             [mapView addAnnotation:pin];
             
@@ -803,6 +837,7 @@
 #pragma mark Relayout methods
 - (void)relayoutUI{
     if (layoutDirty == YES){
+        NSLog(@"relayoutUI");
         //CGRect f = self.view.frame;
         CGRect c = container.frame;
         
@@ -814,15 +849,6 @@
         
         // Description
         if (descView.hidden == NO) {
-            //            CGSize rect = CGSizeMake(width, INFINITY);
-            //            NSString* four_lines = @"M\nM\nM\nM";
-            //            CGSize fit4 = [four_lines sizeWithFont:descView.font constrainedToSize:rect lineBreakMode:descView.lineBreakMode];
-            //            CGSize fitFull = [descView.text sizeWithFont:descView.font constrainedToSize:rect lineBreakMode:descView.lineBreakMode];
-            //            CGFloat bestHeight = fitFull.height;
-            //            if (descView.numberOfLines == 4){
-            //                bestHeight = MIN(fit4.height, fitFull.height);
-            //            }
-            //            descView.frame = CGRectMake(left , baseY, width, bestHeight);
             descView.frame = CGRectMake(left , baseY, width, 44);
 //            [descView sizeToFit];
             baseX = CGRectGetMaxX(descView.frame);
@@ -906,7 +932,7 @@
         
         // Map
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
-        int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + container.frame.origin.y  + OVERLAP /*+ SMALL_SLOT */);
+        int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + container.frame.origin.y  + OVERLAP + 8/*+ SMALL_SLOT */);
         mapView.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b);
         mapShadow.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width , 4);
         mapShadow.hidden = mapView.hidden;

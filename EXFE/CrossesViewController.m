@@ -613,7 +613,7 @@
         }
         
         if (cross.time != nil){
-            NSString *time = [cross.time getTimeSingleLine];
+            NSString *time = [cross.time getTimeTitle];
             //[time retain];
             if (time == nil || time.length == 0) {
                 cell.time = @"";

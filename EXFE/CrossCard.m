@@ -61,14 +61,15 @@
         if (conversationCount > 0) {
             convw = conv_width + titlePaddingRight;
         }
-        titleRect = CGRectMake(CGRectGetMinX(barnnerRect) + paddingH, CGRectGetMinY(barnnerRect) + titlePaddingV, CGRectGetWidth(barnnerRect) - convw - paddingH, CGRectGetHeight(barnnerRect) );
+        titleRect = CGRectMake(CGRectGetMinX(barnnerRect) + paddingH, CGRectGetMinY(barnnerRect) + titlePaddingV, CGRectGetWidth(barnnerRect) - convw - paddingH, CGRectGetHeight(barnnerRect) - titlePaddingV );
+        
         CGFloat textPaddingV = 4.5;
-        timeRect = CGRectMake(textbarRect.origin.x + paddingH, textbarRect.origin.y + textPaddingV, 112, textbarRect.size.height - textPaddingV * 2);
+        timeRect = CGRectMake(textbarRect.origin.x + paddingH, textbarRect.origin.y + textPaddingV, 100, textbarRect.size.height - textPaddingV * 2);
         timeFadingRect = CGRectMake(CGRectGetMaxX(timeRect) - 12, CGRectGetMidY(timeRect) - 11, 20, 22);
-
+        
         avatarRect = CGRectMake(CGRectGetMaxX(textbarRect) - avatarWidth - 3, CGRectGetMinY(textbarRect) + (CGRectGetHeight(textbarRect) - avatarHeight) / 2, avatarWidth, avatarHeight);
-
-        placeRect = CGRectMake(CGRectGetMaxX(timeRect) + paddingHM, textbarRect.origin.y + textPaddingV, 140, textbarRect.size.height - textPaddingV * 2);
+        
+        placeRect = CGRectMake(CGRectGetMaxX(timeRect) + paddingHM, textbarRect.origin.y + textPaddingV, 150, textbarRect.size.height - textPaddingV * 2);
         placeFadingRect = CGRectMake(CGRectGetMaxX(placeRect) - 20, CGRectGetMidY(placeRect) - 11, 20, 22);
         
     }
@@ -151,12 +152,23 @@
 - (void)layoutSubviews{
 	CGRect b = [self bounds];
 	[contentView setFrame:b];
+    
+    CGFloat paddingH = 8;
+    CGFloat titlePaddingV = 12;
+    
+    CGFloat convw = 0;
+    CGFloat conv_width = 36;
+    CGFloat titlePaddingRight = 4;
+    if (conversationCount > 0) {
+        convw = conv_width + titlePaddingRight;
+    }
+    titleRect = CGRectMake(CGRectGetMinX(barnnerRect) + paddingH, CGRectGetMinY(barnnerRect) + titlePaddingV, CGRectGetWidth(barnnerRect) - convw - paddingH, CGRectGetHeight(barnnerRect) - titlePaddingV );
+    
     [super layoutSubviews];
 }
 
 - (void)drawContentView:(CGRect)rect{
     CGRect b = [self bounds];
-    // Rect caculation
     
     if (bannerimg != nil){
         [bannerimg drawInRect:barnnerRect];
@@ -184,7 +196,7 @@
         CGRect fillrect=CGRectMake(barnnerRect.origin.x, 8 , barnnerRect.size.width, barnnerRect.size.height);
         CGContextAddRect(context, fillrect);
         CGContextClosePath(context);
-        CGContextSetRGBFillColor(context, COLOR255(58), COLOR255(110), COLOR255(165), 1);
+        CGContextSetRGBFillColor(context, COLOR255(0x84), COLOR255(0xBF), COLOR255(0xDE), 1);
         CGContextFillPath(context);
     }
     
