@@ -36,6 +36,8 @@ static char identitykey;
     suggestionTable.dataSource=self;
     suggestionTable.delegate=self;
     [self.view addSubview:suggestionTable];
+    
+    address=[[AddressBook alloc] init];
 
     
     
@@ -139,6 +141,7 @@ static char identitykey;
     
     NSDate *localaddressbook_read_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"localaddressbook_read_at"];
     int offset=[[NSDate date] timeIntervalSince1970]-[localaddressbook_read_at timeIntervalSince1970];
+    //TODO: offset=10000 for debug, must be deleted before release.
 //    offset=100000;
     if(localcontacts==nil || offset > 1*24*60*60){
         MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -149,34 +152,45 @@ static char identitykey;
         [bigspin release];
         hud.labelText = @"Loading";
 
-        AddressBook *address=[[AddressBook alloc] init];
-        
         dispatch_queue_t loadingQueue = dispatch_queue_create("loading addressbook", NULL);
         dispatch_async(loadingQueue, ^{
-//            address.parentview=self.view;
-            if(localcontacts!=nil)
-                [localcontacts release];
-            localcontacts =[[address UpdatePeople:nil] retain];
+            [address UpdatePeople:nil];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                    if(filteredlocalcontacts!=nil)
-                        [filteredlocalcontacts release];
-                
-                    filteredlocalcontacts=[localcontacts retain];
-                    [NSKeyedArchiver archiveRootObject: filteredlocalcontacts toFile:filename];
-                    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"localaddressbook_read_at"];
-                    if(addressbookType==LOCAL_ADDRESSBOOK)
-                        [self reloadLocalAddressBook];
-                [address release];
+                NSFetchRequest* request = [LocalContact fetchRequest];
+                if(filteredlocalcontacts!=nil)
+                   [filteredlocalcontacts release];
+               filteredlocalcontacts=[[LocalContact objectsWithFetchRequest:request] retain];
+                if(addressbookType==LOCAL_ADDRESSBOOK)
+                    [self reloadLocalAddressBook];
+
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [self copyMoreContactsFromIdx:100];
             });
         });
         dispatch_release(loadingQueue);
     }
+}
 
+- (void) copyMoreContactsFromIdx:(int)idx{
+    dispatch_queue_t loadingQueue = dispatch_queue_create("loading addressbook", NULL);
+    dispatch_async(loadingQueue, ^{
+        [address CopyAllPeopleFrom:idx];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSFetchRequest* request = [LocalContact fetchRequest];
+            if(filteredlocalcontacts!=nil)
+                [filteredlocalcontacts release];
+            filteredlocalcontacts=[[LocalContact objectsWithFetchRequest:request] retain];
+            NSLog(@"filteredlocalcontacts count:%i",[filteredlocalcontacts count]);
+            if(addressbookType==LOCAL_ADDRESSBOOK)
+                [self reloadLocalAddressBook];
 
-    
-
+            if(idx+100<address.contactscount){
+                [self copyMoreContactsFromIdx:idx+100];
+            }
+        });
+    });
+    dispatch_release(loadingQueue);
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
@@ -207,6 +221,7 @@ static char identitykey;
     addressbookType=LOCAL_ADDRESSBOOK;
     [expandExfeeView setHidden:YES];
     expandCellHeight=44;
+    NSLog(@"reload...local contacts");
     [suggestionTable reloadData];
 }
 
@@ -279,6 +294,7 @@ static char identitykey;
     [errorHinticon release];
     [errorHintLabel release];
     [errorHint release];
+    [address release];
     [super dealloc];
 }
 - (BOOL) showErrorHint{
@@ -362,6 +378,7 @@ static char identitykey;
             request.params=rsvpParams;
             request.onDidLoadResponse=^(RKResponse *response){
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
+                NSLog(@"%@",[response bodyAsString]);
                 if (response.statusCode == 200) {
                     NSDictionary *body=[response.body objectFromJSONData];
                     if([body isKindOfClass:[NSDictionary class]]) {
@@ -581,10 +598,11 @@ static char identitykey;
     }
     if(addressbookType==LOCAL_ADDRESSBOOK)
     {
-        NSDictionary *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
-        cell.title = [person objectForKey:@"name"];
+        LocalContact *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
 
-        UIImage *avatar=[person objectForKey:@"avatar"];
+        cell.title = person.name;
+
+        UIImage *avatar=[UIImage imageWithData:person.avatar];
         if(avatar==nil)
             cell.avatar=[UIImage imageNamed:@"portrait_default.png"];
         else
@@ -592,32 +610,38 @@ static char identitykey;
         
         
         NSMutableArray *iconset=[[NSMutableArray alloc] initWithCapacity:3];
-
-        if([person objectForKey:@"social"]!=nil && [[person objectForKey:@"social"] isKindOfClass: [NSArray class]]){
-            for (NSDictionary *socialdict in [person objectForKey:@"social"]) {
-                if([[socialdict objectForKey:@"service"] isEqualToString:@"twitter"]){
-                    [iconset addObject:[UIImage imageNamed:@"identity_twitter_18_grey.png"]];
-                }
-                if([[socialdict objectForKey:@"service"] isEqualToString:@"facebook"]){
-                    [iconset addObject:[UIImage imageNamed:@"identity_facebook_18_grey.png"]];
-                }
-            }
-        }
-        
-        if([person objectForKey:@"im"]!=nil && [[person objectForKey:@"im"] isKindOfClass: [NSArray class]]){
-            for (NSDictionary *imdict in [person objectForKey:@"im"]) {
-                if([[imdict objectForKey:@"service"] isEqualToString:@"Facebook"]){
-                    [iconset addObject:[UIImage imageNamed:@"identity_facebook_18_grey.png"]];
+        if(person.social!=nil){
+            NSArray *social_array=[NSKeyedUnarchiver unarchiveObjectWithData:person.social];
+            if( social_array!=nil && [social_array isKindOfClass:[NSArray class]]){
+                for (NSDictionary *socialdict in social_array) {
+                    if([[socialdict objectForKey:@"service"] isEqualToString:@"twitter"]){
+                        [iconset addObject:[UIImage imageNamed:@"identity_twitter_18_grey.png"]];
+                    }
+                    if([[socialdict objectForKey:@"service"] isEqualToString:@"facebook"]){
+                        [iconset addObject:[UIImage imageNamed:@"identity_facebook_18_grey.png"]];
+                    }
                 }
             }
         }
-
-        if([person objectForKey:@"emails"]!=nil && [[person objectForKey:@"emails"] isKindOfClass: [NSArray class]]){
-            [iconset addObject:[UIImage imageNamed:@"identity_email_18_grey.png"]];
+        if(person.im!=nil){
+            NSArray *im_array=[NSKeyedUnarchiver unarchiveObjectWithData:person.im];
+            if( im_array!=nil && [im_array isKindOfClass: [NSArray class]]){
+                for (NSDictionary *imdict in im_array) {
+                    if([[imdict objectForKey:@"service"] isEqualToString:@"Facebook"]){
+                        [iconset addObject:[UIImage imageNamed:@"identity_facebook_18_grey.png"]];
+                    }
+                }
+            }
+ 
         }
-//        NSDictionary *persondict=[AddressBook getDefaultIdentity:person];
-//        NSString *username=[persondict objectForKey:@"external_id"];
-//        cell.subtitle=username;
+        if(person.emails!=nil){
+            NSArray *emails_array=[NSKeyedUnarchiver unarchiveObjectWithData:person.emails];
+
+            if(emails_array!=nil && [emails_array isKindOfClass: [NSArray class]]){
+                [iconset addObject:[UIImage imageNamed:@"identity_email_18_grey.png"]];
+            }
+            
+        }
         cell.providerIconSet=iconset;
         cell.providerIcon=nil;
 
@@ -682,7 +706,9 @@ static char identitykey;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(addressbookType==LOCAL_ADDRESSBOOK){
-        NSDictionary *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
+        LocalContact *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
+        NSLog(@"person:%@",person);
+//        NSDictionary *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
         [self addByInputIdentity:[[AddressBook getDefaultIdentity:person] objectForKey:@"external_id"] provider:[[AddressBook getDefaultIdentity:person] objectForKey:@"provider"] dismiss:NO];
     }else{
         Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
@@ -813,8 +839,9 @@ static char identitykey;
         else{
             selectedRowIndex=indexPath.row;
         }
-        NSDictionary *dict=[filteredlocalcontacts objectAtIndex:indexPath.row];
-        NSArray* useridentities=[AddressBook getLocalIdentityObjects:dict];
+        LocalContact *localcontact=[filteredlocalcontacts objectAtIndex:indexPath.row];
+        
+        NSArray* useridentities=[AddressBook getLocalIdentityObjects:localcontact];
         expandCellHeight=44+[useridentities count]/2*40+([useridentities count]%2)*40;
         
         [[suggestionTable cellForRowAtIndexPath:indexPath] setNeedsDisplay];

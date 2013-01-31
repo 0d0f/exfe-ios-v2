@@ -86,11 +86,11 @@
     }
 
     if([invitation.mates intValue]>0){
-        CGImageRef triimageref = CGImageRetain([UIImage imageNamed:@"portrait_tri_26"].CGImage);
+        CGImageRef triimageref = CGImageRetain([UIImage imageNamed:@"portrait_tri.png"].CGImage);
         CGContextDrawImage(currentContext,CGRectMake(rect.size.width-13-5, rect.size.height-5-13, 13, 13) , triimageref);
         CGImageRelease(triimageref);
         
-        CTFontRef matesfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 10.0, NULL);
+        CTFontRef matesfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 9.0, NULL);
 
         NSMutableAttributedString *matesattribstring=[[NSMutableAttributedString alloc] initWithString:[invitation.mates stringValue]];
         [matesattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)matesfontref range:NSMakeRange(0,[matesattribstring length])];
@@ -107,7 +107,7 @@
         
         CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)matesattribstring);
         CGMutablePathRef path = CGPathCreateMutable();
-        CGPathAddRect(path, NULL, CGRectMake(rect.size.width-13, rect.size.height-3-13, 13, 13));
+        CGPathAddRect(path, NULL, CGRectMake(rect.size.width-14, rect.size.height-3-13.5, 13, 13));
         CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [matesattribstring length]), path, NULL);
         CFRelease(framesetter);
         CFRelease(path);
