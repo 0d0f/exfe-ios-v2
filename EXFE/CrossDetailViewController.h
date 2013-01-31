@@ -62,7 +62,7 @@
     UIButton *timeEditMenu;
     UIButton *placeEditMenu;
     UIButton *titleAndDescEditMenu;
-    BOOL isWidgetShown;
+    NSInteger popupCtrolId;
     
 }
 @property (retain,nonatomic) Cross* cross;
