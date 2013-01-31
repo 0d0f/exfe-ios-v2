@@ -78,9 +78,10 @@
                 localcontact.uid=[NSNumber numberWithInt:uid];
                 
                 CFStringRef compositeName=ABRecordCopyCompositeName(ref);
-                localcontact.name=(NSString *)compositeName;
-
-                indexfield=[indexfield stringByAppendingString:(NSString *)compositeName];
+                if((NSString *)compositeName!=nil){
+                    localcontact.name=(NSString *)compositeName;
+                    indexfield=[indexfield stringByAppendingString:(NSString *)compositeName];
+                }
                 
                 CFDataRef avatarref=ABPersonCopyImageData(ref);
                 UIImage *avatar = [UIImage imageWithData:(NSData *)avatarref];
@@ -93,8 +94,10 @@
                 NSMutableArray *emails_array=[[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_email)] autorelease];
                 for (CFIndex i = 0; i < ABMultiValueGetCount(multi_email); i++) {
                     NSString* email =(NSString*) ABMultiValueCopyValueAtIndex(multi_email, i);
-                    indexfield=[indexfield stringByAppendingFormat:@" %@",email];
-                    [emails_array addObject:email];
+                    if(email!=nil){
+                        indexfield=[indexfield stringByAppendingFormat:@" %@",email];
+                        [emails_array addObject:email];
+                    }
                 }
                 if([emails_array count]>0){
                     NSData *data = [NSKeyedArchiver archivedDataWithRootObject: emails_array];
@@ -107,10 +110,13 @@
 
                 if([[socialprofile objectForKey:@"service"] isEqualToString:@"twitter"] ||  [[socialprofile objectForKey:@"service"] isEqualToString:@"facebook"]){
                     [social_array addObject:socialprofile];
+                    
                     NSString *social_username=[socialprofile objectForKey:@"username"];
-                    if([[socialprofile objectForKey:@"service"] isEqualToString:@"twitter"])
-                        social_username=[@"@" stringByAppendingString:social_username];
-                    indexfield=[indexfield stringByAppendingFormat:@" %@",social_username];
+                    if(social_username!=nil){
+                        if([[socialprofile objectForKey:@"service"] isEqualToString:@"twitter"])
+                            social_username=[@"@" stringByAppendingString:social_username];
+                        indexfield=[indexfield stringByAppendingFormat:@" %@",social_username];
+                    }
                 }
             }
                 if([social_array count]>0){
@@ -123,10 +129,13 @@
 
                 NSDictionary* personim =(NSDictionary*) ABMultiValueCopyValueAtIndex(multi_im, i);
 
-                if([[personim objectForKey:@"service"] isEqualToString:@"Facebook"]){
-                    [im_array addObject:personim];
-                    indexfield=[indexfield stringByAppendingFormat:@" %@",[personim objectForKey:@"username"]];
+                if([personim objectForKey:@"username"]!=nil){
+                    if([[personim objectForKey:@"service"] isEqualToString:@"Facebook"]){
+                        [im_array addObject:personim];
+                        indexfield=[indexfield stringByAppendingFormat:@" %@",[personim objectForKey:@"username"]];
+                    }
                 }
+                
                 if([im_array count]>0){
                     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:im_array];
                     localcontact.im=data;

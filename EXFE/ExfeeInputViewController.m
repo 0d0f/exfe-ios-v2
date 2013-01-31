@@ -136,14 +136,14 @@ static char identitykey;
 }
 
 - (void)viewDidAppear:(BOOL)animated{
-    NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *filename = [docsPath stringByAppendingPathComponent:@"localcontacts"];
-    
+//    NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+//    NSString *filename = [docsPath stringByAppendingPathComponent:@"localcontacts"];
     NSDate *localaddressbook_read_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"localaddressbook_read_at"];
     int offset=[[NSDate date] timeIntervalSince1970]-[localaddressbook_read_at timeIntervalSince1970];
+    
     //TODO: offset=10000 for debug, must be deleted before release.
 //    offset=100000;
-    if(localcontacts==nil || offset > 1*24*60*60){
+    if(offset > 1*24*60*60){
         MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode=MBProgressHUDModeCustomView;
         EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
@@ -169,6 +169,14 @@ static char identitykey;
             });
         });
         dispatch_release(loadingQueue);
+    }else{
+        NSFetchRequest* request = [LocalContact fetchRequest];
+        if(filteredlocalcontacts!=nil)
+            [filteredlocalcontacts release];
+        filteredlocalcontacts=[[LocalContact objectsWithFetchRequest:request] retain];
+        if(addressbookType==LOCAL_ADDRESSBOOK)
+            [self reloadLocalAddressBook];
+
     }
 }
 
@@ -181,12 +189,13 @@ static char identitykey;
             if(filteredlocalcontacts!=nil)
                 [filteredlocalcontacts release];
             filteredlocalcontacts=[[LocalContact objectsWithFetchRequest:request] retain];
-            NSLog(@"filteredlocalcontacts count:%i",[filteredlocalcontacts count]);
             if(addressbookType==LOCAL_ADDRESSBOOK)
                 [self reloadLocalAddressBook];
 
             if(idx+100<address.contactscount){
                 [self copyMoreContactsFromIdx:idx+100];
+            }else{
+                [[NSUserDefaults standardUserDefaults] setObject:[NSDate date]  forKey:@"localaddressbook_read_at"];
             }
         });
     });
@@ -608,7 +617,7 @@ static char identitykey;
         else
             cell.avatar=avatar;
         
-        
+        NSLog(@"reload idx:%i",indexPath.row);
         NSMutableArray *iconset=[[NSMutableArray alloc] initWithCapacity:3];
         if(person.social!=nil){
             NSArray *social_array=[NSKeyedUnarchiver unarchiveObjectWithData:person.social];
@@ -692,6 +701,7 @@ static char identitykey;
         }
         
     }
+    NSLog(@"return cell idx:%i",indexPath.row);
     return cell;
 }
 
