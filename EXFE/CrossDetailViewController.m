@@ -52,6 +52,14 @@
 #define TITLE_HORIZON_MARGIN             (SMALL_SLOT)
 #define TITLE_VERTICAL_MARGIN            (18)
 
+#define kPopupTypeEditTitle              (0x0101)
+#define kPopupTypeEditTime               (0x0102)
+#define kPopupTypeEditPlace              (0x0103)
+#define kPopupTypeEditStatus             (0x0204)
+#define kPopupTypeVewStatus              (0x0305)
+#define MASK_HIGH_BITS                   (0xFF00)
+#define MASK_LOW_BITS                    (0x00FF)
+
 
 @interface CrossDetailViewController ()
 
@@ -61,14 +69,11 @@
 @synthesize cross;
 @synthesize default_user;
 
-
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        isWidgetShown = NO;
     }
     return self;
 }
@@ -214,6 +219,8 @@
     [self.view  addSubview:btnBack];
     
     self.view.backgroundColor = [UIColor grayColor];
+    
+    popupCtrolId = 0;
 }
 
 - (void)hideWidgetTabBar{
@@ -321,23 +328,69 @@
 }
 
 - (void)hidePopupIfShown{
-    [self hideMenuWithAnimation:YES];
-    [self hideStatusView];
-    [self hideTitleAndDescEditMenuWithAnimation:YES];
-    [self hideTimeEditMenuWithAnimation:YES];
-    [self hidePlaceEditMenuWithAnimation:YES];
+    [self hidePopupIfShown:0];
+}
+
+- (void)hidePopupIfShown:(NSInteger)skipId{
+    NSInteger ctrlid = skipId & MASK_LOW_BITS;
+    
+    if (ctrlid != (kPopupTypeEditStatus & MASK_LOW_BITS)) {
+        [self hideMenuWithAnimation:YES];
+    }
+    if (ctrlid != (kPopupTypeVewStatus & MASK_LOW_BITS)) {
+        [self hideStatusView];
+    }
+    if (ctrlid != (kPopupTypeEditTitle & MASK_LOW_BITS)) {
+        [self hideTitleAndDescEditMenuWithAnimation:YES];
+    }
+    if (ctrlid != (kPopupTypeEditTime & MASK_LOW_BITS)) {
+        [self hideTimeEditMenuWithAnimation:YES];
+    }
+    if (ctrlid != (kPopupTypeEditPlace & MASK_LOW_BITS)) {
+        [self hidePlaceEditMenuWithAnimation:YES];
+    }
     [self hideWidgetTabBar];
+    
+    popupCtrolId = skipId;
+}
+
+- (void)showPopup:(NSInteger)ctrlId{
+    if (ctrlId == 0 ) {
+        [self hidePopupIfShown];
+        return;
+    }
+    
+    if (ctrlId != popupCtrolId) {
+        NSInteger low = ctrlId & MASK_LOW_BITS;
+        [self hidePopupIfShown:ctrlId];
+        switch (low) {
+            case kPopupTypeEditTitle & MASK_LOW_BITS:
+                [self showTtitleAndDescEditMenu:titleView];
+                break;
+            case kPopupTypeEditTime & MASK_LOW_BITS:
+                [self showTimeEditMenu:timeRelView];
+                break;
+            case kPopupTypeEditPlace & MASK_LOW_BITS:
+                [self showPlaceEditMenu:placeTitleView];
+                break;
+            case kPopupTypeEditStatus & MASK_LOW_BITS:
+                break;
+            case kPopupTypeVewStatus & MASK_LOW_BITS:
+                break;
+                
+            default:
+                break;
+        }
+        
+    }
 }
 
 - (void)handleHeaderTap:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
     
-    
-    [self hidePopupIfShown];
-    
     if (sender.state == UIGestureRecognizerStateEnded) {
         if (titleView.hidden == NO && CGRectContainsPoint(titleView.frame, location)){
-            [self showTtitleAndDescEditMenu:titleView];
+            [self showPopup:kPopupTypeEditTitle];
             return;
         }
     }
@@ -346,15 +399,12 @@
 - (void)handleTap:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
 
-    [self hidePopupIfShown];
-    
     if (sender.state == UIGestureRecognizerStateEnded) {
         //UIView *tappedView = [sender.view hitTest:[sender locationInView:sender.view] withEvent:nil];
-
         
         if (descView.hidden == NO && CGRectContainsPoint([Util expandRect:descView.frame], location)) {
             [self showDescriptionFullContent: (descView.numberOfLines != 0)];
-            [self showTtitleAndDescEditMenu:titleView];
+            [self showPopup:kPopupTypeEditTitle];
             return;
         }
         if (CGRectContainsPoint([Util expandRect:[exfeeShowview frame]], location)) {
@@ -378,17 +428,9 @@
             r3 = timeZoneView.frame;
         }
         if (CGRectContainsPoint([Util expandRect:r1 with:r2 with:r3], location)) {
-            [self showTimeEditMenu:timeRelView];
+            [self showPopup:kPopupTypeEditTime];
             return;
         }
-        
-//        if (timeRelView.hidden == NO && CGRectContainsPoint(timeRelView.frame, location)){
-//            [self showTimeEditMenu:timeRelView];
-//            return;
-//        }else if (timeAbsView.hidden == NO && CGRectContainsPoint(timeAbsView.frame, location)) {
-//            [self showTimeEditMenu:timeAbsView];
-//            return;
-//        }
         
         r1 = CGRectNull;
         r2 = CGRectNull;
@@ -399,16 +441,11 @@
             r2 = placeDescView.frame;
         }
         if (CGRectContainsPoint([Util expandRect:r1 with:r2], location)) {
-            [self showPlaceEditMenu:placeTitleView];
+            [self showPopup:kPopupTypeEditPlace];
             return;
         }
-//        if (placeTitleView.hidden == NO && CGRectContainsPoint(placeTitleView.frame, location)){
-//            [self showPlaceEditMenu:placeTitleView];
-//            return;
-//        }else if (placeDescView.hidden == NO && CGRectContainsPoint(placeDescView.frame, location)){
-//            [self showPlaceEditMenu:placeDescView];
-//            return;
-//        }
+        
+        [self hidePopupIfShown:0];
     }
 }
 
@@ -1231,17 +1268,23 @@
         rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44) withDelegate:self items:itemslist showTitleBar:YES];
         [self.view addSubview:rsvpmenu];
     }
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44)];
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44)];
 
     rsvpmenu.invitation = _invitation;
     rsvpmenu.hidden = NO;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
-    
-    if(rsvpstatusview!=nil)
-       [rsvpstatusview setHidden:YES];
-    
+    rsvpmenu.frame = CGRectOffset(rsvpmenu.frame, 0 - CGRectGetWidth(rsvpmenu.frame), 0);
     [UIView commitAnimations];
+    
+    
+//    [UIView beginAnimations:nil context:NULL];
+//    [UIView setAnimationDuration:0.3];
+//    
+//    if(rsvpstatusview!=nil)
+//       [rsvpstatusview setHidden:YES];
+//    
+//    [UIView commitAnimations];
 
 }
     
