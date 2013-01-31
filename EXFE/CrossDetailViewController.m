@@ -910,8 +910,9 @@
         Invitation *invitation =[arr objectAtIndex:index];
         
 
+        CGPoint offset = container.contentOffset;
         int x=exfeeShowview.frame.origin.x+(col+1)*(50+5*2)+5;
-        int y=exfeeShowview.frame.origin.y+row*(50+5*2)+y_start_offset;
+        int y=exfeeShowview.frame.origin.y+row*(50+5*2)+y_start_offset - offset.y;
         
         if(x + 180 > self.view.frame.size.width){
             x = x - 180;
@@ -931,9 +932,11 @@
             rsvpstatus_x=self.view.frame.size.width-rsvpstatusview.frame.size.width;
         
         if(app.userid ==[invitation.identity.connected_user_id intValue]){
-            [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Pending", nil]];
-            [self hideStatusView];
-            [rsvpstatusview setHidden:YES];
+            NSInteger ctrlId = popupCtrolId;
+            [self hidePopupIfShown:kPopupTypeEditStatus];
+            if (ctrlId != kPopupTypeEditStatus) {
+                [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Pending", nil]];
+            }
         }else{
             [rsvpstatusview setHidden:NO];
 //            CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:
@@ -985,7 +988,7 @@
 
             
             [rsvpstatusview setNeedsDisplay];
-            [self hideMenuWithAnimation:YES];
+            [self hidePopupIfShown:kPopupTypeVewStatus];
         }
     }
     //        [crosstitle resignFirstResponder];
@@ -1268,7 +1271,8 @@
         rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44) withDelegate:self items:itemslist showTitleBar:YES];
         [self.view addSubview:rsvpmenu];
     }
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44)];
+    CGPoint offset = container.contentOffset;
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20 - offset.y, 125, 20+[itemslist count]*44)];
 
     rsvpmenu.invitation = _invitation;
     rsvpmenu.hidden = NO;
