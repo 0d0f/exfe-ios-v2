@@ -37,6 +37,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    CGRect b = self.view.bounds;
+    CGRect a = [UIScreen mainScreen].applicationFrame;
     
     toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
@@ -92,7 +94,7 @@
 //    [toolbar setHidden:YES];
 
     
-    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(0+ self.view.frame.size.width * 0.6,  self.view.frame.origin.y +  DECTOR_HEIGHT, 40, DECTOR_HEIGHT_EXTRA) ];
+    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90,  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
 
     headview.backgroundColor=[UIColor grayColor];
     
