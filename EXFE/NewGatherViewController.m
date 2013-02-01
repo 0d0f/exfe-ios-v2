@@ -437,10 +437,11 @@
         CGRectContainsPoint([descView frame], location) || CGRectContainsPoint([descView frame], location)){
         TitleDescEditViewController *titleViewController=[[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
         titleViewController.delegate=self;
-        NSString *imgurl;
+        NSString *imgurl = nil;
         for(NSDictionary *widget in (NSArray*)cross.widget) {
             if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
                 imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+                break;
             }
         }
         titleViewController.imgurl=imgurl;

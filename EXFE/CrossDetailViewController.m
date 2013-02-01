@@ -53,10 +53,11 @@
 #define TITLE_VERTICAL_MARGIN            (18)
 
 #define kPopupTypeEditTitle              (0x0101)
-#define kPopupTypeEditTime               (0x0102)
-#define kPopupTypeEditPlace              (0x0103)
-#define kPopupTypeEditStatus             (0x0204)
-#define kPopupTypeVewStatus              (0x0305)
+#define kPopupTypeEditDescription        (0x0102)
+#define kPopupTypeEditTime               (0x0103)
+#define kPopupTypeEditPlace              (0x0104)
+#define kPopupTypeEditStatus             (0x0205)
+#define kPopupTypeVewStatus              (0x0306)
 #define MASK_HIGH_BITS                   (0xFF00)
 #define MASK_LOW_BITS                    (0x00FF)
 
@@ -344,6 +345,9 @@
     if (ctrlid != (kPopupTypeEditTitle & MASK_LOW_BITS)) {
         [self hideTitleAndDescEditMenuWithAnimation:YES];
     }
+    if (ctrlid != (kPopupTypeEditDescription & MASK_LOW_BITS)) {
+        [self hideTitleAndDescEditMenuWithAnimation:YES];
+    }
     if (ctrlid != (kPopupTypeEditTime & MASK_LOW_BITS)) {
         [self hideTimeEditMenuWithAnimation:YES];
     }
@@ -366,6 +370,7 @@
         [self hidePopupIfShown:ctrlId];
         switch (low) {
             case kPopupTypeEditTitle & MASK_LOW_BITS:
+            case kPopupTypeEditDescription & MASK_LOW_BITS:
                 [self showTtitleAndDescEditMenu:titleView];
                 break;
             case kPopupTypeEditTime & MASK_LOW_BITS:
@@ -406,7 +411,7 @@
         
         if (descView.hidden == NO && CGRectContainsPoint([Util expandRect:descView.frame], location)) {
             [self showDescriptionFullContent: (descView.numberOfLines != 0)];
-            [self showPopup:kPopupTypeEditTitle];
+            [self showPopup:kPopupTypeEditDescription];
             return;
         }
         if (CGRectContainsPoint([Util expandRect:[exfeeShowview frame]], location)) {
@@ -1343,13 +1348,15 @@
 - (void) showTitleAndDescView{
     TitleDescEditViewController *titleViewController=[[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
     titleViewController.delegate=self;
-    NSString *imgurl;
+    NSString *imgurl = nil;
     for(NSDictionary *widget in (NSArray*)cross.widget) {
         if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
             imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+            break;
         }
     }
     titleViewController.imgurl=imgurl;
+    //titleViewController.editFieldHint = popupCtrolId & MASK_LOW_BITS;
     [self presentModalViewController:titleViewController animated:YES];
     [titleViewController setCrossTitle:cross.title desc:cross.cross_description];
     [titleViewController release];

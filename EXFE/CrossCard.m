@@ -187,7 +187,7 @@
         CGRect fillrect=CGRectMake(barnnerRect.origin.x, 8 , barnnerRect.size.width, barnnerRect.size.height);
         CGContextAddRect(context, fillrect);
         CGContextClosePath(context);
-        CGContextSetRGBFillColor(context, COLOR255(0xEF), COLOR255(0xF6), COLOR255(0xFF), 1);
+        CGContextSetRGBFillColor(context, COLOR255(0xE0), COLOR255(0xEF), COLOR255(0xFF), 1);
         CGContextFillPath(context);
     }
     

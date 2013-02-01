@@ -41,6 +41,8 @@
             [btnaccepted setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [btnaccepted setFrame:CGRectMake(0, y, 125, 44)];
             [btnaccepted.titleLabel setTextAlignment:NSTextAlignmentLeft];
+            btnaccepted.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            btnaccepted.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
             [btnaccepted addTarget:self action:@selector(setRsvpAccepted) forControlEvents:UIControlEventTouchUpInside];
             CALayer *bottomBorder = [CALayer layer];
             bottomBorder.borderColor = [UIColor darkGrayColor].CGColor;
@@ -57,6 +59,8 @@
             [btnUnavailable.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
             [btnUnavailable setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [btnUnavailable setFrame:CGRectMake(0, y, 125, 44)];
+            btnUnavailable.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            btnUnavailable.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
             [btnUnavailable.titleLabel setTextAlignment:NSTextAlignmentLeft];
             [btnUnavailable addTarget:self action:@selector(setRsvpUnavailable) forControlEvents:UIControlEventTouchUpInside];
 
@@ -76,6 +80,8 @@
             [btnPending.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
             [btnPending setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [btnPending setFrame:CGRectMake(0, y, 125, 44)];
+            btnPending.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            btnPending.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
             [btnPending.titleLabel setTextAlignment:NSTextAlignmentLeft];
             [btnPending addTarget:self action:@selector(setRsvpPending) forControlEvents:UIControlEventTouchUpInside];
             
@@ -95,6 +101,8 @@
             [btnDelete.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
             [btnDelete setTitleColor:[UIColor colorWithRed:229/255.0 green:46/255.0 blue:83/255.0 alpha:1] forState:UIControlStateNormal];
             [btnDelete setFrame:CGRectMake(0, y, 125, 44)];
+            btnDelete.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            btnDelete.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
             [btnDelete.titleLabel setTextAlignment:NSTextAlignmentLeft];
             [btnDelete addTarget:self action:@selector(setRsvpRemove) forControlEvents:UIControlEventTouchUpInside];
             
