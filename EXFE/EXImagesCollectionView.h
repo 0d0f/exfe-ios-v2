@@ -14,6 +14,8 @@
 #import "EXInvitationItem.h"
 #import "EXCollectionMask.h"
 #import "ExfeeNumberView.h"
+#import <QuartzCore/QuartzCore.h>
+
 
 #define y_start_offset 12
 

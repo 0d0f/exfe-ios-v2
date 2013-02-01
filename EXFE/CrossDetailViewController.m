@@ -99,7 +99,7 @@
         [container addSubview:descView];
         
         exfeeSuggestHeight = 70;
-        exfeeShowview = [[EXImagesCollectionView alloc]initWithFrame:CGRectMake(c.origin.x, CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN - EXFEE_OVERLAP, c.size.width, exfeeSuggestHeight + EXFEE_OVERLAP)];
+        exfeeShowview = [[EXImagesCollectionView alloc]initWithFrame:CGRectMake(c.origin.x+10, CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN - EXFEE_OVERLAP, c.size.width-20, exfeeSuggestHeight + EXFEE_OVERLAP)];
         exfeeShowview.backgroundColor = [UIColor clearColor];
         [exfeeShowview calculateColumn];
         [exfeeShowview setDataSource:self];
@@ -619,7 +619,7 @@
 
 - (void)fillPlace:(Place*)place{
     if(place == nil || [place isEmpty]){
-        placeTitleView.text = @"Shomewhere";
+        placeTitleView.text = @"Somewhere";
         placeDescView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
         placeDescView.text = @"Choose a place";
         placeDescView.hidden = NO;
@@ -639,7 +639,7 @@
                 placeDescView.hidden = YES;
             }
         }else{
-            placeTitleView.text = @"Shomewhere";
+            placeTitleView.text = @"Somewhere";
             placeDescView.hidden = YES;
             //mapView.hidden = YES;
         }
@@ -723,7 +723,7 @@
         // Exfee
         if (exfeeShowview.hidden == NO){
             baseY += DESC_BOTTOM_MARGIN;
-            exfeeShowview.frame = CGRectMake(CGRectGetMinX(c), baseY - EXFEE_OVERLAP, CGRectGetWidth(c), exfeeSuggestHeight + EXFEE_OVERLAP);
+            exfeeShowview.frame = CGRectMake(CGRectGetMinX(c)+10, baseY - EXFEE_OVERLAP, CGRectGetWidth(c)-20, exfeeSuggestHeight + EXFEE_OVERLAP);
             baseX = CGRectGetMaxX(exfeeShowview.frame);
             baseY = CGRectGetMaxY(exfeeShowview.frame);
         }
@@ -925,7 +925,7 @@
             x = x - 180;
         }
         if(rsvpstatusview==nil){
-                rsvpstatusview=[[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-44, 180, 44) withDelegate:self];
+                rsvpstatusview=[[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-55, 180+12, 50) withDelegate:self];
                 [self.view addSubview:rsvpstatusview];
         }
         rsvpstatusview.invitation=invitation;
@@ -946,16 +946,6 @@
             }
         }else{
             [rsvpstatusview setHidden:NO];
-//            CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:
-//                                                 @"transform.scale"];
-//            scaleAnimation.duration= 1;
-//            scaleAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-//            scaleAnimation.fromValue = [NSNumber numberWithFloat:0.5];
-//            scaleAnimation.toValue = [NSNumber numberWithFloat:1.0];
-//            [[rsvpstatusview layer] addAnimation:scaleAnimation forKey:@"scaleAnimation"];
-
-            
-            NSLog(@"from %f to %i position %f",rsvpstatusview.frame.origin.x,rsvpstatus_x,[rsvpstatusview layer].position.x);
             
             [rsvpstatusview setFrame:CGRectMake(rsvpstatus_x, y-rsvpstatusview.frame.size.height, rsvpstatusview.frame.size.width, rsvpstatusview.frame.size.height)];
             
@@ -966,14 +956,14 @@
             moveAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
             
             moveAnimation.fromValue =[NSNumber numberWithFloat:y-rsvpstatusview.frame.size.height+30-rsvpstatusview.frame.origin.y];
-            moveAnimation.toValue =[NSNumber numberWithFloat:y-rsvpstatusview.frame.size.height-rsvpstatusview.frame.origin.y];
+            moveAnimation.toValue =[NSNumber numberWithFloat:y-rsvpstatusview.frame.size.height-rsvpstatusview.frame.origin.y+7];
             moveAnimation.removedOnCompletion = NO;
             moveAnimation.fillMode = kCAFillModeForwards;
             [[rsvpstatusview layer] addAnimation:moveAnimation forKey:@"moveAnimation"];
             
             CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:
                                                @"transform.scale"];
-            scaleAnimation.duration= 0.2;
+            scaleAnimation.duration= 0.233;
             scaleAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
             
             scaleAnimation.fromValue =[NSNumber numberWithInt:0.1];
@@ -985,7 +975,7 @@
             CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:
                                                 @"opacity"];
             opacityAnimation.duration= 0.3;
-            opacityAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+            opacityAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
             
             opacityAnimation.fromValue =[NSNumber numberWithInt:0];
             opacityAnimation.toValue =[NSNumber numberWithInt:1];
@@ -1515,14 +1505,6 @@
             [exfeeInvitations addObject:invitation];
         }
     }
-//    NSString *newtitle=@".X. with ";
-//    if(title_be_edit==NO){
-//        for(Invitation *invitation in exfeeInvitations){
-//            newtitle=[newtitle stringByAppendingFormat:@"%@ ",invitation.identity.name];
-//        }
-//        cross.title=newtitle;
-//        titleView.text=newtitle;
-//    }
     
     [exfeeShowview reloadData];
 }

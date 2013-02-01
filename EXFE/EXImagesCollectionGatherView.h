@@ -49,7 +49,8 @@
     BOOL editmode;
     NSMutableDictionary *itemsCache;
     EXCollectionMask *maskview;
-//    UILabel *acceptlabel;
+    UILabel *invited_num;
+
     UIView *addview;
 }
 

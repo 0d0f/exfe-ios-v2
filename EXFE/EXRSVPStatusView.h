@@ -17,6 +17,7 @@
     UILabel *namelabel;
     UILabel *rsvplabel;
     UIImageView *rsvpbadge;
+    UIImageView *background;
 
     id delegate;
 }

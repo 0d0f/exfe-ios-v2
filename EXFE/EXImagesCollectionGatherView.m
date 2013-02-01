@@ -55,9 +55,7 @@
             x_count=0;
             y_count++;
         }
-        //        int x=x_count*(imageWidth+imageXmargin*2);
-        //        int y=y_count*(imageHeight+nameHeight+imageYmargin*2);
-        int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
+        int x=x_count*(imageWidth+imageXmargin*2);
         int y=y_count*(imageHeight+imageYmargin*2)+y_start_offset;
         
         CGRect rect=CGRectMake(x,y,imageWidth,imageHeight);
@@ -120,7 +118,7 @@
     int count=[_dataSource numberOfimageCollectionView:self];
     if(count >maxColumn*maxRow-1)
     {
-        int new_column=ceil((float)count/maxColumn);
+        int new_column=ceil((float)(count+1)/maxColumn);
         
         int new_height=new_column*(imageHeight+imageYmargin*2)+y_start_offset;
         if(new_height!=self.frame.size.height)
@@ -144,7 +142,7 @@
 //                }
 //            }
         }
-        float new_height=imageYmargin+imageHeight+15+(imageYmargin+imageHeight+15)*(row-1);
+        float new_height=imageYmargin+imageHeight+5+(imageYmargin+imageHeight+5)*(row-1);
         if(new_height!=self.frame.size.height)
             [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
     }
@@ -162,7 +160,7 @@
             x_count=0;
             y_count++;
         }
-        int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
+        int x=x_count*(imageWidth+imageXmargin*2);
         int y=y_count*(imageHeight+imageYmargin*2)+y_start_offset;
         
         if(i<count){
@@ -204,17 +202,13 @@
             
         }
         else{
-//            ExfeeNumberView *exfeecount=[[ExfeeNumberView alloc] initWithFrame:CGRectMake(x+5, y+5, 52, 52)];
-//            exfeecount.acceptednumber=acceptednum;
-//            exfeecount.allnumber=allnum;
-//            exfeecount.backgroundColor=[UIColor whiteColor];
             if(addview==nil){
                 addview=[[UIView alloc] initWithFrame:CGRectMake(x+5, y+5, 52, 52)];
                 UIImageView *addimg=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 52, 52)];
                 addimg.image=[UIImage imageNamed:@"gather_add.png"];
                 [addview addSubview:addimg];
-                UILabel *invited_num=[[UILabel alloc] initWithFrame:CGRectMake(0, 2, 18, 10)];
-                invited_num.font=[UIFont fontWithName:@"HelveticaNeue" size:14];
+                invited_num=[[UILabel alloc] initWithFrame:CGRectMake(0, 2, 18, 13)];
+                invited_num.font=[UIFont fontWithName:@"HelveticaNeue" size:13];
                 invited_num.textColor=FONT_COLOR_51;
                 invited_num.text=[NSString stringWithFormat:@"%i",allnum];
                 invited_num.backgroundColor=[UIColor clearColor];
@@ -240,6 +234,9 @@
 //            [exfeecount release];
         }
         
+        if(invited_num!=nil)
+            invited_num.text=[NSString stringWithFormat:@"%i",allnum];
+
         x_count++;
     }
     if( x_count==maxColumn){
@@ -286,6 +283,8 @@
 
 - (void)dealloc {
 	[grid release];
+    if(invited_num!=nil)
+       [invited_num release];
 //    [acceptlabel release];
     [super dealloc];
 }

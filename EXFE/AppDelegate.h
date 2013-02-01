@@ -11,8 +11,8 @@
 #import "Flurry.h"
 #import <objc/runtime.h>
 
-#define APP_DB_VERSION 204
-#define DBNAME @"exfe_v2_4.sqlite"
+#define APP_DB_VERSION 205
+#define DBNAME @"exfe_v2_5.sqlite"
 
     
 #define DEV

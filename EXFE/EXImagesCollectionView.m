@@ -54,9 +54,7 @@
             x_count=0;
             y_count++;
         }
-//        int x=x_count*(imageWidth+imageXmargin*2);
-//        int y=y_count*(imageHeight+nameHeight+imageYmargin*2);
-        int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
+        int x=x_count*(imageWidth+imageXmargin*2);
         int y=y_count*(imageHeight+imageYmargin*2)+y_start_offset;
         
         CGRect rect=CGRectMake(x,y,imageWidth,imageHeight);
@@ -122,58 +120,45 @@
         int new_column=ceil((float)(count+1)/maxColumn);
         
         int new_height=new_column*(imageHeight+imageYmargin*2)+y_start_offset;
-        if(new_height!=self.frame.size.height)
+        if(new_height!=self.frame.size.height){
             [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
+        }
     }
     else{
         int row=1;
-        for(int row_idx=0;row_idx<=maxRow;row_idx++)
-        {
-//            if(editmode==YES){
-//                if(maxColumn*row_idx-(count)>0)
-//                {
-//                    row=row_idx;
-//                    break;
-//                }
-//            }else{
-                if(maxColumn*row_idx-(count+1)>=0)
-                {
+        for(int row_idx=0;row_idx<=maxRow;row_idx++) {
+                if(maxColumn*row_idx-(count+1)>=0) {
                     row=row_idx;
                     break;
                 }
-//            }
         }
-        float new_height=imageYmargin+imageHeight+15+(imageYmargin+imageHeight+15)*(row-1);
-        if(new_height!=self.frame.size.height)
+        float new_height=imageYmargin+imageHeight+5+(imageYmargin+imageHeight+5)*(row-1);
+        if(new_height!=self.frame.size.height){
             [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
+        }
     }
 
     int x_count=0;
     int y_count=0;
     
-//    NSArray *selected=[_dataSource selectedOfimageCollectionView:self];
     int acceptednum=0;
     int allnum=0;
-//    BOOL acceptflag=NO;
     for(int i=0;i<=count;i++)
     {
         if( x_count==maxColumn){
             x_count=0;
             y_count++;
         }
-        int x=x_count*(imageWidth+imageXmargin*2)+imageXmargin;
+        int x=x_count*(imageWidth+imageXmargin*2);
         int y=y_count*(imageHeight+imageYmargin*2)+y_start_offset;
 
         if(i<count){
-    //        BOOL isSelected=[[selected objectAtIndex:i] boolValue];
             EXInvitationItem *item=[itemsCache objectForKey:[NSNumber numberWithInt:i]];
             if(item==nil)
             {
                 EXInvitationItem *item=[_dataSource imageCollectionView:self itemAtIndex:i];
                 if(item!=nil){
-        //            item.isSelected=isSelected;
                     [item setFrame:CGRectMake(x, y, imageWidth+10, imageHeight+10)];
-        //            [item setBackgroundColor:[UIColor clearColor]];
                     [itemsCache setObject:item forKey:[NSNumber numberWithInt:i]];
                     [self addSubview:item];
                     if([item.invitation.rsvp_status isEqualToString:@"ACCEPTED"]){
@@ -181,7 +166,15 @@
                         if( acceptednum==1){
                         if(acceptlabel==nil){
                             acceptlabel=[[UILabel alloc] initWithFrame:CGRectMake(x, y-12, 50, 12)];
-                            [acceptlabel setBackgroundColor:[UIColor colorWithRed:58.0/255.0f green:110.0/255.0f blue:165.0/255.0f alpha:0.2]];
+                            [acceptlabel setBackgroundColor:[UIColor colorWithRed:0xd2/255.0f green:0xe2/255.0f blue:0xf4/255.0f alpha:1]];
+                            UIBezierPath *maskPath;
+                            maskPath = [UIBezierPath bezierPathWithRoundedRect:acceptlabel.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(1.5, 1.5)];
+                            CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                            maskLayer.frame = self.bounds;
+                            maskLayer.path = maskPath.CGPath;
+                            acceptlabel.layer.mask = maskLayer;
+                            [maskLayer release];
+                            
                             [acceptlabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
                             [acceptlabel setTextColor:[UIColor colorWithRed:103/255.0 green:127/255.0 blue:153/255.0 alpha:1]];
                             [acceptlabel setTextAlignment:NSTextAlignmentCenter];
@@ -191,10 +184,8 @@
                         acceptlabel.text=@"Accepted";
                         [acceptlabel setHidden:NO];
                         }
-//                        acceptflag=YES;
                     }
                     allnum+=1+[item.invitation.mates intValue];
-        //            [self sendSubviewToBack:item];
                 }
             }
             else{
@@ -218,16 +209,7 @@
         y_count++;
     }
     [self setNeedsDisplay];
-//    maskview.itemsCache=itemsCache;
-//    [maskview setNeedsDisplay];
 }
-//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-//    NSLog(@"click");
-//    for (UITouch *touch in touches) {
-//        CGPoint touchPoint = [touch locationInView:self];
-////        [self onImageTouch:touchPoint];
-//    }
-//}
 
 - (void) onImageTouch:(CGPoint) point{
     int x_count=0;
