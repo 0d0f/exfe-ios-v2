@@ -226,7 +226,6 @@
                 [self addSubview:addview];
                 [addimg release];
                 [addview release];
-                [invited_num release];
             }
             else{
                 [addview setFrame:CGRectMake(x+5, y+5, 52, 52)];

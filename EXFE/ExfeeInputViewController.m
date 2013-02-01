@@ -820,7 +820,16 @@ static char identitykey;
             [filteredlocalcontacts release];
             filteredlocalcontacts=nil;
         }
-        filteredlocalcontacts = [[localcontacts filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(indexfield like[c] %@)", inputpredicate]] retain];
+        
+        NSFetchRequest* request = [LocalContact fetchRequest];
+        if(filteredlocalcontacts!=nil)
+            [filteredlocalcontacts release];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(indexfield like[c] %@)", inputpredicate];
+        [request setPredicate:predicate];
+
+        
+        filteredlocalcontacts=[[LocalContact objectsWithFetchRequest:request] retain];
+
         [suggestionTable reloadData];
     }
     return YES;
