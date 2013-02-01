@@ -24,10 +24,12 @@
     id delegate;
     float keyboardheight;
     NSString *imgurl;
+    NSInteger editFieldHint;
 }
 
 @property (nonatomic,retain) id delegate;
 @property (nonatomic,retain) NSString *imgurl;
+@property (nonatomic) NSInteger editFieldHint;
 
 - (void) setCrossTitle:(NSString*)title desc:(NSString*)desc;
 - (void) done:(id)sender;
