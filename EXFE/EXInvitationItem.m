@@ -69,10 +69,10 @@
                 UIImage *rsvpicon = nil;
                 if ([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
                     rsvpicon=[UIImage imageNamed:@"rsvp_accepted_stroke_26blue.png"];
-                else if ([invitation.rsvp_status isEqualToString:@"INTERESTED"])
-                    rsvpicon=[UIImage imageNamed:@"rsvp_pending_stroke_26g5.png"];
                 else if ([invitation.rsvp_status isEqualToString:@"DECLINED"])
                     rsvpicon=[UIImage imageNamed:@"rsvp_unavailable_stroke_26g5.png"];
+                else
+                    rsvpicon=[UIImage imageNamed:@"rsvp_pending_stroke_26g5.png"];
                 
                 if (rsvpicon != nil){
                     CGImageRef ximageref = CGImageRetain(rsvpicon.CGImage);
@@ -123,8 +123,6 @@
     }
 
     CGContextRestoreGState(currentContext);
-    
-
 
     if(!isMe){
         NSString *name=invitation.identity.name;

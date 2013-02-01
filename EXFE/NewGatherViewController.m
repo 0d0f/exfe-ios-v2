@@ -555,7 +555,7 @@
                 break;
             newtitle=[newtitle stringByAppendingFormat:@"%@ ",invitation.identity.name];
             count++;
-            if(count<3)
+            if(count<3 && count>1)
                 newtitle=[newtitle stringByAppendingString:@","];
         }
         cross.title=newtitle;

@@ -353,6 +353,8 @@
 
 
 - (void) done{
+    place.title=placeedit.PlaceTitle.text;
+    place.place_description=placeedit.PlaceDesc.text;
     [delegate setPlace:place];
     [self dismissModalViewControllerAnimated:YES];
 }

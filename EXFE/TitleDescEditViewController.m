@@ -166,7 +166,7 @@
 //    descView = [[UITextView alloc] initWithFrame:CGRectMake(0, dectorView.frame.origin.y+dectorView.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-(dectorView.frame.origin.y+dectorView.frame.size.height))];
 //    [self.view addSubview:descView];
     CGRect rect = descView.frame;
-    rect.size.height=self.view.frame.size.height-(dectorView.frame.origin.y+dectorView.frame.size.height)-keyboardheight;
+    rect.size.height=self.view.frame.size.height-(dectorView.frame.origin.y+dectorView.frame.size.height)-keyboardheight-toolbar.frame.size.height;
     [descView setFrame:rect];
     if([descView.text isEqualToString:@"Take some note"])
         descView.text=@"";
