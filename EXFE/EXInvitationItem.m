@@ -57,7 +57,7 @@
             CGImageRelease(ximageref);
             if(isMe){
                 NSString *portrait_frame=@"portrait_circle.png";
-                if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+                if([invitation.rsvp_status isEqualToString:@"ACCEPTED"]&& !isGather)
                     portrait_frame=@"portrait_circle_accepted.png";
                 CGImageRef frameimageref = CGImageRetain([UIImage imageNamed:portrait_frame].CGImage);
                 CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , frameimageref);
