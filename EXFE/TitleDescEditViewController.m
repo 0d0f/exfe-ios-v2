@@ -24,6 +24,7 @@
 @implementation TitleDescEditViewController
 @synthesize delegate;
 @synthesize imgurl;
+@synthesize editFieldHint;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -149,6 +150,14 @@
 #endif
 
     [self setBackground:imgurl];
+    
+    if (editFieldHint == 1) {
+        // Edit title
+        [titleView becomeFirstResponder];
+    }else{
+        // Assume default is edit Description
+        [descView becomeFirstResponder];
+    }
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification

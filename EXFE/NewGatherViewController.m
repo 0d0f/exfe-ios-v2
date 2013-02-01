@@ -35,13 +35,13 @@
 #define EXFEE_HEIGHT                     (50)
 #define EXFEE_BOTTOM_MARGIN              (LARGE_SLOT - SMALL_SLOT)
 #define TIME_RELATIVE_HEIGHT             (MAIN_TEXT_HIEGHT)
-#define TIME_RELATIVE_BOTTOM_MARGIN      (SMALL_SLOT)
+#define TIME_RELATIVE_BOTTOM_MARGIN      (0)
 #define TIME_ABSOLUTE_HEIGHT             (ALTERNATIVE_TEXT_HIEGHT)
 #define TIME_ABSOLUTE_RIGHT_MARGIN       (SMALL_SLOT)
 #define TIME_ZONE_HEIGHT                 (ALTERNATIVE_TEXT_HIEGHT)
 #define TIME_BOTTOM_MARGIN               (LARGE_SLOT)
 #define PLACE_TITLE_HEIGHT               (MAIN_TEXT_HIEGHT)
-#define PLACE_TITLE_BOTTOM_MARGIN        (SMALL_SLOT)
+#define PLACE_TITLE_BOTTOM_MARGIN        (0)
 #define PLACE_DESC_HEIGHT                (ALTERNATIVE_TEXT_HIEGHT * 4)
 #define PLACE_DESC_MIN_HEIGHT            (20)
 #define PLACE_DESC_MAX_HEIGHT            (90)
@@ -81,7 +81,7 @@
         descView = [[EXLabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 44)];
         descView.textColor = [UIColor COLOR_RGB(127, 127, 127)];
         descView.numberOfLines = 4;
-        descView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
+        descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         descView.shadowColor = [UIColor whiteColor];
         descView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         descView.backgroundColor = [UIColor colorWithWhite:0.96 alpha:1];
@@ -106,7 +106,7 @@
         [container addSubview:timeRelView];
         
         timeAbsView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeRelView.frame.origin.y + timeRelView.frame.size.height + TIME_RELATIVE_BOTTOM_MARGIN, c.size.width /2 -  CONTAINER_VERTICAL_PADDING, TIME_ABSOLUTE_HEIGHT)];
-        timeAbsView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
+        timeAbsView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         timeAbsView.shadowColor = [UIColor whiteColor];
         timeAbsView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         timeAbsView.backgroundColor = [UIColor clearColor];
@@ -114,7 +114,7 @@
         [container addSubview:timeAbsView];
         
         timeZoneView= [[UILabel alloc] initWithFrame:CGRectMake(left + timeAbsView.frame.size.width + TIME_ABSOLUTE_RIGHT_MARGIN, timeAbsView.frame.origin.y, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 - timeAbsView.frame.size.width  - TIME_ABSOLUTE_RIGHT_MARGIN , TIME_ZONE_HEIGHT)];
-        timeZoneView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
+        timeZoneView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         timeZoneView.backgroundColor = [UIColor clearColor];
         [container addSubview:timeZoneView];
         
@@ -128,7 +128,7 @@
         [container addSubview:placeTitleView];
         
         placeDescView= [[UILabel alloc] initWithFrame:CGRectMake(left, placeTitleView.frame.origin.y + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_DESC_HEIGHT)];
-        placeDescView.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
+        placeDescView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         placeDescView.shadowColor = [UIColor whiteColor];
         placeDescView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         placeDescView.numberOfLines = 4;
@@ -172,7 +172,7 @@
         [headview addSubview:dectorMask];
         [dectorMask release];
         
-        titleView = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - (CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN) * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+        titleView = [[UILabel alloc] initWithFrame:CGRectMake(20 + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - 20 - TITLE_HORIZON_MARGIN * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
         titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
         titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         titleView.backgroundColor = [UIColor clearColor];
@@ -434,8 +434,12 @@
     }
 
     
-    if (CGRectContainsPoint([titleView frame], location) || CGRectContainsPoint([descView frame], location)||
-        CGRectContainsPoint([descView frame], location) || CGRectContainsPoint([descView frame], location)){
+    if (CGRectContainsPoint([titleView frame], location) || CGRectContainsPoint([descView frame], location)){
+        NSInteger editHint = 2;
+        if (CGRectContainsPoint([titleView frame], location) ) {
+            editHint = 1;
+        }
+        
         TitleDescEditViewController *titleViewController=[[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
         titleViewController.delegate=self;
         NSString *imgurl = nil;
@@ -446,7 +450,7 @@
             }
         }
         titleViewController.imgurl=imgurl;
-//        [titleViewController setBackground:imgurl];
+        titleViewController.editFieldHint = editHint;
         [self presentModalViewController:titleViewController animated:YES];
         [titleViewController setCrossTitle:cross.title desc:cross.cross_description];
         [titleViewController release];
