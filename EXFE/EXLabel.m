@@ -49,7 +49,7 @@
 
 - (void)sizeToFit{
     CGFloat ow = self.frame.size.width;
-    CGFloat oh = self.frame.size.height;
+    //CGFloat oh = self.frame.size.height;
     CGSize rect = CGSizeMake(ow, INFINITY);
     
     NSString* four_lines = @"M\nM\nM\nM"; // 4 lines

@@ -29,7 +29,7 @@
 #import "EditCrossDelegate.h"
 #import "EXTabBar.h"
 
-@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate>{
+@interface CrossDetailViewController : UIViewController <EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate, RKObjectLoaderDelegate>{
 
     UIScrollView *container;
     UIImageView *dectorView;

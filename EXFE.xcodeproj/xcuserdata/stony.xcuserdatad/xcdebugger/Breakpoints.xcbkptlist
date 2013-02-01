@@ -34,38 +34,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossCard.m"
-         timestampString = "381230441.133882"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "181"
-         endingLineNumber = "181"
-         landmarkName = "-drawContentView:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/CrossCard.m"
          timestampString = "381226085.316092"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "149"
          endingLineNumber = "149"
          landmarkName = "-setBannerimg:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/CrossCard.m"
-         timestampString = "381230441.133882"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "201"
-         endingLineNumber = "201"
-         landmarkName = "-drawContentView:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -111,19 +85,6 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "EXFE/ProfileViewController.m"
-         timestampString = "380802901.458266"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "78"
-         endingLineNumber = "78"
-         landmarkName = "-viewDidLoad"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "EXFE/ConversationViewController.m"
          timestampString = "381036064.452915"
          startingColumnNumber = "9223372036854775807"
@@ -138,11 +99,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossDetailViewController.m"
-         timestampString = "381312715.794776"
+         timestampString = "381398784.977342"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "250"
-         endingLineNumber = "250"
+         startingLineNumber = "252"
+         endingLineNumber = "252"
          landmarkName = "-widgetClick:with:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -151,38 +112,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/CrossDetailViewController.m"
-         timestampString = "381312715.794776"
+         timestampString = "381398784.977342"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "702"
-         endingLineNumber = "702"
+         startingLineNumber = "709"
+         endingLineNumber = "709"
          landmarkName = "-relayoutUI"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/CrossDetailViewController.m"
-         timestampString = "381312676.413819"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "412"
-         endingLineNumber = "412"
-         landmarkName = "-handleTap:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/CrossDetailViewController.m"
-         timestampString = "381314123.275183"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "908"
-         endingLineNumber = "908"
-         landmarkName = "-imageCollectionView:didSelectRowAtIndex:row:col:frame:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

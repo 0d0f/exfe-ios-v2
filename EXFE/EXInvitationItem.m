@@ -43,7 +43,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    //AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     CGRect imagerect=rect;
     imagerect.size.height=rect.size.height-15;
         CGContextRef currentContext = UIGraphicsGetCurrentContext();

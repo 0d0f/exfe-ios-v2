@@ -86,13 +86,11 @@ static char identitykey;
     [toolbar addSubview:exfeeList];
     
     UIButton *btncancel=[UIButton buttonWithType:UIButtonTypeCustom];
-    
-    [btncancel setBackgroundColor:[UIColor colorWithRed:25/255.0f green:25/255.0f blue:25/255.0f alpha:0.5]];
-    
-    [btncancel setBackgroundImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btncancel setFrame:CGRectMake(0, 0, 20, 44)];
+    btncancel.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
+    [btncancel setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btncancel setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btncancel addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside];
-    
     [toolbar addSubview:btncancel];
     
     inputleftmask=[[UIImageView alloc] initWithFrame:CGRectMake(exfeeList.frame.origin.x,exfeeList.frame.origin.y , 40, 30)];

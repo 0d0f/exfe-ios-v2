@@ -142,8 +142,9 @@
     
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
     [btnBack setFrame:CGRectMake(0, 0, 20, 44)];
-    btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
     [self.view  addSubview:btnBack];
 }

@@ -47,15 +47,16 @@
         username.textColor = [UIColor COLOR_SNOW];
         username.font=[UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
         username.shadowColor = [UIColor blackColor];
-        username.shadowOffset = CGSizeMake(0, -1);
+        username.shadowOffset = CGSizeMake(0, 1);
         [headerView addSubview:username];
         
         [self.view addSubview:headerView];
         
         btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
         [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
-        btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+        btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
         [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+        [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
         [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
         [self.view  addSubview:btnBack];
         
@@ -73,7 +74,7 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"x_bg.png"]]];
     CGRect b = self.view.bounds;
-    CGRect f = self.view.frame;
+    //CGRect f = self.view.frame;
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSFetchRequest* request = [User fetchRequest];
@@ -375,11 +376,11 @@
     if(footerView == nil) {
         footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 44)];
 
-        buttonsignout = [UIButton buttonWithType:UIButtonTypeCustom];
-        [buttonsignout setTitle:@"Sign Out" forState:UIControlStateNormal];
-        [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
-        [buttonsignout setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
-        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
+        buttonsignout = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
+        [buttonsignout setTitle:@"Sign out" forState:UIControlStateNormal];
+        [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
+        [buttonsignout setTitleColor:[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)] forState:UIControlStateNormal];
+//        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
 
         
         [buttonsignout setFrame:CGRectMake(200, 10, 100, 44)];

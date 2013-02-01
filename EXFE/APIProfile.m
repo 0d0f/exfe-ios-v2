@@ -50,7 +50,7 @@
     
 }
 +(void) LoadUsrWithUserId:(int)user_id token:(NSString*)token usingBlock:(void (^)(RKRequest *request))block {
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    //AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSString *endpoint = [NSString stringWithFormat:@"/users/%u?token=%@",user_id, token];
     RKClient *client = [RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];

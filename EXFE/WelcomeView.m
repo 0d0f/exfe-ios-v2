@@ -51,8 +51,8 @@
     welcome1 = [[NSMutableAttributedString alloc] initWithString:str1];
     
     CTTextAlignment alignment = kCTLeftTextAlignment;
-    float linespaceing=1;
-    float minheight=18;
+    //float linespaceing=1;
+    //float minheight=18;
     
     CTParagraphStyleSetting allsetting[3] = {
 //        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
@@ -115,8 +115,8 @@
     welcome2 = [[NSMutableAttributedString alloc] initWithString:str];
     
     CTTextAlignment alignment = kCTCenterTextAlignment;
-    float linespaceing=1;
-    float minheight=18;
+    //float linespaceing=1;
+    //float minheight=18;
     
     CTParagraphStyleSetting allsetting[3] = {
 //        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},

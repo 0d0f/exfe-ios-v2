@@ -38,7 +38,7 @@
 {
     [super viewDidLoad];
     CGRect b = self.view.bounds;
-    CGRect a = [UIScreen mainScreen].applicationFrame;
+    //CGRect a = [UIScreen mainScreen].applicationFrame;
     
     toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
@@ -76,9 +76,10 @@
     [titlestr release];
     [viewtitle release];
     UIButton *btncancel=[UIButton buttonWithType:UIButtonTypeCustom];
-    [btncancel setBackgroundColor:[UIColor colorWithRed:25/255.0f green:25/255.0f blue:25/255.0f alpha:0.5]];
-    [btncancel setBackgroundImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btncancel setFrame:CGRectMake(0, 0, 20, 44)];
+    btncancel.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
+    [btncancel setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btncancel setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btncancel addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside];
     
     [toolbar addSubview:btncancel];

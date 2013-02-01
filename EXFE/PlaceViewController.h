@@ -33,6 +33,7 @@ typedef enum {
     CLLocationManager *locationManager;
     EXGradientToolbarView *toolbar;
     IBOutlet MKMapView *map;
+    UIView *mapShadow;
     UITextField *inputplace;
 //    IBOutlet UIBarButtonItem *rightbutton;
     UIButton *rightbutton;

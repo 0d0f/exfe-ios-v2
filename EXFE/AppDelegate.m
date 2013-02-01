@@ -73,7 +73,7 @@ static char handleurlobject;
     if(login==NO){
         [self ShowLanding];
     }
-    NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
+    //NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
     
 //    if(!ifdevicetokenSave && login==YES)
 //    {

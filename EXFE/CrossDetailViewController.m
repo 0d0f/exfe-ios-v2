@@ -53,10 +53,11 @@
 #define TITLE_VERTICAL_MARGIN            (18)
 
 #define kPopupTypeEditTitle              (0x0101)
-#define kPopupTypeEditTime               (0x0102)
-#define kPopupTypeEditPlace              (0x0103)
-#define kPopupTypeEditStatus             (0x0204)
-#define kPopupTypeVewStatus              (0x0305)
+#define kPopupTypeEditDescription        (0x0102)
+#define kPopupTypeEditTime               (0x0103)
+#define kPopupTypeEditPlace              (0x0104)
+#define kPopupTypeEditStatus             (0x0205)
+#define kPopupTypeVewStatus              (0x0306)
 #define MASK_HIGH_BITS                   (0xFF00)
 #define MASK_LOW_BITS                    (0x00FF)
 
@@ -107,7 +108,7 @@
         
         timeRelView = [[UILabel alloc] initWithFrame:CGRectMake(left, exfeeShowview.frame.origin.y + exfeeShowview.frame.size.height + EXFEE_BOTTOM_MARGIN, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, TIME_RELATIVE_HEIGHT)];
         timeRelView.textColor = [UIColor COLOR_RGB(0x3A, 0x6E, 0xA5)];
-        timeRelView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+        timeRelView.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:21];
         timeRelView.shadowColor = [UIColor whiteColor];
         timeRelView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         timeRelView.backgroundColor = [UIColor clearColor];
@@ -128,7 +129,7 @@
         
         placeTitleView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeAbsView.frame.origin.y + timeAbsView.frame.size.height + TIME_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_TITLE_HEIGHT)];
         placeTitleView.textColor = [UIColor COLOR_RGB(0x3A, 0x6E, 0xA5)];
-        placeTitleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+        placeTitleView.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:21];
         placeTitleView.shadowColor = [UIColor whiteColor];
         placeTitleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         placeTitleView.numberOfLines = 2;
@@ -213,8 +214,9 @@
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
     [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
-    btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
     [self.view  addSubview:btnBack];
     
@@ -343,6 +345,9 @@
     if (ctrlid != (kPopupTypeEditTitle & MASK_LOW_BITS)) {
         [self hideTitleAndDescEditMenuWithAnimation:YES];
     }
+    if (ctrlid != (kPopupTypeEditDescription & MASK_LOW_BITS)) {
+        [self hideTitleAndDescEditMenuWithAnimation:YES];
+    }
     if (ctrlid != (kPopupTypeEditTime & MASK_LOW_BITS)) {
         [self hideTimeEditMenuWithAnimation:YES];
     }
@@ -365,6 +370,7 @@
         [self hidePopupIfShown:ctrlId];
         switch (low) {
             case kPopupTypeEditTitle & MASK_LOW_BITS:
+            case kPopupTypeEditDescription & MASK_LOW_BITS:
                 [self showTtitleAndDescEditMenu:titleView];
                 break;
             case kPopupTypeEditTime & MASK_LOW_BITS:
@@ -393,6 +399,7 @@
             [self showPopup:kPopupTypeEditTitle];
             return;
         }
+        [self hidePopupIfShown];
     }
 }
 
@@ -404,7 +411,7 @@
         
         if (descView.hidden == NO && CGRectContainsPoint([Util expandRect:descView.frame], location)) {
             [self showDescriptionFullContent: (descView.numberOfLines != 0)];
-            [self showPopup:kPopupTypeEditTitle];
+            [self showPopup:kPopupTypeEditDescription];
             return;
         }
         if (CGRectContainsPoint([Util expandRect:[exfeeShowview frame]], location)) {
@@ -445,7 +452,7 @@
             return;
         }
         
-        [self hidePopupIfShown:0];
+        [self hidePopupIfShown];
     }
 }
 
@@ -1050,10 +1057,10 @@
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
     NSLog(@"Click to Navigation");
     id<MKAnnotation> annotation = view.annotation;
-    NSString *title = annotation.title;
+    //NSString *title = annotation.title;
     CLLocationDegrees latitude = annotation.coordinate.latitude;
     CLLocationDegrees longitude = annotation.coordinate.longitude;
-    int zoom = 13;
+    //int zoom = 13;
     
 //    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
 //        MKPlacemark *endLocation = [[MKPlacemark alloc] initWithCoordinate:annotation.coordinate addressDictionary:nil];
@@ -1118,25 +1125,24 @@
     
 }
 
-- (void)onClick:(id)sender{
-    
-}
-
-
-
-
 - (void)clickforTitleAndDescEdit:(id)sender{
-    [self hideTitleAndDescEditMenuNow];
+    [self hidePopupIfShown];
+    //[self hideTitleAndDescEditMenuNow];
+    //popupCtrolId = 0;
     [self showTitleAndDescView];
 }
 
 - (void)clickforTimeEdit:(id)sender{
-    [self hideTimeEditMenuNow];
+    [self hidePopupIfShown];
+//    [self hideTimeEditMenuNow];
+//    popupCtrolId = 0;
     [self showTimeView];
 }
 
 - (void)clickforPlaceEdit:(id)sender{
-    [self hidePlaceEditMenuNow];
+    [self hidePopupIfShown];
+//    [self hidePlaceEditMenuNow];
+//    popupCtrolId = 0;
     [self ShowPlaceView:@"search"];
 }
 
@@ -1312,30 +1318,35 @@
 
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu{
     [self sendrsvp:@"ACCEPTED" invitation:menu.invitation];
-    [self hideMenuWithAnimation:YES];
+    [self hidePopupIfShown];
+    //[self hideMenuWithAnimation:YES];
 }
 
 - (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu{
     [self sendrsvp:@"DECLINED" invitation:menu.invitation];
-    [self hideMenuWithAnimation:YES];
+    [self hidePopupIfShown];
+    //[self hideMenuWithAnimation:YES];
 }
 
 - (void)RSVPPendingMenuView:(EXRSVPMenuView *) menu{
     [self sendrsvp:@"INTERESTED" invitation:menu.invitation];
-    [self hideMenuWithAnimation:YES];
+    [self hidePopupIfShown];
+    //[self hideMenuWithAnimation:YES];
 }
 
 #pragma mark show Edit View Controller
 - (void) showTitleAndDescView{
     TitleDescEditViewController *titleViewController=[[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
     titleViewController.delegate=self;
-    NSString *imgurl;
+    NSString *imgurl = nil;
     for(NSDictionary *widget in (NSArray*)cross.widget) {
         if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
             imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+            break;
         }
     }
     titleViewController.imgurl=imgurl;
+    //titleViewController.editFieldHint = popupCtrolId & MASK_LOW_BITS;
     [self presentModalViewController:titleViewController animated:YES];
     [titleViewController setCrossTitle:cross.title desc:cross.cross_description];
     [titleViewController release];

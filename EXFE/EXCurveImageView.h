@@ -13,7 +13,7 @@
     UIImage *image;
 }
 
-@property CGRect CurveFrame;
+@property (nonatomic) CGRect CurveFrame;
 @property (nonatomic,retain) UIImage * image;
 
 - (id)initWithFrame:(CGRect)frame withCurveFrame:(CGRect)curveFrame;

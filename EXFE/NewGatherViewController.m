@@ -98,7 +98,7 @@
         
         timeRelView = [[UILabel alloc] initWithFrame:CGRectMake(left, exfeeShowview.frame.origin.y + exfeeShowview.frame.size.height + EXFEE_BOTTOM_MARGIN, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, TIME_RELATIVE_HEIGHT)];
         timeRelView.textColor = [UIColor COLOR_RGB(0x3A, 0x6E, 0xA5)];
-        timeRelView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+        timeRelView.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:21];
         timeRelView.shadowColor = [UIColor whiteColor];
         timeRelView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         timeRelView.backgroundColor = [UIColor clearColor];
@@ -119,7 +119,7 @@
         
         placeTitleView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeAbsView.frame.origin.y + timeAbsView.frame.size.height + TIME_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_TITLE_HEIGHT)];
         placeTitleView.textColor = [UIColor COLOR_RGB(0x3A, 0x6E, 0xA5)];
-        placeTitleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+        placeTitleView.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:21];
         placeTitleView.shadowColor = [UIColor whiteColor];
         placeTitleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         placeTitleView.numberOfLines = 2;
@@ -186,8 +186,9 @@
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
     [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 /2, 20, 44)];
-    btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnBack];
     
@@ -436,10 +437,11 @@
         CGRectContainsPoint([descView frame], location) || CGRectContainsPoint([descView frame], location)){
         TitleDescEditViewController *titleViewController=[[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
         titleViewController.delegate=self;
-        NSString *imgurl;
+        NSString *imgurl = nil;
         for(NSDictionary *widget in (NSArray*)cross.widget) {
             if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
                 imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+                break;
             }
         }
         titleViewController.imgurl=imgurl;

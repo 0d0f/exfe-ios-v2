@@ -180,15 +180,6 @@
         [[UIImage imageNamed:@"portrait_default.png"] drawInRect:avatarRect];
     }
     
-    
-    UIColor * color = [UIColor clearColor];
-    if (hlTitle){
-        color = [UIColor COLOR_BLUE_SEA];
-    }else{
-        color = [UIColor COLOR_WHITE];
-    }
-    [color set];
-    
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
     if (bannerimg == nil){
@@ -196,7 +187,7 @@
         CGRect fillrect=CGRectMake(barnnerRect.origin.x, 8 , barnnerRect.size.width, barnnerRect.size.height);
         CGContextAddRect(context, fillrect);
         CGContextClosePath(context);
-        CGContextSetRGBFillColor(context, COLOR255(0x84), COLOR255(0xBF), COLOR255(0xDE), 1);
+        CGContextSetRGBFillColor(context, COLOR255(0xE0), COLOR255(0xEF), COLOR255(0xFF), 1);
         CGContextFillPath(context);
     }
     
@@ -208,13 +199,19 @@
     CGContextTranslateCTM(context, 0, 0 - CGRectGetMidY(titleRect));
     CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor COLOR_WA(0x00, 0x5A)].CGColor);
     
-    CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL);
+    NSString * fontType = nil;
+    if (hlTitle){
+        fontType = @"HelveticaNeue-Bold"; //[NSString stringWithString:@"blah blah"];
+    }else{
+        fontType = @"HelveticaNeue"; //[NSString stringWithString:@"blah blah"];
+    }
+    CTFontRef textfontref= CTFontCreateWithName((CFStringRef)fontType, 21.0, NULL);
     if(title == nil){
         title = @"";
     }
     NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:title];
     [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
-    [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)color.CGColor range:NSMakeRange(0,[textstring length])];
+    [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_WHITE].CGColor range:NSMakeRange(0,[textstring length])];
     CTLineBreakMode lineBreakMode = kCTLineBreakByCharWrapping;
     CTParagraphStyleSetting gathersetting[3] = {
         {kCTParagraphStyleSpecifierLineBreakMode, sizeof(lineBreakMode), &lineBreakMode}

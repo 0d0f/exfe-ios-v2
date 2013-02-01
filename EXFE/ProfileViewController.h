@@ -15,6 +15,7 @@
 #import "AddIdentityViewController.h"
 #import "EXCurveView.h"
 #import "CustomAttributedTextView.h"
+#import "UIUnderlinedButton.h"
 
 @interface ProfileViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
     IBOutlet UIToolbar* toolbar;

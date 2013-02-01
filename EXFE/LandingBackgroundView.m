@@ -100,7 +100,7 @@
     CGContextScaleCTM(context, 1.0, -1.0);
     
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)bigtitle);
-    CFRange range;
+    //CFRange range;
     CGRect rectstrthex=CGRectMake(0,y,320,64);
     CGMutablePathRef textpath = CGPathCreateMutable();
     CGPathAddRect(textpath, NULL, rectstrthex);

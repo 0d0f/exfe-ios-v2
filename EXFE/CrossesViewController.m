@@ -40,7 +40,6 @@
 
 - (void)viewDidLoad
 {
-    CGRect screenframe=[[UIScreen mainScreen] bounds];
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     [self.view setFrame:appFrame];
     self.view.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];

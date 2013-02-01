@@ -43,8 +43,9 @@
 
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
     [btnBack setFrame:CGRectMake(0, 0, 20, 44)];
-    btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:btnBack];
 
@@ -62,16 +63,14 @@
 //    [toolbar addSubview:icon];
     [icon release];
 
-    EXAttributedLabel *viewtitle=[[EXAttributedLabel alloc] initWithFrame:CGRectMake(30, (44-30)/2, self.view.frame.size.width-30-60, 30)];
+    EXAttributedLabel *viewtitle=[[EXAttributedLabel alloc] initWithFrame:CGRectMake(60, (44-30)/2, self.view.frame.size.width-60-60, 30)];
     viewtitle.backgroundColor=[UIColor clearColor];
     
-    NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Edit Time"];
+    NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Edit ·X· time"];
     CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
     [titlestr addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0, [titlestr length])];
-    
     [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_51.CGColor range:NSMakeRange(0,[titlestr length])];
-//    [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(5,3)];
-    
+    [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(5,3)];
     
     CTTextAlignment alignment = kCTCenterTextAlignment;
     float linespaceing=1;
@@ -277,9 +276,16 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     }
 	NSString *timestr=[_times objectAtIndex:indexPath.row];
-    if(timestr!=nil)
-        cell.textLabel.text =timestr;
-        
+    if(timestr != nil){
+        cell.textLabel.text = timestr;
+    }
+    
+    if (indexPath.row == 0) {
+        cell.textLabel.textColor = [UIColor COLOR_WA(0x7F, 0xFF)];
+    }else{
+        cell.textLabel.textColor = [UIColor blackColor];
+    }
+    
     return cell;
     
 }
