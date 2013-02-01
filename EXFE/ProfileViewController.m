@@ -376,11 +376,11 @@
     if(footerView == nil) {
         footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 44)];
 
-        buttonsignout = [UIButton buttonWithType:UIButtonTypeCustom];
-        [buttonsignout setTitle:@"Sign Out" forState:UIControlStateNormal];
-        [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
-        [buttonsignout setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
-        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
+        buttonsignout = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
+        [buttonsignout setTitle:@"Sign out" forState:UIControlStateNormal];
+        [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
+        [buttonsignout setTitleColor:[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)] forState:UIControlStateNormal];
+//        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
 
         
         [buttonsignout setFrame:CGRectMake(200, 10, 100, 44)];

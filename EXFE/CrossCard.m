@@ -229,7 +229,7 @@
     CFRelease(theFrame);
     CGContextRestoreGState(context);
     
-    UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue" size:15];
+    UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue-Light" size:15];
     // text info
     
     if (time == nil || time.length == 0) {

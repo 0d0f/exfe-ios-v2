@@ -24,6 +24,7 @@
 		4F2B9E6616BB7BB400DD133D /* back_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2B9E6416BB7BB400DD133D /* back_pressed@2x.png */; };
 		4F2B9E6916BB7D6C00DD133D /* shadow_4up.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2B9E6716BB7D6C00DD133D /* shadow_4up.png */; };
 		4F2B9E6A16BB7D6C00DD133D /* shadow_4up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2B9E6816BB7D6C00DD133D /* shadow_4up@2x.png */; };
+		4F2B9E6D16BB908600DD133D /* UIUnderlinedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2B9E6C16BB908400DD133D /* UIUnderlinedButton.m */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
 		4F63E24B169AD2B3003354D7 /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24A169AD2B2003354D7 /* NSDateComponents+Helper.m */; };
 		4F63E24E169BFCD5003354D7 /* DateTimeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24D169BFCD4003354D7 /* DateTimeUtil.m */; };
@@ -539,6 +540,8 @@
 		4F2B9E6416BB7BB400DD133D /* back_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_pressed@2x.png"; sourceTree = "<group>"; };
 		4F2B9E6716BB7D6C00DD133D /* shadow_4up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shadow_4up.png; sourceTree = "<group>"; };
 		4F2B9E6816BB7D6C00DD133D /* shadow_4up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shadow_4up@2x.png"; sourceTree = "<group>"; };
+		4F2B9E6B16BB908400DD133D /* UIUnderlinedButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIUnderlinedButton.h; sourceTree = "<group>"; };
+		4F2B9E6C16BB908400DD133D /* UIUnderlinedButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIUnderlinedButton.m; sourceTree = "<group>"; };
 		4F3355CE168C4F4700D398C0 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		4F3C6D8016ACEE670095AA50 /* EditCrossDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditCrossDelegate.h; sourceTree = "<group>"; };
@@ -1940,6 +1943,8 @@
 				4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */,
 				4F15D6CF16B11EA100BABE72 /* EXTabBar.h */,
 				4F15D6D016B11EA100BABE72 /* EXTabBar.m */,
+				4F2B9E6B16BB908400DD133D /* UIUnderlinedButton.h */,
+				4F2B9E6C16BB908400DD133D /* UIUnderlinedButton.m */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -2603,6 +2608,7 @@
 				78FA8C3316B7CD1000D9E876 /* Exfee.m in Sources */,
 				78FA8C3816B7CD7A00D9E876 /* Cross.m in Sources */,
 				4F2B9E6216BB6E3000DD133D /* LocalContact.m in Sources */,
+				4F2B9E6D16BB908600DD133D /* UIUnderlinedButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
