@@ -244,6 +244,8 @@
 }
 - (void)dealloc{
     CFRelease(addressBook);
+    
+    [super dealloc];
 }
 
 @end

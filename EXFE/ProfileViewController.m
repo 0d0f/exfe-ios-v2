@@ -73,7 +73,7 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"x_bg.png"]]];
     CGRect b = self.view.bounds;
-    CGRect f = self.view.frame;
+    //CGRect f = self.view.frame;
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSFetchRequest* request = [User fetchRequest];

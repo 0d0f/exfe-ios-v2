@@ -1060,10 +1060,10 @@
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
     NSLog(@"Click to Navigation");
     id<MKAnnotation> annotation = view.annotation;
-    NSString *title = annotation.title;
+    //NSString *title = annotation.title;
     CLLocationDegrees latitude = annotation.coordinate.latitude;
     CLLocationDegrees longitude = annotation.coordinate.longitude;
-    int zoom = 13;
+    //int zoom = 13;
     
 //    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
 //        MKPlacemark *endLocation = [[MKPlacemark alloc] initWithCoordinate:annotation.coordinate addressDictionary:nil];
@@ -1128,25 +1128,21 @@
     
 }
 
-- (void)onClick:(id)sender{
-    
-}
-
-
-
-
 - (void)clickforTitleAndDescEdit:(id)sender{
     [self hideTitleAndDescEditMenuNow];
+    popupCtrolId = 0;
     [self showTitleAndDescView];
 }
 
 - (void)clickforTimeEdit:(id)sender{
     [self hideTimeEditMenuNow];
+    popupCtrolId = 0;
     [self showTimeView];
 }
 
 - (void)clickforPlaceEdit:(id)sender{
     [self hidePlaceEditMenuNow];
+    popupCtrolId = 0;
     [self ShowPlaceView:@"search"];
 }
 

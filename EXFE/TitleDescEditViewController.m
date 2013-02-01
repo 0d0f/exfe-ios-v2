@@ -38,7 +38,7 @@
 {
     [super viewDidLoad];
     CGRect b = self.view.bounds;
-    CGRect a = [UIScreen mainScreen].applicationFrame;
+    //CGRect a = [UIScreen mainScreen].applicationFrame;
     
     toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];

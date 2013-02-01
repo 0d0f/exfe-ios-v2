@@ -19,7 +19,7 @@
 #import "EXGradientToolbarView.h"
 #import "GatherExfeeInputCell.h"
 #import <objc/runtime.h>
-#import "LocalContact.h"
+//#import "LocalContact.h"
 
 #define LOCAL_ADDRESSBOOK 0
 #define EXFE_ADDRESSBOOK 1

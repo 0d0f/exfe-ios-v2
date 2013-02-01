@@ -19,6 +19,7 @@
 		4F14689C167F1C0700872F9D /* ProfileCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F14689B167F1C0600872F9D /* ProfileCard.m */; };
 		4F15D6D116B11EA100BABE72 /* EXTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15D6D016B11EA100BABE72 /* EXTabBar.m */; };
 		4F266F02168EC49900BDB9D5 /* EXLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F266F01168EC49900BDB9D5 /* EXLabel.m */; };
+		4F2B9E6216BB6E3000DD133D /* LocalContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2B9E6116BB6E3000DD133D /* LocalContact.m */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
 		4F63E24B169AD2B3003354D7 /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24A169AD2B2003354D7 /* NSDateComponents+Helper.m */; };
 		4F63E24E169BFCD5003354D7 /* DateTimeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24D169BFCD4003354D7 /* DateTimeUtil.m */; };
@@ -450,7 +451,6 @@
 		78FA8C3816B7CD7A00D9E876 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3716B7CD7900D9E876 /* Cross.m */; };
 		78FA8C3E16B8FD6F00D9E876 /* portrait_tri.png in Resources */ = {isa = PBXBuildFile; fileRef = 78FA8C3C16B8FD6F00D9E876 /* portrait_tri.png */; };
 		78FA8C3F16B8FD6F00D9E876 /* portrait_tri@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78FA8C3D16B8FD6F00D9E876 /* portrait_tri@2x.png */; };
-		78FA8C5916B9229E00D9E876 /* LocalContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C5816B9229E00D9E876 /* LocalContact.m */; };
 		78FAE24415EFE04C0045DD67 /* EXInvitationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FAE24315EFE04C0045DD67 /* EXInvitationItem.m */; };
 		78FB6B8D15D6C64000EF83B3 /* EXBubbleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB6B8A15D6C63F00EF83B3 /* EXBubbleButton.m */; };
 		78FB6B8E15D6C64000EF83B3 /* EXBubbleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB6B8C15D6C64000EF83B3 /* EXBubbleScrollView.m */; };
@@ -529,6 +529,8 @@
 		4F15D6D016B11EA100BABE72 /* EXTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabBar.m; sourceTree = "<group>"; };
 		4F266F00168EC49900BDB9D5 /* EXLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXLabel.h; sourceTree = "<group>"; };
 		4F266F01168EC49900BDB9D5 /* EXLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXLabel.m; sourceTree = "<group>"; };
+		4F2B9E6016BB6E3000DD133D /* LocalContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalContact.h; sourceTree = "<group>"; };
+		4F2B9E6116BB6E3000DD133D /* LocalContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalContact.m; sourceTree = "<group>"; };
 		4F3355CE168C4F4700D398C0 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		4F3C6D8016ACEE670095AA50 /* EditCrossDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditCrossDelegate.h; sourceTree = "<group>"; };
@@ -1056,8 +1058,6 @@
 		78FA8C3716B7CD7900D9E876 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
 		78FA8C3C16B8FD6F00D9E876 /* portrait_tri.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_tri.png; sourceTree = "<group>"; };
 		78FA8C3D16B8FD6F00D9E876 /* portrait_tri@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_tri@2x.png"; sourceTree = "<group>"; };
-		78FA8C5716B9229E00D9E876 /* LocalContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalContact.h; sourceTree = "<group>"; };
-		78FA8C5816B9229E00D9E876 /* LocalContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalContact.m; sourceTree = "<group>"; };
 		78FAE24215EFE04C0045DD67 /* EXInvitationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXInvitationItem.h; sourceTree = "<group>"; };
 		78FAE24315EFE04C0045DD67 /* EXInvitationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXInvitationItem.m; sourceTree = "<group>"; };
 		78FB6B8915D6C63F00EF83B3 /* EXBubbleButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXBubbleButton.h; sourceTree = "<group>"; };
@@ -1672,8 +1672,8 @@
 		78A98EFC1561169E009E0806 /* Class */ = {
 			isa = PBXGroup;
 			children = (
-				78FA8C5716B9229E00D9E876 /* LocalContact.h */,
-				78FA8C5816B9229E00D9E876 /* LocalContact.m */,
+				4F2B9E6016BB6E3000DD133D /* LocalContact.h */,
+				4F2B9E6116BB6E3000DD133D /* LocalContact.m */,
 				78FA8C3616B7CD7900D9E876 /* Cross.h */,
 				78FA8C3716B7CD7900D9E876 /* Cross.m */,
 				78FA8C3116B7CD1000D9E876 /* Exfee.h */,
@@ -2478,7 +2478,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F1142E216AE40B000C30179 /* EXFETests.m in Sources */,
-				78FA8C5916B9229E00D9E876 /* LocalContact.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2587,6 +2586,7 @@
 				78FA8C3016B7CCB900D9E876 /* Identity.m in Sources */,
 				78FA8C3316B7CD1000D9E876 /* Exfee.m in Sources */,
 				78FA8C3816B7CD7A00D9E876 /* Cross.m in Sources */,
+				4F2B9E6216BB6E3000DD133D /* LocalContact.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

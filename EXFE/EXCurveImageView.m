@@ -42,7 +42,7 @@
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         
         int ovalWidth = self.frame.size.width;
-        int ovalHeight = self.frame.size.height;
+        //int ovalHeight = self.frame.size.height;
         CGFloat x0 = (CurveFrame.origin.x + CurveFrame.size.width * 0.0f);
         CGFloat y0 = (CurveFrame.origin.y + CurveFrame.size.height * 0.0f);
         CGFloat x1 = (CurveFrame.origin.x + CurveFrame.size.width * 0.7f);

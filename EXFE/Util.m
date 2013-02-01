@@ -276,7 +276,7 @@
     NSUInteger units = (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit);
     NSDateComponents *components = [calendar components:units fromDate:date toDate:now options:0];
     
-    NSString *relativeString;
+    NSString *relativeString = @"";
     if (delta < 1 * MINUTE) {
         relativeString = (components.second == 1) ? @"One second" : [NSString stringWithFormat:@"%d seconds",abs(components.second)];
     } else if (delta < 2 * MINUTE) {
@@ -338,7 +338,7 @@
     NSUInteger units = (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit);
     NSDateComponents *components = [calendar components:units fromDate:date toDate:now options:0];
     
-    NSString *relativeString;
+    NSString *relativeString = nil;
     if (delta < 1 * MINUTE) {
         relativeString = (components.second == 1) ? @"One second" : [NSString stringWithFormat:@"%d seconds",abs(components.second)];
     } else if (delta < 2 * MINUTE) {
@@ -350,10 +350,11 @@
     } else if (delta < 24 * HOUR) {
         relativeString = [NSString stringWithFormat:@"%d hours",abs(components.hour)];
     } else if (delta < 48 * HOUR) {
-        if(isNegative==NO)
+        if(isNegative==NO){
             relativeString = @"yesterday";
-        else if(isNegative==YES)
+        }else if(isNegative==YES){
             relativeString = @"tomorrow";
+        }
         return relativeString;
     } else if (delta < 30 * DAY) {
         relativeString = [NSString stringWithFormat:@"%d days",abs(components.day)];
@@ -770,7 +771,7 @@
     
     if(day==0)
     {
-        if(timestr!=@"")
+        if(timestr.length > 0)
         {
             if(localtime==YES)
                 [dateformat setTimeZone:[NSTimeZone localTimeZone]];
