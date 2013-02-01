@@ -42,8 +42,9 @@
 
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
     [btnBack setFrame:CGRectMake(0, 0, 20, 44)];
-    btnBack.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:btnBack];
 
@@ -153,7 +154,10 @@
 
     [_tableView setHidden:YES];
     [map setFrame:CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height-44)];
-
+    mapShadow = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(map.bounds) - 4, CGRectGetWidth(map.bounds), 4)];
+    [mapShadow setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"shadow_4up.png"]]];
+    [map addSubview:mapShadow];
+    
     if(showtableview==YES){
         [self setViewStyle:EXPlaceViewStyleBigTableview];
         [inputplace becomeFirstResponder];
@@ -259,6 +263,7 @@
         [_tableView setHidden:YES];
 //        [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, self.view.frame.size.height, _tableView.frame.size.width, _tableView.frame.size.height)];
         [map setFrame:CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height-44)];
+        mapShadow.frame = CGRectMake(0, CGRectGetHeight(map.bounds) - 4, CGRectGetWidth(map.bounds), 4);
         [UIView commitAnimations];
         [inputplace resignFirstResponder];
         [map becomeFirstResponder];
@@ -270,6 +275,7 @@
         [UIView setAnimationDelay:0];
         [UIView setAnimationDuration:0.25];
         [map setFrame:CGRectMake(0, 44, self.view.frame.size.width,85)];
+        mapShadow.frame = CGRectMake(0, CGRectGetHeight(map.bounds) - 4, CGRectGetWidth(map.bounds), 4);
         [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, 44+85, _tableView.frame.size.width, self.view.frame.size.height-44-85)];
         [UIView commitAnimations];
     } else if(style== EXPlaceViewStyleBigTableview){
@@ -280,6 +286,7 @@
         [UIView setAnimationDelay:0];
         [UIView setAnimationDuration:0.25];
         [map setFrame:CGRectMake(0, 44, self.view.frame.size.width,140)];
+        mapShadow.frame = CGRectMake(0, CGRectGetHeight(map.bounds) - 4, CGRectGetWidth(map.bounds), 4);
         [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, 44+140, _tableView.frame.size.width, self.view.frame.size.height-44-140)];
         [UIView commitAnimations];
         
@@ -291,6 +298,7 @@
         [UIView setAnimationDuration:0.25];
         
         [map setFrame:CGRectMake(0, 44, self.view.frame.size.width,self.view.frame.size.height-44-216)];
+        mapShadow.frame = CGRectMake(0, CGRectGetHeight(map.bounds) - 4, CGRectGetWidth(map.bounds), 4);
         [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, 44+85, _tableView.frame.size.width, self.view.frame.size.height-44-85)];
         [UIView commitAnimations];
         
@@ -302,6 +310,7 @@
         [UIView setAnimationDelay:0];
         [UIView setAnimationDuration:0.25];
         [map setFrame:CGRectMake(0, 44, self.view.frame.size.width,140)];
+        mapShadow.frame = CGRectMake(0, CGRectGetHeight(map.bounds) - 4, CGRectGetWidth(map.bounds), 4);
         [_tableView setFrame:CGRectMake(_tableView.frame.origin.x, 44+140, _tableView.frame.size.width, self.view.frame.size.height-44-140)];
         [UIView commitAnimations];
     }
@@ -401,6 +410,7 @@
     [placeedit release];
     [actionsheet release];
     [originplace release];
+    [mapShadow release];
     [super dealloc];
 }
 

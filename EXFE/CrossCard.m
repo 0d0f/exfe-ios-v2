@@ -187,7 +187,7 @@
         CGRect fillrect=CGRectMake(barnnerRect.origin.x, 8 , barnnerRect.size.width, barnnerRect.size.height);
         CGContextAddRect(context, fillrect);
         CGContextClosePath(context);
-        CGContextSetRGBFillColor(context, COLOR255(0x84), COLOR255(0xBF), COLOR255(0xDE), 1);
+        CGContextSetRGBFillColor(context, COLOR255(0xEF), COLOR255(0xF6), COLOR255(0xFF), 1);
         CGContextFillPath(context);
     }
     
@@ -203,7 +203,7 @@
     if (hlTitle){
         fontType = @"HelveticaNeue-Bold"; //[NSString stringWithString:@"blah blah"];
     }else{
-        fontType = @"HelveticaNeue-Medium"; //[NSString stringWithString:@"blah blah"];
+        fontType = @"HelveticaNeue"; //[NSString stringWithString:@"blah blah"];
     }
     CTFontRef textfontref= CTFontCreateWithName((CFStringRef)fontType, 21.0, NULL);
     if(title == nil){
