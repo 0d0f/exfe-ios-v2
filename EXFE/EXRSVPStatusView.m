@@ -16,10 +16,14 @@
     self = [super initWithFrame:frame];
     if (self) {
         delegate=_delegate;
-        self.backgroundColor=[UIColor whiteColor];
-        self.layer.shadowColor=[UIColor blackColor].CGColor;
-        self.layer.shadowOpacity = 1;
-        self.layer.shadowOffset = CGSizeMake(0.0f, 3.0f);
+        self.backgroundColor=[UIColor clearColor];
+//        self.layer.shadowColor=[UIColor blackColor].CGColor;
+//        self.layer.shadowOpacity = 1;
+//        self.layer.shadowOffset = CGSizeMake(0.0f, 3.0f);
+        
+        background= [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+        background.image=[[UIImage imageNamed:@"x_exfee_tip.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(9, 9, 9,9)];
+        [self addSubview:background];
 //        UIButton *next=[UIButton buttonWithType:UIButtonTypeCustom];
 //        
 //        [next setFrame:CGRectMake(165.0f, 7.0f, 10.0f, 30.0f)];
@@ -29,21 +33,24 @@
         
         UIImageView *arrow=[[UIImageView alloc] initWithFrame:CGRectMake(165.0f, (frame.size.height-15)/2, 12, 15)];
         arrow.image=[UIImage imageNamed:@"arrow.png"];
-        [self addSubview:arrow];
+//        [self addSubview:arrow];
+        [arrow release];
         
-        namelabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 5, 155, 20)];
+        namelabel=[[UILabel alloc] initWithFrame:CGRectMake(16, 5, 155, 20)];
         [namelabel setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:18]];
         [namelabel setTextColor:FONT_COLOR_51];
-        [namelabel setTextAlignment:NSTextAlignmentCenter];
+        [namelabel setTextAlignment:NSTextAlignmentLeft];
+        namelabel.backgroundColor=[UIColor clearColor];
         [self addSubview:namelabel];
         
-        rsvpbadge=[[UIImageView alloc] initWithFrame:CGRectMake(10, 24, 18, 18)];
+        rsvpbadge=[[UIImageView alloc] initWithFrame:CGRectMake(16, 24, 18, 18)];
         [self addSubview:rsvpbadge];
         
-        rsvplabel=[[UILabel alloc] initWithFrame:CGRectMake(10+18+5, 24, 100, 20)];
+        rsvplabel=[[UILabel alloc] initWithFrame:CGRectMake(16+18+5, 24, 180-10-18, 20)];
         [rsvplabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
         [rsvplabel setTextColor:FONT_COLOR_HL];
         [rsvplabel setTextAlignment:NSTextAlignmentLeft];
+        rsvplabel.backgroundColor=[UIColor clearColor];
         [self addSubview:rsvplabel];
 
         UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu)];
@@ -69,17 +76,25 @@
     NSString *rsvpstatustext=@"";
     if ([invitation.rsvp_status isEqualToString:@"ACCEPTED"]){
         rsvpicon=[UIImage imageNamed:@"rsvp_accepted_stroke_26blue.png"];
+        rsvplabel.textColor=FONT_COLOR_HL;
         rsvpstatustext=@"Accepted";
-    }
-    else if ([invitation.rsvp_status isEqualToString:@"INTERESTED"]){
-        rsvpicon=[UIImage imageNamed:@"rsvp_pending_stroke_26g5.png"];
-        rsvpstatustext=@"Pending";
-
     }
     else if ([invitation.rsvp_status isEqualToString:@"DECLINED"]){
         rsvpicon=[UIImage imageNamed:@"rsvp_unavailable_stroke_26g5.png"];
         rsvpstatustext=@"Unavailable";
+        rsvplabel.textColor=FONT_COLOR_51;
 
+    }
+    else{
+        rsvpicon=[UIImage imageNamed:@"rsvp_pending_stroke_26g5.png"];
+        rsvpstatustext=@"Pending";
+        rsvplabel.textColor=FONT_COLOR_51;
+    }
+    
+    if([invitation.identity.unreachable boolValue]==YES){
+        rsvpicon=[UIImage imageNamed:@"portrait_exclaim.png"];
+        rsvpstatustext=@"Contact unreachable";
+        rsvplabel.textColor=[UIColor colorWithRed:229/255.0 green:46/255.0 blue:83/255.0 alpha:1];
     }
     
     rsvpbadge.image=rsvpicon;
@@ -89,6 +104,16 @@
     
     
 }
+
+- (void)dealloc{
+    [super dealloc];
+    [background release];
+    [namelabel release];
+    [rsvplabel release];
+    [rsvpbadge release];
+}
+
+
 
 - (void) showMenu{
     [self setHidden:YES];

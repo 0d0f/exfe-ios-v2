@@ -46,19 +46,25 @@
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     CGRect imagerect=rect;
     imagerect.size.height=rect.size.height-15;
-//        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:imagerect cornerRadius:3];
         CGContextRef currentContext = UIGraphicsGetCurrentContext();
         CGContextSaveGState(currentContext);
         CGContextTranslateCTM(currentContext, 0, self.bounds.size.height);
         CGContextScaleCTM(currentContext, 1.0, -1.0);
 
         if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-//            if(isMe){
-//                avatar=[avatar roundedCornerImage:40 borderSize:0];
-//            }
             CGImageRef ximageref = CGImageRetain(avatar.CGImage);
             CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , ximageref);
             CGImageRelease(ximageref);
+            if(isMe){
+                NSString *portrait_frame=@"portrait_circle.png";
+                if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+                    portrait_frame=@"portrait_circle_accepted.png";
+                CGImageRef frameimageref = CGImageRetain([UIImage imageNamed:portrait_frame].CGImage);
+                CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , frameimageref);
+                CGImageRelease(frameimageref);
+                
+            }
+
             if(isMe && !isGather){
                 UIImage *rsvpicon = nil;
                 if ([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
@@ -76,14 +82,14 @@
             }
 
         }
-    if(!isMe){
-        NSString *portrait_frame=@"portrait_frame_50.png";
-        if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
-            portrait_frame=@"portrait_frame_accept_50.png";
-        CGImageRef frameimageref = CGImageRetain([UIImage imageNamed:portrait_frame].CGImage);
-        CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , frameimageref);
-        CGImageRelease(frameimageref);
-    }
+        if(!isMe){
+            NSString *portrait_frame=@"portrait_frame_50.png";
+            if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
+                portrait_frame=@"portrait_frame_accepted_50.png";
+            CGImageRef frameimageref = CGImageRetain([UIImage imageNamed:portrait_frame].CGImage);
+            CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , frameimageref);
+            CGImageRelease(frameimageref);
+        }
 
     if([invitation.mates intValue]>0){
         CGImageRef triimageref = CGImageRetain([UIImage imageNamed:@"portrait_tri.png"].CGImage);
@@ -136,46 +142,10 @@
     if([invitation.identity.unreachable boolValue]==YES){
         CGContextTranslateCTM(currentContext, 0, self.bounds.size.height);
         CGContextScaleCTM(currentContext, 1.0, -1.0);
-        CGImageRef frameimageref = CGImageRetain([UIImage imageNamed:@"exfee_unreachable.png"].CGImage);
+        CGImageRef frameimageref = CGImageRetain([UIImage imageNamed:@"portrait_exclaim.png"].CGImage);
         CGContextDrawImage(currentContext,CGRectMake(rect.size.width-20, 0, 20,20) , frameimageref);
         CGImageRelease(frameimageref);
     }
-
-//        if(self.isHost==YES)
-//            [[UIImage imageNamed:@"exfee_frame.png"] drawInRect:CGRectMake(rect.origin.x-1, rect.origin.y-1, 42, 42)];
-    
-//        if(self.mates>0)
-//        {
-//            [[UIImage imageNamed:@"exfee_frame_mates.png"] drawInRect:CGRectMake(rect.origin.x-3, rect.origin.y-3, 46, 44)];
-//        }
-//        if(isSelected==YES)
-//        {
-//            if([self.rsvp_status isEqualToString:@"ACCEPTED"])
-//                [[UIImage imageNamed:@"rsvp_accept_badge.png"] drawInRect:CGRectMake(rect.origin.x-4, rect.origin.y-4, 52, 52)];
-//            else if([self.rsvp_status isEqualToString:@"INTERESTED"])
-//                [[UIImage imageNamed:@"rsvp_interested_badge.png"] drawInRect:CGRectMake(rect.origin.x-4, rect.origin.y-4, 52, 52)];
-//            else if([self.rsvp_status isEqualToString:@"NORESPONSE"])
-//                [[UIImage imageNamed:@"rsvp_pending_badge.png"] drawInRect:CGRectMake(rect.origin.x-4, rect.origin.y-4, 52, 52)];
-//            else if([self.rsvp_status isEqualToString:@"DECLINED"])
-//                [[UIImage imageNamed:@"rsvp_unavailable_badge.png"] drawInRect:CGRectMake(rect.origin.x-4, rect.origin.y-4, 52, 52)];
-//
-//        }
-//    Identity *identity=self.invitation.identity;
-//    NSString *name=identity.name;
-//    if(name==nil)
-//        name=identity.external_username;
-//    if(name==nil)
-//        name=identity.external_id;
-//
-//        if(name!=nil){
-//            [[UIColor blackColor] set];
-//            UIFont *font=[UIFont fontWithName:@"HelveticaNeue" size:11];
-//            if(isSelected==YES)
-//                font=[UIFont fontWithName:@"HelveticaNeue-Bold" size:11];
-//
-//                [name drawInRect:CGRectMake(rect.origin.x, rect.size.height-15, rect.size.width, 15) withFont:font lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
-//
-//        }
 }
 
 @end

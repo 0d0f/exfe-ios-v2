@@ -89,7 +89,7 @@
         [container addSubview:descView];
         
         exfeeSuggestHeight = 70;
-        exfeeShowview = [[EXImagesCollectionGatherView alloc]initWithFrame:CGRectMake(c.origin.x, CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN - EXFEE_OVERLAP, c.size.width, exfeeSuggestHeight + EXFEE_OVERLAP)];
+        exfeeShowview = [[EXImagesCollectionGatherView alloc]initWithFrame:CGRectMake(c.origin.x+10, CGRectGetMaxY(descView.frame) + DESC_BOTTOM_MARGIN - EXFEE_OVERLAP, c.size.width-20, exfeeSuggestHeight + EXFEE_OVERLAP)];
         exfeeShowview.backgroundColor = [UIColor clearColor];
         [exfeeShowview calculateColumn];
         [exfeeShowview setDataSource:self];
@@ -342,7 +342,7 @@
     User *user=default_user;
     Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
  
-    cross.title=[NSString stringWithFormat:@".X. with %@",default_identity.name];
+    cross.title=[NSString stringWithFormat:@"·X· with %@",default_identity.name];
 
     title_be_edit=NO;
 
@@ -522,15 +522,29 @@
         exfeeInvitations = [[NSMutableArray alloc] initWithArray:invitations];
     else{
         for(Invitation *invitation in invitations){
-            [exfeeInvitations addObject:invitation];
+            if(![self InvitationExist:invitation])
+                [exfeeInvitations addObject:invitation];
         }
     }
     [self reFormatTitle];
     [exfeeShowview reloadData];
+    
+}
+
+- (BOOL) InvitationExist:(Invitation*)invitation{
+    if(exfeeInvitations==nil)
+        return NO;
+    else{
+        for (Invitation *existinvitation in exfeeInvitations){
+            if([existinvitation.identity.connected_user_id isEqualToNumber:invitation.identity.connected_user_id])
+                return YES;
+        }
+    }
+    return NO;
 }
 
 - (void) reFormatTitle{
-    NSString *newtitle=@".X. with ";
+    NSString *newtitle=@"·X· with ";
     if(title_be_edit==NO){
         int count=0;
         for(Invitation *invitation in exfeeInvitations){
@@ -765,7 +779,7 @@
 
 - (void)fillPlace:(Place*)place{
     if(place == nil || [place isEmpty]){
-        placeTitleView.text = @"Shomewhere";
+        placeTitleView.text = @"Somewhere";
         placeDescView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
         placeDescView.text = @"Choose a place";
         placeDescView.hidden = NO;
@@ -785,7 +799,7 @@
                 placeDescView.hidden = YES;
             }
         }else{
-            placeTitleView.text = @"Shomewhere";
+            placeTitleView.text = @"Somewhere";
             placeDescView.hidden = YES;
         }
         
@@ -858,7 +872,7 @@
         // Exfee
         if (exfeeShowview.hidden == NO){
             baseY += DESC_BOTTOM_MARGIN;
-            exfeeShowview.frame = CGRectMake(CGRectGetMinX(c), baseY - EXFEE_OVERLAP, CGRectGetWidth(c), exfeeSuggestHeight + EXFEE_OVERLAP);
+            exfeeShowview.frame = CGRectMake(CGRectGetMinX(c)+10, baseY - EXFEE_OVERLAP, CGRectGetWidth(c)-20, exfeeSuggestHeight + EXFEE_OVERLAP);
             baseX = CGRectGetMaxX(exfeeShowview.frame);
             baseY = CGRectGetMaxY(exfeeShowview.frame);
         }
@@ -1019,7 +1033,6 @@
     //    }
     
     //    [exfeeIdentities count]
-    NSLog(@"Exfee Collection should resize to %f", height);
     if (height > 0){
         exfeeSuggestHeight = height;
     }

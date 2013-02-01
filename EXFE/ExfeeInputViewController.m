@@ -230,7 +230,6 @@ static char identitykey;
     addressbookType=LOCAL_ADDRESSBOOK;
     [expandExfeeView setHidden:YES];
     expandCellHeight=44;
-    NSLog(@"reload...local contacts");
     [suggestionTable reloadData];
 }
 
@@ -336,6 +335,7 @@ static char identitykey;
     for(id inputobj in customobjects){
         if([inputobj isKindOfClass:[Invitation class]]){
             Invitation *invitation=(Invitation*)inputobj;
+//            invitation.identity.connected_user_id
             NSString *key=[invitation.identity.provider stringByAppendingString:invitation.identity.external_id];
             if(![dict objectForKey:key]){
                 [dict setObject:@"" forKey:key];
@@ -387,7 +387,6 @@ static char identitykey;
             request.params=rsvpParams;
             request.onDidLoadResponse=^(RKResponse *response){
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-                NSLog(@"%@",[response bodyAsString]);
                 if (response.statusCode == 200) {
                     NSDictionary *body=[response.body objectFromJSONData];
                     if([body isKindOfClass:[NSDictionary class]]) {
@@ -617,7 +616,6 @@ static char identitykey;
         else
             cell.avatar=avatar;
         
-        NSLog(@"reload idx:%i",indexPath.row);
         NSMutableArray *iconset=[[NSMutableArray alloc] initWithCapacity:3];
         if(person.social!=nil){
             NSArray *social_array=[NSKeyedUnarchiver unarchiveObjectWithData:person.social];
@@ -701,7 +699,6 @@ static char identitykey;
         }
         
     }
-    NSLog(@"return cell idx:%i",indexPath.row);
     return cell;
 }
 
@@ -717,8 +714,6 @@ static char identitykey;
 {
     if(addressbookType==LOCAL_ADDRESSBOOK){
         LocalContact *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
-        NSLog(@"person:%@",person);
-//        NSDictionary *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
         [self addByInputIdentity:[[AddressBook getDefaultIdentity:person] objectForKey:@"external_id"] provider:[[AddressBook getDefaultIdentity:person] objectForKey:@"provider"] dismiss:NO];
     }else{
         Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
