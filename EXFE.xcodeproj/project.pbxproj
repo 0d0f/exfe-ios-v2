@@ -430,6 +430,8 @@
 		78F45F4216BBB64400F364FE /* shadow_4up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F45F4016BBB64400F364FE /* shadow_4up@2x.png */; };
 		78F45F4A16BBB6C700F364FE /* back_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F45F4816BBB6C700F364FE /* back_pressed.png */; };
 		78F45F4B16BBB6C700F364FE /* back_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F45F4916BBB6C700F364FE /* back_pressed@2x.png */; };
+		78F45F5316BBBA2100F364FE /* UIUnderlinedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */; };
+		78F45F5816BBBB1200F364FE /* UIUnderlinedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */; };
 		78F9F887165383D60079BA6B /* identity_facebook_40.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F9F87D165383D50079BA6B /* identity_facebook_40.png */; };
 		78F9F888165383D60079BA6B /* identity_facebook_40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F9F87E165383D50079BA6B /* identity_facebook_40@2x.png */; };
 		78F9F889165383D60079BA6B /* identity_facebook_50.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F9F87F165383D50079BA6B /* identity_facebook_50.png */; };
@@ -1028,6 +1030,8 @@
 		78F45F4016BBB64400F364FE /* shadow_4up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shadow_4up@2x.png"; sourceTree = "<group>"; };
 		78F45F4816BBB6C700F364FE /* back_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_pressed.png; sourceTree = "<group>"; };
 		78F45F4916BBB6C700F364FE /* back_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_pressed@2x.png"; sourceTree = "<group>"; };
+		78F45F5116BBBA2100F364FE /* UIUnderlinedButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIUnderlinedButton.h; sourceTree = "<group>"; };
+		78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIUnderlinedButton.m; sourceTree = "<group>"; };
 		78F9F87D165383D50079BA6B /* identity_facebook_40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity_facebook_40.png; sourceTree = "<group>"; };
 		78F9F87E165383D50079BA6B /* identity_facebook_40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity_facebook_40@2x.png"; sourceTree = "<group>"; };
 		78F9F87F165383D50079BA6B /* identity_facebook_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity_facebook_50.png; sourceTree = "<group>"; };
@@ -1897,6 +1901,8 @@
 				4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */,
 				4F15D6CF16B11EA100BABE72 /* EXTabBar.h */,
 				4F15D6D016B11EA100BABE72 /* EXTabBar.m */,
+				78F45F5116BBBA2100F364FE /* UIUnderlinedButton.h */,
+				78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -2443,6 +2449,7 @@
 			files = (
 				4F1142E216AE40B000C30179 /* EXFETests.m in Sources */,
 				78FA8C5916B9229E00D9E876 /* LocalContact.m in Sources */,
+				78F45F5316BBBA2100F364FE /* UIUnderlinedButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2551,6 +2558,7 @@
 				78FA8C3016B7CCB900D9E876 /* Identity.m in Sources */,
 				78FA8C3316B7CD1000D9E876 /* Exfee.m in Sources */,
 				78FA8C3816B7CD7A00D9E876 /* Cross.m in Sources */,
+				78F45F5816BBBB1200F364FE /* UIUnderlinedButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
