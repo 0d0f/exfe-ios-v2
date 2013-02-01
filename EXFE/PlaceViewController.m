@@ -75,12 +75,9 @@
     rightbutton=[UIButton buttonWithType:UIButtonTypeCustom];
     [rightbutton setFrame:CGRectMake(265, 7, 50, 30)];
     [rightbutton setTitle:@"Done" forState:UIControlStateNormal];
+    [rightbutton setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 3, 0,3)] forState:UIControlStateNormal];
     [rightbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
-    [rightbutton setTitleColor:[UIColor colorWithRed:25/255.0f green:25/255.0f blue:25/255.0f alpha:1] forState:UIControlStateNormal];
-    rightbutton.titleLabel.shadowColor=[UIColor whiteColor];
-    rightbutton.titleLabel.shadowOffset=CGSizeMake(0, 1);
-    
-    [rightbutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)] forState:UIControlStateNormal];
+
     [rightbutton addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:rightbutton];
     [self regObserver];
@@ -107,9 +104,25 @@
         place.place_description=@"";
         place.lat=@"";
         place.lng=@"";
+        place.external_id=@"";
+        place.provider=@"";
 
     }
     else{
+
+        if(place.title==nil)
+            place.title=@"";
+        if(place.place_description==nil)
+            place.place_description=@"";
+        if(place.lat==nil)
+            place.lat=@"";
+        if(place.lng==nil)
+            place.lng=@"";
+        if(place.external_id==nil)
+            place.external_id=@"";
+        if(place.provider==nil)
+            place.provider=@"";
+        
         [originplace setObject:place.external_id forKey:@"external_id"];
         [originplace setObject:place.lat forKey:@"lat"];
         [originplace setObject:place.lng forKey:@"lng"];
