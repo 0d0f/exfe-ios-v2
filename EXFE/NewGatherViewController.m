@@ -35,13 +35,13 @@
 #define EXFEE_HEIGHT                     (50)
 #define EXFEE_BOTTOM_MARGIN              (LARGE_SLOT - SMALL_SLOT)
 #define TIME_RELATIVE_HEIGHT             (MAIN_TEXT_HIEGHT)
-#define TIME_RELATIVE_BOTTOM_MARGIN      (SMALL_SLOT)
+#define TIME_RELATIVE_BOTTOM_MARGIN      (0)
 #define TIME_ABSOLUTE_HEIGHT             (ALTERNATIVE_TEXT_HIEGHT)
 #define TIME_ABSOLUTE_RIGHT_MARGIN       (SMALL_SLOT)
 #define TIME_ZONE_HEIGHT                 (ALTERNATIVE_TEXT_HIEGHT)
 #define TIME_BOTTOM_MARGIN               (LARGE_SLOT)
 #define PLACE_TITLE_HEIGHT               (MAIN_TEXT_HIEGHT)
-#define PLACE_TITLE_BOTTOM_MARGIN        (SMALL_SLOT)
+#define PLACE_TITLE_BOTTOM_MARGIN        (0)
 #define PLACE_DESC_HEIGHT                (ALTERNATIVE_TEXT_HIEGHT * 4)
 #define PLACE_DESC_MIN_HEIGHT            (20)
 #define PLACE_DESC_MAX_HEIGHT            (90)
@@ -171,7 +171,7 @@
         [headview addSubview:dectorMask];
         [dectorMask release];
         
-        titleView = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - (CGRectGetMaxX(btnBack.frame) + TITLE_HORIZON_MARGIN) * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+        titleView = [[UILabel alloc] initWithFrame:CGRectMake(20 + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - 20 - TITLE_HORIZON_MARGIN * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
         titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
         titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         titleView.backgroundColor = [UIColor clearColor];
