@@ -95,6 +95,7 @@
     locationManager.desiredAccuracy = kCLLocationAccuracyBest; // 100 m
     [locationManager startUpdatingLocation];
     placeedit=[[EXPlaceEditView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 110)];
+    placeedit.PlaceTitle.tag=402;
     [placeedit setHidden:YES];
     [map addSubview:placeedit];
 
@@ -147,7 +148,7 @@
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
    
-    actionsheet=[[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Remove" otherButtonTitles:nil, nil];
+    actionsheet=[[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Clear place" otherButtonTitles:nil, nil];
     
     [self regEvent];
     
@@ -206,7 +207,7 @@
     region.span.longitudeDelta = delta;
     region.span.latitudeDelta = delta;
     [map setRegion:region animated:YES];
-    inputplace.text=place.title;
+    inputplace.text=@"";//place.title;
     
     if(place!=nil){
         [self addPlaceEdit:place];
@@ -769,32 +770,28 @@
         return;
     }
     UITextField *textField=(UITextField*)notification.object;
-    if([textField.text length]>2 && textField.tag==401)
-    {
-        editinginterval=CFAbsoluteTimeGetCurrent();
-        [self performSelector:@selector(getPlace) withObject:self afterDelay:0.8];
+    if(textField.tag==401){
+        if([textField.text length]>2 && textField.tag==401)
+        {
+            editinginterval=CFAbsoluteTimeGetCurrent();
+            [self performSelector:@selector(getPlace) withObject:self afterDelay:0.8];
+        }
+        if(![textField.text isEqualToString:@""] && ![textField.text isEqualToString:place.title] && place.title!=nil){
+            [clearbutton setHidden:YES];
+        }
+        [_tableView reloadData];
+        [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }if(textField.tag==402){
+        if([textField.text isEqualToString:@""]){
+            [actionsheet showInView:self.view];
+        }
     }
-    if(![textField.text isEqualToString:@""] && ![textField.text isEqualToString:place.title] && place.title!=nil){
-        [clearbutton setHidden:YES];
-//        [revert setHidden:NO];
-    }
-    
-    [_tableView reloadData];
-    [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
 
 }
 - (void) editingDidBegan:(NSNotification*)notification{
 //    isedit=NO;
     willUserScroll=YES;
     UITextField *textField=(UITextField*)notification.object;
-//    if(![textField.text isEqualToString:@""] && ![textField.text isEqualToString:place.title] && place.title!=nil){
-//        [clearbutton setHidden:YES];
-//        [revert setHidden:NO];
-//    }
-    
-    
-//    if([textField.text length]>2)
-//        [self performSelector:@selector(getPlace) withObject:self];
 
     [self drawMapAnnontations:-1];
     [self setViewStyle:EXPlaceViewStyleTableview];

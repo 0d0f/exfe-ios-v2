@@ -250,7 +250,7 @@
 
     CABasicAnimation *opacityAnimation_out = [CABasicAnimation animationWithKeyPath:
                                           @"opacity"];
-    opacityAnimation_out.duration= 1;
+    opacityAnimation_out.duration= 2;
     opacityAnimation_out.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
     opacityAnimation_out.fromValue =[NSNumber numberWithInt:1];
@@ -260,8 +260,8 @@
 
     CABasicAnimation *opacityAnimation_in = [CABasicAnimation animationWithKeyPath:
                                           @"opacity"];
-    opacityAnimation_in.duration= 1;
-    opacityAnimation_in.beginTime=1;
+    opacityAnimation_in.duration= 2;
+    opacityAnimation_in.beginTime=2;
     opacityAnimation_in.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
     opacityAnimation_in.fromValue =[NSNumber numberWithInt:0];
@@ -271,7 +271,7 @@
     
     CAAnimationGroup *group = [CAAnimationGroup animation];
     group.animations=[NSArray arrayWithObjects:opacityAnimation_out,opacityAnimation_in, nil];
-    group.duration=2;
+    group.duration=4;
     group.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     group.repeatCount=FLT_MAX;
                       
