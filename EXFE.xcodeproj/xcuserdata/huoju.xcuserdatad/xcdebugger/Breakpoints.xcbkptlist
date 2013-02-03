@@ -351,7 +351,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "370"
          endingLineNumber = "370"
-         landmarkName = "-maplongpress:"
+         landmarkName = "-done"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1326,7 +1326,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "182"
          endingLineNumber = "182"
-         landmarkName = "-viewDidLoad"
+         landmarkName = "-initPlaceView"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1768,7 +1768,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "338"
          endingLineNumber = "338"
-         landmarkName = "-setPlace:isedit:"
+         landmarkName = "-maplongpress:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1794,7 +1794,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "764"
          endingLineNumber = "764"
-         landmarkName = "-getPlace"
+         landmarkName = "-textFieldShouldReturn:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1807,8 +1807,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "754"
          endingLineNumber = "754"
-         landmarkName = "-addPlaceEdit:"
-         landmarkType = "5">
+         landmarkName = "@implementation PlaceViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
