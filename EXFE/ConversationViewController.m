@@ -578,14 +578,15 @@
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         [self hiddenTimeNow];
     }
-    if(!floattimetextlayer){
-        floattimetextlayer=[CATextLayer layer];
-        floattimetextlayer.contentsScale=[[UIScreen mainScreen] scale];
-        floattimetextlayer.cornerRadius = 2.0;
-        floattimetextlayer.backgroundColor=FONT_COLOR_232737.CGColor;
-        [floattimetextlayer setAlignmentMode:kCAAlignmentCenter];
-        [self.view.layer addSublayer:floattimetextlayer];
-    }
+//    if(!floattimetextlayer){
+//        floattimetextlayer=[CATextLayer layer];
+//        floattimetextlayer.contentsScale=[[UIScreen mainScreen] scale];
+//        floattimetextlayer.cornerRadius = 2.0;
+//        floattimetextlayer.backgroundColor=FONT_COLOR_232737.CGColor;
+//        [floattimetextlayer setAlignmentMode:kCAAlignmentCenter];
+//        [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (40 + 4*2), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA+ 5, 40 + 8, 24 + 2)];
+//        [self.view.layer addSublayer:floattimetextlayer];
+//    }
     CGPoint point=_tableView.contentOffset;
     NSArray *paths = [_tableView indexPathsForVisibleRows];
     if(paths!=nil && [paths count]>0)
@@ -593,6 +594,16 @@
         NSIndexPath *path=(NSIndexPath*)[paths objectAtIndex:0];
         if(paths!=nil && topcellPath!=path.row && point.y>0 && showfloattime==YES)
         {
+            if(!floattimetextlayer){
+                floattimetextlayer=[CATextLayer layer];
+                floattimetextlayer.contentsScale=[[UIScreen mainScreen] scale];
+                floattimetextlayer.cornerRadius = 2.0;
+                floattimetextlayer.backgroundColor=FONT_COLOR_232737.CGColor;
+                [floattimetextlayer setAlignmentMode:kCAAlignmentCenter];
+                [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (40 + 4*2), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA+ 5, 40 + 8, 24 + 2)];
+                [self.view.layer addSublayer:floattimetextlayer];
+            }
+            
             [floattimetextlayer removeAnimationForKey:@"fadeout"];
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
             Post *post=[_posts objectAtIndex:path.row];
@@ -623,7 +634,7 @@
             CFRelease(timefontref);
             CFRelease(timefontref9);
             CGSize timesize=[self textWidthForHeight:28 withAttributedString:timeattribstring];
-            [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width-5-(timesize.width+4*2),DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA,timesize.width+8,timesize.height+2)];
+            [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (timesize.width + 4 * 2), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA+ 5, timesize.width + 8, timesize.height + 2)];
             [floattimetextlayer setString:timeattribstring];
             [timeattribstring release];
             topcellPath=path.row;

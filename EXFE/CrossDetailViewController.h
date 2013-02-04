@@ -53,8 +53,6 @@
     Cross* cross;
     User* default_user;
     
-    BOOL layoutDirty;
-    
     NSArray *exfeeInvitations;
     EXRSVPStatusView *rsvpstatusview;
     CGFloat exfeeSuggestHeight;
@@ -62,7 +60,11 @@
     UIButton *timeEditMenu;
     UIButton *placeEditMenu;
     UIButton *titleAndDescEditMenu;
+    
+    BOOL layoutDirty;
     NSInteger popupCtrolId;
+    CGRect savedFrame;
+    BOOL savedScrollEnable;
     
 }
 @property (retain,nonatomic) Cross* cross;
