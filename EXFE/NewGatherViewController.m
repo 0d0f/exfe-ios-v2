@@ -198,7 +198,13 @@
     
     CGRect screenframe=[[UIScreen mainScreen] bounds];
     UIView *pannel=[[UIView alloc] initWithFrame:CGRectMake(0,screenframe.size.height-44-20, self.view.frame.size.width, 44)];
-    [pannel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.33]];
+    UIImageView *pannelbackimg=[[UIImageView alloc] initWithFrame:CGRectMake(0,0, pannel.frame.size.width, 44)];
+    pannelbackimg.image=[UIImage imageNamed:@"glassbar.png"];
+    [pannel addSubview:pannelbackimg];
+    [pannelbackimg release];
+    
+//
+//    [pannel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.33]];
 
     UIButton *btngather=[UIButton buttonWithType:UIButtonTypeCustom];
     [btngather setFrame:CGRectMake(99, 8.5, 122, 32)];
@@ -281,7 +287,7 @@
     CAAnimationGroup *group = [CAAnimationGroup animation];
     group.animations=[NSArray arrayWithObjects:opacityAnimation_out,opacityAnimation_in, nil];
     group.duration=4;
-    group.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    group.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     group.repeatCount=FLT_MAX;
                       
     [[pannellight layer] addAnimation:group forKey:@"opacityAnimation"];
@@ -552,8 +558,14 @@
         return NO;
     else{
         for (Invitation *existinvitation in exfeeInvitations){
-            if([existinvitation.identity.connected_user_id isEqualToNumber:invitation.identity.connected_user_id])
+            if([existinvitation.identity.connected_user_id intValue]>0 &&[existinvitation.identity.connected_user_id isEqualToNumber:invitation.identity.connected_user_id])
                 return YES;
+            if([existinvitation.identity.connected_user_id intValue]==0)
+            {
+                if([existinvitation.identity.external_id isEqualToString:invitation.identity.external_id])
+                    return YES;
+            }
+            
         }
     }
     return NO;
@@ -1075,9 +1087,6 @@
         if(app.userid ==[invitation.identity.connected_user_id intValue]){
             [identitypicker setHidden:NO];
             [pickertoolbar setHidden:NO];
-
-//            [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Pending", nil]];
-
         }
         else{
             [self showMenu:invitation items:[NSArray arrayWithObjects:@"Delete", nil]];
@@ -1177,11 +1186,18 @@
 - (void)RSVPRemoveMenuView:(EXRSVPMenuView *) menu{
     [self hideMenu];
     for (Invitation *invitation in exfeeInvitations) {
-        if([invitation.identity.identity_id isEqualToNumber:menu.invitation.identity.identity_id])
+        if([menu.invitation.identity.identity_id intValue]>0 && [invitation.identity.identity_id isEqualToNumber:menu.invitation.identity.identity_id])
         {
             [exfeeInvitations removeObject:invitation];
             [exfeeShowview reloadData];
             return;
+        }
+        if([menu.invitation.identity.identity_id intValue]==0){
+            if([invitation.identity.external_id isEqualToString:menu.invitation.identity.external_id]){
+                [exfeeInvitations removeObject:invitation];
+                [exfeeShowview reloadData];
+                return;
+            }
         }
     }
 
