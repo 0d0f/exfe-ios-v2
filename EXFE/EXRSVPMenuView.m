@@ -41,6 +41,7 @@
             [btnaccepted setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [btnaccepted setFrame:CGRectMake(0, y, 125, 44)];
             [btnaccepted.titleLabel setTextAlignment:NSTextAlignmentLeft];
+            
             btnaccepted.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             btnaccepted.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
             [btnaccepted addTarget:self action:@selector(setRsvpAccepted) forControlEvents:UIControlEventTouchUpInside];

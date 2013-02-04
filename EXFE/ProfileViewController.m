@@ -50,6 +50,10 @@
         username.shadowOffset = CGSizeMake(0, 1);
         [headerView addSubview:username];
         
+        UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(headerView.bounds), CGRectGetMaxY(headerView.bounds) - 4, CGRectGetWidth(headerView.bounds), 4)];
+        [shadow setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"shadow_4up.png"]]];
+        [headerView addSubview:shadow];
+        
         [self.view addSubview:headerView];
         
         btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];

@@ -61,6 +61,16 @@
 #define MASK_HIGH_BITS                   (0xFF00)
 #define MASK_LOW_BITS                    (0x00FF)
 
+#define kViewTagMaskRoot                 (0100000)
+#define kViewTagMaskOne                  (0070000)
+#define kViewTagMaskTwo                  (0007700)
+#define kViewTagMaskThree                (0000077)
+#define kViewTagRootView                 (0100000)
+#define kViewTagHeader                   (0110000)
+#define kViewTagContainer                (0120000)
+#define kViewTagTabBar                   (0130000)
+#define kViewTagBack                     (0140000)
+
 
 @interface CrossDetailViewController ()
 
@@ -81,15 +91,23 @@
 
 - (void)initUI{
    
-    CGRect f = self.view.frame;
+    
+    self.view.tag = kViewTagMaskRoot;
     CGRect a = [UIScreen mainScreen].applicationFrame;
+    self.view.frame = a;
+    CGRect b = self.view.bounds;
+    
+    
     CGRect c = CGRectMake(0, CONTAINER_TOP_MARGIN, CGRectGetWidth(a), CGRectGetHeight(a) - CONTAINER_TOP_MARGIN);
     container = [[UIScrollView alloc] initWithFrame:c];
+    container.backgroundColor = [UIColor COLOR_SNOW];
+    container.delegate = self;
+    container.tag = kViewTagContainer;
     {
         
         int left = CONTAINER_VERTICAL_PADDING;
         descView = [[EXLabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 80)];
-        descView.textColor = [UIColor COLOR_RGB(0x33, 0x33, 0x33)];
+        descView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
         descView.numberOfLines = 4;
         descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         descView.shadowColor = [UIColor whiteColor];
@@ -151,6 +169,7 @@
         mapView.backgroundColor = [UIColor lightGrayColor];
         mapView.scrollEnabled = NO;
         mapView.delegate = self;
+        
         [container addSubview:mapView];
         mapShadow = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(mapView.frame), CGRectGetMinY(mapView.frame), CGRectGetWidth(mapView.frame), 4)];
         [mapShadow setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"shadow_4.png"]]];
@@ -165,12 +184,11 @@
         container.contentSize = s;
         
     }
-    container.backgroundColor = [UIColor COLOR_SNOW];
-    container.delegate = self;
     [self.view addSubview:container];
     
-    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetMaxX(f) - 90,  f.origin.y +  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
+    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(CGRectGetMinX(b), CGRectGetMinY(b), CGRectGetWidth(b), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90,  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
     headerView.backgroundColor = [UIColor COLOR_WA(0x7F, 0xFF)];
+    headerView.tag = kViewTagHeader;
     {
         CGFloat scale = CGRectGetWidth(headerView.bounds) / HEADER_BACKGROUND_WIDTH;
         CGFloat startY = 0 - HEADER_BACKGROUND_Y_OFFSET * scale;
@@ -204,12 +222,13 @@
     [self.view addSubview:headerView];
     
     
-    widgetTabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(f), 103) withCurveFrame:CGRectMake(CGRectGetWidth(f) - 90, 103 - 15, 78, 15)];
+    widgetTabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), 103) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90, 103 - 15, 78, 15)];
     NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30refl.png"], [UIImage imageNamed:@"widget_conv_30refl.png"], nil];
     widgetTabBar.widgets = imgs;
     [widgetTabBar addTarget:self action:@selector(widgetJump:with:)];
     widgetTabBar.hidden = YES;
     widgetTabBar.contents = [NSArray arrayWithObjects:@"", @"5", @"", nil];
+    widgetTabBar.tag = kViewTagTabBar;
     [self.view  addSubview:widgetTabBar];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
@@ -218,11 +237,10 @@
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
+    btnBack.tag = kViewTagBack;
     [self.view  addSubview:btnBack];
     
     self.view.backgroundColor = [UIColor grayColor];
-    
-    popupCtrolId = 0;
 }
 
 - (void)hideWidgetTabBar{
@@ -282,6 +300,10 @@
     // Do any additional setup after loading the view from its nib.
     [self initUI];
     [self refreshUI];
+    
+    popupCtrolId = 0;
+    savedFrame = CGRectNull;
+    savedScrollEnable = NO;
 
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     gestureRecognizer.delegate = self;
@@ -292,6 +314,9 @@
     [headerView addGestureRecognizer:headTapRecognizer];
     [headTapRecognizer release];
     
+    UITapGestureRecognizer *mapTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
+    [mapView addGestureRecognizer:mapTap];
+    [mapTap release];
     
     //[APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
     
@@ -388,6 +413,42 @@
                 break;
         }
         
+    }
+}
+
+- (void)handleMapTap:(UITapGestureRecognizer*)sender{
+    //CGPoint location = [sender locationInView:sender.view];
+    
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [self hidePopupIfShown];
+        
+        NSInteger tagId = mapView.superview.tag;
+        if (tagId == kViewTagContainer) {
+            CGPoint offset = container.contentOffset;
+            
+            [mapView removeFromSuperview];
+            mapView.frame = CGRectOffset(mapView.frame, 0 - offset.x, 0 - offset.y);
+            savedFrame = mapView.frame;
+            savedScrollEnable = mapView.scrollEnabled;
+            mapView.scrollEnabled = YES;
+            [self.view addSubview:mapView];
+            
+            [UIView animateWithDuration:0.233 animations:^{
+                mapView.frame = self.view.bounds;
+            }];
+        }else{
+            [UIView animateWithDuration:0.233 animations:^{
+                mapView.frame = savedFrame;
+            } completion:^(BOOL finished){
+                mapView.scrollEnabled = savedScrollEnable;
+                [mapView removeFromSuperview];
+                [container insertSubview:mapView belowSubview:mapShadow];
+                [self setLayoutDirty];
+                [self relayoutUI];
+            }];
+            
+            
+        }
     }
 }
 
@@ -577,7 +638,7 @@
         }else{
             timeRelView.text = [title copy];
             
-            timeAbsView.textColor = [UIColor COLOR_WA(0x00, 0xFF)];
+            timeAbsView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
             NSString* desc = [time getTimeDescription];
             [desc retain];
             if(desc != nil && desc.length > 0){
@@ -626,7 +687,7 @@
         mapView.hidden = YES;
         [self setLayoutDirty];
     }else {
-        placeDescView.textColor = [UIColor COLOR_WA(0x00, 0xFF)];
+        placeDescView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
         if ([place hasTitle]){
             placeTitleView.text = place.title;
             
@@ -722,7 +783,9 @@
         
         // Exfee
         if (exfeeShowview.hidden == NO){
-            baseY += DESC_BOTTOM_MARGIN;
+            if (descView.hidden == NO) {
+                baseY += DESC_BOTTOM_MARGIN;
+            }
             exfeeShowview.frame = CGRectMake(CGRectGetMinX(c)+10, baseY - EXFEE_OVERLAP, CGRectGetWidth(c)-20, exfeeSuggestHeight + EXFEE_OVERLAP);
             baseX = CGRectGetMaxX(exfeeShowview.frame);
             baseY = CGRectGetMaxY(exfeeShowview.frame);
