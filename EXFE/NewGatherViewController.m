@@ -79,7 +79,7 @@
     {
         int left = CONTAINER_VERTICAL_PADDING;
         descView = [[EXLabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 44)];
-        descView.textColor = [UIColor COLOR_RGB(127, 127, 127)];
+        descView.textColor = [UIColor COLOR_WA(127, 0xFF)];
         descView.numberOfLines = 4;
         descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         descView.shadowColor = [UIColor whiteColor];
@@ -641,13 +641,14 @@
     [self setLayoutDirty];
     
     if (x.cross_description == nil || x.cross_description.length == 0){
-//        descView.hidden = YES;
-//        descView.text = @"";
+        descView.textColor = [UIColor COLOR_WA(127, 0xFF)];
+        descView.text = @"Take some note";
         [self setLayoutDirty];
     }else{
-        if ([x.cross_description length]>0)
+        if ([x.cross_description length]>0){
+            descView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
             descView.text = x.cross_description;
-        descView.hidden = NO;
+        }
         [self setLayoutDirty];
     }
 }
@@ -668,14 +669,12 @@
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
                                 dectorView.image = backimg;
-                                //[self setLayoutDirty];
                             }
                         });
                     });
                     dispatch_release(imgQueue);
                 }else{
                     dectorView.image = backimg;
-                    //[self setLayoutDirty];
                 }
                 flag = YES;
                 break;
@@ -744,7 +743,7 @@
         }else{
             timeRelView.text = [title copy];
             
-            timeAbsView.textColor = [UIColor COLOR_WA(0x00, 0xFF)];
+            timeAbsView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
             NSString* desc = [time getTimeDescription];
             [desc retain];
             if(desc != nil && desc.length > 0){
@@ -793,7 +792,7 @@
         mapView.hidden = YES;
         [self setLayoutDirty];
     }else {
-        placeDescView.textColor = [UIColor COLOR_WA(0x00, 0xFF)];
+        placeDescView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
         if ([place hasTitle]){
             placeTitleView.text = place.title;
             
