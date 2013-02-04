@@ -153,7 +153,7 @@
     [self regEvent];
     
     clearbutton=[UIButton buttonWithType:UIButtonTypeCustom];
-    [clearbutton setFrame:CGRectMake(238, 13, 18, 18)];
+    [clearbutton setFrame:CGRectMake(238-6, 13, 18, 18)];
     [clearbutton addTarget:self action:@selector(clearplace) forControlEvents:UIControlEventTouchUpInside];
     [clearbutton setImage:[UIImage imageNamed:@"textfield_clear.png"] forState:UIControlStateNormal];
     [self.view addSubview:clearbutton];
@@ -182,6 +182,7 @@
     CLLocationCoordinate2D location;
     location.latitude =[place.lat doubleValue];
     location.longitude =[place.lng doubleValue];
+    
     PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:place.title description:place.place_description];
     annotation.external_id=place.external_id;
     
@@ -193,8 +194,13 @@
         annoview.image=[UIImage imageNamed:@"map_pin_blue.png"];
     }
     [annotation release];
+    
+    
+    CLLocationCoordinate2D mapcenter =location;
+    mapcenter.latitude=mapcenter.latitude-0.0040;
+    
     MKCoordinateRegion region;
-    region.center = location;
+    region.center = mapcenter;
     float delta=0.02;
     if([place.lat isEqualToString:@""] && [place.lng isEqualToString:@""]){
         delta=120;
@@ -207,26 +213,11 @@
     region.span.longitudeDelta = delta;
     region.span.latitudeDelta = delta;
     [map setRegion:region animated:YES];
-    inputplace.text=@"";//place.title;
+    inputplace.text=@"";
     
     if(place!=nil){
         [self addPlaceEdit:place];
     }
-    
-//    if(showdetailview==YES){
-//        CGPoint point=[map convertCoordinate:location toPointToView:map];
-//        point.y+=18;
-//        CLLocationCoordinate2D newll =[map convertPoint:point toCoordinateFromView:map];
-//        MKCoordinateRegion region;
-//        region.center = newll;
-//        region.span.longitudeDelta = delta;
-//        region.span.latitudeDelta = delta;
-//        [map setRegion:region animated:YES];
-//        [self addPlaceEdit:place];
-//        [map becomeFirstResponder];
-//        [inputplace resignFirstResponder];
-//        [placeedit resignFirstResponder];
-//    }
 }
 
 - (void)regObserver
@@ -235,6 +226,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editingDidBegan:) name:UITextFieldTextDidBeginEditingNotification object:inputplace];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:placeedit.PlaceTitle];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:placeedit.PlaceDesc];
+    
 }
 
 - (void)regEvent
@@ -465,7 +457,18 @@
     }
     _annotations=annotations;
     [map addAnnotations:_annotations];
+    if(idx>0 && [_annotations count]>0)
+    {
+       PlaceAnnotation *annotation= [_annotations objectAtIndex:0];
+        CLLocationCoordinate2D location= annotation.coordinate;
+        location.latitude=location.latitude-0.0040;
 
+        MKCoordinateRegion region;
+        region.center = location;
+        region.span.longitudeDelta = 0.02;
+        region.span.latitudeDelta = 0.02;
+        [map setRegion:region animated:YES];
+    }
 }
 
 - (void) clearplace{
@@ -727,8 +730,8 @@
         
         [self setViewStyle:EXPlaceViewStyleMap];
         float delta=0.02;
-        CGPoint point=[map convertCoordinate:location toPointToView:map];
-        point.y+=18;
+//        CGPoint point=[map convertCoordinate:location toPointToView:map];
+//        point.y+=18;
         
         CLLocationCoordinate2D newll;// =[map convertPoint:point toCoordinateFromView:map];
         MKCoordinateRegion region;
@@ -744,6 +747,10 @@
         region.center = newll;
         region.span.longitudeDelta = delta;
         region.span.latitudeDelta = delta;
+        
+        CLLocationCoordinate2D mapcenter =location;
+        mapcenter.latitude=mapcenter.latitude-0.0040;
+
         [map setRegion:region animated:YES];
         [placeedit setHidden:NO];
         [placeedit becomeFirstResponder];

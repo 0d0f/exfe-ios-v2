@@ -226,7 +226,7 @@
     [self.view addSubview:identitypicker];
     
     pickertoolbar = [[UIView alloc] initWithFrame:CGRectMake(0, screenframe.size.height-216-[UIApplication sharedApplication].statusBarFrame.size.height-44, self.view.frame.size.width, 44)];
-    [pickertoolbar setBackgroundColor:[UIColor blackColor]];
+    [pickertoolbar setBackgroundColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:0.96]];
     pickertoolbar.tag=1200;
 
     UIButton *pickdone=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -241,7 +241,16 @@
     [pickdone addTarget:self action:@selector(pickdone) forControlEvents:UIControlEventTouchUpInside];
     [pickertoolbar addSubview:pickdone];
 
+    UILabel *pickerlabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 10, 140, 23)];
+    pickerlabel.text=@"Host as identity:";
+    pickerlabel.font=[UIFont fontWithName:@"HelveticaNeue-Light" size:20];
+    pickerlabel.textColor=[UIColor whiteColor];
+    pickerlabel.backgroundColor=[UIColor clearColor];
+    [pickertoolbar addSubview:pickerlabel];
+    [pickerlabel release];
+    
     [self.view addSubview:pickertoolbar];
+    [pickertoolbar release];
     [pickertoolbar setHidden:YES];
     
 }
@@ -1125,14 +1134,14 @@
         titlebarheight=0;
     }
     
-    rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 44*[itemslist count]+titlebarheight) withDelegate:self items:itemslist showTitleBar:showtitlebar];
+    rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y, 125, 44*[itemslist count]+titlebarheight) withDelegate:self items:itemslist showTitleBar:showtitlebar];
     [self.view addSubview:rsvpmenu];
     rsvpmenu.invitation=_invitation;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
     
     
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y-20, 125, 44*[itemslist count]+titlebarheight)];
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y, 125, 44*[itemslist count]+titlebarheight)];
     if(rsvpstatusview!=nil)
         [rsvpstatusview setHidden:YES];
     
@@ -1281,7 +1290,7 @@
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
-    return 200;
+    return 300;
     
 }
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
@@ -1292,10 +1301,10 @@
     NSString *external_id=((Identity*)[orderedIdentities objectAtIndex:row]).external_id;
     NSString *provider=((Identity*)[orderedIdentities objectAtIndex:row]).provider;
     
-    CGRect rowFrame = CGRectMake(0.0f, 0.0f, 200, 40);
+    CGRect rowFrame = CGRectMake(0.0f, 0.0f, 300, 40);
     
     UIView *rowview=[[[UIView alloc] initWithFrame:rowFrame] autorelease];
-    UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(30, 0,200-30,40)];
+    UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(30, 0,300-30,40)];
     
     label.text=external_id;
     label.backgroundColor=[UIColor clearColor];
@@ -1304,7 +1313,7 @@
     [rowview addSubview:label];
     [label release];
     
-    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18.png",provider];
+    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
     UIImage *icon=[UIImage imageNamed:iconname];
     
     UIImageView *imgprovider=[[UIImageView alloc] initWithFrame:CGRectMake(6, (40-18)/2, icon.size.width, icon.size.height)];
