@@ -783,7 +783,9 @@
         
         // Exfee
         if (exfeeShowview.hidden == NO){
-            baseY += DESC_BOTTOM_MARGIN;
+            if (descView.hidden == NO) {
+                baseY += DESC_BOTTOM_MARGIN;
+            }
             exfeeShowview.frame = CGRectMake(CGRectGetMinX(c)+10, baseY - EXFEE_OVERLAP, CGRectGetWidth(c)-20, exfeeSuggestHeight + EXFEE_OVERLAP);
             baseX = CGRectGetMaxX(exfeeShowview.frame);
             baseY = CGRectGetMaxY(exfeeShowview.frame);
