@@ -93,9 +93,10 @@
    
     
     self.view.tag = kViewTagMaskRoot;
-    CGRect f = self.view.frame;
-    CGRect b = self.view.bounds;
     CGRect a = [UIScreen mainScreen].applicationFrame;
+    self.view.frame = a;
+    CGRect b = self.view.bounds;
+    
     
     CGRect c = CGRectMake(0, CONTAINER_TOP_MARGIN, CGRectGetWidth(a), CGRectGetHeight(a) - CONTAINER_TOP_MARGIN);
     container = [[UIScrollView alloc] initWithFrame:c];
@@ -185,7 +186,7 @@
     }
     [self.view addSubview:container];
     
-    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetMaxX(f) - 90,  f.origin.y +  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
+    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(CGRectGetMinX(b), CGRectGetMinY(b), CGRectGetWidth(b), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90,  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
     headerView.backgroundColor = [UIColor COLOR_WA(0x7F, 0xFF)];
     headerView.tag = kViewTagHeader;
     {
@@ -221,7 +222,7 @@
     [self.view addSubview:headerView];
     
     
-    widgetTabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(f), 103) withCurveFrame:CGRectMake(CGRectGetWidth(f) - 90, 103 - 15, 78, 15)];
+    widgetTabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), 103) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90, 103 - 15, 78, 15)];
     NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30refl.png"], [UIImage imageNamed:@"widget_conv_30refl.png"], nil];
     widgetTabBar.widgets = imgs;
     [widgetTabBar addTarget:self action:@selector(widgetJump:with:)];
