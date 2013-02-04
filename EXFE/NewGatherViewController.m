@@ -140,6 +140,7 @@
         int b = (placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + c.origin.y + OVERLAP /*+ DECTOR_HEIGHT_EXTRA*/);
         mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, placeDescView.frame.origin.y + placeDescView.frame.size.height + PLACE_DESC_BOTTOM_MARGIN, c.size.width  , a - b)];
         mapView.backgroundColor = [UIColor lightGrayColor];
+        mapView.scrollEnabled = NO;
         mapView.delegate = self;
         [container addSubview:mapView];
         mapShadow = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(mapView.frame), CGRectGetMinY(mapView.frame), CGRectGetWidth(mapView.frame), 4)];
@@ -419,7 +420,7 @@
 }
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
-    CGPoint location = [sender locationInView:self.view];
+    CGPoint location = [sender locationInView:sender.view];
 
 //    if (descView.hidden == NO && CGRectContainsPoint(descView.frame, location)) {
 //        [self showDescriptionFullContent: (descView.numberOfLines != 0)];
@@ -433,8 +434,8 @@
         [pickertoolbar setHidden:YES];
     }
 
-    
-    if (CGRectContainsPoint([titleView frame], location) || CGRectContainsPoint([descView frame], location)){
+    CGPoint containerLocation = [container convertPoint:location fromView:sender.view];
+    if (CGRectContainsPoint([titleView frame], location) || CGRectContainsPoint([descView frame], containerLocation)){
         NSInteger editHint = 2;
         if (CGRectContainsPoint([titleView frame], location) ) {
             editHint = 1;
@@ -456,7 +457,7 @@
         [titleViewController release];
     }
 
-    if (CGRectContainsPoint([timeRelView frame], location) || CGRectContainsPoint([timeAbsView frame], location)|| CGRectContainsPoint([timeZoneView frame], location))
+    if (CGRectContainsPoint([timeRelView frame], containerLocation) || CGRectContainsPoint([timeAbsView frame], containerLocation)|| CGRectContainsPoint([timeZoneView frame], containerLocation))
     {
         TimeViewController *timeViewController=[[TimeViewController alloc] initWithNibName:@"TimeViewController" bundle:nil];
         timeViewController.delegate=self;
@@ -464,35 +465,11 @@
         [self presentModalViewController:timeViewController animated:YES];
         [timeViewController release];
     }
-    if (CGRectContainsPoint([placeTitleView frame], location) || CGRectContainsPoint([placeDescView frame], location))
+    if (CGRectContainsPoint([placeTitleView frame], containerLocation) || CGRectContainsPoint([placeDescView frame], location))
     {
         [self ShowPlaceView:@"search"];
     }
-    //    if(exfeeShowview.editmode==YES){
-    //        if (!CGRectContainsPoint([exfeeShowview frame], location)){
-    //            [self setExfeeViewMode:NO];
-    //        }
-    //    }
-    //    if(viewmode==YES){
-    //        if(crosstitle.hidden==NO)
-    //        {
-    //            if (!CGRectContainsPoint([crosstitle frame], location)){
-    //                cross.title = crosstitle.text;
-    //                crosstitle_view.text=crosstitle.text;
-    //                [crosstitle setHidden:YES];
-    //                [crosstitle_view setHidden:NO];
-    //                [title_input_img setHidden:YES];
-    //                [self saveCrossUpdate];
-    //            }
-    //
-    //        }
-    //        if(crossdescription.editable==YES){
-    //            if (!CGRectContainsPoint([crossdescription frame], location)){
-    //                [self saveCrossDesc];
-    //            }
-    //        }
-    //    }
-    if (CGRectContainsPoint([exfeeShowview frame], location)) {
+    if (CGRectContainsPoint([exfeeShowview frame], containerLocation)) {
         //        [crosstitle resignFirstResponder];
         [exfeeShowview becomeFirstResponder];
         CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
@@ -501,11 +478,6 @@
         [self hideMenu];
         [self hideStatusView];
     }
-    
-    //    else{
-    //        [crosstitle resignFirstResponder];
-    //        [map becomeFirstResponder];
-    //    }
     
 }
 
