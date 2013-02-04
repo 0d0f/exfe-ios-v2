@@ -177,23 +177,8 @@
                     [self addSubview:item];
                     if([item.invitation.rsvp_status isEqualToString:@"ACCEPTED"]){
                         acceptednum += 1;
-//                        if( acceptednum==1){
-//                            if(acceptlabel==nil){
-//                                acceptlabel=[[UILabel alloc] initWithFrame:CGRectMake(x, y-12, 50, 12)];
-//                                [acceptlabel setBackgroundColor:[UIColor colorWithRed:58.0/255.0f green:110.0/255.0f blue:165.0/255.0f alpha:0.2]];
-//                                [acceptlabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
-//                                [acceptlabel setTextColor:[UIColor colorWithRed:103/255.0 green:127/255.0 blue:153/255.0 alpha:1]];
-//                                [acceptlabel setTextAlignment:NSTextAlignmentCenter];
-//                                [self addSubview:acceptlabel];
-//                            }
-//                            [acceptlabel setFrame:CGRectMake(x, y-12, 50, 12)];
-//                            acceptlabel.text=@"Accepted";
-//                            [acceptlabel setHidden:NO];
-//                        }
-                        //                        acceptflag=YES;
                     }
                     allnum+=1+[item.invitation.mates intValue];
-                    //            [self sendSubviewToBack:item];
                 }
             }
             else{
@@ -207,15 +192,15 @@
                 UIImageView *addimg=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 52, 52)];
                 addimg.image=[UIImage imageNamed:@"gather_add.png"];
                 [addview addSubview:addimg];
-                invited_num=[[UILabel alloc] initWithFrame:CGRectMake(0, 2, 18, 13)];
+                invited_num=[[UILabel alloc] initWithFrame:CGRectMake(-1, 2, 18, 13)];
                 invited_num.font=[UIFont fontWithName:@"HelveticaNeue" size:13];
                 invited_num.textColor=FONT_COLOR_51;
                 invited_num.text=[NSString stringWithFormat:@"%i",allnum];
                 invited_num.backgroundColor=[UIColor clearColor];
-                invited_num.textAlignment=NSTextAlignmentCenter;
+                invited_num.textAlignment=NSTextAlignmentRight;
                 [addview addSubview:invited_num];
                 
-                UILabel *invitedstr=[[UILabel alloc] initWithFrame:CGRectMake(18, 4, 52-18, 10)];
+                UILabel *invitedstr=[[UILabel alloc] initWithFrame:CGRectMake(19, 4, 52-18, 10)];
                 invitedstr.font=[UIFont fontWithName:@"HelveticaNeue" size:10];
                 invitedstr.textColor=FONT_COLOR_51;
                 invitedstr.text=@"invited";
@@ -230,7 +215,6 @@
             else{
                 [addview setFrame:CGRectMake(x+5, y+5, 52, 52)];
             }
-//            [exfeecount release];
         }
         
         if(invited_num!=nil)
@@ -243,16 +227,7 @@
         y_count++;
     }
     [self setNeedsDisplay];
-    //    maskview.itemsCache=itemsCache;
-    //    [maskview setNeedsDisplay];
 }
-//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-//    NSLog(@"click");
-//    for (UITouch *touch in touches) {
-//        CGPoint touchPoint = [touch locationInView:self];
-////        [self onImageTouch:touchPoint];
-//    }
-//}
 
 - (void) onImageTouch:(CGPoint) point{
     int x_count=0;

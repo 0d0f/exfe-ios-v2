@@ -47,7 +47,49 @@ static RKRequestQueue *queue;
     [queue addRequest:request];
     [queue start];
 }
-
+-(void) GetTopPlaceFromGoogleNearby:(double)lat lng:(double)lng delegate:(id)delegate{
+    NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    RKClient *client=[RKClient sharedClient];
+    [client setBaseURL:[RKURL URLWithBaseURLString:@"https://maps.googleapis.com"]];
+    
+    //    NSString *key=@"AIzaSyCBJcbHO0x87BvSVT-2Sg14PWko-GUN09c";
+    NSString *endpoint = [NSString stringWithFormat:@"/maps/api/place/search/json?location=%g,%g&radius=100&language=%@&sensor=true&key=%@",lat,lng,language,GOOGLE_API_KEY];
+    [client get:endpoint usingBlock:^(RKRequest *request) {
+        request.method=RKRequestMethodGET;
+        request.onDidLoadResponse=^(RKResponse *response){
+            if (response.statusCode == 200) {
+                NSDictionary *body=[response.body objectFromJSONData];
+                if([body isKindOfClass:[NSDictionary class]]) {
+                    NSString *status=[body objectForKey:@"status"];
+                    if(status!=nil &&[status isEqualToString:@"OK"])
+                    {
+                        NSArray *results=[body objectForKey:@"results"] ;
+                        if([results count]>0){
+                            NSDictionary *place = [results objectAtIndex:0];
+                            if([results count]>1)
+                                place = [results objectAtIndex:1];
+                            NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:[place objectForKey:@"name"],@"title",[place objectForKey:@"vicinity"],@"description",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[place objectForKey:@"id"],@"external_id",@"google",@"provider", nil];
+                            [(PlaceViewController*)delegate fillTopPlace:dict];
+                        }
+                        //autorelease
+//                        for(NSDictionary *place in results)
+//                        {
+//                            
+//                            [local_results addObject:dict];
+//                            [dict release];
+//                        }
+//                        [(PlaceViewController*)delegate reloadPlaceData:local_results];
+                    }
+                }
+            }
+            else {
+                //Check Response Body to get Data!
+            }
+        };
+        
+    }
+     ];
+}
 -(void) GetPlacesFromGoogleNearby:(double)lat lng:(double)lng delegate:(id)delegate{
     NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
     RKClient *client=[RKClient sharedClient];

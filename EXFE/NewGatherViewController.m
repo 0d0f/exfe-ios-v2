@@ -199,7 +199,13 @@
     
     CGRect screenframe=[[UIScreen mainScreen] bounds];
     UIView *pannel=[[UIView alloc] initWithFrame:CGRectMake(0,screenframe.size.height-44-20, self.view.frame.size.width, 44)];
-    [pannel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.33]];
+    UIImageView *pannelbackimg=[[UIImageView alloc] initWithFrame:CGRectMake(0,0, pannel.frame.size.width, 44)];
+    pannelbackimg.image=[UIImage imageNamed:@"glassbar.png"];
+    [pannel addSubview:pannelbackimg];
+    [pannelbackimg release];
+    
+//
+//    [pannel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.33]];
 
     UIButton *btngather=[UIButton buttonWithType:UIButtonTypeCustom];
     [btngather setFrame:CGRectMake(99, 8.5, 122, 32)];
@@ -227,7 +233,7 @@
     [self.view addSubview:identitypicker];
     
     pickertoolbar = [[UIView alloc] initWithFrame:CGRectMake(0, screenframe.size.height-216-[UIApplication sharedApplication].statusBarFrame.size.height-44, self.view.frame.size.width, 44)];
-    [pickertoolbar setBackgroundColor:[UIColor blackColor]];
+    [pickertoolbar setBackgroundColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:0.96]];
     pickertoolbar.tag=1200;
 
     UIButton *pickdone=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -242,7 +248,16 @@
     [pickdone addTarget:self action:@selector(pickdone) forControlEvents:UIControlEventTouchUpInside];
     [pickertoolbar addSubview:pickdone];
 
+    UILabel *pickerlabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 10, 140, 23)];
+    pickerlabel.text=@"Host as identity:";
+    pickerlabel.font=[UIFont fontWithName:@"HelveticaNeue-Light" size:20];
+    pickerlabel.textColor=[UIColor whiteColor];
+    pickerlabel.backgroundColor=[UIColor clearColor];
+    [pickertoolbar addSubview:pickerlabel];
+    [pickerlabel release];
+    
     [self.view addSubview:pickertoolbar];
+    [pickertoolbar release];
     [pickertoolbar setHidden:YES];
     
 }
@@ -273,7 +288,7 @@
     CAAnimationGroup *group = [CAAnimationGroup animation];
     group.animations=[NSArray arrayWithObjects:opacityAnimation_out,opacityAnimation_in, nil];
     group.duration=4;
-    group.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    group.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     group.repeatCount=FLT_MAX;
                       
     [[pannellight layer] addAnimation:group forKey:@"opacityAnimation"];
@@ -515,8 +530,14 @@
         return NO;
     else{
         for (Invitation *existinvitation in exfeeInvitations){
-            if([existinvitation.identity.connected_user_id isEqualToNumber:invitation.identity.connected_user_id])
+            if([existinvitation.identity.connected_user_id intValue]>0 &&[existinvitation.identity.connected_user_id isEqualToNumber:invitation.identity.connected_user_id])
                 return YES;
+            if([existinvitation.identity.connected_user_id intValue]==0)
+            {
+                if([existinvitation.identity.external_id isEqualToString:invitation.identity.external_id])
+                    return YES;
+            }
+            
         }
     }
     return NO;
@@ -529,10 +550,10 @@
         for(Invitation *invitation in exfeeInvitations){
             if(count==3)
                 break;
-            newtitle=[newtitle stringByAppendingFormat:@"%@ ",invitation.identity.name];
+            newtitle=[newtitle stringByAppendingFormat:@"%@",invitation.identity.name];
             count++;
-            if(count<3 && count>1)
-                newtitle=[newtitle stringByAppendingString:@","];
+            if(count<3 && count>=1)
+                newtitle=[newtitle stringByAppendingString:@", "];
         }
         cross.title=newtitle;
         titleView.text=newtitle;
@@ -1038,9 +1059,6 @@
         if(app.userid ==[invitation.identity.connected_user_id intValue]){
             [identitypicker setHidden:NO];
             [pickertoolbar setHidden:NO];
-
-//            [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Pending", nil]];
-
         }
         else{
             [self showMenu:invitation items:[NSArray arrayWithObjects:@"Delete", nil]];
@@ -1096,14 +1114,14 @@
         titlebarheight=0;
     }
     
-    rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 44*[itemslist count]+titlebarheight) withDelegate:self items:itemslist showTitleBar:showtitlebar];
+    rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y, 125, 44*[itemslist count]+titlebarheight) withDelegate:self items:itemslist showTitleBar:showtitlebar];
     [self.view addSubview:rsvpmenu];
     rsvpmenu.invitation=_invitation;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
     
     
-    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y-20, 125, 44*[itemslist count]+titlebarheight)];
+    [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y, 125, 44*[itemslist count]+titlebarheight)];
     if(rsvpstatusview!=nil)
         [rsvpstatusview setHidden:YES];
     
@@ -1140,15 +1158,20 @@
 - (void)RSVPRemoveMenuView:(EXRSVPMenuView *) menu{
     [self hideMenu];
     for (Invitation *invitation in exfeeInvitations) {
-        if([invitation.identity.identity_id isEqualToNumber:menu.invitation.identity.identity_id])
+        if([menu.invitation.identity.identity_id intValue]>0 && [invitation.identity.identity_id isEqualToNumber:menu.invitation.identity.identity_id])
         {
             [exfeeInvitations removeObject:invitation];
             [exfeeShowview reloadData];
             return;
         }
+        if([menu.invitation.identity.identity_id intValue]==0){
+            if([invitation.identity.external_id isEqualToString:menu.invitation.identity.external_id]){
+                [exfeeInvitations removeObject:invitation];
+                [exfeeShowview reloadData];
+                return;
+            }
+        }
     }
-
-//    menu.invitation
 }
 
 - (void) setrsvp:(NSString*)status invitation:(Invitation*)_invitation{
@@ -1252,7 +1275,7 @@
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
-    return 200;
+    return 300;
     
 }
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
@@ -1263,10 +1286,10 @@
     NSString *external_id=((Identity*)[orderedIdentities objectAtIndex:row]).external_id;
     NSString *provider=((Identity*)[orderedIdentities objectAtIndex:row]).provider;
     
-    CGRect rowFrame = CGRectMake(0.0f, 0.0f, 200, 40);
+    CGRect rowFrame = CGRectMake(0.0f, 0.0f, 300, 40);
     
     UIView *rowview=[[[UIView alloc] initWithFrame:rowFrame] autorelease];
-    UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(30, 0,200-30,40)];
+    UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(30, 0,300-30,40)];
     
     label.text=external_id;
     label.backgroundColor=[UIColor clearColor];
@@ -1275,7 +1298,7 @@
     [rowview addSubview:label];
     [label release];
     
-    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18.png",provider];
+    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
     UIImage *icon=[UIImage imageNamed:iconname];
     
     UIImageView *imgprovider=[[UIImageView alloc] initWithFrame:CGRectMake(6, (40-18)/2, icon.size.width, icon.size.height)];
