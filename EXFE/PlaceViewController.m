@@ -249,7 +249,7 @@
         UITouch * touch = [touches anyObject];
         if (!CGRectContainsPoint([placeedit frame], [touch locationInView:map]))
         {
-            [placeedit setHidden:YES];
+//            [placeedit setHidden:YES];
             [placeedit resignFirstResponder];
         }
         [self setViewStyle:EXPlaceViewStyleMap];
@@ -343,15 +343,16 @@
         CLLocationCoordinate2D touchMapCoordinate =
         [map convertPoint:touchPoint toCoordinateFromView:map];
         [map removeAnnotations: map.annotations];
-
-        if([place.title isEqualToString:@""]){
-            place.title=@"Somewhere";
-            [placeedit setPlaceTitleText:@"Somewhere"];
+        BOOL newPlace=NO;
+        if([place.title isEqualToString:@""] || [place.title isEqualToString:@"Right there on the map"]){
+            place.title=@"Right there on the map";
+            [placeedit setPlaceTitleText:@"Right there on the map"];
+            newPlace=YES;
         }
         if([place.place_description isEqualToString:@""] )
             [placeedit setPlaceDescText:@""];
 
-        
+        [placeedit setHidden:NO];
         PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:touchMapCoordinate withTitle:place.title description:place.place_description];
         if([[map annotations] count]==0)
             annotation.index=-2;
@@ -362,9 +363,17 @@
         place.lat=[NSString stringWithFormat:@"%f",annotation.coordinate.latitude];
         place.lng=[NSString stringWithFormat:@"%f",annotation.coordinate.longitude];
         place.provider=@"";
+        if(newPlace==YES)
+            [[APIPlace sharedManager] GetTopPlaceFromGoogleNearby:annotation.coordinate.latitude lng:annotation.coordinate.longitude delegate:self];
+
     }
 }
 
+- (void) fillTopPlace:(NSDictionary*)topPlace{
+    placeedit.PlaceDesc.text =[topPlace objectForKey:@"description"];
+    place.place_description=[topPlace objectForKey:@"description"];
+    [placeedit setNeedsDisplay];
+}
 
 - (void) done{
     place.title=placeedit.PlaceTitle.text;
@@ -461,10 +470,10 @@
 
 - (void) clearplace{
     isnotinputplace=YES;
-    place.title=@"";
-    place.place_description=@"";
-    place.lat=@"";
-    place.lng=@"";
+//    place.title=@"";
+//    place.place_description=@"";
+//    place.lat=@"";
+//    place.lng=@"";
     [map removeAnnotations:[map annotations]];
     [placeedit setHidden:YES];
     [placeedit resignFirstResponder];
@@ -473,6 +482,9 @@
 //    [revert setHidden:NO];
     [clearbutton setHidden:YES];
     isnotinputplace=NO;
+
+    [_places release];
+    _places=nil;
     [_tableView reloadData];
 }
 - (BOOL) isPlaceNull{
@@ -596,7 +608,7 @@
     if ([annotation isKindOfClass:[MKUserLocation class]])
         return nil;
     MKAnnotationView *annView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
-    annView.canShowCallout = YES;
+    annView.canShowCallout = NO;
     
     if([((PlaceAnnotation*)annotation).external_id isEqualToString:place.external_id])
             annView.image=[UIImage imageNamed:@"map_pin_blue.png"];
@@ -625,6 +637,7 @@
                 }
             }
         }
+        
         view.image=[UIImage imageNamed:@"map_pin_blue.png"];
 
         
@@ -776,8 +789,9 @@
             editinginterval=CFAbsoluteTimeGetCurrent();
             [self performSelector:@selector(getPlace) withObject:self afterDelay:0.8];
         }
-        if(![textField.text isEqualToString:@""] && ![textField.text isEqualToString:place.title] && place.title!=nil){
-            [clearbutton setHidden:YES];
+//         && ![textField.text isEqualToString:place.title] && place.title!=nil
+        if(![textField.text isEqualToString:@""]){
+            [clearbutton setHidden:NO];
         }
         [_tableView reloadData];
         [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];

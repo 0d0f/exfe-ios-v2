@@ -75,6 +75,7 @@ typedef enum {
 - (void) textDidChange:(NSNotification*)notification;
 - (void) editingDidBegan:(NSNotification*)notification;
 - (void) reloadPlaceData:(NSArray*)places;
+- (void) fillTopPlace:(NSDictionary*)topPlace;
 - (void) drawMapAnnontations:(int)idx;
 
 - (void) selectOnMap:(id) sender;
