@@ -94,6 +94,15 @@
     
     [toolbar addSubview:doneButton];
 //    [toolbar setHidden:YES];
+    
+    descView = [[UITextView alloc] initWithFrame:CGRectMake(10, CGRectGetHeight(toolbar.frame) + DECTOR_HEIGHT, self.view.frame.size.width-20, self.view.frame.size.height - DECTOR_HEIGHT - CGRectGetHeight(toolbar.frame))];
+    descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+    descView.backgroundColor = [UIColor clearColor];
+    descView.textAlignment = NSTextAlignmentLeft;
+    descView.backgroundColor=[UIColor whiteColor];
+    descView.contentInset = UIEdgeInsetsMake(8, 0, 0, 0);
+    descView.text=@"Take some note";
+    [self.view addSubview:descView];
 
     headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90,  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
     headview.backgroundColor=[UIColor grayColor];
@@ -117,22 +126,20 @@
 //    [headview addSubview:imageback];
 //    [imageback release];
 
-    titleView = [[UITextView alloc] initWithFrame:CGRectMake(25.0,15,290,54)];
+    UIView *titleBg = [[UIView alloc] initWithFrame:CGRectMake(25, 15, 290, 55)];
+    titleBg.backgroundColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:0.75];
+    titleBg.layer.cornerRadius = 1.5;
+    [headview addSubview:titleBg];
+    [titleBg release];
+    
+    titleView = [[UITextView alloc] initWithFrame:CGRectMake(20,15,300,55)];
     titleView.textColor = FONT_COLOR_FA;
     titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
-    titleView.backgroundColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:0.75];
+    titleView.backgroundColor = [UIColor clearColor];
     titleView.textAlignment = NSTextAlignmentCenter;
-    titleView.layer.cornerRadius=1.5;
+    titleView.contentInset = UIEdgeInsetsMake(-8, 0, -8, 0);
+    titleView.delegate = self;
     [headview addSubview:titleView];
-    
-    descView = [[UITextView alloc] initWithFrame:CGRectMake(10, headview.frame.origin.y+headview.frame.size.height, self.view.frame.size.width-20, self.view.frame.size.height-(headview.frame.origin.y+headview.frame.size.height))];
-    descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
-    descView.backgroundColor = [UIColor clearColor];
-    descView.textAlignment = NSTextAlignmentLeft;
-    descView.backgroundColor=[UIColor whiteColor];
-    descView.text=@"Take some note";
-    
-    [self.view addSubview:descView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -269,6 +276,13 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark UITextViewDelegate
+- (void)textViewDidChange:(UITextView *)textView{
+    if (textView.contentSize.height <= 26 + 8 * 2) {
+        textView.contentOffset = CGPointMake(0, -8);
+    }
 }
 
 @end

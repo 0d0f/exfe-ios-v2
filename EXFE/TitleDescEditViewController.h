@@ -15,7 +15,7 @@
 #import "Util.h"
 #import "NewGatherViewController.h"
 
-@interface TitleDescEditViewController : UIViewController{
+@interface TitleDescEditViewController : UIViewController<UITextViewDelegate>{
     EXGradientToolbarView *toolbar;
     EXCurveView *headview;
     UIImageView *dectorView;
@@ -34,4 +34,9 @@
 - (void) setCrossTitle:(NSString*)title desc:(NSString*)desc;
 - (void) done:(id)sender;
 - (void) setBackground:(NSString *)_imgurl;
+
+#pragma mark UITextViewDelegate
+- (void)textViewDidChange:(UITextView *)textView;
+
+
 @end
