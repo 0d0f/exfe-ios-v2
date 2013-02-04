@@ -95,23 +95,21 @@
     [toolbar addSubview:doneButton];
 //    [toolbar setHidden:YES];
 
-    
     headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90,  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
-
     headview.backgroundColor=[UIColor grayColor];
-    
-    CGFloat scale = CGRectGetWidth(headview.bounds) / HEADER_BACKGROUND_WIDTH;
-    CGFloat startY = 0 - HEADER_BACKGROUND_Y_OFFSET * scale;
-    dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, HEADER_BACKGROUND_WIDTH * scale, HEADER_BACKGFOUND_HEIGHT * scale)];
-    //dectorView=[[UIImageView alloc] initWithFrame:headview.bounds];
-    dectorView.image=[UIImage imageNamed:@"x_titlebg_default.jpg"];
-    
-    UIView* dectorMask = [[UIView alloc] initWithFrame:headview.bounds];
-    dectorMask.backgroundColor = [UIColor COLOR_WA(0x00, 0x55)];
-    [headview addSubview:dectorMask];
-    [dectorMask release];
-    
-    [headview addSubview:dectorView];
+    {
+        CGFloat scale = CGRectGetWidth(headview.bounds) / HEADER_BACKGROUND_WIDTH;
+        CGFloat startY = 0 - HEADER_BACKGROUND_Y_OFFSET * scale;
+        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, HEADER_BACKGROUND_WIDTH * scale, HEADER_BACKGFOUND_HEIGHT * scale)];
+        //dectorView=[[UIImageView alloc] initWithFrame:headview.bounds];
+        dectorView.image=[UIImage imageNamed:@"x_titlebg_default.jpg"];
+        [headview addSubview:dectorView];
+        
+        UIView* dectorMask = [[UIView alloc] initWithFrame:headview.bounds];
+        dectorMask.backgroundColor = [UIColor COLOR_WA(0x00, 0x55)];
+        [headview addSubview:dectorMask];
+        [dectorMask release];
+    }
     [self.view addSubview:headview];
     
     UIImageView *imageback=[[UIImageView alloc] initWithFrame:CGRectMake(25.5,20.5,263,47)];
