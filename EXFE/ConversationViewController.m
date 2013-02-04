@@ -736,14 +736,19 @@
                 UIImage *avatar = [[ImgCache sharedManager] getImgFrom:post.by_identity.avatar_filename];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                        cell.avatar=avatar;
+                        cell.avatar = avatar;
+                    }else{
+                        cell.avatar = [UIImage imageNamed:@"portrait_default.png"];
                     }
                 });
             });
             dispatch_release(imgQueue);
         }
-        else
+        else{
             cell.avatar=avatar;
+        }
+    }else{
+        cell.avatar = [UIImage imageNamed:@"portrait_default.png"];
     }
 	return cell;
 }
