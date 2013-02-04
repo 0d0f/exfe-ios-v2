@@ -214,7 +214,6 @@
 }
 
 - (void)hiddenAcceptLabel{
-    NSLog(@"hidden");
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:1];
     acceptlabel.alpha=0;

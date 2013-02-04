@@ -114,22 +114,20 @@
     [headview addSubview:dectorView];
     [self.view addSubview:headview];
     
-    UIImageView *imageback=[[UIImageView alloc] initWithFrame:CGRectMake(25.5,20.5,263,47)];
-    imageback.image=[[UIImage imageNamed:@"xedit_textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(4,4,4,4)];
-    [headview addSubview:imageback];
-    [imageback release];
+//    UIImageView *imageback=[[UIImageView alloc] initWithFrame:CGRectMake(25.5,20.5,263,47)];
+//    imageback.image=[[UIImage imageNamed:@"xedit_textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(4,4,4,4)];
+//    [headview addSubview:imageback];
+//    [imageback release];
 
-    titleView = [[UITextView alloc] initWithFrame:CGRectMake(25.5,20.5,263,47)];
-    titleView.textColor = [UIColor blackColor];
-    titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
-    titleView.backgroundColor = [UIColor clearColor];
+    titleView = [[UITextView alloc] initWithFrame:CGRectMake(25.0,15,290,54)];
+    titleView.textColor = FONT_COLOR_FA;
+    titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+    titleView.backgroundColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:0.75];
     titleView.textAlignment = NSTextAlignmentCenter;
-    titleView.backgroundColor=[UIColor clearColor];
+    titleView.layer.cornerRadius=1.5;
     [headview addSubview:titleView];
     
-    
-
-    descView = [[UITextView alloc] initWithFrame:CGRectMake(0, headview.frame.origin.y+headview.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-(headview.frame.origin.y+headview.frame.size.height))];
+    descView = [[UITextView alloc] initWithFrame:CGRectMake(10, headview.frame.origin.y+headview.frame.size.height, self.view.frame.size.width-20, self.view.frame.size.height-(headview.frame.origin.y+headview.frame.size.height))];
     descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
     descView.backgroundColor = [UIColor clearColor];
     descView.textAlignment = NSTextAlignmentLeft;
