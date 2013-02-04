@@ -50,7 +50,8 @@
 
 - (void)viewDidLoad
 {
-    CGRect f = self.view.frame;
+    //CGRect f = self.view.frame;
+    CGRect b = self.view.bounds;
     CGRect screenframe=[[UIScreen mainScreen] bounds];
     screenframe.size.height-=20;
     [self.view setFrame:screenframe];
@@ -61,6 +62,24 @@
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
     [self refreshConversation];
+    
+    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
+    [_tableView addGestureRecognizer:gestureRecognizer];
+    [gestureRecognizer release];
+    
+    hintGroup = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(b), 100, CGRectGetWidth(b), CGRectGetHeight(b) - 100 - 42)];
+    {
+        UILabel *no_posts = [[UILabel alloc] initWithFrame:CGRectMake(50, 60, 260, 51)];
+        no_posts.textAlignment = NSTextAlignmentCenter;
+        no_posts.textColor = [UIColor COLOR_WA(0x6B, 0xFF)];
+        no_posts.text = @"No post in conversation,\n yet.";
+        no_posts.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
+        no_posts.backgroundColor = [UIColor clearColor];
+        no_posts.numberOfLines = 2;
+        [hintGroup addSubview:no_posts];
+        [no_posts release];
+    }
+    [self.view  addSubview:hintGroup];
     
     CGRect toolbarframe=CGRectMake(0, screenframe.size.height-kDefaultToolbarHeight, screenframe.size.width, kDefaultToolbarHeight);
     
@@ -88,13 +107,9 @@
 //    [_tableView setFrame:_tableviewrect];
     _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
-
-    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
-    [_tableView addGestureRecognizer:gestureRecognizer];
-    [gestureRecognizer release];
     
     CGFloat width = CGRectGetWidth(self.view.bounds);
-    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetMaxX(f) - 90,  f.origin.y +  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA)];
+    headerView = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90,  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA)];
     headerView.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     {
         CGFloat scale = CGRectGetWidth(headerView.bounds) / HEADER_BACKGROUND_WIDTH;
@@ -154,7 +169,7 @@
     }
     [self.view addSubview:headerView];
     
-    widgetTabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, -44, CGRectGetWidth(f), 103)  withCurveFrame:CGRectMake(CGRectGetWidth(f) - 90, 103 - 15, 78, 15)];
+    widgetTabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, -44, CGRectGetWidth(b), 103)  withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90, 103 - 15, 78, 15)];
     NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_conv_30refl.png"], [UIImage imageNamed:@"widget_x_30refl.png"],  nil];
     widgetTabBar.widgets = imgs;
     [widgetTabBar addTarget:self action:@selector(widgetJump:with:)];
@@ -180,6 +195,16 @@
 //    floatTime=[[UILabel alloc] initWithFrame:CGRectMake(0, 80, 60, 26)];
 //    floatTime.text=@"label time";
 //    [self.view addSubview:floatTime];
+    
+    
+    
+    
+    [self showOrHideHint];
+    
+    UISwipeGestureRecognizer *headSwipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderSwipe:)];
+    headSwipeRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+    [headerView addGestureRecognizer:headSwipeRecognizer];
+    [headSwipeRecognizer release];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
@@ -232,6 +257,15 @@
             break;
         default:
             break;
+    }
+}
+
+
+- (void)handleHeaderSwipe:(UISwipeGestureRecognizer*)sender{
+    //CGPoint location = [sender locationInView:sender.view];
+    
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [self toHome];
     }
 }
 
@@ -372,6 +406,7 @@
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
     
 	_posts = [[Post objectsWithFetchRequest:request] retain];
+    [self showOrHideHint];
     [_tableView reloadData];
     if(_tableView.contentSize.height>_tableView.frame.size.height) {
         CGPoint bottomOffset = CGPointMake(0, _tableView.contentSize.height - _tableView.frame.size.height);
@@ -780,6 +815,15 @@
 }
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
     NSLog(@"Error!:%@",error);
+}
+
+
+- (void)showOrHideHint{
+    if (_posts == nil || _posts.count == 0) {
+        hintGroup.hidden = NO;
+    }else{
+        hintGroup.hidden = YES;
+    }
 }
 
 @end

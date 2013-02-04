@@ -43,6 +43,7 @@
     UILabel *titleView;
     EXWidgetTabBar *widgetTabBar;
     EXTabBar *tabBar;
+    UIView *hintGroup;
     
     NSDictionary *headImgDict;
     ConversationInputAccessoryView *inputaccessoryview;
@@ -75,5 +76,6 @@
 - (void) toCross;
 - (void) toHome;
 - (void) statusbarResize;
+
 
 @end

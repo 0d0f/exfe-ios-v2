@@ -314,6 +314,11 @@
     [headerView addGestureRecognizer:headTapRecognizer];
     [headTapRecognizer release];
     
+    UISwipeGestureRecognizer *headSwipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderSwipe:)];
+    headSwipeRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+    [headerView addGestureRecognizer:headSwipeRecognizer];
+    [headSwipeRecognizer release];
+    
     UITapGestureRecognizer *mapTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
     [mapView addGestureRecognizer:mapTap];
     [mapTap release];
@@ -464,6 +469,16 @@
     }
 }
 
+- (void)handleHeaderSwipe:(UISwipeGestureRecognizer*)sender{
+    //CGPoint location = [sender locationInView:sender.view];
+    
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [self hidePopupIfShown];
+        
+        [self goBack];
+    }
+}
+
 - (void)handleTap:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
 
@@ -524,7 +539,7 @@
 }
 
 - (void)gotoBack:(UIButton*)sender{
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self goBack];
 }
 
 #pragma mark Refresh UI content methods
@@ -1446,6 +1461,10 @@
     }
     [self presentModalViewController:placeViewController animated:YES];
     [placeViewController release];
+}
+
+- (void) goBack{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark API request for modification.
