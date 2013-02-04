@@ -165,7 +165,7 @@
                         acceptednum += 1;
                         if( acceptednum==1){
                         if(acceptlabel==nil){
-                            acceptlabel=[[UILabel alloc] initWithFrame:CGRectMake(x, y-12, 50, 12)];
+                            acceptlabel=[[UILabel alloc] initWithFrame:CGRectMake(x, y-12, 60, 12)];
                             [acceptlabel setBackgroundColor:[UIColor colorWithRed:0xd2/255.0f green:0xe2/255.0f blue:0xf4/255.0f alpha:1]];
                             UIBezierPath *maskPath;
                             maskPath = [UIBezierPath bezierPathWithRoundedRect:acceptlabel.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(1.5, 1.5)];
@@ -180,7 +180,7 @@
                             [acceptlabel setTextAlignment:NSTextAlignmentCenter];
                             [self addSubview:acceptlabel];
                         }
-                        [acceptlabel setFrame:CGRectMake(x, y-12, 50, 12)];
+                        [acceptlabel setFrame:CGRectMake(x, y-12, 60, 12)];
                         acceptlabel.text=@"Accepted";
                         [acceptlabel setHidden:NO];
                         [self performSelector:@selector(hiddenAcceptLabel) withObject:self afterDelay:4];
