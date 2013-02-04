@@ -155,7 +155,7 @@
         container.contentSize = s;
         
     }
-    container.backgroundColor = [UIColor whiteColor];
+    container.backgroundColor = [UIColor COLOR_SNOW];
     [self.view addSubview:container];
     
     headview = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetMaxX(f) - 90,  f.origin.y +  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
@@ -225,11 +225,6 @@
     
     [self.view addSubview:identitypicker];
     
-//    UIView *test=[[UIView alloc] initWithFrame:CGRectMake(50, 50, 200, 200)];
-//    test.tag=1222;
-//    [test setBackgroundColor:[UIColor blackColor]];
-//    [self.view addSubview:test];
-    
     pickertoolbar = [[UIView alloc] initWithFrame:CGRectMake(0, screenframe.size.height-216-[UIApplication sharedApplication].statusBarFrame.size.height-44, self.view.frame.size.width, 44)];
     [pickertoolbar setBackgroundColor:[UIColor blackColor]];
     pickertoolbar.tag=1200;
@@ -238,11 +233,11 @@
     [pickdone setFrame:CGRectMake(265, 7, 50, 30)];
     [pickdone setTitle:@"Done" forState:UIControlStateNormal];
     [pickdone.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
-    [pickdone setTitleColor:[UIColor colorWithRed:25/255.0f green:25/255.0f blue:25/255.0f alpha:1] forState:UIControlStateNormal];
-    pickdone.titleLabel.shadowColor=[UIColor whiteColor];
+    [pickdone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    pickdone.titleLabel.shadowColor=[UIColor blackColor];
     pickdone.titleLabel.shadowOffset=CGSizeMake(0, 1);
     
-    [pickdone setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)] forState:UIControlStateNormal];
+    [pickdone setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 3, 0, 3)] forState:UIControlStateNormal];
     [pickdone addTarget:self action:@selector(pickdone) forControlEvents:UIControlEventTouchUpInside];
     [pickertoolbar addSubview:pickdone];
 
@@ -255,7 +250,7 @@
 
     CABasicAnimation *opacityAnimation_out = [CABasicAnimation animationWithKeyPath:
                                           @"opacity"];
-    opacityAnimation_out.duration= 1;
+    opacityAnimation_out.duration= 2;
     opacityAnimation_out.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
     opacityAnimation_out.fromValue =[NSNumber numberWithInt:1];
@@ -265,8 +260,8 @@
 
     CABasicAnimation *opacityAnimation_in = [CABasicAnimation animationWithKeyPath:
                                           @"opacity"];
-    opacityAnimation_in.duration= 1;
-    opacityAnimation_in.beginTime=1;
+    opacityAnimation_in.duration= 2;
+    opacityAnimation_in.beginTime=2;
     opacityAnimation_in.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
     opacityAnimation_in.fromValue =[NSNumber numberWithInt:0];
@@ -276,7 +271,7 @@
     
     CAAnimationGroup *group = [CAAnimationGroup animation];
     group.animations=[NSArray arrayWithObjects:opacityAnimation_out,opacityAnimation_in, nil];
-    group.duration=2;
+    group.duration=4;
     group.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     group.repeatCount=FLT_MAX;
                       
@@ -564,7 +559,7 @@
                 break;
             newtitle=[newtitle stringByAppendingFormat:@"%@ ",invitation.identity.name];
             count++;
-            if(count<3)
+            if(count<3 && count>1)
                 newtitle=[newtitle stringByAppendingString:@","];
         }
         cross.title=newtitle;
