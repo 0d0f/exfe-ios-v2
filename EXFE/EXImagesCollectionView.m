@@ -183,6 +183,8 @@
                         [acceptlabel setFrame:CGRectMake(x, y-12, 50, 12)];
                         acceptlabel.text=@"Accepted";
                         [acceptlabel setHidden:NO];
+                        [self performSelector:@selector(hiddenAcceptLabel) withObject:self afterDelay:4];
+
                         }
                     }
                     allnum+=1+[item.invitation.mates intValue];
@@ -209,6 +211,15 @@
         y_count++;
     }
     [self setNeedsDisplay];
+}
+
+- (void)hiddenAcceptLabel{
+    NSLog(@"hidden");
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:1];
+    acceptlabel.alpha=0;
+    [UIView commitAnimations];
+
 }
 
 - (void) onImageTouch:(CGPoint) point{

@@ -90,4 +90,5 @@ typedef enum {
 - (void) clearplace;
 - (void) initPlaceView;
 - (BOOL) isPlaceNull;
+- (void) addCustomAnnotation:(CLLocationCoordinate2D)location;
 @end

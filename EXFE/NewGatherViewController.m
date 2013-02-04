@@ -578,10 +578,10 @@
         for(Invitation *invitation in exfeeInvitations){
             if(count==3)
                 break;
-            newtitle=[newtitle stringByAppendingFormat:@"%@ ",invitation.identity.name];
+            newtitle=[newtitle stringByAppendingFormat:@"%@",invitation.identity.name];
             count++;
-            if(count<3 && count>1)
-                newtitle=[newtitle stringByAppendingString:@","];
+            if(count<3 && count>=1)
+                newtitle=[newtitle stringByAppendingString:@", "];
         }
         cross.title=newtitle;
         titleView.text=newtitle;
@@ -1200,8 +1200,6 @@
             }
         }
     }
-
-//    menu.invitation
 }
 
 - (void) setrsvp:(NSString*)status invitation:(Invitation*)_invitation{

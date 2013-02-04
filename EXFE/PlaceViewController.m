@@ -241,7 +241,6 @@
         UITouch * touch = [touches anyObject];
         if (!CGRectContainsPoint([placeedit frame], [touch locationInView:map]))
         {
-//            [placeedit setHidden:YES];
             [placeedit resignFirstResponder];
         }
         [self setViewStyle:EXPlaceViewStyleMap];
@@ -332,33 +331,37 @@
     else {
         
         CGPoint touchPoint = [gestureRecognizer locationInView:map];
-        CLLocationCoordinate2D touchMapCoordinate =
-        [map convertPoint:touchPoint toCoordinateFromView:map];
-        [map removeAnnotations: map.annotations];
-        BOOL newPlace=NO;
-        if([place.title isEqualToString:@""] || [place.title isEqualToString:@"Right there on the map"]){
-            place.title=@"Right there on the map";
-            [placeedit setPlaceTitleText:@"Right there on the map"];
-            newPlace=YES;
-        }
-        if([place.place_description isEqualToString:@""] )
-            [placeedit setPlaceDescText:@""];
-
-        [placeedit setHidden:NO];
-        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:touchMapCoordinate withTitle:place.title description:place.place_description];
-        if([[map annotations] count]==0)
-            annotation.index=-2;
-        [map addAnnotation:annotation];
-        [annotation release];
-        [clearbutton setHidden:YES];
-        
-        place.lat=[NSString stringWithFormat:@"%f",annotation.coordinate.latitude];
-        place.lng=[NSString stringWithFormat:@"%f",annotation.coordinate.longitude];
-        place.provider=@"";
-        if(newPlace==YES)
-            [[APIPlace sharedManager] GetTopPlaceFromGoogleNearby:annotation.coordinate.latitude lng:annotation.coordinate.longitude delegate:self];
+        CLLocationCoordinate2D touchMapCoordinate =[map convertPoint:touchPoint toCoordinateFromView:map];
+        [self addCustomAnnotation:touchMapCoordinate];
 
     }
+}
+
+- (void) addCustomAnnotation:(CLLocationCoordinate2D)location{
+    [map removeAnnotations: map.annotations];
+    BOOL newPlace=NO;
+    if([place.title isEqualToString:@""] || [place.title isEqualToString:@"Right there on the map"]){
+        place.title=@"Right there on the map";
+        [placeedit setPlaceTitleText:@"Right there on the map"];
+        newPlace=YES;
+    }
+    if([place.place_description isEqualToString:@""] )
+        [placeedit setPlaceDescText:@""];
+    
+    [placeedit setHidden:NO];
+    PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:place.title description:place.place_description];
+    if([[map annotations] count]==0)
+        annotation.index=-2;
+    [map addAnnotation:annotation];
+    [annotation release];
+    [clearbutton setHidden:YES];
+    
+    place.lat=[NSString stringWithFormat:@"%f",annotation.coordinate.latitude];
+    place.lng=[NSString stringWithFormat:@"%f",annotation.coordinate.longitude];
+    place.provider=@"";
+    if(newPlace==YES)
+        [[APIPlace sharedManager] GetTopPlaceFromGoogleNearby:annotation.coordinate.latitude lng:annotation.coordinate.longitude delegate:self];
+    
 }
 
 - (void) fillTopPlace:(NSDictionary*)topPlace{
@@ -414,6 +417,8 @@
     _places=places;
     [_tableView reloadData];
     [self drawMapAnnontations:-1];
+    [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+
 }
 
 - (void)dealloc {
@@ -606,10 +611,21 @@
 }
 
 #pragma mark MKMapView delegate methods
+
+//- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+//{
+//    MKAnnotationView* annotationView = [mapView viewForAnnotation:userLocation];
+//    annotationView.canShowCallout = NO;
+//    
+//}
+
 - (MKAnnotationView *) mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>) annotation{
 
-    if ([annotation isKindOfClass:[MKUserLocation class]])
+    if ([annotation isKindOfClass:[MKUserLocation class]]){
         return nil;
+//        MKAnnotationView* annotationView = [mapView viewForAnnotation:userLocation];
+//        annotationView.canShowCallout = NO;
+    }
     MKAnnotationView *annView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
     annView.canShowCallout = NO;
     
@@ -628,6 +644,12 @@
 }
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
 
+    if ([view.annotation isKindOfClass:[MKUserLocation class]]){
+        
+        [self addCustomAnnotation:((MKUserLocation*)view.annotation).location.coordinate];
+
+    }
+    
     if ([view.annotation isKindOfClass:[PlaceAnnotation class]]) {
         NSArray *annotations=[map annotations];
         if([annotations count]>0)
@@ -720,18 +742,16 @@
             }
         }
     }
-        MKCoordinateRegion region;
-        region.center = location;
-        region.span.longitudeDelta = 0.02;
-        region.span.latitudeDelta = 0.02;
-        [map setRegion:region animated:YES];
+//        MKCoordinateRegion region;
+//        region.center = location;
+//        region.span.longitudeDelta = 0.02;
+//        region.span.latitudeDelta = 0.02;
+//        [map setRegion:region animated:YES];
+//    
+//    if(editing==YES){
     
-    if(editing==YES){
-        
         [self setViewStyle:EXPlaceViewStyleMap];
         float delta=0.02;
-//        CGPoint point=[map convertCoordinate:location toPointToView:map];
-//        point.y+=18;
         
         CLLocationCoordinate2D newll;// =[map convertPoint:point toCoordinateFromView:map];
         MKCoordinateRegion region;
@@ -740,7 +760,6 @@
         if(location.latitude==0 && location.longitude==0 && index==-1)
         {
             delta=120;
-//            CLLocationCoordinate2D location_center;
             newll.latitude =33.431441;
             newll.longitude =-41.484375;
         }
@@ -754,7 +773,7 @@
         [map setRegion:region animated:YES];
         [placeedit setHidden:NO];
         [placeedit becomeFirstResponder];
-    }
+//    }
 //
 }
 

@@ -77,6 +77,7 @@
 - (void) calculateColumn;
 //- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 - (void) onImageTouch:(CGPoint) point;
+- (void) hiddenAcceptLabel;
 
 //- (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 
