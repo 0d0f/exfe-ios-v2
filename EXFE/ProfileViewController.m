@@ -39,6 +39,8 @@
         UIImageView * mask = [[UIImageView alloc] initWithFrame:headerView.bounds];
         mask.image = [UIImage imageNamed:@"profile_title_mask.png"];
         [headerView addSubview:mask];
+        [mask release];
+         
         
         username = [[UILabel alloc] initWithFrame:CGRectMake(40, DECTOR_HEIGHT / 2 - 56 / 2, 180, 56)];
         username.backgroundColor = [UIColor clearColor];
@@ -55,6 +57,7 @@
         [headerView addSubview:shadow];
         
         [self.view addSubview:headerView];
+        [shadow release];
         
         btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
         [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
@@ -69,6 +72,7 @@
 }
 - (void)dealloc
 {
+    [username release];
     if(identitiesData != nil)
         [identitiesData release];
     [super dealloc];
@@ -104,7 +108,7 @@
     else{
         useravatar.image=[UIImage imageNamed:@"portrait_default.png"];
     }
-
+    [users release];
     tableview.backgroundColor = [UIColor clearColor];
     tableview.opaque = NO;
     tableview.backgroundView = nil;
@@ -591,6 +595,7 @@
                                 oauth.parentView=self;
                                 oauth.oauth_url=[responseobj objectForKey:@"url"];
                                 [self presentModalViewController:oauth animated:YES];
+                                [oauth release];
 
                             }
                             //                                if([responseobj isKindOfClass:[NSDictionary class]]){

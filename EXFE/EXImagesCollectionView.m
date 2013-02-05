@@ -25,7 +25,7 @@
     if (self) {
     }
     [self initData];
-    itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
+    self.itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
     self.userInteractionEnabled = YES;
     return self;
 }
@@ -207,7 +207,7 @@
         x_count++;
     }
     if( x_count==maxColumn){
-        x_count=0;
+//        x_count=0;
         y_count++;
     }
     [self setNeedsDisplay];
@@ -250,6 +250,7 @@
 - (void)dealloc {
 	[grid release];
     [acceptlabel release];
+    [itemsCache release];
     [super dealloc];
 }
 @end

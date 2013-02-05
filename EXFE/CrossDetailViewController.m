@@ -323,7 +323,7 @@
     [mapView addGestureRecognizer:mapTap];
     [mapTap release];
     
-//    
+//
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
@@ -663,7 +663,7 @@
             timeZoneView.text = @"";
             timeZoneView.hidden = YES;
         }else{
-            timeRelView.text = [title copy];
+            timeRelView.text = title;
             
             timeAbsView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
             NSString* desc = [time getTimeDescription];
@@ -677,7 +677,7 @@
                 [tz retain];
                 if (tz != nil && tz.length > 0) {
                     timeZoneView.hidden = NO;
-                    timeZoneView.text = [tz copy];
+                    timeZoneView.text = tz;
                     [timeZoneView sizeToFit];
                 }else{
                     timeZoneView.hidden = YES;
@@ -753,6 +753,7 @@
             }
             MapPin *pin = [[MapPin alloc] initWithCoordinates:region.center placeName:placeTitle description:@""];
             [mapView addAnnotation:pin];
+            [pin release];
             mapView.showsUserLocation = YES;
             
         }else{

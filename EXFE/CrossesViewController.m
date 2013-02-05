@@ -119,6 +119,7 @@
     CFRelease(paragraphstyle);
     CFRelease(fontref);
     welcome_exfe.attributedText = attrStr;
+    [attrStr release];
     welcome_exfe.backgroundColor = [UIColor clearColor];
     welcome_exfe.frame = CGRectOffset(welcome_exfe.frame, 160 - CGRectGetMidX(welcome_exfe.frame), 0);
     [self.view addSubview:welcome_exfe];
