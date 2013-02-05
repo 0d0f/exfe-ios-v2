@@ -323,7 +323,6 @@
     [mapView addGestureRecognizer:mapTap];
     [mapTap release];
     
-<<<<<<< HEAD
 //    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
