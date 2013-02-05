@@ -115,7 +115,19 @@
             [self addSubview:btnDelete];
             y+=44;
         }
+
+        self.layer.borderWidth=0.5;
+        self.layer.borderColor=[UIColor colorWithWhite:1 alpha:0.12].CGColor;
         
+        UIBezierPath *maskPath;
+        maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerBottomLeft) cornerRadii:CGSizeMake(1.5, 1.5)];
+
+        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+        maskLayer.frame = self.bounds;
+        maskLayer.path = maskPath.CGPath;
+        self.layer.mask = maskLayer;
+        [maskLayer release];
+    
     }
     return self;
 }

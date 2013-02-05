@@ -32,7 +32,7 @@
     if (self) {
         self.invitation=_invitation;
         if([invitation.rsvp_status isEqualToString:@"ACCEPTED"])
-            self.backgroundColor=[UIColor colorWithRed:58.0/255.0f green:110.0/255.0f blue:165.0/255.0f alpha:0.2];
+            self.backgroundColor=[UIColor colorWithRed:0xd2/255.0f green:0xe2/255.0f blue:0xf4/255.0f alpha:1];
         else
             self.backgroundColor=[UIColor clearColor];
 

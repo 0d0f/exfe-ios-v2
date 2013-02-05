@@ -221,7 +221,7 @@
     CTFontRef titlefont18ref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 18, NULL);
     
     if(titleexfe==nil){
-        titleexfe=[[NSMutableAttributedString alloc] initWithString:@"       EXFE [’ɛksfi]\nA utility for hanging out with friends."];
+        titleexfe=[[NSMutableAttributedString alloc] initWithString:@"       EXFE [’ɛksfi]\nA utility for gathering with friends."];
         [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont12ref range:NSMakeRange(0,7)];
         [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont32ref range:NSMakeRange(0+7,5)];
         [titleexfe addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont12ref range:NSMakeRange(6+7,7)];
@@ -241,7 +241,7 @@
         [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont12ref range:NSMakeRange(0,8)];
         [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont32ref range:NSMakeRange(0+8,4)];
         [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont12ref range:NSMakeRange(5+8,7)];
-        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont18ref range:NSMakeRange(13+8,[titlethex length]-13-8)];
+        [titlethex addAttribute:(NSString*)kCTFontAttributeName value:(id)titlefont18ref range:NSMakeRange(13+7,[titlethex length]-13-7)];
         
         [titlethex addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[titlethex length])];
         
