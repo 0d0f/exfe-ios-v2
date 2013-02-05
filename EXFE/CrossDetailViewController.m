@@ -333,11 +333,15 @@
     
     [APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
     
-//    UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderSwipe:)];
-//    swipeRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-//    [headerView addGestureRecognizer:swipeRecognizer];
-//    [swipeRecognizer release];
+    UISwipeGestureRecognizer *swipeRightRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+    swipeRightRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:swipeRightRecognizer];
+    [swipeRightRecognizer release];
     
+    UISwipeGestureRecognizer *swipeLeftRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+    swipeLeftRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:swipeLeftRecognizer];
+    [swipeLeftRecognizer release];
 }
 
 - (void)dealloc {
@@ -478,6 +482,60 @@
             return;
         }
         [self hidePopupIfShown];
+    }
+}
+
+- (void)handleSwipe:(UISwipeGestureRecognizer*)sender{
+    CGPoint location = [sender locationInView:sender.view];
+    
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        CGPoint locInContainer = [container convertPoint:location fromView:self.view];
+       
+        [self hidePopupIfShown];
+        if (descView.hidden == NO && CGRectContainsPoint([Util expandRect:descView.frame], locInContainer)) {
+            [self clickforTitleAndDescEdit:descView];
+            return;
+        }
+//        if (CGRectContainsPoint([Util expandRect:[exfeeShowview frame]], location)) {
+//            //        [crosstitle resignFirstResponder];
+//            [exfeeShowview becomeFirstResponder];
+//            CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
+//            [exfeeShowview onImageTouch:exfeeviewlocation];
+//            return;
+//        }
+        
+        CGRect r1 = CGRectNull;
+        CGRect r2 = CGRectNull;
+        CGRect r3 = CGRectNull;
+        if (timeRelView.hidden == NO) {
+            r1 = timeRelView.frame;
+        }
+        if (timeAbsView.hidden == NO) {
+            r2 = timeAbsView.frame;
+        }
+        if (timeZoneView.hidden == NO) {
+            r3 = timeZoneView.frame;
+        }
+        if (CGRectContainsPoint([Util expandRect:r1 with:r2 with:r3], locInContainer)) {
+            [self clickforTimeEdit:timeRelView];
+            return;
+        }
+        
+        r1 = CGRectNull;
+        r2 = CGRectNull;
+        if (placeTitleView.hidden == NO) {
+            r1 = placeTitleView.frame;
+        }
+        if (placeDescView.hidden == NO) {
+            r2 = placeDescView.frame;
+        }
+        if (CGRectContainsPoint([Util expandRect:r1 with:r2], locInContainer)) {
+            [self clickforPlaceEdit:placeTitleView];
+            return;
+        }
+        
+        
+        
     }
 }
 
@@ -1239,6 +1297,10 @@
         [titleAndDescEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
         [titleAndDescEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
         titleAndDescEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
+        titleAndDescEditMenu.layer.borderWidth = 0.5;
+        titleAndDescEditMenu.layer.borderColor = [UIColor COLOR_WA(0xFF, 0xE0)].CGColor;
+        titleAndDescEditMenu.layer.cornerRadius = 1.5;
+        titleAndDescEditMenu.layer.masksToBounds = YES;
         [titleAndDescEditMenu addTarget:self action:@selector(clickforTitleAndDescEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:titleAndDescEditMenu];
     }
@@ -1279,6 +1341,10 @@
         [timeEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
         [timeEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
         timeEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
+        timeEditMenu.layer.borderWidth = 0.5;
+        timeEditMenu.layer.borderColor = [UIColor COLOR_WA(0xFF, 0xE0)].CGColor;
+        timeEditMenu.layer.cornerRadius = 1.5;
+        timeEditMenu.layer.masksToBounds = YES;
         [timeEditMenu addTarget:self action:@selector(clickforTimeEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:timeEditMenu];
     }
@@ -1318,6 +1384,10 @@
         [placeEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
         [placeEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
         placeEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
+        placeEditMenu.layer.borderWidth = 0.5;
+        placeEditMenu.layer.borderColor = [UIColor COLOR_WA(0xFF, 0xE0)].CGColor;
+        placeEditMenu.layer.cornerRadius = 1.5;
+        placeEditMenu.layer.masksToBounds = YES;
         [placeEditMenu addTarget:self action:@selector(clickforPlaceEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:placeEditMenu];
     }
