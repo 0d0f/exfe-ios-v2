@@ -370,7 +370,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     if(section == [identitiesData count]-1)
-        return 60;
+        return 10+62+44;
     return 1.0;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
@@ -378,25 +378,45 @@
         return nil;
     if (section==1)
     if(footerView == nil) {
-        footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 44)];
+        footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 10+62+44)];
 
         buttonsignout = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
         [buttonsignout setTitle:@"Sign out" forState:UIControlStateNormal];
         [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
         [buttonsignout setTitleColor:[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)] forState:UIControlStateNormal];
 //        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
-
-        
         [buttonsignout setFrame:CGRectMake(200, 10, 100, 44)];
         [buttonsignout setBackgroundColor:[UIColor clearColor]];
         [buttonsignout addTarget:self action:@selector(Logout) forControlEvents:UIControlEventTouchUpInside];
         [footerView addSubview:buttonsignout];
+
+        UIUnderlinedButton *buttonrome = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
+        [buttonrome setTitle:@"“Rome wasn't built in a day.”" forState:UIControlStateNormal];
+        [buttonrome.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:16]];
+        [buttonrome setTitleColor:[UIColor COLOR_RGB(127, 127, 127)] forState:UIControlStateNormal];
+        [buttonrome setFrame:CGRectMake(72, 10+62, 200, 44)];
+        [buttonrome setBackgroundColor:[UIColor clearColor]];
+        [buttonrome addTarget:self action:@selector(showRome) forControlEvents:UIControlEventTouchUpInside];
+        [footerView addSubview:buttonrome];
+
+        
     }
     
     //return the view for the footer
     return footerView;
 }
 
+- (void) showRome{
+    WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:CGRectMake(4, 4+20, self.view.frame.size.width-4-4, self.view.frame.size.height-44-4-4)];
+    [welcome setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5f]];
+//    welcome.parent=self;
+    
+    [self.view addSubview:welcome];
+    [self.view bringSubviewToFront:welcome];
+//    self.tableView.bounces=NO;
+    [welcome release];
+
+}
 #pragma mark UITableViewDelegate methods
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

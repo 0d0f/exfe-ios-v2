@@ -48,4 +48,6 @@
 - (NSIndexPath*) getIndexById:(int)identity_id;
 - (void) deleteIdentity:(int)identity_id;
 - (void) deleteIdentityUI:(int)identity_id;
+
+- (void) showRome;
 @end

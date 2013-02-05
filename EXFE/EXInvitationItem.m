@@ -92,9 +92,16 @@
         }
 
     if([invitation.mates intValue]>0){
+        if(!isMe){
+
         CGImageRef triimageref = CGImageRetain([UIImage imageNamed:@"portrait_tri.png"].CGImage);
         CGContextDrawImage(currentContext,CGRectMake(rect.size.width-13-5, rect.size.height-5-13, 13, 13) , triimageref);
         CGImageRelease(triimageref);
+        }else{
+            CGImageRef triimageref = CGImageRetain([UIImage imageNamed:@"portrait_circle_tri.png"].CGImage);
+            CGContextDrawImage(currentContext,CGRectMake(5, 5, rect.size.width-10, rect.size.height-10) , triimageref);
+            CGImageRelease(triimageref);
+        }
         
         CTFontRef matesfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 9.0, NULL);
 
