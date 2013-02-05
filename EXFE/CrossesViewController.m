@@ -65,9 +65,9 @@
         [self loadObjectsFromDataStore];
         [self initUI];
         [self refreshCrosses:@"crossupdateview"];
-        NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
-        if(newuser !=nil && [newuser isEqualToString:@"YES"])
-            [self showWelcome];
+//        NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
+//        if(newuser !=nil && [newuser isEqualToString:@"YES"])
+//            [self showWelcome];
     }
     default_background=[UIImage imageNamed:@"x_titlebg_default.jpg"];
 
@@ -91,6 +91,7 @@
     label_profile.text = @"Manage identities to \nreveal who your are.";
     label_profile.numberOfLines = 2;
     [label_profile sizeToFit];
+    //label_profile.hidden = YES;
     [self.view addSubview:label_profile];
     
     label_gather = [[UILabel alloc] initWithFrame:CGRectMake(220, 70, 130, 31)];
@@ -101,6 +102,7 @@
     label_gather.text = @"Hang out with\n friends.";
     label_gather.numberOfLines = 2;
     [label_gather sizeToFit];
+    //label_gather.hidden = YES;
     label_gather.frame = CGRectOffset(label_gather.frame, 305 - CGRectGetMaxX(label_gather.frame), 0);
     [self.view addSubview:label_gather];
     
@@ -120,6 +122,7 @@
     CFRelease(fontref);
     welcome_exfe.attributedText = attrStr;
     welcome_exfe.backgroundColor = [UIColor clearColor];
+    //welcome_exfe.hidden = YES;
     welcome_exfe.frame = CGRectOffset(welcome_exfe.frame, 160 - CGRectGetMidX(welcome_exfe.frame), 0);
     [self.view addSubview:welcome_exfe];
     
@@ -130,8 +133,11 @@
     welcome_more.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
     welcome_more.text = @"A utility for gathering with friends.";
     [welcome_more sizeToFit];
+    //welcome_more.hidden = YES;
     welcome_more.frame = CGRectOffset(welcome_more.frame, 160 - CGRectGetMidX(welcome_more.frame), 0);
     [self.view addSubview:welcome_more];
+    
+    [self refreshWelcome];
     
 }
 
@@ -173,6 +179,7 @@
     }
     [users release];
 }
+// deprecated
 - (void) showWelcome{
     WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:CGRectMake(4, tableView.frame.origin.y+4, self.view.frame.size.width-4-4, self.view.frame.size.height-44-4-4)];
     [welcome setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5f]];
@@ -184,6 +191,7 @@
     [welcome release];
     
 }
+// deprecated
 - (void) closeWelcome{
     for(UIView *view in self.view.subviews)
     {
@@ -299,8 +307,9 @@
 //    for(Cross *c in _crosses){
 //        NSLog(@"%@",c.title);
 //    }
-    [self.tableView reloadData];
     [self refreshWelcome];
+    [self.tableView reloadData];
+    
 }
 - (void)refresh
 {
@@ -334,9 +343,9 @@
 - (void)emptyView{
 
     [_crosses release];
-    _crosses=nil;
-    [self.tableView reloadData];
+    _crosses = nil;
     [self refreshWelcome];
+    [self.tableView reloadData];
 }
 - (BOOL) isIdentityBelongsMe:(int)identity_id{
     NSArray *identities=[[NSUserDefaults standardUserDefaults] objectForKey:@"default_user_identities"];
