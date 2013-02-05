@@ -323,6 +323,12 @@
     [mapView addGestureRecognizer:mapTap];
     [mapTap release];
     
+    
+//    UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderSwipe:)];
+//    swipeRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+//    [headerView addGestureRecognizer:swipeRecognizer];
+//    [swipeRecognizer release];
+    
     //[APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
     
     //[APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:<#(NSDictionary *)#>]
@@ -1204,23 +1210,17 @@
 }
 
 - (void)clickforTitleAndDescEdit:(id)sender{
-    //[self hideTitleAndDescEditMenuNow];
-    //popupCtrolId = 0;
     [self showTitleAndDescView];
-    [self hidePopupIfShown];
+    [self hidePopupIfShown]; // title & desc need the current popupctrlid info to determing the focus. keep the sequence.
 }
 
 - (void)clickforTimeEdit:(id)sender{
     [self hidePopupIfShown];
-//    [self hideTimeEditMenuNow];
-//    popupCtrolId = 0;
     [self showTimeView];
 }
 
 - (void)clickforPlaceEdit:(id)sender{
     [self hidePopupIfShown];
-//    [self hidePlaceEditMenuNow];
-//    popupCtrolId = 0;
     [self ShowPlaceView:@"search"];
 }
 
