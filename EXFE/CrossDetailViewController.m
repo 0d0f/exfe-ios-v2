@@ -318,7 +318,15 @@
     [mapView addGestureRecognizer:mapTap];
     [mapTap release];
     
-    //[APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
+//    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    NSString *updated_at = [formatter stringFromDate:cross.updated_at];
+    [formatter release];
+
+    
+    [APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
     
     //[APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:<#(NSDictionary *)#>]
 }
@@ -1504,6 +1512,28 @@
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
     
+    if([objectLoader.userData isKindOfClass:[NSDictionary class]])
+    {
+        if([[((NSDictionary*)objectLoader.userData) objectForKey:@"name"] isEqualToString:@"cross_reload"]){
+            for (id obj in objects){
+                if( [obj isKindOfClass:[Meta class]]){
+                    if([((Meta*)obj).code intValue]==403)
+                    {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        alert.tag=403;
+                        
+                        [alert show];
+                        [alert release];
+
+//                        [[Cross currentContext] deleteObject:self.cross];
+                    }
+                    else if([((Meta*)obj).code intValue]==200){
+                        [self refreshUI];
+                    }
+                }
+            }
+        }
+    }
     
     
     if([objects count] > 0){
@@ -1763,6 +1793,10 @@
 //            [[Exfee currentContext] rollback];
 //            [[Cross currentContext] rollback];
 //            [self reloadExfeeIdentities];
+        }else if(alertView.tag==403){ //privacy control
+            [[Cross currentContext] deleteObject:self.cross];
+            [[Cross currentContext] save:nil];
+            [self.navigationController popToRootViewControllerAnimated:YES];
         }
     }else if(buttonIndex==1) //retry
     {

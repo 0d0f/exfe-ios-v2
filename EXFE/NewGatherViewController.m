@@ -351,7 +351,7 @@
         default_background=[cross_default_backgrounds objectAtIndex:idx];
     }
 
-    NSDictionary *widget=[NSDictionary dictionaryWithObjectsAndKeys:default_background,@"image",@"Background",@"type", nil];
+    NSMutableDictionary *widget=[NSMutableDictionary dictionaryWithObjectsAndKeys:default_background,@"image",@"Background",@"type", nil];
     if(cross.widget==nil)
         cross.widget=[[NSMutableArray alloc] initWithCapacity:1];
     [cross.widget addObject:widget];
@@ -544,8 +544,17 @@
         exfeeInvitations = [[NSMutableArray alloc] initWithArray:invitations];
     else{
         for(Invitation *invitation in invitations){
-            if(![self InvitationExist:invitation])
+            if(![self InvitationExist:invitation]){
                 [exfeeInvitations addObject:invitation];
+                if([exfeeInvitations count]==12){
+                    [self reFormatTitle];
+                    [exfeeShowview reloadData];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [alert show];
+                    [alert release];
+                    return;
+                }
+            }
         }
     }
     [self reFormatTitle];
@@ -689,13 +698,47 @@
                         UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
+                                if(dectorView.image!=nil){
+                                    CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+                                    fadeoutAnimation.fillMode = kCAFillModeForwards;
+                                    fadeoutAnimation.duration=0.5;
+                                    fadeoutAnimation.removedOnCompletion =NO;
+                                    fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
+                                    fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
+                                    [dectorView.layer addAnimation:fadeoutAnimation forKey:@"fadeout"];
+                                }
                                 dectorView.image = backimg;
+                                CABasicAnimation *fadeinAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+                                fadeinAnimation.fillMode = kCAFillModeForwards;
+                                fadeinAnimation.duration=0.5;
+                                fadeinAnimation.removedOnCompletion =NO;
+                                fadeinAnimation.fromValue=[NSNumber numberWithFloat:0.0];
+                                fadeinAnimation.toValue=[NSNumber numberWithFloat:1.0];
+                                [dectorView.layer addAnimation:fadeinAnimation forKey:@"fadein"];
+
                             }
                         });
                     });
                     dispatch_release(imgQueue);
                 }else{
+                    if(dectorView.image!=nil){
+                        CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+                        fadeoutAnimation.fillMode = kCAFillModeForwards;
+                        fadeoutAnimation.duration=0.5;
+                        fadeoutAnimation.removedOnCompletion =NO;
+                        fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
+                        fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
+                        [dectorView.layer addAnimation:fadeoutAnimation forKey:@"fadeout"];
+                    }
                     dectorView.image = backimg;
+                    CABasicAnimation *fadeinAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+                    fadeinAnimation.fillMode = kCAFillModeForwards;
+                    fadeinAnimation.duration=0.5;
+                    fadeinAnimation.removedOnCompletion =NO;
+                    fadeinAnimation.fromValue=[NSNumber numberWithFloat:0.0];
+                    fadeinAnimation.toValue=[NSNumber numberWithFloat:1.0];
+                    [dectorView.layer addAnimation:fadeinAnimation forKey:@"fadein"];
+
                 }
                 flag = YES;
                 break;
@@ -1347,6 +1390,37 @@
     [identitypicker setHidden:YES];
     [pickertoolbar setHidden:YES];
     [self reFormatTitle];
+}
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+#pragma mark motion shake event
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+    if ( event.subtype == UIEventSubtypeMotionShake ) {
+        NSArray *cross_default_backgrounds=[[NSUserDefaults standardUserDefaults] objectForKey:@"cross_default_backgrounds"];
+        NSString *default_background=@"";
+        
+        if(cross_default_backgrounds!=nil && [cross_default_backgrounds count]>0){
+            int idx=arc4random()%[cross_default_backgrounds count];
+            default_background=[cross_default_backgrounds objectAtIndex:idx];
+        }
+        
+//        NSMutableDictionary *widget=[NSMutableDictionary dictionaryWithObjectsAndKeys:default_background,@"image",@"Background",@"type", nil];
+        if(cross.widget==nil)
+            cross.widget=[[NSMutableArray alloc] initWithCapacity:1];
+        else{
+            for (int i=0;i<[cross.widget count];i++){
+                NSMutableDictionary *widget=[cross.widget objectAtIndex:i];
+                if([[widget objectForKey:@"type"] isEqualToString:@"Background"]){
+                    [widget setObject:default_background forKey:@"image"];
+                }
+            }
+        }
+        [self fillBackground:cross.widget];
+    }
+
 }
 
 @end
