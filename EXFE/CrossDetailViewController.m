@@ -1230,6 +1230,7 @@
         titleAndDescEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
         titleAndDescEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
         [titleAndDescEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
+        [titleAndDescEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
         titleAndDescEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
         [titleAndDescEditMenu addTarget:self action:@selector(clickforTitleAndDescEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:titleAndDescEditMenu];
@@ -1269,6 +1270,7 @@
         timeEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
         timeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
         [timeEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
+        [timeEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
         timeEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
         [timeEditMenu addTarget:self action:@selector(clickforTimeEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:timeEditMenu];
@@ -1307,6 +1309,7 @@
         placeEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
         placeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
         [placeEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
+        [placeEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
         placeEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
         [placeEditMenu addTarget:self action:@selector(clickforPlaceEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:placeEditMenu];
