@@ -156,7 +156,7 @@
     CTFontRef fontRef= CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
     [string addAttribute:(NSString*)kCTFontAttributeName  value:(id)fontRef range:NSMakeRange(0,[string length])];
     CFRelease(fontRef);
-    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLACK].CGColor range:NSMakeRange(0,9)];
+    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_WA(0x19, 0xFF)].CGColor range:NSMakeRange(0,9)];
     [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:NSMakeRange(9,3)];
     
     CTTextAlignment alignment = kCTRightTextAlignment;

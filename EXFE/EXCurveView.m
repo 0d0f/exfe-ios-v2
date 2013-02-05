@@ -8,6 +8,7 @@
 
 #import "EXCurveView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "Util.h"
 
 @implementation EXCurveView
 @synthesize CurveFrame;
@@ -60,6 +61,10 @@
    
     self.layer.mask = maskLayer;
     self.layer.masksToBounds = YES;
+//    self.layer.shadowColor = [UIColor COLOR_WA(0, 0xFF)].CGColor;
+//    self.layer.shadowOffset = CGSizeMake(0, 2);
+//    self.layer.shadowOpacity = 0.75;
+//    self.layer.shadowRadius = 6;
 }
 
 /*

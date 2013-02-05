@@ -43,7 +43,7 @@
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     [self.view setFrame:appFrame];
     self.view.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
-
+    
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
 
     customStatusBar = [[CustomStatusBar alloc] initWithFrame:CGRectZero];
@@ -58,25 +58,6 @@
     [self.tableView addSubview:topview];
     [topview release];
     [super viewDidLoad];
-    
-    gatherax=[[NSMutableAttributedString alloc] initWithString:@"Gather a ·X·"];
-    CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL);
-    [gatherax addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0,[gatherax length])];
-    CFRelease(fontref);
-    [gatherax addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([gatherax length]-3,3)];
-
-    CTTextAlignment alignment = kCTCenterTextAlignment;
-    float linespaceing=1;
-    float minheight=26;
-    
-    CTParagraphStyleSetting gathersetting[3] = {
-        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
-        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
-        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
-    };
-    CTParagraphStyleRef gatherstyle = CTParagraphStyleCreate(gathersetting, 3);
-    [gatherax addAttribute:(id)kCTParagraphStyleAttributeName value:(id)gatherstyle range:NSMakeRange(0,[gatherax length])];
-    CFRelease(gatherstyle);
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     BOOL login=[app Checklogin];
@@ -102,64 +83,65 @@
     CGRect rect = CGRectMake((targetSize.width / 2 - default_background.size.width / 2 * scaleFactor),(0 - default_background.size.height * 198.0f / 495.0f * scaleFactor),default_background.size.width * scaleFactor,default_background.size.height * scaleFactor);
     [default_background drawInRect:rect];
     default_background = UIGraphicsGetImageFromCurrentImageContext();
+    
+    label_profile = [[UILabel alloc] initWithFrame:CGRectMake(15, 70, 130, 31)];
+    label_profile.backgroundColor = [UIColor clearColor];
+    label_profile.textColor = [UIColor COLOR_WA(0x6B, 0xFF)];
+    label_profile.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+    label_profile.text = @"Manage identities to \nreveal who your are.";
+    label_profile.numberOfLines = 2;
+    [label_profile sizeToFit];
+    [self.view addSubview:label_profile];
+    
+    label_gather = [[UILabel alloc] initWithFrame:CGRectMake(220, 70, 130, 31)];
+    label_gather.backgroundColor = [UIColor clearColor];
+    label_gather.textColor = [UIColor COLOR_WA(0x6B, 0xFF)];
+    label_gather.textAlignment = NSTextAlignmentRight;
+    label_gather.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+    label_gather.text = @"Hang out with\n friends.";
+    label_gather.numberOfLines = 2;
+    [label_gather sizeToFit];
+    label_gather.frame = CGRectOffset(label_gather.frame, 305 - CGRectGetMaxX(label_gather.frame), 0);
+    [self.view addSubview:label_gather];
+    
+    welcome_exfe = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(32, 250, 260, 35)];
+    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"Welcome to EXFE"];
+    CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 30.0, NULL);
+    [attrStr addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0, [attrStr length])];
+    [attrStr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLACK].CGColor range:NSMakeRange(0,11)];
+    [attrStr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:NSMakeRange(11,4)];
+    CTTextAlignment alignment = kCTCenterTextAlignment;
+    CTParagraphStyleSetting paragraphsetting[3] = {
+        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
+    };
+    CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(paragraphsetting, 3);
+    [attrStr addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,[attrStr length])];
+    CFRelease(paragraphstyle);
+    CFRelease(fontref);
+    welcome_exfe.attributedText = attrStr;
+    welcome_exfe.backgroundColor = [UIColor clearColor];
+    welcome_exfe.frame = CGRectOffset(welcome_exfe.frame, 160 - CGRectGetMidX(welcome_exfe.frame), 0);
+    [self.view addSubview:welcome_exfe];
+    
+    welcome_more = [[UILabel alloc] initWithFrame:CGRectMake(32, 285, 300, 23)];
+    welcome_more.backgroundColor = [UIColor clearColor];
+    welcome_more.textColor = [UIColor COLOR_WA(0x6B, 0xFF)];
+    welcome_more.textAlignment = NSTextAlignmentRight;
+    welcome_more.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+    welcome_more.text = @"A utility for gathering with friends.";
+    [welcome_more sizeToFit];
+    welcome_more.frame = CGRectOffset(welcome_more.frame, 160 - CGRectGetMidX(welcome_more.frame), 0);
+    [self.view addSubview:welcome_more];
+    
 }
 
 - (void)initUI{
-    UIImage *gatherbtnimg = [UIImage imageNamed:@"gather_blue.png"];
-    UIButton *gatherButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [gatherButton setImage:gatherbtnimg forState:UIControlStateNormal];
-    gatherButton.frame = CGRectMake(0, 0, gatherbtnimg.size.width, gatherbtnimg.size.height);
-    [gatherButton setBackgroundImage:[[UIImage imageNamed:@"btn_dark.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
-
-    [gatherButton addTarget:self action:@selector(ShowGatherView) forControlEvents:UIControlEventTouchUpInside];
-    gatherButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:gatherButton] autorelease];
-    [self.navigationController navigationBar].topItem.rightBarButtonItem=gatherButtonItem;
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    UIImage *settingbtnimg = [UIImage imageNamed:@"portrait_default.png"];
-
-    settingButton = [[EXInnerButton alloc] initWithFrame:CGRectMake(2, 6, 30, 30)];
-    [settingButton addTarget:self action:@selector(ShowProfileView) forControlEvents:UIControlEventTouchUpInside];
-    settingButton.image=settingbtnimg;
-    settingButton.layer.cornerRadius=5.5f;
-    settingButton.clipsToBounds = YES;
 
     [self refreshPortrait];
-    
-    UIView *containview=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 32, 44)];
-    containview.backgroundColor=[UIColor clearColor];
-    UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"i_avatar_effect.png"]];
-    shadowImageView.contentMode = UIViewContentModeScaleToFill;
-    shadowImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    shadowImageView.frame = settingButton.bounds;
-    [settingButton addSubview:shadowImageView];
-
-    [containview addSubview:settingButton];
-    profileButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:containview] autorelease];
-    [self.navigationController navigationBar].topItem.leftBarButtonItem=profileButtonItem;
-    
-    [shadowImageView release];
-    [containview release];
-    
-    CGRect frame = CGRectMake(0, 0, 400, 44);
-    UILabel *label = [[[UILabel alloc] initWithFrame:frame] autorelease];
-    label.backgroundColor = [UIColor clearColor];
-    label.font =[UIFont fontWithName:@"HelveticaNeue-Bold" size:16];
-    label.shadowColor = [UIColor colorWithWhite:0 alpha:0.5];
-    label.shadowOffset= CGSizeMake(0, -1);
-    label.textAlignment = UITextAlignmentLeft;
-    label.textColor = [UIColor whiteColor];
-    label.text = app.username;
-    [self.navigationController navigationBar].topItem.titleView = label;
-    
-    UINavigationBar *navbar=[self.navigationController navigationBar];
-    [navbar setBackgroundImage:[UIImage imageNamed:@"navbar.png"] forBarMetrics:UIBarMetricsDefault];
-//    if(navbar)
-//    {
-//        [navbar setBackgroundImage:[UIImage imageNamed:@"navbar_bg.png"]  forBarMetrics:UIBarMetricsDefault];
-//    }
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.navigationController.view setNeedsDisplay];
+    
+    
     
 }
 
@@ -181,8 +163,8 @@
                 UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:user.avatar_filename];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(avatar_img!=nil && ![avatar_img isEqual:[NSNull null]]){
-                        settingButton.image=avatar_img;
-                        [settingButton setNeedsDisplay];
+//                        settingButton.image=avatar_img;
+//                        [settingButton setNeedsDisplay];
                     }
                 });
             });
@@ -236,9 +218,13 @@
 //        [cellDateTime release];
 //        cellDateTime=nil;
 //    }
-    [settingButton release];
-    [gatherax release];
+//    [settingButton release];
+//    [gatherax release];
     [customStatusBar release];
+    [label_profile release];
+    [label_gather release];
+    [welcome_exfe release];
+    [welcome_more release];
     [super dealloc];
 }
 
@@ -314,16 +300,43 @@
 //        NSLog(@"%@",c.title);
 //    }
     [self.tableView reloadData];
+    [self refreshWelcome];
 }
 - (void)refresh
 {
     [self refreshCrosses:@"crossupdateview"];
 }
+
+- (NSInteger)getCrossCount{
+    if (_crosses) {
+        return _crosses.count;
+    }
+    return 0;
+}
+
+- (void)refreshWelcome{
+    NSInteger count = [self getCrossCount];
+    
+    if (label_profile.hidden != (count > 0)) {
+        label_profile.hidden = count > 0;
+    }
+    if (label_gather.hidden != (count > 0)) {
+        label_gather.hidden = count > 0;
+    }
+    if (welcome_exfe.hidden != (count > 2)) {
+        welcome_exfe.hidden = count > 2;
+    }
+    if (welcome_more.hidden != (count > 2)) {
+        welcome_more.hidden = count > 2;
+    }
+}
+
 - (void)emptyView{
 
     [_crosses release];
     _crosses=nil;
     [self.tableView reloadData];
+    [self refreshWelcome];
 }
 - (BOOL) isIdentityBelongsMe:(int)identity_id{
     NSArray *identities=[[NSUserDefaults standardUserDefaults] objectForKey:@"default_user_identities"];
@@ -447,7 +460,7 @@
 //                NSString *refresh_cross_id=[objectLoader.userData objectForKey:@"cross_id" ];
 
                 [self loadObjectsFromDataStore];
-                [self.tableView reloadData];
+//                [self.tableView reloadData];
             }
         }
     }
@@ -495,11 +508,7 @@
     if (section == 0){
         return 1;
     }else if (section == 1){
-        if(_crosses == nil){
-            return 0;
-        }else{
-            return [_crosses count];
-        }
+        return [self getCrossCount];
     }else {
         return 0;
     }

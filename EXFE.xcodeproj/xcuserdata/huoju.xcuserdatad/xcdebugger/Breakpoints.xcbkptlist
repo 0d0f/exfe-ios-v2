@@ -1599,7 +1599,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "611"
          endingLineNumber = "611"
-         landmarkName = "-Gather:"
+         landmarkName = "-ShowPlaceView:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1664,7 +1664,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "760"
          endingLineNumber = "760"
-         landmarkName = "-fillExfee"
+         landmarkName = "-setTime:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1807,7 +1807,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "532"
          endingLineNumber = "532"
-         landmarkName = "-didReceiveMemoryWarning"
+         landmarkName = "-addExfee:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1885,7 +1885,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "543"
          endingLineNumber = "543"
-         landmarkName = "-addExfee:"
+         landmarkName = "-InvitationExist:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint

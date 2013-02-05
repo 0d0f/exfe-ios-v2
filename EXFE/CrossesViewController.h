@@ -24,19 +24,24 @@
 @interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate, CrossCardDelegate>
 {
     IBOutlet UITableView* tableView;
-    UIBarButtonItem *profileButtonItem;
-    UIBarButtonItem *gatherButtonItem;
+//    UIBarButtonItem *profileButtonItem;
+//    UIBarButtonItem *gatherButtonItem;
     NSArray* _crosses;
     BOOL logoutflag;
     BOOL alertShowflag;
     int current_cellrow;
-    NSMutableArray *cellDateTime;
+//    NSMutableArray *cellDateTime;
     CustomStatusBar *customStatusBar;
     NSMutableAttributedString *gatherax;
     MBProgressHUD *hud;
-    EXInnerButton *settingButton;
+//    EXInnerButton *settingButton;
     UIImage *default_background;
     //ProfileCard *headerView;
+    
+    UILabel *label_profile;
+    UILabel *label_gather;
+    EXAttributedLabel *welcome_exfe;
+    UILabel *welcome_more;
 }
 - (void) refreshCell;
 - (void) refreshCrosses:(NSString*)source;

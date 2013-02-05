@@ -314,10 +314,16 @@
     [headerView addGestureRecognizer:headTapRecognizer];
     [headTapRecognizer release];
     
+    UISwipeGestureRecognizer *headSwipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderSwipe:)];
+    headSwipeRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+    [headerView addGestureRecognizer:headSwipeRecognizer];
+    [headSwipeRecognizer release];
+    
     UITapGestureRecognizer *mapTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
     [mapView addGestureRecognizer:mapTap];
     [mapTap release];
     
+<<<<<<< HEAD
 //    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
@@ -328,7 +334,11 @@
     
     [APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
     
-    //[APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:<#(NSDictionary *)#>]
+//    UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderSwipe:)];
+//    swipeRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+//    [headerView addGestureRecognizer:swipeRecognizer];
+//    [swipeRecognizer release];
+    
 }
 
 - (void)dealloc {
@@ -472,6 +482,16 @@
     }
 }
 
+- (void)handleHeaderSwipe:(UISwipeGestureRecognizer*)sender{
+    //CGPoint location = [sender locationInView:sender.view];
+    
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [self hidePopupIfShown];
+        
+        [self goBack];
+    }
+}
+
 - (void)handleTap:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
 
@@ -532,7 +552,7 @@
 }
 
 - (void)gotoBack:(UIButton*)sender{
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self goBack];
 }
 
 #pragma mark Refresh UI content methods
@@ -1197,23 +1217,17 @@
 }
 
 - (void)clickforTitleAndDescEdit:(id)sender{
-    //[self hideTitleAndDescEditMenuNow];
-    //popupCtrolId = 0;
     [self showTitleAndDescView];
-    [self hidePopupIfShown];
+    [self hidePopupIfShown]; // title & desc need the current popupctrlid info to determing the focus. keep the sequence.
 }
 
 - (void)clickforTimeEdit:(id)sender{
     [self hidePopupIfShown];
-//    [self hideTimeEditMenuNow];
-//    popupCtrolId = 0;
     [self showTimeView];
 }
 
 - (void)clickforPlaceEdit:(id)sender{
     [self hidePopupIfShown];
-//    [self hidePlaceEditMenuNow];
-//    popupCtrolId = 0;
     [self ShowPlaceView:@"search"];
 }
 
@@ -1223,6 +1237,7 @@
         titleAndDescEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
         titleAndDescEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
         [titleAndDescEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
+        [titleAndDescEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
         titleAndDescEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
         [titleAndDescEditMenu addTarget:self action:@selector(clickforTitleAndDescEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:titleAndDescEditMenu];
@@ -1262,6 +1277,7 @@
         timeEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
         timeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
         [timeEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
+        [timeEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
         timeEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
         [timeEditMenu addTarget:self action:@selector(clickforTimeEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:timeEditMenu];
@@ -1300,6 +1316,7 @@
         placeEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
         placeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
         [placeEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
+        [placeEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
         placeEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
         [placeEditMenu addTarget:self action:@selector(clickforPlaceEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:placeEditMenu];
@@ -1454,6 +1471,10 @@
     }
     [self presentModalViewController:placeViewController animated:YES];
     [placeViewController release];
+}
+
+- (void) goBack{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark API request for modification.
