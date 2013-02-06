@@ -187,7 +187,7 @@
                             acceptlabel.bottomInset = -1;
                             [acceptlabel setHidden:NO];
                             [self bringSubviewToFront:acceptlabel];
-                            //[self performSelector:@selector(hiddenAcceptLabel) withObject:self afterDelay:4];
+                            [self performSelector:@selector(hiddenAcceptLabel) withObject:self afterDelay:4];
                         }
                     }
                     allnum+=1+[item.invitation.mates intValue];
