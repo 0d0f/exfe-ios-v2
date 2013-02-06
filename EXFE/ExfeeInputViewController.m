@@ -122,7 +122,7 @@ static char identitykey;
     [doneButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     doneButton.frame = CGRectMake(255+5+5, 7, 50, 30);
     [doneButton addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
-    [doneButton setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
+    [doneButton setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0,4)] forState:UIControlStateNormal];
 
     [toolbar addSubview:doneButton];
     addressbookType=LOCAL_ADDRESSBOOK;

@@ -45,9 +45,15 @@
     imageXmargin=5;
     imageYmargin=5;
     [self calculateColumn];
+    [self calculateGridRect];
+}
+
+- (void) calculateGridRect{
     int x_count=0;
     int y_count=0;
     int count=maxColumn*maxRow;
+    if(grid!=nil)
+       [grid release];
     grid=[[NSMutableArray alloc]initWithCapacity:count];
     for(int i=0;i<count;i++)
     {
@@ -82,7 +88,13 @@
 }
 - (void) calculateColumn{
     maxColumn=(self.frame.size.width-imageWidth)/(imageWidth+imageXmargin*2)+1;
-    maxRow=(self.frame.size.height-y_start_offset)/(imageHeight+imageYmargin*2)+1;
+//    int count=[_dataSource numberOfimageCollectionView:self];
+//    int count_maxRow=ceil((float)count/maxColumn);
+//    if((self.frame.size.height-y_start_offset)/(imageHeight+imageYmargin*2)<=1)
+//        maxRow=(self.frame.size.height-y_start_offset)/(imageHeight+imageYmargin*2)+1;
+//    else
+        maxRow=(self.frame.size.height-y_start_offset)/(imageHeight+imageYmargin*2);
+
 }
 - (void) setFrame:(CGRect)frame{
     [super setFrame:frame];
@@ -111,7 +123,6 @@
 //    if(acceptlabel!=nil){
 //        [acceptlabel setHidden:YES];
 //    }
-    
     [itemsCache removeAllObjects];
     [itemsCache release];
     itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
@@ -121,32 +132,27 @@
         int new_column=ceil((float)(count+1)/maxColumn);
         
         int new_height=new_column*(imageHeight+imageYmargin*2)+y_start_offset;
-        if(new_height!=self.frame.size.height)
+        if(new_height!=self.frame.size.height){
             [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
+        }
     }
     else{
         int row=1;
         for(int row_idx=0;row_idx<=maxRow;row_idx++)
         {
-//            if(editmode==YES){
                 if(maxColumn*row_idx-(count)>0)
                 {
                     row=row_idx;
                     break;
                 }
-//            }else{
-//                if(maxColumn*row_idx-(count)>=0)
-//                {
-//                    row=row_idx;
-//                    break;
-//                }
-//            }
         }
         float new_height=imageYmargin+imageHeight+5+(imageYmargin+imageHeight+5)*(row-1);
         if(new_height!=self.frame.size.height)
             [_delegate imageCollectionView:self shouldResizeHeightTo:new_height];
     }
-    
+    [self calculateColumn];
+    [self calculateGridRect];
+
     int x_count=0;
     int y_count=0;
     
@@ -228,6 +234,8 @@
         y_count++;
     }
     [self setNeedsDisplay];
+    NSLog(@"max: %i %i",maxColumn,maxRow);
+    
 }
 
 - (void) onImageTouch:(CGPoint) point{

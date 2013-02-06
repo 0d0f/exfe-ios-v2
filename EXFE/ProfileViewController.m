@@ -416,7 +416,7 @@
 }
 
 - (void) showRome{
-    WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:CGRectMake(4, 4+20, self.view.frame.size.width-4-4, self.view.frame.size.height-44-4-4)];
+    WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:self.view.bounds];
     [welcome setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5f]];
 //    welcome.parent=self;
     

@@ -73,5 +73,6 @@
 - (void) reloadData;
 - (void) initData;
 - (void) calculateColumn;
+- (void) calculateGridRect;
 - (void) onImageTouch:(CGPoint) point;
 @end
