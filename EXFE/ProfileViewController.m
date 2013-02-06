@@ -126,6 +126,8 @@
     
 }
 
+
+
 - (void)gotoBack:(UIButton*)sender{
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -134,6 +136,7 @@
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     [APIProfile LoadUsrWithUserId:app.userid delegate:self];
 }
+
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];

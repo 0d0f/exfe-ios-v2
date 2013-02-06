@@ -104,7 +104,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "335"
          endingLineNumber = "335"
-         landmarkName = "-isIdentityBelongsMe:"
+         landmarkName = "-refreshWelcome"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -229,13 +229,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/ProfileViewController.m"
-         timestampString = "381753635.433156"
+         timestampString = "381840450.320639"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "276"
-         endingLineNumber = "276"
-         landmarkName = "-tableView:cellForRowAtIndexPath:"
-         landmarkType = "5">
+         startingLineNumber = "279"
+         endingLineNumber = "279"
+         landmarkName = "@implementation ProfileViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
@@ -468,7 +468,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "508"
          endingLineNumber = "508"
-         landmarkName = "-tableView:numberOfRowsInSection:"
+         landmarkName = "-alertView:clickedButtonAtIndex:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -494,7 +494,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "212"
          endingLineNumber = "212"
-         landmarkName = "-closeWelcome"
+         landmarkName = "-crossWithId:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -559,7 +559,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "315"
          endingLineNumber = "315"
-         landmarkName = "-loadObjectsFromDataStore"
+         landmarkName = "-refresh"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1074,11 +1074,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/ProfileViewController.m"
-         timestampString = "381834859.254488"
+         timestampString = "381840450.320639"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "451"
-         endingLineNumber = "451"
+         startingLineNumber = "454"
+         endingLineNumber = "454"
          landmarkName = "-getIndexById:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1087,12 +1087,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/ProfileViewController.m"
-         timestampString = "381834859.254488"
+         timestampString = "381840450.320639"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "433"
-         endingLineNumber = "433"
-         landmarkName = "-tableView:commitEditingStyle:forRowAtIndexPath:"
+         startingLineNumber = "436"
+         endingLineNumber = "436"
+         landmarkName = "-tableView:didSelectRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1118,7 +1118,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "354"
          endingLineNumber = "354"
-         landmarkName = "-objectLoader:didLoadObjects:"
+         landmarkName = "-isIdentityBelongsMe:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1646,11 +1646,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/ProfileViewController.m"
-         timestampString = "381753635.433156"
+         timestampString = "381840450.320639"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "148"
-         endingLineNumber = "148"
+         startingLineNumber = "151"
+         endingLineNumber = "151"
          landmarkName = "-touchesBegan:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1984,11 +1984,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/ProfileViewController.m"
-         timestampString = "381834859.254488"
+         timestampString = "381840450.320639"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "565"
-         endingLineNumber = "565"
+         startingLineNumber = "568"
+         endingLineNumber = "568"
          landmarkName = "-showAlert:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2185,6 +2185,32 @@
          startingLineNumber = "136"
          endingLineNumber = "136"
          landmarkName = "-reloadData"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/ProfileViewController.m"
+         timestampString = "381840438.672095"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "145"
+         endingLineNumber = "145"
+         landmarkName = "-touchesBegan:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/ProfileViewController.m"
+         timestampString = "381840571.612072"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "187"
+         endingLineNumber = "187"
+         landmarkName = "-loadObjectsFromDataStore"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
