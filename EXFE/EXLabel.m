@@ -63,24 +63,39 @@
     }
 }
 
-- (void)sizeToFit{
-    CGFloat ow = self.frame.size.width;
-    //CGFloat oh = self.frame.size.height;
+// Must call after text/umberOfLine/font changed
+- (CGSize)sizeThatFits:(CGSize)size{
+    CGFloat ow = size.width;
+    CGFloat oh = size.height;
     CGSize rect = CGSizeMake(ow, INFINITY);
     
-    NSString* four_lines = @"M\nM\nM\nM"; // 4 lines
+    NSMutableString *temp = [[NSMutableString alloc] initWithCapacity:self.numberOfLines * 2];
+    [temp appendString:@"M|"];
+    for (NSInteger i = 1 ; i < self.numberOfLines; i++) {
+        [temp appendString:@"\nM|"];
+    }
+    
+    NSString* four_lines = temp; // 4 lines
     CGSize fit4 = [four_lines sizeWithFont:self.font constrainedToSize:rect lineBreakMode:self.lineBreakMode];
+    four_lines = nil;
+    [temp release];
     CGSize fitFull = [self.text sizeWithFont:self.font constrainedToSize:rect lineBreakMode:self.lineBreakMode];
-    hasMore = fitFull.height > fit4.height;
     CGFloat bestHeight = fitFull.height;
     if (self.numberOfLines > 0){
+        hasMore = fitFull.height > fit4.height;
         bestHeight = MIN(fit4.height, bestHeight);
         isExpended = NO;
     }else{
         isExpended = YES;
     }
     
-    self.frame = CGRectMake(CGRectGetMinX(self.frame) , CGRectGetMinY(self.frame), ow, MAX(bestHeight, self.minimumHeight));
+    return CGSizeMake(ow, MIN(oh, MAX(bestHeight, self.minimumHeight)));
 }
+
+//- (void)sizeToFit{
+//    
+//    CGSize size = [self sizeThatFits:self.bounds.size];
+//    self.bounds = CGRectMake(0, 0, size.width, size.height);
+//}
 
 @end
