@@ -29,6 +29,7 @@
 		4F6F289A16B0F2B1002D0D8C /* widget_x_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F6F289416B0F2B1002D0D8C /* widget_x_30.png */; };
 		4F6F289B16B0F2B1002D0D8C /* widget_x_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F6F289516B0F2B1002D0D8C /* widget_x_30@2x.png */; };
 		4F81C848168309E9007284DF /* EXCurveImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F81C847168309E9007284DF /* EXCurveImageView.m */; };
+		4F9105E616C2349400E524AC /* UIBorderLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9105E516C2349400E524AC /* UIBorderLabel.m */; };
 		4FAD642716968C7F001870FF /* CrossTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD642616968C7F001870FF /* CrossTime+Helper.m */; };
 		4FAE4E6416AF9F82001479F8 /* x_titlebg_default.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */; };
 		4FB1635716B25756005B1D3C /* profile_title_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635516B25756005B1D3C /* profile_title_mask.png */; };
@@ -553,6 +554,8 @@
 		4F6F289516B0F2B1002D0D8C /* widget_x_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_x_30@2x.png"; sourceTree = "<group>"; };
 		4F81C846168309E9007284DF /* EXCurveImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCurveImageView.h; sourceTree = "<group>"; };
 		4F81C847168309E9007284DF /* EXCurveImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCurveImageView.m; sourceTree = "<group>"; };
+		4F9105E416C2349400E524AC /* UIBorderLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBorderLabel.h; sourceTree = "<group>"; };
+		4F9105E516C2349400E524AC /* UIBorderLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBorderLabel.m; sourceTree = "<group>"; };
 		4FAD642516968C7F001870FF /* CrossTime+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CrossTime+Helper.h"; sourceTree = "<group>"; };
 		4FAD642616968C7F001870FF /* CrossTime+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CrossTime+Helper.m"; sourceTree = "<group>"; };
 		4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = x_titlebg_default.jpg; sourceTree = "<group>"; };
@@ -1939,6 +1942,8 @@
 				4F15D6D016B11EA100BABE72 /* EXTabBar.m */,
 				78F45F5116BBBA2100F364FE /* UIUnderlinedButton.h */,
 				78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */,
+				4F9105E416C2349400E524AC /* UIBorderLabel.h */,
+				4F9105E516C2349400E524AC /* UIBorderLabel.m */,
 			);
 			name = CustomView;
 			sourceTree = "<group>";
@@ -2607,6 +2612,7 @@
 				78F45F5816BBBB1200F364FE /* UIUnderlinedButton.m in Sources */,
 				7879B47916BE77B200D3BE3C /* LocalContact.m in Sources */,
 				4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */,
+				4F9105E616C2349400E524AC /* UIBorderLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

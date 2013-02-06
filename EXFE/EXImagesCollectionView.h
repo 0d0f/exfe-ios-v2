@@ -15,6 +15,7 @@
 #import "EXCollectionMask.h"
 #import "ExfeeNumberView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIBorderLabel.h"
 
 
 #define y_start_offset 12
@@ -54,7 +55,8 @@
     BOOL editmode;
     NSMutableDictionary *itemsCache;
     EXCollectionMask *maskview;
-    UILabel *acceptlabel;
+    //UILabel *acceptlabel;
+    UIBorderLabel *acceptlabel;
 }
 @property int maxColumn;
 @property int maxRow;
