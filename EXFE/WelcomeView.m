@@ -15,13 +15,13 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        gobutton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [gobutton setTitle:@"Go" forState:UIControlStateNormal];
-        [gobutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
-        [gobutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
-        [gobutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
-        [gobutton addTarget:self action:@selector(goNext) forControlEvents:UIControlEventTouchUpInside];
-        [gobutton setFrame:CGRectMake(50, self.frame.size.height-30-44, 200, 44)];
+//        gobutton = [UIButton buttonWithType:UIButtonTypeCustom];
+//        [gobutton setTitle:@"Go" forState:UIControlStateNormal];
+//        [gobutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
+//        [gobutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
+//        [gobutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
+//        [gobutton addTarget:self action:@selector(goNext) forControlEvents:UIControlEventTouchUpInside];
+//        [gobutton setFrame:CGRectMake(50, self.frame.size.height-30-44, 200, 44)];
         
         closebutton = [UIButton buttonWithType:UIButtonTypeCustom];
         [closebutton setTitle:@"Close" forState:UIControlStateNormal];
@@ -31,13 +31,13 @@
         [closebutton addTarget:self action:@selector(closeWelcome) forControlEvents:UIControlEventTouchUpInside];
         [closebutton setFrame:CGRectMake(50, self.frame.size.height-30-44, 200, 44)];
         self.backgroundColor=[UIColor clearColor];
-        [closebutton setHidden:YES];
-        [self addSubview:gobutton];
+        [closebutton setHidden:NO];
+//        [self addSubview:gobutton];
         [self addSubview:closebutton];
-        [self initWelcome1];
+//        [self initWelcome1];
         [self initWelcome2];
-        self.layer.cornerRadius=5;
-        self.layer.masksToBounds=YES;
+//        self.layer.cornerRadius=5;
+//        self.layer.masksToBounds=YES;
         viewpage=0;
         // Initialization code
     }
@@ -94,13 +94,13 @@
     
     UIImage *rome=[UIImage imageNamed:@"rome.jpg"];
     CGImageRef romeref = CGImageRetain(rome.CGImage);
-    CGContextDrawImage(context,CGRectMake(73, self.frame.size.height-276.5+120+10, 160, 120) , romeref);
+    CGContextDrawImage(context,CGRectMake(73, self.frame.size.height-276.5+120+10-40, 160, 120) , romeref);
     CGImageRelease(romeref);
 
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)welcome2);
     
     CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, NULL, CGRectMake(6+20, self.frame.size.height-40-276.5-120, 308-20*2, 276.5));
+    CGPathAddRect(path, NULL, CGRectMake(6+20, self.frame.size.height-40-276.5-120-40-30, 308-20*2, 276.5));
     CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [welcome2 length]), path, NULL);
     CFRelease(framesetter);
     CFRelease(path);
@@ -135,9 +135,11 @@
     };
     CTParagraphStyleRef pstyle = CTParagraphStyleCreate(psetting, 3);
     [welcome2 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)pstyle range:NSMakeRange([@"“Rome wasn't built in a day.”\n\n" length],[welcome2 length]-[@"“Rome wasn't built in a day.”\n\n" length])];
-
     
     [welcome2 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL) range:NSMakeRange(0,[welcome2 length])];
+    
+    [welcome2 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 14.0, NULL) range:NSMakeRange([@"“Rome wasn't built in a day.”\n\nEXFE [ˈɛksfi] is still in pilot stage. We’re building up blocks, consequently some bugs or unfinished pages may happen. Our apologies for any trouble you may encounter. Any feedback, please email " length],17)];
+
     
     [welcome2 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 20.0, NULL) range:NSMakeRange(0,[@"“Rome wasn't built in a day.”" length])];
     
@@ -169,8 +171,9 @@
     CGContextClearRect(context, rect);
     CGContextSaveGState(context);
     CGFloat colors [] = {
-        0/255.0f, 0/255.0f, 0/255.0f, 0.9,
-        25/255.0f, 25/255.0f, 25/255.0f, 0.9
+        21/255.0f, 51/255.0f, 83/255.0f, 1,
+        25/255.0f, 25/255.0f, 25/255.0f, 1
+
     };
     CGColorSpaceRef baseSpace = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColorComponents(baseSpace, colors, NULL, 2);
@@ -181,14 +184,32 @@
     CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);
     CGGradientRelease(gradient), gradient = NULL;
     CGContextRestoreGState(context);
-    if(viewpage==0)
-        [self drawWelcome1];
-    else if(viewpage==1)
+    
+//    CGRect innerrect= CGRectMake(5, 10, rect.size.width-20, rect.size.height-20);
+//    CGContextSaveGState(context);
+//    CGFloat colorsinner [] = {
+//        21/255.0f, 51/255.0f, 83/255.0f, 0.9,
+//        25/255.0f, 25/255.0f, 25/255.0f, 0.9
+//    };
+//    baseSpace = CGColorSpaceCreateDeviceRGB();
+//    gradient = CGGradientCreateWithColorComponents(baseSpace, colorsinner, NULL, 2);
+//    CGColorSpaceRelease(baseSpace);
+//    baseSpace = NULL;
+//    startPoint = CGPointMake(CGRectGetMidX(innerrect), CGRectGetMinY(innerrect));
+//    endPoint = CGPointMake(CGRectGetMidX(innerrect), CGRectGetMaxY(innerrect));
+//    CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);
+//    CGGradientRelease(gradient), gradient = NULL;
+//    CGContextRestoreGState(context);
+
+    
+//    if(viewpage==0)
+//        [self drawWelcome1];
+//    else if(viewpage==1)
         [self drawWelcome2];
 }
 - (void) goNext{
     viewpage=1;
-    [gobutton setHidden:YES];
+//    [gobutton setHidden:YES];
     [closebutton setHidden:NO];
     [self setNeedsDisplay];
 }

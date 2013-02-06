@@ -363,7 +363,7 @@
 
     NSMutableDictionary *widget=[NSMutableDictionary dictionaryWithObjectsAndKeys:default_background,@"image",@"Background",@"type", nil];
     if(cross.widget==nil)
-        cross.widget=[[NSMutableArray alloc] initWithCapacity:1];
+        cross.widget=[[[NSMutableArray alloc] initWithCapacity:1] autorelease];
     [cross.widget addObject:widget];
     
     User *user=default_user;
@@ -778,7 +778,7 @@
             timeZoneView.text = @"";
             timeZoneView.hidden = YES;
         }else{
-            timeRelView.text = [title copy];
+            timeRelView.text = title;//[title copy];
             
             timeAbsView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
             NSString* desc = [time getTimeDescription];
@@ -792,7 +792,7 @@
                 [tz retain];
                 if (tz != nil && tz.length > 0) {
                     timeZoneView.hidden = NO;
-                    timeZoneView.text = [tz copy];
+                    timeZoneView.text = tz;//[tz copy];
                     [timeZoneView sizeToFit];
                 }else{
                     timeZoneView.hidden = YES;
@@ -865,7 +865,7 @@
             if (placeTitle == nil || place.title.length == 0) {
                 placeTitle = @"Somewhere";
             }
-            MapPin *pin = [[MapPin alloc] initWithCoordinates:region.center placeName:place.title description:@""];
+            MapPin *pin = [[[MapPin alloc] initWithCoordinates:region.center placeName:place.title description:@""] autorelease];
             [mapView addAnnotation:pin];
             
         }else{
@@ -1027,7 +1027,7 @@
     
     Invitation *invitation =[exfeeInvitations objectAtIndex:index];
     
-    EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
+    EXInvitationItem *item=[[[EXInvitationItem alloc] initWithInvitation:invitation] autorelease];
     item.backgroundColor=[UIColor clearColor];
     item.isGather=YES;
     
@@ -1093,6 +1093,7 @@
         exfeeinputViewController.gatherview=self;
         [self hideMenu];
         [self presentModalViewController:exfeeinputViewController animated:YES];
+        [exfeeinputViewController release];
 
     }
     else if(index < [reducedExfeeIdentities count]){
@@ -1124,7 +1125,7 @@
         static NSString *defaultPinID = @"com.exfe.pin";
         pinView = (MKAnnotationView *)[map dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
         if ( pinView == nil ){
-            pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID];
+            pinView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID] autorelease];
             pinView.canShowCallout = YES;
             pinView.image = [UIImage imageNamed:@"map_pin_blue.png"];
             
@@ -1382,7 +1383,7 @@
         
 //        NSMutableDictionary *widget=[NSMutableDictionary dictionaryWithObjectsAndKeys:default_background,@"image",@"Background",@"type", nil];
         if(cross.widget==nil)
-            cross.widget=[[NSMutableArray alloc] initWithCapacity:1];
+            cross.widget=[[[NSMutableArray alloc] initWithCapacity:1] autorelease];
         else{
             for (int i=0;i<[cross.widget count];i++){
                 NSMutableDictionary *widget=[cross.widget objectAtIndex:i];

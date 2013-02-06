@@ -228,6 +228,7 @@
     CTFrameDraw(theFrame, context);
     CFRelease(theFrame);
     CGContextRestoreGState(context);
+    [textstring release];
     
     UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue-Light" size:15];
     // text info
@@ -291,6 +292,7 @@
                 CTFrameDraw(theFrame, context);
                 CFRelease(theFrame);
                 CGContextRestoreGState(context);
+                [textstring release];
             }
             //[convCount drawInRect:numRect withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
         } else {
@@ -306,6 +308,7 @@
 
     self.selectedBackgroundView = view;
     [super setSelected:selected animated:animated];
+    [view release];
 
     // Configure the view for the selected state
 }

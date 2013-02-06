@@ -31,6 +31,7 @@
     
     UIView *contentLayer = [[UIView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(a), CGRectGetHeight(a) - 44)];
     [self.view addSubview:contentLayer];
+    [contentLayer release];
     
     toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
@@ -46,6 +47,7 @@
     title.shadowOffset = CGSizeMake(0, 1);
     title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     [toolbar addSubview:title];
+    [title release];
     [self.view addSubview:toolbar];
     
     UIImage *textfieldback = [UIImage imageNamed:@"textfield_bg_rect.png"];
@@ -291,6 +293,7 @@
                                     oauth.parentView=self;
                                     oauth.oauth_url=[responseobj objectForKey:@"url"];
                                     [self presentModalViewController:oauth animated:YES];
+                                    [oauth release];
 
                                 }else{
 
@@ -363,6 +366,7 @@
                                     oauth.parentView=self;
                                     oauth.oauth_url=[responseobj objectForKey:@"url"];
                                     [self presentModalViewController:oauth animated:YES];
+                                    [oauth release];
                                 }
                             }
                         }

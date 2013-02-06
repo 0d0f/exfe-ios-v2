@@ -49,14 +49,15 @@
     [btnBack addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:btnBack];
 
-    timeInput =[[UITextField alloc] initWithFrame:CGRectMake(54, 13.5, 195-18, 18.5)];
+//    timeInput =[[UITextField alloc] initWithFrame:CGRectMake(54, 13.5, 195-18, 18.5)];
     
-    UIImageView *inputframeview=[[UIImageView alloc] initWithFrame:CGRectMake(28, 7, 229, 31)];
-    inputframeview.image=[UIImage imageNamed:@"textfield.png"];
-    inputframeview.contentMode    = UIViewContentModeScaleToFill;
-    inputframeview.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
+//    UIImageView *inputframeview=[[UIImageView alloc] initWithFrame:CGRectMake(28, 7, 229, 31)];
+//    inputframeview.image=[UIImage imageNamed:@"textfield.png"];
+//    inputframeview.contentMode    = UIViewContentModeScaleToFill;
+//    inputframeview.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
 //    [toolbar addSubview:inputframeview];
 //    [toolbar addSubview:timeInput];
+//    [inputframeview.contentStretch release]
 
     UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(33, 13.5, 18, 18)];
     icon.image=[UIImage imageNamed:@"time_18.png"];
@@ -121,7 +122,7 @@
 
 - (void)regObserver
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:timeInput];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:timeInput];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:inputplace];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editingDidBegan:) name:UITextFieldTextDidBeginEditingNotification object:inputplace];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:placeedit.PlaceTitle];
@@ -131,11 +132,11 @@
 - (void)textDidChange:(NSNotification*)notification
 {
 
-    if([timeInput.text length]>2)
-    {
-        editinginterval=CFAbsoluteTimeGetCurrent();
-        [self performSelector:@selector(getTimeFromAPI) withObject:self afterDelay:0.8];
-    }
+//    if([timeInput.text length]>2)
+//    {
+//        editinginterval=CFAbsoluteTimeGetCurrent();
+//        [self performSelector:@selector(getTimeFromAPI) withObject:self afterDelay:0.8];
+//    }
 }
 
 - (void) getTimeFromAPI{
@@ -144,7 +145,7 @@
         NSString *params_timezone=[DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];        
         RKParams* rsvpParams = [RKParams params];
         [rsvpParams setValue:params_timezone forParam:@"timezone"];
-        [rsvpParams setValue:timeInput.text forParam:@"time_string"];
+//        [rsvpParams setValue:timeInput.text forParam:@"time_string"];
         RKClient *client = [RKClient sharedClient];
         [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
         NSString *endpoint = [NSString stringWithFormat:@"/time/Recognize"];
@@ -379,13 +380,14 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [inputtimeword resignFirstResponder];
-    [timeInput resignFirstResponder];
+//    [timeInput resignFirstResponder];
     [_tableView becomeFirstResponder];
 }
 - (void)dealloc {
     [lasttimebutton release];
     [_tableView release];
     [_times release];
+//    [timeInput release];
     [super dealloc];
 }
 

@@ -75,6 +75,7 @@
                 else{
                     localcontact=[LocalContact object];
                 }
+                [localcontacts release];
                 localcontact.uid=[NSNumber numberWithInt:uid];
                 
                 CFStringRef compositeName=ABRecordCopyCompositeName(ref);
@@ -87,8 +88,8 @@
                 UIImage *avatar = [UIImage imageWithData:(NSData *)avatarref];
                 if(avatar!=nil){
                     localcontact.avatar=(NSData *)avatarref;
+                    CFRelease(avatarref);
                 }
-
                 
             if(ABMultiValueGetCount(multi_email)>0){
                 NSMutableArray *emails_array=[[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_email)] autorelease];
@@ -97,6 +98,7 @@
                     if(email!=nil){
                         indexfield=[indexfield stringByAppendingFormat:@" %@",email];
                         [emails_array addObject:email];
+                        [email release];
                     }
                 }
                 if([emails_array count]>0){
@@ -118,11 +120,14 @@
                         indexfield=[indexfield stringByAppendingFormat:@" %@",social_username];
                     }
                 }
+                if(socialprofile!=nil)
+                    [socialprofile release];
             }
-                if([social_array count]>0){
-                    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:social_array];
-                    localcontact.social=data;
-                }
+                
+            if([social_array count]>0){
+                NSData *data = [NSKeyedArchiver archivedDataWithRootObject:social_array];
+                localcontact.social=data;
+            }
 
             for (CFIndex i = 0; i < ABMultiValueGetCount(multi_im); i++) {
                 NSMutableArray *im_array=[[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_im)] autorelease];
@@ -135,6 +140,8 @@
                         indexfield=[indexfield stringByAppendingFormat:@" %@",[personim objectForKey:@"username"]];
                     }
                 }
+                if(personim!=nil)
+                    [personim release];
                 
                 if([im_array count]>0){
                     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:im_array];
@@ -143,9 +150,13 @@
             }
             localcontact.indexfield=indexfield;
             }
+            CFRelease(multi_email);
+            CFRelease(multi_socialprofile);
+            CFRelease(multi_im);
         }
     }
     [[LocalContact currentContext] save:nil];
+    CFRelease(allPeople);
 }
 
 + (NSDictionary*) getDefaultIdentity:(LocalContact*) person{
@@ -243,7 +254,8 @@
     return identities;
 }
 - (void)dealloc{
-    CFRelease(addressBook);
+    if(addressBook!=nil)
+        CFRelease(addressBook);
     
     [super dealloc];
 }

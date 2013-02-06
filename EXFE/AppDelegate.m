@@ -420,6 +420,8 @@ static char handleurlobject;
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetoken"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"ifdevicetokenSave"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"localaddressbook_read_at"];
+    
     
     [[NSUserDefaults standardUserDefaults] synchronize];
     AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];  

@@ -96,8 +96,8 @@
     CGContextSaveGState(currentContext);
     
     CGFloat colors [] = {
-        0xfa/255.0f, 0xfa/255.0f, 0xfa/255.0f, 0.75,
-        0xfa/255.0f, 0xfa/255.0f, 0xfa/255.0f, 0.5
+        0xfa/255.0f, 0xfa/255.0f, 0xfa/255.0f, 0.90,
+        0xfa/255.0f, 0xfa/255.0f, 0xfa/255.0f, 0.75
     };
     CGColorSpaceRef baseSpace = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColorComponents(baseSpace, colors, NULL, 2);
@@ -108,6 +108,12 @@
     CGPoint endPoint = CGPointMake(CGRectGetMidX(rect), CGRectGetMaxY(rect));
     CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);
     CGGradientRelease(gradient), gradient = NULL;
+    
+    float borderSize = 1.0f;
+    CGContextSetFillColorWithColor(currentContext, [UIColor colorWithWhite:1 alpha:0.66] .CGColor);
+    CGContextFillRect(context, CGRectMake(0.0f, self.frame.size.height - borderSize, self.frame.size.width, borderSize));
+
+    
 }
 
 @end

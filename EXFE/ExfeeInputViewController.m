@@ -122,7 +122,7 @@ static char identitykey;
     [doneButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     doneButton.frame = CGRectMake(255+5+5, 7, 50, 30);
     [doneButton addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
-    [doneButton setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
+    [doneButton setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0,4)] forState:UIControlStateNormal];
 
     [toolbar addSubview:doneButton];
     addressbookType=LOCAL_ADDRESSBOOK;
@@ -301,6 +301,7 @@ static char identitykey;
     [errorHintLabel release];
     [errorHint release];
     [address release];
+    [expandExfeeViewShadow release];
     [super dealloc];
 }
 - (BOOL) showErrorHint{
@@ -533,6 +534,7 @@ static char identitykey;
         }
     }
     [dict release];
+    [suggestwithselected release];
     suggestIdentities=[temp retain];
     [temp release];
     [suggestionTable reloadData];
@@ -573,6 +575,7 @@ static char identitykey;
     Identity* identity=[self getIdentityFromLocal:input provider:provider];
     if(identity!=nil){
         [self addBubbleByIdentity:identity input:input];
+//        [identity release];
         return;
     }
     
@@ -920,12 +923,14 @@ static char identitykey;
 //              else
 //                  [identitycell setBackgroundColor:[UIColor colorWithRed:58/255.f green:110/255.f blue:165/255.f alpha:1]];
                 [expandExfeeView addSubview:identitycell];
+//                [identitycell release];
                 idx++;
             }
             if([useridentities count]%2==1){
                 UIBorderView *identitycell=[[UIBorderView alloc] initWithFrame:CGRectMake([useridentities count]%2*cellwidth, [useridentities count]/2*40, cellwidth, 40)];
                 [identitycell setBackgroundColor:FONT_COLOR_51];
                 [expandExfeeView addSubview:identitycell];
+//                [identitycell release];
 
             }
             [expandExfeeView addSubview:expandExfeeViewShadow];

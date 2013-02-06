@@ -395,21 +395,22 @@
                     while (key = [enumerator nextObject]){
                         NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
                         NSString *updated_at_str=[obj objectForKey:@"updated_at"];
-                        NSDate *updated_at =[NSDate date];
                         if([updated_at_str isKindOfClass:[NSString class]])
                         {
-                            if([updated_at_str length]>19)
+                            NSDate *updated_at =[NSDate date];
+                            if([updated_at_str length]>19){
                                 updated_at_str=[updated_at_str substringToIndex:19];
-                            updated_at = [formatter dateFromString:updated_at_str];
-                        if([updated_at compare: cross.updated_at] == NSOrderedDescending || [updated_at compare: cross.updated_at] == NSOrderedSame) {
-                            if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]])
-                            {
-                                NSNumber *identity_id=[obj objectForKey:@"identity_id"];
-                                if([self isIdentityBelongsMe:[identity_id intValue]]==NO)
-                                    notification++;
+                                updated_at = [formatter dateFromString:updated_at_str];
+                            }
+                            if([updated_at compare: cross.updated_at] == NSOrderedDescending || [updated_at compare: cross.updated_at] == NSOrderedSame) {
+                                if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]])
+                                {
+                                    NSNumber *identity_id=[obj objectForKey:@"identity_id"];
+                                    if([self isIdentityBelongsMe:[identity_id intValue]]==NO)
+                                        notification++;
+                                }
                             }
                         }
-                    }
                     }
                     [formatter release];
                 }
@@ -481,7 +482,7 @@
 }
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+    NSString *errormsg;
     if(error.code==2)
         errormsg=@"A connection failure has occurred.";
     else
@@ -678,11 +679,11 @@
         }
         
         NSArray *widgets = cross.widget;
-        BOOL hasBackImage=NO;
+//        BOOL hasBackImage=NO;
         for(NSDictionary *widget in widgets) {
             if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
                 NSString *imgurl=[Util getBackgroundLink:[widget objectForKey:@"image"]];
-                hasBackImage=YES;
+//                hasBackImage=YES;
                 CGSize targetSize = CGSizeMake((320 - CARD_VERTICAL_MARGIN * 2) * [UIScreen mainScreen].scale, 44 * [UIScreen mainScreen].scale);
                 UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:imgurl withSize:targetSize];
                 if(backimg == nil || [backimg isEqual:[NSNull null]]){

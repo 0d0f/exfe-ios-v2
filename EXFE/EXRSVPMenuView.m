@@ -30,9 +30,10 @@
             
             [self addSubview:responseview];
             [responselabel release];
-            [responseview release];
             y+=20;
         }
+        [responseview release];
+
         
         if([self Itemscontain:itemlist string:@"Accepted"]){
             UIButton *btnaccepted=[UIButton buttonWithType:UIButtonTypeCustom];
