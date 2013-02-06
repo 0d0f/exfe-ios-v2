@@ -11,13 +11,29 @@
 
 @implementation EXLabel
 
+@synthesize placeholder;
+@synthesize placehlderColor;
+@synthesize minimumHeight;
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        placehlderColor = [UIColor lightGrayColor];
     }
     return self;
+}
+
+- (void)drawTextInRect:(CGRect)rect{
+    if (self.text != nil && self.text.length > 0) {
+        [super drawTextInRect:rect];
+    }else{
+        if (placeholder != nil && placeholder.length > 0) {
+            [placehlderColor set];
+            [placeholder drawInRect:rect withFont:self.font];
+        }
+    }
 }
 
 // Only override drawRect: if you perform custom drawing.
@@ -64,7 +80,7 @@
         isExpended = YES;
     }
     
-    self.frame = CGRectMake(CGRectGetMinX(self.frame) , CGRectGetMinY(self.frame), ow, bestHeight);
+    self.frame = CGRectMake(CGRectGetMinX(self.frame) , CGRectGetMinY(self.frame), ow, MAX(bestHeight, self.minimumHeight));
 }
 
 @end

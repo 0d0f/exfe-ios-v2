@@ -37,7 +37,7 @@
 //    EXCurveImageView *dectorView;
     EXCurveView *headview;
     UIImageView *dectorView;
-    UILabel *descView;
+    EXLabel *descView;
     EXImagesCollectionGatherView *exfeeShowview;
     //UIView *exfeeShowview;
     UILabel *timeRelView;

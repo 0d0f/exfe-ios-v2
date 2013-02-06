@@ -79,14 +79,17 @@
     {
         int left = CONTAINER_VERTICAL_PADDING;
         descView = [[EXLabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 44)];
-        descView.textColor = [UIColor COLOR_WA(127, 0xFF)];
+        descView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
         descView.numberOfLines = 4;
         descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         descView.shadowColor = [UIColor whiteColor];
         descView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         descView.backgroundColor = [UIColor colorWithWhite:0.96 alpha:1];
         descView.lineBreakMode = NSLineBreakByWordWrapping;
-        descView.text=@"Take some note";
+        descView.placeholder = @"Take some notes";
+        descView.placehlderColor = [UIColor COLOR_WA(0xA3, 0xFF)];
+        descView.text = @"";
+        descView.minimumHeight = 44;
         [container addSubview:descView];
         
         exfeeSuggestHeight = 70;
@@ -642,17 +645,9 @@
     [titleView setText:x.title];
     [self setLayoutDirty];
     
-    if (x.cross_description == nil || x.cross_description.length == 0){
-        descView.textColor = [UIColor COLOR_WA(127, 0xFF)];
-        descView.text = @"Take some note";
-        [self setLayoutDirty];
-    }else{
-        if ([x.cross_description length]>0){
-            descView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
-            descView.text = x.cross_description;
-        }
-        [self setLayoutDirty];
-    }
+    descView.text = x.cross_description;
+    [self setLayoutDirty];
+    
 }
 
 - (void) fillBackground:(NSArray*)widgets{
@@ -905,8 +900,8 @@
         
         // Description
         if (descView.hidden == NO) {
-            descView.frame = CGRectMake(left , baseY, width, 44);
-//            [descView sizeToFit];
+            descView.frame = CGRectMake(left , baseY, width, 88);
+            [descView sizeToFit];
             baseX = CGRectGetMaxX(descView.frame);
             baseY = CGRectGetMaxY(descView.frame) ;
         }
