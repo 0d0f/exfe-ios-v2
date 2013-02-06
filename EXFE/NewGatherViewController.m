@@ -188,6 +188,11 @@
         titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         [headview addSubview:titleView];
     }
+    UIImageView *headerShadow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow.png"]];
+    headerShadow.frame = CGRectMake(0, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA - 20, 320, 25);
+    [self.view addSubview:headerShadow];
+    [headerShadow release];
+    
     [self.view addSubview:headview];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];

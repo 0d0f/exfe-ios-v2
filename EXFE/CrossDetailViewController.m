@@ -219,8 +219,12 @@
         [tabBar addTarget:self action:@selector(widgetClick:with:)];
         [headerView addSubview:tabBar];
     }
-    [self.view addSubview:headerView];
+    UIImageView *headerShadow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow.png"]];
+    headerShadow.frame = CGRectMake(0, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA - 20, 320, 25);
+    [self.view addSubview:headerShadow];
+    [headerShadow release];
     
+    [self.view addSubview:headerView];
     
     widgetTabBar = [[EXWidgetTabBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), 103) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90, 103 - 15, 78, 15)];
     NSArray * imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30refl.png"], [UIImage imageNamed:@"widget_conv_30refl.png"], nil];
@@ -843,11 +847,15 @@
             [self setLayoutDirty];
         }
     }
-    [self relayoutUI];
+    [self relayoutUIwithAnimation:YES];
 }
 
 #pragma mark Relayout methods
 - (void)relayoutUI{
+    [self relayoutUIwithAnimation:NO];
+}
+
+- (void)relayoutUIwithAnimation:(BOOL)Animated{
     if (layoutDirty == YES){
         NSLog(@"relayoutUI");
         CGRect c = container.frame;
@@ -860,12 +868,25 @@
         
         // Description
         if (descView.hidden == NO) {
-            descView.frame = CGRectMake(left , baseY, width, 80);
-            [descView sizeToFit];
-            baseX = CGRectGetMaxX(descView.frame);
-            baseY = CGRectGetMaxY(descView.frame) ;
+            CGSize size = [descView sizeThatFits:CGSizeMake(width, INFINITY)];
+            //descView.frame = CGRectMake(left , baseY, descView.frame.size.width, descView.frame.size.height);
+            if (Animated) {
+                [UIView beginAnimations:nil context:NULL];
+                [UIView setAnimationDuration:0.233];
+            }
+            CGRect newRect = CGRectMake(left , baseY, width, size.height);
+            descView.center = CGPointMake(CGRectGetMidX(newRect), CGRectGetMidY(newRect));
+            descView.bounds = CGRectMake(0 , 0, width, size.height);
+            if (Animated) {
+                [UIView commitAnimations];
+            }
+            baseX = left + size.width;
+            baseY = baseY + size.height;
         }
-        
+        if (Animated) {
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:0.233];
+        }
         // Exfee
         if (exfeeShowview.hidden == NO){
             if (descView.hidden == NO) {
@@ -961,7 +982,9 @@
             s.height = CGRectGetHeight(self.view.bounds) + 1;
         }
         container.contentSize = s;
-        
+        if (Animated) {
+            [UIView commitAnimations];
+        }
         [self clearLayoutDirty];
     }
 }
