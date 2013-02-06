@@ -1297,7 +1297,7 @@
         [titleAndDescEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
         titleAndDescEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
         titleAndDescEditMenu.layer.borderWidth = 0.5;
-        titleAndDescEditMenu.layer.borderColor = [UIColor COLOR_WA(0xFF, 0xE0)].CGColor;
+        titleAndDescEditMenu.layer.borderColor = [UIColor COLOR_WA(0xFF, 0x20)].CGColor;
         titleAndDescEditMenu.layer.cornerRadius = 1.5;
         titleAndDescEditMenu.layer.masksToBounds = YES;
         [titleAndDescEditMenu addTarget:self action:@selector(clickforTitleAndDescEdit:) forControlEvents:UIControlEventTouchUpInside];
@@ -1341,7 +1341,7 @@
         [timeEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
         timeEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
         timeEditMenu.layer.borderWidth = 0.5;
-        timeEditMenu.layer.borderColor = [UIColor COLOR_WA(0xFF, 0xE0)].CGColor;
+        timeEditMenu.layer.borderColor = [UIColor COLOR_WA(0xFF, 0x20)].CGColor;
         timeEditMenu.layer.cornerRadius = 1.5;
         timeEditMenu.layer.masksToBounds = YES;
         [timeEditMenu addTarget:self action:@selector(clickforTimeEdit:) forControlEvents:UIControlEventTouchUpInside];
@@ -1384,7 +1384,7 @@
         [placeEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
         placeEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
         placeEditMenu.layer.borderWidth = 0.5;
-        placeEditMenu.layer.borderColor = [UIColor COLOR_WA(0xFF, 0xE0)].CGColor;
+        placeEditMenu.layer.borderColor = [UIColor COLOR_WA(0xFF, 0x20)].CGColor;
         placeEditMenu.layer.cornerRadius = 1.5;
         placeEditMenu.layer.masksToBounds = YES;
         [placeEditMenu addTarget:self action:@selector(clickforPlaceEdit:) forControlEvents:UIControlEventTouchUpInside];
