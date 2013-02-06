@@ -290,6 +290,7 @@
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"addidentitybutton"] autorelease];
         }
         cell.textLabel.text=@"Add identity...";
+        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
         return cell;
     }
     Identity *identity=[[identitiesData objectAtIndex:[indexPath section]]  objectAtIndex:indexPath.row];
@@ -389,7 +390,7 @@
         [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
         [buttonsignout setTitleColor:[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)] forState:UIControlStateNormal];
 //        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
-        [buttonsignout setFrame:CGRectMake(200, 10, 100, 44)];
+        [buttonsignout setFrame:CGRectMake(200, 64, 100, 44)];
         [buttonsignout setBackgroundColor:[UIColor clearColor]];
         [buttonsignout addTarget:self action:@selector(Logout) forControlEvents:UIControlEventTouchUpInside];
         [footerView addSubview:buttonsignout];
@@ -398,8 +399,12 @@
         [buttonrome setTitle:@"“Rome wasn't built in a day.”" forState:UIControlStateNormal];
         [buttonrome.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:16]];
         [buttonrome setTitleColor:[UIColor COLOR_RGB(127, 127, 127)] forState:UIControlStateNormal];
-        [buttonrome setFrame:CGRectMake(72, 10+62, 200, 44)];
+        [buttonrome setFrame:CGRectMake(40, 20, 240, 25)];
         [buttonrome setBackgroundColor:[UIColor clearColor]];
+        buttonrome.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        buttonrome.backgroundColor = [UIColor COLOR_WA(0xE6, 0xFF)];
+        buttonrome.layer.cornerRadius = 12.5;
+        buttonrome.layer.masksToBounds = YES;
         [buttonrome addTarget:self action:@selector(showRome) forControlEvents:UIControlEventTouchUpInside];
         [footerView addSubview:buttonrome];
 
