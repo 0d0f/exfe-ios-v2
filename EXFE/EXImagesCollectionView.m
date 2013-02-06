@@ -184,7 +184,7 @@
                             acceptlabel.text=@"Accepted";
                             acceptlabel.leftInset = 5;
                             acceptlabel.topInset = 0;
-                            acceptlabel.bottomInset = -1;
+                            acceptlabel.bottomInset = 1;
                             [acceptlabel setHidden:NO];
                             [self bringSubviewToFront:acceptlabel];
                             [self performSelector:@selector(hiddenAcceptLabel) withObject:self afterDelay:4];
