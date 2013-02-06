@@ -165,27 +165,30 @@
                     if([item.invitation.rsvp_status isEqualToString:@"ACCEPTED"]){
                         acceptednum += 1;
                         if( acceptednum==1){
-                        if(acceptlabel==nil){
-                            acceptlabel=[[UILabel alloc] initWithFrame:CGRectMake(x, y-12, 60, 12)];
-                            [acceptlabel setBackgroundColor:[UIColor colorWithRed:0xd2/255.0f green:0xe2/255.0f blue:0xf4/255.0f alpha:1]];
-                            UIBezierPath *maskPath;
-                            maskPath = [UIBezierPath bezierPathWithRoundedRect:acceptlabel.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(1.5, 1.5)];
-                            CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-                            maskLayer.frame = self.bounds;
-                            maskLayer.path = maskPath.CGPath;
-                            acceptlabel.layer.mask = maskLayer;
-                            [maskLayer release];
-                            
-                            [acceptlabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
-                            [acceptlabel setTextColor:[UIColor colorWithRed:103/255.0 green:127/255.0 blue:153/255.0 alpha:1]];
-                            [acceptlabel setTextAlignment:NSTextAlignmentCenter];
-                            [self addSubview:acceptlabel];
-                        }
-                        [acceptlabel setFrame:CGRectMake(x, y-12, 60, 12)];
-                        acceptlabel.text=@"Accepted";
-                        [acceptlabel setHidden:NO];
-                        [self performSelector:@selector(hiddenAcceptLabel) withObject:self afterDelay:4];
-
+                            if(acceptlabel==nil){
+                                acceptlabel=[[UIBorderLabel alloc] initWithFrame:CGRectMake(x, y-12, 60, 17)];
+                                [acceptlabel setBackgroundColor:[UIColor colorWithRed:0xd2/255.0f green:0xe2/255.0f blue:0xf4/255.0f alpha:1]];
+                                UIBezierPath *maskPath;
+                                maskPath = [UIBezierPath bezierPathWithRoundedRect:acceptlabel.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(1.5, 1.5)];
+                                CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                                maskLayer.frame = self.bounds;
+                                maskLayer.path = maskPath.CGPath;
+                                acceptlabel.layer.mask = maskLayer;
+                                [maskLayer release];
+                                
+                                [acceptlabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
+                                [acceptlabel setTextColor:[UIColor colorWithRed:103/255.0 green:127/255.0 blue:153/255.0 alpha:1]];
+                                [acceptlabel setTextAlignment:NSTextAlignmentLeft];
+                                [self addSubview:acceptlabel];
+                            }
+                            [acceptlabel setFrame:CGRectMake(x, y-12, 60, 17)];
+                            acceptlabel.text=@"Accepted";
+                            acceptlabel.leftInset = 5;
+                            acceptlabel.topInset = 0;
+                            acceptlabel.bottomInset = 1;
+                            [acceptlabel setHidden:NO];
+                            [self bringSubviewToFront:acceptlabel];
+                            [self performSelector:@selector(hiddenAcceptLabel) withObject:self afterDelay:4];
                         }
                     }
                     allnum+=1+[item.invitation.mates intValue];

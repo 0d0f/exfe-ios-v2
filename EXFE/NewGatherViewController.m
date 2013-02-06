@@ -70,23 +70,27 @@
 }
 
 - (void)initUI{
-    
-    CGRect f = self.view.frame;
     CGRect a = [UIScreen mainScreen].applicationFrame;
+    self.view.frame = a;
+    //CGRect f = self.view.frame;
+    CGRect b = self.view.bounds;
     CGRect c = CGRectMake(0, CONTAINER_TOP_MARGIN, CGRectGetWidth(a), CGRectGetHeight(a) - CONTAINER_TOP_MARGIN);
     container = [[UIScrollView alloc] initWithFrame:c];
     container.delegate=self;
     {
         int left = CONTAINER_VERTICAL_PADDING;
         descView = [[EXLabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, c.size.width -  CONTAINER_VERTICAL_PADDING * 2, 44)];
-        descView.textColor = [UIColor COLOR_WA(127, 0xFF)];
+        descView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
         descView.numberOfLines = 4;
         descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         descView.shadowColor = [UIColor whiteColor];
         descView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         descView.backgroundColor = [UIColor colorWithWhite:0.96 alpha:1];
         descView.lineBreakMode = NSLineBreakByWordWrapping;
-        descView.text=@"Take some note";
+        descView.placeholder = @"Take some notes";
+        descView.placehlderColor = [UIColor COLOR_WA(0xA3, 0xFF)];
+        descView.text = @"";
+        descView.minimumHeight = 44;
         [container addSubview:descView];
         
         exfeeSuggestHeight = 70;
@@ -159,7 +163,7 @@
     container.backgroundColor = [UIColor COLOR_SNOW];
     [self.view addSubview:container];
     
-    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y, f.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetMaxX(f) - 90,  f.origin.y +  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
+    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90,  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
     headview.backgroundColor=[UIColor grayColor];
     {
         CGFloat scale = CGRectGetWidth(headview.bounds) / 880.0f;
@@ -173,7 +177,7 @@
         [headview addSubview:dectorMask];
         [dectorMask release];
         
-        titleView = [[UILabel alloc] initWithFrame:CGRectMake(20 + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, f.size.width - 20 - TITLE_HORIZON_MARGIN * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
+        titleView = [[UILabel alloc] initWithFrame:CGRectMake(20 + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, CGRectGetWidth(b) - 20 - TITLE_HORIZON_MARGIN * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
         titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
         titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         titleView.backgroundColor = [UIColor clearColor];
@@ -642,17 +646,9 @@
     [titleView setText:x.title];
     [self setLayoutDirty];
     
-    if (x.cross_description == nil || x.cross_description.length == 0){
-        descView.textColor = [UIColor COLOR_WA(127, 0xFF)];
-        descView.text = @"Take some note";
-        [self setLayoutDirty];
-    }else{
-        if ([x.cross_description length]>0){
-            descView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
-            descView.text = x.cross_description;
-        }
-        [self setLayoutDirty];
-    }
+    descView.text = x.cross_description;
+    [self setLayoutDirty];
+    
 }
 
 - (void) fillBackground:(NSArray*)widgets{
@@ -905,8 +901,8 @@
         
         // Description
         if (descView.hidden == NO) {
-            descView.frame = CGRectMake(left , baseY, width, 44);
-//            [descView sizeToFit];
+            descView.frame = CGRectMake(left , baseY, width, 88);
+            [descView sizeToFit];
             baseX = CGRectGetMaxX(descView.frame);
             baseY = CGRectGetMaxY(descView.frame) ;
         }
