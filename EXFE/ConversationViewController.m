@@ -785,7 +785,7 @@
         };
         request.onDidFailLoadWithError=^(NSError *error){
             [inputToolbar setInputEnabled:YES];
-            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+            NSString *errormsg;
             if(error.code==2)
                 errormsg=@"A connection failure has occurred.";
             else

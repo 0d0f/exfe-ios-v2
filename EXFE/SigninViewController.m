@@ -41,7 +41,7 @@
         };
         request.onDidFailLoadWithError=^(NSError *error){
             [spin setHidden:YES];
-            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+            NSString *errormsg;
             if(error.code==2)
                 errormsg=@"A connection failure has occurred.";
             else
@@ -79,7 +79,7 @@
         };
         request.onDidFailLoadWithError=^(NSError *error){
             [spin setHidden:YES];
-            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+            NSString *errormsg;
             if(error.code==2)
                 errormsg=@"A connection failure has occurred.";
             else

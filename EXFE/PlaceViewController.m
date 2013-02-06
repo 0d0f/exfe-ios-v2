@@ -54,6 +54,7 @@
     inputframeview.contentMode    = UIViewContentModeScaleToFill;
     inputframeview.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
     [toolbar addSubview:inputframeview];
+    [inputframeview release];
     
     inputplace=[[UITextField alloc] initWithFrame:CGRectMake(54, 13.5, 195-18, 18.5)];
     inputplace.tag=401;
@@ -433,6 +434,7 @@
     [actionsheet release];
     [originplace release];
     [mapShadow release];
+    [inputplace release];
     [super dealloc];
 }
 

@@ -108,6 +108,7 @@
                             CFRelease(path);
                             CTFrameDraw(theFrame, context);
                             CFRelease(theFrame);
+                            [textstring release];
                             CGContextRestoreGState(context);
                         }
                     }

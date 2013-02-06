@@ -207,6 +207,7 @@
                 invitedstr.backgroundColor=[UIColor clearColor];
                 invitedstr.textAlignment=NSTextAlignmentLeft;
                 [addview addSubview:invitedstr];
+                [invitedstr release];
                 
                 [self addSubview:addview];
                 [addimg release];

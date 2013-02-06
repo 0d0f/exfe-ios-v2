@@ -16,17 +16,16 @@
 @synthesize nameHeight;
 @synthesize imageXmargin;
 @synthesize imageYmargin;
-@synthesize itemsCache;
+//@synthesize itemsCache;
 @synthesize editmode;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self initData];
+        itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
     }
-    [self initData];
-    self.itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
-    self.userInteractionEnabled = YES;
     return self;
 }
 
@@ -111,8 +110,10 @@
         [acceptlabel setHidden:YES];
     }
     
-    [itemsCache removeAllObjects];
-    [itemsCache release];
+    if(itemsCache!=nil){
+        [itemsCache removeAllObjects];
+        [itemsCache release];
+    }
     itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
     int count=[_dataSource numberOfimageCollectionView:self];
     if(count >maxColumn*maxRow-1)
@@ -250,7 +251,8 @@
 - (void)dealloc {
 	[grid release];
     [acceptlabel release];
-    [itemsCache release];
+    if(itemsCache!=nil)
+        [itemsCache release];
     [super dealloc];
 }
 @end

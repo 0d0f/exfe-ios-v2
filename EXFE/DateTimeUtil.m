@@ -24,7 +24,7 @@ static NSDate* s_Now = nil;
 + (void)setNow:(NSDate*)now{
     [s_Now release];
     s_Now = now;
-    [s_Now retain];
+//    [s_Now retain];
 }
 
 + (void)clearNow{
@@ -94,7 +94,7 @@ static NSDate* s_Now = nil;
         if (![DateTimeUtil isSameTimezone:comp.timeZone with:timezone]) {
             if ([comp hasDate]){
                 if(![comp hasTime]) {
-                    NSDateComponents* result = [[NSDateComponents alloc] init];
+                    NSDateComponents* result = [[[NSDateComponents alloc] init] autorelease];
                     result.year = comp.year;
                     result.month = comp.month;
                     result.day = comp.day;
@@ -110,8 +110,8 @@ static NSDate* s_Now = nil;
                     flag = flag | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
                     NSDateComponents *result = [gregorian components:flag fromDate:date];
                     [gregorian release];
-                    [date release];
-                    return [result autorelease];
+//                    [date release];
+                    return result;
                 }
             }
         }
@@ -131,7 +131,7 @@ static NSDate* s_Now = nil;
 + (NSString*) GetRelativeTime:(NSDateComponents*)targetTime fromDate:(NSDate*)baseDateTime baseOn:(NSTimeZone*)targetTimeZone format:(int)type{
     
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    [gregorian retain];
+//    [gregorian retain];
     NSDateComponents *baseTime = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:baseDateTime];
     [gregorian release];
     NSString* result = [DateTimeUtil GetRelativeTime:targetTime from:baseTime baseOn:targetTimeZone format:type];
@@ -178,7 +178,7 @@ static NSDate* s_Now = nil;
     
     // get minutes
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    [gregorian retain];
+//    [gregorian retain];
     NSDate* target = [gregorian dateFromComponents:targetTime];
     NSDate* base = [gregorian dateFromComponents:baseTime];
     [gregorian release];
@@ -305,6 +305,7 @@ static NSDate* s_Now = nil;
                     [dateFormatter setLocale:usLocale];
                     [usLocale release];
                     NSString *weekday = [dateFormatter stringFromDate:target];
+                    [dateFormatter release];
                     return [NSString stringWithFormat:@"%@. in %i days", weekday, dateSpan];
                 }
             }
@@ -350,7 +351,7 @@ static NSDate* s_Now = nil;
     [fmt setTimeZone:tz];
     [fmt setDateFormat:@"z"];
     NSString * abbr = [fmt stringFromDate:date];
-    NSLog(@"%@", abbr);
+    [fmt release];
     return abbr;
 }
 

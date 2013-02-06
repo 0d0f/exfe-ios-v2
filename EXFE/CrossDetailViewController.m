@@ -330,7 +330,6 @@
     NSString *updated_at = [formatter stringFromDate:cross.updated_at];
     [formatter release];
 
-    
     [APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
     
     UISwipeGestureRecognizer *swipeRightRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];

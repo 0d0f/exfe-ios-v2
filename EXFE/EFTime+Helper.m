@@ -194,20 +194,22 @@
     NSDictionary *dict = [DateTimeUtil datetimeTemplate:2];
     [dict retain];
     
-    NSString * datestr = [[self date] copy];
-    [datestr retain];
-    NSString * timestr = [[self time] copy];
-    [timestr retain];
+    NSString * datestr = [self date];
+    //[[self date] copy];
+//    [datestr retain];
+    NSString * timestr =[self time];
+//    [[self time] copy];
+//    [timestr retain];
     
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    [gregorian retain];
+//    [gregorian retain];
     if ([self hasTime]){
         NSDateComponents *comps = [self getLocalDateComponent];
-        [comps retain];
+//        [comps retain];
         NSDate* localDate = [gregorian dateFromComponents:comps];
         if ([self hasDate]) {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter retain];
+//            [formatter retain];
             NSDateComponents *thisYear = [gregorian components:NSYearCalendarUnit fromDate:[DateTimeUtil dateNow]];
             if (thisYear.year == comps.year) {
                 [formatter setDateFormat:[dict valueForKey:@"date"]];
@@ -215,28 +217,28 @@
                 [formatter setDateFormat:[dict valueForKey:@"dateWithYear"]];
             }
 
-            [datestr release];
+//            [datestr release];
             datestr = [formatter stringFromDate:localDate];
-            [datestr retain];
+//            [datestr retain];
             [formatter setDateFormat:[dict valueForKey:@"time"]];
-            [timestr release];
+//            [timestr release];
             timestr = [formatter stringFromDate:localDate];
-            [timestr retain];
+//            [timestr retain];
             [formatter release];
         }else{
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter retain];
+//            [formatter retain];
             [formatter setDateFormat:[dict valueForKey:@"time"]];
-            [timestr release];
+//            [timestr release];
             timestr = [formatter stringFromDate:localDate];
-            [timestr retain];
+//            [timestr retain];
             [formatter release];
         }
-        [comps release];
+//        [comps release];
     } else {
         if ([self hasDate]) {
             NSDateComponents *comps = [self getUTCDateComponent];
-            [comps retain];
+//            [comps retain];
             NSDate *date = [gregorian dateFromComponents:comps];
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             NSDateComponents *thisYear = [gregorian components:NSYearCalendarUnit fromDate:[DateTimeUtil dateNow]];
@@ -245,11 +247,11 @@
             }else{
                 [formatter setDateFormat:[dict valueForKey:@"dateWithYear"]];
             }
-            [datestr release];
+//            [datestr release];
             datestr = [formatter stringFromDate:date];
-            [datestr retain];
+//            [datestr retain];
             [formatter release];
-            [comps release];
+//            [comps release];
         }else{
             
         }
@@ -319,8 +321,8 @@
             }
         }
     }
-    [datestr release];
-    [timestr release];
+//    [datestr release];
+//    [timestr release];
     return result;
 }
 
