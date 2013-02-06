@@ -14,13 +14,15 @@
 #import "ImgCache.h"
 #import "Util.h"
 #import "NewGatherViewController.h"
+#import "SSTextView.h"
 
 @interface TitleDescEditViewController : UIViewController<UITextViewDelegate>{
     EXGradientToolbarView *toolbar;
     EXCurveView *headview;
     UIImageView *dectorView;
     UITextView *titleView;
-    UITextView *descView;
+    //UITextView *descView;
+    SSTextView *descView;
     id delegate;
     float keyboardheight;
     NSString *imgurl;
