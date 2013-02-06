@@ -121,11 +121,11 @@
 - (void)drawContentView:(CGRect)r{
     CGRect b = [self bounds];
     // Rect caculation
-    int cardMargin = 13;
+    int cardMargin = 14;
     CGRect barnnerRect = CGRectMake(cardMargin, 16, b.size.width - cardMargin * 2, 40);
     
-    int avatarWidth = 42;
-    int avatarHeight = 42;
+    int avatarWidth = 40;
+    int avatarHeight = 40;
     CGRect avatarRect = CGRectMake(barnnerRect.origin.x, barnnerRect.origin.y, avatarWidth, avatarHeight);
     
     int paddingH = 8;
@@ -143,7 +143,7 @@
         [[UIImage imageNamed:@"portrait_default.png"] drawInRect:avatarRect];
     }
     
-    [[UIImage imageNamed:@"xlist_top.png"] drawInRect:CGRectMake(0, 9, CGRectGetWidth(b), CGRectGetHeight(b) - 9)];
+    [[UIImage imageNamed:@"xlist_top.png"] drawInRect:b];
     
     [[UIColor greenColor] set];
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
