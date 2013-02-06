@@ -139,7 +139,9 @@
     titleView.textAlignment = NSTextAlignmentCenter;
     titleView.contentInset = UIEdgeInsetsMake(-8, 0, -8, 0);
     titleView.delegate = self;
+    [self textViewDidChange:titleView];
     [headview addSubview:titleView];
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -267,9 +269,12 @@
 }
 
 - (void) setCrossTitle:(NSString*)title desc:(NSString*)desc{
-    titleView.text=title;
-    if(desc!=nil && desc.length>0)
+    titleView.text = title;
+    [self textViewDidChange:titleView];
+    
+    if(desc!=nil && desc.length>0){
         descView.text=desc;
+    }
 }
 
 - (void)didReceiveMemoryWarning
