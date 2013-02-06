@@ -86,7 +86,7 @@
         
         /* Custom Background image */
         textViewBackgroundImage = [[UIImageView alloc] initWithFrame:backgroundFrame];
-        textViewBackgroundImage.image          = [UIImage imageNamed:@"textbg"];
+        textViewBackgroundImage.image          = [UIImage imageNamed:@"textfield_round"];
         textViewBackgroundImage.contentMode    = UIViewContentModeScaleToFill;
         textViewBackgroundImage.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
         
