@@ -73,9 +73,9 @@ static NSMutableDictionary *imgs;
 }
 - (UIImage*) getImgFromCache:(NSString*)url withSize:(CGSize)size{
     NSString *md5key=[ImgCache md5:[NSString stringWithFormat:@"%@_%f_%f",url,size.width,size.height]];
-    UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
-    if(imgfromdict!=nil)
-        return imgfromdict;
+//    UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
+//    if(imgfromdict!=nil)
+//        return imgfromdict;
     NSString *cachefilename=[[ImgCache CachePath] stringByAppendingPathComponent:md5key];
     UIImage *img=[UIImage imageWithContentsOfFile:cachefilename];
     return img;
@@ -93,11 +93,11 @@ static NSMutableDictionary *imgs;
 
 - (UIImage*) getImgFrom:(NSString*)url withSize:(CGSize)size{
     NSString *md5key=[ImgCache md5:[NSString stringWithFormat:@"%@_%f_%f",url,size.width,size.height]];
-    UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
-    if(imgfromdict!=nil)
-        return imgfromdict;
+//    UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
+//    if(imgfromdict!=nil)
+//        return imgfromdict;
     NSString *cachefilename=[[ImgCache CachePath] stringByAppendingPathComponent:md5key];
-    UIImage *image=[UIImage imageWithContentsOfFile:cachefilename];
+    UIImage *image=nil;//[UIImage imageWithContentsOfFile:cachefilename];
     if(image==nil)
     {
 

@@ -136,7 +136,10 @@
   if(bannerimg!=nil){
     [bannerimg release];
   }
-  
+//  if(image ==nil){
+//    if([self.title isEqualToString:@"看电影 007"])
+//      NSLog(@"draw nil image:%@ %@",self.title,image);
+//  }
 	bannerimg = [image copy];
 	[self setNeedsDisplay];
 }
@@ -164,6 +167,7 @@
     
     if (bannerimg != nil){
         [bannerimg drawInRect:barnnerRect];
+    }else{
     }
     
     if (avatar != nil) {
@@ -182,7 +186,7 @@
         CGContextSetRGBFillColor(context, COLOR255(0xE0), COLOR255(0xEF), COLOR255(0xFF), 1);
         CGContextFillPath(context);
     }
-    
+  
     [[UIImage imageNamed:@"xlist_cell.png"] drawInRect:b];
 
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
