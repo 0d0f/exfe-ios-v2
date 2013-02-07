@@ -369,7 +369,7 @@
     User *user=default_user;
     Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
  
-    cross.title=[NSString stringWithFormat:@"·X· with %@",default_identity.name];
+    cross.title=[NSString stringWithFormat:@"·X· %@",default_identity.name];
 
     title_be_edit=NO;
 
@@ -562,19 +562,21 @@
 }
 
 - (void) reFormatTitle{
-    NSString *newtitle=@"·X· with ";
-    if(title_be_edit==NO){
-        int count=0;
+    NSString *newtitle = @"·X· ";
+    if(title_be_edit == NO){
+        int count = 0;
         for(Invitation *invitation in exfeeInvitations){
-            if(count==3)
+            if(count==3){
                 break;
-            newtitle=[newtitle stringByAppendingFormat:@"%@",invitation.identity.name];
+            }
+            newtitle = [newtitle stringByAppendingFormat:@"%@", invitation.identity.name];
+            if(count < 3 && count >= 1){
+                newtitle = [newtitle stringByAppendingString:@", "];
+            }
             count++;
-            if(count<3 && count>=1)
-                newtitle=[newtitle stringByAppendingString:@", "];
         }
-        cross.title=newtitle;
-        titleView.text=newtitle;
+        cross.title = newtitle;
+        titleView.text = newtitle;
     }
 }
 
