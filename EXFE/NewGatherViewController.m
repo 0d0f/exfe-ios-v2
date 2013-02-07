@@ -406,7 +406,7 @@
 
 - (void) replaceDefaultIdentity:(int)idx{
     User *user=default_user;
-    Identity *default_identity=[[user.identities allObjects] objectAtIndex:idx];
+    Identity *default_identity=[orderedIdentities objectAtIndex:idx];
     if(user!=nil){
         Invitation *invitation=[Invitation object];
         invitation.rsvp_status=@"ACCEPTED";
@@ -1024,6 +1024,15 @@
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView{
     return [exfeeInvitations count];
 }
+
+- (BOOL) isMe:(Identity*)my_identity{
+  for(Identity *_identity in default_user.identities){
+    if([_identity.identity_id isEqual:my_identity.identity_id])
+      return YES;
+  }
+  return NO;
+
+}
 - (EXInvitationItem *)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView itemAtIndex:(int)index{
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -1032,11 +1041,16 @@
     EXInvitationItem *item=[[[EXInvitationItem alloc] initWithInvitation:invitation] autorelease];
     item.backgroundColor=[UIColor clearColor];
     item.isGather=YES;
-    
-    if(app.userid ==[invitation.identity.connected_user_id intValue]){
-        item.isMe = YES;
-    }
-    
+    if([self isMe:invitation.identity])
+      item.isMe=YES;
+//    for(Identity *my_identity in default_user.identities){
+//      if([my_identity.identity_id isEqual:invitation.identity.identity_id])
+//        item.isMe=YES;
+//    }
+//    if(app.userid ==[invitation.identity.connected_user_id intValue]){
+//        item.isMe = YES;
+//    }
+  
     Identity *identity = invitation.identity;
     UIImage *img = nil;
     if(identity.avatar_filename != nil)
@@ -1099,11 +1113,12 @@
 
     }
     else if(index < [reducedExfeeIdentities count]){
-        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+//        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         NSArray *arr=exfeeInvitations;//[self getReducedExfeeIdentities];
         Invitation *invitation =[arr objectAtIndex:index];
-        
-        if(app.userid ==[invitation.identity.connected_user_id intValue]){
+      
+      if([self isMe:invitation.identity]){
+//        if(app.userid ==[invitation.identity.connected_user_id intValue]){
             [identitypicker setHidden:NO];
             [pickertoolbar setHidden:NO];
         }
@@ -1330,7 +1345,10 @@
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
-    NSString *external_id=((Identity*)[orderedIdentities objectAtIndex:row]).external_id;
+    NSString *username=((Identity*)[orderedIdentities objectAtIndex:row]).name;
+    if(username ==nil)
+      username=((Identity*)[orderedIdentities objectAtIndex:row]).external_username;
+  
     NSString *provider=((Identity*)[orderedIdentities objectAtIndex:row]).provider;
     
     CGRect rowFrame = CGRectMake(0.0f, 0.0f, 300, 40);
@@ -1338,7 +1356,7 @@
     UIView *rowview=[[[UIView alloc] initWithFrame:rowFrame] autorelease];
     UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(30, 0,300-30,40)];
     
-    label.text=external_id;
+    label.text=username;
     label.backgroundColor=[UIColor clearColor];
     
     rowview.backgroundColor=[UIColor clearColor];

@@ -52,7 +52,6 @@ static RKRequestQueue *queue;
     RKClient *client=[RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:@"https://maps.googleapis.com"]];
     
-    //    NSString *key=@"AIzaSyCBJcbHO0x87BvSVT-2Sg14PWko-GUN09c";
     NSString *endpoint = [NSString stringWithFormat:@"/maps/api/place/search/json?location=%g,%g&radius=100&language=%@&sensor=true&key=%@",lat,lng,language,GOOGLE_API_KEY];
     [client get:endpoint usingBlock:^(RKRequest *request) {
         request.method=RKRequestMethodGET;
@@ -71,19 +70,10 @@ static RKRequestQueue *queue;
                             NSDictionary *dict=[[[NSDictionary alloc] initWithObjectsAndKeys:[place objectForKey:@"name"],@"title",[place objectForKey:@"vicinity"],@"description",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[place objectForKey:@"id"],@"external_id",@"google",@"provider", nil] autorelease];
                             [(PlaceViewController*)delegate fillTopPlace:dict];
                         }
-                        //autorelease
-//                        for(NSDictionary *place in results)
-//                        {
-//                            
-//                            [local_results addObject:dict];
-//                            [dict release];
-//                        }
-//                        [(PlaceViewController*)delegate reloadPlaceData:local_results];
                     }
                 }
             }
             else {
-                //Check Response Body to get Data!
             }
         };
         
@@ -95,7 +85,6 @@ static RKRequestQueue *queue;
     RKClient *client=[RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:@"https://maps.googleapis.com"]];
 
-//    NSString *key=@"AIzaSyCBJcbHO0x87BvSVT-2Sg14PWko-GUN09c";
     NSString *endpoint = [NSString stringWithFormat:@"/maps/api/place/search/json?location=%g,%g&radius=1000&language=%@&sensor=true&key=%@",lat,lng,language,GOOGLE_API_KEY];
     [client get:endpoint usingBlock:^(RKRequest *request) {
         request.method=RKRequestMethodGET;

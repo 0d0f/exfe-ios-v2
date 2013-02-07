@@ -632,19 +632,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/APIPlace.m"
-         timestampString = "368773058.430443"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "20"
-         endingLineNumber = "20"
-         landmarkName = "+sharedManager"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/APIPlace.m"
          timestampString = "369304729.698513"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
@@ -1451,11 +1438,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/EXImagesCollectionGatherView.m"
-         timestampString = "381832576.265413"
+         timestampString = "381916419.164061"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "137"
-         endingLineNumber = "137"
+         startingLineNumber = "130"
+         endingLineNumber = "130"
          landmarkName = "-reloadData"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1586,7 +1573,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "437"
          endingLineNumber = "437"
-         landmarkName = "-touchesBegan:"
+         landmarkName = "-dealloc"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1599,8 +1586,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "611"
          endingLineNumber = "611"
-         landmarkName = "-ShowPlaceView:"
-         landmarkType = "5">
+         landmarkName = "@implementation NewGatherViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
@@ -1885,7 +1872,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "543"
          endingLineNumber = "543"
-         landmarkName = "-InvitationExist:"
+         landmarkName = "-addExfee:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1893,11 +1880,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/NewGatherViewController.m"
-         timestampString = "381829067.168049"
+         timestampString = "381916947.793511"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1217"
-         endingLineNumber = "1217"
+         startingLineNumber = "1232"
+         endingLineNumber = "1232"
          landmarkName = "-RSVPRemoveMenuView:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1906,11 +1893,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/NewGatherViewController.m"
-         timestampString = "381829067.168049"
+         timestampString = "381916947.793511"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1103"
-         endingLineNumber = "1103"
+         startingLineNumber = "1117"
+         endingLineNumber = "1117"
          landmarkName = "-imageCollectionView:didSelectRowAtIndex:row:col:frame:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1958,25 +1945,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/NewGatherViewController.m"
-         timestampString = "381829067.168049"
+         timestampString = "381916947.793511"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1388"
-         endingLineNumber = "1388"
+         startingLineNumber = "1403"
+         endingLineNumber = "1403"
          landmarkName = "-motionEnded:withEvent:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/NewGatherViewController.m"
-         timestampString = "381746268.946665"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "688"
-         endingLineNumber = "688"
-         landmarkName = "-fillBackground:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -2178,19 +2152,6 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "EXFE/EXImagesCollectionGatherView.m"
-         timestampString = "381832576.265413"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "136"
-         endingLineNumber = "136"
-         landmarkName = "-reloadData"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "EXFE/ProfileViewController.m"
          timestampString = "381840438.672095"
          startingColumnNumber = "9223372036854775807"
@@ -2224,6 +2185,32 @@
          startingLineNumber = "141"
          endingLineNumber = "141"
          landmarkName = "-setBannerimg:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/NewGatherViewController.m"
+         timestampString = "381916947.793511"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1382"
+         endingLineNumber = "1382"
+         landmarkName = "-pickdone"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/NewGatherViewController.m"
+         timestampString = "381916048.937376"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "408"
+         endingLineNumber = "408"
+         landmarkName = "-replaceDefaultIdentity:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

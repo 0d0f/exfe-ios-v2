@@ -102,6 +102,7 @@
 - (void) replaceDefaultIdentity:(int)idx;
 - (IBAction) Gather:(id) sender;
 - (void) reFormatTitle;
+- (BOOL) isMe:(Identity*)my_identity;
 
 #pragma mark EditCrossDelegate
 - (void) addExfee:(NSArray*) invitations;
