@@ -176,9 +176,9 @@ static char handleurlobject;
         [(CrossesViewController*)crossviewController refreshCrosses:@"crossview_init"];
         [(CrossesViewController*)crossviewController loadObjectsFromDataStore];
 
-        NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
-        if(newuser !=nil && [newuser isEqualToString:@"YES"])
-            [(CrossesViewController*)crossviewController showWelcome];
+//        NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
+//        if(newuser !=nil && [newuser isEqualToString:@"YES"])
+//            [(CrossesViewController*)crossviewController showWelcome];
 
         [self.navigationController dismissModalViewControllerAnimated:YES];
     }
