@@ -15,7 +15,7 @@
 #define DBNAME @"exfe_v2_5.sqlite"
 
     
-#define DEV
+#define WWW
 
 //#ifdef DEV
 //#define API_V2_ROOT @"http://api.white.0d0f.com/v2"

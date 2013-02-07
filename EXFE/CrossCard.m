@@ -122,7 +122,7 @@
 }
 - (void)setPlace:(NSString *)s {
 	[place release];
-    place = [s copy];
+  place = [s copy];
 	[self setNeedsDisplay];
 }
 
@@ -133,20 +133,12 @@
 }
 
 - (void)setBannerimg:(UIImage *)image {
-    if (bannerimg == image){
-        return;
-    }
-    if (bannerimg != nil){
-        [bannerimg release];
-        bannerimg = nil;
-        [self setNeedsDisplay];
-    }
-    
-    bannerimg = image;
-    [bannerimg retain];
-    if (image != nil) {
-        [self setNeedsDisplay];
-    }
+  if(bannerimg!=nil){
+    [bannerimg release];
+  }
+  
+	bannerimg = [image copy];
+	[self setNeedsDisplay];
 }
 
 - (void)layoutSubviews{
