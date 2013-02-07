@@ -260,7 +260,7 @@
 }
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
+//    NSLog(@"Error!:%@",error);
 }
 
 #pragma mark UITableViewDataSource methods
@@ -523,7 +523,7 @@
         request.onDidFailLoadWithError=^(NSError *error){
 //            [spin setHidden:YES];
             
-            NSLog(@"error %@",error);
+//            NSLog(@"error %@",error);
             //                [MBProgressHUD hideHUDForView:self.view animated:YES];
         };
     }];
@@ -628,7 +628,7 @@
             
         };
         request.onDidFailLoadWithError=^(NSError *error){
-            NSLog(@"error %@",error);
+//            NSLog(@"error %@",error);
             //                [MBProgressHUD hideHUDForView:self.view animated:YES];
         };
     }];

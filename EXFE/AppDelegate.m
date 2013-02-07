@@ -506,7 +506,7 @@ static char handleurlobject;
     [users release];
 }
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
+//    NSLog(@"Error!:%@",error);
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -543,7 +543,7 @@ static char handleurlobject;
             };
             request.onDidFailLoadWithError=^(NSError *error){
 //                [spin setHidden:YES];
-                NSLog(@"error %@",error);
+//                NSLog(@"error %@",error);
             };
         }];
     }

@@ -896,7 +896,7 @@
 #pragma mark Relayout methods
 - (void)relayoutUI{
     if (layoutDirty == YES){
-        NSLog(@"relayoutUI");
+//        NSLog(@"relayoutUI");
         //CGRect f = self.view.frame;
         CGRect c = container.frame;
         
@@ -1157,11 +1157,11 @@
 }
 
 - (void)mapView:(MKMapView *)map didSelectAnnotationView:(MKAnnotationView *)view{
-    NSLog(@"Click on the annotation");
+//    NSLog(@"Click on the annotation");
 }
 
 - (void)onClick:(id)sender{
-    NSLog(@"Click to Navigation");
+//    NSLog(@"Click to Navigation");
 }
 
 - (void) showMenu:(Invitation*)_invitation items:(NSArray*)itemslist{
@@ -1313,7 +1313,7 @@
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
         [app GatherCrossDidFinish];
     }else{
-        NSLog(@"gather error");
+//        NSLog(@"gather error");
     }
 
 //    NSLog(@"%@",objects);
@@ -1324,7 +1324,7 @@
     
 }
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"%@",error);
+//    NSLog(@"%@",error);
 }
 
 #pragma mark UIPickerviewDatasource methods

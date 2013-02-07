@@ -1677,7 +1677,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1268"
          endingLineNumber = "1268"
-         landmarkName = "-showTimeEditMenu:"
+         landmarkName = "-mapView:annotationView:calloutAccessoryControlTapped:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1820,7 +1820,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1548"
          endingLineNumber = "1548"
-         landmarkName = "-toConversationAnimated:"
+         landmarkName = "-ShowPlaceView:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -2172,19 +2172,6 @@
          startingLineNumber = "187"
          endingLineNumber = "187"
          landmarkName = "-loadObjectsFromDataStore"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "EXFE/CrossCard.m"
-         timestampString = "381907170.87406"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "141"
-         endingLineNumber = "141"
-         landmarkName = "-setBannerimg:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint

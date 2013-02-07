@@ -93,7 +93,7 @@
         
         if (conversationCount > 0) {
             if (CGRectContainsPoint(convRect, location)) {
-                NSLog(@"CrossCard hit conversation");
+//                NSLog(@"CrossCard hit conversation");
                 if (delegate) {
                     [delegate onClickConversation:self];
                 }
@@ -136,10 +136,6 @@
   if(bannerimg!=nil){
     [bannerimg release];
   }
-//  if(image ==nil){
-//    if([self.title isEqualToString:@"看电影 007"])
-//      NSLog(@"draw nil image:%@ %@",self.title,image);
-//  }
 	bannerimg = [image copy];
 	[self setNeedsDisplay];
 }

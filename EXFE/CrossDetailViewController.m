@@ -860,7 +860,7 @@
 
 - (void)relayoutUIwithAnimation:(BOOL)Animated{
     if (layoutDirty == YES){
-        NSLog(@"relayoutUI");
+//        NSLog(@"relayoutUI");
         CGRect c = container.frame;
         
         float left = CONTAINER_VERTICAL_PADDING;
@@ -1229,7 +1229,7 @@
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
-    NSLog(@"Click to Navigation");
+//    NSLog(@"Click to Navigation");
     id<MKAnnotation> annotation = view.annotation;
     //NSString *title = annotation.title;
     CLLocationDegrees latitude = annotation.coordinate.latitude;
@@ -1581,8 +1581,8 @@
     Identity *myidentity=[self getMyInvitation].identity;
     NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:_invitation.identity.identity_id,@"identity_id",myidentity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
     
-    NSLog(@"%@",[rsvpdict JSONString]);
-    
+//    NSLog(@"%@",[rsvpdict JSONString]);
+  
     RKParams* rsvpParams = [RKParams params];
     [rsvpParams setValue:[NSString stringWithFormat:@"[%@]",[rsvpdict JSONString]] forParam:@"rsvp"];
     RKClient *client = [RKClient sharedClient];

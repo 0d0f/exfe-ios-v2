@@ -158,7 +158,7 @@
                     id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                     if(code){
                         if([code intValue]==200) {
-                            NSLog(@"%@",[body objectForKey:@"response"]);
+//                            NSLog(@"%@",[body objectForKey:@"response"]);
                             NSDictionary *cross_time=[[body objectForKey:@"response"] objectForKey:@"cross_time"];
                             NSDictionary *begin_at=[cross_time objectForKey:@"begin_at"];
 //                            if(_crosstime==nil){
@@ -214,7 +214,7 @@
             datetimestr=[NSString stringWithFormat:@"%@ %@",_crosstime.begin_at.date,_crosstime.begin_at.time];
             NSDate *date=[dateformat dateFromString:datetimestr];
             if(date){
-                NSLog(@"set datepicker %@",date);
+//                NSLog(@"set datepicker %@",date);
                 [datepicker setDate:date];
             }
         }

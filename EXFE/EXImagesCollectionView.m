@@ -244,7 +244,7 @@
                 [_delegate imageCollectionView:self didSelectRowAtIndex:i row:y_count col:x_count frame:rect];
             }
             else if (countidx==allcount+1){
-                NSLog(@"click the sum grid: x=%i y=%i count=%i",x_count,y_count,allcount);
+//                NSLog(@"click the sum grid: x=%i y=%i count=%i",x_count,y_count,allcount);
             }
         }
         x_count++;
