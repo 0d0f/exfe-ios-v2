@@ -398,7 +398,7 @@
         [buttonsignout addTarget:self action:@selector(Logout) forControlEvents:UIControlEventTouchUpInside];
         [footerView addSubview:buttonsignout];
 
-        UIUnderlinedButton *buttonrome = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
+        UIButton *buttonrome = [UIButton buttonWithType:UIButtonTypeCustom];
         [buttonrome setTitle:@"“Rome wasn't built in a day.”" forState:UIControlStateNormal];
         [buttonrome.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:16]];
         [buttonrome setTitleColor:[UIColor COLOR_RGB(127, 127, 127)] forState:UIControlStateNormal];

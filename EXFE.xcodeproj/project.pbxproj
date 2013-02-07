@@ -328,7 +328,6 @@
 		78CD517D15EF61CF00086036 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD517915EF61CF00086036 /* Icon.png */; };
 		78CD517E15EF61CF00086036 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD517A15EF61CF00086036 /* Icon@2x.png */; };
 		78CD518115EF620600086036 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD517F15EF620600086036 /* iTunesArtwork.png */; };
-		78CD518215EF620600086036 /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD518015EF620600086036 /* iTunesArtwork@2x.png */; };
 		78CEBFF015BFE7BE002BCA27 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		78CEBFF115BFE7BE002BCA27 /* ExfeeInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78CEBFEF15BFE7BE002BCA27 /* ExfeeInputViewController.xib */; };
 		78D0A600158CFB4C00401BCA /* OAuthLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */; };
@@ -847,7 +846,6 @@
 		78CD517915EF61CF00086036 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		78CD517A15EF61CF00086036 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		78CD517F15EF620600086036 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
-		78CD518015EF620600086036 /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork@2x.png"; sourceTree = "<group>"; };
 		78CEBFED15BFE7BE002BCA27 /* ExfeeInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExfeeInputViewController.h; sourceTree = "<group>"; };
 		78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExfeeInputViewController.m; sourceTree = "<group>"; };
 		78CEBFEF15BFE7BE002BCA27 /* ExfeeInputViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExfeeInputViewController.xib; sourceTree = "<group>"; };
@@ -1715,7 +1713,6 @@
 				78CD517915EF61CF00086036 /* Icon.png */,
 				78CD517A15EF61CF00086036 /* Icon@2x.png */,
 				78CD517F15EF620600086036 /* iTunesArtwork.png */,
-				78CD518015EF620600086036 /* iTunesArtwork@2x.png */,
 			);
 			name = appstore;
 			sourceTree = "<group>";
@@ -1987,7 +1984,6 @@
 				78CD517D15EF61CF00086036 /* Icon.png in Resources */,
 				78CD517E15EF61CF00086036 /* Icon@2x.png in Resources */,
 				78CD518115EF620600086036 /* iTunesArtwork.png in Resources */,
-				78CD518215EF620600086036 /* iTunesArtwork@2x.png in Resources */,
 				7889C7BC15F46A3500609B12 /* xlist_slash@2x.png in Resources */,
 				7889C7BD15F46A3500609B12 /* xlist_slash.png in Resources */,
 				78964B7515F72E090084C85E /* xlist_cell_number_area.png in Resources */,
