@@ -637,12 +637,7 @@
             if (time == nil || time.length == 0) {
                 cell.time = @"";
             }else{
-                NSString *tz = [cross.time.begin_at getTimeZoneString];
-                if (tz != nil && tz.length > 0) {
-                    cell.time = [NSString stringWithFormat:@"%@ %@", time, tz];
-                }else{
-                    cell.time = [NSString stringWithFormat:@"%@", time];;
-                }
+                cell.time = [NSString stringWithFormat:@"%@", time];
             }
             //[time release];
         }else{
@@ -724,9 +719,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(indexPath.section == 0){
-        return 66;
+        return 64;
     }else {
-        return 90.0;
+        return 90;
     }
 }
 

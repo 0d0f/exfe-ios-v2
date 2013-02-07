@@ -146,11 +146,11 @@
         [headerView addSubview:dectorMask];
         [dectorMask release];
         
-        titleView = [[UILabel alloc] initWithFrame:CGRectMake(25, 10, 290, 25)];
+        titleView = [[UILabel alloc] initWithFrame:CGRectMake(25, 10, 260, 25)];
         titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
         titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         titleView.backgroundColor = [UIColor clearColor];
-        titleView.lineBreakMode = UILineBreakModeClip;
+        titleView.lineBreakMode = UILineBreakModeTailTruncation;
         titleView.numberOfLines = 1;
         titleView.textAlignment = NSTextAlignmentCenter;
         titleView.shadowColor = [UIColor blackColor];

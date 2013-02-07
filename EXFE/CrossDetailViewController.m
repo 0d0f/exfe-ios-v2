@@ -496,6 +496,7 @@
        
         [self hidePopupIfShown];
         if (descView.hidden == NO && CGRectContainsPoint([Util expandRect:descView.frame], locInContainer)) {
+            [self showTimeEditMenu:descView];
             [self clickforTitleAndDescEdit:descView];
             return;
         }
@@ -520,6 +521,7 @@
             r3 = timeZoneView.frame;
         }
         if (CGRectContainsPoint([Util expandRect:r1 with:r2 with:r3], locInContainer)) {
+            [self showTimeEditMenu:timeRelView];
             [self clickforTimeEdit:timeRelView];
             return;
         }
@@ -533,6 +535,7 @@
             r2 = placeDescView.frame;
         }
         if (CGRectContainsPoint([Util expandRect:r1 with:r2], locInContainer)) {
+            [self showPlaceEditMenu:placeTitleView];
             [self clickforPlaceEdit:placeTitleView];
             return;
         }
@@ -1298,16 +1301,18 @@
 
 - (void)clickforTitleAndDescEdit:(id)sender{
     [self showTitleAndDescView];
-    [self hidePopupIfShown]; // title & desc need the current popupctrlid info to determing the focus. keep the sequence.
+    [self performSelector:@selector(hidePopupIfShown) withObject:sender afterDelay:1];
+    // title & desc need the current popupctrlid info to determing the focus. keep the sequence.
 }
 
 - (void)clickforTimeEdit:(id)sender{
-    [self hidePopupIfShown];
+    [self performSelector:@selector(hidePopupIfShown) withObject:sender afterDelay:1];
+    //[self hidePopupIfShown];
     [self showTimeView];
 }
 
 - (void)clickforPlaceEdit:(id)sender{
-    [self hidePopupIfShown];
+    [self performSelector:@selector(hidePopupIfShown) withObject:sender afterDelay:1];
     [self ShowPlaceView:@"search"];
 }
 
@@ -1332,7 +1337,7 @@
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
-    [titleAndDescEditMenu setFrame:CGRectOffset(titleAndDescEditMenu.frame, 0 - CGRectGetWidth(titleAndDescEditMenu.frame), 0)];
+    [titleAndDescEditMenu setFrame:CGRectOffset(titleAndDescEditMenu.frame, 2 - CGRectGetWidth(titleAndDescEditMenu.frame), 0)];
     [UIView commitAnimations];
 }
 
@@ -1376,7 +1381,7 @@
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
-    [timeEditMenu setFrame:CGRectOffset(timeEditMenu.frame, 0 - CGRectGetWidth(timeEditMenu.frame), 0)];
+    [timeEditMenu setFrame:CGRectOffset(timeEditMenu.frame, 2 - CGRectGetWidth(timeEditMenu.frame), 0)];
     [UIView commitAnimations];
 }
 
@@ -1419,7 +1424,7 @@
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
-    [placeEditMenu setFrame:CGRectOffset(placeEditMenu.frame, 0 - CGRectGetWidth(placeEditMenu.frame), 0)];
+    [placeEditMenu setFrame:CGRectOffset(placeEditMenu.frame, 2 - CGRectGetWidth(placeEditMenu.frame), 0)];
     [UIView commitAnimations];
 }
 

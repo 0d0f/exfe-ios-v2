@@ -49,14 +49,15 @@
     
     [self.view addSubview:toolbar];
     
-    EXAttributedLabel *viewtitle=[[EXAttributedLabel alloc] initWithFrame:CGRectMake(30, (44-30)/2, self.view.frame.size.width-30-60, 30)];
+    EXAttributedLabel *viewtitle=[[EXAttributedLabel alloc] initWithFrame:CGRectMake(60, (44-30)/2, self.view.frame.size.width-60-60, 30)];
     viewtitle.backgroundColor=[UIColor clearColor];
 
-    NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Edit ·X·"];
+     NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Title & Description"];
+   // NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Edit ·X·"];
     CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
-    [titlestr addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0, 8)];
-    [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_51.CGColor range:NSMakeRange(0,4)];
-    [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(5,3)];
+    [titlestr addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0, titlestr.length)];
+    [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_51.CGColor range:NSMakeRange(0,titlestr.length)];
+    //[titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(5,3)];
 
     
     CTTextAlignment alignment = kCTCenterTextAlignment;
@@ -95,13 +96,13 @@
     [toolbar addSubview:doneButton];
 //    [toolbar setHidden:YES];
     
-    descView = [[UITextView alloc] initWithFrame:CGRectMake(10, CGRectGetHeight(toolbar.frame) + DECTOR_HEIGHT, self.view.frame.size.width-20, self.view.frame.size.height - DECTOR_HEIGHT - CGRectGetHeight(toolbar.frame))];
+    descView = [[SSTextView alloc] initWithFrame:CGRectMake(10, CGRectGetHeight(toolbar.frame) + DECTOR_HEIGHT, self.view.frame.size.width-20, self.view.frame.size.height - DECTOR_HEIGHT - CGRectGetHeight(toolbar.frame))];
     descView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
     descView.backgroundColor = [UIColor clearColor];
     descView.textAlignment = NSTextAlignmentLeft;
     descView.backgroundColor=[UIColor whiteColor];
     descView.contentInset = UIEdgeInsetsMake(8, 0, 0, 0);
-    descView.text=@"Take some note";
+    descView.placeholder = @"Take some note";
     [self.view addSubview:descView];
 
     headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90,  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
