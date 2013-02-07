@@ -563,7 +563,6 @@
                     });
                     dispatch_release(imgQueue);
                 }else{
-                    NSLog(@"Cache profile img");
                     headerView.avatar = avatarImg;
                 }
             }
@@ -581,6 +580,7 @@
             cell = [[[CrossCard alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
         }
         Cross *cross=[_crosses objectAtIndex:indexPath.row ];
+        cell.cross_id=cross.cross_id;
         cell.hlTitle = NO;
         cell.hlPlace = NO;
         cell.hlTime = NO;
@@ -644,76 +644,81 @@
             cell.time = @"";
         }
 //
-        cell.avatar = nil;
+//        cell.avatar = nil;
+        NSString *avatarimgurl=nil;
         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         for(Invitation *invitation in cross.exfee.invitations) {
             if ([invitation.identity.connected_user_id intValue]== app.userid) {
                 if(invitation && invitation.invited_by &&
                    invitation.invited_by.avatar_filename ) {
-                    UIImage *avatarImg=[[ImgCache sharedManager] getImgFromCache:invitation.invited_by.avatar_filename];
-                    if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
-                        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                        dispatch_async(imgQueue, ^{
-                            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:invitation.invited_by.avatar_filename];
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
-                                    cell.avatar=avatar;
-                                }
-                            });
-                        });
-                        dispatch_release(imgQueue);
-                    }else{
-                        cell.avatar = avatarImg;
-                        [cell setNeedsDisplay];
-                    }
-                }else{
-                    cell.avatar = nil;
+                    avatarimgurl=invitation.invited_by.avatar_filename;
+                    break;
                 }
-                break;
+//                else{
+//                    cell.avatar = nil;
+//                }
             }
         }
-        
+        if(avatarimgurl==nil)
+          cell.avatar = nil;
+        else{
+          UIImage *avatarImg=[[ImgCache sharedManager] getImgFromCache:avatarimgurl];
+          if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+              UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatarimgurl];
+              dispatch_async(dispatch_get_main_queue(), ^{
+                if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
+                  cell.avatar=avatar;
+                }
+              });
+            });
+            dispatch_release(imgQueue);
+          }else{
+            cell.avatar = avatarImg;
+          }
+        }
+      NSString *backimgurl=nil;
         NSArray *widgets = cross.widget;
         for(NSDictionary *widget in widgets) {
             if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-                NSString *imgurl=[Util getBackgroundLink:[widget objectForKey:@"image"]];
-                CGSize targetSize = CGSizeMake((320 - CARD_VERTICAL_MARGIN * 2) * [UIScreen mainScreen].scale, 44 * [UIScreen mainScreen].scale);
-                UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:imgurl withSize:targetSize];
-                if(backimg == nil || [backimg isEqual:[NSNull null]]){
-                  cell.bannerimg=nil;
-//                  NSLog(@"set img nil");
-                }
-                else{
-                  cell.bannerimg=backimg;
-//                  NSLog(@"set cache img:%@",imgurl);
-                }
-                if(cell.bannerimg==nil){
-                  dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                  dispatch_async(imgQueue, ^{
-                      UIImage *image=[[ImgCache sharedManager] getImgFrom:imgurl withSize:targetSize];
-                      dispatch_async(dispatch_get_main_queue(), ^{
-                          if(image!=nil && ![image isEqual:[NSNull null]]){
-//                            NSLog(@"set img:%@",imgurl);
-                            cell.bannerimg = image;
-                          }else{
-                            cell.bannerimg=nil;
-//                            NSLog(@"set nil:%@",imgurl);
-                          }
-                      });
-                  });
-                  dispatch_release(imgQueue);
-                  break;
-                }
+                backimgurl=[Util getBackgroundLink:[widget objectForKey:@"image"]];
             }
         }
+      CGSize targetSize = CGSizeMake((320 - CARD_VERTICAL_MARGIN * 2) * [UIScreen mainScreen].scale, 44 * [UIScreen mainScreen].scale);
+      if(backimgurl==nil || backimgurl.length<=5){
+        cell.bannerimg=nil;
+      }else{
+        NSString *extname=[backimgurl substringFromIndex:[backimgurl length]-3];
+        if([extname isEqualToString:@"bg/"]){
+          cell.bannerimg=nil;
+        }else{
+          UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:backimgurl withSize:targetSize];
+          if(backimg != nil && ![backimg isEqual:[NSNull null]]){
+            cell.bannerimg=backimg;
+          }
+          else
+          {
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+              UIImage *image=[[ImgCache sharedManager] getImgFrom:backimgurl withSize:targetSize];
+              cell.bannerimg=nil;
+              dispatch_async(dispatch_get_main_queue(), ^{
+                cell.bannerimg = image;
+              });
+            });
+            dispatch_release(imgQueue);
+          }
+        }
+      }
+
         cell.delegate = self;
-        cell.cross_id = cross.cross_id;
-        
+      
         return cell;
     }else{
         return nil;
     }
-    
+  
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
