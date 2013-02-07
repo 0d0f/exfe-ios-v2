@@ -637,12 +637,7 @@
             if (time == nil || time.length == 0) {
                 cell.time = @"";
             }else{
-                NSString *tz = [cross.time.begin_at getTimeZoneString];
-                if (tz != nil && tz.length > 0) {
-                    cell.time = [NSString stringWithFormat:@"%@ %@", time, tz];
-                }else{
-                    cell.time = [NSString stringWithFormat:@"%@", time];;
-                }
+                cell.time = [NSString stringWithFormat:@"%@", time];
             }
             //[time release];
         }else{
