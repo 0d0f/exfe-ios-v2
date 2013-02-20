@@ -129,6 +129,8 @@
 
 
 - (void)gotoBack:(UIButton*)sender{
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    [manager.requestQueue cancelAllRequests];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

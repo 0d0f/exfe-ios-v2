@@ -53,7 +53,7 @@
     Cross* cross;
     User* default_user;
     
-    NSArray *exfeeInvitations;
+    NSMutableArray *exfeeInvitations;
     EXRSVPStatusView *rsvpstatusview;
     CGFloat exfeeSuggestHeight;
     EXRSVPMenuView *rsvpmenu;
@@ -78,6 +78,7 @@
 - (void)hideMenuWithAnimation:(BOOL)animated;
 - (void)hideStatusView;
 - (void)reloadStatusview:(Invitation*)_invitation;
+- (BOOL) isMe:(Identity*)my_identity;
 
 #pragma mark UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;

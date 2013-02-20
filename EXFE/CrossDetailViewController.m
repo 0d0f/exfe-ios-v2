@@ -245,6 +245,23 @@
     [self.view  addSubview:btnBack];
     
     self.view.backgroundColor = [UIColor grayColor];
+  
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSFetchRequest* request = [User fetchRequest];
+    NSPredicate *predicate = [NSPredicate
+                              predicateWithFormat:@"user_id = %u", app.userid];
+    [request setPredicate:predicate];
+    NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    if(cross==nil){
+      cross=[Cross object];
+      cross.cross_description=@"";
+    }
+    if(users!=nil && [users count] >0)
+    {
+      default_user=[[users objectAtIndex:0] retain];
+    }
+    [users release];
+
 }
 
 - (void)hideWidgetTabBar{
@@ -695,7 +712,7 @@
     int accepts = 0;
     
     for(Invitation *invitation in invitations) {
-        if ([invitation.identity.connected_user_id intValue]== app.userid) {
+      if([self isMe:invitation.identity]){
             [exfee insertObject:invitation atIndex:myself];
             myself ++;
         }else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
@@ -710,7 +727,7 @@
         [exfeeInvitations release];
         exfeeInvitations = nil;
     }
-    exfeeInvitations = [[NSArray alloc] initWithArray:exfee];
+    exfeeInvitations = [[NSMutableArray alloc] initWithArray:exfee];
     [exfee release];
     [exfeeShowview reloadData];
 }
@@ -1000,19 +1017,25 @@
     layoutDirty = NO;
 }
 
+- (BOOL) isMe:(Identity*)my_identity{
+  for(Identity *_identity in default_user.identities){
+    if([_identity.identity_id isEqual:my_identity.identity_id])
+      return YES;
+  }
+  return NO;
+  
+}
+
+
 #pragma mark EXImagesCollectionView Datasource methods
 
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
     return [exfeeInvitations count];
 }
 - (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index{
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
     Invitation *invitation =[exfeeInvitations objectAtIndex:index];
-    
     EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
-    
-    if(app.userid ==[invitation.identity.connected_user_id intValue]){
+    if([self isMe:invitation.identity]){
         item.isMe = YES;
     }
     
@@ -1039,34 +1062,10 @@
             dispatch_release(imgQueue);
         }
     }
-//    item.isHost = [invitation.host boolValue];
-//    item.mates = [invitation.mates intValue];
-//    item.rsvp_status = invitation.rsvp_status;
-    //    NSString *name=identity.name;
-    //    if(name==nil)
-    //        name=identity.external_username;
-    //    if(name==nil)
-    //        name=identity.external_id;
-    //    item.name=name;
-    //[arr release];
     return item;
 }
 
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
-    
-//    if(viewmode==YES && exfeeShowview.editmode==NO)
-//    {
-//        if(height==120 && [exfeeIdentities count]==6)
-//            return;
-//    }
-//    [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
-//    [exfeeShowview calculateColumn];
-    //    if(viewmode==NO || exfeeShowview.editmode==YES){
-//    [self reArrangeViews];
-    //    }
-    
-    //    [exfeeIdentities count]
-    //NSLog(@"Exfee Collection should resize to %f", height);
     if (height > 0){
         exfeeSuggestHeight = height;
     }
@@ -1112,7 +1111,8 @@
         if(rsvpstatus_x+rsvpstatusview.frame.size.width>self.view.frame.size.width)
             rsvpstatus_x=self.view.frame.size.width-rsvpstatusview.frame.size.width;
         
-        if(app.userid ==[invitation.identity.connected_user_id intValue]){
+        //if(app.userid ==[invitation.identity.connected_user_id intValue]){
+        if([self isMe:invitation.identity]){
             NSInteger ctrlId = popupCtrolId;
             [self hidePopupIfShown:kPopupTypeEditStatus];
             if (ctrlId != kPopupTypeEditStatus) {
@@ -1571,7 +1571,9 @@
 }
 
 - (void) goBack{
-    [self.navigationController popToRootViewControllerAnimated:YES];
+  RKObjectManager* manager =[RKObjectManager sharedManager];
+  [manager.requestQueue cancelAllRequests];
+  [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark API request for modification.
@@ -1702,7 +1704,8 @@
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     for(Invitation *invitation in exfeeInvitations)
     {
-        if([invitation.identity.connected_user_id intValue] == app.userid)
+//        if([invitation.identity.connected_user_id intValue] == app.userid)
+          if([self isMe:invitation.identity])
             return invitation;
     }
     return nil;
@@ -1713,6 +1716,7 @@
         exfeeInvitations = [[NSMutableArray alloc] initWithArray:invitations];
     else{
         for(Invitation *invitation in invitations){
+          
             [exfeeInvitations addObject:invitation];
         }
     }
