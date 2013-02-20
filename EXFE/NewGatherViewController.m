@@ -566,13 +566,13 @@
     if(title_be_edit == NO){
         int count = 0;
         for(Invitation *invitation in exfeeInvitations){
-            if(count==3){
+            if(count == 3){
                 break;
             }
-            newtitle = [newtitle stringByAppendingFormat:@"%@", invitation.identity.name];
             if(count < 3 && count >= 1){
                 newtitle = [newtitle stringByAppendingString:@", "];
             }
+            newtitle = [newtitle stringByAppendingFormat:@"%@", invitation.identity.name];
             count++;
         }
         cross.title = newtitle;
