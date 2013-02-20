@@ -38,30 +38,25 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     CGRect b = self.view.bounds;
+    CGRect a = [UIScreen mainScreen].applicationFrame;
     
-    UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 88)];
+    UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 88 + 20)];
     header.backgroundColor = [UIColor grayColor];
     [self.view addSubview:header];
     [header release];
     
-    UIView* container = [[UIView alloc] initWithFrame:CGRectMake(0, 88, 320, CGRectGetHeight(b) - 88)];
-    container.backgroundColor = [UIColor lightGrayColor];
-    CGRect bounds = container.bounds;
-    CAShapeLayer *maskLayer = [CAShapeLayer layer];
-    UIBezierPath *curvePath = [UIBezierPath bezierPath];
-    [curvePath moveToPoint:CGPointMake(0, 0)];
-    [curvePath addLineToPoint:CGPointMake(0, CGRectGetMaxY(bounds))];
-    [curvePath addLineToPoint:CGPointMake(CGRectGetMaxX(bounds), CGRectGetMaxY(bounds))];
-    [curvePath addLineToPoint:CGPointMake(CGRectGetMaxX(bounds), 15)];
-    [curvePath addLineToPoint:CGPointMake(CGRectGetMaxX(bounds) - 12, 15)];
-    [curvePath addCurveToPoint:CGPointMake(CGRectGetMaxX(bounds) - 90, 0) controlPoint1:CGPointMake(CGRectGetMaxX(bounds) - 90 + 32, 15) controlPoint2:CGPointMake(CGRectGetMaxX(bounds) - 12 - 32, 0)];
-    //[curvePath addLineToPoint:CGPointMake(CGRectGetMaxX(bounds) - 90, 0)];
-    [curvePath closePath];
-    maskLayer.path = [curvePath CGPath];
-    container.layer.mask = maskLayer;
-    container.layer.masksToBounds = YES;
+    UIScrollView* container = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 88, 320, CGRectGetHeight(a) - 88)];
+    container.alwaysBounceVertical = YES;
+    container.backgroundColor = [UIColor clearColor];
+    
+    UIView* sample = [[UIView alloc] initWithFrame:container.bounds];
+    sample.backgroundColor = [UIColor redColor];
+    [container addSubview:sample];
+    [sample release];
+    
     [self.view addSubview:container];
     [container release];
+    
     
     UIButton* btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
