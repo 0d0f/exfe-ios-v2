@@ -57,6 +57,8 @@
 		4FC8FCE8168D7E5700409779 /* Place+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCE7168D7E5700409779 /* Place+Helper.m */; };
 		4FC8FCEB168D912E00409779 /* EFTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCEA168D912E00409779 /* EFTime+Helper.m */; };
 		4FD4DD7416A68674003F1A55 /* EXWidgetTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */; };
+		4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */; };
+		4FD9375516D4A57600ED6677 /* CrossGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */; };
 		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
@@ -501,6 +503,9 @@
 		4FC8FCEA168D912E00409779 /* EFTime+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFTime+Helper.m"; sourceTree = "<group>"; };
 		4FD4DD7216A68674003F1A55 /* EXWidgetTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXWidgetTabBar.h; sourceTree = "<group>"; };
 		4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXWidgetTabBar.m; sourceTree = "<group>"; };
+		4FD9375116D4A57600ED6677 /* CrossGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossGroupViewController.h; sourceTree = "<group>"; };
+		4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossGroupViewController.m; sourceTree = "<group>"; };
+		4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossGroupViewController.xib; sourceTree = "<group>"; };
 		4FE8D3C51681926C00222420 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4FE8D3C61681926C00222420 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		4FE8D3C71681926C00222420 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
@@ -1189,6 +1194,9 @@
 				78606CE5169AD2900014806A /* TitleDescEditViewController.m */,
 				78606CE6169AD2910014806A /* TitleDescEditViewController.xib */,
 				4F3C6D8016ACEE670095AA50 /* EditCrossDelegate.h */,
+				4FD9375116D4A57600ED6677 /* CrossGroupViewController.h */,
+				4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */,
+				4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */,
 			);
 			name = Cross;
 			sourceTree = "<group>";
@@ -2120,6 +2128,7 @@
 				7879B4E416C1131E00D3BE3C /* portrait_circle_tri@2x.png in Resources */,
 				4F9105ED16C256E700E524AC /* x_shadow.png in Resources */,
 				4F9105EE16C256E700E524AC /* x_shadow@2x.png in Resources */,
+				4FD9375516D4A57600ED6677 /* CrossGroupViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2261,6 +2270,7 @@
 				7879B47916BE77B200D3BE3C /* LocalContact.m in Sources */,
 				4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */,
 				4F9105E616C2349400E524AC /* UIBorderLabel.m in Sources */,
+				4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
