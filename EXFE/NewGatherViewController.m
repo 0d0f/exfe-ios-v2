@@ -573,10 +573,10 @@
             if(count==3){
                 break;
             }
-            newtitle = [newtitle stringByAppendingFormat:@"%@", invitation.identity.name];
             if(count < 3 && count >= 1){
                 newtitle = [newtitle stringByAppendingString:@", "];
             }
+            newtitle = [newtitle stringByAppendingFormat:@"%@", invitation.identity.name];
             count++;
         }
         cross.title = newtitle;
