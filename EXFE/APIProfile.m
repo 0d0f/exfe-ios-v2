@@ -83,6 +83,7 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"/identities/complete?key=%@",key];
     RKObjectManager* manager =[RKObjectManager sharedManager];
+    [manager.requestQueue cancelAllRequests];
     [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
 
     [manager.client setValue:app.accesstoken forHTTPHeaderField:@"token"];

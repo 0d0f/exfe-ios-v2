@@ -73,14 +73,14 @@ static char handleurlobject;
     if(login==NO){
         [self ShowLanding];
     }
-    //NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
-    
-//    if(!ifdevicetokenSave && login==YES)
-//    {
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
-//    }
+//    NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
+  
+    if(login==YES)
+    {
+      [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
+    }
     crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
-	self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
 
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.rootViewController=self.navigationController;
@@ -165,7 +165,7 @@ static char handleurlobject;
         [APICrosses MappingRoute];
 //        NSString* devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"];
         NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
-        if(!ifdevicetokenSave)
+        if( ifdevicetokenSave==nil)
         {
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
         }
@@ -189,11 +189,10 @@ static char handleurlobject;
     NSString * tokenAsString = [[[deviceToken description]
                                  stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]]
                                 stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
+  
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
         return;
     
-    [[NSUserDefaults standardUserDefaults] setObject:tokenAsString forKey:@"udid"];
     
     RKParams* rsvpParams = [RKParams params];
     [rsvpParams setValue:tokenAsString forParam:@"udid"];
@@ -205,7 +204,8 @@ static char handleurlobject;
     
     RKClient *client = [RKClient sharedClient];
     [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    
+  
+  
     NSString *endpoint = [NSString stringWithFormat:@"/users/%u/regdevice?token=%@",self.userid,self.accesstoken];
     [client post:endpoint usingBlock:^(RKRequest *request){
         request.method=RKRequestMethodPOST;
@@ -219,6 +219,7 @@ static char handleurlobject;
                         if([code intValue]==200) {
                             //TODO: make sure the api response is ok.
                             [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"ifdevicetokenSave"];
+                            [[NSUserDefaults standardUserDefaults] setObject:tokenAsString forKey:@"udid"];
                         }
                 }
             }else {
@@ -421,6 +422,9 @@ static char handleurlobject;
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"ifdevicetokenSave"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"localaddressbook_read_at"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"udid"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"push_token"];
+  
     
     
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -506,7 +510,7 @@ static char handleurlobject;
     [users release];
 }
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
+//    NSLog(@"Error!:%@",error);
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -543,7 +547,7 @@ static char handleurlobject;
             };
             request.onDidFailLoadWithError=^(NSError *error){
 //                [spin setHidden:YES];
-                NSLog(@"error %@",error);
+//                NSLog(@"error %@",error);
             };
         }];
     }

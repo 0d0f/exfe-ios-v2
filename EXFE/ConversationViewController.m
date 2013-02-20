@@ -57,7 +57,7 @@
     [self.view setFrame:screenframe];
 
     [super viewDidLoad];
-    _tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, DECTOR_HEIGHT, CGRectGetWidth(self.view.bounds), self.view.frame.size.height-DECTOR_HEIGHT-kDefaultToolbarHeight)];
+    _tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, DECTOR_HEIGHT, CGRectGetWidth(self.view.bounds), self.view.frame.size.height-DECTOR_HEIGHT-kDefaultToolbarHeight+2)];
     _tableView.dataSource=self;
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
@@ -84,6 +84,7 @@
     CGRect toolbarframe=CGRectMake(0, screenframe.size.height-kDefaultToolbarHeight, screenframe.size.width, kDefaultToolbarHeight);
     
     inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
+    inputToolbar.backgroundColor=[UIColor clearColor];
     inputToolbar.delegate = self;
     inputToolbar.textView.delegate=self;
     [inputToolbar.textView.internalTextView setReturnKeyType:UIReturnKeySend];
@@ -332,6 +333,7 @@
         CGRect _tableviewrect=_tableView.frame;
             _tableviewrect.origin.y=-keyboardEndFrame.size.height+DECTOR_HEIGHT;
 //            _tableviewrect.size.height=-keyboardEndFrame.size.height;
+//          NSLog(@"tableview height:%f",_tableView.frame.size.height);
             [_tableView setFrame:_tableviewrect];
         }
     }
@@ -354,6 +356,7 @@
         if(_tableView.contentSize.height>_tableView.frame.size.height){
             CGRect _tableviewrect=_tableView.frame;
             _tableviewrect.origin.y=DECTOR_HEIGHT;
+//          NSLog(@"tableview height:%f",_tableView.frame.size.height);
             [_tableView setFrame:_tableviewrect];
         }
 
@@ -467,7 +470,7 @@
 //    toolbarframe.origin.y=screenframe.size.height-toolbarframe.size.height-kNavBarHeight-keyboardheight;
     
     CGRect toolbarframe=CGRectMake(0, screenframe.size.height-kDefaultToolbarHeight-DECTOR_HEIGHT-DECTOR_HEIGHT_EXTRA, screenframe.size.width, kDefaultToolbarHeight);
-
+  
     [inputToolbar setFrame:toolbarframe];
     
 }

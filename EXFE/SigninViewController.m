@@ -250,6 +250,8 @@
     textPassword.secureTextEntry=YES;
     [textPassword setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     [textPassword setTextColor:FONT_COLOR_25];
+    [textPassword addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventEditingChanged];
+
     [self.view addSubview:textPassword];
 
     textDisplayname=[[UITextField alloc] initWithFrame:CGRectMake(20, 120, 230, 40)];
@@ -262,6 +264,8 @@
     [textDisplayname setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     [textDisplayname setTextColor:FONT_COLOR_25];
     [textDisplayname setHidden:YES];
+    [textDisplayname addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventEditingChanged];
+
     [self.view addSubview:textDisplayname];
 
     
@@ -333,6 +337,15 @@
     [textDisplayname setHidden:NO];
     [divider setHidden:NO];
     [setupnewbtn setHidden:NO];
+  
+  if((textUsername.text != nil && textDisplayname.text.length >0) && (textDisplayname.text != nil && textDisplayname.text.length >0) && (textPassword.text != nil && textPassword.text.length >0)){
+    [setupnewbtn setEnabled:YES];
+    [setupnewbtn addTarget:self action:@selector(Signupnew:) forControlEvents:UIControlEventTouchUpInside];
+  }else{
+    [setupnewbtn removeTarget:self action:@selector(Signupnew:) forControlEvents:UIControlEventTouchUpInside];
+    [setupnewbtn setEnabled:NO];
+  }
+
     [loginbtn setHidden:YES];
 }
 - (void) welcomeButtonPress:(id) sender{
@@ -470,6 +483,15 @@
         [identityRightButton setImage:nil forState:UIControlStateNormal];
         identityLeftIcon.image=nil;
     }
+  
+  if((textUsername.text != nil && textDisplayname.text.length >0) && (textDisplayname.text != nil && textDisplayname.text.length >0) && (textPassword.text != nil && textPassword.text.length >0)){
+    [setupnewbtn setEnabled:YES];
+    [setupnewbtn addTarget:self action:@selector(Signupnew:) forControlEvents:UIControlEventTouchUpInside];
+  }else{
+    [setupnewbtn removeTarget:self action:@selector(Signupnew:) forControlEvents:UIControlEventTouchUpInside];
+    [setupnewbtn setEnabled:NO];
+  }
+
 }
 
 - (IBAction)showForgetPwd:(id)sender{

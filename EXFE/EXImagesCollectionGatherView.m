@@ -234,8 +234,7 @@
         y_count++;
     }
     [self setNeedsDisplay];
-    NSLog(@"max: %i %i",maxColumn,maxRow);
-    
+  
 }
 
 - (void) onImageTouch:(CGPoint) point{
@@ -256,9 +255,6 @@
             if(countidx<=allcount+1){
                 [_delegate imageCollectionView:self didSelectRowAtIndex:i row:y_count col:x_count frame:rect];
             }
-//            else if (countidx==allcount+1){
-//                NSLog(@"click the sum grid: x=%i y=%i count=%i",x_count,y_count,allcount);
-//            }
         }
         x_count++;
     }

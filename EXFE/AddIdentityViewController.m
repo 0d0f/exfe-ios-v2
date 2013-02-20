@@ -304,7 +304,7 @@
                         }
                         else{
                             if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
-                                NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
+//                                NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
                             }
                         }
                     }
@@ -315,7 +315,7 @@
         request.onDidFailLoadWithError=^(NSError *error){
             [spin setHidden:YES];
 
-            NSLog(@"error %@",error);
+//            NSLog(@"error %@",error);
             //                [MBProgressHUD hideHUDForView:self.view animated:YES];
         };
     }];
@@ -372,7 +372,7 @@
                         }
                         else{
                             if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
-                                NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
+//                                NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
                             }
                         }
                     }
@@ -381,7 +381,7 @@
             
         };
         request.onDidFailLoadWithError=^(NSError *error){
-            NSLog(@"error %@",error);
+//            NSLog(@"error %@",error);
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         };
     }];

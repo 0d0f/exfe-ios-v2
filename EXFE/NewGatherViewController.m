@@ -337,7 +337,7 @@
     NSPredicate *predicate = [NSPredicate
                               predicateWithFormat:@"user_id = %u", app.userid];
     [request setPredicate:predicate];
-	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    NSArray *users = [[User objectsWithFetchRequest:request] retain];
     if(cross==nil){
         cross=[Cross object];
         cross.cross_description=@"";
@@ -516,6 +516,10 @@
 //    [self.navigationController popToRootViewControllerAnimated:YES];
     if(cross)
         [[Cross currentContext] deleteObject:cross];
+
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    [manager.requestQueue cancelAllRequests];
+
     [self dismissModalViewControllerAnimated:YES];
 
 }
@@ -592,7 +596,14 @@
 - (IBAction) Gather:(id) sender{
 //    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"a_order" ascending:YES];
 //    NSArray *orderedIdentities=[default_user.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-  
+    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode=MBProgressHUDModeCustomView;
+    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+    [bigspin startAnimating];
+    hud.customView=bigspin;
+    [bigspin release];
+    hud.labelText = @"Loading";
+
     cross.by_identity=[orderedIdentities objectAtIndex:0];
     if(cross.time==nil){
         cross.time=[CrossTime object];
@@ -896,7 +907,7 @@
 #pragma mark Relayout methods
 - (void)relayoutUI{
     if (layoutDirty == YES){
-        NSLog(@"relayoutUI");
+//        NSLog(@"relayoutUI");
         //CGRect f = self.view.frame;
         CGRect c = container.frame;
         
@@ -1157,11 +1168,11 @@
 }
 
 - (void)mapView:(MKMapView *)map didSelectAnnotationView:(MKAnnotationView *)view{
-    NSLog(@"Click on the annotation");
+//    NSLog(@"Click on the annotation");
 }
 
 - (void)onClick:(id)sender{
-    NSLog(@"Click to Navigation");
+//    NSLog(@"Click to Navigation");
 }
 
 - (void) showMenu:(Invitation*)_invitation items:(NSArray*)itemslist{
@@ -1307,24 +1318,19 @@
 #pragma mark RKObjectLoaderDelegate methods
 
 - (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
     if([objects count]>0)
     {
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
         [app GatherCrossDidFinish];
     }else{
-        NSLog(@"gather error");
+//        NSLog(@"gather error");
     }
-
-//    NSLog(@"%@",objects);
-//    if([objects count]>0){
-//        
-//        [self fillExfee];
-//    }
-    
+  
 }
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"%@",error);
+  [MBProgressHUD hideHUDForView:self.view animated:YES];
+//    NSLog(@"%@",error);
 }
 
 #pragma mark UIPickerviewDatasource methods

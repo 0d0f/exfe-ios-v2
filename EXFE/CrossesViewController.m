@@ -553,11 +553,11 @@
                 if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
                     dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
                     dispatch_async(imgQueue, ^{
-                        NSLog(@"fetch profile img");
+//                        NSLog(@"fetch profile img");
                         UIImage *avatar = [[ImgCache sharedManager] getImgFrom:imgName];
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
-                                NSLog(@"fetched profile img");
+//                                NSLog(@"fetched profile img");
                                 headerView.avatar = avatar;
                                 [headerView setNeedsDisplay];
                             }

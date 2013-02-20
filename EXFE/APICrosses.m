@@ -17,6 +17,22 @@
 
 
 @implementation APICrosses
+//static id sharedManager = nil;
+//static RKRequestQueue *queue;
+//
+//
+//+ (id)sharedManager {
+//  @synchronized(self)
+//  {
+//    if (sharedManager == nil) {
+//      sharedManager = [[self alloc] init];
+//      queue=[RKRequestQueue newRequestQueueWithName:@"crosses"];
+//    }
+//  }
+//  return sharedManager;
+//}
+
+
 + (RKManagedObjectMapping*) getPlaceMapping{
     
     RKObjectManager* manager =[RKObjectManager sharedManager];

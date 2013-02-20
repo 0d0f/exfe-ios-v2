@@ -14,7 +14,10 @@
 #import "Exfee.h"
 #import "Meta.h"
 
-@interface APICrosses : NSObject 
+@interface APICrosses : NSObject {
+//  RKRequestQueue *queue;
+}
+//+ (id) sharedManager;
 +(void) MappingCross;
 +(void) MappingRoute;
 +(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source;
