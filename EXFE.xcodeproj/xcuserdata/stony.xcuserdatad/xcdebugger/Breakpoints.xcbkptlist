@@ -143,8 +143,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "856"
          endingLineNumber = "856"
-         landmarkName = "@implementation CrossDetailViewController"
-         landmarkType = "3">
+         landmarkName = "-fillConversationCount:"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
