@@ -10,7 +10,6 @@
 #import <MapKit/MapKit.h>
 #import <RestKit/JSONKit.h>
 #import <RestKit/RestKit.h>
-#import "EXCurveImageView.h"
 #import "Cross.h"
 #import "Identity.h"
 #import "Exfee.h"

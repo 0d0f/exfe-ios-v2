@@ -21,6 +21,8 @@
 #import "EFTime+Helper.h"
 #import "Place+Helper.h"
 
+#import "CrossGroupViewController.h"
+
 
 @interface CrossesViewController ()
 
@@ -763,15 +765,15 @@
             }
             
         }
-//        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-//        gatherViewController.cross=cross;
-//        [gatherViewController setViewMode];
-//        [self.navigationController pushViewController:gatherViewController animated:YES];
-//        [gatherViewController release];
         CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
         viewController.cross = cross;
         [self.navigationController pushViewController:viewController animated:YES];
         [viewController release];
+        
+//        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+//        viewController.cross = cross;
+//        [self.navigationController pushViewController:viewController animated:YES];
+//        [viewController release];
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         current_cellrow = indexPath.row;

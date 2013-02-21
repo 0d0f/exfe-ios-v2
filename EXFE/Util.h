@@ -33,7 +33,8 @@
 #define COLOR255(d) (d/255.0f)
 #define COLOR_RGBA(r,g,b,a) colorWithRed:COLOR255(r) green:COLOR255(g) blue:COLOR255(b) alpha:COLOR255(a)
 #define COLOR_RGB(r,g,b) colorWithRed:COLOR255(r) green:COLOR255(g) blue:COLOR255(b) alpha:1
-#define COLOR_WA(w,a) colorWithWhite:COLOR255(w)  alpha:COLOR255(a)
+#define COLOR_WA(w,a) colorWithWhite:COLOR255(w) alpha:COLOR255(a)
+#define COLOR_GR(gray) colorWithWhite:COLOR255(gray) alpha:1
 
 #define COLOR_EXFEE_BLUE          COLOR_RGB(0x37, 0x84,0xD5)
 
@@ -42,7 +43,7 @@
 #define COLOR_SNOW                COLOR_RGB(0xFA, 0xFA, 0xFA)
 #define COLOR_IRON                COLOR_RGB(0xDD, 0xDD, 0xDD)
 #define COLOR_ALUMINUM            COLOR_RGB(0xAA, 0xAA, 0xAA)
-#define COLOR_GREY                COLOR_RGB(0x80, 0x80, 0x80)
+#define COLOR_GRAY                COLOR_RGB(0x80, 0x80, 0x80)
 #define COLOR_CARBON              COLOR_RGB(0x33, 0x33, 0x33)
 #define COLOR_BLACK               COLOR_RGB(0x00, 0x00, 0x00)
 

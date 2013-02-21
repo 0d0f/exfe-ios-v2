@@ -34,7 +34,6 @@
 @interface NewGatherViewController : UIViewController <EXImagesCollectionGatherDataSource, EXImagesCollectionGatherDelegate, MKMapViewDelegate, EXRSVPMenuDelegate,UIGestureRecognizerDelegate,EditCrossDelegate,UIPickerViewDataSource,UIPickerViewDelegate,UIScrollViewDelegate>{
     
     UIScrollView *container;
-//    EXCurveImageView *dectorView;
     EXCurveView *headview;
     UIImageView *dectorView;
     EXLabel *descView;
