@@ -1235,12 +1235,14 @@
         {
             [exfeeInvitations removeObject:invitation];
             [exfeeShowview reloadData];
+            [self reFormatTitle];
             return;
         }
         if([menu.invitation.identity.identity_id intValue]==0){
             if([invitation.identity.external_id isEqualToString:menu.invitation.identity.external_id]){
                 [exfeeInvitations removeObject:invitation];
                 [exfeeShowview reloadData];
+                [self reFormatTitle];
                 return;
             }
         }
