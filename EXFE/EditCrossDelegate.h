@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "Invitation.h"
+#import "CrossTime+Helper.h"
+#import "Place+Helper.h"
 
 @protocol EditCrossDelegate <NSObject>
 
