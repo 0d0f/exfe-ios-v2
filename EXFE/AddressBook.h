@@ -12,6 +12,8 @@
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
 #import "LocalContact.h"
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
 
 @interface AddressBook : NSObject{
     UIView *parentview;

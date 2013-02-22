@@ -223,6 +223,7 @@
 		788A69F816A403AC003EA9ED /* xedit_textfield@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 788A69F616A403AC003EA9ED /* xedit_textfield@2x.png */; };
 		788A69FB16A4123F003EA9ED /* gather_add.png in Resources */ = {isa = PBXBuildFile; fileRef = 788A69F916A4123E003EA9ED /* gather_add.png */; };
 		788A69FC16A4123F003EA9ED /* gather_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 788A69FA16A4123F003EA9ED /* gather_add@2x.png */; };
+		788C736016D6292100BDD594 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 788C735F16D6292000BDD594 /* CoreTelephony.framework */; };
 		78920EBC157CB0E1004F3901 /* Rsvp.m in Sources */ = {isa = PBXBuildFile; fileRef = 78920EBB157CB0E1004F3901 /* Rsvp.m */; };
 		78964B7515F72E090084C85E /* xlist_cell_number_area.png in Resources */ = {isa = PBXBuildFile; fileRef = 78964B6315F72E090084C85E /* xlist_cell_number_area.png */; };
 		78964B7615F72E090084C85E /* xlist_cell_number_area@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78964B6415F72E090084C85E /* xlist_cell_number_area@2x.png */; };
@@ -716,6 +717,7 @@
 		788A69F616A403AC003EA9ED /* xedit_textfield@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xedit_textfield@2x.png"; sourceTree = "<group>"; };
 		788A69F916A4123E003EA9ED /* gather_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gather_add.png; sourceTree = "<group>"; };
 		788A69FA16A4123F003EA9ED /* gather_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gather_add@2x.png"; sourceTree = "<group>"; };
+		788C735F16D6292000BDD594 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		78920EBA157CB0E1004F3901 /* Rsvp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rsvp.h; sourceTree = "<group>"; };
 		78920EBB157CB0E1004F3901 /* Rsvp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rsvp.m; sourceTree = "<group>"; };
 		78964B6315F72E090084C85E /* xlist_cell_number_area.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xlist_cell_number_area.png; sourceTree = "<group>"; };
@@ -933,6 +935,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				788C736016D6292100BDD594 /* CoreTelephony.framework in Frameworks */,
 				7882F80316A68372004309DF /* CoreImage.framework in Frameworks */,
 				78C6BA0116634C6F00483D23 /* AddressBook.framework in Frameworks */,
 				78199C94160A626700A560F7 /* libRestKit.a in Frameworks */,
@@ -1486,6 +1489,7 @@
 		78A98E8A1560F832009E0806 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				788C735F16D6292000BDD594 /* CoreTelephony.framework */,
 				7882F80216A68372004309DF /* CoreImage.framework */,
 				78C6BA0016634C6F00483D23 /* AddressBook.framework */,
 				78AA793515CFB94C00883025 /* CoreText.framework */,

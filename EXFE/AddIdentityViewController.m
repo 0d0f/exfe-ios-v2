@@ -372,7 +372,6 @@
                         }
                         else{
                             if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
-//                                NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
                             }
                         }
                     }

@@ -1,9 +1,9 @@
 //
 //  LocalContact.m
-//  RestKit
+//  EXFE
 //
-//  Created by huoju on 1/30/13.
-//  Copyright (c) 2013 RestKit. All rights reserved.
+//  Created by huoju on 2/21/13.
+//
 //
 
 #import "LocalContact.h"
@@ -13,10 +13,11 @@
 
 @dynamic avatar;
 @dynamic emails;
+@dynamic im;
 @dynamic indexfield;
 @dynamic name;
 @dynamic social;
 @dynamic uid;
-@dynamic im;
+@dynamic phones;
 
 @end

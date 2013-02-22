@@ -73,6 +73,7 @@
         <attribute name="im" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="indexfield" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phones" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="social" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
@@ -127,7 +128,7 @@
         <element name="Exfee" positionX="160" positionY="192" width="128" height="120"/>
         <element name="Identity" positionX="160" positionY="267" width="128" height="285"/>
         <element name="Invitation" positionX="160" positionY="192" width="128" height="210"/>
-        <element name="LocalContact" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="LocalContact" positionX="160" positionY="192" width="128" height="165"/>
         <element name="Meta" positionX="160" positionY="192" width="128" height="90"/>
         <element name="Place" positionX="160" positionY="192" width="128" height="195"/>
         <element name="Post" positionX="160" positionY="192" width="128" height="135"/>
