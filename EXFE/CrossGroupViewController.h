@@ -62,8 +62,6 @@
     UIButton* btnBack;
     // Tab
     
-    
-    
 }
 
 @property (nonatomic,retain) UIViewController *currentViewController;

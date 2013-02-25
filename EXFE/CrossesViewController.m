@@ -765,15 +765,15 @@
             }
             
         }
-        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-        viewController.cross = cross;
-        [self.navigationController pushViewController:viewController animated:YES];
-        [viewController release];
-        
-//        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+//        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
 //        viewController.cross = cross;
 //        [self.navigationController pushViewController:viewController animated:YES];
 //        [viewController release];
+        
+        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+        viewController.cross = cross;
+        [self.navigationController pushViewController:viewController animated:YES];
+        [viewController release];
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         current_cellrow = indexPath.row;
