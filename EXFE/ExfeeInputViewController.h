@@ -56,13 +56,13 @@
 - (void) Close;
 - (Identity*) getIdentityFromLocal:(NSString*)input provider:(NSString*)provider;
 - (void) addBubbleByIdentity:(Identity*)identity input:(NSString*)input;
-- (void) addBubbleByInputString:(NSString*)input provider:(NSString*)provider;
+- (void) addBubbleByInputString:(NSString*)input name:(NSString*)name provider:(NSString*)provider;
 
 - (IBAction)textDidChange:(UITextField*)textField;
 - (IBAction)editingDidBegan:(UITextField*)textField;
 - (IBAction)editingDidEnd:(UITextField*)textField;
 //- (void) addByText;
-- (void) addByInputIdentity:(NSString*)input provider:(NSString*)provider dismiss:(BOOL)shoulddismiss;
+- (void) addByInputIdentity:(NSString*)input name:(NSString*)name provider:(NSString*)provider dismiss:(BOOL)shoulddismiss;
 - (void) loadIdentitiesFromDataStore:(NSString*)input;
 - (void) changeLeftIconWhite:(BOOL)iswhite;
 - (void) ErrorHint:(BOOL)hidden content:(NSString*)content;

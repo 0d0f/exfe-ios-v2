@@ -354,6 +354,7 @@ static char identitykey;
 
         for(NSDictionary *inputobj in inputobjs){
             NSString *input=[inputobj objectForKey:@"input"];
+            NSString *name=[inputobj objectForKey:@"name"];
             NSString *provider=[inputobj objectForKey:@"provider"];
             if([provider isEqualToString:@""])
                 provider=[Util findProvider:input];
@@ -361,7 +362,7 @@ static char identitykey;
             if(![provider isEqualToString:@""]) {
                 if(![json isEqualToString:@""])
                     json=[json stringByAppendingString:@","];
-                json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,input];
+                json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"name\":\"%@\",\"external_username\":\"%@\"}",provider,name,input];
             }
         }
         json=[NSString stringWithFormat:@"[%@]",json];
@@ -440,7 +441,7 @@ static char identitykey;
 - (void) done:(id)sender{
     NSString *inputtext=[exfeeList getInput];
     if(![inputtext isEqualToString:@""])
-        [self addByInputIdentity:inputtext provider:@"" dismiss:YES];
+      [self addByInputIdentity:inputtext name:@"" provider:@"" dismiss:YES];
     else{
         [self addExfeeToCross];
     }
@@ -563,15 +564,15 @@ static char identitykey;
     
 }
 
-- (void) addBubbleByInputString:(NSString*)input provider:(NSString*)provider{
-    NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:input,@"input",provider,@"provider", nil];
+- (void) addBubbleByInputString:(NSString*)input name:(NSString*)name provider:(NSString*)provider{
+    NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:input,@"input",name,@"name",provider,@"provider", nil];
     [exfeeList addBubble:input customObject:dict];
     if([exfeeList bubblecount]>0)
         [self changeLeftIconWhite:YES];
     
 }
 
-- (void) addByInputIdentity:(NSString*)input provider:(NSString*)provider dismiss:(BOOL)shoulddismiss{
+- (void) addByInputIdentity:(NSString*)input name:(NSString*)name provider:(NSString*)provider dismiss:(BOOL)shoulddismiss{
     Identity* identity=[self getIdentityFromLocal:input provider:provider];
     if(identity!=nil){
         [self addBubbleByIdentity:identity input:input];
@@ -581,8 +582,12 @@ static char identitykey;
     
     NSArray* inputs=[input componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@", "]];
     for(input in inputs){
-        [self addBubbleByInputString:input provider:provider];
+      if( [inputs count]>1)
+        [self addBubbleByInputString:input name:@"" provider:provider];
+      else
+        [self addBubbleByInputString:input name:name provider:provider];
     }
+
 }
 
 #pragma mark UITableView Datasource methods
@@ -650,6 +655,14 @@ static char identitykey;
             }
             
         }
+        if(person.phones!=nil){
+          NSArray *phones_array=[NSKeyedUnarchiver unarchiveObjectWithData:person.phones];
+          
+          if(phones_array!=nil && [phones_array isKindOfClass: [NSArray class]]){
+            [iconset addObject:[UIImage imageNamed:@"identity_phone_18_grey.png"]];
+          }
+        }
+
         cell.providerIconSet=iconset;
         cell.providerIcon=nil;
 
@@ -715,7 +728,7 @@ static char identitykey;
 {
     if(addressbookType==LOCAL_ADDRESSBOOK){
         LocalContact *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
-        [self addByInputIdentity:[[AddressBook getDefaultIdentity:person] objectForKey:@"external_id"] provider:[[AddressBook getDefaultIdentity:person] objectForKey:@"provider"] dismiss:NO];
+      [self addByInputIdentity:[[AddressBook getDefaultIdentity:person] objectForKey:@"external_id"] name:@"" provider:[[AddressBook getDefaultIdentity:person] objectForKey:@"provider"] dismiss:NO];
     }else{
         Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
         Invitation *invitation =[Invitation object];
@@ -776,7 +789,7 @@ static char identitykey;
     NSString *inputtext=[textfield.text stringByTrimmingCharactersInSet:
                          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-    [self addByInputIdentity:inputtext provider:@"" dismiss:NO];
+  [self addByInputIdentity:inputtext name:@"" provider:@"" dismiss:NO];
 }
 - (id)customObject:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
     NSDictionary *dictionary=[[[NSDictionary alloc] initWithObjectsAndKeys:input,@"name",@"id",@"id", nil ] autorelease];
@@ -945,6 +958,6 @@ static char identitykey;
 }
 - (void) selectidentity:(id)sender{
     NSDictionary *identity = (NSDictionary *)objc_getAssociatedObject(sender, &identitykey);
-    [self addByInputIdentity:[identity objectForKey:@"external_id"] provider:[identity objectForKey:@"provider"] dismiss:NO];
+  [self addByInputIdentity:[identity objectForKey:@"external_id"] name:[identity objectForKey:@"name"] provider:[identity objectForKey:@"provider"] dismiss:NO];
 }
 @end
