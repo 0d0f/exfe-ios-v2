@@ -18,7 +18,7 @@
         {
             signinbutton=[UIButton buttonWithType:UIButtonTypeCustom];
             [signinbutton setFrame:CGRectMake(14, 10, 126, 31)];
-            [signinbutton setTitle:@"Start with email" forState:UIControlStateNormal];
+            [signinbutton setTitle:@"Start" forState:UIControlStateNormal];
             [signinbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:14]];
             [signinbutton setTitleColor:FONT_COLOR_51 forState:UIControlStateNormal];
             [signinbutton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];

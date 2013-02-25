@@ -67,7 +67,7 @@
 - (IBAction)sendPwd:(id)sender;
 - (IBAction)sendVerify:(id)sender;
 - (void) backLandingView:(id)sender;
-- (void) setHintView:(NSString*)hintname;
+- (void) setHintView:(NSString*)hintname provider:(NSString*)provider;
 - (void) TwitterSigninButtonPress:(id)sender;
 - (void) setSignupView;
 - (void) setSigninView;

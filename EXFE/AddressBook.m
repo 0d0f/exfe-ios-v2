@@ -124,12 +124,10 @@
                   clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
                   clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
                   clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@" " withString:@""];
+                  clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"." withString:@""];
                   
                   NSString *cnphoneregex = @"1([3458]|7[1-8])\\d*";
                   NSPredicate *cnphoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", cnphoneregex];
-
-//                  NSString *usphoneprefixregex = @"[2-9](?!11)\\d{3,6}";
-//                  NSPredicate *usphoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", usphoneregex];
                   NSString *phoneresult=@"";
                   if([mcc isEqualToString:@"460"] || [isocode isEqualToString:@"cn"]){
                     if([[clean_phone substringToIndex:2] isEqualToString:@"00"])
@@ -220,6 +218,7 @@
 #define TWITTER_TYPE 1
 #define FACEBOOK_TYPE 2
 #define EMAIL_TYPE 3
+#define PHONE_TYPE 4
     if(person.social!=nil){
         NSArray *social_array=[NSKeyedUnarchiver unarchiveObjectWithData:person.social];
         if( social_array!=nil && [social_array isKindOfClass:[NSArray class]]){
@@ -257,8 +256,17 @@
         }
         
     }
+  
+    if(person.phones!=nil){
+      NSArray *phone_array=[NSKeyedUnarchiver unarchiveObjectWithData:person.phones];
+      if(phone_array!=nil && [phone_array isKindOfClass: [NSArray class]]){
+          NSString *phone=[phone_array objectAtIndex:0];
+          username=phone;
+          type=PHONE_TYPE;
+      }
+    }
 
-    
+  
     NSString *provider=@"";
     if(type==TWITTER_TYPE)
         provider=@"twitter";
@@ -266,6 +274,9 @@
         provider=@"facebook";
     else if(type==EMAIL_TYPE)
         provider=@"email";
+    else if(type==PHONE_TYPE)
+      provider=@"phone";
+  
     return [NSDictionary dictionaryWithObjectsAndKeys:provider,@"provider",username,@"external_id", nil] ;
 }
 
