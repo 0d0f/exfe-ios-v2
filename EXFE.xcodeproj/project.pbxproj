@@ -58,6 +58,8 @@
 		4FD4DD7416A68674003F1A55 /* EXWidgetTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */; };
 		4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */; };
 		4FD9375516D4A57600ED6677 /* CrossGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */; };
+		4FD9377116D7504500ED6677 /* WidgetConvViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9376F16D7504500ED6677 /* WidgetConvViewController.m */; };
+		4FD9377216D7504500ED6677 /* WidgetConvViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FD9377016D7504500ED6677 /* WidgetConvViewController.xib */; };
 		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
@@ -509,6 +511,9 @@
 		4FD9375116D4A57600ED6677 /* CrossGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossGroupViewController.h; sourceTree = "<group>"; };
 		4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossGroupViewController.m; sourceTree = "<group>"; };
 		4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossGroupViewController.xib; sourceTree = "<group>"; };
+		4FD9376E16D7504500ED6677 /* WidgetConvViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetConvViewController.h; sourceTree = "<group>"; };
+		4FD9376F16D7504500ED6677 /* WidgetConvViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetConvViewController.m; sourceTree = "<group>"; };
+		4FD9377016D7504500ED6677 /* WidgetConvViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WidgetConvViewController.xib; sourceTree = "<group>"; };
 		4FE8D3C51681926C00222420 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4FE8D3C61681926C00222420 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		4FE8D3C71681926C00222420 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
@@ -1090,6 +1095,9 @@
 		4FD9376316D6048200ED6677 /* Tab */ = {
 			isa = PBXGroup;
 			children = (
+				4FD9376E16D7504500ED6677 /* WidgetConvViewController.h */,
+				4FD9376F16D7504500ED6677 /* WidgetConvViewController.m */,
+				4FD9377016D7504500ED6677 /* WidgetConvViewController.xib */,
 				4FD9375116D4A57600ED6677 /* CrossGroupViewController.h */,
 				4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */,
 				4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */,
@@ -2195,6 +2203,7 @@
 				7848CE0416D7682700F9488E /* identity_phone_18_grey@2x.png in Resources */,
 				7848CE0516D7682700F9488E /* identity_phone_18.png in Resources */,
 				7848CE0616D7682700F9488E /* identity_phone_18@2x.png in Resources */,
+				4FD9377216D7504500ED6677 /* WidgetConvViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2335,6 +2344,7 @@
 				4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */,
 				4F9105E616C2349400E524AC /* UIBorderLabel.m in Sources */,
 				4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */,
+				4FD9377116D7504500ED6677 /* WidgetConvViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

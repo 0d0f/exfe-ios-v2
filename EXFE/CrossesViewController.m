@@ -645,20 +645,38 @@
         }else{
             cell.time = @"";
         }
-//
-//        cell.avatar = nil;
+        
         NSString *avatarimgurl=nil;
         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         for(Invitation *invitation in cross.exfee.invitations) {
-            if ([invitation.identity.connected_user_id intValue]== app.userid) {
+            NSInteger connected_uid = [invitation.identity.connected_user_id intValue];
+            if (connected_uid == app.userid) {
                 if(invitation && invitation.invited_by &&
                    invitation.invited_by.avatar_filename ) {
                     avatarimgurl=invitation.invited_by.avatar_filename;
                     break;
                 }
-//                else{
-//                    cell.avatar = nil;
-//                }
+            }else if (connected_uid < 0){
+                // Unverified identity: connected_uid + identity_git id == 0
+                // Concern: performace issue?
+                NSFetchRequest* request = [User fetchRequest];
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
+                [request setPredicate:predicate];
+                NSArray *users = [[User objectsWithFetchRequest:request] retain];
+                if(users != nil && [users count] > 0)
+                {
+                    User *_user = [users objectAtIndex:0];
+                    for(Identity *identity in _user.identities){
+                        if([identity.identity_id intValue] + connected_uid == 0){
+                            if(invitation && invitation.invited_by &&
+                               invitation.invited_by.avatar_filename ) {
+                                avatarimgurl = invitation.invited_by.avatar_filename;
+                            }
+                            break;
+                        }
+                    }
+                }
+                [users release];
             }
         }
         if(avatarimgurl==nil)
@@ -765,15 +783,15 @@
             }
             
         }
-        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-        viewController.cross = cross;
-        [self.navigationController pushViewController:viewController animated:YES];
-        [viewController release];
-        
-//        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+//        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
 //        viewController.cross = cross;
 //        [self.navigationController pushViewController:viewController animated:YES];
 //        [viewController release];
+        
+        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+        viewController.cross = cross;
+        [self.navigationController pushViewController:viewController animated:YES];
+        [viewController release];
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         current_cellrow = indexPath.row;

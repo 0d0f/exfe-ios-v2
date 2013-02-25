@@ -25,6 +25,7 @@
 #import "PlaceViewController.h"
 #import "ConversationViewController.h"
 #import "CrossesViewController.h"
+#import "WidgetConvViewController.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -225,6 +226,7 @@
     [container sizeToFit];
     xContainer.contentSize = container.bounds.size;
     [xContainer addSubview:container];
+    
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
@@ -737,6 +739,7 @@
     //[self changeHeaderStyle:headerStyle];
     headerStyle = (headerStyle + 1) % 2;
     [self changeHeaderStyle:headerStyle];
+    [self swapChildViewController:headerStyle];
 }
 
 #pragma mark EXImagesCollectionView Datasource methods
@@ -996,7 +999,7 @@
             titleView.lineBreakMode = UILineBreakModeTailTruncation;
             titleView.numberOfLines = 1;
             [btnBack setFrame:CGRectMake(0, 0, 20, 44)];
-            [xContainer setFrame:CGRectMake(0, 44, 320, CGRectGetHeight(a) - 44)];
+            //[xContainer setFrame:CGRectMake(0, 44, 320, CGRectGetHeight(a) - 44)];
             break;
             
         default:
@@ -1004,7 +1007,7 @@
             titleView.lineBreakMode = UILineBreakModeWordWrap;
             titleView.numberOfLines = 2;
             [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
-            [xContainer setFrame:CGRectMake(0, 88, 320, CGRectGetHeight(a) - 88)];
+            //[xContainer setFrame:CGRectMake(0, 88, 320, CGRectGetHeight(a) - 88)];
             break;
     }
 }
@@ -1033,6 +1036,68 @@
                                 
                                 weakSelf.currentViewController = [childViewController autorelease];
                             }];
+}
+
+- (void)swapChildViewController:(NSInteger)widget_id{
+    if (_currentViewController) {
+        __weak __block UIViewController *weakCrt = _currentViewController;
+        CGRect frame = _currentViewController.view.frame;
+        [UIView animateWithDuration:0.4 animations:^{
+            weakCrt.view.frame = CGRectOffset(frame, 0, CGRectGetHeight(frame));
+        }
+                         completion:^(BOOL finished){
+                             [weakCrt.view removeFromSuperview];
+                             [weakCrt removeFromParentViewController];
+                         }];
+        _currentViewController = nil;
+    }
+    switch (widget_id) {
+        case 1:
+        {
+            WidgetConvViewController * conversationView =  [[WidgetConvViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
+            
+            // prepare data for conversation
+            conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
+            conversationView.cross_title = _cross.title;
+            for(NSDictionary *widget in _cross.widget) {
+                if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+                    conversationView.headImgDict = widget;
+                    break;
+                }
+            }
+            Invitation* myInv = [self getMyInvitation];
+            if (myInv != nil){
+                conversationView.identity = myInv.identity;
+            }
+            
+            // clean up data
+            _cross.conversation_count = 0;
+            [self fillConversationCount:0];
+            
+            [self addChildViewController:conversationView];
+            [self.view insertSubview:conversationView.view belowSubview:btnBack];
+//            _currentViewController = [conversationView autorelease];
+            CGRect frame = conversationView.view.frame;
+            conversationView.view.frame = CGRectOffset(frame, 0, CGRectGetHeight(frame));
+            
+            __weak __block CrossGroupViewController *weakSelf=self;
+            [UIView animateWithDuration:0.4 animations:^{
+                conversationView.view.frame = frame;
+            }
+                             completion:^(BOOL finished){
+                                 
+                                 //[weakSelf.currentViewController.view removeFromSuperview];
+                                 [weakSelf.currentViewController removeFromParentViewController];
+                                 //[aNewViewController didMoveToParentViewController:weakSelf];
+                                 
+                                 weakSelf.currentViewController=[conversationView autorelease];
+                             }];
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 
