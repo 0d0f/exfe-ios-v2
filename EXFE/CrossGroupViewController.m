@@ -145,11 +145,11 @@
     xContainer.alwaysBounceVertical = YES;
     xContainer.backgroundColor = [UIColor clearColor];
     xContainer.delegate = self;
-    xContainer.tag = kViewTagContainer;
     [self.view addSubview:xContainer];
     
     container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(xContainer.bounds), 600)];
     container.backgroundColor = [UIColor COLOR_SNOW];
+    container.tag = kViewTagContainer;
     {
         int left = CONTAINER_VERTICAL_PADDING;
         descView = [[EXLabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, CGRectGetWidth(c) -  CONTAINER_VERTICAL_PADDING * 2, 80)];
@@ -271,7 +271,6 @@
     
     // Gesture handler: need merge
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    gestureRecognizer.delegate = self;
     [container addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
     
@@ -285,6 +284,7 @@
     [headSwipeRecognizer release];
     
     UITapGestureRecognizer *mapTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
+    mapTap.delegate = self;
     [mapView addGestureRecognizer:mapTap];
     [mapTap release];
     
@@ -1104,10 +1104,16 @@
 
 #pragma mark TODO gesture handler
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
-    //    [self hideMenuWithAnimation:YES];
-    //    [self hideStatusView];
-    //    [self hideTimeEditMenuWithAnimation:YES];
-    //    [self hidePlaceEditMenuWithAnimation:YES];
+    
+    if (mapView.superview.tag == kViewTagContainer && mapView.scrollEnabled == YES){
+        return NO;
+    }
+    CGPoint location = [gestureRecognizer locationInView:gestureRecognizer.view];
+    CGPoint center = gestureRecognizer.view.center;
+    if (ABS(location.x - center.x) < 30 && ABS(location.y - center.y) < 30){
+        return NO;
+    }
+    
     return YES;
 }
 
@@ -1174,17 +1180,15 @@
 }
 
 - (void)handleMapTap:(UITapGestureRecognizer*)sender{
-    //CGPoint location = [sender locationInView:sender.view];
     
     if (sender.state == UIGestureRecognizerStateEnded) {
         [self hidePopupIfShown];
         
         NSInteger tagId = mapView.superview.tag;
         if (tagId == kViewTagContainer) {
-            CGPoint offset = xContainer.contentOffset;
-            
             [mapView removeFromSuperview];
-            mapView.frame = CGRectOffset(mapView.frame, 0 - offset.x, 0 - offset.y);
+            CGRect f2 = [self.view convertRect:mapView.frame fromView:mapView.superview];
+            mapView.frame = CGRectOffset(f2, 0, CGRectGetMinY(container.frame) + CGRectGetMinY(xContainer.frame) - xContainer.contentOffset.y + 20);
             savedFrame = mapView.frame;
             savedScrollEnable = mapView.scrollEnabled;
             mapView.scrollEnabled = YES;
@@ -1199,7 +1203,7 @@
             } completion:^(BOOL finished){
                 mapView.scrollEnabled = savedScrollEnable;
                 [mapView removeFromSuperview];
-                [container insertSubview:mapView belowSubview:mapShadow];
+                [mapShadow.superview insertSubview:mapView belowSubview:mapShadow];
                 [self setLayoutDirty];
                 [self relayoutUI];
             }];
