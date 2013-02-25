@@ -146,12 +146,12 @@
     
     if(CGRectContainsPoint(useravatarRect, location))
     {
-        FullScreenViewController *viewcontroller=[[FullScreenViewController alloc] initWithNibName:@"FullScreenViewController" bundle:nil];
-        viewcontroller.wantsFullScreenLayout=YES;
-        viewcontroller.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
-        viewcontroller.image=useravatar.image;
-        [self presentModalViewController:viewcontroller animated:YES];
-        [viewcontroller release];
+//        FullScreenViewController *viewcontroller=[[FullScreenViewController alloc] initWithNibName:@"FullScreenViewController" bundle:nil];
+//        viewcontroller.wantsFullScreenLayout=YES;
+//        viewcontroller.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+//        viewcontroller.image=useravatar.image;
+//        [self presentModalViewController:viewcontroller animated:YES];
+//        [viewcontroller release];
     }
     else{
         CGPoint location2= [sender locationInView:footerView];
