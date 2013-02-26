@@ -451,23 +451,36 @@
                 [app.navigationController dismissModalViewControllerAnimated:YES];
             }
             else if([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"pushtocross"]) {
-//                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-//                Cross *cross=[self crossWithId:[cross_id intValue]];
+                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
+                Cross *cross=[self crossWithId:[cross_id intValue]];
 //                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
 //                gatherViewController.cross=cross;
 //                [gatherViewController setViewMode];
 //                [self.navigationController pushViewController:gatherViewController animated:YES];
 //                [gatherViewController release];
+                CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+                viewController.cross = cross;
+                viewController.widgetId = kWidgetCross;
+                viewController.headerStyle = kHeaderStyleFull;
+                [self.navigationController pushViewController:viewController animated:NO];
+                [viewController release];
             }
             else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"pushtoconversation"]) {
-//                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-//                Cross *cross=[self crossWithId:[cross_id intValue]];
+                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
+                Cross *cross=[self crossWithId:[cross_id intValue]];
 //                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
 //                gatherViewController.cross=cross;
 //                [gatherViewController setViewMode];
 //                [self.navigationController pushViewController:gatherViewController animated:NO];
 //                [gatherViewController toconversation];
 //                [gatherViewController release];
+                
+                CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+                viewController.cross = cross;
+                viewController.widgetId = kWidgetConversation;
+                viewController.headerStyle = kHeaderStyleHalf;
+                [self.navigationController pushViewController:viewController animated:NO];
+                [viewController release];
             }
             else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossupdateview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview_init"]) {
 //                NSString *refresh_cross_id=[objectLoader.userData objectForKey:@"cross_id" ];
@@ -867,11 +880,18 @@
     
     Cross *cross = [self crossWithId:cross_id];
     if(cross != nil){
-        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
+        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
         viewController.cross = cross;
+        viewController.widgetId = kWidgetConversation;
+        viewController.headerStyle = kHeaderStyleHalf;
         [self.navigationController pushViewController:viewController animated:NO];
-        [viewController toConversationAnimated:NO];
         [viewController release];
+
+//        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
+//        viewController.cross = cross;
+//        [self.navigationController pushViewController:viewController animated:NO];
+//        [viewController toConversationAnimated:NO];
+//        [viewController release];
     }
 }
 

@@ -91,17 +91,19 @@
 @synthesize cross = _cross;
 @synthesize default_user = _default_user;
 @synthesize currentViewController = _currentViewController;
+@synthesize headerStyle = _headerStyle;
+@synthesize widgetId = _widgetId;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        headerStyle = kHeaderStyleFull;
-        
+        _headerStyle = kHeaderStyleFull;
+        _widgetId = kWidgetCross;
         popupCtrolId = 0;
-//        savedFrame = CGRectNull;
-//        savedScrollEnable = NO;
+        savedFrame = CGRectNull;
+        savedScrollEnable = NO;
     }
     return self;
 }
@@ -113,6 +115,7 @@
     // Do any additional setup after loading the view from its nib.
     CGRect b = self.view.bounds;
     CGRect a = [UIScreen mainScreen].applicationFrame;
+    self.view.frame = a;
     self.view.backgroundColor = [UIColor grayColor];
     
     headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), 88 + 20)];
@@ -246,10 +249,6 @@
     //btnSwitch.tag = kViewTagBack;
     [self.view  addSubview:btnSwitch];
     
-    
-    
-    [self changeHeaderStyle:headerStyle];
-    
     if(_cross == nil){
         _cross = [Cross object];
         _cross.cross_description=@"";
@@ -306,6 +305,11 @@
     [formatter release];
     
     [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",_cross.cross_id,@"cross_id", nil]];
+    
+    [self changeHeaderStyle:_headerStyle];
+    if (_widgetId > 0) {
+        [self swapChildViewController:_widgetId];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -737,9 +741,9 @@
 
 - (void)switchWidget:(id)sender{
     //[self changeHeaderStyle:headerStyle];
-    headerStyle = (headerStyle + 1) % 2;
-    [self changeHeaderStyle:headerStyle];
-    [self swapChildViewController:headerStyle];
+    _headerStyle = (_headerStyle + 1) % 2;
+    [self changeHeaderStyle:_headerStyle];
+    [self swapChildViewController:_headerStyle];
 }
 
 #pragma mark EXImagesCollectionView Datasource methods
@@ -992,7 +996,7 @@
 
 #pragma mark == Helper methods for Header
 - (void) changeHeaderStyle:(NSInteger)style{
-    CGRect a = [UIScreen mainScreen].applicationFrame;
+    //CGRect a = [UIScreen mainScreen].applicationFrame;
     switch (style) {
         case kHeaderStyleHalf:
             [titleView setFrame:CGRectMake(25, 0, 290, 50)];
@@ -1040,21 +1044,34 @@
 
 - (void)swapChildViewController:(NSInteger)widget_id{
     if (_currentViewController) {
-        __weak __block UIViewController *weakCrt = _currentViewController;
+//        NSLog(@"Widget exits");
+//        __weak __block UIViewController *weakCrt = _currentViewController;
+//        CGRect frame = _currentViewController.view.frame;
+//        [UIView animateWithDuration:0.4 animations:^{
+//            NSLog(@"Animate to hide widget");
+//            weakCrt.view.frame = CGRectOffset(frame, 0, CGRectGetHeight(frame));
+//        }
+//                         completion:^(BOOL finished){
+//                             NSLog(@"Remove hidden widget");
+//                             [weakCrt.view removeFromSuperview];
+//                             [weakCrt removeFromParentViewController];
+//                         }];
+//        NSLog(@"Remove Widget reference");
+//        self.currentViewController = nil;
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.4];
         CGRect frame = _currentViewController.view.frame;
-        [UIView animateWithDuration:0.4 animations:^{
-            weakCrt.view.frame = CGRectOffset(frame, 0, CGRectGetHeight(frame));
-        }
-                         completion:^(BOOL finished){
-                             [weakCrt.view removeFromSuperview];
-                             [weakCrt removeFromParentViewController];
-                         }];
-        _currentViewController = nil;
+        _currentViewController.view.frame = CGRectOffset(frame, 0, CGRectGetHeight(frame));
+        [_currentViewController.view removeFromSuperview];
+        [_currentViewController removeFromParentViewController];
+        self.currentViewController = nil;
+        [UIView commitAnimations];
     }
     switch (widget_id) {
         case 1:
         {
-            WidgetConvViewController * conversationView =  [[WidgetConvViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
+            WidgetConvViewController * conversationView =  [[WidgetConvViewController alloc]initWithNibName:@"WidgetConvViewController" bundle:nil] ;
             
             // prepare data for conversation
             conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
@@ -1711,36 +1728,41 @@
 
 #pragma mark Navigation
 - (void) toConversationAnimated:(BOOL)isAnimated{
-    ConversationViewController * conversationView = nil;
-    if(conversationView == nil){
-        conversationView = [[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
-    }
     
-    // prepare data for conversation
-    conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
-    conversationView.cross_title = _cross.title;
-    for(NSDictionary *widget in _cross.widget) {
-        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-            conversationView.headImgDict = widget;
-            break;
-        }
-    }
-    Invitation* myInv = [self getMyInvitation];
-    if (myInv != nil){
-        conversationView.identity = myInv.identity;
-    }
+    _headerStyle = kHeaderStyleHalf;
+    [self changeHeaderStyle:_headerStyle];
+    [self swapChildViewController:kWidgetConversation];
     
-    // clean up data
-    _cross.conversation_count = 0;
-    [self fillConversationCount:0];
-    
-    // update cross list
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
-    [crossViewController refreshTableViewWithCrossId:[_cross.cross_id intValue]];
-    
-    [self.navigationController pushViewController:conversationView animated:isAnimated];
-    [conversationView release];
+//    ConversationViewController * conversationView = nil;
+//    if(conversationView == nil){
+//        conversationView = [[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
+//    }
+//    
+//    // prepare data for conversation
+//    conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
+//    conversationView.cross_title = _cross.title;
+//    for(NSDictionary *widget in _cross.widget) {
+//        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+//            conversationView.headImgDict = widget;
+//            break;
+//        }
+//    }
+//    Invitation* myInv = [self getMyInvitation];
+//    if (myInv != nil){
+//        conversationView.identity = myInv.identity;
+//    }
+//    
+//    // clean up data
+//    _cross.conversation_count = 0;
+//    [self fillConversationCount:0];
+//    
+//    // update cross list
+//    NSArray *viewControllers = self.navigationController.viewControllers;
+//    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+//    [crossViewController refreshTableViewWithCrossId:[_cross.cross_id intValue]];
+//    
+//    [self.navigationController pushViewController:conversationView animated:isAnimated];
+//    [conversationView release];
 }
 
 #pragma mark EditCrossDelegate

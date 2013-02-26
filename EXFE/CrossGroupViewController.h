@@ -22,10 +22,12 @@
 #define kHeaderStyleFull   0
 #define kHeaderStyleHalf   1
 
+#define kWidgetCross           0
+#define kWidgetConversation    1
+#define kWidgetExfee           2
 
 @interface CrossGroupViewController : UIViewController<EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate, RKObjectLoaderDelegate>{
     
-    NSInteger headerStyle;
     CGFloat exfeeSuggestHeight;
     NSMutableArray *exfeeInvitations;
     
@@ -67,10 +69,13 @@
 @property (nonatomic,retain) UIViewController *currentViewController;
 @property (retain,nonatomic) Cross* cross;
 @property (retain,nonatomic) User* default_user;
+@property (nonatomic) NSInteger headerStyle;
+@property (nonatomic) NSUInteger widgetId;
 
 -(void)swapViewControllers:(UIViewController*)childViewController;
 
-
+#pragma mark Navigation
+- (void) toConversationAnimated:(BOOL)isAnimated;
 
 
 @end
