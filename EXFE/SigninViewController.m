@@ -486,10 +486,12 @@
                 [self performSelector:@selector(getUser) withObject:self afterDelay:0.8];
         }
     } else {
+      if(textUsername.text == nil || [textUsername.text length]==0){
         avatarview.image=nil;
         avatarframeview.image=nil;
         [identityRightButton setImage:nil forState:UIControlStateNormal];
         identityLeftIcon.image=nil;
+      }
     }
   
   if((textUsername.text != nil && textDisplayname.text.length >0) && (textDisplayname.text != nil && textDisplayname.text.length >0) && (textPassword.text != nil && textPassword.text.length >0)){

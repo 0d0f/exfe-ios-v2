@@ -372,8 +372,16 @@
 }
 
 - (void) done{
-    place.title=placeedit.PlaceTitle.text;
-    place.place_description=placeedit.PlaceDesc.text;
+    NSIndexPath *index=[_tableView indexPathForSelectedRow];
+    int tipline=0;
+    if([inputplace.text length]>0)
+      tipline=1;
+    if (index.row-tipline>0) {
+      place.title=placeedit.PlaceTitle.text;
+      place.place_description=placeedit.PlaceDesc.text;
+    }else{
+      place.title=inputplace.text;
+    }
     [delegate setPlace:place];
     [self dismissModalViewControllerAnimated:YES];
 }
@@ -567,7 +575,8 @@
     if([inputplace.text length]>0 )
         tipline=1;
     [self selectPlace:indexPath.row-tipline editing:YES];
-    [self drawMapAnnontations:indexPath.row];
+    if(indexPath.row-tipline>=0)
+      [self drawMapAnnontations:indexPath.row-tipline];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -688,11 +697,9 @@
     location.latitude=0;
     location.longitude=0;
     isedit=editing;
-    if(index==-2)
-    {
+    if(index==-2) {
         NSArray *annotations=[map annotations];
-        if([annotations count]>0)
-        {
+        if([annotations count]>0) {
             PlaceAnnotation *annotation=[annotations objectAtIndex:0];
             place.title=annotation.place_title;
             place.place_description=annotation.place_description;
@@ -708,7 +715,6 @@
             MKAnnotationView* annoview = [map viewForAnnotation: annotation];
             annoview.image=[UIImage imageNamed:@"map_pin_blue.png"];
         }
-
     }else if(index==-1){
         place.title=inputplace.text;
         place.place_description=@"";
@@ -716,6 +722,8 @@
         place.lng=@"";
         place.external_id=@"";
         place.provider=@"";
+        placeedit.PlaceTitle.text=place.title;
+        placeedit.PlaceDesc.text=@"";
     }else{
         NSDictionary *placedict=[_places objectAtIndex:index];
         place.title=[placedict objectForKey:@"title"];

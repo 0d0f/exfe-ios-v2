@@ -58,8 +58,6 @@
 		4FD4DD7416A68674003F1A55 /* EXWidgetTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */; };
 		4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */; };
 		4FD9375516D4A57600ED6677 /* CrossGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */; };
-		4FD9377116D7504500ED6677 /* WidgetConvViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9376F16D7504500ED6677 /* WidgetConvViewController.m */; };
-		4FD9377216D7504500ED6677 /* WidgetConvViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FD9377016D7504500ED6677 /* WidgetConvViewController.xib */; };
 		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
@@ -130,6 +128,9 @@
 		7839555115E21A520042A1D3 /* navbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7839554F15E21A520042A1D3 /* navbar@2x.png */; };
 		783BA9DF15EC82F900AD832D /* btn_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 783BA9DD15EC82F900AD832D /* btn_back.png */; };
 		783BA9E015EC82F900AD832D /* btn_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783BA9DE15EC82F900AD832D /* btn_back@2x.png */; };
+		783F1D8E16DB5193005F85B3 /* WidgetConvViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */; };
+		783F1D8F16DB5193005F85B3 /* WidgetConvViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 783F1D8D16DB5193005F85B3 /* WidgetConvViewController.xib */; };
+		783F1D9416DB51A0005F85B3 /* WidgetConvViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */; };
 		783F52E616774C4100331746 /* btn_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 783F52E416774C4100331746 /* btn_blue.png */; };
 		783F52E716774C4100331746 /* btn_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783F52E516774C4100331746 /* btn_blue@2x.png */; };
 		783F52E91677777600331746 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783F52E81677777600331746 /* back@2x.png */; };
@@ -511,9 +512,6 @@
 		4FD9375116D4A57600ED6677 /* CrossGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossGroupViewController.h; sourceTree = "<group>"; };
 		4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossGroupViewController.m; sourceTree = "<group>"; };
 		4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossGroupViewController.xib; sourceTree = "<group>"; };
-		4FD9376E16D7504500ED6677 /* WidgetConvViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetConvViewController.h; sourceTree = "<group>"; };
-		4FD9376F16D7504500ED6677 /* WidgetConvViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetConvViewController.m; sourceTree = "<group>"; };
-		4FD9377016D7504500ED6677 /* WidgetConvViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WidgetConvViewController.xib; sourceTree = "<group>"; };
 		4FE8D3C51681926C00222420 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4FE8D3C61681926C00222420 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		4FE8D3C71681926C00222420 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
@@ -604,6 +602,9 @@
 		7839554F15E21A520042A1D3 /* navbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar@2x.png"; sourceTree = "<group>"; };
 		783BA9DD15EC82F900AD832D /* btn_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_back.png; sourceTree = "<group>"; };
 		783BA9DE15EC82F900AD832D /* btn_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_back@2x.png"; sourceTree = "<group>"; };
+		783F1D8B16DB5193005F85B3 /* WidgetConvViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetConvViewController.h; sourceTree = "<group>"; };
+		783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetConvViewController.m; sourceTree = "<group>"; };
+		783F1D8D16DB5193005F85B3 /* WidgetConvViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WidgetConvViewController.xib; sourceTree = "<group>"; };
 		783F52E416774C4100331746 /* btn_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_blue.png; sourceTree = "<group>"; };
 		783F52E516774C4100331746 /* btn_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_blue@2x.png"; sourceTree = "<group>"; };
 		783F52E81677777600331746 /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
@@ -1095,12 +1096,12 @@
 		4FD9376316D6048200ED6677 /* Tab */ = {
 			isa = PBXGroup;
 			children = (
-				4FD9376E16D7504500ED6677 /* WidgetConvViewController.h */,
-				4FD9376F16D7504500ED6677 /* WidgetConvViewController.m */,
-				4FD9377016D7504500ED6677 /* WidgetConvViewController.xib */,
 				4FD9375116D4A57600ED6677 /* CrossGroupViewController.h */,
 				4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */,
 				4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */,
+				783F1D8B16DB5193005F85B3 /* WidgetConvViewController.h */,
+				783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */,
+				783F1D8D16DB5193005F85B3 /* WidgetConvViewController.xib */,
 			);
 			name = Tab;
 			sourceTree = "<group>";
@@ -1947,6 +1948,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F1142DF16AE40B000C30179 /* InfoPlist.strings in Resources */,
+				783F1D8F16DB5193005F85B3 /* WidgetConvViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2203,7 +2205,6 @@
 				7848CE0416D7682700F9488E /* identity_phone_18_grey@2x.png in Resources */,
 				7848CE0516D7682700F9488E /* identity_phone_18.png in Resources */,
 				7848CE0616D7682700F9488E /* identity_phone_18@2x.png in Resources */,
-				4FD9377216D7504500ED6677 /* WidgetConvViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2233,6 +2234,7 @@
 				4F1142E216AE40B000C30179 /* EXFETests.m in Sources */,
 				78F45F5316BBBA2100F364FE /* UIUnderlinedButton.m in Sources */,
 				7879B47816BE77AF00D3BE3C /* LocalContact.m in Sources */,
+				783F1D8E16DB5193005F85B3 /* WidgetConvViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2344,7 +2346,7 @@
 				4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */,
 				4F9105E616C2349400E524AC /* UIBorderLabel.m in Sources */,
 				4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */,
-				4FD9377116D7504500ED6677 /* WidgetConvViewController.m in Sources */,
+				783F1D9416DB51A0005F85B3 /* WidgetConvViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
