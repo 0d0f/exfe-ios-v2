@@ -74,7 +74,7 @@
     [contentLayer addSubview:identityRightButton];
     
     textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 18, 230-(6+18+6)*2+50, 40)];
-    textUsername.placeholder=@"Enter your email";
+    textUsername.placeholder=@"Enter email or phone";
     textUsername.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     textUsername.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
     textUsername.textAlignment=UITextAlignmentCenter;
@@ -188,6 +188,9 @@
     //    if(CFAbsoluteTimeGetCurrent()-editinginterval>1.2)
     //    {
     NSString *provider=[Util findProvider:textUsername.text];
+    if ([provider isEqualToString:@"phone"] && ![[textUsername.text substringToIndex:1] isEqualToString:@"+"])
+    textUsername.text=[Util formatPhoneNumber:textUsername.text];
+  
     if(![provider isEqualToString:@""]){
         
         NSString *json=@"";

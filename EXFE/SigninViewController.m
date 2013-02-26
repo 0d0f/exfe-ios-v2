@@ -228,7 +228,7 @@
     
     
     textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 70, 230-(6+18+6)*2, 40)];
-    textUsername.placeholder=@"Enter your email";
+    textUsername.placeholder=@"Enter email or phone";
     textUsername.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     textUsername.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
     textUsername.textAlignment=UITextAlignmentCenter;
@@ -406,6 +406,9 @@
 //    if(CFAbsoluteTimeGetCurrent()-editinginterval>1.2)
 //    {
     NSString *provider=[Util findProvider:textUsername.text];
+    if ([provider isEqualToString:@"phone"] && ![[textUsername.text substringToIndex:1] isEqualToString:@"+"])
+      textUsername.text=[Util formatPhoneNumber:textUsername.text];
+  
     if(![provider isEqualToString:@""]){
             RKClient *client = [RKClient sharedClient];
             [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
@@ -447,12 +450,17 @@
                                     }
                                 }
                                 else if([registration_flag isEqualToString:@"SIGN_UP"] ){
+                                    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
+                                    identityLeftIcon.image=[UIImage imageNamed:iconname];
+
                                     [self setSignupView];
                                 }
                                 else if([registration_flag isEqualToString:@"VERIFY"] )
                                 {
+                                    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
+                                    identityLeftIcon.image=[UIImage imageNamed:iconname];
                                     [self setSigninView];
-                                    [self setHintView:@"verification"];
+                                    [self setHintView:@"verification" provider:provider];
                                 }
                             }
                     }
@@ -478,10 +486,12 @@
                 [self performSelector:@selector(getUser) withObject:self afterDelay:0.8];
         }
     } else {
+      if(textUsername.text == nil || [textUsername.text length]==0){
         avatarview.image=nil;
         avatarframeview.image=nil;
         [identityRightButton setImage:nil forState:UIControlStateNormal];
         identityLeftIcon.image=nil;
+      }
     }
   
   if((textUsername.text != nil && textDisplayname.text.length >0) && (textDisplayname.text != nil && textDisplayname.text.length >0) && (textPassword.text != nil && textPassword.text.length >0)){
@@ -495,9 +505,9 @@
 }
 
 - (IBAction)showForgetPwd:(id)sender{
-    [self setHintView:@"forgetpassword"];
+//    [self setHintView:@"forgetpassword"];
 }
-- (void) setHintView:(NSString*)hintname{
+- (void) setHintView:(NSString*)hintname provider:(NSString*)provider{
     [textUsername resignFirstResponder];
     [textPassword resignFirstResponder];
     if(hint_title==nil){
@@ -550,7 +560,10 @@
     else if([hintname isEqualToString:@"verification"]){
         hint_title.text=@"Verification";
         NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"This identity requires verification before using. Confirm sending verification to your mailbox?"];
-        [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:0xff/255.0 green:0x7e/255.0 blue:0x98/255.0 alpha:1].CGColor range:NSMakeRange(0,[desc length])];
+        if([provider isEqualToString:@"phone"])
+            desc = [[NSMutableAttributedString alloc] initWithString:@"This identity requires verification before using. Confirm sending verification to your phone?"];
+      
+          [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:0xff/255.0 green:0x7e/255.0 blue:0x98/255.0 alpha:1].CGColor range:NSMakeRange(0,[desc length])];
         
 //        [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor colorWithRed:255/255.0 green:240/255.0 blue:243/255.0 alpha:1.0].CGColor range:NSMakeRange(0,[desc length])];
         [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_250.CGColor range:NSMakeRange(49,[desc length]-49)];
@@ -613,6 +626,8 @@
                 [spin setHidden:YES];
 
                 NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"Verification sent, it should arrive in minutes. Please check your mailbox and follow the instruction."];
+                if([provider isEqualToString:@"phone"])
+                  desc = [[NSMutableAttributedString alloc] initWithString:@"Verification sent, it should arrive in minutes. Please check your phone and follow the instruction."];
 //                [desc addAttribute:NSForegroundColorAttributeName value:(id)[UIColor colorWithRed:255/255.0 green:240/255.0 blue:243/255.0 alpha:1.0] range:NSMakeRange(0,50)];
 
 //                [desc addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:16] range:NSMakeRange(0,[desc length])];

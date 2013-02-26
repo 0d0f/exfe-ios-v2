@@ -274,8 +274,15 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     int count=[[identitiesData objectAtIndex:section] count];
-    if(section==0)
+    if(section==0){
+      BOOL connected=NO;
+      for(Identity *identity in user.identities){
+        if([identity.status isEqualToString:@"CONNECTED"])
+           connected=YES;
+      }
+      if(connected==YES)
         count=count+1;
+    }
     return count;
 }
 
@@ -320,7 +327,8 @@
             [cell setLabelName:identity.name];
         else
             [cell setLabelName:identity.external_id];
-        if([identity.provider isEqualToString:@"email"])
+
+        if([identity.provider isEqualToString:@"email"] ||[identity.provider isEqualToString:@"phone"])
             [cell setLabelIdentity:identity.external_id];
         else{
             [cell setLabelIdentity:[NSString stringWithFormat:@"%@@%@",identity.external_username,identity.provider]];

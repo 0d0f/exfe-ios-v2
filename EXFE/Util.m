@@ -502,11 +502,51 @@
     NSPredicate *facebookTest = [NSPredicate predicateWithFormat:@"SELF MATCHES[c] %@", facebookRegex];
     if([facebookTest evaluateWithObject:external_id]==YES)
         return @"facebook";
-    
+  
+    NSString *phone=[Util formatPhoneNumber:external_id];
+    if([phone length] >0)
+      return @"phone";
     return @"";
 }
+
++ (NSString*) formatPhoneNumber:(NSString*)phonenumber{
+  CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
+  CTCarrier *carrier = [netInfo subscriberCellularProvider];
+  NSString *mcc = [carrier mobileCountryCode];
+  NSString *mnc = [carrier mobileNetworkCode];
+  NSString *isocode =[carrier isoCountryCode];
+  NSString* clean_phone=@"";
+  clean_phone=[phonenumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
+  clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@")" withString:@""];
+  clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+  clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+  clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@" " withString:@""];
+  clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"." withString:@""];
+  
+  NSString *cnphoneregex = @"1([3458]|7[1-8])\\d*";
+  NSPredicate *cnphoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", cnphoneregex];
+  NSString *phoneresult=@"";
+  if(([mcc isEqualToString:@"460"] || [isocode isEqualToString:@"cn"]) && [clean_phone length]>=11 ){
+    if([[clean_phone substringToIndex:2] isEqualToString:@"00"])
+      phoneresult =[@"+" stringByAppendingString: [clean_phone substringFromIndex:2]];
+    else if([[clean_phone substringToIndex:1] isEqualToString:@"+"])
+      phoneresult=clean_phone;
+    else if([cnphoneTest evaluateWithObject:clean_phone]==YES)
+      phoneresult=[@"+86" stringByAppendingString:clean_phone];
+  }
+  if(([mcc isEqualToString:@"310"] ||[mcc isEqualToString:@"311"] || [isocode isEqualToString:@"us"] || [isocode isEqualToString:@"ca"]) && [clean_phone length]>=10){
+    if([[clean_phone substringToIndex:1] isEqualToString:@"+"])
+      phoneresult=clean_phone;
+    else if([[clean_phone substringToIndex:1] isEqualToString:@"1"])
+      phoneresult=[@"+" stringByAppendingString:clean_phone];
+    else if([clean_phone characterAtIndex:0] >= '2' && [clean_phone characterAtIndex:0] <= '9' && [clean_phone length]>=7)
+      phoneresult=[@"+1" stringByAppendingString:clean_phone];
+  }
+  return phoneresult;
+}
+
 + (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime{
-    
+  
     BOOL is_same_timezone=false;
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     NSLocale *locale=[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
