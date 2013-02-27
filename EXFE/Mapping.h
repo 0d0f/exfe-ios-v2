@@ -11,8 +11,8 @@
 #import "Identity.h"
 
 @interface Mapping : NSObject
-+ (RKManagedObjectMapping*) getIdentityMapping;
-+ (RKManagedObjectMapping*) getMetaMapping;
+//+ (RKManagedObjectMapping*) getIdentityMapping;
+//+ (RKManagedObjectMapping*) getMetaMapping;
 + (RKObjectMapping*) getIdentitySerializationMapping;
 
 @end

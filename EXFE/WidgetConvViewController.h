@@ -28,7 +28,7 @@
 #define kKeyboardHeightPortrait 216
 #define kKeyboardHeightLandscape 140
 
-@interface WidgetConvViewController : UIViewController  <RKRequestDelegate,UIInputToolbarDelegate,UIExpandingTextViewDelegate,UITableViewDataSource,UITableViewDelegate>{
+@interface WidgetConvViewController : UIViewController  <UIInputToolbarDelegate,UIExpandingTextViewDelegate,UITableViewDataSource,UITableViewDelegate>{
     ConversationTableView* _tableView;
     int exfee_id;
     UIInputToolbar *inputToolbar;

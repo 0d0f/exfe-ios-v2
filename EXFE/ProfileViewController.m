@@ -130,7 +130,8 @@
 
 - (void)gotoBack:(UIButton*)sender{
     RKObjectManager* manager =[RKObjectManager sharedManager];
-    [manager.requestQueue cancelAllRequests];
+  //RESTKIT0.2
+//    [manager.requestQueue cancelAllRequests];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -252,18 +253,18 @@
 
 
 #pragma Mark - RKRequestDelegate
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    NSDictionary *a=[objects objectAtIndex:1];
-//    NSArray *b=[a objectForKey:@"identities"];
-    [[User currentContext] save:nil];
-    [[Invitation currentContext] save:nil];
-    [[Identity currentContext] save:nil];
-    [self loadObjectsFromDataStore];
-}
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-//    NSLog(@"Error!:%@",error);
-}
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+////    NSDictionary *a=[objects objectAtIndex:1];
+////    NSArray *b=[a objectForKey:@"identities"];
+//    [[User currentContext] save:nil];
+//    [[Invitation currentContext] save:nil];
+//    [[Identity currentContext] save:nil];
+//    [self loadObjectsFromDataStore];
+//}
+//
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+////    NSLog(@"Error!:%@",error);
+//}
 
 #pragma mark UITableViewDataSource methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -489,55 +490,56 @@
 - (void) deleteIdentity:(int)identity_id{
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/deleteIdentity",app.userid];
-    
-    RKParams* rsvpParams = [RKParams params];
-    [rsvpParams setValue:[NSNumber numberWithInt:identity_id] forParam:@"identity_id"];
-    
-    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        request.onDidLoadResponse=^(RKResponse *response){
-//            [spin setHidden:YES];
-            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
-            if (response.statusCode == 200) {
-                NSDictionary *body=[response.body objectFromJSONData];
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code){
-                        if([code intValue]==200) {
-                            NSDictionary *responseobj=[body objectForKey:@"response"];
-                            if([responseobj isKindOfClass:[NSDictionary class]]){
-                                NSString *identity_id_str=[responseobj objectForKey:@"identity_id"];
-                                NSString *user_id_str=[responseobj objectForKey:@"user_id"];
-                                if(identity_id_str!=nil && user_id_str!=nil){
-                                    int response_identity_id=[identity_id_str intValue];
-                                    int response_user_id=[user_id_str intValue];
-                                    if(response_identity_id==identity_id && response_user_id==app.userid){
-                                        [self deleteIdentityUI:identity_id];
-                                    }
-                                }
-                                
-                            }
-                        }
-                        
-                    }
-                }
-
-            }
-            
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-//            [spin setHidden:YES];
-            
-//            NSLog(@"error %@",error);
-            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
-        };
-    }];
-    
+//RESTKIT0.2
+//    RKClient *client = [RKClient sharedClient];
+//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/deleteIdentity",app.userid];
+//    
+//    RKParams* rsvpParams = [RKParams params];
+//    [rsvpParams setValue:[NSNumber numberWithInt:identity_id] forParam:@"identity_id"];
+//    
+//    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+//    [client post:endpoint usingBlock:^(RKRequest *request){
+//        request.method=RKRequestMethodPOST;
+//        request.params=rsvpParams;
+//        request.onDidLoadResponse=^(RKResponse *response){
+////            [spin setHidden:YES];
+//            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
+//            if (response.statusCode == 200) {
+//                NSDictionary *body=[response.body objectFromJSONData];
+//                if([body isKindOfClass:[NSDictionary class]]) {
+//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                    if(code){
+//                        if([code intValue]==200) {
+//                            NSDictionary *responseobj=[body objectForKey:@"response"];
+//                            if([responseobj isKindOfClass:[NSDictionary class]]){
+//                                NSString *identity_id_str=[responseobj objectForKey:@"identity_id"];
+//                                NSString *user_id_str=[responseobj objectForKey:@"user_id"];
+//                                if(identity_id_str!=nil && user_id_str!=nil){
+//                                    int response_identity_id=[identity_id_str intValue];
+//                                    int response_user_id=[user_id_str intValue];
+//                                    if(response_identity_id==identity_id && response_user_id==app.userid){
+//                                        [self deleteIdentityUI:identity_id];
+//                                    }
+//                                }
+//                                
+//                            }
+//                        }
+//                        
+//                    }
+//                }
+//
+//            }
+//            
+//        };
+//        request.onDidFailLoadWithError=^(NSError *error){
+////            [spin setHidden:YES];
+//            
+////            NSLog(@"error %@",error);
+//            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
+//        };
+//    }];
+  
 }
 - (void) Logout {
     [Util signout];
@@ -580,68 +582,69 @@
 }
 
 - (void) doVerify:(int)identity_id{
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    NSString *endpoint = [NSString stringWithFormat:@"/users/VerifyUserIdentity"];
-    
-    RKParams* rsvpParams = [RKParams params];
-    [rsvpParams setValue:[NSNumber numberWithInt:identity_id] forParam:@"identity_id"];
-    NSString *callback=@"oauth://handleOAuthAddIdentity";
-    [rsvpParams setValue:callback forParam:@"device_callback"];
-    [rsvpParams setValue:@"iOS" forParam:@"device"];
-    
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-    
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        request.onDidLoadResponse=^(RKResponse *response){
-            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
-            if (response.statusCode == 200) {
-                NSDictionary *body=[response.body objectFromJSONData];
-                
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code){
-                        if([code intValue]==200) {
-                            NSDictionary *responseobj=[body objectForKey:@"response"];
-                            if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"])
-                            {
-//                                NSLog(@"url: %@",[responseobj objectForKey:@"url"]);
-                                OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
-                                oauth.parentView=self;
-                                oauth.oauth_url=[responseobj objectForKey:@"url"];
-                                [self presentModalViewController:oauth animated:YES];
-                                [oauth release];
-
-                            }
-                            //                                if([responseobj isKindOfClass:[NSDictionary class]]){
-                            //                                    if([responseobj objectForKey:@"url"]!=nil){
-                            //                                        OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
-                            //                                        oauth.parentView=self;
-                            //                                        oauth.oauth_url=[responseobj objectForKey:@"url"];
-                            //                                        [self presentModalViewController:oauth animated:YES];
-                            //                                    }else{
-                            //                                        [self.navigationController popViewControllerAnimated:YES];
-                            //                                    }
-                            //                                }
-                        }
-                        else{
-                            //                                if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
-                            //                                    NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
-                            //                                }
-                        }
-                    }
-                }
-            }
-            
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-//            NSLog(@"error %@",error);
-            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
-        };
-    }];
+//RESTKIT0.2  
+//    RKClient *client = [RKClient sharedClient];
+//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//    NSString *endpoint = [NSString stringWithFormat:@"/users/VerifyUserIdentity"];
+//    
+//    RKParams* rsvpParams = [RKParams params];
+//    [rsvpParams setValue:[NSNumber numberWithInt:identity_id] forParam:@"identity_id"];
+//    NSString *callback=@"oauth://handleOAuthAddIdentity";
+//    [rsvpParams setValue:callback forParam:@"device_callback"];
+//    [rsvpParams setValue:@"iOS" forParam:@"device"];
+//    
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+//    
+//    [client post:endpoint usingBlock:^(RKRequest *request){
+//        request.method=RKRequestMethodPOST;
+//        request.params=rsvpParams;
+//        request.onDidLoadResponse=^(RKResponse *response){
+//            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
+//            if (response.statusCode == 200) {
+//                NSDictionary *body=[response.body objectFromJSONData];
+//                
+//                if([body isKindOfClass:[NSDictionary class]]) {
+//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                    if(code){
+//                        if([code intValue]==200) {
+//                            NSDictionary *responseobj=[body objectForKey:@"response"];
+//                            if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"])
+//                            {
+////                                NSLog(@"url: %@",[responseobj objectForKey:@"url"]);
+//                                OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
+//                                oauth.parentView=self;
+//                                oauth.oauth_url=[responseobj objectForKey:@"url"];
+//                                [self presentModalViewController:oauth animated:YES];
+//                                [oauth release];
+//
+//                            }
+//                            //                                if([responseobj isKindOfClass:[NSDictionary class]]){
+//                            //                                    if([responseobj objectForKey:@"url"]!=nil){
+//                            //                                        OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
+//                            //                                        oauth.parentView=self;
+//                            //                                        oauth.oauth_url=[responseobj objectForKey:@"url"];
+//                            //                                        [self presentModalViewController:oauth animated:YES];
+//                            //                                    }else{
+//                            //                                        [self.navigationController popViewControllerAnimated:YES];
+//                            //                                    }
+//                            //                                }
+//                        }
+//                        else{
+//                            //                                if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
+//                            //                                    NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
+//                            //                                }
+//                        }
+//                    }
+//                }
+//            }
+//            
+//        };
+//        request.onDidFailLoadWithError=^(NSError *error){
+////            NSLog(@"error %@",error);
+//            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
+//        };
+//    }];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

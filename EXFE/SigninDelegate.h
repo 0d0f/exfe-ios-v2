@@ -15,7 +15,7 @@
 #import "User.h"
 #import "Identity.h"
 
-@interface SigninDelegate : NSObject<RKRequestDelegate,OAuthLoginViewControllerDelegate,RKObjectLoaderDelegate>{
+@interface SigninDelegate : NSObject<OAuthLoginViewControllerDelegate>{
     UIViewController *modalview;
     UIViewController *parent;
 }

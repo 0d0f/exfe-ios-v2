@@ -517,8 +517,9 @@
     if(cross)
         [[Cross currentContext] deleteObject:cross];
 
-    RKObjectManager* manager =[RKObjectManager sharedManager];
-    [manager.requestQueue cancelAllRequests];
+  //RESTKIT0.2
+//    RKObjectManager* manager =[RKObjectManager sharedManager];
+//    [manager.requestQueue cancelAllRequests];
 
     [self dismissModalViewControllerAnimated:YES];
 
@@ -1269,42 +1270,42 @@
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     Identity *myidentity=[self getMyInvitation].identity;
     NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:_invitation.identity.identity_id,@"identity_id",myidentity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
-    
-    RKParams* rsvpParams = [RKParams params];
-    [rsvpParams setValue:[NSString stringWithFormat:@"[%@]",[rsvpdict JSONString]] forParam:@"rsvp"];
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/rsvp?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-                NSDictionary *body=[response.body objectFromJSONData];
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code)
-                        if([code intValue]==200) {
-                            [APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
-                        }
-                }
-                //We got an error!
-            }else {
-                //Check Response Body to get Data!
-            }
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
-            if(error.code==2)
-                errormsg=@"A connection failure has occurred.";
-            else
-                errormsg=@"Could not connect to the server.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-        };
-    }];
-    
+//RESTKIT0.2    
+//    RKParams* rsvpParams = [RKParams params];
+//    [rsvpParams setValue:[NSString stringWithFormat:@"[%@]",[rsvpdict JSONString]] forParam:@"rsvp"];
+//    RKClient *client = [RKClient sharedClient];
+//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//    NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/rsvp?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
+//    [client post:endpoint usingBlock:^(RKRequest *request){
+//        request.method=RKRequestMethodPOST;
+//        request.params=rsvpParams;
+//        request.onDidLoadResponse=^(RKResponse *response){
+//            if (response.statusCode == 200) {
+//                NSDictionary *body=[response.body objectFromJSONData];
+//                if([body isKindOfClass:[NSDictionary class]]) {
+//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                    if(code)
+//                        if([code intValue]==200) {
+//                            [APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
+//                        }
+//                }
+//                //We got an error!
+//            }else {
+//                //Check Response Body to get Data!
+//            }
+//        };
+//        request.onDidFailLoadWithError=^(NSError *error){
+//            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+//            if(error.code==2)
+//                errormsg=@"A connection failure has occurred.";
+//            else
+//                errormsg=@"Could not connect to the server.";
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+//            [alert show];
+//            [alert release];
+//        };
+//    }];
+  
 }
 
 - (Invitation*) getMyInvitation{
@@ -1319,21 +1320,21 @@
 
 #pragma mark RKObjectLoaderDelegate methods
 
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    [MBProgressHUD hideHUDForView:self.view animated:YES];
-    if([objects count]>0)
-    {
-        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [app GatherCrossDidFinish];
-    }else{
-//        NSLog(@"gather error");
-    }
-  
-}
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-  [MBProgressHUD hideHUDForView:self.view animated:YES];
-//    NSLog(@"%@",error);
-}
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+//    [MBProgressHUD hideHUDForView:self.view animated:YES];
+//    if([objects count]>0)
+//    {
+//        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//        [app GatherCrossDidFinish];
+//    }else{
+////        NSLog(@"gather error");
+//    }
+//  
+//}
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+//  [MBProgressHUD hideHUDForView:self.view animated:YES];
+////    NSLog(@"%@",error);
+//}
 
 #pragma mark UIPickerviewDatasource methods
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {

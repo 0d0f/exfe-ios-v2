@@ -24,10 +24,10 @@
 +(void) LoadCrossWithCrossId:(int)corss_id updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source;
 +(void) GatherCross:(Cross*) cross delegate:(id)delegate;
 
-
-+ (RKManagedObjectMapping*) getPlaceMapping;
-+ (RKManagedObjectMapping*) getInvitationMapping;
-+ (RKManagedObjectMapping*) getCrossMapping;
-+ (RKManagedObjectMapping*) getExfeeMapping;
+//RESTKIT0.2
+//+ (RKManagedObjectMapping*) getPlaceMapping;
+//+ (RKManagedObjectMapping*) getInvitationMapping;
+//+ (RKManagedObjectMapping*) getCrossMapping;
+//+ (RKManagedObjectMapping*) getExfeeMapping;
 
 @end

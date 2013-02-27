@@ -878,27 +878,27 @@
     AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];
     
     NSString *udid=[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"];
-    RKParams* rsvpParams = [RKParams params];
-    [rsvpParams setValue:udid forParam:@"udid"];
-    [rsvpParams setValue:@"iOS" forParam:@"os_name"];
-    
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/signout?token=%@",app.userid,app.accesstoken];
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-            }else {
-                //Check Response Body to get Data!
-            }
-            [app SignoutDidFinish];
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-            [app SignoutDidFinish];
-        };
-    }];
+//    RKParams* rsvpParams = [RKParams params];
+//    [rsvpParams setValue:udid forParam:@"udid"];
+//    [rsvpParams setValue:@"iOS" forParam:@"os_name"];
+//    
+//    RKClient *client = [RKClient sharedClient];
+//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/signout?token=%@",app.userid,app.accesstoken];
+//    [client post:endpoint usingBlock:^(RKRequest *request){
+//        request.method=RKRequestMethodPOST;
+//        request.params=rsvpParams;
+//        request.onDidLoadResponse=^(RKResponse *response){
+//            if (response.statusCode == 200) {
+//            }else {
+//                //Check Response Body to get Data!
+//            }
+//            [app SignoutDidFinish];
+//        };
+//        request.onDidFailLoadWithError=^(NSError *error){
+//            [app SignoutDidFinish];
+//        };
+//    }];
 }
 + (void) showError:(Meta*)meta delegate:(id)delegate{
     NSString *errormsg=@"";

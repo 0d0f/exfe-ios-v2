@@ -20,7 +20,7 @@
 #import "EXSpinView.h"
 #import "CustomAttributedTextView.h"
 
-@interface SigninViewController : UIViewController <RKRequestDelegate> {
+@interface SigninViewController : UIViewController {
     id delegate;
     SigninDelegate *signindelegate;
 

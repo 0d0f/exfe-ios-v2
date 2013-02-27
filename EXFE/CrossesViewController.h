@@ -21,7 +21,7 @@
 
 #define CARD_VERTICAL_MARGIN      (15)
 
-@interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate, CrossCardDelegate>
+@interface CrossesViewController : PullRefreshTableViewController <UIAlertViewDelegate, CrossCardDelegate>
 {
     IBOutlet UITableView* tableView;
 //    UIBarButtonItem *profileButtonItem;

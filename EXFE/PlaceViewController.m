@@ -852,44 +852,44 @@
     [rightbutton setTitle:title forState:UIControlStateNormal];
     [rightbutton addTarget:self action:aSelector forControlEvents:UIControlEventTouchUpInside];
 }
-
-- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
-    if (response.statusCode == 200) {
-        NSDictionary *body=[response.body objectFromJSONData];
-        if([body isKindOfClass:[NSDictionary class]]) {
-
-            NSString *status=[body objectForKey:@"status"];
-            if(status!=nil &&[status isEqualToString:@"OK"])
-            {
-                NSArray *results=[body objectForKey:@"results"] ;
-                if([results count]>0)
-                {
-                    NSDictionary *dict=[results objectAtIndex:0];
-                    NSNumber *_lng=[[[dict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"];
-                    NSNumber *_lat=[[[dict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"];
-                    MKCoordinateRegion region;
-                    float delta=0.02;
-                    CLLocationCoordinate2D location_center;
-                    location_center.latitude =[_lat doubleValue];
-                    location_center.longitude =[_lng doubleValue];
-                    region.center=location_center;
-                    region.span.longitudeDelta = delta;
-                    region.span.latitudeDelta = delta;
-                    [map setRegion:region animated:YES];
-                }
-                NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]] ;
-                for(NSDictionary *placedict in results)
-                {
-                    NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:[placedict objectForKey:@"name"],@"title",[placedict objectForKey:@"formatted_address"],@"description",[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[placedict objectForKey:@"id"],@"external_id",@"google",@"provider",nil];
-                    [local_results addObject:dict];
-                    [dict release];
-                }
-                [self reloadPlaceData:local_results];
-            }
-        }
-    }
-    else {
-        //Check Response Body to get Data!
-    }
-}
+//RESTKIT0.2
+//- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
+//    if (response.statusCode == 200) {
+//        NSDictionary *body=[response.body objectFromJSONData];
+//        if([body isKindOfClass:[NSDictionary class]]) {
+//
+//            NSString *status=[body objectForKey:@"status"];
+//            if(status!=nil &&[status isEqualToString:@"OK"])
+//            {
+//                NSArray *results=[body objectForKey:@"results"] ;
+//                if([results count]>0)
+//                {
+//                    NSDictionary *dict=[results objectAtIndex:0];
+//                    NSNumber *_lng=[[[dict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"];
+//                    NSNumber *_lat=[[[dict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"];
+//                    MKCoordinateRegion region;
+//                    float delta=0.02;
+//                    CLLocationCoordinate2D location_center;
+//                    location_center.latitude =[_lat doubleValue];
+//                    location_center.longitude =[_lng doubleValue];
+//                    region.center=location_center;
+//                    region.span.longitudeDelta = delta;
+//                    region.span.latitudeDelta = delta;
+//                    [map setRegion:region animated:YES];
+//                }
+//                NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]] ;
+//                for(NSDictionary *placedict in results)
+//                {
+//                    NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:[placedict objectForKey:@"name"],@"title",[placedict objectForKey:@"formatted_address"],@"description",[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[placedict objectForKey:@"id"],@"external_id",@"google",@"provider",nil];
+//                    [local_results addObject:dict];
+//                    [dict release];
+//                }
+//                [self reloadPlaceData:local_results];
+//            }
+//        }
+//    }
+//    else {
+//        //Check Response Body to get Data!
+//    }
+//}
 @end

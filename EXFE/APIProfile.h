@@ -15,8 +15,9 @@
 +(void) MappingUsers;
 +(void) MappingSuggest;
 +(void) LoadUsrWithUserId:(int)user_id delegate:(id)delegate;
-+(void) LoadUsrWithUserId:(int)user_id token:(NSString*)token usingBlock:(void (^)(RKRequest *request))block ;
-+(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids usingBlock:(void (^)(RKRequest *request))block;
+//RESTKIT0.2
+//+(void) LoadUsrWithUserId:(int)user_id token:(NSString*)token usingBlock:(void (^)(RKRequest *request))block ;
+//+(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids usingBlock:(void (^)(RKRequest *request))block;
 +(void) LoadSuggest:(NSString*)key delegate:(id)delegate;
 //+(void) getIdentity:(NSString*)identity_json;
 @end

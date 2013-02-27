@@ -767,63 +767,57 @@
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:identity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
     
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u/add?token=%@",exfee_id,app.accesstoken];
-    [inputToolbar setInputEnabled:NO];
-    NSString *JSON=[postdict JSONString];
-    
-    
-    RKParams *params = [RKRequestSerialization serializationWithData:[JSON 
- dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=params;
-        request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-                [self refreshConversation];
-                [inputToolbar.textView clearText];
-            }else {
-            }
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-            [inputToolbar setInputEnabled:YES];
-            NSString *errormsg;
-            if(error.code==2)
-                errormsg=@"A connection failure has occurred.";
-            else
-                errormsg=@"Could not connect to the server.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-        };
-
-        request.delegate=self;
-    }];
-    
+//    RKClient *client = [RKClient sharedClient];
+//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//    NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u/add?token=%@",exfee_id,app.accesstoken];
+//    [inputToolbar setInputEnabled:NO];
+//    NSString *JSON=[postdict JSONString];
+//    
+//    
+//    RKParams *params = [RKRequestSerialization serializationWithData:[JSON 
+// dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
+//    [client post:endpoint usingBlock:^(RKRequest *request){
+//        request.method=RKRequestMethodPOST;
+//        request.params=params;
+//        request.onDidLoadResponse=^(RKResponse *response){
+//            if (response.statusCode == 200) {
+//                [self refreshConversation];
+//                [inputToolbar.textView clearText];
+//            }else {
+//            }
+//        };
+//        request.onDidFailLoadWithError=^(NSError *error){
+//            [inputToolbar setInputEnabled:YES];
+//            NSString *errormsg;
+//            if(error.code==2)
+//                errormsg=@"A connection failure has occurred.";
+//            else
+//                errormsg=@"Could not connect to the server.";
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+//            [alert show];
+//            [alert release];
+//        };
+//
+//        request.delegate=self;
+//    }];
+  
 }
 -(void)inputButtonPressed:(NSString *)inputText{
     [self addPost:inputText];
 }
 #pragma Mark - RKRequestDelegate
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    if(objectLoader.isGET) {
-
-        if([objects count]>0)
-        {
-//            for(Post *post in objects)
-//            {
-//                if([post isKindOfClass:[Post class]])
-//                    
-//                    NSLog(@"%@",post.content);
-//            }
-            [self loadObjectsFromDataStore];
-        }
-    }
-}
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
-}
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+//    if(objectLoader.isGET) {
+//
+//        if([objects count]>0)
+//        {
+//            [self loadObjectsFromDataStore];
+//        }
+//    }
+//}
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+//    NSLog(@"Error!:%@",error);
+//}
 
 
 - (void)showOrHideHint{

@@ -13,7 +13,8 @@
 #import "PlaceViewController.h"
 
 @interface APIPlace : NSObject{
-    RKRequestQueue *queue;
+//RESTKIT0.2
+//    RKRequestQueue *queue;
 }
 + (id) sharedManager;
 +(void) GetPlaces:(NSString*)keyword lat:(double)lat lng:(double)lng delegate:(id)delegate;

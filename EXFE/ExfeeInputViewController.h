@@ -24,7 +24,7 @@
 #define LOCAL_ADDRESSBOOK 0
 #define EXFE_ADDRESSBOOK 1
 
-@interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,RKObjectLoaderDelegate,UITableViewDelegate,UITableViewDataSource,EXBubbleScrollViewDelegate,UIScrollViewDelegate>{
+@interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,EXBubbleScrollViewDelegate,UIScrollViewDelegate>{
     UITextField *exfeeInput;
     EXGradientToolbarView *toolbar;
     NSMutableArray *suggestIdentities;

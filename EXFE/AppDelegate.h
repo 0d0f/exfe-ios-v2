@@ -55,7 +55,7 @@
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate>{
+@interface AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>{
     int userid;
     NSString *accesstoken;
     NSString *username;

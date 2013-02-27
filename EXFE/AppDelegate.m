@@ -59,12 +59,13 @@ static char handleurlobject;
 #endif
     RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
     RKLogConfigureByName("*", RKLogLevelOff);
-    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
-    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
-
-    [[[RKClient sharedClient] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
-    [[[RKObjectManager sharedManager] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
-    
+//RESTKIT0.2  
+//    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
+//    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
+//
+//    [[[RKClient sharedClient] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
+//    [[[RKObjectManager sharedManager] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
+  
     [APICrosses MappingCross];
     [APIConversation MappingConversation];
     [APIProfile MappingUsers];
@@ -89,31 +90,32 @@ static char handleurlobject;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
     if(login==YES)
         [APIProfile LoadUsrWithUserId:userid delegate:self];
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    
-    NSString *endpoint = [NSString stringWithFormat:@"/Backgrounds/GetAvailableBackgrounds?token=%@",self.accesstoken];
-    [client get:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-                NSDictionary *body=[response.body objectFromJSONData];
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code)
-                        if([code intValue]==200) {
-                            NSArray *backgrounds=[[body objectForKey:@"response"] objectForKey:@"backgrounds"];
-                            [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
-                        }
-                }
-            }else {
-                //Check Response Body to get Data!
-            }
-            
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-        };
-    }];
+//RESTKIT0.2
+//    RKClient *client = [RKClient sharedClient];
+//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//    
+//    NSString *endpoint = [NSString stringWithFormat:@"/Backgrounds/GetAvailableBackgrounds?token=%@",self.accesstoken];
+//    [client get:endpoint usingBlock:^(RKRequest *request){
+//        request.method=RKRequestMethodPOST;
+//        request.onDidLoadResponse=^(RKResponse *response){
+//            if (response.statusCode == 200) {
+//                NSDictionary *body=[response.body objectFromJSONData];
+//                if([body isKindOfClass:[NSDictionary class]]) {
+//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                    if(code)
+//                        if([code intValue]==200) {
+//                            NSArray *backgrounds=[[body objectForKey:@"response"] objectForKey:@"backgrounds"];
+//                            [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
+//                        }
+//                }
+//            }else {
+//                //Check Response Body to get Data!
+//            }
+//            
+//        };
+//        request.onDidFailLoadWithError=^(NSError *error){
+//        };
+//    }];
     return YES;
 }
 
@@ -193,43 +195,43 @@ static char handleurlobject;
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
         return;
     
-    
-    RKParams* rsvpParams = [RKParams params];
-    [rsvpParams setValue:tokenAsString forParam:@"udid"];
-    [rsvpParams setValue:tokenAsString forParam:@"push_token"];
-    [rsvpParams setValue:@"iOS" forParam:@"os_name"];
-    [rsvpParams setValue:@"apple" forParam:@"brand"];
-    [rsvpParams setValue:@"" forParam:@"model"];
-    [rsvpParams setValue:@"6" forParam:@"os_version"];
-    
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-  
-  
-    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/regdevice?token=%@",self.userid,self.accesstoken];
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-                NSDictionary *body=[response.body objectFromJSONData];
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code)
-                        if([code intValue]==200) {
-                            //TODO: make sure the api response is ok.
-                            [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"ifdevicetokenSave"];
-                            [[NSUserDefaults standardUserDefaults] setObject:tokenAsString forKey:@"udid"];
-                        }
-                }
-            }else {
-                //Check Response Body to get Data!
-            }
-            
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-        };
-    }];
+//RESTKIT0.2
+//    RKParams* rsvpParams = [RKParams params];
+//    [rsvpParams setValue:tokenAsString forParam:@"udid"];
+//    [rsvpParams setValue:tokenAsString forParam:@"push_token"];
+//    [rsvpParams setValue:@"iOS" forParam:@"os_name"];
+//    [rsvpParams setValue:@"apple" forParam:@"brand"];
+//    [rsvpParams setValue:@"" forParam:@"model"];
+//    [rsvpParams setValue:@"6" forParam:@"os_version"];
+//    
+//    RKClient *client = [RKClient sharedClient];
+//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//  
+//  
+//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/regdevice?token=%@",self.userid,self.accesstoken];
+//    [client post:endpoint usingBlock:^(RKRequest *request){
+//        request.method=RKRequestMethodPOST;
+//        request.params=rsvpParams;
+//        request.onDidLoadResponse=^(RKResponse *response){
+//            if (response.statusCode == 200) {
+//                NSDictionary *body=[response.body objectFromJSONData];
+//                if([body isKindOfClass:[NSDictionary class]]) {
+//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                    if(code)
+//                        if([code intValue]==200) {
+//                            //TODO: make sure the api response is ok.
+//                            [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"ifdevicetokenSave"];
+//                            [[NSUserDefaults standardUserDefaults] setObject:tokenAsString forKey:@"udid"];
+//                        }
+//                }
+//            }else {
+//                //Check Response Body to get Data!
+//            }
+//            
+//        };
+//        request.onDidFailLoadWithError=^(NSError *error){
+//        };
+//    }];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
@@ -263,67 +265,68 @@ static char handleurlobject;
         token_formerge=[token_formerge stringByAppendingString:[params objectForKey:@"token"]];
     
     [params release];
-    if(![token isEqualToString:@""]&& [user_id intValue]>0){
-        [APIProfile LoadUsrWithUserId:[user_id intValue] token:token usingBlock:^(RKRequest *request) {
-            request.method=RKRequestMethodGET;
-            request.onDidLoadResponse=^(RKResponse *response){
-                if (response.statusCode == 200) {
-                    NSDictionary *body=[response.body objectFromJSONData];
-                    if([body isKindOfClass:[NSDictionary class]]) {
-                        id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                        if(code)
-                            if([code intValue]==200) {
-                                NSString *ids_formerge=@"";
-                                RKObjectMapper* mapper;
-                                mapper = [RKObjectMapper mapperWithObject:body mappingProvider:[RKObjectManager sharedManager].mappingProvider];
-                                RKObjectMappingResult* result = [mapper performMapping];
-                                NSDictionary *obj=[result asDictionary];
-                                User *user=[obj objectForKey:@"response.user"];
-                                for (Identity *_identity in user.identities){
-                                    if([ids_formerge isEqualToString:@""])
-                                        ids_formerge = [ids_formerge stringByAppendingFormat:@"%u",
-                                                        [_identity.identity_id intValue]];
-                                    else
-                                        ids_formerge = [ids_formerge stringByAppendingFormat:@",%u",
-                                                    [_identity.identity_id intValue]];
-                                }
-                                ids_formerge=[NSString stringWithFormat:@"[%@]",ids_formerge];
-
-                                if([self Checklogin]==NO){
-                                    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-                                    app.userid=[user_id intValue];
-                                    app.accesstoken=token;
-
-                                    [SigninDelegate saveSigninData:user];
-                                    [self SigninDidFinish];
-                                    [self processUrlHandler:url];
-                                }else{
-                                    if([identity_id intValue] >0  && [user_id intValue] != self.userid)
-                                    {
+//RESTKIT0.2
+//    if(![token isEqualToString:@""]&& [user_id intValue]>0){
+//        [APIProfile LoadUsrWithUserId:[user_id intValue] token:token usingBlock:^(RKRequest *request) {
+//            request.method=RKRequestMethodGET;
+//            request.onDidLoadResponse=^(RKResponse *response){
+//                if (response.statusCode == 200) {
+//                    NSDictionary *body=[response.body objectFromJSONData];
+//                    if([body isKindOfClass:[NSDictionary class]]) {
+//                        id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                        if(code)
+//                            if([code intValue]==200) {
+//                                NSString *ids_formerge=@"";
+//                                RKObjectMapper* mapper;
+//                                mapper = [RKObjectMapper mapperWithObject:body mappingProvider:[RKObjectManager sharedManager].mappingProvider];
+//                                RKObjectMappingResult* result = [mapper performMapping];
+//                                NSDictionary *obj=[result asDictionary];
+//                                User *user=[obj objectForKey:@"response.user"];
+//                                for (Identity *_identity in user.identities){
+//                                    if([ids_formerge isEqualToString:@""])
+//                                        ids_formerge = [ids_formerge stringByAppendingFormat:@"%u",
+//                                                        [_identity.identity_id intValue]];
+//                                    else
+//                                        ids_formerge = [ids_formerge stringByAppendingFormat:@",%u",
+//                                                    [_identity.identity_id intValue]];
+//                                }
+//                                ids_formerge=[NSString stringWithFormat:@"[%@]",ids_formerge];
+//
+//                                if([self Checklogin]==NO){
+//                                    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//                                    app.userid=[user_id intValue];
+//                                    app.accesstoken=token;
+//
+//                                    [SigninDelegate saveSigninData:user];
+//                                    [self SigninDidFinish];
+//                                    [self processUrlHandler:url];
+//                                }else{
+//                                    if([identity_id intValue] >0  && [user_id intValue] != self.userid)
+//                                    {
+////                                        
 //                                        
-                                        
-                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Merge accounts" message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?",user.name] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Merge",nil];
-                                        alert.tag=400;
-                                        objc_setAssociatedObject (alert, &alertobject, ids_formerge,OBJC_ASSOCIATION_RETAIN);
-                                        objc_setAssociatedObject (alert, &handleurlobject, url,OBJC_ASSOCIATION_RETAIN);
-                                        
-
-                                        [alert show];
-                                        [alert release];
-                                    }else{
-                                        [self processUrlHandler:url];
-                                    }
-                                }
-                                
-                            }
-
-                    }
-                }
-            };
-        }];
-    }else{
-        [self processUrlHandler:url];
-    }
+//                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Merge accounts" message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?",user.name] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Merge",nil];
+//                                        alert.tag=400;
+//                                        objc_setAssociatedObject (alert, &alertobject, ids_formerge,OBJC_ASSOCIATION_RETAIN);
+//                                        objc_setAssociatedObject (alert, &handleurlobject, url,OBJC_ASSOCIATION_RETAIN);
+//                                        
+//
+//                                        [alert show];
+//                                        [alert release];
+//                                    }else{
+//                                        [self processUrlHandler:url];
+//                                    }
+//                                }
+//                                
+//                            }
+//
+//                    }
+//                }
+//            };
+//        }];
+//    }else{
+//        [self processUrlHandler:url];
+//    }
 
     
     
@@ -489,29 +492,29 @@ static char handleurlobject;
     [[objectStore managedObjectContextForCurrentThread] mergeChangesFromContextDidSaveNotification:notification];
 }
 
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-	NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", userid];
-    [request setPredicate:predicate];
-	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    
-    if(users!=nil && [users count] >0)
-    {
-        User* user=[users objectAtIndex:0];
-        NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:4];
-        for(Identity *identity in user.identities){
-            [identities addObject:identity.identity_id];
-        }
-        [[NSUserDefaults standardUserDefaults] setObject:identities forKey:@"default_user_identities"];
-        [identities release];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-    [users release];
-}
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-//    NSLog(@"Error!:%@",error);
-}
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+//	NSFetchRequest* request = [User fetchRequest];
+//    NSPredicate *predicate = [NSPredicate
+//                              predicateWithFormat:@"user_id = %u", userid];
+//    [request setPredicate:predicate];
+//	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+//    
+//    if(users!=nil && [users count] >0)
+//    {
+//        User* user=[users objectAtIndex:0];
+//        NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:4];
+//        for(Identity *identity in user.identities){
+//            [identities addObject:identity.identity_id];
+//        }
+//        [[NSUserDefaults standardUserDefaults] setObject:identities forKey:@"default_user_identities"];
+//        [identities release];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//    }
+//    [users release];
+//}
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+////    NSLog(@"Error!:%@",error);
+//}
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -520,36 +523,37 @@ static char handleurlobject;
     if(buttonIndex==1 && alertView.tag==400){
         
         NSString *merge_identity = (NSString *)objc_getAssociatedObject(alertView, &alertobject);
-        [APIProfile MergeIdentities:token_formerge Identities_ids:merge_identity usingBlock:^(RKRequest *request){
-            request.method=RKRequestMethodPOST;
-            request.onDidLoadResponse=^(RKResponse *response){
-                if (response.statusCode == 200) {
-                    NSDictionary *body=[response.body objectFromJSONData];
-                    if([body isKindOfClass:[NSDictionary class]]){
-                        NSDictionary *meta=[body objectForKey:@"meta"];
-                        if([meta isKindOfClass:[NSDictionary class]]){
-                            if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]]){
-                                if([[meta objectForKey:@"code"] intValue]==200){
-                                    [APIProfile LoadUsrWithUserId:app.userid token:app.accesstoken usingBlock:^(RKRequest *drequest) {
-                                        request.method=RKRequestMethodGET;
-                                        request.onDidLoadResponse=^(RKResponse *response){
-                                            if (response.statusCode == 200) {
-                                                NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
-                                                [self processUrlHandler:url];
-                                            }
-                                        };
-                                    }];
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-            request.onDidFailLoadWithError=^(NSError *error){
-//                [spin setHidden:YES];
-//                NSLog(@"error %@",error);
-            };
-        }];
+//RESTKIT0.2      
+//        [APIProfile MergeIdentities:token_formerge Identities_ids:merge_identity usingBlock:^(RKRequest *request){
+//            request.method=RKRequestMethodPOST;
+//            request.onDidLoadResponse=^(RKResponse *response){
+//                if (response.statusCode == 200) {
+//                    NSDictionary *body=[response.body objectFromJSONData];
+//                    if([body isKindOfClass:[NSDictionary class]]){
+//                        NSDictionary *meta=[body objectForKey:@"meta"];
+//                        if([meta isKindOfClass:[NSDictionary class]]){
+//                            if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]]){
+//                                if([[meta objectForKey:@"code"] intValue]==200){
+//                                    [APIProfile LoadUsrWithUserId:app.userid token:app.accesstoken usingBlock:^(RKRequest *drequest) {
+//                                        request.method=RKRequestMethodGET;
+//                                        request.onDidLoadResponse=^(RKResponse *response){
+//                                            if (response.statusCode == 200) {
+//                                                NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
+//                                                [self processUrlHandler:url];
+//                                            }
+//                                        };
+//                                    }];
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            };
+//            request.onDidFailLoadWithError=^(NSError *error){
+////                [spin setHidden:YES];
+////                NSLog(@"error %@",error);
+//            };
+//        }];
     }
 }
 

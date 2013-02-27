@@ -31,8 +31,8 @@
 }
 
 #pragma mark RKObjectLoaderDelegate methods
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+//RESTKIT0.2
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
 //    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 //	NSFetchRequest* request = [User fetchRequest];
 //    NSPredicate *predicate = [NSPredicate
@@ -60,25 +60,25 @@
 //    }
 //    [users release];
 //    if(parent!=nil)
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];
-    [request setPredicate:predicate];
-	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    
-    if(users!=nil && [users count] >0)
-    {
-        User* user=[users objectAtIndex:0];
-        [SigninDelegate saveSigninData:user];
-    }
-    [users release];
-
-    [parent performSelector:@selector(SigninDidFinish)];
-//    else{
-//        [app SigninDidFinish];
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//	NSFetchRequest* request = [User fetchRequest];
+//    NSPredicate *predicate = [NSPredicate
+//                              predicateWithFormat:@"user_id = %u", app.userid];
+//    [request setPredicate:predicate];
+//	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+//    
+//    if(users!=nil && [users count] >0)
+//    {
+//        User* user=[users objectAtIndex:0];
+//        [SigninDelegate saveSigninData:user];
 //    }
-}
+//    [users release];
+//
+//    [parent performSelector:@selector(SigninDidFinish)];
+////    else{
+////        [app SigninDidFinish];
+////    }
+//}
 
 + (void)saveSigninData:(User*)user{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -97,8 +97,9 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
-}
+//RESTKIT0.2
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+//    NSLog(@"Error!:%@",error);
+//}
 
 @end
