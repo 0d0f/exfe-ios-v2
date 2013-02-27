@@ -11,8 +11,8 @@
 #import "Flurry.h"
 #import <objc/runtime.h>
 
-#define APP_DB_VERSION 206
-#define DBNAME @"exfe_v2_6.sqlite"
+#define APP_DB_VERSION 207
+#define DBNAME @"exfe_v2_7.sqlite"
 
     
 #define DEV
@@ -26,21 +26,21 @@
 
 
 #ifdef DEV
-#define API_V2_ROOT @"http://api.panda.0d0f.com/v2"
+#define API_ROOT @"http://api.panda.0d0f.com/v2"
 #define IMG_ROOT @"http://panda.0d0f.com/static/img"
 #define EXFE_OAUTH_LINK @"http://panda.0d0f.com/oauth"
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 #endif
 
 #ifdef LOCAL
-#define API_V2_ROOT @"http://api.local.exfe.com/v2"
+#define API_ROOT @"http://api.local.exfe.com/v2"
 #define IMG_ROOT @"http://local.exfe.com/static/img"
 #define EXFE_OAUTH_LINK @"http://local.exfe.com/OAuth"
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 #endif
 
 #ifdef WWW
-#define API_V2_ROOT @"https://www.exfe.com/v2"
+#define API_ROOT @"https://www.exfe.com/v2"
 #define IMG_ROOT @"https://exfe.com/static/img"
 #define EXFE_OAUTH_LINK @"https://exfe.com/OAuth"
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"

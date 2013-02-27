@@ -18,20 +18,20 @@
 
 @implementation APICrosses
 //RESTKIT0.2
-//static id sharedManager = nil;
+static id sharedManager = nil;
 //static RKRequestQueue *queue;
 //
 //
-//+ (id)sharedManager {
-//  @synchronized(self)
-//  {
-//    if (sharedManager == nil) {
-//      sharedManager = [[self alloc] init];
++ (id)sharedManager {
+  @synchronized(self)
+  {
+    if (sharedManager == nil) {
+      sharedManager = [[self alloc] init];
 //      queue=[RKRequestQueue newRequestQueueWithName:@"crosses"];
-//    }
-//  }
-//  return sharedManager;
-//}
+    }
+  }
+  return sharedManager;
+}
 
 
 //+ (RKManagedObjectMapping*) getPlaceMapping{

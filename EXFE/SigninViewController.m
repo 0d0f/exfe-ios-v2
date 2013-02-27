@@ -16,43 +16,44 @@
 @synthesize delegate;
 
 - (IBAction) Signin:(id) sender{
+    NSLog(@"signin");
     [self showSignError:@""];
-//RESTKIT0.2
-//    RKClient *client = [RKClient sharedClient];
-//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//    NSString *endpoint = [NSString stringWithFormat:@"/users/signin"];
-//    RKParams* rsvpParams = [RKParams params];
-//    NSString *provider=[Util findProvider:textUsername.text];
-//    [rsvpParams setValue:provider forParam:@"provider"];
-//    NSString *username=[Util cleanInputName:textUsername.text provider:provider];
-//    [rsvpParams setValue:username forParam:@"external_username"];
-//    [rsvpParams setValue:textPassword.text forParam:@"password"];
+  NSString *provider=[Util findProvider:textUsername.text];
+  NSString *username=[Util cleanInputName:textUsername.text provider:provider];
+  
+  NSString *endpoint = [NSString stringWithFormat:@"%@/users/signin",API_ROOT];
+  RKObjectManager *manager=[RKObjectManager sharedManager] ;
+  NSDictionary *params=@{
+    @"provider": provider,
+    @"external_username": username,
+    @"password": textPassword.text,
+    };
+  
+  [manager.HTTPClient postPath:endpoint parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+        [self processResponse:responseObject status:@"signin"];
+        [delegate SigninDidFinish];
+    }
+    [spin setHidden:YES];
+
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    [spin setHidden:YES];
+    NSString *errormsg;
+    if(error.code==2)
+        errormsg=@"A connection failure has occurred.";
+    else
+        errormsg=@"Could not connect to the server.";
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+    
+  }];
+
 
     [spin removeFromSuperview];
     [loginbtn addSubview:spin];
     [spin setHidden:NO];
-//RESTKIT0.2
-//    [client post:endpoint usingBlock:^(RKRequest *request){
-//        request.method=RKRequestMethodPOST;
-//        request.params=rsvpParams;
-//        request.onDidLoadResponse=^(RKResponse *response){
-//            if (response.statusCode == 200) {
-//                [self processResponse:[response.body objectFromJSONData] status:@"signin"];
-//            }
-//            [spin setHidden:YES];
-//        };
-//        request.onDidFailLoadWithError=^(NSError *error){
-//            [spin setHidden:YES];
-//            NSString *errormsg;
-//            if(error.code==2)
-//                errormsg=@"A connection failure has occurred.";
-//            else
-//                errormsg=@"Could not connect to the server.";
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-//            [alert show];
-//            [alert release];
-//        };
-//    }];
+
 }
 
 - (void) Signupnew:(id) sender{
@@ -407,68 +408,64 @@
 - (IBAction)editingDidBegan:(UITextField*)textField{
 }
 - (void) getUser{
-//    NSString *provider=[Util findProvider:textUsername.text];
-//    if ([provider isEqualToString:@"phone"] && ![[textUsername.text substringToIndex:1] isEqualToString:@"+"])
-//      textUsername.text=[Util formatPhoneNumber:textUsername.text];
-//  
-//    if(![provider isEqualToString:@""]){
-//            RKClient *client = [RKClient sharedClient];
-//            [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//            NSString *endpoint = [NSString stringWithFormat:@"/users/GetRegistrationFlag?external_username=%@&provider=%@",textUsername.text,provider];
-//            AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//            [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-//            [client get:endpoint usingBlock:^(RKRequest *request){
-//                request.method=RKRequestMethodGET;
-//                request.onDidLoadResponse=^(RKResponse *response){
-//                    if (response.statusCode == 200) {
-//                        NSDictionary *body=[response.body objectFromJSONData];
-//                        id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                        if(code)
-//                            if([code intValue]==200) {
-//                                NSDictionary* response = [body objectForKey:@"response"];
-//                                NSString *registration_flag=(NSString*)[response objectForKey:@"registration_flag"] ;
-//                                if([registration_flag isEqualToString:@"SIGN_IN"] )
-//                                {
-//                                    [self setSigninView];
-//                                    NSDictionary *identity = [response objectForKey:@"identity"];
-//                                    NSString *avatar_filename=[identity objectForKey:@"avatar_filename"];
-//                                    NSString *provider=[identity objectForKey:@"provider"];
-//                                    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
-//                                    identityLeftIcon.image=[UIImage imageNamed:iconname];
-//
-//                                    if(avatar_filename!=nil) {
-//                                        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-//                                        dispatch_async(imgQueue, ^{
-//                                            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatar_filename];
-//                                            dispatch_async(dispatch_get_main_queue(), ^{
-//                                                if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-//                                                    avatarview.image=avatar;
-//                                                    avatarframeview.image=[UIImage imageNamed:@"signin_portrait_frame.png"];
-//                                                    
-//                                                }
-//                                            });
-//                                        });
-//                                        dispatch_release(imgQueue);        
-//                                    }
-//                                }
-//                                else if([registration_flag isEqualToString:@"SIGN_UP"] ){
-//                                    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
-//                                    identityLeftIcon.image=[UIImage imageNamed:iconname];
-//
-//                                    [self setSignupView];
-//                                }
-//                                else if([registration_flag isEqualToString:@"VERIFY"] )
-//                                {
-//                                    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
-//                                    identityLeftIcon.image=[UIImage imageNamed:iconname];
-//                                    [self setSigninView];
-//                                    [self setHintView:@"verification" provider:provider];
-//                                }
-//                            }
-//                    }
-//                };
-//            }];
-//        }
+  
+    NSString *provider=[Util findProvider:textUsername.text];
+    if ([provider isEqualToString:@"phone"] && ![[textUsername.text substringToIndex:1] isEqualToString:@"+"])
+      textUsername.text=[Util formatPhoneNumber:textUsername.text];
+
+    if(![provider isEqualToString:@""]){
+      NSString *endpoint = [NSString stringWithFormat:@"%@/users/GetRegistrationFlag?external_username=%@&provider=%@",API_ROOT,textUsername.text,provider];
+      RKObjectManager *manager=[RKObjectManager sharedManager] ;
+      
+      [manager.HTTPClient getPath:endpoint parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+          NSDictionary *body=responseObject;
+          id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+          if(code)
+            if([code intValue]==200) {
+              NSDictionary* response = [body objectForKey:@"response"];
+                NSString *registration_flag=(NSString*)[response objectForKey:@"registration_flag"] ;
+                  if([registration_flag isEqualToString:@"SIGN_IN"] ) {
+                    [self setSigninView];
+                     NSDictionary *identity = [response objectForKey:@"identity"];
+                     NSString *avatar_filename=[identity objectForKey:@"avatar_filename"];
+                     NSString *provider=[identity objectForKey:@"provider"];
+                     NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
+                     identityLeftIcon.image=[UIImage imageNamed:iconname];
+
+                     if(avatar_filename!=nil) {
+                       dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                       dispatch_async(imgQueue, ^{
+                           UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatar_filename];
+                           dispatch_async(dispatch_get_main_queue(), ^{
+                               if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+                                   avatarview.image=avatar;
+                                   avatarframeview.image=[UIImage imageNamed:@"signin_portrait_frame.png"];
+                               }
+                           });
+                       });
+                       dispatch_release(imgQueue);
+                      }
+                    }
+                    else if([registration_flag isEqualToString:@"SIGN_UP"] ){
+                        NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
+                        identityLeftIcon.image=[UIImage imageNamed:iconname];
+
+                        [self setSignupView];
+                    }
+                    else if([registration_flag isEqualToString:@"VERIFY"] ) {
+                        NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
+                        identityLeftIcon.image=[UIImage imageNamed:iconname];
+                        [self setSigninView];
+                        [self setHintView:@"verification" provider:provider];
+                    }
+            }
+        }
+      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//         NSLog(@"It Failed: %@", error);
+      }];
+      
+    }
 }
 
 

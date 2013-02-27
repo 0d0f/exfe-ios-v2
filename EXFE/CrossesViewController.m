@@ -155,32 +155,33 @@
 }
 
 - (void) refreshPortrait{
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-
-    NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];
-    [request setPredicate:predicate];
-	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    
-    if(users!=nil && [users count] >0){
-        User *user=[users objectAtIndex:0];
-        
-        if(user){
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-                UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:user.avatar_filename];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(avatar_img!=nil && ![avatar_img isEqual:[NSNull null]]){
-//                        settingButton.image=avatar_img;
-//                        [settingButton setNeedsDisplay];
-                    }
-                });
-            });
-            dispatch_release(imgQueue);
-        }
-    }
-    [users release];
+//RESTKIT0.2
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//
+//    NSFetchRequest* request = [User fetchRequest];
+//    NSPredicate *predicate = [NSPredicate
+//                              predicateWithFormat:@"user_id = %u", app.userid];
+//    [request setPredicate:predicate];
+//	NSArray *users = [[User objectsWithFetchRequest:request] retain];
+//    
+//    if(users!=nil && [users count] >0){
+//        User *user=[users objectAtIndex:0];
+//        
+//        if(user){
+//            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+//            dispatch_async(imgQueue, ^{
+//                UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:user.avatar_filename];
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    if(avatar_img!=nil && ![avatar_img isEqual:[NSNull null]]){
+////                        settingButton.image=avatar_img;
+////                        [settingButton setNeedsDisplay];
+//                    }
+//                });
+//            });
+//            dispatch_release(imgQueue);
+//        }
+//    }
+//    [users release];
 }
 // deprecated
 - (void) showWelcome{
@@ -293,8 +294,8 @@
         [bigspin release];
     }
         
-    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]];
-    
+//    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]];
+  
 }
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -302,14 +303,11 @@
 }
 
 - (void)loadObjectsFromDataStore {
-	NSFetchRequest* request = [Cross fetchRequest];
-	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
-	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
-    [_crosses release];
-    _crosses=[[Cross objectsWithFetchRequest:request] retain];
-//    for(Cross *c in _crosses){
-//        NSLog(@"%@",c.title);
-//    }
+//	NSFetchRequest* request = [Cross fetchRequest];
+//	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
+//	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
+//    [_crosses release];
+//    _crosses=[[Cross objectsWithFetchRequest:request] retain];
     [self refreshWelcome];
     [self.tableView reloadData];
     
@@ -531,12 +529,16 @@
     
     if (indexPath.section == 0){
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-        
-        NSFetchRequest* request = [User fetchRequest];
-        NSPredicate *predicate = [NSPredicate
-                                  predicateWithFormat:@"user_id = %u", app.userid];
+      
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+//        NSFetchRequest* request = [User fetchRequest];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
         [request setPredicate:predicate];
-        NSArray *users = [[User objectsWithFetchRequest:request] retain];
+      
+        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+      
+        NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+//        NSArray *users = [[User objectsWithFetchRequest:request] retain];
 
         NSString* reuseIdentifier = @"Profile";
         ProfileCard *headerView =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];

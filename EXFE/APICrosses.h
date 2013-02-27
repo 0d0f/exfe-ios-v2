@@ -17,7 +17,7 @@
 @interface APICrosses : NSObject {
 //  RKRequestQueue *queue;
 }
-//+ (id) sharedManager;
++ (id) sharedManager;
 +(void) MappingCross;
 +(void) MappingRoute;
 +(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source;

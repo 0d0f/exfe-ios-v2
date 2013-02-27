@@ -59,17 +59,46 @@ static char handleurlobject;
 #endif
     RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
     RKLogConfigureByName("*", RKLogLevelOff);
+  
+
+  
+  NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+  RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
+  NSError *error = nil;
+  BOOL success = RKEnsureDirectoryExistsAtPath(RKApplicationDataDirectory(), &error);
+  if (! success) {
+    RKLogError(@"Failed to create Application Data Directory at path '%@': %@", RKApplicationDataDirectory(), error);
+  }
+  NSString *path = [RKApplicationDataDirectory() stringByAppendingPathComponent:databaseName];
+  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:path fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
+  if (! persistentStore) {
+    RKLogError(@"Failed adding persistent store at path '%@': %@", path, error);
+  }
+  
+  [managedObjectStore createManagedObjectContexts];
+
+  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+  RKObjectManager* manager =[RKObjectManager managerWithBaseURL:[NSURL URLWithString:API_ROOT]];
+  if(app.accesstoken!=nil)
+    [manager.HTTPClient setDefaultHeader:app.accesstoken value:@"token"];
+  
+  //    RKObjectManager* manager =[RKObjectManager managerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
+
+  
+  
 //RESTKIT0.2  
 //    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
+//    RKObjectManager* manager =[RKObjectManager managerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
+//  
 //    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
 //
 //    [[[RKClient sharedClient] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
 //    [[[RKObjectManager sharedManager] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
   
-    [APICrosses MappingCross];
-    [APIConversation MappingConversation];
-    [APIProfile MappingUsers];
-    [APIProfile MappingSuggest];
+//    [APICrosses MappingCross];
+//    [APIConversation MappingConversation];
+//    [APIProfile MappingUsers];
+//    [APIProfile MappingSuggest];
     BOOL login=[self Checklogin];
     if(login==NO){
         [self ShowLanding];
@@ -164,7 +193,7 @@ static char handleurlobject;
 -(void)SigninDidFinish{
     if([self Checklogin]==YES)
     {
-        [APICrosses MappingRoute];
+//        [APICrosses MappingRoute];
 //        NSString* devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"];
         NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
         if( ifdevicetokenSave==nil)
@@ -177,11 +206,6 @@ static char handleurlobject;
         [(CrossesViewController*)crossviewController initUI];
         [(CrossesViewController*)crossviewController refreshCrosses:@"crossview_init"];
         [(CrossesViewController*)crossviewController loadObjectsFromDataStore];
-
-//        NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
-//        if(newuser !=nil && [newuser isEqualToString:@"YES"])
-//            [(CrossesViewController*)crossviewController showWelcome];
-
         [self.navigationController dismissModalViewControllerAnimated:YES];
     }
 }
