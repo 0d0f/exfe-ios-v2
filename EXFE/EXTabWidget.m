@@ -42,7 +42,7 @@
 
 - (CGPoint)positionOfButton:(NSUInteger)pos{
     if (gravity == 1){
-        return CGPointMake(5, CGRectGetWidth(self.bounds) - (30 + 8) * (idx));
+        return CGPointMake(5, CGRectGetWidth(self.bounds) - (30 + 8) * (pos));
     }
     return CGPointZero;
 }
@@ -55,8 +55,8 @@
         NSTimeInterval time = 0.2;
         if (self.delegate) {
             if([self.delegate respondsToSelector:@selector(updateLayout:animationWithParam:)]){
-                NSDictionary * dict = [NSDictionary dictionaryWithKeysAndObjects:@"width", 100, @"animationTime", time nil];
-                [self.delegate performSelector:@selector(updateLayout:animationWithParam:) withObject:self withObject:dict];
+//                NSDictionary * dict = [NSDictionary dictionaryWithKeysAndObjects:@"width", 100, @"animationTime", [NSNumber numberWithDouble:time] nil];
+//                [self.delegate performSelector:@selector(updateLayout:animationWithParam:) withObject:self withObject:dict];
             }
         }
         
