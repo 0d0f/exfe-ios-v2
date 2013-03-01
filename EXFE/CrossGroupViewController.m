@@ -75,11 +75,19 @@
 #define kViewTagMaskOne                  (0070000)
 #define kViewTagMaskTwo                  (0007700)
 #define kViewTagMaskThree                (0000077)
+#define kViewTagMaskLayerTwo             (0077700)
 #define kViewTagRootView                 (0100000)
 #define kViewTagHeader                   (0110000)
 #define kViewTagContainer                (0120000)
 #define kViewTagTabBar                   (0130000)
 #define kViewTagBack                     (0140000)
+#define kViewTagTitle                    (0110101)
+#define kViewTagDescription              (0120102)
+#define kViewTagTimeTitle                (0120201)
+#define kViewTagTimeDescription          (0120202)
+#define kViewTagTimeAdditional           (0120203)
+#define kViewTagPlaceTitle               (0120301)
+#define kViewTagPlaceDescription         (0120302)
 
 @interface CrossGroupViewController ()
 
@@ -118,28 +126,18 @@
     self.view.frame = a;
     self.view.backgroundColor = [UIColor grayColor];
     
+    CGFloat head_bg_img_scale = CGRectGetWidth(self.view.bounds) / HEADER_BACKGROUND_WIDTH;
+    head_bg_img_startY = 0 - HEADER_BACKGROUND_Y_OFFSET * head_bg_img_scale;
+    
     headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), 88 + 20)];
     {
-        CGFloat scale = CGRectGetWidth(headerView.bounds) / HEADER_BACKGROUND_WIDTH;
-        CGFloat startY = 0 - HEADER_BACKGROUND_Y_OFFSET * scale;
-        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, startY, HEADER_BACKGROUND_WIDTH * scale, HEADER_BACKGFOUND_HEIGHT * scale)];
+        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, head_bg_img_startY, HEADER_BACKGROUND_WIDTH * head_bg_img_scale, HEADER_BACKGFOUND_HEIGHT * head_bg_img_scale)];
+        CALayer *sublayer = [CALayer layer];
+        sublayer.backgroundColor = [UIColor blackColor].CGColor;
+        sublayer.opacity = COLOR255(0x55);
+        sublayer.frame = dectorView.bounds;
+        [dectorView.layer addSublayer:sublayer];
         [headerView addSubview:dectorView];
-        
-        UIView* dectorMask = [[UIView alloc] initWithFrame:headerView.bounds];
-        dectorMask.backgroundColor = [UIColor COLOR_WA(0x00, 0x55)];
-        [headerView addSubview:dectorMask];
-        [dectorMask release];
-        
-        titleView = [[UILabel alloc] initWithFrame:CGRectMake(25, 19, 290, 50)];
-        titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
-        titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
-        titleView.backgroundColor = [UIColor clearColor];
-        titleView.lineBreakMode = UILineBreakModeWordWrap;
-        titleView.numberOfLines = 2;
-        titleView.textAlignment = NSTextAlignmentCenter;
-        titleView.shadowColor = [UIColor blackColor];
-        titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-        [headerView addSubview:titleView];
     }
     [self.view addSubview:headerView];
     
@@ -163,6 +161,7 @@
         descView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         descView.backgroundColor = [UIColor clearColor];
         descView.lineBreakMode = NSLineBreakByWordWrapping;
+        descView.tag = kViewTagDescription;
         [container addSubview:descView];
         
         exfeeSuggestHeight = 70;
@@ -179,6 +178,7 @@
         timeRelView.shadowColor = [UIColor whiteColor];
         timeRelView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         timeRelView.backgroundColor = [UIColor clearColor];
+        timeRelView.tag = kViewTagTimeTitle;
         [container addSubview:timeRelView];
         
         timeAbsView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeRelView.frame.origin.y + timeRelView.frame.size.height + TIME_RELATIVE_BOTTOM_MARGIN, c.size.width /2 -  CONTAINER_VERTICAL_PADDING, TIME_ABSOLUTE_HEIGHT)];
@@ -186,12 +186,14 @@
         timeAbsView.shadowColor = [UIColor whiteColor];
         timeAbsView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         timeAbsView.backgroundColor = [UIColor clearColor];
+        timeAbsView.tag = kViewTagTimeDescription;
         [container addSubview:timeAbsView];
         
         timeZoneView= [[UILabel alloc] initWithFrame:CGRectMake(left + timeAbsView.frame.size.width + TIME_ABSOLUTE_RIGHT_MARGIN, timeAbsView.frame.origin.y, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 - timeAbsView.frame.size.width  - TIME_ABSOLUTE_RIGHT_MARGIN , TIME_ZONE_HEIGHT)];
         timeZoneView.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         timeZoneView.backgroundColor = [UIColor clearColor];
         timeZoneView.hidden = YES;
+        timeZoneView.tag = kViewTagTimeAdditional;
         [container addSubview:timeZoneView];
         
         placeTitleView= [[UILabel alloc] initWithFrame:CGRectMake(left, timeAbsView.frame.origin.y + timeAbsView.frame.size.height + TIME_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_TITLE_HEIGHT)];
@@ -201,6 +203,7 @@
         placeTitleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         placeTitleView.numberOfLines = 2;
         placeTitleView.backgroundColor = [UIColor clearColor];
+        placeTitleView.tag = kViewTagPlaceTitle;
         [container addSubview:placeTitleView];
         
         placeDescView= [[UILabel alloc] initWithFrame:CGRectMake(left, placeTitleView.frame.origin.y + placeTitleView.frame.size.height + PLACE_TITLE_BOTTOM_MARGIN, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , PLACE_DESC_HEIGHT)];
@@ -210,6 +213,7 @@
         placeDescView.numberOfLines = 4;
         placeDescView.lineBreakMode = NSLineBreakByWordWrapping;
         placeDescView.backgroundColor = [UIColor clearColor];
+        placeDescView.tag = kViewTagPlaceDescription;
         [container addSubview:placeDescView];
         
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) ;
@@ -230,6 +234,29 @@
     xContainer.contentSize = container.bounds.size;
     [xContainer addSubview:container];
     
+    {
+        tabLayer = [[EXTabLayer alloc] init];
+        //tabLayer.contents = (id)[UIImage imageNamed:@"x_titlebg_default.jpg"].CGImage;
+        tabLayer.frame = CGRectMake(0, head_bg_img_startY, HEADER_BACKGROUND_WIDTH * head_bg_img_scale, HEADER_BACKGFOUND_HEIGHT * head_bg_img_scale);
+        tabLayer.curveBase = 0 - head_bg_img_startY;
+        tabLayer.curveCenter = CGPointMake(269, tabLayer.curveBase + 100);
+        [tabLayer setNeedsLayout];
+        //[tabLayer setNeedsDisplay];
+        head_bg_point = tabLayer.mask.position;
+        [self.view.layer addSublayer:tabLayer];
+    }
+    
+    titleView = [[UILabel alloc] initWithFrame:CGRectMake(25, 19, 290, 50)];
+    titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
+    titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+    titleView.backgroundColor = [UIColor clearColor];
+    titleView.lineBreakMode = UILineBreakModeWordWrap;
+    titleView.numberOfLines = 2;
+    titleView.textAlignment = NSTextAlignmentCenter;
+    titleView.shadowColor = [UIColor blackColor];
+    titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
+    titleView.tag = kViewTagTitle;
+    [self.view addSubview:titleView];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
@@ -240,33 +267,27 @@
     btnBack.tag = kViewTagBack;
     [self.view  addSubview:btnBack];
     
-    UIButton* btnSwitch = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnSwitch setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 20, 0, 20, 44)];
+    
+    
+    UIView *tabBar = [[UIView alloc] initWithFrame:CGRectMake(0, 66, CGRectGetWidth(self.view.frame), 36)];
+    tabBar.backgroundColor = [UIColor clearColor];
+    {
+        
+    }
+    [self.view addSubview:tabBar];
+    [tabBar release];
+    
+    
+    
+    btnSwitch = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnSwitch setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 30 - 8, 68, 30, 30)];
     btnSwitch.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
-    [btnSwitch setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [btnSwitch setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
+    [btnSwitch setImage:[UIImage imageNamed:@"widget_x_30.png"] forState:UIControlStateNormal];
     [btnSwitch addTarget:self action:@selector(switchWidget:) forControlEvents:UIControlEventTouchUpInside];
     //btnSwitch.tag = kViewTagBack;
     [self.view  addSubview:btnSwitch];
     
-    if(_cross == nil){
-        _cross = [Cross object];
-        _cross.cross_description=@"";
-    }
     
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];
-    [request setPredicate:predicate];
-    NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    if(users!=nil && [users count] > 0)
-    {
-        _default_user = [[users objectAtIndex:0] retain];
-    }
-    [users release];
-    
-    [self refreshUI];
     
     // Gesture handler: need merge
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
@@ -296,8 +317,40 @@
     swipeLeftRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:swipeLeftRecognizer];
     [swipeLeftRecognizer release];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    // fill data & relayout
+    if(_cross == nil){
+        _cross = [Cross object];
+        _cross.cross_description=@"";
+    }
     
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSFetchRequest* request = [User fetchRequest];
+    NSPredicate *predicate = [NSPredicate
+                              predicateWithFormat:@"user_id = %u", app.userid];
+    [request setPredicate:predicate];
+    NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    if(users!=nil && [users count] > 0)
+    {
+        _default_user = [[users objectAtIndex:0] retain];
+    }
+    [users release];
     
+    [self refreshUI];
+    
+    if (_widgetId > 0) {
+        [self swapChildViewController:_widgetId];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    // start thread/query for underground opration
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
@@ -305,11 +358,16 @@
     [formatter release];
     
     [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",_cross.cross_id,@"cross_id", nil]];
-    
-    [self changeHeaderStyle:_headerStyle];
-    if (_widgetId > 0) {
-        [self swapChildViewController:_widgetId];
-    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -334,6 +392,8 @@
     [mapShadow release];
     [xContainer release];
     [container release];
+    
+    [tabLayer release];
     
     [super dealloc];
 }
@@ -376,12 +436,16 @@
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
                                 dectorView.image = backimg;
+                                //tabLayer.contents = (id) backimg.CGImage;
+                                [tabLayer setimage:backimg];
                             }
                         });
                     });
                     dispatch_release(imgQueue);
                 }else{
                     dectorView.image = backimg;
+                    //tabLayer.contents = (id) backimg.CGImage;
+                    [tabLayer setimage:backimg];
                 }
                 flag = YES;
                 break;
@@ -390,6 +454,8 @@
     }
     if (flag == NO){
         dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+        //tabLayer.contents = (id)[UIImage imageNamed:@"x_titlebg_default.jpg"].CGImage;
+        [tabLayer setimage:[UIImage imageNamed:@"x_titlebg_default.jpg"]];
     }
 }
 
@@ -406,7 +472,7 @@
 }
 
 - (void)fillExfee{
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    //AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     NSMutableArray *exfee = [[NSMutableArray alloc]  initWithCapacity:12];
     
@@ -462,7 +528,7 @@
                 [tz retain];
                 if (tz != nil && tz.length > 0) {
                     timeZoneView.hidden = NO;
-                    timeZoneView.text = tz;
+                    timeZoneView.text = [NSString stringWithFormat:@"(%@)", tz];
                     [timeZoneView sizeToFit];
                 }else{
                     timeZoneView.hidden = YES;
@@ -740,10 +806,8 @@
 }
 
 - (void)switchWidget:(id)sender{
-    //[self changeHeaderStyle:headerStyle];
-    _headerStyle = (_headerStyle + 1) % 2;
-    [self changeHeaderStyle:_headerStyle];
-    [self swapChildViewController:_headerStyle];
+    [self hidePopupIfShown];
+    [self swapChildViewController:(_headerStyle + 1) % 2];
 }
 
 #pragma mark EXImagesCollectionView Datasource methods
@@ -804,7 +868,7 @@
         //        [self ShowExfeeView];
     }
     else if(index < [reducedExfeeIdentities count]){
-        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        //AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         NSArray *arr=exfeeInvitations;//[self getReducedExfeeIdentities];
         Invitation *invitation =[arr objectAtIndex:index];
         
@@ -994,6 +1058,22 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
+-(void)moveLayer:(CALayer*)layer to:(CGPoint)point
+{
+    // Prepare the animation from the current position to the new position
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
+    animation.duration = 0.2;
+    animation.fromValue = [layer valueForKey:@"position"];
+    // iOS
+    animation.toValue = [NSValue valueWithCGPoint:point];
+    
+    // Update the layer's position so that the layer doesn't snap back when the animation completes.
+    layer.position = point;
+    
+    // Add the animation, overriding the implicit animation.
+    [layer addAnimation:animation forKey:@"position"];
+}
+
 #pragma mark == Helper methods for Header
 - (void) changeHeaderStyle:(NSInteger)style{
     //CGRect a = [UIScreen mainScreen].applicationFrame;
@@ -1003,7 +1083,8 @@
             titleView.lineBreakMode = UILineBreakModeTailTruncation;
             titleView.numberOfLines = 1;
             [btnBack setFrame:CGRectMake(0, 0, 20, 44)];
-            //[xContainer setFrame:CGRectMake(0, 44, 320, CGRectGetHeight(a) - 44)];
+            [btnSwitch setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 30 - 8, 68 - 44, 30, 30)];
+            [self moveLayer:tabLayer.mask to:CGPointMake(head_bg_point.x, head_bg_point.y - 44)];
             break;
             
         default:
@@ -1011,9 +1092,11 @@
             titleView.lineBreakMode = UILineBreakModeWordWrap;
             titleView.numberOfLines = 2;
             [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
-            //[xContainer setFrame:CGRectMake(0, 88, 320, CGRectGetHeight(a) - 88)];
+            [btnSwitch setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 30 - 8, 68, 30, 30)];
+            [self moveLayer:tabLayer.mask to:head_bg_point];
             break;
     }
+    _headerStyle = style;
 }
 
 #pragma mark == Helper methods for Content
@@ -1043,31 +1126,34 @@
 }
 
 - (void)swapChildViewController:(NSInteger)widget_id{
+    
     if (_currentViewController) {
-//        NSLog(@"Widget exits");
-//        __weak __block UIViewController *weakCrt = _currentViewController;
-//        CGRect frame = _currentViewController.view.frame;
-//        [UIView animateWithDuration:0.4 animations:^{
-//            NSLog(@"Animate to hide widget");
-//            weakCrt.view.frame = CGRectOffset(frame, 0, CGRectGetHeight(frame));
-//        }
-//                         completion:^(BOOL finished){
-//                             NSLog(@"Remove hidden widget");
-//                             [weakCrt.view removeFromSuperview];
-//                             [weakCrt removeFromParentViewController];
-//                         }];
-//        NSLog(@"Remove Widget reference");
-//        self.currentViewController = nil;
+        [UIView animateWithDuration:0.2
+                         animations:^{
+                             [self changeHeaderStyle:kHeaderStyleFull];
+                         }];
         
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.4];
-        CGRect frame = _currentViewController.view.frame;
-        _currentViewController.view.frame = CGRectOffset(frame, 0, CGRectGetHeight(frame));
-        [_currentViewController.view removeFromSuperview];
-        [_currentViewController removeFromParentViewController];
-        self.currentViewController = nil;
-        [UIView commitAnimations];
+        [UIView animateWithDuration:0.233
+                              delay:0.2
+                            options:UIViewAnimationOptionTransitionNone
+                         animations:^{
+                             self.currentViewController.view.alpha = 0;
+                         }
+                         completion:^(BOOL finished){
+                             
+                             [self.currentViewController.view removeFromSuperview];
+                             [self.currentViewController removeFromParentViewController];
+                             [self.currentViewController didMoveToParentViewController:nil];
+                             self.currentViewController = nil;
+                             
+                             [self showChinldViewController:widget_id];
+                         }];
+    }else{
+        [self showChinldViewController:widget_id];
     }
+}
+
+- (void)showChinldViewController:(NSInteger)widget_id{
     switch (widget_id) {
         case 1:
         {
@@ -1092,27 +1178,28 @@
             [self fillConversationCount:0];
             
             [self addChildViewController:conversationView];
-            [self.view insertSubview:conversationView.view belowSubview:btnBack];
-//            _currentViewController = [conversationView autorelease];
-            CGRect frame = conversationView.view.frame;
-            conversationView.view.frame = CGRectOffset(frame, 0, CGRectGetHeight(frame));
-            
+            [self.view insertSubview:conversationView.view aboveSubview:xContainer];
+            conversationView.view.alpha = 0;
             __weak __block CrossGroupViewController *weakSelf=self;
-            [UIView animateWithDuration:0.4 animations:^{
-                conversationView.view.frame = frame;
+            [UIView animateWithDuration:0.233 animations:^{
+                conversationView.view.alpha = 1;
             }
                              completion:^(BOOL finished){
+                                 [conversationView didMoveToParentViewController:weakSelf];
+                                 weakSelf.currentViewController = [conversationView autorelease];
+                                 [UIView animateWithDuration:0.2
+                                                  animations:^{
+                                                      [self changeHeaderStyle:kHeaderStyleHalf];
+                                                  }];
                                  
-                                 //[weakSelf.currentViewController.view removeFromSuperview];
-                                 [weakSelf.currentViewController removeFromParentViewController];
-                                 //[aNewViewController didMoveToParentViewController:weakSelf];
-                                 
-                                 weakSelf.currentViewController=[conversationView autorelease];
                              }];
         }
             break;
             
         default:
+            
+            
+            
             break;
     }
 }
@@ -1234,9 +1321,11 @@
     CGPoint location = [sender locationInView:sender.view];
     
     if (sender.state == UIGestureRecognizerStateEnded) {
-        if (titleView.hidden == NO && CGRectContainsPoint(titleView.frame, location)){
-            [self showPopup:kPopupTypeEditTitle];
-            return;
+        if (_currentViewController == nil) {
+            if (titleView.hidden == NO && CGRectContainsPoint(titleView.frame, location)){
+                [self showPopup:kPopupTypeEditTitle];
+                return;
+            }
         }
         [self hidePopupIfShown];
     }
@@ -1381,6 +1470,27 @@
     [self ShowPlaceView:@"search"];
 }
 
+- (void)clickforMenuEdit:(id)sender{
+    UIView *v = sender;
+    switch (v.tag) {
+        case kViewTagTitle & kViewTagMaskLayerTwo:
+        case kViewTagDescription & kViewTagMaskLayerTwo:
+            [self showTitleAndDescView];
+            [self performSelector:@selector(hidePopupIfShown) withObject:sender afterDelay:1];
+            break;
+        case kViewTagTimeTitle & kViewTagMaskLayerTwo:
+            [self performSelector:@selector(hidePopupIfShown) withObject:sender afterDelay:1];
+            [self showTimeView];
+            break;
+        case kViewTagPlaceTitle & kViewTagMaskLayerTwo:
+            [self performSelector:@selector(hidePopupIfShown) withObject:sender afterDelay:1];
+            [self ShowPlaceView:@"search"];
+            break;
+        default:
+            break;
+    }
+}
+
 #pragma mark Edit Menu API
 - (void) showTtitleAndDescEditMenu:(UIView*)sender{
     if (titleAndDescEditMenu == nil) {
@@ -1510,6 +1620,53 @@
 - (void)hidePlaceEditMenuNow{
     if (placeEditMenu != nil && placeEditMenu.hidden == NO) {
         placeEditMenu.hidden = YES;
+    }
+}
+
+- (void) showPopupEditMenu:(UIView*)sender{
+    UIButton* _popupEditMenu = nil;
+    if (_popupEditMenu == nil) {
+        _popupEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
+        _popupEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
+        [_popupEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
+        [_popupEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
+        _popupEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
+        _popupEditMenu.layer.borderWidth = 0.5;
+        _popupEditMenu.layer.borderColor = [UIColor COLOR_WA(0xFF, 0x20)].CGColor;
+        _popupEditMenu.layer.cornerRadius = 1.5;
+        _popupEditMenu.layer.masksToBounds = YES;
+        [_popupEditMenu addTarget:self action:@selector(clickforMenuEdit:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:_popupEditMenu];
+    }
+    CGPoint newLocation = [_popupEditMenu.superview convertPoint:sender.frame.origin fromView:sender.superview];
+    CGRect original = CGRectMake(CGRectGetWidth(_popupEditMenu.superview.bounds), newLocation.y + SMALL_SLOT, 50, 44);
+    _popupEditMenu.frame = original;
+    _popupEditMenu.hidden = NO;
+    _popupEditMenu.tag = sender.tag;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3];
+    [_popupEditMenu setFrame:CGRectOffset(_popupEditMenu.frame, 2 - CGRectGetWidth(_popupEditMenu.frame), 0)];
+    [UIView commitAnimations];
+}
+
+- (void) hidePopupEditMenuWithAnimation:(BOOL)animated{
+    UIButton* _popupEditMenu = nil;
+    if (animated) {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.3];
+        [_popupEditMenu setFrame:CGRectOffset(_popupEditMenu.frame, CGRectGetWidth(self.view.frame) - CGRectGetWidth(_popupEditMenu.frame), 0)];
+        [UIView setAnimationDidStopSelector:@selector(hidePopupEditMenuNow)];
+        [UIView commitAnimations];
+    }else{
+        [self hidePopupEditMenuNow];
+    }
+}
+
+- (void)hidePopupEditMenuNow{
+    UIButton* _popupEditMenu = nil;
+    if (_popupEditMenu != nil && _popupEditMenu.hidden == NO) {
+        _popupEditMenu.hidden = YES;
     }
 }
 
@@ -1727,47 +1884,10 @@
 }
 
 #pragma mark Navigation
-- (void) toConversationAnimated:(BOOL)isAnimated{
-    
-    _headerStyle = kHeaderStyleHalf;
-    [self changeHeaderStyle:_headerStyle];
-    [self swapChildViewController:kWidgetConversation];
-    
-//    ConversationViewController * conversationView = nil;
-//    if(conversationView == nil){
-//        conversationView = [[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
-//    }
-//    
-//    // prepare data for conversation
-//    conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
-//    conversationView.cross_title = _cross.title;
-//    for(NSDictionary *widget in _cross.widget) {
-//        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-//            conversationView.headImgDict = widget;
-//            break;
-//        }
-//    }
-//    Invitation* myInv = [self getMyInvitation];
-//    if (myInv != nil){
-//        conversationView.identity = myInv.identity;
-//    }
-//    
-//    // clean up data
-//    _cross.conversation_count = 0;
-//    [self fillConversationCount:0];
-//    
-//    // update cross list
-//    NSArray *viewControllers = self.navigationController.viewControllers;
-//    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
-//    [crossViewController refreshTableViewWithCrossId:[_cross.cross_id intValue]];
-//    
-//    [self.navigationController pushViewController:conversationView animated:isAnimated];
-//    [conversationView release];
-}
 
 #pragma mark EditCrossDelegate
 - (Invitation*) getMyInvitation{
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    //AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     for(Invitation *invitation in exfeeInvitations)
     {
         //        if([invitation.identity.connected_user_id intValue] == app.userid)

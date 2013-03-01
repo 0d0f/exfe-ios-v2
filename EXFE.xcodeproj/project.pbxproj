@@ -29,8 +29,10 @@
 		4F9105E616C2349400E524AC /* UIBorderLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9105E516C2349400E524AC /* UIBorderLabel.m */; };
 		4F9105ED16C256E700E524AC /* x_shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F9105EB16C256E700E524AC /* x_shadow.png */; };
 		4F9105EE16C256E700E524AC /* x_shadow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F9105EC16C256E700E524AC /* x_shadow@2x.png */; };
+		4F92B7F216E0F6F00099AE4F /* EXTabWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F92B7F116E0F6F00099AE4F /* EXTabWidget.m */; };
 		4FAD642716968C7F001870FF /* CrossTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD642616968C7F001870FF /* CrossTime+Helper.m */; };
 		4FAE4E6416AF9F82001479F8 /* x_titlebg_default.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */; };
+		4FAF86A616DF1D8A00F9CE98 /* EXTabLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF86A516DF1D8A00F9CE98 /* EXTabLayer.m */; };
 		4FB1635716B25756005B1D3C /* profile_title_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635516B25756005B1D3C /* profile_title_mask.png */; };
 		4FB1635816B25756005B1D3C /* profile_title_mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635616B25756005B1D3C /* profile_title_mask@2x.png */; };
 		4FB4435716B7B62800DE220E /* navi_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB4435516B7B62800DE220E /* navi_btn.png */; };
@@ -476,9 +478,13 @@
 		4F9105E516C2349400E524AC /* UIBorderLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBorderLabel.m; sourceTree = "<group>"; };
 		4F9105EB16C256E700E524AC /* x_shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_shadow.png; sourceTree = "<group>"; };
 		4F9105EC16C256E700E524AC /* x_shadow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x_shadow@2x.png"; sourceTree = "<group>"; };
+		4F92B7F016E0F6F00099AE4F /* EXTabWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTabWidget.h; sourceTree = "<group>"; };
+		4F92B7F116E0F6F00099AE4F /* EXTabWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabWidget.m; sourceTree = "<group>"; };
 		4FAD642516968C7F001870FF /* CrossTime+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CrossTime+Helper.h"; sourceTree = "<group>"; };
 		4FAD642616968C7F001870FF /* CrossTime+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CrossTime+Helper.m"; sourceTree = "<group>"; };
 		4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = x_titlebg_default.jpg; sourceTree = "<group>"; };
+		4FAF86A416DF1D8A00F9CE98 /* EXTabLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTabLayer.h; sourceTree = "<group>"; };
+		4FAF86A516DF1D8A00F9CE98 /* EXTabLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabLayer.m; sourceTree = "<group>"; };
 		4FB1635516B25756005B1D3C /* profile_title_mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_title_mask.png; sourceTree = "<group>"; };
 		4FB1635616B25756005B1D3C /* profile_title_mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_title_mask@2x.png"; sourceTree = "<group>"; };
 		4FB4435516B7B62800DE220E /* navi_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navi_btn.png; sourceTree = "<group>"; };
@@ -1483,6 +1489,10 @@
 				784D370F168C22C900987B6C /* EXRSVPMenuView.m */,
 				78335FAA1695912B00ADFE10 /* EXAlertView.h */,
 				78335FAB1695912B00ADFE10 /* EXAlertView.m */,
+				4FAF86A416DF1D8A00F9CE98 /* EXTabLayer.h */,
+				4FAF86A516DF1D8A00F9CE98 /* EXTabLayer.m */,
+				4F92B7F016E0F6F00099AE4F /* EXTabWidget.h */,
+				4F92B7F116E0F6F00099AE4F /* EXTabWidget.m */,
 			);
 			name = Control;
 			sourceTree = "<group>";
@@ -2347,6 +2357,8 @@
 				4F9105E616C2349400E524AC /* UIBorderLabel.m in Sources */,
 				4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */,
 				783F1D9416DB51A0005F85B3 /* WidgetConvViewController.m in Sources */,
+				4FAF86A616DF1D8A00F9CE98 /* EXTabLayer.m in Sources */,
+				4F92B7F216E0F6F00099AE4F /* EXTabWidget.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

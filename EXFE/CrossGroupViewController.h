@@ -13,6 +13,7 @@
 #import "EditCrossDelegate.h"
 #import "EXImagesCollectionView.h"
 #import "EXRSVPMenuView.h"
+#import "EXTabLayer.h"
 
 @class Cross;
 @class User;
@@ -30,6 +31,8 @@
     
     CGFloat exfeeSuggestHeight;
     NSMutableArray *exfeeInvitations;
+    CGFloat head_bg_img_startY;
+    CGPoint head_bg_point;
     
     BOOL layoutDirty;
     NSInteger popupCtrolId;
@@ -63,6 +66,9 @@
     // Navigation
     UIButton* btnBack;
     // Tab
+    EXTabLayer *tabLayer;
+    
+    UIButton* btnSwitch;
     
 }
 

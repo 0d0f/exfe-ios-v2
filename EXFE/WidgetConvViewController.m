@@ -559,7 +559,7 @@
                 floattimetextlayer.cornerRadius = 2.0;
                 floattimetextlayer.backgroundColor=FONT_COLOR_232737.CGColor;
                 [floattimetextlayer setAlignmentMode:kCAAlignmentCenter];
-                [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (40 + 4*2), 5, 40 + 8, 24 + 2)];
+                [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (40 + 4*2), 25, 40 + 8, 24 + 2)];
                 [self.view.layer addSublayer:floattimetextlayer];
             }
             
@@ -593,7 +593,7 @@
             CFRelease(timefontref);
             CFRelease(timefontref9);
             CGSize timesize=[self textWidthForHeight:28 withAttributedString:timeattribstring];
-            [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (timesize.width + 4 * 2),  5, timesize.width + 8, timesize.height + 2)];
+            [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (timesize.width + 4 * 2),  25, timesize.width + 8, timesize.height + 2)];
             [floattimetextlayer setString:timeattribstring];
             [timeattribstring release];
             topcellPath=path.row;

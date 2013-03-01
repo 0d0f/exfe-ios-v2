@@ -65,12 +65,19 @@
 #define kViewTagMaskOne                  (0070000)
 #define kViewTagMaskTwo                  (0007700)
 #define kViewTagMaskThree                (0000077)
+#define kViewTagMaskLayerTwo             (0077700)
 #define kViewTagRootView                 (0100000)
 #define kViewTagHeader                   (0110000)
 #define kViewTagContainer                (0120000)
 #define kViewTagTabBar                   (0130000)
 #define kViewTagBack                     (0140000)
-
+#define kViewTagTitle                    (0110101)
+#define kViewTagDescription              (0120102)
+#define kViewTagTimeTitle                (0120201)
+#define kViewTagTimeDescription          (0120202)
+#define kViewTagTimeAdditional           (0120203)
+#define kViewTagPlaceTitle               (0120301)
+#define kViewTagPlaceDescription         (0120302)
 
 @interface CrossDetailViewController ()
 
