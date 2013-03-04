@@ -51,8 +51,9 @@
     UIImageView* dectorView;
     UILabel* titleView;
     // Content
-    UIScrollView* xContainer;
-    UIView* container;
+//    UIScrollView* xContainer;
+//    UIView* container;
+    UIScrollView* container;
     EXLabel* descView;
     EXImagesCollectionView *exfeeShowview;
     UILabel *timeRelView;

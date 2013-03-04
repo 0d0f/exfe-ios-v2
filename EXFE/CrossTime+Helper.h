@@ -11,6 +11,7 @@
 @interface CrossTime (Helper)
 
 - (NSString*) getTimeTitle;
+- (NSString*) getTimeTitle:(NSUInteger)fmt;
 - (NSString*) getTimeDescription;
 - (NSString*) getTimeSingleLine;
 - (NSString*) getTimeZoneLine;

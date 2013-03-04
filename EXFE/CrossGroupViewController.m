@@ -124,7 +124,6 @@
     CGRect b = self.view.bounds;
     CGRect a = [UIScreen mainScreen].applicationFrame;
     self.view.frame = a;
-    self.view.backgroundColor = [UIColor COLOR_SNOW];
     
     CGFloat head_bg_img_scale = CGRectGetWidth(self.view.bounds) / HEADER_BACKGROUND_WIDTH;
     head_bg_img_startY = 0 - HEADER_BACKGROUND_Y_OFFSET * head_bg_img_scale;
@@ -141,16 +140,12 @@
     }
     [self.view addSubview:headerView];
     
-    xContainer = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 88, CGRectGetWidth(b), CGRectGetHeight(a) - 88)];
-    CGRect c = xContainer.bounds;
-    xContainer.alwaysBounceVertical = YES;
-    xContainer.backgroundColor = [UIColor clearColor];
-    xContainer.delegate = self;
-    [self.view addSubview:xContainer];
-    
-    container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(xContainer.bounds), 600)];
+    container = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 88, CGRectGetWidth(b), CGRectGetHeight(a) - 88)];
     container.backgroundColor = [UIColor COLOR_SNOW];
+    container.alwaysBounceVertical = YES;
+    container.delegate = self;
     container.tag = kViewTagContainer;
+    CGRect c = container.bounds;
     {
         int left = CONTAINER_VERTICAL_PADDING;
         descView = [[EXLabel alloc] initWithFrame:CGRectMake(left, CONTAINER_TOP_PADDING, CGRectGetWidth(c) -  CONTAINER_VERTICAL_PADDING * 2, 80)];
@@ -230,17 +225,14 @@
         
         
     }
-    [container sizeToFit];
-    xContainer.contentSize = container.bounds.size;
-    [xContainer addSubview:container];
+    [self.view addSubview:container];
     
     headerShadow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow.png"]];
-    headerShadow.frame = CGRectMake(0, CGRectGetMinY(xContainer.frame), 320, 25);
+    headerShadow.frame = CGRectMake(0, CGRectGetMinY(container.frame), 320, 25);
     [self.view addSubview:headerShadow];
     
     {
         tabLayer = [[EXTabLayer alloc] init];
-        //tabLayer.contents = (id)[UIImage imageNamed:@"x_titlebg_default.jpg"].CGImage;
         tabLayer.frame = CGRectMake(0, head_bg_img_startY, HEADER_BACKGROUND_WIDTH * head_bg_img_scale, HEADER_BACKGFOUND_HEIGHT * head_bg_img_scale);
         tabLayer.curveBase = 0 - head_bg_img_startY;
         tabLayer.curveCenter = CGPointMake(269, tabLayer.curveBase + 100);
@@ -377,7 +369,6 @@
     [placeDescView release];
     [mapView release];
     [mapShadow release];
-    [xContainer release];
     [container release];
     
     [tabLayer release];
@@ -426,7 +417,6 @@
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
                                 dectorView.image = backimg;
-                                //tabLayer.contents = (id) backimg.CGImage;
                                 [tabLayer setimage:backimg];
                             }
                         });
@@ -434,7 +424,6 @@
                     dispatch_release(imgQueue);
                 }else{
                     dectorView.image = backimg;
-                    //tabLayer.contents = (id) backimg.CGImage;
                     [tabLayer setimage:backimg];
                 }
                 flag = YES;
@@ -444,7 +433,6 @@
     }
     if (flag == NO){
         dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
-        //tabLayer.contents = (id)[UIImage imageNamed:@"x_titlebg_default.jpg"].CGImage;
         [tabLayer setimage:[UIImage imageNamed:@"x_titlebg_default.jpg"]];
     }
 }
@@ -623,7 +611,7 @@
 - (void)relayoutUIwithAnimation:(BOOL)Animated{
     if (layoutDirty == YES){
         //        NSLog(@"relayoutUI");
-        CGRect c = xContainer.frame;
+        CGRect c = container.frame;
         
         float left = CONTAINER_VERTICAL_PADDING;
         float width = c.size.width - CONTAINER_VERTICAL_PADDING * 2;
@@ -732,22 +720,18 @@
         
         // Map
         int a = CGRectGetHeight([UIScreen mainScreen].applicationFrame) - DECTOR_HEIGHT;
-        int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + container.frame.origin.y  + OVERLAP + 8 /*+ SMALL_SLOT */);
+        int b = (CGRectGetMaxY(placeDescView.frame) - CGRectGetMinY(placeTitleView.frame) + PLACE_TITLE_BOTTOM_MARGIN + TIME_BOTTOM_MARGIN + OVERLAP + 8 /*+ SMALL_SLOT */);
         mapView.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width , a - b);
         mapShadow.frame = CGRectMake(0, CGRectGetMaxY(placeDescView.frame) + PLACE_DESC_BOTTOM_MARGIN, c.size.width , 4);
         mapShadow.hidden = mapView.hidden;
         
-        CGSize s = xContainer.contentSize;
+        CGSize s = container.contentSize;
         if (mapView.hidden){
-            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(placeDescView.frame);
+            s.height = CGRectGetMaxY(placeDescView.frame);
         }else{
-            s.height = CGRectGetMinY(container.frame) + CGRectGetMaxY(mapView.frame);
+            s.height = CGRectGetMaxY(mapView.frame);
         }
-        if (s.height < CGRectGetHeight(xContainer.bounds)) {
-            s.height = CGRectGetHeight(xContainer.bounds);
-        }
-        [container setFrame:CGRectMake(0, 0, s.width, s.height)];
-        xContainer.contentSize = s;
+        container.contentSize = s;
         
         if (Animated) {
             [UIView commitAnimations];
@@ -1286,7 +1270,7 @@
         if (tagId == kViewTagContainer) {
             [mapView removeFromSuperview];
             CGRect f2 = [self.view convertRect:mapView.frame fromView:mapView.superview];
-            mapView.frame = CGRectOffset(f2, 0, CGRectGetMinY(container.frame) + CGRectGetMinY(xContainer.frame) - xContainer.contentOffset.y + 20);
+            mapView.frame = CGRectOffset(f2, 0, CGRectGetMinY(container.frame) + CGRectGetMinY(container.frame) - container.contentOffset.y + 20);
             savedFrame = mapView.frame;
             savedScrollEnable = mapView.scrollEnabled;
             mapView.scrollEnabled = YES;
@@ -1827,7 +1811,7 @@
                 errormsg=@"A connection failure has occurred.";
             else
                 errormsg=@"Could not connect to the server.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert show];
             [alert release];
             
@@ -1851,7 +1835,7 @@
                 if( [obj isKindOfClass:[Meta class]]){
                     if([((Meta*)obj).code intValue]==403)
                     {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                         alert.tag=403;
                         
                         [alert show];
