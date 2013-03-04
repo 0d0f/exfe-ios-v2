@@ -16,8 +16,6 @@
 @end
 
 @interface EXTabWidget : UIView{
-    NSArray* buttons;
-    
     NSUInteger currentIndex;
     NSArray* notifications;
     NSArray* hiddens;
@@ -26,5 +24,7 @@
 }
 
 @property (nonatomic, retain) id<EXTabWidgetDelegate> delegate;
+
+- (id)initWithFrame:(CGRect)frame withImages:(NSArray*)imgs current:(NSInteger)index;
 
 @end

@@ -266,29 +266,7 @@
     [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
     btnBack.tag = kViewTagBack;
     [self.view  addSubview:btnBack];
-    
-    
-    
-    UIView *tabBar = [[UIView alloc] initWithFrame:CGRectMake(0, 66, CGRectGetWidth(self.view.frame), 36)];
-    tabBar.backgroundColor = [UIColor clearColor];
-    {
-        
-    }
-    [self.view addSubview:tabBar];
-    [tabBar release];
-    
-    
-    
-    btnSwitch = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnSwitch setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 30 - 8, 68, 30, 30)];
-    btnSwitch.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
-    [btnSwitch setImage:[UIImage imageNamed:@"widget_x_30.png"] forState:UIControlStateNormal];
-    [btnSwitch addTarget:self action:@selector(switchWidget:) forControlEvents:UIControlEventTouchUpInside];
-    //btnSwitch.tag = kViewTagBack;
-    [self.view  addSubview:btnSwitch];
-    
-    
-    
+
     // Gesture handler: need merge
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [container addGestureRecognizer:gestureRecognizer];
@@ -345,6 +323,11 @@
     if (_widgetId > 0) {
         [self swapChildViewController:_widgetId];
     }
+    
+    NSArray* imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30"], [UIImage imageNamed:@"widget_conv_30"], nil];
+    tabWidget = [[EXTabWidget alloc] initWithFrame:CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40) withImages:imgs current:_widgetId];
+    tabWidget.delegate = self;
+    [self.view insertSubview:tabWidget belowSubview:btnBack];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -394,6 +377,7 @@
     [container release];
     
     [tabLayer release];
+    [tabWidget release];
     
     [super dealloc];
 }
@@ -1060,9 +1044,14 @@
 
 -(void)moveLayer:(CALayer*)layer to:(CGPoint)point
 {
+    [self moveLayer:layer to:point duration:0.2];
+}
+
+-(void)moveLayer:(CALayer*)layer to:(CGPoint)point duration:(NSTimeInterval)time
+{
     // Prepare the animation from the current position to the new position
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
-    animation.duration = 0.2;
+    animation.duration = time;
     animation.fromValue = [layer valueForKey:@"position"];
     // iOS
     animation.toValue = [NSValue valueWithCGPoint:point];
@@ -1079,20 +1068,20 @@
     //CGRect a = [UIScreen mainScreen].applicationFrame;
     switch (style) {
         case kHeaderStyleHalf:
-            [titleView setFrame:CGRectMake(25, 0, 290, 50)];
+            titleView.frame = CGRectMake(25, 0, 290, 50);
             titleView.lineBreakMode = UILineBreakModeTailTruncation;
             titleView.numberOfLines = 1;
-            [btnBack setFrame:CGRectMake(0, 0, 20, 44)];
-            [btnSwitch setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 30 - 8, 68 - 44, 30, 30)];
+            btnBack.frame = CGRectMake(0, 0, 20, 44);
+            tabWidget.frame = CGRectMake(0, 66 - 44, CGRectGetWidth(self.view.bounds), 40);
             [self moveLayer:tabLayer.mask to:CGPointMake(head_bg_point.x, head_bg_point.y - 44)];
             break;
             
         default:
-            [titleView setFrame:CGRectMake(25, 19, 290, 50)];
+            titleView.frame = CGRectMake(25, 19, 290, 50);
             titleView.lineBreakMode = UILineBreakModeWordWrap;
             titleView.numberOfLines = 2;
-            [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
-            [btnSwitch setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 30 - 8, 68, 30, 30)];
+            btnBack.frame=CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44);
+            tabWidget.frame = CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40);
             [self moveLayer:tabLayer.mask to:head_bg_point];
             break;
     }
@@ -2181,6 +2170,29 @@
 //        default:
 //            break;
 //    }
+}
+
+- (void)widgetClick:(id)tab withButton:(id)widget{
+    [self switchWidget:widget];
+}
+
+- (void)updateLayout:(id)sender animationWithParam:(NSDictionary*)param{
+    // @"width"
+    // @"animationTime"
+    NSLog(@"CrossGroup update ui, call back from tab widget");
+    NSString *w = [param objectForKey:@"width"];
+    CGFloat width = [w floatValue];
+    NSString *t = [param objectForKey:@"animationTime"];
+    NSTimeInterval time = [t doubleValue];
+    
+    CGPoint p = head_bg_point;
+    CGPoint c = tabLayer.curveCenter;
+    float offset = 0;
+    if (_headerStyle == kHeaderStyleHalf) {
+        offset = 44;
+    }
+    
+    [self moveLayer:tabLayer.mask to:CGPointMake(p.x - c.x + width, p.y - offset) duration:time];
 }
 
 

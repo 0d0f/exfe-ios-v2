@@ -14,6 +14,7 @@
 #import "EXImagesCollectionView.h"
 #import "EXRSVPMenuView.h"
 #import "EXTabLayer.h"
+#import "EXTabWidget.h"
 
 @class Cross;
 @class User;
@@ -27,7 +28,7 @@
 #define kWidgetConversation    1
 #define kWidgetExfee           2
 
-@interface CrossGroupViewController : UIViewController<EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate, RKObjectLoaderDelegate>{
+@interface CrossGroupViewController : UIViewController<EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, EXTabWidgetDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate, RKObjectLoaderDelegate>{
     
     CGFloat exfeeSuggestHeight;
     NSMutableArray *exfeeInvitations;
@@ -67,9 +68,7 @@
     UIButton* btnBack;
     // Tab
     EXTabLayer *tabLayer;
-    
-    UIButton* btnSwitch;
-    
+    EXTabWidget* tabWidget;
 }
 
 @property (nonatomic,retain) UIViewController *currentViewController;
