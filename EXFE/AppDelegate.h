@@ -24,8 +24,15 @@
 //#define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 //#endif
 
-
 #ifdef DEV
+#define API_V2_ROOT @"http://api.0d0f.com/v2"
+#define IMG_ROOT @"http://0d0f.com/static/img"
+#define EXFE_OAUTH_LINK @"http://dev.0d0f.com/oauth"
+#define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
+#endif
+
+
+#ifdef PANDA
 #define API_V2_ROOT @"http://api.panda.0d0f.com/v2"
 #define IMG_ROOT @"http://panda.0d0f.com/static/img"
 #define EXFE_OAUTH_LINK @"http://panda.0d0f.com/oauth"

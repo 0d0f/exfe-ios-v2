@@ -1123,7 +1123,7 @@
             NSInteger ctrlId = popupCtrolId;
             [self hidePopupIfShown:kPopupTypeEditStatus];
             if (ctrlId != kPopupTypeEditStatus) {
-                [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Pending", nil]];
+                [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Interested", nil]];
             }
         }else{
             [rsvpstatusview setHidden:NO];

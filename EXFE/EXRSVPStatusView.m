@@ -78,14 +78,15 @@
         rsvpicon=[UIImage imageNamed:@"rsvp_accepted_stroke_26blue.png"];
         rsvplabel.textColor=FONT_COLOR_HL;
         rsvpstatustext=@"Accepted";
-    }
-    else if ([invitation.rsvp_status isEqualToString:@"DECLINED"]){
+    } else if ([invitation.rsvp_status isEqualToString:@"DECLINED"]){
         rsvpicon=[UIImage imageNamed:@"rsvp_unavailable_stroke_26g5.png"];
         rsvpstatustext=@"Unavailable";
         rsvplabel.textColor=FONT_COLOR_51;
-
-    }
-    else{
+    } else if ([invitation.rsvp_status isEqualToString:@"INTERESTED"]){
+        rsvpicon=[UIImage imageNamed:@"rsvp_pending_stroke_26g5.png"];
+        rsvpstatustext=@"Interested";
+        rsvplabel.textColor=FONT_COLOR_51;
+    } else{
         rsvpicon=[UIImage imageNamed:@"rsvp_pending_stroke_26g5.png"];
         rsvpstatustext=@"Pending";
         rsvplabel.textColor=FONT_COLOR_51;

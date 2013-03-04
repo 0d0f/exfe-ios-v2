@@ -60,6 +60,7 @@
 		4FD4DD7416A68674003F1A55 /* EXWidgetTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */; };
 		4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */; };
 		4FD9375516D4A57600ED6677 /* CrossGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */; };
+		4FDE96C016E4FC240014456C /* WidgetConvViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FDE96BF16E4FC240014456C /* WidgetConvViewController.xib */; };
 		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
@@ -70,7 +71,6 @@
 		7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 780961FF15BDB70B0071E9D0 /* EXOverlayView.m */; };
 		780D27A4157F368900402460 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A3157F368900402460 /* Post.m */; };
 		780D27A7157F4AB100402460 /* PostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A6157F4AB100402460 /* PostCell.m */; };
-		780D4CF81609D9AA00D4D080 /* portrait_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780D4CF71609D99700D4D080 /* portrait_default@2x.png */; };
 		780EAC151650D94A00953D75 /* AddIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 780EAC131650D94900953D75 /* AddIdentityViewController.m */; };
 		780EAC161650D94A00953D75 /* AddIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 780EAC141650D94900953D75 /* AddIdentityViewController.xib */; };
 		780EAC27165215E800953D75 /* OAuthAddIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 780EAC25165215E700953D75 /* OAuthAddIdentityViewController.m */; };
@@ -131,7 +131,6 @@
 		783BA9DF15EC82F900AD832D /* btn_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 783BA9DD15EC82F900AD832D /* btn_back.png */; };
 		783BA9E015EC82F900AD832D /* btn_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783BA9DE15EC82F900AD832D /* btn_back@2x.png */; };
 		783F1D8E16DB5193005F85B3 /* WidgetConvViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */; };
-		783F1D8F16DB5193005F85B3 /* WidgetConvViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 783F1D8D16DB5193005F85B3 /* WidgetConvViewController.xib */; };
 		783F1D9416DB51A0005F85B3 /* WidgetConvViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */; };
 		783F52E616774C4100331746 /* btn_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 783F52E416774C4100331746 /* btn_blue.png */; };
 		783F52E716774C4100331746 /* btn_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783F52E516774C4100331746 /* btn_blue@2x.png */; };
@@ -518,6 +517,7 @@
 		4FD9375116D4A57600ED6677 /* CrossGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossGroupViewController.h; sourceTree = "<group>"; };
 		4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossGroupViewController.m; sourceTree = "<group>"; };
 		4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossGroupViewController.xib; sourceTree = "<group>"; };
+		4FDE96BF16E4FC240014456C /* WidgetConvViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WidgetConvViewController.xib; sourceTree = "<group>"; };
 		4FE8D3C51681926C00222420 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4FE8D3C61681926C00222420 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		4FE8D3C71681926C00222420 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
@@ -536,7 +536,6 @@
 		780D27A3157F368900402460 /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
 		780D27A5157F4AB100402460 /* PostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCell.h; sourceTree = "<group>"; };
 		780D27A6157F4AB100402460 /* PostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostCell.m; sourceTree = "<group>"; };
-		780D4CF71609D99700D4D080 /* portrait_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_default@2x.png"; sourceTree = "<group>"; };
 		780EAC121650D94900953D75 /* AddIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddIdentityViewController.h; sourceTree = "<group>"; };
 		780EAC131650D94900953D75 /* AddIdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddIdentityViewController.m; sourceTree = "<group>"; };
 		780EAC141650D94900953D75 /* AddIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddIdentityViewController.xib; sourceTree = "<group>"; };
@@ -610,7 +609,6 @@
 		783BA9DE15EC82F900AD832D /* btn_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_back@2x.png"; sourceTree = "<group>"; };
 		783F1D8B16DB5193005F85B3 /* WidgetConvViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetConvViewController.h; sourceTree = "<group>"; };
 		783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetConvViewController.m; sourceTree = "<group>"; };
-		783F1D8D16DB5193005F85B3 /* WidgetConvViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WidgetConvViewController.xib; sourceTree = "<group>"; };
 		783F52E416774C4100331746 /* btn_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_blue.png; sourceTree = "<group>"; };
 		783F52E516774C4100331746 /* btn_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_blue@2x.png"; sourceTree = "<group>"; };
 		783F52E81677777600331746 /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
@@ -1107,7 +1105,7 @@
 				4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */,
 				783F1D8B16DB5193005F85B3 /* WidgetConvViewController.h */,
 				783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */,
-				783F1D8D16DB5193005F85B3 /* WidgetConvViewController.xib */,
+				4FDE96BF16E4FC240014456C /* WidgetConvViewController.xib */,
 			);
 			name = Tab;
 			sourceTree = "<group>";
@@ -1261,7 +1259,6 @@
 				7879B4E116C1131E00D3BE3C /* portrait_circle_tri.png */,
 				7879B4E216C1131E00D3BE3C /* portrait_circle_tri@2x.png */,
 				7879869D15DA85F500AA631B /* portrait_default.png */,
-				780D4CF71609D99700D4D080 /* portrait_default@2x.png */,
 				78F45F3A16BB986800F364FE /* portrait_exclaim.png */,
 				78F45F3B16BB986800F364FE /* portrait_exclaim@2x.png */,
 				7879B47A16BE854200D3BE3C /* portrait_frame_50.png */,
@@ -1958,7 +1955,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F1142DF16AE40B000C30179 /* InfoPlist.strings in Resources */,
-				783F1D8F16DB5193005F85B3 /* WidgetConvViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2101,7 +2097,6 @@
 				7817DAAB1603419E00AE859D /* Default-568h@2x.png in Resources */,
 				7817DAAC1603419E00AE859D /* Default.png in Resources */,
 				7817DAAD1603419E00AE859D /* Default@2x.png in Resources */,
-				780D4CF81609D9AA00D4D080 /* portrait_default@2x.png in Resources */,
 				780EAC161650D94A00953D75 /* AddIdentityViewController.xib in Resources */,
 				780EAC28165215E800953D75 /* OAuthAddIdentityViewController.xib in Resources */,
 				78F9F887165383D60079BA6B /* identity_facebook_40.png in Resources */,
@@ -2215,6 +2210,7 @@
 				7848CE0416D7682700F9488E /* identity_phone_18_grey@2x.png in Resources */,
 				7848CE0516D7682700F9488E /* identity_phone_18.png in Resources */,
 				7848CE0616D7682700F9488E /* identity_phone_18@2x.png in Resources */,
+				4FDE96C016E4FC240014456C /* WidgetConvViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

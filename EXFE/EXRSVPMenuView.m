@@ -76,9 +76,9 @@
             y+=44;
         }
 
-        if([self Itemscontain:itemlist string:@"Pending"]){
+        if([self Itemscontain:itemlist string:@"Interested"]){
             UIButton *btnPending=[UIButton buttonWithType:UIButtonTypeCustom];
-            [btnPending setTitle:@"Pending" forState:UIControlStateNormal];
+            [btnPending setTitle:@"Interested" forState:UIControlStateNormal];
             [btnPending.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
             [btnPending setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [btnPending setFrame:CGRectMake(0, y, 125, 44)];
