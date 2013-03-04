@@ -124,7 +124,7 @@
     CGRect b = self.view.bounds;
     CGRect a = [UIScreen mainScreen].applicationFrame;
     self.view.frame = a;
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor COLOR_SNOW];
     
     CGFloat head_bg_img_scale = CGRectGetWidth(self.view.bounds) / HEADER_BACKGROUND_WIDTH;
     head_bg_img_startY = 0 - HEADER_BACKGROUND_Y_OFFSET * head_bg_img_scale;
@@ -233,6 +233,10 @@
     [container sizeToFit];
     xContainer.contentSize = container.bounds.size;
     [xContainer addSubview:container];
+    
+    headerShadow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow.png"]];
+    headerShadow.frame = CGRectMake(0, CGRectGetMinY(xContainer.frame), 320, 25);
+    [self.view addSubview:headerShadow];
     
     {
         tabLayer = [[EXTabLayer alloc] init];
@@ -378,6 +382,8 @@
     
     [tabLayer release];
     [tabWidget release];
+    
+    [headerShadow release];
     
     [super dealloc];
 }
@@ -1167,7 +1173,7 @@
             [self fillConversationCount:0];
             
             [self addChildViewController:conversationView];
-            [self.view insertSubview:conversationView.view aboveSubview:xContainer];
+            [self.view insertSubview:conversationView.view aboveSubview:headerShadow];
             conversationView.view.alpha = 0;
             __weak __block CrossGroupViewController *weakSelf=self;
             [UIView animateWithDuration:0.233 animations:^{
@@ -1235,7 +1241,6 @@
     if (ctrlid != (kPopupTypeEditPlace & MASK_LOW_BITS)) {
         [self hidePlaceEditMenuWithAnimation:YES];
     }
-    [self hideWidgetTabBar];
     
     popupCtrolId = skipId;
 }
@@ -2110,8 +2115,8 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [self hidePopupIfShown];
     
+    CGPoint offset = scrollView.contentOffset;
     if (mapView.hidden == NO) {
-        CGPoint offset = scrollView.contentOffset;
         CGSize size = scrollView.contentSize;
         if (size.height - offset.y <= CGRectGetHeight(scrollView.bounds) + 5) {
             mapView.scrollEnabled = YES;
@@ -2119,59 +2124,17 @@
             mapView.scrollEnabled = NO;
         }
     }
-}
-
-
-- (void)hideWidgetTabBar{
-//    widgetTabBar.hidden = YES;
-//    tabBar.hidden = NO;
-}
-
-- (void)widgetJump:(id)sender with:(NSNumber*)index
-{
-    NSInteger idx = [index integerValue];
-    switch (idx) {
-        case 0:
-            [self hideWidgetTabBar];
-            break;
-        case 1:
-            [self hideWidgetTabBar];
-            [self toConversationAnimated:NO];
-            break;
-        default:
-            [self hideWidgetTabBar];
-            break;
+    
+    if (offset.y < 0) {
+        headerShadow.hidden = YES;
+    }else{
+        if (headerShadow.hidden == YES) {
+            headerShadow.hidden = NO;
+        }
     }
 }
 
-- (void)widgetClick:(id)sender with:(NSNumber*)index{
-//    [self hidePopupIfShown];
-//    NSInteger idx = [index integerValue];
-//    switch (idx) {
-//        case 0:
-//            widgetTabBar.alpha = 0;
-//            widgetTabBar.hidden = NO;
-//            [UIView animateWithDuration:0.144 animations:^{
-//                tabBar.alpha = 0;
-//                tabBar.frame = CGRectOffset(tabBar.frame, 0, -15);
-//            } completion:^(BOOL finished){
-//                tabBar.alpha = 1;
-//                tabBar.hidden = YES;
-//                tabBar.frame = CGRectOffset(tabBar.frame, 0, 15);
-//            }];
-//            
-//            [UIView animateWithDuration:0.233 animations:^{
-//                widgetTabBar.alpha = 1;
-//            } completion:nil];
-//            break;
-//        case 1:
-//            [self toConversationAnimated:NO];
-//            break;
-//        default:
-//            break;
-//    }
-}
-
+#pragma mark EXTabWidgetDelegate
 - (void)widgetClick:(id)tab withButton:(id)widget{
     [self switchWidget:widget];
 }
@@ -2179,7 +2142,6 @@
 - (void)updateLayout:(id)sender animationWithParam:(NSDictionary*)param{
     // @"width"
     // @"animationTime"
-    NSLog(@"CrossGroup update ui, call back from tab widget");
     NSString *w = [param objectForKey:@"width"];
     CGFloat width = [w floatValue];
     NSString *t = [param objectForKey:@"animationTime"];

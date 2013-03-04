@@ -62,13 +62,14 @@
     UILabel *placeDescView;
     MKMapView *mapView;
     UIView *mapShadow;
-    // Widget
-    UIView* widgetContainer;
-    // Navigation
-    UIButton* btnBack;
-    // Tab
+    // WidgetTab
     EXTabLayer *tabLayer;
     EXTabWidget* tabWidget;
+    // Navigation
+    UIButton* btnBack;
+    
+    
+    UIImageView *headerShadow;
 }
 
 @property (nonatomic,retain) UIViewController *currentViewController;

@@ -24,7 +24,7 @@
             CGPoint topleft = [self positionOfButton:i];
             NSLog(@"EXTabWidget init: %i topleft(%@)", i, NSStringFromCGPoint(topleft));
             
-            btn.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
+            btn.backgroundColor = [UIColor clearColor];
             [btn setImage:[imgs objectAtIndex:i] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
             btn.tag = i + 1;
