@@ -36,18 +36,12 @@
 //    [manager.mappingProvider setObjectMapping:identityMapping forKeyPath:@"response.identities"];
 }
 
-+(void) LoadUsrWithUserId:(int)user_id delegate:(id)delegate {
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    
-//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u?token=%@",app.userid, app.accesstoken];
-//    RKObjectManager* manager =[RKObjectManager sharedManager];
-//    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//
-//    [manager loadObjectsAtResourcePath:endpoint usingBlock:^(RKObjectLoader *loader) {
-//        loader.userData = [NSNumber numberWithInt:user_id];
-//        loader.delegate = delegate;
-//    }];
+//+(void) LoadUsrWithUserId:(int)user_id delegate:(id)delegate {  
++(void) LoadUsrWithUserId:(int)user_id success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
   
+  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u?token=%@",API_ROOT,user_id, app.accesstoken];
+  [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:nil success:success failure:failure];
 }
 //+(void) LoadUsrWithUserId:(int)user_id token:(NSString*)token usingBlock:(void (^)(RKRequest *request))block {
     //AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];

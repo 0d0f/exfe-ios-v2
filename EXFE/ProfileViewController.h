@@ -44,7 +44,7 @@
 - (void) refreshIdentities;
 - (void) test:(id)sender;
 - (void) doVerify:(int)identity_id;
-- (Identity*) getIdentityById:(int)identity_id;
+//- (Identity*) getIdentityById:(int)identity_id;
 - (NSIndexPath*) getIndexById:(int)identity_id;
 - (void) deleteIdentity:(int)identity_id;
 - (void) deleteIdentityUI:(int)identity_id;

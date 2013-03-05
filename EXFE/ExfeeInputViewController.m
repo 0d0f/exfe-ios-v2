@@ -551,19 +551,19 @@ static char identitykey;
 }
 - (void) addBubbleByIdentity:(Identity*)identity input:(NSString*)input{
 
-    Invitation *invitation =[Invitation object];
-    invitation.rsvp_status=@"NORESPONSE";
-    invitation.identity=identity;
-    Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
-    if(myinvitation!=nil)
-        invitation.updated_by=myinvitation.identity;
-    else
-        invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
-    
-    [exfeeList addBubble:input customObject:invitation];
-    if([exfeeList bubblecount]>0)
-        [self changeLeftIconWhite:YES];
-    
+//    Invitation *invitation =[Invitation object];
+//    invitation.rsvp_status=@"NORESPONSE";
+//    invitation.identity=identity;
+//    Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
+//    if(myinvitation!=nil)
+//        invitation.updated_by=myinvitation.identity;
+//    else
+//        invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+//    
+//    [exfeeList addBubble:input customObject:invitation];
+//    if([exfeeList bubblecount]>0)
+//        [self changeLeftIconWhite:YES];
+  
 }
 
 - (void) addBubbleByInputString:(NSString*)input name:(NSString*)name provider:(NSString*)provider{
@@ -737,10 +737,10 @@ static char identitykey;
         invitation.rsvp_status=@"NORESPONSE";
         invitation.identity=identity;
         Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
-        if(myinvitation!=nil)
-            invitation.updated_by=myinvitation.identity;
-        else
-            invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+//        if(myinvitation!=nil)
+//            invitation.updated_by=myinvitation.identity;
+//        else
+//            invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
 
         NSString *identity_name=identity.nickname;
         if(identity_name==nil || [identity_name isEqualToString:@""])

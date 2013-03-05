@@ -366,22 +366,22 @@
         cross.widget=[[[NSMutableArray alloc] initWithCapacity:1] autorelease];
     [cross.widget addObject:widget];
     
-    User *user=default_user;
-    Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
- 
-    cross.title=[NSString stringWithFormat:@"·X· %@",default_identity.name];
-
-    title_be_edit=NO;
-
-    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"identity_id" ascending:YES]
-    ;
-    
-    orderedIdentities=[[NSMutableArray alloc] initWithCapacity:[default_user.identities count]];
-    NSArray *identities=[default_user.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-    for(Identity *identity in identities){
-        [orderedIdentities addObject:identity];
-    }
-    [self addDefaultIdentity:0];
+//    User *user=default_user;
+//    Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
+// 
+//    cross.title=[NSString stringWithFormat:@"·X· %@",default_identity.name];
+//
+//    title_be_edit=NO;
+//
+//    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"identity_id" ascending:YES]
+//    ;
+//    
+//    orderedIdentities=[[NSMutableArray alloc] initWithCapacity:[default_user.identities count]];
+//    NSArray *identities=[default_user.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+//    for(Identity *identity in identities){
+//        [orderedIdentities addObject:identity];
+//    }
+//    [self addDefaultIdentity:0];
 
 //    cross.exfee.invitations
 }
@@ -1038,10 +1038,10 @@
 }
 
 - (BOOL) isMe:(Identity*)my_identity{
-  for(Identity *_identity in default_user.identities){
-    if([_identity.identity_id isEqual:my_identity.identity_id])
-      return YES;
-  }
+//  for(Identity *_identity in default_user.identities){
+//    if([_identity.identity_id isEqual:my_identity.identity_id])
+//      return YES;
+//  }
   return NO;
 
 }
@@ -1342,7 +1342,8 @@
 }
 
 - (NSInteger)pickerView:(UIPickerView *)thePickerView numberOfRowsInComponent:(NSInteger)component {
-    return [default_user.identities count];
+//    return [default_user.identities count];
+  return 0;
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{

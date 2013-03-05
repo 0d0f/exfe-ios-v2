@@ -2,8 +2,8 @@
 //  User.h
 //  EXFE
 //
-//  Created by ju huo on 6/8/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by huoju on 3/1/13.
+//
 //
 
 #import <Foundation/Foundation.h>
@@ -16,10 +16,9 @@
 @property (nonatomic, retain) NSString * avatar_filename;
 @property (nonatomic, retain) NSString * bio;
 @property (nonatomic, retain) NSNumber * cross_quantity;
-@property (nonatomic, retain) NSNumber * user_id;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * timezone;
-@property (nonatomic, retain) Identity *default_identity;
+@property (nonatomic, retain) NSNumber * user_id;
 @property (nonatomic, retain) NSSet *identities;
 @end
 

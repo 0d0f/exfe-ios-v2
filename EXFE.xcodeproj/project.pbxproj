@@ -113,6 +113,7 @@
 		782B3CDA156B997200721150 /* SigninViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CD8156B997200721150 /* SigninViewController.xib */; };
 		78335FAC1695912B00ADFE10 /* EXAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78335FAB1695912B00ADFE10 /* EXAlertView.m */; };
 		78335FAF16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m in Sources */ = {isa = PBXBuildFile; fileRef = 78335FAE16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m */; };
+		7835CC2916E0AEE3005001AA /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7835CC2816E0AEE1005001AA /* User.m */; };
 		783662D115E37C1E00F4AEAC /* exclamation.png in Resources */ = {isa = PBXBuildFile; fileRef = 783662CF15E37C1E00F4AEAC /* exclamation.png */; };
 		783662D215E37C1E00F4AEAC /* exclamation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783662D015E37C1E00F4AEAC /* exclamation@2x.png */; };
 		783662D515E3EC9600F4AEAC /* ProfileBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 783662D415E3EC9600F4AEAC /* ProfileBackgroundView.m */; };
@@ -164,7 +165,6 @@
 		7852709C15FC7A1E001AF618 /* EXSpinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7852709B15FC7A1E001AF618 /* EXSpinView.m */; };
 		785659FC15F3AD660003CDF8 /* CustomStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */; };
 		785F6F541581DE4C00BF8EA0 /* APIProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F531581DE4C00BF8EA0 /* APIProfile.m */; };
-		785F6F60158204FE00BF8EA0 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F5F158204FE00BF8EA0 /* User.m */; };
 		785F6F6415820A0000BF8EA0 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F6215820A0000BF8EA0 /* ProfileViewController.m */; };
 		785F6F6515820A0000BF8EA0 /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 785F6F6315820A0000BF8EA0 /* ProfileViewController.xib */; };
 		785F6F7D1585A95D00BF8EA0 /* PullRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F7A1585A5A200BF8EA0 /* PullRefreshTableViewController.m */; };
@@ -426,13 +426,6 @@
 			remoteGlobalIDString = 25160E78145651060060A5C5;
 			remoteInfo = RestKitFrameworkTests;
 		};
-		789C8D6815931BF100580624 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 78A98ED615611028009E0806 /* RestKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 259C301615128079003066A2;
-			remoteInfo = RestKitResources;
-		};
 		78A98EEB156110C6009E0806 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78A98ED615611028009E0806 /* RestKit.xcodeproj */;
@@ -585,6 +578,8 @@
 		78335FAB1695912B00ADFE10 /* EXAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAlertView.m; sourceTree = "<group>"; };
 		78335FAD16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PerformBlockAfterDelay.h"; sourceTree = "<group>"; };
 		78335FAE16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PerformBlockAfterDelay.m"; sourceTree = "<group>"; };
+		7835CC2716E0AEE0005001AA /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		7835CC2816E0AEE1005001AA /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		783662CF15E37C1E00F4AEAC /* exclamation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exclamation.png; sourceTree = "<group>"; };
 		783662D015E37C1E00F4AEAC /* exclamation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exclamation@2x.png"; sourceTree = "<group>"; };
 		783662D315E3EC9600F4AEAC /* ProfileBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileBackgroundView.h; sourceTree = "<group>"; };
@@ -652,8 +647,6 @@
 		785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomStatusBar.m; sourceTree = "<group>"; };
 		785F6F521581DE4C00BF8EA0 /* APIProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIProfile.h; sourceTree = "<group>"; };
 		785F6F531581DE4C00BF8EA0 /* APIProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIProfile.m; sourceTree = "<group>"; };
-		785F6F5E158204FE00BF8EA0 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		785F6F5F158204FE00BF8EA0 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		785F6F6115820A0000BF8EA0 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		785F6F6215820A0000BF8EA0 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		785F6F6315820A0000BF8EA0 /* ProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewController.xib; sourceTree = "<group>"; };
@@ -1567,7 +1560,6 @@
 				789C8D6315931BF100580624 /* RestKitTests.octest */,
 				789C8D6515931BF100580624 /* RestKit.framework */,
 				789C8D6715931BF100580624 /* RestKitFrameworkTests.octest */,
-				789C8D6915931BF100580624 /* RestKitResources.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1597,8 +1589,8 @@
 				780D27A3157F368900402460 /* Post.m */,
 				78920EBA157CB0E1004F3901 /* Rsvp.h */,
 				78920EBB157CB0E1004F3901 /* Rsvp.m */,
-				785F6F5E158204FE00BF8EA0 /* User.h */,
-				785F6F5F158204FE00BF8EA0 /* User.m */,
+				7835CC2716E0AEE0005001AA /* User.h */,
+				7835CC2816E0AEE1005001AA /* User.m */,
 			);
 			name = Class;
 			sourceTree = "<group>";
@@ -1933,13 +1925,6 @@
 			remoteRef = 789C8D6615931BF100580624 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		789C8D6915931BF100580624 /* RestKitResources.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = RestKitResources.bundle;
-			remoteRef = 789C8D6815931BF100580624 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -2265,7 +2250,6 @@
 				785FD5891580797F0056590D /* UIInputToolbar.m in Sources */,
 				78E4EE5A1581D02B00AE6211 /* ConversationTableView.m in Sources */,
 				785F6F541581DE4C00BF8EA0 /* APIProfile.m in Sources */,
-				785F6F60158204FE00BF8EA0 /* User.m in Sources */,
 				785F6F6415820A0000BF8EA0 /* ProfileViewController.m in Sources */,
 				785F6F7D1585A95D00BF8EA0 /* PullRefreshTableViewController.m in Sources */,
 				78A834091588BBDC0019FDF5 /* ProfileCellView.m in Sources */,
@@ -2347,6 +2331,7 @@
 				4F9105E616C2349400E524AC /* UIBorderLabel.m in Sources */,
 				4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */,
 				783F1D9416DB51A0005F85B3 /* WidgetConvViewController.m in Sources */,
+				7835CC2916E0AEE3005001AA /* User.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

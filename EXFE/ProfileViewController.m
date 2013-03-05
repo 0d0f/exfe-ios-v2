@@ -85,11 +85,12 @@
     //CGRect f = self.view.frame;
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
     [request setPredicate:predicate];
-    NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+
     if(users != nil && [users count] > 0)
     {
         User *_user = [users objectAtIndex:0];
@@ -108,7 +109,7 @@
     else{
         useravatar.image=[UIImage imageNamed:@"portrait_default.png"];
     }
-    [users release];
+//    [users release];
     tableview.backgroundColor = [UIColor clearColor];
     tableview.opaque = NO;
     tableview.backgroundView = nil;
@@ -137,7 +138,13 @@
 
 - (void) refreshIdentities{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [APIProfile LoadUsrWithUserId:app.userid delegate:self];
+  [APIProfile LoadUsrWithUserId:app.userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    [self loadObjectsFromDataStore];
+
+    
+  } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+    
+  }];
 }
 
 
@@ -179,12 +186,12 @@
 
 - (void)loadObjectsFromDataStore {
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
     [request setPredicate:predicate];
-	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+
     if(users!=nil && [users count] >0)
     {
         user=[users objectAtIndex:0];
@@ -247,15 +254,13 @@
         [devices_section release];
         [identities_section release];
     }
-    [users release];
+//    [users release];
     [tableview reloadData];
 }
 
 
 #pragma Mark - RKRequestDelegate
 //- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-////    NSDictionary *a=[objects objectAtIndex:1];
-////    NSArray *b=[a objectForKey:@"identities"];
 //    [[User currentContext] save:nil];
 //    [[Invitation currentContext] save:nil];
 //    [[Identity currentContext] save:nil];

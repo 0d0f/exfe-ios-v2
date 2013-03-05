@@ -155,6 +155,15 @@
 }
 
 - (void) refreshPortrait{
+  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
+  [request setPredicate:predicate];
+  
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+  
+  NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+
 //RESTKIT0.2
 //    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 //
@@ -164,23 +173,23 @@
 //    [request setPredicate:predicate];
 //	NSArray *users = [[User objectsWithFetchRequest:request] retain];
 //    
-//    if(users!=nil && [users count] >0){
-//        User *user=[users objectAtIndex:0];
-//        
-//        if(user){
-//            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-//            dispatch_async(imgQueue, ^{
-//                UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:user.avatar_filename];
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    if(avatar_img!=nil && ![avatar_img isEqual:[NSNull null]]){
-////                        settingButton.image=avatar_img;
-////                        [settingButton setNeedsDisplay];
-//                    }
-//                });
-//            });
-//            dispatch_release(imgQueue);
-//        }
-//    }
+    if(users!=nil && [users count] >0){
+        User *user=[users objectAtIndex:0];
+        
+        if(user){
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+                UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:user.avatar_filename];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(avatar_img!=nil && ![avatar_img isEqual:[NSNull null]]){
+//                        settingButton.image=avatar_img;
+//                        [settingButton setNeedsDisplay];
+                    }
+                });
+            });
+            dispatch_release(imgQueue);
+        }
+    }
 //    [users release];
 }
 // deprecated
@@ -247,8 +256,9 @@
     BOOL login=[app Checklogin];
     if(login==YES)
     {
-        [self refreshPortrait];
-        [self refreshCrosses:@"crossupdateview"];
+      //RESTKIT 0.20
+//        [self refreshPortrait];
+//        [self refreshCrosses:@"crossupdateview"];
     }
     else {
         [app ShowLanding];
@@ -661,24 +671,24 @@
             }else if (connected_uid < 0){
                 // Unverified identity: connected_uid + identity_git id == 0
                 // Concern: performace issue?
-                NSFetchRequest* request = [User fetchRequest];
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
-                [request setPredicate:predicate];
-                NSArray *users = [[User objectsWithFetchRequest:request] retain];
-                if(users != nil && [users count] > 0)
-                {
-                    User *_user = [users objectAtIndex:0];
-                    for(Identity *identity in _user.identities){
-                        if([identity.identity_id intValue] + connected_uid == 0){
-                            if(invitation && invitation.invited_by &&
-                               invitation.invited_by.avatar_filename ) {
-                                avatarimgurl = invitation.invited_by.avatar_filename;
-                            }
-                            break;
-                        }
-                    }
-                }
-                [users release];
+//                NSFetchRequest* request = [User fetchRequest];
+//                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
+//                [request setPredicate:predicate];
+//                NSArray *users = [[User objectsWithFetchRequest:request] retain];
+//                if(users != nil && [users count] > 0)
+//                {
+//                    User *_user = [users objectAtIndex:0];
+//                    for(Identity *identity in _user.identities){
+//                        if([identity.identity_id intValue] + connected_uid == 0){
+//                            if(invitation && invitation.invited_by &&
+//                               invitation.invited_by.avatar_filename ) {
+//                                avatarimgurl = invitation.invited_by.avatar_filename;
+//                            }
+//                            break;
+//                        }
+//                    }
+//                }
+//                [users release];
             }
         }
         if(avatarimgurl==nil)

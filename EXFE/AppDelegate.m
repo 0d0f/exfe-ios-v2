@@ -35,10 +35,10 @@ static char handleurlobject;
 {
     [Flurry startSession:@"8R2R8KZG35DK6S6MDHGS"];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(observeContextSave:)
-                                                 name:NSManagedObjectContextDidSaveNotification
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(observeContextSave:)
+//                                                 name:NSManagedObjectContextDidSaveNotification
+//                                               object:nil];
     NSNumber* db_version=[[NSUserDefaults standardUserDefaults] objectForKey:@"db_version"];
     
     if(db_version==nil || [db_version intValue]<APP_DB_VERSION){
@@ -47,41 +47,114 @@ static char handleurlobject;
         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
     }
     
-
-
-    
-#ifdef RESTKIT_GENERATE_SEED_DB
-    NSString *seedDatabaseName = nil;
-    NSString *databaseName = DBNAME;
-#else
-    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
-    NSString *databaseName = DBNAME;
-#endif
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-    RKLogConfigureByName("*", RKLogLevelOff);
+  NSURL *baseURL = [NSURL URLWithString:API_ROOT];
+  RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+  // Enable Activity Indicator Spinner
+  [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
   
-
-  
+  // Initialize managed object store
   NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
   RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
-  NSError *error = nil;
-  BOOL success = RKEnsureDirectoryExistsAtPath(RKApplicationDataDirectory(), &error);
-  if (! success) {
-    RKLogError(@"Failed to create Application Data Directory at path '%@': %@", RKApplicationDataDirectory(), error);
-  }
-  NSString *path = [RKApplicationDataDirectory() stringByAppendingPathComponent:databaseName];
-  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:path fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
-  if (! persistentStore) {
-    RKLogError(@"Failed adding persistent store at path '%@': %@", path, error);
-  }
+  objectManager.managedObjectStore = managedObjectStore;
   
-  [managedObjectStore createManagedObjectContexts];
+  RKEntityMapping *identityMapping = [RKEntityMapping mappingForEntityForName:@"Identity" inManagedObjectStore:managedObjectStore];
 
-  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-  RKObjectManager* manager =[RKObjectManager managerWithBaseURL:[NSURL URLWithString:API_ROOT]];
-  if(app.accesstoken!=nil)
-    [manager.HTTPClient setDefaultHeader:app.accesstoken value:@"token"];
+  identityMapping.identificationAttributes = @[ @"identity_id" ];
+  [identityMapping addAttributeMappingsFromDictionary:@{@"id": @"identity_id",@"order": @"a_order"}];
+  [identityMapping addAttributeMappingsFromArray:@[@"name",@"nickname",@"provider",@"external_id",@"external_username",@"connected_user_id",@"bio",@"avatar_filename",@"avatar_updated_at",@"created_at",@"updated_at",@"type",@"unreachable",@"status"]];
   
+  RKEntityMapping *userMapping = [RKEntityMapping mappingForEntityForName:@"User" inManagedObjectStore:managedObjectStore];
+  userMapping.identificationAttributes = @[ @"user_id" ];
+  [userMapping addAttributeMappingsFromDictionary:@{@"id": @"user_id",
+   @"avatar_filename": @"avatar_filename",
+   @"bio": @"bio",
+   @"cross_quantity": @"cross_quantity",
+   @"name": @"name",
+   @"timezone": @"timezone"}];
+
+  [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identities" toKeyPath:@"identities" withMapping:identityMapping]];
+  
+  RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping pathPattern:nil keyPath:@"response.user" statusCodes:nil];
+  [objectManager addResponseDescriptor:responseDescriptor];
+  
+  
+  [managedObjectStore createPersistentStoreCoordinator];
+  NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
+  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
+  NSLog(@"%@",storePath);
+  NSError *error;
+  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:seedPath withConfiguration:nil options:nil error:&error];
+  NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
+  
+  // Create the managed object contexts
+  [managedObjectStore createManagedObjectContexts];
+  
+  // Configure a managed object cache to ensure we do not create duplicate objects
+  managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
+  
+  
+//  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u?token=%@",API_ROOT,user_id, app.accesstoken];
+  
+//  NSURL *url = [NSURL URLWithString:@"http://api.0d0f.com/v2/users/29?token=7d0a978b674529fe1c66120beaad804eae0bcf6fc8e03cd4106d8f773835ebdd"];
+//  NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//  
+//      RKManagedObjectRequestOperation *operation = [[RKManagedObjectRequestOperation alloc] initWithRequest:request responseDescriptors:@[responseDescriptor]];
+//      NSManagedObjectContext *context=[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
+//      operation.managedObjectContext = context;
+//      //  operation.managedObjectCache = managedObjectStore.managedObjectCache;
+//      [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+//        User * user=(User*)[[mappingResult array] objectAtIndex:0];
+//        NSSet *identities=user.identities;
+//        for (Identity *identity in identities){
+//          NSLog(@"login result: %@", identity.name);
+//          
+//        }
+//       
+//        
+//      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+//        RKLogError(@"Load failed with error: %@", error);
+//      }];
+//      [operation start];
+//      [operation release];
+
+//  [APIProfile LoadUsrWithUserId:385 delegate:self];
+//
+//#ifdef RESTKIT_GENERATE_SEED_DB
+//    NSString *seedDatabaseName = nil;
+//    NSString *databaseName = DBNAME;
+//#else
+//    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
+//    NSString *databaseName = DBNAME;
+//#endif
+//    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+//    RKLogConfigureByName("*", RKLogLevelOff);
+//  
+//
+//  
+//  NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+//  RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
+//  NSError *error = nil;
+//  BOOL success = RKEnsureDirectoryExistsAtPath(RKApplicationDataDirectory(), &error);
+//  if (! success) {
+//    RKLogError(@"Failed to create Application Data Directory at path '%@': %@", RKApplicationDataDirectory(), error);
+//  }
+//  NSString *path = [RKApplicationDataDirectory() stringByAppendingPathComponent:databaseName];
+//  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:path fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
+//  if (! persistentStore) {
+//    RKLogError(@"Failed adding persistent store at path '%@': %@", path, error);
+//  }
+//  
+//  [managedObjectStore createManagedObjectContexts];
+//
+//
+  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//  RKObjectManager* manager =[RKObjectManager managerWithBaseURL:[NSURL URLWithString:API_ROOT]];
+//  manager.managedObjectStore=managedObjectStore;
+  if(app.accesstoken!=nil)
+    [objectManager.HTTPClient setDefaultHeader:app.accesstoken value:@"token"];
+  
+//  NSManagedObjectContext *context=[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
+
   //    RKObjectManager* manager =[RKObjectManager managerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
 
   
@@ -118,7 +191,27 @@ static char handleurlobject;
     [self.window makeKeyAndVisible];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
     if(login==YES)
-        [APIProfile LoadUsrWithUserId:userid delegate:self];
+        [APIProfile LoadUsrWithUserId:userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+          NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+          NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", userid];
+          [request setPredicate:predicate];
+          RKObjectManager *objectManager = [RKObjectManager sharedManager];
+          NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+          if(users!=nil && [users count] >0)
+          {
+              User* user=[users objectAtIndex:0];
+              NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:4];
+              for(Identity *identity in user.identities){
+                  [identities addObject:identity.identity_id];
+              }
+              [[NSUserDefaults standardUserDefaults] setObject:identities forKey:@"default_user_identities"];
+              [identities release];
+              [[NSUserDefaults standardUserDefaults] synchronize];
+          }
+        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        }];
+  
+      
 //RESTKIT0.2
 //    RKClient *client = [RKClient sharedClient];
 //    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
@@ -194,7 +287,7 @@ static char handleurlobject;
     if([self Checklogin]==YES)
     {
 //        [APICrosses MappingRoute];
-//        NSString* devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"];
+        NSString* devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"];
         NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
         if( ifdevicetokenSave==nil)
         {
@@ -203,9 +296,9 @@ static char handleurlobject;
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
 
-        [(CrossesViewController*)crossviewController initUI];
-        [(CrossesViewController*)crossviewController refreshCrosses:@"crossview_init"];
-        [(CrossesViewController*)crossviewController loadObjectsFromDataStore];
+//        [(CrossesViewController*)crossviewController initUI];
+//        [(CrossesViewController*)crossviewController refreshCrosses:@"crossview_init"];
+//        [(CrossesViewController*)crossviewController loadObjectsFromDataStore];
         [self.navigationController dismissModalViewControllerAnimated:YES];
     }
 }
@@ -469,21 +562,21 @@ static char handleurlobject;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 - (void) cleandb{
-    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
+//    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
 
-#ifdef RESTKIT_GENERATE_SEED_DB
-    NSString *seedDatabaseName = nil;
-    NSString *databaseName = DBNAME;
-#else
-    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
-    NSString *databaseName = DBNAME;
-#endif
-    
-    [objectStore deletePersistentStore];
-    [objectStore save:nil];
+//#ifdef RESTKIT_GENERATE_SEED_DB
+//    NSString *seedDatabaseName = nil;
+//    NSString *databaseName = DBNAME;
+//#else
+//    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
+//    NSString *databaseName = DBNAME;
+//#endif
+//    
+//    [objectStore deletePersistentStore];
+//    [objectStore save:nil];
 //    objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
 
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(observeContextSave:)
 //                                                 name:NSManagedObjectContextDidSaveNotification
@@ -511,10 +604,10 @@ static char handleurlobject;
     }
     return NO;
 }
-- (void) observeContextSave:(NSNotification*) notification {
-    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
-    [[objectStore managedObjectContextForCurrentThread] mergeChangesFromContextDidSaveNotification:notification];
-}
+//- (void) observeContextSave:(NSNotification*) notification {
+//    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
+//    [[objectStore managedObjectContextForCurrentThread] mergeChangesFromContextDidSaveNotification:notification];
+//}
 
 //- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
 //	NSFetchRequest* request = [User fetchRequest];

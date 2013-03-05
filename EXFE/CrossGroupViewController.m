@@ -722,10 +722,10 @@
 
 #pragma mark ==== Helpers
 - (BOOL) isMe:(Identity*)my_identity{
-    for(Identity *_identity in _default_user.identities){
-        if([_identity.identity_id isEqual:my_identity.identity_id])
-            return YES;
-    }
+//    for(Identity *_identity in _default_user.identities){
+//        if([_identity.identity_id isEqual:my_identity.identity_id])
+//            return YES;
+//    }
     return NO;
     
 }

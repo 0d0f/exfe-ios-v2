@@ -9,6 +9,9 @@
 #import "Mapping.h"
 
 @implementation Mapping
+
+
+
 //RESTKIT0.2
 //+ (RKManagedObjectMapping*) getMetaMapping{
 //    RKObjectManager* manager =[RKObjectManager sharedManager];
