@@ -22,7 +22,6 @@
         for (NSUInteger i = 0; i < imgs.count; i++) {
             UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
             CGPoint topleft = [self positionOfButton:i];
-            NSLog(@"EXTabWidget init: %i topleft(%@)", i, NSStringFromCGPoint(topleft));
             
             btn.backgroundColor = [UIColor clearColor];
             [btn setImage:[imgs objectAtIndex:i] forState:UIControlStateNormal];

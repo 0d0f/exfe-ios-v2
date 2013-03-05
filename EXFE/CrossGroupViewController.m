@@ -1070,7 +1070,7 @@
             titleView.frame = CGRectMake(25, 19, 290, 50);
             titleView.lineBreakMode = UILineBreakModeWordWrap;
             titleView.numberOfLines = 2;
-            btnBack.frame=CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44);
+            btnBack.frame = CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44);
             tabWidget.frame = CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40);
             [self moveLayer:tabLayer.mask to:head_bg_point];
             break;
