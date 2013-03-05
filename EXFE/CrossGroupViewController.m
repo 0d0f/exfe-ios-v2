@@ -320,10 +320,12 @@
         [self swapChildViewController:_widgetId];
     }
     
-    NSArray* imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30"], [UIImage imageNamed:@"widget_conv_30"], nil];
-    tabWidget = [[EXTabWidget alloc] initWithFrame:CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40) withImages:imgs current:_widgetId];
-    tabWidget.delegate = self;
-    [self.view insertSubview:tabWidget belowSubview:btnBack];
+    if (tabWidget == nil) {
+        NSArray* imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30"], [UIImage imageNamed:@"widget_conv_30"], nil];
+        tabWidget = [[EXTabWidget alloc] initWithFrame:CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40) withImages:imgs current:_widgetId];
+        tabWidget.delegate = self;
+        [self.view insertSubview:tabWidget belowSubview:btnBack];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -1188,9 +1190,9 @@
 #pragma mark TODO gesture handler
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
     
-    if (mapView.superview.tag == kViewTagContainer && mapView.scrollEnabled == YES){
-        return NO;
-    }
+//    if (mapView.superview.tag == kViewTagContainer && mapView.scrollEnabled == YES){
+//        return NO;
+//    }
     CGPoint location = [gestureRecognizer locationInView:gestureRecognizer.view];
     CGPoint center = gestureRecognizer.view.center;
     if (ABS(location.x - center.x) < 30 && ABS(location.y - center.y) < 30){
@@ -1270,7 +1272,7 @@
         if (tagId == kViewTagContainer) {
             [mapView removeFromSuperview];
             CGRect f2 = [self.view convertRect:mapView.frame fromView:mapView.superview];
-            mapView.frame = CGRectOffset(f2, 0, CGRectGetMinY(container.frame) + CGRectGetMinY(container.frame) - container.contentOffset.y + 20);
+            mapView.frame = CGRectOffset(f2, 0, CGRectGetMinY(container.frame) - container.contentOffset.y + 20);
             savedFrame = mapView.frame;
             savedScrollEnable = mapView.scrollEnabled;
             mapView.scrollEnabled = YES;
@@ -1946,7 +1948,7 @@
                             NSDictionary *responsedict=[body objectForKey:@"response"];
                             NSDictionary *crossdict=[responsedict objectForKey:@"cross" ];
                             NSNumber *cross_id=[crossdict objectForKey:@"id"];
-                            if([cross_id intValue]==[self.cross.cross_id intValue])
+                            if([cross_id intValue]==[_cross.cross_id intValue])
                             {
                                 [app CrossUpdateDidFinish:[_cross.cross_id intValue]];
                             }

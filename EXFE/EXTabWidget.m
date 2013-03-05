@@ -17,6 +17,7 @@
     if (self) {
         currentIndex = 0;
         gravity = 1; // right to left
+        _enable = YES;
         // Initialization code
         CGRect frame = CGRectMake(0, 0, 30, 30);
         for (NSUInteger i = 0; i < imgs.count; i++) {
@@ -59,10 +60,15 @@
 }
 
 - (void)widgetClick:(id)sender{
+    if (_enable == NO) {
+        return;
+    }
+    
     UIButton* btn = sender;
     NSUInteger idx = btn.tag - 1;
     
     if (idx == currentIndex) {
+        _enable = NO;
         NSTimeInterval time = 0.2;
         if (self.delegate) {
             if([self.delegate respondsToSelector:@selector(updateLayout:animationWithParam:)]){
@@ -93,6 +99,7 @@
                              another.frame = aNew;
                          }
                          completion:^(BOOL finished){
+                             _enable = YES;
                              [UIView animateWithDuration:0.233
                                               animations:^{
                                                   CGRect aNew = another.frame;

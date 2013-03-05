@@ -372,16 +372,37 @@
 }
 
 - (void) done{
-    NSIndexPath *index=[_tableView indexPathForSelectedRow];
-    int tipline=0;
-    if([inputplace.text length]>0)
-      tipline=1;
-    if (index.row-tipline>0) {
-      place.title=placeedit.PlaceTitle.text;
-      place.place_description=placeedit.PlaceDesc.text;
+    if (_tableView.hidden) {
+        if (placeedit.PlaceTitle.text.length == 0) {
+            if (placeedit.PlaceDesc.text.length > 0) {
+                // Hack: temp walkaround to hide clear popup
+                return;
+            }
+            place.title=@"";
+            place.place_description=@"";
+            place.lat=@"";
+            place.lng=@"";
+            place.external_id=@"";
+            place.provider=@"";
+        }else{
+            place.title = placeedit.PlaceTitle.text;
+            place.place_description = placeedit.PlaceDesc.text;
+        }
     }else{
-      place.title=inputplace.text;
+        NSIndexPath *index = [_tableView indexPathForSelectedRow];
+        int tipline = 0;
+        if([inputplace.text length] > 0){
+            tipline = 1;
+        }
+        
+        if (index.row - tipline >= 0) {
+            place.title = placeedit.PlaceTitle.text;
+            place.place_description = placeedit.PlaceDesc.text;
+        }else{
+            place.title = inputplace.text;
+        }
     }
+    
     [delegate setPlace:place];
     [self dismissModalViewControllerAnimated:YES];
 }
@@ -830,11 +851,18 @@
             [clearbutton setHidden:NO];
         }
         [_tableView reloadData];
+//        place.title=@"";
+//        place.place_description=@"";
+//        place.lat=@"";
+//        place.lng=@"";
+//        place.external_id=@"";
+//        place.provider=@"";
         [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
     }if(textField.tag==402){
-        if([textField.text isEqualToString:@""]){
-            [actionsheet showInView:self.view];
-        }
+        //place title editor
+//        if([textField.text isEqualToString:@""]){
+//            [actionsheet showInView:self.view];
+//        }
     }
 
 }

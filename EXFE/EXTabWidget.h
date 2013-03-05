@@ -21,6 +21,8 @@
     NSArray* hiddens;
     
     NSUInteger gravity;
+    
+    BOOL _enable;
 }
 
 @property (nonatomic, retain) id<EXTabWidgetDelegate> delegate;
