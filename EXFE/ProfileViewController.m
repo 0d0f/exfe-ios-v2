@@ -130,9 +130,7 @@
 
 
 - (void)gotoBack:(UIButton*)sender{
-    RKObjectManager* manager =[RKObjectManager sharedManager];
-  //RESTKIT0.2
-//    [manager.requestQueue cancelAllRequests];
+    [[RKObjectManager sharedManager].operationQueue cancelAllOperations];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -140,10 +138,8 @@
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
   [APIProfile LoadUsrWithUserId:app.userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
     [self loadObjectsFromDataStore];
-
-    
   } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-    
+    NSLog(@"Error!:%@",error);
   }];
 }
 
@@ -257,19 +253,6 @@
 //    [users release];
     [tableview reloadData];
 }
-
-
-#pragma Mark - RKRequestDelegate
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    [[User currentContext] save:nil];
-//    [[Invitation currentContext] save:nil];
-//    [[Identity currentContext] save:nil];
-//    [self loadObjectsFromDataStore];
-//}
-//
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-////    NSLog(@"Error!:%@",error);
-//}
 
 #pragma mark UITableViewDataSource methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

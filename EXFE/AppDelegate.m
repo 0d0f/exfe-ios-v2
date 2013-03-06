@@ -77,6 +77,16 @@ static char handleurlobject;
   RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping pathPattern:nil keyPath:@"response.user" statusCodes:nil];
   [objectManager addResponseDescriptor:responseDescriptor];
   
+  RKEntityMapping *crossMapping = [RKEntityMapping mappingForEntityForName:@"Cross" inManagedObjectStore:managedObjectStore];
+  crossMapping.identificationAttributes = @[ @"cross_id" ];
+  [crossMapping addAttributeMappingsFromDictionary:@{@"id": @"cross_id",
+   @"description": @"cross_description",
+   @"id_base62": @"crossid_base62"}];
+  [crossMapping addAttributeMappingsFromArray:@[@"title",@"created_at",@"updated",@"widget",@"updated_at",@"conversation_count"]];
+  RKResponseDescriptor *crossresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.crosses" statusCodes:nil];
+  [objectManager addResponseDescriptor:crossresponseDescriptor];
+
+  
   
   [managedObjectStore createPersistentStoreCoordinator];
   NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
@@ -118,17 +128,6 @@ static char handleurlobject;
 //      [operation release];
 
 //  [APIProfile LoadUsrWithUserId:385 delegate:self];
-//
-//#ifdef RESTKIT_GENERATE_SEED_DB
-//    NSString *seedDatabaseName = nil;
-//    NSString *databaseName = DBNAME;
-//#else
-//    NSString *seedDatabaseName = RKDefaultSeedDatabaseFileName;
-//    NSString *databaseName = DBNAME;
-//#endif
-//    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-//    RKLogConfigureByName("*", RKLogLevelOff);
-//  
 //
 //  
 //  NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];

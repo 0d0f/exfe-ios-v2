@@ -161,18 +161,8 @@
   [request setPredicate:predicate];
   
   RKObjectManager *objectManager = [RKObjectManager sharedManager];
-  
   NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
 
-//RESTKIT0.2
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//
-//    NSFetchRequest* request = [User fetchRequest];
-//    NSPredicate *predicate = [NSPredicate
-//                              predicateWithFormat:@"user_id = %u", app.userid];
-//    [request setPredicate:predicate];
-//	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-//    
     if(users!=nil && [users count] >0){
         User *user=[users objectAtIndex:0];
         

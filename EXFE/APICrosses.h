@@ -20,7 +20,10 @@
 + (id) sharedManager;
 +(void) MappingCross;
 +(void) MappingRoute;
-+(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source;
+//+(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source;
++(void) LoadCrossWithUserId:(int)user_id updatedtime:(NSString*)updatedtime source:(NSDictionary*)source success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
+
 +(void) LoadCrossWithCrossId:(int)corss_id updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source;
 +(void) GatherCross:(Cross*) cross delegate:(id)delegate;
 

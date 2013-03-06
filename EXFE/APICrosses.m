@@ -176,7 +176,18 @@ static id sharedManager = nil;
 //        loader.delegate=delegate;
 //    }];
 //}
-//     
+
++(void) LoadCrossWithUserId:(int)user_id updatedtime:(NSString*)updatedtime source:(NSDictionary*)source success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
+  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+  if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
+      updatedtime=[Util encodeToPercentEscapeString:updatedtime];
+  
+  NSString *endpoint = [NSString stringWithFormat:@"/users/%u/crosses?updated_at=%@&token=%@",app.userid,updatedtime,app.accesstoken];
+
+}
+
+
+//
 //+(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source{
 //    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 //    if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
