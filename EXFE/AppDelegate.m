@@ -57,6 +57,12 @@ static char handleurlobject;
   RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
   objectManager.managedObjectStore = managedObjectStore;
   
+  RKEntityMapping *metaMapping = [RKEntityMapping mappingForEntityForName:@"Meta" inManagedObjectStore:managedObjectStore];
+  [metaMapping addAttributeMappingsFromArray:@[@"code",@"errorDetail",@"errorType"]];
+  RKResponseDescriptor *metaresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:metaMapping pathPattern:nil keyPath:@"meta" statusCodes:nil];
+  [objectManager addResponseDescriptor:metaresponseDescriptor];
+
+  
   RKEntityMapping *identityMapping = [RKEntityMapping mappingForEntityForName:@"Identity" inManagedObjectStore:managedObjectStore];
 
   identityMapping.identificationAttributes = @[ @"identity_id" ];
@@ -85,7 +91,6 @@ static char handleurlobject;
   [crossMapping addAttributeMappingsFromArray:@[@"title",@"created_at",@"updated",@"widget",@"updated_at",@"conversation_count"]];
   RKResponseDescriptor *crossresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.crosses" statusCodes:nil];
   [objectManager addResponseDescriptor:crossresponseDescriptor];
-
   
   
   [managedObjectStore createPersistentStoreCoordinator];

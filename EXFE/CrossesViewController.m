@@ -293,7 +293,125 @@
         hud.customView=bigspin;
         [bigspin release];
     }
+  
+    //  source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]
+    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+
+        int notification=0;
+        if([[mappingResult array] count]>0)
+        {
+        //        NSString *source=[objectLoader.userData objectForKey:@"name" ];
+          NSString *exfee_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
+          NSDate *last_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
+          BOOL needsave=NO;
+          BOOL isError=NO;
+          Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+          if(meta!=nil){
+            if([meta.code intValue]!=200){
+              [Util showError:meta delegate:self];
+              isError=YES;
+            }
+          }
+          if(isError==NO){
+            NSArray *crosses=(NSArray*)[[mappingResult dictionary] objectForKey:@"response.crosses"];
+            for (Cross *cross in crosses){
+              id updated=cross.updated;
+              if([updated isKindOfClass:[NSDictionary class]]){
+                  NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
+                  NSString *key=nil;
+                  NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                  [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                  [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+              
+                  while (key = [enumerator nextObject]){
+                      NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
+                      NSString *updated_at_str=[obj objectForKey:@"updated_at"];
+                      if([updated_at_str isKindOfClass:[NSString class]]) {
+                          NSDate *updated_at =[NSDate date];
+                          if([updated_at_str length]>19){
+                              updated_at_str=[updated_at_str substringToIndex:19];
+                              updated_at = [formatter dateFromString:updated_at_str];
+                          }
+                          if([updated_at compare: cross.updated_at] == NSOrderedDescending || [updated_at compare: cross.updated_at] == NSOrderedSame) {
+                              if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]]) {
+                                  NSNumber *identity_id=[obj objectForKey:@"identity_id"];
+                                  if([self isIdentityBelongsMe:[identity_id intValue]]==NO)
+                                      notification++;
+                              }
+                          }
+                      }
+                  }
+                  [formatter release];
+              }
+              if(cross.updated_at!=nil){
+                  if([source isEqualToString:@"crossview"]){
+                      if(exfee_updated_at==nil){
+                          cross.read_at=[NSDate date];
+                          needsave=YES;
+                      }
+                  }
+                  if(last_updated_at==nil)
+                      last_updated_at=cross.updated_at;
+                  else{
+                      last_updated_at=[cross.updated_at laterDate:last_updated_at];
+                  }
+              }
+            }
+
+            [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            if(![source isEqualToString:@"crossview"] && notification>0){
+              [customStatusBar showWithStatusMessage:[NSString stringWithFormat:@"%i updates...",notification]];
+              [customStatusBar performSelector:@selector(hide) withObject:nil afterDelay:2];
+            }
+            if ([source isEqualToString:@"gatherview"]) {
+                AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                [app.navigationController dismissModalViewControllerAnimated:YES];
+            }
+            else if([source isEqualToString:@"pushtocross"]) {
+            //                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
+            //                Cross *cross=[self crossWithId:[cross_id intValue]];
+            //                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+            ////                gatherViewController.cross=cross;
+            ////                [gatherViewController setViewMode];
+            ////                [self.navigationController pushViewController:gatherViewController animated:YES];
+            ////                [gatherViewController release];
+            }
+            else if([source isEqualToString:@"pushtoconversation"]) {
+            ////                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
+            ////                Cross *cross=[self crossWithId:[cross_id intValue]];
+            ////                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
+            ////                gatherViewController.cross=cross;
+            ////                [gatherViewController setViewMode];
+            ////                [self.navigationController pushViewController:gatherViewController animated:NO];
+            ////                [gatherViewController toconversation];
+            ////                [gatherViewController release];
+            }
+            else if([source isEqualToString:@"crossupdateview"] || [source isEqualToString:@"crossview"] || [source isEqualToString:@"crossview_init"]) {
+            ////                NSString *refresh_cross_id=[objectLoader.userData objectForKey:@"cross_id" ];
+            //
+              [self loadObjectsFromDataStore];
+            ////                [self.tableView reloadData];
+            }
+          }
+        //        }
+        //        if(isError==NO)
+        //        {
+        //            if(needsave==YES)
+        //                [[Cross currentContext] save:nil];
+        //
+        }
+        //
+        [self stopLoading];
+        if(hud)
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
         
+      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+//        [self stopLoading];
+        if(hud)
+          [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+      }];
 //    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]];
   
 }
@@ -303,13 +421,15 @@
 }
 
 - (void)loadObjectsFromDataStore {
-//	NSFetchRequest* request = [Cross fetchRequest];
-//	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
-//	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
-//    [_crosses release];
-//    _crosses=[[Cross objectsWithFetchRequest:request] retain];
-    [self refreshWelcome];
-    [self.tableView reloadData];
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Cross"];
+	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
+	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+  [_crosses release];
+  _crosses = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+  
+  [self refreshWelcome];
+  [self.tableView reloadData];
     
 }
 - (void)refresh
@@ -529,17 +649,13 @@
     
     if (indexPath.section == 0){
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-      
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-//        NSFetchRequest* request = [User fetchRequest];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
         [request setPredicate:predicate];
       
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
       
         NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
-//        NSArray *users = [[User objectsWithFetchRequest:request] retain];
-
         NSString* reuseIdentifier = @"Profile";
         ProfileCard *headerView =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
         if (nil == headerView) {
@@ -779,7 +895,7 @@
                         cross.read_at=[cross.read_at laterDate:updated_at];
                 }
                 NSError *saveError;
-                [[Cross currentContext] save:&saveError];
+//                [[Cross currentContext] save:&saveError];
                 [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: indexPath]
                                       withRowAnimation: UITableViewRowAnimationNone];
             }

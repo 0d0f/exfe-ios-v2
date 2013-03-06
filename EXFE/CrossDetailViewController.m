@@ -247,15 +247,17 @@
     self.view.backgroundColor = [UIColor grayColor];
   
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
     [request setPredicate:predicate];
-    NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    if(cross==nil){
-      cross=[Cross object];
-      cross.cross_description=@"";
-    }
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+  
+//    if(cross==nil){
+//      NSEntityDescription* entitydesc=[NSEntityDescription entityForName:@"User" inManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+//      [[Cross alloc] initWithEntity:entitydesc insertIntoManagedObjectContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+//      cross.cross_description=@"";
+//    }
     if(users!=nil && [users count] >0)
     {
       default_user=[[users objectAtIndex:0] retain];
@@ -1902,35 +1904,36 @@
 {
     //tag 101: save cross
     //tag 102: save exfee
-    if(buttonIndex==0)//cancel
-    {
-        if(alertView.tag==201){
-            [[Cross currentContext] rollback];
-            [self fillTime:cross.time];
-            [self fillPlace:cross.place];
-            [self relayoutUI];
-
-//            [self setTime:cross.time];
-//            [self setPlace:cross.place];
-//            crosstitle.text=cross.title;
-//            crossdescription.text=cross.cross_description;
-        }else if(alertView.tag==202){
-//            [[Exfee currentContext] rollback];
+//RESTKIT0.20
+//    if(buttonIndex==0)//cancel
+//    {
+//        if(alertView.tag==201){
 //            [[Cross currentContext] rollback];
-//            [self reloadExfeeIdentities];
-        }else if(alertView.tag==403){ //privacy control
-            [[Cross currentContext] deleteObject:self.cross];
-            [[Cross currentContext] save:nil];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        }
-    }else if(buttonIndex==1) //retry
-    {
-        if(alertView.tag==201){
-            [self saveCrossUpdate];
-        }else if(alertView.tag==202){
-//            [self saveExfeeUpdate];
-        }
-    }
+//            [self fillTime:cross.time];
+//            [self fillPlace:cross.place];
+//            [self relayoutUI];
+//
+////            [self setTime:cross.time];
+////            [self setPlace:cross.place];
+////            crosstitle.text=cross.title;
+////            crossdescription.text=cross.cross_description;
+//        }else if(alertView.tag==202){
+////            [[Exfee currentContext] rollback];
+////            [[Cross currentContext] rollback];
+////            [self reloadExfeeIdentities];
+//        }else if(alertView.tag==403){ //privacy control
+//            [[Cross currentContext] deleteObject:self.cross];
+//            [[Cross currentContext] save:nil];
+//            [self.navigationController popToRootViewControllerAnimated:YES];
+//        }
+//    }else if(buttonIndex==1) //retry
+//    {
+//        if(alertView.tag==201){
+//            [self saveCrossUpdate];
+//        }else if(alertView.tag==202){
+////            [self saveExfeeUpdate];
+//        }
+//    }
 }
 
 #pragma mark UIScrollViewDelegate
