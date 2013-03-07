@@ -414,10 +414,13 @@
                 if(backimg == nil || [backimg isEqual:[NSNull null]]){
                     dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
                     dispatch_async(imgQueue, ^{
+                        // Not in Cache
                         dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+                        [tabLayer setimage:[UIImage imageNamed:@"x_titlebg_default.jpg"]];
                         UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
+                                // Fill after download
                                 dectorView.image = backimg;
                                 [tabLayer setimage:backimg];
                             }
@@ -425,6 +428,7 @@
                     });
                     dispatch_release(imgQueue);
                 }else{
+                    // Find in cache
                     dectorView.image = backimg;
                     [tabLayer setimage:backimg];
                 }
@@ -434,6 +438,7 @@
         }
     }
     if (flag == NO){
+        // Missing Background widget
         dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
         [tabLayer setimage:[UIImage imageNamed:@"x_titlebg_default.jpg"]];
     }
