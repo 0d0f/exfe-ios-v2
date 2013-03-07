@@ -14,7 +14,7 @@
 #import "UIInputToolbar.h"
 #import "ConversationTableView.h"
 #import "PostCell.h"
-#import <RestKit/RKRequestSerialization.h>
+//#import <RestKit/RKRequestSerialization.h>
 #import "ConversationInputAccessoryView.h"
 #import "GatherExfeeInputCell.h"
 #import "CTUtil.h"
