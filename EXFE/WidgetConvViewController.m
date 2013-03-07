@@ -13,7 +13,6 @@
 #import "ImgCache.h"
 #import "Util.h"
 #import "EXCurveView.h"
-#import <RestKit/JSONKit.h>
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)

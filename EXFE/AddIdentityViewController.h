@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
-#import <RestKit/JSONKit.h>
 #import <CoreText/CoreText.h>
 #import "ProfileViewController.h"
 #import "SigninIconToolbarView.h"

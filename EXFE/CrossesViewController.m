@@ -8,7 +8,6 @@
 
 #import "CrossesViewController.h"
 #import "ProfileViewController.h"
-#import "CrossDetailViewController.h"
 #import "APICrosses.h"
 #import "Cross.h"
 #import "Exfee.h"
@@ -940,11 +939,11 @@
     [Util signout];
 }
 
-- (void)gotoCrossDetail{
-    CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-    [self.navigationController pushViewController:viewController animated:YES];
-    [viewController release];
-}
+//- (void)gotoCrossDetail{
+//    CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
+//    [self.navigationController pushViewController:viewController animated:YES];
+//    [viewController release];
+//}
 
 #pragma mark View Push methods
 - (BOOL) PushToCross:(int)cross_id{
@@ -979,18 +978,18 @@
 
 
 #pragma mark CrossCardDelegate
-- (void) onClickConversation:(UIView*)card{
-    CrossCard* c = (CrossCard*)card;
-    int cross_id = [c.cross_id intValue];
-    
-    Cross *cross = [self crossWithId:cross_id];
-    if(cross != nil){
-        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-        viewController.cross = cross;
-        [self.navigationController pushViewController:viewController animated:NO];
-        [viewController toConversationAnimated:NO];
-        [viewController release];
-    }
-}
+//- (void) onClickConversation:(UIView*)card{
+//    CrossCard* c = (CrossCard*)card;
+//    int cross_id = [c.cross_id intValue];
+//    
+//    Cross *cross = [self crossWithId:cross_id];
+//    if(cross != nil){
+//        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
+//        viewController.cross = cross;
+//        [self.navigationController pushViewController:viewController animated:NO];
+//        [viewController toConversationAnimated:NO];
+//        [viewController release];
+//    }
+//}
 
 @end

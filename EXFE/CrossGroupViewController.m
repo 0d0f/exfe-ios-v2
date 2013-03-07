@@ -23,7 +23,6 @@
 #import "TitleDescEditViewController.h"
 #import "TimeViewController.h"
 #import "PlaceViewController.h"
-#import "ConversationViewController.h"
 #import "CrossesViewController.h"
 #import "WidgetConvViewController.h"
 
@@ -256,17 +255,17 @@
     }
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
     [request setPredicate:predicate];
-    NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
     if(users!=nil && [users count] > 0)
     {
         _default_user = [[users objectAtIndex:0] retain];
     }
-    [users release];
-    
+//    [users release];
+  
     [self refreshUI];
     
     // Gesture handler: need merge
@@ -304,8 +303,31 @@
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     NSString *updated_at = [formatter stringFromDate:_cross.updated_at];
     [formatter release];
+  
+//  [NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",_cross.cross_id,@"cross_id", nil]
+//    [APICrosses LoadCrossWithUserId:[_cross.cross_id intValue] updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
+//    [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:updated_at  success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+//    } failure:^[(RKObjectRequestOperation *operation, NSError *error) {
+//    }];
+  [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+
+    if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+    {
+      Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+      if([meta.code intValue]==403){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        alert.tag=403;
+        [alert show];
+        [alert release];
+      }else if([meta.code intValue]==200){
+        [self refreshUI];
+      }
+      
+    }
+  } failure:^(RKObjectRequestOperation *operation, NSError *error) {
     
-    [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",_cross.cross_id,@"cross_id", nil]];
+  }];
+  
 }
 
 - (void)didReceiveMemoryWarning
@@ -1672,73 +1694,45 @@
 #pragma mark RKObjectLoaderDelegate methods
 //RESTKIT0.2
 //- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    
-//    if([objectLoader.userData isKindOfClass:[NSDictionary class]])
-//    {
-//        if([[((NSDictionary*)objectLoader.userData) objectForKey:@"name"] isEqualToString:@"cross_reload"]){
-//            for (id obj in objects){
-//                if( [obj isKindOfClass:[Meta class]]){
-//                    if([((Meta*)obj).code intValue]==403)
-//                    {
-//                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-//                        alert.tag=403;
-//                        
-//                        [alert show];
-//                        [alert release];
-//                        
-//                        //                        [[Cross currentContext] deleteObject:self.cross];
-//                    }
-//                    else if([((Meta*)obj).code intValue]==200){
-//                        [self refreshUI];
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    
-//    
 //    if([objects count] > 0){
 //        [self fillExfee];
 //    }
 //    
 //}
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-//    NSLog(@"%@",error);
-//}
 
 #pragma mark Navigation
-- (void) toConversationAnimated:(BOOL)isAnimated{
-    ConversationViewController * conversationView = nil;
-    if(conversationView == nil){
-        conversationView = [[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
-    }
-    
-    // prepare data for conversation
-    conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
-    conversationView.cross_title = _cross.title;
-    for(NSDictionary *widget in _cross.widget) {
-        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-            conversationView.headImgDict = widget;
-            break;
-        }
-    }
-    Invitation* myInv = [self getMyInvitation];
-    if (myInv != nil){
-        conversationView.identity = myInv.identity;
-    }
-    
-    // clean up data
-    _cross.conversation_count = 0;
-    [self fillConversationCount:0];
-    
-    // update cross list
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
-    [crossViewController refreshTableViewWithCrossId:[_cross.cross_id intValue]];
-    
-    [self.navigationController pushViewController:conversationView animated:isAnimated];
-    [conversationView release];
-}
+//- (void) toConversationAnimated:(BOOL)isAnimated{
+//    ConversationViewController * conversationView = nil;
+//    if(conversationView == nil){
+//        conversationView = [[ConversationViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
+//    }
+//    
+//    // prepare data for conversation
+//    conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
+//    conversationView.cross_title = _cross.title;
+//    for(NSDictionary *widget in _cross.widget) {
+//        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+//            conversationView.headImgDict = widget;
+//            break;
+//        }
+//    }
+//    Invitation* myInv = [self getMyInvitation];
+//    if (myInv != nil){
+//        conversationView.identity = myInv.identity;
+//    }
+//    
+//    // clean up data
+//    _cross.conversation_count = 0;
+//    [self fillConversationCount:0];
+//    
+//    // update cross list
+//    NSArray *viewControllers = self.navigationController.viewControllers;
+//    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+//    [crossViewController refreshTableViewWithCrossId:[_cross.cross_id intValue]];
+//    
+//    [self.navigationController pushViewController:conversationView animated:isAnimated];
+//    [conversationView release];
+//}
 
 #pragma mark EditCrossDelegate
 - (Invitation*) getMyInvitation{

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <RestKit/RestKit.h>
-#import <RestKit/JSONKit.h>
 #import "OAuthLoginViewController.h"
 #import "AppDelegate.h"
 #import "APIProfile.h"

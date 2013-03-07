@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import <RestKit/JSONKit.h>
 #import <RestKit/RestKit.h>
 #import "EXCurveView.h"
 #import "Cross.h"

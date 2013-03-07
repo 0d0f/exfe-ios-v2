@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4F0597961682B9FA00F9CE10 /* CrossDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0597941682B9FA00F9CE10 /* CrossDetailViewController.m */; };
-		4F0597971682B9FA00F9CE10 /* CrossDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F0597951682B9FA00F9CE10 /* CrossDetailViewController.xib */; };
 		4F0E159B16A95C390086AC4A /* edit_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159916A95C390086AC4A /* edit_30.png */; };
 		4F0E159C16A95C390086AC4A /* edit_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159A16A95C390086AC4A /* edit_30@2x.png */; };
 		4F1142D716AE40B000C30179 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1142D616AE40B000C30179 /* SenTestingKit.framework */; };
@@ -138,7 +136,6 @@
 		7840916C156F6AA5006DF115 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7840916B156F6AA5006DF115 /* Util.m */; };
 		78409172156F80A7006DF115 /* APIConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409171156F80A6006DF115 /* APIConversation.m */; };
 		78409175156F81E6006DF115 /* Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409174156F81E6006DF115 /* Mapping.m */; };
-		7840917915732A91006DF115 /* ConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7840917715732A90006DF115 /* ConversationViewController.m */; };
 		7841389A15AD36C2002E1030 /* EXIconToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7841389915AD36C2002E1030 /* EXIconToolBar.m */; };
 		78415346159C3F5C002B7A2E /* PlaceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415345159C3F5C002B7A2E /* PlaceAnnotation.m */; };
 		78415363159D6766002B7A2E /* WildcardGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */; };
@@ -177,7 +174,6 @@
 		78606CE7169AD2920014806A /* TitleDescEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78606CE5169AD2900014806A /* TitleDescEditViewController.m */; };
 		78606CE8169AD2920014806A /* TitleDescEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78606CE6169AD2910014806A /* TitleDescEditViewController.xib */; };
 		78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78615B3B15788BCD003CF68A /* ABTableViewCell.m */; };
-		78615B401578CC22003CF68A /* ConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7840917815732A91006DF115 /* ConversationViewController.xib */; };
 		7865CD7F165A3C0300D0E86A /* x_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7865CD7D165A3C0300D0E86A /* x_bg.png */; };
 		7865CD80165A3C0300D0E86A /* x_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7865CD7E165A3C0300D0E86A /* x_bg@2x.png */; };
 		7865CD85165A3DCF00D0E86A /* btn_red_44.png in Resources */ = {isa = PBXBuildFile; fileRef = 7865CD81165A3DCF00D0E86A /* btn_red_44.png */; };
@@ -436,9 +432,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4F0597931682B9FA00F9CE10 /* CrossDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossDetailViewController.h; sourceTree = "<group>"; };
-		4F0597941682B9FA00F9CE10 /* CrossDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossDetailViewController.m; sourceTree = "<group>"; };
-		4F0597951682B9FA00F9CE10 /* CrossDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossDetailViewController.xib; sourceTree = "<group>"; };
 		4F0E159916A95C390086AC4A /* edit_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30.png; sourceTree = "<group>"; };
 		4F0E159A16A95C390086AC4A /* edit_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30@2x.png"; sourceTree = "<group>"; };
 		4F1142D516AE40B000C30179 /* EXFETests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EXFETests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -609,9 +602,6 @@
 		78409171156F80A6006DF115 /* APIConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIConversation.m; sourceTree = "<group>"; };
 		78409173156F81E6006DF115 /* Mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mapping.h; sourceTree = "<group>"; };
 		78409174156F81E6006DF115 /* Mapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mapping.m; sourceTree = "<group>"; };
-		7840917615732A90006DF115 /* ConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationViewController.h; sourceTree = "<group>"; };
-		7840917715732A90006DF115 /* ConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ConversationViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		7840917815732A91006DF115 /* ConversationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConversationViewController.xib; sourceTree = "<group>"; };
 		7841389815AD36C2002E1030 /* EXIconToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXIconToolBar.h; sourceTree = "<group>"; };
 		7841389915AD36C2002E1030 /* EXIconToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXIconToolBar.m; sourceTree = "<group>"; };
 		78415344159C3F5C002B7A2E /* PlaceAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceAnnotation.h; sourceTree = "<group>"; };
@@ -1293,12 +1283,6 @@
 		78409164156F3AA7006DF115 /* Cross */ = {
 			isa = PBXGroup;
 			children = (
-				7840917615732A90006DF115 /* ConversationViewController.h */,
-				7840917715732A90006DF115 /* ConversationViewController.m */,
-				7840917815732A91006DF115 /* ConversationViewController.xib */,
-				4F0597931682B9FA00F9CE10 /* CrossDetailViewController.h */,
-				4F0597941682B9FA00F9CE10 /* CrossDetailViewController.m */,
-				4F0597951682B9FA00F9CE10 /* CrossDetailViewController.xib */,
 				78E8873F156244E70026D197 /* CrossesViewController.h */,
 				78E88740156244E70026D197 /* CrossesViewController.m */,
 				78E88741156244E70026D197 /* CrossesViewController.xib */,
@@ -1945,7 +1929,6 @@
 				78E88743156244E70026D197 /* CrossesViewController.xib in Resources */,
 				782B3CB8156B80A000721150 /* LandingViewController.xib in Resources */,
 				782B3CDA156B997200721150 /* SigninViewController.xib in Resources */,
-				78615B401578CC22003CF68A /* ConversationViewController.xib in Resources */,
 				785F6F6515820A0000BF8EA0 /* ProfileViewController.xib in Resources */,
 				78A8340B1588BBEE0019FDF5 /* ProfileCellView.xib in Resources */,
 				78D0A602158CFE1900401BCA /* OAuthLoginViewController.xib in Resources */,
@@ -2105,7 +2088,6 @@
 				783F52E616774C4100331746 /* btn_blue.png in Resources */,
 				783F52E716774C4100331746 /* btn_blue@2x.png in Resources */,
 				783F52E91677777600331746 /* back@2x.png in Resources */,
-				4F0597971682B9FA00F9CE10 /* CrossDetailViewController.xib in Resources */,
 				78B91DE016884F1800BB98B1 /* rsvp_accepted_stroke_26blue.png in Resources */,
 				78B91DE116884F1800BB98B1 /* rsvp_accepted_stroke_26blue@2x.png in Resources */,
 				78B91DE216884F1800BB98B1 /* rsvp_pending_stroke_26g5.png in Resources */,
@@ -2239,7 +2221,6 @@
 				7840916C156F6AA5006DF115 /* Util.m in Sources */,
 				78409172156F80A7006DF115 /* APIConversation.m in Sources */,
 				78409175156F81E6006DF115 /* Mapping.m in Sources */,
-				7840917915732A91006DF115 /* ConversationViewController.m in Sources */,
 				788312AB1574A63600D67103 /* ImgCache.m in Sources */,
 				78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */,
 				78920EBC157CB0E1004F3901 /* Rsvp.m in Sources */,
@@ -2302,7 +2283,6 @@
 				4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */,
 				4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */,
 				4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */,
-				4F0597961682B9FA00F9CE10 /* CrossDetailViewController.m in Sources */,
 				78B91DD916882BE400BB98B1 /* ExfeeNumberView.m in Sources */,
 				78B91DED168AB0F600BB98B1 /* EXRSVPStatusView.m in Sources */,
 				4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */,

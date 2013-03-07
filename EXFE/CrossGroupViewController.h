@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import <RestKit/JSONKit.h>
 #import <RestKit/RestKit.h>
 #import "EditCrossDelegate.h"
 #import "EXImagesCollectionView.h"

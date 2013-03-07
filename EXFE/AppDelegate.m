@@ -64,7 +64,6 @@ static char handleurlobject;
 
   
   RKEntityMapping *identityMapping = [RKEntityMapping mappingForEntityForName:@"Identity" inManagedObjectStore:managedObjectStore];
-
   identityMapping.identificationAttributes = @[ @"identity_id" ];
   [identityMapping addAttributeMappingsFromDictionary:@{@"id": @"identity_id",@"order": @"a_order"}];
   [identityMapping addAttributeMappingsFromArray:@[@"name",@"nickname",@"provider",@"external_id",@"external_username",@"connected_user_id",@"bio",@"avatar_filename",@"avatar_updated_at",@"created_at",@"updated_at",@"type",@"unreachable",@"status"]];
@@ -77,11 +76,23 @@ static char handleurlobject;
    @"cross_quantity": @"cross_quantity",
    @"name": @"name",
    @"timezone": @"timezone"}];
-
   [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identities" toKeyPath:@"identities" withMapping:identityMapping]];
-  
   RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping pathPattern:nil keyPath:@"response.user" statusCodes:nil];
   [objectManager addResponseDescriptor:responseDescriptor];
+  
+
+  RKEntityMapping *exfeeMapping = [RKEntityMapping mappingForEntityForName:@"Exfee" inManagedObjectStore:managedObjectStore];
+  exfeeMapping.identificationAttributes = @[ @"exfee_id" ];
+  [exfeeMapping addAttributeMappingsFromDictionary:@{@"id": @"exfee_id"}];
+  [exfeeMapping addAttributeMappingsFromArray:@[@"total",@"accepted",@"type"]];
+  
+  
+  //    exfeeMapping.primaryKeyAttribute=@"exfee_id";
+  //    [exfeeMapping mapKeyPathsToAttributes:@"total",@"total",@"accepted",@"accepted",@"type",@"type",
+  //     nil];
+  //    [exfeeMapping mapRelationship:@"invitations" withMapping:invitationMapping];
+  //    return exfeeMapping;
+
   
   RKEntityMapping *crossMapping = [RKEntityMapping mappingForEntityForName:@"Cross" inManagedObjectStore:managedObjectStore];
   crossMapping.identificationAttributes = @[ @"cross_id" ];
@@ -89,8 +100,14 @@ static char handleurlobject;
    @"description": @"cross_description",
    @"id_base62": @"crossid_base62"}];
   [crossMapping addAttributeMappingsFromArray:@[@"title",@"created_at",@"updated",@"widget",@"updated_at",@"conversation_count"]];
-  RKResponseDescriptor *crossresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.crosses" statusCodes:nil];
+  [crossMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"exfee" toKeyPath:@"exfee" withMapping:exfeeMapping]];
+  
+  RKResponseDescriptor *crossesresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.crosses" statusCodes:nil];
+  [objectManager addResponseDescriptor:crossesresponseDescriptor];
+  
+  RKResponseDescriptor *crossresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.cross" statusCodes:nil];
   [objectManager addResponseDescriptor:crossresponseDescriptor];
+  
   
   
   [managedObjectStore createPersistentStoreCoordinator];

@@ -206,6 +206,26 @@ static id sharedManager = nil;
 //}
 //
 //
+
++(void) LoadCrossWithCrossId:(int)corss_id updatedtime:(NSString*)updatedtime success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
+
+  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+  if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
+      updatedtime=[Util encodeToPercentEscapeString:updatedtime];
+  
+  NSString *endpoint = [NSString stringWithFormat:@"%@/crosses/%u?updated_at=%@&token=%@",API_ROOT,corss_id,updatedtime,app.accesstoken];
+  [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:nil success:success failure:failure];
+
+//  RKObjectManager* manager =[RKObjectManager sharedManager];
+//  [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//  RKObjectLoader *loader = [manager loaderWithResourcePath:endpoint];
+//  loader.delegate = delegate;
+//  loader.method = RKRequestMethodGET;
+//  loader.userData=source;
+//  [loader send];
+  
+}
+
 //+(void) LoadCrossWithCrossId:(int)corss_id updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source{
 //    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 //    if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
