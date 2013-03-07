@@ -11,6 +11,7 @@
 #import "Flurry.h"
 #import <objc/runtime.h>
 #import "User.h"
+#import "ModelMapping.h"
 
 #define APP_DB_VERSION 207
 #define DBNAME @"exfe_v2_7.sqlite"

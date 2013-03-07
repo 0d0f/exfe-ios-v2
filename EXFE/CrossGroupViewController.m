@@ -424,10 +424,7 @@
 }
 
 - (void)fillExfee{
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
     NSMutableArray *exfee = [[NSMutableArray alloc]  initWithCapacity:12];
-    
     NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES];
     NSArray *invitations=[_cross.exfee.invitations sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
     int myself = 0;
@@ -1939,7 +1936,9 @@
     if(buttonIndex==0)//cancel
     {
         if(alertView.tag==201){
-            [[Cross currentContext] rollback];
+          RKObjectManager *objectManager = [RKObjectManager sharedManager];
+          [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+//            [[Cross currentContext] rollback];
             [self fillTime:_cross.time];
             [self fillPlace:_cross.place];
             [self relayoutUI];
@@ -1953,8 +1952,11 @@
             //            [[Cross currentContext] rollback];
             //            [self reloadExfeeIdentities];
         }else if(alertView.tag==403){ //privacy control
-            [[Cross currentContext] deleteObject:self.cross];
-            [[Cross currentContext] save:nil];
+          RKObjectManager *objectManager = [RKObjectManager sharedManager];
+          [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:self.cross];
+          [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
+//            [[Cross currentContext] deleteObject:self.cross];
+//            [[Cross currentContext] save:nil];
             [self.navigationController popToRootViewControllerAnimated:YES];
         }
     }else if(buttonIndex==1) //retry
