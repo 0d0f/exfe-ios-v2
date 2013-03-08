@@ -132,57 +132,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
 
-- (void)hideWidgetTabBar{
-    widgetTabBar.hidden = YES;
-    tabBar.hidden = NO;
-}
-
-- (void)widgetJump:(id)sender with:(NSNumber*)index
-{
-    
-    NSInteger idx = [index integerValue];
-    switch (idx) {
-        case 0:
-            [self hideWidgetTabBar];
-            break;
-        case 1:
-            [self hideWidgetTabBar];
-            [self toCross];
-            break;
-        default:
-            [self hideWidgetTabBar];
-            break;
-    }
-}
-
-- (void)widgetClick:(id)sender with:(NSNumber*)index{
-    
-    NSInteger idx = [index integerValue];
-    switch (idx) {
-        case 0:
-            widgetTabBar.alpha = 0;
-            widgetTabBar.hidden = NO;
-            [UIView animateWithDuration:0.144 animations:^{
-                tabBar.alpha = 0;
-                tabBar.frame = CGRectOffset(tabBar.frame, 0, -15);
-            } completion:^(BOOL finished){
-                tabBar.alpha = 1;
-                tabBar.hidden = YES;
-                tabBar.frame = CGRectOffset(tabBar.frame, 0, 15);
-            }];
-            
-            [UIView animateWithDuration:0.233 animations:^{
-                widgetTabBar.alpha = 1;
-            } completion:nil];
-            break;
-        case 1:
-            [self toCross];
-            break;
-        default:
-            break;
-    }
-}
-
 
 - (void)handleHeaderSwipe:(UISwipeGestureRecognizer*)sender{
     //CGPoint location = [sender locationInView:sender.view];
@@ -235,8 +184,6 @@
     [dectorView release];
     [titleView release];
     [headerView release];
-    [widgetTabBar release];
-    [tabBar release];
     [super dealloc];
 }
 
@@ -526,7 +473,6 @@
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     showfloattime=YES;
     [inputToolbar hidekeyboard];
-    [self hideWidgetTabBar];
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
@@ -564,7 +510,7 @@
                 floattimetextlayer.cornerRadius = 2.0;
                 floattimetextlayer.backgroundColor=FONT_COLOR_232737.CGColor;
                 [floattimetextlayer setAlignmentMode:kCAAlignmentCenter];
-                [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (40 + 4*2), 5, 40 + 8, 24 + 2)];
+                [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (40 + 4*2), 25, 40 + 8, 24 + 2)];
                 [self.view.layer addSublayer:floattimetextlayer];
             }
             
@@ -598,7 +544,7 @@
             CFRelease(timefontref);
             CFRelease(timefontref9);
             CGSize timesize=[self textWidthForHeight:28 withAttributedString:timeattribstring];
-            [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (timesize.width + 4 * 2),  5, timesize.width + 8, timesize.height + 2)];
+            [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (timesize.width + 4 * 2),  25, timesize.width + 8, timesize.height + 2)];
             [floattimetextlayer setString:timeattribstring];
             [timeattribstring release];
             topcellPath=path.row;
