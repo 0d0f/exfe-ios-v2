@@ -46,13 +46,13 @@
         }
         if(![style isEqualToString:@"addidentity"]){
             facebookbutton =[UIButton buttonWithType:UIButtonTypeCustom];
-            [facebookbutton setFrame:CGRectMake(14+126+14+13+10, 10, 32, 32)];
+            [facebookbutton setFrame:CGRectMake(14+126+14+13+42, 10, 32, 32)];
             [facebookbutton setBackgroundImage:[UIImage imageNamed:@"identity_facebook_32.png"] forState:UIControlStateNormal];
             [facebookbutton addTarget:delegate action:@selector(FacebookSigninButtonPress:) forControlEvents:UIControlEventTouchUpInside];
             [self addSubview:facebookbutton];
 
             twitterbutton=[UIButton buttonWithType:UIButtonTypeCustom];
-            [twitterbutton setFrame:CGRectMake(212+13+20, 10, 32, 32)];
+            [twitterbutton setFrame:CGRectMake(212+13+48, 10, 32, 32)];
             [twitterbutton setBackgroundImage:[UIImage imageNamed:@"identity_twitter_32.png"] forState:UIControlStateNormal];
             [twitterbutton addTarget:delegate action:@selector(TwitterSigninButtonPress:) forControlEvents:UIControlEventTouchUpInside];
             [self addSubview:twitterbutton];
