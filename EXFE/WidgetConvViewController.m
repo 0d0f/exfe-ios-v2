@@ -267,7 +267,19 @@
             [formatter release];
         }
     }
-    [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at delegate:self];
+  [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+    if(meta!=nil){
+      if([meta.code intValue]==200){
+        [self loadObjectsFromDataStore];
+      }
+    }else{
+      //show error hint
+    }
+
+  } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+    
+  }];
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [inputToolbar hidekeyboard];

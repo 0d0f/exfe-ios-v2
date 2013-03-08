@@ -12,6 +12,8 @@
 
 @interface APIConversation : NSObject
 +(void) MappingConversation;
-+(void) LoadConversationWithExfeeId:(int)exfee_id updatedtime:(NSString*)updatedtime delegate:(id)delegate;
+//+(void) LoadConversationWithExfeeId:(int)exfee_id updatedtime:(NSString*)updatedtime delegate:(id)delegate;
++(void) LoadConversationWithExfeeId:(int)exfee_id updatedtime:(NSString*)updatedtime success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
 
 @end
