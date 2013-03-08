@@ -328,16 +328,21 @@
 - (void)loadObjectsFromDataStore {
 	[_posts release];
 
-	NSFetchRequest* request = [Post fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
-                              @"exfee", exfee_id];    
-    [request setPredicate:predicate];
-//    [request setFetchLimit:50];
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
+  NSPredicate *predicate = [NSPredicate
+                            predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
+                            @"exfee", exfee_id];
+
+  [request setPredicate:predicate];
+  
+  
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:YES];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
     
-	_posts = [[Post objectsWithFetchRequest:request] retain];
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+  _posts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+
+  
     [self showOrHideHint];
     [_tableView reloadData];
     if(_tableView.contentSize.height>_tableView.frame.size.height) {

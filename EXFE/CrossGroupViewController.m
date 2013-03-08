@@ -1074,7 +1074,7 @@
     switch (widget_id) {
         case 1:
         {
-            WidgetConvViewController * conversationView =  [[WidgetConvViewController alloc]initWithNibName:@"ConversationViewController" bundle:nil] ;
+            WidgetConvViewController * conversationView =  [[WidgetConvViewController alloc]initWithNibName:@"WidgetConvViewController" bundle:nil] ;
             
             // prepare data for conversation
             conversationView.exfee_id = [_cross.exfee.exfee_id intValue];

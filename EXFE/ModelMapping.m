@@ -51,6 +51,19 @@
   RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping pathPattern:nil keyPath:@"response.user" statusCodes:nil];
   [objectManager addResponseDescriptor:responseDescriptor];
   
+  RKEntityMapping *eftimeMapping = [RKEntityMapping mappingForEntityForName:@"EFTime" inManagedObjectStore:managedObjectStore];
+  [eftimeMapping addAttributeMappingsFromArray:@[@"date",@"date_word",@"time",@"time_word",@"timezone"]];
+
+  RKEntityMapping *crosstimeMapping = [RKEntityMapping mappingForEntityForName:@"CrossTime" inManagedObjectStore:managedObjectStore];
+  [crosstimeMapping addAttributeMappingsFromArray:@[@"origin",@"outputformat"]];
+  [crosstimeMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"begin_at" toKeyPath:@"begin_at" withMapping:eftimeMapping]];
+  
+  RKEntityMapping *placeMapping = [RKEntityMapping mappingForEntityForName:@"Place" inManagedObjectStore:managedObjectStore];
+  placeMapping.identificationAttributes = @[ @"place_id" ];
+  [placeMapping addAttributeMappingsFromDictionary:@{@"id": @"place_id",
+   @"description": @"place_description"}];
+  [placeMapping addAttributeMappingsFromArray:@[@"title",@"lat",@"lng",@"provider",@"external_id",@"created_at",@"updated_at",@"type"]];
+
   RKEntityMapping *crossMapping = [RKEntityMapping mappingForEntityForName:@"Cross" inManagedObjectStore:managedObjectStore];
   crossMapping.identificationAttributes = @[ @"cross_id" ];
   [crossMapping addAttributeMappingsFromDictionary:@{@"id": @"cross_id",
@@ -58,11 +71,22 @@
    @"id_base62": @"crossid_base62"}];
   [crossMapping addAttributeMappingsFromArray:@[@"title",@"created_at",@"updated",@"widget",@"updated_at",@"conversation_count"]];
   [crossMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"exfee" toKeyPath:@"exfee" withMapping:exfeeMapping]];
+  [crossMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"time" toKeyPath:@"time" withMapping:crosstimeMapping]];
+  [crossMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"place" toKeyPath:@"place" withMapping:placeMapping]];
   
+  RKEntityMapping *conversationMapping = [RKEntityMapping mappingForEntityForName:@"Post" inManagedObjectStore:managedObjectStore];
+  conversationMapping.identificationAttributes = @[ @"post_id" ];
+  [conversationMapping addAttributeMappingsFromDictionary:@{@"id": @"post_id"}];
+  [conversationMapping addAttributeMappingsFromArray:@[@"content",@"created_at",@"updated_at",@"postable_id",@"postable_type"]];
+  [conversationMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"by_identity" toKeyPath:@"by_identity" withMapping:identityMapping]];
+
   RKResponseDescriptor *crossesresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.crosses" statusCodes:nil];
   [objectManager addResponseDescriptor:crossesresponseDescriptor];
   
   RKResponseDescriptor *crossresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.cross" statusCodes:nil];
   [objectManager addResponseDescriptor:crossresponseDescriptor];
+  
+  RKResponseDescriptor *conversationresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:conversationMapping pathPattern:nil keyPath:@"response.conversation" statusCodes:nil];
+  [objectManager addResponseDescriptor:conversationresponseDescriptor];
 }
 @end

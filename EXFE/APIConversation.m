@@ -42,6 +42,7 @@
         updatedtime=[Util encodeToPercentEscapeString:updatedtime];
     
     NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u?updated_at=%@&token=%@",exfee_id, updatedtime,app.accesstoken];
+    NSLog(@"post: %@",endpoint);
 //RESTKIT0.2    
 //    RKObjectManager* manager =[RKObjectManager sharedManager];
 //    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
