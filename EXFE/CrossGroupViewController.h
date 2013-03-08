@@ -12,6 +12,8 @@
 #import "EditCrossDelegate.h"
 #import "EXImagesCollectionView.h"
 #import "EXRSVPMenuView.h"
+#import "EXTabLayer.h"
+#import "EXTabWidget.h"
 
 @class Cross;
 @class User;
@@ -21,12 +23,17 @@
 #define kHeaderStyleFull   0
 #define kHeaderStyleHalf   1
 
+#define kWidgetCross           0
+#define kWidgetConversation    1
+#define kWidgetExfee           2
 
-@interface CrossGroupViewController : UIViewController<EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate>{
+@interface CrossGroupViewController : UIViewController<EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, EXTabWidgetDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate>{
     
-    NSInteger headerStyle;
+    
     CGFloat exfeeSuggestHeight;
     NSMutableArray *exfeeInvitations;
+    CGFloat head_bg_img_startY;
+    CGPoint head_bg_point;
     
     BOOL layoutDirty;
     NSInteger popupCtrolId;
@@ -44,8 +51,9 @@
     UIImageView* dectorView;
     UILabel* titleView;
     // Content
-    UIScrollView* xContainer;
-    UIView* container;
+    //    UIScrollView* xContainer;
+    //    UIView* container;
+    UIScrollView* container;
     EXLabel* descView;
     EXImagesCollectionView *exfeeShowview;
     UILabel *timeRelView;
@@ -55,21 +63,26 @@
     UILabel *placeDescView;
     MKMapView *mapView;
     UIView *mapShadow;
-    // Widget
-    UIView* widgetContainer;
+    // WidgetTab
+    EXTabLayer *tabLayer;
+    EXTabWidget* tabWidget;
     // Navigation
     UIButton* btnBack;
-    // Tab
     
+    
+    UIImageView *headerShadow;
 }
 
 @property (nonatomic,retain) UIViewController *currentViewController;
 @property (retain,nonatomic) Cross* cross;
 @property (retain,nonatomic) User* default_user;
+@property (nonatomic) NSInteger headerStyle;
+@property (nonatomic) NSUInteger widgetId;
 
 -(void)swapViewControllers:(UIViewController*)childViewController;
 
-
+#pragma mark Navigation
+- (void) toConversationAnimated:(BOOL)isAnimated;
 
 
 @end

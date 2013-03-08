@@ -72,7 +72,7 @@
         NSTimeInterval time = 0.2;
         if (self.delegate) {
             if([self.delegate respondsToSelector:@selector(updateLayout:animationWithParam:)]){
-                NSDictionary * dict = [NSDictionary dictionaryWithKeysAndObjects:@"width", @"239", @"animationTime", [NSString stringWithFormat:@"%f", time], nil];
+                NSDictionary * dict = @{@"width": @"239", @"animationTime": [NSString stringWithFormat:@"%f", time]};
                 [self.delegate performSelector:@selector(updateLayout:animationWithParam:) withObject:self withObject:dict];
             }
         }
@@ -114,7 +114,7 @@
                                                   
                                                   if (self.delegate) {
                                                       if([self.delegate respondsToSelector:@selector(updateLayout:animationWithParam:)]){
-                                                          NSDictionary * dict = [NSDictionary dictionaryWithKeysAndObjects:@"width", @"269", @"animationTime", [NSString stringWithFormat:@"%f", time + 0.2], nil];
+                                                          NSDictionary * dict = @{@"width": @"269", @"animationTime": [NSString stringWithFormat:@"%f", time + 0.2]};
                                                           [self.delegate performSelector:@selector(updateLayout:animationWithParam:) withObject:self withObject:dict];
                                                       }
                                                   }
