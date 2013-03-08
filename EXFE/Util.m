@@ -913,7 +913,7 @@
     if([meta.code intValue]==401){
         errormsg=@"Authentication failed due to security concerns, please sign in again.";
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Sign Out",nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
         alert.tag=500;
         alert.delegate=delegate;
         [alert show];
@@ -947,7 +947,7 @@
     {
         if([(NSNumber*)[meta objectForKey:@"code"] intValue]==401){
             errormsg=@"Authentication failed due to security concerns, please sign in again.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Sign Out",nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
             alert.tag=500;
             alert.delegate=delegate;
             [alert show];
@@ -963,7 +963,7 @@
     else
         errormsg=@"Could not connect to the server.";
     if(![errormsg isEqualToString:@""]){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         [alert release];
     }

@@ -60,7 +60,7 @@
     NSLog(@"fun4: %i Asia/Shanghai", d );
     int e = [DateTimeUtil daysWithinEraFromDate:now toDate:then baseTimeZone:[NSTimeZone timeZoneWithName:@"PST8PDT"]];
     NSLog(@"fun4: %i PST8PDT", e );
-    STAssertTrue(YES, @"ok");
+    STAssertTrue(YES, @"OK");
     
     //STFail(@"Unit tests are not implemented yet in EXFETests");
 }

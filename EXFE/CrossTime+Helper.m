@@ -16,11 +16,15 @@
 
 
 - (NSString*) getTimeTitle{
+    return [self getTimeTitle:1]; // short format
+}
+
+- (NSString*) getTimeTitle:(NSUInteger)fmt{
     if( [self.outputformat intValue] == 1) { //use origin
         return [CrossTime getRaw:self.origin];
     }else{
         if ([self.begin_at hasDate]){
-            return [DateTimeUtil GetRelativeTime:[self.begin_at getLocalDateComponent] format:0];
+            return [DateTimeUtil GetRelativeTime:[self.begin_at getLocalDateComponent] format:fmt];
         }else{
             if ([self.begin_at hasTime]) {
                 return [self.begin_at getHumanReadableString];

@@ -368,23 +368,26 @@
                 [app.navigationController dismissModalViewControllerAnimated:YES];
             }
             else if([source isEqualToString:@"pushtocross"]) {
-            //                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-            //                Cross *cross=[self crossWithId:[cross_id intValue]];
-            //                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-            ////                gatherViewController.cross=cross;
-            ////                [gatherViewController setViewMode];
-            ////                [self.navigationController pushViewController:gatherViewController animated:YES];
-            ////                [gatherViewController release];
+//                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
+//                Cross *cross=[self crossWithId:[cross_id intValue]];
+//                
+//                CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+//                viewController.cross = cross;
+//                viewController.widgetId = kWidgetCross;
+//                viewController.headerStyle = kHeaderStyleFull;
+//                [self.navigationController pushViewController:viewController animated:NO];
+//                [viewController release];
             }
             else if([source isEqualToString:@"pushtoconversation"]) {
-            ////                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-            ////                Cross *cross=[self crossWithId:[cross_id intValue]];
-            ////                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-            ////                gatherViewController.cross=cross;
-            ////                [gatherViewController setViewMode];
-            ////                [self.navigationController pushViewController:gatherViewController animated:NO];
-            ////                [gatherViewController toconversation];
-            ////                [gatherViewController release];
+//                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
+//                Cross *cross=[self crossWithId:[cross_id intValue]];
+//                CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+//                viewController.cross = cross;
+//                viewController.widgetId = kWidgetConversation;
+//                viewController.headerStyle = kHeaderStyleHalf;
+//                [self.navigationController pushViewController:viewController animated:NO];
+//                [viewController release];
+
             }
             else if([source isEqualToString:@"crossupdateview"] || [source isEqualToString:@"crossview"] || [source isEqualToString:@"crossview_init"]) {
             ////                NSString *refresh_cross_id=[objectLoader.userData objectForKey:@"cross_id" ];
@@ -608,7 +611,7 @@
 //        errormsg=@"Could not connect to the server.";
 //    if(alertShowflag==NO){
 //        alertShowflag=YES;
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 //        [alert show];
 //        [alert release];
 //    }
@@ -978,18 +981,19 @@
 
 
 #pragma mark CrossCardDelegate
-//- (void) onClickConversation:(UIView*)card{
-//    CrossCard* c = (CrossCard*)card;
-//    int cross_id = [c.cross_id intValue];
-//    
-//    Cross *cross = [self crossWithId:cross_id];
-//    if(cross != nil){
-//        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-//        viewController.cross = cross;
-//        [self.navigationController pushViewController:viewController animated:NO];
-//        [viewController toConversationAnimated:NO];
-//        [viewController release];
-//    }
-//}
+- (void) onClickConversation:(UIView*)card{
+    CrossCard* c = (CrossCard*)card;
+    int cross_id = [c.cross_id intValue];
+    
+    Cross *cross = [self crossWithId:cross_id];
+    if(cross != nil){
+        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+        viewController.cross = cross;
+        viewController.widgetId = kWidgetConversation;
+        viewController.headerStyle = kHeaderStyleHalf;
+        [self.navigationController pushViewController:viewController animated:NO];
+        [viewController release];
+    }
+}
 
 @end

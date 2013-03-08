@@ -349,7 +349,7 @@
         {
             Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
             if([meta.code intValue]==403){
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 alert.tag=403;
                 [alert show];
                 [alert release];
@@ -1841,7 +1841,7 @@
 //                errormsg=@"A connection failure has occurred.";
 //            else
 //                errormsg=@"Could not connect to the server.";
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 //            [alert show];
 //            [alert release];
 //            
