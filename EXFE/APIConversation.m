@@ -45,14 +45,5 @@
   [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:nil success:success failure:failure];
 }
 
-+(void) LoadConversationWithExfeeId:(int)exfee_id updatedtime:(NSString*)updatedtime delegate:(id)delegate{
-
-//RESTKIT0.2
-//    RKObjectManager* manager =[RKObjectManager sharedManager];
-//    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//    [manager loadObjectsAtResourcePath:endpoint delegate:delegate];
-
-    
-}
 
 @end
