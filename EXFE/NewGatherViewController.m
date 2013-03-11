@@ -311,13 +311,12 @@
     [self initUI];
     [self refreshUI];
     [exfeeShowview reloadData];
-    
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     gestureRecognizer.delegate=self;
     [self.view addGestureRecognizer:gestureRecognizer];
     
     [gestureRecognizer release];
-    
+  
 }
 
 #pragma mark UIScrollViewDelegate
@@ -333,21 +332,23 @@
 
 - (void) initData{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];
+  
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
     [request setPredicate:predicate];
-    NSArray *users = [[User objectsWithFetchRequest:request] retain];
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+
     if(cross==nil){
-        cross=[Cross object];
+      NSEntityDescription *crossEntity = [NSEntityDescription entityForName:@"Cross" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+      
+        cross=[[[Cross alloc] initWithEntity:crossEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
         cross.cross_description=@"";
     }
     if(users!=nil && [users count] >0)
     {
         default_user=[[users objectAtIndex:0] retain];
     }
-    [users release];
-    
 
     exfeeInvitations = [[NSMutableArray alloc] initWithCapacity:12];
 //    cross=[Cross object];
@@ -366,22 +367,18 @@
         cross.widget=[[[NSMutableArray alloc] initWithCapacity:1] autorelease];
     [cross.widget addObject:widget];
     
-//    User *user=default_user;
-//    Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
-// 
-//    cross.title=[NSString stringWithFormat:@"·X· %@",default_identity.name];
-//
-//    title_be_edit=NO;
-//
-//    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"identity_id" ascending:YES]
-//    ;
-//    
-//    orderedIdentities=[[NSMutableArray alloc] initWithCapacity:[default_user.identities count]];
-//    NSArray *identities=[default_user.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-//    for(Identity *identity in identities){
-//        [orderedIdentities addObject:identity];
-//    }
-//    [self addDefaultIdentity:0];
+    User *user=default_user;
+    Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
+
+    cross.title=[NSString stringWithFormat:@"·X· %@",default_identity.name];
+    title_be_edit=NO;
+    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"identity_id" ascending:YES];
+    orderedIdentities=[[NSMutableArray alloc] initWithCapacity:[default_user.identities count]];
+    NSArray *identities=[default_user.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+    for(Identity *identity in identities){
+        [orderedIdentities addObject:identity];
+    }
+    [self addDefaultIdentity:0];
 
 //    cross.exfee.invitations
 }
@@ -391,7 +388,9 @@
     Identity *default_identity=[orderedIdentities objectAtIndex:idx];
 //    [[user.identities allObjects] objectAtIndex:idx];
     if(user!=nil){
-        Invitation *invitation=[Invitation object];
+      RKObjectManager *objectManager = [RKObjectManager sharedManager];
+      NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+      Invitation *invitation=[[[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
         invitation.rsvp_status=@"ACCEPTED";
         invitation.host=[NSNumber numberWithBool:YES];
         invitation.mates=0;
@@ -408,7 +407,9 @@
     User *user=default_user;
     Identity *default_identity=[orderedIdentities objectAtIndex:idx];
     if(user!=nil){
-        Invitation *invitation=[Invitation object];
+        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+        NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+        Invitation *invitation=[[[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
         invitation.rsvp_status=@"ACCEPTED";
         invitation.host=[NSNumber numberWithBool:YES];
         invitation.mates=0;
@@ -514,13 +515,26 @@
 
 - (void)Close:(UIButton*)sender{
 //    [self.navigationController popToRootViewControllerAnimated:YES];
-    if(cross)
-        [[Cross currentContext] deleteObject:cross];
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+  if(cross){
+    if(self.cross.time.begin_at)
+      [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:self.cross.time.begin_at];
+    if(self.cross.time)
+      [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:self.cross.time];
+    if(self.cross.exfee)
+      [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:self.cross.exfee];
 
-  //RESTKIT0.2
-//    RKObjectManager* manager =[RKObjectManager sharedManager];
-//    [manager.requestQueue cancelAllRequests];
-
+      [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:self.cross];
+      [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
+  }
+  if(exfeeInvitations)
+  {
+    for (Invitation *invitation in exfeeInvitations){
+      [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:invitation];
+      [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
+    }
+  }
+    [objectManager.operationQueue cancelAllOperations];
     [self dismissModalViewControllerAnimated:YES];
 
 }
@@ -606,13 +620,21 @@
     hud.labelText = @"Loading";
 
     cross.by_identity=[orderedIdentities objectAtIndex:0];
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
     if(cross.time==nil){
-        cross.time=[CrossTime object];
-        cross.time.begin_at=[EFTime object];
-        cross.time.begin_at.timezone = [DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];
+
+      NSEntityDescription *crosstimeEntity = [NSEntityDescription entityForName:@"CrossTime" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+      cross.time=[[[CrossTime alloc] initWithEntity:crosstimeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+
+      NSEntityDescription *eftimeEntity = [NSEntityDescription entityForName:@"EFTime" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+      cross.time.begin_at=[[[EFTime alloc] initWithEntity:eftimeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+
+      cross.time.begin_at.timezone = [DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];
     }
-    Exfee *exfee=[Exfee object];
-    
+//    Exfee *exfee=[Exfee object];
+    NSEntityDescription *exfeeEntity = [NSEntityDescription entityForName:@"Exfee" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    Exfee *exfee=[[[Exfee alloc] initWithEntity:exfeeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+  
     for(Invitation *invitation in exfeeInvitations){
         [exfee addInvitationsObject:invitation];
     }

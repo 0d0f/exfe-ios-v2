@@ -101,7 +101,10 @@
     [map addSubview:placeedit];
 
     if(place==nil) {
-        place=[Place object];
+      
+        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+        NSEntityDescription *placeEntity = [NSEntityDescription entityForName:@"Place" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+        place=[[[Place alloc] initWithEntity:placeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
         place.title=@"";
         place.place_description=@"";
         place.lat=@"";
@@ -360,9 +363,30 @@
     place.lat=[NSString stringWithFormat:@"%f",annotation.coordinate.latitude];
     place.lng=[NSString stringWithFormat:@"%f",annotation.coordinate.longitude];
     place.provider=@"";
-    if(newPlace==YES)
-        [[APIPlace sharedManager] GetTopPlaceFromGoogleNearby:annotation.coordinate.latitude lng:annotation.coordinate.longitude delegate:self];
-    
+    if(newPlace==YES){
+      [[APIPlace sharedManager] GetTopPlaceFromGoogleNearby:annotation.coordinate.latitude lng:annotation.coordinate.longitude success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+          NSDictionary *body=(NSDictionary*)responseObject;
+          if([body isKindOfClass:[NSDictionary class]]) {
+            NSString *status=[body objectForKey:@"status"];
+            if(status!=nil &&[status isEqualToString:@"OK"])
+            {
+              NSArray *results=[body objectForKey:@"results"] ;
+              if([results count]>0){
+                NSDictionary *place = [results objectAtIndex:0];
+                if([results count]>1)
+                  place = [results objectAtIndex:1];
+                
+                  NSDictionary *dict=[[[NSDictionary alloc] initWithObjectsAndKeys:[place objectForKey:@"name"],@"title",[place objectForKey:@"vicinity"],@"description",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[place objectForKey:@"id"],@"external_id",@"google",@"provider", nil] autorelease];
+                [self fillTopPlace:dict];
+              }
+            }
+          }
+        }
+      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+      }];
+    }
 }
 
 - (void) fillTopPlace:(NSDictionary*)topPlace{
@@ -434,7 +458,22 @@
         CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
         if(meters<0 || meters>500)
         {
-            [[APIPlace sharedManager] GetPlacesFromGoogleNearby:location.latitude lng:location.longitude delegate:self];
+          [[APIPlace sharedManager] GetPlacesFromGoogleNearby:location.latitude lng:location.longitude success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+              NSDictionary *body=(NSDictionary*)responseObject;
+              if([body isKindOfClass:[NSDictionary class]]) {
+                NSString *status=[body objectForKey:@"status"];
+                if(status!=nil &&[status isEqualToString:@"OK"])
+                {
+                  NSArray *results=[body objectForKey:@"results"] ;
+                  [self processResultFromPlaceAPI:results];
+                }
+              }
+            }
+          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            
+          }];
+//            [[APIPlace sharedManager] GetPlacesFromGoogleNearby:location.latitude lng:location.longitude delegate:self];
         }
     }
     lng=location.longitude;
@@ -822,14 +861,75 @@
     [placeedit becomeFirstResponder];
 }
 
+- (void) processResultFromPlaceAPI:(NSArray*)results{
+  if([results count]>0)
+  {
+    NSDictionary *dict=[results objectAtIndex:0];
+    NSNumber *_lng=[[[dict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"];
+    NSNumber *_lat=[[[dict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"];
+    MKCoordinateRegion region;
+    float delta=0.02;
+    CLLocationCoordinate2D location_center;
+    location_center.latitude =[_lat doubleValue];
+    location_center.longitude =[_lng doubleValue];
+    region.center=location_center;
+    region.span.longitudeDelta = delta;
+    region.span.latitudeDelta = delta;
+    [map setRegion:region animated:YES];
+  }
+  NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]] ;
+  for(NSDictionary *placedict in results)
+  {
+    NSString *_name=[placedict objectForKey:@"name"];
+    if(_name==nil)
+      _name=@"";
+    NSString *_formatted_address=[placedict objectForKey:@"formatted_address"];
+    if(_formatted_address==nil){
+      _formatted_address=[placedict objectForKey:@"vicinity"];
+      if(_formatted_address==nil)
+        _formatted_address=@"";
+    }
+    NSString *_lng=[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"];
+    if(_lng==nil)
+      _lng=@"";
+    NSString *_lat=[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"];
+    if(_lat==nil)
+      _lat=@"";
+    NSString *_id=[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"id"];
+    if(_id==nil)
+      _id=@"";
+
+    NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:_name,@"title",_formatted_address,@"description",_lng,@"lng",_lat,@"lat",_id,@"external_id",@"google",@"provider",nil];
+    [local_results addObject:dict];
+    [dict release];
+  }
+  [self reloadPlaceData:local_results];
+  
+}
+- (void) getPlacefromapi{
+  [[APIPlace sharedManager] GetPlacesFromGoogleByTitle:inputplace.text lat:lat lng:lng success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+      NSDictionary *body=(NSDictionary*)responseObject;
+      if([body isKindOfClass:[NSDictionary class]]) {
+        NSString *status=[body objectForKey:@"status"];
+        if(status!=nil &&[status isEqualToString:@"OK"])
+        {
+          NSArray *results=[body objectForKey:@"results"] ;
+          [self processResultFromPlaceAPI:results];
+        }
+      }
+    }
+    
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    
+  }];
+}
 - (void) getPlace{
     if(CFAbsoluteTimeGetCurrent()-editinginterval>0.8)
-    {
-        [[APIPlace sharedManager] GetPlacesFromGoogleByTitle:inputplace.text lat:lat lng:lng delegate:self];
-    }
+      [self getPlacefromapi];
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
-    [[APIPlace sharedManager] GetPlacesFromGoogleByTitle:inputplace.text lat:lat lng:lng delegate:self];
+  [self getPlacefromapi];
     return YES;
 }
 
@@ -873,44 +973,5 @@
     [rightbutton setTitle:title forState:UIControlStateNormal];
     [rightbutton addTarget:self action:aSelector forControlEvents:UIControlEventTouchUpInside];
 }
-//RESTKIT0.2
-//- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
-//    if (response.statusCode == 200) {
-//        NSDictionary *body=[response.body objectFromJSONData];
-//        if([body isKindOfClass:[NSDictionary class]]) {
-//
-//            NSString *status=[body objectForKey:@"status"];
-//            if(status!=nil &&[status isEqualToString:@"OK"])
-//            {
-//                NSArray *results=[body objectForKey:@"results"] ;
-//                if([results count]>0)
-//                {
-//                    NSDictionary *dict=[results objectAtIndex:0];
-//                    NSNumber *_lng=[[[dict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"];
-//                    NSNumber *_lat=[[[dict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"];
-//                    MKCoordinateRegion region;
-//                    float delta=0.02;
-//                    CLLocationCoordinate2D location_center;
-//                    location_center.latitude =[_lat doubleValue];
-//                    location_center.longitude =[_lng doubleValue];
-//                    region.center=location_center;
-//                    region.span.longitudeDelta = delta;
-//                    region.span.latitudeDelta = delta;
-//                    [map setRegion:region animated:YES];
-//                }
-//                NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]] ;
-//                for(NSDictionary *placedict in results)
-//                {
-//                    NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:[placedict objectForKey:@"name"],@"title",[placedict objectForKey:@"formatted_address"],@"description",[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[placedict objectForKey:@"id"],@"external_id",@"google",@"provider",nil];
-//                    [local_results addObject:dict];
-//                    [dict release];
-//                }
-//                [self reloadPlaceData:local_results];
-//            }
-//        }
-//    }
-//    else {
-//        //Check Response Body to get Data!
-//    }
-//}
+
 @end
