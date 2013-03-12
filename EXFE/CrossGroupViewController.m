@@ -1057,9 +1057,8 @@
 
 #pragma mark == ViewController Navigation
 - (void) goBack{
-//RESTKIT0.2
-//    RKObjectManager* manager =[RKObjectManager sharedManager];
-//    [manager.requestQueue cancelAllRequests];
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    [manager.operationQueue cancelAllOperations];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

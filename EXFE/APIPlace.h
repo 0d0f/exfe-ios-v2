@@ -12,12 +12,15 @@
 #import "PlaceViewController.h"
 
 @interface APIPlace : NSObject{
+//  NSOperationQueue *queue;
 //RESTKIT0.2
 //    RKRequestQueue *queue;
 }
 + (id) sharedManager;
-+(void) GetPlaces:(NSString*)keyword lat:(double)lat lng:(double)lng delegate:(id)delegate;
--(void) GetPlacesFromGoogleNearby:(double)lat lng:(double)lng delegate:(id)delegate;
--(void) GetTopPlaceFromGoogleNearby:(double)lat lng:(double)lng delegate:(id)delegate;
--(void) GetPlacesFromGoogleByTitle:(NSString*) title lat:(double)lat lng:(double)lng delegate:(id)delegate;
+-(void) GetTopPlaceFromGoogleNearby:(double)lat lng:(double)lng success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+-(void) GetPlacesFromGoogleNearby:(double)lat lng:(double)lng success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+-(void) GetPlacesFromGoogleByTitle:(NSString*) title lat:(double)lat lng:(double)lng success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
 @end
