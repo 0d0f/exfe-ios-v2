@@ -25,6 +25,7 @@
 #import "PlaceViewController.h"
 #import "CrossesViewController.h"
 #import "WidgetConvViewController.h"
+#import "WidgetExfeeViewController.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -1166,42 +1167,49 @@
     switch (widget_id) {
         case 1:
         {
-            WidgetConvViewController * conversationView =  [[WidgetConvViewController alloc]initWithNibName:@"WidgetConvViewController" bundle:nil] ;
+            WidgetExfeeViewController *exfeeView = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
+            [self addChildViewController:exfeeView];
+            [self.view insertSubview:exfeeView.view aboveSubview:headerShadow];
+            [exfeeView didMoveToParentViewController:self];
+            self.currentViewController = [exfeeView autorelease];
+            [self changeHeaderStyle:kHeaderStyleHalf];
             
-            // prepare data for conversation
-            conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
-            conversationView.cross_title = _cross.title;
-            for(NSDictionary *widget in _cross.widget) {
-                if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-                    conversationView.headImgDict = widget;
-                    break;
-                }
-            }
-            Invitation* myInv = [self getMyInvitation];
-            if (myInv != nil){
-                conversationView.identity = myInv.identity;
-            }
-            
-            // clean up data
-            _cross.conversation_count = 0;
-            [self fillConversationCount:0];
-            
-            [self addChildViewController:conversationView];
-            [self.view insertSubview:conversationView.view aboveSubview:headerShadow];
-            conversationView.view.alpha = 0;
-            __weak __block CrossGroupViewController *weakSelf=self;
-            [UIView animateWithDuration:0.233 animations:^{
-                conversationView.view.alpha = 1;
-            }
-                             completion:^(BOOL finished){
-                                 [conversationView didMoveToParentViewController:weakSelf];
-                                 weakSelf.currentViewController = [conversationView autorelease];
-                                 [UIView animateWithDuration:0.2
-                                                  animations:^{
-                                                      [self changeHeaderStyle:kHeaderStyleHalf];
-                                                  }];
-                                 
-                             }];
+//            WidgetConvViewController * conversationView =  [[WidgetConvViewController alloc]initWithNibName:@"WidgetConvViewController" bundle:nil] ;
+//            
+//            // prepare data for conversation
+//            conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
+//            conversationView.cross_title = _cross.title;
+//            for(NSDictionary *widget in _cross.widget) {
+//                if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+//                    conversationView.headImgDict = widget;
+//                    break;
+//                }
+//            }
+//            Invitation* myInv = [self getMyInvitation];
+//            if (myInv != nil){
+//                conversationView.identity = myInv.identity;
+//            }
+//            
+//            // clean up data
+//            _cross.conversation_count = 0;
+//            [self fillConversationCount:0];
+//            
+//            [self addChildViewController:conversationView];
+//            [self.view insertSubview:conversationView.view aboveSubview:headerShadow];
+//            conversationView.view.alpha = 0;
+//            __weak __block CrossGroupViewController *weakSelf=self;
+//            [UIView animateWithDuration:0.233 animations:^{
+//                conversationView.view.alpha = 1;
+//            }
+//                             completion:^(BOOL finished){
+//                                 [conversationView didMoveToParentViewController:weakSelf];
+//                                 weakSelf.currentViewController = [conversationView autorelease];
+//                                 [UIView animateWithDuration:0.2
+//                                                  animations:^{
+//                                                      [self changeHeaderStyle:kHeaderStyleHalf];
+//                                                  }];
+//                                 
+//                             }];
         }
             break;
             
