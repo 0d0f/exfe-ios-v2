@@ -167,15 +167,29 @@ static id sharedManager = nil;
 ////    RKObjectManager* manager =[RKObjectManager sharedManager];
 //}
 //
-//+(void) GatherCross:(Cross*) cross delegate:(id)delegate{
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    RKObjectManager* manager =[RKObjectManager sharedManager];
+
++(void) GatherCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
+
+  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+  
+    NSString *endpoint = [NSString stringWithFormat:@"%@/crosses/gather",API_ROOT];
+
+//    NSDictionary *param=[NSDictionary dictionaryWithObjectsAndKeys:app.accesstoken,@"token", nil];
+    manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
+    manager.requestSerializationMIMEType = RKMIMETypeJSON;
+
+    [manager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+    [manager postObject:cross path:endpoint parameters:nil success:success failure:failure];
+//  [manager.HTTPClient postPath:endpoint parameters:postdict success:^(AFHTTPRequestOperation *operation, id
+  
+                                                                      
 //    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
 //    [manager.client setValue:app.accesstoken forHTTPHeaderField:@"token"];
 //    [manager postObject:cross usingBlock:^(RKObjectLoader *loader){
 //        loader.delegate=delegate;
 //    }];
-//}
+}
 
 +(void) LoadCrossWithUserId:(int)user_id updatedtime:(NSString*)updatedtime success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
 

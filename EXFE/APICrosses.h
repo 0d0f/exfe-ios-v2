@@ -28,7 +28,7 @@
 +(void) LoadCrossWithCrossId:(int)corss_id updatedtime:(NSString*)updatedtime success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 
-+(void) GatherCross:(Cross*) cross delegate:(id)delegate;
++(void) GatherCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 //RESTKIT0.2
 //+ (RKManagedObjectMapping*) getPlaceMapping;

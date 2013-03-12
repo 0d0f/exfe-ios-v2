@@ -650,27 +650,27 @@
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:identity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
 
-  NSString *endpoint = [NSString stringWithFormat:@"%@/conversation/%u/add?token=%@",API_ROOT,exfee_id,app.accesstoken];
-  RKObjectManager *manager=[RKObjectManager sharedManager];
-  manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
-  [manager.HTTPClient postPath:endpoint parameters:postdict success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-        [self refreshConversation];
-        [inputToolbar.textView clearText];
-    }else {
-    }
-  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-    [inputToolbar setInputEnabled:YES];
-    NSString *errormsg;
-    if(error.code==2)
-        errormsg=@"A connection failure has occurred.";
-    else
-        errormsg=@"Could not connect to the server.";
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert show];
-    [alert release];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/conversation/%u/add?token=%@",API_ROOT,exfee_id,app.accesstoken];
+    RKObjectManager *manager=[RKObjectManager sharedManager];
+    manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
+    [manager.HTTPClient postPath:endpoint parameters:postdict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+      if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+          [self refreshConversation];
+          [inputToolbar.textView clearText];
+      }else {
+      }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+      [inputToolbar setInputEnabled:YES];
+      NSString *errormsg;
+      if(error.code==2)
+          errormsg=@"A connection failure has occurred.";
+      else
+          errormsg=@"Could not connect to the server.";
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+      [alert show];
+      [alert release];
 
-  }];
+    }];
 }
 -(void)inputButtonPressed:(NSString *)inputText{
     [self addPost:inputText];
