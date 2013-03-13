@@ -48,6 +48,9 @@ static char handleurlobject;
     }
     
   NSURL *baseURL = [NSURL URLWithString:API_ROOT];
+  RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+  RKLogConfigureByName("*", RKLogLevelOff);
+  
   RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
   // Enable Activity Indicator Spinner
   [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;

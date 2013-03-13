@@ -631,7 +631,6 @@
 
       cross.time.begin_at.timezone = [DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];
     }
-//    Exfee *exfee=[Exfee object];
     NSEntityDescription *exfeeEntity = [NSEntityDescription entityForName:@"Exfee" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
     Exfee *exfee=[[[Exfee alloc] initWithEntity:exfeeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
   
@@ -640,7 +639,16 @@
     }
     cross.exfee = exfee;
     [Flurry logEvent:@"GATHER_SEND"];
-    [APICrosses GatherCross:[cross retain] delegate:self];
+  [APICrosses GatherCross:cross success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
+    NSLog(@"%@",mappingResult);
+
+  } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
+    NSLog(@"%@",error);
+    
+  }];
+//    [APICrosses GatherCross:[cross retain] delegate:self];
 }
 
 - (void) ShowPlaceView:(NSString*)status{

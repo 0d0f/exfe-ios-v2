@@ -71,17 +71,21 @@
                 NSString *indexfield=@"";
                 ABRecordID uid=ABRecordGetRecordID(ref);
                 LocalContact *localcontact=nil;
-                
-                NSFetchRequest* request = [LocalContact fetchRequest];
+              
+                NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(uid == %i)",uid];
                 [request setPredicate:predicate];
-                NSArray *localcontacts=[[LocalContact objectsWithFetchRequest:request] retain];
+                RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                NSArray *localcontacts = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
                 if([localcontacts count]>0)
                     localcontact= [localcontacts objectAtIndex:0];
                 else{
-                    localcontact=[LocalContact object];
+                  
+                    NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+                    RKObjectManager *objectManager=[RKObjectManager sharedManager];
+                  localcontact=[[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
                 }
-                [localcontacts release];
+//                [localcontacts release];
                 localcontact.uid=[NSNumber numberWithInt:uid];
                 
                 CFStringRef compositeName=ABRecordCopyCompositeName(ref);
@@ -208,7 +212,9 @@
             CFRelease(multi_im);
         }
     }
-    [[LocalContact currentContext] save:nil];
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+  [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
+//    [[LocalContact currentContext] save:nil];
     CFRelease(allPeople);
 }
 
