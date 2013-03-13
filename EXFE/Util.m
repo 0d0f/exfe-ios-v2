@@ -934,6 +934,24 @@
     return username;
 }
 
++ (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate{
+  for (UIWindow* window in [UIApplication sharedApplication].windows) {
+    NSArray* subviews = window.subviews;
+    if ([subviews count] > 0)
+      if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
+        return;
+  }
+  NSString *errormsg=@"";
+    if([meta.code intValue]==401){
+      errormsg=@"Authentication failed due to security concerns, please sign in again.";
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
+      alert.tag=500;
+      alert.delegate=delegate;
+      [alert show];
+      [alert release];
+    }
+}
+
 + (void) showErrorWithMetaDict:(NSDictionary*)meta delegate:(id)delegate{
     for (UIWindow* window in [UIApplication sharedApplication].windows) {
         NSArray* subviews = window.subviews;

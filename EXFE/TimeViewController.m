@@ -305,9 +305,15 @@
 - (void) saveDate:(NSString*) time_word{
     if([time_word isEqualToString:@"Sometime"])
             [self dismissModalViewControllerAnimated:YES];
-    EFTime *eftime=[EFTime object];
-    CrossTime *crosstime=[CrossTime object];
-    
+  
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSEntityDescription *eftimeEntity = [NSEntityDescription entityForName:@"EFTime" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    EFTime *eftime=[[[EFTime alloc] initWithEntity:eftimeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+
+
+    NSEntityDescription *crosstimeEntity = [NSEntityDescription entityForName:@"CrossTime" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    CrossTime *crosstime=[[[CrossTime alloc] initWithEntity:crosstimeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+
     NSDate *date=datepicker.date;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];

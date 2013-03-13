@@ -368,15 +368,14 @@
                 [app.navigationController dismissModalViewControllerAnimated:YES];
             }
             else if([source isEqualToString:@"pushtocross"]) {
-//                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-//                Cross *cross=[self crossWithId:[cross_id intValue]];
-//                
-//                CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
-//                viewController.cross = cross;
-//                viewController.widgetId = kWidgetCross;
-//                viewController.headerStyle = kHeaderStyleFull;
-//                [self.navigationController pushViewController:viewController animated:NO];
-//                [viewController release];
+                Cross *cross=[self crossWithId:cross_id];
+                
+                CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+                viewController.cross = cross;
+                viewController.widgetId = kWidgetCross;
+                viewController.headerStyle = kHeaderStyleFull;
+                [self.navigationController pushViewController:viewController animated:NO];
+                [viewController release];
             }
             else if([source isEqualToString:@"pushtoconversation"]) {
 //                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];

@@ -212,8 +212,8 @@
             CFRelease(multi_im);
         }
     }
-  RKObjectManager *objectManager = [RKObjectManager sharedManager];
-  [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
+//  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+//  [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
 //    [[LocalContact currentContext] save:nil];
     CFRelease(allPeople);
 }

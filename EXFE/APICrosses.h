@@ -30,6 +30,9 @@
 
 +(void) GatherCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
++(void) EditCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
+
 //RESTKIT0.2
 //+ (RKManagedObjectMapping*) getPlaceMapping;
 //+ (RKManagedObjectMapping*) getInvitationMapping;
