@@ -17,6 +17,7 @@
 
 @interface EXTabWidget : UIView{
     NSUInteger currentIndex;
+    NSUInteger total;
     NSArray* notifications;
     NSArray* hiddens;
     

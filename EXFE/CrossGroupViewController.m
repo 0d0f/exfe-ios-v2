@@ -322,7 +322,7 @@
     }
     
     if (tabWidget == nil) {
-        NSArray* imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30"], [UIImage imageNamed:@"widget_conv_30"], nil];
+        NSArray* imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30"], [UIImage imageNamed:@"widget_conv_30"], [UIImage imageNamed:@"time_icon"], nil];
         tabWidget = [[EXTabWidget alloc] initWithFrame:CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40) withImages:imgs current:_widgetId];
         tabWidget.delegate = self;
         [self.view insertSubview:tabWidget belowSubview:btnBack];
@@ -811,7 +811,8 @@
 
 - (void)switchWidget:(id)sender{
     [self hidePopupIfShown];
-    [self swapChildViewController:(_headerStyle + 1) % 2];
+    UIView *v = sender;
+    [self swapChildViewController:v.tag];
 }
 
 #pragma mark EXImagesCollectionView Datasource methods
@@ -1164,7 +1165,47 @@
 
 - (void)showChinldViewController:(NSInteger)widget_id{
     switch (widget_id) {
-        case 1:
+        case 2:
+        {
+            WidgetConvViewController * conversationView =  [[WidgetConvViewController alloc]initWithNibName:@"WidgetConvViewController" bundle:nil] ;
+            
+            // prepare data for conversation
+            conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
+            conversationView.cross_title = _cross.title;
+            for(NSDictionary *widget in _cross.widget) {
+                if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+                    conversationView.headImgDict = widget;
+                    break;
+                }
+            }
+            Invitation* myInv = [self getMyInvitation];
+            if (myInv != nil){
+                conversationView.identity = myInv.identity;
+            }
+            
+            // clean up data
+            _cross.conversation_count = 0;
+            [self fillConversationCount:0];
+            
+            [self addChildViewController:conversationView];
+            [self.view insertSubview:conversationView.view aboveSubview:headerShadow];
+            conversationView.view.alpha = 0;
+            __weak __block CrossGroupViewController *weakSelf=self;
+            [UIView animateWithDuration:0.233 animations:^{
+                conversationView.view.alpha = 1;
+            }
+                             completion:^(BOOL finished){
+                                 [conversationView didMoveToParentViewController:weakSelf];
+                                 weakSelf.currentViewController = [conversationView autorelease];
+                                 [UIView animateWithDuration:0.2
+                                                  animations:^{
+                                                      [self changeHeaderStyle:kHeaderStyleHalf];
+                                                  }];
+                                 
+                             }];
+        }
+            break;
+        case 3:
         {
             WidgetExfeeViewController *exfeeView = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
             [self addChildViewController:exfeeView];
@@ -1172,45 +1213,7 @@
             [exfeeView didMoveToParentViewController:self];
             self.currentViewController = [exfeeView autorelease];
             [self changeHeaderStyle:kHeaderStyleHalf];
-            
-//            WidgetConvViewController * conversationView =  [[WidgetConvViewController alloc]initWithNibName:@"WidgetConvViewController" bundle:nil] ;
-//            
-//            // prepare data for conversation
-//            conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
-//            conversationView.cross_title = _cross.title;
-//            for(NSDictionary *widget in _cross.widget) {
-//                if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-//                    conversationView.headImgDict = widget;
-//                    break;
-//                }
-//            }
-//            Invitation* myInv = [self getMyInvitation];
-//            if (myInv != nil){
-//                conversationView.identity = myInv.identity;
-//            }
-//            
-//            // clean up data
-//            _cross.conversation_count = 0;
-//            [self fillConversationCount:0];
-//            
-//            [self addChildViewController:conversationView];
-//            [self.view insertSubview:conversationView.view aboveSubview:headerShadow];
-//            conversationView.view.alpha = 0;
-//            __weak __block CrossGroupViewController *weakSelf=self;
-//            [UIView animateWithDuration:0.233 animations:^{
-//                conversationView.view.alpha = 1;
-//            }
-//                             completion:^(BOOL finished){
-//                                 [conversationView didMoveToParentViewController:weakSelf];
-//                                 weakSelf.currentViewController = [conversationView autorelease];
-//                                 [UIView animateWithDuration:0.2
-//                                                  animations:^{
-//                                                      [self changeHeaderStyle:kHeaderStyleHalf];
-//                                                  }];
-//                                 
-//                             }];
         }
-            break;
             
         default:
             

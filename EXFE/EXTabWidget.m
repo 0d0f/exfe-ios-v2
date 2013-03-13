@@ -34,6 +34,7 @@
                 btn.hidden = YES;
             }
             [self addSubview:btn];
+            total = btn.tag;
         }
     }
     return self;
@@ -66,84 +67,90 @@
     
     UIButton* btn = sender;
     NSUInteger idx = btn.tag - 1;
-    
+    NSLog(@"widget clicked: index %i when current is %i/%i", idx, currentIndex, total);
     if (idx == currentIndex) {
         _enable = NO;
-        NSTimeInterval time = 0.2;
         if (self.delegate) {
             if([self.delegate respondsToSelector:@selector(updateLayout:animationWithParam:)]){
-                NSDictionary * dict = @{@"width": @"239", @"animationTime": [NSString stringWithFormat:@"%f", time]};
+                NSDictionary * dict = @{@"width": @"201", @"animationTime": [NSString stringWithFormat:@"%f", 0.2]};
                 [self.delegate performSelector:@selector(updateLayout:animationWithParam:) withObject:self withObject:dict];
             }
         }
         
-        CGPoint outofView = CGPointMake(CGRectGetWidth(self.bounds), CGRectGetMinY(btn.frame));
-        CGPoint target = [self positionOfButton:1];
-        CGPoint last = [self positionOfButton:0];
-        
-        UIButton * another = (UIButton*)[self viewWithTag: 3 - btn.tag]; // tricks!!!
-        //UIButton * another = [buttons objectAtIndex:1 - idx];
-        CGRect aStart = another.frame;
-        aStart.origin = outofView;
-        //aStart.origin = target;
-        another.frame = aStart;
-        another.hidden = NO;
-        
-        //[self bringSubviewToFront:btn];
+        NSUInteger animCount = 0;
+        for (UIView *view in self.subviews) {
+            if (view.tag - 1 != currentIndex) {
+                animCount ++;
+                CGRect aStart = view.frame;
+                aStart.origin = [self positionOfButton:0 - animCount];
+                view.frame = aStart;
+                view.hidden = NO;
+            }
+        }
         
         [UIView animateWithDuration:0.233
                          animations:^{
                              // move hidden icon in
-                             CGRect aNew = another.frame;
-                             aNew.origin = target;
-                             another.frame = aNew;
+                             NSUInteger count = 0;
+                             for (UIView *view in self.subviews) {
+                                 if (view.tag - 1 != currentIndex) {
+                                     count ++;
+                                     CGRect aStart = view.frame;
+                                     aStart.origin = [self positionOfButton:total - count];
+                                     view.frame = aStart;
+                                     view.hidden = NO;
+                                 }
+                             }
                          }
                          completion:^(BOOL finished){
                              _enable = YES;
-                             [UIView animateWithDuration:0.233
-                                              animations:^{
-                                                  CGRect aNew = another.frame;
-                                                  aNew.origin = last;
-                                                  another.frame = aNew;
-                                                  
-                                                  CGRect bOld = btn.frame;
-                                                  bOld.origin = outofView;
-                                                  btn.frame = bOld;
-                                                  
-                                                  currentIndex = another.tag - 1;
-                                                  
-                                                  if (self.delegate) {
-                                                      if([self.delegate respondsToSelector:@selector(updateLayout:animationWithParam:)]){
-                                                          NSDictionary * dict = @{@"width": @"269", @"animationTime": [NSString stringWithFormat:@"%f", time + 0.2]};
-                                                          [self.delegate performSelector:@selector(updateLayout:animationWithParam:) withObject:self withObject:dict];
-                                                      }
-                                                  }
-                                              }
-                                              completion:^(BOOL finished){
-                                                  if (self.delegate) {
-                                                      if([self.delegate respondsToSelector:@selector(widgetClick:withButton:)]){
-                                                          [self.delegate performSelector:@selector(widgetClick:withButton:) withObject:self withObject:sender];
-                                                      }
-                                                  }
-                                              } ];
+                             
                          } ];
-        
-       
-        
-       
-        
+    } else {
+        _enable = NO;
+        [UIView animateWithDuration:0.233
+                         animations:^{
+                             
+                             NSUInteger animCount = 0;
+                             for (UIView *view in self.subviews) {
+                                 if (view.tag - 1 == idx) {
+                                 }else if (view.tag - 1 == currentIndex){
+                                     CGRect aStart = view.frame;
+                                     aStart.origin = [self positionOfButton:0 - total];
+                                     view.frame = aStart;
+                                 }else{
+                                     animCount ++;
+                                     CGRect aStart = view.frame;
+                                     aStart.origin = [self positionOfButton:0 - animCount];
+                                     view.frame = aStart;
+                                 }
+                             }
+                             currentIndex = idx;
+                         }
+                         completion:^(BOOL finished){
+                             [UIView animateWithDuration:0.233 animations:^{
+                                 
+                                 CGRect aStart = btn.frame;
+                                 aStart.origin = [self positionOfButton:0];
+                                 btn.frame = aStart;
+
+                                 if (self.delegate) {
+                                     if([self.delegate respondsToSelector:@selector(updateLayout:animationWithParam:)]){
+                                         NSDictionary * dict = @{@"width": @"269", @"animationTime": [NSString stringWithFormat:@"%f", 0.4]};
+                                         [self.delegate performSelector:@selector(updateLayout:animationWithParam:) withObject:self withObject:dict];
+                                     }
+                                 }
+                             }
+                             completion:^(BOOL finished){
+                                 _enable = YES;
+                                 if (self.delegate) {
+                                     if([self.delegate respondsToSelector:@selector(widgetClick:withButton:)]){
+                                         [self.delegate performSelector:@selector(widgetClick:withButton:) withObject:self withObject:sender];
+                                     }
+                                 }
+                             }];
+                         } ];
     }
-//    else{
-//
-//        switch (idx) {
-//            case <#constant#>:
-//                <#statements#>
-//                break;
-//                
-//            default:
-//                break;
-//        }
-//    }
 }
 
 
