@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ExfeeResponseCell.h"
+#import "ExfeeRsvpCell.h"
 #import "Invitation.h"
 #import "Exfee.h"
 
@@ -22,7 +24,10 @@ typedef enum {
 
 @interface WidgetExfeeViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>{
     UITableView* invTable;
+    ExfeeRsvpCell *tableHeader;
+    ABTableViewCell *tableFooter;
     UIScrollView* exfeeContainer;
+    
     Exfee *exfee;
     Invitation* selected_invitation;
     

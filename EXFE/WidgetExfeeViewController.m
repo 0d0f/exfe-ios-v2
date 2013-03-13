@@ -7,9 +7,10 @@
 //
 
 #import "WidgetExfeeViewController.h"
+#import "Util.h"
+#import "CrossCard.h"
 
-#define EXFEE_SELECTOR_HEIGHT     ((70 + 20) * 2)
-#define EXFEE_CONTENT_HEIGHT      (200)
+#define EXFEE_CONTENT_HEIGHT      (236)
 
 #define kTagViewExfeeRoot         10
 #define kTagViewExfeeSelector     20
@@ -74,7 +75,7 @@
     invTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     invTable.dataSource = self;
     invTable.delegate = self;
-    invTable.backgroundColor = [UIColor redColor];
+    invTable.backgroundColor = [UIColor COLOR_SNOW];
     invTable.tag = kTableOrigin;
     [exfeeContainer addSubview:invTable];
     
@@ -103,13 +104,13 @@
 
 #pragma mark UITableViewDataSource methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 0;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
     
-    if (section == 2) {
-        return 1; //depends on Exfee
+    if (section == 1) {
+        return 2; //depends on Exfee
     }else{
         return 1;
     }
@@ -117,30 +118,86 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 0){
-    }else if (indexPath.section == 2){
-    }else{
-        return nil;
+    switch (indexPath.section) {
+        case 0:
+        {
+            if (tableHeader == nil) {
+                tableHeader = [[ExfeeRsvpCell alloc] initWithFrame:CGRectMake(0, 0, 320, 87)];
+                tableHeader.backgroundColor = [UIColor redColor];
+                NSAttributedString *as = [[NSAttributedString alloc] initWithString:@"Pending"];
+                tableHeader.MainText = as;
+                tableHeader.AltText = @"agda by fejao";
+                tableHeader.RsvpString = @"Pending";
+                tableHeader.NameText = @"Steve Exfer";
+            }
+            return tableHeader;
+        }
+        case 1:
+        {
+            NSString* reuseIdentifier = @"Exfee Identity Cell";
+            ExfeeResponseCell *cell =[tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+            if (nil == cell) {
+                cell = [[[ExfeeResponseCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
+            }
+            // fill UI element;
+            [cell setNeedsDisplay];
+            return cell;
+        }
+        case 2:
+        {
+            if (tableFooter == nil) {
+                tableFooter = [[ABTableViewCell alloc] initWithFrame:CGRectMake(0, 0, 320, 32)];
+                tableFooter.backgroundColor = [UIColor greenColor];
+            }
+            return tableFooter;
+        }
+            break;
+            
+        default:
+            return nil;
+            //break;
     }
-    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section == 0){
-        return 64;
-    }else {
-        return 90;
-    }
-}
+    switch (indexPath.section) {
+        case 0:
+            return 121.0f;
+        case 1:
+            return 32.0f;
+        case 2:
+            return 32.0f;
+        default:
+            return 0;
+    }}
 
 #pragma mark UITableViewDelegate methods
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1){
+    switch (indexPath.section) {
+        case 0:
+            
+            break;
+        case 1:
+            switch (indexPath.row) {
+                case 0:
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            break;
+        case 2:
+            
+            break;
+            
+        default:
+            break;
     }
 }
-
 
 #pragma mark UIScrollViewDelegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
