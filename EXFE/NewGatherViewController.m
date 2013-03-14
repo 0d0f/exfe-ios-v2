@@ -1298,6 +1298,7 @@
 }
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
+  NSLog(@"send rsvp");
     //    NSError *error;
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     Identity *myidentity=[self getMyInvitation].identity;

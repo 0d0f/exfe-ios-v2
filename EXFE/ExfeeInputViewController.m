@@ -139,7 +139,7 @@ static char identitykey;
     int offset=[[NSDate date] timeIntervalSince1970]-[localaddressbook_read_at timeIntervalSince1970];
     
     //TODO: offset=10000 for debug, must be deleted before release.
-    offset=100000;
+//    offset=100000;
     if(offset > 1*24*60*60){
         MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode=MBProgressHUDModeCustomView;
@@ -166,27 +166,26 @@ static char identitykey;
                     [self reloadLocalAddressBook];
 
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                [self copyMoreContactsFromIdx:100];
+                [self copyMoreContactsFromIdx:100];
             });
         });
         dispatch_release(loadingQueue);
     }else{
-//      NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
-//      if(filteredlocalcontacts!=nil)
-//          [filteredlocalcontacts release];
-//      RKObjectManager *objectManager = [RKObjectManager sharedManager];
-//      filteredlocalcontacts = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
-//      if(addressbookType==LOCAL_ADDRESSBOOK)
-//          [self reloadLocalAddressBook];
+      NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
+      if(filteredlocalcontacts!=nil)
+          [filteredlocalcontacts release];
+      RKObjectManager *objectManager = [RKObjectManager sharedManager];
+      filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+      if(addressbookType==LOCAL_ADDRESSBOOK)
+          [self reloadLocalAddressBook];
 
     }
 }
 
 - (void) copyMoreContactsFromIdx:(int)idx{
-  NSLog(@"copy contacts");
     dispatch_queue_t loadingQueue = dispatch_queue_create("loading addressbook", NULL);
     dispatch_async(loadingQueue, ^{
-//        [address CopyAllPeopleFrom:idx];
+        [address CopyAllPeopleFrom:idx];
         dispatch_async(dispatch_get_main_queue(), ^{
           
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
@@ -198,11 +197,11 @@ static char identitykey;
             if(addressbookType==LOCAL_ADDRESSBOOK)
                 [self reloadLocalAddressBook];
 
-//            if(idx+100<address.contactscount){
-//                [self copyMoreContactsFromIdx:idx+100];
-//            }else{
-//                [[NSUserDefaults standardUserDefaults] setObject:[NSDate date]  forKey:@"localaddressbook_read_at"];
-//            }
+            if(idx+100<address.contactscount){
+                [self copyMoreContactsFromIdx:idx+100];
+            }else{
+                [[NSUserDefaults standardUserDefaults] setObject:[NSDate date]  forKey:@"localaddressbook_read_at"];
+            }
         });
     });
     dispatch_release(loadingQueue);
@@ -358,7 +357,7 @@ static char identitykey;
         [self dismissModalViewControllerAnimated:YES];
     }
     else{
-        NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:[inputobjs count]];
+        NSMutableArray *identities=[[[NSMutableArray alloc] initWithCapacity:[inputobjs count]] autorelease];
         for(NSDictionary *inputobj in inputobjs){
             NSString *input=[inputobj objectForKey:@"input"];
             NSString *name=[inputobj objectForKey:@"name"];
@@ -366,24 +365,21 @@ static char identitykey;
             NSDictionary *identity=[NSDictionary dictionaryWithObjectsAndKeys:provider,@"provider",name,@"name",input,@"external_username", nil];
             [identities addObject:identity];
         }
-        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//RESTKIT0.2      
-//        RKClient *client = [RKClient sharedClient];
-//        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-      
-        MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.labelText = @"Adding...";
-        hud.mode=MBProgressHUDModeCustomView;
-        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-        [bigspin startAnimating];
-        hud.customView=bigspin;
-        [bigspin release];
+
+      MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+      hud.labelText = @"Adding...";
+      hud.mode=MBProgressHUDModeCustomView;
+      EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+      [bigspin startAnimating];
+      hud.customView=bigspin;
+      [bigspin release];
         
       NSString *endpoint = [NSString stringWithFormat:@"%@/identities/get",API_ROOT];
       RKObjectManager *manager=[RKObjectManager sharedManager] ;
       manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
 
       [manager.HTTPClient postPath:endpoint parameters:[NSDictionary dictionaryWithObjectsAndKeys:identities,@"identities", nil] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
           NSDictionary *body=(NSDictionary*)responseObject;
           id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
@@ -432,6 +428,8 @@ static char identitykey;
 //        [spin setHidden:YES];
 //        
       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+
 //        [spin setHidden:YES];
 //        NSString *errormsg;
 //        if(error.code==2)
@@ -831,19 +829,6 @@ static char identitykey;
     }
 
 }
-#pragma mark RKObjectLoaderDelegate methods
-//RESTKIT0.2
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    
-//    if([objects count]>0) {
-//        if([objectLoader.userData isEqualToString:@"suggest"])
-//            [self loadIdentitiesFromDataStore:[exfeeList getInput]];
-//    }
-//}
-//
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-//    //    [self stopLoading];
-//}
 
 #pragma mark EXBubbleScrollViewDelegate methods
 - (void) deleteLastBubble:(EXBubbleScrollView *)bubbleScrollView deletedbubble:(EXBubbleButton*)bubble{
@@ -913,15 +898,19 @@ static char identitykey;
             [filteredlocalcontacts release];
             filteredlocalcontacts=nil;
         }
-        
-        NSFetchRequest* request = [LocalContact fetchRequest];
-        if(filteredlocalcontacts!=nil)
-            [filteredlocalcontacts release];
+      
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(indexfield like[c] %@)", inputpredicate];
         [request setPredicate:predicate];
 
-        
-        filteredlocalcontacts=[[LocalContact objectsWithFetchRequest:request] retain];
+      
+//        NSFetchRequest* request = [LocalContact fetchRequest];
+        if(filteredlocalcontacts!=nil)
+            [filteredlocalcontacts release];
+        [request setPredicate:predicate];
+
+        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+        filteredlocalcontacts= [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
 
         [suggestionTable reloadData];
     }

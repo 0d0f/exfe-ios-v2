@@ -140,7 +140,6 @@
 		783F52E91677777600331746 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783F52E81677777600331746 /* back@2x.png */; };
 		7840916C156F6AA5006DF115 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7840916B156F6AA5006DF115 /* Util.m */; };
 		78409172156F80A7006DF115 /* APIConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409171156F80A6006DF115 /* APIConversation.m */; };
-		78409175156F81E6006DF115 /* Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409174156F81E6006DF115 /* Mapping.m */; };
 		7841389A15AD36C2002E1030 /* EXIconToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7841389915AD36C2002E1030 /* EXIconToolBar.m */; };
 		78415346159C3F5C002B7A2E /* PlaceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415345159C3F5C002B7A2E /* PlaceAnnotation.m */; };
 		78415363159D6766002B7A2E /* WildcardGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */; };
@@ -617,8 +616,6 @@
 		7840916B156F6AA5006DF115 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 		78409170156F80A6006DF115 /* APIConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIConversation.h; sourceTree = "<group>"; };
 		78409171156F80A6006DF115 /* APIConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIConversation.m; sourceTree = "<group>"; };
-		78409173156F81E6006DF115 /* Mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mapping.h; sourceTree = "<group>"; };
-		78409174156F81E6006DF115 /* Mapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mapping.m; sourceTree = "<group>"; };
 		7841389815AD36C2002E1030 /* EXIconToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXIconToolBar.h; sourceTree = "<group>"; };
 		7841389915AD36C2002E1030 /* EXIconToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXIconToolBar.m; sourceTree = "<group>"; };
 		78415344159C3F5C002B7A2E /* PlaceAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceAnnotation.h; sourceTree = "<group>"; };
@@ -1619,8 +1616,6 @@
 				78F0580A159B708F00F360F2 /* APIPlace.m */,
 				785F6F521581DE4C00BF8EA0 /* APIProfile.h */,
 				785F6F531581DE4C00BF8EA0 /* APIProfile.m */,
-				78409173156F81E6006DF115 /* Mapping.h */,
-				78409174156F81E6006DF115 /* Mapping.m */,
 				7818FF1415EB415E0095E92F /* ObjectToDict.h */,
 				7818FF1515EB415E0095E92F /* ObjectToDict.m */,
 				788B620F16E89B200019B953 /* ModelMapping.h */,
@@ -2252,7 +2247,6 @@
 				782B3CD9156B997200721150 /* SigninViewController.m in Sources */,
 				7840916C156F6AA5006DF115 /* Util.m in Sources */,
 				78409172156F80A7006DF115 /* APIConversation.m in Sources */,
-				78409175156F81E6006DF115 /* Mapping.m in Sources */,
 				788312AB1574A63600D67103 /* ImgCache.m in Sources */,
 				78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */,
 				78920EBC157CB0E1004F3901 /* Rsvp.m in Sources */,

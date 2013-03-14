@@ -44,6 +44,7 @@
 }
 
 - (void) CopyAllPeopleFrom:(int)idx{
+  NSLog(@"copy more people:%i",idx);
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople( addressBook );
     CFIndex count= CFArrayGetCount(allPeople);
     if(count>contactscount)
@@ -212,9 +213,8 @@
             CFRelease(multi_im);
         }
     }
-//  RKObjectManager *objectManager = [RKObjectManager sharedManager];
-//  [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
-//    [[LocalContact currentContext] save:nil];
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+  [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
     CFRelease(allPeople);
 }
 
