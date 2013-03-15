@@ -54,7 +54,6 @@
     [spin removeFromSuperview];
     [loginbtn addSubview:spin];
     [spin setHidden:NO];
-//    [APIProfile LoadUsrWithUserId:385 delegate:self];
 }
 
 - (void) Signupnew:(id) sender{

@@ -52,7 +52,6 @@ static char handleurlobject;
 //  RKLogConfigureByName("*", RKLogLevelOff);
   
   RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
-  // Enable Activity Indicator Spinner
   [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
   
   // Initialize managed object store
@@ -76,74 +75,11 @@ static char handleurlobject;
   managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
   
   
-//  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u?token=%@",API_ROOT,user_id, app.accesstoken];
-  
-//  NSURL *url = [NSURL URLWithString:@"http://api.0d0f.com/v2/users/29?token=7d0a978b674529fe1c66120beaad804eae0bcf6fc8e03cd4106d8f773835ebdd"];
-//  NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//  
-//      RKManagedObjectRequestOperation *operation = [[RKManagedObjectRequestOperation alloc] initWithRequest:request responseDescriptors:@[responseDescriptor]];
-//      NSManagedObjectContext *context=[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
-//      operation.managedObjectContext = context;
-//      //  operation.managedObjectCache = managedObjectStore.managedObjectCache;
-//      [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-//        User * user=(User*)[[mappingResult array] objectAtIndex:0];
-//        NSSet *identities=user.identities;
-//        for (Identity *identity in identities){
-//          NSLog(@"login result: %@", identity.name);
-//          
-//        }
-//       
-//        
-//      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        RKLogError(@"Load failed with error: %@", error);
-//      }];
-//      [operation start];
-//      [operation release];
-
-//  [APIProfile LoadUsrWithUserId:385 delegate:self];
-//
-//  
-//  NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-//  RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
-//  NSError *error = nil;
-//  BOOL success = RKEnsureDirectoryExistsAtPath(RKApplicationDataDirectory(), &error);
-//  if (! success) {
-//    RKLogError(@"Failed to create Application Data Directory at path '%@': %@", RKApplicationDataDirectory(), error);
-//  }
-//  NSString *path = [RKApplicationDataDirectory() stringByAppendingPathComponent:databaseName];
-//  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:path fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
-//  if (! persistentStore) {
-//    RKLogError(@"Failed adding persistent store at path '%@': %@", path, error);
-//  }
-//  
-//  [managedObjectStore createManagedObjectContexts];
-//
-//
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//  RKObjectManager* manager =[RKObjectManager managerWithBaseURL:[NSURL URLWithString:API_ROOT]];
-//  manager.managedObjectStore=managedObjectStore;
   if(app.accesstoken!=nil)
     [objectManager.HTTPClient setDefaultHeader:app.accesstoken value:@"token"];
   
-//  NSManagedObjectContext *context=[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
-
-  //    RKObjectManager* manager =[RKObjectManager managerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
-
-  
-  
-//RESTKIT0.2  
-//    RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
-//    RKObjectManager* manager =[RKObjectManager managerWithBaseURL:[NSURL URLWithString:API_V2_ROOT]];
-//  
-//    manager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:databaseName usingSeedDatabaseName:seedDatabaseName managedObjectModel:nil delegate:self];
-//
-//    [[[RKClient sharedClient] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
-//    [[[RKObjectManager sharedManager] requestQueue] setShowsNetworkActivityIndicatorWhenBusy:YES];
-  
-//    [APICrosses MappingCross];
-//    [APIConversation MappingConversation];
-//    [APIProfile MappingUsers];
-//    [APIProfile MappingSuggest];
+   [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
     BOOL login=[self Checklogin];
     if(login==NO){
         [self ShowLanding];
@@ -183,33 +119,24 @@ static char handleurlobject;
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         }];
   
-      
-//RESTKIT0.2
-//    RKClient *client = [RKClient sharedClient];
-//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//    
-//    NSString *endpoint = [NSString stringWithFormat:@"/Backgrounds/GetAvailableBackgrounds?token=%@",self.accesstoken];
-//    [client get:endpoint usingBlock:^(RKRequest *request){
-//        request.method=RKRequestMethodPOST;
-//        request.onDidLoadResponse=^(RKResponse *response){
-//            if (response.statusCode == 200) {
-//                NSDictionary *body=[response.body objectFromJSONData];
-//                if([body isKindOfClass:[NSDictionary class]]) {
-//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                    if(code)
-//                        if([code intValue]==200) {
-//                            NSArray *backgrounds=[[body objectForKey:@"response"] objectForKey:@"backgrounds"];
-//                            [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
-//                        }
-//                }
-//            }else {
-//                //Check Response Body to get Data!
-//            }
-//            
-//        };
-//        request.onDidFailLoadWithError=^(NSError *error){
-//        };
-//    }];
+  NSString *endpoint = [NSString stringWithFormat:@"%@/Backgrounds/GetAvailableBackgrounds?token=%@",API_ROOT,self.accesstoken];
+  [objectManager.HTTPClient getPath:endpoint parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+      NSDictionary *body=responseObject;
+      if([body isKindOfClass:[NSDictionary class]]) {
+          id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+          if(code)
+              if([code intValue]==200) {
+                  NSArray *backgrounds=[[body objectForKey:@"response"] objectForKey:@"backgrounds"];
+                  [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
+              }
+        }
+    }else {
+    }
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    
+  }];
+
     return YES;
 }
 
@@ -258,7 +185,6 @@ static char handleurlobject;
 -(void)SigninDidFinish{
     if([self Checklogin]==YES)
     {
-//        [APICrosses MappingRoute];
         NSString* devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"];
         NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
         if( ifdevicetokenSave==nil)
@@ -268,9 +194,9 @@ static char handleurlobject;
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
 
-//        [(CrossesViewController*)crossviewController initUI];
-//        [(CrossesViewController*)crossviewController refreshCrosses:@"crossview_init"];
-//        [(CrossesViewController*)crossviewController loadObjectsFromDataStore];
+        [(CrossesViewController*)crossviewController initUI];
+        [(CrossesViewController*)crossviewController refreshCrosses:@"crossview_init"];
+        [(CrossesViewController*)crossviewController loadObjectsFromDataStore];
         [self.navigationController dismissModalViewControllerAnimated:YES];
     }
 }
@@ -534,6 +460,18 @@ static char handleurlobject;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 - (void) cleandb{
+  
+  NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
+  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
+  NSLog(@"%@",storePath);
+
+  NSURL *storeURL = [NSURL fileURLWithPath:seedPath];
+  NSError *error = nil;
+  if ([[NSFileManager defaultManager] fileExistsAtPath:storeURL.path]) {
+    if (![[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error]) {
+      NSLog(@"delete:%@",seedPath);
+    }
+  }
 //    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
 
 //#ifdef RESTKIT_GENERATE_SEED_DB

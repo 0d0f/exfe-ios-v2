@@ -16,7 +16,6 @@
 
 
 @implementation APICrosses
-//RESTKIT0.2
 static id sharedManager = nil;
 //static RKRequestQueue *queue;
 //

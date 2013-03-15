@@ -422,82 +422,9 @@ static char identitykey;
                   [self dismissModalViewControllerAnimated:YES];
               }
         }
-//          [self processResponse:responseObject status:@"signin"];
-//          [delegate SigninDidFinish];
-//        }
-//        [spin setHidden:YES];
-//        
       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-
-//        [spin setHidden:YES];
-//        NSString *errormsg;
-//        if(error.code==2)
-//          errormsg=@"A connection failure has occurred.";
-//        else
-//          errormsg=@"Could not connect to the server.";
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alert show];
-//        [alert release];
-//        
       }];
-      //RESTKIT0.2
-//        RKParams* rsvpParams = [RKParams params];
-//        [rsvpParams setValue:json forParam:@"identities"];
-//        [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-//        [client post:endpoint usingBlock:^(RKRequest *request){
-//            request.method=RKRequestMethodPOST;
-//            request.params=rsvpParams;
-//            request.onDidLoadResponse=^(RKResponse *response){
-//                [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                if (response.statusCode == 200) {
-//                    NSDictionary *body=[response.body objectFromJSONData];
-//                    if([body isKindOfClass:[NSDictionary class]]) {
-//                        id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                        if(code)
-//                            if([code intValue]==200) {
-//                                NSDictionary* response = [body objectForKey:@"response"];
-//                                NSArray *identities = [response objectForKey:@"identities"];
-//                                for (NSDictionary *identitydict in identities) {
-//                                    NSString *external_id=[identitydict objectForKey:@"external_id"];
-//                                    NSString *provider=[identitydict objectForKey:@"provider"];
-//                                    NSString *avatar_filename=[identitydict objectForKey:@"avatar_filename"];
-//                                    NSString *identity_id=[identitydict objectForKey:@"id"];
-//                                    NSString *name=[identitydict objectForKey:@"name"];
-//                                    NSString *nickname=[identitydict objectForKey:@"nickname"];
-//                                    NSString *external_username=[identitydict objectForKey:@"external_username"];
-//
-//                                    Identity *identity=[Identity object];
-//                                    identity.external_id=external_id;
-//                                    identity.provider=provider;
-//                                    identity.avatar_filename=avatar_filename;
-//                                    identity.name=name;
-//                                    identity.external_username=external_username;
-//                                    identity.nickname=nickname;
-//                                    identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
-//                                    
-//                                    Invitation *invitation =[Invitation object];
-//                                    invitation.rsvp_status=@"NORESPONSE";
-//                                    invitation.identity=identity;
-//                                    Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
-//                                    if(myinvitation!=nil)
-//                                        invitation.updated_by=myinvitation.identity;
-//                                    else
-//                                        invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
-//                                    [invitations addObject:invitation];
-//                                }
-//                                [(NewGatherViewController*)gatherview addExfee:invitations];
-//                                [self dismissModalViewControllerAnimated:YES];
-//                            }
-//                    }
-//                }
-//            };
-//            request.onDidFailLoadWithError=^(NSError *error){
-//                [MBProgressHUD hideHUDForView:self.view animated:YES];
-//            };
-//            request.delegate=self;
-//        }];
-      
     }
 }
 
