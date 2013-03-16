@@ -33,6 +33,10 @@
 		4F9105EE16C256E700E524AC /* x_shadow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F9105EC16C256E700E524AC /* x_shadow@2x.png */; };
 		4F9926FF16EF6E30003D784A /* ExfeeResponseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9926FE16EF6E30003D784A /* ExfeeResponseCell.m */; };
 		4F99270516F02AEE003D784A /* ExfeeRsvpCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F99270416F02AEE003D784A /* ExfeeRsvpCell.m */; };
+		4F99270D16F091FD003D784A /* Exfee+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F99270C16F091FD003D784A /* Exfee+EXFE.m */; };
+		4FA013A516F2F4AD00F40CB6 /* Invitation+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013A416F2F4AD00F40CB6 /* Invitation+EXFE.m */; };
+		4FA013AB16F31B5400F40CB6 /* Identity+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013AA16F31B5400F40CB6 /* Identity+EXFE.m */; };
+		4FA013AE16F3546A00F40CB6 /* ExfeeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013AD16F3546A00F40CB6 /* ExfeeCollectionViewCell.m */; };
 		4FAD642716968C7F001870FF /* CrossTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD642616968C7F001870FF /* CrossTime+Helper.m */; };
 		4FAE4E6416AF9F82001479F8 /* x_titlebg_default.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */; };
 		4FB1635716B25756005B1D3C /* profile_title_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635516B25756005B1D3C /* profile_title_mask.png */; };
@@ -480,6 +484,14 @@
 		4F9926FE16EF6E30003D784A /* ExfeeResponseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExfeeResponseCell.m; sourceTree = "<group>"; };
 		4F99270316F02AED003D784A /* ExfeeRsvpCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExfeeRsvpCell.h; sourceTree = "<group>"; };
 		4F99270416F02AEE003D784A /* ExfeeRsvpCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExfeeRsvpCell.m; sourceTree = "<group>"; };
+		4F99270B16F091FD003D784A /* Exfee+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Exfee+EXFE.h"; sourceTree = "<group>"; };
+		4F99270C16F091FD003D784A /* Exfee+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Exfee+EXFE.m"; sourceTree = "<group>"; };
+		4FA013A316F2F4AD00F40CB6 /* Invitation+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Invitation+EXFE.h"; sourceTree = "<group>"; };
+		4FA013A416F2F4AD00F40CB6 /* Invitation+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Invitation+EXFE.m"; sourceTree = "<group>"; };
+		4FA013A916F31B5400F40CB6 /* Identity+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Identity+EXFE.h"; sourceTree = "<group>"; };
+		4FA013AA16F31B5400F40CB6 /* Identity+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Identity+EXFE.m"; sourceTree = "<group>"; };
+		4FA013AC16F3546A00F40CB6 /* ExfeeCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExfeeCollectionViewCell.h; sourceTree = "<group>"; };
+		4FA013AD16F3546A00F40CB6 /* ExfeeCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExfeeCollectionViewCell.m; sourceTree = "<group>"; };
 		4FAD642516968C7F001870FF /* CrossTime+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CrossTime+Helper.h"; sourceTree = "<group>"; };
 		4FAD642616968C7F001870FF /* CrossTime+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CrossTime+Helper.m"; sourceTree = "<group>"; };
 		4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = x_titlebg_default.jpg; sourceTree = "<group>"; };
@@ -1062,6 +1074,12 @@
 				4FC8FCEA168D912E00409779 /* EFTime+Helper.m */,
 				4FC8FCE6168D7E5700409779 /* Place+Helper.h */,
 				4FC8FCE7168D7E5700409779 /* Place+Helper.m */,
+				4F99270B16F091FD003D784A /* Exfee+EXFE.h */,
+				4F99270C16F091FD003D784A /* Exfee+EXFE.m */,
+				4FA013A316F2F4AD00F40CB6 /* Invitation+EXFE.h */,
+				4FA013A416F2F4AD00F40CB6 /* Invitation+EXFE.m */,
+				4FA013A916F31B5400F40CB6 /* Identity+EXFE.h */,
+				4FA013AA16F31B5400F40CB6 /* Identity+EXFE.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -1414,6 +1432,8 @@
 				4F9926FE16EF6E30003D784A /* ExfeeResponseCell.m */,
 				4F99270316F02AED003D784A /* ExfeeRsvpCell.h */,
 				4F99270416F02AEE003D784A /* ExfeeRsvpCell.m */,
+				4FA013AC16F3546A00F40CB6 /* ExfeeCollectionViewCell.h */,
+				4FA013AD16F3546A00F40CB6 /* ExfeeCollectionViewCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -2350,6 +2370,10 @@
 				4F64BA8D16ED9A2700B9594E /* WidgetExfeeViewController.m in Sources */,
 				4F9926FF16EF6E30003D784A /* ExfeeResponseCell.m in Sources */,
 				4F99270516F02AEE003D784A /* ExfeeRsvpCell.m in Sources */,
+				4F99270D16F091FD003D784A /* Exfee+EXFE.m in Sources */,
+				4FA013A516F2F4AD00F40CB6 /* Invitation+EXFE.m in Sources */,
+				4FA013AB16F31B5400F40CB6 /* Identity+EXFE.m in Sources */,
+				4FA013AE16F3546A00F40CB6 /* ExfeeCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

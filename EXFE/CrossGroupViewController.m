@@ -1208,6 +1208,7 @@
         case 3:
         {
             WidgetExfeeViewController *exfeeView = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
+            exfeeView.exfee = _cross.exfee;
             [self addChildViewController:exfeeView];
             [self.view insertSubview:exfeeView.view aboveSubview:headerShadow];
             [exfeeView didMoveToParentViewController:self];

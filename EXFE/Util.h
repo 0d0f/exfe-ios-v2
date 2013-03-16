@@ -45,8 +45,8 @@
 #define COLOR_WHITE               COLOR_RGB(0xFF, 0xFF, 0xFF)
 #define COLOR_SNOW                COLOR_RGB(0xFA, 0xFA, 0xFA)
 #define COLOR_IRON                COLOR_RGB(0xDD, 0xDD, 0xDD)
-#define COLOR_ALUMINUM            COLOR_RGB(0xAA, 0xAA, 0xAA)
-#define COLOR_GRAY                COLOR_RGB(0x80, 0x80, 0x80)
+#define COLOR_ALUMINUM            COLOR_RGB(0xB2, 0xB2, 0xB2)
+#define COLOR_GRAY                COLOR_RGB(0x7F, 0x7F, 0x7F)
 #define COLOR_CARBON              COLOR_RGB(0x33, 0x33, 0x33)
 #define COLOR_BLACK               COLOR_RGB(0x00, 0x00, 0x00)
 
