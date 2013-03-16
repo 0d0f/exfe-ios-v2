@@ -7,7 +7,6 @@
 //
 
 #import "APIProfile.h"
-#import "Mapping.h"
 #import "ProfileCellView.h"
 
 @implementation APIProfile
@@ -36,7 +35,6 @@
 //    [manager.mappingProvider setObjectMapping:identityMapping forKeyPath:@"response.identities"];
 }
 
-//+(void) LoadUsrWithUserId:(int)user_id delegate:(id)delegate {  
 +(void) LoadUsrWithUserId:(int)user_id success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
   
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];

@@ -13,7 +13,6 @@
 
 @interface APIPlace : NSObject{
 //  NSOperationQueue *queue;
-//RESTKIT0.2
 //    RKRequestQueue *queue;
 }
 + (id) sharedManager;

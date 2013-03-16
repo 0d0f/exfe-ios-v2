@@ -340,8 +340,7 @@
     NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
 
     if(cross==nil){
-      NSEntityDescription *crossEntity = [NSEntityDescription entityForName:@"Cross" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-      
+        NSEntityDescription *crossEntity = [NSEntityDescription entityForName:@"Cross" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
         cross=[[[Cross alloc] initWithEntity:crossEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
         cross.cross_description=@"";
     }
@@ -618,9 +617,13 @@
     hud.customView=bigspin;
     [bigspin release];
     hud.labelText = @"Loading";
-
-    cross.by_identity=[orderedIdentities objectAtIndex:0];
+//    Identity *_by_identity=[orderedIdentities objectAtIndex:0];
+  
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
+//
+//    Identity *_by_identity_currentMOC= (Identity*)[objectManager.managedObjectStore.mainQueueManagedObjectContext objectWithID:[_by_identity objectID]];
+    cross.by_identity=[orderedIdentities objectAtIndex:0];
+
     if(cross.time==nil){
 
       NSEntityDescription *crosstimeEntity = [NSEntityDescription entityForName:@"CrossTime" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
@@ -639,15 +642,14 @@
     }
     cross.exfee = exfee;
     [Flurry logEvent:@"GATHER_SEND"];
-  [APICrosses GatherCross:cross success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-    [MBProgressHUD hideHUDForView:self.view animated:YES];
-    NSLog(@"%@",mappingResult);
+    [APICrosses GatherCross:cross success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+      [MBProgressHUD hideHUDForView:self.view animated:YES];
+      AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+      [app GatherCrossDidFinish];
 
-  } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-    [MBProgressHUD hideHUDForView:self.view animated:YES];
-    NSLog(@"%@",error);
-    
-  }];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+      [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
 //    [APICrosses GatherCross:[cross retain] delegate:self];
 }
 
@@ -1296,6 +1298,7 @@
 }
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
+  NSLog(@"send rsvp");
     //    NSError *error;
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     Identity *myidentity=[self getMyInvitation].identity;

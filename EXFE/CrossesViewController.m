@@ -368,15 +368,14 @@
                 [app.navigationController dismissModalViewControllerAnimated:YES];
             }
             else if([source isEqualToString:@"pushtocross"]) {
-//                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-//                Cross *cross=[self crossWithId:[cross_id intValue]];
-//                
-//                CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
-//                viewController.cross = cross;
-//                viewController.widgetId = kWidgetCross;
-//                viewController.headerStyle = kHeaderStyleFull;
-//                [self.navigationController pushViewController:viewController animated:NO];
-//                [viewController release];
+                Cross *cross=[self crossWithId:cross_id];
+                
+                CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+                viewController.cross = cross;
+                viewController.widgetId = kWidgetCross;
+                viewController.headerStyle = kHeaderStyleFull;
+                [self.navigationController pushViewController:viewController animated:NO];
+                [viewController release];
             }
             else if([source isEqualToString:@"pushtoconversation"]) {
 //                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
@@ -409,10 +408,20 @@
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         
       } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//        [self stopLoading];
+        NSString *errormsg;
+        if(error.code==2)
+            errormsg=@"A connection failure has occurred.";
+        else
+            errormsg=@"Could not connect to the server.";
+        if(alertShowflag==NO){
+            alertShowflag=YES;
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+        }
+        [self stopLoading];
         if(hud)
-          [MBProgressHUD hideHUDForView:self.view animated:YES];
-        
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
       }];
 //    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]];
   
@@ -478,148 +487,7 @@
     
     return NO;
 }
-#pragma mark RKObjectLoaderDelegate methods
-//RESTKIT0.2
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    int notification=0;
-//    if([objects count]>0)
-//    {
-//        NSString *source=[objectLoader.userData objectForKey:@"name" ];
-//        NSString *exfee_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-//
-//        NSDate *last_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-//
-//        BOOL needsave=NO;
-//        BOOL isError=NO;
-//        for(id object in objects)
-//        {
-//            
-//            if([object isKindOfClass:[Meta class]]){
-//                Meta *meta=object;
-//                if([meta.code intValue]!=200)
-//                {
-//                    [Util showError:meta delegate:self];
-//                    isError=YES;
-//                }
-//            }
-//            else if([object isKindOfClass:[Cross class]])
-//            {
-//                
-//                Cross *cross=(Cross*)object;
-//                id updated=cross.updated;
-//                if([updated isKindOfClass:[NSDictionary class]]){
-//                    NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
-//                    NSString *key=nil;
-//                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//                    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//                    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-//                    
-//                    while (key = [enumerator nextObject]){
-//                        NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
-//                        NSString *updated_at_str=[obj objectForKey:@"updated_at"];
-//                        if([updated_at_str isKindOfClass:[NSString class]])
-//                        {
-//                            NSDate *updated_at =[NSDate date];
-//                            if([updated_at_str length]>19){
-//                                updated_at_str=[updated_at_str substringToIndex:19];
-//                                updated_at = [formatter dateFromString:updated_at_str];
-//                            }
-//                            if([updated_at compare: cross.updated_at] == NSOrderedDescending || [updated_at compare: cross.updated_at] == NSOrderedSame) {
-//                                if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]])
-//                                {
-//                                    NSNumber *identity_id=[obj objectForKey:@"identity_id"];
-//                                    if([self isIdentityBelongsMe:[identity_id intValue]]==NO)
-//                                        notification++;
-//                                }
-//                            }
-//                        }
-//                    }
-//                    [formatter release];
-//                }
-//                
-//                if(cross.updated_at!=nil)
-//                {
-//                    
-//                    if([source isEqualToString:@"crossview"]){
-//                        if(exfee_updated_at==nil){
-//                            cross.read_at=[NSDate date];
-//                            needsave=YES;
-//                        }
-//                    }
-//                    if(last_updated_at==nil)
-//                        last_updated_at=cross.updated_at;
-//                    else{
-//                        last_updated_at=[cross.updated_at laterDate:last_updated_at];
-//                    }
-//                }
-//            }
-//        }
-//        if(isError==NO)
-//        {
-//            if(needsave==YES)
-//                [[Cross currentContext] save:nil];
-//            [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
-//            [[NSUserDefaults standardUserDefaults] synchronize];
-//
-//            if(![source isEqualToString:@"crossview"] && notification>0){
-//                
-//                [customStatusBar showWithStatusMessage:[NSString stringWithFormat:@"%i updates...",notification]];
-//                [customStatusBar performSelector:@selector(hide) withObject:nil afterDelay:2];
-//            }
-//            if ([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"gatherview"]) {
-//                AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//                [app.navigationController dismissModalViewControllerAnimated:YES];
-//            }
-//            else if([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"pushtocross"]) {
-////                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-////                Cross *cross=[self crossWithId:[cross_id intValue]];
-////                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-////                gatherViewController.cross=cross;
-////                [gatherViewController setViewMode];
-////                [self.navigationController pushViewController:gatherViewController animated:YES];
-////                [gatherViewController release];
-//            }
-//            else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"pushtoconversation"]) {
-////                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-////                Cross *cross=[self crossWithId:[cross_id intValue]];
-////                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-////                gatherViewController.cross=cross;
-////                [gatherViewController setViewMode];
-////                [self.navigationController pushViewController:gatherViewController animated:NO];
-////                [gatherViewController toconversation];
-////                [gatherViewController release];
-//            }
-//            else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossupdateview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview_init"]) {
-////                NSString *refresh_cross_id=[objectLoader.userData objectForKey:@"cross_id" ];
-//
-//                [self loadObjectsFromDataStore];
-////                [self.tableView reloadData];
-//            }
-//        }
-//    }
-//
-//    [self stopLoading];
-//    if(hud)
-//        [MBProgressHUD hideHUDForView:self.view animated:YES];
-//}
-//
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-//    NSString *errormsg;
-//    if(error.code==2)
-//        errormsg=@"A connection failure has occurred.";
-//    else
-//        errormsg=@"Could not connect to the server.";
-//    if(alertShowflag==NO){
-//        alertShowflag=YES;
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alert show];
-//        [alert release];
-//    }
-//    [self stopLoading];
-//    if(hud)
-//        [MBProgressHUD hideHUDForView:self.view animated:YES];
-//
-//}
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -903,11 +771,6 @@
             }
             
         }
-//        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-//        viewController.cross = cross;
-//        [self.navigationController pushViewController:viewController animated:YES];
-//        [viewController release];
-        
         CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
         viewController.cross = cross;
         [self.navigationController pushViewController:viewController animated:YES];

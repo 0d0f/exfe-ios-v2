@@ -875,30 +875,23 @@
     return [domains containsObject:[domainname lowercaseString]];
 }
 + (void) signout{
-    AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-    
-    NSString *udid=[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"];
-//    RKParams* rsvpParams = [RKParams params];
-//    [rsvpParams setValue:udid forParam:@"udid"];
-//    [rsvpParams setValue:@"iOS" forParam:@"os_name"];
-//    
-//    RKClient *client = [RKClient sharedClient];
-//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/signout?token=%@",app.userid,app.accesstoken];
-//    [client post:endpoint usingBlock:^(RKRequest *request){
-//        request.method=RKRequestMethodPOST;
-//        request.params=rsvpParams;
-//        request.onDidLoadResponse=^(RKResponse *response){
-//            if (response.statusCode == 200) {
-//            }else {
-//                //Check Response Body to get Data!
-//            }
-//            [app SignoutDidFinish];
-//        };
-//        request.onDidFailLoadWithError=^(NSError *error){
-//            [app SignoutDidFinish];
-//        };
-//    }];
+  AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+  
+  NSString *udid=[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"];
+  if(udid==nil)
+    udid=@"";
+  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u/signout?token=%@",API_ROOT,app.userid,app.accesstoken];
+  RKObjectManager *manager=[RKObjectManager sharedManager] ;
+  manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
+  [manager.HTTPClient postPath:endpoint parameters:@{@"udid":udid,@"os_name":@"iOS"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+    }
+    [app SignoutDidFinish];
+   
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    [app SignoutDidFinish];
+  }];
+
 }
 + (void) showError:(Meta*)meta delegate:(id)delegate{
     NSString *errormsg=@"";
@@ -932,6 +925,24 @@
             username=[username stringByReplacingOccurrencesOfString:@"@facebook" withString:@""];
     }
     return username;
+}
+
++ (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate{
+  for (UIWindow* window in [UIApplication sharedApplication].windows) {
+    NSArray* subviews = window.subviews;
+    if ([subviews count] > 0)
+      if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
+        return;
+  }
+  NSString *errormsg=@"";
+    if([meta.code intValue]==401){
+      errormsg=@"Authentication failed due to security concerns, please sign in again.";
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
+      alert.tag=500;
+      alert.delegate=delegate;
+      [alert show];
+      [alert release];
+    }
 }
 
 + (void) showErrorWithMetaDict:(NSDictionary*)meta delegate:(id)delegate{

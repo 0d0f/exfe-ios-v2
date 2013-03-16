@@ -18,22 +18,15 @@
 //  RKRequestQueue *queue;
 }
 + (id) sharedManager;
-+(void) MappingCross;
-+(void) MappingRoute;
-//+(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source;
 +(void) LoadCrossWithUserId:(int)user_id updatedtime:(NSString*)updatedtime success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 
-//+(void) LoadCrossWithCrossId:(int)corss_id updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source;
 +(void) LoadCrossWithCrossId:(int)corss_id updatedtime:(NSString*)updatedtime success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 
 +(void) GatherCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
-//RESTKIT0.2
-//+ (RKManagedObjectMapping*) getPlaceMapping;
-//+ (RKManagedObjectMapping*) getInvitationMapping;
-//+ (RKManagedObjectMapping*) getCrossMapping;
-//+ (RKManagedObjectMapping*) getExfeeMapping;
++(void) EditCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
 
 @end

@@ -139,7 +139,7 @@ static char identitykey;
     int offset=[[NSDate date] timeIntervalSince1970]-[localaddressbook_read_at timeIntervalSince1970];
     
     //TODO: offset=10000 for debug, must be deleted before release.
-    offset=100000;
+//    offset=100000;
     if(offset > 1*24*60*60){
         MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode=MBProgressHUDModeCustomView;
@@ -166,27 +166,26 @@ static char identitykey;
                     [self reloadLocalAddressBook];
 
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                [self copyMoreContactsFromIdx:100];
+                [self copyMoreContactsFromIdx:100];
             });
         });
         dispatch_release(loadingQueue);
     }else{
-//      NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
-//      if(filteredlocalcontacts!=nil)
-//          [filteredlocalcontacts release];
-//      RKObjectManager *objectManager = [RKObjectManager sharedManager];
-//      filteredlocalcontacts = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
-//      if(addressbookType==LOCAL_ADDRESSBOOK)
-//          [self reloadLocalAddressBook];
+      NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
+      if(filteredlocalcontacts!=nil)
+          [filteredlocalcontacts release];
+      RKObjectManager *objectManager = [RKObjectManager sharedManager];
+      filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+      if(addressbookType==LOCAL_ADDRESSBOOK)
+          [self reloadLocalAddressBook];
 
     }
 }
 
 - (void) copyMoreContactsFromIdx:(int)idx{
-  NSLog(@"copy contacts");
     dispatch_queue_t loadingQueue = dispatch_queue_create("loading addressbook", NULL);
     dispatch_async(loadingQueue, ^{
-//        [address CopyAllPeopleFrom:idx];
+        [address CopyAllPeopleFrom:idx];
         dispatch_async(dispatch_get_main_queue(), ^{
           
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
@@ -198,11 +197,11 @@ static char identitykey;
             if(addressbookType==LOCAL_ADDRESSBOOK)
                 [self reloadLocalAddressBook];
 
-//            if(idx+100<address.contactscount){
-//                [self copyMoreContactsFromIdx:idx+100];
-//            }else{
-//                [[NSUserDefaults standardUserDefaults] setObject:[NSDate date]  forKey:@"localaddressbook_read_at"];
-//            }
+            if(idx+100<address.contactscount){
+                [self copyMoreContactsFromIdx:idx+100];
+            }else{
+                [[NSUserDefaults standardUserDefaults] setObject:[NSDate date]  forKey:@"localaddressbook_read_at"];
+            }
         });
     });
     dispatch_release(loadingQueue);
@@ -358,93 +357,74 @@ static char identitykey;
         [self dismissModalViewControllerAnimated:YES];
     }
     else{
-        NSString *json=@"";
-
+        NSMutableArray *identities=[[[NSMutableArray alloc] initWithCapacity:[inputobjs count]] autorelease];
         for(NSDictionary *inputobj in inputobjs){
             NSString *input=[inputobj objectForKey:@"input"];
             NSString *name=[inputobj objectForKey:@"name"];
             NSString *provider=[inputobj objectForKey:@"provider"];
-            if([provider isEqualToString:@""])
-                provider=[Util findProvider:input];
-            
-            if(![provider isEqualToString:@""]) {
-                if(![json isEqualToString:@""])
-                    json=[json stringByAppendingString:@","];
-                json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"name\":\"%@\",\"external_username\":\"%@\"}",provider,name,input];
-            }
+            NSDictionary *identity=[NSDictionary dictionaryWithObjectsAndKeys:provider,@"provider",name,@"name",input,@"external_username", nil];
+            [identities addObject:identity];
         }
-        json=[NSString stringWithFormat:@"[%@]",json];
-        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//RESTKIT0.2      
-//        RKClient *client = [RKClient sharedClient];
-//        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-      
-        MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.labelText = @"Adding...";
-        hud.mode=MBProgressHUDModeCustomView;
-        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-        [bigspin startAnimating];
-        hud.customView=bigspin;
-        [bigspin release];
+
+      MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+      hud.labelText = @"Adding...";
+      hud.mode=MBProgressHUDModeCustomView;
+      EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+      [bigspin startAnimating];
+      hud.customView=bigspin;
+      [bigspin release];
         
-        NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
-      //RESTKIT0.2
-//        RKParams* rsvpParams = [RKParams params];
-//        [rsvpParams setValue:json forParam:@"identities"];
-//        [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-//        [client post:endpoint usingBlock:^(RKRequest *request){
-//            request.method=RKRequestMethodPOST;
-//            request.params=rsvpParams;
-//            request.onDidLoadResponse=^(RKResponse *response){
-//                [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                if (response.statusCode == 200) {
-//                    NSDictionary *body=[response.body objectFromJSONData];
-//                    if([body isKindOfClass:[NSDictionary class]]) {
-//                        id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                        if(code)
-//                            if([code intValue]==200) {
-//                                NSDictionary* response = [body objectForKey:@"response"];
-//                                NSArray *identities = [response objectForKey:@"identities"];
-//                                for (NSDictionary *identitydict in identities) {
-//                                    NSString *external_id=[identitydict objectForKey:@"external_id"];
-//                                    NSString *provider=[identitydict objectForKey:@"provider"];
-//                                    NSString *avatar_filename=[identitydict objectForKey:@"avatar_filename"];
-//                                    NSString *identity_id=[identitydict objectForKey:@"id"];
-//                                    NSString *name=[identitydict objectForKey:@"name"];
-//                                    NSString *nickname=[identitydict objectForKey:@"nickname"];
-//                                    NSString *external_username=[identitydict objectForKey:@"external_username"];
-//
-//                                    Identity *identity=[Identity object];
-//                                    identity.external_id=external_id;
-//                                    identity.provider=provider;
-//                                    identity.avatar_filename=avatar_filename;
-//                                    identity.name=name;
-//                                    identity.external_username=external_username;
-//                                    identity.nickname=nickname;
-//                                    identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
-//                                    
-//                                    Invitation *invitation =[Invitation object];
-//                                    invitation.rsvp_status=@"NORESPONSE";
-//                                    invitation.identity=identity;
-//                                    Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
-//                                    if(myinvitation!=nil)
-//                                        invitation.updated_by=myinvitation.identity;
-//                                    else
-//                                        invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
-//                                    [invitations addObject:invitation];
-//                                }
-//                                [(NewGatherViewController*)gatherview addExfee:invitations];
-//                                [self dismissModalViewControllerAnimated:YES];
-//                            }
-//                    }
-//                }
-//            };
-//            request.onDidFailLoadWithError=^(NSError *error){
-//                [MBProgressHUD hideHUDForView:self.view animated:YES];
-//            };
-//            request.delegate=self;
-//        }];
-      
+      NSString *endpoint = [NSString stringWithFormat:@"%@/identities/get",API_ROOT];
+      RKObjectManager *manager=[RKObjectManager sharedManager] ;
+      manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
+
+      [manager.HTTPClient postPath:endpoint parameters:[NSDictionary dictionaryWithObjectsAndKeys:identities,@"identities", nil] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+          NSDictionary *body=(NSDictionary*)responseObject;
+          id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+          if(code)
+              if([code intValue]==200) {
+                  NSDictionary* response = [body objectForKey:@"response"];
+                  NSArray *identities = [response objectForKey:@"identities"];
+                  for (NSDictionary *identitydict in identities) {
+                      NSString *external_id=[identitydict objectForKey:@"external_id"];
+                      NSString *provider=[identitydict objectForKey:@"provider"];
+                      NSString *avatar_filename=[identitydict objectForKey:@"avatar_filename"];
+                      NSString *identity_id=[identitydict objectForKey:@"id"];
+                      NSString *name=[identitydict objectForKey:@"name"];
+                      NSString *nickname=[identitydict objectForKey:@"nickname"];
+                      NSString *external_username=[identitydict objectForKey:@"external_username"];
+
+                      NSEntityDescription *identityEntity = [NSEntityDescription entityForName:@"Identity" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
+                      Identity *identity=[[[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+                      identity.external_id=external_id;
+                      identity.provider=provider;
+                      identity.avatar_filename=avatar_filename;
+                      identity.name=name;
+                      identity.external_username=external_username;
+                      identity.nickname=nickname;
+                      identity.identity_id=[NSNumber numberWithInt:[identity_id intValue]];
+
+                    
+                      NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
+                      Invitation *invitation=[[[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+                      invitation.rsvp_status=@"NORESPONSE";
+                      invitation.identity=identity;
+                      Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
+                      if(myinvitation!=nil)
+                          invitation.updated_by=myinvitation.identity;
+                      else
+                          invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+                      [invitations addObject:invitation];
+                  }
+                  [(NewGatherViewController*)gatherview addExfee:invitations];
+                  [self dismissModalViewControllerAnimated:YES];
+              }
+        }
+      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+      }];
     }
 }
 
@@ -749,14 +729,18 @@ static char identitykey;
       [self addByInputIdentity:[[AddressBook getDefaultIdentity:person] objectForKey:@"external_id"] name:@"" provider:[[AddressBook getDefaultIdentity:person] objectForKey:@"provider"] dismiss:NO];
     }else{
         Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
-        Invitation *invitation =[Invitation object];
+      
+        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+        NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+        Invitation *invitation=[[[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+      
         invitation.rsvp_status=@"NORESPONSE";
         invitation.identity=identity;
         Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
-//        if(myinvitation!=nil)
-//            invitation.updated_by=myinvitation.identity;
-//        else
-//            invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+        if(myinvitation!=nil)
+            invitation.updated_by=myinvitation.identity;
+        else
+            invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
 
         NSString *identity_name=identity.nickname;
         if(identity_name==nil || [identity_name isEqualToString:@""])
@@ -772,19 +756,6 @@ static char identitykey;
     }
 
 }
-#pragma mark RKObjectLoaderDelegate methods
-//RESTKIT0.2
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    
-//    if([objects count]>0) {
-//        if([objectLoader.userData isEqualToString:@"suggest"])
-//            [self loadIdentitiesFromDataStore:[exfeeList getInput]];
-//    }
-//}
-//
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-//    //    [self stopLoading];
-//}
 
 #pragma mark EXBubbleScrollViewDelegate methods
 - (void) deleteLastBubble:(EXBubbleScrollView *)bubbleScrollView deletedbubble:(EXBubbleButton*)bubble{
@@ -854,15 +825,19 @@ static char identitykey;
             [filteredlocalcontacts release];
             filteredlocalcontacts=nil;
         }
-        
-        NSFetchRequest* request = [LocalContact fetchRequest];
-        if(filteredlocalcontacts!=nil)
-            [filteredlocalcontacts release];
+      
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(indexfield like[c] %@)", inputpredicate];
         [request setPredicate:predicate];
 
-        
-        filteredlocalcontacts=[[LocalContact objectsWithFetchRequest:request] retain];
+      
+//        NSFetchRequest* request = [LocalContact fetchRequest];
+        if(filteredlocalcontacts!=nil)
+            [filteredlocalcontacts release];
+        [request setPredicate:predicate];
+
+        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+        filteredlocalcontacts= [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
 
         [suggestionTable reloadData];
     }

@@ -905,7 +905,7 @@
             NSInteger ctrlId = popupCtrolId;
             [self hidePopupIfShown:kPopupTypeEditStatus];
             if (ctrlId != kPopupTypeEditStatus) {
-                [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable",@"Interested", nil]];
+                [self showMenu:invitation items:[NSArray arrayWithObjects:@"Accepted",@"Unavailable", nil]];
             }
         }else{
             [rsvpstatusview setHidden:NO];
@@ -1705,7 +1705,6 @@
     rsvpmenu.frame = CGRectOffset(rsvpmenu.frame, 0 - CGRectGetWidth(rsvpmenu.frame), 0);
     [UIView commitAnimations];
     
-    
     //    [UIView beginAnimations:nil context:NULL];
     //    [UIView setAnimationDuration:0.3];
     //
@@ -1819,66 +1818,60 @@
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     Identity *myidentity=[self getMyInvitation].identity;
     NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:_invitation.identity.identity_id,@"identity_id",myidentity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
-    
-    //    NSLog(@"%@",[rsvpdict JSONString]);
-//RESTKIT0.2
-//    RKParams* rsvpParams = [RKParams params];
-//    [rsvpParams setValue:[NSString stringWithFormat:@"[%@]",[rsvpdict JSONString]] forParam:@"rsvp"];
-//    RKClient *client = [RKClient sharedClient];
-//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//    NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/rsvp?token=%@",[_cross.exfee.exfee_id intValue],app.accesstoken];
-//    [client post:endpoint usingBlock:^(RKRequest *request){
-//        request.method=RKRequestMethodPOST;
-//        request.params=rsvpParams;
-//        request.onDidLoadResponse=^(RKResponse *response){
-//            if (response.statusCode == 200) {
-//                NSDictionary *body=[response.body objectFromJSONData];
-//                if([body isKindOfClass:[NSDictionary class]]) {
-//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                    if(code)
-//                        if([code intValue]==200) {
-//                            [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",_cross.cross_id,@"cross_id", nil]];
-//                            
-//                        }
-//                }
-//                //We got an error!
-//            }else {
-//                //Check Response Body to get Data!
-//            }
-//        };
-//        request.onDidFailLoadWithError=^(NSError *error){
-//            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
-//            if(error.code==2)
-//                errormsg=@"A connection failure has occurred.";
-//            else
-//                errormsg=@"Could not connect to the server.";
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//            [alert show];
-//            [alert release];
-//            
-//            //            EXAlertView *alertview=[EXAlertView showAlertTo:self.view frame:CGRectMake(10, 10, self.view.frame.size.width-20, 22) message:@"alert" animated:YES];
-//            //            [alertview setBackgroundColor:[UIColor colorWithRed:255/255.0 green:255/255.0 blue:204/255.0 alpha:0.9]];
-//            //            [EXAlertView hideAlertFrom:self.view animated:YES delay:2 ];
-//            
-//        };
-//    }];
   
-}
+  NSString *endpoint = [NSString stringWithFormat:@"%@/exfee/%u/rsvp?token=%@",API_ROOT,[_cross.exfee.exfee_id intValue],app.accesstoken];
+  
+  RKObjectManager *manager=[RKObjectManager sharedManager] ;
+  manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
+  [manager.HTTPClient postPath:endpoint parameters:@{@"rsvps":@[rsvpdict]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
+    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+      if([responseObject isKindOfClass:[NSDictionary class]])
+      {
+        NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
+        if([[meta objectForKey:@"code"] intValue]==403){
+          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+          alert.tag=403;
+          [alert show];
+          [alert release];
+        }else if([[meta objectForKey:@"code"] intValue]==200){
+          [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:@"" success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            
+            if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+            {
+              Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+              if([meta.code intValue]==200){
+                [self refreshUI];
+              }
+              
+            }
+          } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+            
+          }];
 
-#pragma mark RKObjectLoaderDelegate methods
-//RESTKIT0.2
-//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    if([objects count] > 0){
-//        [self fillExfee];
-//    }
-//    
-//}
+          [self refreshUI];
+        }
+        
+      }
+    }
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+    if(error.code==2)
+        errormsg=@"A connection failure has occurred.";
+    else
+        errormsg=@"Could not connect to the server.";
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+
+  }];
+}
 
 #pragma mark Navigation
 
 #pragma mark EditCrossDelegate
 - (Invitation*) getMyInvitation{
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     for(Invitation *invitation in exfeeInvitations)
     {
         //        if([invitation.identity.connected_user_id intValue] == app.userid)
@@ -1927,79 +1920,6 @@
     [self relayoutUI];
 }
 
-- (void)submitEditCross:(Cross*)cross_diff{
-    //    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    //    hud.labelText = @"Saving";
-    //    hud.mode=MBProgressHUDModeCustomView;
-    //    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-    //    [bigspin startAnimating];
-    //    hud.customView=bigspin;
-    //    [bigspin release];
-    
-    _cross.by_identity=[self getMyInvitation].identity;
-    
-    NSError *error;
-//RESTKIT0.2  
-//    NSString *json = [[RKObjectSerializer serializerWithObject:_cross mapping:[[APICrosses getCrossMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
-//    if(!error){
-//        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//        RKClient *client = [RKClient sharedClient];
-//        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//        NSString *endpoint = [NSString stringWithFormat:@"/crosses/%u/edit?token=%@",[_cross.cross_id intValue],app.accesstoken];
-//        [client post:endpoint usingBlock:^(RKRequest *request){
-//            request.method=RKRequestMethodPOST;
-//            
-//            request.params=[RKRequestSerialization serializationWithData:[json dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
-//            request.onDidLoadResponse=^(RKResponse *response){
-//                if (response.statusCode == 200) {
-//                    NSDictionary *body=[response.body objectFromJSONData];
-//                    NSDictionary *meta=[body objectForKey:@"meta"];
-//                    if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]])
-//                    {
-//                        if([(NSNumber*)[meta objectForKey:@"code"] intValue]==200){
-//                            NSDictionary *responsedict=[body objectForKey:@"response"];
-//                            NSDictionary *crossdict=[responsedict objectForKey:@"cross" ];
-//                            NSNumber *cross_id=[crossdict objectForKey:@"id"];
-//                            if([cross_id intValue]==[self.cross.cross_id intValue])
-//                            {
-//                                [app CrossUpdateDidFinish:[_cross.cross_id intValue]];
-//                            }
-//                        }else{
-//                            [Util showErrorWithMetaDict:meta delegate:self];
-//                        }
-//                    }
-//                }else {
-//                    NSString *errormsg=@"Could not save this cross.";
-//                    if(![errormsg isEqualToString:@""]){
-//                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
-//                        alert.tag=201; // 201 = Save Cross
-//                        [alert show];
-//                        [alert release];
-//                    }
-//                }
-//                [MBProgressHUD hideHUDForView:self.view animated:YES];
-//            };
-//            request.onDidFailLoadWithError=^(NSError *error){
-//                [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                NSString *errormsg=@"";
-//                if(error.code==2)
-//                    errormsg=@"A connection failure has occurred.";
-//                else
-//                    errormsg=@"Could not connect to the server.";
-//                if(![errormsg isEqualToString:@""]){
-//                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
-//                    alert.tag=201; // 201 = Save Cross
-//                    [alert show];
-//                    [alert release];
-//                }
-//                
-//                //                [Util showConnectError:error delegate:self];
-//            };
-//            request.delegate=self;
-//        }];
-//    }
-}
-
 - (void)saveCrossUpdate{
     
     MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -2011,66 +1931,36 @@
     [bigspin release];
     
     _cross.by_identity=[self getMyInvitation].identity;
-    //RESTKIT0.2
-//    NSError *error;
-//    NSString *json = [[RKObjectSerializer serializerWithObject:_cross mapping:[[APICrosses getCrossMapping]  inverseMapping]] serializedObjectForMIMEType:RKMIMETypeJSON error:&error];
-//    if(!error){
-//        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//        RKClient *client = [RKClient sharedClient];
-//        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//        NSString *endpoint = [NSString stringWithFormat:@"/crosses/%u/edit?token=%@",[_cross.cross_id intValue],app.accesstoken];
-//        [client post:endpoint usingBlock:^(RKRequest *request){
-//            request.method=RKRequestMethodPOST;
-//            
-//            request.params=[RKRequestSerialization serializationWithData:[json dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
-//            request.onDidLoadResponse=^(RKResponse *response){
-//                if (response.statusCode == 200) {
-//                    NSDictionary *body=[response.body objectFromJSONData];
-//                    NSDictionary *meta=[body objectForKey:@"meta"];
-//                    if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]])
-//                    {
-//                        if([(NSNumber*)[meta objectForKey:@"code"] intValue]==200){
-//                            NSDictionary *responsedict=[body objectForKey:@"response"];
-//                            NSDictionary *crossdict=[responsedict objectForKey:@"cross" ];
-//                            NSNumber *cross_id=[crossdict objectForKey:@"id"];
-//                            if([cross_id intValue]==[self.cross.cross_id intValue])
-//                            {
-//                                [app CrossUpdateDidFinish:[_cross.cross_id intValue]];
-//                            }
-//                        }else{
-//                            [Util showErrorWithMetaDict:meta delegate:self];
-//                        }
-//                    }
-//                }else {
-//                    NSString *errormsg=@"Could not save this cross.";
-//                    if(![errormsg isEqualToString:@""]){
-//                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
-//                        alert.tag=201; // 201 = Save Cross
-//                        [alert show];
-//                        [alert release];
-//                    }
-//                }
-//                [MBProgressHUD hideHUDForView:self.view animated:YES];
-//            };
-//            request.onDidFailLoadWithError=^(NSError *error){
-//                [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                NSString *errormsg=@"";
-//                if(error.code==2)
-//                    errormsg=@"A connection failure has occurred.";
-//                else
-//                    errormsg=@"Could not connect to the server.";
-//                if(![errormsg isEqualToString:@""]){
-//                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
-//                    alert.tag=201; // 201 = Save Cross
-//                    [alert show];
-//                    [alert release];
-//                }
-//                
-//                //                [Util showConnectError:error delegate:self];
-//            };
-//            request.delegate=self;
-//        }];
-//    }
+  [APICrosses EditCross:_cross success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    if(operation.HTTPRequestOperation.response.statusCode==200){
+      if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+      {
+        Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+        if([meta.code intValue]==200){
+          Cross *responsecross=[[mappingResult dictionary] objectForKey:@"response.cross"];
+          if([responsecross.cross_id intValue]==[self.cross.cross_id intValue])
+          {
+              [app CrossUpdateDidFinish:[responsecross.cross_id intValue]];
+          }
+        }else{
+          [Util showErrorWithMetaObject:meta delegate:self];
+        }
+      }
+    }else{
+      NSString *errormsg=@"Could not save this cross.";
+      if(![errormsg isEqualToString:@""]){
+          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
+          alert.tag=201; // 201 = Save Cross
+          [alert show];
+          [alert release];
+      }
+    }
+   [MBProgressHUD hideHUDForView:self.view animated:YES];
+  } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+    
+  }];
 }
 
 #pragma mark UIAlertView methods
