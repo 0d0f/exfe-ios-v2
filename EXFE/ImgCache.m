@@ -168,4 +168,32 @@ static NSMutableDictionary *imgs;
     return [UIImage imageNamed:@"portrait_default.png"];
 }
 
+
+#pragma mark tools
+- (void)fillAvatar:(UIImageView*)avatarView with:(NSString*)url byDefault:(UIImage*)defImage
+{
+    if(url == nil){
+        avatarView.image = defImage;
+    } else {
+        UIImage *avatarImg=[self getImgFromCache:url];
+        if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+                UIImage *avatar = [self getImgFrom:url];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
+                        avatarView.image = avatar;
+                    }else{
+                        avatarView.image = defImage;
+                    }
+                });
+            });
+            dispatch_release(imgQueue);
+        }else{
+            avatarView.image = avatarImg;
+        }
+    }
+    
+}
+
 @end

@@ -26,7 +26,6 @@
         _avatar = [[UIImageView alloc] initWithFrame:rectAvatar];
         _avatar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _avatar.contentMode = UIViewContentModeScaleAspectFill;
-        _avatar.backgroundColor = [UIColor yellowColor];
         {
             UIBezierPath *curvePath= [UIBezierPath bezierPathWithRoundedRect:_avatar.bounds cornerRadius:4];
             CAShapeLayer *maskLayer = [CAShapeLayer layer];

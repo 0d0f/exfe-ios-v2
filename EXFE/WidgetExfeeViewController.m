@@ -10,6 +10,7 @@
 #import "WidgetExfeeViewController.h"
 #import "ExfeeCollectionViewCell.h"
 #import "Util.h"
+#import "ImgCache.h"
 
 #define EXFEE_CONTENT_HEIGHT      (220)
 
@@ -391,6 +392,8 @@ typedef enum {
                     cell.sequence = kPosMiddle;
                     break;
             }
+            
+            [[ImgCache sharedManager] fillAvatar:cell.avatar with:inv.identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"]];
             
             return cell;
         }
