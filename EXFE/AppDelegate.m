@@ -144,15 +144,16 @@ static char handleurlobject;
 - (void) createdb{
   NSURL *baseURL = [NSURL URLWithString:API_ROOT];
   
-  RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+  if(objectManager==nil)
+    objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+  
   NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
   RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
   objectManager.managedObjectStore = managedObjectStore;
-  NSArray *descriptors=objectManager.requestDescriptors;
-  if(descriptors==nil || [descriptors count]==0)
-    [ModelMapping buildMapping];
   
   [managedObjectStore createPersistentStoreCoordinator];
+
   NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
   //  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
   NSError *error;
@@ -164,6 +165,9 @@ static char handleurlobject;
   
   // Configure a managed object cache to ensure we do not create duplicate objects
   managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
+  NSArray *descriptors=objectManager.requestDescriptors;
+  if(descriptors==nil || [descriptors count]==0)
+    [ModelMapping buildMapping];
 
 }
 
@@ -498,7 +502,9 @@ static char handleurlobject;
       
       RKObjectManager *objectManager = [RKObjectManager sharedManager];
       [ [NSURLCache sharedURLCache] removeAllCachedResponses];
+      
       objectManager.managedObjectStore.managedObjectCache=nil;
+      objectManager.managedObjectStore = nil;
 //      objectManager removeRequestDescriptor:(RKRequestDescriptor *)
       for ( RKRequestDescriptor * requestdesc in objectManager.requestDescriptors){
         [objectManager removeRequestDescriptor:requestdesc];
