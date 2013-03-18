@@ -18,13 +18,14 @@
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         rectAvatar = CGRectMake(4, 4, 70, 70);
-        rectAvatarFrame = CGRectUnion(CGRectOffset(rectAvatar, -2, -2),CGRectOffset(rectAvatar, 2, 2));
-        rectRsvpImage = CGRectMake(2, CGRectGetMaxY(rectAvatarFrame), 18, 18);
-        rectName = CGRectMake(CGRectGetMaxX(rectRsvpImage) + 2, CGRectGetMaxY(rectAvatarFrame) + 1, 50, 16);
+        rectAvatarFrame = CGRectUnion(CGRectOffset(rectAvatar, -4, -4),CGRectOffset(rectAvatar, 4, 4));
+        rectRsvpImage = CGRectMake(2, CGRectGetMaxY(rectAvatarFrame) - 2, 18, 18);
+        rectName = CGRectMake(CGRectGetMaxX(rectRsvpImage) + 2, CGRectGetMaxY(rectAvatarFrame), 50, 16);
         rectMates = CGRectMake(CGRectGetMaxX(rectAvatar), CGRectGetMinY(rectAvatar), 20, 10);
         
         _avatar = [[UIImageView alloc] initWithFrame:rectAvatar];
         _avatar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//        _avatar.contentMode = UIViewContentModeScaleAspectFit;
         _avatar.contentMode = UIViewContentModeScaleAspectFill;
         {
             UIBezierPath *curvePath= [UIBezierPath bezierPathWithRoundedRect:_avatar.bounds cornerRadius:4];
@@ -36,24 +37,19 @@
         [self addSubview:_avatar];
         
         _avatarFrame = [[UIImageView alloc] initWithFrame:rectAvatarFrame];
+        _avatarFrame.image = [UIImage imageNamed:@"exfee_portrait_frame.png"];
         _avatarFrame.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self addSubview:_avatarFrame];
         
         _rsvpImage = [[UIImageView alloc] initWithFrame:rectRsvpImage];
-        {
-            UIBezierPath *curvePath= [UIBezierPath bezierPathWithRoundedRect:_rsvpImage.bounds cornerRadius:9];
-            CAShapeLayer *maskLayer = [CAShapeLayer layer];
-            maskLayer.path = [curvePath CGPath];
-            _rsvpImage.layer.mask = maskLayer;
-            _rsvpImage.layer.masksToBounds = YES;
-        }
         [self addSubview:_rsvpImage];
         
         _name = [[UILabel alloc] initWithFrame:rectName];
         _name.textColor = [UIColor COLOR_SNOW];
+        _name.font = [UIFont fontWithName:@"HelveticaNeue" size:13];
         _name.lineBreakMode = UILineBreakModeCharacterWrap;
         _name.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _name.backgroundColor = [UIColor blueColor];
+        _name.backgroundColor = [UIColor clearColor];
         [self addSubview:_name];
     }
     return self;
@@ -75,6 +71,7 @@
     
     // draw Mates
     if (self.mates > 0) {
+        
     }
 }
 
@@ -82,6 +79,12 @@
 // Selection highlights underlying contents
 - (void)setSelected:(BOOL)selected
 {
+    NSLog(@"setSelected %i", selected);
+    if (selected) {
+        _avatarFrame.image = [UIImage imageNamed:@"exfee_portrait_selected.png"];
+    }else{
+        _avatarFrame.image = [UIImage imageNamed:@"exfee_portrait_frame.png"];
+    }
     [super setSelected:selected];
 }
 
@@ -128,21 +131,18 @@
 - (void)updateRsvpImage
 {
     if (_unreachable) {
-//        _rsvpImage = [UIImage imageNamed:@""];
-        _rsvpImage.backgroundColor = [UIColor redColor];
+        _rsvpImage.image = [UIImage imageNamed:@"exfee_unreachable_badge.png"];
     }else{
         switch (_rsvp) {
             case kRsvpAccepted:
-//            _rsvpImage = [UIImage imageNamed:@""];
-                _rsvpImage.backgroundColor = [UIColor greenColor];
+            _rsvpImage.image = [UIImage imageNamed:@"rsvp_dot_accepted.png"];
+//                _rsvpImage.backgroundColor = [UIColor greenColor];
                 break;
             case kRsvpDeclined:
-//            _rsvpImage = [UIImage imageNamed:@""];
-                _rsvpImage.backgroundColor = [UIColor purpleColor];
+            _rsvpImage.image = [UIImage imageNamed:@"exfee_unavailable_badge.png"];
                 break;
             default:
-//            _rsvpImage = [UIImage imageNamed:@""];
-                _rsvpImage.backgroundColor = [UIColor blueColor];
+            _rsvpImage.image = [UIImage imageNamed:@"exfee_pending_badge.png"];
                 break;
         }
     }

@@ -12,8 +12,6 @@
 #import "Util.h"
 #import "ImgCache.h"
 
-#define EXFEE_CONTENT_HEIGHT      (220)
-
 #define kTagViewExfeeRoot         10
 #define kTagViewExfeeSelector     20
 #define kTagViewExfeeContent      30
@@ -60,17 +58,13 @@ typedef enum {
     self.view.tag = kTagViewExfeeRoot;
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-//    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-//    [flowLayout setMinimumInteritemSpacing:0.f];
-//    [flowLayout setMinimumLineSpacing:0.f];
-//    flowLayout.sectionInset = UIEdgeInsetsMake(2, 400, 2, 2);
-    
     exfeeContainer = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, CGRectGetWidth(b), CGRectGetHeight(a) - 50) collectionViewLayout:flowLayout];
     [flowLayout release];
     exfeeContainer.delegate = self;
     exfeeContainer.dataSource = self;
-    [exfeeContainer registerClass:[ExfeeCollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
+    [exfeeContainer registerClass:[ExfeeCollectionViewCell class] forCellWithReuseIdentifier:@"Exfee Cell"];
     [exfeeContainer registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Blank Cell"];
+    [exfeeContainer registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Add Cell"];
     exfeeContainer.backgroundColor = [UIColor darkGrayColor];
     exfeeContainer.alwaysBounceVertical = YES;
     exfeeContainer.contentOffset = CGPointMake(0, 0);
@@ -78,8 +72,8 @@ typedef enum {
     exfeeContainer.tag = kTagViewExfeeSelector;
     [self.view addSubview:exfeeContainer];
     
-    
-    invContent = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), EXFEE_CONTENT_HEIGHT)];
+    CGFloat exfee_content_height = CGRectGetHeight(exfeeContainer.frame) - 94 * (2 + (CGRectGetHeight(a) > 480 ? 1 : 0));
+    invContent = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), exfee_content_height)];
     invContent.backgroundColor = [UIColor COLOR_SNOW];
     invContent.tag = kTableOrigin;
     {
@@ -357,7 +351,7 @@ typedef enum {
         case 0:
             return 1;
         case 1:
-            return self.exfee.invitations.count;
+            return self.exfee.invitations.count + 1;
         default:
             return 0;
     }
@@ -375,27 +369,37 @@ typedef enum {
         }
         case 1:
         {
-            ExfeeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
-            
-            Invitation* inv = [self.exfee.invitations.allObjects objectAtIndex:row];
-            cell.name.text = inv.identity.name;
-            [cell setRsvp:[Invitation getRsvpCode:inv.rsvp_status] andUnreachable:[inv.identity.unreachable boolValue]];
-            NSInteger seq = row % 4;
-            switch (seq) {
-                case 0:
-                    cell.sequence = kPosFirst;
-                    break;
-                case 3:
-                    cell.sequence = kPosLast;
-                    break;
-                default:
-                    cell.sequence = kPosMiddle;
-                    break;
+            if (row == self.exfee.invitations.count) {
+                UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Add Cell" forIndexPath:indexPath];
+                if (cell.contentView.subviews.count == 0) {
+                    UIImageView *bg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_add.png"]];
+                    bg.frame = CGRectMake(0, 0, 78, 78);
+                    [cell.contentView addSubview:bg];
+                }
+                return cell;
+            }else{
+                ExfeeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Exfee Cell" forIndexPath:indexPath];
+                
+                Invitation* inv = [self.exfee.invitations.allObjects objectAtIndex:row];
+                cell.name.text = inv.identity.name;
+                [cell setRsvp:[Invitation getRsvpCode:inv.rsvp_status] andUnreachable:[inv.identity.unreachable boolValue]];
+                NSInteger seq = row % 4;
+                switch (seq) {
+                    case 0:
+                        cell.sequence = kPosFirst;
+                        break;
+                    case 3:
+                        cell.sequence = kPosLast;
+                        break;
+                    default:
+                        cell.sequence = kPosMiddle;
+                        break;
+                }
+                
+                [[ImgCache sharedManager] fillAvatar:cell.avatar with:inv.identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"]];
+                
+                return cell;
             }
-            
-            [[ImgCache sharedManager] fillAvatar:cell.avatar with:inv.identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"]];
-            
-            return cell;
         }
         default:
             return nil;
@@ -409,15 +413,15 @@ typedef enum {
     NSInteger seq = row % 4;
     switch (section) {
         case 0:
-            return CGSizeMake(300, EXFEE_CONTENT_HEIGHT);
+            return CGSizeMake(300, CGRectGetHeight(invContent.frame));
         case 1:
             switch (seq) {
                 case 0:
                 case 3:
-                    return CGSizeMake(82, 96);
+                    return CGSizeMake(82, 94);
                     //break;
                 default:
-                    return CGSizeMake(78, 96);
+                    return CGSizeMake(78, 94);
                     //break;
             }
         default:
@@ -462,12 +466,17 @@ typedef enum {
 
 #pragma mark UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Selected Image is Item %d",indexPath.row);
-    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-    [self testClick:cell];
-    selected_invitation = [self.exfee.invitations.allObjects objectAtIndex:indexPath.row];
-    [self fillInvitationContent:selected_invitation];
-    cell.selected = YES;
+    
+    if (indexPath.row == self.exfee.invitations.count){
+        NSLog(@"Add Exfee");
+    }else{
+        NSLog(@"Selected Image is Item %d",indexPath.row);
+        UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+        [self testClick:cell];
+        selected_invitation = [self.exfee.invitations.allObjects objectAtIndex:indexPath.row];
+        [self fillInvitationContent:selected_invitation];
+        //cell.selected = YES;
+    }
 }
 
 #pragma mark UIScrollViewDelegate
@@ -528,11 +537,11 @@ typedef enum {
     BOOL flag = NO;
     if (CGRectGetMinY(btn.frame) - offset.y < CGRectGetHeight(invContent.frame)) {
         // click target is upper than the normal area
-        offset = CGPointMake(offset.x, MAX(CGRectGetMinY(btn.frame) - 20 - CGRectGetHeight(invContent.frame), 0));
+        offset = CGPointMake(offset.x, MAX(CGRectGetMinY(btn.frame) - CGRectGetHeight(invContent.frame), 0));
         flag = YES;
     } else if(CGRectGetMaxY(btn.frame) - offset.y > CGRectGetHeight(exfeeContainer.bounds)){
         // click target is lower than the normal area
-        offset = CGPointMake(offset.x, MAX(CGRectGetMaxY(btn.frame) + 20 - CGRectGetHeight(exfeeContainer.bounds), 0));
+        offset = CGPointMake(offset.x, MAX(CGRectGetMaxY(btn.frame) - CGRectGetHeight(exfeeContainer.bounds), 0));
         flag = YES;
     }
     
