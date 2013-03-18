@@ -22,7 +22,7 @@
 
 static char alertobject;
 static char handleurlobject;
-
+static char mergetoken;
 
 - (void)dealloc
 {
@@ -311,67 +311,64 @@ static char handleurlobject;
     
     [params release];
 //RESTKIT0.2
-//    if(![token isEqualToString:@""]&& [user_id intValue]>0){
+    if(![token isEqualToString:@""]&& [user_id intValue]>0){
+      [APIProfile LoadUsrWithUserId:[user_id intValue] withToken:token success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+              if(operation.HTTPRequestOperation.response.statusCode==200){
+                  NSDictionary *body=[mappingResult dictionary];
+                  if([body isKindOfClass:[NSDictionary class]]) {
+                    Meta *meta=(Meta*)[body objectForKey:@"meta"];
+                    if(meta)
+                        if([meta.code intValue]==200) {
+                              NSString *ids_formerge=@"";
+                              User *user=(User*)[body objectForKey:@"response.user"];
+                              for (Identity *_identity in user.identities){
+                                  if([ids_formerge isEqualToString:@""])
+                                      ids_formerge = [ids_formerge stringByAppendingFormat:@"%u",
+                                                      [_identity.identity_id intValue]];
+                                  else
+                                      ids_formerge = [ids_formerge stringByAppendingFormat:@",%u",
+                                                  [_identity.identity_id intValue]];
+                              }
+                              ids_formerge=[NSString stringWithFormat:@"[%@]",ids_formerge];
+                            if([self Checklogin]==NO){
+                              AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                              app.userid=[user_id intValue];
+                              app.accesstoken=token;
+                              
+                              [SigninDelegate saveSigninData:user];
+                              [self SigninDidFinish];
+                              [self processUrlHandler:url];
+                            }else{
+                              if([identity_id intValue] >0  && [user_id intValue] != self.userid) {
+                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Merge accounts" message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?",user.name] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Merge",nil];
+                                alert.tag=400;
+                                objc_setAssociatedObject (alert, &alertobject, ids_formerge,OBJC_ASSOCIATION_RETAIN);
+                                objc_setAssociatedObject (alert, &handleurlobject, url,OBJC_ASSOCIATION_RETAIN);
+                                objc_setAssociatedObject (alert, &mergetoken, token_formerge,OBJC_ASSOCIATION_RETAIN);
+                                
+                                
+                                
+                                [alert show];
+                                [alert release];
+                              }else{
+                                [self processUrlHandler:url];
+                              }
+                            }
+
+                          }
+                  }
+              }
+      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        
+      }];
 //        [APIProfile LoadUsrWithUserId:[user_id intValue] token:token usingBlock:^(RKRequest *request) {
 //            request.method=RKRequestMethodGET;
 //            request.onDidLoadResponse=^(RKResponse *response){
-//                if (response.statusCode == 200) {
-//                    NSDictionary *body=[response.body objectFromJSONData];
-//                    if([body isKindOfClass:[NSDictionary class]]) {
-//                        id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                        if(code)
-//                            if([code intValue]==200) {
-//                                NSString *ids_formerge=@"";
-//                                RKObjectMapper* mapper;
-//                                mapper = [RKObjectMapper mapperWithObject:body mappingProvider:[RKObjectManager sharedManager].mappingProvider];
-//                                RKObjectMappingResult* result = [mapper performMapping];
-//                                NSDictionary *obj=[result asDictionary];
-//                                User *user=[obj objectForKey:@"response.user"];
-//                                for (Identity *_identity in user.identities){
-//                                    if([ids_formerge isEqualToString:@""])
-//                                        ids_formerge = [ids_formerge stringByAppendingFormat:@"%u",
-//                                                        [_identity.identity_id intValue]];
-//                                    else
-//                                        ids_formerge = [ids_formerge stringByAppendingFormat:@",%u",
-//                                                    [_identity.identity_id intValue]];
-//                                }
-//                                ids_formerge=[NSString stringWithFormat:@"[%@]",ids_formerge];
-//
-//                                if([self Checklogin]==NO){
-//                                    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//                                    app.userid=[user_id intValue];
-//                                    app.accesstoken=token;
-//
-//                                    [SigninDelegate saveSigninData:user];
-//                                    [self SigninDidFinish];
-//                                    [self processUrlHandler:url];
-//                                }else{
-//                                    if([identity_id intValue] >0  && [user_id intValue] != self.userid)
-//                                    {
-////                                        
-//                                        
-//                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Merge accounts" message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?",user.name] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Merge",nil];
-//                                        alert.tag=400;
-//                                        objc_setAssociatedObject (alert, &alertobject, ids_formerge,OBJC_ASSOCIATION_RETAIN);
-//                                        objc_setAssociatedObject (alert, &handleurlobject, url,OBJC_ASSOCIATION_RETAIN);
-//                                        
-//
-//                                        [alert show];
-//                                        [alert release];
-//                                    }else{
-//                                        [self processUrlHandler:url];
-//                                    }
-//                                }
-//                                
-//                            }
-//
-//                    }
-//                }
-//            };
+
 //        }];
-//    }else{
+    }else{
 //        [self processUrlHandler:url];
-//    }
+    }
 
     
     
@@ -593,8 +590,34 @@ static char handleurlobject;
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     if(buttonIndex==1 && alertView.tag==400){
-        
+      
+      NSString *token = (NSString *)objc_getAssociatedObject(alertView, &mergetoken);
+
         NSString *merge_identity = (NSString *)objc_getAssociatedObject(alertView, &alertobject);
+      [APIProfile MergeIdentities:token Identities_ids:merge_identity success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        if(operation.HTTPRequestOperation.response.statusCode==200){
+          NSDictionary *body=[mappingResult dictionary];
+          if([body isKindOfClass:[NSDictionary class]]) {
+              Meta *meta=(Meta*)[body objectForKey:@"meta"];
+              if(meta){
+                  if([meta.code intValue]==200){
+                    [APIProfile LoadUsrWithUserId:app.userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                            if(operation.HTTPRequestOperation.response.statusCode==200){
+                                NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
+                                [self processUrlHandler:url];
+                            }
+
+                    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                      
+                    }];
+                  }
+                
+              }
+          }
+        }
+      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        
+      }];
 //RESTKIT0.2      
 //        [APIProfile MergeIdentities:token_formerge Identities_ids:merge_identity usingBlock:^(RKRequest *request){
 //            request.method=RKRequestMethodPOST;
@@ -602,22 +625,7 @@ static char handleurlobject;
 //                if (response.statusCode == 200) {
 //                    NSDictionary *body=[response.body objectFromJSONData];
 //                    if([body isKindOfClass:[NSDictionary class]]){
-//                        NSDictionary *meta=[body objectForKey:@"meta"];
-//                        if([meta isKindOfClass:[NSDictionary class]]){
-//                            if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]]){
-//                                if([[meta objectForKey:@"code"] intValue]==200){
-//                                    [APIProfile LoadUsrWithUserId:app.userid token:app.accesstoken usingBlock:^(RKRequest *drequest) {
-//                                        request.method=RKRequestMethodGET;
-//                                        request.onDidLoadResponse=^(RKResponse *response){
-//                                            if (response.statusCode == 200) {
-//                                                NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
-//                                                [self processUrlHandler:url];
-//                                            }
-//                                        };
-//                                    }];
-//                                }
-//                            }
-//                        }
+
 //                    }
 //                }
 //            };
