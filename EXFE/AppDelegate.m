@@ -164,6 +164,7 @@ static char handleurlobject;
   
   // Configure a managed object cache to ensure we do not create duplicate objects
   managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
+
 }
 
 -(void)ShowLanding{
@@ -496,6 +497,8 @@ static char handleurlobject;
     if ([[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error]) {
       
       RKObjectManager *objectManager = [RKObjectManager sharedManager];
+      [ [NSURLCache sharedURLCache] removeAllCachedResponses];
+      objectManager.managedObjectStore.managedObjectCache=nil;
 //      objectManager removeRequestDescriptor:(RKRequestDescriptor *)
       for ( RKRequestDescriptor * requestdesc in objectManager.requestDescriptors){
         [objectManager removeRequestDescriptor:requestdesc];
