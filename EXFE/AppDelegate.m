@@ -51,28 +51,28 @@ static char handleurlobject;
   RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
 //  RKLogConfigureByName("*", RKLogLevelOff);
   
-  RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
   [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
-  
-  // Initialize managed object store
-  NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-  RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
-  objectManager.managedObjectStore = managedObjectStore;
-  [ModelMapping buildMapping];
-  
-  [managedObjectStore createPersistentStoreCoordinator];
-  NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
-  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
-  NSLog(@"%@",storePath);
-  NSError *error;
-  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:seedPath withConfiguration:nil options:nil error:&error];
-  NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
-  
-  // Create the managed object contexts
-  [managedObjectStore createManagedObjectContexts];
-  
-  // Configure a managed object cache to ensure we do not create duplicate objects
-  managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
+  [self createdb];
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+
+//  RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+//  NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+//  RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
+//  objectManager.managedObjectStore = managedObjectStore;
+//  [ModelMapping buildMapping];
+//  
+//  [managedObjectStore createPersistentStoreCoordinator];
+//  NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
+////  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
+//  NSError *error;
+//  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
+//  NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
+//  
+//  // Create the managed object contexts
+//  [managedObjectStore createManagedObjectContexts];
+//  
+//  // Configure a managed object cache to ensure we do not create duplicate objects
+//  managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
   
   
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -84,6 +84,7 @@ static char handleurlobject;
     if(login==NO){
         [self ShowLanding];
     }
+  
 //    NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
   
     if(login==YES)
@@ -140,6 +141,30 @@ static char handleurlobject;
     return YES;
 }
 
+- (void) createdb{
+  NSURL *baseURL = [NSURL URLWithString:API_ROOT];
+  
+  RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+  NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+  RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
+  objectManager.managedObjectStore = managedObjectStore;
+  NSArray *descriptors=objectManager.requestDescriptors;
+  if(descriptors==nil || [descriptors count]==0)
+    [ModelMapping buildMapping];
+  
+  [managedObjectStore createPersistentStoreCoordinator];
+  NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
+  //  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
+  NSError *error;
+  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
+  NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
+  
+  // Create the managed object contexts
+  [managedObjectStore createManagedObjectContexts];
+  
+  // Configure a managed object cache to ensure we do not create duplicate objects
+  managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
+}
 
 -(void)ShowLanding{
     LandingViewController *landingView=[[[LandingViewController alloc]initWithNibName:@"LandingViewController" bundle:nil]autorelease];
@@ -462,14 +487,25 @@ static char handleurlobject;
 - (void) cleandb{
   
   NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
-  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
-  NSLog(@"%@",storePath);
+//  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
+//  NSLog(@"%@",storePath);
 
-  NSURL *storeURL = [NSURL fileURLWithPath:seedPath];
+  NSURL *storeURL = [NSURL fileURLWithPath:storePath];
   NSError *error = nil;
   if ([[NSFileManager defaultManager] fileExistsAtPath:storeURL.path]) {
-    if (![[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error]) {
-      NSLog(@"delete:%@",seedPath);
+    if ([[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error]) {
+      
+      RKObjectManager *objectManager = [RKObjectManager sharedManager];
+//      objectManager removeRequestDescriptor:(RKRequestDescriptor *)
+      for ( RKRequestDescriptor * requestdesc in objectManager.requestDescriptors){
+        [objectManager removeRequestDescriptor:requestdesc];
+      }
+      for ( RKResponseDescriptor * responsedesc in objectManager.responseDescriptors){
+        [objectManager removeResponseDescriptor:responsedesc];
+      }
+      
+
+      [self createdb];
     }
   }
 //    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];

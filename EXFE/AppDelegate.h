@@ -78,5 +78,6 @@
 -(void)ShowLanding;
 -(BOOL) Checklogin;
 - (void) cleandb;
+- (void) createdb;
 - (void) processUrlHandler:(NSURL*)url;
 @end
