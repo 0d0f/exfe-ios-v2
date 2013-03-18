@@ -27,4 +27,6 @@
 + (NSString *) getImgUrl:(NSString*)imgName;
 
 + (UIImage *) getDefaultImage;
+
+- (void)fillAvatar:(UIImageView*)avatarView with:(NSString*)url byDefault:(UIImage*)defImage;
 @end

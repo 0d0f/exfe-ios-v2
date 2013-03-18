@@ -6,11 +6,11 @@
 //
 //
 
+#import <CoreText/CoreText.h>
 #import "WidgetExfeeViewController.h"
+#import "ExfeeCollectionViewCell.h"
 #import "Util.h"
-#import "CrossCard.h"
-
-#define EXFEE_CONTENT_HEIGHT      (236)
+#import "ImgCache.h"
 
 #define kTagViewExfeeRoot         10
 #define kTagViewExfeeSelector     20
@@ -19,6 +19,19 @@
 #define kTableFloating   222
 #define kTableOrigin     223
 
+typedef enum {
+    kTagIdNone = 0,
+    kTagIdActionMenu,
+    kTagIdIdentityName,
+    kTagIdIdentityWarninng,
+    kTagIdIdentityProvider,
+    kTagIdRSVPAltLabel,
+    kTagIdRSVPLabel,
+    kTagIdRSVPImage,
+    kTagIdHostFlag,
+    kTagIdName,
+    kTagIdMax = INT16_MAX,
+} _TagID;
 
 @interface WidgetExfeeViewController ()
 
@@ -44,42 +57,258 @@
     CGRect b = self.view.bounds;
     self.view.tag = kTagViewExfeeRoot;
     
-    
-    exfeeContainer = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 50, CGRectGetWidth(b), CGRectGetHeight(a) - 50)];
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    exfeeContainer = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, CGRectGetWidth(b), CGRectGetHeight(a) - 50) collectionViewLayout:flowLayout];
+    [flowLayout release];
     exfeeContainer.delegate = self;
+    exfeeContainer.dataSource = self;
+    [exfeeContainer registerClass:[ExfeeCollectionViewCell class] forCellWithReuseIdentifier:@"Exfee Cell"];
+    [exfeeContainer registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Blank Cell"];
+    [exfeeContainer registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Add Cell"];
     exfeeContainer.backgroundColor = [UIColor darkGrayColor];
     exfeeContainer.alwaysBounceVertical = YES;
     exfeeContainer.contentOffset = CGPointMake(0, 0);
+//    exfeeContainer.contentInset = UIEdgeInsetsMake(0, 4, 0, 4);
     exfeeContainer.tag = kTagViewExfeeSelector;
-    {
-        CGFloat maxHeight = 0;
-        for (NSUInteger i = 1; i < 10; i++) {
-            UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            btn.frame = CGRectMake(20, EXFEE_CONTENT_HEIGHT - 80 + i * 100, 48, 44);
-            [btn addTarget:self action:@selector(testClick:) forControlEvents:UIControlEventTouchUpInside];
-            [btn setTitle:[NSString stringWithFormat:@"%i", i] forState:UIControlStateNormal];
-            btn.tag = i;
-            maxHeight = CGRectGetMaxY(btn.frame);
-            [exfeeContainer addSubview:btn];
-        }
-        
-        if (exfeeContainer.contentSize.height < maxHeight) {
-            exfeeContainer.contentSize = CGSizeMake(exfeeContainer.contentSize.width, maxHeight);
-        }
-    }
     [self.view addSubview:exfeeContainer];
     
+    CGFloat exfee_content_height = CGRectGetHeight(exfeeContainer.frame) - 94 * (2 + (CGRectGetHeight(a) > 480 ? 1 : 0));
+    invContent = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), exfee_content_height)];
+    invContent.backgroundColor = [UIColor COLOR_SNOW];
+    invContent.tag = kTableOrigin;
+    {
+        invName = [[ UILabel alloc] initWithFrame:CGRectMake(25, 16, 230, 25)];
+        invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
+        invName.textColor = [UIColor COLOR_CARBON];
+        invName.tag = kTagIdName;
+        [invContent addSubview:invName];
+        
+        invHostFlag = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
+        invHostFlag.text = @"HOST";
+        invHostFlag.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
+        invHostFlag.textColor = [UIColor COLOR_BLUE_EXFE];
+        [invHostFlag sizeToFit];
+        [invContent addSubview:invHostFlag];
+        
+        invRsvpImage = [[UIImageView alloc] initWithFrame:CGRectMake(33, 57, 26, 26)];
+        [invContent addSubview:invRsvpImage];
+        
+        invRsvpLabel = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(75, 60, 200, 22)];
+        [invContent addSubview:invRsvpLabel];
+        
+        invRsvpAltLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 86, 180, 12)];
+        invRsvpAltLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
+        invRsvpAltLabel.textColor = [UIColor COLOR_GRAY];
+        [invContent addSubview:invRsvpAltLabel];
+        
+        identityProvider = [[UIImageView alloc] initWithFrame:CGRectMake(37, 115, 18, 18)];
+        [invContent addSubview:identityProvider];
+        
+        identityWaring = [[UIImageView alloc] initWithFrame:CGRectMake(75, 115, 18, 18)];
+        [invContent addSubview:identityWaring];
+        
+        identityName = [[UILabel alloc] initWithFrame:CGRectMake(75, 108, 220, 32)];
+        identityName.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
+        identityName.textColor = [UIColor COLOR_BLACK];
+        [invContent addSubview:identityName];
+        
+        ActionMenu = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        ActionMenu.frame = CGRectMake(255, 146, 40, 31);
+        [invContent addSubview:ActionMenu];
+    }
+    [exfeeContainer addSubview:invContent];
     
+    selected_invitation = [self.exfee.invitations.allObjects objectAtIndex:0];
+    [self fillInvitationContent:selected_invitation];
     
-    invTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), EXFEE_CONTENT_HEIGHT)];
-    invTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-    invTable.dataSource = self;
-    invTable.delegate = self;
-    invTable.backgroundColor = [UIColor COLOR_SNOW];
-    invTable.tag = kTableOrigin;
-    [exfeeContainer addSubview:invTable];
-    
-    
+}
+
+- (void)fillInvitationContent:(Invitation*)inv
+{
+    [self fillIdentity:inv.identity];
+    [self fillHost:inv];
+    [self fillRsvp:inv];
+    [self LayoutViews];
+}
+
+- (void)fillIdentity:(Identity*)ident
+{
+    if (ident) {
+        NSString* name = [ident getDisplayName];
+        if (![invName.text isEqualToString:name]) {
+            invName.text = name;
+            [self setNeedLayout:invName.tag];
+        }
+        
+        NSString* at_id = [ident getDisplayIdentity];
+        if (![identityName.text isEqualToString:at_id]) {
+            identityName.text = at_id;
+        }
+
+        Provider p = [Identity getProviderCode:ident.provider];
+        switch(p){
+            case kProviderEmail:
+                identityProvider.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
+                break;
+            case kProviderPhone:
+                identityProvider.image = [UIImage imageNamed:@"identity_phone_18_grey.png"];
+                break;
+            case kProviderTwitter:
+                identityProvider.image = [UIImage imageNamed:@"identity_facebook_18_grey.png"];
+                break;
+            case kProviderFacebook:
+                identityProvider.image = [UIImage imageNamed:@"identity_twitter_18_grey.png"];
+                break;
+            default:
+            break;
+        }
+    }
+}
+
+- (void)fillHost:(Invitation*)inv
+{
+    if (inv) {
+        BOOL shouldHidden = ![inv.host boolValue];
+        if (invHostFlag.hidden != shouldHidden) {
+            invHostFlag.hidden = shouldHidden;
+            [self setNeedLayout:kTagIdHostFlag];
+        }
+    }
+}
+
+- (void)fillRsvp:(Invitation*)inv
+{
+    if (inv) {
+        NSUInteger changeFlag = kTagIdNone;
+        RsvpCode rsvp = [Invitation getRsvpCode:inv.rsvp_status];
+        switch (rsvp) {
+            case kRsvpAccepted:
+            {
+                invRsvpImage.image = [UIImage imageNamed:@"rsvp_accepted_stroke_26blue"];
+                
+                CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+                CTFontRef textfontref2 = CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 18.0, NULL);
+                NSAttributedString *acceptStr = [[NSMutableAttributedString alloc] initWithString:@"Accepted"
+                                                                                       attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                                 (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
+                
+                if ([inv.mates intValue] > 0) {
+                    NSString *strWithMates = [NSString stringWithFormat:@"[Accepted] with %i mates", [inv.mates intValue]];
+                    NSMutableAttributedString *fullStr = [[NSMutableAttributedString alloc] initWithString:strWithMates
+                                                                                                attributes:@{(NSString*)kCTFontAttributeName:(id)textfontref2,
+                                                          (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
+                    [fullStr replaceCharactersInRange:[strWithMates rangeOfString:@"[Accepted]"] withAttributedString:acceptStr];
+                    invRsvpLabel.attributedText = fullStr;
+                    [invRsvpLabel setNeedsDisplay];
+                    [fullStr release];
+                }else{
+                    invRsvpLabel.attributedText = acceptStr;
+                    [invRsvpLabel setNeedsDisplay];
+                }
+                [acceptStr release];
+                CFRelease(textfontref);
+                CFRelease(textfontref2);
+            }
+                break;
+            case kRsvpDeclined:
+            {
+                invRsvpImage.image = [UIImage imageNamed:@"rsvp_unavailable_stroke_26g5"];
+                
+                CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+                NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Declined"
+                                                                                     attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                               (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
+                invRsvpLabel.attributedText = pending;
+                [invRsvpLabel setNeedsDisplay];
+                [pending release];
+                CFRelease(textfontref);
+            }
+                break;
+            case kRsvpInterested:
+            {
+                invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
+                
+                CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+                NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Intersted"
+                                                                                     attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                               (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
+                invRsvpLabel.attributedText = pending;
+                [invRsvpLabel setNeedsDisplay];
+                [pending release];
+                CFRelease(textfontref);
+            }
+                break;
+                // no use
+            case kRsvpRmoved:
+            case kRsvpNotification:
+                // should not be used here
+                break;
+                
+                //pending
+            case kRsvpIgnored:
+            case kRsvpNoResponse:
+            default:{
+                invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
+                
+                CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+                NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Pending"
+                                                                                     attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                               (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
+                invRsvpLabel.attributedText = pending;
+                [invRsvpLabel setNeedsDisplay];
+                [pending release];
+                CFRelease(textfontref);
+            }
+                break;
+        }
+        if ([inv.identity.unreachable boolValue]){
+            CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+            NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Unreachable contact"
+                                                                                 attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                           (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)].CGColor}];
+            invRsvpLabel.attributedText = pending;
+            [invRsvpLabel setNeedsDisplay];
+            [pending release];
+            CFRelease(textfontref);
+        }
+        
+        NSString *altString = nil;
+        if (inv.updated_by.connected_user_id != inv.identity.connected_user_id){
+            altString = [NSString stringWithFormat:@"Set by %@ %@", [inv.updated_by getDisplayName], @"xx days ago"];
+        }else{
+            altString =  @"xx days ago";
+        }
+        invRsvpAltLabel.text = altString;
+        
+        [self setNeedLayout:changeFlag];
+    }
+}
+
+- (void)setNeedLayout
+{
+    [self setNeedLayout:kTagIdMax];
+}
+
+- (void)setNeedLayout:(NSUInteger)level
+{
+    if (level > layoutLevel) {
+        layoutLevel = level;
+    }
+}
+
+- (void)clearLayoutLevel
+{
+    layoutLevel = kTagIdNone;
+}
+
+- (void)LayoutViews
+{
+    if (layoutLevel > kTagIdNone) {
+        
+        
+        
+        [self clearLayoutLevel];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -95,107 +324,158 @@
 
 - (void)dealloc
 {
-    [invTable release];
+    [invName release];
+    [invHostFlag release];
+    [invRsvpImage release];
+    [invRsvpLabel release];
+    [invRsvpAltLabel release];
+    [identityProvider release];
+    [identityWaring release];
+    [identityName release];
+    [invContent release];
     
     [exfeeContainer release];
     
     [super dealloc];
 }
 
-#pragma mark UITableViewDataSource methods
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 3;
-}
-
-- (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    
-    if (section == 1) {
-        return 2; //depends on Exfee
-    }else{
-        return 1;
-    }
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    switch (indexPath.section) {
-        case 0:
-        {
-            if (tableHeader == nil) {
-                tableHeader = [[ExfeeRsvpCell alloc] initWithFrame:CGRectMake(0, 0, 320, 87)];
-                tableHeader.backgroundColor = [UIColor redColor];
-                NSAttributedString *as = [[NSAttributedString alloc] initWithString:@"Pending"];
-                tableHeader.MainText = as;
-                tableHeader.AltText = @"agda by fejao";
-                tableHeader.RsvpString = @"Pending";
-                tableHeader.NameText = @"Steve Exfer";
-            }
-            return tableHeader;
-        }
-        case 1:
-        {
-            NSString* reuseIdentifier = @"Exfee Identity Cell";
-            ExfeeResponseCell *cell =[tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-            if (nil == cell) {
-                cell = [[[ExfeeResponseCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
-            }
-            // fill UI element;
-            [cell setNeedsDisplay];
-            return cell;
-        }
-        case 2:
-        {
-            if (tableFooter == nil) {
-                tableFooter = [[ABTableViewCell alloc] initWithFrame:CGRectMake(0, 0, 320, 32)];
-                tableFooter.backgroundColor = [UIColor greenColor];
-            }
-            return tableFooter;
-        }
-            break;
-            
-        default:
-            return nil;
-            //break;
-    }
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+#pragma mark UICollectionViewDataSource
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    switch (indexPath.section) {
+    return 2;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    switch (section) {
         case 0:
-            return 121.0f;
+            return 1;
         case 1:
-            return 32.0f;
-        case 2:
-            return 32.0f;
+            return self.exfee.invitations.count + 1;
         default:
             return 0;
-    }}
+    }
+}
 
-#pragma mark UITableViewDelegate methods
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    switch (indexPath.section) {
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
+    switch (section) {
         case 0:
-            
-            break;
+        {
+            UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Blank Cell" forIndexPath:indexPath];
+            return cell;
+        }
         case 1:
-            switch (indexPath.row) {
-                case 0:
-                    
-                    break;
-                    
-                default:
-                    break;
+        {
+            if (row == self.exfee.invitations.count) {
+                UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Add Cell" forIndexPath:indexPath];
+                if (cell.contentView.subviews.count == 0) {
+                    UIImageView *bg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_add.png"]];
+                    bg.frame = CGRectMake(0, 0, 78, 78);
+                    [cell.contentView addSubview:bg];
+                }
+                return cell;
+            }else{
+                ExfeeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Exfee Cell" forIndexPath:indexPath];
+                
+                Invitation* inv = [self.exfee.invitations.allObjects objectAtIndex:row];
+                cell.name.text = inv.identity.name;
+                [cell setRsvp:[Invitation getRsvpCode:inv.rsvp_status] andUnreachable:[inv.identity.unreachable boolValue]];
+                NSInteger seq = row % 4;
+                switch (seq) {
+                    case 0:
+                        cell.sequence = kPosFirst;
+                        break;
+                    case 3:
+                        cell.sequence = kPosLast;
+                        break;
+                    default:
+                        cell.sequence = kPosMiddle;
+                        break;
+                }
+                
+                [[ImgCache sharedManager] fillAvatar:cell.avatar with:inv.identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"]];
+                
+                return cell;
             }
-            
-            break;
-        case 2:
-            
-            break;
-            
+        }
         default:
-            break;
+            return nil;
+    }
+}
+
+#pragma mark UICollectionViewDelegateFlowLayout
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
+    NSInteger seq = row % 4;
+    switch (section) {
+        case 0:
+            return CGSizeMake(300, CGRectGetHeight(invContent.frame));
+        case 1:
+            switch (seq) {
+                case 0:
+                case 3:
+                    return CGSizeMake(82, 94);
+                    //break;
+                default:
+                    return CGSizeMake(78, 94);
+                    //break;
+            }
+        default:
+            return CGSizeZero;
+    }
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    switch (section) {
+        case 0:
+            return UIEdgeInsetsMake(0, 0, 0, 0);
+        case 1:
+            return UIEdgeInsetsMake(0, 0, 0, 0);
+        default:
+            return UIEdgeInsetsMake(0, 0, 0, 0);
+    }
+    
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    switch (section) {
+        case 0:
+            return 0;
+        case 1:
+            return 0;
+        default:
+            return 0;
+    }
+}
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    switch (section) {
+        case 0:
+            return 0;
+        case 1:
+            return 0;
+        default:
+            return 0;
+    }
+}
+
+#pragma mark UICollectionViewDelegate
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row == self.exfee.invitations.count){
+        NSLog(@"Add Exfee");
+    }else{
+        NSLog(@"Selected Image is Item %d",indexPath.row);
+        UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+        [self testClick:cell];
+        selected_invitation = [self.exfee.invitations.allObjects objectAtIndex:indexPath.row];
+        [self fillInvitationContent:selected_invitation];
+        //cell.selected = YES;
     }
 }
 
@@ -226,21 +506,21 @@
         }
         _lastContentOffset = offset;
         
-        if (invTable.tag == kTableFloating) {
+        if (invContent.tag == kTableFloating) {
             if (direction == ScrollDirectionDown){
                 NSLog(@"Block view position when floating with drop down: %@", NSStringFromCGPoint(offset));
-                if (offset.y < CGRectGetMinY(invTable.frame)) {
-                    CGRect newFrame = CGRectOffset(invTable.bounds, 0, MAX(offset.y, 0));
-                    invTable.frame = newFrame;
+                if (offset.y < CGRectGetMinY(invContent.frame)) {
+                    CGRect newFrame = CGRectOffset(invContent.bounds, 0, MAX(offset.y, 0));
+                    invContent.frame = newFrame;
                 }
                 return;
             }
             
-            if (offset.y > CGRectGetMaxY(invTable.frame)){
+            if (offset.y > CGRectGetMaxY(invContent.frame)){
                 NSLog(@"Convert floating to origin: %@", NSStringFromCGPoint(offset));
-                CGRect newFrame = CGRectOffset(invTable.bounds, 0, 0);
-                invTable.frame = newFrame;
-                invTable.tag = kTableOrigin;
+                CGRect newFrame = CGRectOffset(invContent.bounds, 0, 0);
+                invContent.frame = newFrame;
+                invContent.tag = kTableOrigin;
                 return;
             }
         }
@@ -250,27 +530,27 @@
 }
 
 - (void)testClick:(id)sender{
-    UIButton* btn = sender;
+    UIView* btn = sender;
     NSLog(@"button click: %i", btn.tag);
     
     CGPoint offset = exfeeContainer.contentOffset;
     BOOL flag = NO;
-    if (CGRectGetMinY(btn.frame) - offset.y < CGRectGetHeight(invTable.frame)) {
+    if (CGRectGetMinY(btn.frame) - offset.y < CGRectGetHeight(invContent.frame)) {
         // click target is upper than the normal area
-        offset = CGPointMake(offset.x, CGRectGetMinY(btn.frame) - 20 - CGRectGetHeight(invTable.frame));
+        offset = CGPointMake(offset.x, MAX(CGRectGetMinY(btn.frame) - CGRectGetHeight(invContent.frame), 0));
         flag = YES;
     } else if(CGRectGetMaxY(btn.frame) - offset.y > CGRectGetHeight(exfeeContainer.bounds)){
         // click target is lower than the normal area
-        offset = CGPointMake(offset.x, CGRectGetMaxY(btn.frame) + 20 - CGRectGetHeight(exfeeContainer.bounds));
+        offset = CGPointMake(offset.x, MAX(CGRectGetMaxY(btn.frame) - CGRectGetHeight(exfeeContainer.bounds), 0));
         flag = YES;
     }
     
-    invTable.frame = CGRectOffset(invTable.bounds, offset.x, MAX(offset.y ,0));
+    invContent.frame = CGRectOffset(invContent.bounds, offset.x, offset.y);
     if (flag) {
         exfeeContainer.contentOffset = offset;
         //exfeeContainer.bounds.y += offset.y - exfeeContainer.contentOffset.y; // for animation
     }
-    invTable.tag = kTableFloating;
+    invContent.tag = kTableFloating;
     
 }
 @end
