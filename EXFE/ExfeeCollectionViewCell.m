@@ -70,8 +70,15 @@
     [super drawRect:rect];
     
     // draw Mates
-    if (self.mates > 0) {
-        
+    if (_mates > 0) {
+        // move to layer on top of avatar frame
+        CGPoint point = CGPointMake(CGRectGetMaxX(rectAvatar) - 18, CGRectGetMinY(rectAvatar));
+        [[UIImage imageNamed:@"exfee_portrait_mate.png"] drawAtPoint:point];
+        NSString* matestr = [NSString stringWithFormat:@"+%d", _mates];
+        CGSize mateSize = [matestr sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:9]];
+        CGPoint textPoint = CGPointMake(point.x + 9 - mateSize.width / 2, point.y + 6 - mateSize.height / 2);
+        [[UIColor whiteColor] set];
+        [matestr drawAtPoint:textPoint withFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:9]];
     }
 }
 
@@ -79,7 +86,6 @@
 // Selection highlights underlying contents
 - (void)setSelected:(BOOL)selected
 {
-    NSLog(@"setSelected %i", selected);
     if (selected) {
         _avatarFrame.image = [UIImage imageNamed:@"exfee_portrait_selected.png"];
     }else{
@@ -102,7 +108,6 @@
 - (void)setMates:(NSUInteger)mates
 {
     _mates = mates;
-    
     [self setNeedsDisplay];
 }
 
@@ -116,15 +121,21 @@
     return _unreachable;
 }
 
-- (void)setRsvp:(RsvpCode)rsvp
+- (BOOL)getHost
 {
-    [self setRsvp:rsvp andUnreachable:NO];
+    return _host;
 }
 
-- (void)setRsvp:(RsvpCode)rsvp andUnreachable:(BOOL)unreachable
+- (void)setRsvp:(RsvpCode)rsvp
+{
+    [self setRsvp:rsvp andUnreachable:NO withHost:NO];
+}
+
+- (void)setRsvp:(RsvpCode)rsvp andUnreachable:(BOOL)unreachable withHost:(BOOL)host
 {
     _rsvp = rsvp;
     _unreachable = unreachable;
+    _host = host;
     [self updateRsvpImage];
 }
 
@@ -132,11 +143,12 @@
 {
     if (_unreachable) {
         _rsvpImage.image = [UIImage imageNamed:@"exfee_unreachable_badge.png"];
-    }else{
+    } else if (_host) {
+        _rsvpImage.image = [UIImage imageNamed:@"exfee_host_badge.png"];
+    } else{
         switch (_rsvp) {
             case kRsvpAccepted:
-            _rsvpImage.image = [UIImage imageNamed:@"rsvp_dot_accepted.png"];
-//                _rsvpImage.backgroundColor = [UIColor greenColor];
+            _rsvpImage.image = [UIImage imageNamed:@"exfee_accepted_badge.png"];
                 break;
             case kRsvpDeclined:
             _rsvpImage.image = [UIImage imageNamed:@"exfee_unavailable_badge.png"];

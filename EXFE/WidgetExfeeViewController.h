@@ -25,7 +25,8 @@ typedef enum {
     
     UIView *invContent;
     UILabel *invName;
-    UILabel *invHostFlag;
+    UIImageView *invHostFlag;
+    UILabel *invHostText;
     UIImageView *invRsvpImage;
     EXAttributedLabel *invRsvpLabel;
     UILabel *invRsvpAltLabel;
@@ -33,6 +34,10 @@ typedef enum {
     UIImageView *identityWaring;
     UILabel *identityName;
     UIButton *ActionMenu;
+    
+    CALayer *layer1;
+    CALayer *layer2;
+    CALayer *layer3;
     
 //    UITableView* invTable;
 //    ExfeeRsvpCell *tableHeader;

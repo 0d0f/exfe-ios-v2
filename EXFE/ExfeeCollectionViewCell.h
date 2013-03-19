@@ -34,8 +34,10 @@ typedef NS_ENUM(NSUInteger, SequencePosition){
 @property (nonatomic, strong) UILabel *name;
 @property (nonatomic, assign) RsvpCode rsvp;
 @property (nonatomic, assign) BOOL unreachable;
+@property (nonatomic, assign) BOOL host;
 @property (nonatomic, assign) NSUInteger mates;
+@property (nonatomic, retain) NSNumber *invitation_id;
 @property (nonatomic, assign) SequencePosition sequence;
 
-- (void)setRsvp:(RsvpCode)rsvp andUnreachable:(BOOL)unreachable;
+- (void)setRsvp:(RsvpCode)rsvp andUnreachable:(BOOL)unreachable withHost:(BOOL)host;
 @end

@@ -7,10 +7,12 @@
 //
 
 #import <CoreText/CoreText.h>
+#import <QuartzCore/QuartzCore.h>
 #import "WidgetExfeeViewController.h"
 #import "ExfeeCollectionViewCell.h"
 #import "Util.h"
 #import "ImgCache.h"
+#import "DateTimeUtil.h"
 
 #define kTagViewExfeeRoot         10
 #define kTagViewExfeeSelector     20
@@ -77,18 +79,38 @@ typedef enum {
     invContent.backgroundColor = [UIColor COLOR_SNOW];
     invContent.tag = kTableOrigin;
     {
+        
+        layer1 = [CALayer layer];
+        layer1.frame = CGRectMake(0, 45, 320, 1);
+        layer1.contents = (id)[UIImage imageNamed:@"exfee_line_h1.png"].CGImage;
+        layer2 = [CALayer layer];
+        layer2.frame = CGRectMake(0, 105, 320, 1);
+        layer2.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
+        layer3 = [CALayer layer];
+        layer3.frame = CGRectMake(65, 45, 1, 180);
+        layer3.contents = (id)[UIImage imageNamed:@"exfee_line_v.png"].CGImage;
+        [invContent.layer addSublayer:layer1];
+        [invContent.layer addSublayer:layer2];
+        [invContent.layer addSublayer:layer3];
+        
+        
         invName = [[ UILabel alloc] initWithFrame:CGRectMake(25, 16, 230, 25)];
         invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
         invName.textColor = [UIColor COLOR_CARBON];
+        invName.backgroundColor = [UIColor clearColor];
         invName.tag = kTagIdName;
         [invContent addSubview:invName];
         
-        invHostFlag = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
-        invHostFlag.text = @"HOST";
-        invHostFlag.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
-        invHostFlag.textColor = [UIColor COLOR_BLUE_EXFE];
-        [invHostFlag sizeToFit];
+        invHostFlag = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_host_blue.png"]];
+        invHostFlag.frame = CGRectMake(162, 21, CGRectGetWidth(invHostFlag.frame), CGRectGetHeight(invHostFlag.frame));
         [invContent addSubview:invHostFlag];
+        
+        invHostText = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
+        invHostText.text = @"HOST";
+        invHostText.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
+        invHostText.textColor = [UIColor COLOR_BLUE_EXFE];
+        [invHostText sizeToFit];
+        [invContent addSubview:invHostText];
         
         invRsvpImage = [[UIImageView alloc] initWithFrame:CGRectMake(33, 57, 26, 26)];
         [invContent addSubview:invRsvpImage];
@@ -99,6 +121,7 @@ typedef enum {
         invRsvpAltLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 86, 180, 12)];
         invRsvpAltLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
         invRsvpAltLabel.textColor = [UIColor COLOR_GRAY];
+        invRsvpAltLabel.backgroundColor = [UIColor clearColor];
         [invContent addSubview:invRsvpAltLabel];
         
         identityProvider = [[UIImageView alloc] initWithFrame:CGRectMake(37, 115, 18, 18)];
@@ -110,6 +133,7 @@ typedef enum {
         identityName = [[UILabel alloc] initWithFrame:CGRectMake(75, 108, 220, 32)];
         identityName.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
         identityName.textColor = [UIColor COLOR_BLACK];
+        identityName.backgroundColor = [UIColor clearColor];
         [invContent addSubview:identityName];
         
         ActionMenu = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -121,6 +145,23 @@ typedef enum {
     selected_invitation = [self.exfee.invitations.allObjects objectAtIndex:0];
     [self fillInvitationContent:selected_invitation];
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapContent:)];
+    [invContent addGestureRecognizer:tap];
+    
+}
+
+- (void)tapContent:(UITapGestureRecognizer*)sender
+{
+    CGPoint location = [sender locationInView:sender.view];
+    
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        //UIView *tappedView = [sender.view hitTest:[sender locationInView:sender.view] withEvent:nil];
+        
+        if (CGRectContainsPoint([Util expandRect:invRsvpImage.frame with:invRsvpLabel.frame with:invRsvpAltLabel.frame], location)) {
+            NSLog(@"open RSVP menu");
+            return;
+        }
+    }
 }
 
 - (void)fillInvitationContent:(Invitation*)inv
@@ -154,13 +195,14 @@ typedef enum {
                 identityProvider.image = [UIImage imageNamed:@"identity_phone_18_grey.png"];
                 break;
             case kProviderTwitter:
-                identityProvider.image = [UIImage imageNamed:@"identity_facebook_18_grey.png"];
-                break;
-            case kProviderFacebook:
                 identityProvider.image = [UIImage imageNamed:@"identity_twitter_18_grey.png"];
                 break;
+            case kProviderFacebook:
+                identityProvider.image = [UIImage imageNamed:@"identity_facebook_18_grey.png"];
+                break;
             default:
-            break;
+                identityProvider.image = nil;
+                break;
         }
     }
 }
@@ -169,6 +211,11 @@ typedef enum {
 {
     if (inv) {
         BOOL shouldHidden = ![inv.host boolValue];
+        if (invHostText.hidden != shouldHidden) {
+            invHostText.hidden = shouldHidden;
+            [self setNeedLayout:kTagIdHostFlag];
+        }
+        
         if (invHostFlag.hidden != shouldHidden) {
             invHostFlag.hidden = shouldHidden;
             [self setNeedLayout:kTagIdHostFlag];
@@ -272,11 +319,12 @@ typedef enum {
             CFRelease(textfontref);
         }
         
-        NSString *altString = nil;
-        if (inv.updated_by.connected_user_id != inv.identity.connected_user_id){
-            altString = [NSString stringWithFormat:@"Set by %@ %@", [inv.updated_by getDisplayName], @"xx days ago"];
-        }else{
-            altString =  @"xx days ago";
+        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit |NSTimeZoneCalendarUnit) fromDate:inv.updated_at];
+        [gregorian release];
+        NSString *altString = [DateTimeUtil GetRelativeTime:comps format:0];
+        if ([inv.updated_by.connected_user_id intValue]!= [inv.identity.connected_user_id intValue]){
+            altString = [NSString stringWithFormat:@"Set by %@ %@", [inv.updated_by getDisplayName], altString];
         }
         invRsvpAltLabel.text = altString;
         
@@ -304,7 +352,24 @@ typedef enum {
 - (void)LayoutViews
 {
     if (layoutLevel > kTagIdNone) {
-        
+        if (layoutLevel >= kTagIdName) {
+            if (invName.text) {
+                CGSize size = [invName.text sizeWithFont:invName.font];
+                CGFloat w = size.width;
+                if (w > CGRectGetWidth(invName.bounds)) {
+                    w = CGRectGetWidth(invName.bounds);
+                }
+                CGFloat x = w + CGRectGetMinX(invName.frame);
+                CGRect f1 = invHostFlag.frame;
+                f1.origin.x = x + 12;
+                invHostFlag.frame = f1;
+                
+                CGRect f2 = invHostText.frame;
+                f2.origin.x = CGRectGetMaxX(f1);
+                invHostText.frame = f2;
+            }
+            
+        }
         
         
         [self clearLayoutLevel];
@@ -326,6 +391,7 @@ typedef enum {
 {
     [invName release];
     [invHostFlag release];
+    [invHostText release];
     [invRsvpImage release];
     [invRsvpLabel release];
     [invRsvpAltLabel release];
@@ -382,7 +448,7 @@ typedef enum {
                 
                 Invitation* inv = [self.exfee.invitations.allObjects objectAtIndex:row];
                 cell.name.text = inv.identity.name;
-                [cell setRsvp:[Invitation getRsvpCode:inv.rsvp_status] andUnreachable:[inv.identity.unreachable boolValue]];
+                [cell setRsvp:[Invitation getRsvpCode:inv.rsvp_status] andUnreachable:[inv.identity.unreachable boolValue] withHost:[inv.host boolValue]];
                 NSInteger seq = row % 4;
                 switch (seq) {
                     case 0:
@@ -397,6 +463,9 @@ typedef enum {
                 }
                 
                 [[ImgCache sharedManager] fillAvatar:cell.avatar with:inv.identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"]];
+                cell.invitation_id = inv.invitation_id;
+//                cell.mates = 10;
+                cell.mates = [inv.mates integerValue];
                 
                 return cell;
             }
@@ -545,11 +614,14 @@ typedef enum {
         flag = YES;
     }
     
+    [UIView beginAnimations:@"" context:nil];
+    [UIView setAnimationDuration:0.4];
     invContent.frame = CGRectOffset(invContent.bounds, offset.x, offset.y);
     if (flag) {
         exfeeContainer.contentOffset = offset;
         //exfeeContainer.bounds.y += offset.y - exfeeContainer.contentOffset.y; // for animation
     }
+    [UIView commitAnimations];
     invContent.tag = kTableFloating;
     
 }
