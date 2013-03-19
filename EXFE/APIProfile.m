@@ -60,24 +60,17 @@
 }
 
 
-+ (void) LoadSuggest:(NSString*)key delegate:(id)delegate{
++ (void) LoadSuggest:(NSString*)key success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+             failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
 
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSString *endpoint = [NSString stringWithFormat:@"/identities/complete?key=%@",key];
-//    RKObjectManager* manager =[RKObjectManager sharedManager];
-//    [manager.requestQueue cancelAllRequests];
-//    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//
-//    [manager.client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-//    [manager loadObjectsAtResourcePath:endpoint usingBlock:^(RKObjectLoader *loader) {
-//        loader.userData=@"suggest";
-//        loader.delegate = delegate;
-//    }];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/identities/complete?key=%@",API_ROOT,key];
+  
+  [[RKObjectManager sharedManager].HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+  [[RKObjectManager sharedManager].HTTPClient getPath:endpoint parameters:nil success:success failure:failure];
+   
 }
 
-//+(void) getIdentity:(NSString*)identity_json{
-//    
-//}
 
 @end

@@ -440,8 +440,11 @@ static char identitykey;
     if(addressbookType== EXFE_ADDRESSBOOK){
         if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
             showInputinSuggestion=YES;
-            [APIProfile LoadSuggest:exfeeInput.text delegate:self];
-            [self loadIdentitiesFromDataStore:exfeeInput.text];
+          [APIProfile LoadSuggest:exfeeInput.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [self loadIdentitiesFromDataStore:[exfeeList getInput]];
+          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            
+          }];
         }
         if(exfeeInput.text==nil || [exfeeInput.text isEqualToString:@""])
         {
@@ -807,7 +810,11 @@ static char identitykey;
             if([self showErrorHint]==YES)
                 return YES;
             showInputinSuggestion=YES;
-            [APIProfile LoadSuggest:input delegate:self];
+            [APIProfile LoadSuggest:input success:^(AFHTTPRequestOperation *operation, id responseObject) {
+              [self loadIdentitiesFromDataStore:[exfeeList getInput]];
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+              
+            }];
             [self loadIdentitiesFromDataStore:input];
         }
         if(input==nil || [input isEqualToString:@""])

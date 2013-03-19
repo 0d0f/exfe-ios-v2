@@ -19,14 +19,11 @@
 
 +(void) LoadUsrWithUserId:(int)user_id withToken:(NSString*)token success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
-//+(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
-
 +(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids
                 success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-//RESTKIT0.2
-//+(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids usingBlock:(void (^)(RKRequest *request))block;
-+(void) LoadSuggest:(NSString*)key delegate:(id)delegate;
-//+(void) getIdentity:(NSString*)identity_json;
++(void) LoadSuggest:(NSString*)key success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
 @end
