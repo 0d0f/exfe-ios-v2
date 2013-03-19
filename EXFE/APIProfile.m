@@ -48,12 +48,15 @@
   
 }
 
-+(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
++(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids
+                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
   
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
   NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u/mergeIdentities?token=%@",API_ROOT,app.userid, app.accesstoken];
-
-  [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:@{@"browsing_identity_token":browsing_identity_token,@"identity_ids":ids} success:success failure:failure];
+  
+  [RKObjectManager sharedManager].HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
+  [[RKObjectManager sharedManager].HTTPClient postPath:endpoint parameters:@{@"browsing_identity_token":browsing_identity_token,@"identity_ids":ids} success:success failure:failure];
 }
 
 

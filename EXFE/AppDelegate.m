@@ -594,31 +594,54 @@ static char mergetoken;
       NSString *token = (NSString *)objc_getAssociatedObject(alertView, &mergetoken);
 
         NSString *merge_identity = (NSString *)objc_getAssociatedObject(alertView, &alertobject);
-      [APIProfile MergeIdentities:token Identities_ids:merge_identity success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        if(operation.HTTPRequestOperation.response.statusCode==200){
-          NSDictionary *body=[mappingResult dictionary];
+      
+      [APIProfile MergeIdentities:token Identities_ids:merge_identity success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"%@",responseObject);
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+          NSDictionary *body=responseObject;
           if([body isKindOfClass:[NSDictionary class]]) {
-              Meta *meta=(Meta*)[body objectForKey:@"meta"];
-              if(meta){
-                  if([meta.code intValue]==200){
+            id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+            if(code)
+              if([code intValue]==200) {
                     [APIProfile LoadUsrWithUserId:app.userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                             if(operation.HTTPRequestOperation.response.statusCode==200){
                                 NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
                                 [self processUrlHandler:url];
-                            }
-
+                          }
                     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
                       
                     }];
-                  }
-                
               }
           }
         }
-      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
       }];
-//RESTKIT0.2      
+      
+//      [APIProfile MergeIdentities:token Identities_ids:merge_identity success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+//        if(operation.HTTPRequestOperation.response.statusCode==200){
+//          NSDictionary *body=[mappingResult dictionary];
+//          if([body isKindOfClass:[NSDictionary class]]) {
+//              Meta *meta=(Meta*)[body objectForKey:@"meta"];
+//              if(meta){
+//                  if([meta.code intValue]==200){
+//                    [APIProfile LoadUsrWithUserId:app.userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+//                            if(operation.HTTPRequestOperation.response.statusCode==200){
+//                                NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
+//                                [self processUrlHandler:url];
+//                          }
+//                    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+//                      
+//                    }];
+//                  }
+//                
+//              }
+//          }
+//        }
+//      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+//      }];
+      
+//RESTKIT0.2
 //        [APIProfile MergeIdentities:token_formerge Identities_ids:merge_identity usingBlock:^(RKRequest *request){
 //            request.method=RKRequestMethodPOST;
 //            request.onDidLoadResponse=^(RKResponse *response){
