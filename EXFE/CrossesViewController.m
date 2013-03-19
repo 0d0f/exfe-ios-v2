@@ -284,13 +284,13 @@
         [formatter release];
     }
     if([source isEqualToString:@"crossview_init"]){
-        hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.labelText = @"Loading";
-        hud.mode=MBProgressHUDModeCustomView;
-        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-        [bigspin startAnimating];
-        hud.customView=bigspin;
-        [bigspin release];
+//        hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//        hud.labelText = @"Loading";
+//        hud.mode=MBProgressHUDModeCustomView;
+//        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+//        [bigspin startAnimating];
+//        hud.customView=bigspin;
+//        [bigspin release];
     }
   
     //  source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]

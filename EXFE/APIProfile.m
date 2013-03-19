@@ -41,52 +41,36 @@
   NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u?token=%@",API_ROOT,user_id, app.accesstoken];
   [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:nil success:success failure:failure];
 }
-//+(void) LoadUsrWithUserId:(int)user_id token:(NSString*)token usingBlock:(void (^)(RKRequest *request))block {
-    //AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u?token=%@",user_id, token];
-//    RKClient *client = [RKClient sharedClient];
-//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//    [client setValue:token forHTTPHeaderField:@"token"];
-//    [client get:endpoint usingBlock:block];
-//}
 
-//+(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids usingBlock:(void (^)(RKRequest *request))block{
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    
-//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/mergeIdentities?token=%@",app.userid, app.accesstoken];
-//    RKClient *client = [RKClient sharedClient];
-//    RKParams* rsvpParams = [RKParams params];
-//    [rsvpParams setValue:browsing_identity_token forParam:@"browsing_identity_token"];
-//    [rsvpParams setValue:ids forParam:@"identity_ids"];
-//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-//    [client post:endpoint usingBlock:^(RKRequest *request) {
-//        request.method = RKRequestMethodPOST;
-//        request.params=rsvpParams;
-//        block(request);
-//    }];
-//
-//    
-//}
++(void) LoadUsrWithUserId:(int)user_id withToken:(NSString*)token success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
+  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u?token=%@",API_ROOT,user_id, token];
+  [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:nil success:success failure:failure];
+  
+}
 
-+ (void) LoadSuggest:(NSString*)key delegate:(id)delegate{
++(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids
+                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+  
+  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u/mergeIdentities?token=%@",API_ROOT,app.userid, app.accesstoken];
+  
+  [RKObjectManager sharedManager].HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
+  [[RKObjectManager sharedManager].HTTPClient postPath:endpoint parameters:@{@"browsing_identity_token":browsing_identity_token,@"identity_ids":ids} success:success failure:failure];
+}
+
+
++ (void) LoadSuggest:(NSString*)key success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+             failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
 
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSString *endpoint = [NSString stringWithFormat:@"/identities/complete?key=%@",key];
-//    RKObjectManager* manager =[RKObjectManager sharedManager];
-//    [manager.requestQueue cancelAllRequests];
-//    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//
-//    [manager.client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-//    [manager loadObjectsAtResourcePath:endpoint usingBlock:^(RKObjectLoader *loader) {
-//        loader.userData=@"suggest";
-//        loader.delegate = delegate;
-//    }];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/identities/complete?key=%@",API_ROOT,key];
+  
+  [[RKObjectManager sharedManager].HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+  [[RKObjectManager sharedManager].HTTPClient getPath:endpoint parameters:nil success:success failure:failure];
+   
 }
 
-//+(void) getIdentity:(NSString*)identity_json{
-//    
-//}
 
 @end

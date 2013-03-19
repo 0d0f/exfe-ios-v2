@@ -58,43 +58,32 @@
 
 - (void) Signupnew:(id) sender{
     [self showSignError:@""];
-//RESTKIT0.2  
-//    RKClient *client = [RKClient sharedClient];
-//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//    NSString *endpoint = [NSString stringWithFormat:@"/users/signin"];
-//    RKParams* rsvpParams = [RKParams params];
-//    NSString *provider=[Util findProvider:textUsername.text];
-//    [rsvpParams setValue:provider forParam:@"provider"];
-//    [rsvpParams setValue:textUsername.text forParam:@"external_username"];
-//    [rsvpParams setValue:textDisplayname.text forParam:@"name"];
-//    [rsvpParams setValue:textPassword.text forParam:@"password"];
   
+  NSString *provider=[Util findProvider:textUsername.text];
+  
+  NSString *endpoint = [NSString stringWithFormat:@"%@/users/signin",API_ROOT];
+  RKObjectManager *manager=[RKObjectManager sharedManager] ;
+  manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
+  [manager.HTTPClient postPath:endpoint parameters:@{@"provider":provider,@"external_username":textUsername.text,@"name":textDisplayname.text,@"password":textPassword.text} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+      [self processResponse:responseObject status:@"signup"];
+    }
+    [spin setHidden:YES];
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    [spin setHidden:YES];
+    NSString *errormsg;
+    if(error.code==2)
+        errormsg=@"A connection failure has occurred.";
+    else
+        errormsg=@"Could not connect to the server.";
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+  }];
+
     [spin removeFromSuperview];
     [setupnewbtn addSubview:spin];
     [spin setHidden:NO];
-//RESTKIT0.2  
-//    [client post:endpoint usingBlock:^(RKRequest *request){
-//        request.method=RKRequestMethodPOST;
-//        request.params=rsvpParams;
-//        request.onDidLoadResponse=^(RKResponse *response){
-//            if (response.statusCode == 200) {
-//                [self processResponse:[response.body objectFromJSONData] status:@"signup"];
-//            }
-//            [spin setHidden:YES];
-//        };
-//        request.onDidFailLoadWithError=^(NSError *error){
-//            [spin setHidden:YES];
-//            NSString *errormsg;
-//            if(error.code==2)
-//                errormsg=@"A connection failure has occurred.";
-//            else
-//                errormsg=@"Could not connect to the server.";
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//            [alert show];
-//            [alert release];
-//        };
-//    }];
-  
 }
 - (IBAction) TwitterLoginButtonPress:(id) sender{
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];

@@ -22,7 +22,7 @@
 
 static char alertobject;
 static char handleurlobject;
-
+static char mergetoken;
 
 - (void)dealloc
 {
@@ -51,28 +51,28 @@ static char handleurlobject;
   RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
 //  RKLogConfigureByName("*", RKLogLevelOff);
   
-  RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
   [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
-  
-  // Initialize managed object store
-  NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-  RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
-  objectManager.managedObjectStore = managedObjectStore;
-  [ModelMapping buildMapping];
-  
-  [managedObjectStore createPersistentStoreCoordinator];
-  NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
-  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
-  NSLog(@"%@",storePath);
-  NSError *error;
-  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:seedPath withConfiguration:nil options:nil error:&error];
-  NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
-  
-  // Create the managed object contexts
-  [managedObjectStore createManagedObjectContexts];
-  
-  // Configure a managed object cache to ensure we do not create duplicate objects
-  managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
+  [self createdb];
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+
+//  RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+//  NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+//  RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
+//  objectManager.managedObjectStore = managedObjectStore;
+//  [ModelMapping buildMapping];
+//  
+//  [managedObjectStore createPersistentStoreCoordinator];
+//  NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
+////  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
+//  NSError *error;
+//  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
+//  NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
+//  
+//  // Create the managed object contexts
+//  [managedObjectStore createManagedObjectContexts];
+//  
+//  // Configure a managed object cache to ensure we do not create duplicate objects
+//  managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
   
   
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -84,6 +84,7 @@ static char handleurlobject;
     if(login==NO){
         [self ShowLanding];
     }
+  
 //    NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
   
     if(login==YES)
@@ -140,6 +141,35 @@ static char handleurlobject;
     return YES;
 }
 
+- (void) createdb{
+  NSURL *baseURL = [NSURL URLWithString:API_ROOT];
+  
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+  if(objectManager==nil)
+    objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+  
+  NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+  RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
+  objectManager.managedObjectStore = managedObjectStore;
+  
+  [managedObjectStore createPersistentStoreCoordinator];
+
+  NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
+  //  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
+  NSError *error;
+  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
+  NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
+  
+  // Create the managed object contexts
+  [managedObjectStore createManagedObjectContexts];
+  
+  // Configure a managed object cache to ensure we do not create duplicate objects
+  managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
+  NSArray *descriptors=objectManager.requestDescriptors;
+  if(descriptors==nil || [descriptors count]==0)
+    [ModelMapping buildMapping];
+
+}
 
 -(void)ShowLanding{
     LandingViewController *landingView=[[[LandingViewController alloc]initWithNibName:@"LandingViewController" bundle:nil]autorelease];
@@ -209,7 +239,30 @@ static char handleurlobject;
   
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
         return;
+  
+    NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u/regdevice?token=%@",API_ROOT,self.userid,self.accesstoken];
+  RKObjectManager *manager=[RKObjectManager sharedManager] ;
+  manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
+  [manager.HTTPClient postPath:endpoint parameters:@{@"udid":tokenAsString,@"push_token":tokenAsString,@"os_name":@"iOS",@"brand":@"apple",@"model":@"",@"os_version":@"6"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+      if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+        NSDictionary *body=responseObject;
+        if([body isKindOfClass:[NSDictionary class]]) {
+          id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+          if(code)
+            if([code intValue]==200) {
+              [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"ifdevicetokenSave"];
+              [[NSUserDefaults standardUserDefaults] setObject:tokenAsString forKey:@"udid"];
+            }
+          }
+        }else {
+        }
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     
+  }];
+  
+  
+
+  
 //RESTKIT0.2
 //    RKParams* rsvpParams = [RKParams params];
 //    [rsvpParams setValue:tokenAsString forParam:@"udid"];
@@ -280,68 +333,59 @@ static char handleurlobject;
         token_formerge=[token_formerge stringByAppendingString:[params objectForKey:@"token"]];
     
     [params release];
-//RESTKIT0.2
-//    if(![token isEqualToString:@""]&& [user_id intValue]>0){
-//        [APIProfile LoadUsrWithUserId:[user_id intValue] token:token usingBlock:^(RKRequest *request) {
-//            request.method=RKRequestMethodGET;
-//            request.onDidLoadResponse=^(RKResponse *response){
-//                if (response.statusCode == 200) {
-//                    NSDictionary *body=[response.body objectFromJSONData];
-//                    if([body isKindOfClass:[NSDictionary class]]) {
-//                        id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                        if(code)
-//                            if([code intValue]==200) {
-//                                NSString *ids_formerge=@"";
-//                                RKObjectMapper* mapper;
-//                                mapper = [RKObjectMapper mapperWithObject:body mappingProvider:[RKObjectManager sharedManager].mappingProvider];
-//                                RKObjectMappingResult* result = [mapper performMapping];
-//                                NSDictionary *obj=[result asDictionary];
-//                                User *user=[obj objectForKey:@"response.user"];
-//                                for (Identity *_identity in user.identities){
-//                                    if([ids_formerge isEqualToString:@""])
-//                                        ids_formerge = [ids_formerge stringByAppendingFormat:@"%u",
-//                                                        [_identity.identity_id intValue]];
-//                                    else
-//                                        ids_formerge = [ids_formerge stringByAppendingFormat:@",%u",
-//                                                    [_identity.identity_id intValue]];
-//                                }
-//                                ids_formerge=[NSString stringWithFormat:@"[%@]",ids_formerge];
-//
-//                                if([self Checklogin]==NO){
-//                                    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//                                    app.userid=[user_id intValue];
-//                                    app.accesstoken=token;
-//
-//                                    [SigninDelegate saveSigninData:user];
-//                                    [self SigninDidFinish];
-//                                    [self processUrlHandler:url];
-//                                }else{
-//                                    if([identity_id intValue] >0  && [user_id intValue] != self.userid)
-//                                    {
-////                                        
-//                                        
-//                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Merge accounts" message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?",user.name] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Merge",nil];
-//                                        alert.tag=400;
-//                                        objc_setAssociatedObject (alert, &alertobject, ids_formerge,OBJC_ASSOCIATION_RETAIN);
-//                                        objc_setAssociatedObject (alert, &handleurlobject, url,OBJC_ASSOCIATION_RETAIN);
-//                                        
-//
-//                                        [alert show];
-//                                        [alert release];
-//                                    }else{
-//                                        [self processUrlHandler:url];
-//                                    }
-//                                }
-//                                
-//                            }
-//
-//                    }
-//                }
-//            };
-//        }];
-//    }else{
-//        [self processUrlHandler:url];
-//    }
+    if(![token isEqualToString:@""]&& [user_id intValue]>0){
+      [APIProfile LoadUsrWithUserId:[user_id intValue] withToken:token success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+              if(operation.HTTPRequestOperation.response.statusCode==200){
+                  NSDictionary *body=[mappingResult dictionary];
+                  if([body isKindOfClass:[NSDictionary class]]) {
+                    Meta *meta=(Meta*)[body objectForKey:@"meta"];
+                    if(meta)
+                        if([meta.code intValue]==200) {
+                              NSString *ids_formerge=@"";
+                              User *user=(User*)[body objectForKey:@"response.user"];
+                              for (Identity *_identity in user.identities){
+                                  if([ids_formerge isEqualToString:@""])
+                                      ids_formerge = [ids_formerge stringByAppendingFormat:@"%u",
+                                                      [_identity.identity_id intValue]];
+                                  else
+                                      ids_formerge = [ids_formerge stringByAppendingFormat:@",%u",
+                                                  [_identity.identity_id intValue]];
+                              }
+                              ids_formerge=[NSString stringWithFormat:@"[%@]",ids_formerge];
+                            if([self Checklogin]==NO){
+                              AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                              app.userid=[user_id intValue];
+                              app.accesstoken=token;
+                              
+                              [SigninDelegate saveSigninData:user];
+                              [self SigninDidFinish];
+                              [self processUrlHandler:url];
+                            }else{
+                              if([identity_id intValue] >0  && [user_id intValue] != self.userid) {
+                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Merge accounts" message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?",user.name] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Merge",nil];
+                                alert.tag=400;
+                                objc_setAssociatedObject (alert, &alertobject, ids_formerge,OBJC_ASSOCIATION_RETAIN);
+                                objc_setAssociatedObject (alert, &handleurlobject, url,OBJC_ASSOCIATION_RETAIN);
+                                objc_setAssociatedObject (alert, &mergetoken, token_formerge,OBJC_ASSOCIATION_RETAIN);
+                                
+                                
+                                
+                                [alert show];
+                                [alert release];
+                              }else{
+                                [self processUrlHandler:url];
+                              }
+                            }
+
+                          }
+                  }
+              }
+      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        
+      }];
+    }else{
+        [self processUrlHandler:url];
+    }
 
     
     
@@ -462,14 +506,29 @@ static char handleurlobject;
 - (void) cleandb{
   
   NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
-  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
-  NSLog(@"%@",storePath);
+//  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
+//  NSLog(@"%@",storePath);
 
-  NSURL *storeURL = [NSURL fileURLWithPath:seedPath];
+  NSURL *storeURL = [NSURL fileURLWithPath:storePath];
   NSError *error = nil;
   if ([[NSFileManager defaultManager] fileExistsAtPath:storeURL.path]) {
-    if (![[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error]) {
-      NSLog(@"delete:%@",seedPath);
+    if ([[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error]) {
+      
+      RKObjectManager *objectManager = [RKObjectManager sharedManager];
+      [ [NSURLCache sharedURLCache] removeAllCachedResponses];
+      
+      objectManager.managedObjectStore.managedObjectCache=nil;
+      objectManager.managedObjectStore = nil;
+//      objectManager removeRequestDescriptor:(RKRequestDescriptor *)
+      for ( RKRequestDescriptor * requestdesc in objectManager.requestDescriptors){
+        [objectManager removeRequestDescriptor:requestdesc];
+      }
+      for ( RKResponseDescriptor * responsedesc in objectManager.responseDescriptors){
+        [objectManager removeResponseDescriptor:responsedesc];
+      }
+      
+
+      [self createdb];
     }
   }
 //    RKManagedObjectStore *objectStore = [[RKObjectManager sharedManager] objectStore];
@@ -548,39 +607,32 @@ static char handleurlobject;
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     if(buttonIndex==1 && alertView.tag==400){
-        
+      
+      NSString *token = (NSString *)objc_getAssociatedObject(alertView, &mergetoken);
+
         NSString *merge_identity = (NSString *)objc_getAssociatedObject(alertView, &alertobject);
-//RESTKIT0.2      
-//        [APIProfile MergeIdentities:token_formerge Identities_ids:merge_identity usingBlock:^(RKRequest *request){
-//            request.method=RKRequestMethodPOST;
-//            request.onDidLoadResponse=^(RKResponse *response){
-//                if (response.statusCode == 200) {
-//                    NSDictionary *body=[response.body objectFromJSONData];
-//                    if([body isKindOfClass:[NSDictionary class]]){
-//                        NSDictionary *meta=[body objectForKey:@"meta"];
-//                        if([meta isKindOfClass:[NSDictionary class]]){
-//                            if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]]){
-//                                if([[meta objectForKey:@"code"] intValue]==200){
-//                                    [APIProfile LoadUsrWithUserId:app.userid token:app.accesstoken usingBlock:^(RKRequest *drequest) {
-//                                        request.method=RKRequestMethodGET;
-//                                        request.onDidLoadResponse=^(RKResponse *response){
-//                                            if (response.statusCode == 200) {
-//                                                NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
-//                                                [self processUrlHandler:url];
-//                                            }
-//                                        };
-//                                    }];
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            };
-//            request.onDidFailLoadWithError=^(NSError *error){
-////                [spin setHidden:YES];
-////                NSLog(@"error %@",error);
-//            };
-//        }];
+      
+      [APIProfile MergeIdentities:token Identities_ids:merge_identity success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+          NSDictionary *body=responseObject;
+          if([body isKindOfClass:[NSDictionary class]]) {
+            id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+            if(code)
+              if([code intValue]==200) {
+                    [APIProfile LoadUsrWithUserId:app.userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                            if(operation.HTTPRequestOperation.response.statusCode==200){
+                                NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
+                                [self processUrlHandler:url];
+                          }
+                    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                      
+                    }];
+              }
+          }
+        }
+      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+      }];
     }
 }
 
