@@ -17,7 +17,6 @@
 		4F14689C167F1C0700872F9D /* ProfileCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F14689B167F1C0600872F9D /* ProfileCard.m */; };
 		4F15C34816E99CD4008FD99B /* EXTabLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15C34516E99CD4008FD99B /* EXTabLayer.m */; };
 		4F15C34916E99CD4008FD99B /* EXTabWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15C34716E99CD4008FD99B /* EXTabWidget.m */; };
-		4F15D6D116B11EA100BABE72 /* EXTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15D6D016B11EA100BABE72 /* EXTabBar.m */; };
 		4F266F02168EC49900BDB9D5 /* EXLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F266F01168EC49900BDB9D5 /* EXLabel.m */; };
 		4F29C8C416F6D968001BB176 /* rsvp_accepted_18blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F29C8A416F6D966001BB176 /* rsvp_accepted_18blue.png */; };
 		4F29C8C516F6D968001BB176 /* rsvp_accepted_18blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F29C8A516F6D966001BB176 /* rsvp_accepted_18blue@2x.png */; };
@@ -121,7 +120,6 @@
 		4FC6E96416B0E7260023AD1C /* dock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FC6E95C16B0E7260023AD1C /* dock@2x.png */; };
 		4FC8FCE8168D7E5700409779 /* Place+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCE7168D7E5700409779 /* Place+Helper.m */; };
 		4FC8FCEB168D912E00409779 /* EFTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCEA168D912E00409779 /* EFTime+Helper.m */; };
-		4FD4DD7416A68674003F1A55 /* EXWidgetTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */; };
 		4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */; };
 		4FD9375516D4A57600ED6677 /* CrossGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */; };
 		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
@@ -515,8 +513,6 @@
 		4F15C34516E99CD4008FD99B /* EXTabLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabLayer.m; sourceTree = "<group>"; };
 		4F15C34616E99CD4008FD99B /* EXTabWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTabWidget.h; sourceTree = "<group>"; };
 		4F15C34716E99CD4008FD99B /* EXTabWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabWidget.m; sourceTree = "<group>"; };
-		4F15D6CF16B11EA100BABE72 /* EXTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTabBar.h; sourceTree = "<group>"; };
-		4F15D6D016B11EA100BABE72 /* EXTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabBar.m; sourceTree = "<group>"; };
 		4F266F00168EC49900BDB9D5 /* EXLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXLabel.h; sourceTree = "<group>"; };
 		4F266F01168EC49900BDB9D5 /* EXLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXLabel.m; sourceTree = "<group>"; };
 		4F29C8A416F6D966001BB176 /* rsvp_accepted_18blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rsvp_accepted_18blue.png; sourceTree = "<group>"; };
@@ -638,8 +634,6 @@
 		4FC8FCE7168D7E5700409779 /* Place+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Place+Helper.m"; sourceTree = "<group>"; };
 		4FC8FCE9168D912E00409779 /* EFTime+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFTime+Helper.h"; sourceTree = "<group>"; };
 		4FC8FCEA168D912E00409779 /* EFTime+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFTime+Helper.m"; sourceTree = "<group>"; };
-		4FD4DD7216A68674003F1A55 /* EXWidgetTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXWidgetTabBar.h; sourceTree = "<group>"; };
-		4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXWidgetTabBar.m; sourceTree = "<group>"; };
 		4FD9375116D4A57600ED6677 /* CrossGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossGroupViewController.h; sourceTree = "<group>"; };
 		4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossGroupViewController.m; sourceTree = "<group>"; };
 		4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossGroupViewController.xib; sourceTree = "<group>"; };
@@ -1985,10 +1979,6 @@
 				78B2AF6715DEAB5F00451EA2 /* EXQuoteView.m */,
 				7852709A15FC7A1E001AF618 /* EXSpinView.h */,
 				7852709B15FC7A1E001AF618 /* EXSpinView.m */,
-				4F15D6CF16B11EA100BABE72 /* EXTabBar.h */,
-				4F15D6D016B11EA100BABE72 /* EXTabBar.m */,
-				4FD4DD7216A68674003F1A55 /* EXWidgetTabBar.h */,
-				4FD4DD7316A68674003F1A55 /* EXWidgetTabBar.m */,
 				78415344159C3F5C002B7A2E /* PlaceAnnotation.h */,
 				78415345159C3F5C002B7A2E /* PlaceAnnotation.m */,
 				4F9105E416C2349400E524AC /* UIBorderLabel.h */,
@@ -2578,8 +2568,6 @@
 				78606CE21696DA3F0014806A /* NewGatherViewController.m in Sources */,
 				78606CE7169AD2920014806A /* TitleDescEditViewController.m in Sources */,
 				4FB501A0169FC504005328BE /* EXCurveView.m in Sources */,
-				4FD4DD7416A68674003F1A55 /* EXWidgetTabBar.m in Sources */,
-				4F15D6D116B11EA100BABE72 /* EXTabBar.m in Sources */,
 				78FA8C3016B7CCB900D9E876 /* Identity.m in Sources */,
 				78FA8C3316B7CD1000D9E876 /* Exfee.m in Sources */,
 				78FA8C3816B7CD7A00D9E876 /* Cross.m in Sources */,
