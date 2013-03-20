@@ -402,6 +402,9 @@
         //                [[Cross currentContext] save:nil];
         //
         }
+        [self loadObjectsFromDataStore];
+        [self.tableView reloadData];
+
         //
         [self stopLoading];
         if(hud)
