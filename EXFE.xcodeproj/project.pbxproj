@@ -76,6 +76,9 @@
 		4F29C91C16F813D7001BB176 /* exfee_line_h2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F29C91216F813CA001BB176 /* exfee_line_h2@2x.png */; };
 		4F29C91D16F813D7001BB176 /* exfee_line_v.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F29C91316F813CE001BB176 /* exfee_line_v.png */; };
 		4F29C91E16F813D7001BB176 /* exfee_line_v@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F29C91416F813D4001BB176 /* exfee_line_v@2x.png */; };
+		4F29C92616F85F7B001BB176 /* EXMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92516F85F7B001BB176 /* EXMenu.m */; };
+		4F29C92A16F962CA001BB176 /* EXBasicMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92916F962CA001BB176 /* EXBasicMenu.m */; };
+		4F29C93016F9A5B5001BB176 /* User+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92F16F9A5B5001BB176 /* User+EXFE.m */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
 		4F63E24B169AD2B3003354D7 /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24A169AD2B2003354D7 /* NSDateComponents+Helper.m */; };
 		4F63E24E169BFCD5003354D7 /* DateTimeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24D169BFCD4003354D7 /* DateTimeUtil.m */; };
@@ -573,6 +576,12 @@
 		4F29C91216F813CA001BB176 /* exfee_line_h2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfee_line_h2@2x.png"; sourceTree = "<group>"; };
 		4F29C91316F813CE001BB176 /* exfee_line_v.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exfee_line_v.png; sourceTree = "<group>"; };
 		4F29C91416F813D4001BB176 /* exfee_line_v@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfee_line_v@2x.png"; sourceTree = "<group>"; };
+		4F29C92416F85F7B001BB176 /* EXMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXMenu.h; sourceTree = "<group>"; };
+		4F29C92516F85F7B001BB176 /* EXMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXMenu.m; sourceTree = "<group>"; };
+		4F29C92816F962C9001BB176 /* EXBasicMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXBasicMenu.h; sourceTree = "<group>"; };
+		4F29C92916F962CA001BB176 /* EXBasicMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXBasicMenu.m; sourceTree = "<group>"; };
+		4F29C92E16F9A5B5001BB176 /* User+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "User+EXFE.h"; sourceTree = "<group>"; };
+		4F29C92F16F9A5B5001BB176 /* User+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "User+EXFE.m"; sourceTree = "<group>"; };
 		4F3355CE168C4F4700D398C0 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		4F3C6D8016ACEE670095AA50 /* EditCrossDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditCrossDelegate.h; sourceTree = "<group>"; };
@@ -1187,6 +1196,8 @@
 				4FA013A416F2F4AD00F40CB6 /* Invitation+EXFE.m */,
 				4FA013A916F31B5400F40CB6 /* Identity+EXFE.h */,
 				4FA013AA16F31B5400F40CB6 /* Identity+EXFE.m */,
+				4F29C92E16F9A5B5001BB176 /* User+EXFE.h */,
+				4F29C92F16F9A5B5001BB176 /* User+EXFE.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -1674,6 +1685,10 @@
 				4F15C34716E99CD4008FD99B /* EXTabWidget.m */,
 				4F3355CE168C4F4700D398C0 /* MapPin.h */,
 				4F3355CF168C4F4700D398C0 /* MapPin.m */,
+				4F29C92416F85F7B001BB176 /* EXMenu.h */,
+				4F29C92516F85F7B001BB176 /* EXMenu.m */,
+				4F29C92816F962C9001BB176 /* EXBasicMenu.h */,
+				4F29C92916F962CA001BB176 /* EXBasicMenu.m */,
 			);
 			name = Control;
 			sourceTree = "<group>";
@@ -2588,6 +2603,9 @@
 				4FA013A516F2F4AD00F40CB6 /* Invitation+EXFE.m in Sources */,
 				4FA013AB16F31B5400F40CB6 /* Identity+EXFE.m in Sources */,
 				4FA013AE16F3546A00F40CB6 /* ExfeeCollectionViewCell.m in Sources */,
+				4F29C92616F85F7B001BB176 /* EXMenu.m in Sources */,
+				4F29C92A16F962CA001BB176 /* EXBasicMenu.m in Sources */,
+				4F29C93016F9A5B5001BB176 /* User+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

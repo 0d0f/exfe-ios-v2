@@ -14,8 +14,8 @@
 #import "EXRSVPStatusView.h"
 #import "MapPin.h"
 #import "Cross.h"
-#import "Exfee.h"
-#import "User.h"
+#import "Exfee+EXFE.h"
+#import "User+EXFE.h"
 #import "Place+Helper.h"
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
@@ -96,7 +96,6 @@
 
 @implementation CrossGroupViewController
 @synthesize cross = _cross;
-@synthesize default_user = _default_user;
 @synthesize currentViewController = _currentViewController;
 @synthesize headerStyle = _headerStyle;
 @synthesize widgetId = _widgetId;
@@ -303,18 +302,6 @@
         _cross.cross_description=@"";
     }
     
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
-    [request setPredicate:predicate];
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
-    if(users!=nil && [users count] > 0)
-    {
-        _default_user = [[users objectAtIndex:0] retain];
-    }
-
-    
     [self refreshUI];
     
     if (_widgetId > 0) {
@@ -401,6 +388,8 @@
     
     [headerShadow release];
     
+    [_sortedInvitations release];
+    
     [super dealloc];
 }
 
@@ -414,7 +403,7 @@
         [self fillTitle:x];
         [self fillBackground:x.widget];
         [self fillDescription:x];
-        [self fillExfee];
+        [self fillExfee:x.exfee];
         [self fillTime:x.time];
         [self fillPlace:x.place];
         [self fillConversationCount:x.conversation_count];
@@ -479,34 +468,8 @@
     }
 }
 
-- (void)fillExfee{
-    //AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    NSMutableArray *exfee = [[NSMutableArray alloc]  initWithCapacity:12];
-    
-    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES];
-    NSArray *invitations=[_cross.exfee.invitations sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-    int myself = 0;
-    int accepts = 0;
-    
-    for(Invitation *invitation in invitations) {
-        if([self isMe:invitation.identity]){
-            [exfee insertObject:invitation atIndex:myself];
-            myself ++;
-        }else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
-            [exfee insertObject:invitation atIndex:(myself + accepts)];
-            accepts ++;
-        }else if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO){
-            [exfee addObject:invitation];
-        }
-    }
-    
-    if(exfeeInvitations != nil){
-        [exfeeInvitations release];
-        exfeeInvitations = nil;
-    }
-    exfeeInvitations = [[NSMutableArray alloc] initWithArray:exfee];
-    [exfee release];
+- (void)fillExfee:(Exfee*)exfee{
+    self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
     [exfeeShowview reloadData];
 }
 
@@ -795,14 +758,7 @@
 }
 
 #pragma mark ==== Helpers
-- (BOOL) isMe:(Identity*)my_identity{
-    for(Identity *_identity in _default_user.identities){
-        if([_identity.identity_id isEqual:my_identity.identity_id])
-            return YES;
-    }
-    return NO;
-    
-}
+
 
 #pragma mark == selector/delegate from UI Views
 - (void)gotoBack:(id)sender{
@@ -818,12 +774,12 @@
 #pragma mark EXImagesCollectionView Datasource methods
 
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
-    return [exfeeInvitations count];
+    return [self.sortedInvitations count];
 }
 - (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index{
-    Invitation *invitation =[exfeeInvitations objectAtIndex:index];
+    Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
     EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
-    if([self isMe:invitation.identity]){
+    if([[User getDefaultUser] isMe:invitation.identity]){
         item.isMe = YES;
     }
     
@@ -864,20 +820,11 @@
 
 #pragma mark EXImagesCollectionView delegate methods
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
-    NSArray* reducedExfeeIdentities=exfeeInvitations;//[self getReducedExfeeIdentities];
-    if(index == [reducedExfeeIdentities count])
-    {
-        //        if(viewmode==YES && exfeeShowview.editmode==NO)
-        //            return;
-        //        [self ShowGatherToolBar];
-        //        [self ShowExfeeView];
-    }
-    else if(index < [reducedExfeeIdentities count]){
-        //AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        NSArray *arr=exfeeInvitations;//[self getReducedExfeeIdentities];
-        Invitation *invitation =[arr objectAtIndex:index];
+    
+    if(index == [self.sortedInvitations count]){
         
-        
+    } else if(index < [self.sortedInvitations count]){
+        Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
         CGPoint location = CGPointMake(CGRectGetMinX(exfeeShowview.frame) + (col+1)*(50+5*2)+5, CGRectGetMinY(exfeeShowview.frame) + row*(50+5*2)+y_start_offset);
         CGPoint newLocation = [self.view convertPoint:location fromView:exfeeShowview.superview];
         
@@ -901,7 +848,7 @@
         if(rsvpstatus_x + rsvpstatusview.frame.size.width > self.view.frame.size.width)
             rsvpstatus_x = self.view.frame.size.width - rsvpstatusview.frame.size.width;
         
-        if([self isMe:invitation.identity]){
+        if([[User getDefaultUser] isMe:invitation.identity]){
             NSInteger ctrlId = popupCtrolId;
             [self hidePopupIfShown:kPopupTypeEditStatus];
             if (ctrlId != kPopupTypeEditStatus) {
@@ -1171,16 +1118,9 @@
             
             // prepare data for conversation
             conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
-            conversationView.cross_title = _cross.title;
-            for(NSDictionary *widget in _cross.widget) {
-                if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-                    conversationView.headImgDict = widget;
-                    break;
-                }
-            }
-            Invitation* myInv = [self getMyInvitation];
+            Invitation* myInv = [_cross.exfee getMyInvitation];
             if (myInv != nil){
-                conversationView.identity = myInv.identity;
+                conversationView.myIdentity = myInv.identity;
             }
             
             // clean up data
@@ -1816,7 +1756,8 @@
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
     //    NSError *error;
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    Identity *myidentity=[self getMyInvitation].identity;
+    
+    Identity *myidentity = [_cross.exfee getMyInvitation].identity;
     NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:_invitation.identity.identity_id,@"identity_id",myidentity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
   
   NSString *endpoint = [NSString stringWithFormat:@"%@/exfee/%u/rsvp?token=%@",API_ROOT,[_cross.exfee.exfee_id intValue],app.accesstoken];
@@ -1870,28 +1811,13 @@
 #pragma mark Navigation
 
 #pragma mark EditCrossDelegate
-- (Invitation*) getMyInvitation{
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    for(Invitation *invitation in exfeeInvitations)
-    {
-        //        if([invitation.identity.connected_user_id intValue] == app.userid)
-        if([self isMe:invitation.identity])
-            return invitation;
-    }
-    return nil;
-}
-
 - (void) addExfee:(NSArray*) invitations{
-    if(exfeeInvitations==nil)
-        exfeeInvitations = [[NSMutableArray alloc] initWithArray:invitations];
-    else{
-        for(Invitation *invitation in invitations){
-            
-            [exfeeInvitations addObject:invitation];
-        }
-    }
-    
-    [exfeeShowview reloadData];
+    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:_cross.exfee.invitations.allObjects];
+    [array addObjectsFromArray:invitations];
+    NSSet *set = [[NSSet alloc] initWithArray:array];
+    [array release];
+    _cross.exfee.invitations = set;
+    [self fillExfee:_cross.exfee];
 }
 
 - (void) setTime:(CrossTime*)time{
@@ -1930,7 +1856,7 @@
     hud.customView=bigspin;
     [bigspin release];
     
-    _cross.by_identity=[self getMyInvitation].identity;
+    _cross.by_identity=[_cross.exfee getMyInvitation].identity;
   [APICrosses EditCross:_cross success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
-#import "Identity.h"
+#import "Identity+EXFE.h"
 #import <RestKit/RestKit.h>
 #import "UIInputToolbar.h"
 #import "ConversationTableView.h"
@@ -27,20 +27,15 @@
 
 @interface WidgetConvViewController : UIViewController  <UIInputToolbarDelegate,UIExpandingTextViewDelegate,UITableViewDataSource,UITableViewDelegate>{
     ConversationTableView* _tableView;
-    int exfee_id;
+//    int exfee_id;
     UIInputToolbar *inputToolbar;
-    Identity *identity;
+//    Identity *identity;
     UIImage *cellbackground;
     UIImage *cellsepator;
     UIImage *avatarframe;
     
-    EXCurveView *headerView;
-    UIImageView *dectorView;
-    UIButton *btnBack;
-    UILabel *titleView;
     UIView *hintGroup;
     
-    NSDictionary *headImgDict;
     ConversationInputAccessoryView *inputaccessoryview;
     CATextLayer *timetextlayer;
     CATextLayer *floattimetextlayer;
@@ -50,15 +45,12 @@
     int topcellPath;
     BOOL showfloattime;
     float keyboardheight;
-    NSString *cross_title;
     
 }
 
-@property int exfee_id;
-@property (retain,nonatomic) Identity* identity;
-@property (retain,nonatomic) UIInputToolbar* inputToolbar;
-@property (retain,nonatomic) NSString* cross_title;
-@property (nonatomic, copy) NSDictionary *headImgDict;
+@property (nonatomic, assign) int exfee_id;
+@property (nonatomic, retain) Identity* myIdentity;
+@property (nonatomic, retain) UIInputToolbar* inputToolbar;
 
 - (void) refreshConversation;
 - (void)loadObjectsFromDataStore;
@@ -68,7 +60,6 @@
 - (void) setShowTime:(BOOL)show;
 - (void) hiddenTime;
 - (void) hiddenTimeNow;
-- (void) toCross;
 - (void) toHome;
 - (void) statusbarResize;
 
