@@ -430,8 +430,10 @@ static char identitykey;
 
 - (void) done:(id)sender{
     NSString *inputtext=[exfeeList getInput];
+    NSString *provider=[Util findProvider:inputtext];
+
     if(![inputtext isEqualToString:@""])
-      [self addByInputIdentity:inputtext name:@"" provider:@"" dismiss:YES];
+      [self addByInputIdentity:inputtext name:@"" provider:provider dismiss:YES];
     else{
         [self addExfeeToCross];
     }
@@ -550,18 +552,21 @@ static char identitykey;
 }
 - (void) addBubbleByIdentity:(Identity*)identity input:(NSString*)input{
 
-//    Invitation *invitation =[Invitation object];
-//    invitation.rsvp_status=@"NORESPONSE";
-//    invitation.identity=identity;
-//    Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
-//    if(myinvitation!=nil)
-//        invitation.updated_by=myinvitation.identity;
-//    else
-//        invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
-//    
-//    [exfeeList addBubble:input customObject:invitation];
-//    if([exfeeList bubblecount]>0)
-//        [self changeLeftIconWhite:YES];
+    RKObjectManager *objectManager=[RKObjectManager sharedManager];
+    NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    Invitation *invitation =[[Invitation alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+  
+    invitation.rsvp_status=@"NORESPONSE";
+    invitation.identity=identity;
+    Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
+    if(myinvitation!=nil)
+        invitation.updated_by=myinvitation.identity;
+    else
+        invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+    
+    [exfeeList addBubble:input customObject:invitation];
+    if([exfeeList bubblecount]>0)
+        [self changeLeftIconWhite:YES];
   
 }
 
@@ -781,7 +786,9 @@ static char identitykey;
     NSString *inputtext=[textfield.text stringByTrimmingCharactersInSet:
                          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-  [self addByInputIdentity:inputtext name:@"" provider:@"" dismiss:NO];
+  NSString *provider=[Util findProvider:inputtext];
+
+  [self addByInputIdentity:inputtext name:@"" provider:provider dismiss:NO];
 }
 - (id)customObject:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
     NSDictionary *dictionary=[[[NSDictionary alloc] initWithObjectsAndKeys:input,@"name",@"id",@"id", nil ] autorelease];

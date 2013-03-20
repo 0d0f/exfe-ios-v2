@@ -213,7 +213,6 @@
     [pannel addSubview:pannelbackimg];
     [pannelbackimg release];
     
-//
 //    [pannel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.33]];
 
     UIButton *btngather=[UIButton buttonWithType:UIButtonTypeCustom];
