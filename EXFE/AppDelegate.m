@@ -47,7 +47,7 @@ static char mergetoken;
         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
     }
     
-  NSURL *baseURL = [NSURL URLWithString:API_ROOT];
+//  NSURL *baseURL = [NSURL URLWithString:API_ROOT];
   RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
 //  RKLogConfigureByName("*", RKLogLevelOff);
   

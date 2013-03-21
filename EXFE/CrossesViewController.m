@@ -255,6 +255,8 @@
 }
 
 - (void)ShowProfileView{
+    RKObjectManager *manager=[RKObjectManager sharedManager];
+    [manager.HTTPClient.operationQueue cancelAllOperations];
     ProfileViewController *profileViewController=[[ProfileViewController alloc]initWithNibName:@"ProfileViewController" bundle:nil];
     [self.navigationController pushViewController:profileViewController animated:YES];
     [profileViewController release];
@@ -330,6 +332,14 @@
                           if([updated_at_str length]>19){
                               updated_at_str=[updated_at_str substringToIndex:19];
                               updated_at = [formatter dateFromString:updated_at_str];
+                            
+                              if(last_updated_at==nil)
+                                last_updated_at=updated_at;
+                              else{
+                                last_updated_at=[updated_at laterDate:last_updated_at];
+                              }
+
+                            
                           }
                           if([updated_at compare: cross.updated_at] == NSOrderedDescending || [updated_at compare: cross.updated_at] == NSOrderedSame) {
                               if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]]) {
@@ -342,19 +352,20 @@
                   }
                   [formatter release];
               }
-              if(cross.updated_at!=nil){
-                  if([source isEqualToString:@"crossview"]){
-                      if(exfee_updated_at==nil){
-                          cross.read_at=[NSDate date];
-                          needsave=YES;
-                      }
-                  }
-                  if(last_updated_at==nil)
-                      last_updated_at=cross.updated_at;
-                  else{
-                      last_updated_at=[cross.updated_at laterDate:last_updated_at];
-                  }
-              }
+//              NSLog(@"%i %@",[cross.cross_id intValue], cross.updated_at);
+//              if(cross.updated_at!=nil){
+//                  if([source isEqualToString:@"crossview"]){
+//                      if(exfee_updated_at==nil){
+//                          cross.read_at=[NSDate date];
+//                          needsave=YES;
+//                      }
+//                  }
+//                  if(last_updated_at==nil)
+//                      last_updated_at=cross.updated_at;
+//                  else{
+//                      last_updated_at=[cross.updated_at laterDate:last_updated_at];
+//                  }
+//              }
             }
 
             [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
