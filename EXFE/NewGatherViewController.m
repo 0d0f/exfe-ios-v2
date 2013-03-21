@@ -906,10 +906,10 @@
             [mapView setRegion:region animated:NO];
             
             [mapView removeAnnotations:mapView.annotations];
-            NSString *placeTitle = place.title;
-            if (placeTitle == nil || place.title.length == 0) {
-                placeTitle = @"Somewhere";
-            }
+//            NSString *placeTitle = place.title;
+//            if (placeTitle == nil || place.title.length == 0) {
+//                placeTitle = @"Somewhere";
+//            }
             MapPin *pin = [[[MapPin alloc] initWithCoordinates:region.center placeName:place.title description:@""] autorelease];
             [mapView addAnnotation:pin];
             
@@ -1069,10 +1069,10 @@
 }
 
 - (BOOL) isMe:(Identity*)my_identity{
-//  for(Identity *_identity in default_user.identities){
-//    if([_identity.identity_id isEqual:my_identity.identity_id])
-//      return YES;
-//  }
+  for(Identity *_identity in default_user.identities){
+    if([_identity.identity_id isEqual:my_identity.identity_id])
+      return YES;
+  }
   return NO;
 
 }
@@ -1374,8 +1374,7 @@
 }
 
 - (NSInteger)pickerView:(UIPickerView *)thePickerView numberOfRowsInComponent:(NSInteger)component {
-//    return [default_user.identities count];
-  return 0;
+    return [default_user.identities count];
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{

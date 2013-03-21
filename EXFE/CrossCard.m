@@ -219,6 +219,8 @@
     CFRelease(path);
     CTFrameDraw(theFrame, context);
     CFRelease(theFrame);
+    CFRelease(pstyle);
+    CFRelease(textfontref);
     CGContextRestoreGState(context);
     [textstring release];
     
@@ -281,6 +283,7 @@
                 CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [textstring length]), path, NULL);
                 CFRelease(framesetter);
                 CFRelease(path);
+                CFRelease(textfontref);
                 CTFrameDraw(theFrame, context);
                 CFRelease(theFrame);
                 CGContextRestoreGState(context);

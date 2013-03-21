@@ -302,9 +302,9 @@
         if([[mappingResult array] count]>0)
         {
         //        NSString *source=[objectLoader.userData objectForKey:@"name" ];
-          NSString *exfee_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
+//          NSString *exfee_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
           NSDate *last_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-          BOOL needsave=NO;
+//          BOOL needsave=NO;
           BOOL isError=NO;
           Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
           if(meta!=nil){
@@ -352,7 +352,7 @@
                   }
                   [formatter release];
               }
-//              NSLog(@"%i %@",[cross.cross_id intValue], cross.updated_at);
+              NSLog(@"%i %@",[cross.cross_id intValue], cross.updated_at);
 //              if(cross.updated_at!=nil){
 //                  if([source isEqualToString:@"crossview"]){
 //                      if(exfee_updated_at==nil){
