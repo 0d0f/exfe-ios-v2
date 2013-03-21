@@ -5,12 +5,9 @@
 //  Created by Stony Wang on 13-3-11.
 //
 //
-
-#import <UIKit/UIKit.h>
 #import "EXAttributedLabel.h"
-#import "Invitation+EXFE.h"
-#import "Identity+EXFE.h"
-#import "Exfee.h"
+#import "EXBasicMenu.h"
+#import "UIBorderLabel.h"
 
 typedef enum {
     ScrollDirectionNone,
@@ -21,7 +18,7 @@ typedef enum {
     ScrollDirectionCrazy,
 } ScrollDirection;
 
-@interface WidgetExfeeViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>{
+@interface WidgetExfeeViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EXBasicMenuDelegate>{
     
     UIView *invContent;
     UILabel *invName;
@@ -32,8 +29,10 @@ typedef enum {
     UILabel *invRsvpAltLabel;
     UIImageView *identityProvider;
     UIImageView *identityWaring;
-    UILabel *identityName;
+    UIBorderLabel *identityName;
     UIButton *ActionMenu;
+    
+    EXBasicMenu *rsvpMenu;
     
     CALayer *layer1;
     CALayer *layer2;
@@ -48,8 +47,12 @@ typedef enum {
     Invitation* selected_invitation;
     CGPoint _lastContentOffset;
     NSUInteger layoutLevel;
+    
+    NSDictionary *rsvpDict;
+    NSDictionary *myRsvpDict;
 }
 
 @property (nonatomic, retain) Exfee *exfee;
+@property (nonatomic, retain) NSArray *sortedInvitations;
 
 @end

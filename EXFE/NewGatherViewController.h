@@ -95,16 +95,16 @@
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation;
 - (void) setrsvp:(NSString*)status invitation:(Invitation*)_invitation;
-- (Invitation*) getMyInvitation;
 - (void) addDefaultIdentity:(int)idx;
 - (void) replaceDefaultIdentity:(int)idx;
 - (IBAction) Gather:(id) sender;
 - (void) reFormatTitle;
 - (BOOL) isMe:(Identity*)my_identity;
+- (Invitation*) getMyInvitation;
 
 #pragma mark EditCrossDelegate
 - (void) addExfee:(NSArray*) invitations;
-- (Invitation*) getMyInvitation;
+
 - (void) setTitle:(NSString*)title Description:(NSString*)desc;
 - (void) setTime:(CrossTime*)time;
 - (void) setPlace:(Place*)place;

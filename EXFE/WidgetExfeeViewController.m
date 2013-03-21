@@ -8,11 +8,21 @@
 
 #import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
+#import <UIKit/UIKit.h>
+#import "Invitation+EXFE.h"
+#import "Identity+EXFE.h"
+#import "Exfee+EXFE.h"
+#import "Invitation+EXFE.h"
+#import "User+EXFE.h"
 #import "WidgetExfeeViewController.h"
+#import "CrossGroupViewController.h"
 #import "ExfeeCollectionViewCell.h"
 #import "Util.h"
 #import "ImgCache.h"
 #import "DateTimeUtil.h"
+#import "APICrosses.h"
+
+
 
 #define kTagViewExfeeRoot         10
 #define kTagViewExfeeSelector     20
@@ -20,6 +30,10 @@
 
 #define kTableFloating   222
 #define kTableOrigin     223
+
+#define kMenuTagRsvp 8901
+#define kMenuTagAction 8902
+#define kMenuTagMate 8903
 
 typedef enum {
     kTagIdNone = 0,
@@ -47,6 +61,37 @@ typedef enum {
     if (self) {
         // Custom initialization
         selected_invitation = nil;
+        
+        rsvpDict = @{ @"header": @"Set response to:",
+                      @"item0": @{ @"main": @"Accepted",
+                                   @"style": @"Highlight"
+                                   },
+                      @"item1": @{ @"main": @"Unavailable",
+                                   @"style": @"Normal"
+                                   },
+                      @"item2": @{ @"main": @"Interested",
+                                   @"style": @"Normal"
+                                   },
+                      @"item3": @{ @"main": @"+ mates...",
+                                   @"style": @"Lowlight"
+                                   }
+                      };
+        [rsvpDict retain];
+        myRsvpDict = @{ @"header": @"Set response to:",
+                        @"item0": @{ @"main": @"I'm in",
+                                     @"style": @"Highlight"
+                                     },
+                        @"item1": @{ @"main": @"Unavailable",
+                                     @"style": @"Normal"
+                                     },
+                        @"item2": @{ @"main": @"Interested",
+                                     @"style": @"Normal"
+                                     },
+                        @"item3": @{ @"main": @"+ mates...",
+                                     @"style": @"Lowlight"
+                                     }
+                        };
+        [myRsvpDict retain];
     }
     return self;
 }
@@ -58,6 +103,10 @@ typedef enum {
     CGRect a = [UIScreen mainScreen].applicationFrame;
     CGRect b = self.view.bounds;
     self.view.tag = kTagViewExfeeRoot;
+    
+    if (self.exfee) {
+        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+    }
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     exfeeContainer = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, CGRectGetWidth(b), CGRectGetHeight(a) - 50) collectionViewLayout:flowLayout];
@@ -130,7 +179,8 @@ typedef enum {
         identityWaring = [[UIImageView alloc] initWithFrame:CGRectMake(75, 115, 18, 18)];
         [invContent addSubview:identityWaring];
         
-        identityName = [[UILabel alloc] initWithFrame:CGRectMake(75, 108, 220, 32)];
+        identityName = [[UIBorderLabel alloc] initWithFrame:CGRectMake(75, 108, 220, 32)];
+        identityName.leftInset = 5;
         identityName.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
         identityName.textColor = [UIColor COLOR_BLACK];
         identityName.backgroundColor = [UIColor clearColor];
@@ -142,12 +192,24 @@ typedef enum {
     }
     [exfeeContainer addSubview:invContent];
     
-    selected_invitation = [self.exfee.invitations.allObjects objectAtIndex:0];
-    [self fillInvitationContent:selected_invitation];
-    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapContent:)];
     [invContent addGestureRecognizer:tap];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSArray *array = [exfeeContainer indexPathsForSelectedItems];
+    if (array == nil || array.count == 0) {
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+        [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+        
+        selected_invitation = [self.sortedInvitations objectAtIndex:0];
+        [self fillInvitationContent:selected_invitation];
+    }
 }
 
 - (void)tapContent:(UITapGestureRecognizer*)sender
@@ -159,6 +221,25 @@ typedef enum {
         
         if (CGRectContainsPoint([Util expandRect:invRsvpImage.frame with:invRsvpLabel.frame with:invRsvpAltLabel.frame], location)) {
             NSLog(@"open RSVP menu");
+            
+            NSDictionary *data = rsvpDict;
+            
+            if ([[User getDefaultUser] isMe:selected_invitation.identity]) {
+                data = myRsvpDict;
+            }
+            
+            if (rsvpMenu == nil) {
+                rsvpMenu = [[EXBasicMenu alloc] initWithFrame:CGRectMake(0, 0, 125, 20 + 44 * 4) andContent:
+                            data];
+                rsvpMenu.delegate = self;
+                rsvpMenu.tag = kMenuTagRsvp;
+                [self.view addSubview:rsvpMenu];
+            }else{
+                [rsvpMenu setContent:data];
+            }
+            
+            [self show:rsvpMenu at:[sender.view convertPoint:invRsvpLabel.frame.origin toView:self.view] withAnimation:YES];
+            
             return;
         }
     }
@@ -401,6 +482,11 @@ typedef enum {
     [invContent release];
     
     [exfeeContainer release];
+  
+    [rsvpMenu release];
+    
+    [rsvpDict release];
+    [myRsvpDict release];
     
     [super dealloc];
 }
@@ -417,7 +503,7 @@ typedef enum {
         case 0:
             return 1;
         case 1:
-            return self.exfee.invitations.count + 1;
+            return self.sortedInvitations.count + 1;
         default:
             return 0;
     }
@@ -435,18 +521,19 @@ typedef enum {
         }
         case 1:
         {
-            if (row == self.exfee.invitations.count) {
+            if (row == self.sortedInvitations.count) {
                 UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Add Cell" forIndexPath:indexPath];
                 if (cell.contentView.subviews.count == 0) {
                     UIImageView *bg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_add.png"]];
                     bg.frame = CGRectMake(0, 0, 78, 78);
                     [cell.contentView addSubview:bg];
+                    [bg release];
                 }
                 return cell;
             }else{
                 ExfeeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Exfee Cell" forIndexPath:indexPath];
                 
-                Invitation* inv = [self.exfee.invitations.allObjects objectAtIndex:row];
+                Invitation* inv = [self.sortedInvitations objectAtIndex:row];
                 cell.name.text = inv.identity.name;
                 [cell setRsvp:[Invitation getRsvpCode:inv.rsvp_status] andUnreachable:[inv.identity.unreachable boolValue] withHost:[inv.host boolValue]];
                 NSInteger seq = row % 4;
@@ -535,29 +622,26 @@ typedef enum {
 
 #pragma mark UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.row == self.exfee.invitations.count){
-        NSLog(@"Add Exfee");
-    }else{
-        NSLog(@"Selected Image is Item %d",indexPath.row);
-        UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-        [self testClick:cell];
-        selected_invitation = [self.exfee.invitations.allObjects objectAtIndex:indexPath.row];
-        [self fillInvitationContent:selected_invitation];
-        //cell.selected = YES;
+    NSInteger section = indexPath.section;
+    if (section == 1) {
+        if (indexPath.row == self.sortedInvitations.count){
+        }else{
+            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+            [self testClick:cell];
+            selected_invitation = [self.sortedInvitations objectAtIndex:indexPath.row];
+            [self fillInvitationContent:selected_invitation];
+        }
     }
 }
 
 #pragma mark UIScrollViewDelegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     _lastContentOffset = scrollView.contentOffset;
-    NSLog(@"Scroll Start");
 }
 
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     _lastContentOffset = CGPointMake(-1, -1);
-    NSLog(@"Scroll Finished");
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -577,7 +661,7 @@ typedef enum {
         
         if (invContent.tag == kTableFloating) {
             if (direction == ScrollDirectionDown){
-                NSLog(@"Block view position when floating with drop down: %@", NSStringFromCGPoint(offset));
+//                NSLog(@"Block view position when floating with drop down: %@", NSStringFromCGPoint(offset));
                 if (offset.y < CGRectGetMinY(invContent.frame)) {
                     CGRect newFrame = CGRectOffset(invContent.bounds, 0, MAX(offset.y, 0));
                     invContent.frame = newFrame;
@@ -586,7 +670,7 @@ typedef enum {
             }
             
             if (offset.y > CGRectGetMaxY(invContent.frame)){
-                NSLog(@"Convert floating to origin: %@", NSStringFromCGPoint(offset));
+//                NSLog(@"Convert floating to origin: %@", NSStringFromCGPoint(offset));
                 CGRect newFrame = CGRectOffset(invContent.bounds, 0, 0);
                 invContent.frame = newFrame;
                 invContent.tag = kTableOrigin;
@@ -600,7 +684,6 @@ typedef enum {
 
 - (void)testClick:(id)sender{
     UIView* btn = sender;
-    NSLog(@"button click: %i", btn.tag);
     
     CGPoint offset = exfeeContainer.contentOffset;
     BOOL flag = NO;
@@ -624,5 +707,137 @@ typedef enum {
     [UIView commitAnimations];
     invContent.tag = kTableFloating;
     
+}
+
+- (void)show:(EXBasicMenu*)menu at:(CGPoint)location withAnimation:(BOOL)animated
+{
+    CGRect f = menu.frame;
+    f.origin.x = CGRectGetWidth(self.view.bounds);
+    f.origin.y = location.y;
+    menu.frame = f;
+    f.origin.x = CGRectGetWidth(self.view.bounds) - CGRectGetWidth(f);
+    menu.hidden = NO;
+    [UIView animateWithDuration:0.4
+                     animations:^(void){
+                         menu.frame = f;
+                     }];
+}
+
+- (void)hide:(EXBasicMenu*)menu withAnmiation:(BOOL)animated
+{
+    if (animated) {
+        CGRect f = menu.frame;
+        f.origin.x = CGRectGetWidth(menu.superview.bounds);
+        [UIView animateWithDuration:0.3
+                         animations:^{
+                             menu.frame = f;
+                         }
+                         completion:^(BOOL finished){
+                             menu.hidden = YES;
+                         }];
+    }else{
+        menu.hidden = YES;
+    }
+    
+}
+
+#pragma mark EXBasicMenuDelegate
+- (void)basicMenu:(EXBasicMenu*)menu didSelectRowAtIndexPath:(NSNumber *)index{
+    switch (menu.tag) {
+        case kMenuTagRsvp:
+        {
+            [self hide:rsvpMenu withAnmiation:YES];
+            NSInteger abc = [index integerValue];
+            switch (abc) {
+                case 0:
+                    if (selected_invitation && [Invitation getRsvpCode:selected_invitation.rsvp_status] != kRsvpAccepted) {
+                        [self sendrsvp:@"ACCEPTED" invitation:selected_invitation];
+                    }
+                    break;
+                case 1:
+                    [self sendrsvp:@"DECLINED" invitation:selected_invitation];
+                    break;
+                case 2:
+                    [self sendrsvp:@"INTERESTED" invitation:selected_invitation];
+                    break;
+                case 3:
+                    break;
+                default:
+                    break;
+            }
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+#pragma mark API request for modification.
+- (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
+    //    NSError *error;
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    Identity *myidentity = [self.exfee getMyInvitation].identity;
+    NSDictionary *rsvpdict = @{@"identity_id":_invitation.identity.identity_id,
+                               @"by_identity_id":myidentity.identity_id,
+                               @"rsvp_status": status,
+                               @"type":@"rsvp"};
+    
+    NSString *endpoint = [NSString stringWithFormat:@"%@/exfee/%u/rsvp?token=%@",API_ROOT,[_exfee.exfee_id intValue],app.accesstoken];
+    
+    RKObjectManager *manager=[RKObjectManager sharedManager] ;
+    manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
+    [manager.HTTPClient postPath:endpoint parameters:@{@"rsvps":@[rsvpdict]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if ([operation.response statusCode] == 200){
+            if([responseObject isKindOfClass:[NSDictionary class]])
+            {
+                NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
+                if([[meta objectForKey:@"code"] intValue]==403){
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    alert.tag=403;
+                    [alert show];
+                    [alert release];
+                }else if([[meta objectForKey:@"code"] intValue]==200){
+                    NSLog(@"submit rsvp sucessfully...");
+                    CrossGroupViewController *parent = (CrossGroupViewController*)self.parentViewController;
+                    [APICrosses LoadCrossWithCrossId:[parent.cross.cross_id intValue] updatedtime:@"" success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                        
+                        if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+                        {
+                            Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                            if([meta.code intValue]==200){
+                                self.exfee = parent.cross.exfee;
+                                self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+                                [exfeeContainer reloadData];
+                                
+                                for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
+                                    Invitation* inv = [self.sortedInvitations objectAtIndex:i];
+                                    if ([_invitation.invitation_id intValue] == [inv.invitation_id intValue]) {
+                                        [exfeeContainer selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+                                    }
+                                }
+                            }
+                            
+                        }
+                    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                        
+                    }];
+                    self.exfee = parent.cross.exfee;
+                    [exfeeContainer reloadData];
+                }
+                
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+        if(error.code==2)
+            errormsg=@"A connection failure has occurred.";
+        else
+            errormsg=@"Could not connect to the server.";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+    }];
 }
 @end

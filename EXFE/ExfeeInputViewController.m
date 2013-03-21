@@ -476,7 +476,7 @@ static char identitykey;
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 - (Identity*) getIdentityFromLocal:(NSString*)input provider:(NSString*)provider{
-  
+    Identity *identity = nil;
   
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((external_username == %@) AND (provider== %@))",input,provider];
@@ -484,9 +484,11 @@ static char identitykey;
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSArray *suggestwithselected = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
   
-    if([suggestwithselected count]>0)
-        return (Identity*)[suggestwithselected objectAtIndex:0];
-    return nil;
+    if([suggestwithselected count] > 0){
+        identity = [suggestwithselected objectAtIndex:0];
+    }
+    [suggestwithselected release];
+    return identity;
 }
 
 - (void)loadIdentitiesFromDataStore:(NSString*)input{
@@ -565,9 +567,10 @@ static char identitykey;
         invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
     
     [exfeeList addBubble:input customObject:invitation];
-    if([exfeeList bubblecount]>0)
+    if([exfeeList bubblecount]>0){
         [self changeLeftIconWhite:YES];
-  
+    }
+    [invitation release];
 }
 
 - (void) addBubbleByInputString:(NSString*)input name:(NSString*)name provider:(NSString*)provider{
@@ -679,6 +682,7 @@ static char identitykey;
             [button addTarget:self action:@selector(checkButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = button;
         }
+        [iconset release];
     }else{
         int row=indexPath.row;
         Identity *identity=[suggestIdentities objectAtIndex:row];

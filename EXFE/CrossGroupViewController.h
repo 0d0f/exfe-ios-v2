@@ -31,7 +31,6 @@
     
     
     CGFloat exfeeSuggestHeight;
-    NSMutableArray *exfeeInvitations;
     CGFloat head_bg_img_startY;
     CGPoint head_bg_point;
     
@@ -73,16 +72,12 @@
     UIImageView *headerShadow;
 }
 
-@property (nonatomic,retain) UIViewController *currentViewController;
-@property (retain,nonatomic) Cross* cross;
-@property (retain,nonatomic) User* default_user;
-@property (nonatomic) NSInteger headerStyle;
-@property (nonatomic) NSUInteger widgetId;
+@property (nonatomic, retain) UIViewController *currentViewController;
+@property (nonatomic, retain) Cross* cross;
+@property (nonatomic, assign) NSInteger headerStyle;
+@property (nonatomic, assign) NSUInteger widgetId;
+@property (nonatomic, retain) NSArray *sortedInvitations;
 
 -(void)swapViewControllers:(UIViewController*)childViewController;
-
-#pragma mark Navigation
-- (void) toConversationAnimated:(BOOL)isAnimated;
-
 
 @end

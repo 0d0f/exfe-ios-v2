@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Invitation.h"
+#import "Invitation+EXFE.h"
 #import "CrossTime+Helper.h"
 #import "Place+Helper.h"
 
@@ -15,7 +15,6 @@
 
 @required
 - (void) addExfee:(NSArray*) invitations;
-- (Invitation*) getMyInvitation;
 - (void) setTitle:(NSString*)title Description:(NSString*)desc;
 - (void) setTime:(CrossTime*)time;
 - (void) setPlace:(Place*)place;
