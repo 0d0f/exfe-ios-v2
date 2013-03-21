@@ -30,7 +30,7 @@
     NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
     if(users != nil && [users count] > 0)
     {
-        return [[users objectAtIndex:0] autorelease];
+        return [users objectAtIndex:0];
     }
     return nil;
 }

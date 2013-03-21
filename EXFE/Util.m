@@ -513,7 +513,7 @@
   CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
   CTCarrier *carrier = [netInfo subscriberCellularProvider];
   NSString *mcc = [carrier mobileCountryCode];
-  NSString *mnc = [carrier mobileNetworkCode];
+//  NSString *mnc = [carrier mobileNetworkCode];
   NSString *isocode =[carrier isoCountryCode];
   NSString* clean_phone=@"";
   clean_phone=[phonenumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
@@ -542,6 +542,7 @@
     else if([clean_phone characterAtIndex:0] >= '2' && [clean_phone characterAtIndex:0] <= '9' && [clean_phone length]>=7)
       phoneresult=[@"+1" stringByAppendingString:clean_phone];
   }
+    [netInfo release];
   return phoneresult;
 }
 

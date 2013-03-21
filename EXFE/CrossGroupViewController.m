@@ -806,7 +806,7 @@
             dispatch_release(imgQueue);
         }
     }
-    return item;
+    return [item autorelease];
 }
 
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
@@ -916,7 +916,7 @@
         static NSString *defaultPinID = @"com.exfe.pin";
         pinView = (MKAnnotationView *)[map dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
         if ( pinView == nil ){
-            pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID];
+            pinView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID] autorelease];
             pinView.canShowCallout = YES;
             pinView.image = [UIImage imageNamed:@"map_pin_blue.png"];
             

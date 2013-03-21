@@ -527,6 +527,7 @@ typedef enum {
                     UIImageView *bg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_add.png"]];
                     bg.frame = CGRectMake(0, 0, 78, 78);
                     [cell.contentView addSubview:bg];
+                    [bg release];
                 }
                 return cell;
             }else{
@@ -806,11 +807,15 @@ typedef enum {
                             Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
                             if([meta.code intValue]==200){
                                 self.exfee = parent.cross.exfee;
+                                self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
                                 [exfeeContainer reloadData];
                                 
-                                NSArray *indexPaths = [exfeeContainer indexPathsForSelectedItems];
-                                
-                                [exfeeContainer selectItemAtIndexPath:[indexPaths objectAtIndex:0] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+                                for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
+                                    Invitation* inv = [self.sortedInvitations objectAtIndex:i];
+                                    if ([_invitation.invitation_id intValue] == [inv.invitation_id intValue]) {
+                                        [exfeeContainer selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+                                    }
+                                }
                             }
                             
                         }

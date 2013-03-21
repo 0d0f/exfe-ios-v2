@@ -132,7 +132,7 @@
             [responselabel release];
             [self addSubview:responseview];
             [responseview release];
-            startY += CGRectGetHeight(responseview.bounds);
+//            startY += CGRectGetHeight(responseview.bounds);
         }
     }
 }
