@@ -146,7 +146,6 @@
 - (void)dealloc {
     RKObjectManager* manager =[RKObjectManager sharedManager];
     [manager.operationQueue cancelAllOperations];
-    //	[_tableView release];
 	[_posts release];
     [cellbackground release];
     [cellsepator release];

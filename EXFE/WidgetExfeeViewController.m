@@ -104,6 +104,10 @@ typedef enum {
     CGRect b = self.view.bounds;
     self.view.tag = kTagViewExfeeRoot;
     
+    if (self.exfee) {
+        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+    }
+    
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     exfeeContainer = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, CGRectGetWidth(b), CGRectGetHeight(a) - 50) collectionViewLayout:flowLayout];
     [flowLayout release];
@@ -175,7 +179,8 @@ typedef enum {
         identityWaring = [[UIImageView alloc] initWithFrame:CGRectMake(75, 115, 18, 18)];
         [invContent addSubview:identityWaring];
         
-        identityName = [[UILabel alloc] initWithFrame:CGRectMake(75, 108, 220, 32)];
+        identityName = [[UIBorderLabel alloc] initWithFrame:CGRectMake(75, 108, 220, 32)];
+        identityName.leftInset = 5;
         identityName.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
         identityName.textColor = [UIColor COLOR_BLACK];
         identityName.backgroundColor = [UIColor clearColor];
@@ -187,12 +192,24 @@ typedef enum {
     }
     [exfeeContainer addSubview:invContent];
     
-    selected_invitation = [self.exfee.invitations.allObjects objectAtIndex:0];
-    [self fillInvitationContent:selected_invitation];
-    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapContent:)];
     [invContent addGestureRecognizer:tap];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSArray *array = [exfeeContainer indexPathsForSelectedItems];
+    if (array == nil || array.count == 0) {
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+        [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+        
+        selected_invitation = [self.sortedInvitations objectAtIndex:0];
+        [self fillInvitationContent:selected_invitation];
+    }
 }
 
 - (void)tapContent:(UITapGestureRecognizer*)sender
@@ -486,7 +503,7 @@ typedef enum {
         case 0:
             return 1;
         case 1:
-            return self.exfee.invitations.count + 1;
+            return self.sortedInvitations.count + 1;
         default:
             return 0;
     }
@@ -504,7 +521,7 @@ typedef enum {
         }
         case 1:
         {
-            if (row == self.exfee.invitations.count) {
+            if (row == self.sortedInvitations.count) {
                 UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Add Cell" forIndexPath:indexPath];
                 if (cell.contentView.subviews.count == 0) {
                     UIImageView *bg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_add.png"]];
@@ -515,7 +532,7 @@ typedef enum {
             }else{
                 ExfeeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Exfee Cell" forIndexPath:indexPath];
                 
-                Invitation* inv = [self.exfee.invitations.allObjects objectAtIndex:row];
+                Invitation* inv = [self.sortedInvitations objectAtIndex:row];
                 cell.name.text = inv.identity.name;
                 [cell setRsvp:[Invitation getRsvpCode:inv.rsvp_status] andUnreachable:[inv.identity.unreachable boolValue] withHost:[inv.host boolValue]];
                 NSInteger seq = row % 4;
@@ -604,29 +621,26 @@ typedef enum {
 
 #pragma mark UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.row == self.exfee.invitations.count){
-//        NSLog(@"Add Exfee");
-    }else{
-//        NSLog(@"Selected Image is Item %d",indexPath.row);
-        UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-        [self testClick:cell];
-        selected_invitation = [self.exfee.invitations.allObjects objectAtIndex:indexPath.row];
-        [self fillInvitationContent:selected_invitation];
-        //cell.selected = YES;
+    NSInteger section = indexPath.section;
+    if (section == 1) {
+        if (indexPath.row == self.sortedInvitations.count){
+        }else{
+            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+            [self testClick:cell];
+            selected_invitation = [self.sortedInvitations objectAtIndex:indexPath.row];
+            [self fillInvitationContent:selected_invitation];
+        }
     }
 }
 
 #pragma mark UIScrollViewDelegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     _lastContentOffset = scrollView.contentOffset;
-//    NSLog(@"Scroll Start");
 }
 
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     _lastContentOffset = CGPointMake(-1, -1);
-//    NSLog(@"Scroll Finished");
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -736,20 +750,16 @@ typedef enum {
             switch (abc) {
                 case 0:
                     if (selected_invitation && [Invitation getRsvpCode:selected_invitation.rsvp_status] != kRsvpAccepted) {
-                        NSLog(@"change to accept");
                         [self sendrsvp:@"ACCEPTED" invitation:selected_invitation];
                     }
                     break;
                 case 1:
-                    NSLog(@"change to Unavailable");
                     [self sendrsvp:@"DECLINED" invitation:selected_invitation];
                     break;
                 case 2:
-                    NSLog(@"change to Interesting");
                     [self sendrsvp:@"INTERESTED" invitation:selected_invitation];
                     break;
                 case 3:
-                    NSLog(@"set mates");
                     break;
                 default:
                     break;
@@ -787,6 +797,7 @@ typedef enum {
                     [alert show];
                     [alert release];
                 }else if([[meta objectForKey:@"code"] intValue]==200){
+                    NSLog(@"submit rsvp sucessfully...");
                     CrossGroupViewController *parent = (CrossGroupViewController*)self.parentViewController;
                     [APICrosses LoadCrossWithCrossId:[parent.cross.cross_id intValue] updatedtime:@"" success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                         
@@ -794,14 +805,20 @@ typedef enum {
                         {
                             Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
                             if([meta.code intValue]==200){
-                                //[self refreshUI];
+                                self.exfee = parent.cross.exfee;
+                                [exfeeContainer reloadData];
+                                
+                                NSArray *indexPaths = [exfeeContainer indexPathsForSelectedItems];
+                                
+                                [exfeeContainer selectItemAtIndexPath:[indexPaths objectAtIndex:0] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
                             }
                             
                         }
                     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
                         
                     }];
-                    //[self refreshUI];
+                    self.exfee = parent.cross.exfee;
+                    [exfeeContainer reloadData];
                 }
                 
             }

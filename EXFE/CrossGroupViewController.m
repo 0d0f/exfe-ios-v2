@@ -1812,11 +1812,8 @@
 
 #pragma mark EditCrossDelegate
 - (void) addExfee:(NSArray*) invitations{
-    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:_cross.exfee.invitations.allObjects];
-    [array addObjectsFromArray:invitations];
-    NSSet *set = [[NSSet alloc] initWithArray:array];
-    [array release];
-    _cross.exfee.invitations = set;
+    [_cross.exfee addInvitations:[NSSet setWithArray:invitations]];
+    //[self saveCrossUpdate];
     [self fillExfee:_cross.exfee];
 }
 

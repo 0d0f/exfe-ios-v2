@@ -27,9 +27,7 @@
 
 @interface WidgetConvViewController : UIViewController  <UIInputToolbarDelegate,UIExpandingTextViewDelegate,UITableViewDataSource,UITableViewDelegate>{
     ConversationTableView* _tableView;
-//    int exfee_id;
     UIInputToolbar *inputToolbar;
-//    Identity *identity;
     UIImage *cellbackground;
     UIImage *cellsepator;
     UIImage *avatarframe;
@@ -53,14 +51,13 @@
 @property (nonatomic, retain) UIInputToolbar* inputToolbar;
 
 - (void) refreshConversation;
-- (void)loadObjectsFromDataStore;
+- (void) loadObjectsFromDataStore;
 - (void) addPost:(NSString*)content;
-- (void)touchesBegan:(UITapGestureRecognizer*)sender;
-- (CGSize)textWidthForHeight:(CGFloat)inHeight withAttributedString:(NSAttributedString *)attributedString;
+- (void) touchesBegan:(UITapGestureRecognizer*)sender;
+- (CGSize) textWidthForHeight:(CGFloat)inHeight withAttributedString:(NSAttributedString *)attributedString;
 - (void) setShowTime:(BOOL)show;
 - (void) hiddenTime;
 - (void) hiddenTimeNow;
-- (void) toHome;
 - (void) statusbarResize;
 
 

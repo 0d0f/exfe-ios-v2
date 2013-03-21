@@ -15,9 +15,9 @@
     CGFloat rightInset;
 }
 
-@property (nonatomic) CGFloat topInset;
-@property (nonatomic) CGFloat leftInset;
-@property (nonatomic) CGFloat bottomInset;
-@property (nonatomic) CGFloat rightInset;
+@property (nonatomic, assign) CGFloat topInset;
+@property (nonatomic, assign) CGFloat leftInset;
+@property (nonatomic, assign) CGFloat bottomInset;
+@property (nonatomic, assign) CGFloat rightInset;
 
 @end

@@ -7,6 +7,7 @@
 //
 #import "EXAttributedLabel.h"
 #import "EXBasicMenu.h"
+#import "UIBorderLabel.h"
 
 typedef enum {
     ScrollDirectionNone,
@@ -28,7 +29,7 @@ typedef enum {
     UILabel *invRsvpAltLabel;
     UIImageView *identityProvider;
     UIImageView *identityWaring;
-    UILabel *identityName;
+    UIBorderLabel *identityName;
     UIButton *ActionMenu;
     
     EXBasicMenu *rsvpMenu;
@@ -52,5 +53,6 @@ typedef enum {
 }
 
 @property (nonatomic, retain) Exfee *exfee;
+@property (nonatomic, retain) NSArray *sortedInvitations;
 
 @end

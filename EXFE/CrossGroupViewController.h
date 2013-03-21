@@ -72,16 +72,12 @@
     UIImageView *headerShadow;
 }
 
-@property (nonatomic,retain) UIViewController *currentViewController;
+@property (nonatomic, retain) UIViewController *currentViewController;
 @property (nonatomic, retain) Cross* cross;
 @property (nonatomic, assign) NSInteger headerStyle;
 @property (nonatomic, assign) NSUInteger widgetId;
 @property (nonatomic, retain) NSArray *sortedInvitations;
 
 -(void)swapViewControllers:(UIViewController*)childViewController;
-
-#pragma mark Navigation
-- (void) toConversationAnimated:(BOOL)isAnimated;
-
 
 @end
