@@ -164,7 +164,7 @@ static char mergetoken;
   [managedObjectStore createManagedObjectContexts];
   
   // Configure a managed object cache to ensure we do not create duplicate objects
-  managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
+  managedObjectStore.managedObjectCache = [[[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext] autorelease];
   NSArray *descriptors=objectManager.requestDescriptors;
   if(descriptors==nil || [descriptors count]==0)
     [ModelMapping buildMapping];
@@ -215,7 +215,7 @@ static char mergetoken;
 -(void)SigninDidFinish{
     if([self Checklogin]==YES)
     {
-        NSString* devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"];
+//        NSString* devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"];
         NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
         if( ifdevicetokenSave==nil)
         {

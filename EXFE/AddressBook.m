@@ -50,15 +50,16 @@
     if(count>contactscount)
         contactscount=count;
     
-    int step=100;
+    int step=200;
     if(idx+step>contactscount)
         step=contactscount-idx;
   
     CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [netInfo subscriberCellularProvider];
     NSString *mcc = [carrier mobileCountryCode];
-    NSString *mnc = [carrier mobileNetworkCode];
+//    NSString *mnc = [carrier mobileNetworkCode];
     NSString *isocode =[carrier isoCountryCode];
+    [netInfo release];
     for(int ai=idx;ai<idx+step;ai++){
         ABRecordRef ref = CFArrayGetValueAtIndex( allPeople, ai );
         ABRecordType reftype = ABRecordGetRecordType(ref);
@@ -77,14 +78,13 @@
                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(uid == %i)",uid];
                 [request setPredicate:predicate];
                 RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                NSArray *localcontacts = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+                NSArray *localcontacts = [objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil];
                 if([localcontacts count]>0)
                     localcontact= [localcontacts objectAtIndex:0];
                 else{
-                  
                     NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
                     RKObjectManager *objectManager=[RKObjectManager sharedManager];
-                  localcontact=[[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+                  localcontact=[[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.persistentStoreManagedObjectContext];
                 }
 //                [localcontacts release];
                 localcontact.uid=[NSNumber numberWithInt:uid];
@@ -208,14 +208,18 @@
             }
             localcontact.indexfield=indexfield;
             }
+            CFRelease(multi_phone);
             CFRelease(multi_email);
             CFRelease(multi_socialprofile);
             CFRelease(multi_im);
         }
     }
   RKObjectManager *objectManager = [RKObjectManager sharedManager];
-  [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
-    CFRelease(allPeople);
+  NSError *err;
+  [objectManager.managedObjectStore.persistentStoreManagedObjectContext save:&err];
+//  [objectManager.managedObjectStore.mainQueueManagedObjectContext save:&err];
+//  [self.managedObjectStore.persistentStoreManagedObjectContext save:nil];
+  CFRelease(allPeople);
 }
 
 + (NSDictionary*) getDefaultIdentity:(LocalContact*) person{

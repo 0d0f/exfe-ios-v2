@@ -1077,7 +1077,7 @@
 
 }
 - (EXInvitationItem *)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView itemAtIndex:(int)index{
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     Invitation *invitation =[exfeeInvitations objectAtIndex:index];
     
