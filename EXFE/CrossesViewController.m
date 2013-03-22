@@ -355,19 +355,19 @@
                   [formatter release];
               }
               NSLog(@"%i %@",[cross.cross_id intValue], cross.updated_at);
-//              if(cross.updated_at!=nil){
+              if(cross.updated_at!=nil){
 //                  if([source isEqualToString:@"crossview"]){
 //                      if(exfee_updated_at==nil){
 //                          cross.read_at=[NSDate date];
 //                          needsave=YES;
 //                      }
 //                  }
-//                  if(last_updated_at==nil)
-//                      last_updated_at=cross.updated_at;
-//                  else{
-//                      last_updated_at=[cross.updated_at laterDate:last_updated_at];
-//                  }
-//              }
+                  if(last_updated_at==nil)
+                      last_updated_at=cross.updated_at;
+                  else{
+                      last_updated_at=[cross.updated_at laterDate:last_updated_at];
+                  }
+              }
             }
 
             [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];

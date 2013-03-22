@@ -933,7 +933,6 @@
 }
 
 - (EXInvitationItem *)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView itemAtIndex:(int)index{
-    
     Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
     
     EXInvitationItem *item=[[[EXInvitationItem alloc] initWithInvitation:invitation] autorelease];

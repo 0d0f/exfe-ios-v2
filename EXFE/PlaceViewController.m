@@ -696,7 +696,7 @@
 //        MKAnnotationView* annotationView = [mapView viewForAnnotation:userLocation];
 //        annotationView.canShowCallout = NO;
     }
-    MKAnnotationView *annView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
+    MKAnnotationView *annView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil] autorelease];
     annView.canShowCallout = NO;
     
     if([((PlaceAnnotation*)annotation).external_id isEqualToString:place.external_id])

@@ -152,33 +152,35 @@ static char identitykey;
         [bigspin release];
         hud.labelText = @"Loading";
 
+      @synchronized(self){
         dispatch_queue_t loadingQueue = dispatch_queue_create("loading addressbook", NULL);
         dispatch_async(loadingQueue, ^{
             [address UpdatePeople:nil];
           
             dispatch_async(dispatch_get_main_queue(), ^{
+                NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
+                if(filteredlocalcontacts!=nil)
+                  [filteredlocalcontacts release];
 
-              NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
-              if(filteredlocalcontacts!=nil)
-                [filteredlocalcontacts release];
+                RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain] ;
 
-              RKObjectManager *objectManager = [RKObjectManager sharedManager];
-              filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain] ;
-
-                if(addressbookType==LOCAL_ADDRESSBOOK)
-                    [self reloadLocalAddressBook];
+                  if(addressbookType==LOCAL_ADDRESSBOOK)
+                      [self reloadLocalAddressBook];
+                [self copyMoreContactsFromIdx:200];
 
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [self copyMoreContactsFromIdx:100];
             });
         });
         dispatch_release(loadingQueue);
+      }
+
     }else{
       NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
       if(filteredlocalcontacts!=nil)
           [filteredlocalcontacts release];
       RKObjectManager *objectManager = [RKObjectManager sharedManager];
-      filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+      filteredlocalcontacts = [[objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil] retain];
       if(addressbookType==LOCAL_ADDRESSBOOK)
           [self reloadLocalAddressBook];
 
@@ -190,20 +192,20 @@ static char identitykey;
     dispatch_async(loadingQueue, ^{
         [address CopyAllPeopleFrom:idx];
         dispatch_async(dispatch_get_main_queue(), ^{
-          
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
-            if(filteredlocalcontacts!=nil)
-              [filteredlocalcontacts release];
-            RKObjectManager *objectManager = [RKObjectManager sharedManager];
-            filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
-          
-            if(addressbookType==LOCAL_ADDRESSBOOK)
-                [self reloadLocalAddressBook];
-
-            if(idx+100<address.contactscount){
-                [self copyMoreContactsFromIdx:idx+100];
-            }else{
+            @synchronized(self){
+              NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
+              if(filteredlocalcontacts!=nil)
+                [filteredlocalcontacts release];
+              RKObjectManager *objectManager = [RKObjectManager sharedManager];
+              filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+            
+              if(addressbookType==LOCAL_ADDRESSBOOK)
+                  [self reloadLocalAddressBook];
+              if(idx+200<address.contactscount){
+                [self copyMoreContactsFromIdx:idx+200];
+              }else{
                 [[NSUserDefaults standardUserDefaults] setObject:[NSDate date]  forKey:@"localaddressbook_read_at"];
+              }
             }
         });
     });
@@ -609,7 +611,9 @@ static char identitykey;
 #pragma mark UITableView Datasource methods
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
     if(addressbookType==LOCAL_ADDRESSBOOK)
+      @synchronized(self){
         return [filteredlocalcontacts count];
+      }
     else{
         if(suggestIdentities)
         {
@@ -955,7 +959,7 @@ static char identitykey;
 //              else
 //                  [identitycell setBackgroundColor:[UIColor colorWithRed:58/255.f green:110/255.f blue:165/255.f alpha:1]];
                 [expandExfeeView addSubview:identitycell];
-//                [identitycell release];
+                [identitycell release];
                 idx++;
             }
             if([useridentities count]%2==1){
