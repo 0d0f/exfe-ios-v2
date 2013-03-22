@@ -21,6 +21,16 @@
     
 }
 
+- (NSArray*) sortedIdentiesBy:(NSSortDescriptor*) descriptor{
+    return [self.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+}
+
+- (NSArray*) sortedIdentiesById{
+    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"identity_id" ascending:YES];
+    return [self sortedIdentiesBy:descriptor];
+}
+
+
 + (User*) getDefaultUser{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     return [User getUserById:app.userid];

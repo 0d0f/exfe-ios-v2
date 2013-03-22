@@ -303,12 +303,11 @@
     if([indexPath section]==0)
     {
         
-        [[ImgCache sharedManager] fillImage: cell
-                                       with: identity.avatar_filename
-                                   byDefult: [UIImage imageNamed:@"portrait_default.png"]
-                                      using: ^(UIView* view, UIImage* image){
-                                          [cell setAvartar:image];
-                                      }];
+        [[ImgCache sharedManager] fillImageWith: identity.avatar_filename
+                                       byDefault: [UIImage imageNamed:@"portrait_default.png"]
+                                          using: ^(UIImage* image){
+                                              [cell setAvartar:image];
+                                          }];
         
         [cell setLabelName:[identity getDisplayName]];
         [cell setLabelIdentity:[identity getDisplayIdentity]];

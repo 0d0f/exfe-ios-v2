@@ -31,6 +31,7 @@ typedef enum {
     UIImageView *identityWaring;
     UIBorderLabel *identityName;
     UIButton *ActionMenu;
+    UIButton *RemoveButton;
     
     EXBasicMenu *rsvpMenu;
     

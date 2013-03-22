@@ -142,7 +142,7 @@
 - (void) getTimeFromAPI{
     if(CFAbsoluteTimeGetCurrent()-editinginterval>0.8)
     {
-        NSString *params_timezone=[DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];        
+//        NSString *params_timezone=[DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];        
 //        RKParams* rsvpParams = [RKParams params];
 //        [rsvpParams setValue:params_timezone forParam:@"timezone"];
 ////        [rsvpParams setValue:timeInput.text forParam:@"time_string"];

@@ -7,6 +7,8 @@
 //
 
 #import "Exfee.h"
+#import "Invitation+EXFE.h"
+#import "Identity+EXFE.h"
 
 typedef NS_ENUM(NSInteger, InvitationSortType){
     kInvitationSortTypeDefaultById,
@@ -16,12 +18,14 @@ typedef NS_ENUM(NSInteger, InvitationSortType){
 
 @interface Exfee (EXFE)
 
--(Invitation*)getMyInvitation;
+- (Invitation*)getMyInvitation;
+- (void) addDefaultInvitationBy:(Identity*)identity;
 
--(NSArray*)getSortedInvitations;
--(NSArray*)getSortedInvitations:(InvitationSortType)sortType;
+- (NSArray*)getSortedInvitations;
+- (NSArray*)getSortedInvitations:(InvitationSortType)sortType;
 
--(NSMutableArray*)getMyInvitationSet;
--(NSArray*)getMergedInvitationSet;
+- (NSArray*)getMyInvitations;
+//-(NSArray*)getMergedInvitationSet;
+- (BOOL)hasInvitation:(Invitation*)invitation;
 
 @end

@@ -14,7 +14,6 @@
 @protocol EditCrossDelegate <NSObject>
 
 @required
-- (void) addExfee:(NSArray*) invitations;
 - (void) setTitle:(NSString*)title Description:(NSString*)desc;
 - (void) setTime:(CrossTime*)time;
 - (void) setPlace:(Place*)place;

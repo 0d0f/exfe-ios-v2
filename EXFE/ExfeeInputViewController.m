@@ -13,7 +13,10 @@
 @end
 
 @implementation ExfeeInputViewController
-@synthesize gatherview;
+@synthesize lastViewController;
+@synthesize exfee = _exfee;
+@synthesize needSubmit = _needSubmit;
+@synthesize onExitBlock;
 
 static char identitykey;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -353,7 +356,8 @@ static char identitykey;
         }
     }
     if([inputobjs count]==0){
-        [(NewGatherViewController*)gatherview addExfee:invitations];
+        NSSet *set = [NSSet setWithArray:invitations];
+        [self.exfee addInvitations:set];
         [self dismissModalViewControllerAnimated:YES];
     }
     else{
@@ -411,14 +415,16 @@ static char identitykey;
                       Invitation *invitation=[[[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
                       invitation.rsvp_status=@"NORESPONSE";
                       invitation.identity=identity;
-                      Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
+                      Invitation *myinvitation=[self.exfee getMyInvitation];
                       if(myinvitation!=nil)
                           invitation.updated_by=myinvitation.identity;
-                      else
-                          invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+                      else{
+                          invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
+                      }
                       [invitations addObject:invitation];
                   }
-                  [(NewGatherViewController*)gatherview addExfee:invitations];
+                  NSSet *set = [NSSet setWithArray:invitations];
+                  [self.exfee addInvitations:set];
                   [self dismissModalViewControllerAnimated:YES];
               }
         }
@@ -518,7 +524,7 @@ static char identitykey;
         BOOL flag=NO;
         NSString *key=[identity.provider stringByAppendingString:identity.external_id];
         if([dict objectForKey:key]==nil){
-            for (Invitation *selected in ((NewGatherViewController*)gatherview).exfeeIdentities){
+            for (Invitation *selected in self.exfee.invitations){
                 if([selected.identity.identity_id intValue]==[identity.identity_id intValue])
                 {
                     flag=YES;
@@ -560,11 +566,12 @@ static char identitykey;
   
     invitation.rsvp_status=@"NORESPONSE";
     invitation.identity=identity;
-    Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
+    Invitation *myinvitation = [self.exfee getMyInvitation];
     if(myinvitation!=nil)
         invitation.updated_by=myinvitation.identity;
-    else
-        invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+    else{
+        invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
+    }
     
     [exfeeList addBubble:input customObject:invitation];
     if([exfeeList bubblecount]>0){
@@ -748,11 +755,12 @@ static char identitykey;
       
         invitation.rsvp_status=@"NORESPONSE";
         invitation.identity=identity;
-        Invitation *myinvitation=[((NewGatherViewController*)gatherview) getMyInvitation];
+        Invitation *myinvitation=[self.exfee getMyInvitation];
         if(myinvitation!=nil)
             invitation.updated_by=myinvitation.identity;
-        else
-            invitation.updated_by=[[((NewGatherViewController*)gatherview).default_user.identities allObjects] objectAtIndex:0];
+        else{
+            invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
+        }
 
         NSString *identity_name=identity.nickname;
         if(identity_name==nil || [identity_name isEqualToString:@""])

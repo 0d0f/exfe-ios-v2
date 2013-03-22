@@ -780,7 +780,7 @@
                     else
                         cross.read_at=[cross.read_at laterDate:updated_at];
                 }
-                NSError *saveError;
+//                NSError *saveError;
 //                [[Cross currentContext] save:&saveError];
                 [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: indexPath]
                                       withRowAnimation: UITableViewRowAnimationNone];

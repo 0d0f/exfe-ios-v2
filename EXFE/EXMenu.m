@@ -42,18 +42,18 @@
         [view removeFromSuperview];
     }
     
-    CGFloat startY = 0;
-    UIView *header = nil;
-    if (_datasource != nil) {
-        if ([_datasource respondsToSelector:@selector(viewForHeaderInMenu:)])
-        {
-            header = [_datasource viewForHeaderInMenu:self];
-        }
-    }
-    if (header){
-        CGRect frame = header.frame;
-
-    }
+//    CGFloat startY = 0;
+//    UIView *header = nil;
+//    if (_datasource != nil) {
+//        if ([_datasource respondsToSelector:@selector(viewForHeaderInMenu:)])
+//        {
+//            header = [_datasource viewForHeaderInMenu:self];
+//        }
+//    }
+//    if (header){
+//        CGRect frame = header.frame;
+//
+//    }
 }
 
 @end

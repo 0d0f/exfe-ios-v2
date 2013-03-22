@@ -373,11 +373,11 @@
             {
               NSArray *results=[body objectForKey:@"results"] ;
               if([results count]>0){
-                NSDictionary *place = [results objectAtIndex:0];
+                NSDictionary *p = [results objectAtIndex:0];
                 if([results count]>1)
-                  place = [results objectAtIndex:1];
+                  p = [results objectAtIndex:1];
                 
-                  NSDictionary *dict=[[[NSDictionary alloc] initWithObjectsAndKeys:[place objectForKey:@"name"],@"title",[place objectForKey:@"vicinity"],@"description",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[place objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[place objectForKey:@"id"],@"external_id",@"google",@"provider", nil] autorelease];
+                  NSDictionary *dict=[[[NSDictionary alloc] initWithObjectsAndKeys:[p objectForKey:@"name"],@"title",[p objectForKey:@"vicinity"],@"description",[[[p objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[p objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[p objectForKey:@"id"],@"external_id",@"google",@"provider", nil] autorelease];
                 [self fillTopPlace:dict];
               }
             }

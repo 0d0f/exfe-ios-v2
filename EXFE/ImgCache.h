@@ -30,6 +30,6 @@
 
 - (void)fillAvatar:(UIImageView*)avatarView with:(NSString*)url byDefault:(UIImage*)defImage;
 
-- (void)fillImage:(UIView*)view with:(NSString*)url byDefult:(UIImage*)defImage using:(void(^)(UIView* view, UIImage* image))fill;
+- (void)fillImageWith:(NSString*)url byDefault:(UIImage*)defImage using:(void(^)(UIImage* image))fill;
 
 @end

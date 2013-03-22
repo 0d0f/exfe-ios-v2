@@ -15,6 +15,7 @@
 #import "Invitation+EXFE.h"
 #import "User+EXFE.h"
 #import "WidgetExfeeViewController.h"
+#import "ExfeeInputViewController.h"
 #import "CrossGroupViewController.h"
 #import "ExfeeCollectionViewCell.h"
 #import "Util.h"
@@ -188,12 +189,30 @@ typedef enum {
         
         ActionMenu = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         ActionMenu.frame = CGRectMake(255, 146, 40, 31);
+        ActionMenu.hidden = YES;
         [invContent addSubview:ActionMenu];
+        
+        
+        RemoveButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIImage* img = [[UIImage imageNamed:@"iphone_delete_button.png"] stretchableImageWithLeftCapWidth:8.0f topCapHeight:0.0f];
+        [RemoveButton setBackgroundImage:img forState:UIControlStateNormal];
+        [RemoveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        RemoveButton.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+        RemoveButton.titleLabel.shadowColor = [UIColor lightGrayColor];
+        RemoveButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
+        [RemoveButton setTitle:@"Delete" forState:UIControlStateNormal];
+        RemoveButton.frame = CGRectMake(0, 0, 70, 30);
+        RemoveButton.hidden = YES;
+        [RemoveButton addTarget:self action:@selector(removeInvitation:) forControlEvents:UIControlEventTouchUpInside];
+        [invContent addSubview:RemoveButton];
     }
     [exfeeContainer addSubview:invContent];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapContent:)];
     [invContent addGestureRecognizer:tap];
+    
+    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swypeDelete:)];
+    [invContent addGestureRecognizer:swipe];
     
 }
 
@@ -212,6 +231,63 @@ typedef enum {
     }
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+}
+
+- (void)dealloc
+{
+    [invName release];
+    [invHostFlag release];
+    [invHostText release];
+    [invRsvpImage release];
+    [invRsvpLabel release];
+    [invRsvpAltLabel release];
+    [identityProvider release];
+    [identityWaring release];
+    [identityName release];
+    [invContent release];
+    
+    [exfeeContainer release];
+    
+    [rsvpMenu release];
+    
+    [rsvpDict release];
+    [myRsvpDict release];
+    
+    [super dealloc];
+}
+
+#pragma mark Click handler
+- (void)removeInvitation:(id)sender
+{
+     NSLog(@"removeInvitation");
+}
+
+#pragma mark Gesture Handler
+- (void)swypeDelete:(UITapGestureRecognizer*)sender
+{
+    CGPoint location = [sender locationInView:sender.view];
+    
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        
+        if (CGRectContainsPoint([Util expandRect:identityProvider.frame with:identityName.frame], location)) {
+            CGRect f = RemoveButton.frame;
+            f.origin.x = CGRectGetWidth(invContent.bounds) - CGRectGetWidth(f) - 15;
+            f.origin.y = CGRectGetMinY(identityName.frame);
+            RemoveButton.frame = f;
+            RemoveButton.hidden = NO;
+        }
+    }
+}
+
 - (void)tapContent:(UITapGestureRecognizer*)sender
 {
     CGPoint location = [sender locationInView:sender.view];
@@ -220,8 +296,6 @@ typedef enum {
         //UIView *tappedView = [sender.view hitTest:[sender locationInView:sender.view] withEvent:nil];
         
         if (CGRectContainsPoint([Util expandRect:invRsvpImage.frame with:invRsvpLabel.frame with:invRsvpAltLabel.frame], location)) {
-            NSLog(@"open RSVP menu");
-            
             NSDictionary *data = rsvpDict;
             
             if ([[User getDefaultUser] isMe:selected_invitation.identity]) {
@@ -245,6 +319,7 @@ typedef enum {
     }
 }
 
+#pragma mark Fill content and Layout
 - (void)fillInvitationContent:(Invitation*)inv
 {
     [self fillIdentity:inv.identity];
@@ -457,39 +532,6 @@ typedef enum {
     }
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-}
-
-- (void)dealloc
-{
-    [invName release];
-    [invHostFlag release];
-    [invHostText release];
-    [invRsvpImage release];
-    [invRsvpLabel release];
-    [invRsvpAltLabel release];
-    [identityProvider release];
-    [identityWaring release];
-    [identityName release];
-    [invContent release];
-    
-    [exfeeContainer release];
-  
-    [rsvpMenu release];
-    
-    [rsvpDict release];
-    [myRsvpDict release];
-    
-    [super dealloc];
-}
 
 #pragma mark UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -625,6 +667,17 @@ typedef enum {
     NSInteger section = indexPath.section;
     if (section == 1) {
         if (indexPath.row == self.sortedInvitations.count){
+            ExfeeInputViewController *viewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
+            viewController.lastViewController = self;
+            viewController.exfee = self.exfee;
+            viewController.onExitBlock = ^{
+                self.sortedInvitations = [self.exfee getSortedInvitations];
+                // handle selected status;
+                // handle selected_invitation and invContent;
+                [exfeeContainer reloadData];
+            };
+            [self presentModalViewController:viewController animated:YES];
+            [viewController release];
         }else{
             UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
             [self testClick:cell];

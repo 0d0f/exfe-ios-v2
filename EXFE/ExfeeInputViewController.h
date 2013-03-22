@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "APIProfile.h"
-#import "Identity.h"
-#import "Invitation.h"
+#import "Identity+EXFE.h"
+#import "Invitation+EXFE.h"
+#import "User+EXFE.h"
+#import "Exfee+EXFE.h"
 #import "NewGatherViewController.h"
 #import "EXBubbleScrollView.h"
 #import "Util.h"
@@ -28,7 +30,6 @@
     UITextField *exfeeInput;
     EXGradientToolbarView *toolbar;
     NSMutableArray *suggestIdentities;
-    UIViewController *gatherview;
     UITableView *suggestionTable;
     UIImageView *inputframeview;
     BOOL showInputinSuggestion;
@@ -50,7 +51,10 @@
     UIButton *btnLocal;
     AddressBook *address;
 }
-@property (nonatomic,retain) UIViewController* gatherview;
+@property (nonatomic, retain) UIViewController *lastViewController;
+@property (nonatomic, retain) Exfee *exfee;
+@property (nonatomic, assign) BOOL needSubmit;
+@property (nonatomic, retain) id onExitBlock;
 
 - (void) done:(id)sender;
 - (void) Close;
