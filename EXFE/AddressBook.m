@@ -57,7 +57,7 @@
     CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [netInfo subscriberCellularProvider];
     NSString *mcc = [carrier mobileCountryCode];
-    NSString *mnc = [carrier mobileNetworkCode];
+//    NSString *mnc = [carrier mobileNetworkCode];
     NSString *isocode =[carrier isoCountryCode];
     for(int ai=idx;ai<idx+step;ai++){
         ABRecordRef ref = CFArrayGetValueAtIndex( allPeople, ai );
