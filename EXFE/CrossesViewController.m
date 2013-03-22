@@ -10,8 +10,9 @@
 #import "ProfileViewController.h"
 #import "APICrosses.h"
 #import "Cross.h"
-#import "Exfee.h"
-#import "Identity.h"
+#import "Exfee+EXFE.h"
+#import "User+EXFE.h"
+#import "Identity+EXFE.h"
 #import "Rsvp.h"
 #import "CrossCard.h"
 #import "ImgCache.h"
@@ -256,6 +257,7 @@
 
 - (void)ShowProfileView{
     ProfileViewController *profileViewController=[[ProfileViewController alloc]initWithNibName:@"ProfileViewController" bundle:nil];
+    profileViewController.user = [User getDefaultUser];
     [self.navigationController pushViewController:profileViewController animated:YES];
     [profileViewController release];
     

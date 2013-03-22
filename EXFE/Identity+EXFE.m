@@ -64,18 +64,24 @@
     if (self.nickname && [self.nickname length] > 0) {
         return self.nickname;
     }
-    return self.name;
+    if (self.name && [self.name length] > 0) {
+        return self.name;
+    }
+    return self.external_id;
 }
 
 - (NSString*)getDisplayIdentity
 {
     Provider p = [Identity getProviderCode:self.provider];
     switch (p) {
+        case kProviderEmail:
+        case kProviderPhone:
+            return self.external_id;
         case kProviderTwitter:
             return [NSString stringWithFormat:@"@%@", self.external_username];
             break;
         default:
-            return self.external_username;
+            return [NSString stringWithFormat:@"%@@%@", self.external_username, self.provider];
             break;
     }
     

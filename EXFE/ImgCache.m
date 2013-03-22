@@ -170,12 +170,36 @@ static NSMutableDictionary *imgs;
 
 
 #pragma mark tools
-- (void)fillAvatar:(UIImageView*)avatarView with:(NSString*)url byDefault:(UIImage*)defImage
-{
-    if(url == nil){
-        avatarView.image = defImage;
+- (void)fillImage:(UIView*)view with:(NSString*)url byDefult:(UIImage*)defImage using:(void(^)(UIView* view, UIImage* image))fill{
+    if (url == nil || url.length == 0) {
+        fill(view, defImage);
     } else {
         UIImage *avatarImg=[self getImgFromCache:url];
+        if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+                UIImage *avatar = [self getImgFrom:url];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
+                        fill(view, avatar);
+                    }else{
+                        fill(view, defImage);
+                    }
+                });
+            });
+            dispatch_release(imgQueue);
+        }else{
+            fill(view, avatarImg);
+        }
+    }
+}
+
+- (void)fillAvatar:(UIImageView*)avatarView with:(NSString*)url byDefault:(UIImage*)defImage
+{
+    if (url == nil || url.length == 0) {
+        avatarView.image = defImage;
+    } else {
+        UIImage *avatarImg = [self getImgFromCache:url];
         if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(imgQueue, ^{
@@ -189,6 +213,7 @@ static NSMutableDictionary *imgs;
                 });
             });
             dispatch_release(imgQueue);
+            
         }else{
             avatarView.image = avatarImg;
         }

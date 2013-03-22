@@ -12,4 +12,5 @@
 
 - (BOOL) isMe:(Identity*)my_identity;
 + (User*) getDefaultUser;
++ (User*) getUserById:(int)userId;
 @end

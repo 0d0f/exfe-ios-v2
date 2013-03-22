@@ -79,8 +79,10 @@
     if ([URLString rangeOfString:@"token="].location != NSNotFound && [URLString rangeOfString:@"oauth://handleOAuthAddIdentity"].location != NSNotFound) {
         if([parentView isKindOfClass:[AddIdentityViewController class]])
             [((AddIdentityViewController*)parentView) oauthSuccess];
-        if([parentView isKindOfClass:[ProfileViewController class]])
-            [((ProfileViewController*)parentView) refreshIdentities];
+        if([parentView isKindOfClass:[ProfileViewController class]]){
+            ProfileViewController *vc = (ProfileViewController*)parentView;
+            [vc syncUser];
+        }
 
         [MBProgressHUD hideHUDForView:self.webview animated:YES];
         [self dismissModalViewControllerAnimated:YES];

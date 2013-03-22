@@ -13,38 +13,31 @@
 #import "Util.h"
 #import "FullScreenViewController.h"
 #import "AddIdentityViewController.h"
-#import "EXCurveView.h"
 #import "CustomAttributedTextView.h"
 #import "UIUnderlinedButton.h"
 
 @interface ProfileViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
-    IBOutlet UIToolbar* toolbar;
-    
+//    IBOutlet UIToolbar* toolbar;
     
     UIImageView* useravatar;
     UILabel* username;
-    EXCurveView *headerView;
+    UIView *headerView;
     UIButton *btnBack;
     
     IBOutlet UITableView* tableview;
     IBOutlet ProfileCellView *tblCell;
-//    BOOL statusBarHidden;
     
-    NSMutableArray *identitiesData;
-    //UIView *headerView;
+    NSArray * _identitiesData;
     UIView *footerView;
     UIButton *buttonsignout;
-    User *user;
-    NSString *usernametext;
-    UIImage *useravatarimg;
 }
-- (void)touchesBegan:(UITapGestureRecognizer*)sender;
-- (void)loadObjectsFromDataStore;
+
+@property (nonatomic, retain) User *user;
+
+- (void) touchesBegan:(UITapGestureRecognizer*)sender;
 - (void) Logout;
-- (void) refreshIdentities;
-- (void) test:(id)sender;
+- (void) syncUser;
 - (void) doVerify:(int)identity_id;
-//- (Identity*) getIdentityById:(int)identity_id;
 - (NSIndexPath*) getIndexById:(int)identity_id;
 - (void) deleteIdentity:(int)identity_id;
 - (void) deleteIdentityUI:(int)identity_id;

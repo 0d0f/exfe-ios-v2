@@ -26,4 +26,16 @@
 +(void) LoadSuggest:(NSString*)key success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
             failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
+
+
++(void) updateName:(NSString*)name
+           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+// should move to APIIdentity.h
++(void) updateIdentity:(Identity*)identity
+                  name:(NSString*)name
+                andBio:(NSString*)bio
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 @end

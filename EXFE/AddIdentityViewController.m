@@ -275,7 +275,8 @@
                             [self presentModalViewController:oauth animated:YES];
                             [oauth release];
                         }else{
-                            [((ProfileViewController*)profileview) refreshIdentities];
+                            ProfileViewController *vc = (ProfileViewController*)profileview;
+                            [vc syncUser];
                             [self.navigationController popViewControllerAnimated:YES];
                         }
                     }
@@ -294,7 +295,8 @@
 }
 
 - (void) oauthSuccess{
-    [((ProfileViewController*)profileview) refreshIdentities];
+    ProfileViewController *vc = (ProfileViewController*)profileview;
+    [vc syncUser];
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (void) doOAuth:(NSString*)provider{
