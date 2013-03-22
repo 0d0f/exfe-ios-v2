@@ -222,6 +222,7 @@
     
     
     textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 70, 230-(6+18+6)*2, 40)];
+    textUsername.keyboardType=UIKeyboardTypeEmailAddress;
     textUsername.placeholder=@"Enter email or phone";
     textUsername.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     textUsername.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;

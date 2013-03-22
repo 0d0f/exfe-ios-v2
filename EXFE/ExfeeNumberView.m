@@ -68,6 +68,7 @@
     CFRelease(path);
     CFRelease(acceptedfontref);
     CTFrameDraw(theFrame, currentContext);
+    CFRelease(theFrame);
     [acceptedattribstring release];
 
     
@@ -91,6 +92,7 @@
     CFRelease(path);
     CFRelease(allfontref);
     CTFrameDraw(theFrame, currentContext);
+    CFRelease(theFrame);
     [allattribstring release];
     
     CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 10.0, NULL);
@@ -110,6 +112,7 @@
     CFRelease(path);
     CFRelease(textfontref);
     CTFrameDraw(theFrame, currentContext);
+    CFRelease(theFrame);
     [textstring release];
 }
 
