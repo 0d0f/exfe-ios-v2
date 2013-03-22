@@ -23,8 +23,12 @@
 
 + (User*) getDefaultUser{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    return [User getUserById:app.userid];
+}
+
++ (User*) getUserById:(int)userId{
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", userId];
     [request setPredicate:predicate];
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
