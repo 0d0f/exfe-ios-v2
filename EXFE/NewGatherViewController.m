@@ -941,29 +941,10 @@
     item.isMe = [[User getDefaultUser] isMe:invitation.identity];
   
     Identity *identity = invitation.identity;
-    UIImage *img = nil;
-    if(identity.avatar_filename != nil)
-        img = [[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
-    if(img != nil && ![img isEqual:[NSNull null]]){
-        item.avatar = img;
-    }
-    else{
-        item.avatar = [UIImage imageNamed:@"portrait_default.png"];
-        
-        if(identity.avatar_filename != nil) {
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-                __block UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                        item.avatar = avatar;
-                        [item setNeedsDisplay];
-                    }
-                });
-            });
-            dispatch_release(imgQueue);
-        }
-    }
+    
+    [[ImgCache sharedManager] fillAvatarWith:identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"] using:^(UIImage *image) {
+        item.avatar = image;
+    }];
     return item;
 }
 

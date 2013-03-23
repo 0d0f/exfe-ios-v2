@@ -782,7 +782,7 @@
     Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
     EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
     item.isMe = [[User getDefaultUser] isMe:invitation.identity];
-    [[ImgCache sharedManager] fillImageWith:invitation.identity.avatar_filename
+    [[ImgCache sharedManager] fillAvatarWith:invitation.identity.avatar_filename
                                    byDefault:[UIImage imageNamed:@"portrait_default.png"]
                                       using:^(UIImage *image) {
                                           item.avatar = image;

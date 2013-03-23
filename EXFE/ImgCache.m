@@ -194,12 +194,63 @@ static NSMutableDictionary *imgs;
     }
 }
 
-- (void)fillAvatar:(UIImageView*)avatarView with:(NSString*)url byDefault:(UIImage*)defImage
+- (void)fillImage:(UIImageView*)avatarView with:(NSString*)url byDefault:(UIImage*)defImage
 {
     if (url == nil || url.length == 0) {
         avatarView.image = defImage;
     } else {
         UIImage *avatarImg = [self getImgFromCache:url];
+        if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+                UIImage *avatar = [self getImgFrom:url];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
+                        avatarView.image = avatar;
+                    }else{
+                        avatarView.image = defImage;
+                    }
+                });
+            });
+            dispatch_release(imgQueue);
+            
+        }else{
+            avatarView.image = avatarImg;
+        }
+    }
+    
+}
+
+- (void)fillAvatarWith:(NSString*)url byDefault:(UIImage*)defImage using:(void(^)(UIImage* image))fill{
+    if (url == nil || url.length == 0) {
+        fill(defImage);
+    } else {
+        UIImage *avatarImg=[self checkImgFrom:url];
+        if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+                UIImage *avatar = [self getImgFrom:url];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
+                        fill(avatar);
+                    }else{
+                        fill(defImage);
+                    }
+                });
+            });
+            dispatch_release(imgQueue);
+        }else{
+            fill(avatarImg);
+        }
+    }
+}
+
+- (void)fillAvatar:(UIImageView*)avatarView with:(NSString*)url byDefault:(UIImage*)defImage
+{
+    if (url == nil || url.length == 0) {
+        avatarView.image = defImage;
+    } else {
+        UIImage *avatarImg = [self checkImgFrom:url];
         if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(imgQueue, ^{

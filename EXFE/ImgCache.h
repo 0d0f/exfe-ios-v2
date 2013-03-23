@@ -29,7 +29,10 @@
 + (UIImage *) getDefaultImage;
 
 - (void)fillAvatar:(UIImageView*)avatarView with:(NSString*)url byDefault:(UIImage*)defImage;
+- (void)fillAvatarWith:(NSString*)url byDefault:(UIImage*)defImage using:(void(^)(UIImage* image))fill;
 
+- (void)fillImage:(UIImageView*)avatarView with:(NSString*)url byDefault:(UIImage*)defImage;
 - (void)fillImageWith:(NSString*)url byDefault:(UIImage*)defImage using:(void(^)(UIImage* image))fill;
+
 
 @end
