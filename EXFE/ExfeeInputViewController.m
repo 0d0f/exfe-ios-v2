@@ -360,6 +360,7 @@ static char identitykey;
     if([inputobjs count]==0){
         NSSet *set = [NSSet setWithArray:invitations];
         [self.exfee addInvitations:set];
+        [self.onExitBlock invoke];
         [self dismissModalViewControllerAnimated:YES];
     }
     else{
@@ -427,6 +428,8 @@ static char identitykey;
                   }
                   NSSet *set = [NSSet setWithArray:invitations];
                   [self.exfee addInvitations:set];
+                  
+                  [self.onExitBlock invoke];
                   [self dismissModalViewControllerAnimated:YES];
               }
         }

@@ -57,7 +57,7 @@
     UIImageView *pannellight;
     UIPickerView *identitypicker;
     UIView *pickertoolbar;
-    NSMutableArray *myIdentities;
+    NSArray *myIdentities;
 }
 @property (nonatomic, retain) Cross* cross;
 @property (nonatomic, retain) NSArray *sortedInvitations;

@@ -330,7 +330,8 @@
 
 - (void) initData{
     title_be_edit = NO;
-    myIdentities = [NSMutableArray arrayWithArray:[[User getDefaultUser] sortedIdentiesById]];
+    myIdentities = [[User getDefaultUser] sortedIdentiesById];
+    [myIdentities retain];
     Identity *default_identity = [myIdentities objectAtIndex:0];
     
     NSManagedObjectContext *context = [RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
@@ -362,7 +363,7 @@
     self.cross.exfee.invitations = [[[NSMutableSet alloc] initWithCapacity:12] autorelease];
     [self.cross.exfee addDefaultInvitationBy:default_identity];
     
-    self.sortedInvitations = [self.cross.exfee getSortedInvitations];
+    self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
 }
 
 - (void)dealloc {
@@ -967,7 +968,7 @@
         viewController.exfee = self.cross.exfee;
         viewController.onExitBlock = ^{
             
-            self.sortedInvitations = [self.cross.exfee getSortedInvitations];
+            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
             [self reFormatTitle];
             [exfeeShowview reloadData];
             if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
@@ -1085,7 +1086,7 @@
     
     if ([self.cross.exfee hasInvitation:menu.invitation]) {
         [self.cross.exfee removeInvitationsObject:menu.invitation];
-        self.sortedInvitations = [self.cross.exfee getSortedInvitations];
+        self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
         [exfeeShowview reloadData];
         [self reFormatTitle];
         return;
