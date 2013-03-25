@@ -26,6 +26,7 @@
 #import "CrossesViewController.h"
 #import "WidgetConvViewController.h"
 #import "WidgetExfeeViewController.h"
+#import "APIExfee.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -1748,58 +1749,55 @@
 
 #pragma mark API request for modification.
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
-    //    NSError *error;
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     Identity *myidentity = [_cross.exfee getMyInvitation].identity;
-    NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:_invitation.identity.identity_id,@"identity_id",myidentity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
-  
-  NSString *endpoint = [NSString stringWithFormat:@"%@/exfee/%u/rsvp?token=%@",API_ROOT,[_cross.exfee.exfee_id intValue],app.accesstoken];
-  
-  RKObjectManager *manager=[RKObjectManager sharedManager] ;
-  manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
-  [manager.HTTPClient postPath:endpoint parameters:@{@"rsvps":@[rsvpdict]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    
-    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-      if([responseObject isKindOfClass:[NSDictionary class]])
-      {
-        NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
-        if([[meta objectForKey:@"code"] intValue]==403){
-          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-          alert.tag=403;
-          [alert show];
-          [alert release];
-        }else if([[meta objectForKey:@"code"] intValue]==200){
-          [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:@"" success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            
-            if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-            {
-              Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-              if([meta.code intValue]==200){
-                [self refreshUI];
-              }
-              
-            }
-          } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-            
-          }];
-
-          [self refreshUI];
-        }
-        
-      }
-    }
-  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-    NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
-    if(error.code==2)
-        errormsg=@"A connection failure has occurred.";
-    else
-        errormsg=@"Could not connect to the server.";
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
-    [alert release];
-
-  }];
+    [APIExfee submitRsvp: status
+                      on: _invitation
+              myIdentity: myidentity.identity_id
+                 onExfee: [_cross.exfee.exfee_id intValue]
+                 success: ^(AFHTTPRequestOperation *operation, id responseObject) {
+                     
+                     if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                         if([responseObject isKindOfClass:[NSDictionary class]])
+                         {
+                             NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
+                             if([[meta objectForKey:@"code"] intValue]==403){
+                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                 alert.tag=403;
+                                 [alert show];
+                                 [alert release];
+                             }else if([[meta objectForKey:@"code"] intValue]==200){
+                                 [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:@"" success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                     
+                                     if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+                                     {
+                                         Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                                         if([meta.code intValue]==200){
+                                             [self refreshUI];
+                                         }
+                                         
+                                     }
+                                 } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                     
+                                 }];
+                                 
+                                 [self refreshUI];
+                             }
+                             
+                         }
+                     }
+                 }
+                 failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
+                     NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+                     if(error.code==2)
+                         errormsg=@"A connection failure has occurred.";
+                     else
+                         errormsg=@"Could not connect to the server.";
+                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                     [alert show];
+                     [alert release];
+                     
+                 }];
 }
 
 #pragma mark Navigation
