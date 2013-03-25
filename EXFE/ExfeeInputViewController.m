@@ -752,7 +752,7 @@ static char identitykey;
 {
     if(addressbookType==LOCAL_ADDRESSBOOK){
         LocalContact *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
-      [self addByInputIdentity:[[AddressBook getDefaultIdentity:person] objectForKey:@"external_id"] name:@"" provider:[[AddressBook getDefaultIdentity:person] objectForKey:@"provider"] dismiss:NO];
+      [self addByInputIdentity:[[AddressBook getDefaultIdentity:person] objectForKey:@"external_id"] name:[[AddressBook getDefaultIdentity:person] objectForKey:@"name"] provider:[[AddressBook getDefaultIdentity:person] objectForKey:@"provider"] dismiss:NO];
     }else{
         Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
       
@@ -949,8 +949,6 @@ static char identitykey;
                 
                 [identitycellbtn setBackgroundImage:[[UIImage imageNamed:@"cell_selected_40.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0,0)] forState:UIControlStateHighlighted];
 
-
-
                 SEL selector = @selector(selectidentity:);
                 [identitycellbtn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
                 objc_setAssociatedObject (identitycellbtn, &identitykey, identity,OBJC_ASSOCIATION_RETAIN);
@@ -969,7 +967,7 @@ static char identitykey;
                 UIBorderView *identitycell=[[UIBorderView alloc] initWithFrame:CGRectMake([useridentities count]%2*cellwidth, [useridentities count]/2*40, cellwidth, 40)];
                 [identitycell setBackgroundColor:FONT_COLOR_51];
                 [expandExfeeView addSubview:identitycell];
-//                [identitycell release];
+                [identitycell release];
 
             }
             [expandExfeeView addSubview:expandExfeeViewShadow];
