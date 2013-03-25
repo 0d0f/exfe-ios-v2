@@ -21,7 +21,7 @@
 @property (nonatomic, retain) NSDate * read_at;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) id updated;
-@property (nonatomic, retain) NSDate * updated_at;
+@property (nonatomic, retain) NSString * updated_at;
 @property (nonatomic, retain) id widget;
 @property (nonatomic, retain) Identity *by_identity;
 @property (nonatomic, retain) Exfee *exfee;

@@ -14,11 +14,11 @@
 @interface Post : NSManagedObject
 
 @property (nonatomic, retain) NSString * content;
-@property (nonatomic, retain) NSDate * created_at;
+@property (nonatomic, retain) NSString * created_at;
 @property (nonatomic, retain) NSNumber * post_id;
 @property (nonatomic, retain) NSNumber * postable_id;
 @property (nonatomic, retain) NSString * postable_type;
-@property (nonatomic, retain) NSDate * updated_at;
+@property (nonatomic, retain) NSString * updated_at;
 @property (nonatomic, retain) Identity *by_identity;
 
 @end
