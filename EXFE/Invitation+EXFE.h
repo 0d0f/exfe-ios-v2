@@ -22,5 +22,8 @@ typedef NS_ENUM(NSUInteger, RsvpCode){
 
 + (RsvpCode)getRsvpCode:(NSString*)str;
 + (NSString*)getRsvpString:(RsvpCode)code;
++ (Invitation*)invitationWithIdentity:(Identity*)identity;
 
+
+- (void)replaceIdentity:(Identity*)identity;
 @end

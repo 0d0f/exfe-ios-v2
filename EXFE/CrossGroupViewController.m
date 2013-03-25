@@ -298,8 +298,10 @@
     [super viewWillAppear:animated];
     // fill data & relayout
     if(_cross == nil){
-        _cross = [Cross object];
-        _cross.cross_description=@"";
+        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+        NSEntityDescription *crossEntity = [NSEntityDescription entityForName:@"Cross" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+        _cross = [[[Cross alloc] initWithEntity:crossEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+        _cross.cross_description = @"";
     }
     
     [self refreshUI];
@@ -779,33 +781,13 @@
 - (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index{
     Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
     EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
-    if([[User getDefaultUser] isMe:invitation.identity]){
-        item.isMe = YES;
-    }
+    item.isMe = [[User getDefaultUser] isMe:invitation.identity];
+    [[ImgCache sharedManager] fillImageWith:invitation.identity.avatar_filename
+                                   byDefault:[UIImage imageNamed:@"portrait_default.png"]
+                                      using:^(UIImage *image) {
+                                          item.avatar = image;
+                                      }];
     
-    Identity *identity = invitation.identity;
-    UIImage *img = nil;
-    if(identity.avatar_filename != nil)
-        img = [[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
-    if(img != nil && ![img isEqual:[NSNull null]]){
-        item.avatar = img;
-    }
-    else{
-        item.avatar = [UIImage imageNamed:@"portrait_default.png"];
-        if(identity.avatar_filename != nil) {
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-                __block UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                        item.avatar = avatar;
-                        [item setNeedsDisplay];
-                    }
-                });
-            });
-            dispatch_release(imgQueue);
-        }
-    }
     return [item autorelease];
 }
 

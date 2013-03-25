@@ -11,12 +11,12 @@
 #import <RestKit/RestKit.h>
 #import "EXCurveView.h"
 #import "Cross.h"
-#import "Identity.h"
-#import "Exfee.h"
-#import "User.h"
-#import "Invitation.h"
-#import "CrossTime.h"
-#import "Place.h"
+#import "Identity+EXFE.h"
+#import "Exfee+EXFE.h"
+#import "User+EXFE.h"
+#import "Invitation+EXFE.h"
+#import "CrossTime+Helper.h"
+#import "Place+Helper.h"
 #import "EXImagesCollectionGatherView.h"
 #import "EXRSVPStatusView.h"
 #import "EXRSVPMenuView.h"
@@ -37,7 +37,6 @@
     UIImageView *dectorView;
     EXLabel *descView;
     EXImagesCollectionGatherView *exfeeShowview;
-    //UIView *exfeeShowview;
     UILabel *timeRelView;
     UILabel *timeAbsView;
     UILabel *timeZoneView;
@@ -49,23 +48,19 @@
     UIButton *btnBack;
     UILabel *titleView;
     
-    Cross* cross;
-    User* default_user;
-    
     BOOL layoutDirty;
     BOOL title_be_edit;
-    NSMutableArray *exfeeInvitations;
+//    NSMutableArray *exfeeInvitations;
     EXRSVPStatusView *rsvpstatusview;
     CGFloat exfeeSuggestHeight;
     EXRSVPMenuView *rsvpmenu;
     UIImageView *pannellight;
     UIPickerView *identitypicker;
     UIView *pickertoolbar;
-    NSMutableArray *orderedIdentities;
+    NSMutableArray *myIdentities;
 }
-@property (retain,nonatomic) Cross* cross;
-@property (retain,readonly) NSMutableArray *exfeeIdentities;
-@property (retain,nonatomic) User* default_user;
+@property (nonatomic, retain) Cross* cross;
+@property (nonatomic, retain) NSArray *sortedInvitations;
 @property BOOL title_be_edit;
 
 - (void) initUI;
@@ -74,12 +69,11 @@
 - (void) refreshUI;
 - (void) hideMenu;
 - (void) hideStatusView;
-- (void) reloadStatusview:(Invitation*)_invitation;
+//- (void) reloadStatusview:(Invitation*)_invitation;
 - (void) fillTime:(CrossTime*)time;
 - (void) fillPlace:(Place*)place;
 - (void) ShowPlaceView:(NSString*)status;
 - (void) GlassBarlightAnimation;
-- (BOOL) InvitationExist:(Invitation*)invitation;
 
 #pragma mark MKMapViewDelegate
 - (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated;
@@ -95,16 +89,10 @@
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation;
 - (void) setrsvp:(NSString*)status invitation:(Invitation*)_invitation;
-- (void) addDefaultIdentity:(int)idx;
-- (void) replaceDefaultIdentity:(int)idx;
 - (IBAction) Gather:(id) sender;
 - (void) reFormatTitle;
-- (BOOL) isMe:(Identity*)my_identity;
-- (Invitation*) getMyInvitation;
 
 #pragma mark EditCrossDelegate
-- (void) addExfee:(NSArray*) invitations;
-
 - (void) setTitle:(NSString*)title Description:(NSString*)desc;
 - (void) setTime:(CrossTime*)time;
 - (void) setPlace:(Place*)place;

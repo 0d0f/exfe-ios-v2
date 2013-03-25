@@ -7,9 +7,8 @@
 //
 
 #import "Exfee+EXFE.h"
-#import "Invitation+EXFE.h"
-#import "Identity+EXFE.h"
 #import "User+EXFE.h"
+#import <RestKit/RestKit.h>
 
 @implementation Exfee (EXFE)
 
@@ -28,6 +27,15 @@
         }
     }
     return me;
+}
+
+- (void) addDefaultInvitationBy:(Identity*)identity{
+    
+    Invitation *invitation = [Invitation invitationWithIdentity:identity];
+    invitation.rsvp_status = @"ACCEPTED";
+    invitation.host = [NSNumber numberWithBool:YES];
+    invitation.updated_by = identity;
+    [self addInvitationsObject:invitation];
 }
 
 -(NSArray*)getSortedInvitations{
@@ -86,9 +94,16 @@
     return result;
 }
 
--(NSMutableArray*)getMyInvitationSet
+-(NSArray*)getMyInvitations
 {
-    return nil;
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:5];
+    for(Invitation *invitation in self.invitations)
+    {
+        if([[User getDefaultUser] isMe:invitation.identity]){
+            [array addObject:invitation];
+        }
+    }
+    return array;
 }
 
 -(NSArray*)getMergedInvitationSet
@@ -109,6 +124,22 @@
         }
     }
     return [merged allValues];
+}
+
+- (BOOL)hasInvitation:(Invitation*)invitation{
+    for (Invitation *inv in self.invitations){
+        int inv_user_id = [inv.identity.connected_user_id intValue];
+        if(inv_user_id == 0){
+            if ([inv.identity.external_id isEqualToString:invitation.identity.external_id]) {
+                return YES;
+            }
+        }else if(inv_user_id > 0){
+            if (inv_user_id == [invitation.identity.connected_user_id intValue]){
+                return YES;
+            }
+        }
+    }
+    return NO;
 }
 
 

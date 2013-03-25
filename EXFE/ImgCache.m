@@ -170,9 +170,9 @@ static NSMutableDictionary *imgs;
 
 
 #pragma mark tools
-- (void)fillImage:(UIView*)view with:(NSString*)url byDefult:(UIImage*)defImage using:(void(^)(UIView* view, UIImage* image))fill{
+- (void)fillImageWith:(NSString*)url byDefault:(UIImage*)defImage using:(void(^)(UIImage* image))fill{
     if (url == nil || url.length == 0) {
-        fill(view, defImage);
+        fill(defImage);
     } else {
         UIImage *avatarImg=[self getImgFromCache:url];
         if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
@@ -181,15 +181,15 @@ static NSMutableDictionary *imgs;
                 UIImage *avatar = [self getImgFrom:url];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
-                        fill(view, avatar);
+                        fill(avatar);
                     }else{
-                        fill(view, defImage);
+                        fill(defImage);
                     }
                 });
             });
             dispatch_release(imgQueue);
         }else{
-            fill(view, avatarImg);
+            fill(avatarImg);
         }
     }
 }
