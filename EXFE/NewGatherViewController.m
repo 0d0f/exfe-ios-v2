@@ -966,6 +966,7 @@
         ExfeeInputViewController *viewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
         viewController.lastViewController = self;
         viewController.exfee = self.cross.exfee;
+        viewController.needSubmit = NO;
         viewController.onExitBlock = ^{
             
             self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];

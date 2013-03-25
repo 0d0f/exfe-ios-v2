@@ -142,5 +142,15 @@
     return NO;
 }
 
+- (void)debugPrint{
+    NSLog(@"exfee id: %@", self.exfee_id);
+    NSLog(@"exfee accepted: %@", self.accepted);
+    NSLog(@"exfee total: %@", self.total);
+    NSLog(@"exfee invitation count: %i", self.invitations.count);
+    for (Invitation *inv in self.invitations) {
+        NSLog(@"exfee invitation item: %@", [inv.identity getDisplayName]);
+    }
+}
+
 
 @end

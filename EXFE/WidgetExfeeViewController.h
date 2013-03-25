@@ -55,5 +55,6 @@ typedef enum {
 
 @property (nonatomic, retain) Exfee *exfee;
 @property (nonatomic, retain) NSArray *sortedInvitations;
+@property (nonatomic, copy) id onExitBlock;
 
 @end

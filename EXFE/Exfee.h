@@ -27,4 +27,5 @@
 - (void)addInvitations:(NSSet *)values;
 - (void)removeInvitations:(NSSet *)values;
 
+- (void)debugPrint;
 @end
