@@ -281,18 +281,50 @@ typedef enum {
     UIView *btn = sender;
     btn.hidden = YES;
     NSArray *array = [exfeeContainer indexPathsForSelectedItems];
+    selected_invitation.rsvp_status = @"REMOVED";
     
-    [self.exfee removeInvitationsObject:selected_invitation];
-    selected_invitation = nil;
-    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
-    [exfeeContainer reloadData];
+    Identity *myidentity = [self.exfee getMyInvitation].identity;
+    [APIExfee edit:self.exfee
+        myIdentity:[myidentity.identity_id intValue]
+           success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+               if ([operation.HTTPRequestOperation.response statusCode] == 200){
+                   if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+                   {
+                       Meta* meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                       int code = [meta.code intValue];
+                       int type = code /100;
+                       switch (type) {
+                           case 2: // HTTP OK
+                               if(code == 200){
+                                   Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
+                                   //[self.exfee removeInvitationsObject:selected_invitation];
+                                   selected_invitation = nil;
+                                   self.exfee = respExfee;
+                                   self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+                                   [exfeeContainer reloadData];
+                                   
+                                   if (array == nil || array.count <= 1) {
+                                       NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+                                       [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+                                       selected_invitation = [self.sortedInvitations objectAtIndex:0];
+                                       [self fillInvitationContent:selected_invitation];
+                                   }
+                               }
+                               break;
+                           default:
+                               break;
+                       }
+                       
+                       
+                       
+                   }
+               }
+           }
+           failure:^(RKObjectRequestOperation *operation, NSError *error) {
+               ;
+           }];
     
-    if (array == nil || array.count <= 1) {
-        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-        [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-        selected_invitation = [self.sortedInvitations objectAtIndex:0];
-        [self fillInvitationContent:selected_invitation];
-    }
+    
 }
 
 #pragma mark Gesture Handler

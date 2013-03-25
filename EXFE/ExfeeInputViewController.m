@@ -359,11 +359,13 @@ static char identitykey;
             [inputobjs addObject:(NSDictionary*)inputobj];
         }
     }
-    if([inputobjs count]==0){
+    if([inputobjs count] == 0){
+        NSSet *set = [NSSet setWithArray:invitations];
+        [self.exfee addInvitations:set];
         if (self.needSubmit) {
-            [self sumitExfeBeforeDismiss:invitations];
+            [self sumitExfeBeforeDismiss:self.exfee];
         } else {
-            [self dissmisModal:invitations];
+            [self dissmisModal];
         }
     }
     else{
@@ -429,10 +431,12 @@ static char identitykey;
                       }
                       [invitations addObject:invitation];
                   }
+                  NSSet *set = [NSSet setWithArray:invitations];
+                  [self.exfee addInvitations:set];
                   if (self.needSubmit) {
-                      [self sumitExfeBeforeDismiss:invitations];
+                      [self sumitExfeBeforeDismiss:self.exfee];
                   } else {
-                      [self dissmisModal:invitations];
+                      [self dissmisModal];
                   }
               }
         }
@@ -442,60 +446,57 @@ static char identitykey;
     }
 }
 
-- (void)sumitExfeBeforeDismiss:(NSArray*)invitations{
+- (void)sumitExfeBeforeDismiss:(Exfee*)exfee{
     Identity *myidentity = [self.exfee getMyInvitation].identity;
-    [APIExfee addInvitations:invitations
-                          to:[self.exfee.exfee_id intValue]
-                    modifier:[myidentity.identity_id intValue]
-                     success:^(AFHTTPRequestOperation *operation, id responseObject) {             
-                         
-                         if ([operation.response statusCode] == 200){
-                             if([responseObject isKindOfClass:[NSDictionary class]])
-                             {
-                                 NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
-                                 int code = [[meta objectForKey:@"code"] intValue];
-                                 int type = code /100;
-                                 switch (type) {
-                                     case 2: // HTTP OK
-                                         if (code == 206) {
-                                             // show popup
-                                         }
-                                         
-                                         if(code == 200){
-                                             NSLog(@"submit rsvp sucessfully...");
-                                             [self dissmisModal:invitations];
-                                         }
-                                         break;
-                                     case 4: // Client Error
-                                         if(code == 403){
-                                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                             alert.tag=403;
-                                             [alert show];
-                                             [alert release];
-                                         }
-                                         break;
-                                     case 5: // Server Error
-                                         break;
-                                     default:
-                                         break;
-                                 }
-                                 
-                                 
-                                 
-                             }
-                         }
-                     }
-                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                         ;
-                     }];
+    [APIExfee edit:exfee
+        myIdentity:[myidentity.identity_id intValue]
+           success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+               {
+                   
+                   if ([operation.HTTPRequestOperation.response statusCode] == 200){
+                       if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+                       {
+                           Meta* meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                           int code = [meta.code intValue];
+                           int type = code /100;
+                           switch (type) {
+                               case 2: // HTTP OK
+                                   if (code == 206) {
+                                       NSLog(@"HTTP 206 Partial Successfully");
+                                   }
+                                   if(code == 200){
+                                       Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
+                                       self.exfee = respExfee;
+                                       [self dissmisModal];
+                                   }
+                                   break;
+                               case 4: // Client Error
+                                   if(code == 403){
+                                       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                       alert.tag=403;
+                                       [alert show];
+                                       [alert release];
+                                   }
+                                   break;
+                               case 5: // Server Error
+                                   break;
+                               default:
+                                   break;
+                           }
+                           
+                           
+                           
+                       }
+                   }
+               }
+           } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+               ;
+           }];
     
     
 }
 
-- (void)dissmisModal:(NSArray*)invitations{
-    NSSet *set = [NSSet setWithArray:invitations];
-    [self.exfee addInvitations:set];
-    
+- (void)dissmisModal{
     self.onExitBlock();
 //    [self.onExitBlock invoke];
     [self dismissModalViewControllerAnimated:YES];
@@ -632,7 +633,11 @@ static char identitykey;
     Invitation *invitation =[[Invitation alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
   
     invitation.rsvp_status=@"NORESPONSE";
-    invitation.identity=identity;
+    if (!identity.type) {
+        identity.type = @"identity";
+    }
+    invitation.identity = identity;
+    invitation.type = @"invitation";
     Invitation *myinvitation = [self.exfee getMyInvitation];
     if(myinvitation!=nil)
         invitation.updated_by=myinvitation.identity;

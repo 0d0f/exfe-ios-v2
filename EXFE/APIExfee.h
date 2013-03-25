@@ -24,8 +24,8 @@
 
 + (void)edit:(Exfee*)exfee
   myIdentity:(int)my_identity_id
-     success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-     failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+     success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+     failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 + (void)addInvitations:(NSArray*)array
                     to:(int)exfee_id

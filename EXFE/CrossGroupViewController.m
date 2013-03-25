@@ -312,7 +312,7 @@
     }
     
     if (tabWidget == nil) {
-        NSArray* imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30"], [UIImage imageNamed:@"widget_conv_30"], [UIImage imageNamed:@"time_icon"], nil];
+        NSArray* imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30"], [UIImage imageNamed:@"widget_conv_30"], [UIImage imageNamed:@"widget_exfee_30"], nil];
         tabWidget = [[EXTabWidget alloc] initWithFrame:CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40) withImages:imgs current:_widgetId];
         tabWidget.delegate = self;
         [self.view insertSubview:tabWidget belowSubview:btnBack];
@@ -1848,36 +1848,38 @@
     [bigspin release];
     
     _cross.by_identity=[_cross.exfee getMyInvitation].identity;
-  [APICrosses EditCross:_cross success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    if(operation.HTTPRequestOperation.response.statusCode==200){
-      if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-      {
-        Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-        if([meta.code intValue]==200){
-          Cross *responsecross=[[mappingResult dictionary] objectForKey:@"response.cross"];
-          if([responsecross.cross_id intValue]==[self.cross.cross_id intValue])
-          {
-              [app CrossUpdateDidFinish:[responsecross.cross_id intValue]];
-          }
-        }else{
-          [Util showErrorWithMetaObject:meta delegate:self];
-        }
-      }
-    }else{
-      NSString *errormsg=@"Could not save this cross.";
-      if(![errormsg isEqualToString:@""]){
-          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
-          alert.tag=201; // 201 = Save Cross
-          [alert show];
-          [alert release];
-      }
-    }
-   [MBProgressHUD hideHUDForView:self.view animated:YES];
-  } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-    
-  }];
+    [APICrosses EditCross:_cross
+                  success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                      AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                      
+                      if(operation.HTTPRequestOperation.response.statusCode==200){
+                          if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+                          {
+                              Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                              if([meta.code intValue]==200){
+                                  Cross *responsecross=[[mappingResult dictionary] objectForKey:@"response.cross"];
+                                  if([responsecross.cross_id intValue]==[self.cross.cross_id intValue])
+                                  {
+                                      [app CrossUpdateDidFinish:[responsecross.cross_id intValue]];
+                                  }
+                              }else{
+                                  [Util showErrorWithMetaObject:meta delegate:self];
+                              }
+                          }
+                      }else{
+                          NSString *errormsg=@"Could not save this cross.";
+                          if(![errormsg isEqualToString:@""]){
+                              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
+                              alert.tag=201; // 201 = Save Cross
+                              [alert show];
+                              [alert release];
+                          }
+                      }
+                      [MBProgressHUD hideHUDForView:self.view animated:YES];
+                  }
+                  failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                      
+                  }];
 }
 
 #pragma mark UIAlertView methods
