@@ -13,7 +13,7 @@
     NSString *title;
 //    NSString *subtitle;
     UIImage *providerIcon;
-    NSArray *providerIconSet;
+//    NSArray *providerIconSet;
 }
 
 @property (nonatomic,retain) UIImage* avatar;

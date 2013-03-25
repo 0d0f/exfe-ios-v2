@@ -323,12 +323,12 @@
 {
     [super viewDidAppear:animated];
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    NSString *updated_at = [formatter stringFromDate:_cross.updated_at];
-    [formatter release];
-    
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+//    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+//    NSString *updated_at = [formatter stringFromDate:_cross.updated_at];
+//    [formatter release];
+    NSString *updated_at = _cross.updated_at;
     //  [NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",_cross.cross_id,@"cross_id", nil]
     //    [APICrosses LoadCrossWithUserId:[_cross.cross_id intValue] updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
     //    [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:updated_at  success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
