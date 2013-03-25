@@ -45,4 +45,20 @@
     [manager.HTTPClient postPath:endpoint parameters:@{@"by_identity_id":[NSNumber numberWithInt:my_identity_id], @"exfee": exfee} success:success failure:failure];
 }
 
++ (void)addInvitations:(NSArray*)array
+                    to:(int)exfee_id
+              modifier:(int)identity_id
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure{
+    
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    
+    NSString *endpoint = [NSString stringWithFormat:@"%@/exfee/%u/edit?token=%@",API_ROOT, exfee_id, app.accesstoken];
+    RKObjectManager *manager=[RKObjectManager sharedManager] ;
+    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
+    [manager.HTTPClient postPath:endpoint parameters:@{@"by_identity_id":[NSNumber numberWithInt:identity_id], @"exfee": @{@"id": [NSNumber numberWithInt:exfee_id], @"type": @"exfee", @"invitations":array}} success:success failure:failure];
+    
+}
+
 @end

@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import "APIProfile.h"
 #import "Identity+EXFE.h"
 #import "Invitation+EXFE.h"
 #import "User+EXFE.h"
@@ -54,7 +53,8 @@
 @property (nonatomic, assign) UIViewController *lastViewController;
 @property (nonatomic, retain) Exfee *exfee;
 @property (nonatomic, assign) BOOL needSubmit;
-@property (nonatomic, copy) id onExitBlock;
+//@property (nonatomic, copy) id onExitBlock;
+@property (nonatomic, copy) void (^onExitBlock)(void);
 
 - (void) done:(id)sender;
 - (void) Close;

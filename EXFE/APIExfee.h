@@ -27,5 +27,9 @@
      success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
      failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-
++ (void)addInvitations:(NSArray*)array
+                    to:(int)exfee_id
+              modifier:(int)identity_id
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 @end

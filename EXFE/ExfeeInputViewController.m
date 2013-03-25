@@ -7,6 +7,8 @@
 //
 
 #import "ExfeeInputViewController.h"
+#import "APIProfile.h"
+#import "APIExfee.h"
 
 @interface ExfeeInputViewController ()
 
@@ -358,10 +360,11 @@ static char identitykey;
         }
     }
     if([inputobjs count]==0){
-        NSSet *set = [NSSet setWithArray:invitations];
-        [self.exfee addInvitations:set];
-        [self.onExitBlock invoke];
-        [self dismissModalViewControllerAnimated:YES];
+        if (self.needSubmit) {
+            [self sumitExfeBeforeDismiss:invitations];
+        } else {
+            [self dissmisModal:invitations];
+        }
     }
     else{
         NSMutableArray *identities=[[[NSMutableArray alloc] initWithCapacity:[inputobjs count]] autorelease];
@@ -426,17 +429,76 @@ static char identitykey;
                       }
                       [invitations addObject:invitation];
                   }
-                  NSSet *set = [NSSet setWithArray:invitations];
-                  [self.exfee addInvitations:set];
-                  
-                  [self.onExitBlock invoke];
-                  [self dismissModalViewControllerAnimated:YES];
+                  if (self.needSubmit) {
+                      [self sumitExfeBeforeDismiss:invitations];
+                  } else {
+                      [self dissmisModal:invitations];
+                  }
               }
         }
       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
       }];
     }
+}
+
+- (void)sumitExfeBeforeDismiss:(NSArray*)invitations{
+    Identity *myidentity = [self.exfee getMyInvitation].identity;
+    [APIExfee addInvitations:invitations
+                          to:[self.exfee.exfee_id intValue]
+                    modifier:[myidentity.identity_id intValue]
+                     success:^(AFHTTPRequestOperation *operation, id responseObject) {             
+                         
+                         if ([operation.response statusCode] == 200){
+                             if([responseObject isKindOfClass:[NSDictionary class]])
+                             {
+                                 NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
+                                 int code = [[meta objectForKey:@"code"] intValue];
+                                 int type = code /100;
+                                 switch (type) {
+                                     case 2: // HTTP OK
+                                         if (code == 206) {
+                                             // show popup
+                                         }
+                                         
+                                         if(code == 200){
+                                             NSLog(@"submit rsvp sucessfully...");
+                                             [self dissmisModal:invitations];
+                                         }
+                                         break;
+                                     case 4: // Client Error
+                                         if(code == 403){
+                                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                             alert.tag=403;
+                                             [alert show];
+                                             [alert release];
+                                         }
+                                         break;
+                                     case 5: // Server Error
+                                         break;
+                                     default:
+                                         break;
+                                 }
+                                 
+                                 
+                                 
+                             }
+                         }
+                     }
+                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                         ;
+                     }];
+    
+    
+}
+
+- (void)dissmisModal:(NSArray*)invitations{
+    NSSet *set = [NSSet setWithArray:invitations];
+    [self.exfee addInvitations:set];
+    
+    self.onExitBlock();
+//    [self.onExitBlock invoke];
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void) done:(id)sender{

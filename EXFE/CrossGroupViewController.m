@@ -1141,6 +1141,8 @@
                 NSLog(@"_cross.exfee: ");
                 [_cross.exfee debugPrint];
                 
+                
+                
 //                [self fillExfee:_cross.exfee];
                 [self fillExfee:exfeeView.exfee];
             };
