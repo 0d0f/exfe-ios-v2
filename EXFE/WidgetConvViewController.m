@@ -229,11 +229,12 @@
         Post *post=[_posts objectAtIndex:0];
         if(post && post.updated_at!=nil)
         {
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-            updated_at = [formatter stringFromDate:post.updated_at];
-            [formatter release];
+//            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+//            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+//            updated_at = [formatter stringFromDate:post.updated_at];
+//            [formatter release];
+          updated_at=post.updated_at;
         }
     }
   [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
@@ -370,6 +371,13 @@
                     
                 istimehidden=NO;
                 Post *post=[_posts objectAtIndex:path.row];
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+                [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                NSDate *post_created_at = [formatter dateFromString:post.created_at];
+                [formatter release];
+
+              
                 if(post && !timetextlayer){
                     timetextlayer=[CATextLayer layer];
                     timetextlayer.contentsScale=[[UIScreen mainScreen] scale];
@@ -388,9 +396,9 @@
                     NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
                     [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                     [dateformat setDateFormat:@"yyyy-MM-dd"];
-                    NSString *datestr=[dateformat stringFromDate:post.created_at];
+                    NSString *datestr=[dateformat stringFromDate:post_created_at];
                     [dateformat setDateFormat:@"HH:mm:ss"];
-                    NSString *timestr=[dateformat stringFromDate:post.created_at];
+                    NSString *timestr=[dateformat stringFromDate:post_created_at];
                     [dateformat release];
                     NSString *timestring=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:timestring];
@@ -406,9 +414,9 @@
                     
                     [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
                     [dateformat_to setDateFormat:@"ccc, MMM d"];
-                    NSString *datestring=[dateformat_to stringFromDate:post.created_at];
+                    NSString *datestring=[dateformat_to stringFromDate:post_created_at];
                     [dateformat_to setDateFormat:@"h:mm a"];
-                    NSString *timestring=[dateformat_to stringFromDate:post.created_at];
+                    NSString *timestring=[dateformat_to stringFromDate:post_created_at];
                     [locale_to release];
                     [dateformat_to release];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",datestring,timestring]];
@@ -498,20 +506,26 @@
             [floattimetextlayer removeAnimationForKey:@"fadeout"];
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
             Post *post=[_posts objectAtIndex:path.row];
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+            NSDate *post_created_at = [formatter dateFromString:post.created_at];
+            [formatter release];
+
 
             NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
             [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             [dateformat setDateFormat:@"yyyy-MM-dd"];
-            NSString *datestr=[dateformat stringFromDate:post.created_at];
+            NSString *datestr=[dateformat stringFromDate:post_created_at];
             [dateformat setDateFormat:@"HH:mm:ss"];
-            NSString *timestr=[dateformat stringFromDate:post.created_at];
+            NSString *timestr=[dateformat stringFromDate:post_created_at];
             [dateformat release];
             NSString *relative=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
 
             NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
             [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
             [dateformat_to setDateFormat:@"h:mm a MMM d"];
-            NSString *datestring=[dateformat_to stringFromDate:post.created_at];
+            NSString *datestring=[dateformat_to stringFromDate:post_created_at];
             [dateformat_to release];
 
             NSMutableAttributedString *timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",relative,datestring]];

@@ -319,6 +319,12 @@
             NSArray *crosses=(NSArray*)[[mappingResult dictionary] objectForKey:@"response.crosses"];
             for (Cross *cross in crosses){
               id updated=cross.updated;
+              NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+              [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+              [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+              NSDate *cross_updated_at = [formatter dateFromString:cross.updated_at];
+              [formatter release];
+
               if([updated isKindOfClass:[NSDictionary class]]){
                   NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
                   NSString *key=nil;
@@ -343,7 +349,8 @@
 
                             
                           }
-                          if([updated_at compare: cross.updated_at] == NSOrderedDescending || [updated_at compare: cross.updated_at] == NSOrderedSame) {
+
+                          if([updated_at compare: cross_updated_at] == NSOrderedDescending || [updated_at compare: cross_updated_at] == NSOrderedSame) {
                               if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]]) {
                                   NSNumber *identity_id=[obj objectForKey:@"identity_id"];
                                   if([self isIdentityBelongsMe:[identity_id intValue]]==NO)
@@ -363,9 +370,9 @@
 //                      }
 //                  }
                   if(last_updated_at==nil)
-                      last_updated_at=cross.updated_at;
+                      last_updated_at=cross_updated_at;
                   else{
-                      last_updated_at=[cross.updated_at laterDate:last_updated_at];
+                      last_updated_at=[cross_updated_at laterDate:last_updated_at];
                   }
               }
             }

@@ -84,7 +84,7 @@
                 else{
                     NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
                     RKObjectManager *objectManager=[RKObjectManager sharedManager];
-                  localcontact=[[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.persistentStoreManagedObjectContext];
+                  localcontact=[[[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.persistentStoreManagedObjectContext] autorelease];
                 }
 //                [localcontacts release];
                 localcontact.uid=[NSNumber numberWithInt:uid];
