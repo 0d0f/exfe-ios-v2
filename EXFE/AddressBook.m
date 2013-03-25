@@ -286,8 +286,11 @@
         provider=@"email";
     else if(type==PHONE_TYPE)
       provider=@"phone";
-  
-    return [NSDictionary dictionaryWithObjectsAndKeys:provider,@"provider",username,@"external_id", nil] ;
+    NSString *name=@"";
+  if(person.name!=nil)
+    name=person.name;
+
+    return [NSDictionary dictionaryWithObjectsAndKeys:provider,@"provider",username,@"external_id",name,@"name", nil] ;
 }
 
 + (NSArray*) getLocalIdentityObjects:(LocalContact*) person{

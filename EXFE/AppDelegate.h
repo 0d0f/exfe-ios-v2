@@ -13,11 +13,11 @@
 #import "User.h"
 #import "ModelMapping.h"
 
-#define APP_DB_VERSION 207
-#define DBNAME @"exfe_v2_7.sqlite"
+#define APP_DB_VERSION 208
+#define DBNAME @"exfe_v2_8.sqlite"
 
     
-#define DEV
+#define WWW
 
 #ifdef DEV
 #define API_ROOT @"http://api.0d0f.com/v2"

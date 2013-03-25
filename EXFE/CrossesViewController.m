@@ -361,7 +361,6 @@
                   }
                   [formatter release];
               }
-              NSLog(@"%i %@",[cross.cross_id intValue], cross.updated_at);
               if(cross.updated_at!=nil){
 //                  if([source isEqualToString:@"crossview"]){
 //                      if(exfee_updated_at==nil){

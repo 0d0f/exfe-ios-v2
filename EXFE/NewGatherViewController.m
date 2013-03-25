@@ -330,8 +330,7 @@
 
 - (void) initData{
     title_be_edit = NO;
-    myIdentities = [[User getDefaultUser] sortedIdentiesById];
-    [myIdentities retain];
+    myIdentities = [[NSArray alloc] initWithArray:[[User getDefaultUser] sortedIdentiesById]];
     Identity *default_identity = [myIdentities objectAtIndex:0];
     
     NSManagedObjectContext *context = [RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
