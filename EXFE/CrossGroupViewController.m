@@ -782,7 +782,8 @@
     Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
     EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
     item.isMe = [[User getDefaultUser] isMe:invitation.identity];
-    [[ImgCache sharedManager] fillImageWith:invitation.identity.avatar_filename
+    
+    [[ImgCache sharedManager] fillAvatarWith:invitation.identity.avatar_filename
                                    byDefault:[UIImage imageNamed:@"portrait_default.png"]
                                       using:^(UIImage *image) {
                                           item.avatar = image;
@@ -1081,8 +1082,9 @@
                          completion:^(BOOL finished){
                              
                              [self.currentViewController.view removeFromSuperview];
+                             [self.currentViewController willMoveToParentViewController:nil];
                              [self.currentViewController removeFromParentViewController];
-                             [self.currentViewController didMoveToParentViewController:nil];
+//                             [self.currentViewController didMoveToParentViewController:nil];
                              self.currentViewController = nil;
                              
                              [self showChinldViewController:widget_id];
@@ -1131,6 +1133,16 @@
         {
             WidgetExfeeViewController *exfeeView = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
             exfeeView.exfee = _cross.exfee;
+            exfeeView.onExitBlock = ^{
+                NSLog(@"CrossGroup call back:");
+                NSLog(@"exfeeView.exfee: ");
+                [exfeeView.exfee debugPrint];
+                NSLog(@"_cross.exfee: ");
+                [_cross.exfee debugPrint];
+                
+//                [self fillExfee:_cross.exfee];
+                [self fillExfee:exfeeView.exfee];
+            };
             [self addChildViewController:exfeeView];
             [self.view insertSubview:exfeeView.view aboveSubview:headerShadow];
             [exfeeView didMoveToParentViewController:self];

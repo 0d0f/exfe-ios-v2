@@ -103,6 +103,7 @@
 		4FAE4E6416AF9F82001479F8 /* x_titlebg_default.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */; };
 		4FB1635716B25756005B1D3C /* profile_title_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635516B25756005B1D3C /* profile_title_mask.png */; };
 		4FB1635816B25756005B1D3C /* profile_title_mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635616B25756005B1D3C /* profile_title_mask@2x.png */; };
+		4FB30D1D17003BFE007BC66D /* APIExfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB30D1C17003BFE007BC66D /* APIExfee.m */; };
 		4FB4435716B7B62800DE220E /* navi_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB4435516B7B62800DE220E /* navi_btn.png */; };
 		4FB4435816B7B62800DE220E /* navi_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB4435616B7B62800DE220E /* navi_btn@2x.png */; };
 		4FB4435F16B7B67F00DE220E /* widget_conv_30refl.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB4435916B7B67F00DE220E /* widget_conv_30refl.png */; };
@@ -622,6 +623,8 @@
 		4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = x_titlebg_default.jpg; sourceTree = "<group>"; };
 		4FB1635516B25756005B1D3C /* profile_title_mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_title_mask.png; sourceTree = "<group>"; };
 		4FB1635616B25756005B1D3C /* profile_title_mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_title_mask@2x.png"; sourceTree = "<group>"; };
+		4FB30D1B17003BFE007BC66D /* APIExfee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIExfee.h; sourceTree = "<group>"; };
+		4FB30D1C17003BFE007BC66D /* APIExfee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIExfee.m; sourceTree = "<group>"; };
 		4FB4435516B7B62800DE220E /* navi_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navi_btn.png; sourceTree = "<group>"; };
 		4FB4435616B7B62800DE220E /* navi_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navi_btn@2x.png"; sourceTree = "<group>"; };
 		4FB4435916B7B67F00DE220E /* widget_conv_30refl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_conv_30refl.png; sourceTree = "<group>"; };
@@ -1823,14 +1826,16 @@
 				78409171156F80A6006DF115 /* APIConversation.m */,
 				78A98F01156117D8009E0806 /* APICrosses.h */,
 				78A98F02156117D8009E0806 /* APICrosses.m */,
+				4FB30D1B17003BFE007BC66D /* APIExfee.h */,
+				4FB30D1C17003BFE007BC66D /* APIExfee.m */,
 				78F05809159B708F00F360F2 /* APIPlace.h */,
 				78F0580A159B708F00F360F2 /* APIPlace.m */,
 				785F6F521581DE4C00BF8EA0 /* APIProfile.h */,
 				785F6F531581DE4C00BF8EA0 /* APIProfile.m */,
-				7818FF1415EB415E0095E92F /* ObjectToDict.h */,
-				7818FF1515EB415E0095E92F /* ObjectToDict.m */,
 				788B620F16E89B200019B953 /* ModelMapping.h */,
 				788B621016E89B200019B953 /* ModelMapping.m */,
+				7818FF1415EB415E0095E92F /* ObjectToDict.h */,
+				7818FF1515EB415E0095E92F /* ObjectToDict.m */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -2616,6 +2621,7 @@
 				4F29C92A16F962CA001BB176 /* EXBasicMenu.m in Sources */,
 				4F29C93016F9A5B5001BB176 /* User+EXFE.m in Sources */,
 				4FA0C40A16FB626B00E25C74 /* WCAlertView.m in Sources */,
+				4FB30D1D17003BFE007BC66D /* APIExfee.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -303,7 +303,7 @@
     if([indexPath section]==0)
     {
         
-        [[ImgCache sharedManager] fillImageWith: identity.avatar_filename
+        [[ImgCache sharedManager] fillAvatarWith: identity.avatar_filename
                                        byDefault: [UIImage imageNamed:@"portrait_default.png"]
                                           using: ^(UIImage* image){
                                               [cell setAvartar:image];

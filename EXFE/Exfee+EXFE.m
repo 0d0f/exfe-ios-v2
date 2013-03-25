@@ -128,18 +128,28 @@
 
 - (BOOL)hasInvitation:(Invitation*)invitation{
     for (Invitation *inv in self.invitations){
-        int inv_user_id = [inv.identity.connected_user_id intValue];
-        if(inv_user_id == 0){
+        int identity_id = [inv.identity.identity_id intValue];
+        if(identity_id == 0){
             if ([inv.identity.external_id isEqualToString:invitation.identity.external_id]) {
                 return YES;
             }
-        }else if(inv_user_id > 0){
-            if (inv_user_id == [invitation.identity.connected_user_id intValue]){
+        }else if(identity_id > 0){
+            if (identity_id == [invitation.identity.identity_id intValue]){
                 return YES;
             }
         }
     }
     return NO;
+}
+
+- (void)debugPrint{
+    NSLog(@"exfee id: %@", self.exfee_id);
+    NSLog(@"exfee accepted: %@", self.accepted);
+    NSLog(@"exfee total: %@", self.total);
+    NSLog(@"exfee invitation count: %i", self.invitations.count);
+    for (Invitation *inv in self.invitations) {
+        NSLog(@"exfee invitation item: %@", [inv.identity getDisplayName]);
+    }
 }
 
 

@@ -265,10 +265,34 @@ typedef enum {
     [super dealloc];
 }
 
+
+- (void)willMoveToParentViewController:(UIViewController *)parent
+{
+    if (parent == nil) {
+        NSLog(@"willMoveToParentViewController widgetexfee.exfee");
+        [self.exfee debugPrint];
+        
+        [self.onExitBlock invoke];
+    }
+}
 #pragma mark Click handler
 - (void)removeInvitation:(id)sender
 {
-     NSLog(@"removeInvitation");
+    UIView *btn = sender;
+    btn.hidden = YES;
+    NSArray *array = [exfeeContainer indexPathsForSelectedItems];
+    
+    [self.exfee removeInvitationsObject:selected_invitation];
+    selected_invitation = nil;
+    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+    [exfeeContainer reloadData];
+    
+    if (array == nil || array.count <= 1) {
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+        [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+        selected_invitation = [self.sortedInvitations objectAtIndex:0];
+        [self fillInvitationContent:selected_invitation];
+    }
 }
 
 #pragma mark Gesture Handler
@@ -475,12 +499,19 @@ typedef enum {
             CFRelease(textfontref);
         }
         
-        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-        NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit |NSTimeZoneCalendarUnit) fromDate:inv.updated_at];
-        [gregorian release];
-        NSString *altString = [DateTimeUtil GetRelativeTime:comps format:0];
+        NSString *altString = @"";
+        if (inv.updated_at != nil) {
+            NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+            NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit |NSTimeZoneCalendarUnit) fromDate:inv.updated_at];
+            [gregorian release];
+            altString = [DateTimeUtil GetRelativeTime:comps format:0];
+        }
         if ([inv.updated_by.connected_user_id intValue]!= [inv.identity.connected_user_id intValue]){
-            altString = [NSString stringWithFormat:@"Set by %@ %@", [inv.updated_by getDisplayName], altString];
+            if (altString && altString.length > 0) {
+                altString = [NSString stringWithFormat:@"Set by %@ %@", [inv.updated_by getDisplayName], altString];
+            }else{
+                 altString = [NSString stringWithFormat:@"Set by %@", [inv.updated_by getDisplayName]];
+            }
         }
         invRsvpAltLabel.text = altString;
         
@@ -667,14 +698,27 @@ typedef enum {
     NSInteger section = indexPath.section;
     if (section == 1) {
         if (indexPath.row == self.sortedInvitations.count){
+//            [self hideMenu];
             ExfeeInputViewController *viewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
             viewController.lastViewController = self;
             viewController.exfee = self.exfee;
+            viewController.needSubmit = YES;
             viewController.onExitBlock = ^{
-                self.sortedInvitations = [self.exfee getSortedInvitations];
-                // handle selected status;
-                // handle selected_invitation and invContent;
+                NSLog(@"WidgetExfee callback");
+                NSLog(@"viewController.exfee:");
+                [viewController.exfee debugPrint];
+                NSLog(@"self.exfee:");
+                [self.exfee debugPrint];
+//                self.exfee = viewController.exfee;
+                
+                self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
                 [exfeeContainer reloadData];
+                
+                if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [alert show];
+                    [alert release];
+                }
             };
             [self presentModalViewController:viewController animated:YES];
             [viewController release];

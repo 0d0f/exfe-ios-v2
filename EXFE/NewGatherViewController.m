@@ -330,7 +330,6 @@
 
 - (void) initData{
     title_be_edit = NO;
-  
     myIdentities = [[NSArray alloc] initWithArray:[[User getDefaultUser] sortedIdentiesById]];
     Identity *default_identity = [myIdentities objectAtIndex:0];
     
@@ -363,7 +362,7 @@
     self.cross.exfee.invitations = [[[NSMutableSet alloc] initWithCapacity:12] autorelease];
     [self.cross.exfee addDefaultInvitationBy:default_identity];
     
-    self.sortedInvitations = [self.cross.exfee getSortedInvitations];
+    self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
 }
 
 - (void)dealloc {
@@ -942,29 +941,10 @@
     item.isMe = [[User getDefaultUser] isMe:invitation.identity];
   
     Identity *identity = invitation.identity;
-    UIImage *img = nil;
-    if(identity.avatar_filename != nil)
-        img = [[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
-    if(img != nil && ![img isEqual:[NSNull null]]){
-        item.avatar = img;
-    }
-    else{
-        item.avatar = [UIImage imageNamed:@"portrait_default.png"];
-        
-        if(identity.avatar_filename != nil) {
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-                __block UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                        item.avatar = avatar;
-                        [item setNeedsDisplay];
-                    }
-                });
-            });
-            dispatch_release(imgQueue);
-        }
-    }
+    
+    [[ImgCache sharedManager] fillAvatarWith:identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"] using:^(UIImage *image) {
+        item.avatar = image;
+    }];
     return item;
 }
 
@@ -985,9 +965,10 @@
         ExfeeInputViewController *viewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
         viewController.lastViewController = self;
         viewController.exfee = self.cross.exfee;
+        viewController.needSubmit = NO;
         viewController.onExitBlock = ^{
             
-            self.sortedInvitations = [self.cross.exfee getSortedInvitations];
+            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
             [self reFormatTitle];
             [exfeeShowview reloadData];
             if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
@@ -1105,7 +1086,7 @@
     
     if ([self.cross.exfee hasInvitation:menu.invitation]) {
         [self.cross.exfee removeInvitationsObject:menu.invitation];
-        self.sortedInvitations = [self.cross.exfee getSortedInvitations];
+        self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
         [exfeeShowview reloadData];
         [self reFormatTitle];
         return;

@@ -360,6 +360,7 @@ static char identitykey;
     if([inputobjs count]==0){
         NSSet *set = [NSSet setWithArray:invitations];
         [self.exfee addInvitations:set];
+        [self.onExitBlock invoke];
         [self dismissModalViewControllerAnimated:YES];
     }
     else{
@@ -427,6 +428,8 @@ static char identitykey;
                   }
                   NSSet *set = [NSSet setWithArray:invitations];
                   [self.exfee addInvitations:set];
+                  
+                  [self.onExitBlock invoke];
                   [self dismissModalViewControllerAnimated:YES];
               }
         }
@@ -437,11 +440,11 @@ static char identitykey;
 }
 
 - (void) done:(id)sender{
-    NSString *inputtext=[exfeeList getInput];
-    NSString *provider=[Util findProvider:inputtext];
-
+    NSString *inputtext = [exfeeList getInput];
+    NSString *provider = [Util findProvider:inputtext];
+    
     if(![inputtext isEqualToString:@""])
-      [self addByInputIdentity:inputtext name:@"" provider:provider dismiss:YES];
+        [self addByInputIdentity:inputtext name:@"" provider:provider dismiss:YES];
     else{
         [self addExfeeToCross];
     }

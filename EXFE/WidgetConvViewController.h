@@ -49,6 +49,7 @@
 @property (nonatomic, assign) int exfee_id;
 @property (nonatomic, retain) Identity* myIdentity;
 @property (nonatomic, retain) UIInputToolbar* inputToolbar;
+@property (nonatomic, copy) id onExitBlock;
 
 - (void) refreshConversation;
 - (void) loadObjectsFromDataStore;

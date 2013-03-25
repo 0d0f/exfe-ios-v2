@@ -1339,7 +1339,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "437"
          endingLineNumber = "437"
-         landmarkName = "-dealloc"
+         landmarkName = "-touchesBegan:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1391,7 +1391,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "803"
          endingLineNumber = "803"
-         landmarkName = "-setTime:"
+         landmarkName = "-showDescriptionFullContent:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1547,7 +1547,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "560"
          endingLineNumber = "560"
-         landmarkName = "-addExfee:"
+         landmarkName = "-ShowPlaceView:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1559,9 +1559,7 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1276"
-         endingLineNumber = "1276"
-         landmarkName = "-RSVPRemoveMenuView:"
-         landmarkType = "5">
+         endingLineNumber = "1276">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1598,9 +1596,7 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1444"
-         endingLineNumber = "1444"
-         landmarkName = "-motionEnded:withEvent:"
-         landmarkType = "5">
+         endingLineNumber = "1444">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
@@ -1689,9 +1685,7 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1423"
-         endingLineNumber = "1423"
-         landmarkName = "-pickdone"
-         landmarkType = "5">
+         endingLineNumber = "1423">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
@@ -1703,7 +1697,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "406"
          endingLineNumber = "406"
-         landmarkName = "-replaceDefaultIdentity:"
+         landmarkName = "-touchesBegan:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1950,7 +1944,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "520"
          endingLineNumber = "520"
-         landmarkName = "-Close:"
+         landmarkName = "-Gather:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint

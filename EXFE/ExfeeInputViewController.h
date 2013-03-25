@@ -51,10 +51,10 @@
     UIButton *btnLocal;
     AddressBook *address;
 }
-@property (nonatomic, retain) UIViewController *lastViewController;
+@property (nonatomic, assign) UIViewController *lastViewController;
 @property (nonatomic, retain) Exfee *exfee;
 @property (nonatomic, assign) BOOL needSubmit;
-@property (nonatomic, retain) id onExitBlock;
+@property (nonatomic, copy) id onExitBlock;
 
 - (void) done:(id)sender;
 - (void) Close;
