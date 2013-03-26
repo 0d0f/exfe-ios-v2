@@ -154,7 +154,7 @@ static char identitykey;
         [bigspin release];
         hud.labelText = @"Loading";
 
-      @synchronized(self){
+//      @synchronized(self){
         dispatch_queue_t loadingQueue = dispatch_queue_create("loading addressbook", NULL);
         dispatch_async(loadingQueue, ^{
             [address UpdatePeople:nil];
@@ -175,7 +175,7 @@ static char identitykey;
             });
         });
         dispatch_release(loadingQueue);
-      }
+//      }
 
     }else{
       NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
