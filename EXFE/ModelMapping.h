@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Cross.h"
+
 @interface ModelMapping : NSObject
 
 + (void) buildMapping;

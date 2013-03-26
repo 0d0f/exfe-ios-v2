@@ -22,7 +22,7 @@
 #import "ImgCache.h"
 #import "DateTimeUtil.h"
 #import "APICrosses.h"
-
+#import "APIExfee.h"
 
 
 #define kTagViewExfeeRoot         10
@@ -281,18 +281,50 @@ typedef enum {
     UIView *btn = sender;
     btn.hidden = YES;
     NSArray *array = [exfeeContainer indexPathsForSelectedItems];
+    selected_invitation.rsvp_status = @"REMOVED";
     
-    [self.exfee removeInvitationsObject:selected_invitation];
-    selected_invitation = nil;
-    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
-    [exfeeContainer reloadData];
+    Identity *myidentity = [self.exfee getMyInvitation].identity;
+    [APIExfee edit:self.exfee
+        myIdentity:[myidentity.identity_id intValue]
+           success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+               if ([operation.HTTPRequestOperation.response statusCode] == 200){
+                   if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+                   {
+                       Meta* meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                       int code = [meta.code intValue];
+                       int type = code /100;
+                       switch (type) {
+                           case 2: // HTTP OK
+                               if(code == 200){
+                                   Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
+                                   //[self.exfee removeInvitationsObject:selected_invitation];
+                                   selected_invitation = nil;
+                                   self.exfee = respExfee;
+                                   self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+                                   [exfeeContainer reloadData];
+                                   
+                                   if (array == nil || array.count <= 1) {
+                                       NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+                                       [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+                                       selected_invitation = [self.sortedInvitations objectAtIndex:0];
+                                       [self fillInvitationContent:selected_invitation];
+                                   }
+                               }
+                               break;
+                           default:
+                               break;
+                       }
+                       
+                       
+                       
+                   }
+               }
+           }
+           failure:^(RKObjectRequestOperation *operation, NSError *error) {
+               ;
+           }];
     
-    if (array == nil || array.count <= 1) {
-        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-        [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-        selected_invitation = [self.sortedInvitations objectAtIndex:0];
-        [self fillInvitationContent:selected_invitation];
-    }
+    
 }
 
 #pragma mark Gesture Handler
@@ -871,70 +903,65 @@ typedef enum {
 
 #pragma mark API request for modification.
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
-    //    NSError *error;
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     Identity *myidentity = [self.exfee getMyInvitation].identity;
-    NSDictionary *rsvpdict = @{@"identity_id":_invitation.identity.identity_id,
-                               @"by_identity_id":myidentity.identity_id,
-                               @"rsvp_status": status,
-                               @"type":@"rsvp"};
-    
-    NSString *endpoint = [NSString stringWithFormat:@"%@/exfee/%u/rsvp?token=%@",API_ROOT,[_exfee.exfee_id intValue],app.accesstoken];
-    
-    RKObjectManager *manager=[RKObjectManager sharedManager] ;
-    manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
-    [manager.HTTPClient postPath:endpoint parameters:@{@"rsvps":@[rsvpdict]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        if ([operation.response statusCode] == 200){
-            if([responseObject isKindOfClass:[NSDictionary class]])
-            {
-                NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
-                if([[meta objectForKey:@"code"] intValue]==403){
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    alert.tag=403;
-                    [alert show];
-                    [alert release];
-                }else if([[meta objectForKey:@"code"] intValue]==200){
-                    NSLog(@"submit rsvp sucessfully...");
-                    CrossGroupViewController *parent = (CrossGroupViewController*)self.parentViewController;
-                    [APICrosses LoadCrossWithCrossId:[parent.cross.cross_id intValue] updatedtime:@"" success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                        
-                        if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-                        {
-                            Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                            if([meta.code intValue]==200){
-                                self.exfee = parent.cross.exfee;
-                                self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
-                                [exfeeContainer reloadData];
-                                
-                                for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
-                                    Invitation* inv = [self.sortedInvitations objectAtIndex:i];
-                                    if ([_invitation.invitation_id intValue] == [inv.invitation_id intValue]) {
-                                        [exfeeContainer selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-                                    }
-                                }
-                            }
-                            
-                        }
-                    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                        
-                    }];
-                    self.exfee = parent.cross.exfee;
-                    [exfeeContainer reloadData];
-                }
-                
-            }
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
-        if(error.code==2)
-            errormsg=@"A connection failure has occurred.";
-        else
-            errormsg=@"Could not connect to the server.";
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        
-    }];
+    [APIExfee submitRsvp: status
+                      on: _invitation
+              myIdentity: myidentity.identity_id
+                 onExfee: [self.exfee.exfee_id intValue]
+                 success: ^(AFHTTPRequestOperation *operation, id responseObject) {
+                     
+                     if ([operation.response statusCode] == 200){
+                         if([responseObject isKindOfClass:[NSDictionary class]])
+                         {
+                             NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
+                             if([[meta objectForKey:@"code"] intValue]==403){
+                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                 alert.tag=403;
+                                 [alert show];
+                                 [alert release];
+                             }else if([[meta objectForKey:@"code"] intValue]==200){
+                                 NSLog(@"submit rsvp sucessfully...");
+                                 CrossGroupViewController *parent = (CrossGroupViewController*)self.parentViewController;
+                                 [APICrosses LoadCrossWithCrossId:[parent.cross.cross_id intValue] updatedtime:@"" success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                     
+                                     if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+                                     {
+                                         Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                                         if([meta.code intValue]==200){
+                                             self.exfee = parent.cross.exfee;
+                                             self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+                                             [exfeeContainer reloadData];
+                                             
+                                             for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
+                                                 Invitation* inv = [self.sortedInvitations objectAtIndex:i];
+                                                 if ([_invitation.invitation_id intValue] == [inv.invitation_id intValue]) {
+                                                     [exfeeContainer selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+                                                 }
+                                             }
+                                         }
+                                         
+                                     }
+                                 } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                     
+                                 }];
+                                 self.exfee = parent.cross.exfee;
+                                 [exfeeContainer reloadData];
+                             }
+                             
+                         }
+                     }
+                 }
+                 failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
+                     NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+                     if(error.code==2)
+                         errormsg=@"A connection failure has occurred.";
+                     else
+                         errormsg=@"Could not connect to the server.";
+                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                     [alert show];
+                     [alert release];
+                     
+                 }];
 }
 @end

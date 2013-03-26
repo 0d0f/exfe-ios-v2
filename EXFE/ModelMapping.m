@@ -8,6 +8,9 @@
 
 #import "ModelMapping.h"
 #import <RestKit/RestKit.h>
+#import "Cross.h"
+#import "Exfee+EXFE.h"
+
 
 @implementation ModelMapping
 + (void) buildMapping{
@@ -138,6 +141,12 @@
 
   RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:crossrequestMapping objectClass:[Cross class] rootKeyPath:@"cross"];
   [objectManager addRequestDescriptor:requestDescriptor];
+    
+    RKRequestDescriptor *exfeeRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:exfeerequestMapping objectClass:[Exfee class] rootKeyPath:@"exfee"];
+    [objectManager addRequestDescriptor:exfeeRequestDescriptor];
+    
+    RKResponseDescriptor *exfeeResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:exfeeMapping pathPattern:nil keyPath:@"response.exfee" statusCodes:nil];
+    [objectManager addResponseDescriptor:exfeeResponseDescriptor];
   
   RKResponseDescriptor *conversationresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:conversationMapping pathPattern:nil keyPath:@"response.conversation" statusCodes:nil];
   [objectManager addResponseDescriptor:conversationresponseDescriptor];
