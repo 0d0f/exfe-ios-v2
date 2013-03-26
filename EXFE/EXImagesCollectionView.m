@@ -144,6 +144,12 @@
     
     int acceptednum=0;
     int allnum=0;
+    for (UIView *subview in [self subviews]){
+      if ([subview isKindOfClass:[ExfeeNumberView class]]){
+        [subview removeFromSuperview];
+      }
+    }
+  
     for(int i=0;i<=count;i++)
     {
         if( x_count==maxColumn){
