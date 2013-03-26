@@ -18,6 +18,7 @@
 #import "ExfeeInputViewController.h"
 #import "CrossGroupViewController.h"
 #import "ExfeeCollectionViewCell.h"
+#import "ExfeeAddCollectionViewCell.h"
 #import "Util.h"
 #import "ImgCache.h"
 #import "DateTimeUtil.h"
@@ -110,14 +111,14 @@ typedef enum {
     }
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    exfeeContainer = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, CGRectGetWidth(b), CGRectGetHeight(a) - 50) collectionViewLayout:flowLayout];
+    exfeeContainer = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(b), CGRectGetHeight(a) - 44) collectionViewLayout:flowLayout];
     [flowLayout release];
     exfeeContainer.delegate = self;
     exfeeContainer.dataSource = self;
     [exfeeContainer registerClass:[ExfeeCollectionViewCell class] forCellWithReuseIdentifier:@"Exfee Cell"];
     [exfeeContainer registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Blank Cell"];
-    [exfeeContainer registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Add Cell"];
-    exfeeContainer.backgroundColor = [UIColor darkGrayColor];
+    [exfeeContainer registerClass:[ExfeeAddCollectionViewCell class] forCellWithReuseIdentifier:@"Add Cell"];
+    exfeeContainer.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"conv_bg.png"]];
     exfeeContainer.alwaysBounceVertical = YES;
     exfeeContainer.contentOffset = CGPointMake(0, 0);
 //    exfeeContainer.contentInset = UIEdgeInsetsMake(0, 4, 0, 4);
@@ -627,13 +628,8 @@ typedef enum {
         case 1:
         {
             if (row == self.sortedInvitations.count) {
-                UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Add Cell" forIndexPath:indexPath];
-                if (cell.contentView.subviews.count == 0) {
-                    UIImageView *bg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_add.png"]];
-                    bg.frame = CGRectMake(0, 0, 78, 78);
-                    [cell.contentView addSubview:bg];
-                    [bg release];
-                }
+                ExfeeAddCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Add Cell" forIndexPath:indexPath];
+                cell.description.text = [NSString stringWithFormat:@"%u / %u", [self.exfee.accepted integerValue], [self.exfee.total integerValue]];
                 return cell;
             }else{
                 ExfeeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Exfee Cell" forIndexPath:indexPath];
