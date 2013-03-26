@@ -185,7 +185,6 @@ static char identitykey;
       filteredlocalcontacts = [[objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil] retain];
       if(addressbookType==LOCAL_ADDRESSBOOK)
           [self reloadLocalAddressBook];
-
     }
 }
 
