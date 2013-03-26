@@ -17,7 +17,7 @@
 #define DBNAME @"exfe_v2_8.sqlite"
 
     
-#define PANDA
+#define DEV
 
 #ifdef DEV
 #define API_ROOT @"http://api.0d0f.com/v2"

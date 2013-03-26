@@ -99,6 +99,7 @@
 		4FA013AE16F3546A00F40CB6 /* ExfeeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013AD16F3546A00F40CB6 /* ExfeeCollectionViewCell.m */; };
 		4FA0C40A16FB626B00E25C74 /* WCAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA0C40916FB626B00E25C74 /* WCAlertView.m */; };
 		4FA0C41016FC57C400E25C74 /* iphone_delete_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FA0C40F16FC57C300E25C74 /* iphone_delete_button.png */; };
+		4FA84B09170155DD0096FB5A /* ExfeeAddCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */; };
 		4FAD642716968C7F001870FF /* CrossTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD642616968C7F001870FF /* CrossTime+Helper.m */; };
 		4FAE4E6416AF9F82001479F8 /* x_titlebg_default.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */; };
 		4FB1635716B25756005B1D3C /* profile_title_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635516B25756005B1D3C /* profile_title_mask.png */; };
@@ -622,6 +623,8 @@
 		4FA0C40816FB626B00E25C74 /* WCAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAlertView.h; sourceTree = "<group>"; };
 		4FA0C40916FB626B00E25C74 /* WCAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAlertView.m; sourceTree = "<group>"; };
 		4FA0C40F16FC57C300E25C74 /* iphone_delete_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iphone_delete_button.png; sourceTree = "<group>"; };
+		4FA84B07170155DD0096FB5A /* ExfeeAddCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExfeeAddCollectionViewCell.h; sourceTree = "<group>"; };
+		4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExfeeAddCollectionViewCell.m; sourceTree = "<group>"; };
 		4FAD642516968C7F001870FF /* CrossTime+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CrossTime+Helper.h"; sourceTree = "<group>"; };
 		4FAD642616968C7F001870FF /* CrossTime+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CrossTime+Helper.m"; sourceTree = "<group>"; };
 		4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = x_titlebg_default.jpg; sourceTree = "<group>"; };
@@ -1633,6 +1636,8 @@
 				4F99270416F02AEE003D784A /* ExfeeRsvpCell.m */,
 				4FA013AC16F3546A00F40CB6 /* ExfeeCollectionViewCell.h */,
 				4FA013AD16F3546A00F40CB6 /* ExfeeCollectionViewCell.m */,
+				4FA84B07170155DD0096FB5A /* ExfeeAddCollectionViewCell.h */,
+				4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -2638,6 +2643,7 @@
 				4F29C93016F9A5B5001BB176 /* User+EXFE.m in Sources */,
 				4FA0C40A16FB626B00E25C74 /* WCAlertView.m in Sources */,
 				4FB30D1D17003BFE007BC66D /* APIExfee.m in Sources */,
+				4FA84B09170155DD0096FB5A /* ExfeeAddCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

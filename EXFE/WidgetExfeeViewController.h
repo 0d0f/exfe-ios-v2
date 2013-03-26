@@ -18,7 +18,7 @@ typedef enum {
     ScrollDirectionCrazy,
 } ScrollDirection;
 
-@interface WidgetExfeeViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EXBasicMenuDelegate>{
+@interface WidgetExfeeViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EXBasicMenuDelegate,UIActionSheetDelegate>{
     
     UIView *invContent;
     UILabel *invName;

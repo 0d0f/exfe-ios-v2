@@ -18,6 +18,7 @@
 #import "ExfeeInputViewController.h"
 #import "CrossGroupViewController.h"
 #import "ExfeeCollectionViewCell.h"
+#import "ExfeeAddCollectionViewCell.h"
 #import "Util.h"
 #import "ImgCache.h"
 #import "DateTimeUtil.h"
@@ -110,14 +111,14 @@ typedef enum {
     }
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    exfeeContainer = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, CGRectGetWidth(b), CGRectGetHeight(a) - 50) collectionViewLayout:flowLayout];
+    exfeeContainer = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(b), CGRectGetHeight(a) - 44) collectionViewLayout:flowLayout];
     [flowLayout release];
     exfeeContainer.delegate = self;
     exfeeContainer.dataSource = self;
     [exfeeContainer registerClass:[ExfeeCollectionViewCell class] forCellWithReuseIdentifier:@"Exfee Cell"];
     [exfeeContainer registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Blank Cell"];
-    [exfeeContainer registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Add Cell"];
-    exfeeContainer.backgroundColor = [UIColor darkGrayColor];
+    [exfeeContainer registerClass:[ExfeeAddCollectionViewCell class] forCellWithReuseIdentifier:@"Add Cell"];
+    exfeeContainer.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"conv_bg.png"]];
     exfeeContainer.alwaysBounceVertical = YES;
     exfeeContainer.contentOffset = CGPointMake(0, 0);
 //    exfeeContainer.contentInset = UIEdgeInsetsMake(0, 4, 0, 4);
@@ -280,49 +281,76 @@ typedef enum {
 {
     UIView *btn = sender;
     btn.hidden = YES;
-    NSArray *array = [exfeeContainer indexPathsForSelectedItems];
-    selected_invitation.rsvp_status = @"REMOVED";
     
-    Identity *myidentity = [self.exfee getMyInvitation].identity;
-    [APIExfee edit:self.exfee
-        myIdentity:[myidentity.identity_id intValue]
-           success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-               if ([operation.HTTPRequestOperation.response statusCode] == 200){
-                   if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-                   {
-                       Meta* meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                       int code = [meta.code intValue];
-                       int type = code /100;
-                       switch (type) {
-                           case 2: // HTTP OK
-                               if(code == 200){
-                                   Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
-                                   //[self.exfee removeInvitationsObject:selected_invitation];
-                                   selected_invitation = nil;
-                                   self.exfee = respExfee;
-                                   self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
-                                   [exfeeContainer reloadData];
-                                   
-                                   if (array == nil || array.count <= 1) {
-                                       NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-                                       [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-                                       selected_invitation = [self.sortedInvitations objectAtIndex:0];
-                                       [self fillInvitationContent:selected_invitation];
+    NSString *title = @"People will no longer has access to any information in this ·X· once removed. Please confirm to remove.";
+    NSString *destTitle = @"Remove from this ·X·";
+    if ([[User getDefaultUser] isMe:selected_invitation.identity]) {
+        destTitle = @"Leave from this ·X·";
+        title = @"You will no longer has access to any information in this ·X· once left. Please confirm to leave.";
+    }
+    
+    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:title
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Cancel"
+                                              destructiveButtonTitle:destTitle
+                                                   otherButtonTitles:nil];
+	popupQuery.actionSheetStyle = UIActionSheetStyleDefault;
+    
+	[popupQuery showInView:self.view];
+	[popupQuery release];
+}
+
+#pragma mark UIActionSheetDelegate
+-(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == actionSheet.destructiveButtonIndex) {
+        NSArray *array = [exfeeContainer indexPathsForSelectedItems];
+        selected_invitation.rsvp_status = @"REMOVED";
+        
+        Identity *myidentity = [self.exfee getMyInvitation].identity;
+        [APIExfee edit:self.exfee
+            myIdentity:[myidentity.identity_id intValue]
+               success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                   if ([operation.HTTPRequestOperation.response statusCode] == 200){
+                       if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+                       {
+                           Meta* meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                           int code = [meta.code intValue];
+                           int type = code /100;
+                           switch (type) {
+                               case 2: // HTTP OK
+                                   if(code == 200){
+                                       Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
+                                       //[self.exfee removeInvitationsObject:selected_invitation];
+                                       selected_invitation = nil;
+                                       self.exfee = respExfee;
+                                       self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+                                       [exfeeContainer reloadData];
+                                       
+                                       if (array == nil || array.count <= 1) {
+                                           NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+                                           [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+                                           selected_invitation = [self.sortedInvitations objectAtIndex:0];
+                                           [self fillInvitationContent:selected_invitation];
+                                       }
                                    }
-                               }
-                               break;
-                           default:
-                               break;
+                                   break;
+                               default:
+                                   break;
+                           }
+                           
+                           
+                           
                        }
-                       
-                       
-                       
                    }
                }
-           }
-           failure:^(RKObjectRequestOperation *operation, NSError *error) {
-               ;
-           }];
+               failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                   ;
+               }];
+    }
+    
+    
+    
     
     
 }
@@ -627,13 +655,8 @@ typedef enum {
         case 1:
         {
             if (row == self.sortedInvitations.count) {
-                UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Add Cell" forIndexPath:indexPath];
-                if (cell.contentView.subviews.count == 0) {
-                    UIImageView *bg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_add.png"]];
-                    bg.frame = CGRectMake(0, 0, 78, 78);
-                    [cell.contentView addSubview:bg];
-                    [bg release];
-                }
+                ExfeeAddCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Add Cell" forIndexPath:indexPath];
+                cell.description.text = [NSString stringWithFormat:@"%u / %u", [self.exfee.accepted integerValue], [self.exfee.total integerValue]];
                 return cell;
             }else{
                 ExfeeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Exfee Cell" forIndexPath:indexPath];
