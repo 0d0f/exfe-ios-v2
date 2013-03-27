@@ -1070,42 +1070,12 @@
 
 - (void)swapChildViewController:(NSInteger)widget_id{
     
-    if (_currentViewController) {
-        
-        [UIView animateWithDuration:0.2
-                         animations:^{
-                             [self changeHeaderStyle: kHeaderStyleFull];
-                         }];
-        
-        
-        
-        [UIView animateWithDuration:0.233
-                              delay:0.2
-                            options:UIViewAnimationOptionTransitionNone
-                         animations:^{
-                             self.currentViewController.view.alpha = 0;
-                         }
-                         completion:^(BOOL finished){
-                             
-                             [self.currentViewController.view removeFromSuperview];
-                             [self.currentViewController willMoveToParentViewController:nil];
-                             [self.currentViewController removeFromParentViewController];
-//                             [self.currentViewController didMoveToParentViewController:nil];
-                             self.currentViewController = nil;
-                             
-                             [self showChinldViewController:widget_id];
-                         }];
-    }else{
-        [self showChinldViewController:widget_id];
-    }
-}
-
-- (void)showChinldViewController:(NSInteger)widget_id{
+    UIViewController *newVC = nil;
+    NSUInteger style = kHeaderStyleFull;
     switch (widget_id) {
         case 2:
         {
             WidgetConvViewController * conversationView =  [[WidgetConvViewController alloc]initWithNibName:@"WidgetConvViewController" bundle:nil] ;
-            
             // prepare data for conversation
             conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
             Invitation* myInv = [_cross.exfee getMyInvitation];
@@ -1117,22 +1087,8 @@
             _cross.conversation_count = 0;
             [self fillConversationCount:0];
             
-            [self addChildViewController:conversationView];
-            [self.view insertSubview:conversationView.view aboveSubview:headerShadow];
-            conversationView.view.alpha = 0;
-            __weak __block CrossGroupViewController *weakSelf=self;
-            [UIView animateWithDuration:0.233 animations:^{
-                conversationView.view.alpha = 1;
-            }
-                             completion:^(BOOL finished){
-                                 [conversationView didMoveToParentViewController:weakSelf];
-                                 weakSelf.currentViewController = [conversationView autorelease];
-                                 [UIView animateWithDuration:0.2
-                                                  animations:^{
-                                                      [self changeHeaderStyle:kHeaderStyleHalf];
-                                                  }];
-                                 
-                             }];
+            newVC = conversationView;
+            style = kHeaderStyleHalf;
         }
             break;
         case 3:
@@ -1143,11 +1099,8 @@
                 [self fillExfee:exfeeView.exfee];
             };
             
-            [self addChildViewController:exfeeView];
-            [self.view insertSubview:exfeeView.view aboveSubview:headerShadow];
-            [exfeeView didMoveToParentViewController:self];
-            self.currentViewController = [exfeeView autorelease];
-            [self changeHeaderStyle:kHeaderStyleHalf];
+            newVC = exfeeView;
+            style = kHeaderStyleHalf;
         }
             
         default:
@@ -1156,8 +1109,45 @@
             
             break;
     }
+    
+    BOOL needChangeHeadStyle = _headerStyle != style;
+    
+    if (newVC) {
+        [self addChildViewController:newVC];
+        [self.view insertSubview:newVC.view aboveSubview:headerShadow];
+        newVC.view.alpha = 0;
+    }
+    __weak __block CrossGroupViewController *weakSelf = self;
+    [UIView animateWithDuration:0.233 animations:^{
+        if (weakSelf.currentViewController) {
+            weakSelf.currentViewController.view.alpha = 0;
+        }
+        if (newVC) {
+            newVC.view.alpha = 1;
+        }
+    }
+                     completion:^(BOOL finished){
+                         if (weakSelf.currentViewController) {
+                             
+                             [weakSelf.currentViewController.view removeFromSuperview];
+                             [weakSelf.currentViewController willMoveToParentViewController:nil];
+                             [weakSelf.currentViewController removeFromParentViewController];
+                             weakSelf.currentViewController = nil;
+                         }
+                         
+                         if (newVC) {
+                             [newVC didMoveToParentViewController:weakSelf];
+                             weakSelf.currentViewController = [newVC autorelease];
+                         }
+                         if (needChangeHeadStyle) {
+                             [UIView animateWithDuration:0.2
+                                              animations:^{
+                                                  [self changeHeaderStyle:style];
+                                              }];
+                         }
+                         
+                     }];
 }
-
 
 
 #pragma mark TODO gesture handler
