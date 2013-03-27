@@ -254,7 +254,7 @@
     [self.view addSubview:titleView];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 40 / 2, 20, 40)];
+    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
     btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
@@ -1025,7 +1025,7 @@
             titleView.frame = CGRectMake(25, 0, 290, 50);
             titleView.lineBreakMode = UILineBreakModeTailTruncation;
             titleView.numberOfLines = 1;
-            btnBack.frame = CGRectMake(0, 0, 20, 40);
+            btnBack.frame = CGRectMake(0, 0, 20, 44);
             tabWidget.frame = CGRectMake(0, 66 - 36, CGRectGetWidth(self.view.bounds), 40);
             [self moveLayer:tabLayer.mask to:CGPointMake(head_bg_point.x, head_bg_point.y - 36)];
             break;
@@ -1034,7 +1034,7 @@
             titleView.frame = CGRectMake(25, 19, 290, 50);
             titleView.lineBreakMode = UILineBreakModeWordWrap;
             titleView.numberOfLines = 2;
-            btnBack.frame = CGRectMake(0, DECTOR_HEIGHT / 2 - 40 / 2, 20, 40);
+            btnBack.frame = CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44);
             tabWidget.frame = CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40);
             [self moveLayer:tabLayer.mask to:head_bg_point];
             break;

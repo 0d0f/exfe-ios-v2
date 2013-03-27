@@ -86,7 +86,7 @@
 
 - (CGPoint)positionOfButton:(NSUInteger)pos{
     if (gravity == 1){
-        return CGPointMake(CGRectGetWidth(self.bounds) - (30 + 20) * (pos + 1) + 10, 0);
+        return CGPointMake(CGRectGetWidth(self.bounds) - (30 + 20) * (pos + 1) + 10, 3);
     }
     return CGPointZero;
 }
