@@ -26,14 +26,13 @@
         _sublayer = [CALayer layer];
         _sublayer.backgroundColor = [UIColor blackColor].CGColor;
         _sublayer.opacity = COLOR255(0x55);
-        _sublayer.frame = CGRectMake(0, 0, 320, 300);
+        _sublayer.frame = CGRectMake(0, 0, 320, 100);
         _sublayer.name = @"cover";
         [self addSublayer:_sublayer];
         
-        _curveBase = 0.f;
-        _curveCenter = CGPointZero;
-        _curveParamRect = CGSizeMake(78, 15);
-        _curveParamControl = CGSizeMake(32, 0);
+        _curveParamBase = CGPointMake(198, 80);
+        _curveParamControl1 = CGRectMake(198 - _curveParamBase.x, 80 - _curveParamBase.y, 76, 0);
+        _curveParamControl2 = CGRectMake(320 - _curveParamBase.x, 100 - _curveParamBase.y, -46, 0);
     }
     return self;
 }
@@ -46,24 +45,24 @@
 - (void)updateCurvePath:(UIBezierPath*)path{
     
     
-    CGFloat minY = _curveBase;
+    CGFloat minY = 0.0f;
     
 
-    CGFloat y0 = _curveCenter.y - _curveParamRect.height / 2.0f;
-    CGFloat y3 = _curveCenter.y + _curveParamRect.height / 2.0f;
-    CGFloat y1 = y0 + _curveParamControl.height;
-    CGFloat y2 = y3 - _curveParamControl.height;
+    CGFloat y0 = _curveParamBase.y + _curveParamControl1.origin.y;
+    CGFloat y3 = _curveParamBase.y + _curveParamControl2.origin.y;
+    CGFloat y1 = y0 + _curveParamControl1.size.height;
+    CGFloat y2 = y3 + _curveParamControl2.size.height;
     
     CGFloat midY = y0;
     CGFloat maxY = y3;
     
-    CGFloat minX = 0;
+    CGFloat minX = 0.0f;
     CGFloat maxX = CGRectGetWidth(self.bounds) * 2;
     
-    CGFloat x0 = _curveCenter.x - _curveParamRect.width / 2.0f;
-    CGFloat x3 = _curveCenter.x + _curveParamRect.width / 2.0f;
-    CGFloat x1 = x0 + _curveParamControl.width;
-    CGFloat x2 = x3 - _curveParamControl.width;
+    CGFloat x0 = _curveParamBase.x + _curveParamControl1.origin.x;
+    CGFloat x3 = _curveParamBase.x + _curveParamControl2.origin.x;
+    CGFloat x1 = x0 + _curveParamControl1.size.width;
+    CGFloat x2 = x3 + _curveParamControl2.size.width;
     
     [path removeAllPoints];
     [path moveToPoint:CGPointMake(minX, minY)];

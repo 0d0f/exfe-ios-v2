@@ -11,11 +11,46 @@
 
 @implementation EXTabWidget
 
+// TODO: under coding
+- (id)initWithFrame:(CGRect)frame withItems:(NSArray*)items current:(NSInteger)index;
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        currentIndex = index;
+        gravity = 1; // right to left
+        _enable = YES;
+        // Initialization code
+        CGRect frame = CGRectMake(0, 0, 30, 30);
+        for (NSUInteger i = 0; i < items.count; i++) {
+            EXTabWidgetItem *item = [items objectAtIndex:i];
+            UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            CGPoint topleft = [self positionOfButton:i];
+            
+            btn.backgroundColor = [UIColor clearColor];
+            
+            [btn setImage:item.image forState:UIControlStateNormal];
+            if (item.highlightedImage) {
+                [btn setImage:item.highlightedImage forState:UIControlStateApplication];
+            }
+            [btn addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
+            btn.tag = i + 1;
+            
+            btn.frame = CGRectOffset(frame, topleft.x, topleft.y);
+            if (i != currentIndex) {
+                btn.hidden = YES;
+            }
+            [self addSubview:btn];
+            total = btn.tag;
+        }
+    }
+    return self;
+}
+
 - (id)initWithFrame:(CGRect)frame withImages:(NSArray*)imgs current:(NSInteger)index;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        currentIndex = 0;
+        currentIndex = index;
         gravity = 1; // right to left
         _enable = YES;
         // Initialization code
@@ -51,7 +86,7 @@
 
 - (CGPoint)positionOfButton:(NSUInteger)pos{
     if (gravity == 1){
-        return CGPointMake(CGRectGetWidth(self.bounds) - (30 + 8) * (pos + 1), 5);
+        return CGPointMake(CGRectGetWidth(self.bounds) - (30 + 20) * (pos + 1) + 10, 0);
     }
     return CGPointZero;
 }
@@ -72,7 +107,7 @@
         _enable = NO;
         if (self.delegate) {
             if([self.delegate respondsToSelector:@selector(updateLayout:animationWithParam:)]){
-                NSDictionary * dict = @{@"width": @"201", @"animationTime": [NSString stringWithFormat:@"%f", 0.2]};
+                NSDictionary * dict = @{@"width": @"98", @"animationTime": [NSString stringWithFormat:@"%f", 0.2]};
                 [self.delegate performSelector:@selector(updateLayout:animationWithParam:) withObject:self withObject:dict];
             }
         }
@@ -136,7 +171,7 @@
 
                                  if (self.delegate) {
                                      if([self.delegate respondsToSelector:@selector(updateLayout:animationWithParam:)]){
-                                         NSDictionary * dict = @{@"width": @"269", @"animationTime": [NSString stringWithFormat:@"%f", 0.4]};
+                                         NSDictionary * dict = @{@"width": @"198", @"animationTime": [NSString stringWithFormat:@"%f", 0.4]};
                                          [self.delegate performSelector:@selector(updateLayout:animationWithParam:) withObject:self withObject:dict];
                                      }
                                  }

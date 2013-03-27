@@ -30,6 +30,8 @@ typedef enum {
     UIImageView *identityProvider;
     UIImageView *identityWaring;
     UIBorderLabel *identityName;
+    UILabel *bioTitle;
+    UILabel *bioContent;
     UIButton *ActionMenu;
     UIButton *RemoveButton;
     
@@ -38,6 +40,7 @@ typedef enum {
     CALayer *layer1;
     CALayer *layer2;
     CALayer *layer3;
+    CALayer *layer4;
     
 //    UITableView* invTable;
 //    ExfeeRsvpCell *tableHeader;

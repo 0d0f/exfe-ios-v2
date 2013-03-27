@@ -48,8 +48,8 @@ static char mergetoken;
     }
     
 //  NSURL *baseURL = [NSURL URLWithString:API_ROOT];
-  RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-//  RKLogConfigureByName("*", RKLogLevelOff);
+//  RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+  RKLogConfigureByName("*", RKLogLevelOff);
   
   [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
   [self createdb];

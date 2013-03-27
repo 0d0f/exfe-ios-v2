@@ -47,7 +47,7 @@
     
     // Header
     UIView* headerView;
-    UIImageView* dectorView;
+//    UIImageView* dectorView;
     UILabel* titleView;
     // Content
     //    UIScrollView* xContainer;

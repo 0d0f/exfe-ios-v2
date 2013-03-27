@@ -34,8 +34,8 @@
 #define SMALL_SLOT                       (5)
 #define ADDITIONAL_SLOT                  (8)
 
-#define DECTOR_HEIGHT                    (88)
-#define DECTOR_HEIGHT_EXTRA              (15)
+#define DECTOR_HEIGHT                    (80)
+#define DECTOR_HEIGHT_EXTRA              (20)
 #define DECTOR_MARGIN                    (SMALL_SLOT)
 #define OVERLAP                          (0)
 #define CONTAINER_TOP_MARGIN             (DECTOR_HEIGHT - OVERLAP)
@@ -127,19 +127,20 @@
     CGFloat head_bg_img_scale = CGRectGetWidth(self.view.bounds) / HEADER_BACKGROUND_WIDTH;
     head_bg_img_startY = 0 - HEADER_BACKGROUND_Y_OFFSET * head_bg_img_scale;
     
-    headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), 88 + 20)];
+    headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA)];
     {
-        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, head_bg_img_startY, HEADER_BACKGROUND_WIDTH * head_bg_img_scale, HEADER_BACKGFOUND_HEIGHT * head_bg_img_scale)];
-        CALayer *sublayer = [CALayer layer];
-        sublayer.backgroundColor = [UIColor blackColor].CGColor;
-        sublayer.opacity = COLOR255(0x55);
-        sublayer.frame = dectorView.bounds;
-        [dectorView.layer addSublayer:sublayer];
-        [headerView addSubview:dectorView];
+//        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, head_bg_img_startY, HEADER_BACKGROUND_WIDTH * head_bg_img_scale, HEADER_BACKGFOUND_HEIGHT * head_bg_img_scale)];
+//        CALayer *sublayer = [CALayer layer];
+//        sublayer.backgroundColor = [UIColor blackColor].CGColor;
+//        sublayer.opacity = COLOR255(0x55);
+//        sublayer.frame = dectorView.bounds;
+//        [dectorView.layer addSublayer:sublayer];
+//dectorView.hidden = YES;
+//        [headerView addSubview:dectorView];
     }
     [self.view addSubview:headerView];
     
-    container = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 88, CGRectGetWidth(b), CGRectGetHeight(a) - 88)];
+    container = [[UIScrollView alloc] initWithFrame:CGRectMake(0, DECTOR_HEIGHT, CGRectGetWidth(b), CGRectGetHeight(a) - DECTOR_HEIGHT)];
     container.backgroundColor = [UIColor COLOR_SNOW];
     container.alwaysBounceVertical = YES;
     container.delegate = self;
@@ -233,8 +234,7 @@
     {
         tabLayer = [[EXTabLayer alloc] init];
         tabLayer.frame = CGRectMake(0, head_bg_img_startY, HEADER_BACKGROUND_WIDTH * head_bg_img_scale, HEADER_BACKGFOUND_HEIGHT * head_bg_img_scale);
-        tabLayer.curveBase = 0 - head_bg_img_startY;
-        tabLayer.curveCenter = CGPointMake(269, tabLayer.curveBase + 100);
+        tabLayer.curveParamBase = CGPointMake(198, 80 - head_bg_img_startY);
         [tabLayer setNeedsLayout];
         //[tabLayer setNeedsDisplay];
         head_bg_point = tabLayer.mask.position;
@@ -254,7 +254,7 @@
     [self.view addSubview:titleView];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
+    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 40 / 2, 20, 40)];
     btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
@@ -372,7 +372,7 @@
 
 - (void)dealloc{
     [titleView release];
-    [dectorView release];
+//    [dectorView release];
     [headerView release];
     
     [descView release];
@@ -430,13 +430,13 @@
                     dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
                     dispatch_async(imgQueue, ^{
                         // Not in Cache
-                        dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+//                        dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
                         [tabLayer setimage:[UIImage imageNamed:@"x_titlebg_default.jpg"]];
                         UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
                                 // Fill after download
-                                dectorView.image = backimg;
+//                                dectorView.image = backimg;
                                 [tabLayer setimage:backimg];
                             }
                         });
@@ -444,7 +444,7 @@
                     dispatch_release(imgQueue);
                 }else{
                     // Find in cache
-                    dectorView.image = backimg;
+//                    dectorView.image = backimg;
                     [tabLayer setimage:backimg];
                 }
                 flag = YES;
@@ -454,7 +454,7 @@
     }
     if (flag == NO){
         // Missing Background widget
-        dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+//        dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
         [tabLayer setimage:[UIImage imageNamed:@"x_titlebg_default.jpg"]];
     }
 }
@@ -996,11 +996,13 @@
 
 -(void)moveLayer:(CALayer*)layer to:(CGPoint)point
 {
+    
     [self moveLayer:layer to:point duration:0.2];
 }
 
 -(void)moveLayer:(CALayer*)layer to:(CGPoint)point duration:(NSTimeInterval)time
 {
+    NSLog(@"moveLayer from: %@ to  %@, base: %@", NSStringFromCGPoint(layer.position), NSStringFromCGPoint(point), NSStringFromCGPoint(head_bg_point) );
     // Prepare the animation from the current position to the new position
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
     animation.duration = time;
@@ -1023,16 +1025,16 @@
             titleView.frame = CGRectMake(25, 0, 290, 50);
             titleView.lineBreakMode = UILineBreakModeTailTruncation;
             titleView.numberOfLines = 1;
-            btnBack.frame = CGRectMake(0, 0, 20, 44);
-            tabWidget.frame = CGRectMake(0, 66 - 44, CGRectGetWidth(self.view.bounds), 40);
-            [self moveLayer:tabLayer.mask to:CGPointMake(head_bg_point.x, head_bg_point.y - 44)];
+            btnBack.frame = CGRectMake(0, 0, 20, 40);
+            tabWidget.frame = CGRectMake(0, 66 - 36, CGRectGetWidth(self.view.bounds), 40);
+            [self moveLayer:tabLayer.mask to:CGPointMake(head_bg_point.x, head_bg_point.y - 36)];
             break;
             
         default:
             titleView.frame = CGRectMake(25, 19, 290, 50);
             titleView.lineBreakMode = UILineBreakModeWordWrap;
             titleView.numberOfLines = 2;
-            btnBack.frame = CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44);
+            btnBack.frame = CGRectMake(0, DECTOR_HEIGHT / 2 - 40 / 2, 20, 40);
             tabWidget.frame = CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40);
             [self moveLayer:tabLayer.mask to:head_bg_point];
             break;
@@ -1069,10 +1071,13 @@
 - (void)swapChildViewController:(NSInteger)widget_id{
     
     if (_currentViewController) {
+        
         [UIView animateWithDuration:0.2
                          animations:^{
-                             [self changeHeaderStyle:kHeaderStyleFull];
+                             [self changeHeaderStyle: kHeaderStyleFull];
                          }];
+        
+        
         
         [UIView animateWithDuration:0.233
                               delay:0.2
@@ -1135,17 +1140,9 @@
             WidgetExfeeViewController *exfeeView = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
             exfeeView.exfee = _cross.exfee;
             exfeeView.onExitBlock = ^{
-                NSLog(@"CrossGroup call back:");
-                NSLog(@"exfeeView.exfee: ");
-                [exfeeView.exfee debugPrint];
-                NSLog(@"_cross.exfee: ");
-                [_cross.exfee debugPrint];
-                
-                
-                
-//                [self fillExfee:_cross.exfee];
                 [self fillExfee:exfeeView.exfee];
             };
+            
             [self addChildViewController:exfeeView];
             [self.view insertSubview:exfeeView.view aboveSubview:headerShadow];
             [exfeeView didMoveToParentViewController:self];
@@ -1960,10 +1957,10 @@
     NSTimeInterval time = [t doubleValue];
     
     CGPoint p = head_bg_point;
-    CGPoint c = tabLayer.curveCenter;
+    CGPoint c = tabLayer.curveParamBase;
     float offset = 0;
     if (_headerStyle == kHeaderStyleHalf) {
-        offset = 44;
+        offset = 36;
     }
     
     [self moveLayer:tabLayer.mask to:CGPointMake(p.x - c.x + width, p.y - offset) duration:time];

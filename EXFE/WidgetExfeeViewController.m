@@ -40,6 +40,8 @@
 typedef enum {
     kTagIdNone = 0,
     kTagIdActionMenu,
+    kTagIdBioContent,
+    kTagIdBioTitle,
     kTagIdIdentityName,
     kTagIdIdentityWarninng,
     kTagIdIdentityProvider,
@@ -138,11 +140,15 @@ typedef enum {
         layer2.frame = CGRectMake(0, 105, 320, 1);
         layer2.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
         layer3 = [CALayer layer];
-        layer3.frame = CGRectMake(65, 45, 1, 180);
-        layer3.contents = (id)[UIImage imageNamed:@"exfee_line_v.png"].CGImage;
+        layer3.frame = CGRectMake(0, 137, 320, 1);
+        layer3.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
+        layer4 = [CALayer layer];
+        layer4.frame = CGRectMake(65, 45, 1, 180);
+        layer4.contents = (id)[UIImage imageNamed:@"exfee_line_v.png"].CGImage;
         [invContent.layer addSublayer:layer1];
         [invContent.layer addSublayer:layer2];
         [invContent.layer addSublayer:layer3];
+        [invContent.layer addSublayer:layer4];
         
         
         invName = [[ UILabel alloc] initWithFrame:CGRectMake(25, 16, 230, 25)];
@@ -154,6 +160,7 @@ typedef enum {
         
         invHostFlag = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_host_blue.png"]];
         invHostFlag.frame = CGRectMake(162, 21, CGRectGetWidth(invHostFlag.frame), CGRectGetHeight(invHostFlag.frame));
+        invHostFlag.tag = kTagIdHostFlag;
         [invContent addSubview:invHostFlag];
         
         invHostText = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
@@ -164,33 +171,57 @@ typedef enum {
         [invContent addSubview:invHostText];
         
         invRsvpImage = [[UIImageView alloc] initWithFrame:CGRectMake(33, 57, 26, 26)];
+        invRsvpImage.tag = kTagIdRSVPImage;
         [invContent addSubview:invRsvpImage];
         
         invRsvpLabel = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(75, 60, 200, 22)];
+        invRsvpLabel.tag = kTagIdRSVPLabel;
         [invContent addSubview:invRsvpLabel];
         
         invRsvpAltLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 86, 180, 12)];
         invRsvpAltLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
         invRsvpAltLabel.textColor = [UIColor COLOR_GRAY];
         invRsvpAltLabel.backgroundColor = [UIColor clearColor];
+        invRsvpAltLabel.tag = kTagIdRSVPAltLabel;
         [invContent addSubview:invRsvpAltLabel];
         
-        identityProvider = [[UIImageView alloc] initWithFrame:CGRectMake(37, 115, 18, 18)];
+        identityProvider = [[UIImageView alloc] initWithFrame:CGRectMake(37, 112, 18, 18)];
+        identityProvider.tag = kTagIdIdentityProvider;
         [invContent addSubview:identityProvider];
         
-        identityWaring = [[UIImageView alloc] initWithFrame:CGRectMake(75, 115, 18, 18)];
+        identityWaring = [[UIImageView alloc] initWithFrame:CGRectMake(75, 112, 18, 18)];
+        identityWaring.tag = kTagIdIdentityWarninng;
         [invContent addSubview:identityWaring];
         
-        identityName = [[UIBorderLabel alloc] initWithFrame:CGRectMake(75, 108, 220, 32)];
+        identityName = [[UIBorderLabel alloc] initWithFrame:CGRectMake(70, 106, 225, 32)];
         identityName.leftInset = 5;
         identityName.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
         identityName.textColor = [UIColor COLOR_BLACK];
         identityName.backgroundColor = [UIColor clearColor];
+        identityName.tag = kTagIdIdentityName;
         [invContent addSubview:identityName];
+        
+        bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(36, 115 + 32, 43, 33)];
+        bioTitle.text = @"Bio";
+        bioTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+        bioTitle.textColor = [UIColor COLOR_BLACK];
+        bioTitle.backgroundColor = [UIColor clearColor];
+        bioTitle.tag = kTagIdBioTitle;
+        bioTitle.hidden = YES;
+        [invContent addSubview:bioTitle];
+        
+        bioContent = [[UILabel alloc] initWithFrame:CGRectMake(75, 115 + 48, 220, 80)];
+        bioContent.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+        bioContent.textColor = [UIColor COLOR_BLACK];
+        bioContent.backgroundColor = [UIColor clearColor];
+        bioContent.tag = kTagIdBioContent;
+        bioContent.hidden = YES;
+        [invContent addSubview:bioContent];
         
         ActionMenu = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         ActionMenu.frame = CGRectMake(255, 146, 40, 31);
         ActionMenu.hidden = YES;
+        ActionMenu.tag = kTagIdActionMenu;
         [invContent addSubview:ActionMenu];
         
         
@@ -254,6 +285,8 @@ typedef enum {
     [identityProvider release];
     [identityWaring release];
     [identityName release];
+    [bioTitle release];
+    [bioContent release];
     [invContent release];
     
     [exfeeContainer release];
@@ -444,6 +477,8 @@ typedef enum {
                 identityProvider.image = nil;
                 break;
         }
+        
+        bioContent.text = ident.bio;
     }
 }
 
