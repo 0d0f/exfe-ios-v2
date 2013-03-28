@@ -94,6 +94,20 @@
 		4F9926FF16EF6E30003D784A /* ExfeeResponseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9926FE16EF6E30003D784A /* ExfeeResponseCell.m */; };
 		4F99270516F02AEE003D784A /* ExfeeRsvpCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F99270416F02AEE003D784A /* ExfeeRsvpCell.m */; };
 		4F99270D16F091FD003D784A /* Exfee+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F99270C16F091FD003D784A /* Exfee+EXFE.m */; };
+		4F9FE4E31702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */; };
+		4F9FE4E41702E12C0098B9B9 /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */; };
+		4F9FE4E51702E12C0098B9B9 /* PSTCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CC1702E12C0098B9B9 /* PSTCollectionViewCell.m */; };
+		4F9FE4E61702E12C0098B9B9 /* PSTCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CF1702E12C0098B9B9 /* PSTCollectionViewController.m */; };
+		4F9FE4E71702E12C0098B9B9 /* PSTCollectionViewData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D11702E12C0098B9B9 /* PSTCollectionViewData.m */; };
+		4F9FE4E81702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D31702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m */; };
+		4F9FE4E91702E12C0098B9B9 /* PSTCollectionViewItemKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D51702E12C0098B9B9 /* PSTCollectionViewItemKey.m */; };
+		4F9FE4EA1702E12C0098B9B9 /* PSTCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D81702E12C0098B9B9 /* PSTCollectionViewLayout.m */; };
+		4F9FE4EB1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DA1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m */; };
+		4F9FE4EC1702E12C0098B9B9 /* PSTGridLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DC1702E12C0098B9B9 /* PSTGridLayoutInfo.m */; };
+		4F9FE4ED1702E12C0098B9B9 /* PSTGridLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DE1702E12C0098B9B9 /* PSTGridLayoutItem.m */; };
+		4F9FE4EE1702E12C0098B9B9 /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E01702E12C0098B9B9 /* PSTGridLayoutRow.m */; };
+		4F9FE4EF1702E12C0098B9B9 /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */; };
+		4F9FE56C1702EB6C0098B9B9 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FE5611702E8B70098B9B9 /* libBlocksKit.a */; };
 		4FA013A516F2F4AD00F40CB6 /* Invitation+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013A416F2F4AD00F40CB6 /* Invitation+EXFE.m */; };
 		4FA013AB16F31B5400F40CB6 /* Identity+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013AA16F31B5400F40CB6 /* Identity+EXFE.m */; };
 		4FA013AE16F3546A00F40CB6 /* ExfeeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013AD16F3546A00F40CB6 /* ExfeeCollectionViewCell.m */; };
@@ -471,6 +485,48 @@
 			remoteGlobalIDString = 78A98E861560F832009E0806;
 			remoteInfo = EXFE;
 		};
+		4F9FE5601702E8B70098B9B9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6C3DBF8D1382F1BA00E6C9AA;
+			remoteInfo = "iOS Library";
+		};
+		4F9FE5621702E8B70098B9B9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6CC40A751447BB1400E47595;
+			remoteInfo = "OS X Framework";
+		};
+		4F9FE5641702E8B70098B9B9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6CF22CB0161EB048002FD317;
+			remoteInfo = "iOS Tests";
+		};
+		4F9FE5661702E8B70098B9B9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6CF22C95161EAFB8002FD317;
+			remoteInfo = "OS X Tests";
+		};
+		4F9FE5681702E8B70098B9B9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0005D5DE161FDF23007DD837;
+			remoteInfo = "iOS Tests App";
+		};
+		4F9FE56A1702EA490098B9B9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C3DBF8C1382F1BA00E6C9AA;
+			remoteInfo = "iOS Library";
+		};
 		789C8D6015931BF100580624 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78A98ED615611028009E0806 /* RestKit.xcodeproj */;
@@ -614,6 +670,35 @@
 		4F99270416F02AEE003D784A /* ExfeeRsvpCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExfeeRsvpCell.m; sourceTree = "<group>"; };
 		4F99270B16F091FD003D784A /* Exfee+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Exfee+EXFE.h"; sourceTree = "<group>"; };
 		4F99270C16F091FD003D784A /* Exfee+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Exfee+EXFE.m"; sourceTree = "<group>"; };
+		4F9FE4C71702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexPath+PSTCollectionViewAdditions.h"; sourceTree = "<group>"; };
+		4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexPath+PSTCollectionViewAdditions.m"; sourceTree = "<group>"; };
+		4F9FE4C91702E12C0098B9B9 /* PSTCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionView.h; sourceTree = "<group>"; };
+		4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionView.m; sourceTree = "<group>"; };
+		4F9FE4CB1702E12C0098B9B9 /* PSTCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewCell.h; sourceTree = "<group>"; };
+		4F9FE4CC1702E12C0098B9B9 /* PSTCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewCell.m; sourceTree = "<group>"; };
+		4F9FE4CD1702E12C0098B9B9 /* PSTCollectionViewCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewCommon.h; sourceTree = "<group>"; };
+		4F9FE4CE1702E12C0098B9B9 /* PSTCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewController.h; sourceTree = "<group>"; };
+		4F9FE4CF1702E12C0098B9B9 /* PSTCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewController.m; sourceTree = "<group>"; };
+		4F9FE4D01702E12C0098B9B9 /* PSTCollectionViewData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewData.h; sourceTree = "<group>"; };
+		4F9FE4D11702E12C0098B9B9 /* PSTCollectionViewData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewData.m; sourceTree = "<group>"; };
+		4F9FE4D21702E12C0098B9B9 /* PSTCollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewFlowLayout.h; sourceTree = "<group>"; };
+		4F9FE4D31702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewFlowLayout.m; sourceTree = "<group>"; };
+		4F9FE4D41702E12C0098B9B9 /* PSTCollectionViewItemKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewItemKey.h; sourceTree = "<group>"; };
+		4F9FE4D51702E12C0098B9B9 /* PSTCollectionViewItemKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewItemKey.m; sourceTree = "<group>"; };
+		4F9FE4D61702E12C0098B9B9 /* PSTCollectionViewLayout+Internals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PSTCollectionViewLayout+Internals.h"; sourceTree = "<group>"; };
+		4F9FE4D71702E12C0098B9B9 /* PSTCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewLayout.h; sourceTree = "<group>"; };
+		4F9FE4D81702E12C0098B9B9 /* PSTCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewLayout.m; sourceTree = "<group>"; };
+		4F9FE4D91702E12C0098B9B9 /* PSTCollectionViewUpdateItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionViewUpdateItem.h; sourceTree = "<group>"; };
+		4F9FE4DA1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTCollectionViewUpdateItem.m; sourceTree = "<group>"; };
+		4F9FE4DB1702E12C0098B9B9 /* PSTGridLayoutInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTGridLayoutInfo.h; sourceTree = "<group>"; };
+		4F9FE4DC1702E12C0098B9B9 /* PSTGridLayoutInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTGridLayoutInfo.m; sourceTree = "<group>"; };
+		4F9FE4DD1702E12C0098B9B9 /* PSTGridLayoutItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTGridLayoutItem.h; sourceTree = "<group>"; };
+		4F9FE4DE1702E12C0098B9B9 /* PSTGridLayoutItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTGridLayoutItem.m; sourceTree = "<group>"; };
+		4F9FE4DF1702E12C0098B9B9 /* PSTGridLayoutRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTGridLayoutRow.h; sourceTree = "<group>"; };
+		4F9FE4E01702E12C0098B9B9 /* PSTGridLayoutRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTGridLayoutRow.m; sourceTree = "<group>"; };
+		4F9FE4E11702E12C0098B9B9 /* PSTGridLayoutSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTGridLayoutSection.h; sourceTree = "<group>"; };
+		4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTGridLayoutSection.m; sourceTree = "<group>"; };
+		4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BlocksKit.xcodeproj; path = Vendor/BlocksKit/BlocksKit.xcodeproj; sourceTree = "<group>"; };
 		4FA013A316F2F4AD00F40CB6 /* Invitation+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Invitation+EXFE.h"; sourceTree = "<group>"; };
 		4FA013A416F2F4AD00F40CB6 /* Invitation+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Invitation+EXFE.m"; sourceTree = "<group>"; };
 		4FA013A916F31B5400F40CB6 /* Identity+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Identity+EXFE.h"; sourceTree = "<group>"; };
@@ -1098,6 +1183,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F9FE56C1702EB6C0098B9B9 /* libBlocksKit.a in Frameworks */,
 				788C736016D6292100BDD594 /* CoreTelephony.framework in Frameworks */,
 				7882F80316A68372004309DF /* CoreImage.framework in Frameworks */,
 				78C6BA0116634C6F00483D23 /* AddressBook.framework in Frameworks */,
@@ -1140,6 +1226,54 @@
 				4F1142E316AE40B000C30179 /* EXFETests-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4F9FE4C61702E12C0098B9B9 /* PSTCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				4F9FE4C71702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.h */,
+				4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */,
+				4F9FE4C91702E12C0098B9B9 /* PSTCollectionView.h */,
+				4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */,
+				4F9FE4CB1702E12C0098B9B9 /* PSTCollectionViewCell.h */,
+				4F9FE4CC1702E12C0098B9B9 /* PSTCollectionViewCell.m */,
+				4F9FE4CD1702E12C0098B9B9 /* PSTCollectionViewCommon.h */,
+				4F9FE4CE1702E12C0098B9B9 /* PSTCollectionViewController.h */,
+				4F9FE4CF1702E12C0098B9B9 /* PSTCollectionViewController.m */,
+				4F9FE4D01702E12C0098B9B9 /* PSTCollectionViewData.h */,
+				4F9FE4D11702E12C0098B9B9 /* PSTCollectionViewData.m */,
+				4F9FE4D21702E12C0098B9B9 /* PSTCollectionViewFlowLayout.h */,
+				4F9FE4D31702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m */,
+				4F9FE4D41702E12C0098B9B9 /* PSTCollectionViewItemKey.h */,
+				4F9FE4D51702E12C0098B9B9 /* PSTCollectionViewItemKey.m */,
+				4F9FE4D61702E12C0098B9B9 /* PSTCollectionViewLayout+Internals.h */,
+				4F9FE4D71702E12C0098B9B9 /* PSTCollectionViewLayout.h */,
+				4F9FE4D81702E12C0098B9B9 /* PSTCollectionViewLayout.m */,
+				4F9FE4D91702E12C0098B9B9 /* PSTCollectionViewUpdateItem.h */,
+				4F9FE4DA1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m */,
+				4F9FE4DB1702E12C0098B9B9 /* PSTGridLayoutInfo.h */,
+				4F9FE4DC1702E12C0098B9B9 /* PSTGridLayoutInfo.m */,
+				4F9FE4DD1702E12C0098B9B9 /* PSTGridLayoutItem.h */,
+				4F9FE4DE1702E12C0098B9B9 /* PSTGridLayoutItem.m */,
+				4F9FE4DF1702E12C0098B9B9 /* PSTGridLayoutRow.h */,
+				4F9FE4E01702E12C0098B9B9 /* PSTGridLayoutRow.m */,
+				4F9FE4E11702E12C0098B9B9 /* PSTGridLayoutSection.h */,
+				4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */,
+			);
+			name = PSTCollectionView;
+			path = Vendor/PSTCollectionView/PSTCollectionView;
+			sourceTree = SOURCE_ROOT;
+		};
+		4F9FE5591702E8B60098B9B9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4F9FE5611702E8B70098B9B9 /* libBlocksKit.a */,
+				4F9FE5631702E8B70098B9B9 /* BlocksKit.framework */,
+				4F9FE5651702E8B70098B9B9 /* iOS Tests.octest */,
+				4F9FE5671702E8B70098B9B9 /* OS X Tests.octest */,
+				4F9FE5691702E8B70098B9B9 /* iOS Tests App.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		4FC6E95416B0E6EC0023AD1C /* dock */ = {
@@ -1535,6 +1669,7 @@
 		785FD54E158065610056590D /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				4F9FE4C61702E12C0098B9B9 /* PSTCollectionView */,
 				4FD9375E16D601B700ED6677 /* UIImage */,
 				78B46B6D15FC87DB006738D7 /* MBProgressHUD.h */,
 				78B46B6C15FC87DB006738D7 /* MBProgressHUD.m */,
@@ -1724,6 +1859,7 @@
 		78A98E7C1560F832009E0806 = {
 			isa = PBXGroup;
 			children = (
+				4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */,
 				78A98ED615611028009E0806 /* RestKit.xcodeproj */,
 				78A98E911560F832009E0806 /* EXFE */,
 				4F1142DA16AE40B000C30179 /* EXFETests */,
@@ -2096,6 +2232,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4F9FE56B1702EA490098B9B9 /* PBXTargetDependency */,
 				78A98EEC156110C6009E0806 /* PBXTargetDependency */,
 			);
 			name = EXFE;
@@ -2123,6 +2260,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 4F9FE5591702E8B60098B9B9 /* Products */;
+					ProjectRef = 4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */;
+				},
+				{
 					ProductGroup = 78A98ED715611028009E0806 /* Products */;
 					ProjectRef = 78A98ED615611028009E0806 /* RestKit.xcodeproj */;
 				},
@@ -2136,6 +2277,41 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		4F9FE5611702E8B70098B9B9 /* libBlocksKit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBlocksKit.a;
+			remoteRef = 4F9FE5601702E8B70098B9B9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F9FE5631702E8B70098B9B9 /* BlocksKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = BlocksKit.framework;
+			remoteRef = 4F9FE5621702E8B70098B9B9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F9FE5651702E8B70098B9B9 /* iOS Tests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "iOS Tests.octest";
+			remoteRef = 4F9FE5641702E8B70098B9B9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F9FE5671702E8B70098B9B9 /* OS X Tests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "OS X Tests.octest";
+			remoteRef = 4F9FE5661702E8B70098B9B9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F9FE5691702E8B70098B9B9 /* iOS Tests App.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "iOS Tests App.app";
+			remoteRef = 4F9FE5681702E8B70098B9B9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		789C8D6115931BF100580624 /* libRestKit.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -2644,6 +2820,19 @@
 				4FA0C40A16FB626B00E25C74 /* WCAlertView.m in Sources */,
 				4FB30D1D17003BFE007BC66D /* APIExfee.m in Sources */,
 				4FA84B09170155DD0096FB5A /* ExfeeAddCollectionViewCell.m in Sources */,
+				4F9FE4E31702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
+				4F9FE4E41702E12C0098B9B9 /* PSTCollectionView.m in Sources */,
+				4F9FE4E51702E12C0098B9B9 /* PSTCollectionViewCell.m in Sources */,
+				4F9FE4E61702E12C0098B9B9 /* PSTCollectionViewController.m in Sources */,
+				4F9FE4E71702E12C0098B9B9 /* PSTCollectionViewData.m in Sources */,
+				4F9FE4E81702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m in Sources */,
+				4F9FE4E91702E12C0098B9B9 /* PSTCollectionViewItemKey.m in Sources */,
+				4F9FE4EA1702E12C0098B9B9 /* PSTCollectionViewLayout.m in Sources */,
+				4F9FE4EB1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m in Sources */,
+				4F9FE4EC1702E12C0098B9B9 /* PSTGridLayoutInfo.m in Sources */,
+				4F9FE4ED1702E12C0098B9B9 /* PSTGridLayoutItem.m in Sources */,
+				4F9FE4EE1702E12C0098B9B9 /* PSTGridLayoutRow.m in Sources */,
+				4F9FE4EF1702E12C0098B9B9 /* PSTGridLayoutSection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2654,6 +2843,11 @@
 			isa = PBXTargetDependency;
 			target = 78A98E861560F832009E0806 /* EXFE */;
 			targetProxy = 4F1142E916AE41B400C30179 /* PBXContainerItemProxy */;
+		};
+		4F9FE56B1702EA490098B9B9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "iOS Library";
+			targetProxy = 4F9FE56A1702EA490098B9B9 /* PBXContainerItemProxy */;
 		};
 		78A98EEC156110C6009E0806 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2814,12 +3008,15 @@
 		78199C8F160A554600A560F7 /* appstore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
+					"\"$(BUILT_PRODUCTS_DIR)/../BlocksKit\"",
+				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
@@ -2834,7 +3031,7 @@
 				PROVISIONING_PROFILE = "DA7D96C7-578C-4997-967D-93AC35D568CC";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DA7D96C7-578C-4997-967D-93AC35D568CC";
 				TARGETED_DEVICE_FAMILY = 1;
-				USER_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = appstore;
@@ -2905,12 +3102,15 @@
 		78A98EA01560F832009E0806 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
+					"\"$(BUILT_PRODUCTS_DIR)/../BlocksKit\"",
+				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
@@ -2925,7 +3125,7 @@
 				PROVISIONING_PROFILE = "71967A1F-58C9-4068-9E55-6EFAA8C2D42E";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "71967A1F-58C9-4068-9E55-6EFAA8C2D42E";
 				TARGETED_DEVICE_FAMILY = 1;
-				USER_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2933,12 +3133,15 @@
 		78A98EA11560F832009E0806 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
+				HEADER_SEARCH_PATHS = (
+					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
+					"\"$(BUILT_PRODUCTS_DIR)/../BlocksKit\"",
+				);
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
@@ -2953,7 +3156,7 @@
 				PROVISIONING_PROFILE = "DA7D96C7-578C-4997-967D-93AC35D568CC";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DA7D96C7-578C-4997-967D-93AC35D568CC";
 				TARGETED_DEVICE_FAMILY = 1;
-				USER_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

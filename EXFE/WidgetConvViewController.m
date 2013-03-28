@@ -74,6 +74,7 @@
         [hintGroup addSubview:no_posts];
         [no_posts release];
     }
+    hintGroup.hidden = YES;
     [self.view  addSubview:hintGroup];
     
     CGRect toolbarframe=CGRectMake(0, CGRectGetHeight(f) - kDefaultToolbarHeight, CGRectGetWidth(f), kDefaultToolbarHeight);
@@ -119,7 +120,7 @@
     
     
     
-    [self showOrHideHint];
+//    [self showOrHideHint];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
@@ -234,22 +235,23 @@
 //            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
 //            updated_at = [formatter stringFromDate:post.updated_at];
 //            [formatter release];
-          updated_at=post.updated_at;
+            updated_at=post.updated_at;
         }
     }
-  [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-    Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-    if(meta!=nil){
-      if([meta.code intValue]==200){
-        [self loadObjectsFromDataStore];
-      }
-    }else{
-      //show error hint
-    }
-
-  } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-    
-  }];
+    [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+        if(meta!=nil){
+            if([meta.code intValue]==200){
+                [self loadObjectsFromDataStore];
+                [self showOrHideHint];
+            }
+        }else{
+            //show error hint
+        }
+        
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        [self showOrHideHint];
+    }];
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [inputToolbar hidekeyboard];
@@ -272,7 +274,7 @@
   _posts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
 
   
-    [self showOrHideHint];
+    
     [_tableView reloadData];
     if(_tableView.contentSize.height>_tableView.frame.size.height) {
         CGPoint bottomOffset = CGPointMake(0, _tableView.contentSize.height - _tableView.frame.size.height);

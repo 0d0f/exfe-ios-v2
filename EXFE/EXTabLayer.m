@@ -26,7 +26,7 @@
         _sublayer = [CALayer layer];
         _sublayer.backgroundColor = [UIColor blackColor].CGColor;
         _sublayer.opacity = COLOR255(0x55);
-        _sublayer.frame = CGRectMake(0, 0, 320, 100);
+        _sublayer.frame = CGRectMake(0, 0, 320, 200);
         _sublayer.name = @"cover";
         [self addSublayer:_sublayer];
         

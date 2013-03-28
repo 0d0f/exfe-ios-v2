@@ -231,6 +231,7 @@ static NSMutableDictionary *imgs;
             dispatch_async(imgQueue, ^{
                 UIImage *avatar = [self getImgFrom:url];
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    dispatch_release(imgQueue);
                     if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
                         fill(avatar);
                     }else{
@@ -238,7 +239,6 @@ static NSMutableDictionary *imgs;
                     }
                 });
             });
-            dispatch_release(imgQueue);
         }else{
             fill(avatarImg);
         }
@@ -256,6 +256,7 @@ static NSMutableDictionary *imgs;
             dispatch_async(imgQueue, ^{
                 UIImage *avatar = [self getImgFrom:url];
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    dispatch_release(imgQueue);
                     if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
                         avatarView.image = avatar;
                     }else{
@@ -263,8 +264,6 @@ static NSMutableDictionary *imgs;
                     }
                 });
             });
-            dispatch_release(imgQueue);
-            
         }else{
             avatarView.image = avatarImg;
         }

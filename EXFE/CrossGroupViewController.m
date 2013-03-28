@@ -8,6 +8,7 @@
 
 #import "CrossGroupViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import <BlocksKit/BlocksKit.h>
 #import "Util.h"
 #import "ImgCache.h"
 #import "EXLabel.h"
@@ -127,18 +128,18 @@
     CGFloat head_bg_img_scale = CGRectGetWidth(self.view.bounds) / HEADER_BACKGROUND_WIDTH;
     head_bg_img_startY = 0 - HEADER_BACKGROUND_Y_OFFSET * head_bg_img_scale;
     
-    headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA)];
-    {
-//        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, head_bg_img_startY, HEADER_BACKGROUND_WIDTH * head_bg_img_scale, HEADER_BACKGFOUND_HEIGHT * head_bg_img_scale)];
-//        CALayer *sublayer = [CALayer layer];
-//        sublayer.backgroundColor = [UIColor blackColor].CGColor;
-//        sublayer.opacity = COLOR255(0x55);
-//        sublayer.frame = dectorView.bounds;
-//        [dectorView.layer addSublayer:sublayer];
-//dectorView.hidden = YES;
-//        [headerView addSubview:dectorView];
-    }
-    [self.view addSubview:headerView];
+//    headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA)];
+//    {
+////        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, head_bg_img_startY, HEADER_BACKGROUND_WIDTH * head_bg_img_scale, HEADER_BACKGFOUND_HEIGHT * head_bg_img_scale)];
+////        CALayer *sublayer = [CALayer layer];
+////        sublayer.backgroundColor = [UIColor blackColor].CGColor;
+////        sublayer.opacity = COLOR255(0x55);
+////        sublayer.frame = dectorView.bounds;
+////        [dectorView.layer addSublayer:sublayer];
+////dectorView.hidden = YES;
+////        [headerView addSubview:dectorView];
+//    }
+//    [self.view addSubview:headerView];
     
     container = [[UIScrollView alloc] initWithFrame:CGRectMake(0, DECTOR_HEIGHT, CGRectGetWidth(b), CGRectGetHeight(a) - DECTOR_HEIGHT)];
     container.backgroundColor = [UIColor COLOR_SNOW];
@@ -250,6 +251,7 @@
     titleView.textAlignment = NSTextAlignmentCenter;
     titleView.shadowColor = [UIColor blackColor];
     titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
+    titleView.userInteractionEnabled = YES;
     titleView.tag = kViewTagTitle;
     [self.view addSubview:titleView];
     
@@ -262,24 +264,91 @@
     btnBack.tag = kViewTagBack;
     [self.view  addSubview:btnBack];
     
+    
+    
     // Gesture handler: need merge
+    UITapGestureRecognizer *singleHeaderTap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
+        NSLog(@"Single tap.");
+        if (_currentViewController == nil) {
+            if (titleView.hidden == NO){
+                [self showPopup:kPopupTypeEditTitle];
+                return;
+            }
+        }
+        [self hidePopupIfShown];
+    } delay:0.18];
+    [titleView addGestureRecognizer:singleHeaderTap];
+    
+    UITapGestureRecognizer *doubleHeaderTap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
+        [singleHeaderTap cancel];
+        NSLog(@"Double tap.");
+        [self hidePopupIfShown];
+        if (_currentViewController) {
+            [self swapChildViewController:1];
+        }
+    }];
+    doubleHeaderTap.numberOfTapsRequired = 2;
+    [titleView addGestureRecognizer:doubleHeaderTap];
+    
+    UISwipeGestureRecognizer *swipeHeaderTap = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
+        NSLog(@"Swiped ");
+        [self hidePopupIfShown];
+        if (sender.state == UIGestureRecognizerStateEnded) {
+            [self hidePopupIfShown];
+            
+            [self goBack];
+        }
+    }];
+    [titleView addGestureRecognizer:swipeHeaderTap];
+    
+    
+    
+    UITapGestureRecognizer *mapTap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
+        NSLog(@"Map Tap ");
+        [self hidePopupIfShown];
+        
+        NSInteger tagId = mapView.superview.tag;
+        if (tagId == kViewTagContainer) {
+            [mapView removeFromSuperview];
+            CGRect f2 = [self.view convertRect:mapView.frame fromView:mapView.superview];
+            mapView.frame = CGRectOffset(f2, 0, CGRectGetMinY(container.frame) - container.contentOffset.y + 20);
+            savedFrame = mapView.frame;
+            savedScrollEnable = mapView.scrollEnabled;
+            mapView.scrollEnabled = YES;
+            [self.view addSubview:mapView];
+            
+            [UIView animateWithDuration:0.233 animations:^{
+                mapView.frame = self.view.bounds;
+            }];
+        }else{
+            [UIView animateWithDuration:0.233 animations:^{
+                mapView.frame = savedFrame;
+            } completion:^(BOOL finished){
+                mapView.scrollEnabled = savedScrollEnable;
+                [mapView removeFromSuperview];
+                [mapShadow.superview insertSubview:mapView belowSubview:mapShadow];
+                [self setLayoutDirty];
+                [self relayoutUI];
+            }];
+            
+            
+        }
+    }];
+    mapTap.delegate = self;
+    [mapView addGestureRecognizer:mapTap];
+    
+    
+//    UITapGestureRecognizer *mapTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
+//    mapTap.delegate = self;
+//    [mapView addGestureRecognizer:mapTap];
+//    [mapTap release];
+    
+    
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [container addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer release];
     
-    UITapGestureRecognizer *headTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderTap:)];
-    [headerView addGestureRecognizer:headTapRecognizer];
-    [headTapRecognizer release];
-    
-    UISwipeGestureRecognizer *headSwipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderSwipe:)];
-    headSwipeRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-    [headerView addGestureRecognizer:headSwipeRecognizer];
-    [headSwipeRecognizer release];
-    
-    UITapGestureRecognizer *mapTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
-    mapTap.delegate = self;
-    [mapView addGestureRecognizer:mapTap];
-    [mapTap release];
+   
     
     UISwipeGestureRecognizer *swipeRightRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
     swipeRightRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
@@ -373,7 +442,7 @@
 - (void)dealloc{
     [titleView release];
 //    [dectorView release];
-    [headerView release];
+//    [headerView release];
     
     [descView release];
     [exfeeShowview release];
@@ -1226,53 +1295,39 @@
     }
 }
 
-- (void)handleMapTap:(UITapGestureRecognizer*)sender{
-    
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        [self hidePopupIfShown];
-        
-        NSInteger tagId = mapView.superview.tag;
-        if (tagId == kViewTagContainer) {
-            [mapView removeFromSuperview];
-            CGRect f2 = [self.view convertRect:mapView.frame fromView:mapView.superview];
-            mapView.frame = CGRectOffset(f2, 0, CGRectGetMinY(container.frame) - container.contentOffset.y + 20);
-            savedFrame = mapView.frame;
-            savedScrollEnable = mapView.scrollEnabled;
-            mapView.scrollEnabled = YES;
-            [self.view addSubview:mapView];
-            
-            [UIView animateWithDuration:0.233 animations:^{
-                mapView.frame = self.view.bounds;
-            }];
-        }else{
-            [UIView animateWithDuration:0.233 animations:^{
-                mapView.frame = savedFrame;
-            } completion:^(BOOL finished){
-                mapView.scrollEnabled = savedScrollEnable;
-                [mapView removeFromSuperview];
-                [mapShadow.superview insertSubview:mapView belowSubview:mapShadow];
-                [self setLayoutDirty];
-                [self relayoutUI];
-            }];
-            
-            
-        }
-    }
-}
-
-- (void)handleHeaderTap:(UITapGestureRecognizer*)sender{
-    CGPoint location = [sender locationInView:sender.view];
-    
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        if (_currentViewController == nil) {
-            if (titleView.hidden == NO && CGRectContainsPoint(titleView.frame, location)){
-                [self showPopup:kPopupTypeEditTitle];
-                return;
-            }
-        }
-        [self hidePopupIfShown];
-    }
-}
+//- (void)handleMapTap:(UITapGestureRecognizer*)sender{
+//    
+//    if (sender.state == UIGestureRecognizerStateEnded) {
+//        [self hidePopupIfShown];
+//        
+//        NSInteger tagId = mapView.superview.tag;
+//        if (tagId == kViewTagContainer) {
+//            [mapView removeFromSuperview];
+//            CGRect f2 = [self.view convertRect:mapView.frame fromView:mapView.superview];
+//            mapView.frame = CGRectOffset(f2, 0, CGRectGetMinY(container.frame) - container.contentOffset.y + 20);
+//            savedFrame = mapView.frame;
+//            savedScrollEnable = mapView.scrollEnabled;
+//            mapView.scrollEnabled = YES;
+//            [self.view addSubview:mapView];
+//            
+//            [UIView animateWithDuration:0.233 animations:^{
+//                mapView.frame = self.view.bounds;
+//            }];
+//        }else{
+//            [UIView animateWithDuration:0.233 animations:^{
+//                mapView.frame = savedFrame;
+//            } completion:^(BOOL finished){
+//                mapView.scrollEnabled = savedScrollEnable;
+//                [mapView removeFromSuperview];
+//                [mapShadow.superview insertSubview:mapView belowSubview:mapShadow];
+//                [self setLayoutDirty];
+//                [self relayoutUI];
+//            }];
+//            
+//            
+//        }
+//    }
+//}
 
 - (void)handleSwipe:(UISwipeGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
@@ -1328,16 +1383,6 @@
         
         
         
-    }
-}
-
-- (void)handleHeaderSwipe:(UISwipeGestureRecognizer*)sender{
-    //CGPoint location = [sender locationInView:sender.view];
-    
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        [self hidePopupIfShown];
-        
-        [self goBack];
     }
 }
 
@@ -1919,7 +1964,9 @@
         CGSize size = scrollView.contentSize;
         if (size.height - offset.y <= CGRectGetHeight(scrollView.bounds) + 5) {
             mapView.scrollEnabled = YES;
+//            mapView.userInteractionEnabled = YES;
         }else{
+//            mapView.userInteractionEnabled = NO;
             mapView.scrollEnabled = NO;
         }
     }

@@ -46,8 +46,6 @@
     UIButton *titleAndDescEditMenu;
     
     // Header
-    UIView* headerView;
-//    UIImageView* dectorView;
     UILabel* titleView;
     // Content
     //    UIScrollView* xContainer;
