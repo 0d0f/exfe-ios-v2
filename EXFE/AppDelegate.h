@@ -17,7 +17,7 @@
 #define DBNAME @"exfe_v2_8.sqlite"
 
     
-#define DEV
+#define PANDA
 
 #ifdef DEV
 #define API_ROOT @"http://api.0d0f.com/v2"
@@ -29,6 +29,7 @@
 
 #ifdef PANDA
 #define API_ROOT @"http://api.panda.0d0f.com/v2"
+#define SERVICE_ROOT @"http://panda.0d0f.com:23333/v3"
 #define IMG_ROOT @"http://panda.0d0f.com/static/img"
 #define EXFE_OAUTH_LINK @"http://panda.0d0f.com/oauth"
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"

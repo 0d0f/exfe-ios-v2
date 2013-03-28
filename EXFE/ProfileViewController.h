@@ -15,6 +15,7 @@
 #import "AddIdentityViewController.h"
 #import "CustomAttributedTextView.h"
 #import "UIUnderlinedButton.h"
+#import "HereViewController.h"
 
 @interface ProfileViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
 //    IBOutlet UIToolbar* toolbar;
@@ -41,6 +42,6 @@
 - (NSIndexPath*) getIndexById:(int)identity_id;
 - (void) deleteIdentity:(int)identity_id;
 - (void) deleteIdentityUI:(int)identity_id;
-
 - (void) showRome;
+- (void) showHere;
 @end

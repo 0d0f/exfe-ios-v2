@@ -379,12 +379,21 @@
             [buttonsignout setTitle:@"Sign out" forState:UIControlStateNormal];
             [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
             [buttonsignout setTitleColor:[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)] forState:UIControlStateNormal];
-            //        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
             [buttonsignout setFrame:CGRectMake(200, 64, 100, 44)];
             [buttonsignout setBackgroundColor:[UIColor clearColor]];
             [buttonsignout addTarget:self action:@selector(Logout) forControlEvents:UIControlEventTouchUpInside];
             [footerView addSubview:buttonsignout];
-            
+
+            UIUnderlinedButton *buttonhere = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
+            [buttonhere setTitle:@"Here" forState:UIControlStateNormal];
+            [buttonhere.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
+            [buttonhere setTitleColor:[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)] forState:UIControlStateNormal];
+            [buttonhere setFrame:CGRectMake(10, 64, 100, 44)];
+            [buttonhere setBackgroundColor:[UIColor clearColor]];
+            [buttonhere addTarget:self action:@selector(showHere) forControlEvents:UIControlEventTouchUpInside];
+            [footerView addSubview:buttonhere];
+
+          
             UIButton *buttonrome = [UIButton buttonWithType:UIButtonTypeCustom];
             [buttonrome setTitle:@"“Rome wasn't built in a day.”" forState:UIControlStateNormal];
             [buttonrome.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:16]];
@@ -414,7 +423,12 @@
     [self.view bringSubviewToFront:welcome];
 //    self.tableView.bounces=NO;
     [welcome release];
+}
 
+- (void)showHere{
+  HereViewController *here =[[HereViewController alloc] initWithNibName:nil bundle:nil];
+  [self presentModalViewController:here animated:YES];
+  [here release];
 }
 #pragma mark UITableViewDelegate methods
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

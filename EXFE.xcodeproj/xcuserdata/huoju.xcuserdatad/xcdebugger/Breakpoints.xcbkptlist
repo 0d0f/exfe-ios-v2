@@ -507,7 +507,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "602"
          endingLineNumber = "602"
-         landmarkName = "+getTimeDesc:"
+         landmarkName = "+getTimeTitle:localTime:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -611,7 +611,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "592"
          endingLineNumber = "592"
-         landmarkName = "+getTimeTitle:localTime:"
+         landmarkName = "+beginningOfWeek:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -884,8 +884,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "711"
          endingLineNumber = "711"
-         landmarkName = "+EXRelativeFromDateStr:TimeStr:type:localTime:"
-         landmarkType = "5">
+         landmarkName = "@implementation Util"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -970,24 +970,24 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/ProfileViewController.m"
-         timestampString = "384194845.133722"
+         timestampString = "385984102.212484"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "452"
-         endingLineNumber = "452"
-         landmarkName = "@implementation ProfileViewController"
-         landmarkType = "3">
+         startingLineNumber = "466"
+         endingLineNumber = "466"
+         landmarkName = "-tableView:didSelectRowAtIndexPath:"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/ProfileViewController.m"
-         timestampString = "384194845.133722"
+         timestampString = "385984102.212484"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "434"
-         endingLineNumber = "434"
+         startingLineNumber = "448"
+         endingLineNumber = "448"
          landmarkName = "-tableView:didSelectRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1762,7 +1762,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "264"
          endingLineNumber = "264"
-         landmarkName = "-tableView:numberOfRowsInSection:"
+         landmarkName = "-numberOfSectionsInTableView:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -2309,6 +2309,19 @@
          startingLineNumber = "148"
          endingLineNumber = "148"
          landmarkName = "-viewDidAppear:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/HereViewController.m"
+         timestampString = "386159177.929011"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "105"
+         endingLineNumber = "105"
+         landmarkName = "-stream:handleEvent:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
