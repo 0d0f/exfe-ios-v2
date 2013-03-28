@@ -471,14 +471,16 @@ static char identitykey;
                                    }
                                    break;
                                case 4: // Client Error
-                                   if(code == 403){
-                                       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                       alert.tag=403;
-                                       [alert show];
-                                       [alert release];
-                                   }
+                               {
+                                   RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                   [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                               }
                                    break;
                                case 5: // Server Error
+                               {
+                                   RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                   [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                               }
                                    break;
                                default:
                                    break;

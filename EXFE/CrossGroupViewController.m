@@ -268,7 +268,6 @@
     
     // Gesture handler: need merge
     UITapGestureRecognizer *singleHeaderTap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
-        NSLog(@"Single tap.");
         if (_currentViewController == nil) {
             if (titleView.hidden == NO){
                 [self showPopup:kPopupTypeEditTitle];
@@ -281,7 +280,6 @@
     
     UITapGestureRecognizer *doubleHeaderTap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
         [singleHeaderTap cancel];
-        NSLog(@"Double tap.");
         [self hidePopupIfShown];
         if (_currentViewController) {
             [self swapChildViewController:1];
@@ -291,7 +289,6 @@
     [titleView addGestureRecognizer:doubleHeaderTap];
     
     UISwipeGestureRecognizer *swipeHeaderTap = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
-        NSLog(@"Swiped ");
         [self hidePopupIfShown];
         if (sender.state == UIGestureRecognizerStateEnded) {
             [self hidePopupIfShown];
@@ -304,7 +301,6 @@
     
     
     UITapGestureRecognizer *mapTap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
-        NSLog(@"Map Tap ");
         [self hidePopupIfShown];
         
         NSInteger tagId = mapView.superview.tag;
@@ -675,7 +671,6 @@
 
 - (void)relayoutUIwithAnimation:(BOOL)Animated{
     if (layoutDirty == YES){
-        //        NSLog(@"relayoutUI");
         CGRect c = container.frame;
         
         float left = CONTAINER_VERTICAL_PADDING;
@@ -985,7 +980,6 @@
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
-    //    NSLog(@"Click to Navigation");
     id<MKAnnotation> annotation = view.annotation;
     //NSString *title = annotation.title;
     CLLocationDegrees latitude = annotation.coordinate.latitude;
@@ -1071,7 +1065,6 @@
 
 -(void)moveLayer:(CALayer*)layer to:(CGPoint)point duration:(NSTimeInterval)time
 {
-    NSLog(@"moveLayer from: %@ to  %@, base: %@", NSStringFromCGPoint(layer.position), NSStringFromCGPoint(point), NSStringFromCGPoint(head_bg_point) );
     // Prepare the animation from the current position to the new position
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
     animation.duration = time;
@@ -1097,6 +1090,7 @@
             btnBack.frame = CGRectMake(0, 0, 20, 44);
             tabWidget.frame = CGRectMake(0, 66 - 36, CGRectGetWidth(self.view.bounds), 40);
             [self moveLayer:tabLayer.mask to:CGPointMake(head_bg_point.x, head_bg_point.y - 36)];
+            tabLayer.curveParamBase = CGPointMake(198, 80 - head_bg_img_startY - 36);
             break;
             
         default:
@@ -1106,6 +1100,7 @@
             btnBack.frame = CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44);
             tabWidget.frame = CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40);
             [self moveLayer:tabLayer.mask to:head_bg_point];
+            tabLayer.curveParamBase = CGPointMake(198, 80 - head_bg_img_startY);
             break;
     }
     _headerStyle = style;
