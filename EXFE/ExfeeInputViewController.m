@@ -9,6 +9,7 @@
 #import "ExfeeInputViewController.h"
 #import "APIProfile.h"
 #import "APIExfee.h"
+#import "WCAlertView.h"
 
 @interface ExfeeInputViewController ()
 
@@ -505,9 +506,10 @@ static char identitykey;
     NSString *inputtext = [exfeeList getInput];
     NSString *provider = [Util findProvider:inputtext];
     
-    if(![inputtext isEqualToString:@""])
+    if (![inputtext isEqualToString:@""]) {
+        NSLog(@"inputtext %@", inputtext);
         [self addByInputIdentity:inputtext name:@"" provider:provider dismiss:YES];
-    else{
+    } else {
         [self addExfeeToCross];
     }
 }
@@ -652,11 +654,11 @@ static char identitykey;
 }
 
 - (void) addBubbleByInputString:(NSString*)input name:(NSString*)name provider:(NSString*)provider{
-    NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:input,@"input",name,@"name",provider,@"provider", nil];
+    NSDictionary *dict = @{@"input":input, @"name":name, @"provider":provider};
     [exfeeList addBubble:input customObject:dict];
-    if([exfeeList bubblecount]>0)
+    if ([exfeeList bubblecount] > 0) {
         [self changeLeftIconWhite:YES];
-    
+    }
 }
 
 - (void) addByInputIdentity:(NSString*)input name:(NSString*)name provider:(NSString*)provider dismiss:(BOOL)shoulddismiss{
@@ -669,12 +671,35 @@ static char identitykey;
     
     NSArray* inputs=[input componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@", "]];
     for(input in inputs){
-      if( [inputs count]>1)
-        [self addBubbleByInputString:input name:@"" provider:provider];
-      else
-        [self addBubbleByInputString:input name:name provider:provider];
+        if ([inputs count] > 1) {
+            [self addBubbleByInputString:input name:@"" provider:provider];
+        } else {
+            if ((name == nil || name.length == 0) && [Util isAcceptedPhoneNumber:input]) {
+                [WCAlertView showAlertWithTitle:@"Set name for"
+                                        message:input
+                             customizationBlock:^(WCAlertView *alertView) {
+                                 alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+//                                 UITextField *field = [alertView textFieldAtIndex:0];
+//                                 field.placeholder = 
+                                 
+                             }
+                                completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
+                                    // Cancel max - 1
+                                    // other 0, ..., max - 2
+                                    if (buttonIndex == 0) {
+                                        UITextField *field = [alertView textFieldAtIndex:0];
+                                        NSString *inputName = [NSString stringWithString:field.text];
+                                        [self addBubbleByInputString:input name:inputName provider:provider];
+                                    }
+                                }
+                              cancelButtonTitle:@"Set"
+                              otherButtonTitles:nil];
+                
+            } else {
+                [self addBubbleByInputString:input name:name provider:provider];
+            }
+        }
     }
-
 }
 
 #pragma mark UITableView Datasource methods

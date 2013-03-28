@@ -509,6 +509,47 @@
     return @"";
 }
 
++ (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber{
+    NSString* clean_phone=@"";
+    clean_phone = [phonenumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@")" withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@" " withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@"." withString:@""];
+    
+    if ([@"+" isEqualToString:[clean_phone substringToIndex:1]]){
+        return YES;
+    }
+    
+    CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [netInfo subscriberCellularProvider];
+    NSString *mcc = [carrier mobileCountryCode];
+//  NSString *mnc = [carrier mobileNetworkCode];
+    NSString *isocode = [carrier isoCountryCode];
+    [netInfo release];
+    
+    if(([@"460" isEqualToString:mcc] || [@"cn" isEqualToString:isocode]) && [clean_phone length] >= 11 ){
+        NSString *cnphoneregex = @"1([3458]|7[1-8])\\d*";
+        NSPredicate *cnphoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", cnphoneregex];
+        if([[clean_phone substringToIndex:2] isEqualToString:@"00"]){
+            return YES;
+        } else if([cnphoneTest evaluateWithObject:clean_phone] == YES){
+            return YES;
+        }
+    } else if(([@"310" isEqualToString:mcc] ||[@"311" isEqualToString:mcc] || [@"us" isEqualToString:isocode] || [@"ca" isEqualToString:isocode]) && [clean_phone length] >= 10){
+        if ([@"1" isEqualToString:[clean_phone substringToIndex:1]]) {
+            return  YES;
+        } else if ([@"011" isEqualToString:[clean_phone substringToIndex:3]]) {
+            return  YES;
+        } else if ([clean_phone characterAtIndex:0] >= '2' && [clean_phone characterAtIndex:0] <= '9' && [clean_phone length]>=7) {
+            return  YES;
+        }
+    }
+    
+    return NO;
+}
+
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber{
   CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
   CTCarrier *carrier = [netInfo subscriberCellularProvider];

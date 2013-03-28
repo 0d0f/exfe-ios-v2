@@ -79,6 +79,7 @@
 + (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 + (UIImage *)scaleImage:(UIImage*)image toResolution:(int)resolution;
 + (NSString*) findProvider:(NSString*)external_id;
++ (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber;
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber;
 + (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime;
 
