@@ -524,11 +524,15 @@
     
     CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [netInfo subscriberCellularProvider];
-    NSString *mcc = [carrier mobileCountryCode];
-//  NSString *mnc = [carrier mobileNetworkCode];
-    NSString *isocode = [carrier isoCountryCode];
-    [netInfo release];
-    
+    NSString *mcc = @"";
+    NSString *isocode = @"";
+    if (carrier) {
+        mcc = [NSString stringWithString:[carrier mobileCountryCode]];
+    //  NSString *mnc = [carrier mobileNetworkCode];
+        isocode = [NSString stringWithString:[carrier isoCountryCode]];
+        [netInfo release];
+    }
+
     if(([@"460" isEqualToString:mcc] || [@"cn" isEqualToString:isocode]) && [clean_phone length] >= 11 ){
         NSString *cnphoneregex = @"1([3458]|7[1-8])\\d*";
         NSPredicate *cnphoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", cnphoneregex];

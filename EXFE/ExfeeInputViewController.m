@@ -507,7 +507,6 @@ static char identitykey;
     NSString *provider = [Util findProvider:inputtext];
     
     if (![inputtext isEqualToString:@""]) {
-        NSLog(@"inputtext %@", inputtext);
         [self addByInputIdentity:inputtext name:@"" provider:provider dismiss:YES];
     } else {
         [self addExfeeToCross];
