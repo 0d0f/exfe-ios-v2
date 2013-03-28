@@ -647,14 +647,7 @@
       }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
       [inputToolbar setInputEnabled:YES];
-      NSString *errormsg;
-      if(error.code==2)
-          errormsg=@"A connection failure has occurred.";
-      else
-          errormsg=@"Could not connect to the server.";
-      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-      [alert show];
-      [alert release];
+      [Util showConnectError:error delegate:self];
 
     }];
 }
@@ -669,5 +662,11 @@
         hintGroup.hidden = YES;
     }
 }
+
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    // nothing yet
+}
+
 
 @end

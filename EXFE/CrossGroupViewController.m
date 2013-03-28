@@ -1817,14 +1817,7 @@
                      }
                  }
                  failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
-                     NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
-                     if(error.code==2)
-                         errormsg=@"A connection failure has occurred.";
-                     else
-                         errormsg=@"Could not connect to the server.";
-                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                     [alert show];
-                     [alert release];
+                     [Util showConnectError:error delegate:self];
                      
                  }];
 }

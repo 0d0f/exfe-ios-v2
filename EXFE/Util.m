@@ -1020,12 +1020,13 @@
 }
 
 + (void) showConnectError:(NSError*)err delegate:(id)delegate{
-    NSString *errormsg=@"";
-    if(err.code==2)
-        errormsg=@"A connection failure has occurred.";
-    else
-        errormsg=@"Could not connect to the server.";
-    if(![errormsg isEqualToString:@""]){
+    NSString *errormsg = @"";
+    if (err.code == 500) {
+        errormsg = @"Sorry, something is technically wrong in the \"cloud\", we’re fixing it up.";
+    } else { //NSURLError.h
+        errormsg = @"Could not connect to the server. Please check your network connection.";
+    }
+    if (![errormsg isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         [alert release];

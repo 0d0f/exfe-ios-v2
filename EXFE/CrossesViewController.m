@@ -430,16 +430,9 @@
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         
       } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        NSString *errormsg;
-        if(error.code==2)
-            errormsg=@"A connection failure has occurred.";
-        else
-            errormsg=@"Could not connect to the server.";
         if(alertShowflag==NO){
             alertShowflag=YES;
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-            [alert release];
+            [Util showConnectError:error delegate:self];
         }
         [self stopLoading];
         if(hud)
