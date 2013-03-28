@@ -89,7 +89,6 @@
 + (NSString*) getTimeDesc:(CrossTime*)crosstime;
 + (NSDate*) beginningOfWeek:(NSDate*)date;
 + (BOOL) isCommonDomainName:(NSString*)domainname;
-+ (void) showError:(Meta*)meta delegate:(id)delegate;
 + (void) showErrorWithMetaDict:(NSDictionary*)meta delegate:(id)delegate;
 + (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate;
 

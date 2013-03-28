@@ -16,8 +16,12 @@
 #define APP_DB_VERSION 208
 #define DBNAME @"exfe_v2_8.sqlite"
 
-    
+
+#ifdef DEBUG
 #define DEV
+#else
+#define WWW
+#endif
 
 #ifdef DEV
 #define API_ROOT @"http://api.0d0f.com/v2"

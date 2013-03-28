@@ -1914,39 +1914,44 @@
 {
     //tag 101: save cross
     //tag 102: save exfee
-    if(buttonIndex==0)//cancel
-    {
-        if(alertView.tag==201){
-          RKObjectManager *objectManager = [RKObjectManager sharedManager];
-          [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
-//            [[Cross currentContext] rollback];
-            [self fillTime:_cross.time];
-            [self fillPlace:_cross.place];
-            [self relayoutUI];
-            
-            //            [self setTime:cross.time];
-            //            [self setPlace:cross.place];
-            //            crosstitle.text=cross.title;
-            //            crossdescription.text=cross.cross_description;
-        }else if(alertView.tag==202){
-            //            [[Exfee currentContext] rollback];
-            //            [[Cross currentContext] rollback];
-            //            [self reloadExfeeIdentities];
-        }else if(alertView.tag==403){ //privacy control
-          RKObjectManager *objectManager = [RKObjectManager sharedManager];
-          [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:self.cross];
-          [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
-//            [[Cross currentContext] deleteObject:self.cross];
-//            [[Cross currentContext] save:nil];
-            [self.navigationController popToRootViewControllerAnimated:YES];
+    switch (alertView.tag) {
+        case 201:{
+            if (buttonIndex == alertView.cancelButtonIndex) {
+                RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                //            [[Cross currentContext] rollback];
+                [self fillTime:_cross.time];
+                [self fillPlace:_cross.place];
+                [self relayoutUI];
+            } else if (buttonIndex == alertView.firstOtherButtonIndex){
+                [self saveCrossUpdate];
+            }
         }
-    }else if(buttonIndex==1) //retry
-    {
-        if(alertView.tag==201){
-            [self saveCrossUpdate];
-        }else if(alertView.tag==202){
-            //            [self saveExfeeUpdate];
+            break;
+        case 202:{
+            if (buttonIndex == alertView.cancelButtonIndex) {
+                //            [self setTime:cross.time];
+                //            [self setPlace:cross.place];
+                //            crosstitle.text=cross.title;
+                //            crossdescription.text=cross.cross_description;
+            } else if (buttonIndex == alertView.firstOtherButtonIndex){
+                //            [self saveExfeeUpdate];
+            }
         }
+            break;
+        case 403:{
+            if (buttonIndex == alertView.cancelButtonIndex) {
+                RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:self.cross];
+                [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
+                //            [[Cross currentContext] deleteObject:self.cross];
+                //            [[Cross currentContext] save:nil];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }
+        }
+            break;
+        default:
+            break;
     }
 }
 

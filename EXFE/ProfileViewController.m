@@ -622,12 +622,11 @@
 {
     //tag 101: save cross
     //tag 102: save exfee
-    if(buttonIndex==0)//cancel
-    {
-    }else if(buttonIndex==1) //retry
-    {
-        int identity_id=alertView.tag;
-        if(identity_id>0) {
+    if (buttonIndex == 0){//cancel
+        
+    } else if(buttonIndex == 1) {//retry
+        int identity_id = alertView.tag;
+        if (identity_id > 0) {
             [self doVerify:identity_id];
         }
     }

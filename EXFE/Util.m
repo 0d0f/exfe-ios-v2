@@ -939,26 +939,6 @@
   }];
 
 }
-+ (void) showError:(Meta*)meta delegate:(id)delegate{
-    NSString *errormsg=@"";
-    
-    for (UIWindow* window in [UIApplication sharedApplication].windows) {
-        NSArray* subviews = window.subviews;
-        if ([subviews count] > 0)
-            if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
-                return;
-    }
-    
-    if([meta.code intValue]==401){
-        errormsg=@"Authentication failed due to security concerns, please sign in again.";
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
-        alert.tag=500;
-        alert.delegate=delegate;
-        [alert show];
-        [alert release];
-    }
-}
 
 + (NSString*) cleanInputName:(NSString*)username provider:(NSString*)provider{
     if([provider isEqualToString:@"twitter"]){
@@ -973,21 +953,46 @@
     return username;
 }
 
+//+ (void) showError:(Meta*)meta delegate:(id)delegate{
+//    for (UIWindow* window in [UIApplication sharedApplication].windows) {
+//        NSArray* subviews = window.subviews;
+//        if ([subviews count] > 0)
+//            if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
+//                return;
+//    }
+//    
+//    NSString *errormsg = @"";
+//    if ([meta.code intValue] == 401) {
+//        errormsg = @"Authentication failed due to security concerns, please sign in again.";
+//        
+//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
+//        alertView.tag = 500;
+//        [alertView show];
+//        [alertView release];
+//    }
+//}
+
 + (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate{
-  for (UIWindow* window in [UIApplication sharedApplication].windows) {
-    NSArray* subviews = window.subviews;
-    if ([subviews count] > 0)
-      if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
-        return;
-  }
-  NSString *errormsg=@"";
-    if([meta.code intValue]==401){
-      errormsg=@"Authentication failed due to security concerns, please sign in again.";
-      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
-      alert.tag=500;
-      alert.delegate=delegate;
-      [alert show];
-      [alert release];
+    
+    for (UIWindow* window in [UIApplication sharedApplication].windows) {
+        NSArray* subviews = window.subviews;
+        if ([subviews count] > 0)
+            if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
+                return;
+    }
+    NSString *errormsg = @"";
+    if ([meta.code intValue] == 401) {
+        errormsg = @"Authentication failed due to security concerns, please sign in again.";
+        
+#ifdef WWW
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil otherButtonTitles:@"Sign Out",nil];
+#else
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
+#endif
+        
+        alertView.tag = 500;
+        [alertView show];
+        [alertView release];
     }
 }
 
@@ -998,17 +1003,18 @@
             if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
                 return;
     }
-    
-    NSString *errormsg=@"";
-    if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]])
-    {
-        if([(NSNumber*)[meta objectForKey:@"code"] intValue]==401){
-            errormsg=@"Authentication failed due to security concerns, please sign in again.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
-            alert.tag=500;
-            alert.delegate=delegate;
-            [alert show];
-            [alert release];
+    NSString *errormsg = @"";
+    if ([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]]) {
+        if ([(NSNumber*)[meta objectForKey:@"code"] intValue] == 401) {
+            errormsg = @"Authentication failed due to security concerns, please sign in again.";
+#ifdef WWW
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil  otherButtonTitles:@"Sign Out",nil];
+#else
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
+#endif
+            alertView.tag = 500;
+            [alertView show];
+            [alertView release];
         }
     }
 }
@@ -1020,7 +1026,7 @@
     else
         errormsg=@"Could not connect to the server.";
     if(![errormsg isEqualToString:@""]){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         [alert release];
     }

@@ -311,7 +311,7 @@
           Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
           if(meta!=nil){
             if([meta.code intValue]!=200){
-              [Util showError:meta delegate:self];
+              [Util showErrorWithMetaObject:meta delegate:self];
               isError=YES;
             }
           }
@@ -512,12 +512,12 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-
-    if(buttonIndex==1 && alertView.tag==500){
-        [Util signout];
-        [app ShowLanding];
-        
+    if (alertView.tag == 500) {
+        if (buttonIndex == alertView.firstOtherButtonIndex) {
+            [Util signout];
+            AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            [app ShowLanding];
+        }
     }
 }
 
