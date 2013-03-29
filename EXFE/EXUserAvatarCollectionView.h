@@ -13,24 +13,26 @@
 
 @protocol UserAvatarCollectionDataSource<NSObject>
 @required
-- (NSInteger) numberOfAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView;
-- (id)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView itemAtIndex:(int)index;
+- (NSInteger)numberOfCircleItemInAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView;
+- (EXCircleItemCell *)circleItemForAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView atIndex:(int)index;
 @end
 
 @protocol UserAvatarCollectionDelegate<NSObject>
 @required
-- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didSelectItemAtIndex:(int)index;
-- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didLongPressItemAtIndex:(int)index;
+- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didSelectCircleItemAtIndex:(int)index;
+- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didLongPressCircleItemAtIndex:(int)index;
 @end
 
 
-@interface EXUserAvatarCollectionView : UIView{
-  id <UserAvatarCollectionDataSource>  _dataSource;
-  id <UserAvatarCollectionDelegate> _delegate;
-  NSArray *cellPosition;
+@interface EXUserAvatarCollectionView : UIView {
+  NSArray *_cellCenterPositions;
 }
-- (void) reloadData;
-- (void) setDataSource:(id) dataSource;
-- (void) setDelegate:(id) delegate;
+
+@property (nonatomic, assign) id<UserAvatarCollectionDataSource> dataSource;
+@property (nonatomic, assign) id<UserAvatarCollectionDelegate> delegate;
+
+- (void)reloadData;
+//- (void)setDataSource:(id)dataSource;
+//- (void)setDelegate:(id)delegate;
 
 @end

@@ -145,6 +145,7 @@
 		76B6503D1705A0150036E832 /* portrait_64_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B650391705A0150036E832 /* portrait_64_selected@2x.png */; };
 		76B6503E1705A0150036E832 /* portrait_64.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B6503A1705A0150036E832 /* portrait_64.png */; };
 		76B6503F1705A0150036E832 /* portrait_64@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B6503B1705A0150036E832 /* portrait_64@2x.png */; };
+		76FF86C81705E62E003CA095 /* EXVerticalAlignLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 76FF86C71705E62D003CA095 /* EXVerticalAlignLabel.m */; };
 		7803EB8B15AD801500291B69 /* EXButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7803EB8A15AD801500291B69 /* EXButton.m */; };
 		7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 780961FF15BDB70B0071E9D0 /* EXOverlayView.m */; };
 		780D27A4157F368900402460 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A3157F368900402460 /* Post.m */; };
@@ -691,6 +692,8 @@
 		76B650391705A0150036E832 /* portrait_64_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_64_selected@2x.png"; sourceTree = "<group>"; };
 		76B6503A1705A0150036E832 /* portrait_64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_64.png; sourceTree = "<group>"; };
 		76B6503B1705A0150036E832 /* portrait_64@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_64@2x.png"; sourceTree = "<group>"; };
+		76FF86C61705E62D003CA095 /* EXVerticalAlignLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXVerticalAlignLabel.h; sourceTree = "<group>"; };
+		76FF86C71705E62D003CA095 /* EXVerticalAlignLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXVerticalAlignLabel.m; sourceTree = "<group>"; };
 		7803EB8915AD801500291B69 /* EXButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXButton.h; sourceTree = "<group>"; };
 		7803EB8A15AD801500291B69 /* EXButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXButton.m; sourceTree = "<group>"; };
 		780961FE15BDB70B0071E9D0 /* EXOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXOverlayView.h; sourceTree = "<group>"; };
@@ -2067,6 +2070,8 @@
 				78240AA01668935700738B7B /* UIBorderView.m */,
 				78F45F5116BBBA2100F364FE /* UIUnderlinedButton.h */,
 				78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */,
+				76FF86C61705E62D003CA095 /* EXVerticalAlignLabel.h */,
+				76FF86C71705E62D003CA095 /* EXVerticalAlignLabel.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2688,6 +2693,7 @@
 				78531D0117056C25002D34A1 /* EXUserAvatarCollectionView.m in Sources */,
 				78531D0B17057F54002D34A1 /* EXCircleItemCell.m in Sources */,
 				76B65037170595250036E832 /* EXCard.m in Sources */,
+				76FF86C81705E62E003CA095 /* EXVerticalAlignLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

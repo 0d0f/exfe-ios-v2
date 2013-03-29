@@ -16,14 +16,21 @@
 #import "EXCircleItemCell.h"
 
 
-@interface HereViewController : UIViewController <NSStreamDelegate,UserAvatarCollectionDataSource>{
-  NSMutableData *_data;
-  int byteIndex;
-  uint8_t buff[1024];
-  EXUserAvatarCollectionView *avatarlistview;
+@interface HereViewController : UIViewController
+<
+NSStreamDelegate,
+UserAvatarCollectionDataSource,
+UserAvatarCollectionDelegate
+> {
+    NSMutableData *_data;
+    int byteIndex;
+    uint8_t buff[1024];
+    
+    EXUserAvatarCollectionView  *_avatarlistview;
   
 }
 
-- (void) close;
-- (void) start;
+- (void)close;
+- (void)start;
+
 @end

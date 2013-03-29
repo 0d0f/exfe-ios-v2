@@ -9,9 +9,15 @@
 #import "EXUserAvatarCollectionView.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import "Util.h"
 
-@interface EXUserAvatarCollectionView ()
+// 640 1036 1676
+#define kRadius1 (160)
+#define kRadius2 (259)
+#define kRadius3 (419)
 
+@interface EXUserAvatarCollectionView (Private)
+- (NSArray *)_circleCenterPositions;
 @end
 
 @implementation EXUserAvatarCollectionView
@@ -20,48 +26,89 @@
 {
   self = [super initWithFrame:frame];
   if (self) {
+      _cellCenterPositions = [[self _circleCenterPositions] retain];
   }
-//  [self initData];
-//  itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
-  self.userInteractionEnabled = YES;
-//  CGPointMake(<#CGFloat x#>, <#CGFloat y#>)
-  cellPosition=@[];
+  
   return self;
 }
 
-- (void) awakeFromNib
-{
-  [super awakeFromNib];
-//  [self initData];
+- (void)drawRect:(CGRect)rect {
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    
+    CGFloat lengths[2];
+    lengths[0] = 1;
+    lengths[1] = 2;
+    CGContextSetLineCap(context, kCGLineCapRound);
+    CGContextSetLineWidth(context, 0.5f);
+    CGContextSetLineDash(context, 0.0f, lengths, 2);
+    
+    CGPoint center = (CGPoint){0.5f * CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)};
+    CGContextSetRGBStrokeColor(context, 0xB2 / 255.0f, 0xB2 / 255.0f, 0xB2 / 255.0f, 1.0f);
+    CGContextAddArc(
+                    context,
+                    center.x,
+                    center.y,
+                    kRadius1,
+                    -M_PI_2,
+                    M_PI + M_PI_2,
+                    1);
+    CGContextDrawPath(context, kCGPathStroke);
+    
+    CGContextAddArc(
+                    context,
+                    center.x,
+                    center.y,
+                    kRadius2,
+                    -M_PI_2,
+                    M_PI + M_PI_2,
+                    1);
+    CGContextDrawPath(context, kCGPathStroke);
+    
+    CGContextAddArc(
+                    context,
+                    center.x,
+                    center.y,
+                    kRadius3,
+                    -M_PI_2,
+                    M_PI + M_PI_2,
+                    1);
+    CGContextDrawPath(context, kCGPathStroke);
+    
+    CGContextRestoreGState(context);
 }
 
-- (void) setDataSource:(id) dataSource{
-  _dataSource=dataSource;
-}
-- (void) setDelegate:(id) delegate{
-  _delegate=delegate;
+- (void)dealloc {
+    [_cellCenterPositions release];
+    [super dealloc];
 }
 
 - (void)reloadData {
     for (UIView *view in self.subviews) {
         if ([view isKindOfClass:[EXCircleItemCell class]])
             [view removeFromSuperview];
-//        [view release];
     }
     
-    int count=[_dataSource numberOfAvatarCollectionView:self];
+    int count= [_dataSource numberOfCircleItemInAvatarCollectionView:self];
     for (int i = 0; i < count; i++) {
-        EXCircleItemCell *cell=[_dataSource avatarCollectionView:self itemAtIndex:i];
-        [cell setFrame:CGRectMake(0, 0, 20, 20)];
+        EXCircleItemCell *cell = [_dataSource circleItemForAvatarCollectionView:self atIndex:i];
+        cell.avatarCenter = [_cellCenterPositions[i] CGPointValue];
         
-        // block 
-        cell.tapBlock = ^{
-            [cell setSelected:cell.isSelected animated:YES complete:nil];
-            [_delegate avatarCollectionView:self didSelectItemAtIndex:cell.idx];
-        };
+        // block
+        if (i) {
+            cell.tapBlock = ^{
+                [cell setSelected:!cell.isSelected animated:YES complete:nil];
+                [_delegate avatarCollectionView:self didSelectCircleItemAtIndex:cell.index];
+            };
+        } else {
+            cell.tapBlock = ^{
+                [_delegate avatarCollectionView:self didSelectCircleItemAtIndex:cell.index];
+            };
+        }
+        
         
         cell.longPressBlock = ^{
-            [_delegate avatarCollectionView:self didLongPressItemAtIndex:cell.idx];
+            [_delegate avatarCollectionView:self didLongPressCircleItemAtIndex:cell.index];
         };
         
         // animation
@@ -96,6 +143,69 @@
         [self addSubview:cell];
         [cell setNeedsDisplay];
     }
+}
+
+#pragma mark - Private
+- (NSArray *)_circleCenterPositions {
+    CGRect viewBounds = self.bounds;
+    CGFloat width = CGRectGetWidth(viewBounds);
+    CGFloat height = CGRectGetHeight(viewBounds);
+    
+    NSValue *value = nil;
+    NSMutableArray *tempPositions = [[NSMutableArray alloc] initWithCapacity:12];
+    
+    CGPoint point11 = (CGPoint){floor(width * 0.5f), floor(height * 0.88f)};
+    value = [NSValue valueWithCGPoint:point11];
+    [tempPositions addObject:value];
+    
+    CGPoint point21 = (CGPoint){floor(width * 0.25f) - 5.0f, floor(height * 0.66f) + 30.0f};
+    value = [NSValue valueWithCGPoint:point21];
+    [tempPositions addObject:value];
+    
+    CGPoint point22 = (CGPoint){floor(width * 0.5f), floor(height * 0.66f)};
+    value = [NSValue valueWithCGPoint:point22];
+    [tempPositions addObject:value];
+    
+    CGPoint point23 = (CGPoint){floor(width * 0.75f) + 5.0f, floor(height * 0.66f) + 30.0f};
+    value = [NSValue valueWithCGPoint:point23];
+    [tempPositions addObject:value];
+    
+    CGPoint point31 = (CGPoint){floor(width * 0.125f) + 5.0f, floor(height * 0.44f) + 40.0f};
+    value = [NSValue valueWithCGPoint:point31];
+    [tempPositions addObject:value];
+    
+    CGPoint point32 = (CGPoint){floor(width * 0.375f), floor(height * 0.44f)};
+    value = [NSValue valueWithCGPoint:point32];
+    [tempPositions addObject:value];
+    
+    CGPoint point33 = (CGPoint){floor(width * 0.625f), floor(height * 0.44f)};
+    value = [NSValue valueWithCGPoint:point33];
+    [tempPositions addObject:value];
+    
+    CGPoint point34 = (CGPoint){floor(width * 0.875f) - 5.0f, floor(height * 0.44f) + 40.0f};
+    value = [NSValue valueWithCGPoint:point34];
+    [tempPositions addObject:value];
+    
+    CGPoint point41 = (CGPoint){floor(width * 0.125f), floor(height * 0.22f) + 40.0f};
+    value = [NSValue valueWithCGPoint:point41];
+    [tempPositions addObject:value];
+    
+    CGPoint point42 = (CGPoint){floor(width * 0.375f), floor(height * 0.22f)};
+    value = [NSValue valueWithCGPoint:point42];
+    [tempPositions addObject:value];
+    
+    CGPoint point43 = (CGPoint){floor(width * 0.625f), floor(height * 0.22f)};
+    value = [NSValue valueWithCGPoint:point43];
+    [tempPositions addObject:value];
+    
+    CGPoint point44 = (CGPoint){floor(width * 0.875f), floor(height * 0.22f) + 40.0f};
+    value = [NSValue valueWithCGPoint:point44];
+    [tempPositions addObject:value];
+    
+    NSArray *result = [[tempPositions copy] autorelease];
+    [tempPositions release];
+    
+    return result;
 }
 
 @end

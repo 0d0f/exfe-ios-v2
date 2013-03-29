@@ -21,14 +21,14 @@
       self.title = @"Here controller";
       self.view.backgroundColor=[UIColor whiteColor];
       UIButton *close =[UIButton buttonWithType:UIButtonTypeRoundedRect];
-      [close setFrame:CGRectMake(20,10,60,20)];
+      [close setFrame:CGRectMake(20,10,60,40)];
       [close setTitle:@"Close" forState:UIControlStateNormal];
       [close addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
       [self.view addSubview:close];
 
 
       UIButton *start =[UIButton buttonWithType:UIButtonTypeRoundedRect];
-      [start setFrame:CGRectMake(100,100,60,40)];
+      [start setFrame:CGRectMake(200,10,60,40)];
       [start setTitle:@"Start" forState:UIControlStateNormal];
       [start addTarget:self action:@selector(start) forControlEvents:UIControlEventTouchUpInside];
       [self.view addSubview:start];
@@ -38,33 +38,46 @@
 
 - (void)viewDidLoad
 {
-  [super viewDidLoad];
-  User* me=[User getDefaultUser];
-  NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://panda.0d0f.com:23333/v3/here/streaming?token=n%i",[me.user_id intValue]]]];
-  AFURLConnectionOperation *operation =   [[AFHTTPRequestOperation alloc] initWithRequest:request];
-  operation.outputStream = [NSOutputStream outputStreamToMemory];
-  [operation.outputStream setDelegate:self];
-  [operation start];
-  _data = [[NSMutableData alloc] init];
-  
-  avatarlistview=[[EXUserAvatarCollectionView alloc] initWithFrame:CGRectMake(0, 0, 200, 300)];
-  [avatarlistview setBackgroundColor:[UIColor grayColor]];
-  [avatarlistview setDataSource:self];
-  [self.view addSubview:avatarlistview];
-  [avatarlistview reloadData];
-  
+    [super viewDidLoad];
+    User* me = [User getDefaultUser];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://panda.0d0f.com:23333/v3/here/streaming?token=n%i",[me.user_id intValue]]]];
+    AFURLConnectionOperation *operation =   [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    operation.outputStream = [NSOutputStream outputStreamToMemory];
+    [operation.outputStream setDelegate:self];
+    [operation start];
+    _data = [[NSMutableData alloc] init];
+    
+    CGRect viewBounds = self.view.bounds;
+    _avatarlistview = [[EXUserAvatarCollectionView alloc] initWithFrame:(CGRect){{0, 0}, viewBounds.size}];
+    [_avatarlistview setBackgroundColor:[UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)]];
+    [_avatarlistview setDataSource:self];
+    [self.view addSubview:_avatarlistview];
+    
+    [_avatarlistview reloadData];
 }
 
-- (NSInteger) numberOfAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView{
-  return 1;
-  
-}
-- (id)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView itemAtIndex:(int)index{
-  EXCircleItemCell *cell = [[EXCircleItemCell alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-  [cell setBackgroundColor:[UIColor blueColor]];
-  return cell;
+#pragma mark - UserAvatarCollectionDataSource
+- (NSInteger)numberOfCircleItemInAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView {
+    return 12;
 }
 
+- (EXCircleItemCell *)circleItemForAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView atIndex:(int)index {
+    EXCircleItemCell *cell = [[[EXCircleItemCell alloc] init] autorelease];
+    
+#warning test only
+    cell.user = [User getDefaultUser];
+    
+    return cell;
+}
+
+#pragma mark - UserAvatarCollectionDelegate
+- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didSelectCircleItemAtIndex:(int)index {
+
+}
+
+- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didLongPressCircleItemAtIndex:(int)index {
+
+}
 
 - (void)didReceiveMemoryWarning
 {

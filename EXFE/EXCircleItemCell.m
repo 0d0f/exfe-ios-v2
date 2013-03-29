@@ -9,7 +9,9 @@
 #import "EXCircleItemCell.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import "EXVerticalAlignLabel.h"
 #import "User.h"
+#import "Util.h"
 #import "ImgCache.h"
 #import "EXCard.h"
 
@@ -18,7 +20,9 @@
 - (void)longPressHandler:(UILongPressGestureRecognizer *)recognizer;
 @end
 
-@implementation EXCircleItemCell
+@implementation EXCircleItemCell {
+    CGFloat _centerDistanceY;
+}
 
 - (id)init {
     self = [[[[NSBundle mainBundle] loadNibNamed:@"EXLiveViewCell"
@@ -28,6 +32,23 @@
     // avatar
     self.avatarImageView.layer.cornerRadius = 30;
     self.avatarImageView.clipsToBounds = YES;
+    
+    // center
+    _centerDistanceY = self.center.y - self.avatarBaseView.center.y;
+    
+    // label
+    EXVerticalAlignLabel *label = [[EXVerticalAlignLabel alloc] initWithFrame:(CGRect){{0, 71}, {75, 35}}];
+    label.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
+    label.numberOfLines = 2;
+    label.textAlignment = UITextAlignmentCenter;
+    label.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+    label.shadowColor = [UIColor whiteColor];
+    label.shadowOffset = CGSizeMake(0.0f, 1.0f);
+    label.backgroundColor = [UIColor clearColor];
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    [self addSubview:label];
+    self.titleLabel = label;
+    [label release];
     
     // tap
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
@@ -41,22 +62,6 @@
     [self.avatarBaseView addGestureRecognizer:longPress];
     [longPress release];
     
-//    self.tapBlock = ^{
-//        [self setSelected:!self.isSelected
-//                 animated:YES
-//                 complete:nil];
-//    };
-//    
-//    self.longPressBlock = ^{
-//        EXCard *card = [[EXCard alloc] initWithUser:nil];   // todo
-//        [card presentFromRect:self.frame
-//                       inView:self
-//               arrowDirection:kEXCardArrowDirectionDown
-//                     animated:YES
-//                     complete:nil];
-//        [card release];
-//    };
-//    
     return self;
 }
 
@@ -67,6 +72,15 @@
     [_selectedMaskView release];
     [_avatarImageView release];
     [super dealloc];
+}
+
+#pragma mark - Getter && Setter
+- (CGPoint)avatarCenter {
+    return self.avatarBaseView.center;
+}
+
+- (void)setAvatarCenter:(CGPoint)avatarCenter {
+    self.center = (CGPoint){avatarCenter.x, avatarCenter.y + _centerDistanceY};
 }
 
 - (void)setUser:(User *)user {
@@ -81,6 +95,7 @@
         _user = [user retain];
         
         self.titleLabel.text = user.name;
+        [self.titleLabel sizeToFit];
         
         dispatch_queue_t image_queue = dispatch_queue_create("fetchimg thread", NULL);
         dispatch_async(image_queue, ^{
@@ -117,6 +132,8 @@
                              handler();
                      }];
 }
+
+#pragma mark - Gesture
 
 - (void)tapHandler:(UITapGestureRecognizer *)recognizer {
     if (_tapBlock)
