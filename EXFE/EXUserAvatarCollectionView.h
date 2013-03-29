@@ -20,6 +20,7 @@
 @protocol UserAvatarCollectionDelegate<NSObject>
 @required
 - (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didSelectItemAtIndex:(int)index;
+- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didLongPressItemAtIndex:(int)index;
 @end
 
 

@@ -41,22 +41,22 @@
     [self.avatarBaseView addGestureRecognizer:longPress];
     [longPress release];
     
-    self.tapBlock = ^{
-        [self setSelected:!self.isSelected
-                 animated:YES
-                 complete:nil];
-    };
-    
-    self.longPressBlock = ^{
-        EXCard *card = [[EXCard alloc] initWithUser:nil];   // todo
-        [card presentFromRect:self.frame
-                       inView:self
-               arrowDirection:kEXCardArrowDirectionDown
-                     animated:YES
-                     complete:nil];
-        [card release];
-    };
-    
+//    self.tapBlock = ^{
+//        [self setSelected:!self.isSelected
+//                 animated:YES
+//                 complete:nil];
+//    };
+//    
+//    self.longPressBlock = ^{
+//        EXCard *card = [[EXCard alloc] initWithUser:nil];   // todo
+//        [card presentFromRect:self.frame
+//                       inView:self
+//               arrowDirection:kEXCardArrowDirectionDown
+//                     animated:YES
+//                     complete:nil];
+//        [card release];
+//    };
+//    
     return self;
 }
 
