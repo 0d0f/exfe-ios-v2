@@ -147,58 +147,62 @@
 
 #pragma mark - Private
 - (NSArray *)_circleCenterPositions {
-    CGRect viewBounds = self.bounds;
+    CGRect viewBounds = [UIScreen mainScreen].bounds;
     CGFloat width = CGRectGetWidth(viewBounds);
     CGFloat height = CGRectGetHeight(viewBounds);
+    CGFloat y = self.frame.origin.y;
+    if (![UIApplication sharedApplication].isStatusBarHidden) {
+        y += CGRectGetHeight([UIApplication sharedApplication].statusBarFrame);
+    }
     
     NSValue *value = nil;
     NSMutableArray *tempPositions = [[NSMutableArray alloc] initWithCapacity:12];
     
-    CGPoint point11 = (CGPoint){floor(width * 0.5f), floor(height * 0.88f)};
+    CGPoint point11 = (CGPoint){floor(width * 0.5f), floor(height * 0.88f) - y};
     value = [NSValue valueWithCGPoint:point11];
     [tempPositions addObject:value];
     
-    CGPoint point21 = (CGPoint){floor(width * 0.25f) - 5.0f, floor(height * 0.66f) + 30.0f};
+    CGPoint point21 = (CGPoint){floor(width * 0.25f) - 5.0f, floor(height * 0.66f) + 30.0f - y};
     value = [NSValue valueWithCGPoint:point21];
     [tempPositions addObject:value];
     
-    CGPoint point22 = (CGPoint){floor(width * 0.5f), floor(height * 0.66f)};
+    CGPoint point22 = (CGPoint){floor(width * 0.5f), floor(height * 0.66f) - y};
     value = [NSValue valueWithCGPoint:point22];
     [tempPositions addObject:value];
     
-    CGPoint point23 = (CGPoint){floor(width * 0.75f) + 5.0f, floor(height * 0.66f) + 30.0f};
+    CGPoint point23 = (CGPoint){floor(width * 0.75f) + 5.0f, floor(height * 0.66f) + 30.0f - y};
     value = [NSValue valueWithCGPoint:point23];
     [tempPositions addObject:value];
     
-    CGPoint point31 = (CGPoint){floor(width * 0.125f) + 5.0f, floor(height * 0.44f) + 40.0f};
+    CGPoint point31 = (CGPoint){floor(width * 0.125f) + 5.0f, floor(height * 0.44f) + 40.0f - y};
     value = [NSValue valueWithCGPoint:point31];
     [tempPositions addObject:value];
     
-    CGPoint point32 = (CGPoint){floor(width * 0.375f), floor(height * 0.44f)};
+    CGPoint point32 = (CGPoint){floor(width * 0.375f), floor(height * 0.44f) - y};
     value = [NSValue valueWithCGPoint:point32];
     [tempPositions addObject:value];
     
-    CGPoint point33 = (CGPoint){floor(width * 0.625f), floor(height * 0.44f)};
+    CGPoint point33 = (CGPoint){floor(width * 0.625f), floor(height * 0.44f) - y};
     value = [NSValue valueWithCGPoint:point33];
     [tempPositions addObject:value];
     
-    CGPoint point34 = (CGPoint){floor(width * 0.875f) - 5.0f, floor(height * 0.44f) + 40.0f};
+    CGPoint point34 = (CGPoint){floor(width * 0.875f) - 5.0f, floor(height * 0.44f) + 40.0f - y};
     value = [NSValue valueWithCGPoint:point34];
     [tempPositions addObject:value];
     
-    CGPoint point41 = (CGPoint){floor(width * 0.125f), floor(height * 0.22f) + 40.0f};
+    CGPoint point41 = (CGPoint){floor(width * 0.125f), floor(height * 0.22f) + 40.0f - y};
     value = [NSValue valueWithCGPoint:point41];
     [tempPositions addObject:value];
     
-    CGPoint point42 = (CGPoint){floor(width * 0.375f), floor(height * 0.22f)};
+    CGPoint point42 = (CGPoint){floor(width * 0.375f), floor(height * 0.22f) - y};
     value = [NSValue valueWithCGPoint:point42];
     [tempPositions addObject:value];
     
-    CGPoint point43 = (CGPoint){floor(width * 0.625f), floor(height * 0.22f)};
+    CGPoint point43 = (CGPoint){floor(width * 0.625f), floor(height * 0.22f) - y};
     value = [NSValue valueWithCGPoint:point43];
     [tempPositions addObject:value];
     
-    CGPoint point44 = (CGPoint){floor(width * 0.875f), floor(height * 0.22f) + 40.0f};
+    CGPoint point44 = (CGPoint){floor(width * 0.875f), floor(height * 0.22f) + 40.0f - y};
     value = [NSValue valueWithCGPoint:point44];
     [tempPositions addObject:value];
     

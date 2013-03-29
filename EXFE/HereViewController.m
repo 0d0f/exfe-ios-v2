@@ -8,8 +8,10 @@
 
 #import "HereViewController.h"
 
-@interface HereViewController ()
+#import "EXHereHeaderView.h"
 
+@interface HereViewController ()
+@property (nonatomic, retain) EXHereHeaderView *headerView;
 @end
 
 @implementation HereViewController
@@ -20,20 +22,19 @@
     if (self) {
       self.title = @"Here controller";
       self.view.backgroundColor=[UIColor whiteColor];
-      UIButton *close =[UIButton buttonWithType:UIButtonTypeRoundedRect];
-      [close setFrame:CGRectMake(20,10,60,40)];
-      [close setTitle:@"Close" forState:UIControlStateNormal];
-      [close addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
-      [self.view addSubview:close];
-
 
       UIButton *start =[UIButton buttonWithType:UIButtonTypeRoundedRect];
-      [start setFrame:CGRectMake(200,10,60,40)];
+      [start setFrame:CGRectMake(256,50,60,40)];
       [start setTitle:@"Start" forState:UIControlStateNormal];
       [start addTarget:self action:@selector(start) forControlEvents:UIControlEventTouchUpInside];
       [self.view addSubview:start];
     }
     return self;
+}
+
+- (void)dealloc {
+    [_headerView release];
+    [super dealloc];
 }
 
 - (void)viewDidLoad
@@ -47,8 +48,18 @@
     [operation start];
     _data = [[NSMutableData alloc] init];
     
+    // headerView
+    CGRect headerViewBounds;
+    EXHereHeaderView *headerView = [[EXHereHeaderView alloc] init];
+    headerViewBounds = headerView.bounds;
+    [headerView.backButton addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+    self.headerView = headerView;
+    [self.view addSubview:headerView];
+    [headerView release];
+    
     CGRect viewBounds = self.view.bounds;
-    _avatarlistview = [[EXUserAvatarCollectionView alloc] initWithFrame:(CGRect){{0, 0}, viewBounds.size}];
+    _avatarlistview = [[EXUserAvatarCollectionView alloc] initWithFrame:(CGRect){{0, CGRectGetHeight(headerViewBounds)},
+        {CGRectGetWidth(viewBounds), CGRectGetHeight(viewBounds) - CGRectGetHeight(headerViewBounds)}}];
     [_avatarlistview setBackgroundColor:[UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)]];
     [_avatarlistview setDataSource:self];
     [self.view addSubview:_avatarlistview];
