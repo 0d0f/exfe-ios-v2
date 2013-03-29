@@ -461,7 +461,7 @@ static char identitykey;
                            int type = code /100;
                            switch (type) {
                                case 2: // HTTP OK
-                                   if (code == 206) {
+                                   if (code == 206) { // Too many people, still accept
                                        NSLog(@"HTTP 206 Partial Successfully");
                                    }
                                    if(code == 200){
@@ -472,6 +472,7 @@ static char identitykey;
                                    break;
                                case 4: // Client Error
                                {
+                                   // 400 Over people mac limited
                                    RKObjectManager *objectManager = [RKObjectManager sharedManager];
                                    [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                                }
