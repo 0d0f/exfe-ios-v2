@@ -26,6 +26,7 @@ typedef void (^LongPressBlock)(void);
 @property (copy, nonatomic) LongPressBlock longPressBlock;
 
 @property (nonatomic, retain) User *user;
+@property (nonatomic, assign) NSUInteger idx;
 
 - (id)init;
 
