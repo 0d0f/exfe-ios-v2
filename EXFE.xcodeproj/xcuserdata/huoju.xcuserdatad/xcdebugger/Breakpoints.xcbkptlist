@@ -2316,11 +2316,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/HereViewController.m"
-         timestampString = "386159177.929011"
+         timestampString = "386239446.846528"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
+         startingLineNumber = "123"
+         endingLineNumber = "123"
          landmarkName = "-stream:handleEvent:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2335,6 +2335,19 @@
          startingLineNumber = "138"
          endingLineNumber = "138"
          landmarkName = "-application:didFinishLaunchingWithOptions:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/EXUserAvatarCollectionView.m"
+         timestampString = "386239416.701896"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "49"
+         endingLineNumber = "49"
+         landmarkName = "-reloadData"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

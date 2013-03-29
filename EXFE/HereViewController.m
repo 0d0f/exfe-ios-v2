@@ -46,7 +46,25 @@
   [operation.outputStream setDelegate:self];
   [operation start];
   _data = [[NSMutableData alloc] init];
+  
+  avatarlistview=[[EXUserAvatarCollectionView alloc] initWithFrame:CGRectMake(0, 0, 200, 300)];
+  [avatarlistview setBackgroundColor:[UIColor grayColor]];
+  [avatarlistview setDataSource:self];
+  [self.view addSubview:avatarlistview];
+  [avatarlistview reloadData];
+  
 }
+
+- (NSInteger) numberOfAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView{
+  return 1;
+  
+}
+- (id)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView itemAtIndex:(int)index{
+  EXCircleItemCell *cell = [[EXCircleItemCell alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+  [cell setBackgroundColor:[UIColor blueColor]];
+  return cell;
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -110,46 +128,5 @@
       NSLog(@"Unknown event: %@ : %d", stream, eventCode);
   }
 }
-//- (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode {
-//  NSLog(@"Unknown event: %@ : %d", stream, eventCode);
-////  switch(eventCode) {
-////      
-////  }
-//}
-//- (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode
-//{
-//  switch (eventCode) {
-//    case NSStreamEventOpenCompleted:
-//      NSLog(@"Stream opened");
-//      break;
-//    case NSStreamEventHasBytesAvailable:
-////      if(!_data) {
-////        _data = [[NSMutableData data] retain];
-////      }
-////      uint8_t buf[1024];
-////      unsigned int len = 0;
-////      len = [(NSInputStream *)stream read:buf maxLength:1024];
-////      if(len) {
-////        [_data appendBytes:(const void *)buf length:len];
-////        NSString* newStr = [NSString stringWithUTF8String:[_data bytes]];
-////        NSLog(@"%@",newStr);
-////      } else {
-////        NSLog(@"no buffer!");
-////      }
-//      NSLog(@"HasBytesAvailable");
-//      break;
-//    case NSStreamEventErrorOccurred:
-//      NSLog(@"Can not connect to the host!");
-//      break;
-//    case NSStreamEventEndEncountered:
-//      NSLog(@"Stream closed");
-//      break;
-////    case NSStreamEventHasSpaceAvailable:
-////      NSLog(@"Stream HasSpaceAvailable");
-////      break;
-//      
-//    default:
-//      NSLog(@"Unknown event: %@ : %d", stream, eventCode);
-//  }
-//}
+
 @end

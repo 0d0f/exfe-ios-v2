@@ -236,6 +236,8 @@
 		7852709015FC74C0001AF618 /* spin_80_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 7852708815FC74C0001AF618 /* spin_80_3.png */; };
 		7852709C15FC7A1E001AF618 /* EXSpinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7852709B15FC7A1E001AF618 /* EXSpinView.m */; };
 		78531CFA1701A434002D34A1 /* HereViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78531CF91701A434002D34A1 /* HereViewController.m */; };
+		78531D0117056C25002D34A1 /* EXUserAvatarCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78531D0017056C25002D34A1 /* EXUserAvatarCollectionView.m */; };
+		78531D0B17057F54002D34A1 /* EXCircleItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78531D0A17057F54002D34A1 /* EXCircleItemCell.m */; };
 		785659FC15F3AD660003CDF8 /* CustomStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */; };
 		785F6F541581DE4C00BF8EA0 /* APIProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F531581DE4C00BF8EA0 /* APIProfile.m */; };
 		785F6F6415820A0000BF8EA0 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F6215820A0000BF8EA0 /* ProfileViewController.m */; };
@@ -800,6 +802,10 @@
 		7852709B15FC7A1E001AF618 /* EXSpinView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXSpinView.m; sourceTree = "<group>"; };
 		78531CF81701A434002D34A1 /* HereViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HereViewController.h; sourceTree = "<group>"; };
 		78531CF91701A434002D34A1 /* HereViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HereViewController.m; sourceTree = "<group>"; };
+		78531CFF17056C25002D34A1 /* EXUserAvatarCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXUserAvatarCollectionView.h; sourceTree = "<group>"; };
+		78531D0017056C25002D34A1 /* EXUserAvatarCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXUserAvatarCollectionView.m; sourceTree = "<group>"; };
+		78531D0917057F54002D34A1 /* EXCircleItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCircleItemCell.h; sourceTree = "<group>"; };
+		78531D0A17057F54002D34A1 /* EXCircleItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCircleItemCell.m; sourceTree = "<group>"; };
 		785659F915F3ACD60003CDF8 /* CustomStatusBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomStatusBar.h; sourceTree = "<group>"; };
 		785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomStatusBar.m; sourceTree = "<group>"; };
 		785F6F521581DE4C00BF8EA0 /* APIProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIProfile.h; sourceTree = "<group>"; };
@@ -1722,6 +1728,10 @@
 				4F29C92516F85F7B001BB176 /* EXMenu.m */,
 				4F29C92816F962C9001BB176 /* EXBasicMenu.h */,
 				4F29C92916F962CA001BB176 /* EXBasicMenu.m */,
+				78531CFF17056C25002D34A1 /* EXUserAvatarCollectionView.h */,
+				78531D0017056C25002D34A1 /* EXUserAvatarCollectionView.m */,
+				78531D0917057F54002D34A1 /* EXCircleItemCell.h */,
+				78531D0A17057F54002D34A1 /* EXCircleItemCell.m */,
 			);
 			name = Control;
 			sourceTree = "<group>";
@@ -2650,6 +2660,8 @@
 				4FB30D1D17003BFE007BC66D /* APIExfee.m in Sources */,
 				4FA84B09170155DD0096FB5A /* ExfeeAddCollectionViewCell.m in Sources */,
 				78531CFA1701A434002D34A1 /* HereViewController.m in Sources */,
+				78531D0117056C25002D34A1 /* EXUserAvatarCollectionView.m in Sources */,
+				78531D0B17057F54002D34A1 /* EXCircleItemCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
