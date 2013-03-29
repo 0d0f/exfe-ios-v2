@@ -81,7 +81,7 @@
         _user = [user retain];
         
         self.titleLabel.text = user.name;
-        Ci
+        
         dispatch_queue_t image_queue = dispatch_queue_create("fetchimg thread", NULL);
         dispatch_async(image_queue, ^{
             UIImage *avatarImage=[[ImgCache sharedManager] getImgFrom:user.avatar_filename];
