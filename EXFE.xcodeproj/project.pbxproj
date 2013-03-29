@@ -139,6 +139,8 @@
 		4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
 		4FFB149C16C0BFFF00F76D32 /* edit_30_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */; };
 		4FFB149D16C0BFFF00F76D32 /* edit_30_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */; };
+		76B650311705940D0036E832 /* EXLiveViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B650301705940D0036E832 /* EXLiveViewCell.xib */; };
+		76B65037170595250036E832 /* EXCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B65036170595250036E832 /* EXCard.m */; };
 		7803EB8B15AD801500291B69 /* EXButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7803EB8A15AD801500291B69 /* EXButton.m */; };
 		7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 780961FF15BDB70B0071E9D0 /* EXOverlayView.m */; };
 		780D27A4157F368900402460 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A3157F368900402460 /* Post.m */; };
@@ -678,6 +680,9 @@
 		4FFB149416BFFB9600F76D32 /* SSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSTextView.m; sourceTree = "<group>"; };
 		4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30_pressed.png; sourceTree = "<group>"; };
 		4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30_pressed@2x.png"; sourceTree = "<group>"; };
+		76B650301705940D0036E832 /* EXLiveViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EXLiveViewCell.xib; sourceTree = "<group>"; };
+		76B65035170595250036E832 /* EXCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCard.h; sourceTree = "<group>"; };
+		76B65036170595250036E832 /* EXCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCard.m; sourceTree = "<group>"; };
 		7803EB8915AD801500291B69 /* EXButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXButton.h; sourceTree = "<group>"; };
 		7803EB8A15AD801500291B69 /* EXButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXButton.m; sourceTree = "<group>"; };
 		780961FE15BDB70B0071E9D0 /* EXOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXOverlayView.h; sourceTree = "<group>"; };
@@ -1732,6 +1737,9 @@
 				78531D0017056C25002D34A1 /* EXUserAvatarCollectionView.m */,
 				78531D0917057F54002D34A1 /* EXCircleItemCell.h */,
 				78531D0A17057F54002D34A1 /* EXCircleItemCell.m */,
+				76B650301705940D0036E832 /* EXLiveViewCell.xib */,
+				76B65035170595250036E832 /* EXCard.h */,
+				76B65036170595250036E832 /* EXCard.m */,
 			);
 			name = Control;
 			sourceTree = "<group>";
@@ -2506,6 +2514,7 @@
 				4FB30D251700A76B007BC66D /* widget_exfee_30@2x.png in Resources */,
 				4FB30D2B1700A7FD007BC66D /* widget_conv_30shine.png in Resources */,
 				4FB30D2C1700A7FD007BC66D /* widget_conv_30shine@2x.png in Resources */,
+				76B650311705940D0036E832 /* EXLiveViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2662,6 +2671,7 @@
 				78531CFA1701A434002D34A1 /* HereViewController.m in Sources */,
 				78531D0117056C25002D34A1 /* EXUserAvatarCollectionView.m in Sources */,
 				78531D0B17057F54002D34A1 /* EXCircleItemCell.m in Sources */,
+				76B65037170595250036E832 /* EXCard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
