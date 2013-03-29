@@ -7,9 +7,12 @@
 //
 
 #import "AppDelegate.h"
+#import <BlocksKit/BlocksKit.h>
+#import "UIApplication+EXFE.h"
 #import "APICrosses.h"
 #import "APIConversation.h"
 #import "APIProfile.h"
+#import "APIExfeServer.h"
 #import "CrossesViewController.h"
 #import "LandingViewController.h"
 
@@ -205,6 +208,8 @@ static char mergetoken;
 {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    [Util checkUpdate];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

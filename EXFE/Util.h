@@ -100,6 +100,7 @@
 + (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2;
 + (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2  with:(CGRect)rect3;
 
++ (void)checkUpdate;
 
 @end
 

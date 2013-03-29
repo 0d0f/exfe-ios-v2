@@ -108,6 +108,8 @@
 		4F9FE4EE1702E12C0098B9B9 /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E01702E12C0098B9B9 /* PSTGridLayoutRow.m */; };
 		4F9FE4EF1702E12C0098B9B9 /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */; };
 		4F9FE56C1702EB6C0098B9B9 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FE5611702E8B70098B9B9 /* libBlocksKit.a */; };
+		4F9FE56F17049CAC0098B9B9 /* APIExfeServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE56E17049CAC0098B9B9 /* APIExfeServer.m */; };
+		4F9FE572170548770098B9B9 /* UIApplication+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE571170548770098B9B9 /* UIApplication+EXFE.m */; };
 		4FA013A516F2F4AD00F40CB6 /* Invitation+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013A416F2F4AD00F40CB6 /* Invitation+EXFE.m */; };
 		4FA013AB16F31B5400F40CB6 /* Identity+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013AA16F31B5400F40CB6 /* Identity+EXFE.m */; };
 		4FA013AE16F3546A00F40CB6 /* ExfeeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013AD16F3546A00F40CB6 /* ExfeeCollectionViewCell.m */; };
@@ -699,6 +701,10 @@
 		4F9FE4E11702E12C0098B9B9 /* PSTGridLayoutSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTGridLayoutSection.h; sourceTree = "<group>"; };
 		4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTGridLayoutSection.m; sourceTree = "<group>"; };
 		4F9FE5581702E8B60098B9B9 /* BlocksKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BlocksKit.xcodeproj; path = Vendor/BlocksKit/BlocksKit.xcodeproj; sourceTree = "<group>"; };
+		4F9FE56D17049CAC0098B9B9 /* APIExfeServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIExfeServer.h; sourceTree = "<group>"; };
+		4F9FE56E17049CAC0098B9B9 /* APIExfeServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIExfeServer.m; sourceTree = "<group>"; };
+		4F9FE570170548770098B9B9 /* UIApplication+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+EXFE.h"; sourceTree = "<group>"; };
+		4F9FE571170548770098B9B9 /* UIApplication+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+EXFE.m"; sourceTree = "<group>"; };
 		4FA013A316F2F4AD00F40CB6 /* Invitation+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Invitation+EXFE.h"; sourceTree = "<group>"; };
 		4FA013A416F2F4AD00F40CB6 /* Invitation+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Invitation+EXFE.m"; sourceTree = "<group>"; };
 		4FA013A916F31B5400F40CB6 /* Identity+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Identity+EXFE.h"; sourceTree = "<group>"; };
@@ -1384,6 +1390,8 @@
 			children = (
 				4F63E249169AD2B2003354D7 /* NSDateComponents+Helper.h */,
 				4F63E24A169AD2B2003354D7 /* NSDateComponents+Helper.m */,
+				4F9FE570170548770098B9B9 /* UIApplication+EXFE.h */,
+				4F9FE571170548770098B9B9 /* UIApplication+EXFE.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -1989,6 +1997,8 @@
 				788B621016E89B200019B953 /* ModelMapping.m */,
 				7818FF1415EB415E0095E92F /* ObjectToDict.h */,
 				7818FF1515EB415E0095E92F /* ObjectToDict.m */,
+				4F9FE56D17049CAC0098B9B9 /* APIExfeServer.h */,
+				4F9FE56E17049CAC0098B9B9 /* APIExfeServer.m */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -2833,6 +2843,8 @@
 				4F9FE4ED1702E12C0098B9B9 /* PSTGridLayoutItem.m in Sources */,
 				4F9FE4EE1702E12C0098B9B9 /* PSTGridLayoutRow.m in Sources */,
 				4F9FE4EF1702E12C0098B9B9 /* PSTGridLayoutSection.m in Sources */,
+				4F9FE56F17049CAC0098B9B9 /* APIExfeServer.m in Sources */,
+				4F9FE572170548770098B9B9 /* UIApplication+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

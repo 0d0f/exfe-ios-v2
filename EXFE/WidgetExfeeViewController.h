@@ -6,6 +6,7 @@
 //
 //
 #import "EXAttributedLabel.h"
+#import "PSTCollectionView.h"
 #import "EXBasicMenu.h"
 #import "UIBorderLabel.h"
 
@@ -18,7 +19,7 @@ typedef enum {
     ScrollDirectionCrazy,
 } ScrollDirection;
 
-@interface WidgetExfeeViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EXBasicMenuDelegate,UIActionSheetDelegate, UIAlertViewDelegate>{
+@interface WidgetExfeeViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, PSTCollectionViewDataSource, PSTCollectionViewDelegate, PSTCollectionViewDelegateFlowLayout, EXBasicMenuDelegate,UIActionSheetDelegate, UIAlertViewDelegate>{
     
     UIView *invContent;
     UILabel *invName;
@@ -35,6 +36,8 @@ typedef enum {
     UIButton *ActionMenu;
     UIButton *RemoveButton;
     
+    PSTCollectionViewFlowLayout *flowLayout;
+    
     EXBasicMenu *rsvpMenu;
     
     CALayer *layer1;
@@ -45,7 +48,7 @@ typedef enum {
 //    UITableView* invTable;
 //    ExfeeRsvpCell *tableHeader;
 //    ABTableViewCell *tableFooter;
-    UICollectionView *exfeeContainer;
+    PSTCollectionView *exfeeContainer;
     
     
     Invitation* selected_invitation;

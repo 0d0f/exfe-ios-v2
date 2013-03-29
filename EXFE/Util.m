@@ -10,6 +10,9 @@
 #import "CrossTime.h"
 #import "EFTime.h"
 #import <math.h>
+#import <BlocksKit/BlocksKit.h>
+#import "UIApplication+EXFE.h"
+#import "APIExfeServer.h"
 
 @implementation Util
 + (NSString*) decodeFromPercentEscapeString:(NSString*)string{
@@ -1083,4 +1086,50 @@
     return [Util expandRect:rect1 with:[Util expandRect:rect2 with:rect3]];
 }
 
++ (void)checkUpdate
+{
+    //    http://api.exfe.com/versions/
+    //    {
+    //        "ios" => {"version" => "", "description" => "", "url" => ""}
+    //        "andriod" => {"version" => "", "description" => "", "url" => ""}
+    //    }
+    
+    // https://itunes.apple.com/cn/app/exfe/id514026604
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterFullStyle];
+    NSString *last_string = [[NSUserDefaults standardUserDefaults] stringForKey:@"version_last_check_time"];
+    NSDate *last_time = [formatter dateFromString:last_string];
+    [formatter release];
+    if ([Util daysBetween:last_time and:[NSDate date]] > 3){
+        [APIExfeServer checkAppVersionSuccess:^(AFHTTPRequestOperation *operation, id JSON) {
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateStyle:NSDateFormatterFullStyle];
+            NSString *now_string = [formatter stringFromDate:[NSDate date]];
+            [formatter release];
+            [[NSUserDefaults standardUserDefaults] setValue:now_string forKey:@"version_last_check_time"];
+            
+            NSDictionary *iosVersionObject = [JSON valueForKeyPath:@"ios"];
+            NSString *version = [iosVersionObject valueForKey:@"version"];
+            NSString *description = [iosVersionObject valueForKey:@"description"];
+            NSString *url = [iosVersionObject valueForKey:@"url"];
+            NSLog(@"ver:%@ desc:%@ url:%@ ", version, description, url);
+            if ([UIApplication isNewVersion:version]) {
+                
+                [UIAlertView showAlertViewWithTitle:@"New version update"
+                                            message:description
+                                  cancelButtonTitle:@"Cancel"
+                                  otherButtonTitles:@[@"Update"]
+                                            handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                                if (buttonIndex == alertView.firstOtherButtonIndex) {
+                                                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                                                }
+                                            }];
+            }
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"check version fail");
+        }];
+    }
+}
 @end

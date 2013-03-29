@@ -112,13 +112,12 @@ typedef enum {
         self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
     }
     
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    exfeeContainer = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(b), CGRectGetHeight(a) - 44) collectionViewLayout:flowLayout];
-    [flowLayout release];
+    flowLayout = [[PSTCollectionViewFlowLayout alloc] init];
+    exfeeContainer = [[PSTCollectionView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(b), CGRectGetHeight(a) - 44) collectionViewLayout:flowLayout];
     exfeeContainer.delegate = self;
     exfeeContainer.dataSource = self;
     [exfeeContainer registerClass:[ExfeeCollectionViewCell class] forCellWithReuseIdentifier:@"Exfee Cell"];
-    [exfeeContainer registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Blank Cell"];
+    [exfeeContainer registerClass:[PSTCollectionViewCell class] forCellWithReuseIdentifier:@"Blank Cell"];
     [exfeeContainer registerClass:[ExfeeAddCollectionViewCell class] forCellWithReuseIdentifier:@"Add Cell"];
     exfeeContainer.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"conv_bg.png"]];
     exfeeContainer.alwaysBounceVertical = YES;
@@ -288,6 +287,7 @@ typedef enum {
     [bioTitle release];
     [bioContent release];
     [invContent release];
+    [flowLayout release];
     
     [exfeeContainer release];
     
@@ -660,12 +660,12 @@ typedef enum {
 
 
 #pragma mark UICollectionViewDataSource
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+- (NSInteger)numberOfSectionsInCollectionView:(PSTCollectionView *)collectionView
 {
     return 2;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+- (NSInteger)collectionView:(PSTCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     switch (section) {
         case 0:
@@ -677,14 +677,14 @@ typedef enum {
     }
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (PSTCollectionViewCell *)collectionView:(PSTCollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     switch (section) {
         case 0:
         {
-            UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Blank Cell" forIndexPath:indexPath];
+            PSTCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Blank Cell" forIndexPath:indexPath];
             return cell;
         }
         case 1:
@@ -726,7 +726,7 @@ typedef enum {
 }
 
 #pragma mark UICollectionViewDelegateFlowLayout
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (CGSize)collectionView:(PSTCollectionView *)collectionView layout:(PSTCollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     NSInteger seq = row % 4;
@@ -748,7 +748,7 @@ typedef enum {
     }
 }
 
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+- (UIEdgeInsets)collectionView:(PSTCollectionView *)collectionView layout:(PSTCollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
     switch (section) {
         case 0:
             return UIEdgeInsetsMake(0, 0, 0, 0);
@@ -760,7 +760,7 @@ typedef enum {
     
 }
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+- (CGFloat)collectionView:(PSTCollectionView *)collectionView layout:(PSTCollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     switch (section) {
         case 0:
@@ -771,7 +771,7 @@ typedef enum {
             return 0;
     }
 }
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+- (CGFloat)collectionView:(PSTCollectionView *)collectionView layout:(PSTCollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
     switch (section) {
         case 0:
@@ -784,7 +784,7 @@ typedef enum {
 }
 
 #pragma mark UICollectionViewDelegate
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(PSTCollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger section = indexPath.section;
     if (section == 1) {
         if (indexPath.row == self.sortedInvitations.count){
@@ -813,7 +813,7 @@ typedef enum {
             [self presentModalViewController:viewController animated:YES];
             [viewController release];
         }else{
-            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+            PSTCollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
             [self testClick:cell];
             selected_invitation = [self.sortedInvitations objectAtIndex:indexPath.row];
             [self fillInvitationContent:selected_invitation];
