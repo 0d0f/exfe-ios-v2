@@ -55,4 +55,18 @@
   }
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+  UITouch *touch = [touches anyObject];
+  CGPoint touchPt = [touch locationInView: self];
+  for(UIView *view in self.subviews){
+    if([view isKindOfClass:[EXCircleItemCell class]]){
+      BOOL inrect=CGRectContainsPoint(view.bounds,touchPt);
+      if (inrect){
+//        ((EXCircleItemCell*)view).idx
+        [_delegate avatarCollectionView:self didSelectItemAtIndex:0];
+      }
+      
+    }
+  }
+}
 @end
