@@ -19,7 +19,7 @@
 
 @protocol UserAvatarCollectionDelegate<NSObject>
 @required
-- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didSelectItemAtIndex:(int)index frame:(CGRect)rect;
+- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didSelectItemAtIndex:(int)index;
 @end
 
 
