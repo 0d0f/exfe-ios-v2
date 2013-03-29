@@ -1096,12 +1096,16 @@
     
     // https://itunes.apple.com/cn/app/exfe/id514026604
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterFullStyle];
     NSString *last_string = [[NSUserDefaults standardUserDefaults] stringForKey:@"version_last_check_time"];
-    NSDate *last_time = [formatter dateFromString:last_string];
-    [formatter release];
-    if ([Util daysBetween:last_time and:[NSDate date]] > 3){
+    NSDate *last_time = nil;
+    if (last_string) {
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateStyle:NSDateFormatterFullStyle];
+        
+        last_time = [formatter dateFromString:last_string];
+        [formatter release];
+    }
+    if (last_time == nil || [Util daysBetween:last_time and:[NSDate date]] > 3){
         [APIExfeServer checkAppVersionSuccess:^(AFHTTPRequestOperation *operation, id JSON) {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterFullStyle];
