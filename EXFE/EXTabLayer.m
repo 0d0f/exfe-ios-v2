@@ -33,6 +33,7 @@
         _curveParamBase = CGPointMake(198, 80);
         _curveParamControl1 = CGRectMake(198 - _curveParamBase.x, 80 - _curveParamBase.y, 76, 0);
         _curveParamControl2 = CGRectMake(320 - _curveParamBase.x, 100 - _curveParamBase.y, -46, 0);
+        _maskPosition = CGPointMake(0, 0);
     }
     return self;
 }
@@ -85,6 +86,7 @@
     [self updateCurvePath:curvePath];
     CAShapeLayer *maskLayer = [CAShapeLayer layer];
     maskLayer.path = [curvePath CGPath];
+    maskLayer.position = _maskPosition;
     self.mask = maskLayer;
     self.masksToBounds = YES;
     

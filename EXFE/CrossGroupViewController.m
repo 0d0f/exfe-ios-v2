@@ -1090,7 +1090,7 @@
             btnBack.frame = CGRectMake(0, 0, 20, 44);
             tabWidget.frame = CGRectMake(0, 66 - 36, CGRectGetWidth(self.view.bounds), 40);
             [self moveLayer:tabLayer.mask to:CGPointMake(head_bg_point.x, head_bg_point.y - 36)];
-            tabLayer.curveParamBase = CGPointMake(198, 80 - head_bg_img_startY - 36);
+            tabLayer.maskPosition = CGPointMake(head_bg_point.x, head_bg_point.y - 36);
             break;
             
         default:
@@ -1100,7 +1100,7 @@
             btnBack.frame = CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44);
             tabWidget.frame = CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40);
             [self moveLayer:tabLayer.mask to:head_bg_point];
-            tabLayer.curveParamBase = CGPointMake(198, 80 - head_bg_img_startY);
+            tabLayer.maskPosition = head_bg_point;
             break;
     }
     _headerStyle = style;
