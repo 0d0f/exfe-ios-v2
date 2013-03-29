@@ -1152,11 +1152,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/AppDelegate.m"
-         timestampString = "385367128.221498"
+         timestampString = "386159806.362135"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "420"
-         endingLineNumber = "420"
+         startingLineNumber = "421"
+         endingLineNumber = "421"
          landmarkName = "-processUrlHandler:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1165,11 +1165,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/AppDelegate.m"
-         timestampString = "385367128.221498"
+         timestampString = "386159806.362135"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "397"
-         endingLineNumber = "397"
+         startingLineNumber = "398"
+         endingLineNumber = "398"
          landmarkName = "-processUrlHandler:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1178,11 +1178,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/AppDelegate.m"
-         timestampString = "385367128.221498"
+         timestampString = "386159806.362135"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "608"
-         endingLineNumber = "608"
+         startingLineNumber = "609"
+         endingLineNumber = "609"
          landmarkName = "-alertView:clickedButtonAtIndex:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1705,11 +1705,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/AppDelegate.m"
-         timestampString = "385367128.221498"
+         timestampString = "386159806.362135"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "476"
-         endingLineNumber = "476"
+         startingLineNumber = "477"
+         endingLineNumber = "477"
          landmarkName = "-CrossUpdateDidFinish:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2004,11 +2004,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/AppDelegate.m"
-         timestampString = "385367128.221498"
+         timestampString = "386159806.362135"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "410"
-         endingLineNumber = "410"
+         startingLineNumber = "411"
+         endingLineNumber = "411"
          landmarkName = "-processUrlHandler:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2030,11 +2030,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/AppDelegate.m"
-         timestampString = "385367128.221498"
+         timestampString = "386159806.362135"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "611"
-         endingLineNumber = "611"
+         startingLineNumber = "612"
+         endingLineNumber = "612"
          landmarkName = "-alertView:clickedButtonAtIndex:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2043,11 +2043,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/AppDelegate.m"
-         timestampString = "385367128.221498"
+         timestampString = "386159806.362135"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "623"
-         endingLineNumber = "623"
+         startingLineNumber = "624"
+         endingLineNumber = "624"
          landmarkName = "-alertView:clickedButtonAtIndex:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2108,11 +2108,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/AppDelegate.m"
-         timestampString = "385367210.631932"
+         timestampString = "386159806.362135"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "216"
-         endingLineNumber = "216"
+         startingLineNumber = "217"
+         endingLineNumber = "217"
          landmarkName = "-SigninDidFinish"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2121,11 +2121,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "EXFE/AppDelegate.m"
-         timestampString = "385368203.854617"
+         timestampString = "386159806.362135"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "236"
-         endingLineNumber = "236"
+         startingLineNumber = "237"
+         endingLineNumber = "237"
          landmarkName = "-application:didRegisterForRemoteNotificationsWithDeviceToken:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2322,6 +2322,19 @@
          startingLineNumber = "105"
          endingLineNumber = "105"
          landmarkName = "-stream:handleEvent:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "EXFE/AppDelegate.m"
+         timestampString = "386159803.612105"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "138"
+         endingLineNumber = "138"
+         landmarkName = "-application:didFinishLaunchingWithOptions:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

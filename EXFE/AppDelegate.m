@@ -135,6 +135,7 @@ static char mergetoken;
     }else {
     }
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    NSLog(@"%@",error);
     
   }];
 
