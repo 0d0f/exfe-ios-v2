@@ -12,6 +12,7 @@
 
 @interface HereViewController ()
 @property (nonatomic, retain) EXHereHeaderView *headerView;
+@property (nonatomic, retain) EXCardViewController *cardViewController;
 @end
 
 @implementation HereViewController
@@ -33,6 +34,7 @@
 }
 
 - (void)dealloc {
+    [_cardViewController release];
     [_headerView release];
     [super dealloc];
 }
@@ -61,7 +63,8 @@
     _avatarlistview = [[EXUserAvatarCollectionView alloc] initWithFrame:(CGRect){{0, CGRectGetHeight(headerViewBounds)},
         {CGRectGetWidth(viewBounds), CGRectGetHeight(viewBounds) - CGRectGetHeight(headerViewBounds)}}];
     [_avatarlistview setBackgroundColor:[UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)]];
-    [_avatarlistview setDataSource:self];
+    _avatarlistview.delegate = self;
+    _avatarlistview.dataSource = self;
     [self.view addSubview:_avatarlistview];
     
     [_avatarlistview reloadData];
@@ -75,7 +78,7 @@
 - (EXCircleItemCell *)circleItemForAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView atIndex:(int)index {
     EXCircleItemCell *cell = [[[EXCircleItemCell alloc] init] autorelease];
     
-#warning test only
+#warning test only 需要拿到实际数据后替换
     cell.user = [User getDefaultUser];
     
     return cell;
@@ -83,23 +86,58 @@
 
 #pragma mark - UserAvatarCollectionDelegate
 - (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didSelectCircleItemAtIndex:(int)index {
+    if (index == 0) {
+        NSArray *cells = [avatarCollectionView visibleCircleItemCells];
+        [UIView animateWithDuration:0.25f
+                         animations:^{
+                             for (EXCircleItemCell *cell in cells) {
+                                 if (0 != cell.index) {
+                                     cell.alpha = 0.5f;
+                                 } else {
+                                     cell.titleLabel.alpha = 0.0f;
+                                 }
+                             }
+                         }];
+        
+        if (nil == _cardViewController) {
+            _cardViewController = [[EXCardViewController alloc] init];
+            _cardViewController.user = [User getDefaultUser];
+            _cardViewController.delegate = self;
+        }
 
+        [_cardViewController presentFromViewController:self
+                                              animated:YES
+                                            completion:nil];
+    }
 }
 
 - (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didLongPressCircleItemAtIndex:(int)index {
 
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - EXCardViewControllerDelegate
+- (void)cardViewControllerWillFinish:(EXCardViewController *)controller {
+    NSArray *cells = [_avatarlistview visibleCircleItemCells];
+    [UIView animateWithDuration:0.25f
+                     animations:^{
+                         for (EXCircleItemCell *cell in cells) {
+                             if (0 != cell.index) {
+                                 cell.alpha = 1.0f;
+                             } else {
+                                 cell.titleLabel.alpha = 1.0f;
+                             }
+                         }
+                     }];
 }
 
-- (void) close{
+- (void)cardViewControllerDidFinish:(EXCardViewController *)controller {}
+
+#pragma mark - Public
+- (void)close {
   [self dismissModalViewControllerAnimated:YES];
 }
-- (void) start{
+
+- (void)start {
   User* me=[User getDefaultUser];
   NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:me.identities.count];
   for (Identity *identity in me.identities)
@@ -121,6 +159,7 @@
   }];
 }
 
+#pragma mark - NSStreamDelegate
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode{
 //  NSLog(@"Unknown event: %@ : %d", stream, eventCode);
   switch (eventCode) {

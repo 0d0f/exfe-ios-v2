@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EXVerticalAlignLabel.h"
 
 typedef void (^TapBlock)(void);
 typedef void (^LongPressBlock)(void);
 
 @class User;
-@class EXVerticalAlignLabel;
 
 @interface EXCircleItemCell : UIView
 

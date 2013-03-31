@@ -31,8 +31,8 @@
 @property (nonatomic, assign) id<UserAvatarCollectionDataSource> dataSource;
 @property (nonatomic, assign) id<UserAvatarCollectionDelegate> delegate;
 
+- (NSArray *)visibleCircleItemCells;
+
 - (void)reloadData;
-//- (void)setDataSource:(id)dataSource;
-//- (void)setDelegate:(id)delegate;
 
 @end

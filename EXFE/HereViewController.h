@@ -14,20 +14,20 @@
 #import <stdint.h>
 #import "EXUserAvatarCollectionView.h"
 #import "EXCircleItemCell.h"
-
+#import "EXCardViewController.h"
 
 @interface HereViewController : UIViewController
 <
 NSStreamDelegate,
 UserAvatarCollectionDataSource,
-UserAvatarCollectionDelegate
+UserAvatarCollectionDelegate,
+EXCardViewControllerDelegate
 > {
     NSMutableData *_data;
     int byteIndex;
     uint8_t buff[1024];
     
     EXUserAvatarCollectionView  *_avatarlistview;
-  
 }
 
 - (void)close;

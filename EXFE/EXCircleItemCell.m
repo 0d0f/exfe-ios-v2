@@ -9,7 +9,6 @@
 #import "EXCircleItemCell.h"
 
 #import <QuartzCore/QuartzCore.h>
-#import "EXVerticalAlignLabel.h"
 #import "User.h"
 #import "Util.h"
 #import "ImgCache.h"

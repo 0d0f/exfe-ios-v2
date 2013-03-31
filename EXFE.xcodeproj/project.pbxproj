@@ -139,6 +139,10 @@
 		4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
 		4FFB149C16C0BFFF00F76D32 /* edit_30_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */; };
 		4FFB149D16C0BFFF00F76D32 /* edit_30_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */; };
+		76A39BDC1708C066008D1FFE /* EXCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A39BDA1708C066008D1FFE /* EXCardViewController.m */; };
+		76A39BDD1708C066008D1FFE /* EXCardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76A39BDB1708C066008D1FFE /* EXCardViewController.xib */; };
+		76A39BE41708C075008D1FFE /* EXCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A39BE21708C075008D1FFE /* EXCardCell.m */; };
+		76A39BE51708C075008D1FFE /* EXCardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76A39BE31708C075008D1FFE /* EXCardCell.xib */; };
 		76B650311705940D0036E832 /* EXLiveViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B650301705940D0036E832 /* EXLiveViewCell.xib */; };
 		76B65037170595250036E832 /* EXCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B65036170595250036E832 /* EXCard.m */; };
 		76B6503C1705A0150036E832 /* portrait_64_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B650381705A0150036E832 /* portrait_64_selected.png */; };
@@ -689,6 +693,12 @@
 		4FFB149416BFFB9600F76D32 /* SSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSTextView.m; sourceTree = "<group>"; };
 		4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30_pressed.png; sourceTree = "<group>"; };
 		4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30_pressed@2x.png"; sourceTree = "<group>"; };
+		76A39BD91708C066008D1FFE /* EXCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCardViewController.h; sourceTree = "<group>"; };
+		76A39BDA1708C066008D1FFE /* EXCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCardViewController.m; sourceTree = "<group>"; };
+		76A39BDB1708C066008D1FFE /* EXCardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EXCardViewController.xib; sourceTree = "<group>"; };
+		76A39BE11708C075008D1FFE /* EXCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCardCell.h; sourceTree = "<group>"; };
+		76A39BE21708C075008D1FFE /* EXCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCardCell.m; sourceTree = "<group>"; };
+		76A39BE31708C075008D1FFE /* EXCardCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EXCardCell.xib; sourceTree = "<group>"; };
 		76B650301705940D0036E832 /* EXLiveViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EXLiveViewCell.xib; sourceTree = "<group>"; };
 		76B65035170595250036E832 /* EXCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCard.h; sourceTree = "<group>"; };
 		76B65036170595250036E832 /* EXCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCard.m; sourceTree = "<group>"; };
@@ -1379,6 +1389,9 @@
 		782B3CC7156B918B00721150 /* User */ = {
 			isa = PBXGroup;
 			children = (
+				76A39BD91708C066008D1FFE /* EXCardViewController.h */,
+				76A39BDA1708C066008D1FFE /* EXCardViewController.m */,
+				76A39BDB1708C066008D1FFE /* EXCardViewController.xib */,
 				78531CF81701A434002D34A1 /* HereViewController.h */,
 				78531CF91701A434002D34A1 /* HereViewController.m */,
 				780EAC29165215EE00953D75 /* AddIdentity */,
@@ -1659,6 +1672,9 @@
 		788312A515738D2600D67103 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				76A39BE11708C075008D1FFE /* EXCardCell.h */,
+				76A39BE21708C075008D1FFE /* EXCardCell.m */,
+				76A39BE31708C075008D1FFE /* EXCardCell.xib */,
 				4F14689A167F1C0600872F9D /* ProfileCard.h */,
 				4F14689B167F1C0600872F9D /* ProfileCard.m */,
 				78615B3A15788BCC003CF68A /* ABTableViewCell.h */,
@@ -2553,6 +2569,8 @@
 				76FF86D017062BDB003CA095 /* EXHereHeaderView.xib in Resources */,
 				76FF86D317062EA1003CA095 /* btn_blue_30inset.png in Resources */,
 				76FF86D417062EA1003CA095 /* btn_blue_30inset@2x.png in Resources */,
+				76A39BDD1708C066008D1FFE /* EXCardViewController.xib in Resources */,
+				76A39BE51708C075008D1FFE /* EXCardCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2712,6 +2730,8 @@
 				76B65037170595250036E832 /* EXCard.m in Sources */,
 				76FF86C81705E62E003CA095 /* EXVerticalAlignLabel.m in Sources */,
 				76FF86CE17062BCB003CA095 /* EXHereHeaderView.m in Sources */,
+				76A39BDC1708C066008D1FFE /* EXCardViewController.m in Sources */,
+				76A39BE41708C075008D1FFE /* EXCardCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

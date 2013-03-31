@@ -21,16 +21,25 @@
 - (NSArray *)_circleCenterPositions;
 @end
 
-@implementation EXUserAvatarCollectionView
+@implementation EXUserAvatarCollectionView {
+    NSMutableSet *_visibleCells;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
   self = [super initWithFrame:frame];
   if (self) {
       _cellCenterPositions = [[self _circleCenterPositions] retain];
+      _visibleCells = [[NSMutableSet alloc] initWithCapacity:12];
   }
   
   return self;
+}
+
+- (void)dealloc {
+    [_visibleCells release];
+    [_cellCenterPositions release];
+    [super dealloc];
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -79,21 +88,34 @@
     CGContextRestoreGState(context);
 }
 
-- (void)dealloc {
-    [_cellCenterPositions release];
-    [super dealloc];
+- (NSArray *)visibleCircleItemCells {
+    NSArray *cells = [_visibleCells allObjects];
+    cells = [cells sortedArrayUsingComparator:^(id obj1, id obj2){
+        EXCircleItemCell *cell1 = (EXCircleItemCell *)obj1;
+        EXCircleItemCell *cell2 = (EXCircleItemCell *)obj2;
+        if (cell1.index > cell2.index)
+            return NSOrderedAscending;
+        else if (cell1.index < cell2.index)
+            return NSOrderedDescending;
+        return NSOrderedSame;
+    }];
+    
+    return cells;
 }
 
 - (void)reloadData {
-    for (UIView *view in self.subviews) {
-        if ([view isKindOfClass:[EXCircleItemCell class]])
-            [view removeFromSuperview];
+    for (EXCircleItemCell *cell in _visibleCells) {
+        [cell removeFromSuperview];
     }
+    [_visibleCells removeAllObjects];
     
     int count= [_dataSource numberOfCircleItemInAvatarCollectionView:self];
     for (int i = 0; i < count; i++) {
         EXCircleItemCell *cell = [_dataSource circleItemForAvatarCollectionView:self atIndex:i];
         cell.avatarCenter = [_cellCenterPositions[i] CGPointValue];
+        cell.index = i;
+        
+        [_visibleCells addObject:cell];
         
         // block
         if (i) {
@@ -149,7 +171,6 @@
         [cell.layer addAnimation:animation forKey:nil];
 
         [self addSubview:cell];
-        [cell setNeedsDisplay];
     }
 }
 
