@@ -19,7 +19,7 @@
 - (id)initWithUser:(id)user {
     self = [super init];
     if (self) {
-        self.frame = (CGRect){{20, 20}, {280, 50}};
+        self.frame = (CGRect){{20, 60}, {280, 50}};
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
         self.layer.cornerRadius = 5;
     }

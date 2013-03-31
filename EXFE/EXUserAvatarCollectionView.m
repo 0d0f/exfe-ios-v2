@@ -10,6 +10,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "Util.h"
+#import "EXCard.h"
 
 // 640 1036 1676
 #define kRadius1 (160)
@@ -38,7 +39,7 @@
     
     CGFloat lengths[2];
     lengths[0] = 1;
-    lengths[1] = 2;
+    lengths[1] = 1;
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineWidth(context, 0.5f);
     CGContextSetLineDash(context, 0.0f, lengths, 2);
@@ -108,6 +109,13 @@
         
         
         cell.longPressBlock = ^{
+            EXCard *card = [[EXCard alloc] initWithUser:cell.user];
+            [card presentFromRect:cell.frame
+                           inView:self
+                   arrowDirection:kEXCardArrowDirectionDown
+                         animated:YES
+                         complete:nil];
+            [card release];
             [_delegate avatarCollectionView:self didLongPressCircleItemAtIndex:cell.index];
         };
         

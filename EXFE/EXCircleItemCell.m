@@ -41,7 +41,7 @@
     label.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
     label.numberOfLines = 2;
     label.textAlignment = UITextAlignmentCenter;
-    label.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+    label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     label.shadowColor = [UIColor whiteColor];
     label.shadowOffset = CGSizeMake(0.0f, 1.0f);
     label.backgroundColor = [UIColor clearColor];

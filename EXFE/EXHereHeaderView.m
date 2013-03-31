@@ -19,10 +19,21 @@
                                          options:nil] lastObject] retain];
     
     if (self) {
+        // background layer
         CAGradientLayer *gradient = [CAGradientLayer layer];
         gradient.frame = self.bounds;
         gradient.colors = @[(id)[UIColor COLOR_RGB(0x33, 0x33, 0x33)].CGColor, (id)[UIColor COLOR_RGB(0x22, 0x22, 0x22)].CGColor];
         [self.layer insertSublayer:gradient atIndex:0];
+        
+        // button background
+        UIImage *buttonBackgroundImage = [UIImage imageNamed:@"btn_blue_30inset.png"];
+        if ([buttonBackgroundImage respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+            buttonBackgroundImage = [buttonBackgroundImage resizableImageWithCapInsets:(UIEdgeInsets){0, 10, 0, 10}];
+        } else {
+            buttonBackgroundImage = [buttonBackgroundImage stretchableImageWithLeftCapWidth:10 topCapHeight:0];
+        }
+        
+        [self.gatherButton setBackgroundImage:buttonBackgroundImage forState:UIControlStateNormal];
     }
     
     return self;
