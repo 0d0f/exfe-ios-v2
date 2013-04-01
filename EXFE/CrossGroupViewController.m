@@ -229,7 +229,7 @@
     [self.view addSubview:container];
     
     headerShadow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow.png"]];
-    headerShadow.frame = CGRectMake(0, CGRectGetMinY(container.frame), 320, 25);
+    headerShadow.frame = CGRectMake(0, CGRectGetMinY(container.frame), 640, 25);
     [self.view addSubview:headerShadow];
     
     {
@@ -346,16 +346,14 @@
     
    
     
-    UISwipeGestureRecognizer *swipeRightRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+    swipeRightRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
     swipeRightRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
     [self.view addGestureRecognizer:swipeRightRecognizer];
-    [swipeRightRecognizer release];
     
-    UISwipeGestureRecognizer *swipeLeftRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+    
+    swipeLeftRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
     swipeLeftRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:swipeLeftRecognizer];
-    [swipeLeftRecognizer release];
-    
   
 }
 
@@ -457,6 +455,9 @@
     [headerShadow release];
     
     [_sortedInvitations release];
+    
+    [swipeRightRecognizer release];
+    [swipeLeftRecognizer release];
     
     [super dealloc];
 }
@@ -1180,6 +1181,12 @@
         [self addChildViewController:newVC];
         [self.view insertSubview:newVC.view aboveSubview:headerShadow];
         newVC.view.alpha = 0;
+        
+        swipeRightRecognizer.enabled = NO;
+        swipeLeftRecognizer.enabled = NO;
+    } else {
+        swipeRightRecognizer.enabled = YES;
+        swipeLeftRecognizer.enabled = YES;
     }
     __weak __block CrossGroupViewController *weakSelf = self;
     [UIView animateWithDuration:0.233 animations:^{

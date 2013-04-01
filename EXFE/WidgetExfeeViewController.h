@@ -53,6 +53,7 @@ typedef enum {
     
     Invitation* selected_invitation;
     CGPoint _lastContentOffset;
+    CGSize _floatingOffset;
     NSUInteger layoutLevel;
     
     NSDictionary *rsvpDict;

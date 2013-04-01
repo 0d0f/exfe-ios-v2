@@ -68,6 +68,10 @@
     
     
     UIImageView *headerShadow;
+    
+    
+    UISwipeGestureRecognizer *swipeRightRecognizer;
+    UISwipeGestureRecognizer *swipeLeftRecognizer;
 }
 
 @property (nonatomic, retain) UIViewController *currentViewController;

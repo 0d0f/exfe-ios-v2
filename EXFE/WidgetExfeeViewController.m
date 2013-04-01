@@ -37,6 +37,12 @@
 #define kMenuTagAction 8902
 #define kMenuTagMate 8903
 
+#define kYOffset  44
+
+#define kPopupIdRsvpMenu 1
+#define kPopupIdRemoveIdentity 2
+
+
 typedef enum {
     kTagIdNone = 0,
     kTagIdActionMenu,
@@ -127,7 +133,7 @@ typedef enum {
     [self.view addSubview:exfeeContainer];
     
     CGFloat exfee_content_height = CGRectGetHeight(exfeeContainer.frame) - 94 * (2 + (CGRectGetHeight(a) > 480 ? 1 : 0));
-    invContent = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), exfee_content_height)];
+    invContent = [[UIView alloc] initWithFrame:CGRectMake(0, 0 + kYOffset, CGRectGetWidth(b), exfee_content_height )];
     invContent.backgroundColor = [UIColor COLOR_SNOW];
     invContent.tag = kTableOrigin;
     {
@@ -150,7 +156,7 @@ typedef enum {
         [invContent.layer addSublayer:layer4];
         
         
-        invName = [[ UILabel alloc] initWithFrame:CGRectMake(25, 16, 230, 25)];
+        invName = [[ UILabel alloc] initWithFrame:CGRectMake(25, 16 , 230, 25)];
         invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
         invName.textColor = [UIColor COLOR_CARBON];
         invName.backgroundColor = [UIColor clearColor];
@@ -237,13 +243,15 @@ typedef enum {
         [RemoveButton addTarget:self action:@selector(removeInvitation:) forControlEvents:UIControlEventTouchUpInside];
         [invContent addSubview:RemoveButton];
     }
-    [exfeeContainer addSubview:invContent];
+    [self.view addSubview:invContent];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapContent:)];
     [invContent addGestureRecognizer:tap];
+    [tap release];
     
     UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swypeDelete:)];
     [invContent addGestureRecognizer:swipe];
+    [swipe release];
     
 }
 
@@ -396,6 +404,7 @@ typedef enum {
     if (sender.state == UIGestureRecognizerStateEnded) {
         
         if (CGRectContainsPoint([Util expandRect:identityProvider.frame with:identityName.frame], location)) {
+            [self hidePopupIfShown:kPopupIdRemoveIdentity];
             CGRect f = RemoveButton.frame;
             f.origin.x = CGRectGetWidth(invContent.bounds) - CGRectGetWidth(f) - 15;
             f.origin.y = CGRectGetMinY(identityName.frame);
@@ -413,6 +422,8 @@ typedef enum {
         //UIView *tappedView = [sender.view hitTest:[sender locationInView:sender.view] withEvent:nil];
         
         if (CGRectContainsPoint([Util expandRect:invRsvpImage.frame with:invRsvpLabel.frame with:invRsvpAltLabel.frame], location)) {
+            [self hidePopupIfShown:kPopupIdRsvpMenu];
+            
             NSDictionary *data = rsvpDict;
             
             if ([[User getDefaultUser] isMe:selected_invitation.identity]) {
@@ -785,6 +796,7 @@ typedef enum {
 
 #pragma mark UICollectionViewDelegate
 - (void)collectionView:(PSTCollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self hidePopupIfShown];
     NSInteger section = indexPath.section;
     if (section == 1) {
         if (indexPath.row == self.sortedInvitations.count){
@@ -813,6 +825,7 @@ typedef enum {
             [self presentModalViewController:viewController animated:YES];
             [viewController release];
         }else{
+            [self hidePopupIfShown];
             PSTCollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
             [self testClick:cell];
             selected_invitation = [self.sortedInvitations objectAtIndex:indexPath.row];
@@ -833,14 +846,14 @@ typedef enum {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if (scrollView.tag == kTagViewExfeeSelector) {
-        
+        [self hidePopupIfShown];
         CGPoint offset = scrollView.contentOffset;
         ScrollDirection direction = ScrollDirectionNone;
         
         if (_lastContentOffset.x >= 0) {
             if (offset.y > _lastContentOffset.y) {
                 direction = ScrollDirectionUp;
-            }else{
+            } else {
                 direction = ScrollDirectionDown;
             }
         }
@@ -848,21 +861,29 @@ typedef enum {
         
         if (invContent.tag == kTableFloating) {
             if (direction == ScrollDirectionDown){
-//                NSLog(@"Block view position when floating with drop down: %@", NSStringFromCGPoint(offset));
+                NSLog(@"Block view position when floating with drop down: %@", NSStringFromCGPoint(offset));
                 if (offset.y < CGRectGetMinY(invContent.frame)) {
-                    CGRect newFrame = CGRectOffset(invContent.bounds, 0, MAX(offset.y, 0));
+                    CGRect newFrame = CGRectOffset(invContent.bounds, 0, MAX(offset.y, 0) + kYOffset);
                     invContent.frame = newFrame;
                 }
                 return;
             }
             
             if (offset.y > CGRectGetMaxY(invContent.frame)){
-//                NSLog(@"Convert floating to origin: %@", NSStringFromCGPoint(offset));
+                NSLog(@"Convert floating to origin: %@", NSStringFromCGPoint(offset));
                 CGRect newFrame = CGRectOffset(invContent.bounds, 0, 0);
                 invContent.frame = newFrame;
                 invContent.tag = kTableOrigin;
                 return;
+            } else {
+//                CGRect rect = invContent.frame;
+//                rect.origin.y = scrollView.frame.origin.y - scrollView.contentOffset.y; //exfeeContainer
+//                invContent.frame = rect;
             }
+        } else if (invContent.tag == kTableOrigin) {
+            CGRect rect = invContent.frame;
+            rect.origin.y = scrollView.frame.origin.y - scrollView.contentOffset.y; //exfeeContainer
+            invContent.frame = rect;
         }
         
     }
@@ -876,24 +897,33 @@ typedef enum {
     BOOL flag = NO;
     if (CGRectGetMinY(btn.frame) - offset.y < CGRectGetHeight(invContent.frame)) {
         // click target is upper than the normal area
+        NSLog(@"Upper, Content Offset %@", NSStringFromCGPoint(offset));
+        NSLog(@"Upper, btnFrame %@, invHeight %f", NSStringFromCGRect(btn.frame), CGRectGetHeight(invContent.bounds));
         offset = CGPointMake(offset.x, MAX(CGRectGetMinY(btn.frame) - CGRectGetHeight(invContent.frame), 0));
         flag = YES;
+        NSLog(@"re Offset %@", NSStringFromCGPoint(offset));
     } else if(CGRectGetMaxY(btn.frame) - offset.y > CGRectGetHeight(exfeeContainer.bounds)){
         // click target is lower than the normal area
+        NSLog(@"Lower, Content Offset %@", NSStringFromCGPoint(offset));
+        NSLog(@"Lower, btnFrame %@, exfeeHeight %f", NSStringFromCGRect(btn.frame), CGRectGetHeight(exfeeContainer.bounds));
         offset = CGPointMake(offset.x, MAX(CGRectGetMaxY(btn.frame) - CGRectGetHeight(exfeeContainer.bounds), 0));
         flag = YES;
+        NSLog(@"re Offset %@", NSStringFromCGPoint(offset));
     }
+    
     
     [UIView beginAnimations:@"" context:nil];
     [UIView setAnimationDuration:0.4];
-    invContent.frame = CGRectOffset(invContent.bounds, offset.x, offset.y);
     if (flag) {
         exfeeContainer.contentOffset = offset;
         //exfeeContainer.bounds.y += offset.y - exfeeContainer.contentOffset.y; // for animation
     }
+    CGPoint invOffset = [exfeeContainer convertPoint:CGPointMake(offset.x, offset.y) toView:self.view];
+    NSLog(@"inv Offset %@", NSStringFromCGPoint(invOffset));
+    invContent.frame = CGRectOffset(invContent.bounds, invOffset.x, invOffset.y - exfeeContainer.contentOffset.y);
+    
     [UIView commitAnimations];
     invContent.tag = kTableFloating;
-    
 }
 
 - (void)show:(EXBasicMenu*)menu at:(CGPoint)location withAnimation:(BOOL)animated
@@ -933,7 +963,7 @@ typedef enum {
     switch (menu.tag) {
         case kMenuTagRsvp:
         {
-            [self hide:rsvpMenu withAnmiation:YES];
+            [self hidePopupIfShown];
             NSInteger abc = [index integerValue];
             switch (abc) {
                 case 0:
@@ -1018,5 +1048,45 @@ typedef enum {
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     // nothing yet
+}
+
+
+- (void)hidePopupIfShown{
+    [self hidePopupIfShown:0];
+}
+
+- (void)hidePopupIfShown:(NSInteger)skipId{
+    
+    if (kPopupIdRsvpMenu != skipId){
+        [self hide:rsvpMenu withAnmiation:YES];
+    }
+    
+    if (kPopupIdRemoveIdentity != skipId) {
+        RemoveButton.hidden = YES;
+    }
+    
+//    NSInteger ctrlid = skipId & MASK_LOW_BITS;
+    
+//    if (ctrlid != (kPopupTypeEditStatus & MASK_LOW_BITS)) {
+//        [self hideMenuWithAnimation:YES];
+//    }
+//    if (ctrlid != (kPopupTypeVewStatus & MASK_LOW_BITS)) {
+//        [self hideStatusView];
+//    }
+//    if (ctrlid != (kPopupTypeEditTitle & MASK_LOW_BITS)) {
+//        [self hideTitleAndDescEditMenuWithAnimation:YES];
+//    }
+//    if (ctrlid != (kPopupTypeEditDescription & MASK_LOW_BITS)) {
+//        [self hideTitleAndDescEditMenuWithAnimation:YES];
+//    }
+//    if (ctrlid != (kPopupTypeEditTime & MASK_LOW_BITS)) {
+//        [self hideTimeEditMenuWithAnimation:YES];
+//    }
+//    if (ctrlid != (kPopupTypeEditPlace & MASK_LOW_BITS)) {
+//        [self hidePlaceEditMenuWithAnimation:YES];
+//    }
+    
+//    popupCtrolId = skipId;
+    
 }
 @end

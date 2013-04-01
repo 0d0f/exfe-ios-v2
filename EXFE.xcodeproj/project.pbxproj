@@ -3017,15 +3017,12 @@
 		78199C8F160A554600A560F7 /* appstore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
-					"\"$(BUILT_PRODUCTS_DIR)/../BlocksKit\"",
-				);
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
@@ -3111,15 +3108,12 @@
 		78A98EA01560F832009E0806 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
-					"\"$(BUILT_PRODUCTS_DIR)/../BlocksKit\"",
-				);
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
@@ -3142,15 +3136,12 @@
 		78A98EA11560F832009E0806 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
-					"\"$(BUILT_PRODUCTS_DIR)/../BlocksKit\"",
-				);
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
 				INFOPLIST_FILE = "EXFE/EXFE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
