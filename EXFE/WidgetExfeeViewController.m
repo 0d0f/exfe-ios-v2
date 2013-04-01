@@ -9,6 +9,7 @@
 #import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
+#import "UILabel+EXFE.h"
 #import "Invitation+EXFE.h"
 #import "Identity+EXFE.h"
 #import "Exfee+EXFE.h"
@@ -160,6 +161,7 @@ typedef enum {
         invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
         invName.textColor = [UIColor COLOR_CARBON];
         invName.backgroundColor = [UIColor clearColor];
+//        invName.numberOfLines = 0;
         invName.tag = kTagIdName;
         [invContent addSubview:invName];
         
@@ -187,6 +189,7 @@ typedef enum {
         invRsvpAltLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
         invRsvpAltLabel.textColor = [UIColor COLOR_GRAY];
         invRsvpAltLabel.backgroundColor = [UIColor clearColor];
+//        invRsvpAltLabel.numberOfLines = 0;
         invRsvpAltLabel.tag = kTagIdRSVPAltLabel;
         [invContent addSubview:invRsvpAltLabel];
         
@@ -206,21 +209,22 @@ typedef enum {
         identityName.tag = kTagIdIdentityName;
         [invContent addSubview:identityName];
         
-        bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(36, 115 + 32, 43, 33)];
-        bioTitle.text = @"Bio";
+        bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(36, 115 + 32, 40, 33)];
         bioTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+        bioTitle.text = @"Bio";
+        [bioTitle sizeToFit];
         bioTitle.textColor = [UIColor COLOR_BLACK];
         bioTitle.backgroundColor = [UIColor clearColor];
         bioTitle.tag = kTagIdBioTitle;
-        bioTitle.hidden = YES;
+        
         [invContent addSubview:bioTitle];
         
-        bioContent = [[UILabel alloc] initWithFrame:CGRectMake(75, 115 + 48, 220, 80)];
+        bioContent = [[UILabel alloc] initWithFrame:CGRectMake(75, 115 + 32, 220, 80)];
         bioContent.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         bioContent.textColor = [UIColor COLOR_BLACK];
         bioContent.backgroundColor = [UIColor clearColor];
+        bioContent.numberOfLines = 0;
         bioContent.tag = kTagIdBioContent;
-        bioContent.hidden = YES;
         [invContent addSubview:bioContent];
         
         ActionMenu = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -462,6 +466,7 @@ typedef enum {
         NSString* name = [ident getDisplayName];
         if (![invName.text isEqualToString:name]) {
             invName.text = name;
+            [invName wrapContent];
             [self setNeedLayout:invName.tag];
         }
         
@@ -489,7 +494,9 @@ typedef enum {
                 break;
         }
         
-        bioContent.text = ident.bio;
+        bioTitle.hidden = NO; //!(ident && ident.bio.length > 0);
+        bioContent.text = @"ageageafeajieap\njigeoaifa\ngjeaifoeajiop"; //ident.bio;
+        [bioContent wrapContent];
     }
 }
 
@@ -620,7 +627,7 @@ typedef enum {
             }
         }
         invRsvpAltLabel.text = altString;
-        
+        [invRsvpAltLabel wrapContent];
         [self setNeedLayout:changeFlag];
     }
 }
@@ -646,12 +653,12 @@ typedef enum {
 {
     if (layoutLevel > kTagIdNone) {
         if (layoutLevel >= kTagIdName) {
-            if (invName.text) {
-                CGSize size = [invName.text sizeWithFont:invName.font];
+//            if (invName.text) {
+                CGSize size = [invName sizeWrapContent:CGSizeMake(CGRectGetWidth(invName.bounds), MAXFLOAT)];
                 CGFloat w = size.width;
-                if (w > CGRectGetWidth(invName.bounds)) {
-                    w = CGRectGetWidth(invName.bounds);
-                }
+//                if (w > CGRectGetWidth(invName.bounds)) {
+//                    w = CGRectGetWidth(invName.bounds);
+//                }
                 CGFloat x = w + CGRectGetMinX(invName.frame);
                 CGRect f1 = invHostFlag.frame;
                 f1.origin.x = x + 12;
@@ -660,7 +667,11 @@ typedef enum {
                 CGRect f2 = invHostText.frame;
                 f2.origin.x = CGRectGetMaxX(f1);
                 invHostText.frame = f2;
-            }
+//            }
+            
+        }
+        
+        if (layoutLevel >= kTagIdBioContent) {
             
         }
         
