@@ -34,6 +34,7 @@
     NSUInteger gravity;
     
     BOOL _enable;
+    NSUInteger _stage;
 }
 
 @property (nonatomic, retain) id<EXTabWidgetDelegate> delegate;
