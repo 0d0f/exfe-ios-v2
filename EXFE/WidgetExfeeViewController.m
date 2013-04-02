@@ -38,7 +38,7 @@
 #define kMenuTagAction 8902
 #define kMenuTagMate 8903
 
-#define kYOffset  44
+#define kYOffset  50
 
 #define kPopupIdRsvpMenu 1
 #define kPopupIdRemoveIdentity 2

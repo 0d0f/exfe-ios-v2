@@ -188,7 +188,7 @@
         [headview addSubview:titleView];
     }
     UIImageView *headerShadow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow.png"]];
-    headerShadow.frame = CGRectMake(0, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA - 20, 320, 25);
+    headerShadow.frame = CGRectMake(0, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA - 20, 320 * 2, 25);
     [self.view addSubview:headerShadow];
     [headerShadow release];
     

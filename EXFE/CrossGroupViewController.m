@@ -128,19 +128,6 @@
     CGFloat head_bg_img_scale = CGRectGetWidth(self.view.bounds) / HEADER_BACKGROUND_WIDTH;
     head_bg_img_startY = 0 - HEADER_BACKGROUND_Y_OFFSET * head_bg_img_scale;
     
-//    headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA)];
-//    {
-////        dectorView = [[UIImageView alloc] initWithFrame:CGRectMake(0, head_bg_img_startY, HEADER_BACKGROUND_WIDTH * head_bg_img_scale, HEADER_BACKGFOUND_HEIGHT * head_bg_img_scale)];
-////        CALayer *sublayer = [CALayer layer];
-////        sublayer.backgroundColor = [UIColor blackColor].CGColor;
-////        sublayer.opacity = COLOR255(0x55);
-////        sublayer.frame = dectorView.bounds;
-////        [dectorView.layer addSublayer:sublayer];
-////dectorView.hidden = YES;
-////        [headerView addSubview:dectorView];
-//    }
-//    [self.view addSubview:headerView];
-    
     container = [[UIScrollView alloc] initWithFrame:CGRectMake(0, DECTOR_HEIGHT, CGRectGetWidth(b), CGRectGetHeight(a) - DECTOR_HEIGHT)];
     container.backgroundColor = [UIColor COLOR_SNOW];
     container.alwaysBounceVertical = YES;
@@ -235,14 +222,14 @@
     {
         tabLayer = [[EXTabLayer alloc] init];
         tabLayer.frame = CGRectMake(0, head_bg_img_startY, HEADER_BACKGROUND_WIDTH * head_bg_img_scale, HEADER_BACKGFOUND_HEIGHT * head_bg_img_scale);
-        tabLayer.curveParamBase = CGPointMake(198, 80 - head_bg_img_startY);
+        tabLayer.curveParamBase = CGPointMake(198, DECTOR_HEIGHT - head_bg_img_startY);
         [tabLayer setNeedsLayout];
         //[tabLayer setNeedsDisplay];
         head_bg_point = tabLayer.mask.position;
         [self.view.layer addSublayer:tabLayer];
     }
     
-    titleView = [[UILabel alloc] initWithFrame:CGRectMake(25, 19, 290, 50)];
+    titleView = [[UILabel alloc] initWithFrame:CGRectMake(25, DECTOR_HEIGHT / 2 - 50 / 2, 290, 50)];
     titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
     titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
     titleView.backgroundColor = [UIColor clearColor];
@@ -256,7 +243,9 @@
     [self.view addSubview:titleView];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44)];
+    CGRect backFrame = CGRectMake(0, 0, 20, 50);
+    backFrame.origin.y = DECTOR_HEIGHT / 2 - CGRectGetHeight(backFrame) / 2;
+    btnBack.frame = backFrame;
     btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
@@ -376,7 +365,7 @@
     
     if (tabWidget == nil) {
         NSArray* imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30"], [UIImage imageNamed:@"widget_conv_30"], [UIImage imageNamed:@"widget_exfee_30"], nil];
-        tabWidget = [[EXTabWidget alloc] initWithFrame:CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40) withImages:imgs current:_widgetId];
+        tabWidget = [[EXTabWidget alloc] initWithFrame:CGRectMake(0, 65, CGRectGetWidth(self.view.bounds), 40) withImages:imgs current:_widgetId];
         tabWidget.delegate = self;
         [self.view insertSubview:tabWidget belowSubview:btnBack];
     }
@@ -1084,25 +1073,29 @@
 - (void) changeHeaderStyle:(NSInteger)style{
     //CGRect a = [UIScreen mainScreen].applicationFrame;
     switch (style) {
-        case kHeaderStyleHalf:
+        case kHeaderStyleHalf:{
             titleView.frame = CGRectMake(25, 0, 290, 50);
             titleView.lineBreakMode = UILineBreakModeTailTruncation;
             titleView.numberOfLines = 1;
-            btnBack.frame = CGRectMake(0, 0, 20, 44);
-            tabWidget.frame = CGRectMake(0, 66 - 36, CGRectGetWidth(self.view.bounds), 40);
-            [self moveLayer:tabLayer.mask to:CGPointMake(head_bg_point.x, head_bg_point.y - 36)];
-            tabLayer.maskPosition = CGPointMake(head_bg_point.x, head_bg_point.y - 36);
-            break;
+            CGRect backFrame = btnBack.bounds;
+            backFrame.origin = CGPointMake(0, 0);
+            btnBack.frame = backFrame;
+            tabWidget.frame = CGRectMake(0, 65 - 30, CGRectGetWidth(self.view.bounds), 40);
+            [self moveLayer:tabLayer.mask to:CGPointMake(head_bg_point.x, head_bg_point.y - 30)];
+            tabLayer.maskPosition = CGPointMake(head_bg_point.x, head_bg_point.y - 30);
+        }   break;
             
-        default:
-            titleView.frame = CGRectMake(25, 19, 290, 50);
+        default:{
+            titleView.frame = CGRectMake(25, DECTOR_HEIGHT / 2 - CGRectGetHeight(titleView.bounds) / 2, 290, 50);
             titleView.lineBreakMode = UILineBreakModeWordWrap;
             titleView.numberOfLines = 2;
-            btnBack.frame = CGRectMake(0, DECTOR_HEIGHT / 2 - 44 / 2, 20, 44);
-            tabWidget.frame = CGRectMake(0, 66, CGRectGetWidth(self.view.bounds), 40);
+            CGRect backFrame = btnBack.bounds;
+            backFrame.origin = CGPointMake(0, DECTOR_HEIGHT / 2 - CGRectGetHeight(backFrame) / 2);
+            btnBack.frame = backFrame;
+            tabWidget.frame = CGRectMake(0, 65, CGRectGetWidth(self.view.bounds), 40);
             [self moveLayer:tabLayer.mask to:head_bg_point];
             tabLayer.maskPosition = head_bg_point;
-            break;
+        }  break;
     }
     _headerStyle = style;
 }
@@ -1997,10 +1990,11 @@
     CGPoint c = tabLayer.curveParamBase;
     float offset = 0;
     if (_headerStyle == kHeaderStyleHalf) {
-        offset = 36;
+        offset = 30;
     }
     
     [self moveLayer:tabLayer.mask to:CGPointMake(p.x - c.x + width, p.y - offset) duration:time];
+    
 }
 
 

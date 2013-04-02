@@ -18,8 +18,8 @@
 #define LARGE_SLOT                       (15)
 #define SMALL_SLOT                      (5)
 
-#define DECTOR_HEIGHT                    (44)
-#define DECTOR_HEIGHT_EXTRA              (LARGE_SLOT)
+#define DECTOR_HEIGHT                    (50)
+#define DECTOR_HEIGHT_EXTRA              (20)
 #define DECTOR_MARGIN                    (SMALL_SLOT)
 #define OVERLAP                          (DECTOR_HEIGHT)
 #define TITLE_HORIZON_MARGIN             (SMALL_SLOT)
