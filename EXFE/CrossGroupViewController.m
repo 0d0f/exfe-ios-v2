@@ -216,9 +216,8 @@
     [self.view addSubview:container];
     
     headerShadow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow.png"]];
-    headerShadow.frame = CGRectMake(0, CGRectGetMinY(container.frame), 640, 25);
+    headerShadow.frame = CGRectMake(0, CGRectGetMinY(container.frame) - 5, 640, 30);
     [self.view addSubview:headerShadow];
-    
     {
         tabLayer = [[EXTabLayer alloc] init];
         tabLayer.frame = CGRectMake(0, head_bg_img_startY, HEADER_BACKGROUND_WIDTH * head_bg_img_scale, HEADER_BACKGFOUND_HEIGHT * head_bg_img_scale);
