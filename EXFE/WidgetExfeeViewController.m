@@ -120,7 +120,7 @@ typedef enum {
     }
     
     flowLayout = [[PSTCollectionViewFlowLayout alloc] init];
-    exfeeContainer = [[PSTCollectionView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(b), CGRectGetHeight(a) - 44) collectionViewLayout:flowLayout];
+    exfeeContainer = [[PSTCollectionView alloc] initWithFrame:CGRectMake(0, kYOffset, CGRectGetWidth(b), CGRectGetHeight(a) - kYOffset) collectionViewLayout:flowLayout];
     exfeeContainer.delegate = self;
     exfeeContainer.dataSource = self;
     [exfeeContainer registerClass:[ExfeeCollectionViewCell class] forCellWithReuseIdentifier:@"Exfee Cell"];
@@ -248,6 +248,7 @@ typedef enum {
         [invContent addSubview:RemoveButton];
     }
     [self.view addSubview:invContent];
+    _floatingOffset = CGSizeMake(0, 0);
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapContent:)];
     [invContent addGestureRecognizer:tap];
@@ -494,8 +495,8 @@ typedef enum {
                 break;
         }
         
-        bioTitle.hidden = NO; //!(ident && ident.bio.length > 0);
-        bioContent.text = @"ageageafeajieap\njigeoaifa\ngjeaifoeajiop"; //ident.bio;
+        bioTitle.hidden = !(ident && ident.bio.length > 0);
+        bioContent.text = ident.bio;
         [bioContent wrapContent];
     }
 }
@@ -870,71 +871,67 @@ typedef enum {
         }
         _lastContentOffset = offset;
         
-        if (invContent.tag == kTableFloating) {
-            if (direction == ScrollDirectionDown){
-                NSLog(@"Block view position when floating with drop down: %@", NSStringFromCGPoint(offset));
-                if (offset.y < CGRectGetMinY(invContent.frame)) {
-                    CGRect newFrame = CGRectOffset(invContent.bounds, 0, MAX(offset.y, 0) + kYOffset);
-                    invContent.frame = newFrame;
-                }
-                return;
-            }
-            
-            if (offset.y > CGRectGetMaxY(invContent.frame)){
-                NSLog(@"Convert floating to origin: %@", NSStringFromCGPoint(offset));
-                CGRect newFrame = CGRectOffset(invContent.bounds, 0, 0);
-                invContent.frame = newFrame;
-                invContent.tag = kTableOrigin;
-                return;
-            } else {
-//                CGRect rect = invContent.frame;
-//                rect.origin.y = scrollView.frame.origin.y - scrollView.contentOffset.y; //exfeeContainer
-//                invContent.frame = rect;
-            }
-        } else if (invContent.tag == kTableOrigin) {
+        if (invContent.tag == kTableOrigin) {
             CGRect rect = invContent.frame;
-            rect.origin.y = scrollView.frame.origin.y - scrollView.contentOffset.y; //exfeeContainer
-            invContent.frame = rect;
+            rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
+            if (CGRectGetMinY(rect) > CGRectGetMinY(scrollView.frame)) {
+                _floatingOffset = CGSizeMake(0, MAX(scrollView.contentOffset.y, 0));
+                rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
+                invContent.frame = rect;
+            } else if (CGRectGetMaxY(rect) < CGRectGetMinY(scrollView.frame)){
+                _floatingOffset = CGSizeMake(0, 0);
+                rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
+                invContent.frame = rect;
+            } else{
+                invContent.frame = rect;
+            }
         }
-        
     }
     
 }
 
 - (void)testClick:(id)sender{
     UIView* btn = sender;
-    
+    //_floatingOffset
     CGPoint offset = exfeeContainer.contentOffset;
     BOOL flag = NO;
+    CGPoint exfeeOffset;
+    CGPoint invOffset;
     if (CGRectGetMinY(btn.frame) - offset.y < CGRectGetHeight(invContent.frame)) {
         // click target is upper than the normal area
-        NSLog(@"Upper, Content Offset %@", NSStringFromCGPoint(offset));
-        NSLog(@"Upper, btnFrame %@, invHeight %f", NSStringFromCGRect(btn.frame), CGRectGetHeight(invContent.bounds));
-        offset = CGPointMake(offset.x, MAX(CGRectGetMinY(btn.frame) - CGRectGetHeight(invContent.frame), 0));
+//        NSLog(@"Upper, Content Offset %@", NSStringFromCGPoint(offset));
+//        NSLog(@"Upper, btnFrame %@, invHeight %f", NSStringFromCGRect(btn.frame), CGRectGetHeight(invContent.bounds));
+        exfeeOffset = CGPointMake(offset.x, MAX(CGRectGetMinY(btn.frame) - CGRectGetHeight(invContent.frame), 0));
+        invOffset = CGPointMake(0, CGRectGetMinY(exfeeContainer.frame));
         flag = YES;
-        NSLog(@"re Offset %@", NSStringFromCGPoint(offset));
     } else if(CGRectGetMaxY(btn.frame) - offset.y > CGRectGetHeight(exfeeContainer.bounds)){
         // click target is lower than the normal area
-        NSLog(@"Lower, Content Offset %@", NSStringFromCGPoint(offset));
-        NSLog(@"Lower, btnFrame %@, exfeeHeight %f", NSStringFromCGRect(btn.frame), CGRectGetHeight(exfeeContainer.bounds));
-        offset = CGPointMake(offset.x, MAX(CGRectGetMaxY(btn.frame) - CGRectGetHeight(exfeeContainer.bounds), 0));
+//        NSLog(@"Lower, Content Offset %@", NSStringFromCGPoint(offset));
+//        NSLog(@"Lower, btnFrame %@, exfeeHeight %f", NSStringFromCGRect(btn.frame), CGRectGetHeight(exfeeContainer.bounds));
+        exfeeOffset = CGPointMake(offset.x, MAX(CGRectGetMaxY(btn.frame) - CGRectGetHeight(exfeeContainer.bounds), 0));
+        invOffset = CGPointMake(0, CGRectGetMinY(exfeeContainer.frame));
         flag = YES;
-        NSLog(@"re Offset %@", NSStringFromCGPoint(offset));
+        
+    } else {
+        exfeeOffset = offset;
+        invOffset = CGPointMake(0, CGRectGetMinY(exfeeContainer.frame));
     }
+//    NSLog(@"exfe Offset %@", NSStringFromCGPoint(exfeeOffset));
+//    NSLog(@"inv Offset %@", NSStringFromCGPoint(invOffset));
     
-    
-    [UIView beginAnimations:@"" context:nil];
-    [UIView setAnimationDuration:0.4];
-    if (flag) {
-        exfeeContainer.contentOffset = offset;
-        //exfeeContainer.bounds.y += offset.y - exfeeContainer.contentOffset.y; // for animation
-    }
-    CGPoint invOffset = [exfeeContainer convertPoint:CGPointMake(offset.x, offset.y) toView:self.view];
-    NSLog(@"inv Offset %@", NSStringFromCGPoint(invOffset));
-    invContent.frame = CGRectOffset(invContent.bounds, invOffset.x, invOffset.y - exfeeContainer.contentOffset.y);
-    
-    [UIView commitAnimations];
     invContent.tag = kTableFloating;
+    [UIView animateWithDuration:0.4
+                     animations:^{
+                         if (flag) {
+                             exfeeContainer.contentOffset = exfeeOffset;
+                             //exfeeContainer.bounds.y += offset.y - exfeeContainer.contentOffset.y; // for animation
+                         }
+                         invContent.frame = CGRectOffset(invContent.bounds, invOffset.x, invOffset.y);
+                     } completion:^(BOOL finished) {
+                         _floatingOffset = CGSizeMake(0, exfeeContainer.contentOffset.y);
+                         invContent.tag = kTableOrigin;
+                     }];
+
 }
 
 - (void)show:(EXBasicMenu*)menu at:(CGPoint)location withAnimation:(BOOL)animated

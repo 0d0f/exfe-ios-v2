@@ -13,7 +13,8 @@
 typedef NS_ENUM(NSInteger, InvitationSortType){
     kInvitationSortTypeDefaultById,
     kInvitationSortTypeMeAcceptOthers,
-    kInvitationSortTypeHostAcceptOthers
+    kInvitationSortTypeHostAcceptOthers,
+    kInvitationSortTypeHostAcceptNoInvitations
 };
 
 @interface Exfee (EXFE)

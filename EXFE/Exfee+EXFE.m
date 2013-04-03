@@ -54,14 +54,16 @@
             int accepts = 0;
             
             for(Invitation *invitation in invitations) {
-                if([[User getDefaultUser] isMe:invitation.identity]){
-                    [sorted insertObject:invitation atIndex:myself];
-                    myself ++;
-                } else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
-                    [sorted insertObject:invitation atIndex:(myself + accepts)];
-                    accepts ++;
-                } else if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO){
-                    [sorted addObject:invitation];
+                if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO) {
+                    if([[User getDefaultUser] isMe:invitation.identity]){
+                        [sorted insertObject:invitation atIndex:myself];
+                        myself ++;
+                    } else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
+                        [sorted insertObject:invitation atIndex:(myself + accepts)];
+                        accepts ++;
+                    } else {
+                        [sorted addObject:invitation];
+                    }
                 }
             }
         }
@@ -71,14 +73,35 @@
             int accepts = 0;
             
             for(Invitation *invitation in invitations) {
-                if([invitation.host boolValue] == YES){
-                    [sorted insertObject:invitation atIndex:hosts];
-                    hosts ++;
-                } else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
-                    [sorted insertObject:invitation atIndex:(hosts + accepts)];
-                    accepts ++;
-                } else if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO){
-                    [sorted addObject:invitation];
+                if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO){
+                    if([invitation.host boolValue] == YES){
+                        [sorted insertObject:invitation atIndex:hosts];
+                        hosts ++;
+                    } else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
+                        [sorted insertObject:invitation atIndex:(hosts + accepts)];
+                        accepts ++;
+                    } else {
+                        [sorted addObject:invitation];
+                    }
+                }
+            }
+        }
+            break;
+        case kInvitationSortTypeHostAcceptNoInvitations:{
+            int hosts = 0;
+            int accepts = 0;
+            
+            for(Invitation *invitation in invitations) {
+                if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO && [@"NOTIFICATION" isEqualToString:invitation.rsvp_status] == NO) {
+                    if([invitation.host boolValue] == YES){
+                        [sorted insertObject:invitation atIndex:hosts];
+                        hosts ++;
+                    } else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
+                        [sorted insertObject:invitation atIndex:(hosts + accepts)];
+                        accepts ++;
+                    } else {
+                        [sorted addObject:invitation];
+                    }
                 }
             }
         }

@@ -93,7 +93,7 @@
 
 - (CGPoint)positionOfButton:(NSUInteger)pos{
     if (gravity == 1){
-        return CGPointMake(CGRectGetWidth(self.bounds) - (30 + 20) * (pos + 1) + 10, 3);
+        return CGPointMake(CGRectGetWidth(self.bounds) - (30 + 20) * (pos + 1) + 10 + 2, 3);
     }
     return CGPointZero;
 }
@@ -109,7 +109,7 @@
     
     UIButton* btn = sender;
     NSUInteger idx = btn.tag - 1;
-    NSLog(@"widget clicked: index %i when current is %i/%i", idx, currentIndex, total);
+//    NSLog(@"widget clicked: index %i when current is %i/%i", idx, currentIndex, total);
     if (idx == currentIndex) {
         if (_stage == kStageNormal) {
             _enable = NO;
