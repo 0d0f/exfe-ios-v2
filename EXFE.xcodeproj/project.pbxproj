@@ -143,6 +143,10 @@
 		76A39BDD1708C066008D1FFE /* EXCardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76A39BDB1708C066008D1FFE /* EXCardViewController.xib */; };
 		76A39BE41708C075008D1FFE /* EXCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A39BE21708C075008D1FFE /* EXCardCell.m */; };
 		76A39BE51708C075008D1FFE /* EXCardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76A39BE31708C075008D1FFE /* EXCardCell.xib */; };
+		76A39C4917095E5E008D1FFE /* EXCircleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A39C4817095E5D008D1FFE /* EXCircleScrollView.m */; };
+		76A39C50170AB5B2008D1FFE /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A39C4F170AB5B1008D1FFE /* Card.m */; };
+		76A39C53170BEADD008D1FFE /* home_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 76A39C51170BEADC008D1FFE /* home_bg.png */; };
+		76A39C54170BEADD008D1FFE /* home_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76A39C52170BEADC008D1FFE /* home_bg@2x.png */; };
 		76B650311705940D0036E832 /* EXLiveViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B650301705940D0036E832 /* EXLiveViewCell.xib */; };
 		76B65037170595250036E832 /* EXCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B65036170595250036E832 /* EXCard.m */; };
 		76B6503C1705A0150036E832 /* portrait_64_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B650381705A0150036E832 /* portrait_64_selected.png */; };
@@ -699,6 +703,12 @@
 		76A39BE11708C075008D1FFE /* EXCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCardCell.h; sourceTree = "<group>"; };
 		76A39BE21708C075008D1FFE /* EXCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCardCell.m; sourceTree = "<group>"; };
 		76A39BE31708C075008D1FFE /* EXCardCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EXCardCell.xib; sourceTree = "<group>"; };
+		76A39C4717095E5D008D1FFE /* EXCircleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCircleScrollView.h; sourceTree = "<group>"; };
+		76A39C4817095E5D008D1FFE /* EXCircleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCircleScrollView.m; sourceTree = "<group>"; };
+		76A39C4E170AB5B1008D1FFE /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
+		76A39C4F170AB5B1008D1FFE /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
+		76A39C51170BEADC008D1FFE /* home_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_bg.png; sourceTree = "<group>"; };
+		76A39C52170BEADC008D1FFE /* home_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_bg@2x.png"; sourceTree = "<group>"; };
 		76B650301705940D0036E832 /* EXLiveViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EXLiveViewCell.xib; sourceTree = "<group>"; };
 		76B65035170595250036E832 /* EXCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCard.h; sourceTree = "<group>"; };
 		76B65036170595250036E832 /* EXCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCard.m; sourceTree = "<group>"; };
@@ -1242,6 +1252,8 @@
 		4FD9375F16D6023400ED6677 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				76A39C4E170AB5B1008D1FFE /* Card.h */,
+				76A39C4F170AB5B1008D1FFE /* Card.m */,
 				78A98EFC1561169E009E0806 /* Class */,
 				4FD9376016D6025500ED6677 /* Extention */,
 			);
@@ -1427,6 +1439,8 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				76A39C51170BEADC008D1FFE /* home_bg.png */,
+				76A39C52170BEADC008D1FFE /* home_bg@2x.png */,
 				76FF86D117062EA1003CA095 /* btn_blue_30inset.png */,
 				76FF86D217062EA1003CA095 /* btn_blue_30inset@2x.png */,
 				78CA7C1915ECD0A000AAD1DF /* appstore */,
@@ -1775,6 +1789,8 @@
 				4F29C92516F85F7B001BB176 /* EXMenu.m */,
 				4F29C92816F962C9001BB176 /* EXBasicMenu.h */,
 				4F29C92916F962CA001BB176 /* EXBasicMenu.m */,
+				76A39C4717095E5D008D1FFE /* EXCircleScrollView.h */,
+				76A39C4817095E5D008D1FFE /* EXCircleScrollView.m */,
 				78531CFF17056C25002D34A1 /* EXUserAvatarCollectionView.h */,
 				78531D0017056C25002D34A1 /* EXUserAvatarCollectionView.m */,
 				78531D0917057F54002D34A1 /* EXCircleItemCell.h */,
@@ -2571,6 +2587,8 @@
 				76FF86D417062EA1003CA095 /* btn_blue_30inset@2x.png in Resources */,
 				76A39BDD1708C066008D1FFE /* EXCardViewController.xib in Resources */,
 				76A39BE51708C075008D1FFE /* EXCardCell.xib in Resources */,
+				76A39C53170BEADD008D1FFE /* home_bg.png in Resources */,
+				76A39C54170BEADD008D1FFE /* home_bg@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2732,6 +2750,8 @@
 				76FF86CE17062BCB003CA095 /* EXHereHeaderView.m in Sources */,
 				76A39BDC1708C066008D1FFE /* EXCardViewController.m in Sources */,
 				76A39BE41708C075008D1FFE /* EXCardCell.m in Sources */,
+				76A39C4917095E5E008D1FFE /* EXCircleScrollView.m in Sources */,
+				76A39C50170AB5B2008D1FFE /* Card.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

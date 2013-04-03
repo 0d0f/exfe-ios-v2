@@ -6,7 +6,7 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+#import "EXCircleScrollView.h"
 #import "EXCircleItemCell.h"
 
 @class EXUserAvatarCollectionView;
@@ -14,25 +14,29 @@
 @protocol UserAvatarCollectionDataSource<NSObject>
 @required
 - (NSInteger)numberOfCircleItemInAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView;
-- (EXCircleItemCell *)circleItemForAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView atIndex:(int)index;
+- (EXCircleItemCell *)circleItemForAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView atIndexPath:(NSIndexPath *)indexPath;
+- (BOOL)shouldCircleItemCell:(EXCircleItemCell *)cell removeFromAvatarCollectionView:(EXUserAvatarCollectionView *)collectionView;
+- (void)reloadCircleItemCells:(NSSet *)cells;
 @end
 
-@protocol UserAvatarCollectionDelegate<NSObject>
+@protocol UserAvatarCollectionDelegate<NSObject, EXCircleScrollViewDelegate>
 @required
-- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didSelectCircleItemAtIndex:(int)index;
-- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didLongPressCircleItemAtIndex:(int)index;
+- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didSelectCircleItemAtIndexPath:(NSIndexPath *)indexPath;
+- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didLongPressCircleItemAtIndexPath:(NSIndexPath *)indexPath;
 @end
 
 
-@interface EXUserAvatarCollectionView : UIView {
-  NSArray *_cellCenterPositions;
-}
+@interface EXUserAvatarCollectionView : EXCircleScrollView
+<
+EXCircleScrollViewDelegate
+>
 
 @property (nonatomic, assign) id<UserAvatarCollectionDataSource> dataSource;
 @property (nonatomic, assign) id<UserAvatarCollectionDelegate> delegate;
 
 - (NSArray *)visibleCircleItemCells;
-
+- (EXCircleItemCell *)circleItemCellAtIndexPath:(NSIndexPath *)indexPath;
+- (EXCircleItemCell *)dequeueReusableCircleItemCell;
 - (void)reloadData;
 
 @end

@@ -21,7 +21,8 @@
 NSStreamDelegate,
 UserAvatarCollectionDataSource,
 UserAvatarCollectionDelegate,
-EXCardViewControllerDelegate
+EXCardViewControllerDelegate,
+CLLocationManagerDelegate
 > {
     NSMutableData *_data;
     int byteIndex;
@@ -31,6 +32,5 @@ EXCardViewControllerDelegate
 }
 
 - (void)close;
-- (void)start;
 
 @end

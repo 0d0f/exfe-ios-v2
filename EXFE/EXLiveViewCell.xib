@@ -61,7 +61,6 @@
 								<string key="NSFrame">{{8, 8}, {60, 60}}</string>
 								<reference key="NSSuperview" ref="1020912487"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>

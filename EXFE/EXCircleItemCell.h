@@ -12,7 +12,7 @@
 typedef void (^TapBlock)(void);
 typedef void (^LongPressBlock)(void);
 
-@class User;
+@class Card;
 
 @interface EXCircleItemCell : UIView
 
@@ -27,8 +27,8 @@ typedef void (^LongPressBlock)(void);
 @property (copy, nonatomic) TapBlock tapBlock;
 @property (copy, nonatomic) LongPressBlock longPressBlock;
 
-@property (nonatomic, retain) User *user;
-@property (nonatomic, assign) NSUInteger index;
+@property (nonatomic, copy) Card *card;
+@property (nonatomic, copy) NSIndexPath *indexPath;
 
 - (id)init;
 

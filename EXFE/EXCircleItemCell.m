@@ -13,10 +13,14 @@
 #import "Util.h"
 #import "ImgCache.h"
 #import "EXCard.h"
+#import "Card.h"
 
 @interface EXCircleItemCell ()
+@property (nonatomic, assign) BOOL isUsingDefaultAvatar;
 - (void)tapHandler:(UITapGestureRecognizer *)recognizer;
 - (void)longPressHandler:(UILongPressGestureRecognizer *)recognizer;
+
+- (void)_setAvatarImage:(UIImage *)image;
 @end
 
 @implementation EXCircleItemCell {
@@ -65,7 +69,8 @@
 }
 
 - (void)dealloc {
-    [_user release];
+    [_indexPath release];
+    [_card release];
     [_avatarBaseView release];
     [_titleLabel release];
     [_selectedMaskView release];
@@ -82,30 +87,59 @@
     self.center = (CGPoint){avatarCenter.x, avatarCenter.y + _centerDistanceY};
 }
 
-- (void)setUser:(User *)user {
-    if (user == _user)
+- (void)setCard:(Card *)card {
+    if (card == _card)
         return;
-    if (_user) {
-        [_user release];
-        _user = nil;
-    }
     
-    if (user) {
-        _user = [user retain];
+    if (_card && card && [_card isEqualToCard:card]) {
+        NSString *perCardAvatarURL = _card.avatarURLString;
+        [_card release];
+        _card = [card copy];
         
-        self.titleLabel.text = user.name;
+        self.titleLabel.text = card.userName;
         [self.titleLabel sizeToFit];
         
-        dispatch_queue_t image_queue = dispatch_queue_create("fetchimg thread", NULL);
-        dispatch_async(image_queue, ^{
-            UIImage *avatarImage=[[ImgCache sharedManager] getImgFrom:user.avatar_filename];
-            if(avatarImage != nil && ![avatarImage isEqual:[NSNull null]]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.avatarImageView.image = avatarImage;
-                });
-            }
-        });
-        dispatch_release(image_queue);
+        if (![card.avatarURLString isEqualToString:perCardAvatarURL]) {
+            dispatch_queue_t image_queue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(image_queue, ^{
+                UIImage *avatarImage=[[ImgCache sharedManager] getImgFrom:card.avatarURLString];
+                if(avatarImage != nil && ![avatarImage isEqual:[NSNull null]]) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if ([card isEqualToCard:self.card]) {
+                            [self _setAvatarImage:avatarImage];
+                        }
+                    });
+                }
+            });
+            dispatch_release(image_queue);
+        }
+    } else {
+        if (_card) {
+            self.titleLabel.text = @"";
+            [self _setAvatarImage:nil];
+            [_card release];
+            _card = nil;
+        }
+        
+        if (card) {
+            _card = [card copy];
+            
+            self.titleLabel.text = card.userName;
+            [self.titleLabel sizeToFit];
+            
+            dispatch_queue_t image_queue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(image_queue, ^{
+                UIImage *avatarImage=[[ImgCache sharedManager] getImgFrom:card.avatarURLString];
+                if(avatarImage != nil && ![avatarImage isEqual:[NSNull null]]) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if ([card isEqualToCard:self.card]) {
+                            [self _setAvatarImage:avatarImage];
+                        }
+                    });
+                }
+            });
+            dispatch_release(image_queue);
+        }
     }
 }
 
@@ -142,6 +176,34 @@
 - (void)longPressHandler:(UILongPressGestureRecognizer *)recognizer {
     if (_longPressBlock)
         _longPressBlock();
+}
+
+#pragma mark - Private
+- (void)_setAvatarImage:(UIImage *)image {
+    if (nil == image && self.isUsingDefaultAvatar)
+        return;
+    if (nil == image) {
+        self.isUsingDefaultAvatar = YES;
+    } else {
+        self.isUsingDefaultAvatar = NO;
+    }
+    
+    [UIView setAnimationsEnabled:YES];
+    [UIView animateWithDuration:0.6f
+                     animations:^{
+                         self.avatarImageView.alpha = 0.0f;
+                     }
+                     completion:^(BOOL finished){
+                         if (nil == image) {
+                             self.avatarImageView.image = [UIImage imageNamed:@"portrait_64.png"];
+                         } else {
+                             self.avatarImageView.image = image;
+                         }
+                         [UIView animateWithDuration:0.1f
+                                          animations:^{
+                                              self.avatarImageView.alpha = 1.0f;
+                                          }];
+                     }];
 }
 
 @end

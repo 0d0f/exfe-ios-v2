@@ -65,7 +65,7 @@
         color = [UIColor whiteColor];
         self.pravicyLabel.text = @"Public";
     } else {
-        color = [UIColor COLOR_RGB(0x4C, 0x4C, 0x4C)];
+        color = [UIColor COLOR_RGB(0x7F, 0x7F, 0x7F)];
         self.pravicyLabel.text = @"Private";
     }
     
