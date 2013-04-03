@@ -270,6 +270,7 @@
         [singleHeaderTap cancel];
         [self hidePopupIfShown];
         if (_currentViewController) {
+            [tabWidget switchTo:1 animated:NO];
             [self swapChildViewController:1];
         }
     }];
@@ -827,6 +828,13 @@
     [self swapChildViewController:v.tag];
 }
 
+- (void)clickStatusView:(id)sender
+{
+    rsvpstatusview.hidden = YES;
+    [tabWidget switchTo:3 animated:NO];
+    [self swapChildViewController:3];
+}
+
 #pragma mark EXImagesCollectionView Datasource methods
 
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
@@ -872,7 +880,8 @@
             x = x - 180;
         }
         if(rsvpstatusview==nil){
-            rsvpstatusview=[[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-55, 180+12, 50) withDelegate:self];
+            rsvpstatusview = [[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-55, 180+12, 50)];
+            [rsvpstatusview.next addTarget:self action:@selector(clickStatusView:) forControlEvents:UIControlEventTouchUpInside];
             [self.view addSubview:rsvpstatusview];
         }
         rsvpstatusview.invitation=invitation;

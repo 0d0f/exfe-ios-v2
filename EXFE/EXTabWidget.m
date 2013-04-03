@@ -102,6 +102,35 @@
     
 }
 
+- (void)switchTo:(NSUInteger)tag animated:(BOOL)animated
+{
+    if (animated) {
+        // todo
+    } else {
+        if (currentIndex + 1 != tag) {
+            NSUInteger animCount = 0;
+            for (UIView *view in self.subviews) {
+                if (view.tag == tag) {
+                    CGRect aStart = view.frame;
+                    aStart.origin = [self positionOfButton:0];
+                    view.frame = aStart;
+                    view.hidden = NO;
+                }else if (view.tag - 1 == currentIndex){
+                    CGRect aStart = view.frame;
+                    aStart.origin = [self positionOfButton:0 - total];
+                    view.frame = aStart;
+                }else{
+                    animCount ++;
+                    CGRect aStart = view.frame;
+                    aStart.origin = [self positionOfButton:0 - animCount];
+                    view.frame = aStart;
+                }
+            }
+            currentIndex = tag - 1;
+        }
+    }
+}
+
 - (void)widgetClick:(id)sender{
     if (_enable == NO) {
         return;

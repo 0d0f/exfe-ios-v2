@@ -19,11 +19,14 @@
     UIImageView *rsvpbadge;
     UIImageView *background;
 
-    id delegate;
 }
 
-@property (nonatomic,retain) Invitation *invitation;
-- (id)initWithFrame:(CGRect)frame withDelegate:(id)_delegate;
-- (void) showMenu;
-//- (void) setDelegate:(id)_delegate;
+@property (nonatomic, retain) Invitation *invitation;
+@property (nonatomic, unsafe_unretained) id delegate;
+@property (nonatomic, retain) UIButton *next;
+
+- (id)initWithFrame:(CGRect)frame;
+
+
+//- (void) showMenu;
 @end

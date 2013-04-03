@@ -18,7 +18,6 @@
 #import "CrossTime+Helper.h"
 #import "Place+Helper.h"
 #import "EXImagesCollectionGatherView.h"
-#import "EXRSVPStatusView.h"
 #import "EXRSVPMenuView.h"
 #import "APICrosses.h"
 #import "EXLabel.h"
@@ -50,8 +49,6 @@
     
     BOOL layoutDirty;
     BOOL title_be_edit;
-//    NSMutableArray *exfeeInvitations;
-    EXRSVPStatusView *rsvpstatusview;
     CGFloat exfeeSuggestHeight;
     EXRSVPMenuView *rsvpmenu;
     UIImageView *pannellight;

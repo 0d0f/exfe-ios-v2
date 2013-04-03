@@ -1048,8 +1048,6 @@
     
     
     [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y, 125, 44*[itemslist count]+titlebarheight)];
-    if(rsvpstatusview!=nil)
-        [rsvpstatusview setHidden:YES];
     
     [UIView commitAnimations];
     
@@ -1063,7 +1061,7 @@
 }
 
 - (void)hideStatusView{
-    [rsvpstatusview setHidden:YES];
+//    [rsvpstatusview setHidden:YES];
 }
 
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu{

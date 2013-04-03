@@ -40,5 +40,6 @@
 @property (nonatomic, retain) id<EXTabWidgetDelegate> delegate;
 
 - (id)initWithFrame:(CGRect)frame withImages:(NSArray*)imgs current:(NSInteger)index;
+- (void)switchTo:(NSUInteger)idx animated:(BOOL)animated;
 
 @end

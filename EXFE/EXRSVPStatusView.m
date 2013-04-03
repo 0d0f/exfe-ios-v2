@@ -7,15 +7,17 @@
 //
 
 #import "EXRSVPStatusView.h"
+#import <BlocksKit/BlocksKit.h>
 
 @implementation EXRSVPStatusView
 @synthesize invitation;
+@synthesize delegate = _delegate;
+@synthesize next = _next;
 
-- (id)initWithFrame:(CGRect)frame withDelegate:(id)_delegate
+- (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        delegate=_delegate;
         self.backgroundColor=[UIColor clearColor];
 //        self.layer.shadowColor=[UIColor blackColor].CGColor;
 //        self.layer.shadowOpacity = 1;
@@ -24,12 +26,14 @@
         background= [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
         background.image=[[UIImage imageNamed:@"x_exfee_tip.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(9, 9, 9,9)];
         [self addSubview:background];
-//        UIButton *next=[UIButton buttonWithType:UIButtonTypeCustom];
-//        
-//        [next setFrame:CGRectMake(165.0f, 7.0f, 10.0f, 30.0f)];
-//        [next setBackgroundColor:[UIColor greenColor]];
-//        [next addTarget:delegate action:@selector(showMenu:) forControlEvents:UIControlEventTouchUpInside];
-//        [self addSubview:next];
+        
+        
+        self.next = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.next setFrame:CGRectMake(165.0f, CGRectGetHeight(frame) / 2 - 30 / 2, 10.0f, 30.0f)];
+        [self.next setImage:[UIImage imageNamed:@"listarrow.png"] forState:UIControlStateNormal];
+        [self.next setBackgroundColor:[UIColor clearColor]];
+        [self addSubview:self.next];
+        
         
         UIImageView *arrow=[[UIImageView alloc] initWithFrame:CGRectMake(165.0f, (frame.size.height-15)/2, 12, 15)];
         arrow.image=[UIImage imageNamed:@"arrow.png"];
@@ -53,18 +57,16 @@
         rsvplabel.backgroundColor=[UIColor clearColor];
         [self addSubview:rsvplabel];
 
-        UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu)];
+        //
+        UITapGestureRecognizer *gestureRecognizer = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+            [self.next sendActionsForControlEvents: UIControlEventTouchUpInside];
+        }];
         [self addGestureRecognizer:gestureRecognizer];
-        [gestureRecognizer release];
 
         
         // Initialization code
     }
     return self;
-}
-
-- (void) setDelegate:(id)_delegate{
-    delegate=_delegate;
 }
 
 - (void) setInvitation:(Invitation *)_invitation{
@@ -108,18 +110,11 @@
 }
 
 - (void)dealloc{
-    [super dealloc];
     [background release];
     [namelabel release];
     [rsvplabel release];
     [rsvpbadge release];
+    [super dealloc];
 }
 
-
-
-- (void) showMenu{
-    [self setHidden:YES];
-//    [delegate showMenu:invitation];
-//    NSLog(@"showMenu");
-}
 @end
