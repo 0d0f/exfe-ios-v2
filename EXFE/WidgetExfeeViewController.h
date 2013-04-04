@@ -50,8 +50,6 @@ typedef enum {
 //    ABTableViewCell *tableFooter;
     PSTCollectionView *exfeeContainer;
     
-    
-    Invitation* selected_invitation;
     CGPoint _lastContentOffset;
     CGSize _floatingOffset;
     NSUInteger layoutLevel;
@@ -61,6 +59,7 @@ typedef enum {
 }
 
 @property (nonatomic, retain) Exfee *exfee;
+@property (nonatomic, retain) Invitation* selected_invitation;
 @property (nonatomic, retain) NSArray *sortedInvitations;
 @property (nonatomic, copy) id onExitBlock;
 

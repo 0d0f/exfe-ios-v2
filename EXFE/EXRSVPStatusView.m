@@ -10,7 +10,7 @@
 #import <BlocksKit/BlocksKit.h>
 
 @implementation EXRSVPStatusView
-@synthesize invitation;
+@synthesize invitation = _invitation;
 @synthesize delegate = _delegate;
 @synthesize next = _next;
 
@@ -32,6 +32,7 @@
         [self.next setFrame:CGRectMake(165.0f, CGRectGetHeight(frame) / 2 - 30 / 2, 10.0f, 30.0f)];
         [self.next setImage:[UIImage imageNamed:@"listarrow.png"] forState:UIControlStateNormal];
         [self.next setBackgroundColor:[UIColor clearColor]];
+        [self.next addTarget:self action:@selector(clickToDelegate:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.next];
         
         
@@ -69,23 +70,23 @@
     return self;
 }
 
-- (void) setInvitation:(Invitation *)_invitation{
-    invitation=_invitation;
-    namelabel.text=invitation.identity.name;
+- (void) setInvitation:(Invitation *)invitation{
+    _invitation = invitation;
+    namelabel.text = _invitation.identity.name;
     [namelabel setNeedsDisplay];
     
     UIImage *rsvpicon=nil;
     NSString *rsvpstatustext=@"";
-    if ([invitation.rsvp_status isEqualToString:@"ACCEPTED"]){
+    if ([_invitation.rsvp_status isEqualToString:@"ACCEPTED"]){
         rsvpicon=[UIImage imageNamed:@"rsvp_accepted_stroke_26blue.png"];
         rsvplabel.textColor=FONT_COLOR_HL;
         rsvpstatustext=@"Accepted";
-    } else if ([invitation.rsvp_status isEqualToString:@"DECLINED"]){
+    } else if ([_invitation.rsvp_status isEqualToString:@"DECLINED"]){
         rsvpicon=[UIImage imageNamed:@"rsvp_unavailable_stroke_26g5.png"];
         rsvpstatustext=@"Unavailable";
         rsvplabel.textColor=FONT_COLOR_51;
         
-    } else if ([invitation.rsvp_status isEqualToString:@"INTERESTED"]){
+    } else if ([_invitation.rsvp_status isEqualToString:@"INTERESTED"]){
         rsvpicon=[UIImage imageNamed:@"rsvp_pending_stroke_26g5.png"];
         rsvpstatustext=@"Interested";
         rsvplabel.textColor=FONT_COLOR_51;
@@ -95,7 +96,7 @@
         rsvplabel.textColor=FONT_COLOR_51;
     }
     
-    if([invitation.identity.unreachable boolValue]==YES){
+    if([_invitation.identity.unreachable boolValue]==YES){
         rsvpicon=[UIImage imageNamed:@"portrait_exclaim.png"];
         rsvpstatustext=@"Contact unreachable";
         rsvplabel.textColor=[UIColor colorWithRed:229/255.0 green:46/255.0 blue:83/255.0 alpha:1];
@@ -105,8 +106,6 @@
     [rsvpbadge setNeedsDisplay];
     rsvplabel.text=rsvpstatustext;
     [rsvplabel setNeedsDisplay];
-    
-    
 }
 
 - (void)dealloc{
@@ -115,6 +114,15 @@
     [rsvplabel release];
     [rsvpbadge release];
     [super dealloc];
+}
+
+- (void)clickToDelegate:(id)sender
+{
+    if (_delegate) {
+        if ([_delegate respondsToSelector:@selector(RSVPStatusView:clickfor:)]) {
+            [_delegate RSVPStatusView:self clickfor:self.invitation];
+        }
+    }
 }
 
 @end

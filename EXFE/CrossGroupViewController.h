@@ -14,6 +14,7 @@
 #import "EXRSVPMenuView.h"
 #import "EXTabLayer.h"
 #import "EXTabWidget.h"
+#import "EXRSVPStatusView.h"
 
 @class Cross;
 @class User;
@@ -27,7 +28,7 @@
 #define kWidgetConversation    1
 #define kWidgetExfee           2
 
-@interface CrossGroupViewController : UIViewController<EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, EXTabWidgetDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate>{
+@interface CrossGroupViewController : UIViewController<EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, EXTabWidgetDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate, EXRSVPStatusViewDelegate>{
     
     
     CGFloat exfeeSuggestHeight;

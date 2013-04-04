@@ -828,17 +828,22 @@
     [self swapChildViewController:v.tag];
 }
 
-- (void)clickStatusView:(id)sender
-{
-    rsvpstatusview.hidden = YES;
-    [self switchTabWidget:3];
-}
-
 - (void)switchTabWidget:(NSUInteger)idx
 {
+    [self switchTabWidget:idx param:nil];
+}
+- (void)switchTabWidget:(NSUInteger)idx param:(NSDictionary*)params
+{
     [tabWidget switchTo:idx animated:NO];
-    [self swapChildViewController:idx];
+    [self swapChildViewController:idx param:params];
     [self performSelector:@selector(hidePopupIfShown) withObject:tabWidget afterDelay:1];
+}
+
+#pragma mark EXRSVPStatusViewDelegate methods
+- (void)RSVPStatusView:(EXRSVPStatusView*)view clickfor:(Invitation*)invitation
+{
+    view.hidden = YES;
+    [self switchTabWidget:3 param:@{@"selected_invitation": invitation}];
 }
 
 #pragma mark EXImagesCollectionView Datasource methods
@@ -888,7 +893,7 @@
         }
         if(rsvpstatusview==nil){
             rsvpstatusview = [[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-55, 180+12, 50)];
-            [rsvpstatusview.next addTarget:self action:@selector(clickStatusView:) forControlEvents:UIControlEventTouchUpInside];
+            rsvpstatusview.delegate = self;
             [self.view addSubview:rsvpstatusview];
         }
         rsvpstatusview.invitation=invitation;
@@ -1140,8 +1145,11 @@
                                 weakSelf.currentViewController = [childViewController autorelease];
                             }];
 }
-
 - (void)swapChildViewController:(NSInteger)widget_id{
+    [self swapChildViewController:widget_id param:nil];
+}
+
+- (void)swapChildViewController:(NSInteger)widget_id param:(NSDictionary*)params{
     
     UIViewController *newVC = nil;
     NSUInteger style = kHeaderStyleFull;
@@ -1168,6 +1176,12 @@
         {
             WidgetExfeeViewController *exfeeView = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
             exfeeView.exfee = _cross.exfee;
+            if (params) {
+                Invitation* inv = [params objectForKey:@"selected_invitation"];
+                if (inv != nil) {
+                    exfeeView.selected_invitation = inv;
+                }
+            }
             exfeeView.onExitBlock = ^{
                 [self fillExfee:exfeeView.exfee];
             };

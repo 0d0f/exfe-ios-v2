@@ -67,12 +67,12 @@ typedef enum {
 
 @implementation WidgetExfeeViewController
 
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        selected_invitation = nil;
         
         rsvpDict = @{ @"header": @"Set response to:",
                       @"item0": @{ @"main": @"Accepted",
@@ -266,14 +266,42 @@ typedef enum {
 }
 - (void)viewDidAppear:(BOOL)animated
 {
-    NSArray *array = [exfeeContainer indexPathsForSelectedItems];
-    if (array == nil || array.count == 0) {
-        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-        [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-        
-        selected_invitation = [self.sortedInvitations objectAtIndex:0];
-        [self fillInvitationContent:selected_invitation];
+    BOOL flag = NO;
+    for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
+        Invitation* inv = [self.sortedInvitations objectAtIndex:i];
+        if ([inv.invitation_id integerValue] == [self.selected_invitation.invitation_id integerValue]) {
+            flag = YES;
+            NSIndexPath * indexPath = [NSIndexPath indexPathForRow:i inSection:1];
+            PSTCollectionViewCell* cell = [exfeeContainer cellForItemAtIndexPath:indexPath];
+            if (cell != nil) {
+                [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionNone];
+                [self fillInvitationContent:_selected_invitation];
+                [self clickCell:cell];
+            } else {
+                [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionBottom];
+                [self fillInvitationContent:_selected_invitation];
+                
+                double delayInSeconds = 0.01;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                PSTCollectionViewCell*  cell = [exfeeContainer cellForItemAtIndexPath:indexPath];
+                [self clickCell:cell];
+                });
+
+            }
+            break;
+        }
     }
+    if (flag == NO) {
+        self.selected_invitation = nil;
+    }
+    if (self.selected_invitation == nil) {
+        self.selected_invitation = [self.sortedInvitations objectAtIndex:0];
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+        [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        [self fillInvitationContent:_selected_invitation];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -331,7 +359,7 @@ typedef enum {
     
     NSString *title = @"People will no longer has access to any information in this ·X· once removed. Please confirm to remove.";
     NSString *destTitle = @"Remove from this ·X·";
-    if ([[User getDefaultUser] isMe:selected_invitation.identity]) {
+    if ([[User getDefaultUser] isMe:_selected_invitation.identity]) {
         destTitle = @"Leave from this ·X·";
         title = @"You will no longer has access to any information in this ·X· once left. Please confirm to leave.";
     }
@@ -351,8 +379,7 @@ typedef enum {
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     if (buttonIndex == actionSheet.destructiveButtonIndex) {
-        NSArray *array = [exfeeContainer indexPathsForSelectedItems];
-        selected_invitation.rsvp_status = @"REMOVED";
+        _selected_invitation.rsvp_status = @"REMOVED";
         
         Identity *myidentity = [self.exfee getMyInvitation].identity;
         [APIExfee edit:self.exfee
@@ -369,17 +396,16 @@ typedef enum {
                                    if(code == 200){
                                        Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
                                        //[self.exfee removeInvitationsObject:selected_invitation];
-                                       selected_invitation = nil;
+                                       _selected_invitation = nil;
                                        self.exfee = respExfee;
                                        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-                                       [exfeeContainer reloadData];
                                        
-                                       if ((array == nil || array.count < 1) && self.sortedInvitations.count > 0) {
-                                           NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-                                           [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-                                           selected_invitation = [self.sortedInvitations objectAtIndex:0];
-                                           [self fillInvitationContent:selected_invitation];
-                                       }
+                                       [exfeeContainer reloadData];
+                                       NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+                                       [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+                                       _selected_invitation = [self.sortedInvitations objectAtIndex:0];
+                                       [self fillInvitationContent:_selected_invitation];
+                                       
                                    }
                                    break;
                                default:
@@ -395,11 +421,6 @@ typedef enum {
                    ;
                }];
     }
-    
-    
-    
-    
-    
 }
 
 #pragma mark Gesture Handler
@@ -432,7 +453,7 @@ typedef enum {
             
             NSDictionary *data = rsvpDict;
             
-            if ([[User getDefaultUser] isMe:selected_invitation.identity]) {
+            if ([[User getDefaultUser] isMe:_selected_invitation.identity]) {
                 data = myRsvpDict;
             }
             
@@ -894,21 +915,10 @@ typedef enum {
             viewController.exfee = self.exfee;
             viewController.needSubmit = YES;
             viewController.onExitBlock = ^{
-//                NSLog(@"WidgetExfee callback");
-//                NSLog(@"viewController.exfee:");
-//                [viewController.exfee debugPrint];
-//                NSLog(@"self.exfee:");
-//                [self.exfee debugPrint];
                 self.exfee = viewController.exfee;
                 
                 self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                 [exfeeContainer reloadData];
-                
-//                if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
-//                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//                    [alert show];
-//                    [alert release];
-//                }
             };
             [self presentModalViewController:viewController animated:YES];
             [viewController release];
@@ -916,8 +926,8 @@ typedef enum {
             [self hidePopupIfShown];
             PSTCollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
             [self clickCell:cell];
-            selected_invitation = [self.sortedInvitations objectAtIndex:indexPath.row];
-            [self fillInvitationContent:selected_invitation];
+            _selected_invitation = [self.sortedInvitations objectAtIndex:indexPath.row];
+            [self fillInvitationContent:_selected_invitation];
         }
     }
 }
@@ -975,7 +985,6 @@ typedef enum {
 
 - (void)clickCell:(id)sender{
     UIView* btn = sender;
-    //_floatingOffset
     CGPoint offset = exfeeContainer.contentOffset;
     BOOL flag = NO;
     CGPoint exfeeOffset;
@@ -1010,7 +1019,6 @@ typedef enum {
                          _floatingOffset = CGSizeMake(0, exfeeContainer.contentOffset.y);
                          invContent.tag = kTableOrigin;
                      }];
-
 }
 
 - (void)show:(EXBasicMenu*)menu at:(CGPoint)location withAnimation:(BOOL)animated
@@ -1054,15 +1062,15 @@ typedef enum {
             NSInteger abc = [index integerValue];
             switch (abc) {
                 case 0:
-                    if (selected_invitation && [Invitation getRsvpCode:selected_invitation.rsvp_status] != kRsvpAccepted) {
-                        [self sendrsvp:@"ACCEPTED" invitation:selected_invitation];
+                    if (_selected_invitation && [Invitation getRsvpCode:_selected_invitation.rsvp_status] != kRsvpAccepted) {
+                        [self sendrsvp:@"ACCEPTED" invitation:_selected_invitation];
                     }
                     break;
                 case 1:
-                    [self sendrsvp:@"DECLINED" invitation:selected_invitation];
+                    [self sendrsvp:@"DECLINED" invitation:_selected_invitation];
                     break;
                 case 2:
-                    [self sendrsvp:@"INTERESTED" invitation:selected_invitation];
+                    [self sendrsvp:@"INTERESTED" invitation:_selected_invitation];
                     break;
                 case 3:
                     break;

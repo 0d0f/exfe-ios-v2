@@ -29,7 +29,7 @@
     Identity * _identity;
 }
 
-@property (nonatomic, assign) id delegate;
+@property (nonatomic, unsafe_unretained) id delegate;
 @property (nonatomic, retain) Identity * identity;
 
 @end

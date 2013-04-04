@@ -12,21 +12,26 @@
 #import "Identity.h"
 #import "Util.h"
 
+@class EXRSVPStatusView;
+
+
+@protocol EXRSVPStatusViewDelegate <NSObject>
+
+@required
+- (void)RSVPStatusView:(EXRSVPStatusView*)view clickfor:(Invitation*)invitation;
+
+@end
+
 @interface EXRSVPStatusView : UIView{
-    Invitation *invitation;
     UILabel *namelabel;
     UILabel *rsvplabel;
     UIImageView *rsvpbadge;
     UIImageView *background;
-
 }
 
 @property (nonatomic, retain) Invitation *invitation;
-@property (nonatomic, unsafe_unretained) id delegate;
+@property (nonatomic, unsafe_unretained) id<EXRSVPStatusViewDelegate> delegate;
 @property (nonatomic, retain) UIButton *next;
 
 - (id)initWithFrame:(CGRect)frame;
-
-
-//- (void) showMenu;
 @end
