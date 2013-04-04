@@ -39,6 +39,7 @@
 #define kMenuTagMate 8903
 
 #define kYOffset  50
+#define kBottomMargin 2
 
 #define kPopupIdRsvpMenu 1
 #define kPopupIdRemoveIdentity 2
@@ -126,14 +127,14 @@ typedef enum {
     [exfeeContainer registerClass:[ExfeeCollectionViewCell class] forCellWithReuseIdentifier:@"Exfee Cell"];
     [exfeeContainer registerClass:[PSTCollectionViewCell class] forCellWithReuseIdentifier:@"Blank Cell"];
     [exfeeContainer registerClass:[ExfeeAddCollectionViewCell class] forCellWithReuseIdentifier:@"Add Cell"];
-    exfeeContainer.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"conv_bg.png"]];
+    exfeeContainer.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"exfee_bg.png"]];
     exfeeContainer.alwaysBounceVertical = YES;
     exfeeContainer.contentOffset = CGPointMake(0, 0);
 //    exfeeContainer.contentInset = UIEdgeInsetsMake(0, 4, 0, 4);
     exfeeContainer.tag = kTagViewExfeeSelector;
     [self.view addSubview:exfeeContainer];
     
-    CGFloat exfee_content_height = CGRectGetHeight(exfeeContainer.frame) - 94 * (2 + (CGRectGetHeight(a) > 480 ? 1 : 0));
+    CGFloat exfee_content_height = CGRectGetHeight(exfeeContainer.frame) - 94 * (2 + (CGRectGetHeight(a) > 480 ? 1 : 0)) - kBottomMargin;
     invContent = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0 + kYOffset, CGRectGetWidth(b), exfee_content_height )];
     invContent.backgroundColor = [UIColor COLOR_SNOW];
     invContent.alwaysBounceVertical = YES;
@@ -830,7 +831,7 @@ typedef enum {
     NSInteger seq = row % 4;
     switch (section) {
         case 0:
-            return CGSizeMake(300, CGRectGetHeight(invContent.frame));
+            return CGSizeMake(300, CGRectGetHeight(invContent.frame) + kBottomMargin);
         case 1:
             switch (seq) {
                 case 0:
@@ -981,7 +982,7 @@ typedef enum {
     CGPoint invOffset;
     if (CGRectGetMinY(btn.frame) - offset.y < CGRectGetHeight(invContent.frame)) {
         // click target is upper than the normal area
-        exfeeOffset = CGPointMake(offset.x, MAX(CGRectGetMinY(btn.frame) - CGRectGetHeight(invContent.frame), 0));
+        exfeeOffset = CGPointMake(offset.x, MAX(CGRectGetMinY(btn.frame) - CGRectGetHeight(invContent.frame) - kBottomMargin, 0));
         invOffset = CGPointMake(0, CGRectGetMinY(exfeeContainer.frame));
         flag = YES;
     } else if(CGRectGetMaxY(btn.frame) - offset.y > CGRectGetHeight(exfeeContainer.bounds)){
