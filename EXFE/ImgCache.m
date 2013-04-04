@@ -242,11 +242,11 @@ static NSMutableDictionary *imgs;
     if (url == nil || url.length == 0) {
         fill(defImage);
     } else {
-        UIImage *avatarImg = [self checkImgFrom:url];
+        UIImage *avatarImg = [self getImgFromCache:url];
         if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
-            fill(defImage);
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(imgQueue, ^{
+                fill(defImage);
                 UIImage *avatar = [self downloadImgFrom:url];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
@@ -266,11 +266,11 @@ static NSMutableDictionary *imgs;
     if (url == nil || url.length == 0) {
         avatarView.image = defImage;
     } else {
-        UIImage *avatarImg = [self checkImgFrom:url];
+        UIImage *avatarImg = [self getImgFromCache:url];
         if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
-            avatarView.image = defImage;
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(imgQueue, ^{
+                avatarView.image = defImage;
                 UIImage *avatar = [self downloadImgFrom:url];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
