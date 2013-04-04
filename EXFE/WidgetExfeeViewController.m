@@ -159,11 +159,11 @@ typedef enum {
         [invContent.layer addSublayer:layer4];
         
         
-        invName = [[ UILabel alloc] initWithFrame:CGRectMake(25, 16 , 230, 25)];
+        invName = [[UILabel alloc] initWithFrame:CGRectMake(25, 16 , 230, 25)];
         invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
         invName.textColor = [UIColor COLOR_CARBON];
         invName.backgroundColor = [UIColor clearColor];
-        invName.numberOfLines = 0;
+        invName.numberOfLines = 3;
         invName.tag = kTagIdName;
         [invContent addSubview:invName];
         
