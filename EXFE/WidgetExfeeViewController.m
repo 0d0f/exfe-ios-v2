@@ -134,11 +134,11 @@ typedef enum {
     [self.view addSubview:exfeeContainer];
     
     CGFloat exfee_content_height = CGRectGetHeight(exfeeContainer.frame) - 94 * (2 + (CGRectGetHeight(a) > 480 ? 1 : 0));
-    invContent = [[UIView alloc] initWithFrame:CGRectMake(0, 0 + kYOffset, CGRectGetWidth(b), exfee_content_height )];
+    invContent = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0 + kYOffset, CGRectGetWidth(b), exfee_content_height )];
     invContent.backgroundColor = [UIColor COLOR_SNOW];
+    invContent.alwaysBounceVertical = YES;
     invContent.tag = kTableOrigin;
     {
-        
         layer1 = [CALayer layer];
         layer1.frame = CGRectMake(0, 45, 320, 1);
         layer1.contents = (id)[UIImage imageNamed:@"exfee_line_h1.png"].CGImage;
@@ -161,7 +161,7 @@ typedef enum {
         invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
         invName.textColor = [UIColor COLOR_CARBON];
         invName.backgroundColor = [UIColor clearColor];
-//        invName.numberOfLines = 0;
+        invName.numberOfLines = 0;
         invName.tag = kTagIdName;
         [invContent addSubview:invName];
         
@@ -216,7 +216,6 @@ typedef enum {
         bioTitle.textColor = [UIColor COLOR_BLACK];
         bioTitle.backgroundColor = [UIColor clearColor];
         bioTitle.tag = kTagIdBioTitle;
-        
         [invContent addSubview:bioTitle];
         
         bioContent = [[UILabel alloc] initWithFrame:CGRectMake(75, 115 + 32, 220, 80)];
@@ -655,8 +654,10 @@ typedef enum {
 - (void)LayoutViews
 {
     if (layoutLevel > kTagIdNone) {
+        CGPoint start = CGPointZero;
+        
         if (layoutLevel >= kTagIdName) {
-//            if (invName.text) {
+
                 CGSize size = [invName sizeWrapContent:CGSizeMake(CGRectGetWidth(invName.bounds), MAXFLOAT)];
                 CGFloat w = size.width;
 //                if (w > CGRectGetWidth(invName.bounds)) {
@@ -670,15 +671,86 @@ typedef enum {
                 CGRect f2 = invHostText.frame;
                 f2.origin.x = CGRectGetMaxX(f1);
                 invHostText.frame = f2;
-//            }
             
         }
+        
+        start.x = CGRectGetMaxX(invHostText.frame);
+        start.y = MAX(CGRectGetMaxY(invHostText.frame), CGRectGetMaxY(invName.frame));
+        
+        if (layoutLevel >= kTagIdRSVPAltLabel) {
+            
+            [CATransaction begin];
+            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
+            CGRect frame = layer1.frame;
+            frame.origin.y = start.y + 4;
+            layer1.frame = frame;
+            
+            frame = layer4.frame;
+            frame.origin.y = start.y + 4;
+            layer4.frame = frame;
+            [CATransaction commit];
+            
+            frame = invRsvpImage.frame;
+            frame.origin.y = CGRectGetMaxY(layer1.frame) + 12;
+            invRsvpImage.frame = frame;
+            
+            frame = invRsvpLabel.frame;
+            frame.origin.y = CGRectGetMaxY(layer1.frame) + 4;
+            invRsvpLabel.frame = frame;
+            
+            frame = invRsvpAltLabel.frame;
+            frame.origin.y = CGRectGetMaxY(invRsvpLabel.frame) + 1;
+            invRsvpAltLabel.frame = frame;
+        }
+        
+        start.x = CGRectGetMaxX(invRsvpLabel.frame);
+        start.y = MAX(CGRectGetMaxY(invRsvpImage.frame), CGRectGetMaxY(invRsvpAltLabel.frame));
+        
+        if (layoutLevel >= kTagIdIdentityName) {
+            [CATransaction begin];
+            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
+            CGRect frame = layer2.frame;
+            frame.origin.y = start.y + 9;
+            layer2.frame = frame;
+            [CATransaction commit];
+            
+            frame = identityProvider.frame;
+            frame.origin.y = CGRectGetMaxY(layer2.frame) + 6;
+            identityProvider.frame = frame;
+            
+            frame = identityWaring.frame;
+            frame.origin.y = CGRectGetMaxY(layer2.frame) + 6;
+            identityWaring.frame = frame;
+            
+            frame = identityName.frame;
+            frame.origin.y = CGRectGetMaxY(layer2.frame) + 0;
+            identityName.frame = frame;
+        }
+        
+        start.x = CGRectGetMaxX(identityProvider.frame);
+        start.y = MAX(CGRectGetMaxY(identityProvider.frame), CGRectGetMaxY(identityName.frame));
         
         if (layoutLevel >= kTagIdBioContent) {
+            [CATransaction begin];
+            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
+            CGRect frame = layer3.frame;
+            frame.origin.y = start.y + 0;
+            layer3.frame = frame;
+            [CATransaction commit];
             
+            frame = bioTitle.frame;
+            frame.origin.y = CGRectGetMaxY(layer3.frame) + 16;
+            bioTitle.frame = frame;
+            
+            frame = bioContent.frame;
+            frame.origin.y = CGRectGetMaxY(layer3.frame) + 16;
+            bioContent.frame = frame;
         }
         
+        start.x = CGRectGetMaxX(bioContent.frame);
+        start.y = MAX(CGRectGetMaxY(bioTitle.frame), CGRectGetMaxY(bioContent.frame));
         
+        invContent.contentSize = CGSizeMake(MAX(CGRectGetWidth(invContent.frame), start.x), start.y + 10);
         [self clearLayoutLevel];
     }
 }
@@ -884,7 +956,8 @@ typedef enum {
                 _floatingOffset = CGSizeMake(0, 0);
                 rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
                 invContent.frame = rect;
-            } else{if (direction == ScrollDirectionUp && scrollView.contentOffset.y <= 0) {
+            } else {
+                if (direction == ScrollDirectionUp && scrollView.contentOffset.y <= 0) {
                     _floatingOffset = CGSizeMake(0, scrollView.contentOffset.y);
                     rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
                     invContent.frame = rect;
@@ -927,7 +1000,9 @@ typedef enum {
                              exfeeContainer.contentOffset = exfeeOffset;
                              //exfeeContainer.bounds.y += offset.y - exfeeContainer.contentOffset.y; // for animation
                          }
-                         invContent.frame = CGRectOffset(invContent.bounds, invOffset.x, invOffset.y);
+                         CGRect frame = invContent.frame;
+                         frame.origin = invOffset;
+                         invContent.frame = frame;
                      } completion:^(BOOL finished) {
                          _floatingOffset = CGSizeMake(0, exfeeContainer.contentOffset.y);
                          invContent.tag = kTableOrigin;

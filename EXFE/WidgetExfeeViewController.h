@@ -21,7 +21,7 @@ typedef enum {
 
 @interface WidgetExfeeViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, PSTCollectionViewDataSource, PSTCollectionViewDelegate, PSTCollectionViewDelegateFlowLayout, EXBasicMenuDelegate,UIActionSheetDelegate, UIAlertViewDelegate>{
     
-    UIView *invContent;
+    UIScrollView *invContent;
     UILabel *invName;
     UIImageView *invHostFlag;
     UILabel *invHostText;
