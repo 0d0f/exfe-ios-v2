@@ -695,7 +695,7 @@ typedef enum {
             invRsvpImage.frame = frame;
             
             frame = invRsvpLabel.frame;
-            frame.origin.y = CGRectGetMaxY(layer1.frame) + 4;
+            frame.origin.y = CGRectGetMaxY(layer1.frame) + 14;
             invRsvpLabel.frame = frame;
             
             frame = invRsvpAltLabel.frame;
