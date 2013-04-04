@@ -944,6 +944,7 @@
     
     [[ImgCache sharedManager] fillAvatarWith:identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"] using:^(UIImage *image) {
         item.avatar = image;
+        [item setNeedsDisplay];
     }];
     return item;
 }

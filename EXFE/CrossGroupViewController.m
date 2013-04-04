@@ -831,8 +831,14 @@
 - (void)clickStatusView:(id)sender
 {
     rsvpstatusview.hidden = YES;
-    [tabWidget switchTo:3 animated:NO];
-    [self swapChildViewController:3];
+    [self switchTabWidget:3];
+}
+
+- (void)switchTabWidget:(NSUInteger)idx
+{
+    [tabWidget switchTo:idx animated:NO];
+    [self swapChildViewController:idx];
+    [self performSelector:@selector(hidePopupIfShown) withObject:tabWidget afterDelay:1];
 }
 
 #pragma mark EXImagesCollectionView Datasource methods
@@ -849,6 +855,7 @@
                                    byDefault:[UIImage imageNamed:@"portrait_default.png"]
                                       using:^(UIImage *image) {
                                           item.avatar = image;
+                                          [item setNeedsDisplay];
                                       }];
     
     return [item autorelease];
@@ -1277,8 +1284,10 @@
         [self hidePopupIfShown:ctrlId];
         switch (low) {
             case kPopupTypeEditTitle & MASK_LOW_BITS:
-            case kPopupTypeEditDescription & MASK_LOW_BITS:
                 [self showTtitleAndDescEditMenu:titleView];
+                break;
+            case kPopupTypeEditDescription & MASK_LOW_BITS:
+                [self showTtitleAndDescEditMenu:descView];
                 break;
             case kPopupTypeEditTime & MASK_LOW_BITS:
                 [self showTimeEditMenu:timeRelView];
@@ -1298,40 +1307,6 @@
     }
 }
 
-//- (void)handleMapTap:(UITapGestureRecognizer*)sender{
-//    
-//    if (sender.state == UIGestureRecognizerStateEnded) {
-//        [self hidePopupIfShown];
-//        
-//        NSInteger tagId = mapView.superview.tag;
-//        if (tagId == kViewTagContainer) {
-//            [mapView removeFromSuperview];
-//            CGRect f2 = [self.view convertRect:mapView.frame fromView:mapView.superview];
-//            mapView.frame = CGRectOffset(f2, 0, CGRectGetMinY(container.frame) - container.contentOffset.y + 20);
-//            savedFrame = mapView.frame;
-//            savedScrollEnable = mapView.scrollEnabled;
-//            mapView.scrollEnabled = YES;
-//            [self.view addSubview:mapView];
-//            
-//            [UIView animateWithDuration:0.233 animations:^{
-//                mapView.frame = self.view.bounds;
-//            }];
-//        }else{
-//            [UIView animateWithDuration:0.233 animations:^{
-//                mapView.frame = savedFrame;
-//            } completion:^(BOOL finished){
-//                mapView.scrollEnabled = savedScrollEnable;
-//                [mapView removeFromSuperview];
-//                [mapShadow.superview insertSubview:mapView belowSubview:mapShadow];
-//                [self setLayoutDirty];
-//                [self relayoutUI];
-//            }];
-//            
-//            
-//        }
-//    }
-//}
-
 - (void)handleSwipe:(UISwipeGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
     
@@ -1344,13 +1319,13 @@
             [self clickforTitleAndDescEdit:descView];
             return;
         }
-        //        if (CGRectContainsPoint([Util expandRect:[exfeeShowview frame]], location)) {
-        //            //        [crosstitle resignFirstResponder];
-        //            [exfeeShowview becomeFirstResponder];
-        //            CGPoint exfeeviewlocation = [sender locationInView:exfeeShowview];
-        //            [exfeeShowview onImageTouch:exfeeviewlocation];
-        //            return;
-        //        }
+        
+        if (CGRectContainsPoint([Util expandRect:[exfeeShowview frame]], location)) {
+            
+            [self showTimeEditMenu:descView];
+            [self switchTabWidget:3];
+            return;
+        }
         
         CGRect r1 = CGRectNull;
         CGRect r2 = CGRectNull;
@@ -1497,7 +1472,8 @@
         [titleAndDescEditMenu addTarget:self action:@selector(clickforTitleAndDescEdit:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:titleAndDescEditMenu];
     }
-    CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame) + SMALL_SLOT, 50, 44);
+    CGPoint newLocation = [self.view convertPoint:sender.frame.origin fromView:sender.superview];
+    CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), newLocation.y + SMALL_SLOT, 50, 44);
     titleAndDescEditMenu.frame = original;
     titleAndDescEditMenu.hidden = NO;
     
