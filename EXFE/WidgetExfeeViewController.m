@@ -83,9 +83,9 @@ typedef enum {
                                    },
                       @"item2": @{ @"main": @"Interested",
                                    @"style": @"Normal"
-                                   },
-                      @"item3": @{ @"main": @"+ mates...",
-                                   @"style": @"Lowlight"
+//                                   },
+//                      @"item3": @{ @"main": @"+ mates...",
+//                                   @"style": @"Lowlight"
                                    }
                       };
         [rsvpDict retain];
@@ -98,9 +98,9 @@ typedef enum {
                                      },
                         @"item2": @{ @"main": @"Interested",
                                      @"style": @"Normal"
-                                     },
-                        @"item3": @{ @"main": @"+ mates...",
-                                     @"style": @"Lowlight"
+//                                     },
+//                        @"item3": @{ @"main": @"+ mates...",
+//                                     @"style": @"Lowlight"
                                      }
                         };
         [myRsvpDict retain];
@@ -458,7 +458,7 @@ typedef enum {
             }
             
             if (rsvpMenu == nil) {
-                rsvpMenu = [[EXBasicMenu alloc] initWithFrame:CGRectMake(0, 0, 125, 20 + 44 * 4) andContent:
+                rsvpMenu = [[EXBasicMenu alloc] initWithFrame:CGRectMake(0, 0, 125, 20 + 44 * 3) andContent:
                             data];
                 rsvpMenu.delegate = self;
                 rsvpMenu.tag = kMenuTagRsvp;

@@ -29,29 +29,29 @@
         
         
         self.next = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.next setFrame:CGRectMake(165.0f, CGRectGetHeight(frame) / 2 - 30 / 2, 10.0f, 30.0f)];
+        [self.next setFrame:CGRectMake(165.0f, CGRectGetHeight(frame) / 2 - 40 / 2, 10.0f, 40.0f)];
         [self.next setImage:[UIImage imageNamed:@"listarrow.png"] forState:UIControlStateNormal];
         [self.next setBackgroundColor:[UIColor clearColor]];
         [self.next addTarget:self action:@selector(clickToDelegate:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.next];
         
         
-        UIImageView *arrow=[[UIImageView alloc] initWithFrame:CGRectMake(165.0f, (frame.size.height-15)/2, 12, 15)];
+        UIImageView *arrow=[[UIImageView alloc] initWithFrame:CGRectMake(165.0f, (frame.size.height-15)/ 2, 12, 15)];
         arrow.image=[UIImage imageNamed:@"arrow.png"];
 //        [self addSubview:arrow];
         [arrow release];
         
-        namelabel=[[UILabel alloc] initWithFrame:CGRectMake(16, 5, 155, 20)];
+        namelabel=[[UILabel alloc] initWithFrame:CGRectMake(16, 8, 155, 20)];
         [namelabel setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:18]];
         [namelabel setTextColor:FONT_COLOR_51];
         [namelabel setTextAlignment:NSTextAlignmentLeft];
         namelabel.backgroundColor=[UIColor clearColor];
         [self addSubview:namelabel];
         
-        rsvpbadge=[[UIImageView alloc] initWithFrame:CGRectMake(16, 24, 18, 18)];
+        rsvpbadge=[[UIImageView alloc] initWithFrame:CGRectMake(16, 28, 18, 18)];
         [self addSubview:rsvpbadge];
         
-        rsvplabel=[[UILabel alloc] initWithFrame:CGRectMake(16+18+5, 24, 180-10-18, 20)];
+        rsvplabel=[[UILabel alloc] initWithFrame:CGRectMake(16+18+5, 28, 180-10-18, 20)];
         [rsvplabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
         [rsvplabel setTextColor:FONT_COLOR_HL];
         [rsvplabel setTextAlignment:NSTextAlignmentLeft];

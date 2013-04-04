@@ -892,7 +892,7 @@
             x = x - 180;
         }
         if(rsvpstatusview==nil){
-            rsvpstatusview = [[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-55, 180+12, 50)];
+            rsvpstatusview = [[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-55, 180+12, 56)];
             rsvpstatusview.delegate = self;
             [self.view addSubview:rsvpstatusview];
         }
