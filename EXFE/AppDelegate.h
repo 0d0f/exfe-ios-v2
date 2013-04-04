@@ -26,7 +26,7 @@
 #ifdef DEV
 #define API_SERVER @"http://api.0d0f.com/"
 #define API_ROOT @"http://api.0d0f.com/v2"
-#define IMG_ROOT @"http://img.0d0f.com/static/img"
+#define IMG_ROOT @"http://0d0f.com/static/img"
 #define EXFE_OAUTH_LINK @"http://0d0f.com/OAuth"
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 #endif
