@@ -12,6 +12,7 @@
 #import "EXHereHeaderView.h"
 #import "Card.h"
 
+#define kMinRegistCardsDuration             (5.0f)
 #define kServerStreamingTimeroutInterval    (60.0f)
 
 @interface HereViewController ()
@@ -19,16 +20,23 @@
 @property (nonatomic, retain) EXCardViewController *cardViewController;
 
 @property (nonatomic, retain) CLLocationManager *locationManager;
+@property (nonatomic, retain) CLLocation *currentLocation;
+@property (nonatomic, retain) NSDate *latestRegistReqeustDate;
+@property (nonatomic, assign) BOOL shouldInvokeLater;
 
 @property (nonatomic, retain) AFHTTPClient *client;
 @property (nonatomic, retain) NSOutputStream *outputStream;
-@property (nonatomic, retain) NSTimer *timer;
+
+@property (nonatomic, retain) NSTimer *heartTimer;
+@property (nonatomic, retain) NSTimer *invokeTimer;
 @property (nonatomic, retain) NSSet *cards;
 @property (nonatomic, copy) NSString *token;
 @property (nonatomic, assign, setter = setStreamOpened:) BOOL isStreamOpened;
 @end
 
-@implementation HereViewController
+@implementation HereViewController {
+    NSRecursiveLock *_lock;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -36,12 +44,14 @@
     if (self) {
       self.title = @"Here controller";
       self.view.backgroundColor=[UIColor whiteColor];
+        _lock = [[NSRecursiveLock alloc] init];
     }
     
     return self;
 }
 
 - (void)dealloc {
+    [_lock release];
     [_cards release];
     [_cardViewController release];
     [_headerView release];
@@ -80,33 +90,47 @@
     
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
+    self.cards = [NSSet setWithObject:[Card cardWithDictionary:[self meCardParams]]];
+    [_avatarlistview reloadData];
+    
     if (self.locationManager == nil) {
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         self.locationManager.distanceFilter = 10.0f;
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     }
     
     if ([CLLocationManager locationServicesEnabled]) {
         [self.locationManager startUpdatingLocation];
     }
-    [self registerCard];
+    
+    if ([self canSendRequestNow]) {
+        [self sendLiveCardsRequest];
+    } else {
+        self.shouldInvokeLater = YES;
+    }
 }
 
 #pragma mark - CLLocationManagerDelegate
 - (void)locationManager:(CLLocationManager *)manager
 	didUpdateToLocation:(CLLocation *)newLocation
 		   fromLocation:(CLLocation *)oldLocation {
-    if (-[newLocation.timestamp timeIntervalSinceNow] <= 60) {
-        [self registerCard];
+    self.currentLocation = newLocation;
+    if ([self canSendRequestNow]) {
+        [self sendLiveCardsRequest];
+    } else {
+        self.shouldInvokeLater = YES;
     }
 }
 
 - (void)locationManager:(CLLocationManager *)manager
 	 didUpdateLocations:(NSArray *)locations {
-    NSTimeInterval timerInterval = -[((CLLocation *)[locations lastObject]).timestamp timeIntervalSinceNow];
-    if (timerInterval <= 60) {
-        [self registerCard];
+    CLLocation *newLocation = (CLLocation *)[locations lastObject];
+    self.currentLocation = newLocation;
+    if ([self canSendRequestNow]) {
+        [self sendLiveCardsRequest];
+    } else {
+        self.shouldInvokeLater = YES;
     }
 }
 
@@ -150,7 +174,9 @@
         }
     }
     
-    cell.card = card;
+    [cell setCard:card
+         animated:NO
+         complete:nil];
     
     return cell;
 }
@@ -243,23 +269,56 @@
         [identities addObject:identityParam];
     }
     
-    NSDictionary *cardParams = @{@"id" : [NSString stringWithFormat:@"n%i", [me.user_id intValue]] , @"name" : me.name, @"avatar" : me.avatar_filename, @"bio" : me.bio, @"identities" : identities, @"is_me": [NSNumber numberWithBool:YES]};
+    NSDictionary *cardParams = @{@"id" : [NSString stringWithFormat:@"%@:%@", me.name, me.avatar_filename] , @"name" : me.name, @"avatar" : me.avatar_filename, @"bio" : me.bio, @"identities" : identities, @"is_me": [NSNumber numberWithBool:YES]};
     [identities release];
     
     return cardParams;
 }
 
 #pragma mark - runloop
-- (void)runloop:(NSTimer *)timer {
-    [self registerCard];
+- (void)heartRunloop:(NSTimer *)timer {
+    [self sendLiveCardsRequest];
+}
+
+- (void)invokeRunloop:(NSTimer *)timer {
+    if (self.shouldInvokeLater) {
+        [self sendLiveCardsRequest];
+        self.shouldInvokeLater = NO;
+    }
 }
 
 #pragma mark - request
+- (BOOL)canSendRequestNow {
+    NSDate *now = [NSDate date];
+    BOOL canSendRequest = YES;
+    
+    if (self.latestRegistReqeustDate) {
+        NSTimeInterval timeInterval = [now timeIntervalSinceDate:self.latestRegistReqeustDate];
+        if (timeInterval >= kMinRegistCardsDuration) {
+            canSendRequest = YES;
+        } else {
+            canSendRequest = NO;
+        }
+    } else {
+        self.latestRegistReqeustDate = now;
+        canSendRequest = YES;
+    }
+    
+    return canSendRequest;
+}
+
 - (void)cleanUpTimerAndRequestWithTokenNeedClean:(BOOL)isTokenCleanNeeded {
-    if ([self.timer isValid]) {
+    if ([self.heartTimer isValid]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.timer invalidate];
-            self.timer = nil;
+            [self.heartTimer invalidate];
+            self.heartTimer = nil;
+        });
+    }
+    
+    if ([self.invokeTimer isValid]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.invokeTimer invalidate];
+            self.invokeTimer = nil;
         });
     }
     
@@ -275,14 +334,16 @@
     self.isStreamOpened = NO;
 }
 
-- (void)registerCard {
+- (void)sendLiveCardsRequest {
+    [_lock tryLock];
+    
     NSDictionary *cardParams = [self meCardParams];
     NSMutableDictionary *params = [@{@"card": cardParams, @"traits": @[]} mutableCopy];
-    if ([CLLocationManager locationServicesEnabled]) {
-        CLLocation *location = self.locationManager.location;
-        [params setValue:@(location.coordinate.latitude) forKey:@"latitude"];
-        [params setValue:@(location.coordinate.longitude) forKey:@"longitude"];
-        [params setValue:@(location.horizontalAccuracy) forKey:@"accuracy"];
+    if (self.currentLocation) {
+        CLLocation *location = self.currentLocation;
+        [params setValue:[NSString stringWithFormat:@"%f", location.coordinate.latitude] forKey:@"latitude"];
+        [params setValue:[NSString stringWithFormat:@"%f", location.coordinate.longitude] forKey:@"longitude"];
+        [params setValue:[NSString stringWithFormat:@"%f", location.horizontalAccuracy] forKey:@"accuracy"];
     }
     
     if (!self.client) {
@@ -317,12 +378,14 @@
                               [self startStreaming];
                           }
                       }
+                      [_lock unlock];
                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                       if (403 == operation.response.statusCode) {
                           [self cleanUpTimerAndRequestWithTokenNeedClean:YES];
                           
                           [self performSelector:_cmd];
                       }
+                      [_lock unlock];
                   }];
 }
 
@@ -330,11 +393,16 @@
     self.isStreamOpened = YES;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.5f * kServerStreamingTimeroutInterval
-                                                      target:self
-                                                    selector:@selector(runloop:)
-                                                    userInfo:nil
-                                                     repeats:YES];
+        self.heartTimer = [NSTimer scheduledTimerWithTimeInterval:0.5f * kServerStreamingTimeroutInterval
+                                                           target:self
+                                                         selector:@selector(heartRunloop:)
+                                                         userInfo:nil
+                                                          repeats:YES];
+        self.invokeTimer = [NSTimer scheduledTimerWithTimeInterval:kMinRegistCardsDuration
+                                                            target:self
+                                                          selector:@selector(invokeRunloop:)
+                                                          userInfo:nil
+                                                           repeats:YES];
     });
     
     NSString *path=[NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
@@ -379,7 +447,11 @@
             
             if ([array count] == 0) {
                 // restart
-                [self registerCard];
+                if ([self canSendRequestNow]) {
+                    [self sendLiveCardsRequest];
+                } else {
+                    self.shouldInvokeLater = YES;
+                }
             } else {
                 NSString *lastJSON = [array lastObject];
                 data = [lastJSON dataUsingEncoding:NSUTF8StringEncoding];
@@ -401,6 +473,10 @@
                 }
                 
                 NSSet *tempSet = [NSSet setWithArray:[cardDict allValues]];
+                if (0 == [tempSet count]) {
+                    tempSet = [NSSet setWithObject:[Card cardWithDictionary:[self meCardParams]]];
+                }
+                
                 self.cards = tempSet;
                 
                 NSLog(@"Cards:\n%@", self.cards);

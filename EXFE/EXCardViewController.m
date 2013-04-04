@@ -216,6 +216,7 @@
                          self.view.frame = viewFrame;
                      }
                      completion:^(BOOL finished){
+                         [UIView setAnimationsEnabled:YES];
                          if (handler)
                              handler();
                      }];

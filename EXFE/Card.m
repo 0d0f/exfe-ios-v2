@@ -60,25 +60,54 @@
     if (self) {
         [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
             if ([key isEqualToString:@"id"]) {
-                self.cardID = obj;
-            } else if ([key isEqualToString:@"name"]) {
-                self.userName = obj;
-            } else if ([key isEqualToString:@"avatar"]) {
-                self.avatarURLString = obj;
-            } else if ([key isEqualToString:@"bio"]) {
-                self.bio = obj;
-            } else if ([key isEqualToString:@"identities"]) {
-                NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:[obj count]];
-                for (NSDictionary *param in obj) {
-                    CardIdentitiy *identity = [CardIdentitiy cardIdentityWithDictionary:param];
-                    [temp addObject:identity];
+                if ([self isNull:obj]) {
+                    self.cardID = nil;
+                } else {
+                    self.cardID = obj;
                 }
-                self.identities = [[temp copy] autorelease];
-                [temp release];
+            } else if ([key isEqualToString:@"name"]) {
+                if ([self isNull:obj]) {
+                    self.userName = nil;
+                } else {
+                    self.userName = obj;
+                }
+            } else if ([key isEqualToString:@"avatar"]) {
+                if ([self isNull:obj]) {
+                    self.avatarURLString = nil;
+                } else {
+                    self.avatarURLString = obj;
+                }
+            } else if ([key isEqualToString:@"bio"]) {
+                if ([self isNull:obj]) {
+                    self.bio = nil;
+                } else {
+                    self.bio = obj;
+                }
+            } else if ([key isEqualToString:@"identities"]) {
+                if ([self isNull:obj]) {
+                    self.identities = nil;
+                } else {
+                    NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:[obj count]];
+                    for (NSDictionary *param in obj) {
+                        CardIdentitiy *identity = [CardIdentitiy cardIdentityWithDictionary:param];
+                        [temp addObject:identity];
+                    }
+                    self.identities = [[temp copy] autorelease];
+                    [temp release];
+                }
+                
             } else if ([key isEqualToString:@"is_me"]) {
-                self.isMe = [obj boolValue];
+                if ([self isNull:obj]) {
+                    self.isMe = NO;
+                } else {
+                    self.isMe = [obj boolValue];
+                }
             } else if ([key isEqualToString:@"timestamp"]) {
-                self.timeStamp = [obj doubleValue];
+                if ([self isNull:obj]) {
+                    self.timeStamp = 0.0f;
+                } else {
+                    self.timeStamp = [obj doubleValue];
+                }
             }
         }];
     }
@@ -88,16 +117,21 @@
 
 - (NSDictionary *)dictionaryValue {
     NSMutableDictionary *param = [[NSMutableDictionary alloc] initWithCapacity:6];
-    [param setValue:self.cardID forKey:@"id"];
-    [param setValue:self.userName forKey:@"name"];
-    [param setValue:self.avatarURLString forKey:@"avatar"];
-    [param setValue:self.bio forKey:@"bio"];
+    [param setValue:([self isNull:self.cardID]) ? [NSNull null] : self.cardID forKey:@"id"];
+    [param setValue:([self isNull:self.userName]) ? [NSNull null] : self.userName forKey:@"name"];
+    [param setValue:([self isNull:self.avatarURLString]) ? [NSNull null] : self.avatarURLString forKey:@"avatar"];
+    [param setValue:([self isNull:self.bio]) ? [NSNull null] : self.bio forKey:@"bio"];
     [param setValue:[NSNumber numberWithBool:self.isMe] forKey:@"is_me"];
-    NSMutableArray *identities = [[NSMutableArray alloc] initWithCapacity:[self.identities count]];
-    for (CardIdentitiy *identity in self.identities) {
-        [identities addObject:[identity dictionaryValue]];
+    if (self.identities) {
+        NSMutableArray *identities = [[NSMutableArray alloc] initWithCapacity:[self.identities count]];
+        for (CardIdentitiy *identity in self.identities) {
+            [identities addObject:[identity dictionaryValue]];
+        }
+        [param setValue:[[identities copy] autorelease] forKey:@"identities"];
+    } else {
+        [param setValue:[NSNull null] forKey:@"identities"];
     }
-    [param setValue:[[identities copy] autorelease] forKey:@"identities"];
+    
     [param setValue:[NSNumber numberWithDouble:self.timeStamp] forKey:@"timestamp"];
     
     NSDictionary *result = [[param copy] autorelease];
@@ -128,6 +162,12 @@
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"Me:%d name:%@", self.isMe, self.userName];
+}
+
+- (BOOL)isNull:(id)obj {
+    if (((NSNull *)obj) == [NSNull null])
+        return YES;
+    return NO;
 }
 
 @end

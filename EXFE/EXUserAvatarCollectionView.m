@@ -203,7 +203,10 @@
 - (EXCircleItemCell *)dequeueReusableCircleItemCell {
     EXCircleItemCell *cell = [_reusebaleCells anyObject];
     if (cell) {
+        [cell.avatarBaseView.layer removeAllAnimations];
         [cell.layer removeAllAnimations];
+        cell.layer.transform = CATransform3DIdentity;
+        cell.avatarBaseView.layer.transform = CATransform3DIdentity;
         cell.indexPath = nil;
         if (cell.superview) {
             [cell removeFromSuperview];
@@ -455,15 +458,15 @@
     NSArray *frameTimes = [NSArray arrayWithObjects:
                            [NSNumber numberWithFloat:0.0],
                            [NSNumber numberWithFloat:0.5],
-                           [NSNumber numberWithFloat:0.9],
+                           [NSNumber numberWithFloat:0.7],
                            [NSNumber numberWithFloat:1.0],
                            nil];
     [animation setKeyTimes:frameTimes];
     
     animation.fillMode = kCAFillModeForwards;
-    animation.duration = .2;
+    animation.duration = 0.3f;
     
-    [cell.layer addAnimation:animation forKey:nil];
+    [cell.layer addAnimation:animation forKey:@"animation.pop"];
     
     [self addSubview:cell];
 }
@@ -491,6 +494,7 @@
     animation.duration = 0.25f;
     
     [cell.avatarBaseView.layer addAnimation:animation forKey:nil];
+    cell.indexPath = nil;
     [_reusebaleCells addObject:cell];
     
     [UIView animateWithDuration:0.25f
@@ -499,7 +503,6 @@
                          cell.titleLabel.alpha = 0.0f;
                      }
                      completion:^(BOOL finished){
-                         cell.indexPath = nil;
                          [cell removeFromSuperview];
                          
                          cell.avatarBaseView.alpha = 1.0f;

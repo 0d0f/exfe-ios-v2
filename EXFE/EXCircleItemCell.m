@@ -17,10 +17,11 @@
 
 @interface EXCircleItemCell ()
 @property (nonatomic, assign) BOOL isUsingDefaultAvatar;
+@property (nonatomic, assign) UIImageView *currentVisibleAvatarImageView;
 - (void)tapHandler:(UITapGestureRecognizer *)recognizer;
 - (void)longPressHandler:(UILongPressGestureRecognizer *)recognizer;
 
-- (void)_setAvatarImage:(UIImage *)image;
+- (void)_setAvatarImage:(UIImage *)image animated:(BOOL)animated;
 @end
 
 @implementation EXCircleItemCell {
@@ -33,19 +34,21 @@
                                          options:nil] lastObject] retain];
     
     // avatar
-    self.avatarImageView.layer.cornerRadius = 30;
-    self.avatarImageView.clipsToBounds = YES;
+    for (UIImageView *imageView in self.avatarImageViews) {
+        imageView.layer.cornerRadius = 30;
+        imageView.clipsToBounds = YES;
+    }
     
     // center
     _centerDistanceY = self.center.y - self.avatarBaseView.center.y;
     
     // label
     EXVerticalAlignLabel *label = [[EXVerticalAlignLabel alloc] initWithFrame:(CGRect){{0, 71}, {75, 35}}];
-    label.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
+    label.textColor = [UIColor whiteColor];//[UIColor COLOR_WA(0x33, 0xFF)];
     label.numberOfLines = 2;
     label.textAlignment = UITextAlignmentCenter;
     label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
-    label.shadowColor = [UIColor whiteColor];
+    label.shadowColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f];//[UIColor whiteColor];
     label.shadowOffset = CGSizeMake(0.0f, 1.0f);
     label.backgroundColor = [UIColor clearColor];
     label.lineBreakMode = NSLineBreakByWordWrapping;
@@ -65,16 +68,19 @@
     [self.avatarBaseView addGestureRecognizer:longPress];
     [longPress release];
     
+    self.isUsingDefaultAvatar = YES;
+    self.currentVisibleAvatarImageView = self.avatarImageViews[0];
+    
     return self;
 }
 
 - (void)dealloc {
+    [_avatarImageViews release];
     [_indexPath release];
     [_card release];
     [_avatarBaseView release];
     [_titleLabel release];
     [_selectedMaskView release];
-    [_avatarImageView release];
     [super dealloc];
 }
 
@@ -88,6 +94,10 @@
 }
 
 - (void)setCard:(Card *)card {
+    [self setCard:card animated:YES complete:nil];
+}
+
+- (void)setCard:(Card *)card animated:(BOOL)animated complete:(void (^)(void))handler {
     if (card == _card)
         return;
     
@@ -106,7 +116,7 @@
                 if(avatarImage != nil && ![avatarImage isEqual:[NSNull null]]) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if ([card isEqualToCard:self.card]) {
-                            [self _setAvatarImage:avatarImage];
+                            [self _setAvatarImage:avatarImage animated:animated];
                         }
                     });
                 }
@@ -116,7 +126,7 @@
     } else {
         if (_card) {
             self.titleLabel.text = @"";
-            [self _setAvatarImage:nil];
+            [self _setAvatarImage:nil animated:animated];
             [_card release];
             _card = nil;
         }
@@ -133,7 +143,7 @@
                 if(avatarImage != nil && ![avatarImage isEqual:[NSNull null]]) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if ([card isEqualToCard:self.card]) {
-                            [self _setAvatarImage:avatarImage];
+                            [self _setAvatarImage:avatarImage animated:animated];
                         }
                     });
                 }
@@ -179,30 +189,36 @@
 }
 
 #pragma mark - Private
-- (void)_setAvatarImage:(UIImage *)image {
+- (void)_setAvatarImage:(UIImage *)image animated:(BOOL)animated {
     if (nil == image && self.isUsingDefaultAvatar)
         return;
     if (nil == image) {
         self.isUsingDefaultAvatar = YES;
+        image = [UIImage imageNamed:@"portrait_64.png"];
     } else {
         self.isUsingDefaultAvatar = NO;
     }
     
-    [UIView setAnimationsEnabled:YES];
-    [UIView animateWithDuration:0.6f
+    UIImageView *otherImageView = nil;
+    if (self.currentVisibleAvatarImageView == self.avatarImageViews[0]) {
+        otherImageView = self.avatarImageViews[1];
+    } else {
+        otherImageView = self.avatarImageViews[0];
+    }
+    
+    otherImageView.alpha = 0.0f;
+    otherImageView.image = image;
+    
+    [UIView setAnimationsEnabled:animated];
+    [UIView animateWithDuration:0.5f
                      animations:^{
-                         self.avatarImageView.alpha = 0.0f;
+                         otherImageView.alpha = 1.0f;
+                         self.currentVisibleAvatarImageView.alpha = 0.0f;
                      }
                      completion:^(BOOL finished){
-                         if (nil == image) {
-                             self.avatarImageView.image = [UIImage imageNamed:@"portrait_64.png"];
-                         } else {
-                             self.avatarImageView.image = image;
-                         }
-                         [UIView animateWithDuration:0.1f
-                                          animations:^{
-                                              self.avatarImageView.alpha = 1.0f;
-                                          }];
+                         [UIView setAnimationsEnabled:YES];
+                         self.currentVisibleAvatarImageView.image = nil;
+                         self.currentVisibleAvatarImageView = otherImageView;
                      }];
 }
 

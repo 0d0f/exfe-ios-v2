@@ -19,7 +19,7 @@ typedef void (^LongPressBlock)(void);
 @property (retain, nonatomic) IBOutlet UIView *avatarBaseView;
 @property (retain, nonatomic) EXVerticalAlignLabel *titleLabel;
 @property (retain, nonatomic) IBOutlet UIImageView *selectedMaskView;
-@property (retain, nonatomic) IBOutlet UIImageView *avatarImageView;
+@property (retain, nonatomic) IBOutletCollection(UIImageView) NSArray *avatarImageViews;
 
 @property (nonatomic, assign, getter = isSelected) BOOL selected;
 @property (nonatomic, assign) CGPoint avatarCenter;
@@ -33,5 +33,6 @@ typedef void (^LongPressBlock)(void);
 - (id)init;
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated complete:(void (^)(void))handler;
+- (void)setCard:(Card *)card animated:(BOOL)animated complete:(void (^)(void))handler;
 
 @end
