@@ -234,7 +234,7 @@ typedef enum {
         
         
         RemoveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage* img = [[UIImage imageNamed:@"iphone_delete_button.png"] stretchableImageWithLeftCapWidth:8.0f topCapHeight:0.0f];
+        UIImage* img = [[UIImage imageNamed:@"btn_red_30inset.png"] stretchableImageWithLeftCapWidth:8.0f topCapHeight:0.0f];
         [RemoveButton setBackgroundImage:img forState:UIControlStateNormal];
         [RemoveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         RemoveButton.titleLabel.font = [UIFont boldSystemFontOfSize:16];
@@ -966,8 +966,9 @@ typedef enum {
                 }
             }
         }
+    }else if (scrollView.tag == kTableOrigin || scrollView.tag == kTableFloating) {
+        [self hidePopupIfShown];
     }
-    
 }
 
 - (void)clickCell:(id)sender{
