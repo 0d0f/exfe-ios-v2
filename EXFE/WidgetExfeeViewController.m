@@ -137,6 +137,7 @@ typedef enum {
     invContent = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0 + kYOffset, CGRectGetWidth(b), exfee_content_height )];
     invContent.backgroundColor = [UIColor COLOR_SNOW];
     invContent.alwaysBounceVertical = YES;
+    invContent.delegate = self;
     invContent.tag = kTableOrigin;
     {
         layer1 = [CALayer layer];
@@ -1015,7 +1016,7 @@ typedef enum {
 {
     CGRect f = menu.frame;
     f.origin.x = CGRectGetWidth(self.view.bounds);
-    f.origin.y = location.y;
+    f.origin.y = location.y - 28;
     menu.frame = f;
     f.origin.x = CGRectGetWidth(self.view.bounds) - CGRectGetWidth(f);
     menu.hidden = NO;
