@@ -46,49 +46,16 @@
 
 + (void)addInvitations:(NSArray*)array
                     to:(int)exfee_id
-              modifier:(int)identity_id
-               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure{
+              modifier:(int)my_identity_id
+               success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
     
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    RKObjectMapping *identityrequestMapping = [RKObjectMapping requestMapping];
-    [identityrequestMapping addAttributeMappingsFromDictionary:@{@"identity_id": @"id",@"a_order": @"order"}];
-    [identityrequestMapping addAttributeMappingsFromArray:@[@"name",@"nickname",@"provider",@"external_id",@"external_username",@"connected_user_id",@"bio",@"avatar_filename",@"avatar_updated_at",@"created_at",@"updated_at",@"type",@"unreachable",@"status"]];
-    
-    RKObjectMapping *invitationrequestMapping = [RKObjectMapping requestMapping];
-    [invitationrequestMapping addAttributeMappingsFromDictionary:@{@"invitation_id": @"id"}];
-    [invitationrequestMapping addAttributeMappingsFromArray:@[@"rsvp_status",@"host",@"mates",@"via",@"updated_at",@"created_at",@"type"]];
-    [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identity" toKeyPath:@"identity" withMapping:identityrequestMapping]];
-    [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"invited_by" toKeyPath:@"invited_by" withMapping:identityrequestMapping]];
-    [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"updated_by" toKeyPath:@"updated_by" withMapping:identityrequestMapping]];
-    
-    //        RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[NSDictionary class] ];
-    //        [mapping addAttributeMappingsFromArray:@[ @"firstName", @"lastName"] ];
-    //
-    //
-    //
-    RKRequestDescriptor *requestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:invitationrequestMapping objectClass:[Invitation class] rootKeyPath:@"invitation"];
-    
-    NSMutableArray *invJson = [NSMutableArray arrayWithCapacity:array.count];
-    for (Invitation *inv in array) {
-        NSError* error;
-        NSDictionary *parameters = [RKObjectParameterization parametersWithObject:inv requestDescriptor:requestDescriptor error:&error];
-        
-        // Serialize the object to JSON
-        NSData *JSON = [RKMIMETypeSerialization dataFromObject:parameters MIMEType:RKMIMETypeJSON error:&error];
-        NSString* newStr = [[NSString alloc] initWithData:JSON
-                                                 encoding:NSUTF8StringEncoding];
-        
-        [invJson addObject:newStr];
-    }
-    
-    
-    NSString *endpoint = [NSString stringWithFormat:@"%@/exfee/%u/edit?token=%@",API_ROOT, exfee_id, app.accesstoken];
-    RKObjectManager *manager=[RKObjectManager sharedManager] ;
-    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
-    [manager.HTTPClient postPath:endpoint parameters:@{@"by_identity_id":[NSNumber numberWithInt:identity_id], @"exfee": @{@"id": [NSNumber numberWithInt:exfee_id], @"type": @"exfee", @"invitations":invJson}} success:success failure:failure];
-    
+//    Exfee* newExfee = [[Exfee alloc] init];
+//    newExfee.exfee_id = [NSNumber numberWithInt:exfee_id];
+//    newExfee.invitations = [NSSet setWithArray:array];
+//    [self edit:newExfee myIdentity:my_identity_id success:success failure:failure];
 }
 
 @end

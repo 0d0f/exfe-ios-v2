@@ -116,7 +116,7 @@ typedef enum {
     self.view.tag = kTagViewExfeeRoot;
     
     if (self.exfee) {
-        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
     }
     
     flowLayout = [[PSTCollectionViewFlowLayout alloc] init];
@@ -370,10 +370,10 @@ typedef enum {
                                        //[self.exfee removeInvitationsObject:selected_invitation];
                                        selected_invitation = nil;
                                        self.exfee = respExfee;
-                                       self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+                                       self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                                        [exfeeContainer reloadData];
                                        
-                                       if (array == nil || array.count <= 1) {
+                                       if ((array == nil || array.count < 1) && self.sortedInvitations.count > 0) {
                                            NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
                                            [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
                                            selected_invitation = [self.sortedInvitations objectAtIndex:0];
@@ -448,6 +448,8 @@ typedef enum {
             [self show:rsvpMenu at:[sender.view convertPoint:invRsvpLabel.frame.origin toView:self.view] withAnimation:YES];
             
             return;
+        } else if (RemoveButton.hidden == NO  && CGRectContainsPoint(RemoveButton.frame, location) ) {
+            [RemoveButton sendActionsForControlEvents: UIControlEventTouchUpInside];
         }
     }
 }
@@ -818,28 +820,28 @@ typedef enum {
             viewController.exfee = self.exfee;
             viewController.needSubmit = YES;
             viewController.onExitBlock = ^{
-                NSLog(@"WidgetExfee callback");
-                NSLog(@"viewController.exfee:");
-                [viewController.exfee debugPrint];
-                NSLog(@"self.exfee:");
-                [self.exfee debugPrint];
-//                self.exfee = viewController.exfee;
+//                NSLog(@"WidgetExfee callback");
+//                NSLog(@"viewController.exfee:");
+//                [viewController.exfee debugPrint];
+//                NSLog(@"self.exfee:");
+//                [self.exfee debugPrint];
+                self.exfee = viewController.exfee;
                 
-                self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+                self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                 [exfeeContainer reloadData];
                 
-                if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [alert show];
-                    [alert release];
-                }
+//                if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
+//                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                    [alert show];
+//                    [alert release];
+//                }
             };
             [self presentModalViewController:viewController animated:YES];
             [viewController release];
         }else{
             [self hidePopupIfShown];
             PSTCollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-            [self testClick:cell];
+            [self clickCell:cell];
             selected_invitation = [self.sortedInvitations objectAtIndex:indexPath.row];
             [self fillInvitationContent:selected_invitation];
         }
@@ -875,22 +877,27 @@ typedef enum {
             CGRect rect = invContent.frame;
             rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
             if (CGRectGetMinY(rect) > CGRectGetMinY(scrollView.frame)) {
-                _floatingOffset = CGSizeMake(0, MAX(scrollView.contentOffset.y, 0));
+                _floatingOffset = CGSizeMake(0, scrollView.contentOffset.y);
                 rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
                 invContent.frame = rect;
             } else if (CGRectGetMaxY(rect) < CGRectGetMinY(scrollView.frame)){
                 _floatingOffset = CGSizeMake(0, 0);
                 rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
                 invContent.frame = rect;
-            } else{
-                invContent.frame = rect;
+            } else{if (direction == ScrollDirectionUp && scrollView.contentOffset.y <= 0) {
+                    _floatingOffset = CGSizeMake(0, scrollView.contentOffset.y);
+                    rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
+                    invContent.frame = rect;
+                } else {
+                    invContent.frame = rect;
+                }
             }
         }
     }
     
 }
 
-- (void)testClick:(id)sender{
+- (void)clickCell:(id)sender{
     UIView* btn = sender;
     //_floatingOffset
     CGPoint offset = exfeeContainer.contentOffset;
@@ -899,15 +906,11 @@ typedef enum {
     CGPoint invOffset;
     if (CGRectGetMinY(btn.frame) - offset.y < CGRectGetHeight(invContent.frame)) {
         // click target is upper than the normal area
-//        NSLog(@"Upper, Content Offset %@", NSStringFromCGPoint(offset));
-//        NSLog(@"Upper, btnFrame %@, invHeight %f", NSStringFromCGRect(btn.frame), CGRectGetHeight(invContent.bounds));
         exfeeOffset = CGPointMake(offset.x, MAX(CGRectGetMinY(btn.frame) - CGRectGetHeight(invContent.frame), 0));
         invOffset = CGPointMake(0, CGRectGetMinY(exfeeContainer.frame));
         flag = YES;
     } else if(CGRectGetMaxY(btn.frame) - offset.y > CGRectGetHeight(exfeeContainer.bounds)){
         // click target is lower than the normal area
-//        NSLog(@"Lower, Content Offset %@", NSStringFromCGPoint(offset));
-//        NSLog(@"Lower, btnFrame %@, exfeeHeight %f", NSStringFromCGRect(btn.frame), CGRectGetHeight(exfeeContainer.bounds));
         exfeeOffset = CGPointMake(offset.x, MAX(CGRectGetMaxY(btn.frame) - CGRectGetHeight(exfeeContainer.bounds), 0));
         invOffset = CGPointMake(0, CGRectGetMinY(exfeeContainer.frame));
         flag = YES;
@@ -916,8 +919,6 @@ typedef enum {
         exfeeOffset = offset;
         invOffset = CGPointMake(0, CGRectGetMinY(exfeeContainer.frame));
     }
-//    NSLog(@"exfe Offset %@", NSStringFromCGPoint(exfeeOffset));
-//    NSLog(@"inv Offset %@", NSStringFromCGPoint(invOffset));
     
     invContent.tag = kTableFloating;
     [UIView animateWithDuration:0.4
@@ -1026,7 +1027,7 @@ typedef enum {
                                          Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
                                          if([meta.code intValue]==200){
                                              self.exfee = parent.cross.exfee;
-                                             self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+                                             self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                                              [exfeeContainer reloadData];
                                              
                                              for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {

@@ -29,7 +29,7 @@
 
 + (void)addInvitations:(NSArray*)array
                     to:(int)exfee_id
-              modifier:(int)identity_id
-               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+              modifier:(int)my_identity_id
+               success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 @end

@@ -12,6 +12,16 @@
 
 @implementation Exfee (EXFE)
 
++ (id)disconnectedEntity {
+    NSManagedObjectContext *context = [RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Exfee" inManagedObjectContext:context];
+    return [[[self alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:nil] autorelease];
+}
+
+- (void)addToContext:(NSManagedObjectContext *)context {
+    [context insertObject:self];
+}
+
 -(Invitation*)getMyInvitation{
     Invitation * me = nil;
     for(Invitation *invitation in self.invitations)
@@ -68,6 +78,25 @@
             }
         }
             break;
+        case kInvitationSortTypeMeAcceptNoNotifications:{
+            int myself = 0;
+            int accepts = 0;
+            
+            for(Invitation *invitation in invitations) {
+                if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO && [@"NOTIFICATION" isEqualToString:invitation.rsvp_status] == NO) {
+                    if([[User getDefaultUser] isMe:invitation.identity]){
+                        [sorted insertObject:invitation atIndex:myself];
+                        myself ++;
+                    } else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
+                        [sorted insertObject:invitation atIndex:(myself + accepts)];
+                        accepts ++;
+                    } else {
+                        [sorted addObject:invitation];
+                    }
+                }
+            }
+        }
+            break;
         case kInvitationSortTypeHostAcceptOthers:{
             int hosts = 0;
             int accepts = 0;
@@ -87,7 +116,7 @@
             }
         }
             break;
-        case kInvitationSortTypeHostAcceptNoInvitations:{
+        case kInvitationSortTypeHostAcceptNoNotifications:{
             int hosts = 0;
             int accepts = 0;
             

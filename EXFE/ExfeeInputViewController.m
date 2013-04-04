@@ -360,11 +360,12 @@ static char identitykey;
         }
     }
     if([inputobjs count] == 0){
-        NSSet *set = [NSSet setWithArray:invitations];
-        [self.exfee addInvitations:set];
+        
         if (self.needSubmit) {
-            [self sumitExfeBeforeDismiss:self.exfee];
+            [self sumitExfeBeforeDismiss:invitations];
         } else {
+            NSSet *set = [NSSet setWithArray:invitations];
+            [self.exfee addInvitations:set];
             [self dissmisModal];
         }
     }
@@ -431,11 +432,11 @@ static char identitykey;
                       }
                       [invitations addObject:invitation];
                   }
-                  NSSet *set = [NSSet setWithArray:invitations];
-                  [self.exfee addInvitations:set];
                   if (self.needSubmit) {
-                      [self sumitExfeBeforeDismiss:self.exfee];
+                      [self sumitExfeBeforeDismiss:invitations];
                   } else {
+                      NSSet *set = [NSSet setWithArray:invitations];
+                      [self.exfee addInvitations:set];
                       [self dissmisModal];
                   }
               }
@@ -446,13 +447,17 @@ static char identitykey;
     }
 }
 
-- (void)sumitExfeBeforeDismiss:(Exfee*)exfee{
+- (void)sumitExfeBeforeDismiss:(NSArray*)invitations{
+    Exfee *exfee = [Exfee disconnectedEntity];
+    [exfee addToContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+    exfee.exfee_id = [self.exfee.exfee_id copy];
+    NSSet *set = [NSSet setWithArray:invitations];
+    [exfee addInvitations:set];
     Identity *myidentity = [self.exfee getMyInvitation].identity;
     [APIExfee edit:exfee
         myIdentity:[myidentity.identity_id intValue]
            success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                {
-                   
                    if ([operation.HTTPRequestOperation.response statusCode] == 200){
                        if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
                        {
@@ -493,7 +498,8 @@ static char identitykey;
                    }
                }
            } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-               ;
+               RKObjectManager *objectManager = [RKObjectManager sharedManager];
+               [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
            }];
     
     

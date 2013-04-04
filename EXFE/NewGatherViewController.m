@@ -362,7 +362,7 @@
     self.cross.exfee.invitations = [[[NSMutableSet alloc] initWithCapacity:12] autorelease];
     [self.cross.exfee addDefaultInvitationBy:default_identity];
     
-    self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+    self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
 }
 
 - (void)dealloc {
@@ -659,7 +659,7 @@
 }
 
 - (void)fillExfee:(Exfee*)exfee{
-    self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+    self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
     [exfeeShowview reloadData];
 }
 
@@ -968,7 +968,7 @@
         viewController.needSubmit = NO;
         viewController.onExitBlock = ^{
             
-            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
             [self reFormatTitle];
             [exfeeShowview reloadData];
             if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
@@ -1084,7 +1084,7 @@
     
     if ([self.cross.exfee hasInvitation:menu.invitation]) {
         [self.cross.exfee removeInvitationsObject:menu.invitation];
-        self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+        self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
         [exfeeShowview reloadData];
         [self reFormatTitle];
         return;
