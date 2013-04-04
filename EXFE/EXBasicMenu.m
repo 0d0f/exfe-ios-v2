@@ -80,20 +80,20 @@
                             break;
                         case kMenuTextStyleWarning: //red
                             [btnaccepted setTitleColor:[UIColor COLOR_RGB(229, 46,83)] forState:UIControlStateNormal];
-                            btnaccepted.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+                            btnaccepted.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
                             break;
                         case kMenuTextStyleAction: //blue
                             [btnaccepted setTitleColor:[UIColor COLOR_RGB(96, 173,155)] forState:UIControlStateNormal];
-                            btnaccepted.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+                            btnaccepted.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
                             break;
                         case kMenuTextStyleLowlight: //grey
                             [btnaccepted setTitleColor:[UIColor COLOR_WA(127, 255)] forState:UIControlStateNormal];
-                            btnaccepted.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+                            btnaccepted.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
                             break;
                         case kMenuTextStyleNormal: //
                         default:
                             [btnaccepted setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                            btnaccepted.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+                            btnaccepted.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
                             break;
                     }
                     
