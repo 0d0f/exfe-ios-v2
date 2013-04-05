@@ -27,6 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"ADD_IDENTITY"];
     CGRect a = [UIScreen mainScreen].applicationFrame;
     
     UIView *contentLayer = [[UIView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(a), CGRectGetHeight(a) - 44)];

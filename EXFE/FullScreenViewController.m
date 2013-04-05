@@ -26,6 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    [Flurry logEvent:@"FULL_SCREEN"];
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     self.view=[[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds] autorelease];
     self.view.backgroundColor=[UIColor blackColor];

@@ -120,6 +120,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"WIDGET_CROSS"];
     // Do any additional setup after loading the view from its nib.
     CGRect b = self.view.bounds;
     CGRect a = [UIScreen mainScreen].applicationFrame;

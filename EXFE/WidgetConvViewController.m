@@ -52,6 +52,8 @@
     [self.view setFrame:f];
 
     [super viewDidLoad];
+    [Flurry logEvent:@"WIDGET_CONVERSATION"];
+    
     _tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(f), CGRectGetHeight(f) - kDefaultToolbarHeight + 2)];
     _tableView.dataSource=self;
     _tableView.delegate=self;
@@ -112,7 +114,7 @@
     inputaccessoryview=[[ConversationInputAccessoryView alloc] initWithFrame:CGRectMake(10.0, 0.0, 310.0, 40.0)];
     [inputaccessoryview setBackgroundColor:[UIColor lightGrayColor]];
     [inputaccessoryview setAlpha: 0.8];
-    [Flurry logEvent:@"VIEW_CONVERSATION"];
+    
 //    floatTime=[[UILabel alloc] initWithFrame:CGRectMake(0, 80, 60, 26)];
 //    floatTime.text=@"label time";
 //    [self.view addSubview:floatTime];

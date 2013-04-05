@@ -38,6 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"EDIT_TITLE_DESCRIPTION"];
     CGRect b = self.view.bounds;
     //CGRect a = [UIScreen mainScreen].applicationFrame;
     

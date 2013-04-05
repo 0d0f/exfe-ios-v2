@@ -14,7 +14,7 @@
 
 + (void) checkAppVersionSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure{
-    
+    [Flurry logEvent:@"API_CHECK_UPDATE"];
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     RKObjectManager *manager = [RKObjectManager sharedManager];
     NSString *endpoint = [NSString stringWithFormat:@"%@versions/",API_SERVER];

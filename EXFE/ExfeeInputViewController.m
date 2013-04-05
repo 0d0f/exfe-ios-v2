@@ -34,6 +34,7 @@ static char identitykey;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"ADD_IDENTITY"];
     CGRect screenframe=[[UIScreen mainScreen] bounds];
     screenframe.size.height-=20;
     [self.view setFrame:screenframe];

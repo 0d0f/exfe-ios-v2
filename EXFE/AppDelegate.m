@@ -37,6 +37,11 @@ static char mergetoken;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [Flurry startSession:@"8R2R8KZG35DK6S6MDHGS"];
+#ifdef DEBUG
+    [Flurry logEvent:@"START_DEBUG_VERSION"];
+#else
+    [Flurry logEvent:@"START_ONLINE_VERSION"];
+#endif
     
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(observeContextSave:)
@@ -145,6 +150,7 @@ static char mergetoken;
 }
 
 - (void) createdb{
+    [Flurry logEvent:@"CREATE_DB"];
   NSURL *baseURL = [NSURL URLWithString:API_ROOT];
   
   RKObjectManager *objectManager = [RKObjectManager sharedManager];
@@ -312,6 +318,7 @@ static char mergetoken;
 }
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
+    [Flurry logEvent:@"RECEIVE_REMOTE_NOTIFICATION"];
     BOOL isForeground=TRUE;
     if(application.applicationState != UIApplicationStateActive)
         isForeground=FALSE;
@@ -319,6 +326,7 @@ static char mergetoken;
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+    [Flurry logEvent:@"HANDLE_OPEN_URL"];
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
     NSArray *url_components=[url.absoluteString componentsSeparatedByString:@"?"];
     if([url_components count] ==2){
@@ -482,6 +490,7 @@ static char mergetoken;
     
 }
 -(void)SignoutDidFinish{
+    [Flurry logEvent:@"ACTION_DID_SIGN_OUT"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"access_token"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userid"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"default_user_identities"];
@@ -509,7 +518,7 @@ static char mergetoken;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 - (void) cleandb{
-  
+  [Flurry logEvent:@"CLEAN_DB"];
   NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
 //  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
 //  NSLog(@"%@",storePath);

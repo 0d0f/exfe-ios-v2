@@ -168,6 +168,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"SIGN_IN"];
+    
     signindelegate=[[SigninDelegate alloc]init];
     signindelegate.parent=self;
     

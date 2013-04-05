@@ -45,6 +45,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"VIEW_PROFILE"];
     
     CGRect b = self.view.bounds;
     

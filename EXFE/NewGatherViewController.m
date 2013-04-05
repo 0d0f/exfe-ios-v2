@@ -304,6 +304,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"ENTER_GATHER"];
     // Do any additional setup after loading the view from its nib.
     [self initData];
     [self initUI];

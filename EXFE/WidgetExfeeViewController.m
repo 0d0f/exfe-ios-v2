@@ -111,6 +111,7 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"WIDGET_EXFEE"];
     // Do any additional setup after loading the view from its nib.
     CGRect a = [UIScreen mainScreen].applicationFrame;
     CGRect b = self.view.bounds;

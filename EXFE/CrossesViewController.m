@@ -42,6 +42,9 @@
 
 - (void)viewDidLoad
 {
+    
+    [Flurry logEvent:@"CROSS_LIST"];
+    
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     [self.view setFrame:appFrame];
     self.view.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
@@ -860,6 +863,7 @@
 
 #pragma mark CrossCardDelegate
 - (void) onClickConversation:(UIView*)card{
+    [Flurry logEvent:@"CLICK_CROSS_CARD_CONVERSATION"];
     CrossCard* c = (CrossCard*)card;
     int cross_id = [c.cross_id intValue];
     
