@@ -1105,7 +1105,7 @@
         last_time = [formatter dateFromString:last_string];
         [formatter release];
     }
-    if (last_time == nil || [Util daysBetween:last_time and:[NSDate date]] > 3){
+    if (last_time == nil || ABS([Util daysBetween:last_time and:[NSDate date]]) > 3){
         [APIExfeServer checkAppVersionSuccess:^(AFHTTPRequestOperation *operation, id JSON) {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterFullStyle];
@@ -1113,7 +1113,7 @@
             [formatter release];
             [[NSUserDefaults standardUserDefaults] setValue:now_string forKey:@"version_last_check_time"];
             
-            NSDictionary *iosVersionObject = [JSON valueForKeyPath:@"ios"];
+            NSDictionary *iosVersionObject = [JSON valueForKeyPath:@"response.ios"];
             NSString *version = [iosVersionObject valueForKey:@"version"];
             NSString *description = [iosVersionObject valueForKey:@"description"];
             NSString *url = [iosVersionObject valueForKey:@"url"];
