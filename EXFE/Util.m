@@ -1117,7 +1117,6 @@
             NSString *version = [iosVersionObject valueForKey:@"version"];
             NSString *description = [iosVersionObject valueForKey:@"description"];
             NSString *url = [iosVersionObject valueForKey:@"url"];
-            NSLog(@"ver:%@ desc:%@ url:%@ ", version, description, url);
             if ([UIApplication isNewVersion:version]) {
                 
                 [UIAlertView showAlertViewWithTitle:@"New version update"
