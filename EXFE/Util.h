@@ -49,8 +49,9 @@
 #define COLOR_IRON                COLOR_RGB(0xDD, 0xDD, 0xDD)
 #define COLOR_ALUMINUM            COLOR_RGB(0xB2, 0xB2, 0xB2)
 #define COLOR_GRAY                COLOR_RGB(0x7F, 0x7F, 0x7F)
-#define COLOR_CARBON              COLOR_RGB(0x33, 0x33, 0x33)
+#define COLOR_TUNGSTEN            COLOR_RGB(0x33, 0x33, 0x33)
 #define COLOR_BLACK               COLOR_RGB(0x00, 0x00, 0x00)
+#define COLOR_LEAD                COLOR_RGB(0x22, 0x22, 0x22)
 
 #define COLOR_BLUE_EXFE           COLOR_RGB(0x3A, 0x6E, 0xA5)
 #define COLOR_BLUE_SEA            COLOR_RGB(0x37, 0x84, 0xD5)

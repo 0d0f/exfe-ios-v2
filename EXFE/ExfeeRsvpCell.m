@@ -105,7 +105,7 @@
         
         name = [[UILabel alloc] initWithFrame:CGRectMake(25, 16, 230, 25)];
         name.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
-        name.textColor = [UIColor COLOR_CARBON];
+        name.textColor = [UIColor COLOR_TUNGSTEN];
         [contentView addSubview:name];
         
         host = [[UILabel alloc] initWithFrame:CGRectMake(180, 23, 60, 15)];

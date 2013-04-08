@@ -139,6 +139,7 @@
 		4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
 		4FFB149C16C0BFFF00F76D32 /* edit_30_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */; };
 		4FFB149D16C0BFFF00F76D32 /* edit_30_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */; };
+		76109DA1171280BB005176A7 /* EXArrowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76109DA0171280BB005176A7 /* EXArrowView.m */; };
 		76A39BDC1708C066008D1FFE /* EXCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A39BDA1708C066008D1FFE /* EXCardViewController.m */; };
 		76A39BDD1708C066008D1FFE /* EXCardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76A39BDB1708C066008D1FFE /* EXCardViewController.xib */; };
 		76A39BE41708C075008D1FFE /* EXCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A39BE21708C075008D1FFE /* EXCardCell.m */; };
@@ -153,6 +154,11 @@
 		76B6503D1705A0150036E832 /* portrait_64_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B650391705A0150036E832 /* portrait_64_selected@2x.png */; };
 		76B6503E1705A0150036E832 /* portrait_64.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B6503A1705A0150036E832 /* portrait_64.png */; };
 		76B6503F1705A0150036E832 /* portrait_64@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B6503B1705A0150036E832 /* portrait_64@2x.png */; };
+		76E316F4170D2B0B00B8A9F1 /* EXPopoverCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E316F3170D2B0B00B8A9F1 /* EXPopoverCardViewController.m */; };
+		76E316FB170D4E0300B8A9F1 /* EXStreamingServiceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E316FA170D4E0300B8A9F1 /* EXStreamingServiceController.m */; };
+		76E316FE170D85F900B8A9F1 /* EXPopoverCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E316FD170D85F900B8A9F1 /* EXPopoverCardCell.m */; };
+		76E31700170D860400B8A9F1 /* EXPopoverCardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76E316FF170D860400B8A9F1 /* EXPopoverCardCell.xib */; };
+		76E31705170DB4FD00B8A9F1 /* EXPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E31704170DB4FD00B8A9F1 /* EXPopoverController.m */; };
 		76FF86C81705E62E003CA095 /* EXVerticalAlignLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 76FF86C71705E62D003CA095 /* EXVerticalAlignLabel.m */; };
 		76FF86CE17062BCB003CA095 /* EXHereHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76FF86CD17062BCB003CA095 /* EXHereHeaderView.m */; };
 		76FF86D017062BDB003CA095 /* EXHereHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76FF86CF17062BDB003CA095 /* EXHereHeaderView.xib */; };
@@ -697,7 +703,8 @@
 		4FFB149416BFFB9600F76D32 /* SSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSTextView.m; sourceTree = "<group>"; };
 		4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30_pressed.png; sourceTree = "<group>"; };
 		4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30_pressed@2x.png"; sourceTree = "<group>"; };
-		7638C715170C456800512BB9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		76109D9F171280BB005176A7 /* EXArrowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXArrowView.h; sourceTree = "<group>"; };
+		76109DA0171280BB005176A7 /* EXArrowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXArrowView.m; sourceTree = "<group>"; };
 		76A39BD91708C066008D1FFE /* EXCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCardViewController.h; sourceTree = "<group>"; };
 		76A39BDA1708C066008D1FFE /* EXCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCardViewController.m; sourceTree = "<group>"; };
 		76A39BDB1708C066008D1FFE /* EXCardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EXCardViewController.xib; sourceTree = "<group>"; };
@@ -717,6 +724,15 @@
 		76B650391705A0150036E832 /* portrait_64_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_64_selected@2x.png"; sourceTree = "<group>"; };
 		76B6503A1705A0150036E832 /* portrait_64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_64.png; sourceTree = "<group>"; };
 		76B6503B1705A0150036E832 /* portrait_64@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_64@2x.png"; sourceTree = "<group>"; };
+		76E316F2170D2B0B00B8A9F1 /* EXPopoverCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXPopoverCardViewController.h; sourceTree = "<group>"; };
+		76E316F3170D2B0B00B8A9F1 /* EXPopoverCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXPopoverCardViewController.m; sourceTree = "<group>"; };
+		76E316F9170D4E0300B8A9F1 /* EXStreamingServiceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXStreamingServiceController.h; sourceTree = "<group>"; };
+		76E316FA170D4E0300B8A9F1 /* EXStreamingServiceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXStreamingServiceController.m; sourceTree = "<group>"; };
+		76E316FC170D85F900B8A9F1 /* EXPopoverCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXPopoverCardCell.h; sourceTree = "<group>"; };
+		76E316FD170D85F900B8A9F1 /* EXPopoverCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXPopoverCardCell.m; sourceTree = "<group>"; };
+		76E316FF170D860400B8A9F1 /* EXPopoverCardCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EXPopoverCardCell.xib; sourceTree = "<group>"; };
+		76E31703170DB4FD00B8A9F1 /* EXPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXPopoverController.h; sourceTree = "<group>"; };
+		76E31704170DB4FD00B8A9F1 /* EXPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXPopoverController.m; sourceTree = "<group>"; };
 		76FF86C61705E62D003CA095 /* EXVerticalAlignLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXVerticalAlignLabel.h; sourceTree = "<group>"; };
 		76FF86C71705E62D003CA095 /* EXVerticalAlignLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXVerticalAlignLabel.m; sourceTree = "<group>"; };
 		76FF86CC17062BCA003CA095 /* EXHereHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXHereHeaderView.h; sourceTree = "<group>"; };
@@ -1231,6 +1247,7 @@
 		4FD9375D16D6018100ED6677 /* VIewController */ = {
 			isa = PBXGroup;
 			children = (
+				76E31701170DB49F00B8A9F1 /* EXKit */,
 				78409164156F3AA7006DF115 /* Cross */,
 				782B3CC7156B918B00721150 /* User */,
 			);
@@ -1253,6 +1270,7 @@
 		4FD9375F16D6023400ED6677 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				76E316F8170D4DB100B8A9F1 /* ServiceController */,
 				76A39C4E170AB5B1008D1FFE /* Card.h */,
 				76A39C4F170AB5B1008D1FFE /* Card.m */,
 				78A98EFC1561169E009E0806 /* Class */,
@@ -1325,6 +1343,24 @@
 				4F64BA8C16ED9A2700B9594E /* WidgetExfeeViewController.xib */,
 			);
 			name = Tab;
+			sourceTree = "<group>";
+		};
+		76E316F8170D4DB100B8A9F1 /* ServiceController */ = {
+			isa = PBXGroup;
+			children = (
+				76E316F9170D4E0300B8A9F1 /* EXStreamingServiceController.h */,
+				76E316FA170D4E0300B8A9F1 /* EXStreamingServiceController.m */,
+			);
+			name = ServiceController;
+			sourceTree = "<group>";
+		};
+		76E31701170DB49F00B8A9F1 /* EXKit */ = {
+			isa = PBXGroup;
+			children = (
+				76E31703170DB4FD00B8A9F1 /* EXPopoverController.h */,
+				76E31704170DB4FD00B8A9F1 /* EXPopoverController.m */,
+			);
+			name = EXKit;
 			sourceTree = "<group>";
 		};
 		780EAC29165215EE00953D75 /* AddIdentity */ = {
@@ -1402,6 +1438,8 @@
 		782B3CC7156B918B00721150 /* User */ = {
 			isa = PBXGroup;
 			children = (
+				76E316F2170D2B0B00B8A9F1 /* EXPopoverCardViewController.h */,
+				76E316F3170D2B0B00B8A9F1 /* EXPopoverCardViewController.m */,
 				76A39BD91708C066008D1FFE /* EXCardViewController.h */,
 				76A39BDA1708C066008D1FFE /* EXCardViewController.m */,
 				76A39BDB1708C066008D1FFE /* EXCardViewController.xib */,
@@ -1711,6 +1749,9 @@
 				4FA013AD16F3546A00F40CB6 /* ExfeeCollectionViewCell.m */,
 				4FA84B07170155DD0096FB5A /* ExfeeAddCollectionViewCell.h */,
 				4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */,
+				76E316FC170D85F900B8A9F1 /* EXPopoverCardCell.h */,
+				76E316FD170D85F900B8A9F1 /* EXPopoverCardCell.m */,
+				76E316FF170D860400B8A9F1 /* EXPopoverCardCell.xib */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -1806,7 +1847,6 @@
 		78A98E7C1560F832009E0806 = {
 			isa = PBXGroup;
 			children = (
-				7638C715170C456800512BB9 /* AVFoundation.framework */,
 				78A98ED615611028009E0806 /* RestKit.xcodeproj */,
 				78A98E911560F832009E0806 /* EXFE */,
 				4F1142DA16AE40B000C30179 /* EXFETests */,
@@ -2120,6 +2160,8 @@
 				76FF86CC17062BCA003CA095 /* EXHereHeaderView.h */,
 				76FF86CD17062BCB003CA095 /* EXHereHeaderView.m */,
 				76FF86CF17062BDB003CA095 /* EXHereHeaderView.xib */,
+				76109D9F171280BB005176A7 /* EXArrowView.h */,
+				76109DA0171280BB005176A7 /* EXArrowView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2591,6 +2633,7 @@
 				76A39BE51708C075008D1FFE /* EXCardCell.xib in Resources */,
 				76A39C53170BEADD008D1FFE /* home_bg.png in Resources */,
 				76A39C54170BEADD008D1FFE /* home_bg@2x.png in Resources */,
+				76E31700170D860400B8A9F1 /* EXPopoverCardCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2754,6 +2797,11 @@
 				76A39BE41708C075008D1FFE /* EXCardCell.m in Sources */,
 				76A39C4917095E5E008D1FFE /* EXCircleScrollView.m in Sources */,
 				76A39C50170AB5B2008D1FFE /* Card.m in Sources */,
+				76E316F4170D2B0B00B8A9F1 /* EXPopoverCardViewController.m in Sources */,
+				76E316FB170D4E0300B8A9F1 /* EXStreamingServiceController.m in Sources */,
+				76E316FE170D85F900B8A9F1 /* EXPopoverCardCell.m in Sources */,
+				76E31705170DB4FD00B8A9F1 /* EXPopoverController.m in Sources */,
+				76109DA1171280BB005176A7 /* EXArrowView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

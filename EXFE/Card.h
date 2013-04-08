@@ -21,6 +21,8 @@ NSCopying
 - (id)initWithDictionary:(NSDictionary *)dict;
 - (NSDictionary *)dictionaryValue;
 
+- (NSString *)providerImageName;
+
 @end
 
 @interface Card : NSObject

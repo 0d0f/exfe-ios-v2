@@ -11,6 +11,9 @@
 #import <CoreLocation/CoreLocation.h>
 #import "EXHereHeaderView.h"
 #import "Card.h"
+#import "EXPopoverController.h"
+#import "EXPopoverCardViewController.h"
+#import "EXStreamingServiceController.h"
 
 #define kMinRegistCardsDuration             (5.0f)
 #define kServerStreamingTimeroutInterval    (60.0f)
@@ -18,20 +21,20 @@
 @interface HereViewController ()
 @property (nonatomic, retain) EXHereHeaderView *headerView;
 @property (nonatomic, retain) EXCardViewController *cardViewController;
+@property (nonatomic, retain) EXPopoverController *popoverCardViewController;
+
+@property (nonatomic, retain) EXStreamingServiceController  *streamingService;
 
 @property (nonatomic, retain) CLLocationManager *locationManager;
 @property (nonatomic, retain) CLLocation *currentLocation;
+
 @property (nonatomic, retain) NSDate *latestRegistReqeustDate;
 @property (nonatomic, assign) BOOL shouldInvokeLater;
 
 @property (nonatomic, retain) AFHTTPClient *client;
-@property (nonatomic, retain) NSOutputStream *outputStream;
 
-@property (nonatomic, retain) NSTimer *heartTimer;
-@property (nonatomic, retain) NSTimer *invokeTimer;
 @property (nonatomic, retain) NSSet *cards;
 @property (nonatomic, copy) NSString *token;
-@property (nonatomic, assign, setter = setStreamOpened:) BOOL isStreamOpened;
 @end
 
 @implementation HereViewController {
@@ -51,6 +54,7 @@
 }
 
 - (void)dealloc {
+    [_popoverCardViewController release];
     [_lock release];
     [_cards release];
     [_cardViewController release];
@@ -73,6 +77,7 @@
     
     self.cards = [NSSet setWithObject:[Card cardWithDictionary:[self meCardParams]]];
     
+    // avatarView
     CGRect viewBounds = self.view.bounds;
     _avatarlistview = [[EXUserAvatarCollectionView alloc] initWithFrame:(CGRect){{0, CGRectGetHeight(headerViewBounds)},
         {CGRectGetWidth(viewBounds), CGRectGetHeight(viewBounds) - CGRectGetHeight(headerViewBounds)}}];
@@ -83,6 +88,30 @@
     [self.view addSubview:_avatarlistview];
     
     [_avatarlistview reloadData];
+    
+    // network
+    if (!self.client) {
+        self.client = [[[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:SERVICE_ROOT]] autorelease];
+        self.client.parameterEncoding = AFJSONParameterEncoding;
+    }
+    
+    if (!self.streamingService) {
+        _streamingService = [[EXStreamingServiceController alloc] initWithBaseURL:[NSURL URLWithString:SERVICE_ROOT]];
+        
+        NSOutputStream *outputStream = [NSOutputStream outputStreamToMemory];
+        outputStream.delegate = self;
+        _streamingService.outputStream = outputStream;
+        
+        _streamingService.invokeHandler = ^{
+            if (self.shouldInvokeLater) {
+                [self sendLiveCardsRequest];
+                self.shouldInvokeLater = NO;
+            }
+        };
+        _streamingService.heartBeatHandler = ^{
+            [self sendLiveCardsRequest];
+        };
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -115,23 +144,27 @@
 - (void)locationManager:(CLLocationManager *)manager
 	didUpdateToLocation:(CLLocation *)newLocation
 		   fromLocation:(CLLocation *)oldLocation {
-    self.currentLocation = newLocation;
-    if ([self canSendRequestNow]) {
-        [self sendLiveCardsRequest];
-    } else {
-        self.shouldInvokeLater = YES;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.currentLocation = newLocation;
+        if ([self canSendRequestNow]) {
+            [self sendLiveCardsRequest];
+        } else {
+            self.shouldInvokeLater = YES;
+        }
+    });
 }
 
 - (void)locationManager:(CLLocationManager *)manager
 	 didUpdateLocations:(NSArray *)locations {
     CLLocation *newLocation = (CLLocation *)[locations lastObject];
-    self.currentLocation = newLocation;
-    if ([self canSendRequestNow]) {
-        [self sendLiveCardsRequest];
-    } else {
-        self.shouldInvokeLater = YES;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.currentLocation = newLocation;
+        if ([self canSendRequestNow]) {
+            [self sendLiveCardsRequest];
+        } else {
+            self.shouldInvokeLater = YES;
+        }
+    });
 }
 
 #pragma mark - UserAvatarCollectionDataSource
@@ -229,7 +262,24 @@
 }
 
 - (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didLongPressCircleItemAtIndexPath:(NSIndexPath *)indexPath {
-
+    EXCircleItemCell *cell = [avatarCollectionView circleItemCellAtIndexPath:indexPath];
+    CGSize contentSize = [EXPopoverCardViewController cardSizeWithCard:cell.card];
+    
+    if (self.popoverCardViewController) {
+        ((EXPopoverCardViewController *)self.popoverCardViewController.contentViewController).card = cell.card;
+    } else {
+        EXPopoverCardViewController *contentViewController = [[EXPopoverCardViewController alloc] initWithCard:cell.card];
+        _popoverCardViewController = [[EXPopoverController alloc] initWithContentViewController:contentViewController];
+        [contentViewController release];
+    }
+    
+    self.popoverCardViewController.contentSize = contentSize;
+    
+    [_popoverCardViewController presentFromRect:cell.frame
+                                         inView:_avatarlistview
+                                 arrowDirection:kEXArrowDirectionAny
+                                       animated:YES
+                                       complete:nil];
 }
 
 #pragma mark - EXCardViewControllerDelegate
@@ -257,7 +307,7 @@
                                                               [self.locationManager stopUpdatingLocation];
                                                           }
                                                           [UIApplication sharedApplication].idleTimerDisabled = NO;
-                                                          [self cleanUpTimerAndRequestWithTokenNeedClean:NO];
+                                                          [self cleanUpWithTokenNeedClean:NO];
                                                       }];
 }
 
@@ -294,7 +344,9 @@
     
     if (self.latestRegistReqeustDate) {
         NSTimeInterval timeInterval = [now timeIntervalSinceDate:self.latestRegistReqeustDate];
+        NSLog(@"!!!! %f", timeInterval);
         if (timeInterval >= kMinRegistCardsDuration) {
+            self.latestRegistReqeustDate = now;
             canSendRequest = YES;
         } else {
             canSendRequest = NO;
@@ -307,31 +359,16 @@
     return canSendRequest;
 }
 
-- (void)cleanUpTimerAndRequestWithTokenNeedClean:(BOOL)isTokenCleanNeeded {
-    if ([self.heartTimer isValid]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.heartTimer invalidate];
-            self.heartTimer = nil;
-        });
+- (void)cleanUpWithTokenNeedClean:(BOOL)isTokenCleanNeeded {
+    if (self.streamingService) {
+        [self.streamingService stopStreaming];
     }
     
-    if ([self.invokeTimer isValid]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.invokeTimer invalidate];
-            self.invokeTimer = nil;
-        });
-    }
+    [self.client.operationQueue cancelAllOperations];
     
     if (isTokenCleanNeeded) {
         self.token = nil;
     }
-    
-    if (self.outputStream) {
-        [self.outputStream close];
-        self.outputStream = nil;
-    }
-    [self.client.operationQueue cancelAllOperations];
-    self.isStreamOpened = NO;
 }
 
 - (void)sendLiveCardsRequest {
@@ -346,11 +383,6 @@
         [params setValue:[NSString stringWithFormat:@"%f", location.horizontalAccuracy] forKey:@"accuracy"];
     }
     
-    if (!self.client) {
-        self.client = [[[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:SERVICE_ROOT]] autorelease];
-        self.client.parameterEncoding=AFJSONParameterEncoding;
-    }
-    
     NSString *path = nil;
     if (self.token != nil && self.token.length) {
         path = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT,@"live/cards", self.token];
@@ -361,66 +393,42 @@
     [self.client postPath:path
                parameters:params
                   success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                      if (200 == operation.response.statusCode) {
+                      if (operation.response.statusCode >= 200 &&
+                          operation.response.statusCode < 400) {
                           NSString *token = [[[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding] autorelease];
                           token = [token stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                           token = [token stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                          
                           if (self.token != nil &&
                               self.token.length != 0 &&
                               [self.token isEqualToString:token]) {
-                              if (!self.isStreamOpened) {
-                                  [self startStreaming];
+                              if (kEXStreamingServiceStateReady == self.streamingService.serviceState) {
+                                  NSString *streamingPath = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
+                                  [self.streamingService startStreamingWithPath:streamingPath
+                                                                        success:nil
+                                                                        failure:nil];
                               }
                           } else {
-                              [self cleanUpTimerAndRequestWithTokenNeedClean:YES];
+                              [self cleanUpWithTokenNeedClean:YES];
                               
                               self.token = token;
-                              [self startStreaming];
+                              NSString *streamingPath = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
+                              [self.streamingService startStreamingWithPath:streamingPath
+                                                                    success:nil
+                                                                    failure:nil];
                           }
                       }
+                      
                       [_lock unlock];
                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                      if (403 == operation.response.statusCode) {
-                          [self cleanUpTimerAndRequestWithTokenNeedClean:YES];
+                      if (403 == operation.response.statusCode ||
+                          404 == operation.response.statusCode) {
+                          [self cleanUpWithTokenNeedClean:YES];
                           
                           [self performSelector:_cmd];
                       }
                       [_lock unlock];
                   }];
-}
-
-- (void)startStreaming {
-    self.isStreamOpened = YES;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.heartTimer = [NSTimer scheduledTimerWithTimeInterval:0.5f * kServerStreamingTimeroutInterval
-                                                           target:self
-                                                         selector:@selector(heartRunloop:)
-                                                         userInfo:nil
-                                                          repeats:YES];
-        self.invokeTimer = [NSTimer scheduledTimerWithTimeInterval:kMinRegistCardsDuration
-                                                            target:self
-                                                          selector:@selector(invokeRunloop:)
-                                                          userInfo:nil
-                                                           repeats:YES];
-    });
-    
-    NSString *path=[NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
-    NSMutableURLRequest *request = [self.client requestWithMethod:@"GET"
-                                                             path:path
-                                                       parameters:nil];
-    request.timeoutInterval = 120.0f;
-    AFHTTPRequestOperation *operation = [self.client HTTPRequestOperationWithRequest:request
-                                                                             success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                                                 NSLog(@"%@", responseObject);
-                                                                             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                                 NSLog(@"%@", error);
-                                                                             }];
-    self.outputStream = [NSOutputStream outputStreamToMemory];
-    operation.outputStream = self.outputStream;
-    operation.outputStream.delegate = self;
-    
-    [self.client.operationQueue addOperation:operation];
 }
 
 #pragma mark - NSStreamDelegate
@@ -450,7 +458,9 @@
                 if ([self canSendRequestNow]) {
                     [self sendLiveCardsRequest];
                 } else {
-                    self.shouldInvokeLater = YES;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        self.shouldInvokeLater = YES;
+                    });
                 }
             } else {
                 NSString *lastJSON = [array lastObject];

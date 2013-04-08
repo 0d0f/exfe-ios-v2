@@ -25,6 +25,9 @@
         gradient.colors = @[(id)[UIColor COLOR_RGB(0x33, 0x33, 0x33)].CGColor, (id)[UIColor COLOR_RGB(0x22, 0x22, 0x22)].CGColor];
         [self.layer insertSublayer:gradient atIndex:0];
         
+        // tip view
+        self.tipView.layer.cornerRadius = 3;
+        
         // button background
         UIImage *buttonBackgroundImage = [UIImage imageNamed:@"btn_blue_30inset.png"];
         if ([buttonBackgroundImage respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
@@ -39,9 +42,13 @@
     return self;
 }
 
+- (IBAction)titleControlPressed:(id)sender {
+}
+
 - (void)dealloc {
     [_backButton release];
     [_gatherButton release];
+    [_tipView release];
     [super dealloc];
 }
 @end

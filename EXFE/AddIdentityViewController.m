@@ -42,7 +42,7 @@
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, CGRectGetWidth(toolbar.bounds) - 20, CGRectGetHeight(toolbar.bounds))];
     title.text = @"Add identity";
     title.textAlignment = NSTextAlignmentCenter;
-    title.textColor = [UIColor COLOR_CARBON];
+    title.textColor = [UIColor COLOR_TUNGSTEN];
     title.shadowColor = [UIColor COLOR_WHITE];
     title.shadowOffset = CGSizeMake(0, 1);
     title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];

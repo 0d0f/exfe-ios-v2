@@ -147,7 +147,7 @@ typedef enum {
         
         invName = [[ UILabel alloc] initWithFrame:CGRectMake(25, 16, 230, 25)];
         invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
-        invName.textColor = [UIColor COLOR_CARBON];
+        invName.textColor = [UIColor COLOR_TUNGSTEN];
         invName.backgroundColor = [UIColor clearColor];
         invName.tag = kTagIdName;
         [invContent addSubview:invName];

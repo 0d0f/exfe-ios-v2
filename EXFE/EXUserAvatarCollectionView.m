@@ -10,7 +10,6 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "Util.h"
-#import "EXCard.h"
 
 // 640 1036 1676
 #define kRadius1 (160)
@@ -419,24 +418,17 @@
     if (NSOrderedSame != [indexPath compare:[NSIndexPath indexPathForRow:0 inSection:0]]) {
         cell.tapBlock = ^{
             [cell setSelected:!cell.isSelected animated:YES complete:nil];
-            [self.delegate avatarCollectionView:self didSelectCircleItemAtIndexPath:indexPath];
+            [self.delegate avatarCollectionView:self didSelectCircleItemAtIndexPath:cell.indexPath];
         };
     } else {
         cell.alpha = 1.0f;
         cell.tapBlock = ^{
-            [self.delegate avatarCollectionView:self didSelectCircleItemAtIndexPath:indexPath];
+            [self.delegate avatarCollectionView:self didSelectCircleItemAtIndexPath:cell.indexPath];
         };
     }
     
     cell.longPressBlock = ^{
-//        EXCard *card = [[EXCard alloc] initWithUser:cell.user];
-//        [card presentFromRect:cell.frame
-//                       inView:self
-//               arrowDirection:kEXCardArrowDirectionDown
-//                     animated:YES
-//                     complete:nil];
-//        [card release];
-//        [self.delegate avatarCollectionView:self didLongPressCircleItemAtIndexPath:indexPath];
+        [self.delegate avatarCollectionView:self didLongPressCircleItemAtIndexPath:cell.indexPath];
     };
     
     // animation
