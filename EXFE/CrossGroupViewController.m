@@ -24,7 +24,6 @@
 #import "TitleDescEditViewController.h"
 #import "TimeViewController.h"
 #import "PlaceViewController.h"
-#import "CrossesViewController.h"
 #import "WidgetConvViewController.h"
 #import "WidgetExfeeViewController.h"
 #import "APIExfee.h"
@@ -1933,12 +1932,12 @@
             break;
         case 403:{
             if (buttonIndex == alertView.cancelButtonIndex) {
-                RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:self.cross];
-                [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
-                //            [[Cross currentContext] deleteObject:self.cross];
-                //            [[Cross currentContext] save:nil];
+                // remove self from local storage
+                [[self.cross managedObjectContext] deleteObject:self.cross];
+                // exit current page
                 [self.navigationController popToRootViewControllerAnimated:YES];
+                // notify the list to reload from local
+                [NSNotificationCenter.defaultCenter postNotificationName:EXCrossListDidChangeNotification object:self];
             }
         }
             break;

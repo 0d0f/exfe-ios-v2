@@ -60,6 +60,10 @@
 #define HEADER_BACKGFOUND_HEIGHT    (495.0f)
 #define HEADER_BACKGROUND_Y_OFFSET  (198.0f)
 
+
+// Notification Definition
+extern NSString *const EXCrossListDidChangeNotification;
+
 #define MERCATOR_OFFSET 268435456
 #define MERCATOR_RADIUS 85445659.44705395
 

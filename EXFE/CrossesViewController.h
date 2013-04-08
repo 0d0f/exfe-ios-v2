@@ -24,19 +24,13 @@
 @interface CrossesViewController : PullRefreshTableViewController <UIAlertViewDelegate, CrossCardDelegate>
 {
     IBOutlet UITableView* tableView;
-//    UIBarButtonItem *profileButtonItem;
-//    UIBarButtonItem *gatherButtonItem;
-//    NSArray* _crosses;
     BOOL logoutflag;
     BOOL alertShowflag;
     int current_cellrow;
-//    NSMutableArray *cellDateTime;
     CustomStatusBar *customStatusBar;
     NSMutableAttributedString *gatherax;
     MBProgressHUD *hud;
-//    EXInnerButton *settingButton;
     UIImage *default_background;
-    //ProfileCard *headerView;
     
     UILabel *label_profile;
     UILabel *label_gather;
@@ -45,6 +39,8 @@
 }
 
 @property (nonatomic, retain) NSArray* crossList;
+@property (nonatomic, retain) id crossChangeObserver;
+
 - (void) refreshCell;
 - (void) refreshCrosses:(NSString*)source;
 - (void) refreshCrosses:(NSString*)source withCrossId:(int)cross_id;

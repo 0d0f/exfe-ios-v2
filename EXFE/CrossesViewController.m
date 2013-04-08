@@ -172,6 +172,14 @@
     welcome_more.frame = CGRectOffset(welcome_more.frame, 160 - CGRectGetMidX(welcome_more.frame), 0);
     [self.view addSubview:welcome_more];
     
+    if (self.crossChangeObserver == nil) {
+        self.crossChangeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:EXCrossListDidChangeNotification
+                                                                                     object:nil
+                                                                                      queue:[NSOperationQueue mainQueue]
+                                                                                 usingBlock:^(NSNotification *note) {
+                                                                                     [self loadObjectsFromDataStore];
+                                                                                 }];
+    }
     [self refreshWelcome];
     
 }
@@ -246,10 +254,14 @@
 }
 - (void)viewDidUnload
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self.crossChangeObserver];
     [super viewDidUnload];
 }
+
 - (void)dealloc {
-    self.crossList=nil;
+    
+    
+    self.crossList = nil;
     
 //    if(cellDateTime){
 //        [cellDateTime release];
@@ -437,18 +449,10 @@
             ////                NSString *refresh_cross_id=[objectLoader.userData objectForKey:@"cross_id" ];
             //
               [self loadObjectsFromDataStore];
-            ////                [self.tableView reloadData];
             }
           }
-        //        }
-        //        if(isError==NO)
-        //        {
-        //            if(needsave==YES)
-        //                [[Cross currentContext] save:nil];
-        //
         }
         [self loadObjectsFromDataStore];
-        [self.tableView reloadData];
 
         //
         [self stopLoading];

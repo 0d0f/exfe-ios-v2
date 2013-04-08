@@ -14,6 +14,12 @@
 #import "UIApplication+EXFE.h"
 #import "APIExfeServer.h"
 
+
+// Notification Definition
+NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
+
+
+
 @implementation Util
 + (NSString*) decodeFromPercentEscapeString:(NSString*)string{
     CFStringRef sref = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,(CFStringRef) string,CFSTR(""),kCFStringEncodingUTF8);
