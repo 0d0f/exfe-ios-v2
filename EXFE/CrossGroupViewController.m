@@ -27,6 +27,7 @@
 #import "WidgetConvViewController.h"
 #import "WidgetExfeeViewController.h"
 #import "APIExfee.h"
+#import "NSString+EXFE.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -525,7 +526,7 @@
 
 - (void)fillTime:(CrossTime*)time{
     if (time != nil){
-        NSString *title = [time getTimeTitle];
+        NSString *title = [[time getTimeTitle] sentenceCapitalizedString];
         [title retain];
         if (title == nil || title.length == 0) {
             timeRelView.text = @"Sometime";
@@ -538,7 +539,7 @@
             timeRelView.text = title;
             
             timeAbsView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
-            NSString* desc = [time getTimeDescription];
+            NSString* desc = [[time getTimeDescription] sentenceCapitalizedString];
             [desc retain];
             if(desc != nil && desc.length > 0){
                 timeAbsView.text = desc;

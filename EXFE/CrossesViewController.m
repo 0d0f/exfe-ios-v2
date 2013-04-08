@@ -20,7 +20,7 @@
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
 #import "Place+Helper.h"
-
+#import "NSString+EXFE.h"
 #import "CrossGroupViewController.h"
 
 
@@ -661,7 +661,7 @@
         }
         
         if (cross.time != nil){
-            NSString *time = [cross.time getTimeTitle];
+            NSString *time = [[cross.time getTimeTitle] sentenceCapitalizedString];
             //[time retain];
             if (time == nil || time.length == 0) {
                 cell.time = @"";

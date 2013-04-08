@@ -13,6 +13,7 @@
 #import "Place+Helper.h"
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
+#import "NSString+EXFE.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -678,7 +679,7 @@
 
 - (void)fillTime:(CrossTime*)time{
     if (time != nil){
-        NSString *title = [time getTimeTitle];
+        NSString *title = [[time getTimeTitle] sentenceCapitalizedString];
         [title retain];
         if (title == nil || title.length == 0) {
             timeRelView.text = @"Sometime";
@@ -691,7 +692,7 @@
             timeRelView.text = title;//[title copy];
             
             timeAbsView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
-            NSString* desc = [time getTimeDescription];
+            NSString* desc = [[time getTimeDescription] sentenceCapitalizedString];
             [desc retain];
             if(desc != nil && desc.length > 0){
                 timeAbsView.text = desc;

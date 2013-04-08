@@ -160,7 +160,7 @@ static NSDate* s_Now = nil;
     // handle missing time
     if (([targetTime hasDate] && ![targetTime hasTime]) || ([baseTime hasDate] && ![baseTime hasTime])) {
         if (targetTime.year == baseTime.year && targetTime.month == baseTime.month && targetTime.day == baseTime.day) {
-            return @"Today";
+            return @"today";
         }else{
             // Normalize date time
             if ([targetTime hasTime]){
@@ -190,24 +190,24 @@ static NSDate* s_Now = nil;
         NSInteger m = -minutes;
         if (m == 0){
             if (type == 1) {
-                return @"Now";
+                return @"now";
             }else{
-                return @"Seconds ago";
+                return @"seconds ago";
             }
         }else if (m >= 1 && m < 30){
             if (type == 1) {
-                return @"Now";
+                return @"now";
             }else{
                 return [NSString stringWithFormat:@"%i minutes ago", m];
             }
         }else if (m >= 30 && m < 60){
             if (type == 1) {
-                return @"Just now";
+                return @"just now";
             }else{
                 return [NSString stringWithFormat:@"%i minutes ago", m];
             }
         }else if (m >= 60 && m < 82){
-            return @"An hour ago";
+            return @"an hour ago";
         }else if (m >= 82 && m <  108){
             return @"1.5 hours ago";
         }else if (m >= 108 && m < 720){
@@ -217,20 +217,20 @@ static NSDate* s_Now = nil;
             NSInteger dateSpan = [DateTimeUtil daysWithinEraFromDate:target toDate:base];
             if (m >= 720 && m < 1440){
                 if (dateSpan == 1){
-                    return @"Yesterday";
+                    return @"yesterday";
                 }else{
                     int h = (m + 12) / 60;
                     return [NSString stringWithFormat:@"%i hours ago", h];
                 }
             }else if (m >= 1440 && m < 2880){
                 if (dateSpan == 1){
-                    return @"Yesterday";
+                    return @"yesterday";
                 }else{
-                    return @"Two days ago";
+                    return @"two days ago";
                 }
             }else /*if (m >= 2880 && m < 43200)*/{
                 if (dateSpan == 2){
-                    return @"Two days ago";
+                    return @"two days ago";
                 }else{
                     //NSInteger dd = (m + 1439) / 1440;
                     return [NSString stringWithFormat:@"%i days ago", dateSpan];
@@ -271,32 +271,32 @@ static NSDate* s_Now = nil;
     }else{
         NSInteger m = minutes;
         if (m >=1 && m < 60){
-            return [NSString stringWithFormat:@"In %i minutes", m];
+            return [NSString stringWithFormat:@"in %i minutes", m];
         }else if (m >= 60 && m < 82){
-            return @"In one hour";
+            return @"in one hour";
         }else if (m >= 82 && m < 108){
-            return @"In 1.5 hours";
+            return @"in 1.5 hours";
         }else if (m >= 108 && m < 720){
             int h = (m + 12) / 60;
-            return [NSString stringWithFormat:@"In %i hours", h];
+            return [NSString stringWithFormat:@"in %i hours", h];
         }else if (m >= 720 && m < 43200){
             NSInteger dateSpan = [DateTimeUtil daysWithinEraFromDate:base toDate:target];
             if (m >= 720 && m < 1440){
                 if (dateSpan == 1){
-                    return @"Tomorrow";
+                    return @"tomorrow";
                 }else{
                     int h = (m + 12) / 60;
-                    return [NSString stringWithFormat:@"In %i hours", h];
+                    return [NSString stringWithFormat:@"in %i hours", h];
                 }
             }else if (m >= 1440 && m < 2880){
                 if (dateSpan == 1){
-                    return @"Tomorrow";
+                    return @"tomorrow";
                 }else{
-                    return @"In two days";
+                    return @"in two days";
                 }
             }else /*if (m >= 2880 && m < 43200)*/{
                 if (dateSpan == 2){
-                    return @"In two days";
+                    return @"in two days";
                 }else{
                     //NSInteger dd = (m + 1439) / 1440;
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -331,13 +331,13 @@ static NSDate* s_Now = nil;
                 if (mm == 0) {
                     return @""; //ERROR
                 }else{
-                    return [NSString stringWithFormat:@"In %@", months];
+                    return [NSString stringWithFormat:@"in %@", months];
                 }
             }else{
                 if (mm == 0) {
-                    return [NSString stringWithFormat:@"In %@", years];
+                    return [NSString stringWithFormat:@"in %@", years];
                 }else{
-                    return [NSString stringWithFormat:@"In %@ %@", years, months];
+                    return [NSString stringWithFormat:@"in %@ %@", years, months];
                 }
             }
         }
