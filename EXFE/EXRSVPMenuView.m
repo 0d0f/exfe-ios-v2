@@ -9,7 +9,7 @@
 #import "EXRSVPMenuView.h"
 
 @implementation EXRSVPMenuView
-@synthesize invitation;
+@synthesize invitation = _invitation;
 
 - (id)initWithFrame:(CGRect)frame withDelegate:(id)_delegate items:(NSArray*)itemlist showTitleBar:(BOOL)showtitlebar
 {
@@ -37,7 +37,8 @@
         
         if([self Itemscontain:itemlist string:@"Accepted"]){
             UIButton *btnaccepted=[UIButton buttonWithType:UIButtonTypeCustom];
-            [btnaccepted setTitle:@"Accepted" forState:UIControlStateNormal];
+            NSString *str = @"I'm in";
+            [btnaccepted setTitle:str forState:UIControlStateNormal];
             [btnaccepted.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18]];
             [btnaccepted setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [btnaccepted setFrame:CGRectMake(0, y, 125, 44)];

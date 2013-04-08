@@ -24,7 +24,6 @@
 
 
 @interface EXRSVPMenuView : UIView{
-    Invitation *invitation;
     id <EXRSVPMenuDelegate>delegate;
 }
 
