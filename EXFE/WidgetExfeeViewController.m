@@ -25,6 +25,7 @@
 #import "DateTimeUtil.h"
 #import "APICrosses.h"
 #import "APIExfee.h"
+#import "NSString+EXFE.h"
 
 
 #define kTagViewExfeeRoot         10
@@ -267,41 +268,7 @@ typedef enum {
 }
 - (void)viewDidAppear:(BOOL)animated
 {
-    BOOL flag = NO;
-    for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
-        Invitation* inv = [self.sortedInvitations objectAtIndex:i];
-        if ([inv.invitation_id integerValue] == [self.selected_invitation.invitation_id integerValue]) {
-            flag = YES;
-            NSIndexPath * indexPath = [NSIndexPath indexPathForRow:i inSection:1];
-            PSTCollectionViewCell* cell = [exfeeContainer cellForItemAtIndexPath:indexPath];
-            if (cell != nil) {
-                [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionNone];
-                [self fillInvitationContent:_selected_invitation];
-                [self clickCell:cell];
-            } else {
-                [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionBottom];
-                [self fillInvitationContent:_selected_invitation];
-                
-                double delayInSeconds = 0.01;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                PSTCollectionViewCell*  cell = [exfeeContainer cellForItemAtIndexPath:indexPath];
-                [self clickCell:cell];
-                });
-
-            }
-            break;
-        }
-    }
-    if (flag == NO) {
-        self.selected_invitation = nil;
-    }
-    if (self.selected_invitation == nil) {
-        self.selected_invitation = [self.sortedInvitations objectAtIndex:0];
-        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-        [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-        [self fillInvitationContent:_selected_invitation];
-    }
+    [self reloadSelected];
     
 }
 
@@ -402,10 +369,7 @@ typedef enum {
                                        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                                        
                                        [exfeeContainer reloadData];
-                                       NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-                                       [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-                                       _selected_invitation = [self.sortedInvitations objectAtIndex:0];
-                                       [self fillInvitationContent:_selected_invitation];
+                                       [self reloadSelected];
                                        
                                    }
                                    break;
@@ -652,7 +616,7 @@ typedef enum {
                  altString = [NSString stringWithFormat:@"Set by %@", [inv.updated_by getDisplayName]];
             }
         }
-        invRsvpAltLabel.text = altString;
+        invRsvpAltLabel.text = [altString sentenceCapitalizedString];
         [invRsvpAltLabel wrapContent];
         [self setNeedLayout:changeFlag];
     }
@@ -1116,13 +1080,7 @@ typedef enum {
                                              self.exfee = parent.cross.exfee;
                                              self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                                              [exfeeContainer reloadData];
-                                             
-                                             for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
-                                                 Invitation* inv = [self.sortedInvitations objectAtIndex:i];
-                                                 if ([_invitation.invitation_id intValue] == [inv.invitation_id intValue]) {
-                                                     [exfeeContainer selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-                                                 }
-                                             }
+                                             [self reloadSelected];
                                          }
                                          
                                      }
@@ -1184,5 +1142,44 @@ typedef enum {
     
 //    popupCtrolId = skipId;
     
+}
+
+- (void)reloadSelected
+{
+    BOOL flag = NO;
+    for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
+        Invitation* inv = [self.sortedInvitations objectAtIndex:i];
+        if ([inv.invitation_id integerValue] == [self.selected_invitation.invitation_id integerValue]) {
+            flag = YES;
+            NSIndexPath * indexPath = [NSIndexPath indexPathForRow:i inSection:1];
+            PSTCollectionViewCell* cell = [exfeeContainer cellForItemAtIndexPath:indexPath];
+            if (cell != nil) {
+                [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionNone];
+                [self fillInvitationContent:_selected_invitation];
+                [self clickCell:cell];
+            } else {
+                [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionBottom];
+                [self fillInvitationContent:_selected_invitation];
+                
+                double delayInSeconds = 0.01;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    PSTCollectionViewCell*  cell = [exfeeContainer cellForItemAtIndexPath:indexPath];
+                    [self clickCell:cell];
+                });
+                
+            }
+            break;
+        }
+    }
+    if (flag == NO) {
+        self.selected_invitation = nil;
+    }
+    if (self.selected_invitation == nil) {
+        self.selected_invitation = [self.sortedInvitations objectAtIndex:0];
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+        [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        [self fillInvitationContent:_selected_invitation];
+    }
 }
 @end
