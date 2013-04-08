@@ -36,6 +36,7 @@ static char mergetoken;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [Flurry setAppVersion:[UIApplication appVersion]];
     [Flurry startSession:@"8R2R8KZG35DK6S6MDHGS"];
 #ifdef DEBUG
     [Flurry logEvent:@"START_DEBUG_VERSION"];
@@ -55,33 +56,19 @@ static char mergetoken;
         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
     }
     
-//  NSURL *baseURL = [NSURL URLWithString:API_ROOT];
-//  RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-  RKLogConfigureByName("*", RKLogLevelOff);
+#ifdef DEBUG
+    RKLogConfigureByName("RestKit/Network", RKLogLevelOff);
+//    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
+    RKLogConfigureByName("RestKit/CoreData", RKLogLevelOff);
+//    RKLogConfigureByName("RestKit/CoreData/Cache", RKLogLevelTrace);
+#else
+    RKLogConfigureByName("*", RKLogLevelOff);
+#endif
   
   [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
   [self createdb];
   RKObjectManager *objectManager = [RKObjectManager sharedManager];
 
-//  RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
-//  NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-//  RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
-//  objectManager.managedObjectStore = managedObjectStore;
-//  [ModelMapping buildMapping];
-//  
-//  [managedObjectStore createPersistentStoreCoordinator];
-//  NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
-////  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
-//  NSError *error;
-//  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
-//  NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
-//  
-//  // Create the managed object contexts
-//  [managedObjectStore createManagedObjectContexts];
-//  
-//  // Configure a managed object cache to ensure we do not create duplicate objects
-//  managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
-  
   
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
   if(app.accesstoken!=nil)
@@ -154,8 +141,10 @@ static char mergetoken;
   NSURL *baseURL = [NSURL URLWithString:API_ROOT];
   
   RKObjectManager *objectManager = [RKObjectManager sharedManager];
-  if(objectManager==nil)
-    objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+    if(objectManager == nil){
+        objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+        [RKObjectManager setSharedManager:objectManager];
+    }
   
   NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
   RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];

@@ -33,7 +33,7 @@
   [manager.HTTPClient postPath:endpoint parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
     if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
         [self processResponse:responseObject status:@"signin"];
-        [delegate SigninDidFinish];
+//        [delegate SigninDidFinish];
     }
     [spin setHidden:YES];
 

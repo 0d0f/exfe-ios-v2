@@ -34,4 +34,6 @@
 + (NSString*) ThreeLettersAbbr:(NSTimeZone*)tz;
 
 
++ (NSTimeInterval)secondsBetween:(NSString*)date1 with:(NSString*)date2;
+
 @end

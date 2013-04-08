@@ -26,7 +26,7 @@
     IBOutlet UITableView* tableView;
 //    UIBarButtonItem *profileButtonItem;
 //    UIBarButtonItem *gatherButtonItem;
-    NSArray* _crosses;
+//    NSArray* _crosses;
     BOOL logoutflag;
     BOOL alertShowflag;
     int current_cellrow;
@@ -43,6 +43,8 @@
     EXAttributedLabel *welcome_exfe;
     UILabel *welcome_more;
 }
+
+@property (nonatomic, retain) NSArray* crossList;
 - (void) refreshCell;
 - (void) refreshCrosses:(NSString*)source;
 - (void) refreshCrosses:(NSString*)source withCrossId:(int)cross_id;

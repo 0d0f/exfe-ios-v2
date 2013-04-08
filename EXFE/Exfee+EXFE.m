@@ -6,9 +6,10 @@
 //
 //
 
+#import <RestKit/RestKit.h>
 #import "Exfee+EXFE.h"
 #import "User+EXFE.h"
-#import <RestKit/RestKit.h>
+#import "DateTimeUtil.h"
 
 @implementation Exfee (EXFE)
 
@@ -57,6 +58,27 @@
     NSMutableArray *sorted = [[NSMutableArray alloc]  initWithCapacity:self.invitations.count];
     
     NSArray *invitations = [self.invitations sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES]]];
+    
+    // WALKAROUND: clean duplicate
+//    if (invitations != nil) {
+//        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+//        for (Invitation *x in invitations) {
+//            NSString *key = [x.invitation_id stringValue];
+//            Invitation *previous = [dict objectForKey:key];
+//            if (previous == nil) {
+//                [dict setObject:x forKey:key];
+//            } else {
+//                if ([x.updated_at timeIntervalSinceDate:previous.updated_at] > 0) {
+//                    [dict removeObjectForKey:key];
+//                    [dict setObject:x forKey:key];
+//                }
+//            }
+//        }
+//        if (invitations.count > dict.count) {
+//            invitations = [dict allValues];
+//        }
+//    }
+    
     
     switch (sortType) {
         case kInvitationSortTypeMeAcceptOthers:{

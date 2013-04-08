@@ -40,6 +40,35 @@
     return self;
 }
 
+- (void)setCrossList:(NSArray *)crossList
+{
+    if (_crossList != crossList) {
+        NSArray *tempList = crossList;
+        // WALKAROUND: clean duplicate
+//        if (tempList != nil) {
+//            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+//            for (Cross *x in crossList) {
+//                NSString *key = [x.cross_id stringValue];
+//                Cross *previous = [dict objectForKey:key];
+//                if (previous == nil) {
+//                    [dict setObject:x forKey:key];
+//                } else {
+//                    if ([DateTimeUtil secondsBetween:previous.updated_at with:x.updated_at]) {
+//                        [dict removeObjectForKey:key];
+//                        [dict setObject:x forKey:key];
+//                    }
+//                }
+//            }
+//            if (tempList.count > dict.count) {
+//                tempList = [dict allValues];
+//            }
+//        }
+        [tempList retain];
+        [_crossList release];
+        _crossList = tempList;
+    }
+}
+
 - (void)viewDidLoad
 {
     
@@ -148,13 +177,9 @@
 }
 
 - (void)initUI{
-
     [self refreshPortrait];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.navigationController.view setNeedsDisplay];
-    
-    
-    
 }
 
 - (void) refreshPortrait{
@@ -212,7 +237,7 @@
 
 }
 - (Cross*) crossWithId:(int)cross_id{
-    for(Cross *c in _crosses)
+    for(Cross *c in self.crossList)
     {
         if([c.cross_id intValue]==cross_id)
             return c;
@@ -224,10 +249,8 @@
     [super viewDidUnload];
 }
 - (void)dealloc {
-    if(_crosses){
-        [_crosses release];
-        _crosses=nil;
-    }
+    self.crossList=nil;
+    
 //    if(cellDateTime){
 //        [cellDateTime release];
 //        cellDateTime=nil;
@@ -454,8 +477,8 @@
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
   RKObjectManager *objectManager = [RKObjectManager sharedManager];
-  [_crosses release];
-  _crosses = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+    
+    self.crossList = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
   
   [self refreshWelcome];
   [self.tableView reloadData];
@@ -467,10 +490,7 @@
 }
 
 - (NSInteger)getCrossCount{
-    if (_crosses) {
-        return _crosses.count;
-    }
-    return 0;
+    return self.crossList.count;
 }
 
 - (void)refreshWelcome{
@@ -491,9 +511,7 @@
 }
 
 - (void)emptyView{
-
-    [_crosses release];
-    _crosses = nil;
+    self.crossList = nil;
     [self refreshWelcome];
     [self.tableView reloadData];
 }
@@ -579,7 +597,7 @@
         [headerView addProfileTarget:self action:@selector(ShowProfileView)];
         return headerView;
     }else if (indexPath.section == 1){
-        if(_crosses==nil){
+        if(self.crossList == nil){
             return nil;
         }
         NSString* reuseIdentifier = @"Card Cell";
@@ -587,7 +605,7 @@
         if (nil == cell) {
             cell = [[[CrossCard alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
         }
-        Cross *cross=[_crosses objectAtIndex:indexPath.row ];
+        Cross *cross=[self.crossList objectAtIndex:indexPath.row ];
         cell.cross_id=cross.cross_id;
         cell.hlTitle = NO;
         cell.hlPlace = NO;
@@ -759,7 +777,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1){
-        Cross *cross=[_crosses objectAtIndex:indexPath.row];
+        Cross *cross=[self.crossList objectAtIndex:indexPath.row];
         if(cross.updated!=nil)
         {
             id updated=cross.updated;
@@ -799,15 +817,12 @@
     }
 }
 - (void) refreshTableViewWithCrossId:(int)cross_id{
-    for(int i=0;i<[_crosses count];i++)
-    {
-        
-        Cross *c=[_crosses objectAtIndex:i];
-        
-        
-        if([c.cross_id intValue]==cross_id)
+    for (int i = 0; i < [self.crossList count]; i++) {
+        Cross *c = [self.crossList objectAtIndex:i];
+        if ([c.cross_id intValue] == cross_id){
             [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: [NSIndexPath indexPathForRow:i inSection:1]]
                                   withRowAnimation: UITableViewRowAnimationNone];
+        }
     }
 }
 - (void) refreshCell{

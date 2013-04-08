@@ -384,4 +384,15 @@ static NSDate* s_Now = nil;
     return 0;
 }
 
++ (NSTimeInterval)secondsBetween:(NSString*)date1 with:(NSString*)date2
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    NSDate *pre = [formatter dateFromString:date2];
+    NSDate *xxx = [formatter dateFromString:date1];
+    [formatter release];
+    return [xxx timeIntervalSinceDate:pre];
+}
+
 @end
