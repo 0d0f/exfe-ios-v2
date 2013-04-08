@@ -956,25 +956,6 @@
     return username;
 }
 
-//+ (void) showError:(Meta*)meta delegate:(id)delegate{
-//    for (UIWindow* window in [UIApplication sharedApplication].windows) {
-//        NSArray* subviews = window.subviews;
-//        if ([subviews count] > 0)
-//            if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
-//                return;
-//    }
-//    
-//    NSString *errormsg = @"";
-//    if ([meta.code intValue] == 401) {
-//        errormsg = @"Authentication failed due to security concerns, please sign in again.";
-//        
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
-//        alertView.tag = 500;
-//        [alertView show];
-//        [alertView release];
-//    }
-//}
-
 + (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate{
     
     for (UIWindow* window in [UIApplication sharedApplication].windows) {
@@ -988,9 +969,9 @@
         errormsg = @"Authentication failed due to security concerns, please sign in again.";
         
 #ifdef WWW
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil otherButtonTitles:@"Sign Out",nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil otherButtonTitles:@"OK",nil];
 #else
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
 #endif
         
         alertView.tag = 500;
@@ -1011,9 +992,9 @@
         if ([(NSNumber*)[meta objectForKey:@"code"] intValue] == 401) {
             errormsg = @"Authentication failed due to security concerns, please sign in again.";
 #ifdef WWW
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil  otherButtonTitles:@"Sign Out",nil];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil  otherButtonTitles:@"OK",nil];
 #else
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
 #endif
             alertView.tag = 500;
             [alertView show];
