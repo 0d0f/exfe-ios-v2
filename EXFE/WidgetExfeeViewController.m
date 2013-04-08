@@ -325,11 +325,11 @@ typedef enum {
     UIView *btn = sender;
     btn.hidden = YES;
     
-    NSString *title = @"People will no longer has access to any information in this ·X· once removed. Please confirm to remove.";
+    NSString *title = @"People will no longer have access to any information in this ·X·. Please confirm to remove.";
     NSString *destTitle = @"Remove from this ·X·";
     if ([[User getDefaultUser] isMe:_selected_invitation.identity]) {
+        title = @"You will no longer have access to any information in this ·X· once left. Please confirm to leave.";
         destTitle = @"Leave from this ·X·";
-        title = @"You will no longer has access to any information in this ·X· once left. Please confirm to leave.";
     }
     
     UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:title
@@ -1064,10 +1064,10 @@ typedef enum {
                          {
                              NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
                              if([[meta objectForKey:@"code"] intValue]==403){
-                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                 alert.tag=403;
-                                 [alert show];
-                                 [alert release];
+//                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                                 alert.tag=403;
+//                                 [alert show];
+//                                 [alert release];
                              }else if([[meta objectForKey:@"code"] intValue]==200){
                                  NSLog(@"submit rsvp sucessfully...");
                                  CrossGroupViewController *parent = (CrossGroupViewController*)self.parentViewController;
