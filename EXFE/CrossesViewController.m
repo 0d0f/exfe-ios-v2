@@ -254,12 +254,15 @@
 }
 - (void)viewDidUnload
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self.crossChangeObserver];
+    
     [super viewDidUnload];
 }
 
 - (void)dealloc {
     
+    if (self.crossChangeObserver) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self.crossChangeObserver];
+    }
     
     self.crossList = nil;
     
