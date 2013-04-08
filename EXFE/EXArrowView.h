@@ -18,7 +18,7 @@ typedef enum  {
 
 @interface EXArrowView : UIView
 
-@property (nonatomic, assign) CGFloat cornerRadius; // default as 8.0f
+@property (nonatomic, assign) CGFloat cornerRadius; // default as 4.0f
 @property (nonatomic, copy) UIColor *strokeColor;   // default as black
 @property (nonatomic, assign) CGFloat strokeWidth;  // default as 1
 

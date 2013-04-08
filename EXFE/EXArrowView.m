@@ -8,12 +8,12 @@
 
 #import "EXArrowView.h"
 
-#define kDefaultCornerRadius    (8.0f)
+#define kDefaultCornerRadius    (4.0f)
 #define kDefaultStrokeColor     [UIColor blackColor]
 #define kDefaultStrokeWidth     (1.0f)
 
 #define kArrowEdgeLength        (10.0f)
-#define kArrowHalfEdgeLength    (5.0f)
+#define kArrowHalfEdgeLength    (7.0f)
 #define kArrowHeight            (7.0f)
 
 @implementation EXArrowView
@@ -68,17 +68,17 @@
             arrowPoint2 = (CGPoint){_pointPosition.x, 0.0f};
             arrowPoint3 = (CGPoint){_pointPosition.x + kArrowHalfEdgeLength, kArrowHeight};
             curvePoint11 = (CGPoint){width - (kArrowHeight + _cornerRadius), kArrowHeight};
-            curvePoint12 = (CGPoint){width - (kArrowHeight), kArrowHeight + _cornerRadius};
-            curvePoint13 = (CGPoint){width - (kArrowHeight), kArrowHeight + _cornerRadius * 2};
+            curvePoint12 = (CGPoint){width - (kArrowHeight), kArrowHeight};
+            curvePoint13 = (CGPoint){width - (kArrowHeight), kArrowHeight + _cornerRadius};
             curvePoint21 = (CGPoint){width - (kArrowHeight), height - (kArrowHeight + _cornerRadius)};
-            curvePoint22 = (CGPoint){width - (kArrowHeight + _cornerRadius), height - (kArrowHeight)};
-            curvePoint23 = (CGPoint){width - (kArrowHeight + _cornerRadius * 2), height - (kArrowHeight)};
+            curvePoint22 = (CGPoint){width - (kArrowHeight), height - (kArrowHeight)};
+            curvePoint23 = (CGPoint){width - (kArrowHeight + _cornerRadius), height - (kArrowHeight)};
             curvePoint31 = (CGPoint){(kArrowHeight + _cornerRadius), height - (kArrowHeight)};
-            curvePoint32 = (CGPoint){(kArrowHeight), height - (kArrowHeight + _cornerRadius)};
-            curvePoint33 = (CGPoint){(kArrowHeight), height - (kArrowHeight + _cornerRadius * 2)};
+            curvePoint32 = (CGPoint){(kArrowHeight), height - (kArrowHeight)};
+            curvePoint33 = (CGPoint){(kArrowHeight), height - (kArrowHeight + _cornerRadius)};
             curvePoint41 = (CGPoint){(kArrowHeight), (kArrowHeight + _cornerRadius)};
-            curvePoint42 = (CGPoint){(kArrowHeight + _cornerRadius), (kArrowHeight)};
-            curvePoint43 = (CGPoint){(kArrowHeight + _cornerRadius * 2), (kArrowHeight)};
+            curvePoint42 = (CGPoint){(kArrowHeight), (kArrowHeight)};
+            curvePoint43 = (CGPoint){(kArrowHeight + _cornerRadius), (kArrowHeight)};
             break;
         case kEXArrowDirectionDown:
             arrowPoint1 = (CGPoint){_pointPosition.x + kArrowHalfEdgeLength, height - kArrowHeight};

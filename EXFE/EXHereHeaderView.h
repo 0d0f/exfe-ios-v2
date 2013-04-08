@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class EXArrowView;
 @interface EXHereHeaderView : UIView
 
 @property (retain, nonatomic) IBOutlet UIButton *backButton;
 @property (retain, nonatomic) IBOutlet UIButton *gatherButton;
-@property (retain, nonatomic) IBOutlet UIView *tipView;
+@property (retain, nonatomic) EXArrowView *arrowView;
 
 - (id)init;
 

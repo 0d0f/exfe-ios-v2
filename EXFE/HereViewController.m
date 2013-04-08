@@ -87,6 +87,8 @@
     _avatarlistview.scrollEnable = NO;
     [self.view addSubview:_avatarlistview];
     
+    [self.view bringSubviewToFront:headerView];
+    
     [_avatarlistview reloadData];
     
     // network
