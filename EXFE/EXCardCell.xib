@@ -42,7 +42,7 @@
 							<object class="IBUILabel" id="112779000">
 								<reference key="NSNextResponder" ref="570225286"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{83, 7}, {184, 23}}</string>
+								<string key="NSFrame">{{83, 4}, {184, 23}}</string>
 								<reference key="NSSuperview" ref="570225286"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="246890834"/>
@@ -80,7 +80,7 @@
 							<object class="IBUILabel" id="810828855">
 								<reference key="NSNextResponder" ref="570225286"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{3, 10}, {69, 23}}</string>
+								<string key="NSFrame">{{3, 7}, {69, 23}}</string>
 								<reference key="NSSuperview" ref="570225286"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="112779000"/>
@@ -113,7 +113,7 @@
 							<object class="IBUILabel" id="246890834">
 								<reference key="NSNextResponder" ref="570225286"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{268, 10}, {32, 23}}</string>
+								<string key="NSFrame">{{268, 7}, {32, 23}}</string>
 								<reference key="NSSuperview" ref="570225286"/>
 								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>

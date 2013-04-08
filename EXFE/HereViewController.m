@@ -75,7 +75,7 @@
     [self.view addSubview:headerView];
     [headerView release];
     
-    self.cards = [NSSet setWithObject:[Card cardWithDictionary:[self meCardParams]]];
+    self.cards = [NSSet setWithObject:[Card cardWithDictionary:[self meCardParamsToSend:NO]]];
     
     // avatarView
     CGRect viewBounds = self.view.bounds;
@@ -121,7 +121,7 @@
     
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
-    self.cards = [NSSet setWithObject:[Card cardWithDictionary:[self meCardParams]]];
+    self.cards = [NSSet setWithObject:[Card cardWithDictionary:[self meCardParamsToSend:NO]]];
     [_avatarlistview reloadData];
     
     if (self.locationManager == nil) {
@@ -297,7 +297,7 @@
                              if (NSOrderedSame != [cell.indexPath compare:[NSIndexPath indexPathForRow:0 inSection:0]]) {
                                  cell.alpha = 1.0f;
                              } else {
-                                         cell.titleLabel.alpha = 1.0f;
+                                 cell.titleLabel.alpha = 1.0f;
                              }
                          }
                      }];
@@ -317,12 +317,23 @@
                                                       }];
 }
 
-- (NSDictionary *)meCardParams {
+- (NSDictionary *)meCardParamsToSend:(BOOL)isToSend {
     User *me = [User getDefaultUser];
     NSMutableArray *identities = [[NSMutableArray alloc] initWithCapacity:me.identities.count];
-    for (Identity *identity in me.identities) {
-        NSDictionary *identityParam = @{@"external_id": identity.external_id, @"external_username": identity.external_username, @"provider": identity.provider};
-        [identities addObject:identityParam];
+    if (isToSend && self.cardViewController) {
+        NSDictionary *identityPrivacyDict = self.cardViewController.identityPrivacyDict;
+        for (Identity *identity in me.identities) {
+            NSString *key = [NSString stringWithFormat:@"%@%@%@", identity.external_id, identity.external_username, identity.provider];
+            if ([[identityPrivacyDict valueForKey:key] boolValue]) {
+                NSDictionary *identityParam = @{@"external_id": identity.external_id, @"external_username": identity.external_username, @"provider": identity.provider};
+                [identities addObject:identityParam];
+            }
+        }
+    } else {
+        for (Identity *identity in me.identities) {
+            NSDictionary *identityParam = @{@"external_id": identity.external_id, @"external_username": identity.external_username, @"provider": identity.provider};
+            [identities addObject:identityParam];
+        }
     }
     
     NSDictionary *cardParams = @{@"id" : [NSString stringWithFormat:@"%@:%@", me.name, me.avatar_filename] , @"name" : me.name, @"avatar" : me.avatar_filename, @"bio" : me.bio, @"identities" : identities, @"is_me": [NSNumber numberWithBool:YES]};
@@ -380,7 +391,7 @@
 - (void)sendLiveCardsRequest {
     [_lock tryLock];
     
-    NSDictionary *cardParams = [self meCardParams];
+    NSDictionary *cardParams = [self meCardParamsToSend:YES];
     NSMutableDictionary *params = [@{@"card": cardParams, @"traits": @[]} mutableCopy];
     if (self.currentLocation) {
         CLLocation *location = self.currentLocation;
@@ -490,7 +501,7 @@
                 
                 NSSet *tempSet = [NSSet setWithArray:[cardDict allValues]];
                 if (0 == [tempSet count]) {
-                    tempSet = [NSSet setWithObject:[Card cardWithDictionary:[self meCardParams]]];
+                    tempSet = [NSSet setWithObject:[Card cardWithDictionary:[self meCardParamsToSend:NO]]];
                 }
                 
                 self.cards = tempSet;

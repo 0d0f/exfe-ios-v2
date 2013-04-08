@@ -51,6 +51,7 @@
 }
 
 - (void)dealloc {
+    [_identityPrivacyDict release];
     [_sortedUserIdentities release];
     [_window release];
     [_user release];
@@ -73,6 +74,7 @@
         _user = nil;
         
         self.sortedUserIdentities = nil;
+        self.identityPrivacyDict = nil;
     }
     
     if (user) {
@@ -90,6 +92,12 @@
         }];
         
         self.sortedUserIdentities = identities;
+        
+        self.identityPrivacyDict = [NSMutableDictionary dictionaryWithCapacity:[self.sortedUserIdentities count]];
+        for (Identity *identity in self.sortedUserIdentities) {
+            NSString *key = [NSString stringWithFormat:@"%@%@%@", identity.external_id, identity.external_username, identity.provider];
+            [self.identityPrivacyDict setValue:[NSNumber numberWithBool:YES] forKey:key];
+        }
     }
 }
 
@@ -118,6 +126,12 @@
     if (indexPath.row < [self.user.identities count]) {
         Identity *identity = [self.sortedUserIdentities objectAtIndex:indexPath.row];
         cell.identity = identity;
+        
+        NSString *key = [NSString stringWithFormat:@"%@%@%@", identity.external_id, identity.external_username, identity.provider];
+        if ([[self.identityPrivacyDict valueForKey:key] boolValue])
+            cell.pravicyState = kEXCardCellPravicyStatePublic;
+        else
+            cell.pravicyState = kEXCardCellPravicyStatePrivate;
     } else {
         cell.identity = nil;
     }
@@ -135,13 +149,26 @@
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-#warning test only 得知接口之后改为根据数据来获取 pravicy 信息
-    EXCardCell *cell = (EXCardCell *)[tableView cellForRowAtIndexPath:indexPath];
-    if (kEXCardCellPravicyStatePublic == cell.pravicyState) {
-        cell.pravicyState = kEXCardCellPravicyStatePrivate;
+    if (indexPath.row >= [self.sortedUserIdentities count])
+        return;
+    
+    Identity *identity = [self.sortedUserIdentities objectAtIndex:indexPath.row];
+    
+    NSString *key = [NSString stringWithFormat:@"%@%@%@", identity.external_id, identity.external_username, identity.provider];
+    if ([[self.identityPrivacyDict valueForKey:key] boolValue]) {
+        int i = 0;
+        for (NSNumber *num in self.identityPrivacyDict.allValues) {
+            if ([num boolValue]) {
+                i++;
+            }
+        }
+        if (i > 1)
+            [self.identityPrivacyDict setValue:[NSNumber numberWithBool:NO] forKey:key];
     } else {
-        cell.pravicyState = kEXCardCellPravicyStatePublic;
+        [self.identityPrivacyDict setValue:[NSNumber numberWithBool:YES] forKey:key];
     }
+    
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - Public

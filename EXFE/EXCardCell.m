@@ -45,7 +45,6 @@
         self.displayIdentityLabel.text = [identity getDisplayIdentity];
         self.providerLabel.text = [identity.provider capitalizedString];
         
-#warning test only 需要确认这里的接口
         self.pravicyLabel.text = @"Public";
     }
 }

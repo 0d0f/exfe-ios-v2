@@ -29,6 +29,7 @@ UIGestureRecognizerDelegate
 
 @property (nonatomic, retain) User *user;
 @property (nonatomic, assign) id<EXCardViewControllerDelegate> delegate;
+@property (nonatomic, retain) NSMutableDictionary *identityPrivacyDict;
 
 - (void)presentFromViewController:(UIViewController *)controller animated:(BOOL)animated completion:(void (^)(void))handler;
 - (void)dismissWithAnimated:(BOOL)animated completion:(void (^)(void))handler;

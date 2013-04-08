@@ -173,15 +173,10 @@
 - (BOOL)isEqualToCard:(Card *)aCard {
     if (nil == aCard)
         return NO;
-//    NSAssert(_userName != nil && _userName.length != 0, @"name为空了");
-//    NSAssert(aCard.userName != nil && aCard.userName.length != 0, @"card参数的name为空了");
-//    NSAssert(_avatarURLString != nil && _avatarURLString.length != 0, @"avatarUrl为空了");
-//    NSAssert(aCard.avatarURLString != nil && aCard.avatarURLString.length != 0, @"card参数的avatarUrl为空了");
-    
-    if ([_userName isEqualToString:aCard.userName] &&
-        [_avatarURLString isEqualToString:aCard.avatarURLString]) {
+    if ([_cardID isEqualToString:aCard.cardID]) {
         return YES;
     }
+
     return NO;
 }
 

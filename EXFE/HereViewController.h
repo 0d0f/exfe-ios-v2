@@ -24,10 +24,6 @@ UserAvatarCollectionDelegate,
 EXCardViewControllerDelegate,
 CLLocationManagerDelegate
 > {
-    NSMutableData *_data;
-    int byteIndex;
-    uint8_t buff[1024];
-    
     EXUserAvatarCollectionView  *_avatarlistview;
 }
 
