@@ -130,13 +130,16 @@
     }
     CGContextRestoreGState(context);
     
-    CGContextSaveGState(context);
-    CGContextSetShadowWithColor(context, shadowOffset, shadowBlurRadius, shadow.CGColor);
+//    CGContextSaveGState(context);
+//    CGContextSetShadowWithColor(context, shadowOffset, shadowBlurRadius, shadow.CGColor);
     [strokeColor setStroke];
     bezierPath.lineWidth = 1;
     [bezierPath stroke];
-    CGContextRestoreGState(context);
-
+//    CGContextRestoreGState(context);
+    
+    //// Cleanup
+    CGGradientRelease(gradient);
+    CGColorSpaceRelease(colorSpace);
 }
 
 @end

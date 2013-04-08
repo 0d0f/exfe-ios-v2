@@ -181,7 +181,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"Me:%d name:%@", self.isMe, self.userName];
+    return [NSString stringWithFormat:@"Me:%d name:%@ CardID:%@", self.isMe, self.userName, self.cardID];
 }
 
 - (BOOL)isNull:(id)obj {

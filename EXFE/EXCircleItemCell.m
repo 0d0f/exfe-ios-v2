@@ -211,27 +211,29 @@
         self.isUsingDefaultAvatar = NO;
     }
     
-    UIImageView *otherImageView = nil;
-    if (self.currentVisibleAvatarImageView == self.avatarImageViews[0]) {
-        otherImageView = self.avatarImageViews[1];
-    } else {
-        otherImageView = self.avatarImageViews[0];
-    }
+    self.currentVisibleAvatarImageView.image = image;
     
-    otherImageView.alpha = 0.0f;
-    otherImageView.image = image;
-    
-    [UIView setAnimationsEnabled:animated];
-    [UIView animateWithDuration:0.5f
-                     animations:^{
-                         otherImageView.alpha = 1.0f;
-                         self.currentVisibleAvatarImageView.alpha = 0.0f;
-                     }
-                     completion:^(BOOL finished){
-                         [UIView setAnimationsEnabled:YES];
-                         self.currentVisibleAvatarImageView.image = nil;
-                         self.currentVisibleAvatarImageView = otherImageView;
-                     }];
+//    UIImageView *otherImageView = nil;
+//    if (self.currentVisibleAvatarImageView == self.avatarImageViews[0]) {
+//        otherImageView = self.avatarImageViews[1];
+//    } else {
+//        otherImageView = self.avatarImageViews[0];
+//    }
+//    
+//    otherImageView.alpha = 0.0f;
+//    otherImageView.image = image;
+//    
+//    [UIView setAnimationsEnabled:animated];
+//    [UIView animateWithDuration:0.5f
+//                     animations:^{
+//                         otherImageView.alpha = 1.0f;
+//                         self.currentVisibleAvatarImageView.alpha = 0.0f;
+//                     }
+//                     completion:^(BOOL finished){
+//                         [UIView setAnimationsEnabled:YES];
+////                         self.currentVisibleAvatarImageView.image = nil;
+//                         self.currentVisibleAvatarImageView = otherImageView;
+//                     }];
 }
 
 @end

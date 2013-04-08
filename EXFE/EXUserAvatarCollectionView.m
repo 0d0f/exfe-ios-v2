@@ -332,7 +332,8 @@
     }
     
     NSUInteger count = (_flags.numberOfCells > 12) ? 12 : _flags.numberOfCells;
-    NSUInteger numberOfNewCellToAdd = count - [_visibleCells count];
+    NSInteger numberOfNewCellToAdd = count - [_visibleCells count];
+    numberOfNewCellToAdd = numberOfNewCellToAdd < 0 ? 0 : numberOfNewCellToAdd;
     
     int remainCount = 0;
     int ring = 1;

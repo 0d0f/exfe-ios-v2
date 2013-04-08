@@ -44,6 +44,20 @@
         
         [self.gatherButton setBackgroundImage:buttonBackgroundImage forState:UIControlStateNormal];
         
+        // wave animation
+        NSMutableArray *animations = [[NSMutableArray alloc] initWithCapacity:60];
+        for (int i = 0; i < 60; i++) {
+            NSString *imageName = (i / 10) ? [NSString stringWithFormat:@"liveicon_%d.png", i] : [NSString stringWithFormat:@"liveicon_0%d.png", i];
+            [animations addObject:[UIImage imageNamed:imageName]];
+        }
+        self.waveAnimationImageView.animationImages = animations;
+        self.waveAnimationImageView.animationDuration = 1.0f;
+        self.waveAnimationImageView.backgroundColor = [UIColor COLOR_BLUE_LAKE];
+        self.waveAnimationImageView.layer.cornerRadius = 3.0f;
+        self.waveAnimationImageView.layer.masksToBounds = YES;
+        [self.waveAnimationImageView startAnimating];
+        [animations release];
+        
         // tipView
         UILabel *tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{15, 10}, {200, 80}}];
         tipLabel.text = @"People accessing exfe.com by your side are shown below. If not found, put two phones together with speaker volume max.";
@@ -55,7 +69,7 @@
         
         _arrowView = [[EXArrowView alloc] initWithFrame:(CGRect){{10, 38}, {300, 100}}];
         [_arrowView setPointPosition:(CGPoint){CGRectGetMidX(self.bounds) - 10, CGRectGetMidY(self.bounds)} andArrowDirection:kEXArrowDirectionUp];
-        _arrowView.gradientColors = @[(id)[UIColor COLOR_BLUE_LAKE].CGColor, (id)[UIColor COLOR_BLUE_EXFE].CGColor];
+        _arrowView.gradientColors = @[(id)[UIColor COLOR_RGB(0x36, 0x9F, 0xE9)].CGColor, (id)[UIColor COLOR_RGB(0x23, 0x55, 0x8C)].CGColor];
         _arrowView.strokeColor = [UIColor COLOR_BLUE_LAKE];
         [_arrowView setNeedsDisplay];
         
@@ -63,14 +77,15 @@
         self.tipLabel = tipLabel;
         [tipLabel release];
         
-        CATransform3D scaleTransform3D = CATransform3DMakeScale(0.05f, 0.15f, 1.0f);
+        CATransform3D scaleTransform3D = CATransform3DMakeScale(0.073f, 0.25f, 1.0f);
         CATransform3D rotationTransform3D = CATransform3DMakeRotation(-M_PI_2, 0.0f, 0.0f, 1.0f);
         CATransform3D transform = CATransform3DConcat(scaleTransform3D, rotationTransform3D);
-        CATransform3D translateTransform3D = CATransform3DMakeTranslation(32, -64, 0.0f);
+        CATransform3D translateTransform3D = CATransform3DMakeTranslation(37, -64, 0.0f);
         transform = CATransform3DConcat(transform, translateTransform3D);
         _arrowView.layer.transform = transform;
         
         self.tipLabel.alpha = 0.0f;
+        _arrowView.alpha = 0.0f;
         
         [self addSubview:_arrowView];
         
@@ -81,10 +96,12 @@
 }
 
 - (void)dealloc {
+    [_waveAnimationImageView release];
     [_innerWindow release];
     [_arrowView release];
     [_backButton release];
     [_gatherButton release];
+    [_waveAnimationImageView release];
     [super dealloc];
 }
 
@@ -111,24 +128,32 @@
     
     [self.innerWindow makeKeyAndVisible];
     
-    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-    animation.values = @[[NSValue valueWithCATransform3D:_arrowView.layer.transform],
-                         [NSValue valueWithCATransform3D:CATransform3DIdentity]];
-    animation.duration = 0.233f;
-    [_arrowView.layer addAnimation:animation forKey:nil];
-    _arrowView.layer.transform = CATransform3DIdentity;
-    
-    [UIView animateWithDuration:0.233f
+    [UIView animateWithDuration:0.05f
                      animations:^{
-                         self.tipLabel.alpha = 1.0f;
+                         self.waveAnimationImageView.alpha = 0.0f;
+                         self.arrowView.alpha = 1.0f;
+                     }
+                     completion:^(BOOL finished){
+                         [self.waveAnimationImageView stopAnimating];
+                         CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+                         animation.values = @[[NSValue valueWithCATransform3D:_arrowView.layer.transform],
+                                              [NSValue valueWithCATransform3D:CATransform3DIdentity]];
+                         animation.duration = 0.233f;
+                         [_arrowView.layer addAnimation:animation forKey:nil];
+                         _arrowView.layer.transform = CATransform3DIdentity;
+                         
+                         [UIView animateWithDuration:0.233f
+                                          animations:^{
+                                              self.tipLabel.alpha = 1.0f;
+                                          }];
                      }];
 }
 
 - (void)dismissTipView {
-    CATransform3D scaleTransform3D = CATransform3DMakeScale(0.05f, 0.15f, 1.0f);
+    CATransform3D scaleTransform3D = CATransform3DMakeScale(0.073f, 0.25f, 1.0f);
     CATransform3D rotationTransform3D = CATransform3DMakeRotation(-M_PI_2, 0.0f, 0.0f, 1.0f);
     CATransform3D transform = CATransform3DConcat(scaleTransform3D, rotationTransform3D);
-    CATransform3D translateTransform3D = CATransform3DMakeTranslation(32, -64, 0.0f);
+    CATransform3D translateTransform3D = CATransform3DMakeTranslation(37, -64, 0.0f);
     transform = CATransform3DConcat(transform, translateTransform3D);
     
     CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
@@ -140,12 +165,21 @@
     
     [UIView animateWithDuration:0.233f
                      animations:^{
-                         [self.originWindow makeKeyAndVisible];
-                         self.innerWindow.hidden = YES;
-                         [_innerWindow release];
-                         _innerWindow = nil;
-                         
                          self.tipLabel.alpha = 0.0f;
+                     }
+                     completion:^(BOOL finished){
+                         [self.waveAnimationImageView startAnimating];
+                         [UIView animateWithDuration:0.05f
+                                          animations:^{
+                                              self.waveAnimationImageView.alpha = 1.0f;
+                                              self.arrowView.alpha = 0.0f;
+                                          }
+                                          completion:^(BOOL finished){
+                                              [self.originWindow makeKeyAndVisible];
+                                              self.innerWindow.hidden = YES;
+                                              [_innerWindow release];
+                                              _innerWindow = nil;
+                                          }];
                      }];
 }
 

@@ -24,6 +24,7 @@ typedef enum {
 @property (nonatomic, copy) NSURL *baseURL;
 @property (nonatomic, retain) NSOutputStream *outputStream; // should be set
 @property (nonatomic, assign) EXStreamingServiceState serviceState;
+@property (nonatomic, retain) AFHTTPClient  *client;
 
 @property (nonatomic, assign) NSTimeInterval serviceTimeoutInterval;    // Default as 60 secs
 @property (nonatomic, copy) StreamingSuccessBlock   streamingSuccessHanlder;

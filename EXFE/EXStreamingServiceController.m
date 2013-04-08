@@ -13,7 +13,6 @@
 #define kDefaultInvokeInterval          (5.0f)
 
 @interface EXStreamingServiceController ()
-@property (nonatomic, retain) AFHTTPClient  *client;
 @property (nonatomic, retain) NSTimer   *invokeTimer;
 @property (nonatomic, retain) NSTimer   *heartBeatTimer;
 @end

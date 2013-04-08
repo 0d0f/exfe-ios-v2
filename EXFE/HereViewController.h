@@ -15,14 +15,16 @@
 #import "EXUserAvatarCollectionView.h"
 #import "EXCircleItemCell.h"
 #import "EXCardViewController.h"
+#import "EXLiveServiceController.h"
 
 @interface HereViewController : UIViewController
 <
-NSStreamDelegate,
 UserAvatarCollectionDataSource,
 UserAvatarCollectionDelegate,
 EXCardViewControllerDelegate,
-CLLocationManagerDelegate
+CLLocationManagerDelegate,
+EXLiveServiceControllerDataSource,
+EXLiveServiceControllerDelegate
 > {
     EXUserAvatarCollectionView  *_avatarlistview;
 }
