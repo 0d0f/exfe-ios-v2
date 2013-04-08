@@ -24,9 +24,9 @@
 #define kHeaderStyleFull   0
 #define kHeaderStyleHalf   1
 
-#define kWidgetCross           0
-#define kWidgetConversation    1
-#define kWidgetExfee           2
+#define kWidgetCross           1
+#define kWidgetConversation    2
+#define kWidgetExfee           3
 
 @interface CrossGroupViewController : UIViewController<EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, EXTabWidgetDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate, EXRSVPStatusViewDelegate>{
     

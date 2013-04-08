@@ -30,7 +30,7 @@
         for (NSUInteger i = 0; i < items.count; i++) {
             EXTabWidgetItem *item = [items objectAtIndex:i];
             UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
-            CGPoint topleft = [self positionOfButton:i];
+            
             
             btn.backgroundColor = [UIColor clearColor];
             
@@ -41,9 +41,11 @@
             [btn addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
             btn.tag = i + 1;
             
-            btn.frame = CGRectOffset(frame, topleft.x, topleft.y);
             if (i != currentIndex) {
                 btn.hidden = YES;
+            } else {
+                CGPoint topleft = [self positionOfButton:0];
+                btn.frame = CGRectOffset(frame, topleft.x, topleft.y);
             }
             [self addSubview:btn];
             total = btn.tag;
@@ -59,21 +61,23 @@
         currentIndex = index;
         gravity = 1; // right to left
         _enable = YES;
-        _stage = 0;
+        _stage = kStageNormal;
         // Initialization code
         CGRect frame = CGRectMake(0, 0, 30, 30);
         for (NSUInteger i = 0; i < imgs.count; i++) {
             UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
-            CGPoint topleft = [self positionOfButton:i];
             
             btn.backgroundColor = [UIColor clearColor];
             [btn setImage:[imgs objectAtIndex:i] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
             btn.tag = i + 1;
             
-            btn.frame = CGRectOffset(frame, topleft.x, topleft.y);
             if (i != currentIndex) {
-                btn.hidden = YES;
+                CGPoint topleft = [self positionOfButton:-1];
+                btn.frame = CGRectOffset(frame, topleft.x, topleft.y);
+            } else {
+                CGPoint topleft = [self positionOfButton:0];
+                btn.frame = CGRectOffset(frame, topleft.x, topleft.y);
             }
             [self addSubview:btn];
             total = btn.tag;
@@ -108,13 +112,13 @@
         // todo
     } else {
         if (currentIndex + 1 != tag) {
+            _stage = kStageNormal;
             NSUInteger animCount = 0;
             for (UIView *view in self.subviews) {
                 if (view.tag == tag) {
                     CGRect aStart = view.frame;
                     aStart.origin = [self positionOfButton:0];
                     view.frame = aStart;
-                    view.hidden = NO;
                 }else if (view.tag - 1 == currentIndex){
                     CGRect aStart = view.frame;
                     aStart.origin = [self positionOfButton:0 - total];
@@ -138,7 +142,7 @@
     
     UIButton* btn = sender;
     NSUInteger idx = btn.tag - 1;
-//    NSLog(@"widget clicked: index %i when current is %i/%i", idx, currentIndex, total);
+    NSLog(@"widget clicked: index %i when current is %i/%i", idx, currentIndex, total);
     if (idx == currentIndex) {
         if (_stage == kStageNormal) {
             _enable = NO;
@@ -160,7 +164,6 @@
                     CGRect aStart = view.frame;
                     aStart.origin = [self positionOfButton:0 - animCount];
                     view.frame = aStart;
-                    view.hidden = NO;
                 }
             }
             
@@ -174,7 +177,6 @@
                                          CGRect aStart = view.frame;
                                          aStart.origin = [self positionOfButton:total - count];
                                          view.frame = aStart;
-                                         view.hidden = NO;
                                      }
                                  }
                              }
@@ -193,7 +195,6 @@
                     CGRect aStart = view.frame;
                     aStart.origin = [self positionOfButton:total - count];
                     view.frame = aStart;
-                    view.hidden = NO;
                 }
             }
             if (self.delegate) {
@@ -216,7 +217,6 @@
                                          CGRect aStart = view.frame;
                                          aStart.origin = [self positionOfButton:0 - animCount];
                                          view.frame = aStart;
-                                         view.hidden = NO;
                                      }
                                  }
                                  

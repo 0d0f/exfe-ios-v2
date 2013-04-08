@@ -359,13 +359,13 @@
     
     [self refreshUI];
     
-    if (_widgetId > 0) {
+    if (_widgetId > kWidgetCross) {
         [self swapChildViewController:_widgetId];
     }
     
     if (tabWidget == nil) {
         NSArray* imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30"], [UIImage imageNamed:@"widget_conv_30"], [UIImage imageNamed:@"widget_exfee_30"], nil];
-        tabWidget = [[EXTabWidget alloc] initWithFrame:CGRectMake(0, 65, CGRectGetWidth(self.view.bounds), 40) withImages:imgs current:_widgetId];
+        tabWidget = [[EXTabWidget alloc] initWithFrame:CGRectMake(0, 65, CGRectGetWidth(self.view.bounds), 40) withImages:imgs current:_widgetId - 1];
         tabWidget.delegate = self;
         [self.view insertSubview:tabWidget belowSubview:btnBack];
     }
@@ -375,35 +375,27 @@
 {
     [super viewDidAppear:animated];
     
-//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-//    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-//    NSString *updated_at = [formatter stringFromDate:_cross.updated_at];
-//    [formatter release];
     NSString *updated_at = _cross.updated_at;
-    //  [NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",_cross.cross_id,@"cross_id", nil]
-    //    [APICrosses LoadCrossWithUserId:[_cross.cross_id intValue] updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult)
-    //    [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:updated_at  success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-    //    } failure:^[(RKObjectRequestOperation *operation, NSError *error) {
-    //    }];
-    [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        
-        if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-        {
-            Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-            if([meta.code intValue]==403){
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                alert.tag=403;
-                [alert show];
-                [alert release];
-            }else if([meta.code intValue]==200){
-                [self refreshUI];
-            }
-            
-        }
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        
-    }];
+    [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue]
+                         updatedtime:updated_at
+                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                 
+                                 if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
+                                     Meta* meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                                     if ([meta.code intValue] == 403){
+                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                         alert.tag = 403;
+                                         [alert show];
+                                         [alert release];
+                                     } else if([meta.code intValue] == 200) {
+                                         [self refreshUI];
+                                     }
+                                     
+                                 }
+                             }
+                             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                 
+                             }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -1154,7 +1146,7 @@
     UIViewController *newVC = nil;
     NSUInteger style = kHeaderStyleFull;
     switch (widget_id) {
-        case 2:
+        case kWidgetConversation:
         {
             WidgetConvViewController * conversationView =  [[WidgetConvViewController alloc]initWithNibName:@"WidgetConvViewController" bundle:nil] ;
             // prepare data for conversation
@@ -1172,7 +1164,7 @@
             style = kHeaderStyleHalf;
         }
             break;
-        case 3:
+        case kWidgetExfee:
         {
             WidgetExfeeViewController *exfeeView = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
             exfeeView.exfee = _cross.exfee;
