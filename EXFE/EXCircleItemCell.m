@@ -12,7 +12,6 @@
 #import "User.h"
 #import "Util.h"
 #import "ImgCache.h"
-#import "EXCard.h"
 #import "Card.h"
 
 @interface EXCircleItemCell ()
@@ -65,6 +64,8 @@
     // long press
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                             action:@selector(longPressHandler:)];
+    longPress.minimumPressDuration = 0.233f;
+    longPress.delegate = self;
     [self.avatarBaseView addGestureRecognizer:longPress];
     [longPress release];
     
@@ -184,8 +185,19 @@
 }
 
 - (void)longPressHandler:(UILongPressGestureRecognizer *)recognizer {
-    if (_longPressBlock)
-        _longPressBlock();
+    UIGestureRecognizerState state = recognizer.state;
+    switch (state) {
+        case UIGestureRecognizerStateBegan:
+            if (_longPressBeginBlock)
+                _longPressBeginBlock();
+            break;
+        case UIGestureRecognizerStateEnded:
+            if (_longPressEndBlock)
+                _longPressEndBlock();
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - Private

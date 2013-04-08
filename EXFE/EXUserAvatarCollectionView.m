@@ -427,8 +427,12 @@
         };
     }
     
-    cell.longPressBlock = ^{
-        [self.delegate avatarCollectionView:self didLongPressCircleItemAtIndexPath:cell.indexPath];
+    cell.longPressBeginBlock = ^{
+        [self.delegate avatarCollectionView:self didBeginLongPressCircleItemAtIndexPath:cell.indexPath];
+    };
+    
+    cell.longPressEndBlock = ^{
+        [self.delegate avatarCollectionView:self didEndLongPressCircleItemAtIndexPath:cell.indexPath];
     };
     
     // animation

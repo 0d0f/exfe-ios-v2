@@ -149,7 +149,6 @@
 		76A39C53170BEADD008D1FFE /* home_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 76A39C51170BEADC008D1FFE /* home_bg.png */; };
 		76A39C54170BEADD008D1FFE /* home_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76A39C52170BEADC008D1FFE /* home_bg@2x.png */; };
 		76B650311705940D0036E832 /* EXLiveViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B650301705940D0036E832 /* EXLiveViewCell.xib */; };
-		76B65037170595250036E832 /* EXCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B65036170595250036E832 /* EXCard.m */; };
 		76B6503C1705A0150036E832 /* portrait_64_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B650381705A0150036E832 /* portrait_64_selected.png */; };
 		76B6503D1705A0150036E832 /* portrait_64_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B650391705A0150036E832 /* portrait_64_selected@2x.png */; };
 		76B6503E1705A0150036E832 /* portrait_64.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B6503A1705A0150036E832 /* portrait_64.png */; };
@@ -718,8 +717,6 @@
 		76A39C51170BEADC008D1FFE /* home_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_bg.png; sourceTree = "<group>"; };
 		76A39C52170BEADC008D1FFE /* home_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_bg@2x.png"; sourceTree = "<group>"; };
 		76B650301705940D0036E832 /* EXLiveViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EXLiveViewCell.xib; sourceTree = "<group>"; };
-		76B65035170595250036E832 /* EXCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCard.h; sourceTree = "<group>"; };
-		76B65036170595250036E832 /* EXCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCard.m; sourceTree = "<group>"; };
 		76B650381705A0150036E832 /* portrait_64_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_64_selected.png; sourceTree = "<group>"; };
 		76B650391705A0150036E832 /* portrait_64_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_64_selected@2x.png"; sourceTree = "<group>"; };
 		76B6503A1705A0150036E832 /* portrait_64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_64.png; sourceTree = "<group>"; };
@@ -1838,8 +1835,6 @@
 				78531D0917057F54002D34A1 /* EXCircleItemCell.h */,
 				78531D0A17057F54002D34A1 /* EXCircleItemCell.m */,
 				76B650301705940D0036E832 /* EXLiveViewCell.xib */,
-				76B65035170595250036E832 /* EXCard.h */,
-				76B65036170595250036E832 /* EXCard.m */,
 			);
 			name = Control;
 			sourceTree = "<group>";
@@ -2790,7 +2785,6 @@
 				78531CFA1701A434002D34A1 /* HereViewController.m in Sources */,
 				78531D0117056C25002D34A1 /* EXUserAvatarCollectionView.m in Sources */,
 				78531D0B17057F54002D34A1 /* EXCircleItemCell.m in Sources */,
-				76B65037170595250036E832 /* EXCard.m in Sources */,
 				76FF86C81705E62E003CA095 /* EXVerticalAlignLabel.m in Sources */,
 				76FF86CE17062BCB003CA095 /* EXHereHeaderView.m in Sources */,
 				76A39BDC1708C066008D1FFE /* EXCardViewController.m in Sources */,

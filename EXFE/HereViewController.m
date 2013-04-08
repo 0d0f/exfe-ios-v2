@@ -261,7 +261,7 @@
     }
 }
 
-- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didLongPressCircleItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didBeginLongPressCircleItemAtIndexPath:(NSIndexPath *)indexPath {
     EXCircleItemCell *cell = [avatarCollectionView circleItemCellAtIndexPath:indexPath];
     CGSize contentSize = [EXPopoverCardViewController cardSizeWithCard:cell.card];
     
@@ -280,6 +280,10 @@
                                  arrowDirection:kEXArrowDirectionAny
                                        animated:YES
                                        complete:nil];
+}
+
+- (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didEndLongPressCircleItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self.popoverCardViewController dismissWithAnimated:YES complete:nil];
 }
 
 #pragma mark - EXCardViewControllerDelegate

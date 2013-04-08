@@ -10,11 +10,15 @@
 #import "EXVerticalAlignLabel.h"
 
 typedef void (^TapBlock)(void);
-typedef void (^LongPressBlock)(void);
+typedef void (^LongPressBeginBlock)(void);
+typedef void (^LongPressEndBlock)(void);
 
 @class Card;
 
 @interface EXCircleItemCell : UIView
+<
+UIGestureRecognizerDelegate
+>
 
 @property (retain, nonatomic) IBOutlet UIView *avatarBaseView;
 @property (retain, nonatomic) EXVerticalAlignLabel *titleLabel;
@@ -25,7 +29,8 @@ typedef void (^LongPressBlock)(void);
 @property (nonatomic, assign) CGPoint avatarCenter;
 
 @property (copy, nonatomic) TapBlock tapBlock;
-@property (copy, nonatomic) LongPressBlock longPressBlock;
+@property (copy, nonatomic) LongPressBeginBlock longPressBeginBlock;
+@property (copy, nonatomic) LongPressEndBlock longPressEndBlock;
 
 @property (nonatomic, copy) Card *card;
 @property (nonatomic, copy) NSIndexPath *indexPath;
