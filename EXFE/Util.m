@@ -1011,13 +1011,16 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 
 + (void) showConnectError:(NSError*)err delegate:(id)delegate{
     NSString *errormsg = @"";
+    NSString *errorTitle = @"";
     if (err.code == 500) {
+        errorTitle = @"Server Error";
         errormsg = @"Sorry, something is technically wrong in the \"cloud\", we’re fixing it up.";
     } else { //NSURLError.h
-        errormsg = @"Could not connect to the server. Please check your network connection.";
+        errorTitle = @"Network Error";
+        errormsg = @"Failed to connect to server. Please retry or wait awhile.";
     }
     if (![errormsg isEqualToString:@""]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:errorTitle message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         [alert release];
     }
