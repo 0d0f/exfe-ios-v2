@@ -1160,6 +1160,7 @@
             // clean up data
             _cross.conversation_count = 0;
             [self fillConversationCount:0];
+            [NSNotificationCenter.defaultCenter postNotificationName:EXCrossListDidChangeNotification object:self];
             
             newVC = conversationView;
             style = kHeaderStyleHalf;
