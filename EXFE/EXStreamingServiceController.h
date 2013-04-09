@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "AFNetworking.h"
+#import <RestKit/RestKit.h>
 
 typedef void (^StreamingSuccessBlock)(AFHTTPRequestOperation *operation, id responseObject);
 typedef void (^StreamingFailureBlock)(AFHTTPRequestOperation *operation, NSError *error);

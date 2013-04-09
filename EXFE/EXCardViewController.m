@@ -44,7 +44,7 @@
     [self.view.layer insertSublayer:bgLayer atIndex:0];
     
     CAGradientLayer *innerShadowLayer = [CAGradientLayer layer];
-    innerShadowLayer.colors = @[(id)[UIColor colorWithWhite:0.0f alpha:0.5f].CGColor, (id)[UIColor clearColor].CGColor];
+    innerShadowLayer.colors = @[(id)[UIColor colorWithWhite:0.0f alpha:0.2f].CGColor, (id)[UIColor clearColor].CGColor];
     innerShadowLayer.frame = (CGRect){{0, 0}, {CGRectGetWidth(self.view.layer.bounds), 4}};
     [self.view.layer addSublayer:innerShadowLayer];
     
@@ -160,10 +160,17 @@
                 i++;
             }
         }
-        if (i > 1)
+        if (i > 1) {
             [self.identityPrivacyDict setValue:[NSNumber numberWithBool:NO] forKey:key];
+            if ([self.delegate respondsToSelector:@selector(cardViewControllerDidChangeUserPrivacy:)]) {
+                [self.delegate cardViewControllerDidChangeUserPrivacy:self];
+            }
+        }
     } else {
         [self.identityPrivacyDict setValue:[NSNumber numberWithBool:YES] forKey:key];
+        if ([self.delegate respondsToSelector:@selector(cardViewControllerDidChangeUserPrivacy:)]) {
+            [self.delegate cardViewControllerDidChangeUserPrivacy:self];
+        }
     }
     
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];

@@ -74,6 +74,14 @@
 {
     [super viewDidLoad];
     
+    // bg Color
+    UIImage *bgColorImage = [UIImage imageNamed:@"livebg.png"];
+    
+    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:bgColorImage];
+    backgroundView.frame = self.view.bounds;
+    [self.view addSubview:backgroundView];
+    [backgroundView release];
+    
     // headerView
     CGRect headerViewBounds;
     EXHereHeaderView *headerView = [[EXHereHeaderView alloc] init];
@@ -118,6 +126,8 @@
     
     [self becomeFirstResponder];
     self.canUpdateData = YES;
+    
+    self.headerView.gatherButton.enabled = NO;
     
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
@@ -343,6 +353,13 @@
                                               animated:YES
                                             completion:nil];
     }
+    
+    NSSet *selectedCells = [avatarCollectionView selectedCircleItemCells];
+    if ([selectedCells count]) {
+        self.headerView.gatherButton.enabled = YES;
+    } else {
+        self.headerView.gatherButton.enabled = NO;
+    }
 }
 
 - (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didBeginLongPressCircleItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -371,6 +388,10 @@
 }
 
 #pragma mark - EXCardViewControllerDelegate
+- (void)cardViewControllerDidChangeUserPrivacy:(EXCardViewController *)controller {
+    [self.liveService forceInvokeUserCardUpdate];
+}
+
 - (void)cardViewControllerWillFinish:(EXCardViewController *)controller {
     NSSet *cells = [_avatarlistview visibleCircleItemCells];
     [UIView animateWithDuration:0.25f

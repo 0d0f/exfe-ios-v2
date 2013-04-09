@@ -18,16 +18,9 @@
     return self;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
 - (void)dealloc {
-    [_providerImageView release];
     [_userNameLabel release];
+    [_providerLabel release];
     [super dealloc];
 }
 @end

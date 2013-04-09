@@ -12,6 +12,8 @@
 @class EXCardViewController;
 
 @protocol EXCardViewControllerDelegate <NSObject>
+@required
+- (void)cardViewControllerDidChangeUserPrivacy:(EXCardViewController *)controller;
 @optional
 - (void)cardViewControllerWillFinish:(EXCardViewController *)controller;
 - (void)cardViewControllerDidFinish:(EXCardViewController *)controller;

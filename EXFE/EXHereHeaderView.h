@@ -13,8 +13,9 @@
 
 @property (retain, nonatomic) IBOutlet UIButton *backButton;
 @property (retain, nonatomic) IBOutlet UIButton *gatherButton;
-@property (retain, nonatomic) IBOutlet UIImageView *waveAnimationImageView;
+@property (retain, nonatomic) UIImageView *waveAnimationImageView;
 @property (retain, nonatomic) EXArrowView *arrowView;
+@property (retain, nonatomic) IBOutlet UIControl *titleControl;
 
 - (id)init;
 

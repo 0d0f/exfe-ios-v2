@@ -107,6 +107,10 @@
     });
 }
 
+- (void)forceInvokeUserCardUpdate {
+    [self sendLiveCardsRequest];
+}
+
 #pragma mark - request
 - (BOOL)canSendRequestNow {
     NSDate *now = [NSDate date];

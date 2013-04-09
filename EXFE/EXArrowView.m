@@ -9,7 +9,7 @@
 #import "EXArrowView.h"
 
 #define kDefaultCornerRadius    (4.0f)
-#define kDefaultStrokeColor     [UIColor blackColor]
+#define kDefaultStrokeColor     [UIColor whiteColor]
 #define kDefaultStrokeWidth     (1.0f)
 
 #define kArrowEdgeLength        (10.0f)

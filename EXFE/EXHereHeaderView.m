@@ -13,6 +13,42 @@
 #import "EXArrowView.h"
 #import "AppDelegate.h"
 
+@interface EXHereHeaderArrowView : UIView
+@end
+
+@implementation EXHereHeaderArrowView
+
+- (void)drawRect:(CGRect)rect {
+    //// General Declarations
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    //// Color Declarations
+    UIColor* color = [UIColor colorWithRed: 0.212 green: 0.624 blue: 0.914 alpha: 1];
+    
+    //// Rounded Rectangle Drawing
+    UIBezierPath* roundedRectanglePath = [UIBezierPath bezierPath];
+    [roundedRectanglePath moveToPoint: CGPointMake(4.11, 7.74)];
+    [roundedRectanglePath addLineToPoint: CGPointMake(0, 10.72)];
+    [roundedRectanglePath addLineToPoint: CGPointMake(4.11, 13.41)];
+    [roundedRectanglePath addLineToPoint: CGPointMake(4.11, 18)];
+    [roundedRectanglePath addCurveToPoint: CGPointMake(8.09, 22) controlPoint1: CGPointMake(4.11, 20.21) controlPoint2: CGPointMake(5.89, 22)];
+    [roundedRectanglePath addLineToPoint: CGPointMake(22.02, 22)];
+    [roundedRectanglePath addCurveToPoint: CGPointMake(26, 18) controlPoint1: CGPointMake(24.22, 22) controlPoint2: CGPointMake(26, 20.21)];
+    [roundedRectanglePath addLineToPoint: CGPointMake(26, 4)];
+    [roundedRectanglePath addCurveToPoint: CGPointMake(22.02, 0) controlPoint1: CGPointMake(26, 1.79) controlPoint2: CGPointMake(24.22, 0)];
+    [roundedRectanglePath addLineToPoint: CGPointMake(8.09, 0)];
+    [roundedRectanglePath addCurveToPoint: CGPointMake(4.11, 4) controlPoint1: CGPointMake(5.89, 0) controlPoint2: CGPointMake(4.11, 1.79)];
+    [roundedRectanglePath addLineToPoint: CGPointMake(4.11, 7.74)];
+    [roundedRectanglePath closePath];
+    [color setFill];
+    [roundedRectanglePath fill];
+    
+    CGContextSaveGState(context);
+//    CGContextRestoreGState(context);
+}
+
+@end
+
 @interface EXHereHeaderView ()
 @property (nonatomic, retain) UILabel *tipLabel;
 @property (nonatomic, assign) UIWindow *originWindow;
@@ -20,7 +56,9 @@
 @property (nonatomic, assign) BOOL isTipViewPresented;
 @end
 
-@implementation EXHereHeaderView
+@implementation EXHereHeaderView {
+    EXHereHeaderArrowView *_littleArrowView;
+}
 
 - (id)init {
     self = [[[[NSBundle mainBundle] loadNibNamed:@"EXHereHeaderView"
@@ -28,11 +66,18 @@
                                          options:nil] lastObject] retain];
     
     if (self) {
+        self.backgroundColor = [UIColor clearColor];
+        
         // background layer
         CAGradientLayer *gradient = [CAGradientLayer layer];
         gradient.frame = self.bounds;
-        gradient.colors = @[(id)[UIColor COLOR_RGB(0x33, 0x33, 0x33)].CGColor, (id)[UIColor COLOR_RGB(0x22, 0x22, 0x22)].CGColor];
+        gradient.colors = @[(id)[UIColor COLOR_RGBA(0xFF, 0xFF, 0xFF, 51.0f)].CGColor, (id)[UIColor COLOR_RGBA(0xFF, 0xFF, 0xFF, 30.6f)].CGColor];
         [self.layer insertSublayer:gradient atIndex:0];
+        
+        CALayer *lineLayer = [CALayer layer];
+        lineLayer.backgroundColor = [UIColor COLOR_RGBA(0xFF, 0xFF, 0xFF, 64.0f)].CGColor;
+        lineLayer.frame = (CGRect){{0, CGRectGetHeight(self.bounds)}, {CGRectGetWidth(self.bounds), 0.5f}};
+        [self.layer addSublayer:lineLayer];
         
         // button background
         UIImage *buttonBackgroundImage = [UIImage imageNamed:@"btn_blue_30inset.png"];
@@ -44,19 +89,26 @@
         
         [self.gatherButton setBackgroundImage:buttonBackgroundImage forState:UIControlStateNormal];
         
+        _littleArrowView = [[EXHereHeaderArrowView alloc] initWithFrame:(CGRect){{184, 13}, {26, 22}}];
+        _littleArrowView.backgroundColor = [UIColor clearColor];
+        [self addSubview:_littleArrowView];
+        
         // wave animation
-        NSMutableArray *animations = [[NSMutableArray alloc] initWithCapacity:60];
-        for (int i = 0; i < 60; i++) {
-            NSString *imageName = (i / 10) ? [NSString stringWithFormat:@"liveicon_%d.png", i] : [NSString stringWithFormat:@"liveicon_0%d.png", i];
+        NSMutableArray *animations = [[NSMutableArray alloc] initWithCapacity:100];
+        for (int i = 0; i < 100; i++) {
+            NSString *imageName = (i / 10) ? [NSString stringWithFormat:@"livewave-%d.png", i > 49 ? 49 : i] : [NSString stringWithFormat:@"livewave-0%d.png", i];
             [animations addObject:[UIImage imageNamed:imageName]];
         }
+        self.waveAnimationImageView = [[[UIImageView alloc] initWithFrame:(CGRect){{4, 0}, {22, 22}}] autorelease];
         self.waveAnimationImageView.animationImages = animations;
-        self.waveAnimationImageView.animationDuration = 1.0f;
-        self.waveAnimationImageView.backgroundColor = [UIColor COLOR_BLUE_LAKE];
+        self.waveAnimationImageView.animationDuration = 2.0f;
+        self.waveAnimationImageView.backgroundColor = [UIColor clearColor];
         self.waveAnimationImageView.layer.cornerRadius = 3.0f;
         self.waveAnimationImageView.layer.masksToBounds = YES;
         [self.waveAnimationImageView startAnimating];
         [animations release];
+        
+        [_littleArrowView addSubview:self.waveAnimationImageView];
         
         // tipView
         UILabel *tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{15, 10}, {200, 80}}];
@@ -67,10 +119,11 @@
         tipLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
         tipLabel.backgroundColor = [UIColor clearColor];
         
-        _arrowView = [[EXArrowView alloc] initWithFrame:(CGRect){{10, 38}, {300, 100}}];
+        _arrowView = [[EXArrowView alloc] initWithFrame:(CGRect){{15, 38}, {290, 100}}];
         [_arrowView setPointPosition:(CGPoint){CGRectGetMidX(self.bounds) - 10, CGRectGetMidY(self.bounds)} andArrowDirection:kEXArrowDirectionUp];
         _arrowView.gradientColors = @[(id)[UIColor COLOR_RGB(0x36, 0x9F, 0xE9)].CGColor, (id)[UIColor COLOR_RGB(0x23, 0x55, 0x8C)].CGColor];
-        _arrowView.strokeColor = [UIColor COLOR_BLUE_LAKE];
+        _arrowView.strokeColor = [UIColor COLOR_RGBA(0x36, 0x9F, 0xE9, 178.0f)];
+        _arrowView.alpha = 0.92f;
         [_arrowView setNeedsDisplay];
         
         [_arrowView addSubview:tipLabel];
@@ -89,6 +142,8 @@
         
         [self addSubview:_arrowView];
         
+        [self bringSubviewToFront:self.titleControl];
+        
         self.isTipViewPresented = NO;
     }
     
@@ -104,6 +159,8 @@
         [_waveAnimationImageView stopAnimating];
         [_waveAnimationImageView release];
     }
+    [_littleArrowView release];
+    [_titleControl release];
     [super dealloc];
 }
 
@@ -132,7 +189,7 @@
     
     [UIView animateWithDuration:0.05f
                      animations:^{
-                         self.waveAnimationImageView.alpha = 0.0f;
+                         _littleArrowView.alpha = 0.0f;
                          self.arrowView.alpha = 1.0f;
                      }
                      completion:^(BOOL finished){
@@ -173,7 +230,7 @@
                          [self.waveAnimationImageView startAnimating];
                          [UIView animateWithDuration:0.05f
                                           animations:^{
-                                              self.waveAnimationImageView.alpha = 1.0f;
+                                              _littleArrowView.alpha = 1.0f;
                                               self.arrowView.alpha = 0.0f;
                                           }
                                           completion:^(BOOL finished){

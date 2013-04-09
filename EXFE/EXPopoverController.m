@@ -31,7 +31,8 @@
     if (self) {
         self.contentViewController = controller;
         _backgroundArrowView = [[EXArrowView alloc] initWithFrame:CGRectZero];
-        _backgroundArrowView.gradientColors = @[(id)[UIColor COLOR_TUNGSTEN].CGColor, (id)[UIColor COLOR_LEAD].CGColor];
+        _backgroundArrowView.gradientColors = @[(id)[UIColor COLOR_RGBA(0xFF, 0xFF, 0xFF, 245.0f)].CGColor, (id)[UIColor COLOR_RGBA(0xEA, 0xEA, 0xEA, 245.0f)].CGColor];
+        _backgroundArrowView.alpha = 0.96f;
     }
     
     return self;

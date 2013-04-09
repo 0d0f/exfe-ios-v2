@@ -48,5 +48,6 @@ NSStreamDelegate
 - (void)stop;
 
 - (void)invokeUserCardUpdate;
+- (void)forceInvokeUserCardUpdate;
 
 @end

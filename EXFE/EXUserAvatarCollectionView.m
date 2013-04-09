@@ -29,15 +29,16 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
     
-    CGFloat lengths[2];
-    lengths[0] = 1;
-    lengths[1] = 1;
+//    CGFloat lengths[2];
+//    lengths[0] = 1;
+//    lengths[1] = 1;
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineWidth(context, 0.5f);
-    CGContextSetLineDash(context, 0.0f, lengths, 2);
+//    CGContextSetLineDash(context, 0.0f, lengths, 2);
     
     CGPoint center = (CGPoint){0.5f * CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)};
-    CGContextSetRGBStrokeColor(context, 0xB2 / 255.0f, 0xB2 / 255.0f, 0xB2 / 255.0f, 1.0f);
+//    CGContextSetRGBStrokeColor(context, 0xB2 / 255.0f, 0xB2 / 255.0f, 0xB2 / 255.0f, 1.0f);
+    CGContextSetRGBStrokeColor(context, 0xFF / 255.0f, 0xFF / 255.0f, 0xFF / 255.0f, 0.1f);
     CGContextAddArc(
                     context,
                     center.x,
@@ -108,16 +109,8 @@
         _visibleCells = [[NSMutableSet alloc] initWithCapacity:kMaxNumberOfCells];
         _reusebaleCells = [[NSMutableSet alloc] init];
         
-        // bg Color
-        UIImage *bgColorImage = [UIImage imageNamed:@"home_bg.png"];
-        if ([bgColorImage respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
-            bgColorImage = [bgColorImage resizableImageWithCapInsets:(UIEdgeInsets){20, 1, 20, 1}];
-        } else {
-            bgColorImage = [bgColorImage stretchableImageWithLeftCapWidth:1 topCapHeight:20];
-        }
-        
         self.backgroundView = [[[EXUserAvatarCollectionViewBackgroundView alloc] initWithFrame:self.bounds] autorelease];
-        self.backgroundView.backgroundColor = [UIColor colorWithPatternImage:bgColorImage];//[UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
+        self.backgroundView.backgroundColor = [UIColor clearColor];
         
         self.pageHorizontalWidth = floor(CGRectGetWidth(frame) * 0.125f);
         

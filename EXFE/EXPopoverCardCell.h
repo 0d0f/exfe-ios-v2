@@ -10,7 +10,7 @@
 
 @interface EXPopoverCardCell : UITableViewCell
 
-@property (retain, nonatomic) IBOutlet UIImageView *providerImageView;
 @property (retain, nonatomic) IBOutlet UILabel *userNameLabel;
+@property (retain, nonatomic) IBOutlet UILabel *providerLabel;
 
 @end

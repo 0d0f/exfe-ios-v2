@@ -14,10 +14,11 @@
 #import "Util.h"
 #import "EXPopoverCardCell.h"
 #import "EXArrowView.h"
+#import "Identity+EXFE.h"
 
-#define kHeaderViewHeight   (30.0f)
-#define kLineHeight         (15.0f)
-#define kViewWidth          (250.0f)
+#define kHeaderViewHeight   (28.0f)
+#define kLineHeight         (18.0f)
+#define kViewWidth          (200.0f)
 
 
 @interface EXPopoverCardViewController ()
@@ -98,8 +99,14 @@
     }
     
     CardIdentitiy *identity = _card.identities[indexPath.row];
-    cell.providerImageView.image = [UIImage imageNamed:[identity providerImageName]];
     cell.userNameLabel.text = identity.externalUsername;
+    
+    Provider provider = [Identity getProviderCode:identity.provider];
+    if (provider == kProviderEmail) {
+        cell.providerLabel.text = @"";
+    } else {
+        cell.providerLabel.text = identity.provider;
+    }
     
     return cell;
 }
@@ -116,10 +123,10 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UILabel *label = [[UILabel alloc] initWithFrame:(CGRect){CGPointZero, {kViewWidth, kHeaderViewHeight}}];
-    label.text = @"Real artists ship.";
-    label.textAlignment = UITextAlignmentCenter;
+    label.text = @"Real artists ship. ";
+    label.textAlignment = UITextAlignmentRight;
     label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
-    label.textColor = [UIColor whiteColor];
+    label.textColor = [UIColor blackColor];
     label.backgroundColor = [UIColor clearColor];
     
     return [label autorelease];
