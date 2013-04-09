@@ -97,13 +97,14 @@
                                                                                  }
                                                                              }
                                                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                                 if (_streamingFailureHandler) {
-                                                                                     _streamingFailureHandler(operation, error);
-                                                                                 }
                                                                                  dispatch_async(dispatch_get_main_queue(), ^{
                                                                                      // make sure kvo on main thread
                                                                                      self.serviceState = kEXStreamingServiceStateReady;
                                                                                  });
+                                                                                 
+                                                                                 if (_streamingFailureHandler) {
+                                                                                     _streamingFailureHandler(operation, error);
+                                                                                 }
                                                                              }];
     if (self.outputStream) {
         operation.outputStream = self.outputStream;

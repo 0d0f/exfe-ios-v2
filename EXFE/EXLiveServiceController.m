@@ -24,6 +24,7 @@ static NSString *LiveCardID = nil;
 @property (nonatomic, retain) NSDate *latestRegistReqeustDate;
 @property (nonatomic, assign) BOOL shouldInvokeLater;
 @property (nonatomic, retain) NSRecursiveLock *lock;
+@property (nonatomic, assign) BOOL isRegisting;
 @end
 
 @interface EXLiveServiceController (Private)
@@ -66,6 +67,7 @@ static NSString *LiveCardID = nil;
         _cardID = [LiveCardID copy];
         
         [self _setRunning:NO];
+        self.isRegisting = NO;
     }
     
     return self;
@@ -135,60 +137,63 @@ static NSString *LiveCardID = nil;
 - (void)sendLiveCardsRequest {
     [_lock tryLock];
     
+    if (self.isRegisting)
+        return;
+    
     NSDictionary *params = [self.dataSource postBodyParamForliveServiceController:self];
     
     NSString *path = nil;
     if (self.token != nil && self.token.length) {
         path = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT,@"live/cards", self.token];
+        self.isRegisting = NO;
     } else {
         path = [NSString stringWithFormat:@"%@/%@",SERVICE_ROOT,@"live/cards"];
+        self.isRegisting = YES;
     }
     
     [self.streamingService.client postPath:path
                                 parameters:params
                                    success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                        if (operation.response.statusCode >= 200 &&
-                                           operation.response.statusCode < 400) {
+                                           operation.response.statusCode < 400 &&
+                                           responseObject) {
                                            NSArray *responseList = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
                                            // 只有第一次请求时返回，其余时候应该为空
-                                           if ([responseList count] >= 2) {
+                                           if ([responseList count] >= 2 &&
+                                               (nil == _token || !_token.length) &&
+                                               (nil == _cardID || !_cardID.length)) {
                                                NSString *token = responseList[0];
                                                token = [token stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                                                token = [token stringByReplacingOccurrencesOfString:@"\n" withString:@""];
                                                
                                                NSString *cardID = responseList[1];
                                                
-                                               if (self.token != nil &&
-                                                   self.token.length != 0) {
-                                                   if (kEXStreamingServiceStateReady == self.streamingService.serviceState) {
-                                                       NSString *streamingPath = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
-                                                       [self.streamingService startStreamingWithPath:streamingPath
-                                                                                             success:nil
-                                                                                             failure:nil];
-                                                   }
-                                               } else {
-                                                   [self stop];
-                                                   [self _cleanUp];
-                                                   
-                                                   _token = [token copy];
-                                                   _cardID = [cardID copy];
-                                                   
-                                                   LiveToken = [token copy];
-                                                   LiveCardID = [cardID copy];
-                                                   
-                                                   if ([self.delegate respondsToSelector:@selector(liveServiceController:didGetToken:andCardID:)]) {
-                                                       [self.delegate liveServiceController:self
-                                                                                didGetToken:self.token
-                                                                                  andCardID:self.cardID];
-                                                   }
-                                                   
+                                               [self stop];
+                                               [self _cleanUp];
+                                               
+                                               _token = [token copy];
+                                               _cardID = [cardID copy];
+                                               
+                                               LiveToken = [token copy];
+                                               LiveCardID = [cardID copy];
+                                               
+                                               if ([self.delegate respondsToSelector:@selector(liveServiceController:didGetToken:andCardID:)]) {
+                                                   [self.delegate liveServiceController:self
+                                                                            didGetToken:self.token
+                                                                              andCardID:self.cardID];
+                                               }
+                                               
+                                               if (kEXStreamingServiceStateReady == self.streamingService.serviceState) {
                                                    NSString *streamingPath = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
                                                    [self.streamingService startStreamingWithPath:streamingPath
                                                                                          success:nil
                                                                                          failure:nil];
-                                                   // re post
-                                                   [self performSelector:_cmd];
                                                }
+                                               
+                                               self.isRegisting = NO;
+                                               
+                                               // re post
+                                               [self performSelector:_cmd];
                                            }
                                        }
                                        
@@ -209,9 +214,15 @@ static NSString *LiveCardID = nil;
                                                LiveCardID = nil;
                                            }
                                            
+                                           self.isRegisting = NO;
+                                           [_lock unlock];
+                                           
+                                           [self performSelector:_cmd];
+                                       } else if (NSURLErrorTimedOut == error.code) {
+                                           [_lock unlock];
+                                           
                                            [self performSelector:_cmd];
                                        }
-                                       [_lock unlock];
                                    }];
 }
 
