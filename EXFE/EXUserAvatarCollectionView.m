@@ -167,19 +167,34 @@
 }
 
 #pragma mark - Public
-- (NSArray *)visibleCircleItemCells {
-    NSArray *cells = [_visibleCells allObjects];
-    cells = [cells sortedArrayUsingComparator:^(id obj1, id obj2){
-        EXCircleItemCell *cell1 = (EXCircleItemCell *)obj1;
-        EXCircleItemCell *cell2 = (EXCircleItemCell *)obj2;
-        if (NSOrderedAscending == [cell1.indexPath compare:cell2.indexPath])
-            return NSOrderedAscending;
-        else if (NSOrderedDescending == [cell1.indexPath compare:cell2.indexPath])
-            return NSOrderedDescending;
-        return NSOrderedSame;
-    }];
+- (NSSet *)unselectedCircleItemCells {
+    NSMutableSet *selectedCells = [NSMutableSet setWithCapacity:[_visibleCells count]];
+    for (EXCircleItemCell *cell in _visibleCells) {
+        if (!cell.isSelected) {
+            [selectedCells addObject:cell];
+        }
+    }
     
-    return cells;
+    NSSet *result = [[selectedCells copy] autorelease];
+    
+    return result;
+}
+
+- (NSSet *)selectedCircleItemCells {
+    NSMutableSet *selectedCells = [NSMutableSet setWithCapacity:[_visibleCells count]];
+    for (EXCircleItemCell *cell in _visibleCells) {
+        if (cell.isSelected) {
+            [selectedCells addObject:cell];
+        }
+    }
+    
+    NSSet *result = [[selectedCells copy] autorelease];
+    
+    return result;
+}
+
+- (NSSet *)visibleCircleItemCells {
+    return _visibleCells;
 }
 
 - (void)reloadData {
@@ -313,6 +328,20 @@
     return result;
 }
 
+- (void)_reloadFlags {
+    CGRect viewBounds = self.bounds;
+    _flags.numberOfCells = [self.dataSource numberOfCircleItemInAvatarCollectionView:self];
+    self.pageHorizontalWidth = floor(CGRectGetWidth(viewBounds) * 0.125f);
+    
+    NSUInteger restCellNumber = ((_flags.numberOfCells - 1) % 11);
+    NSUInteger numberOfPages = ((_flags.numberOfCells - 1) / 11) * 8;
+    if (restCellNumber) {
+        numberOfPages += restCellNumber / 3;
+        numberOfPages += (restCellNumber % 3) ? 1 : 0;
+    }
+    self.contentHorizontalWidth = numberOfPages * self.pageHorizontalWidth;
+}
+
 - (void)_layoutCells {
     // remove useless
     for (EXCircleItemCell *cell in _visibleCells) {
@@ -322,7 +351,7 @@
     }
     [_visibleCells minusSet:_reusebaleCells];
     
-    [self.dataSource reloadCircleItemCells:_visibleCells];
+    [self.dataSource circleItemCellsNeedReload:_visibleCells];
     
     // add new
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -352,32 +381,6 @@
             index = 1;
         }
     }
-    
-//    for (int i = 0; i < 5; i++) {
-//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:1];
-//        if (![self _isCircleItemCellExistAtIndexPath:indexPath]) {
-//            [self _addCircleItemCellAtIndexPath:indexPath];
-//        } else {
-//            EXCircleItemCell *cell = [self circleItemCellAtIndexPath:indexPath];
-//            CGFloat alpha = 1.0f;
-//            cell.avatarCenter = [self _positionForIndexPath:indexPath alpha:&alpha];
-//            cell.alpha = alpha;
-//        }
-//    }
-//    
-//    for (int i = 2; i < 4; i++) {
-//        for (int j = 0; j < 6; j++) {
-//            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:j inSection:i];
-//            if (![self _isCircleItemCellExistAtIndexPath:indexPath]) {
-//                [self _addCircleItemCellAtIndexPath:indexPath];
-//            } else {
-//                EXCircleItemCell *cell = [self circleItemCellAtIndexPath:indexPath];
-//                CGFloat alpha = 1.0f;
-//                cell.avatarCenter = [self _positionForIndexPath:indexPath alpha:&alpha];
-//                cell.alpha = alpha;
-//            }
-//        }
-//    }
 }
 
 - (BOOL)_isCircleItemCellExistAtIndexPath:(NSIndexPath *)indexPath {
@@ -392,19 +395,6 @@
     return isExist;
 }
 
-- (void)_reloadFlags {
-    CGRect viewBounds = self.bounds;
-    _flags.numberOfCells = [self.dataSource numberOfCircleItemInAvatarCollectionView:self];
-    self.pageHorizontalWidth = floor(CGRectGetWidth(viewBounds) * 0.125f);
-    
-    NSUInteger restCellNumber = ((_flags.numberOfCells - 1) % 11);
-    NSUInteger numberOfPages = ((_flags.numberOfCells - 1) / 11) * 8;
-    if (restCellNumber) {
-        numberOfPages += restCellNumber / 3;
-        numberOfPages += (restCellNumber % 3) ? 1 : 0;
-    }
-    self.contentHorizontalWidth = numberOfPages * self.pageHorizontalWidth;
-}
 
 - (void)_addCircleItemCellAtIndexPath:(NSIndexPath *)indexPath {
     EXCircleItemCell *cell = [_dataSource circleItemForAvatarCollectionView:self atIndexPath:indexPath];

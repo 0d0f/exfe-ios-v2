@@ -23,6 +23,7 @@
 #define kViewHeightMax              (CGRectGetHeight([UIScreen mainScreen].applicationFrame) - 85.0f)
 
 @interface EXCardViewController ()
+@property (nonatomic, assign) UIWindow *originWindow;
 @property (nonatomic, retain) UIWindow *window;
 @property (nonatomic, assign) CGFloat moveDistance;
 @property (nonatomic, retain) UIViewController *sourceViewController;
@@ -102,9 +103,6 @@
 }
 
 #pragma mark - Action
-- (IBAction)doneButtonPressed:(id)sender {
-}
-
 - (void)tapHandler:(UITapGestureRecognizer *)recognizer {
     [recognizer.view removeGestureRecognizer:recognizer];
     [self dismissWithAnimated:YES
@@ -175,6 +173,7 @@
 - (void)presentFromViewController:(UIViewController *)controller animated:(BOOL)animated completion:(void (^)(void))handler {
     [self retain];
     
+    self.originWindow = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
     self.sourceViewController = controller;
     
     CGRect screenBounds = [UIScreen mainScreen].bounds;
@@ -217,7 +216,7 @@
                            animated:YES
                          completion:^{
                              [self.view removeFromSuperview];
-                             [((AppDelegate *)[UIApplication sharedApplication].delegate).window makeKeyAndVisible];
+                             [self.originWindow makeKeyAndVisible];
                              self.window.hidden = YES;
                              
                              if ([self.delegate respondsToSelector:@selector(cardViewControllerDidFinish:)]) {

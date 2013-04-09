@@ -39,6 +39,9 @@ NSStreamDelegate
 @property (nonatomic, copy, readonly) NSString *token;
 @property (nonatomic, copy, readonly) NSString *cardID;
 
+@property (nonatomic, copy) Card *latestMeCard;
+@property (nonatomic, retain) NSSet *latestOthersCards;
+
 + (EXLiveServiceController *)defaultService;
 
 - (void)start;

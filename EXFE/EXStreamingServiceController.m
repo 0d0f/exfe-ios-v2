@@ -15,6 +15,7 @@
 @interface EXStreamingServiceController ()
 @property (nonatomic, retain) NSTimer   *invokeTimer;
 @property (nonatomic, retain) NSTimer   *heartBeatTimer;
+@property (nonatomic, copy) NSString *path;
 @end
 
 @implementation EXStreamingServiceController
@@ -38,6 +39,7 @@
 
 - (void)dealloc {
     [self stopStreaming];
+    [_path release];
     [_outputStream release];
     [_client release];
     [_baseURL release];
@@ -70,6 +72,8 @@
     self.streamingSuccessHanlder = successHandler;
     self.streamingFailureHandler = failureHandler;
     
+    self.path = path;
+    
     // fire timer
     dispatch_async(dispatch_get_main_queue(), ^{
         self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:self.heartBeatInterval
@@ -92,12 +96,18 @@
     request.timeoutInterval = self.serviceTimeoutInterval = kDefaultServiceTimeoutInterval;
     AFHTTPRequestOperation *operation = [self.client HTTPRequestOperationWithRequest:request
                                                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
+#ifdef DEBUG
+                                                                                 NSLog(@"Start Streaming Success!");
+#endif
                                                                                  if (_streamingSuccessHanlder) {
                                                                                      _streamingSuccessHanlder(operation, responseObject);
                                                                                  }
                                                                              }
                                                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                                                  dispatch_async(dispatch_get_main_queue(), ^{
+#ifdef DEBUG
+                                                                                     NSLog(@"Start Streaming Failure!");
+#endif
                                                                                      // make sure kvo on main thread
                                                                                      self.serviceState = kEXStreamingServiceStateReady;
                                                                                  });
@@ -130,8 +140,9 @@
     });
     if (self.outputStream) {
         [self.outputStream close];
+        self.outputStream = nil;
     }
-    [self.client.operationQueue cancelAllOperations];
+    [self.client cancelAllHTTPOperationsWithMethod:@"GET" path:self.path];
 }
 
 @end

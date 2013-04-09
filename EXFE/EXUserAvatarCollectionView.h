@@ -16,7 +16,7 @@
 - (NSInteger)numberOfCircleItemInAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView;
 - (EXCircleItemCell *)circleItemForAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView atIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)shouldCircleItemCell:(EXCircleItemCell *)cell removeFromAvatarCollectionView:(EXUserAvatarCollectionView *)collectionView;
-- (void)reloadCircleItemCells:(NSSet *)cells;
+- (void)circleItemCellsNeedReload:(NSSet *)cells;
 @end
 
 @protocol UserAvatarCollectionDelegate<NSObject, EXCircleScrollViewDelegate>
@@ -35,7 +35,10 @@ EXCircleScrollViewDelegate
 @property (nonatomic, assign) id<UserAvatarCollectionDataSource> dataSource;
 @property (nonatomic, assign) id<UserAvatarCollectionDelegate> delegate;
 
-- (NSArray *)visibleCircleItemCells;
+- (NSSet *)unselectedCircleItemCells;
+- (NSSet *)selectedCircleItemCells;
+- (NSSet *)visibleCircleItemCells;
+
 - (EXCircleItemCell *)circleItemCellAtIndexPath:(NSIndexPath *)indexPath;
 - (EXCircleItemCell *)dequeueReusableCircleItemCell;
 - (void)reloadData;

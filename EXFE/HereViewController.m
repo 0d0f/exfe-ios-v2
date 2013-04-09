@@ -26,6 +26,8 @@
 
 @property (nonatomic, retain) Card *meCard;
 @property (nonatomic, retain) NSSet *othersCards;
+
+@property (nonatomic, assign) BOOL canUpdateData;
 @end
 
 @implementation HereViewController {
@@ -94,7 +96,7 @@
     [_avatarlistview reloadData];
     
     // live service
-    _liveService = [[EXLiveServiceController alloc] init];
+    self.liveService = [EXLiveServiceController defaultService];
     _liveService.cleanUpWhenStoped = NO;
     _liveService.delegate = self;
     _liveService.dataSource = self;
@@ -102,8 +104,15 @@
     [self.liveService start];
 }
 
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    [self becomeFirstResponder];
+    self.canUpdateData = YES;
     
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
@@ -124,8 +133,68 @@
     [self.liveService invokeUserCardUpdate];
 }
 
+#pragma mark - Motion Handle
+- (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+    if (motion == UIEventSubtypeMotionShake) {
+        [self motionShakeBegan];
+    }
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+    if (motion == UIEventSubtypeMotionShake) {
+        [self motionShakeEnded];
+    }
+}
+
+- (void)motionShakeBegan {
+    self.canUpdateData = NO;
+    
+    @autoreleasepool {
+        NSSet *unselectedCells = [_avatarlistview unselectedCircleItemCells];
+        NSMutableSet *cardsToRemove = [NSMutableSet setWithCapacity:[unselectedCells count]];
+        for (EXCircleItemCell *cell in unselectedCells) {
+            if (![cell.card isEqualToCard:self.meCard]) {
+                [cardsToRemove addObject:cell.card];
+            }
+        }
+        
+        NSMutableSet *nowCards = [NSMutableSet setWithCapacity:[self.othersCards count]];
+        for (Card *card in self.othersCards) {
+            BOOL needRemove = NO;
+            for (Card *toRemoveCard in cardsToRemove) {
+                if ([card isEqualToCard:toRemoveCard]) {
+                    needRemove = YES;
+                    break;
+                }
+            }
+            if (!needRemove) {
+                [nowCards addObject:card];
+            }
+        }
+        
+        self.othersCards = nowCards;
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_avatarlistview reloadData];
+    });
+}
+
+- (void)motionShakeEnded {
+    self.meCard = self.liveService.latestMeCard;
+    self.othersCards = self.liveService.latestOthersCards;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_avatarlistview reloadData];
+        self.canUpdateData = YES;
+    });
+}
+
 #pragma mark - EXLiveServiceControllerDelegate
 - (void)liveServiceController:(EXLiveServiceController *)serviceController didGetMe:(Card *)me others:(NSSet *)cards {
+    if (!self.canUpdateData)
+        return;
+    
     self.meCard = me;
     self.othersCards = cards;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -192,7 +261,7 @@
         card = self.meCard;
     } else {
         // others
-        NSArray *visibleCells = [avatarCollectionView visibleCircleItemCells];
+        NSSet *visibleCells = [avatarCollectionView visibleCircleItemCells];
         for (Card *aCard in self.othersCards) {
             BOOL hasShown = NO;
             for (EXCircleItemCell *visibleCell in visibleCells) {
@@ -227,7 +296,7 @@
     return YES;
 }
 
-- (void)reloadCircleItemCells:(NSSet *)cells {
+- (void)circleItemCellsNeedReload:(NSSet *)cells {
     for (EXCircleItemCell *cell in cells) {
         if (NSOrderedSame == [cell.indexPath compare:[NSIndexPath indexPathForRow:0 inSection:0]]) {
             [cell setCard:self.meCard animated:NO complete:nil];
@@ -245,7 +314,9 @@
 #pragma mark - UserAvatarCollectionDelegate
 - (void)avatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView didSelectCircleItemAtIndexPath:(NSIndexPath *)indexPath {
     if (NSOrderedSame == [indexPath compare:[NSIndexPath indexPathForRow:0 inSection:0]]) {
-        NSArray *cells = [avatarCollectionView visibleCircleItemCells];
+        self.canUpdateData = NO;
+        
+        NSSet *cells = [avatarCollectionView visibleCircleItemCells];
         [UIView animateWithDuration:0.25f
                          animations:^{
                              for (EXCircleItemCell *cell in cells) {
@@ -296,7 +367,7 @@
 
 #pragma mark - EXCardViewControllerDelegate
 - (void)cardViewControllerWillFinish:(EXCardViewController *)controller {
-    NSArray *cells = [_avatarlistview visibleCircleItemCells];
+    NSSet *cells = [_avatarlistview visibleCircleItemCells];
     [UIView animateWithDuration:0.25f
                      animations:^{
                          for (EXCircleItemCell *cell in cells) {
@@ -309,7 +380,15 @@
                      }];
 }
 
-- (void)cardViewControllerDidFinish:(EXCardViewController *)controller {}
+- (void)cardViewControllerDidFinish:(EXCardViewController *)controller {
+    self.meCard = self.liveService.latestMeCard;
+    self.othersCards = self.liveService.latestOthersCards;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_avatarlistview reloadData];
+        self.canUpdateData = YES;
+    });
+}
 
 #pragma mark - Action
 - (void)backButtonPressed:(id)sender {
@@ -318,14 +397,14 @@
 
 #pragma mark - Public
 - (void)close {
+    if ([CLLocationManager locationServicesEnabled] && self.locationManager) {
+        [self.locationManager stopUpdatingLocation];
+    }
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
+    [self.liveService stop];
+    
     [self.presentingViewController dismissViewControllerAnimated:YES
-                                                      completion:^{
-                                                          if ([CLLocationManager locationServicesEnabled] && self.locationManager) {
-                                                              [self.locationManager stopUpdatingLocation];
-                                                          }
-                                                          [UIApplication sharedApplication].idleTimerDisabled = NO;
-                                                          [self.liveService stop];
-                                                      }];
+                                                      completion:nil];
 }
 
 - (NSDictionary *)meCardParamsToSend {

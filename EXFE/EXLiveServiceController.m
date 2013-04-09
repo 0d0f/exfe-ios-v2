@@ -16,9 +16,6 @@
 #define kMinRegistCardsDuration             (5.0f)
 #define kServerStreamingTimeroutInterval    (60.0f)
 
-static NSString *LiveToken = nil;
-static NSString *LiveCardID = nil;
-
 @interface EXLiveServiceController ()
 @property (nonatomic, retain) EXStreamingServiceController *streamingService;
 @property (nonatomic, retain) NSDate *latestRegistReqeustDate;
@@ -49,10 +46,6 @@ static NSString *LiveCardID = nil;
     if (self) {
         _streamingService = [[EXStreamingServiceController alloc] initWithBaseURL:[NSURL URLWithString:SERVICE_ROOT]];
         
-        NSOutputStream *outputStream = [NSOutputStream outputStreamToMemory];
-        outputStream.delegate = self;
-        _streamingService.outputStream = outputStream;
-        
         _streamingService.invokeHandler = ^{
             if (self.shouldInvokeLater) {
                 [self sendLiveCardsRequest];
@@ -62,9 +55,6 @@ static NSString *LiveCardID = nil;
         _streamingService.heartBeatHandler = ^{
             [self sendLiveCardsRequest];
         };
-        
-        _token = [LiveToken copy];
-        _cardID = [LiveCardID copy];
         
         [self _setRunning:NO];
         self.isRegisting = NO;
@@ -76,28 +66,32 @@ static NSString *LiveCardID = nil;
 - (void)dealloc {
     [self stop];
     [self _cleanUp];
-    if (_streamingService.outputStream) {
-        _streamingService.outputStream.delegate = nil;
-        _streamingService.outputStream = nil;
-    }
     [_lock release];
     [_token release];
     [_cardID release];
+    [_latestMeCard release];
+    [_latestOthersCards release];
     [_streamingService release];
     [super dealloc];
 }
 
 - (void)start {
-    [self _setRunning:YES];
+    NSOutputStream *outputStream = [NSOutputStream outputStreamToMemory];
+    outputStream.delegate = self;
+    _streamingService.outputStream = outputStream;
+    
     [self invokeUserCardUpdate];
+    
+    [self _setRunning:YES];
 }
 
 - (void)stop {
     [self _setRunning:NO];
     
-    if (self.streamingService) {
+    if (self.streamingService.serviceState == kEXStreamingServiceStateGoing) {
         [self.streamingService stopStreaming];
     }
+    
     if (self.cleanUpWhenStoped) {
         [self _cleanUp];
     }
@@ -174,9 +168,6 @@ static NSString *LiveCardID = nil;
                                                _token = [token copy];
                                                _cardID = [cardID copy];
                                                
-                                               LiveToken = [token copy];
-                                               LiveCardID = [cardID copy];
-                                               
                                                if ([self.delegate respondsToSelector:@selector(liveServiceController:didGetToken:andCardID:)]) {
                                                    [self.delegate liveServiceController:self
                                                                             didGetToken:self.token
@@ -194,6 +185,13 @@ static NSString *LiveCardID = nil;
                                                
                                                // re post
                                                [self performSelector:_cmd];
+                                           } else {
+                                               if (kEXStreamingServiceStateReady == self.streamingService.serviceState) {
+                                                   NSString *streamingPath = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
+                                                   [self.streamingService startStreamingWithPath:streamingPath
+                                                                                         success:nil
+                                                                                         failure:nil];
+                                               }
                                            }
                                        }
                                        
@@ -203,16 +201,6 @@ static NSString *LiveCardID = nil;
                                            operation.response.statusCode < 500) {
                                            [self stop];
                                            [self _cleanUp];
-                                           
-                                           if (LiveToken) {
-                                               [LiveToken release];
-                                               LiveToken = nil;
-                                           }
-                                           
-                                           if (LiveCardID) {
-                                               [LiveCardID release];
-                                               LiveCardID = nil;
-                                           }
                                            
                                            self.isRegisting = NO;
                                            [_lock unlock];
@@ -274,6 +262,9 @@ static NSString *LiveCardID = nil;
                     NSLog(@"Card JSON:\n%@", lastJSON);
                     NSLog(@"\nMe:\n%@\nOthers:\n%@", meCard, othersCards);
 #endif
+                    
+                    self.latestMeCard = meCard;
+                    self.latestOthersCards = others;
                     
                     [self.delegate liveServiceController:self
                                                 didGetMe:meCard
