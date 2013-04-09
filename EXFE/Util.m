@@ -7,12 +7,12 @@
 //
 
 #import "Util.h"
-#import "CrossTime.h"
-#import "EFTime.h"
 #import <math.h>
 #import <BlocksKit/BlocksKit.h>
 #import "UIApplication+EXFE.h"
 #import "APIExfeServer.h"
+#import "CrossTime.h"
+#import "EFTime.h"
 
 
 // Notification Definition
@@ -495,27 +495,75 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 }
 
 + (NSString*) findProvider:(NSString*)external_id{
-    
+    Provider p = [self matchedProvider:external_id];
+    return [Identity getProviderString:p];
+}
+
++ (Provider)matchedProvider:(NSString*)raw
+{
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    if ([emailTest evaluateWithObject:raw] == YES){
+        return kProviderEmail;
+    }
     
-    if([emailTest evaluateWithObject:external_id]==YES)
-        return @"email";
-    
-    NSString *twitterRegex = @"@[A-Za-z0-9.-]+";
-    NSPredicate *twitterTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex];
-    if([twitterTest evaluateWithObject:external_id]==YES)
-        return @"twitter";
+    NSString *twitterRegex1 = @"@[A-Za-z0-9.-]+";
+    NSPredicate *twitterTest1 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex1];
+    if ([twitterTest1 evaluateWithObject:raw] == YES){
+        return kProviderTwitter;
+    }
+    NSString *twitterRegex2 = @"[A-Za-z0-9.-]+@twitter";
+    NSPredicate *twitterTest2 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex2];
+    if ([twitterTest2 evaluateWithObject:raw] == YES){
+        return kProviderTwitter;
+    }
     
     NSString *facebookRegex = @"[A-Z0-9a-z._%+-]+@facebook";
     NSPredicate *facebookTest = [NSPredicate predicateWithFormat:@"SELF MATCHES[c] %@", facebookRegex];
-    if([facebookTest evaluateWithObject:external_id]==YES)
-        return @"facebook";
-  
-    NSString *phone=[Util formatPhoneNumber:external_id];
-    if([phone length] >0)
-      return @"phone";
-    return @"";
+    if ([facebookTest evaluateWithObject:raw] == YES){
+        return kProviderFacebook;
+    }
+    
+    NSString *phone = [Util formatPhoneNumber:raw];
+    if ([phone length] > 0){
+        return kProviderPhone;
+    }
+    
+    return kProviderUnknown;
+}
+
++ (NSDictionary*)parseIdentityString:(NSString*)raw
+{
+    Provider p = [self matchedProvider:raw];
+    NSString * provider = [Identity getProviderString:p];
+    switch (p) {
+        case kProviderEmail:{
+            return @{@"external_username": raw, @"external_id": raw, @"provider": provider};
+        } break;
+        case kProviderPhone:{
+            return @{@"external_username":raw, @"external_id": raw, @"provider": provider};
+        } break;
+        case kProviderFacebook:{
+            if ([raw hasSuffix:@"@facebook"]) {
+                NSString *name = [raw substringToIndex:raw.length - @"@facebook".length];
+                return @{@"external_username":name, @"external_id": @"", @"provider": provider};
+            }
+        } break;
+        case kProviderTwitter:{
+            if ([raw hasPrefix:@"@"]) {
+                return @{@"external_username":[raw substringFromIndex:1], @"external_id": @"", @"provider": provider};
+            }else{
+                if ([raw hasSuffix:@"@twitter"]) {
+                    NSString *name = [raw substringToIndex:raw.length - @"@twitter".length];
+                    return @{@"external_username":name, @"external_id": @"", @"provider": provider};
+                }
+            }
+        } break;
+        default:
+            break;
+    }
+    
+    return @{@"external_username":raw, @"external_id": @"", @"provider": provider};
 }
 
 + (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber{
@@ -926,7 +974,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 }
 
 + (BOOL) isCommonDomainName:(NSString*)domainname{
-    NSArray *domains =[NSArray arrayWithObjects:@"biz",@"com",@"nfo",@"net",@"org",@".us",@".uk",@".jp",@".cn",@".ca",@".au",@".de", nil];
+    NSArray *domains =[NSArray arrayWithObjects:@"biz",@"com",@"nfo",@"net",@"org",@"edu",@".us",@".uk",@".jp",@".cn",@".ca",@".au",@".de", nil];
     return [domains containsObject:[domainname lowercaseString]];
 }
 + (void) signout{
