@@ -13,6 +13,7 @@
 #import "Place+Helper.h"
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
+#import "HereViewController.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -213,7 +214,20 @@
     [pannelbackimg release];
     
 //    [pannel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.33]];
-
+#warning test onley
+    //_________________test begin___________
+    UIButton *hereButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [hereButton setFrame:CGRectMake(5, 8.5, 80, 32)];
+    [hereButton setTitle:@"Live" forState:UIControlStateNormal];
+    [hereButton.titleLabel setShadowColor:[UIColor blackColor]];
+    [hereButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
+    hereButton.layer.cornerRadius = 2;
+    [hereButton addTarget:self action:@selector(hereButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [hereButton setBackgroundImage:[[UIImage imageNamed:@"btn_glass_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
+    [pannel addSubview:hereButton];
+    //_________________test end___________
+    
     UIButton *btngather=[UIButton buttonWithType:UIButtonTypeCustom];
     [btngather setFrame:CGRectMake(99, 8.5, 122, 32)];
     [btngather setTitle:@"Gather" forState:UIControlStateNormal];
@@ -268,6 +282,31 @@
     [pickertoolbar setHidden:YES];
     
 }
+
+#pragma mark - Test
+- (void)hereButtonPressed:(id)sender {
+    [self hideMenu];
+    HereViewController *viewController = [[HereViewController alloc] init];
+    viewController.exfee = self.cross.exfee;
+    viewController.needSubmit = NO;
+    viewController.finishHandler = ^{
+        self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+        [self reFormatTitle];
+        [exfeeShowview reloadData];
+        if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+        }
+    };
+    
+    [self presentViewController:viewController
+                       animated:YES
+                     completion:nil];
+    [viewController release];
+}
+
+#pragma mark -
 
 - (void) GlassBarlightAnimation{
 
@@ -400,7 +439,7 @@
         [identitypicker setHidden:YES];
         [pickertoolbar setHidden:YES];
     }
-
+    
     CGPoint containerLocation = [container convertPoint:location fromView:sender.view];
     if (CGRectContainsPoint([titleView frame], location) || CGRectContainsPoint([descView frame], containerLocation)){
         NSInteger editHint = 2;

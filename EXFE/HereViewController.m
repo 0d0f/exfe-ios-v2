@@ -14,6 +14,10 @@
 #import "EXPopoverController.h"
 #import "EXPopoverCardViewController.h"
 
+#import "EXSpinView.h"
+#import "MBProgressHUD.h"
+#import "APIExfee.h"
+
 @interface HereViewController ()
 @property (nonatomic, retain) EXHereHeaderView *headerView;
 @property (nonatomic, retain) EXCardViewController *cardViewController;
@@ -75,6 +79,7 @@
     EXHereHeaderView *headerView = [[EXHereHeaderView alloc] init];
     headerViewBounds = headerView.bounds;
     [headerView.backButton addTarget:self action:@selector(backButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [headerView.gatherButton addTarget:self action:@selector(gatherButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     self.headerView = headerView;
     [self.view addSubview:headerView];
     [headerView release];
@@ -395,7 +400,120 @@
     [self close];
 }
 
-#pragma mark - Public
+- (void)gatherButtonPressed:(id)sender {
+    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Adding...";
+    hud.mode=MBProgressHUDModeCustomView;
+    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+    [bigspin startAnimating];
+    hud.customView=bigspin;
+    [bigspin release];
+    
+    NSSet *selectedCells = [_avatarlistview selectedCircleItemCells];
+    NSMutableArray *identityParams = [[NSMutableArray alloc] initWithCapacity:[selectedCells count]];
+    for (EXCircleItemCell *cell in selectedCells) {
+        NSArray *cardIdentities = cell.card.identities;
+        for (CardIdentitiy *anIdentity in cardIdentities) {
+            [identityParams addObject:[anIdentity dictionaryValue]];
+        }
+    }
+    
+    [APIExfee getIdentitiesFromIdentityParams:identityParams
+                                       succes:^(NSArray *identities){
+                                           [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                           
+                                           RKObjectManager *manager=[RKObjectManager sharedManager] ;
+                                           manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
+                                           
+                                           NSMutableArray *invitations = [[NSMutableArray alloc] initWithCapacity:[identities count]];
+                                           
+                                           for (Identity *identity in identities) {
+                                               NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
+                                               Invitation *invitation=[[[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+                                               invitation.rsvp_status=@"NORESPONSE";
+                                               invitation.identity=identity;
+                                               Invitation *myinvitation=[self.exfee getMyInvitation];
+                                               if(myinvitation!=nil)
+                                                   invitation.updated_by=myinvitation.identity;
+                                               else{
+                                                   invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
+                                               }
+                                               [invitations addObject:invitation];
+                                           }
+                                           
+                                           NSSet *set = [NSSet setWithArray:invitations];
+                                           [invitations release];
+                                           
+                                           [self.exfee addInvitations:set];
+                                           if (self.needSubmit) {
+                                               [self submitExfeBeforeDismiss:self.exfee];
+                                           } else {
+                                               if (self.finishHandler) {
+                                                   self.finishHandler();
+                                                   [self close];
+                                               }
+                                           }
+                                       }
+                                      failure:^(NSError *error){
+                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                              [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                          });
+                                      }];
+}
+
+#pragma mark -
+- (void)submitExfeBeforeDismiss:(Exfee*)exfee {
+    Identity *myidentity = [self.exfee getMyInvitation].identity;
+    [APIExfee edit:exfee
+        myIdentity:[myidentity.identity_id intValue]
+           success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+               {
+                   
+                   if ([operation.HTTPRequestOperation.response statusCode] == 200){
+                       if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+                       {
+                           Meta* meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                           int code = [meta.code intValue];
+                           int type = code /100;
+                           switch (type) {
+                               case 2: // HTTP OK
+                                   if (code == 206) {
+                                       NSLog(@"HTTP 206 Partial Successfully");
+                                   }
+                                   if(code == 200){
+                                       Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
+                                       self.exfee = respExfee;
+                                       if (self.finishHandler) {
+                                           self.finishHandler();
+                                           [self close];
+                                       }
+                                   }
+                                   break;
+                               case 4: // Client Error
+                                   if(code == 403){
+                                       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                       alert.tag=403;
+                                       [alert show];
+                                       [alert release];
+                                   }
+                                   break;
+                               case 5: // Server Error
+                                   break;
+                               default:
+                                   break;
+                           }
+                           
+                           
+                           
+                       }
+                   }
+               }
+           } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+               ;
+           }];
+}
+
+
 - (void)close {
     if ([CLLocationManager locationServicesEnabled] && self.locationManager) {
         [self.locationManager stopUpdatingLocation];

@@ -32,4 +32,9 @@
               modifier:(int)identity_id
                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
++ (void)getIdentitiesFromIdentityParams:(NSArray *)identityParams
+                                 succes:(void (^)(NSArray *identities))successHandler
+                                failure:(void (^)(NSError *error))failureHandler;
+
 @end

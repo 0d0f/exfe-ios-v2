@@ -17,6 +17,10 @@
 #import "EXCardViewController.h"
 #import "EXLiveServiceController.h"
 
+typedef void (^LiveViewFinishBlock)(void);
+
+@class Exfee;
+
 @interface HereViewController : UIViewController
 <
 UserAvatarCollectionDataSource,
@@ -29,6 +33,10 @@ EXLiveServiceControllerDelegate
     EXUserAvatarCollectionView  *_avatarlistview;
 }
 
-- (void)close;
+@property (nonatomic, assign) Exfee *exfee;
+@property (nonatomic, assign) BOOL needSubmit;
+@property (nonatomic, copy) LiveViewFinishBlock finishHandler;
+
+- (void)backButtonPressed:(id)sender;
 
 @end

@@ -25,6 +25,8 @@
 #import "APICrosses.h"
 #import "APIExfee.h"
 
+#import "HereViewController.h"
+
 
 #define kTagViewExfeeRoot         10
 #define kTagViewExfeeSelector     20
@@ -209,6 +211,20 @@ typedef enum {
     }
     [exfeeContainer addSubview:invContent];
     
+#warning test only
+    //_________________test begin___________
+    UIButton *hereButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [hereButton setFrame:CGRectMake(220, 180, 80, 32)];
+    [hereButton setTitle:@"Live" forState:UIControlStateNormal];
+    [hereButton.titleLabel setShadowColor:[UIColor blackColor]];
+    [hereButton.titleLabel setShadowOffset:CGSizeMake(0, -1)];
+    hereButton.layer.cornerRadius = 2;
+    [hereButton addTarget:self action:@selector(hereButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [hereButton setBackgroundImage:[[UIImage imageNamed:@"btn_glass_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
+    [exfeeContainer addSubview:hereButton];
+    //_________________test end___________
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapContent:)];
     [invContent addGestureRecognizer:tap];
     
@@ -276,6 +292,36 @@ typedef enum {
         [self.onExitBlock invoke];
     }
 }
+
+#pragma mark - Test
+- (void)hereButtonPressed:(id)sender {
+    HereViewController *viewController = [[HereViewController alloc] init];
+    viewController.exfee = self.exfee;
+    viewController.needSubmit = NO;
+    viewController.finishHandler = ^{
+        NSLog(@"WidgetExfee callback");
+        NSLog(@"viewController.exfee:");
+        [viewController.exfee debugPrint];
+        NSLog(@"self.exfee:");
+        [self.exfee debugPrint];
+        
+        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+        [exfeeContainer reloadData];
+        
+        if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+        }
+
+    };
+    
+    [self presentViewController:viewController
+                       animated:YES
+                     completion:nil];
+    [viewController release];
+}
+
 #pragma mark Click handler
 - (void)removeInvitation:(id)sender
 {
