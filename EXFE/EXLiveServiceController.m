@@ -16,6 +16,9 @@
 #define kMinRegistCardsDuration             (5.0f)
 #define kServerStreamingTimeroutInterval    (60.0f)
 
+static NSString *LiveToken = nil;
+static NSString *LiveCardID = nil;
+
 @interface EXLiveServiceController ()
 @property (nonatomic, retain) EXStreamingServiceController *streamingService;
 @property (nonatomic, retain) NSDate *latestRegistReqeustDate;
@@ -59,6 +62,9 @@
             [self sendLiveCardsRequest];
         };
         
+        _token = [LiveToken copy];
+        _cardID = [LiveCardID copy];
+        
         [self _setRunning:NO];
     }
     
@@ -68,6 +74,10 @@
 - (void)dealloc {
     [self stop];
     [self _cleanUp];
+    if (_streamingService.outputStream) {
+        _streamingService.outputStream.delegate = nil;
+        _streamingService.outputStream = nil;
+    }
     [_lock release];
     [_token release];
     [_cardID release];
@@ -142,7 +152,7 @@
                                            NSArray *responseList = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
                                            // 只有第一次请求时返回，其余时候应该为空
                                            if ([responseList count] >= 2) {
-                                               NSString *token = responseList[0];//[[[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding] autorelease];
+                                               NSString *token = responseList[0];
                                                token = [token stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                                                token = [token stringByReplacingOccurrencesOfString:@"\n" withString:@""];
                                                
@@ -163,6 +173,9 @@
                                                    _token = [token copy];
                                                    _cardID = [cardID copy];
                                                    
+                                                   LiveToken = [token copy];
+                                                   LiveCardID = [cardID copy];
+                                                   
                                                    if ([self.delegate respondsToSelector:@selector(liveServiceController:didGetToken:andCardID:)]) {
                                                        [self.delegate liveServiceController:self
                                                                                 didGetToken:self.token
@@ -173,6 +186,8 @@
                                                    [self.streamingService startStreamingWithPath:streamingPath
                                                                                          success:nil
                                                                                          failure:nil];
+                                                   // re post
+                                                   [self performSelector:_cmd];
                                                }
                                            }
                                        }
@@ -183,6 +198,16 @@
                                            operation.response.statusCode < 500) {
                                            [self stop];
                                            [self _cleanUp];
+                                           
+                                           if (LiveToken) {
+                                               [LiveToken release];
+                                               LiveToken = nil;
+                                           }
+                                           
+                                           if (LiveCardID) {
+                                               [LiveCardID release];
+                                               LiveCardID = nil;
+                                           }
                                            
                                            [self performSelector:_cmd];
                                        }
@@ -208,7 +233,9 @@
         case NSStreamEventHasSpaceAvailable:
         {
             NSData *data = (NSData *)[stream propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
-            NSString *string = [[[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:[NSString defaultCStringEncoding]] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] ;
+            NSString *string = [[[NSString alloc] initWithBytes:[data bytes]
+                                                         length:[data length]
+                                                       encoding:[NSString defaultCStringEncoding]] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             
             NSArray *array = [string componentsSeparatedByString:@"\n"];
             
@@ -262,8 +289,15 @@
 }
 
 - (void)_cleanUp {
-    [_token release];
-    [_cardID release];
+    if (_token) {
+        [_token release];
+        _token = nil;
+    }
+    
+    if (_cardID) {
+        [_cardID release];
+        _cardID = nil;
+    }
 }
 
 @end

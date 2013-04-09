@@ -426,12 +426,9 @@
 }
 
 - (void)showHere{
-    static HereViewController *here = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        here = [[HereViewController alloc] initWithNibName:nil bundle:nil];
-    });
+    HereViewController *here = [[HereViewController alloc] initWithNibName:nil bundle:nil];
     [self presentModalViewController:here animated:YES];
+    [here release];
 }
 
 #pragma mark UITableViewDelegate methods

@@ -45,12 +45,22 @@
 }
 
 - (void)dealloc {
-    [_popoverCardViewController release];
+    if (self.liveService.isRunning) {
+        [self.liveService stop];
+    }
+    self.liveService = nil;
+    self.locationManager = nil;
+    self.currentLocation = nil;
+    self.popoverCardViewController = nil;
     [_lock release];
-    [_meCard release];
-    [_othersCards release];
-    [_cardViewController release];
-    [_headerView release];
+    self.meCard = nil;
+    self.othersCards = nil;
+    self.cardViewController = nil;
+    self.headerView = nil;
+    if (_avatarlistview) {
+        [_avatarlistview release];
+        _avatarlistview = nil;
+    }
     [super dealloc];
 }
 
@@ -62,7 +72,7 @@
     CGRect headerViewBounds;
     EXHereHeaderView *headerView = [[EXHereHeaderView alloc] init];
     headerViewBounds = headerView.bounds;
-    [headerView.backButton addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+    [headerView.backButton addTarget:self action:@selector(backButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     self.headerView = headerView;
     [self.view addSubview:headerView];
     [headerView release];
@@ -101,7 +111,7 @@
     [_avatarlistview reloadData];
     
     if (self.locationManager == nil) {
-        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager = [[[CLLocationManager alloc] init] autorelease];
         self.locationManager.delegate = self;
         self.locationManager.distanceFilter = 10.0f;
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
@@ -300,6 +310,11 @@
 }
 
 - (void)cardViewControllerDidFinish:(EXCardViewController *)controller {}
+
+#pragma mark - Action
+- (void)backButtonPressed:(id)sender {
+    [self close];
+}
 
 #pragma mark - Public
 - (void)close {

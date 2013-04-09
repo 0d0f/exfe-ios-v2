@@ -37,7 +37,7 @@
     [param setValue:self.externalUsername forKey:@"external_username"];
     [param setValue:self.provider forKey:@"provider"];
     
-    NSDictionary *result = [param copy];
+    NSDictionary *result = [[param copy] autorelease];
     [param release];
     
     return result;
@@ -153,6 +153,7 @@
             [identities addObject:[identity dictionaryValue]];
         }
         [param setValue:[[identities copy] autorelease] forKey:@"identities"];
+        [identities release];
     } else {
         [param setValue:[NSNull null] forKey:@"identities"];
     }

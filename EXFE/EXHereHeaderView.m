@@ -96,12 +96,14 @@
 }
 
 - (void)dealloc {
-    [_waveAnimationImageView release];
     [_innerWindow release];
     [_arrowView release];
     [_backButton release];
     [_gatherButton release];
-    [_waveAnimationImageView release];
+    if (_waveAnimationImageView) {
+        [_waveAnimationImageView stopAnimating];
+        [_waveAnimationImageView release];
+    }
     [super dealloc];
 }
 
@@ -119,7 +121,7 @@
 
 - (void)presentTipView {
     self.originWindow = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
-    self.innerWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.innerWindow = [[[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds] autorelease];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                           action:@selector(tapHandler:)];
     [self.innerWindow addGestureRecognizer:tap];

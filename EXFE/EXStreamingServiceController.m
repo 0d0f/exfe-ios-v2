@@ -23,7 +23,7 @@
     self = [super init];
     if (self) {
         self.baseURL = baseURL;
-        self.client = [[AFHTTPClient alloc] initWithBaseURL:self.baseURL];
+        self.client = [[[AFHTTPClient alloc] initWithBaseURL:self.baseURL] autorelease];
         self.client.parameterEncoding = AFJSONParameterEncoding;
         
         // Default
