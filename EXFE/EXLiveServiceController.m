@@ -77,7 +77,7 @@
 
 - (void)start {
     [self _setRunning:YES];
-    [self sendLiveCardsRequest];
+    [self invokeUserCardUpdate];
 }
 
 - (void)stop {
@@ -92,11 +92,13 @@
 }
 
 - (void)invokeUserCardUpdate {
-    if ([self canSendRequestNow]) {
-        [self sendLiveCardsRequest];
-    } else {
-        self.shouldInvokeLater = YES;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self canSendRequestNow]) {
+            [self sendLiveCardsRequest];
+        } else {
+            self.shouldInvokeLater = YES;
+        }
+    });
 }
 
 #pragma mark - request
@@ -123,7 +125,7 @@
 - (void)sendLiveCardsRequest {
     [_lock tryLock];
     
-    NSDictionary *params = [self.dataSource userCardDictionaryForliveServiceController:self];
+    NSDictionary *params = [self.dataSource postBodyParamForliveServiceController:self];
     
     NSString *path = nil;
     if (self.token != nil && self.token.length) {
@@ -138,37 +140,40 @@
                                        if (operation.response.statusCode >= 200 &&
                                            operation.response.statusCode < 400) {
                                            NSArray *responseList = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-                                           NSString *token = responseList[0];//[[[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding] autorelease];
-                                           token = [token stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                                           token = [token stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-                                           
-                                           NSString *cardID = responseList[1];
-                                           
-                                           if (self.token != nil &&
-                                               self.token.length != 0) {
-                                               if (kEXStreamingServiceStateReady == self.streamingService.serviceState) {
+                                           // 只有第一次请求时返回，其余时候应该为空
+                                           if ([responseList count] >= 2) {
+                                               NSString *token = responseList[0];//[[[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding] autorelease];
+                                               token = [token stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                                               token = [token stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                                               
+                                               NSString *cardID = responseList[1];
+                                               
+                                               if (self.token != nil &&
+                                                   self.token.length != 0) {
+                                                   if (kEXStreamingServiceStateReady == self.streamingService.serviceState) {
+                                                       NSString *streamingPath = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
+                                                       [self.streamingService startStreamingWithPath:streamingPath
+                                                                                             success:nil
+                                                                                             failure:nil];
+                                                   }
+                                               } else {
+                                                   [self stop];
+                                                   [self _cleanUp];
+                                                   
+                                                   _token = [token copy];
+                                                   _cardID = [cardID copy];
+                                                   
+                                                   if ([self.delegate respondsToSelector:@selector(liveServiceController:didGetToken:andCardID:)]) {
+                                                       [self.delegate liveServiceController:self
+                                                                                didGetToken:self.token
+                                                                                  andCardID:self.cardID];
+                                                   }
+                                                   
                                                    NSString *streamingPath = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
                                                    [self.streamingService startStreamingWithPath:streamingPath
                                                                                          success:nil
                                                                                          failure:nil];
                                                }
-                                           } else {
-                                               [self stop];
-                                               [self _cleanUp];
-                                               
-                                               _token = [token copy];
-                                               _cardID = [cardID copy];
-                                               
-                                               if ([self.delegate respondsToSelector:@selector(liveServiceController:didGetToken:andCardID:)]) {
-                                                   [self.delegate liveServiceController:self
-                                                                            didGetToken:self.token
-                                                                              andCardID:self.cardID];
-                                               }
-                                               
-                                               NSString *streamingPath = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
-                                               [self.streamingService startStreamingWithPath:streamingPath
-                                                                                     success:nil
-                                                                                     failure:nil];
                                            }
                                        }
                                        
@@ -215,30 +220,26 @@
                 
                 NSArray *cardsInDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
                 
-                NSMutableDictionary *cardDict = [[NSMutableDictionary alloc] initWithCapacity:[cardsInDict count]];
-                for (NSDictionary *param in cardsInDict) {
-                    Card *newCard = [Card cardWithDictionary:param];
-                    NSString *key = [NSString stringWithFormat:@"%@%@", newCard.userName, newCard.avatarURLString];
-                    Card *oldCard = [cardDict valueForKey:key];
-                    if (oldCard) {
-                        if (newCard.timeStamp > oldCard.timeStamp) {
-                            [cardDict setValue:newCard forKey:key];
-                        }
-                    } else {
-                        [cardDict setValue:newCard forKey:key];
+                NSMutableSet *othersCards = [NSMutableSet setWithCapacity:[cardsInDict count]];
+                Card *meCard = [Card cardWithDictionary:[self.dataSource meCardDictionaryForliveServiceController:self]];
+                for (NSDictionary *cardDict in cardsInDict) {
+                    Card *newCard = [Card cardWithDictionary:cardDict];
+                    if (![meCard isEqualToCard:newCard]) {
+                        [othersCards addObject:newCard];
                     }
                 }
                 
-                NSSet *tempSet = [NSSet setWithArray:[cardDict allValues]];
-                if (0 == [tempSet count]) {
-                    tempSet = [NSSet setWithObject:[Card cardWithDictionary:[self.dataSource userCardDictionaryForliveServiceController:self]]];
-                }
+                NSSet *others = [[othersCards copy] autorelease];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    NSLog(@"Cards:\n%@", tempSet);
+#ifdef DEBUG
+                    NSLog(@"Card JSON:\n%@", lastJSON);
+                    NSLog(@"\nMe:\n%@\nOthers:\n%@", meCard, othersCards);
+#endif
                     
                     [self.delegate liveServiceController:self
-                                didGetCardsFromStreaming:tempSet];
+                                                didGetMe:meCard
+                                                  others:others];
                 });
             }
             

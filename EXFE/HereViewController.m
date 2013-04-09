@@ -24,7 +24,8 @@
 @property (nonatomic, retain) CLLocationManager *locationManager;
 @property (nonatomic, retain) CLLocation *currentLocation;
 
-@property (nonatomic, retain) NSSet *cards;
+@property (nonatomic, retain) Card *meCard;
+@property (nonatomic, retain) NSSet *othersCards;
 @end
 
 @implementation HereViewController {
@@ -46,7 +47,8 @@
 - (void)dealloc {
     [_popoverCardViewController release];
     [_lock release];
-    [_cards release];
+    [_meCard release];
+    [_othersCards release];
     [_cardViewController release];
     [_headerView release];
     [super dealloc];
@@ -65,7 +67,7 @@
     [self.view addSubview:headerView];
     [headerView release];
     
-    self.cards = [NSSet setWithObject:[Card cardWithDictionary:[self meCardParamsToSend:NO]]];
+    self.meCard = [Card cardWithDictionary:[self meCardParamsToSend]];
     
     // avatarView
     CGRect viewBounds = self.view.bounds;
@@ -86,6 +88,7 @@
     _liveService.cleanUpWhenStoped = NO;
     _liveService.delegate = self;
     _liveService.dataSource = self;
+    
     [self.liveService start];
 }
 
@@ -94,7 +97,7 @@
     
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
-    self.cards = [NSSet setWithObject:[Card cardWithDictionary:[self meCardParamsToSend:NO]]];
+    self.meCard = [Card cardWithDictionary:[self meCardParamsToSend]];
     [_avatarlistview reloadData];
     
     if (self.locationManager == nil) {
@@ -112,16 +115,34 @@
 }
 
 #pragma mark - EXLiveServiceControllerDelegate
-- (void)liveServiceController:(EXLiveServiceController *)serviceController didGetCardsFromStreaming:(NSSet *)cards {
-    self.cards = cards;
+- (void)liveServiceController:(EXLiveServiceController *)serviceController didGetMe:(Card *)me others:(NSSet *)cards {
+    self.meCard = me;
+    self.othersCards = cards;
     dispatch_async(dispatch_get_main_queue(), ^{
         [_avatarlistview reloadData];
     });
 }
 
 #pragma mark - EXLiveServiceControllerDataSource
-- (NSDictionary *)userCardDictionaryForliveServiceController:(EXLiveServiceController *)serviceController {
-    return [self meCardParamsToSend:YES];
+- (NSDictionary *)postBodyParamForliveServiceController:(EXLiveServiceController *)serviceController {
+    NSMutableDictionary *param = [[NSMutableDictionary alloc ] initWithObjectsAndKeys:
+                                  [self meCardParamsToSend], @"card",
+                                  @[], @"traits", nil];
+    
+    if (self.currentLocation) {
+        [param setValue:[NSString stringWithFormat:@"%lf", self.currentLocation.coordinate.latitude] forKey:@"latitude"];
+        [param setValue:[NSString stringWithFormat:@"%lf", self.currentLocation.coordinate.longitude] forKey:@"longitude"];
+        [param setValue:[NSString stringWithFormat:@"%lf", self.currentLocation.horizontalAccuracy] forKey:@"accuracy"];
+    }
+    
+    NSDictionary *postBody = [[param copy] autorelease];
+    [param release];
+    
+    return postBody;
+}
+
+- (NSDictionary *)meCardDictionaryForliveServiceController:(EXLiveServiceController *)serviceController {
+    return [self meCardParamsToSend];
 }
 
 #pragma mark - CLLocationManagerDelegate
@@ -145,7 +166,7 @@
 
 #pragma mark - UserAvatarCollectionDataSource
 - (NSInteger)numberOfCircleItemInAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView {
-    return [self.cards count];
+    return [self.othersCards count] + 1; // + me
 }
 
 - (EXCircleItemCell *)circleItemForAvatarCollectionView:(EXUserAvatarCollectionView *)avatarCollectionView
@@ -158,17 +179,11 @@
     Card *card = nil;
     if (NSOrderedSame == [indexPath compare:[NSIndexPath indexPathForRow:0 inSection:0]]) {
         // me
-        for (Card *aCard in self.cards) {
-            if ([aCard.cardID isEqualToString:self.liveService.cardID]) {
-                card = aCard;
-                break;
-            }
-        }
-//        NSAssert(card != nil, @"Card中没有自己");
+        card = self.meCard;
     } else {
         // others
         NSArray *visibleCells = [avatarCollectionView visibleCircleItemCells];
-        for (Card *aCard in self.cards) {
+        for (Card *aCard in self.othersCards) {
             BOOL hasShown = NO;
             for (EXCircleItemCell *visibleCell in visibleCells) {
                 if ([aCard isEqualToCard:visibleCell.card]) {
@@ -194,7 +209,7 @@
     if (NSOrderedSame == [cell.indexPath compare:[NSIndexPath indexPathForRow:0 inSection:0]])
         return NO;
     Card *card = cell.card;
-    for (Card *aCard in self.cards) {
+    for (Card *aCard in self.othersCards) {
         if ([aCard isEqualToCard:card]) {
             return NO;
         }
@@ -205,14 +220,9 @@
 - (void)reloadCircleItemCells:(NSSet *)cells {
     for (EXCircleItemCell *cell in cells) {
         if (NSOrderedSame == [cell.indexPath compare:[NSIndexPath indexPathForRow:0 inSection:0]]) {
-            for (Card *card in self.cards) {
-                if ([card.cardID isEqualToString:self.liveService.cardID]) {
-                    [cell setCard:card animated:NO complete:nil];
-                    break;
-                }
-            }
+            [cell setCard:self.meCard animated:NO complete:nil];
         } else {
-            for (Card *card in self.cards) {
+            for (Card *card in self.othersCards) {
                 if ([cell.card isEqualToCard:card]) {
                     cell.card = card;
                     break;
@@ -303,11 +313,11 @@
                                                       }];
 }
 
-- (NSDictionary *)meCardParamsToSend:(BOOL)isToSend {
+- (NSDictionary *)meCardParamsToSend {
     User *me = [User getDefaultUser];
     NSMutableArray *identities = [[NSMutableArray alloc] initWithCapacity:me.identities.count];
     
-    if (isToSend && self.cardViewController) {
+    if (self.cardViewController.identityPrivacyDict) {
         NSDictionary *identityPrivacyDict = self.cardViewController.identityPrivacyDict;
         
         for (Identity *identity in me.identities) {

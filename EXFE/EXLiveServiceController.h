@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @class EXLiveServiceController;
+@class Card;
 
 @protocol EXLiveServiceControllerDelegate <NSObject>
 @required
-- (void)liveServiceController:(EXLiveServiceController *)serviceController didGetCardsFromStreaming:(NSSet *)cards;
+- (void)liveServiceController:(EXLiveServiceController *)serviceController didGetMe:(Card *)me others:(NSSet *)cards;
 @optional
 - (void)liveServiceController:(EXLiveServiceController *)serviceController didGetToken:(NSString *)totken andCardID:(NSString *)cardID;
 - (void)liveServiceControllerTokenDidInvalid:(EXLiveServiceController *)serviceController willRetry:(BOOL)retry;
@@ -20,7 +21,8 @@
 
 @protocol EXLiveServiceControllerDataSource <NSObject>
 @required
-- (NSDictionary *)userCardDictionaryForliveServiceController:(EXLiveServiceController *)serviceController;
+- (NSDictionary *)meCardDictionaryForliveServiceController:(EXLiveServiceController *)serviceController;
+- (NSDictionary *)postBodyParamForliveServiceController:(EXLiveServiceController *)serviceController;
 @end
 
 @interface EXLiveServiceController : NSObject

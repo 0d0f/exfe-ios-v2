@@ -1588,10 +1588,10 @@
 		76E316F8170D4DB100B8A9F1 /* ServiceController */ = {
 			isa = PBXGroup;
 			children = (
-				76E316F9170D4E0300B8A9F1 /* EXStreamingServiceController.h */,
-				76E316FA170D4E0300B8A9F1 /* EXStreamingServiceController.m */,
 				76A14F7317133E1900751C92 /* EXLiveServiceController.h */,
 				76A14F7417133E1900751C92 /* EXLiveServiceController.m */,
+				76E316F9170D4E0300B8A9F1 /* EXStreamingServiceController.h */,
+				76E316FA170D4E0300B8A9F1 /* EXStreamingServiceController.m */,
 			);
 			name = ServiceController;
 			sourceTree = "<group>";
