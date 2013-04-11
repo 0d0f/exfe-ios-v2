@@ -4833,7 +4833,7 @@
 					"SERVER=DEV",
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
-				INFOPLIST_FILE = "$(SRCROOT)/0d0f-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4862,7 +4862,7 @@
 					"SERVER=DEV",
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
-				INFOPLIST_FILE = "$(SRCROOT)/0d0f-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/EXFE/0d0f-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4891,7 +4891,7 @@
 					"SERVER=PILOT",
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
-				INFOPLIST_FILE = "$(SRCROOT)/Polit-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Polit-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4920,7 +4920,7 @@
 					"SERVER=PILOT",
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
-				INFOPLIST_FILE = "$(SRCROOT)/Polit-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Polit-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
