@@ -36,11 +36,13 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.exfe.app</string>
+			<string>com.0d0f.exfe</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>exfe</string>
+				<string>0d0f</string>
 			</array>
 		</dict>
 	</array>
