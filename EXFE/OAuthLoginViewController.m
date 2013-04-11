@@ -58,6 +58,7 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    [Flurry logEvent:@"OAUTH_SIGN_IN"];
     toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
     [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
 	self.title = @"Sign In";

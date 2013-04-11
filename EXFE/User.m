@@ -2,8 +2,8 @@
 //  User.m
 //  EXFE
 //
-//  Created by ju huo on 6/8/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by huoju on 3/1/13.
+//
 //
 
 #import "User.h"
@@ -15,10 +15,9 @@
 @dynamic avatar_filename;
 @dynamic bio;
 @dynamic cross_quantity;
-@dynamic user_id;
 @dynamic name;
 @dynamic timezone;
-@dynamic default_identity;
+@dynamic user_id;
 @dynamic identities;
 
 @end

@@ -17,17 +17,16 @@
 @interface APICrosses : NSObject {
 //  RKRequestQueue *queue;
 }
-//+ (id) sharedManager;
-+(void) MappingCross;
-+(void) MappingRoute;
-+(void) LoadCrossWithUserId:(int)userid updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source;
-+(void) LoadCrossWithCrossId:(int)corss_id updatedtime:(NSString*)updatedtime delegate:(id)delegate source:(NSDictionary*)source;
-+(void) GatherCross:(Cross*) cross delegate:(id)delegate;
++ (id) sharedManager;
++(void) LoadCrossWithUserId:(int)user_id updatedtime:(NSString*)updatedtime success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 
-+ (RKManagedObjectMapping*) getPlaceMapping;
-+ (RKManagedObjectMapping*) getInvitationMapping;
-+ (RKManagedObjectMapping*) getCrossMapping;
-+ (RKManagedObjectMapping*) getExfeeMapping;
++(void) LoadCrossWithCrossId:(int)corss_id updatedtime:(NSString*)updatedtime success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
+
++(void) GatherCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
++(void) EditCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
 
 @end

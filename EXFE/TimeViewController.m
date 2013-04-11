@@ -27,6 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"EDIT_TIME"];
     CGRect screenframe=[[UIScreen mainScreen] bounds];
     
     CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];
@@ -142,59 +143,59 @@
 - (void) getTimeFromAPI{
     if(CFAbsoluteTimeGetCurrent()-editinginterval>0.8)
     {
-        NSString *params_timezone=[DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];        
-        RKParams* rsvpParams = [RKParams params];
-        [rsvpParams setValue:params_timezone forParam:@"timezone"];
-//        [rsvpParams setValue:timeInput.text forParam:@"time_string"];
-        RKClient *client = [RKClient sharedClient];
-        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-        NSString *endpoint = [NSString stringWithFormat:@"/time/Recognize"];
-        [client post:endpoint usingBlock:^(RKRequest *request){
-            request.method=RKRequestMethodPOST;
-            request.params=rsvpParams;
-            request.onDidLoadResponse=^(RKResponse *response){
-                if (response.statusCode == 200) {
-                    NSDictionary *body=[response.body objectFromJSONData];
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code){
-                        if([code intValue]==200) {
-//                            NSLog(@"%@",[body objectForKey:@"response"]);
-                            NSDictionary *cross_time=[[body objectForKey:@"response"] objectForKey:@"cross_time"];
-                            NSDictionary *begin_at=[cross_time objectForKey:@"begin_at"];
-//                            if(_crosstime==nil){
-//                                _crosstime=[CrossTime object];
-//                                _crosstime.begin_at=[EFTime object];
-//                                
-//                            }
-                            CrossTime *crosstime=[CrossTime object];
-                            crosstime.begin_at=[EFTime object];
-                            
-                            crosstime.origin=[cross_time objectForKey:@"origin"];
-                            crosstime.outputformat=[NSNumber numberWithBool:[[cross_time objectForKey:@"outputformat"] boolValue]];
-                            crosstime.begin_at.date=[begin_at objectForKey:@"date"];
-                            crosstime.begin_at.date_word=[begin_at objectForKey:@"date_word"];
-                            crosstime.begin_at.time=[begin_at objectForKey:@"time"];
-                            crosstime.begin_at.time_word=[begin_at objectForKey:@"time_word"];
-                            crosstime.begin_at.timezone=[begin_at objectForKey:@"timezone"];
-                            [self setDateTime:crosstime];
-                            datechanged=YES;
-                        }
-
-                    }
-
-                }
-            };
-            request.onDidFailLoadWithError=^(NSError *error){
-        //            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
-        //            if(error.code==2)
-        //                errormsg=@"A connection failure has occurred.";
-        //            else
-        //                errormsg=@"Could not connect to the server.";
-        //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        //            [alert show];
-        //            [alert release];
-            };
-        }];
+//        NSString *params_timezone=[DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];        
+//        RKParams* rsvpParams = [RKParams params];
+//        [rsvpParams setValue:params_timezone forParam:@"timezone"];
+////        [rsvpParams setValue:timeInput.text forParam:@"time_string"];
+//        RKClient *client = [RKClient sharedClient];
+//        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//        NSString *endpoint = [NSString stringWithFormat:@"/time/Recognize"];
+//        [client post:endpoint usingBlock:^(RKRequest *request){
+//            request.method=RKRequestMethodPOST;
+//            request.params=rsvpParams;
+//            request.onDidLoadResponse=^(RKResponse *response){
+//                if (response.statusCode == 200) {
+//                    NSDictionary *body=[response.body objectFromJSONData];
+//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                    if(code){
+//                        if([code intValue]==200) {
+////                            NSLog(@"%@",[body objectForKey:@"response"]);
+//                            NSDictionary *cross_time=[[body objectForKey:@"response"] objectForKey:@"cross_time"];
+//                            NSDictionary *begin_at=[cross_time objectForKey:@"begin_at"];
+////                            if(_crosstime==nil){
+////                                _crosstime=[CrossTime object];
+////                                _crosstime.begin_at=[EFTime object];
+////                                
+////                            }
+//                            CrossTime *crosstime=[CrossTime object];
+//                            crosstime.begin_at=[EFTime object];
+//                            
+//                            crosstime.origin=[cross_time objectForKey:@"origin"];
+//                            crosstime.outputformat=[NSNumber numberWithBool:[[cross_time objectForKey:@"outputformat"] boolValue]];
+//                            crosstime.begin_at.date=[begin_at objectForKey:@"date"];
+//                            crosstime.begin_at.date_word=[begin_at objectForKey:@"date_word"];
+//                            crosstime.begin_at.time=[begin_at objectForKey:@"time"];
+//                            crosstime.begin_at.time_word=[begin_at objectForKey:@"time_word"];
+//                            crosstime.begin_at.timezone=[begin_at objectForKey:@"timezone"];
+//                            [self setDateTime:crosstime];
+//                            datechanged=YES;
+//                        }
+//
+//                    }
+//
+//                }
+//            };
+//            request.onDidFailLoadWithError=^(NSError *error){
+//        //            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+//        //            if(error.code==2)
+//        //                errormsg=@"A connection failure has occurred.";
+//        //            else
+//        //                errormsg=@"Could not connect to the server.";
+//        //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//        //            [alert show];
+//        //            [alert release];
+//            };
+//        }];
     }
     
 }
@@ -305,9 +306,15 @@
 - (void) saveDate:(NSString*) time_word{
     if([time_word isEqualToString:@"Sometime"])
             [self dismissModalViewControllerAnimated:YES];
-    EFTime *eftime=[EFTime object];
-    CrossTime *crosstime=[CrossTime object];
-    
+  
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSEntityDescription *eftimeEntity = [NSEntityDescription entityForName:@"EFTime" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    EFTime *eftime=[[[EFTime alloc] initWithEntity:eftimeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+
+
+    NSEntityDescription *crosstimeEntity = [NSEntityDescription entityForName:@"CrossTime" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    CrossTime *crosstime=[[[CrossTime alloc] initWithEntity:crosstimeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+
     NSDate *date=datepicker.date;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];

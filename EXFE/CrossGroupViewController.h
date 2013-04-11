@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import <RestKit/JSONKit.h>
 #import <RestKit/RestKit.h>
 #import "EditCrossDelegate.h"
 #import "EXImagesCollectionView.h"
 #import "EXRSVPMenuView.h"
 #import "EXTabLayer.h"
 #import "EXTabWidget.h"
+#import "EXRSVPStatusView.h"
 
 @class Cross;
 @class User;
@@ -23,15 +23,14 @@
 
 #define kHeaderStyleFull   0
 #define kHeaderStyleHalf   1
+#define kWidgetCross           1
+#define kWidgetConversation    2
+#define kWidgetExfee           3
 
-#define kWidgetCross           0
-#define kWidgetConversation    1
-#define kWidgetExfee           2
-
-@interface CrossGroupViewController : UIViewController<EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, EXTabWidgetDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate, RKObjectLoaderDelegate>{
+@interface CrossGroupViewController : UIViewController<EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, EXTabWidgetDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate, EXRSVPStatusViewDelegate>{
+    
     
     CGFloat exfeeSuggestHeight;
-    NSMutableArray *exfeeInvitations;
     CGFloat head_bg_img_startY;
     CGPoint head_bg_point;
     
@@ -47,12 +46,10 @@
     UIButton *titleAndDescEditMenu;
     
     // Header
-    UIView* headerView;
-    UIImageView* dectorView;
     UILabel* titleView;
     // Content
-//    UIScrollView* xContainer;
-//    UIView* container;
+    //    UIScrollView* xContainer;
+    //    UIView* container;
     UIScrollView* container;
     EXLabel* descView;
     EXImagesCollectionView *exfeeShowview;
@@ -71,18 +68,18 @@
     
     
     UIImageView *headerShadow;
+    
+    
+    UISwipeGestureRecognizer *swipeRightRecognizer;
+    UISwipeGestureRecognizer *swipeLeftRecognizer;
 }
 
-@property (nonatomic,retain) UIViewController *currentViewController;
-@property (retain,nonatomic) Cross* cross;
-@property (retain,nonatomic) User* default_user;
-@property (nonatomic) NSInteger headerStyle;
-@property (nonatomic) NSUInteger widgetId;
+@property (nonatomic, retain) UIViewController *currentViewController;
+@property (nonatomic, retain) Cross* cross;
+@property (nonatomic, assign) NSInteger headerStyle;
+@property (nonatomic, assign) NSUInteger widgetId;
+@property (nonatomic, retain) NSArray *sortedInvitations;
 
 -(void)swapViewControllers:(UIViewController*)childViewController;
-
-#pragma mark Navigation
-- (void) toConversationAnimated:(BOOL)isAnimated;
-
 
 @end

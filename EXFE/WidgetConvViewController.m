@@ -12,16 +12,14 @@
 #import "PostCell.h"
 #import "ImgCache.h"
 #import "Util.h"
-#import "EXCurveView.h"
-#import <RestKit/JSONKit.h>
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
 #define LARGE_SLOT                       (15)
 #define SMALL_SLOT                      (5)
 
-#define DECTOR_HEIGHT                    (44)
-#define DECTOR_HEIGHT_EXTRA              (LARGE_SLOT)
+#define DECTOR_HEIGHT                    (50)
+#define DECTOR_HEIGHT_EXTRA              (20)
 #define DECTOR_MARGIN                    (SMALL_SLOT)
 #define OVERLAP                          (DECTOR_HEIGHT)
 #define TITLE_HORIZON_MARGIN             (SMALL_SLOT)
@@ -33,10 +31,8 @@
 
 @implementation WidgetConvViewController
 @synthesize exfee_id;
-@synthesize identity;
+@synthesize myIdentity;
 @synthesize inputToolbar;
-@synthesize cross_title;
-@synthesize headImgDict;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -56,6 +52,8 @@
     [self.view setFrame:f];
 
     [super viewDidLoad];
+    [Flurry logEvent:@"WIDGET_CONVERSATION"];
+    
     _tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(f), CGRectGetHeight(f) - kDefaultToolbarHeight + 2)];
     _tableView.dataSource=self;
     _tableView.delegate=self;
@@ -78,6 +76,7 @@
         [hintGroup addSubview:no_posts];
         [no_posts release];
     }
+    hintGroup.hidden = YES;
     [self.view  addSubview:hintGroup];
     
     CGRect toolbarframe=CGRectMake(0, CGRectGetHeight(f) - kDefaultToolbarHeight, CGRectGetWidth(f), kDefaultToolbarHeight);
@@ -115,7 +114,7 @@
     inputaccessoryview=[[ConversationInputAccessoryView alloc] initWithFrame:CGRectMake(10.0, 0.0, 310.0, 40.0)];
     [inputaccessoryview setBackgroundColor:[UIColor lightGrayColor]];
     [inputaccessoryview setAlpha: 0.8];
-    [Flurry logEvent:@"VIEW_CONVERSATION"];
+    
 //    floatTime=[[UILabel alloc] initWithFrame:CGRectMake(0, 80, 60, 26)];
 //    floatTime.text=@"label time";
 //    [self.view addSubview:floatTime];
@@ -123,31 +122,9 @@
     
     
     
-    [self showOrHideHint];
-    
-    UISwipeGestureRecognizer *headSwipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderSwipe:)];
-    headSwipeRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-    [headerView addGestureRecognizer:headSwipeRecognizer];
-    [headSwipeRecognizer release];
+//    [self showOrHideHint];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
-}
-
-- (void)handleHeaderSwipe:(UISwipeGestureRecognizer*)sender{
-    //CGPoint location = [sender locationInView:sender.view];
-    
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        [self toHome];
-    }
-}
-
-- (void) toCross{
-    [self.navigationController popViewControllerAnimated:NO];
-}
-
-- (void) toHome{
-    [self.navigationController popToRootViewControllerAnimated:YES];
-    
 }
 
 - (void)viewDidUnload
@@ -171,17 +148,14 @@
 
 - (void)dealloc {
     RKObjectManager* manager =[RKObjectManager sharedManager];
-    [manager.requestQueue cancelAllRequests];
+    [manager.operationQueue cancelAllOperations];
 	[_posts release];
     [cellbackground release];
     [cellsepator release];
     [avatarframe release];
     [_tableView release];
     [inputToolbar release];
-    
-    [dectorView release];
-    [titleView release];
-    [headerView release];
+
     [super dealloc];
 }
 
@@ -258,14 +232,28 @@
         Post *post=[_posts objectAtIndex:0];
         if(post && post.updated_at!=nil)
         {
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-            updated_at = [formatter stringFromDate:post.updated_at];
-            [formatter release];
+//            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+//            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+//            updated_at = [formatter stringFromDate:post.updated_at];
+//            [formatter release];
+            updated_at=post.updated_at;
         }
     }
-    [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at delegate:self];
+    [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+        if(meta!=nil){
+            if([meta.code intValue]==200){
+                [self loadObjectsFromDataStore];
+                [self showOrHideHint];
+            }
+        }else{
+            //show error hint
+        }
+        
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        [self showOrHideHint];
+    }];
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [inputToolbar hidekeyboard];
@@ -273,17 +261,22 @@
 - (void)loadObjectsFromDataStore {
 	[_posts release];
 
-	NSFetchRequest* request = [Post fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
-                              @"exfee", exfee_id];    
-    [request setPredicate:predicate];
-//    [request setFetchLimit:50];
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
+  NSPredicate *predicate = [NSPredicate
+                            predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
+                            @"exfee", exfee_id];
+
+  [request setPredicate:predicate];
+  
+  
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:YES];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
     
-	_posts = [[Post objectsWithFetchRequest:request] retain];
-    [self showOrHideHint];
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+  _posts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+
+  
+    
     [_tableView reloadData];
     if(_tableView.contentSize.height>_tableView.frame.size.height) {
         CGPoint bottomOffset = CGPointMake(0, _tableView.contentSize.height - _tableView.frame.size.height);
@@ -382,6 +375,13 @@
                     
                 istimehidden=NO;
                 Post *post=[_posts objectAtIndex:path.row];
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+                [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                NSDate *post_created_at = [formatter dateFromString:post.created_at];
+                [formatter release];
+
+              
                 if(post && !timetextlayer){
                     timetextlayer=[CATextLayer layer];
                     timetextlayer.contentsScale=[[UIScreen mainScreen] scale];
@@ -400,9 +400,9 @@
                     NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
                     [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                     [dateformat setDateFormat:@"yyyy-MM-dd"];
-                    NSString *datestr=[dateformat stringFromDate:post.created_at];
+                    NSString *datestr=[dateformat stringFromDate:post_created_at];
                     [dateformat setDateFormat:@"HH:mm:ss"];
-                    NSString *timestr=[dateformat stringFromDate:post.created_at];
+                    NSString *timestr=[dateformat stringFromDate:post_created_at];
                     [dateformat release];
                     NSString *timestring=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:timestring];
@@ -418,9 +418,9 @@
                     
                     [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
                     [dateformat_to setDateFormat:@"ccc, MMM d"];
-                    NSString *datestring=[dateformat_to stringFromDate:post.created_at];
+                    NSString *datestring=[dateformat_to stringFromDate:post_created_at];
                     [dateformat_to setDateFormat:@"h:mm a"];
-                    NSString *timestring=[dateformat_to stringFromDate:post.created_at];
+                    NSString *timestring=[dateformat_to stringFromDate:post_created_at];
                     [locale_to release];
                     [dateformat_to release];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",datestring,timestring]];
@@ -510,20 +510,26 @@
             [floattimetextlayer removeAnimationForKey:@"fadeout"];
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
             Post *post=[_posts objectAtIndex:path.row];
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+            NSDate *post_created_at = [formatter dateFromString:post.created_at];
+            [formatter release];
+
 
             NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
             [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             [dateformat setDateFormat:@"yyyy-MM-dd"];
-            NSString *datestr=[dateformat stringFromDate:post.created_at];
+            NSString *datestr=[dateformat stringFromDate:post_created_at];
             [dateformat setDateFormat:@"HH:mm:ss"];
-            NSString *timestr=[dateformat stringFromDate:post.created_at];
+            NSString *timestr=[dateformat stringFromDate:post_created_at];
             [dateformat release];
             NSString *relative=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
 
             NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
             [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
             [dateformat_to setDateFormat:@"h:mm a MMM d"];
-            NSString *datestring=[dateformat_to stringFromDate:post.created_at];
+            NSString *datestring=[dateformat_to stringFromDate:post_created_at];
             [dateformat_to release];
 
             NSMutableAttributedString *timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",relative,datestring]];
@@ -630,66 +636,25 @@
     [Flurry logEvent:@"SEND_CONVERSATION"];
 
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:identity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
-    
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    NSString *endpoint = [NSString stringWithFormat:@"/conversation/%u/add?token=%@",exfee_id,app.accesstoken];
-    [inputToolbar setInputEnabled:NO];
-    NSString *JSON=[postdict JSONString];
-    
-    
-    RKParams *params = [RKRequestSerialization serializationWithData:[JSON 
- dataUsingEncoding:NSUTF8StringEncoding] MIMEType:RKMIMETypeJSON];
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=params;
-        request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-                [self refreshConversation];
-                [inputToolbar.textView clearText];
-            }else {
-            }
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-            [inputToolbar setInputEnabled:YES];
-            NSString *errormsg;
-            if(error.code==2)
-                errormsg=@"A connection failure has occurred.";
-            else
-                errormsg=@"Could not connect to the server.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-        };
+    NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:myIdentity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
 
-        request.delegate=self;
+    NSString *endpoint = [NSString stringWithFormat:@"%@/conversation/%u/add?token=%@",API_ROOT,exfee_id,app.accesstoken];
+    RKObjectManager *manager=[RKObjectManager sharedManager];
+    manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
+    [manager.HTTPClient postPath:endpoint parameters:postdict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+      if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+          [self refreshConversation];
+          [inputToolbar.textView clearText];
+      }else {
+      }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+      [inputToolbar setInputEnabled:YES];
+      [Util showConnectError:error delegate:self];
     }];
-    
 }
 -(void)inputButtonPressed:(NSString *)inputText{
     [self addPost:inputText];
 }
-#pragma Mark - RKRequestDelegate
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    if(objectLoader.isGET) {
-
-        if([objects count]>0)
-        {
-//            for(Post *post in objects)
-//            {
-//                if([post isKindOfClass:[Post class]])
-//                    
-//                    NSLog(@"%@",post.content);
-//            }
-            [self loadObjectsFromDataStore];
-        }
-    }
-}
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
-}
-
 
 - (void)showOrHideHint{
     if (_posts == nil || _posts.count == 0) {
@@ -698,5 +663,11 @@
         hintGroup.hidden = YES;
     }
 }
+
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    // nothing yet
+}
+
 
 @end

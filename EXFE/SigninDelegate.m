@@ -27,65 +27,47 @@
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     app.userid=[userid intValue];
     app.accesstoken=token;
-    [APIProfile LoadUsrWithUserId:app.userid delegate:self];
-}
+    [APIProfile LoadUsrWithUserId:app.userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+      AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 
-#pragma mark RKObjectLoaderDelegate methods
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//	NSFetchRequest* request = [User fetchRequest];
-//    NSPredicate *predicate = [NSPredicate
-//                              predicateWithFormat:@"user_id = %u", app.userid];
-//    [request setPredicate:predicate];
-//	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-//    
-//    if(users!=nil && [users count] >0)
-//    {
-//        User* user=[users objectAtIndex:0];
-//        NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:4];
-//        for(Identity *identity in user.identities){
-//            [identities addObject:identity.identity_id];
-//        }
-//        [[NSUserDefaults standardUserDefaults] setObject:identities forKey:@"default_user_identities"];
-//        [identities release];
-//        
-//        [[NSUserDefaults standardUserDefaults] setObject:user.name forKey:@"username"];
-//        [[NSUserDefaults standardUserDefaults] synchronize];
-//        app.username=user.name;
-//        [[NSUserDefaults standardUserDefaults] setObject:app.accesstoken forKey:@"access_token"];
-//        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%i",app.userid] forKey:@"userid"];
-//        [[NSUserDefaults standardUserDefaults] synchronize];
-//
-//    }
-//    [users release];
-//    if(parent!=nil)
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-	NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
+      NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+      NSPredicate *predicate = [NSPredicate
                               predicateWithFormat:@"user_id = %u", app.userid];
-    [request setPredicate:predicate];
-	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    
-    if(users!=nil && [users count] >0)
-    {
-        User* user=[users objectAtIndex:0];
-        [SigninDelegate saveSigninData:user];
-    }
-    [users release];
+      [request setPredicate:predicate];
+      RKObjectManager *objectManager = [RKObjectManager sharedManager];
+      NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
 
-    [parent performSelector:@selector(SigninDidFinish)];
-//    else{
-//        [app SigninDidFinish];
-//    }
+      if(users!=nil && [users count] >0)
+      {
+        User* user=[users objectAtIndex:0];
+        NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:4];
+        for(Identity *identity in user.identities){
+            [identities addObject:identity.identity_id];
+        }
+        [[NSUserDefaults standardUserDefaults] setObject:identities forKey:@"default_user_identities"];
+        [identities release];
+
+        [[NSUserDefaults standardUserDefaults] setObject:user.name forKey:@"username"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        app.username=user.name;
+        [[NSUserDefaults standardUserDefaults] setObject:app.accesstoken forKey:@"access_token"];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%i",app.userid] forKey:@"userid"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+
+      }
+      if(parent!=nil)
+        [parent performSelector:@selector(SigninDidFinish)];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+    }];
 }
+
 
 + (void)saveSigninData:(User*)user{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:4];
-    for(Identity *identity in user.identities){
-        [identities addObject:identity.identity_id];
-    }
+//    for(Identity *identity in user.identities){
+//        [identities addObject:identity.identity_id];
+//    }
     [[NSUserDefaults standardUserDefaults] setObject:identities forKey:@"default_user_identities"];
     [identities release];
 
@@ -95,10 +77,6 @@
     [[NSUserDefaults standardUserDefaults] setObject:app.accesstoken forKey:@"access_token"];
     [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%i",app.userid] forKey:@"userid"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSLog(@"Error!:%@",error);
 }
 
 @end

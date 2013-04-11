@@ -38,6 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"EDIT_TITLE_DESCRIPTION"];
     CGRect b = self.view.bounds;
     //CGRect a = [UIScreen mainScreen].applicationFrame;
     
@@ -105,7 +106,7 @@
     descView.placeholder = @"Take some note";
     [self.view addSubview:descView];
 
-    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90,  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
+    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 122,  DECTOR_HEIGHT, 122, DECTOR_HEIGHT_EXTRA) ];
     headview.backgroundColor=[UIColor grayColor];
     {
         CGFloat scale = CGRectGetWidth(headview.bounds) / HEADER_BACKGROUND_WIDTH;

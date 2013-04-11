@@ -12,6 +12,8 @@
 #import "Invitation.h"
 #import "Identity.h"
 
+
+// The class is deprecated. We should use EXBasicMenu.
 @class EXRSVPMenuView;
 
 @protocol EXRSVPMenuDelegate<NSObject>
@@ -24,7 +26,6 @@
 
 
 @interface EXRSVPMenuView : UIView{
-    Invitation *invitation;
     id <EXRSVPMenuDelegate>delegate;
 }
 

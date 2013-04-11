@@ -16,80 +16,60 @@
 @synthesize delegate;
 
 - (IBAction) Signin:(id) sender{
+    NSLog(@"signin");
     [self showSignError:@""];
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    NSString *endpoint = [NSString stringWithFormat:@"/users/signin"];
-    RKParams* rsvpParams = [RKParams params];
-    NSString *provider=[Util findProvider:textUsername.text];
-    [rsvpParams setValue:provider forParam:@"provider"];
-    NSString *username=[Util cleanInputName:textUsername.text provider:provider];
-    [rsvpParams setValue:username forParam:@"external_username"];
-    [rsvpParams setValue:textPassword.text forParam:@"password"];
+  NSString *provider=[Util findProvider:textUsername.text];
+  NSString *username=[Util cleanInputName:textUsername.text provider:provider];
+  
+  NSString *endpoint = [NSString stringWithFormat:@"%@/users/signin",API_ROOT];
+  RKObjectManager *manager=[RKObjectManager sharedManager] ;
+  NSDictionary *params=@{
+    @"provider": provider,
+    @"external_username": username,
+    @"password": textPassword.text,
+    };
+
+  manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
+  [manager.HTTPClient postPath:endpoint parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+        [self processResponse:responseObject status:@"signin"];
+//        [delegate SigninDidFinish];
+    }
+    [spin setHidden:YES];
+
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    [spin setHidden:YES];
+   [Util showConnectError:error delegate:self];
+    
+  }];
+
 
     [spin removeFromSuperview];
     [loginbtn addSubview:spin];
     [spin setHidden:NO];
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-                [self processResponse:[response.body objectFromJSONData] status:@"signin"];
-            }
-            [spin setHidden:YES];
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-            [spin setHidden:YES];
-            NSString *errormsg;
-            if(error.code==2)
-                errormsg=@"A connection failure has occurred.";
-            else
-                errormsg=@"Could not connect to the server.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-        };
-    }];
 }
 
 - (void) Signupnew:(id) sender{
     [self showSignError:@""];
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    NSString *endpoint = [NSString stringWithFormat:@"/users/signin"];
-    RKParams* rsvpParams = [RKParams params];
-    NSString *provider=[Util findProvider:textUsername.text];
-    [rsvpParams setValue:provider forParam:@"provider"];
-    [rsvpParams setValue:textUsername.text forParam:@"external_username"];
-    [rsvpParams setValue:textDisplayname.text forParam:@"name"];
-    [rsvpParams setValue:textPassword.text forParam:@"password"];
-    
+  
+  NSString *provider=[Util findProvider:textUsername.text];
+  
+  NSString *endpoint = [NSString stringWithFormat:@"%@/users/signin",API_ROOT];
+  RKObjectManager *manager=[RKObjectManager sharedManager] ;
+  manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
+  [manager.HTTPClient postPath:endpoint parameters:@{@"provider":provider,@"external_username":textUsername.text,@"name":textDisplayname.text,@"password":textPassword.text} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+      [self processResponse:responseObject status:@"signup"];
+    }
+    [spin setHidden:YES];
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    [spin setHidden:YES];
+    [Util showConnectError:error delegate:self];
+  }];
+
     [spin removeFromSuperview];
     [setupnewbtn addSubview:spin];
     [spin setHidden:NO];
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-                [self processResponse:[response.body objectFromJSONData] status:@"signup"];
-            }
-            [spin setHidden:YES];
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-            [spin setHidden:YES];
-            NSString *errormsg;
-            if(error.code==2)
-                errormsg=@"A connection failure has occurred.";
-            else
-                errormsg=@"Could not connect to the server.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-        };
-    }];
-    
 }
 - (IBAction) TwitterLoginButtonPress:(id) sender{
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
@@ -109,24 +89,24 @@
 //    [self loginSuccessWith:token userid:userid username:username];
 //}
 #pragma Mark - RKRequestDelegate
-
-- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
-    
-    if ([request isGET]) {
-        if ([response isOK]) {
-        }
-    } else if ([request isPOST]) {
-        if ([response isJSON]) {
-            NSError *error = nil;
-            id jsonParser =[[RKParserRegistry sharedRegistry] parserForMIMEType:RKMIMETypeJSON];
-            NSDictionary *parsedResponse = [jsonParser objectFromString:[response bodyAsString] error:&error];
-            [self processResponse:parsedResponse status:@""];
-        }
-    } else if ([request isDELETE]) {
-        if ([response isNotFound]) {
-        }
-    }
-}
+//RESTKIT0.2
+//- (void)request:(RKRequest*)request didLoadResponse:(RKResponse*)response {
+//    
+//    if ([request isGET]) {
+//        if ([response isOK]) {
+//        }
+//    } else if ([request isPOST]) {
+//        if ([response isJSON]) {
+//            NSError *error = nil;
+//            id jsonParser =[[RKParserRegistry sharedRegistry] parserForMIMEType:RKMIMETypeJSON];
+//            NSDictionary *parsedResponse = [jsonParser objectFromString:[response bodyAsString] error:&error];
+//            [self processResponse:parsedResponse status:@""];
+//        }
+//    } else if ([request isDELETE]) {
+//        if ([response isNotFound]) {
+//        }
+//    }
+//}
 
 - (void) processResponse:(id)obj status:(NSString*)status{
     if([obj isKindOfClass:[NSDictionary class]])
@@ -168,9 +148,9 @@
     }
 }
 
-- (void)request:(RKRequest *)request didFailLoadWithError:(NSError *)error{
-    NSLog(@"error:%@",error);   
-}
+//- (void)request:(RKRequest *)request didFailLoadWithError:(NSError *)error{
+//    NSLog(@"error:%@",error);   
+//}
 
 - (void)SigninDidFinish{
     [delegate SigninDidFinish];
@@ -188,6 +168,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"SIGN_IN"];
+    
     signindelegate=[[SigninDelegate alloc]init];
     signindelegate.parent=self;
     
@@ -228,6 +210,7 @@
     
     
     textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 70, 230-(6+18+6)*2, 40)];
+    textUsername.keyboardType=UIKeyboardTypeEmailAddress;
     textUsername.placeholder=@"Enter email or phone";
     textUsername.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     textUsername.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
@@ -403,72 +386,64 @@
 - (IBAction)editingDidBegan:(UITextField*)textField{
 }
 - (void) getUser{
-//    if(CFAbsoluteTimeGetCurrent()-editinginterval>1.2)
-//    {
+  
     NSString *provider=[Util findProvider:textUsername.text];
     if ([provider isEqualToString:@"phone"] && ![[textUsername.text substringToIndex:1] isEqualToString:@"+"])
       textUsername.text=[Util formatPhoneNumber:textUsername.text];
-  
+
     if(![provider isEqualToString:@""]){
-            RKClient *client = [RKClient sharedClient];
-            [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-            NSString *endpoint = [NSString stringWithFormat:@"/users/GetRegistrationFlag?external_username=%@&provider=%@",textUsername.text,provider];
-            AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-            [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-            [client get:endpoint usingBlock:^(RKRequest *request){
-                request.method=RKRequestMethodGET;
-                request.onDidLoadResponse=^(RKResponse *response){
-                    if (response.statusCode == 200) {
-                        NSDictionary *body=[response.body objectFromJSONData];
-                        id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                        if(code)
-                            if([code intValue]==200) {
-                                NSDictionary* response = [body objectForKey:@"response"];
-                                NSString *registration_flag=(NSString*)[response objectForKey:@"registration_flag"] ;
-                                if([registration_flag isEqualToString:@"SIGN_IN"] )
-                                {
-                                    [self setSigninView];
-                                    NSDictionary *identity = [response objectForKey:@"identity"];
-                                    NSString *avatar_filename=[identity objectForKey:@"avatar_filename"];
-                                    NSString *provider=[identity objectForKey:@"provider"];
-                                    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
-                                    identityLeftIcon.image=[UIImage imageNamed:iconname];
+      NSString *endpoint = [NSString stringWithFormat:@"%@/users/GetRegistrationFlag?external_username=%@&provider=%@",API_ROOT,textUsername.text,provider];
+      RKObjectManager *manager=[RKObjectManager sharedManager] ;
+      
+      [manager.HTTPClient getPath:endpoint parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+          NSDictionary *body=responseObject;
+          id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+          if(code)
+            if([code intValue]==200) {
+              NSDictionary* response = [body objectForKey:@"response"];
+                NSString *registration_flag=(NSString*)[response objectForKey:@"registration_flag"] ;
+                  if([registration_flag isEqualToString:@"SIGN_IN"] ) {
+                    [self setSigninView];
+                     NSDictionary *identity = [response objectForKey:@"identity"];
+                     NSString *avatar_filename=[identity objectForKey:@"avatar_filename"];
+                     NSString *provider=[identity objectForKey:@"provider"];
+                     NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
+                     identityLeftIcon.image=[UIImage imageNamed:iconname];
 
-                                    if(avatar_filename!=nil) {
-                                        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                                        dispatch_async(imgQueue, ^{
-                                            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatar_filename];
-                                            dispatch_async(dispatch_get_main_queue(), ^{
-                                                if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                                                    avatarview.image=avatar;
-                                                    avatarframeview.image=[UIImage imageNamed:@"signin_portrait_frame.png"];
-                                                    
-                                                }
-                                            });
-                                        });
-                                        dispatch_release(imgQueue);        
-                                    }
-                                }
-                                else if([registration_flag isEqualToString:@"SIGN_UP"] ){
-                                    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
-                                    identityLeftIcon.image=[UIImage imageNamed:iconname];
-
-                                    [self setSignupView];
-                                }
-                                else if([registration_flag isEqualToString:@"VERIFY"] )
-                                {
-                                    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
-                                    identityLeftIcon.image=[UIImage imageNamed:iconname];
-                                    [self setSigninView];
-                                    [self setHintView:@"verification" provider:provider];
-                                }
-                            }
+                     if(avatar_filename!=nil) {
+                       dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                       dispatch_async(imgQueue, ^{
+                           UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatar_filename];
+                           dispatch_async(dispatch_get_main_queue(), ^{
+                               if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+                                   avatarview.image=avatar;
+                                   avatarframeview.image=[UIImage imageNamed:@"signin_portrait_frame.png"];
+                               }
+                           });
+                       });
+                       dispatch_release(imgQueue);
+                      }
                     }
-                };
-            }];
+                    else if([registration_flag isEqualToString:@"SIGN_UP"] ){
+                        NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
+                        identityLeftIcon.image=[UIImage imageNamed:iconname];
+
+                        [self setSignupView];
+                    }
+                    else if([registration_flag isEqualToString:@"VERIFY"] ) {
+                        NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
+                        identityLeftIcon.image=[UIImage imageNamed:iconname];
+                        [self setSigninView];
+                        [self setHintView:@"verification" provider:provider];
+                    }
+            }
         }
-    
-//    }
+      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//         NSLog(@"It Failed: %@", error);
+      }];
+      
+    }
 }
 
 
@@ -602,63 +577,48 @@
 }
 
 - (IBAction)sendVerify:(id)sender{
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    NSString *provider=[Util findProvider:textUsername.text];
-    NSString *endpoint = @"/users/VerifyIdentity";
-    
-    RKParams* params = [RKParams params];
-    [params setValue:provider forParam:@"provider"];
-    [params setValue:textUsername.text forParam:@"external_username"];
+//RESTKIT0.2  
+//    RKClient *client = [RKClient sharedClient];
+//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//    NSString *provider=[Util findProvider:textUsername.text];
+//    NSString *endpoint = @"/users/VerifyIdentity";
+//    
+//    RKParams* params = [RKParams params];
+//    [params setValue:provider forParam:@"provider"];
+//    [params setValue:textUsername.text forParam:@"external_username"];
 
 //    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
     [spin removeFromSuperview];
     [sendbtn addSubview:spin];
     [spin setHidden:NO];
-
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.params=params;
-        request.onDidFailLoadWithError=^(NSError *error){
-            [spin setHidden:YES];
-        };
-        request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-                [spin setHidden:YES];
-
-                NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"Verification sent, it should arrive in minutes. Please check your mailbox and follow the instruction."];
-                if([provider isEqualToString:@"phone"])
-                  desc = [[NSMutableAttributedString alloc] initWithString:@"Verification sent, it should arrive in minutes. Please check your phone and follow the instruction."];
-//                [desc addAttribute:NSForegroundColorAttributeName value:(id)[UIColor colorWithRed:255/255.0 green:240/255.0 blue:243/255.0 alpha:1.0] range:NSMakeRange(0,50)];
-
-//                [desc addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:16] range:NSMakeRange(0,[desc length])];
-
-//                [desc addAttribute:NSForegroundColorAttributeName value:FONT_COLOR_250 range:NSMakeRange(0,[desc length])];
-                
-//                NSShadow *shadowDicblack=[[NSShadow alloc] init];
-//                [shadowDicblack setShadowBlurRadius:1];
-//                [shadowDicblack setShadowColor:[UIColor blackColor]];
-//                [shadowDicblack setShadowOffset:CGSizeMake(0, 1)];
-//                [desc addAttribute:NSShadowAttributeName value:shadowDicblack range:NSMakeRange(0,[desc length])];
-//                [shadowDicblack release];
-                [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_250.CGColor range:NSMakeRange(0,[desc length])];
-                
-                CTFontRef fontref16= CTFontCreateWithName(CFSTR("HelveticaNeue"), 16.0, NULL);
-                [desc addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref16 range:NSMakeRange(0,[desc length])];
-                CFRelease(fontref16);
-
-                [hint_desc setText:desc];
-                [desc release];
-//                [sendbtn setHidden:YES];
-                [sendbtn setTitle:@"Done" forState:UIControlStateNormal];
-                [sendbtn removeTarget:self action:@selector(sendVerify:) forControlEvents:UIControlEventTouchUpInside];
-                [sendbtn addTarget:self action:@selector(backLandingView:) forControlEvents:UIControlEventTouchUpInside];
-//                [sendbtn setEnabled:NO];
-//                sendbtn.tag=60;
-//                NSTimer *countdown=[NSTimer timerWithTimeInterval:1 target:self selector:@selector(countdownResend:) userInfo:nil repeats:YES];
-//                [[NSRunLoop mainRunLoop] addTimer:countdown forMode:NSDefaultRunLoopMode];
-            }
-        };
-    }];
+//RESTKIT0.2
+//    [client post:endpoint usingBlock:^(RKRequest *request){
+//        request.params=params;
+//        request.onDidFailLoadWithError=^(NSError *error){
+//            [spin setHidden:YES];
+//        };
+//        request.onDidLoadResponse=^(RKResponse *response){
+//            if (response.statusCode == 200) {
+//                [spin setHidden:YES];
+//
+//                NSMutableAttributedString * desc = [[NSMutableAttributedString alloc] initWithString:@"Verification sent, it should arrive in minutes. Please check your mailbox and follow the instruction."];
+//                if([provider isEqualToString:@"phone"])
+//                  desc = [[NSMutableAttributedString alloc] initWithString:@"Verification sent, it should arrive in minutes. Please check your phone and follow the instruction."];
+//
+//                [desc addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_250.CGColor range:NSMakeRange(0,[desc length])];
+//                
+//                CTFontRef fontref16= CTFontCreateWithName(CFSTR("HelveticaNeue"), 16.0, NULL);
+//                [desc addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref16 range:NSMakeRange(0,[desc length])];
+//                CFRelease(fontref16);
+//
+//                [hint_desc setText:desc];
+//                [desc release];
+//                [sendbtn setTitle:@"Done" forState:UIControlStateNormal];
+//                [sendbtn removeTarget:self action:@selector(sendVerify:) forControlEvents:UIControlEventTouchUpInside];
+//                [sendbtn addTarget:self action:@selector(backLandingView:) forControlEvents:UIControlEventTouchUpInside];
+//            }
+//        };
+//    }];
 }
 
 - (void) countdownResend:(NSTimer*)theTimer{
@@ -676,28 +636,34 @@
 }
 
 - (IBAction)sendPwd:(id)sender{
-    RKClient *client = [RKClient sharedClient];
-    NSString *endpoint = [NSString stringWithFormat:@"/users/forgotpassword"];
-    RKParams* rsvpParams = [RKParams params];
-    NSString *provider=[Util findProvider:textUsername.text];
-    [rsvpParams setValue:provider forParam:@"provider"];
-    [rsvpParams setValue:textUsername.text forParam:@"external_username"];
-    
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-    
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-//                [hint_desc setText:@"Password sent, it should arrive in minutes. Please check your mailbox and follow the instruction."];
-                [sendbtn setHidden:YES];
-            }
-        };
-    }];
+  //RESTKIT0.2
+//    RKClient *client = [RKClient sharedClient];
+//    NSString *endpoint = [NSString stringWithFormat:@"/users/forgotpassword"];
+//    RKParams* rsvpParams = [RKParams params];
+//    NSString *provider=[Util findProvider:textUsername.text];
+//    [rsvpParams setValue:provider forParam:@"provider"];
+//    [rsvpParams setValue:textUsername.text forParam:@"external_username"];
+//    
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    
+//    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+//    
+//    [client post:endpoint usingBlock:^(RKRequest *request){
+//        request.method=RKRequestMethodPOST;
+//        request.params=rsvpParams;
+//        request.onDidLoadResponse=^(RKResponse *response){
+//            if (response.statusCode == 200) {
+////                [hint_desc setText:@"Password sent, it should arrive in minutes. Please check your mailbox and follow the instruction."];
+//                [sendbtn setHidden:YES];
+//            }
+//        };
+//    }];
 }
 //#pragma mark RKObjectLoaderDelegate methods
+
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    // nothing yet
+}
 
 @end

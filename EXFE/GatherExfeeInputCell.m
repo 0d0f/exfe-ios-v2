@@ -13,6 +13,7 @@
 @synthesize title;
 //@synthesize subtitle;
 @synthesize providerIcon;
+@synthesize providerIconSet = _providerIconSet;
 
 
 - (void)setTitle:(NSString *)s {
@@ -39,11 +40,12 @@
 }
 
 - (void) setProviderIconSet:(NSArray *)s{
-    if(providerIconSet!=nil)
-        [providerIconSet release];
-    providerIconSet = [s copy];
+    if (_providerIconSet != nil)
+    {
+        [_providerIconSet release];
+    }
+    _providerIconSet = [s copy];
     [self setNeedsDisplay];
-    
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -67,11 +69,11 @@
     [title drawInRect:CGRectMake(50, 11, 190, 20) withFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
 //    [subtitle drawInRect:CGRectMake(5+30+5, 6+22, self.frame.size.width-(5+30+5+5), 18) withFont:[UIFont fontWithName:@"HelveticaNeue" size:12] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft ];
     [avatar drawInRect:CGRectMake(0, 0, 44, 44)];
-    if(providerIconSet!=nil)
+    if (_providerIconSet != nil)
     {
         [providerIcon drawInRect:CGRectMake(self.frame.size.width-18-10, 13, 18, 18)];
         int i=1;
-        for(UIImage *icon in providerIconSet){
+        for(UIImage *icon in _providerIconSet){
             [icon drawInRect:CGRectMake(self.frame.size.width-(18+10)*i, 13, 18, 18)];
             i++;
         }

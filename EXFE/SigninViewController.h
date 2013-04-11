@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
-#import <RestKit/JSONKit.h>
 #import <CoreText/CoreText.h>
 #import "OAuthLoginViewController.h"
 #import "APIProfile.h"
@@ -20,7 +19,7 @@
 #import "EXSpinView.h"
 #import "CustomAttributedTextView.h"
 
-@interface SigninViewController : UIViewController <RKRequestDelegate> {
+@interface SigninViewController : UIViewController {
     id delegate;
     SigninDelegate *signindelegate;
 

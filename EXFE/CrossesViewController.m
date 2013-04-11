@@ -8,11 +8,11 @@
 
 #import "CrossesViewController.h"
 #import "ProfileViewController.h"
-#import "CrossDetailViewController.h"
 #import "APICrosses.h"
 #import "Cross.h"
-#import "Exfee.h"
-#import "Identity.h"
+#import "Exfee+EXFE.h"
+#import "User+EXFE.h"
+#import "Identity+EXFE.h"
 #import "Rsvp.h"
 #import "CrossCard.h"
 #import "ImgCache.h"
@@ -20,7 +20,7 @@
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
 #import "Place+Helper.h"
-
+#import "NSString+EXFE.h"
 #import "CrossGroupViewController.h"
 
 
@@ -40,8 +40,40 @@
     return self;
 }
 
+- (void)setCrossList:(NSArray *)crossList
+{
+    if (_crossList != crossList) {
+        NSArray *tempList = crossList;
+        // WALKAROUND: clean duplicate
+//        if (tempList != nil) {
+//            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+//            for (Cross *x in crossList) {
+//                NSString *key = [x.cross_id stringValue];
+//                Cross *previous = [dict objectForKey:key];
+//                if (previous == nil) {
+//                    [dict setObject:x forKey:key];
+//                } else {
+//                    if ([DateTimeUtil secondsBetween:previous.updated_at with:x.updated_at]) {
+//                        [dict removeObjectForKey:key];
+//                        [dict setObject:x forKey:key];
+//                    }
+//                }
+//            }
+//            if (tempList.count > dict.count) {
+//                tempList = [dict allValues];
+//            }
+//        }
+        [tempList retain];
+        [_crossList release];
+        _crossList = tempList;
+    }
+}
+
 - (void)viewDidLoad
 {
+    
+    [Flurry logEvent:@"CROSS_LIST"];
+    
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     [self.view setFrame:appFrame];
     self.view.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
@@ -140,29 +172,33 @@
     welcome_more.frame = CGRectOffset(welcome_more.frame, 160 - CGRectGetMidX(welcome_more.frame), 0);
     [self.view addSubview:welcome_more];
     
+    if (self.crossChangeObserver == nil) {
+        self.crossChangeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:EXCrossListDidChangeNotification
+                                                                                     object:nil
+                                                                                      queue:[NSOperationQueue mainQueue]
+                                                                                 usingBlock:^(NSNotification *note) {
+                                                                                     [self loadObjectsFromDataStore];
+                                                                                 }];
+    }
     [self refreshWelcome];
     
 }
 
 - (void)initUI{
-
     [self refreshPortrait];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.navigationController.view setNeedsDisplay];
-    
-    
-    
 }
 
 - (void) refreshPortrait{
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
+  [request setPredicate:predicate];
+  
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+  NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
 
-    NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];
-    [request setPredicate:predicate];
-	NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    
     if(users!=nil && [users count] >0){
         User *user=[users objectAtIndex:0];
         
@@ -180,7 +216,7 @@
             dispatch_release(imgQueue);
         }
     }
-    [users release];
+//    [users release];
 }
 // deprecated
 - (void) showWelcome{
@@ -209,7 +245,7 @@
 
 }
 - (Cross*) crossWithId:(int)cross_id{
-    for(Cross *c in _crosses)
+    for(Cross *c in self.crossList)
     {
         if([c.cross_id intValue]==cross_id)
             return c;
@@ -218,13 +254,18 @@
 }
 - (void)viewDidUnload
 {
+    
     [super viewDidUnload];
 }
+
 - (void)dealloc {
-    if(_crosses){
-        [_crosses release];
-        _crosses=nil;
+    
+    if (self.crossChangeObserver) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self.crossChangeObserver];
     }
+    
+    self.crossList = nil;
+    
 //    if(cellDateTime){
 //        [cellDateTime release];
 //        cellDateTime=nil;
@@ -246,8 +287,9 @@
     BOOL login=[app Checklogin];
     if(login==YES)
     {
-        [self refreshPortrait];
-        [self refreshCrosses:@"crossupdateview"];
+      //RESTKIT 0.20
+//        [self refreshPortrait];
+//        [self refreshCrosses:@"crossupdateview"];
     }
     else {
         [app ShowLanding];
@@ -255,7 +297,10 @@
 }
 
 - (void)ShowProfileView{
+    RKObjectManager *manager=[RKObjectManager sharedManager];
+    [manager.HTTPClient.operationQueue cancelAllOperations];
     ProfileViewController *profileViewController=[[ProfileViewController alloc]initWithNibName:@"ProfileViewController" bundle:nil];
+    profileViewController.user = [User getDefaultUser];
     [self.navigationController pushViewController:profileViewController animated:YES];
     [profileViewController release];
     
@@ -270,11 +315,12 @@
 - (void) refreshCrosses:(NSString*)source{
     [self refreshCrosses:(NSString*)source withCrossId:0];
 }
+
 - (void) refreshCrosses:(NSString*)source withCrossId:(int)cross_id{
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     NSString *updated_at=@"";
-    NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"]; 
+    NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
     if(date_updated_at!=nil)
     {
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -284,16 +330,144 @@
         [formatter release];
     }
     if([source isEqualToString:@"crossview_init"]){
-        hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.labelText = @"Loading";
-        hud.mode=MBProgressHUDModeCustomView;
-        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-        [bigspin startAnimating];
-        hud.customView=bigspin;
-        [bigspin release];
+        //        hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        //        hud.labelText = @"Loading";
+        //        hud.mode=MBProgressHUDModeCustomView;
+        //        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+        //        [bigspin startAnimating];
+        //        hud.customView=bigspin;
+        //        [bigspin release];
     }
+    
+    //  source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]
+    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         
-    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]];
+        int notification=0;
+        if([[mappingResult array] count]>0)
+        {
+            //        NSString *source=[objectLoader.userData objectForKey:@"name" ];
+            //          NSString *exfee_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
+            NSDate *last_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
+            //          BOOL needsave=NO;
+            BOOL isError=NO;
+            Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+            if(meta!=nil){
+                if([meta.code intValue]!=200){
+                    [Util showErrorWithMetaObject:meta delegate:self];
+                    isError=YES;
+                }
+            }
+            if(isError==NO){
+                NSArray *crosses=(NSArray*)[[mappingResult dictionary] objectForKey:@"response.crosses"];
+                for (Cross *cross in crosses){
+                    id updated=cross.updated;
+                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+                    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                    NSDate *cross_updated_at = [formatter dateFromString:cross.updated_at];
+                    [formatter release];
+                    
+                    if([updated isKindOfClass:[NSDictionary class]]){
+                        NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
+                        NSString *key=nil;
+                        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                        
+                        while (key = [enumerator nextObject]){
+                            NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
+                            NSString *updated_at_str=[obj objectForKey:@"updated_at"];
+                            if([updated_at_str isKindOfClass:[NSString class]]) {
+                                NSDate *updated_at =[NSDate date];
+                                if([updated_at_str length]>19){
+                                    updated_at_str=[updated_at_str substringToIndex:19];
+                                    updated_at = [formatter dateFromString:updated_at_str];
+                                    
+                                    if(last_updated_at==nil)
+                                        last_updated_at=updated_at;
+                                    else{
+                                        last_updated_at=[updated_at laterDate:last_updated_at];
+                                    }
+                                    
+                                    
+                                }
+                                
+                                if([updated_at compare: cross_updated_at] == NSOrderedDescending || [updated_at compare: cross_updated_at] == NSOrderedSame) {
+                                    if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]]) {
+                                        NSNumber *identity_id=[obj objectForKey:@"identity_id"];
+                                        if([self isIdentityBelongsMe:[identity_id intValue]]==NO)
+                                            notification++;
+                                    }
+                                }
+                            }
+                        }
+                        [formatter release];
+                    }
+                    if(cross.updated_at!=nil){
+                        //                  if([source isEqualToString:@"crossview"]){
+                        //                      if(exfee_updated_at==nil){
+                        //                          cross.read_at=[NSDate date];
+                        //                          needsave=YES;
+                        //                      }
+                        //                  }
+                        if(last_updated_at==nil)
+                            last_updated_at=cross_updated_at;
+                        else{
+                            last_updated_at=[cross_updated_at laterDate:last_updated_at];
+                        }
+                    }
+                }
+                
+                [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                if(![source isEqualToString:@"crossview"] && notification>0){
+                    [customStatusBar showWithStatusMessage:[NSString stringWithFormat:@"%i updates...",notification]];
+                    [customStatusBar performSelector:@selector(hide) withObject:nil afterDelay:2];
+                }
+                if ([source isEqualToString:@"gatherview"]) {
+                    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                    [app.navigationController dismissModalViewControllerAnimated:YES];
+                }
+                else if([source isEqualToString:@"pushtocross"]) {
+                    Cross *cross=[self crossWithId:cross_id];
+                    
+                    CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+                    viewController.cross = cross;
+                    viewController.widgetId = kWidgetCross;
+                    [self.navigationController pushViewController:viewController animated:NO];
+                    [viewController release];
+                }
+                else if([source isEqualToString:@"pushtoconversation"]) {
+                    Cross *cross=[self crossWithId:cross_id];
+                    
+                    CrossGroupViewController *viewController = [[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+                    viewController.cross = cross;
+                    viewController.widgetId = kWidgetConversation;
+                    [self.navigationController pushViewController:viewController animated:NO];
+                    [viewController release];
+                    
+                }
+                else if([source isEqualToString:@"crossupdateview"] || [source isEqualToString:@"crossview"] || [source isEqualToString:@"crossview_init"]) {
+                    [self loadObjectsFromDataStore];
+                }
+            }
+        }
+        [self loadObjectsFromDataStore];
+        
+        //
+        [self stopLoading];
+        if(hud)
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        if(alertShowflag==NO){
+            alertShowflag=YES;
+            [Util showConnectError:error delegate:self];
+        }
+        [self stopLoading];
+        if(hud)
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
     
 }
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -302,16 +476,15 @@
 }
 
 - (void)loadObjectsFromDataStore {
-	NSFetchRequest* request = [Cross fetchRequest];
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Cross"];
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
-    [_crosses release];
-    _crosses=[[Cross objectsWithFetchRequest:request] retain];
-//    for(Cross *c in _crosses){
-//        NSLog(@"%@",c.title);
-//    }
-    [self refreshWelcome];
-    [self.tableView reloadData];
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    
+    self.crossList = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+  
+  [self refreshWelcome];
+  [self.tableView reloadData];
     
 }
 - (void)refresh
@@ -320,10 +493,7 @@
 }
 
 - (NSInteger)getCrossCount{
-    if (_crosses) {
-        return _crosses.count;
-    }
-    return 0;
+    return self.crossList.count;
 }
 
 - (void)refreshWelcome{
@@ -344,9 +514,7 @@
 }
 
 - (void)emptyView{
-
-    [_crosses release];
-    _crosses = nil;
+    self.crossList = nil;
     [self refreshWelcome];
     [self.tableView reloadData];
 }
@@ -358,169 +526,15 @@
     
     return NO;
 }
-#pragma mark RKObjectLoaderDelegate methods
 
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    int notification=0;
-    if([objects count]>0)
-    {
-        NSString *source=[objectLoader.userData objectForKey:@"name" ];
-        NSString *exfee_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-
-        NSDate *last_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-
-        BOOL needsave=NO;
-        BOOL isError=NO;
-        for(id object in objects)
-        {
-            
-            if([object isKindOfClass:[Meta class]]){
-                Meta *meta=object;
-                if([meta.code intValue]!=200)
-                {
-                    [Util showError:meta delegate:self];
-                    isError=YES;
-                }
-            }
-            else if([object isKindOfClass:[Cross class]])
-            {
-                
-                Cross *cross=(Cross*)object;
-                id updated=cross.updated;
-                if([updated isKindOfClass:[NSDictionary class]]){
-                    NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
-                    NSString *key=nil;
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-                    
-                    while (key = [enumerator nextObject]){
-                        NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
-                        NSString *updated_at_str=[obj objectForKey:@"updated_at"];
-                        if([updated_at_str isKindOfClass:[NSString class]])
-                        {
-                            NSDate *updated_at =[NSDate date];
-                            if([updated_at_str length]>19){
-                                updated_at_str=[updated_at_str substringToIndex:19];
-                                updated_at = [formatter dateFromString:updated_at_str];
-                            }
-                            if([updated_at compare: cross.updated_at] == NSOrderedDescending || [updated_at compare: cross.updated_at] == NSOrderedSame) {
-                                if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]])
-                                {
-                                    NSNumber *identity_id=[obj objectForKey:@"identity_id"];
-                                    if([self isIdentityBelongsMe:[identity_id intValue]]==NO)
-                                        notification++;
-                                }
-                            }
-                        }
-                    }
-                    [formatter release];
-                }
-                
-                if(cross.updated_at!=nil)
-                {
-                    
-                    if([source isEqualToString:@"crossview"]){
-                        if(exfee_updated_at==nil){
-                            cross.read_at=[NSDate date];
-                            needsave=YES;
-                        }
-                    }
-                    if(last_updated_at==nil)
-                        last_updated_at=cross.updated_at;
-                    else{
-                        last_updated_at=[cross.updated_at laterDate:last_updated_at];
-                    }
-                }
-            }
-        }
-        if(isError==NO)
-        {
-            if(needsave==YES)
-                [[Cross currentContext] save:nil];
-            [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-
-            if(![source isEqualToString:@"crossview"] && notification>0){
-                
-                [customStatusBar showWithStatusMessage:[NSString stringWithFormat:@"%i updates...",notification]];
-                [customStatusBar performSelector:@selector(hide) withObject:nil afterDelay:2];
-            }
-            if ([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"gatherview"]) {
-                AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-                [app.navigationController dismissModalViewControllerAnimated:YES];
-            }
-            else if([[objectLoader.userData objectForKey:@"name"] isEqualToString:@"pushtocross"]) {
-                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-                Cross *cross=[self crossWithId:[cross_id intValue]];
-//                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-//                gatherViewController.cross=cross;
-//                [gatherViewController setViewMode];
-//                [self.navigationController pushViewController:gatherViewController animated:YES];
-//                [gatherViewController release];
-                CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
-                viewController.cross = cross;
-                viewController.widgetId = kWidgetCross;
-                viewController.headerStyle = kHeaderStyleFull;
-                [self.navigationController pushViewController:viewController animated:NO];
-                [viewController release];
-            }
-            else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"pushtoconversation"]) {
-                NSNumber *cross_id=[objectLoader.userData objectForKey:@"cross_id"];
-                Cross *cross=[self crossWithId:[cross_id intValue]];
-//                GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-//                gatherViewController.cross=cross;
-//                [gatherViewController setViewMode];
-//                [self.navigationController pushViewController:gatherViewController animated:NO];
-//                [gatherViewController toconversation];
-//                [gatherViewController release];
-                
-                CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
-                viewController.cross = cross;
-                viewController.widgetId = kWidgetConversation;
-                viewController.headerStyle = kHeaderStyleHalf;
-                [self.navigationController pushViewController:viewController animated:NO];
-                [viewController release];
-            }
-            else if([[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossupdateview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview"] || [[objectLoader.userData objectForKey:@"name" ] isEqualToString:@"crossview_init"]) {
-//                NSString *refresh_cross_id=[objectLoader.userData objectForKey:@"cross_id" ];
-
-                [self loadObjectsFromDataStore];
-//                [self.tableView reloadData];
-            }
-        }
-    }
-
-    [self stopLoading];
-    if(hud)
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-}
-
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-    NSString *errormsg;
-    if(error.code==2)
-        errormsg=@"A connection failure has occurred.";
-    else
-        errormsg=@"Could not connect to the server.";
-    if(alertShowflag==NO){
-        alertShowflag=YES;
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-    }
-    [self stopLoading];
-    if(hud)
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-
-}
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-
-    if(buttonIndex==1 && alertView.tag==500){
-        [Util signout];
-        [app ShowLanding];
-        
+    if (alertView.tag == 500) {
+        if (buttonIndex == alertView.firstOtherButtonIndex) {
+            [Util signout];
+            AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            [app ShowLanding];
+        }
     }
 }
 
@@ -544,13 +558,13 @@
     
     if (indexPath.section == 0){
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-        
-        NSFetchRequest* request = [User fetchRequest];
-        NSPredicate *predicate = [NSPredicate
-                                  predicateWithFormat:@"user_id = %u", app.userid];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
         [request setPredicate:predicate];
-        NSArray *users = [[User objectsWithFetchRequest:request] retain];
-
+      
+        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+      
+        NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
         NSString* reuseIdentifier = @"Profile";
         ProfileCard *headerView =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
         if (nil == headerView) {
@@ -586,7 +600,7 @@
         [headerView addProfileTarget:self action:@selector(ShowProfileView)];
         return headerView;
     }else if (indexPath.section == 1){
-        if(_crosses==nil){
+        if(self.crossList == nil){
             return nil;
         }
         NSString* reuseIdentifier = @"Card Cell";
@@ -594,7 +608,7 @@
         if (nil == cell) {
             cell = [[[CrossCard alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
         }
-        Cross *cross=[_crosses objectAtIndex:indexPath.row ];
+        Cross *cross=[self.crossList objectAtIndex:indexPath.row ];
         cell.cross_id=cross.cross_id;
         cell.hlTitle = NO;
         cell.hlPlace = NO;
@@ -647,7 +661,7 @@
         }
         
         if (cross.time != nil){
-            NSString *time = [cross.time getTimeTitle];
+            NSString *time = [[cross.time getTimeTitle] sentenceCapitalizedString];
             //[time retain];
             if (time == nil || time.length == 0) {
                 cell.time = @"";
@@ -672,24 +686,24 @@
             }else if (connected_uid < 0){
                 // Unverified identity: connected_uid + identity_git id == 0
                 // Concern: performace issue?
-                NSFetchRequest* request = [User fetchRequest];
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
-                [request setPredicate:predicate];
-                NSArray *users = [[User objectsWithFetchRequest:request] retain];
-                if(users != nil && [users count] > 0)
-                {
-                    User *_user = [users objectAtIndex:0];
-                    for(Identity *identity in _user.identities){
-                        if([identity.identity_id intValue] + connected_uid == 0){
-                            if(invitation && invitation.invited_by &&
-                               invitation.invited_by.avatar_filename ) {
-                                avatarimgurl = invitation.invited_by.avatar_filename;
-                            }
-                            break;
-                        }
-                    }
-                }
-                [users release];
+//                NSFetchRequest* request = [User fetchRequest];
+//                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
+//                [request setPredicate:predicate];
+//                NSArray *users = [[User objectsWithFetchRequest:request] retain];
+//                if(users != nil && [users count] > 0)
+//                {
+//                    User *_user = [users objectAtIndex:0];
+//                    for(Identity *identity in _user.identities){
+//                        if([identity.identity_id intValue] + connected_uid == 0){
+//                            if(invitation && invitation.invited_by &&
+//                               invitation.invited_by.avatar_filename ) {
+//                                avatarimgurl = invitation.invited_by.avatar_filename;
+//                            }
+//                            break;
+//                        }
+//                    }
+//                }
+//                [users release];
             }
         }
         if(avatarimgurl==nil)
@@ -766,7 +780,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1){
-        Cross *cross=[_crosses objectAtIndex:indexPath.row];
+        Cross *cross=[self.crossList objectAtIndex:indexPath.row];
         if(cross.updated!=nil)
         {
             id updated=cross.updated;
@@ -789,19 +803,15 @@
                     else
                         cross.read_at=[cross.read_at laterDate:updated_at];
                 }
-                NSError *saveError;
-                [[Cross currentContext] save:&saveError];
+//                NSError *saveError;
+//                [[Cross currentContext] save:&saveError];
                 [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: indexPath]
                                       withRowAnimation: UITableViewRowAnimationNone];
             }
             
         }
-//        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-//        viewController.cross = cross;
-//        [self.navigationController pushViewController:viewController animated:YES];
-//        [viewController release];
-        
         CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+        viewController.widgetId = kWidgetCross;
         viewController.cross = cross;
         [self.navigationController pushViewController:viewController animated:YES];
         [viewController release];
@@ -811,15 +821,12 @@
     }
 }
 - (void) refreshTableViewWithCrossId:(int)cross_id{
-    for(int i=0;i<[_crosses count];i++)
-    {
-        
-        Cross *c=[_crosses objectAtIndex:i];
-        
-        
-        if([c.cross_id intValue]==cross_id)
+    for (int i = 0; i < [self.crossList count]; i++) {
+        Cross *c = [self.crossList objectAtIndex:i];
+        if ([c.cross_id intValue] == cross_id){
             [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: [NSIndexPath indexPathForRow:i inSection:1]]
                                   withRowAnimation: UITableViewRowAnimationNone];
+        }
     }
 }
 - (void) refreshCell{
@@ -835,11 +842,11 @@
     [Util signout];
 }
 
-- (void)gotoCrossDetail{
-    CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-    [self.navigationController pushViewController:viewController animated:YES];
-    [viewController release];
-}
+//- (void)gotoCrossDetail{
+//    CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
+//    [self.navigationController pushViewController:viewController animated:YES];
+//    [viewController release];
+//}
 
 #pragma mark View Push methods
 - (BOOL) PushToCross:(int)cross_id{
@@ -875,6 +882,7 @@
 
 #pragma mark CrossCardDelegate
 - (void) onClickConversation:(UIView*)card{
+    [Flurry logEvent:@"CLICK_CROSS_CARD_CONVERSATION"];
     CrossCard* c = (CrossCard*)card;
     int cross_id = [c.cross_id intValue];
     
@@ -883,7 +891,6 @@
         CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
         viewController.cross = cross;
         viewController.widgetId = kWidgetConversation;
-        viewController.headerStyle = kHeaderStyleHalf;
         [self.navigationController pushViewController:viewController animated:NO];
         [viewController release];
 

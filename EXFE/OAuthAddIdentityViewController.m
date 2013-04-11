@@ -30,7 +30,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [Flurry logEvent:@"OAUTH_ADD_IDENTITY"];
     toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
     [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
 	self.title = @"Sign In";
@@ -79,8 +79,10 @@
     if ([URLString rangeOfString:@"token="].location != NSNotFound && [URLString rangeOfString:@"oauth://handleOAuthAddIdentity"].location != NSNotFound) {
         if([parentView isKindOfClass:[AddIdentityViewController class]])
             [((AddIdentityViewController*)parentView) oauthSuccess];
-        if([parentView isKindOfClass:[ProfileViewController class]])
-            [((ProfileViewController*)parentView) refreshIdentities];
+        if([parentView isKindOfClass:[ProfileViewController class]]){
+            ProfileViewController *vc = (ProfileViewController*)parentView;
+            [vc syncUser];
+        }
 
         [MBProgressHUD hideHUDForView:self.webview animated:YES];
         [self dismissModalViewControllerAnimated:YES];

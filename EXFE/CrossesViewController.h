@@ -21,28 +21,26 @@
 
 #define CARD_VERTICAL_MARGIN      (15)
 
-@interface CrossesViewController : PullRefreshTableViewController <RKRequestDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate, CrossCardDelegate>
+@interface CrossesViewController : PullRefreshTableViewController <UIAlertViewDelegate, CrossCardDelegate>
 {
     IBOutlet UITableView* tableView;
-//    UIBarButtonItem *profileButtonItem;
-//    UIBarButtonItem *gatherButtonItem;
-    NSArray* _crosses;
     BOOL logoutflag;
     BOOL alertShowflag;
     int current_cellrow;
-//    NSMutableArray *cellDateTime;
     CustomStatusBar *customStatusBar;
     NSMutableAttributedString *gatherax;
     MBProgressHUD *hud;
-//    EXInnerButton *settingButton;
     UIImage *default_background;
-    //ProfileCard *headerView;
     
     UILabel *label_profile;
     UILabel *label_gather;
     EXAttributedLabel *welcome_exfe;
     UILabel *welcome_more;
 }
+
+@property (nonatomic, retain) NSArray* crossList;
+@property (nonatomic, retain) id crossChangeObserver;
+
 - (void) refreshCell;
 - (void) refreshCrosses:(NSString*)source;
 - (void) refreshCrosses:(NSString*)source withCrossId:(int)cross_id;

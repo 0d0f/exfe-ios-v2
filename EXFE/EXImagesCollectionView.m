@@ -43,23 +43,16 @@
     imageXmargin=5;
     imageYmargin=5;
     [self calculateColumn];
-    int x_count=0;
-    int y_count=0;
-    int count=maxColumn*maxRow;
-    grid=[[NSMutableArray alloc]initWithCapacity:count];
-    for(int i=0;i<count;i++)
-    {
-        if( x_count==maxColumn){
-            x_count=0;
-            y_count++;
-        }
-        int x=x_count*(imageWidth+imageXmargin*2);
-        int y=y_count*(imageHeight+imageYmargin*2)+y_start_offset;
-        
-        CGRect rect=CGRectMake(x,y,imageWidth,imageHeight);
-        [grid addObject:[NSValue valueWithCGRect:rect]];
-        x_count++;
-    }
+}
+
+- (CGRect)rectAtPostion:(NSUInteger)pos
+{
+    NSUInteger row = pos / maxColumn;
+    NSUInteger idx = pos % maxColumn;
+    
+    return CGRectMake(idx * (imageWidth + imageXmargin * 2),
+               row * (imageHeight + imageYmargin * 2) + y_start_offset,
+               imageWidth,imageHeight);
 }
 
 - (void) setImageWidth:(float)width height:(float)height{
@@ -144,6 +137,12 @@
     
     int acceptednum=0;
     int allnum=0;
+    for (UIView *subview in [self subviews]){
+      if ([subview isKindOfClass:[ExfeeNumberView class]]){
+        [subview removeFromSuperview];
+      }
+    }
+  
     for(int i=0;i<=count;i++)
     {
         if( x_count==maxColumn){
@@ -226,33 +225,22 @@
 }
 
 - (void) onImageTouch:(CGPoint) point{
-    int x_count=0;
-    int y_count=0;
-    int countidx=0;
     int allcount=[_dataSource numberOfimageCollectionView:self];
-    for (int i=0;i<[grid count];i++)
-    {
-        if( x_count==maxColumn){
-            x_count=0;
-            y_count++;
-        }
-        countidx+=1;
-        CGRect rect=[(NSValue*)[grid objectAtIndex:i] CGRectValue];
-        BOOL inrect=CGRectContainsPoint(rect,point);
-        if(inrect==YES){
-            if(countidx<=allcount){
-                [_delegate imageCollectionView:self didSelectRowAtIndex:i row:y_count col:x_count frame:rect];
-            }
-            else if (countidx==allcount+1){
-//                NSLog(@"click the sum grid: x=%i y=%i count=%i",x_count,y_count,allcount);
+    for (NSUInteger i = 0;i < allcount + 1; i ++) {
+        CGRect rect= [self rectAtPostion:i];
+        BOOL hit = CGRectContainsPoint(rect,point);
+        if (hit == YES) {
+            if (i < allcount) {
+                [_delegate imageCollectionView:self didSelectRowAtIndex:i row:(i / maxColumn) col:(i % maxColumn) frame:rect];
+            } else if (i == allcount){
+                //                NSLog(@"click the sum grid: x=%i y=%i count=%i",x_count,y_count,allcount);
             }
         }
-        x_count++;
+
     }
 }
 
 - (void)dealloc {
-	[grid release];
     [acceptlabel release];
     if(itemsCache!=nil)
         [itemsCache release];

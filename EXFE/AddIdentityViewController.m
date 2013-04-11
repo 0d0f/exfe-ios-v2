@@ -27,6 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"ADD_IDENTITY"];
     CGRect a = [UIScreen mainScreen].applicationFrame;
     
     UIView *contentLayer = [[UIView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(a), CGRectGetHeight(a) - 44)];
@@ -74,6 +75,7 @@
     [contentLayer addSubview:identityRightButton];
     
     textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 18, 230-(6+18+6)*2+50, 40)];
+    textUsername.keyboardType = UIKeyboardTypeEmailAddress;
     textUsername.placeholder=@"Enter email or phone";
     textUsername.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     textUsername.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;
@@ -193,139 +195,110 @@
   
     if(![provider isEqualToString:@""]){
         
-        NSString *json=@"";
-        json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,textUsername.text];
-        json=[NSString stringWithFormat:@"[%@]",json];
-        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-        RKClient *client = [RKClient sharedClient];
-        [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//        MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-//        hud.labelText = @"Adding...";
-//        hud.mode=MBProgressHUDModeCustomView;
-//        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-//        [bigspin startAnimating];
-//        hud.customView=bigspin;
-//        [bigspin release];
-    
-        NSString *endpoint = [NSString stringWithFormat:@"/identities/get"];
-        RKParams* rsvpParams = [RKParams params];
-        [rsvpParams setValue:json forParam:@"identities"];
-        [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-        [client post:endpoint usingBlock:^(RKRequest *request){
-            request.method=RKRequestMethodPOST;
-            request.params=rsvpParams;
-            request.onDidLoadResponse=^(RKResponse *response){
-                if (response.statusCode == 200) {
-                    NSDictionary *body=[response.body objectFromJSONData];
-                    if([body isKindOfClass:[NSDictionary class]]) {
-                        id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                        if(code)
-                            if([code intValue]==200) {
-                                NSDictionary* response = [body objectForKey:@"response"];
-                                NSArray *identities = [response objectForKey:@"identities"];
-                                if(identities && [identities count]>0){
-                                    NSDictionary *identity = [identities objectAtIndex:0];
-                                    NSString *avatar_filename=[identity objectForKey:@"avatar_filename"];
-                                    NSString *provider=[identity objectForKey:@"provider"];
-                                    NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
-                                    identityLeftIcon.image=[UIImage imageNamed:iconname];
-                                    if(avatar_filename!=nil) {
-                                        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                                        dispatch_async(imgQueue, ^{
-                                            UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatar_filename];
-                                            dispatch_async(dispatch_get_main_queue(), ^{
-                                                if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                                                    avatarview.image=avatar;
-                                                    avatarframeview.image=[UIImage imageNamed:@"signin_portrait_frame.png"];
-                                                }
-                                            });
-                                        });
-                                        dispatch_release(imgQueue);
+      NSString *json=@"";
+      json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,textUsername.text];
+      json=[NSString stringWithFormat:@"[%@]",json];
+      NSString *endpoint = [NSString stringWithFormat:@"%@/identities/get",API_ROOT];
+      RKObjectManager *manager=[RKObjectManager sharedManager] ;
+      manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
+      [manager.HTTPClient postPath:endpoint parameters:@{@"identities":json} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+          NSDictionary *body=responseObject;
+          if([body isKindOfClass:[NSDictionary class]]) {
+            id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+            if(code)
+                if([code intValue]==200) {
+                    NSDictionary* response = [body objectForKey:@"response"];
+                    NSArray *identities = [response objectForKey:@"identities"];
+                    if(identities && [identities count]>0){
+                        NSDictionary *identity = [identities objectAtIndex:0];
+                        NSString *avatar_filename=[identity objectForKey:@"avatar_filename"];
+                        NSString *provider=[identity objectForKey:@"provider"];
+                        NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
+                        identityLeftIcon.image=[UIImage imageNamed:iconname];
+                        if(avatar_filename!=nil) {
+                            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                            dispatch_async(imgQueue, ^{
+                                UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatar_filename];
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
+                                        avatarview.image=avatar;
+                                        avatarframeview.image=[UIImage imageNamed:@"signin_portrait_frame.png"];
                                     }
-                                }
-                            }
+                                });
+                            });
+                            dispatch_release(imgQueue);
+                        }
                     }
                 }
-         
-            };
-            request.onDidFailLoadWithError=^(NSError *error){
-//                [MBProgressHUD hideHUDForView:self.view animated:YES];
-            };
-        }];
+              }
+          }
+      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+          [MBProgressHUD hideHUDForView:self.view animated:YES];
+      }];
     }
 }
 
 - (void) addIdentity:(id) sender{
     [spin setHidden:NO];
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/addIdentity",app.userid];
-    
-    RKParams* rsvpParams = [RKParams params];
-    NSString *provider=[Util findProvider:textUsername.text];
-    
-    if([provider isEqualToString:@"twitter"] || [provider isEqualToString:@"facebook"]){
-        [rsvpParams setValue:@"" forParam:@"external_username"];
-        NSString *callback=@"oauth://handleOAuthAddIdentity";
-        [rsvpParams setValue:callback forParam:@"device_callback"];
-        [rsvpParams setValue:@"iOS" forParam:@"device"];
-    }
-    else
-        [rsvpParams setValue:textUsername.text forParam:@"external_username"];
-    [rsvpParams setValue:provider forParam:@"provider"];
-    
-    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        request.onDidLoadResponse=^(RKResponse *response){
-                [spin setHidden:YES];
-            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
-            if (response.statusCode == 200) {
-                NSDictionary *body=[response.body objectFromJSONData];
+  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u/addIdentity",API_ROOT,app.userid];
+  RKObjectManager *manager=[RKObjectManager sharedManager] ;
 
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code){
-                        if([code intValue]==200) {
-                            NSDictionary *responseobj=[body objectForKey:@"response"];
-                            if([responseobj isKindOfClass:[NSDictionary class]]){
-                                if([responseobj objectForKey:@"url"]!=nil){
-                                    OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
-                                    oauth.parentView=self;
-                                    oauth.oauth_url=[responseobj objectForKey:@"url"];
-                                    [self presentModalViewController:oauth animated:YES];
-                                    [oauth release];
+  NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:5];
+  NSString *provider=[Util findProvider:textUsername.text];
+  if([provider isEqualToString:@"twitter"] || [provider isEqualToString:@"facebook"]){
+      [dict setObject:@"" forKey:@"external_username"];
+      NSString *callback=@"oauth://handleOAuthAddIdentity";
+      [dict setObject:callback forKey:@"device_callback"];
+      [dict setObject:@"iOS" forKey:@"device"];
+  }
+  else
+      [dict setObject:textUsername.text forKey:@"external_username"];
 
-                                }else{
+  [dict setObject:provider forKey:@"provider"];
+  manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
+  [manager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
 
-                                    [((ProfileViewController*)profileview) refreshIdentities];
-                                    [self.navigationController popViewControllerAnimated:YES];
-                                }
-                            }
-                        }
-                        else{
-                            if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
-//                                NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
-                            }
+  [manager.HTTPClient postPath:endpoint parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [spin setHidden:YES];
+    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+        NSDictionary *body=responseObject;
+        if([body isKindOfClass:[NSDictionary class]]) {
+            id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+            if(code){
+                if([code intValue]==200) {
+                    NSDictionary *responseobj=[body objectForKey:@"response"];
+                    if([responseobj isKindOfClass:[NSDictionary class]]){
+                        if([responseobj objectForKey:@"url"]!=nil){
+                            OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
+                            oauth.parentView=self;
+                            oauth.oauth_url=[responseobj objectForKey:@"url"];
+                            [self presentModalViewController:oauth animated:YES];
+                            [oauth release];
+                        }else{
+                            ProfileViewController *vc = (ProfileViewController*)profileview;
+                            [vc syncUser];
+                            [self.navigationController popViewControllerAnimated:YES];
                         }
                     }
                 }
+                else{
+                    if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
+//                                NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
+                    }
+                }
             }
-            
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-            [spin setHidden:YES];
-
-//            NSLog(@"error %@",error);
-            //                [MBProgressHUD hideHUDForView:self.view animated:YES];
-        };
-    }];
+        }
+    }
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    
+  }];
 }
 
 - (void) oauthSuccess{
-    [((ProfileViewController*)profileview) refreshIdentities];
+    ProfileViewController *vc = (ProfileViewController*)profileview;
+    [vc syncUser];
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (void) doOAuth:(NSString*)provider{
@@ -338,56 +311,56 @@
     [bigspin release];
     hud.labelText = @"Loading";
 
-    RKParams* rsvpParams = [RKParams params];
-    [rsvpParams setValue:@"" forParam:@"external_username"];
-    NSString *callback=@"oauth://handleOAuthAddIdentity";
-    [rsvpParams setValue:callback forParam:@"device_callback"];
-    [rsvpParams setValue:@"iOS" forParam:@"device"];
-    [rsvpParams setValue:provider forParam:@"provider"];
-    
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/addIdentity",app.userid];
-    
-    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        request.onDidLoadResponse=^(RKResponse *response){
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            if (response.statusCode == 200) {
-                NSDictionary *body=[response.body objectFromJSONData];
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code){
-                        if([code intValue]==200) {
-                            NSDictionary *responseobj=[body objectForKey:@"response"];
-                            if([responseobj isKindOfClass:[NSDictionary class]]){
-                                if([responseobj objectForKey:@"url"]!=nil){
-                                    OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
-                                    oauth.parentView=self;
-                                    oauth.oauth_url=[responseobj objectForKey:@"url"];
-                                    [self presentModalViewController:oauth animated:YES];
-                                    [oauth release];
-                                }
-                            }
-                        }
-                        else{
-                            if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
-                            }
-                        }
-                    }
-                }
-            }
-            
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-//            NSLog(@"error %@",error);
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-        };
-    }];
-    
+//    RKParams* rsvpParams = [RKParams params];
+//    [rsvpParams setValue:@"" forParam:@"external_username"];
+//    NSString *callback=@"oauth://handleOAuthAddIdentity";
+//    [rsvpParams setValue:callback forParam:@"device_callback"];
+//    [rsvpParams setValue:@"iOS" forParam:@"device"];
+//    [rsvpParams setValue:provider forParam:@"provider"];
+//    
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    RKClient *client = [RKClient sharedClient];
+//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/addIdentity",app.userid];
+//    
+//    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
+//    [client post:endpoint usingBlock:^(RKRequest *request){
+//        request.method=RKRequestMethodPOST;
+//        request.params=rsvpParams;
+//        request.onDidLoadResponse=^(RKResponse *response){
+//            [MBProgressHUD hideHUDForView:self.view animated:YES];
+//            if (response.statusCode == 200) {
+//                NSDictionary *body=[response.body objectFromJSONData];
+//                if([body isKindOfClass:[NSDictionary class]]) {
+//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                    if(code){
+//                        if([code intValue]==200) {
+//                            NSDictionary *responseobj=[body objectForKey:@"response"];
+//                            if([responseobj isKindOfClass:[NSDictionary class]]){
+//                                if([responseobj objectForKey:@"url"]!=nil){
+//                                    OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
+//                                    oauth.parentView=self;
+//                                    oauth.oauth_url=[responseobj objectForKey:@"url"];
+//                                    [self presentModalViewController:oauth animated:YES];
+//                                    [oauth release];
+//                                }
+//                            }
+//                        }
+//                        else{
+//                            if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            
+//        };
+//        request.onDidFailLoadWithError=^(NSError *error){
+////            NSLog(@"error %@",error);
+//            [MBProgressHUD hideHUDForView:self.view animated:YES];
+//        };
+//    }];
+  
 }
 - (void) FacebookSigninButtonPress:(id)sender{
     [self doOAuth:@"facebook"];

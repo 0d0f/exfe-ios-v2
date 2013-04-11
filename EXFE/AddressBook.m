@@ -44,20 +44,22 @@
 }
 
 - (void) CopyAllPeopleFrom:(int)idx{
+  NSLog(@"copy more people:%i",idx);
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople( addressBook );
     CFIndex count= CFArrayGetCount(allPeople);
     if(count>contactscount)
         contactscount=count;
     
-    int step=100;
+    int step=200;
     if(idx+step>contactscount)
         step=contactscount-idx;
   
     CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [netInfo subscriberCellularProvider];
     NSString *mcc = [carrier mobileCountryCode];
-    NSString *mnc = [carrier mobileNetworkCode];
+//    NSString *mnc = [carrier mobileNetworkCode];
     NSString *isocode =[carrier isoCountryCode];
+    [netInfo release];
     for(int ai=idx;ai<idx+step;ai++){
         ABRecordRef ref = CFArrayGetValueAtIndex( allPeople, ai );
         ABRecordType reftype = ABRecordGetRecordType(ref);
@@ -71,17 +73,20 @@
                 NSString *indexfield=@"";
                 ABRecordID uid=ABRecordGetRecordID(ref);
                 LocalContact *localcontact=nil;
-                
-                NSFetchRequest* request = [LocalContact fetchRequest];
+              
+                NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(uid == %i)",uid];
                 [request setPredicate:predicate];
-                NSArray *localcontacts=[[LocalContact objectsWithFetchRequest:request] retain];
+                RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                NSArray *localcontacts = [objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil];
                 if([localcontacts count]>0)
                     localcontact= [localcontacts objectAtIndex:0];
                 else{
-                    localcontact=[LocalContact object];
+                    NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+                    RKObjectManager *objectManager=[RKObjectManager sharedManager];
+                  localcontact=[[[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.persistentStoreManagedObjectContext] autorelease];
                 }
-                [localcontacts release];
+//                [localcontacts release];
                 localcontact.uid=[NSNumber numberWithInt:uid];
                 
                 CFStringRef compositeName=ABRecordCopyCompositeName(ref);
@@ -203,13 +208,18 @@
             }
             localcontact.indexfield=indexfield;
             }
+            CFRelease(multi_phone);
             CFRelease(multi_email);
             CFRelease(multi_socialprofile);
             CFRelease(multi_im);
         }
     }
-    [[LocalContact currentContext] save:nil];
-    CFRelease(allPeople);
+  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+  NSError *err;
+  [objectManager.managedObjectStore.persistentStoreManagedObjectContext save:&err];
+//  [objectManager.managedObjectStore.mainQueueManagedObjectContext save:&err];
+//  [self.managedObjectStore.persistentStoreManagedObjectContext save:nil];
+  CFRelease(allPeople);
 }
 
 + (NSDictionary*) getDefaultIdentity:(LocalContact*) person{
@@ -276,8 +286,11 @@
         provider=@"email";
     else if(type==PHONE_TYPE)
       provider=@"phone";
-  
-    return [NSDictionary dictionaryWithObjectsAndKeys:provider,@"provider",username,@"external_id", nil] ;
+    NSString *name=@"";
+  if(person.name!=nil)
+    name=person.name;
+
+    return [NSDictionary dictionaryWithObjectsAndKeys:provider,@"provider",username,@"external_id",name,@"name", nil] ;
 }
 
 + (NSArray*) getLocalIdentityObjects:(LocalContact*) person{

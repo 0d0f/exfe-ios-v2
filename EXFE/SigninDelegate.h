@@ -8,14 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <RestKit/RestKit.h>
-#import <RestKit/JSONKit.h>
 #import "OAuthLoginViewController.h"
 #import "AppDelegate.h"
 #import "APIProfile.h"
 #import "User.h"
 #import "Identity.h"
 
-@interface SigninDelegate : NSObject<RKRequestDelegate,OAuthLoginViewControllerDelegate,RKObjectLoaderDelegate>{
+@interface SigninDelegate : NSObject<OAuthLoginViewControllerDelegate>{
     UIViewController *modalview;
     UIViewController *parent;
 }

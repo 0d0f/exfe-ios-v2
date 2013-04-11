@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import "APIProfile.h"
-#import "Identity.h"
-#import "Invitation.h"
+#import "Identity+EXFE.h"
+#import "Invitation+EXFE.h"
+#import "User+EXFE.h"
+#import "Exfee+EXFE.h"
 #import "NewGatherViewController.h"
 #import "EXBubbleScrollView.h"
 #import "Util.h"
@@ -24,11 +25,10 @@
 #define LOCAL_ADDRESSBOOK 0
 #define EXFE_ADDRESSBOOK 1
 
-@interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,RKObjectLoaderDelegate,UITableViewDelegate,UITableViewDataSource,EXBubbleScrollViewDelegate,UIScrollViewDelegate>{
+@interface ExfeeInputViewController : UIViewController <UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,EXBubbleScrollViewDelegate,UIScrollViewDelegate>{
     UITextField *exfeeInput;
     EXGradientToolbarView *toolbar;
     NSMutableArray *suggestIdentities;
-    UIViewController *gatherview;
     UITableView *suggestionTable;
     UIImageView *inputframeview;
     BOOL showInputinSuggestion;
@@ -50,7 +50,11 @@
     UIButton *btnLocal;
     AddressBook *address;
 }
-@property (nonatomic,retain) UIViewController* gatherview;
+@property (nonatomic, assign) UIViewController *lastViewController;
+@property (nonatomic, retain) Exfee *exfee;
+@property (nonatomic, assign) BOOL needSubmit;
+//@property (nonatomic, copy) id onExitBlock;
+@property (nonatomic, copy) void (^onExitBlock)(void);
 
 - (void) done:(id)sender;
 - (void) Close;

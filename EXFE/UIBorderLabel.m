@@ -10,6 +10,11 @@
 
 @implementation UIBorderLabel
 
+@synthesize topInset;
+@synthesize leftInset;
+@synthesize bottomInset;
+@synthesize rightInset;
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];

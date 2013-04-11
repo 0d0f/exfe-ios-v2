@@ -10,44 +10,46 @@
 #import <RestKit/RestKit.h>
 #import "Flurry.h"
 #import <objc/runtime.h>
+#import "User.h"
+#import "ModelMapping.h"
 
-#define APP_DB_VERSION 206
-#define DBNAME @"exfe_v2_6.sqlite"
+#define APP_DB_VERSION 208
+#define DBNAME @"exfe_v2_8.sqlite"
 
-    
+
+#ifdef DEBUG
 #define DEV
-
-//#ifdef DEV
-//#define API_V2_ROOT @"http://api.white.0d0f.com/v2"
-//#define IMG_ROOT @"http://img.white.0d0f.com/static/img"
-//#define EXFE_OAUTH_LINK @"http://white.0d0f.com/OAuth"
-//#define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
-//#endif
+#else
+#define WWW
+#endif
 
 #ifdef DEV
-#define API_V2_ROOT @"http://api.0d0f.com/v2"
+#define API_SERVER @"http://api.0d0f.com/"
+#define API_ROOT @"http://api.0d0f.com/v2"
 #define IMG_ROOT @"http://0d0f.com/static/img"
-#define EXFE_OAUTH_LINK @"http://dev.0d0f.com/oauth"
+#define EXFE_OAUTH_LINK @"http://0d0f.com/OAuth"
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 #endif
 
-
 #ifdef PANDA
-#define API_V2_ROOT @"http://api.panda.0d0f.com/v2"
+#define API_SERVER @"http://api.panda.0d0f.com/"
+#define API_ROOT @"http://api.panda.0d0f.com/v2"
 #define IMG_ROOT @"http://panda.0d0f.com/static/img"
 #define EXFE_OAUTH_LINK @"http://panda.0d0f.com/oauth"
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 #endif
 
 #ifdef LOCAL
-#define API_V2_ROOT @"http://api.local.exfe.com/v2"
+#define API_SERVER @"http://api.local.exfe.com/"
+#define API_ROOT @"http://api.local.exfe.com/v2"
 #define IMG_ROOT @"http://local.exfe.com/static/img"
 #define EXFE_OAUTH_LINK @"http://local.exfe.com/OAuth"
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 #endif
 
 #ifdef WWW
-#define API_V2_ROOT @"https://www.exfe.com/v2"
+#define API_SERVER @"https://www.exfe.com/"
+#define API_ROOT @"https://www.exfe.com/v2"
 #define IMG_ROOT @"https://exfe.com/static/img"
 #define EXFE_OAUTH_LINK @"https://exfe.com/OAuth"
 #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
@@ -62,7 +64,7 @@
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,RKObjectLoaderDelegate,UIAlertViewDelegate>{
+@interface AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>{
     int userid;
     NSString *accesstoken;
     NSString *username;
@@ -83,5 +85,6 @@
 -(void)ShowLanding;
 -(BOOL) Checklogin;
 - (void) cleandb;
+- (void) createdb;
 - (void) processUrlHandler:(NSURL*)url;
 @end

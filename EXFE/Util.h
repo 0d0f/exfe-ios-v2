@@ -16,6 +16,7 @@
 #import "Place.h"
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
+#import "Identity+EXFE.h"
 
 
 
@@ -45,8 +46,8 @@
 #define COLOR_WHITE               COLOR_RGB(0xFF, 0xFF, 0xFF)
 #define COLOR_SNOW                COLOR_RGB(0xFA, 0xFA, 0xFA)
 #define COLOR_IRON                COLOR_RGB(0xDD, 0xDD, 0xDD)
-#define COLOR_ALUMINUM            COLOR_RGB(0xAA, 0xAA, 0xAA)
-#define COLOR_GRAY                COLOR_RGB(0x80, 0x80, 0x80)
+#define COLOR_ALUMINUM            COLOR_RGB(0xB2, 0xB2, 0xB2)
+#define COLOR_GRAY                COLOR_RGB(0x7F, 0x7F, 0x7F)
 #define COLOR_CARBON              COLOR_RGB(0x33, 0x33, 0x33)
 #define COLOR_BLACK               COLOR_RGB(0x00, 0x00, 0x00)
 
@@ -59,6 +60,10 @@
 #define HEADER_BACKGROUND_WIDTH     (880.0f)
 #define HEADER_BACKGFOUND_HEIGHT    (495.0f)
 #define HEADER_BACKGROUND_Y_OFFSET  (198.0f)
+
+
+// Notification Definition
+extern NSString *const EXCrossListDidChangeNotification;
 
 #define MERCATOR_OFFSET 268435456
 #define MERCATOR_RADIUS 85445659.44705395
@@ -79,6 +84,9 @@
 + (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 + (UIImage *)scaleImage:(UIImage*)image toResolution:(int)resolution;
 + (NSString*) findProvider:(NSString*)external_id;
++ (Provider)matchedProvider:(NSString*)raw;
++ (NSDictionary*)parseIdentityString:(NSString*)raw;
++ (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber;
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber;
 + (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime;
 
@@ -88,8 +96,9 @@
 + (NSString*) getTimeDesc:(CrossTime*)crosstime;
 + (NSDate*) beginningOfWeek:(NSDate*)date;
 + (BOOL) isCommonDomainName:(NSString*)domainname;
-+ (void) showError:(Meta*)meta delegate:(id)delegate;
 + (void) showErrorWithMetaDict:(NSDictionary*)meta delegate:(id)delegate;
++ (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate;
+
 + (void) showConnectError:(NSError*)err delegate:(id)delegate;
 + (void) signout;
 + (int)daysBetween:(NSDate *)dt1 and:(NSDate *)dt2;
@@ -98,6 +107,7 @@
 + (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2;
 + (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2  with:(CGRect)rect3;
 
++ (void)checkUpdate;
 
 @end
 

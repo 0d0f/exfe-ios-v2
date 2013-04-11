@@ -52,7 +52,7 @@
 @property (nonatomic) BOOL hlPlace;
 @property (nonatomic) BOOL hlConversation;
 @property (nonatomic, retain) NSNumber *cross_id;
-@property (nonatomic, retain) id<CrossCardDelegate> delegate;
+@property (nonatomic, assign) id<CrossCardDelegate> delegate;
 
 
 

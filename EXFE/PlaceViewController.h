@@ -82,6 +82,7 @@ typedef enum {
 - (void) selectPlace:(int)index editing:(BOOL)editing;
 - (void) addPlaceEdit:(Place*)_place;
 - (void) getPlace;
+- (void) getPlacefromapi;
 - (void) setRightButton:(NSString*) title Selector:(SEL)aSelector;
 - (void) done;
 - (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer;
@@ -91,4 +92,5 @@ typedef enum {
 - (void) initPlaceView;
 - (BOOL) isPlaceNull;
 - (void) addCustomAnnotation:(CLLocationCoordinate2D)location;
+- (void) processResultFromPlaceAPI:(NSArray*)results;
 @end

@@ -40,7 +40,6 @@
 
 
 @interface EXImagesCollectionView : UIView{
-    NSMutableArray *grid;
     float imageWidth;
     float imageHeight;
     float nameHeight;

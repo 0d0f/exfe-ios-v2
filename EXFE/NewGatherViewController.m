@@ -13,6 +13,7 @@
 #import "Place+Helper.h"
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
+#import "NSString+EXFE.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -20,8 +21,8 @@
 #define LARGE_SLOT                       (16)
 #define SMALL_SLOT                      (5)
 
-#define DECTOR_HEIGHT                    (88)
-#define DECTOR_HEIGHT_EXTRA              (LARGE_SLOT)
+#define DECTOR_HEIGHT                    (80)
+#define DECTOR_HEIGHT_EXTRA              (20)
 #define DECTOR_MARGIN                    (SMALL_SLOT)
 #define OVERLAP                          (DECTOR_HEIGHT)
 #define CONTAINER_TOP_MARGIN             (DECTOR_HEIGHT - OVERLAP)
@@ -55,8 +56,7 @@
 @end
 
 @implementation NewGatherViewController
-@synthesize cross;
-@synthesize default_user;
+@synthesize cross = _cross;
 @synthesize title_be_edit;
 
 
@@ -163,7 +163,7 @@
     container.backgroundColor = [UIColor COLOR_SNOW];
     [self.view addSubview:container];
     
-    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90,  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
+    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 122,  DECTOR_HEIGHT, 122, DECTOR_HEIGHT_EXTRA) ];
     headview.backgroundColor=[UIColor grayColor];
     {
         CGFloat scale = CGRectGetWidth(headview.bounds) / 880.0f;
@@ -189,7 +189,7 @@
         [headview addSubview:titleView];
     }
     UIImageView *headerShadow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow.png"]];
-    headerShadow.frame = CGRectMake(0, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA - 20, 320, 25);
+    headerShadow.frame = CGRectMake(0, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA - 25, 320 * 2, 30);
     [self.view addSubview:headerShadow];
     [headerShadow release];
     
@@ -213,7 +213,6 @@
     [pannel addSubview:pannelbackimg];
     [pannelbackimg release];
     
-//
 //    [pannel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.33]];
 
     UIButton *btngather=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -306,18 +305,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"ENTER_GATHER"];
     // Do any additional setup after loading the view from its nib.
     [self initData];
     [self initUI];
     [self refreshUI];
     [exfeeShowview reloadData];
-    
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     gestureRecognizer.delegate=self;
     [self.view addGestureRecognizer:gestureRecognizer];
     
     [gestureRecognizer release];
-    
+  
 }
 
 #pragma mark UIScrollViewDelegate
@@ -332,94 +331,40 @@
 }
 
 - (void) initData{
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSFetchRequest* request = [User fetchRequest];
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"user_id = %u", app.userid];
-    [request setPredicate:predicate];
-    NSArray *users = [[User objectsWithFetchRequest:request] retain];
-    if(cross==nil){
-        cross=[Cross object];
-        cross.cross_description=@"";
-    }
-    if(users!=nil && [users count] >0)
-    {
-        default_user=[[users objectAtIndex:0] retain];
-    }
-    [users release];
+    title_be_edit = NO;
+    myIdentities = [[NSArray alloc] initWithArray:[[User getDefaultUser] sortedIdentiesById]];
+    Identity *default_identity = [myIdentities objectAtIndex:0];
     
-
-    exfeeInvitations = [[NSMutableArray alloc] initWithCapacity:12];
-//    cross=[Cross object];
-//    cross.cross_description=@"Take some note";
-
+    NSManagedObjectContext *context = [RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
+    if (self.cross == nil) {
+        NSEntityDescription *crossEntity = [NSEntityDescription entityForName:@"Cross" inManagedObjectContext:context];
+        self.cross = [[Cross alloc] initWithEntity:crossEntity insertIntoManagedObjectContext:context];
+    }
+    
     NSArray *cross_default_backgrounds=[[NSUserDefaults standardUserDefaults] objectForKey:@"cross_default_backgrounds"];
     NSString *default_background=@"";
-    
     if(cross_default_backgrounds!=nil && [cross_default_backgrounds count]>0){
         int idx=arc4random()%[cross_default_backgrounds count];
         default_background=[cross_default_backgrounds objectAtIndex:idx];
     }
-
     NSMutableDictionary *widget=[NSMutableDictionary dictionaryWithObjectsAndKeys:default_background,@"image",@"Background",@"type", nil];
-    if(cross.widget==nil)
-        cross.widget=[[[NSMutableArray alloc] initWithCapacity:1] autorelease];
-    [cross.widget addObject:widget];
-    
-    User *user=default_user;
-    Identity *default_identity=[[user.identities allObjects] objectAtIndex:0];
- 
-    cross.title=[NSString stringWithFormat:@"·X· %@",default_identity.name];
-
-    title_be_edit=NO;
-
-    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"identity_id" ascending:YES]
-    ;
-    
-    orderedIdentities=[[NSMutableArray alloc] initWithCapacity:[default_user.identities count]];
-    NSArray *identities=[default_user.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-    for(Identity *identity in identities){
-        [orderedIdentities addObject:identity];
+    if (self.cross.widget == nil) {
+        self.cross.widget = [[[NSMutableArray alloc] initWithCapacity:1] autorelease];
     }
-    [self addDefaultIdentity:0];
-
-//    cross.exfee.invitations
-}
-
-- (void) addDefaultIdentity:(int)idx{
-    User *user=default_user;
-    Identity *default_identity=[orderedIdentities objectAtIndex:idx];
-//    [[user.identities allObjects] objectAtIndex:idx];
-    if(user!=nil){
-        Invitation *invitation=[Invitation object];
-        invitation.rsvp_status=@"ACCEPTED";
-        invitation.host=[NSNumber numberWithBool:YES];
-        invitation.mates=0;
-        invitation.identity=default_identity;
-        invitation.updated_by=default_identity;
-        invitation.updated_at=[NSDate date];
-        invitation.created_at=[NSDate date];
-        [exfeeInvitations addObject:invitation];
-        [exfeeShowview reloadData];
-    }
-}
-
-- (void) replaceDefaultIdentity:(int)idx{
-    User *user=default_user;
-    Identity *default_identity=[orderedIdentities objectAtIndex:idx];
-    if(user!=nil){
-        Invitation *invitation=[Invitation object];
-        invitation.rsvp_status=@"ACCEPTED";
-        invitation.host=[NSNumber numberWithBool:YES];
-        invitation.mates=0;
-        invitation.identity=default_identity;
-        invitation.updated_by=default_identity;
-        invitation.updated_at=[NSDate date];
-        invitation.created_at=[NSDate date];
-        [exfeeInvitations replaceObjectAtIndex:0 withObject:invitation];
-        [exfeeShowview reloadData];
-    }
+    [_cross.widget addObject:widget];
     
+    
+    self.cross.title=[NSString stringWithFormat:@"·X· %@",default_identity.name];
+    self.cross.cross_description = @"";
+    
+    if (self.cross.exfee == nil) {
+        NSEntityDescription *exfeeEntity = [NSEntityDescription entityForName:@"Exfee" inManagedObjectContext:context];
+        self.cross.exfee =[[[Exfee alloc] initWithEntity:exfeeEntity insertIntoManagedObjectContext:context] autorelease];
+    }
+    self.cross.exfee.invitations = [[[NSMutableSet alloc] initWithCapacity:12] autorelease];
+    [self.cross.exfee addDefaultInvitationBy:default_identity];
+    
+    self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
 }
 
 - (void)dealloc {
@@ -436,10 +381,10 @@
     [dectorView release];
     [headview release];
     [pannellight release];
-    [orderedIdentities release]; 
-//    [btnBack release];
+    [myIdentities release];
     [titleView release];
     
+    [_sortedInvitations release];
     [super dealloc];
 }
 
@@ -468,7 +413,7 @@
         TitleDescEditViewController *titleViewController=[[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
         titleViewController.delegate=self;
         NSString *imgurl = nil;
-        for(NSDictionary *widget in (NSArray*)cross.widget) {
+        for(NSDictionary *widget in (NSArray*)_cross.widget) {
             if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
                 imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
                 break;
@@ -477,7 +422,7 @@
         titleViewController.imgurl=imgurl;
         titleViewController.editFieldHint = editHint;
         [self presentModalViewController:titleViewController animated:YES];
-        [titleViewController setCrossTitle:cross.title desc:cross.cross_description];
+        [titleViewController setCrossTitle:_cross.title desc:_cross.cross_description];
         [titleViewController release];
     }
 
@@ -485,7 +430,7 @@
     {
         TimeViewController *timeViewController=[[TimeViewController alloc] initWithNibName:@"TimeViewController" bundle:nil];
         timeViewController.delegate=self;
-        [timeViewController setDateTime:cross.time];
+        [timeViewController setDateTime:_cross.time];
         [self presentModalViewController:timeViewController animated:YES];
         [timeViewController release];
     }
@@ -513,63 +458,35 @@
 }
 
 - (void)Close:(UIButton*)sender{
-//    [self.navigationController popToRootViewControllerAnimated:YES];
-    if(cross)
-        [[Cross currentContext] deleteObject:cross];
-
-    RKObjectManager* manager =[RKObjectManager sharedManager];
-    [manager.requestQueue cancelAllRequests];
-
+    //    [self.navigationController popToRootViewControllerAnimated:YES];
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
+    if(self.cross){
+        if(self.cross.time.begin_at){
+            [context deleteObject:self.cross.time.begin_at];
+        }
+        if(self.cross.time){
+            [context deleteObject:self.cross.time];
+        }
+        if(self.cross.exfee){
+            for (Invitation *invitation in self.sortedInvitations){
+                [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:invitation];
+                [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
+            }
+            [context deleteObject:self.cross.exfee];
+        }
+        [context deleteObject:self.cross];
+        [context save:nil];
+    }
+    [objectManager.operationQueue cancelAllOperations];
     [self dismissModalViewControllerAnimated:YES];
-
-}
-
-- (void) addExfee:(NSArray*) invitations{
-    if(exfeeInvitations==nil)
-        exfeeInvitations = [[NSMutableArray alloc] initWithArray:invitations];
-    else{
-        for(Invitation *invitation in invitations){
-            if(![self InvitationExist:invitation]){
-                [exfeeInvitations addObject:invitation];
-                if([exfeeInvitations count]==12){
-                    [self reFormatTitle];
-                    [exfeeShowview reloadData];
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [alert show];
-                    [alert release];
-                    return;
-                }
-            }
-        }
-    }
-    [self reFormatTitle];
-    [exfeeShowview reloadData];
-    
-}
-
-- (BOOL) InvitationExist:(Invitation*)invitation{
-    if(exfeeInvitations==nil)
-        return NO;
-    else{
-        for (Invitation *existinvitation in exfeeInvitations){
-            if([existinvitation.identity.connected_user_id intValue]>0 &&[existinvitation.identity.connected_user_id isEqualToNumber:invitation.identity.connected_user_id])
-                return YES;
-            if([existinvitation.identity.connected_user_id intValue]==0)
-            {
-                if([existinvitation.identity.external_id isEqualToString:invitation.identity.external_id])
-                    return YES;
-            }
-            
-        }
-    }
-    return NO;
 }
 
 - (void) reFormatTitle{
     NSString *newtitle = @"·X· ";
     if(title_be_edit == NO){
         int count = 0;
-        for(Invitation *invitation in exfeeInvitations){
+        for(Invitation *invitation in self.sortedInvitations){
             if(count == 3){
                 break;
             }
@@ -579,23 +496,22 @@
             newtitle = [newtitle stringByAppendingFormat:@"%@", invitation.identity.name];
             count++;
         }
-        cross.title = newtitle;
+        _cross.title = newtitle;
         titleView.text = newtitle;
     }
 }
 
 - (void) setTitle:(NSString*)title Description:(NSString*)desc{
-    if(cross.title!=title)
+    if(_cross.title!=title)
         title_be_edit=YES;
-    cross.title=title;
-    cross.cross_description=desc;
-    [self fillTitleAndDescription:cross];
+    _cross.title=title;
+    _cross.cross_description=desc;
+    [self fillTitleAndDescription:_cross];
     [self relayoutUI];
 }
 
 - (IBAction) Gather:(id) sender{
-//    NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"a_order" ascending:YES];
-//    NSArray *orderedIdentities=[default_user.identities sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+    
     MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode=MBProgressHUDModeCustomView;
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
@@ -603,29 +519,36 @@
     hud.customView=bigspin;
     [bigspin release];
     hud.labelText = @"Loading";
-
-    cross.by_identity=[orderedIdentities objectAtIndex:0];
-    if(cross.time==nil){
-        cross.time=[CrossTime object];
-        cross.time.begin_at=[EFTime object];
-        cross.time.begin_at.timezone = [DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];
-    }
-    Exfee *exfee=[Exfee object];
+  
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
     
-    for(Invitation *invitation in exfeeInvitations){
-        [exfee addInvitationsObject:invitation];
+    _cross.by_identity = [myIdentities objectAtIndex:0];
+    if(_cross.time == nil){
+      NSEntityDescription *crosstimeEntity = [NSEntityDescription entityForName:@"CrossTime" inManagedObjectContext:context];
+      _cross.time = [[[CrossTime alloc] initWithEntity:crosstimeEntity insertIntoManagedObjectContext:context] autorelease];
+      NSEntityDescription *eftimeEntity = [NSEntityDescription entityForName:@"EFTime" inManagedObjectContext:context];
+      _cross.time.begin_at = [[[EFTime alloc] initWithEntity:eftimeEntity insertIntoManagedObjectContext:context] autorelease];
+      _cross.time.begin_at.timezone = [DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];
     }
-    cross.exfee = exfee;
     [Flurry logEvent:@"GATHER_SEND"];
-    [APICrosses GatherCross:[cross retain] delegate:self];
+    [APICrosses GatherCross:_cross
+                    success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                        [app GatherCrossDidFinish];
+                    }
+                    failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                    }];
 }
 
 - (void) ShowPlaceView:(NSString*)status{
     PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
     placeViewController.delegate=self;
-    if(cross.place!=nil){
-            if(![cross.place.title isEqualToString:@""] || ( ![cross.place.lat isEqualToString:@""] || ![cross.place.lng isEqualToString:@""])){
-                [placeViewController setPlace:cross.place isedit:YES];
+    if(_cross.place!=nil){
+            if(![_cross.place.title isEqualToString:@""] || ( ![_cross.place.lat isEqualToString:@""] || ![_cross.place.lng isEqualToString:@""])){
+                [placeViewController setPlace:_cross.place isedit:YES];
             }
             else{
                 placeViewController.isaddnew=YES;
@@ -654,6 +577,7 @@
     if (x != nil){
         [self fillTitleAndDescription:x];
         [self fillBackground:x.widget];
+        [self fillExfee:x.exfee];
         [self fillTime:x.time];
         [self fillPlace:x.place];
     }
@@ -736,52 +660,26 @@
     }
 }
 
-- (void)fillExfee{
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    NSMutableArray *exfee = [[NSMutableArray alloc]  initWithCapacity:12];
-    
-    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES];
-    NSArray *invitations=[cross.exfee.invitations sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-    int myself = 0;
-    int accepts = 0;
-    
-    for(Invitation *invitation in invitations) {
-        if ([invitation.identity.connected_user_id intValue]== app.userid) {
-            [exfee insertObject:invitation atIndex:myself];
-            myself ++;
-        }else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
-            [exfee insertObject:invitation atIndex:(myself + accepts)];
-            accepts ++;
-        }else if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO){
-            [exfee addObject:invitation];
-        }
-    }
-    
-    if(exfeeInvitations != nil){
-        [exfeeInvitations release];
-        exfeeInvitations = nil;
-    }
-    exfeeInvitations = [[NSMutableArray alloc] initWithArray:exfee];
-    [exfee release];
+- (void)fillExfee:(Exfee*)exfee{
+    self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
     [exfeeShowview reloadData];
 }
 
 - (void) setTime:(CrossTime*)time{
-    cross.time=time;
+    _cross.time=time;
     [self fillTime:time];
     [self relayoutUI];
 }
 
 - (void) setPlace:(Place*)place{
-    cross.place=place;
+    _cross.place=place;
     [self fillPlace:place];
     [self relayoutUI];
 }
 
 - (void)fillTime:(CrossTime*)time{
     if (time != nil){
-        NSString *title = [time getTimeTitle];
+        NSString *title = [[time getTimeTitle] sentenceCapitalizedString];
         [title retain];
         if (title == nil || title.length == 0) {
             timeRelView.text = @"Sometime";
@@ -794,7 +692,7 @@
             timeRelView.text = title;//[title copy];
             
             timeAbsView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
-            NSString* desc = [time getTimeDescription];
+            NSString* desc = [[time getTimeDescription] sentenceCapitalizedString];
             [desc retain];
             if(desc != nil && desc.length > 0){
                 timeAbsView.text = desc;
@@ -874,10 +772,10 @@
             [mapView setRegion:region animated:NO];
             
             [mapView removeAnnotations:mapView.annotations];
-            NSString *placeTitle = place.title;
-            if (placeTitle == nil || place.title.length == 0) {
-                placeTitle = @"Somewhere";
-            }
+//            NSString *placeTitle = place.title;
+//            if (placeTitle == nil || place.title.length == 0) {
+//                placeTitle = @"Somewhere";
+//            }
             MapPin *pin = [[[MapPin alloc] initWithCoordinates:region.center placeName:place.title description:@""] autorelease];
             [mapView addAnnotation:pin];
             
@@ -1033,76 +931,27 @@
 #pragma mark EXImagesCollectionView Datasource methods
 
 - (NSInteger) numberOfimageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView{
-    return [exfeeInvitations count];
+    return self.sortedInvitations.count;
 }
 
-- (BOOL) isMe:(Identity*)my_identity{
-  for(Identity *_identity in default_user.identities){
-    if([_identity.identity_id isEqual:my_identity.identity_id])
-      return YES;
-  }
-  return NO;
-
-}
 - (EXInvitationItem *)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView itemAtIndex:(int)index{
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    Invitation *invitation =[exfeeInvitations objectAtIndex:index];
+    Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
     
     EXInvitationItem *item=[[[EXInvitationItem alloc] initWithInvitation:invitation] autorelease];
     item.backgroundColor=[UIColor clearColor];
     item.isGather=YES;
-    if([self isMe:invitation.identity])
-      item.isMe=YES;
-//    for(Identity *my_identity in default_user.identities){
-//      if([my_identity.identity_id isEqual:invitation.identity.identity_id])
-//        item.isMe=YES;
-//    }
-//    if(app.userid ==[invitation.identity.connected_user_id intValue]){
-//        item.isMe = YES;
-//    }
+    item.isMe = [[User getDefaultUser] isMe:invitation.identity];
   
     Identity *identity = invitation.identity;
-    UIImage *img = nil;
-    if(identity.avatar_filename != nil)
-        img = [[ImgCache sharedManager] checkImgFrom:identity.avatar_filename];
-    if(img != nil && ![img isEqual:[NSNull null]]){
-        item.avatar = img;
-    }
-    else{
-        item.avatar = [UIImage imageNamed:@"portrait_default.png"];
-        
-        if(identity.avatar_filename != nil) {
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-                __block UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                        item.avatar = avatar;
-                        [item setNeedsDisplay];
-                    }
-                });
-            });
-            dispatch_release(imgQueue);
-        }
-    }
+    
+    [[ImgCache sharedManager] fillAvatarWith:identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"] using:^(UIImage *image) {
+        item.avatar = image;
+        [item setNeedsDisplay];
+    }];
     return item;
 }
 
 - (void)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView shouldResizeHeightTo:(float)height{
-    
-    //    if(viewmode==YES && exfeeShowview.editmode==NO)
-    //    {
-    //        if(height==120 && [exfeeIdentities count]==6)
-    //            return;
-    //    }
-    //    [exfeeShowview setFrame:CGRectMake(exfeeShowview.frame.origin.x, exfeeShowview.frame.origin.y, exfeeShowview.frame.size.width, height)];
-    //    [exfeeShowview calculateColumn];
-    //    if(viewmode==NO || exfeeShowview.editmode==YES){
-    //    [self reArrangeViews];
-    //    }
-    
-    //    [exfeeIdentities count]
     if (height > 0){
         exfeeSuggestHeight = height;
     }
@@ -1113,27 +962,34 @@
 
 #pragma mark EXImagesCollectionView delegate methods
 - (void)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
-    NSArray* reducedExfeeIdentities=exfeeInvitations;//[self getReducedExfeeIdentities];
-    if(index == [reducedExfeeIdentities count])
+    if(index == self.sortedInvitations.count)
     {
-        ExfeeInputViewController *exfeeinputViewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
-        exfeeinputViewController.gatherview=self;
         [self hideMenu];
-        [self presentModalViewController:exfeeinputViewController animated:YES];
-        [exfeeinputViewController release];
+        ExfeeInputViewController *viewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
+        viewController.lastViewController = self;
+        viewController.exfee = self.cross.exfee;
+        viewController.needSubmit = NO;
+        viewController.onExitBlock = ^{
+            
+            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+            [self reFormatTitle];
+            [exfeeShowview reloadData];
+            if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alert show];
+                [alert release];
+            }
+        };
+        [self presentModalViewController:viewController animated:YES];
+        [viewController release];
 
-    }
-    else if(index < [reducedExfeeIdentities count]){
-//        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        NSArray *arr=exfeeInvitations;//[self getReducedExfeeIdentities];
-        Invitation *invitation =[arr objectAtIndex:index];
+    } else if(index < self.sortedInvitations.count){
+        Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
       
-      if([self isMe:invitation.identity]){
-//        if(app.userid ==[invitation.identity.connected_user_id intValue]){
+        if([[User getDefaultUser] isMe:invitation.identity]){
             [identitypicker setHidden:NO];
             [pickertoolbar setHidden:NO];
-        }
-        else{
+        }else{
             [self showMenu:invitation items:[NSArray arrayWithObjects:@"Delete", nil]];
             
         }
@@ -1195,8 +1051,6 @@
     
     
     [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y, 125, 44*[itemslist count]+titlebarheight)];
-    if(rsvpstatusview!=nil)
-        [rsvpstatusview setHidden:YES];
     
     [UIView commitAnimations];
     
@@ -1210,7 +1064,7 @@
 }
 
 - (void)hideStatusView{
-    [rsvpstatusview setHidden:YES];
+//    [rsvpstatusview setHidden:YES];
 }
 
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu{
@@ -1230,110 +1084,86 @@
 
 - (void)RSVPRemoveMenuView:(EXRSVPMenuView *) menu{
     [self hideMenu];
-    for (Invitation *invitation in exfeeInvitations) {
-        if([menu.invitation.identity.identity_id intValue]>0 && [invitation.identity.identity_id isEqualToNumber:menu.invitation.identity.identity_id])
-        {
-            [exfeeInvitations removeObject:invitation];
-            [exfeeShowview reloadData];
-            [self reFormatTitle];
-            return;
-        }
-        if([menu.invitation.identity.identity_id intValue]==0){
-            if([invitation.identity.external_id isEqualToString:menu.invitation.identity.external_id]){
-                [exfeeInvitations removeObject:invitation];
-                [exfeeShowview reloadData];
-                [self reFormatTitle];
-                return;
-            }
-        }
+    
+    if ([self.cross.exfee hasInvitation:menu.invitation]) {
+        [self.cross.exfee removeInvitationsObject:menu.invitation];
+        self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+        [exfeeShowview reloadData];
+        [self reFormatTitle];
+        return;
     }
 }
 
 - (void) setrsvp:(NSString*)status invitation:(Invitation*)_invitation{
-    int i=0;
-    for (Invitation *invitation in exfeeInvitations) {
-        if([invitation.identity.identity_id isEqualToNumber:_invitation.identity.identity_id])
-        {
-            ((Invitation*)[exfeeInvitations objectAtIndex:i]).rsvp_status=status;
-//            [exfeeInvitations removeObject:invitation];
+    for (Invitation *invitation in self.sortedInvitations) {
+        if ([invitation.identity.identity_id isEqualToNumber:_invitation.identity.identity_id]) {
+            invitation.rsvp_status = status;
             [exfeeShowview reloadData];
             return;
         }
-        i++;
     }
-    
 }
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
+  NSLog(@"send rsvp");
     //    NSError *error;
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    Identity *myidentity=[self getMyInvitation].identity;
-    NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:_invitation.identity.identity_id,@"identity_id",myidentity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
-    
-    RKParams* rsvpParams = [RKParams params];
-    [rsvpParams setValue:[NSString stringWithFormat:@"[%@]",[rsvpdict JSONString]] forParam:@"rsvp"];
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/rsvp?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
-    [client post:endpoint usingBlock:^(RKRequest *request){
-        request.method=RKRequestMethodPOST;
-        request.params=rsvpParams;
-        request.onDidLoadResponse=^(RKResponse *response){
-            if (response.statusCode == 200) {
-                NSDictionary *body=[response.body objectFromJSONData];
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code)
-                        if([code intValue]==200) {
-                            [APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
-                        }
-                }
-                //We got an error!
-            }else {
-                //Check Response Body to get Data!
-            }
-        };
-        request.onDidFailLoadWithError=^(NSError *error){
-            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
-            if(error.code==2)
-                errormsg=@"A connection failure has occurred.";
-            else
-                errormsg=@"Could not connect to the server.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-        };
-    }];
-    
-}
-
-- (Invitation*) getMyInvitation{
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    for(Invitation *invitation in exfeeInvitations)
-    {
-        if([invitation.identity.connected_user_id intValue] == app.userid)
-            return invitation;
-    }
-    return nil;
+//    Identity *myidentity=[_cross.exfee getMyInvitation].identity;
+//    NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:_invitation.identity.identity_id,@"identity_id",myidentity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
+//RESTKIT0.2
+//    RKParams* rsvpParams = [RKParams params];
+//    [rsvpParams setValue:[NSString stringWithFormat:@"[%@]",[rsvpdict JSONString]] forParam:@"rsvp"];
+//    RKClient *client = [RKClient sharedClient];
+//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
+//    NSString *endpoint = [NSString stringWithFormat:@"/exfee/%u/rsvp?token=%@",[cross.exfee.exfee_id intValue],app.accesstoken];
+//    [client post:endpoint usingBlock:^(RKRequest *request){
+//        request.method=RKRequestMethodPOST;
+//        request.params=rsvpParams;
+//        request.onDidLoadResponse=^(RKResponse *response){
+//            if (response.statusCode == 200) {
+//                NSDictionary *body=[response.body objectFromJSONData];
+//                if([body isKindOfClass:[NSDictionary class]]) {
+//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                    if(code)
+//                        if([code intValue]==200) {
+//                            [APICrosses LoadCrossWithCrossId:[cross.cross_id intValue] updatedtime:@"" delegate:self source:[NSDictionary dictionaryWithObjectsAndKeys:@"cross_reload",@"name",cross.cross_id,@"cross_id", nil]];
+//                        }
+//                }
+//                //We got an error!
+//            }else {
+//                //Check Response Body to get Data!
+//            }
+//        };
+//        request.onDidFailLoadWithError=^(NSError *error){
+//            NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
+//            if(error.code==2)
+//                errormsg=@"A connection failure has occurred.";
+//            else
+//                errormsg=@"Could not connect to the server.";
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+//            [alert show];
+//            [alert release];
+//        };
+//    }];
+  
 }
 
 #pragma mark RKObjectLoaderDelegate methods
 
-- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
-    [MBProgressHUD hideHUDForView:self.view animated:YES];
-    if([objects count]>0)
-    {
-        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [app GatherCrossDidFinish];
-    }else{
-//        NSLog(@"gather error");
-    }
-  
-}
-- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
-  [MBProgressHUD hideHUDForView:self.view animated:YES];
-//    NSLog(@"%@",error);
-}
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didLoadObjects:(NSArray *)objects {
+//    [MBProgressHUD hideHUDForView:self.view animated:YES];
+//    if([objects count]>0)
+//    {
+//        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//        [app GatherCrossDidFinish];
+//    }else{
+////        NSLog(@"gather error");
+//    }
+//  
+//}
+//- (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error {
+//  [MBProgressHUD hideHUDForView:self.view animated:YES];
+////    NSLog(@"%@",error);
+//}
 
 #pragma mark UIPickerviewDatasource methods
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {
@@ -1341,7 +1171,7 @@
 }
 
 - (NSInteger)pickerView:(UIPickerView *)thePickerView numberOfRowsInComponent:(NSInteger)component {
-    return [default_user.identities count];
+    return [[User getDefaultUser].identities count];
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
@@ -1353,11 +1183,11 @@
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
-    NSString *username=((Identity*)[orderedIdentities objectAtIndex:row]).name;
+    NSString *username=((Identity*)[myIdentities objectAtIndex:row]).name;
     if(username ==nil)
-      username=((Identity*)[orderedIdentities objectAtIndex:row]).external_username;
+      username=((Identity*)[myIdentities objectAtIndex:row]).external_username;
   
-    NSString *provider=((Identity*)[orderedIdentities objectAtIndex:row]).provider;
+    NSString *provider=((Identity*)[myIdentities objectAtIndex:row]).provider;
     
     CGRect rowFrame = CGRectMake(0.0f, 0.0f, 300, 40);
     
@@ -1388,7 +1218,7 @@
 
 - (void) pickdone{
     int idx=[identitypicker selectedRowInComponent:0];
-    [self replaceDefaultIdentity:idx];
+    [[_cross.exfee getMyInvitation] replaceIdentity:[myIdentities objectAtIndex:idx]];
     [identitypicker setHidden:YES];
     [pickertoolbar setHidden:YES];
     [self reFormatTitle];
@@ -1410,17 +1240,17 @@
         }
         
 //        NSMutableDictionary *widget=[NSMutableDictionary dictionaryWithObjectsAndKeys:default_background,@"image",@"Background",@"type", nil];
-        if(cross.widget==nil)
-            cross.widget=[[[NSMutableArray alloc] initWithCapacity:1] autorelease];
+        if(_cross.widget==nil)
+            _cross.widget=[[[NSMutableArray alloc] initWithCapacity:1] autorelease];
         else{
-            for (int i=0;i<[cross.widget count];i++){
-                NSMutableDictionary *widget=[cross.widget objectAtIndex:i];
+            for (int i=0;i<[_cross.widget count];i++){
+                NSMutableDictionary *widget=[_cross.widget objectAtIndex:i];
                 if([[widget objectForKey:@"type"] isEqualToString:@"Background"]){
                     [widget setObject:default_background forKey:@"image"];
                 }
             }
         }
-        [self fillBackground:cross.widget];
+        [self fillBackground:_cross.widget];
     }
 
 }

@@ -7,94 +7,108 @@
 //
 
 #import "APIProfile.h"
-#import "Mapping.h"
 #import "ProfileCellView.h"
+#import "Identity+EXFE.h"
 
 @implementation APIProfile
 +(void) MappingUsers{
-    RKObjectManager* manager =[RKObjectManager sharedManager];
-    RKManagedObjectMapping* userMapping = [RKManagedObjectMapping mappingForEntityWithName:@"User" inManagedObjectStore:manager.objectStore];
-    
-    userMapping.primaryKeyAttribute=@"user_id";
-    
-    [userMapping mapKeyPathsToAttributes:@"id", @"user_id",
-     @"avatar_filename", @"avatar_filename", 
-     @"bio", @"bio",
-     @"cross_quantity", @"cross_quantity",
-     @"name", @"name", 
-     @"timezone", @"timezone", 
-     nil];
-    RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
-    [userMapping mapRelationship:@"identities" withMapping:identityMapping];
-    
-    [manager.mappingProvider setObjectMapping:userMapping forKeyPath:@"response.user"];    
+//    RKObjectManager* manager =[RKObjectManager sharedManager];
+//    RKManagedObjectMapping* userMapping = [RKManagedObjectMapping mappingForEntityWithName:@"User" inManagedObjectStore:manager.objectStore];
+//    
+//    userMapping.primaryKeyAttribute=@"user_id";
+//    
+//    [userMapping mapKeyPathsToAttributes:@"id", @"user_id",
+//     @"avatar_filename", @"avatar_filename", 
+//     @"bio", @"bio",
+//     @"cross_quantity", @"cross_quantity",
+//     @"name", @"name", 
+//     @"timezone", @"timezone", 
+//     nil];
+//    RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
+//    [userMapping mapRelationship:@"identities" withMapping:identityMapping];
+//    
+//    [manager.mappingProvider setObjectMapping:userMapping forKeyPath:@"response.user"];    
 }
 
 +(void) MappingSuggest{
-    RKObjectManager* manager =[RKObjectManager sharedManager];
-    RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
-    [manager.mappingProvider setObjectMapping:identityMapping forKeyPath:@"response.identities"];
+//    RKObjectManager* manager =[RKObjectManager sharedManager];
+//    RKManagedObjectMapping* identityMapping = [Mapping getIdentityMapping];
+//    [manager.mappingProvider setObjectMapping:identityMapping forKeyPath:@"response.identities"];
 }
 
-+(void) LoadUsrWithUserId:(int)user_id delegate:(id)delegate {
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    NSString *endpoint = [NSString stringWithFormat:@"/users/%u?token=%@",app.userid, app.accesstoken];
-    RKObjectManager* manager =[RKObjectManager sharedManager];
-    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-
-    [manager loadObjectsAtResourcePath:endpoint usingBlock:^(RKObjectLoader *loader) {
-        loader.userData = [NSNumber numberWithInt:user_id];
-        loader.delegate = delegate;
-    }];
-    
-}
-+(void) LoadUsrWithUserId:(int)user_id token:(NSString*)token usingBlock:(void (^)(RKRequest *request))block {
-    //AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSString *endpoint = [NSString stringWithFormat:@"/users/%u?token=%@",user_id, token];
-    RKClient *client = [RKClient sharedClient];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    [client setValue:token forHTTPHeaderField:@"token"];
-    [client get:endpoint usingBlock:block];
++(void) LoadUsrWithUserId:(int)user_id success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
+  
+  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u?token=%@",API_ROOT,user_id, app.accesstoken];
+  [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:nil success:success failure:failure];
 }
 
-+(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids usingBlock:(void (^)(RKRequest *request))block{
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/mergeIdentities?token=%@",app.userid, app.accesstoken];
-    RKClient *client = [RKClient sharedClient];
-    RKParams* rsvpParams = [RKParams params];
-    [rsvpParams setValue:browsing_identity_token forParam:@"browsing_identity_token"];
-    [rsvpParams setValue:ids forParam:@"identity_ids"];
-    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-    [client post:endpoint usingBlock:^(RKRequest *request) {
-        request.method = RKRequestMethodPOST;
-        request.params=rsvpParams;
-        block(request);
-    }];
-
-    
++(void) LoadUsrWithUserId:(int)user_id withToken:(NSString*)token success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
+  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u?token=%@",API_ROOT,user_id, token];
+  [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:nil success:success failure:failure];
+  
 }
 
-+ (void) LoadSuggest:(NSString*)key delegate:(id)delegate{
++(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids
+                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+  
+  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u/mergeIdentities?token=%@",API_ROOT,app.userid, app.accesstoken];
+  
+  [RKObjectManager sharedManager].HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
+  [[RKObjectManager sharedManager].HTTPClient postPath:endpoint parameters:@{@"browsing_identity_token":browsing_identity_token,@"identity_ids":ids} success:success failure:failure];
+}
+
+
++ (void) LoadSuggest:(NSString*)key success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+             failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
 
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSString *endpoint = [NSString stringWithFormat:@"/identities/complete?key=%@",key];
-    RKObjectManager* manager =[RKObjectManager sharedManager];
-    [manager.requestQueue cancelAllRequests];
-    [manager.client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-
-    [manager.client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-    [manager loadObjectsAtResourcePath:endpoint usingBlock:^(RKObjectLoader *loader) {
-        loader.userData=@"suggest";
-        loader.delegate = delegate;
-    }];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/identities/complete?key=%@",API_ROOT,key];
+  
+  [[RKObjectManager sharedManager].HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+  [[RKObjectManager sharedManager].HTTPClient getPath:endpoint parameters:nil success:success failure:failure];
+   
 }
 
-//+(void) getIdentity:(NSString*)identity_json{
-//    
-//}
++(void) updateName:(NSString*)name
+           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/users/update?token=%@",API_ROOT,app.accesstoken];
+    
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    [objectManager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+    
+    [objectManager.HTTPClient postPath:endpoint parameters:@{@"name":name} success:success failure:failure];
+}
+
+// should move to APIIdentity.m
++(void) updateIdentity:(Identity*)identity
+                  name:(NSString*)name
+                andBio:(NSString*)bio
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    
+    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/identities/%i/update?token=%@", API_ROOT, [identity.identity_id intValue], app.accesstoken];
+    
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    [objectManager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
+    if (name) {
+        [dict setObject:name forKey:@"name"];
+    }
+    if (bio) {
+        [dict setObject:bio forKey:@"bio"];
+    }
+    [objectManager.HTTPClient postPath:endpoint parameters:dict success:success failure:failure];
+}
+
 
 @end
