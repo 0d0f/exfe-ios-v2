@@ -27,6 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"ADD_IDENTITY"];
     CGRect a = [UIScreen mainScreen].applicationFrame;
     
     UIView *contentLayer = [[UIView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(a), CGRectGetHeight(a) - 44)];
@@ -74,6 +75,7 @@
     [contentLayer addSubview:identityRightButton];
     
     textUsername=[[UITextField alloc] initWithFrame:CGRectMake(identitybackimg.frame.origin.x+6+18+6, 18, 230-(6+18+6)*2+50, 40)];
+    textUsername.keyboardType = UIKeyboardTypeEmailAddress;
     textUsername.placeholder=@"Enter email or phone";
     textUsername.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
     textUsername.contentHorizontalAlignment=UIControlContentHorizontalAlignmentCenter;

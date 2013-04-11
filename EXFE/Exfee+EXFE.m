@@ -6,11 +6,22 @@
 //
 //
 
+#import <RestKit/RestKit.h>
 #import "Exfee+EXFE.h"
 #import "User+EXFE.h"
-#import <RestKit/RestKit.h>
+#import "DateTimeUtil.h"
 
 @implementation Exfee (EXFE)
+
++ (id)disconnectedEntity {
+    NSManagedObjectContext *context = [RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Exfee" inManagedObjectContext:context];
+    return [[[self alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:nil] autorelease];
+}
+
+- (void)addToContext:(NSManagedObjectContext *)context {
+    [context insertObject:self];
+}
 
 -(Invitation*)getMyInvitation{
     Invitation * me = nil;
@@ -48,20 +59,62 @@
     
     NSArray *invitations = [self.invitations sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"invitation_id" ascending:YES]]];
     
+    // WALKAROUND: clean duplicate
+//    if (invitations != nil) {
+//        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+//        for (Invitation *x in invitations) {
+//            NSString *key = [x.invitation_id stringValue];
+//            Invitation *previous = [dict objectForKey:key];
+//            if (previous == nil) {
+//                [dict setObject:x forKey:key];
+//            } else {
+//                if ([x.updated_at timeIntervalSinceDate:previous.updated_at] > 0) {
+//                    [dict removeObjectForKey:key];
+//                    [dict setObject:x forKey:key];
+//                }
+//            }
+//        }
+//        if (invitations.count > dict.count) {
+//            invitations = [dict allValues];
+//        }
+//    }
+    
+    
     switch (sortType) {
         case kInvitationSortTypeMeAcceptOthers:{
             int myself = 0;
             int accepts = 0;
             
             for(Invitation *invitation in invitations) {
-                if([[User getDefaultUser] isMe:invitation.identity]){
-                    [sorted insertObject:invitation atIndex:myself];
-                    myself ++;
-                } else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
-                    [sorted insertObject:invitation atIndex:(myself + accepts)];
-                    accepts ++;
-                } else if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO){
-                    [sorted addObject:invitation];
+                if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO) {
+                    if([[User getDefaultUser] isMe:invitation.identity]){
+                        [sorted insertObject:invitation atIndex:myself];
+                        myself ++;
+                    } else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
+                        [sorted insertObject:invitation atIndex:(myself + accepts)];
+                        accepts ++;
+                    } else {
+                        [sorted addObject:invitation];
+                    }
+                }
+            }
+        }
+            break;
+        case kInvitationSortTypeMeAcceptNoNotifications:{
+            int myself = 0;
+            int accepts = 0;
+            
+            for(Invitation *invitation in invitations) {
+                if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO && [@"NOTIFICATION" isEqualToString:invitation.rsvp_status] == NO) {
+                    if([[User getDefaultUser] isMe:invitation.identity]){
+                        [sorted insertObject:invitation atIndex:myself];
+                        myself ++;
+                    } else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
+                        [sorted insertObject:invitation atIndex:(myself + accepts)];
+                        accepts ++;
+                    } else {
+                        [sorted addObject:invitation];
+                    }
                 }
             }
         }
@@ -71,14 +124,35 @@
             int accepts = 0;
             
             for(Invitation *invitation in invitations) {
-                if([invitation.host boolValue] == YES){
-                    [sorted insertObject:invitation atIndex:hosts];
-                    hosts ++;
-                } else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
-                    [sorted insertObject:invitation atIndex:(hosts + accepts)];
-                    accepts ++;
-                } else if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO){
-                    [sorted addObject:invitation];
+                if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO){
+                    if([invitation.host boolValue] == YES){
+                        [sorted insertObject:invitation atIndex:hosts];
+                        hosts ++;
+                    } else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
+                        [sorted insertObject:invitation atIndex:(hosts + accepts)];
+                        accepts ++;
+                    } else {
+                        [sorted addObject:invitation];
+                    }
+                }
+            }
+        }
+            break;
+        case kInvitationSortTypeHostAcceptNoNotifications:{
+            int hosts = 0;
+            int accepts = 0;
+            
+            for(Invitation *invitation in invitations) {
+                if ([@"REMOVED" isEqualToString:invitation.rsvp_status] == NO && [@"NOTIFICATION" isEqualToString:invitation.rsvp_status] == NO) {
+                    if([invitation.host boolValue] == YES){
+                        [sorted insertObject:invitation atIndex:hosts];
+                        hosts ++;
+                    } else if([@"ACCEPTED" isEqualToString:invitation.rsvp_status] == YES){
+                        [sorted insertObject:invitation atIndex:(hosts + accepts)];
+                        accepts ++;
+                    } else {
+                        [sorted addObject:invitation];
+                    }
                 }
             }
         }

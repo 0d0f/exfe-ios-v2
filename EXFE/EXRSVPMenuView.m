@@ -7,9 +7,10 @@
 //
 
 #import "EXRSVPMenuView.h"
+#import "User+EXFE.h"
 
 @implementation EXRSVPMenuView
-@synthesize invitation;
+@synthesize invitation = _invitation;
 
 - (id)initWithFrame:(CGRect)frame withDelegate:(id)_delegate items:(NSArray*)itemlist showTitleBar:(BOOL)showtitlebar
 {
@@ -37,7 +38,29 @@
         
         if([self Itemscontain:itemlist string:@"Accepted"]){
             UIButton *btnaccepted=[UIButton buttonWithType:UIButtonTypeCustom];
-            [btnaccepted setTitle:@"Accepted" forState:UIControlStateNormal];
+            NSString *str = @"Accepted";
+            [btnaccepted setTitle:str forState:UIControlStateNormal];
+            [btnaccepted.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18]];
+            [btnaccepted setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [btnaccepted setFrame:CGRectMake(0, y, 125, 44)];
+            [btnaccepted.titleLabel setTextAlignment:NSTextAlignmentLeft];
+            
+            btnaccepted.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            btnaccepted.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+            [btnaccepted addTarget:self action:@selector(setRsvpAccepted) forControlEvents:UIControlEventTouchUpInside];
+            CALayer *bottomBorder = [CALayer layer];
+            bottomBorder.borderColor = [UIColor darkGrayColor].CGColor;
+            bottomBorder.borderWidth = 1;
+            bottomBorder.frame = CGRectMake(0, btnaccepted.frame.size.height-1,btnaccepted.frame.size.width , 1);
+            [btnaccepted.layer addSublayer:bottomBorder];
+            [self addSubview:btnaccepted];
+            y+=44;
+        }
+        
+        if([self Itemscontain:itemlist string:@"I'm in"]){
+            UIButton *btnaccepted=[UIButton buttonWithType:UIButtonTypeCustom];
+            NSString *str = @"I'm in";
+            [btnaccepted setTitle:str forState:UIControlStateNormal];
             [btnaccepted.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18]];
             [btnaccepted setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [btnaccepted setFrame:CGRectMake(0, y, 125, 44)];
@@ -76,9 +99,9 @@
             y+=44;
         }
 
-        if([self Itemscontain:itemlist string:@"Pending"]){
+        if([self Itemscontain:itemlist string:@"Interested"]){
             UIButton *btnPending=[UIButton buttonWithType:UIButtonTypeCustom];
-            [btnPending setTitle:@"Pending" forState:UIControlStateNormal];
+            [btnPending setTitle:@"Interested" forState:UIControlStateNormal];
             [btnPending.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
             [btnPending setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [btnPending setFrame:CGRectMake(0, y, 125, 44)];

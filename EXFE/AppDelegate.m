@@ -7,9 +7,12 @@
 //
 
 #import "AppDelegate.h"
+#import <BlocksKit/BlocksKit.h>
+#import "UIApplication+EXFE.h"
 #import "APICrosses.h"
 #import "APIConversation.h"
 #import "APIProfile.h"
+#import "APIExfeServer.h"
 #import "CrossesViewController.h"
 #import "LandingViewController.h"
 
@@ -33,7 +36,13 @@ static char mergetoken;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [Flurry setAppVersion:[UIApplication appVersion]];
     [Flurry startSession:@"8R2R8KZG35DK6S6MDHGS"];
+#ifdef DEBUG
+    [Flurry logEvent:@"START_DEBUG_VERSION"];
+#else
+    [Flurry logEvent:@"START_ONLINE_VERSION"];
+#endif
     
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(observeContextSave:)
@@ -47,33 +56,19 @@ static char mergetoken;
         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
     }
     
-//  NSURL *baseURL = [NSURL URLWithString:API_ROOT];
-  RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-//  RKLogConfigureByName("*", RKLogLevelOff);
+#ifdef DEBUG
+    RKLogConfigureByName("RestKit/Network", RKLogLevelOff);
+//    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
+    RKLogConfigureByName("RestKit/CoreData", RKLogLevelOff);
+//    RKLogConfigureByName("RestKit/CoreData/Cache", RKLogLevelTrace);
+#else
+    RKLogConfigureByName("*", RKLogLevelOff);
+#endif
   
   [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
   [self createdb];
   RKObjectManager *objectManager = [RKObjectManager sharedManager];
 
-//  RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
-//  NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-//  RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
-//  objectManager.managedObjectStore = managedObjectStore;
-//  [ModelMapping buildMapping];
-//  
-//  [managedObjectStore createPersistentStoreCoordinator];
-//  NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
-////  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
-//  NSError *error;
-//  NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
-//  NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
-//  
-//  // Create the managed object contexts
-//  [managedObjectStore createManagedObjectContexts];
-//  
-//  // Configure a managed object cache to ensure we do not create duplicate objects
-//  managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
-  
   
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
   if(app.accesstoken!=nil)
@@ -143,11 +138,14 @@ static char mergetoken;
 }
 
 - (void) createdb{
+    [Flurry logEvent:@"CREATE_DB"];
   NSURL *baseURL = [NSURL URLWithString:API_ROOT];
   
   RKObjectManager *objectManager = [RKObjectManager sharedManager];
-  if(objectManager==nil)
-    objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+    if(objectManager == nil){
+        objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+        [RKObjectManager setSharedManager:objectManager];
+    }
   
   NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
   RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
@@ -206,6 +204,8 @@ static char mergetoken;
 {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    [Util checkUpdate];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -308,6 +308,7 @@ static char mergetoken;
 }
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
+    [Flurry logEvent:@"RECEIVE_REMOTE_NOTIFICATION"];
     BOOL isForeground=TRUE;
     if(application.applicationState != UIApplicationStateActive)
         isForeground=FALSE;
@@ -315,6 +316,7 @@ static char mergetoken;
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+    [Flurry logEvent:@"HANDLE_OPEN_URL"];
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
     NSArray *url_components=[url.absoluteString componentsSeparatedByString:@"?"];
     if([url_components count] ==2){
@@ -478,6 +480,7 @@ static char mergetoken;
     
 }
 -(void)SignoutDidFinish{
+    [Flurry logEvent:@"ACTION_DID_SIGN_OUT"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"access_token"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userid"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"default_user_identities"];
@@ -505,7 +508,7 @@ static char mergetoken;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 - (void) cleandb{
-  
+  [Flurry logEvent:@"CLEAN_DB"];
   NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
 //  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
 //  NSLog(@"%@",storePath);

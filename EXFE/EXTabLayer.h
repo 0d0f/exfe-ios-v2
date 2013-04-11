@@ -13,10 +13,10 @@
     CALayer *_imglayer;
 }
 
-@property (nonatomic, assign) CGFloat curveBase;
-@property (nonatomic, assign) CGPoint curveCenter;
-@property (nonatomic, assign) CGSize curveParamRect;
-@property (nonatomic, assign) CGSize curveParamControl;
+@property (nonatomic, assign) CGPoint curveParamBase;
+@property (nonatomic, assign) CGRect curveParamControl1;
+@property (nonatomic, assign) CGRect curveParamControl2;
+@property (nonatomic, assign) CGPoint maskPosition;
 
 - (void) setimage:(UIImage*)image;
 - (void) updateCurvePath:(UIBezierPath*)path;

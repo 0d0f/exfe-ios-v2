@@ -82,12 +82,13 @@ static NSMutableDictionary *imgs;
 }
 
 - (UIImage*) getImgFromCache:(NSString*)url{
-    NSString *md5key=[ImgCache md5:url];
-    UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
-    if(imgfromdict!=nil)
+    NSString *md5key = [ImgCache md5:url];
+    UIImage* imgfromdict = (UIImage*)[imgs objectForKey:md5key];
+    if (imgfromdict != nil){
         return imgfromdict;
+    }
     NSString *cachefilename=[[ImgCache CachePath] stringByAppendingPathComponent:md5key];
-    UIImage *img=[UIImage imageWithContentsOfFile:cachefilename];
+    UIImage *img = [UIImage imageWithContentsOfFile:cachefilename];
     return img;
 }
 
@@ -127,25 +128,40 @@ static NSMutableDictionary *imgs;
     return image;
 }
 
+- (UIImage*) downloadImgFrom:(NSString*)url
+{
+    NSString *md5key = [ImgCache md5:url];
+    NSString *cachefilename = [[ImgCache CachePath] stringByAppendingPathComponent:md5key];
+    return [self downloadImgFrom:url to:cachefilename];
+}
+
+- (UIImage*) downloadImgFrom:(NSString*)url to:(NSString*)filename
+{
+    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+    [data writeToFile:filename atomically:YES];
+    return [UIImage imageWithData:data];
+}
+
 - (UIImage*) getImgFrom:(NSString*)url
 {
-    NSString *md5key=[ImgCache md5:url];
-    UIImage* imgfromdict=(UIImage*)[imgs objectForKey:md5key];
-    if(imgfromdict!=nil)
+    NSString *md5key = [ImgCache md5:url];
+    UIImage* imgfromdict = (UIImage*)[imgs objectForKey:md5key];
+    if (imgfromdict != nil) {
         return imgfromdict;
-    NSString *cachefilename=[[ImgCache CachePath] stringByAppendingPathComponent:md5key];
-    UIImage *img=[UIImage imageWithContentsOfFile:cachefilename];
-    if(img==nil)
-    {
-        NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
-        img = [UIImage imageWithData:data];
-        [data writeToFile:cachefilename atomically:YES];
+    }
+    NSString *cachefilename = [[ImgCache CachePath] stringByAppendingPathComponent:md5key];
+    UIImage *img = [UIImage imageWithContentsOfFile:cachefilename];
+    if (img != nil) {
+        return img;
     }
     
-    if(img!=nil)
+    img = [self downloadImgFrom:url to:cachefilename];
+    
+    if (img != nil){
         [imgs setObject:img forKey:md5key];
-    else
+    } else {
         [imgs setObject:[NSNull null] forKey:md5key];
+    }
     return img;
     
 }
@@ -221,24 +237,24 @@ static NSMutableDictionary *imgs;
     
 }
 
-- (void)fillAvatarWith:(NSString*)url byDefault:(UIImage*)defImage using:(void(^)(UIImage* image))fill{
+- (void)fillAvatarWith:(NSString*)url byDefault:(UIImage*)defImage using:(void(^)(UIImage* image))fill
+{
     if (url == nil || url.length == 0) {
         fill(defImage);
     } else {
-        UIImage *avatarImg=[self checkImgFrom:url];
+        UIImage *avatarImg = [self getImgFromCache:url];
         if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(imgQueue, ^{
-                UIImage *avatar = [self getImgFrom:url];
+                fill(defImage);
+                UIImage *avatar = [self downloadImgFrom:url];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
                         fill(avatar);
-                    }else{
-                        fill(defImage);
                     }
+                    dispatch_release(imgQueue);
                 });
             });
-            dispatch_release(imgQueue);
         }else{
             fill(avatarImg);
         }
@@ -250,21 +266,19 @@ static NSMutableDictionary *imgs;
     if (url == nil || url.length == 0) {
         avatarView.image = defImage;
     } else {
-        UIImage *avatarImg = [self checkImgFrom:url];
+        UIImage *avatarImg = [self getImgFromCache:url];
         if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(imgQueue, ^{
-                UIImage *avatar = [self getImgFrom:url];
+                avatarView.image = defImage;
+                UIImage *avatar = [self downloadImgFrom:url];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
                         avatarView.image = avatar;
-                    }else{
-                        avatarView.image = defImage;
                     }
+                    dispatch_release(imgQueue);
                 });
             });
-            dispatch_release(imgQueue);
-            
         }else{
             avatarView.image = avatarImg;
         }

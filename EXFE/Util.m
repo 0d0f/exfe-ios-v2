@@ -7,9 +7,18 @@
 //
 
 #import "Util.h"
+#import <math.h>
+#import <BlocksKit/BlocksKit.h>
+#import "UIApplication+EXFE.h"
+#import "APIExfeServer.h"
 #import "CrossTime.h"
 #import "EFTime.h"
-#import <math.h>
+
+
+// Notification Definition
+NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
+
+
 
 @implementation Util
 + (NSString*) decodeFromPercentEscapeString:(NSString*)string{
@@ -486,27 +495,120 @@
 }
 
 + (NSString*) findProvider:(NSString*)external_id{
-    
+    Provider p = [self matchedProvider:external_id];
+    return [Identity getProviderString:p];
+}
+
++ (Provider)matchedProvider:(NSString*)raw
+{
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    if ([emailTest evaluateWithObject:raw] == YES){
+        return kProviderEmail;
+    }
     
-    if([emailTest evaluateWithObject:external_id]==YES)
-        return @"email";
-    
-    NSString *twitterRegex = @"@[A-Za-z0-9.-]+";
-    NSPredicate *twitterTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex];
-    if([twitterTest evaluateWithObject:external_id]==YES)
-        return @"twitter";
+    NSString *twitterRegex1 = @"@[A-Za-z0-9.-]+";
+    NSPredicate *twitterTest1 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex1];
+    if ([twitterTest1 evaluateWithObject:raw] == YES){
+        return kProviderTwitter;
+    }
+    NSString *twitterRegex2 = @"[A-Za-z0-9.-]+@twitter";
+    NSPredicate *twitterTest2 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex2];
+    if ([twitterTest2 evaluateWithObject:raw] == YES){
+        return kProviderTwitter;
+    }
     
     NSString *facebookRegex = @"[A-Z0-9a-z._%+-]+@facebook";
     NSPredicate *facebookTest = [NSPredicate predicateWithFormat:@"SELF MATCHES[c] %@", facebookRegex];
-    if([facebookTest evaluateWithObject:external_id]==YES)
-        return @"facebook";
-  
-    NSString *phone=[Util formatPhoneNumber:external_id];
-    if([phone length] >0)
-      return @"phone";
-    return @"";
+    if ([facebookTest evaluateWithObject:raw] == YES){
+        return kProviderFacebook;
+    }
+    
+    NSString *phone = [Util formatPhoneNumber:raw];
+    if ([phone length] > 0){
+        return kProviderPhone;
+    }
+    
+    return kProviderUnknown;
+}
+
++ (NSDictionary*)parseIdentityString:(NSString*)raw
+{
+    Provider p = [self matchedProvider:raw];
+    NSString * provider = [Identity getProviderString:p];
+    switch (p) {
+        case kProviderEmail:{
+            return @{@"external_username": raw, @"external_id": raw, @"provider": provider};
+        } break;
+        case kProviderPhone:{
+            return @{@"external_username":raw, @"external_id": raw, @"provider": provider};
+        } break;
+        case kProviderFacebook:{
+            if ([raw hasSuffix:@"@facebook"]) {
+                NSString *name = [raw substringToIndex:raw.length - @"@facebook".length];
+                return @{@"external_username":name, @"external_id": @"", @"provider": provider};
+            }
+        } break;
+        case kProviderTwitter:{
+            if ([raw hasPrefix:@"@"]) {
+                return @{@"external_username":[raw substringFromIndex:1], @"external_id": @"", @"provider": provider};
+            }else{
+                if ([raw hasSuffix:@"@twitter"]) {
+                    NSString *name = [raw substringToIndex:raw.length - @"@twitter".length];
+                    return @{@"external_username":name, @"external_id": @"", @"provider": provider};
+                }
+            }
+        } break;
+        default:
+            break;
+    }
+    
+    return @{@"external_username":raw, @"external_id": @"", @"provider": provider};
+}
+
++ (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber{
+    NSString* clean_phone=@"";
+    clean_phone = [phonenumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@")" withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@" " withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@"." withString:@""];
+    
+    if ([@"+" isEqualToString:[clean_phone substringToIndex:1]]){
+        return YES;
+    }
+    
+    CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [netInfo subscriberCellularProvider];
+    NSString *mcc = @"";
+    NSString *isocode = @"";
+    if (carrier) {
+        mcc = [NSString stringWithString:[carrier mobileCountryCode]];
+    //  NSString *mnc = [carrier mobileNetworkCode];
+        isocode = [NSString stringWithString:[carrier isoCountryCode]];
+        [netInfo release];
+    }
+
+    if(([@"460" isEqualToString:mcc] || [@"cn" isEqualToString:isocode]) && [clean_phone length] >= 11 ){
+        NSString *cnphoneregex = @"1([3458]|7[1-8])\\d*";
+        NSPredicate *cnphoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", cnphoneregex];
+        if([[clean_phone substringToIndex:2] isEqualToString:@"00"]){
+            return YES;
+        } else if([cnphoneTest evaluateWithObject:clean_phone] == YES){
+            return YES;
+        }
+    } else if(([@"310" isEqualToString:mcc] ||[@"311" isEqualToString:mcc] || [@"us" isEqualToString:isocode] || [@"ca" isEqualToString:isocode]) && [clean_phone length] >= 10){
+        if ([@"1" isEqualToString:[clean_phone substringToIndex:1]]) {
+            return  YES;
+        } else if ([@"011" isEqualToString:[clean_phone substringToIndex:3]]) {
+            return  YES;
+        } else if ([clean_phone characterAtIndex:0] >= '2' && [clean_phone characterAtIndex:0] <= '9' && [clean_phone length]>=7) {
+            return  YES;
+        }
+    }
+    
+    return NO;
 }
 
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber{
@@ -872,7 +974,7 @@
 }
 
 + (BOOL) isCommonDomainName:(NSString*)domainname{
-    NSArray *domains =[NSArray arrayWithObjects:@"biz",@"com",@"nfo",@"net",@"org",@".us",@".uk",@".jp",@".cn",@".ca",@".au",@".de", nil];
+    NSArray *domains =[NSArray arrayWithObjects:@"biz",@"com",@"nfo",@"net",@"org",@"edu",@".us",@".uk",@".jp",@".cn",@".ca",@".au",@".de", nil];
     return [domains containsObject:[domainname lowercaseString]];
 }
 + (void) signout{
@@ -894,26 +996,6 @@
   }];
 
 }
-+ (void) showError:(Meta*)meta delegate:(id)delegate{
-    NSString *errormsg=@"";
-    
-    for (UIWindow* window in [UIApplication sharedApplication].windows) {
-        NSArray* subviews = window.subviews;
-        if ([subviews count] > 0)
-            if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
-                return;
-    }
-    
-    if([meta.code intValue]==401){
-        errormsg=@"Authentication failed due to security concerns, please sign in again.";
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
-        alert.tag=500;
-        alert.delegate=delegate;
-        [alert show];
-        [alert release];
-    }
-}
 
 + (NSString*) cleanInputName:(NSString*)username provider:(NSString*)provider{
     if([provider isEqualToString:@"twitter"]){
@@ -929,20 +1011,26 @@
 }
 
 + (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate{
-  for (UIWindow* window in [UIApplication sharedApplication].windows) {
-    NSArray* subviews = window.subviews;
-    if ([subviews count] > 0)
-      if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
-        return;
-  }
-  NSString *errormsg=@"";
-    if([meta.code intValue]==401){
-      errormsg=@"Authentication failed due to security concerns, please sign in again.";
-      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
-      alert.tag=500;
-      alert.delegate=delegate;
-      [alert show];
-      [alert release];
+    
+    for (UIWindow* window in [UIApplication sharedApplication].windows) {
+        NSArray* subviews = window.subviews;
+        if ([subviews count] > 0)
+            if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
+                return;
+    }
+    NSString *errormsg = @"";
+    if ([meta.code intValue] == 401) {
+        errormsg = @"Authentication failed due to security concerns, please sign in again.";
+        
+#ifdef WWW
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil otherButtonTitles:@"OK",nil];
+#else
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+#endif
+        
+        alertView.tag = 500;
+        [alertView show];
+        [alertView release];
     }
 }
 
@@ -953,29 +1041,35 @@
             if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
                 return;
     }
-    
-    NSString *errormsg=@"";
-    if([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]])
-    {
-        if([(NSNumber*)[meta objectForKey:@"code"] intValue]==401){
-            errormsg=@"Authentication failed due to security concerns, please sign in again.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Sign Out",nil];
-            alert.tag=500;
-            alert.delegate=delegate;
-            [alert show];
-            [alert release];
+    NSString *errormsg = @"";
+    if ([[meta objectForKey:@"code"] isKindOfClass:[NSNumber class]]) {
+        if ([(NSNumber*)[meta objectForKey:@"code"] intValue] == 401) {
+            errormsg = @"Authentication failed due to security concerns, please sign in again.";
+#ifdef WWW
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:nil  otherButtonTitles:@"OK",nil];
+#else
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:delegate cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+#endif
+            alertView.tag = 500;
+            [alertView show];
+            [alertView release];
         }
     }
 }
 
 + (void) showConnectError:(NSError*)err delegate:(id)delegate{
-    NSString *errormsg=@"";
-    if(err.code==2)
-        errormsg=@"A connection failure has occurred.";
-    else
-        errormsg=@"Could not connect to the server.";
-    if(![errormsg isEqualToString:@""]){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+
+    NSString *errormsg = @"";
+    NSString *errorTitle = @"";
+    if (err.code == 500) {
+        errorTitle = @"Server Error";
+        errormsg = @"Sorry, something is technically wrong in the \"cloud\", we’re fixing it up.";
+    } else { //NSURLError.h
+        errorTitle = @"Network Error";
+        errormsg = @"Failed to connect to server. Please retry or wait awhile.";
+    }
+    if (![errormsg isEqualToString:@""]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:errorTitle message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         [alert release];
     }
@@ -1065,5 +1159,54 @@
   }
   NSString *addr = wifiAddress ? wifiAddress : cellAddress;
   return addr ? addr : @"0.0.0.0";
+
++ (void)checkUpdate
+{
+    //    http://api.exfe.com/versions/
+    //    {
+    //        "ios" => {"version" => "", "description" => "", "url" => ""}
+    //        "andriod" => {"version" => "", "description" => "", "url" => ""}
+    //    }
+    
+    // https://itunes.apple.com/cn/app/exfe/id514026604
+    
+    NSString *last_string = [[NSUserDefaults standardUserDefaults] stringForKey:@"version_last_check_time"];
+    NSDate *last_time = nil;
+    if (last_string) {
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateStyle:NSDateFormatterFullStyle];
+        
+        last_time = [formatter dateFromString:last_string];
+        [formatter release];
+    }
+    if (last_time == nil || ABS([Util daysBetween:last_time and:[NSDate date]]) > 3){
+        [APIExfeServer checkAppVersionSuccess:^(AFHTTPRequestOperation *operation, id JSON) {
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateStyle:NSDateFormatterFullStyle];
+            NSString *now_string = [formatter stringFromDate:[NSDate date]];
+            [formatter release];
+            [[NSUserDefaults standardUserDefaults] setValue:now_string forKey:@"version_last_check_time"];
+            
+            NSDictionary *iosVersionObject = [JSON valueForKeyPath:@"response.ios"];
+            NSString *version = [iosVersionObject valueForKey:@"version"];
+            NSString *description = [iosVersionObject valueForKey:@"description"];
+            NSString *url = [iosVersionObject valueForKey:@"url"];
+            if ([UIApplication isNewVersion:version]) {
+                
+                [UIAlertView showAlertViewWithTitle:@"New version update"
+                                            message:description
+                                  cancelButtonTitle:@"Cancel"
+                                  otherButtonTitles:@[@"Update"]
+                                            handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                                if (buttonIndex == alertView.firstOtherButtonIndex) {
+                                                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                                                }
+                                            }];
+            }
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"check version fail");
+        }];
+    }
 }
 @end

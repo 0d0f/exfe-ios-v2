@@ -18,6 +18,7 @@
 #import <CoreTelephony/CTCarrier.h>
 #import <ifaddrs.h>
 #import <arpa/inet.h>
+#import "Identity+EXFE.h"
 
 
 
@@ -63,6 +64,10 @@
 #define HEADER_BACKGFOUND_HEIGHT    (495.0f)
 #define HEADER_BACKGROUND_Y_OFFSET  (198.0f)
 
+
+// Notification Definition
+extern NSString *const EXCrossListDidChangeNotification;
+
 #define MERCATOR_OFFSET 268435456
 #define MERCATOR_RADIUS 85445659.44705395
 
@@ -82,6 +87,9 @@
 + (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 + (UIImage *)scaleImage:(UIImage*)image toResolution:(int)resolution;
 + (NSString*) findProvider:(NSString*)external_id;
++ (Provider)matchedProvider:(NSString*)raw;
++ (NSDictionary*)parseIdentityString:(NSString*)raw;
++ (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber;
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber;
 + (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime;
 
@@ -91,7 +99,6 @@
 + (NSString*) getTimeDesc:(CrossTime*)crosstime;
 + (NSDate*) beginningOfWeek:(NSDate*)date;
 + (BOOL) isCommonDomainName:(NSString*)domainname;
-+ (void) showError:(Meta*)meta delegate:(id)delegate;
 + (void) showErrorWithMetaDict:(NSDictionary*)meta delegate:(id)delegate;
 + (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate;
 
@@ -103,6 +110,7 @@
 + (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2;
 + (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2  with:(CGRect)rect3;
 + (NSString *)getIPAddress;
++ (void)checkUpdate;
 
 @end
 

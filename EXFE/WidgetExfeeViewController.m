@@ -9,6 +9,7 @@
 #import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
+#import "UILabel+EXFE.h"
 #import "Invitation+EXFE.h"
 #import "Identity+EXFE.h"
 #import "Exfee+EXFE.h"
@@ -24,6 +25,7 @@
 #import "DateTimeUtil.h"
 #import "APICrosses.h"
 #import "APIExfee.h"
+#import "NSString+EXFE.h"
 
 #import "HereViewController.h"
 
@@ -39,9 +41,18 @@
 #define kMenuTagAction 8902
 #define kMenuTagMate 8903
 
+#define kYOffset  50
+#define kBottomMargin 2
+
+#define kPopupIdRsvpMenu 1
+#define kPopupIdRemoveIdentity 2
+
+
 typedef enum {
     kTagIdNone = 0,
     kTagIdActionMenu,
+    kTagIdBioContent,
+    kTagIdBioTitle,
     kTagIdIdentityName,
     kTagIdIdentityWarninng,
     kTagIdIdentityProvider,
@@ -59,12 +70,12 @@ typedef enum {
 
 @implementation WidgetExfeeViewController
 
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        selected_invitation = nil;
         
         rsvpDict = @{ @"header": @"Set response to:",
                       @"item0": @{ @"main": @"Accepted",
@@ -75,9 +86,9 @@ typedef enum {
                                    },
                       @"item2": @{ @"main": @"Interested",
                                    @"style": @"Normal"
-                                   },
-                      @"item3": @{ @"main": @"+ mates...",
-                                   @"style": @"Lowlight"
+//                                   },
+//                      @"item3": @{ @"main": @"+ mates...",
+//                                   @"style": @"Lowlight"
                                    }
                       };
         [rsvpDict retain];
@@ -90,9 +101,9 @@ typedef enum {
                                      },
                         @"item2": @{ @"main": @"Interested",
                                      @"style": @"Normal"
-                                     },
-                        @"item3": @{ @"main": @"+ mates...",
-                                     @"style": @"Lowlight"
+//                                     },
+//                        @"item3": @{ @"main": @"+ mates...",
+//                                     @"style": @"Lowlight"
                                      }
                         };
         [myRsvpDict retain];
@@ -103,36 +114,37 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"WIDGET_EXFEE"];
     // Do any additional setup after loading the view from its nib.
     CGRect a = [UIScreen mainScreen].applicationFrame;
     CGRect b = self.view.bounds;
     self.view.tag = kTagViewExfeeRoot;
     
     if (self.exfee) {
-        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
     }
     
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    exfeeContainer = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(b), CGRectGetHeight(a) - 44) collectionViewLayout:flowLayout];
-    [flowLayout release];
+    flowLayout = [[PSTCollectionViewFlowLayout alloc] init];
+    exfeeContainer = [[PSTCollectionView alloc] initWithFrame:CGRectMake(0, kYOffset, CGRectGetWidth(b), CGRectGetHeight(a) - kYOffset) collectionViewLayout:flowLayout];
     exfeeContainer.delegate = self;
     exfeeContainer.dataSource = self;
     [exfeeContainer registerClass:[ExfeeCollectionViewCell class] forCellWithReuseIdentifier:@"Exfee Cell"];
-    [exfeeContainer registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Blank Cell"];
+    [exfeeContainer registerClass:[PSTCollectionViewCell class] forCellWithReuseIdentifier:@"Blank Cell"];
     [exfeeContainer registerClass:[ExfeeAddCollectionViewCell class] forCellWithReuseIdentifier:@"Add Cell"];
-    exfeeContainer.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"conv_bg.png"]];
+    exfeeContainer.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"exfee_bg.png"]];
     exfeeContainer.alwaysBounceVertical = YES;
     exfeeContainer.contentOffset = CGPointMake(0, 0);
 //    exfeeContainer.contentInset = UIEdgeInsetsMake(0, 4, 0, 4);
     exfeeContainer.tag = kTagViewExfeeSelector;
     [self.view addSubview:exfeeContainer];
     
-    CGFloat exfee_content_height = CGRectGetHeight(exfeeContainer.frame) - 94 * (2 + (CGRectGetHeight(a) > 480 ? 1 : 0));
-    invContent = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), exfee_content_height)];
+    CGFloat exfee_content_height = CGRectGetHeight(exfeeContainer.frame) - 94 * (2 + (CGRectGetHeight(a) > 480 ? 1 : 0)) - kBottomMargin;
+    invContent = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0 + kYOffset, CGRectGetWidth(b), exfee_content_height )];
     invContent.backgroundColor = [UIColor COLOR_SNOW];
+    invContent.alwaysBounceVertical = YES;
+    invContent.delegate = self;
     invContent.tag = kTableOrigin;
     {
-        
         layer1 = [CALayer layer];
         layer1.frame = CGRectMake(0, 45, 320, 1);
         layer1.contents = (id)[UIImage imageNamed:@"exfee_line_h1.png"].CGImage;
@@ -140,22 +152,28 @@ typedef enum {
         layer2.frame = CGRectMake(0, 105, 320, 1);
         layer2.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
         layer3 = [CALayer layer];
-        layer3.frame = CGRectMake(65, 45, 1, 180);
-        layer3.contents = (id)[UIImage imageNamed:@"exfee_line_v.png"].CGImage;
+        layer3.frame = CGRectMake(0, 137, 320, 1);
+        layer3.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
+        layer4 = [CALayer layer];
+        layer4.frame = CGRectMake(65, 45, 1, 180);
+        layer4.contents = (id)[UIImage imageNamed:@"exfee_line_v.png"].CGImage;
         [invContent.layer addSublayer:layer1];
         [invContent.layer addSublayer:layer2];
         [invContent.layer addSublayer:layer3];
+        [invContent.layer addSublayer:layer4];
         
         
-        invName = [[ UILabel alloc] initWithFrame:CGRectMake(25, 16, 230, 25)];
+        invName = [[UILabel alloc] initWithFrame:CGRectMake(25, 16 , 230, 25)];
         invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
         invName.textColor = [UIColor COLOR_TUNGSTEN];
         invName.backgroundColor = [UIColor clearColor];
+        invName.numberOfLines = 3;
         invName.tag = kTagIdName;
         [invContent addSubview:invName];
         
         invHostFlag = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_host_blue.png"]];
         invHostFlag.frame = CGRectMake(162, 21, CGRectGetWidth(invHostFlag.frame), CGRectGetHeight(invHostFlag.frame));
+        invHostFlag.tag = kTagIdHostFlag;
         [invContent addSubview:invHostFlag];
         
         invHostText = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
@@ -166,38 +184,63 @@ typedef enum {
         [invContent addSubview:invHostText];
         
         invRsvpImage = [[UIImageView alloc] initWithFrame:CGRectMake(33, 57, 26, 26)];
+        invRsvpImage.tag = kTagIdRSVPImage;
         [invContent addSubview:invRsvpImage];
         
         invRsvpLabel = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(75, 60, 200, 22)];
+        invRsvpLabel.tag = kTagIdRSVPLabel;
         [invContent addSubview:invRsvpLabel];
         
         invRsvpAltLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 86, 180, 12)];
         invRsvpAltLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
         invRsvpAltLabel.textColor = [UIColor COLOR_GRAY];
         invRsvpAltLabel.backgroundColor = [UIColor clearColor];
+//        invRsvpAltLabel.numberOfLines = 0;
+        invRsvpAltLabel.tag = kTagIdRSVPAltLabel;
         [invContent addSubview:invRsvpAltLabel];
         
-        identityProvider = [[UIImageView alloc] initWithFrame:CGRectMake(37, 115, 18, 18)];
+        identityProvider = [[UIImageView alloc] initWithFrame:CGRectMake(37, 112, 18, 18)];
+        identityProvider.tag = kTagIdIdentityProvider;
         [invContent addSubview:identityProvider];
         
-        identityWaring = [[UIImageView alloc] initWithFrame:CGRectMake(75, 115, 18, 18)];
+        identityWaring = [[UIImageView alloc] initWithFrame:CGRectMake(75, 112, 18, 18)];
+        identityWaring.tag = kTagIdIdentityWarninng;
         [invContent addSubview:identityWaring];
         
-        identityName = [[UIBorderLabel alloc] initWithFrame:CGRectMake(75, 108, 220, 32)];
+        identityName = [[UIBorderLabel alloc] initWithFrame:CGRectMake(70, 106, 225, 32)];
         identityName.leftInset = 5;
         identityName.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
         identityName.textColor = [UIColor COLOR_BLACK];
         identityName.backgroundColor = [UIColor clearColor];
+        identityName.tag = kTagIdIdentityName;
         [invContent addSubview:identityName];
+        
+        bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(36, 115 + 32, 40, 33)];
+        bioTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+        bioTitle.text = @"Bio";
+        [bioTitle sizeToFit];
+        bioTitle.textColor = [UIColor COLOR_BLACK];
+        bioTitle.backgroundColor = [UIColor clearColor];
+        bioTitle.tag = kTagIdBioTitle;
+        [invContent addSubview:bioTitle];
+        
+        bioContent = [[UILabel alloc] initWithFrame:CGRectMake(75, 115 + 32, 220, 80)];
+        bioContent.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+        bioContent.textColor = [UIColor COLOR_BLACK];
+        bioContent.backgroundColor = [UIColor clearColor];
+        bioContent.numberOfLines = 0;
+        bioContent.tag = kTagIdBioContent;
+        [invContent addSubview:bioContent];
         
         ActionMenu = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         ActionMenu.frame = CGRectMake(255, 146, 40, 31);
         ActionMenu.hidden = YES;
+        ActionMenu.tag = kTagIdActionMenu;
         [invContent addSubview:ActionMenu];
         
         
         RemoveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage* img = [[UIImage imageNamed:@"iphone_delete_button.png"] stretchableImageWithLeftCapWidth:8.0f topCapHeight:0.0f];
+        UIImage* img = [[UIImage imageNamed:@"btn_red_30inset.png"] stretchableImageWithLeftCapWidth:8.0f topCapHeight:0.0f];
         [RemoveButton setBackgroundImage:img forState:UIControlStateNormal];
         [RemoveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         RemoveButton.titleLabel.font = [UIFont boldSystemFontOfSize:16];
@@ -209,7 +252,8 @@ typedef enum {
         [RemoveButton addTarget:self action:@selector(removeInvitation:) forControlEvents:UIControlEventTouchUpInside];
         [invContent addSubview:RemoveButton];
     }
-    [exfeeContainer addSubview:invContent];
+    [self.view addSubview:invContent];
+    _floatingOffset = CGSizeMake(0, 0);
     
 #warning test only
     //_________________test begin___________
@@ -227,9 +271,11 @@ typedef enum {
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapContent:)];
     [invContent addGestureRecognizer:tap];
+    [tap release];
     
     UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swypeDelete:)];
     [invContent addGestureRecognizer:swipe];
+    [swipe release];
     
 }
 
@@ -238,14 +284,8 @@ typedef enum {
 }
 - (void)viewDidAppear:(BOOL)animated
 {
-    NSArray *array = [exfeeContainer indexPathsForSelectedItems];
-    if (array == nil || array.count == 0) {
-        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-        [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-        
-        selected_invitation = [self.sortedInvitations objectAtIndex:0];
-        [self fillInvitationContent:selected_invitation];
-    }
+    [self reloadSelected];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -270,7 +310,10 @@ typedef enum {
     [identityProvider release];
     [identityWaring release];
     [identityName release];
+    [bioTitle release];
+    [bioContent release];
     [invContent release];
+    [flowLayout release];
     
     [exfeeContainer release];
     
@@ -328,11 +371,11 @@ typedef enum {
     UIView *btn = sender;
     btn.hidden = YES;
     
-    NSString *title = @"People will no longer has access to any information in this ·X· once removed. Please confirm to remove.";
+    NSString *title = @"People will no longer have access to any information in this ·X·. Please confirm to remove.";
     NSString *destTitle = @"Remove from this ·X·";
-    if ([[User getDefaultUser] isMe:selected_invitation.identity]) {
+    if ([[User getDefaultUser] isMe:_selected_invitation.identity]) {
+        title = @"You will no longer have access to any information in this ·X· once left. Please confirm to leave.";
         destTitle = @"Leave from this ·X·";
-        title = @"You will no longer has access to any information in this ·X· once left. Please confirm to leave.";
     }
     
     UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:title
@@ -350,8 +393,7 @@ typedef enum {
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     if (buttonIndex == actionSheet.destructiveButtonIndex) {
-        NSArray *array = [exfeeContainer indexPathsForSelectedItems];
-        selected_invitation.rsvp_status = @"REMOVED";
+        _selected_invitation.rsvp_status = @"REMOVED";
         
         Identity *myidentity = [self.exfee getMyInvitation].identity;
         [APIExfee edit:self.exfee
@@ -368,17 +410,13 @@ typedef enum {
                                    if(code == 200){
                                        Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
                                        //[self.exfee removeInvitationsObject:selected_invitation];
-                                       selected_invitation = nil;
+                                       _selected_invitation = nil;
                                        self.exfee = respExfee;
-                                       self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
-                                       [exfeeContainer reloadData];
+                                       self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                                        
-                                       if (array == nil || array.count <= 1) {
-                                           NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-                                           [exfeeContainer selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-                                           selected_invitation = [self.sortedInvitations objectAtIndex:0];
-                                           [self fillInvitationContent:selected_invitation];
-                                       }
+                                       [exfeeContainer reloadData];
+                                       [self reloadSelected];
+                                       
                                    }
                                    break;
                                default:
@@ -394,11 +432,6 @@ typedef enum {
                    ;
                }];
     }
-    
-    
-    
-    
-    
 }
 
 #pragma mark Gesture Handler
@@ -409,6 +442,7 @@ typedef enum {
     if (sender.state == UIGestureRecognizerStateEnded) {
         
         if (CGRectContainsPoint([Util expandRect:identityProvider.frame with:identityName.frame], location)) {
+            [self hidePopupIfShown:kPopupIdRemoveIdentity];
             CGRect f = RemoveButton.frame;
             f.origin.x = CGRectGetWidth(invContent.bounds) - CGRectGetWidth(f) - 15;
             f.origin.y = CGRectGetMinY(identityName.frame);
@@ -426,14 +460,16 @@ typedef enum {
         //UIView *tappedView = [sender.view hitTest:[sender locationInView:sender.view] withEvent:nil];
         
         if (CGRectContainsPoint([Util expandRect:invRsvpImage.frame with:invRsvpLabel.frame with:invRsvpAltLabel.frame], location)) {
+            [self hidePopupIfShown:kPopupIdRsvpMenu];
+            
             NSDictionary *data = rsvpDict;
             
-            if ([[User getDefaultUser] isMe:selected_invitation.identity]) {
+            if ([[User getDefaultUser] isMe:_selected_invitation.identity]) {
                 data = myRsvpDict;
             }
             
             if (rsvpMenu == nil) {
-                rsvpMenu = [[EXBasicMenu alloc] initWithFrame:CGRectMake(0, 0, 125, 20 + 44 * 4) andContent:
+                rsvpMenu = [[EXBasicMenu alloc] initWithFrame:CGRectMake(0, 0, 125, 20 + 44 * 3) andContent:
                             data];
                 rsvpMenu.delegate = self;
                 rsvpMenu.tag = kMenuTagRsvp;
@@ -445,6 +481,8 @@ typedef enum {
             [self show:rsvpMenu at:[sender.view convertPoint:invRsvpLabel.frame.origin toView:self.view] withAnimation:YES];
             
             return;
+        } else if (RemoveButton.hidden == NO  && CGRectContainsPoint(RemoveButton.frame, location) ) {
+            [RemoveButton sendActionsForControlEvents: UIControlEventTouchUpInside];
         }
     }
 }
@@ -464,6 +502,7 @@ typedef enum {
         NSString* name = [ident getDisplayName];
         if (![invName.text isEqualToString:name]) {
             invName.text = name;
+            [invName wrapContent];
             [self setNeedLayout:invName.tag];
         }
         
@@ -490,6 +529,10 @@ typedef enum {
                 identityProvider.image = nil;
                 break;
         }
+        
+        bioTitle.hidden = !(ident && ident.bio.length > 0);
+        bioContent.text = ident.bio;
+        [bioContent wrapContent];
     }
 }
 
@@ -619,8 +662,8 @@ typedef enum {
                  altString = [NSString stringWithFormat:@"Set by %@", [inv.updated_by getDisplayName]];
             }
         }
-        invRsvpAltLabel.text = altString;
-        
+        invRsvpAltLabel.text = [altString sentenceCapitalizedString];
+        [invRsvpAltLabel wrapContent];
         [self setNeedLayout:changeFlag];
     }
 }
@@ -645,13 +688,15 @@ typedef enum {
 - (void)LayoutViews
 {
     if (layoutLevel > kTagIdNone) {
+        CGPoint start = CGPointZero;
+        
         if (layoutLevel >= kTagIdName) {
-            if (invName.text) {
-                CGSize size = [invName.text sizeWithFont:invName.font];
+
+                CGSize size = [invName sizeWrapContent:CGSizeMake(CGRectGetWidth(invName.bounds), MAXFLOAT)];
                 CGFloat w = size.width;
-                if (w > CGRectGetWidth(invName.bounds)) {
-                    w = CGRectGetWidth(invName.bounds);
-                }
+//                if (w > CGRectGetWidth(invName.bounds)) {
+//                    w = CGRectGetWidth(invName.bounds);
+//                }
                 CGFloat x = w + CGRectGetMinX(invName.frame);
                 CGRect f1 = invHostFlag.frame;
                 f1.origin.x = x + 12;
@@ -660,23 +705,98 @@ typedef enum {
                 CGRect f2 = invHostText.frame;
                 f2.origin.x = CGRectGetMaxX(f1);
                 invHostText.frame = f2;
-            }
             
         }
         
+        start.x = CGRectGetMaxX(invHostText.frame);
+        start.y = MAX(CGRectGetMaxY(invHostText.frame), CGRectGetMaxY(invName.frame));
         
+        if (layoutLevel >= kTagIdRSVPAltLabel) {
+            
+            [CATransaction begin];
+            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
+            CGRect frame = layer1.frame;
+            frame.origin.y = start.y + 4;
+            layer1.frame = frame;
+            
+            frame = layer4.frame;
+            frame.origin.y = start.y + 4;
+            layer4.frame = frame;
+            [CATransaction commit];
+            
+            frame = invRsvpImage.frame;
+            frame.origin.y = CGRectGetMaxY(layer1.frame) + 12;
+            invRsvpImage.frame = frame;
+            
+            frame = invRsvpLabel.frame;
+            frame.origin.y = CGRectGetMaxY(layer1.frame) + 14;
+            invRsvpLabel.frame = frame;
+            
+            frame = invRsvpAltLabel.frame;
+            frame.origin.y = CGRectGetMaxY(invRsvpLabel.frame) + 1;
+            invRsvpAltLabel.frame = frame;
+        }
+        
+        start.x = CGRectGetMaxX(invRsvpLabel.frame);
+        start.y = MAX(CGRectGetMaxY(invRsvpImage.frame), CGRectGetMaxY(invRsvpAltLabel.frame));
+        
+        if (layoutLevel >= kTagIdIdentityName) {
+            [CATransaction begin];
+            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
+            CGRect frame = layer2.frame;
+            frame.origin.y = start.y + 9;
+            layer2.frame = frame;
+            [CATransaction commit];
+            
+            frame = identityProvider.frame;
+            frame.origin.y = CGRectGetMaxY(layer2.frame) + 6;
+            identityProvider.frame = frame;
+            
+            frame = identityWaring.frame;
+            frame.origin.y = CGRectGetMaxY(layer2.frame) + 6;
+            identityWaring.frame = frame;
+            
+            frame = identityName.frame;
+            frame.origin.y = CGRectGetMaxY(layer2.frame) + 0;
+            identityName.frame = frame;
+        }
+        
+        start.x = CGRectGetMaxX(identityProvider.frame);
+        start.y = MAX(CGRectGetMaxY(identityProvider.frame), CGRectGetMaxY(identityName.frame));
+        
+        if (layoutLevel >= kTagIdBioContent) {
+            [CATransaction begin];
+            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
+            CGRect frame = layer3.frame;
+            frame.origin.y = start.y + 0;
+            layer3.frame = frame;
+            [CATransaction commit];
+            
+            frame = bioTitle.frame;
+            frame.origin.y = CGRectGetMaxY(layer3.frame) + 16;
+            bioTitle.frame = frame;
+            
+            frame = bioContent.frame;
+            frame.origin.y = CGRectGetMaxY(layer3.frame) + 16;
+            bioContent.frame = frame;
+        }
+        
+        start.x = CGRectGetMaxX(bioContent.frame);
+        start.y = MAX(CGRectGetMaxY(bioTitle.frame), CGRectGetMaxY(bioContent.frame));
+        
+        invContent.contentSize = CGSizeMake(MAX(CGRectGetWidth(invContent.frame), start.x), start.y + 10);
         [self clearLayoutLevel];
     }
 }
 
 
 #pragma mark UICollectionViewDataSource
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+- (NSInteger)numberOfSectionsInCollectionView:(PSTCollectionView *)collectionView
 {
     return 2;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+- (NSInteger)collectionView:(PSTCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     switch (section) {
         case 0:
@@ -688,14 +808,14 @@ typedef enum {
     }
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (PSTCollectionViewCell *)collectionView:(PSTCollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     switch (section) {
         case 0:
         {
-            UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Blank Cell" forIndexPath:indexPath];
+            PSTCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Blank Cell" forIndexPath:indexPath];
             return cell;
         }
         case 1:
@@ -737,13 +857,13 @@ typedef enum {
 }
 
 #pragma mark UICollectionViewDelegateFlowLayout
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (CGSize)collectionView:(PSTCollectionView *)collectionView layout:(PSTCollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     NSInteger seq = row % 4;
     switch (section) {
         case 0:
-            return CGSizeMake(300, CGRectGetHeight(invContent.frame));
+            return CGSizeMake(300, CGRectGetHeight(invContent.frame) + kBottomMargin);
         case 1:
             switch (seq) {
                 case 0:
@@ -759,7 +879,7 @@ typedef enum {
     }
 }
 
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+- (UIEdgeInsets)collectionView:(PSTCollectionView *)collectionView layout:(PSTCollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
     switch (section) {
         case 0:
             return UIEdgeInsetsMake(0, 0, 0, 0);
@@ -771,7 +891,7 @@ typedef enum {
     
 }
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+- (CGFloat)collectionView:(PSTCollectionView *)collectionView layout:(PSTCollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     switch (section) {
         case 0:
@@ -782,7 +902,7 @@ typedef enum {
             return 0;
     }
 }
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+- (CGFloat)collectionView:(PSTCollectionView *)collectionView layout:(PSTCollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
     switch (section) {
         case 0:
@@ -795,7 +915,8 @@ typedef enum {
 }
 
 #pragma mark UICollectionViewDelegate
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(PSTCollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self hidePopupIfShown];
     NSInteger section = indexPath.section;
     if (section == 1) {
         if (indexPath.row == self.sortedInvitations.count){
@@ -805,29 +926,19 @@ typedef enum {
             viewController.exfee = self.exfee;
             viewController.needSubmit = YES;
             viewController.onExitBlock = ^{
-                NSLog(@"WidgetExfee callback");
-                NSLog(@"viewController.exfee:");
-                [viewController.exfee debugPrint];
-                NSLog(@"self.exfee:");
-                [self.exfee debugPrint];
-//                self.exfee = viewController.exfee;
+                self.exfee = viewController.exfee;
                 
-                self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+                self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                 [exfeeContainer reloadData];
-                
-                if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [alert show];
-                    [alert release];
-                }
             };
             [self presentModalViewController:viewController animated:YES];
             [viewController release];
         }else{
-            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-            [self testClick:cell];
-            selected_invitation = [self.sortedInvitations objectAtIndex:indexPath.row];
-            [self fillInvitationContent:selected_invitation];
+            [self hidePopupIfShown];
+            PSTCollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+            [self clickCell:cell];
+            _selected_invitation = [self.sortedInvitations objectAtIndex:indexPath.row];
+            [self fillInvitationContent:_selected_invitation];
         }
     }
 }
@@ -844,74 +955,88 @@ typedef enum {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if (scrollView.tag == kTagViewExfeeSelector) {
-        
+        [self hidePopupIfShown];
         CGPoint offset = scrollView.contentOffset;
         ScrollDirection direction = ScrollDirectionNone;
         
         if (_lastContentOffset.x >= 0) {
             if (offset.y > _lastContentOffset.y) {
                 direction = ScrollDirectionUp;
-            }else{
+            } else {
                 direction = ScrollDirectionDown;
             }
         }
         _lastContentOffset = offset;
         
-        if (invContent.tag == kTableFloating) {
-            if (direction == ScrollDirectionDown){
-//                NSLog(@"Block view position when floating with drop down: %@", NSStringFromCGPoint(offset));
-                if (offset.y < CGRectGetMinY(invContent.frame)) {
-                    CGRect newFrame = CGRectOffset(invContent.bounds, 0, MAX(offset.y, 0));
-                    invContent.frame = newFrame;
+        if (invContent.tag == kTableOrigin) {
+            CGRect rect = invContent.frame;
+            rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
+            if (CGRectGetMinY(rect) > CGRectGetMinY(scrollView.frame)) {
+                _floatingOffset = CGSizeMake(0, scrollView.contentOffset.y);
+                rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
+                invContent.frame = rect;
+            } else if (CGRectGetMaxY(rect) < CGRectGetMinY(scrollView.frame)){
+                _floatingOffset = CGSizeMake(0, 0);
+                rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
+                invContent.frame = rect;
+            } else {
+                if (direction == ScrollDirectionUp && scrollView.contentOffset.y <= 0) {
+                    _floatingOffset = CGSizeMake(0, scrollView.contentOffset.y);
+                    rect.origin.y = CGRectGetMinY(scrollView.frame) - scrollView.contentOffset.y + _floatingOffset.height;
+                    invContent.frame = rect;
+                } else {
+                    invContent.frame = rect;
                 }
-                return;
-            }
-            
-            if (offset.y > CGRectGetMaxY(invContent.frame)){
-//                NSLog(@"Convert floating to origin: %@", NSStringFromCGPoint(offset));
-                CGRect newFrame = CGRectOffset(invContent.bounds, 0, 0);
-                invContent.frame = newFrame;
-                invContent.tag = kTableOrigin;
-                return;
             }
         }
-        
+    }else if (scrollView.tag == kTableOrigin || scrollView.tag == kTableFloating) {
+        [self hidePopupIfShown];
     }
-    
 }
 
-- (void)testClick:(id)sender{
+- (void)clickCell:(id)sender{
     UIView* btn = sender;
-    
     CGPoint offset = exfeeContainer.contentOffset;
     BOOL flag = NO;
+    CGPoint exfeeOffset;
+    CGPoint invOffset;
     if (CGRectGetMinY(btn.frame) - offset.y < CGRectGetHeight(invContent.frame)) {
         // click target is upper than the normal area
-        offset = CGPointMake(offset.x, MAX(CGRectGetMinY(btn.frame) - CGRectGetHeight(invContent.frame), 0));
+        exfeeOffset = CGPointMake(offset.x, MAX(CGRectGetMinY(btn.frame) - CGRectGetHeight(invContent.frame) - kBottomMargin, 0));
+        invOffset = CGPointMake(0, CGRectGetMinY(exfeeContainer.frame));
         flag = YES;
     } else if(CGRectGetMaxY(btn.frame) - offset.y > CGRectGetHeight(exfeeContainer.bounds)){
         // click target is lower than the normal area
-        offset = CGPointMake(offset.x, MAX(CGRectGetMaxY(btn.frame) - CGRectGetHeight(exfeeContainer.bounds), 0));
+        exfeeOffset = CGPointMake(offset.x, MAX(CGRectGetMaxY(btn.frame) - CGRectGetHeight(exfeeContainer.bounds), 0));
+        invOffset = CGPointMake(0, CGRectGetMinY(exfeeContainer.frame));
         flag = YES;
+        
+    } else {
+        exfeeOffset = offset;
+        invOffset = CGPointMake(0, CGRectGetMinY(exfeeContainer.frame));
     }
     
-    [UIView beginAnimations:@"" context:nil];
-    [UIView setAnimationDuration:0.4];
-    invContent.frame = CGRectOffset(invContent.bounds, offset.x, offset.y);
-    if (flag) {
-        exfeeContainer.contentOffset = offset;
-        //exfeeContainer.bounds.y += offset.y - exfeeContainer.contentOffset.y; // for animation
-    }
-    [UIView commitAnimations];
     invContent.tag = kTableFloating;
-    
+    [UIView animateWithDuration:0.4
+                     animations:^{
+                         if (flag) {
+                             exfeeContainer.contentOffset = exfeeOffset;
+                             //exfeeContainer.bounds.y += offset.y - exfeeContainer.contentOffset.y; // for animation
+                         }
+                         CGRect frame = invContent.frame;
+                         frame.origin = invOffset;
+                         invContent.frame = frame;
+                     } completion:^(BOOL finished) {
+                         _floatingOffset = CGSizeMake(0, exfeeContainer.contentOffset.y);
+                         invContent.tag = kTableOrigin;
+                     }];
 }
 
 - (void)show:(EXBasicMenu*)menu at:(CGPoint)location withAnimation:(BOOL)animated
 {
     CGRect f = menu.frame;
     f.origin.x = CGRectGetWidth(self.view.bounds);
-    f.origin.y = location.y;
+    f.origin.y = location.y - 28;
     menu.frame = f;
     f.origin.x = CGRectGetWidth(self.view.bounds) - CGRectGetWidth(f);
     menu.hidden = NO;
@@ -944,19 +1069,19 @@ typedef enum {
     switch (menu.tag) {
         case kMenuTagRsvp:
         {
-            [self hide:rsvpMenu withAnmiation:YES];
+            [self hidePopupIfShown];
             NSInteger abc = [index integerValue];
             switch (abc) {
                 case 0:
-                    if (selected_invitation && [Invitation getRsvpCode:selected_invitation.rsvp_status] != kRsvpAccepted) {
-                        [self sendrsvp:@"ACCEPTED" invitation:selected_invitation];
+                    if (_selected_invitation && [Invitation getRsvpCode:_selected_invitation.rsvp_status] != kRsvpAccepted) {
+                        [self sendrsvp:@"ACCEPTED" invitation:_selected_invitation];
                     }
                     break;
                 case 1:
-                    [self sendrsvp:@"DECLINED" invitation:selected_invitation];
+                    [self sendrsvp:@"DECLINED" invitation:_selected_invitation];
                     break;
                 case 2:
-                    [self sendrsvp:@"INTERESTED" invitation:selected_invitation];
+                    [self sendrsvp:@"INTERESTED" invitation:_selected_invitation];
                     break;
                 case 3:
                     break;
@@ -985,10 +1110,10 @@ typedef enum {
                          {
                              NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
                              if([[meta objectForKey:@"code"] intValue]==403){
-                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                 alert.tag=403;
-                                 [alert show];
-                                 [alert release];
+//                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                                 alert.tag=403;
+//                                 [alert show];
+//                                 [alert release];
                              }else if([[meta objectForKey:@"code"] intValue]==200){
                                  NSLog(@"submit rsvp sucessfully...");
                                  CrossGroupViewController *parent = (CrossGroupViewController*)self.parentViewController;
@@ -999,15 +1124,9 @@ typedef enum {
                                          Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
                                          if([meta.code intValue]==200){
                                              self.exfee = parent.cross.exfee;
-                                             self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeHostAcceptOthers];
+                                             self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                                              [exfeeContainer reloadData];
-                                             
-                                             for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
-                                                 Invitation* inv = [self.sortedInvitations objectAtIndex:i];
-                                                 if ([_invitation.invitation_id intValue] == [inv.invitation_id intValue]) {
-                                                     [exfeeContainer selectItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-                                                 }
-                                             }
+                                             [self reloadSelected];
                                          }
                                          
                                      }
@@ -1022,15 +1141,91 @@ typedef enum {
                      }
                  }
                  failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
-                     NSString *errormsg=[error.userInfo objectForKey:@"NSLocalizedDescription"];
-                     if(error.code==2)
-                         errormsg=@"A connection failure has occurred.";
-                     else
-                         errormsg=@"Could not connect to the server.";
-                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                     [alert show];
-                     [alert release];
-                     
+                     [Util showConnectError:error delegate:self];
                  }];
+}
+
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    // nothing yet
+}
+
+
+- (void)hidePopupIfShown{
+    [self hidePopupIfShown:0];
+}
+
+- (void)hidePopupIfShown:(NSInteger)skipId{
+    
+    if (kPopupIdRsvpMenu != skipId){
+        [self hide:rsvpMenu withAnmiation:YES];
+    }
+    
+    if (kPopupIdRemoveIdentity != skipId) {
+        RemoveButton.hidden = YES;
+    }
+    
+//    NSInteger ctrlid = skipId & MASK_LOW_BITS;
+    
+//    if (ctrlid != (kPopupTypeEditStatus & MASK_LOW_BITS)) {
+//        [self hideMenuWithAnimation:YES];
+//    }
+//    if (ctrlid != (kPopupTypeVewStatus & MASK_LOW_BITS)) {
+//        [self hideStatusView];
+//    }
+//    if (ctrlid != (kPopupTypeEditTitle & MASK_LOW_BITS)) {
+//        [self hideTitleAndDescEditMenuWithAnimation:YES];
+//    }
+//    if (ctrlid != (kPopupTypeEditDescription & MASK_LOW_BITS)) {
+//        [self hideTitleAndDescEditMenuWithAnimation:YES];
+//    }
+//    if (ctrlid != (kPopupTypeEditTime & MASK_LOW_BITS)) {
+//        [self hideTimeEditMenuWithAnimation:YES];
+//    }
+//    if (ctrlid != (kPopupTypeEditPlace & MASK_LOW_BITS)) {
+//        [self hidePlaceEditMenuWithAnimation:YES];
+//    }
+    
+//    popupCtrolId = skipId;
+    
+}
+
+- (void)reloadSelected
+{
+    BOOL flag = NO;
+    for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
+        Invitation* inv = [self.sortedInvitations objectAtIndex:i];
+        if ([inv.invitation_id integerValue] == [self.selected_invitation.invitation_id integerValue]) {
+            flag = YES;
+            NSIndexPath * indexPath = [NSIndexPath indexPathForRow:i inSection:1];
+            PSTCollectionViewCell* cell = [exfeeContainer cellForItemAtIndexPath:indexPath];
+            if (cell != nil) {
+                [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionNone];
+                [self fillInvitationContent:_selected_invitation];
+                [self clickCell:cell];
+            } else {
+                [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionBottom];
+                [self fillInvitationContent:_selected_invitation];
+                
+                double delayInSeconds = 0.01;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    PSTCollectionViewCell*  cell = [exfeeContainer cellForItemAtIndexPath:indexPath];
+                    [self clickCell:cell];
+                });
+                
+            }
+            break;
+        }
+    }
+    if (flag == NO) {
+        self.selected_invitation = nil;
+    }
+    if (self.selected_invitation == nil) {
+        self.selected_invitation = [self.sortedInvitations objectAtIndex:0];
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+        [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        [self fillInvitationContent:_selected_invitation];
+    }
 }
 @end

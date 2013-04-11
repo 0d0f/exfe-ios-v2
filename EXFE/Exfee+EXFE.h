@@ -13,10 +13,15 @@
 typedef NS_ENUM(NSInteger, InvitationSortType){
     kInvitationSortTypeDefaultById,
     kInvitationSortTypeMeAcceptOthers,
-    kInvitationSortTypeHostAcceptOthers
+    kInvitationSortTypeMeAcceptNoNotifications,
+    kInvitationSortTypeHostAcceptOthers,
+    kInvitationSortTypeHostAcceptNoNotifications
 };
 
 @interface Exfee (EXFE)
+
++ (id)disconnectedEntity;
+- (void)addToContext:(NSManagedObjectContext *)context;
 
 - (Invitation*)getMyInvitation;
 - (void) addDefaultInvitationBy:(Identity*)identity;

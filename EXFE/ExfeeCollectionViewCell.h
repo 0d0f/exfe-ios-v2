@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PSTCollectionView.h"
 #import "Invitation+EXFE.h"
 
 typedef NS_ENUM(NSUInteger, SequencePosition){
@@ -16,12 +17,14 @@ typedef NS_ENUM(NSUInteger, SequencePosition){
     kPosLast
 };
 
-@interface ExfeeCollectionViewCell : UICollectionViewCell{
+@interface ExfeeCollectionViewCell : PSTCollectionViewCell{
     
     UIImageView *_rsvpImage;
     UIImageView *_avatarFrame;
+    CALayer *_matesBg;
+    CATextLayer *_matesLayer;
     
-    CGRect _matesRect;
+//    CGRect _matesRect;
     
     CGRect rectAvatar;
     CGRect rectAvatarFrame;

@@ -14,6 +14,7 @@
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
 #import "HereViewController.h"
+#import "NSString+EXFE.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -21,8 +22,8 @@
 #define LARGE_SLOT                       (16)
 #define SMALL_SLOT                      (5)
 
-#define DECTOR_HEIGHT                    (88)
-#define DECTOR_HEIGHT_EXTRA              (LARGE_SLOT)
+#define DECTOR_HEIGHT                    (80)
+#define DECTOR_HEIGHT_EXTRA              (20)
 #define DECTOR_MARGIN                    (SMALL_SLOT)
 #define OVERLAP                          (DECTOR_HEIGHT)
 #define CONTAINER_TOP_MARGIN             (DECTOR_HEIGHT - OVERLAP)
@@ -163,7 +164,7 @@
     container.backgroundColor = [UIColor COLOR_SNOW];
     [self.view addSubview:container];
     
-    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 90,  DECTOR_HEIGHT, 90 - 12, DECTOR_HEIGHT_EXTRA) ];
+    headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(b), DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 122,  DECTOR_HEIGHT, 122, DECTOR_HEIGHT_EXTRA) ];
     headview.backgroundColor=[UIColor grayColor];
     {
         CGFloat scale = CGRectGetWidth(headview.bounds) / 880.0f;
@@ -189,7 +190,7 @@
         [headview addSubview:titleView];
     }
     UIImageView *headerShadow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow.png"]];
-    headerShadow.frame = CGRectMake(0, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA - 20, 320, 25);
+    headerShadow.frame = CGRectMake(0, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA - 25, 320 * 2, 30);
     [self.view addSubview:headerShadow];
     [headerShadow release];
     
@@ -343,6 +344,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"ENTER_GATHER"];
     // Do any additional setup after loading the view from its nib.
     [self initData];
     [self initUI];
@@ -401,7 +403,7 @@
     self.cross.exfee.invitations = [[[NSMutableSet alloc] initWithCapacity:12] autorelease];
     [self.cross.exfee addDefaultInvitationBy:default_identity];
     
-    self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+    self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
 }
 
 - (void)dealloc {
@@ -698,7 +700,7 @@
 }
 
 - (void)fillExfee:(Exfee*)exfee{
-    self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+    self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
     [exfeeShowview reloadData];
 }
 
@@ -716,7 +718,7 @@
 
 - (void)fillTime:(CrossTime*)time{
     if (time != nil){
-        NSString *title = [time getTimeTitle];
+        NSString *title = [[time getTimeTitle] sentenceCapitalizedString];
         [title retain];
         if (title == nil || title.length == 0) {
             timeRelView.text = @"Sometime";
@@ -729,7 +731,7 @@
             timeRelView.text = title;//[title copy];
             
             timeAbsView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
-            NSString* desc = [time getTimeDescription];
+            NSString* desc = [[time getTimeDescription] sentenceCapitalizedString];
             [desc retain];
             if(desc != nil && desc.length > 0){
                 timeAbsView.text = desc;
@@ -983,6 +985,7 @@
     
     [[ImgCache sharedManager] fillAvatarWith:identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"] using:^(UIImage *image) {
         item.avatar = image;
+        [item setNeedsDisplay];
     }];
     return item;
 }
@@ -1007,7 +1010,7 @@
         viewController.needSubmit = NO;
         viewController.onExitBlock = ^{
             
-            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
             [self reFormatTitle];
             [exfeeShowview reloadData];
             if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
@@ -1087,8 +1090,6 @@
     
     
     [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width-125, exfeeShowview.frame.origin.y, 125, 44*[itemslist count]+titlebarheight)];
-    if(rsvpstatusview!=nil)
-        [rsvpstatusview setHidden:YES];
     
     [UIView commitAnimations];
     
@@ -1102,7 +1103,7 @@
 }
 
 - (void)hideStatusView{
-    [rsvpstatusview setHidden:YES];
+//    [rsvpstatusview setHidden:YES];
 }
 
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu{
@@ -1125,7 +1126,7 @@
     
     if ([self.cross.exfee hasInvitation:menu.invitation]) {
         [self.cross.exfee removeInvitationsObject:menu.invitation];
-        self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+        self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
         [exfeeShowview reloadData];
         [self reFormatTitle];
         return;

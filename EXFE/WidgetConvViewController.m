@@ -18,8 +18,8 @@
 #define LARGE_SLOT                       (15)
 #define SMALL_SLOT                      (5)
 
-#define DECTOR_HEIGHT                    (44)
-#define DECTOR_HEIGHT_EXTRA              (LARGE_SLOT)
+#define DECTOR_HEIGHT                    (50)
+#define DECTOR_HEIGHT_EXTRA              (20)
 #define DECTOR_MARGIN                    (SMALL_SLOT)
 #define OVERLAP                          (DECTOR_HEIGHT)
 #define TITLE_HORIZON_MARGIN             (SMALL_SLOT)
@@ -52,6 +52,8 @@
     [self.view setFrame:f];
 
     [super viewDidLoad];
+    [Flurry logEvent:@"WIDGET_CONVERSATION"];
+    
     _tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(f), CGRectGetHeight(f) - kDefaultToolbarHeight + 2)];
     _tableView.dataSource=self;
     _tableView.delegate=self;
@@ -74,6 +76,7 @@
         [hintGroup addSubview:no_posts];
         [no_posts release];
     }
+    hintGroup.hidden = YES;
     [self.view  addSubview:hintGroup];
     
     CGRect toolbarframe=CGRectMake(0, CGRectGetHeight(f) - kDefaultToolbarHeight, CGRectGetWidth(f), kDefaultToolbarHeight);
@@ -111,7 +114,7 @@
     inputaccessoryview=[[ConversationInputAccessoryView alloc] initWithFrame:CGRectMake(10.0, 0.0, 310.0, 40.0)];
     [inputaccessoryview setBackgroundColor:[UIColor lightGrayColor]];
     [inputaccessoryview setAlpha: 0.8];
-    [Flurry logEvent:@"VIEW_CONVERSATION"];
+    
 //    floatTime=[[UILabel alloc] initWithFrame:CGRectMake(0, 80, 60, 26)];
 //    floatTime.text=@"label time";
 //    [self.view addSubview:floatTime];
@@ -119,7 +122,7 @@
     
     
     
-    [self showOrHideHint];
+//    [self showOrHideHint];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
@@ -152,7 +155,7 @@
     [avatarframe release];
     [_tableView release];
     [inputToolbar release];
-    
+
     [super dealloc];
 }
 
@@ -234,22 +237,23 @@
 //            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
 //            updated_at = [formatter stringFromDate:post.updated_at];
 //            [formatter release];
-          updated_at=post.updated_at;
+            updated_at=post.updated_at;
         }
     }
-  [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-    Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-    if(meta!=nil){
-      if([meta.code intValue]==200){
-        [self loadObjectsFromDataStore];
-      }
-    }else{
-      //show error hint
-    }
-
-  } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-    
-  }];
+    [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+        if(meta!=nil){
+            if([meta.code intValue]==200){
+                [self loadObjectsFromDataStore];
+                [self showOrHideHint];
+            }
+        }else{
+            //show error hint
+        }
+        
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        [self showOrHideHint];
+    }];
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [inputToolbar hidekeyboard];
@@ -272,7 +276,7 @@
   _posts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
 
   
-    [self showOrHideHint];
+    
     [_tableView reloadData];
     if(_tableView.contentSize.height>_tableView.frame.size.height) {
         CGPoint bottomOffset = CGPointMake(0, _tableView.contentSize.height - _tableView.frame.size.height);
@@ -645,15 +649,7 @@
       }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
       [inputToolbar setInputEnabled:YES];
-      NSString *errormsg;
-      if(error.code==2)
-          errormsg=@"A connection failure has occurred.";
-      else
-          errormsg=@"Could not connect to the server.";
-      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-      [alert show];
-      [alert release];
-
+      [Util showConnectError:error delegate:self];
     }];
 }
 -(void)inputButtonPressed:(NSString *)inputText{
@@ -667,5 +663,11 @@
         hintGroup.hidden = YES;
     }
 }
+
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    // nothing yet
+}
+
 
 @end

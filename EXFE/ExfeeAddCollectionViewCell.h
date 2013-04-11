@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PSTCollectionView.h"
 
-@interface ExfeeAddCollectionViewCell : UICollectionViewCell
+@interface ExfeeAddCollectionViewCell : PSTCollectionViewCell
 
 @property (nonatomic, assign) NSUInteger total;
 @property (nonatomic, assign) NSUInteger accept;

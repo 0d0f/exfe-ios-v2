@@ -21,11 +21,10 @@
         rectAvatarFrame = CGRectUnion(CGRectOffset(rectAvatar, -4, -4),CGRectOffset(rectAvatar, 4, 4));
         rectRsvpImage = CGRectMake(2, CGRectGetMaxY(rectAvatarFrame) - 2, 18, 18);
         rectName = CGRectMake(CGRectGetMaxX(rectRsvpImage) + 2, CGRectGetMaxY(rectAvatarFrame), 50, 16);
-        rectMates = CGRectMake(CGRectGetMaxX(rectAvatar), CGRectGetMinY(rectAvatar), 20, 10);
+        rectMates = CGRectMake(CGRectGetWidth(rectAvatar) - 20, 0, 20, 13);
         
         _avatar = [[UIImageView alloc] initWithFrame:rectAvatar];
         _avatar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//        _avatar.contentMode = UIViewContentModeScaleAspectFit;
         _avatar.contentMode = UIViewContentModeScaleAspectFill;
         {
             UIBezierPath *curvePath= [UIBezierPath bezierPathWithRoundedRect:_avatar.bounds cornerRadius:4];
@@ -35,6 +34,23 @@
             _avatar.layer.masksToBounds = YES;
         }
         [self addSubview:_avatar];
+        
+        _matesBg = [[CALayer alloc] init];
+        _matesBg.contents = (id)[UIImage imageNamed:@"exfee_portrait_mate.png"].CGImage;
+        _matesBg.frame = rectMates;
+        _matesBg.zPosition = 88;
+        [_avatar.layer addSublayer:_matesBg];
+        
+        _matesLayer = [[CATextLayer alloc] init];
+        [_matesLayer setFont:@"HelveticaNeue-Bold"];
+        [_matesLayer setFontSize:9];
+        [_matesLayer setFrame: rectMates];
+        [_matesLayer setAlignmentMode:kCAAlignmentCenter];
+        [_matesLayer setContentsScale:[[UIScreen mainScreen] scale]];
+        [_matesLayer setForegroundColor:[[UIColor whiteColor] CGColor]];
+        _matesLayer.zPosition = 99;
+        [_avatar.layer addSublayer:_matesLayer];
+        
         
         _avatarFrame = [[UIImageView alloc] initWithFrame:rectAvatarFrame];
         _avatarFrame.image = [UIImage imageNamed:@"exfee_portrait_frame.png"];
@@ -51,8 +67,19 @@
         _name.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _name.backgroundColor = [UIColor clearColor];
         [self addSubview:_name];
+        
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [_rsvpImage release];
+    [_avatarFrame release];
+    [_matesLayer release];
+    [_matesBg release];
+    [super dealloc];
 }
 
 //- (id)initWithCoder:(NSCoder *)aDecoder {
@@ -64,23 +91,11 @@
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-    [super drawRect:rect];
-    
-    // draw Mates
-    if (_mates > 0) {
-        // move to layer on top of avatar frame
-        CGPoint point = CGPointMake(CGRectGetMaxX(rectAvatar) - 18, CGRectGetMinY(rectAvatar));
-        [[UIImage imageNamed:@"exfee_portrait_mate.png"] drawAtPoint:point];
-        NSString* matestr = [NSString stringWithFormat:@"+%d", _mates];
-        CGSize mateSize = [matestr sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:9]];
-        CGPoint textPoint = CGPointMake(point.x + 9 - mateSize.width / 2, point.y + 6 - mateSize.height / 2);
-        [[UIColor whiteColor] set];
-        [matestr drawAtPoint:textPoint withFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:9]];
-    }
-}
+//- (void)drawRect:(CGRect)rect
+//{
+//    // Drawing code
+//    [super drawRect:rect];
+//}
 
 
 // Selection highlights underlying contents
@@ -108,6 +123,16 @@
 - (void)setMates:(NSUInteger)mates
 {
     _mates = mates;
+    if (mates > 0) {
+        _matesBg.hidden = NO;
+//        _matesLayer.hidden = NO;
+        [_matesLayer setString:[NSString stringWithFormat:@"+%d", _mates]];
+    } else {
+        _matesBg.hidden = YES;
+//        _matesLayer.hidden = YES;
+        [_matesLayer setString:@""];
+    }
+    
     [self setNeedsDisplay];
 }
 

@@ -31,6 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"EDIT_PLACE"];
     originplace=[[NSMutableDictionary alloc] initWithCapacity:5];
 
     toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
@@ -426,6 +427,7 @@
             place.title = inputplace.text;
         }
     }
+    
     [delegate setPlace:place];
     [self dismissModalViewControllerAnimated:YES];
 }
@@ -950,6 +952,12 @@
             [clearbutton setHidden:NO];
         }
         [_tableView reloadData];
+//        place.title=@"";
+//        place.place_description=@"";
+//        place.lat=@"";
+//        place.lng=@"";
+//        place.external_id=@"";
+//        place.provider=@"";
         [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
     }if(textField.tag==402){
         //place title editor

@@ -14,11 +14,9 @@
 
 @implementation CrossTime (Helper)
 
-
 - (NSString*) getTimeTitle{
     return [self getTimeTitle:1]; // short format
 }
-
 - (NSString*) getTimeTitle:(NSUInteger)fmt{
     if( [self.outputformat intValue] == 1) { //use origin
         return [CrossTime getRaw:self.origin];

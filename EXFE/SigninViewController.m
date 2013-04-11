@@ -39,14 +39,7 @@
 
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     [spin setHidden:YES];
-    NSString *errormsg;
-    if(error.code==2)
-        errormsg=@"A connection failure has occurred.";
-    else
-        errormsg=@"Could not connect to the server.";
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
-    [alert release];
+   [Util showConnectError:error delegate:self];
     
   }];
 
@@ -71,14 +64,7 @@
     [spin setHidden:YES];
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     [spin setHidden:YES];
-    NSString *errormsg;
-    if(error.code==2)
-        errormsg=@"A connection failure has occurred.";
-    else
-        errormsg=@"Could not connect to the server.";
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
-    [alert release];
+    [Util showConnectError:error delegate:self];
   }];
 
     [spin removeFromSuperview];
@@ -182,6 +168,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"SIGN_IN"];
+    
     signindelegate=[[SigninDelegate alloc]init];
     signindelegate.parent=self;
     
@@ -672,5 +660,10 @@
 //    }];
 }
 //#pragma mark RKObjectLoaderDelegate methods
+
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    // nothing yet
+}
 
 @end

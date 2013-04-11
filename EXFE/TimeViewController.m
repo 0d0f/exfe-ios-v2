@@ -27,6 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"EDIT_TIME"];
     CGRect screenframe=[[UIScreen mainScreen] bounds];
     
     CGRect statusframe=[[UIApplication sharedApplication] statusBarFrame];

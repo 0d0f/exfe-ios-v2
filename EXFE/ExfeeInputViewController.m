@@ -9,6 +9,7 @@
 #import "ExfeeInputViewController.h"
 #import "APIProfile.h"
 #import "APIExfee.h"
+#import "WCAlertView.h"
 
 @interface ExfeeInputViewController ()
 
@@ -33,6 +34,7 @@ static char identitykey;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [Flurry logEvent:@"ADD_IDENTITY"];
     CGRect screenframe=[[UIScreen mainScreen] bounds];
     screenframe.size.height-=20;
     [self.view setFrame:screenframe];
@@ -359,11 +361,12 @@ static char identitykey;
         }
     }
     if([inputobjs count] == 0){
-        NSSet *set = [NSSet setWithArray:invitations];
-        [self.exfee addInvitations:set];
+        
         if (self.needSubmit) {
-            [self sumitExfeBeforeDismiss:self.exfee];
+            [self sumitExfeBeforeDismiss:invitations];
         } else {
+            NSSet *set = [NSSet setWithArray:invitations];
+            [self.exfee addInvitations:set];
             [self dissmisModal];
         }
     }
@@ -430,11 +433,11 @@ static char identitykey;
                       }
                       [invitations addObject:invitation];
                   }
-                  NSSet *set = [NSSet setWithArray:invitations];
-                  [self.exfee addInvitations:set];
                   if (self.needSubmit) {
-                      [self sumitExfeBeforeDismiss:self.exfee];
+                      [self sumitExfeBeforeDismiss:invitations];
                   } else {
+                      NSSet *set = [NSSet setWithArray:invitations];
+                      [self.exfee addInvitations:set];
                       [self dissmisModal];
                   }
               }
@@ -445,13 +448,17 @@ static char identitykey;
     }
 }
 
-- (void)sumitExfeBeforeDismiss:(Exfee*)exfee{
+- (void)sumitExfeBeforeDismiss:(NSArray*)invitations{
+    Exfee *exfee = [Exfee disconnectedEntity];
+    [exfee addToContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+    exfee.exfee_id = [self.exfee.exfee_id copy];
+    NSSet *set = [NSSet setWithArray:invitations];
+    [exfee addInvitations:set];
     Identity *myidentity = [self.exfee getMyInvitation].identity;
     [APIExfee edit:exfee
         myIdentity:[myidentity.identity_id intValue]
            success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                {
-                   
                    if ([operation.HTTPRequestOperation.response statusCode] == 200){
                        if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
                        {
@@ -460,7 +467,7 @@ static char identitykey;
                            int type = code /100;
                            switch (type) {
                                case 2: // HTTP OK
-                                   if (code == 206) {
+                                   if (code == 206) { // Too many people, still accept
                                        NSLog(@"HTTP 206 Partial Successfully");
                                    }
                                    if(code == 200){
@@ -470,14 +477,17 @@ static char identitykey;
                                    }
                                    break;
                                case 4: // Client Error
-                                   if(code == 403){
-                                       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                       alert.tag=403;
-                                       [alert show];
-                                       [alert release];
-                                   }
+                               {
+                                   // 400 Over people mac limited
+                                   RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                   [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                               }
                                    break;
                                case 5: // Server Error
+                               {
+                                   RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                   [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                               }
                                    break;
                                default:
                                    break;
@@ -489,7 +499,8 @@ static char identitykey;
                    }
                }
            } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-               ;
+               RKObjectManager *objectManager = [RKObjectManager sharedManager];
+               [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
            }];
     
     
@@ -505,9 +516,9 @@ static char identitykey;
     NSString *inputtext = [exfeeList getInput];
     NSString *provider = [Util findProvider:inputtext];
     
-    if(![inputtext isEqualToString:@""])
+    if (![inputtext isEqualToString:@""]) {
         [self addByInputIdentity:inputtext name:@"" provider:provider dismiss:YES];
-    else{
+    } else {
         [self addExfeeToCross];
     }
 }
@@ -652,11 +663,11 @@ static char identitykey;
 }
 
 - (void) addBubbleByInputString:(NSString*)input name:(NSString*)name provider:(NSString*)provider{
-    NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:input,@"input",name,@"name",provider,@"provider", nil];
+    NSDictionary *dict = @{@"input":input, @"name":name, @"provider":provider};
     [exfeeList addBubble:input customObject:dict];
-    if([exfeeList bubblecount]>0)
+    if ([exfeeList bubblecount] > 0) {
         [self changeLeftIconWhite:YES];
-    
+    }
 }
 
 - (void) addByInputIdentity:(NSString*)input name:(NSString*)name provider:(NSString*)provider dismiss:(BOOL)shoulddismiss{
@@ -669,12 +680,35 @@ static char identitykey;
     
     NSArray* inputs=[input componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@", "]];
     for(input in inputs){
-      if( [inputs count]>1)
-        [self addBubbleByInputString:input name:@"" provider:provider];
-      else
-        [self addBubbleByInputString:input name:name provider:provider];
+        if ([inputs count] > 1) {
+            [self addBubbleByInputString:input name:@"" provider:provider];
+        } else {
+            if ((name == nil || name.length == 0) && [Util isAcceptedPhoneNumber:input]) {
+                [WCAlertView showAlertWithTitle:@"Set name for"
+                                        message:input
+                             customizationBlock:^(WCAlertView *alertView) {
+                                 alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+//                                 UITextField *field = [alertView textFieldAtIndex:0];
+//                                 field.placeholder = 
+                                 
+                             }
+                                completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
+                                    // Cancel max - 1
+                                    // other 0, ..., max - 2
+                                    if (buttonIndex == 0) {
+                                        UITextField *field = [alertView textFieldAtIndex:0];
+                                        NSString *inputName = [NSString stringWithString:field.text];
+                                        [self addBubbleByInputString:input name:inputName provider:provider];
+                                    }
+                                }
+                              cancelButtonTitle:@"Set"
+                              otherButtonTitles:nil];
+                
+            } else {
+                [self addBubbleByInputString:input name:name provider:provider];
+            }
+        }
     }
-
 }
 
 #pragma mark UITableView Datasource methods
