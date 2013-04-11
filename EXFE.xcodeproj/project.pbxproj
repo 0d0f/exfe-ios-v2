@@ -124,7 +124,6 @@
 		4FA84B09170155DD0096FB5A /* ExfeeAddCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */; };
 		4FAD642716968C7F001870FF /* CrossTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD642616968C7F001870FF /* CrossTime+Helper.m */; };
 		4FAE4E6416AF9F82001479F8 /* x_titlebg_default.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */; };
-		4FAF86A616DF1D8A00F9CE98 /* EXTabLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF86A516DF1D8A00F9CE98 /* EXTabLayer.m */; };
 		4FB1635716B25756005B1D3C /* profile_title_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635516B25756005B1D3C /* profile_title_mask.png */; };
 		4FB1635816B25756005B1D3C /* profile_title_mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635616B25756005B1D3C /* profile_title_mask@2x.png */; };
 		4FB30D1D17003BFE007BC66D /* APIExfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB30D1C17003BFE007BC66D /* APIExfee.m */; };
@@ -150,7 +149,6 @@
 		4FC8FCEB168D912E00409779 /* EFTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCEA168D912E00409779 /* EFTime+Helper.m */; };
 		4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */; };
 		4FD9375516D4A57600ED6677 /* CrossGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */; };
-		4FDE96C016E4FC240014456C /* WidgetConvViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FDE96BF16E4FC240014456C /* WidgetConvViewController.xib */; };
 		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
@@ -318,7 +316,7 @@
 		788A69FB16A4123F003EA9ED /* gather_add.png in Resources */ = {isa = PBXBuildFile; fileRef = 788A69F916A4123E003EA9ED /* gather_add.png */; };
 		788A69FC16A4123F003EA9ED /* gather_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 788A69FA16A4123F003EA9ED /* gather_add@2x.png */; };
 		788B621116E89B200019B953 /* ModelMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 788B621016E89B200019B953 /* ModelMapping.m */; };
-		788B621216E9C0470019B953 /* WidgetConvViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 783F1D8D16DB5193005F85B3 /* WidgetConvViewController.xib */; };
+		788B621216E9C0470019B953 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		788C736016D6292100BDD594 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 788C735F16D6292000BDD594 /* CoreTelephony.framework */; };
 		78920EBC157CB0E1004F3901 /* Rsvp.m in Sources */ = {isa = PBXBuildFile; fileRef = 78920EBB157CB0E1004F3901 /* Rsvp.m */; };
 		78973F3515DA779700C11D4B /* exfee_18.png in Resources */ = {isa = PBXBuildFile; fileRef = 78973F3115DA779400C11D4B /* exfee_18.png */; };
@@ -714,8 +712,6 @@
 		4FAD642516968C7F001870FF /* CrossTime+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CrossTime+Helper.h"; sourceTree = "<group>"; };
 		4FAD642616968C7F001870FF /* CrossTime+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CrossTime+Helper.m"; sourceTree = "<group>"; };
 		4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = x_titlebg_default.jpg; sourceTree = "<group>"; };
-		4FAF86A416DF1D8A00F9CE98 /* EXTabLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTabLayer.h; sourceTree = "<group>"; };
-		4FAF86A516DF1D8A00F9CE98 /* EXTabLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabLayer.m; sourceTree = "<group>"; };
 		4FB1635516B25756005B1D3C /* profile_title_mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_title_mask.png; sourceTree = "<group>"; };
 		4FB1635616B25756005B1D3C /* profile_title_mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_title_mask@2x.png"; sourceTree = "<group>"; };
 		4FB30D1B17003BFE007BC66D /* APIExfee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIExfee.h; sourceTree = "<group>"; };
@@ -747,7 +743,6 @@
 		4FD9375116D4A57600ED6677 /* CrossGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossGroupViewController.h; sourceTree = "<group>"; };
 		4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossGroupViewController.m; sourceTree = "<group>"; };
 		4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossGroupViewController.xib; sourceTree = "<group>"; };
-		4FDE96BF16E4FC240014456C /* WidgetConvViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WidgetConvViewController.xib; sourceTree = "<group>"; };
 		4FE8D3C51681926C00222420 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4FE8D3C61681926C00222420 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		4FE8D3C71681926C00222420 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
@@ -1381,7 +1376,6 @@
 				4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */,
 				783F1D8B16DB5193005F85B3 /* WidgetConvViewController.h */,
 				783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */,
-				783F1D8D16DB5193005F85B3 /* WidgetConvViewController.xib */,
 				4F64BA8A16ED9A2700B9594E /* WidgetExfeeViewController.h */,
 				4F64BA8B16ED9A2700B9594E /* WidgetExfeeViewController.m */,
 				4F64BA8C16ED9A2700B9594E /* WidgetExfeeViewController.xib */,
@@ -2559,7 +2553,7 @@
 				7848CE0416D7682700F9488E /* identity_phone_18_grey@2x.png in Resources */,
 				7848CE0516D7682700F9488E /* identity_phone_18.png in Resources */,
 				7848CE0616D7682700F9488E /* identity_phone_18@2x.png in Resources */,
-				788B621216E9C0470019B953 /* WidgetConvViewController.xib in Resources */,
+				788B621216E9C0470019B953 /* (null) in Resources */,
 				4F64BA8E16ED9A2700B9594E /* WidgetExfeeViewController.xib in Resources */,
 				4F29C8C416F6D968001BB176 /* rsvp_accepted_18blue.png in Resources */,
 				4F29C8C516F6D968001BB176 /* rsvp_accepted_18blue@2x.png in Resources */,
@@ -2972,8 +2966,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
@@ -2988,8 +2982,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "DA7D96C7-578C-4997-967D-93AC35D568CC";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DA7D96C7-578C-4997-967D-93AC35D568CC";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				WRAPPER_EXTENSION = app;
@@ -3064,8 +3058,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Heng Duanmu (Y8Y7R577E7)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
@@ -3080,8 +3074,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "71967A1F-58C9-4068-9E55-6EFAA8C2D42E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "71967A1F-58C9-4068-9E55-6EFAA8C2D42E";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				WRAPPER_EXTENSION = app;
@@ -3092,8 +3086,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: eDoctor Healthcare Communications Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
@@ -3108,8 +3102,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "DA7D96C7-578C-4997-967D-93AC35D568CC";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DA7D96C7-578C-4997-967D-93AC35D568CC";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				WRAPPER_EXTENSION = app;
