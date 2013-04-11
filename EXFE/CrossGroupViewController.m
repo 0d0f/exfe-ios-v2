@@ -1762,7 +1762,7 @@
     Identity *myidentity = [_cross.exfee getMyInvitation].identity;
     [APIExfee submitRsvp: status
                       on: _invitation
-              myIdentity: myidentity.identity_id
+              myIdentity: [myidentity.identity_id intValue]
                  onExfee: [_cross.exfee.exfee_id intValue]
                  success: ^(AFHTTPRequestOperation *operation, id responseObject) {
                      

@@ -1055,7 +1055,7 @@ typedef enum {
     Identity *myidentity = [self.exfee getMyInvitation].identity;
     [APIExfee submitRsvp: status
                       on: _invitation
-              myIdentity: myidentity.identity_id
+              myIdentity: [myidentity.identity_id intValue]
                  onExfee: [self.exfee.exfee_id intValue]
                  success: ^(AFHTTPRequestOperation *operation, id responseObject) {
                      
@@ -1178,7 +1178,7 @@ typedef enum {
     if (self.selected_invitation == nil) {
         self.selected_invitation = [self.sortedInvitations objectAtIndex:0];
         NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-        [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionNone];
         [self fillInvitationContent:_selected_invitation];
     }
 }
