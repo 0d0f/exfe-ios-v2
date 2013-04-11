@@ -35,7 +35,7 @@ NSCopying
 @property (nonatomic, copy) NSString *avatarURLString;
 @property (nonatomic, copy) NSString *bio;
 @property (nonatomic, retain) NSArray *identities;
-@property (nonatomic, assign) BOOL isMe;
+@property (nonatomic, assign) BOOL isMe;            // 已作废
 @property (nonatomic, assign) NSTimeInterval timeStamp;
 
 + (Card *)cardWithDictionary:(NSDictionary *)dict;

@@ -14,6 +14,7 @@ typedef enum  {
     kEXArrowDirectionLeft = 1UL << 2,
     kEXArrowDirectionRight = 1UL << 3,
     kEXArrowDirectionAny = kEXArrowDirectionUp | kEXArrowDirectionDown | kEXArrowDirectionLeft | kEXArrowDirectionRight,
+    kEXArrowDirectionUnknow = NSUIntegerMax,
 } EXArrowDirection;
 
 @interface EXArrowView : UIView

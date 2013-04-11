@@ -30,7 +30,7 @@
 NSStreamDelegate
 >
 
-@property (nonatomic, assign) BOOL cleanUpWhenStoped;   // Default as YES
+@property (nonatomic, assign) BOOL cleanUpWhenStoped;   // Default as NO
 @property (nonatomic, readonly) BOOL isRunning;     // kvo
 
 @property (nonatomic, assign) id<EXLiveServiceControllerDelegate> delegate;

@@ -58,6 +58,7 @@
         
         [self _setRunning:NO];
         self.isRegisting = NO;
+        self.cleanUpWhenStoped = NO;
     }
     
     return self;
@@ -83,6 +84,11 @@
     [self invokeUserCardUpdate];
     
     [self _setRunning:YES];
+}
+
+- (void)restart {
+    [self stop];
+    [self start];
 }
 
 - (void)stop {
@@ -182,19 +188,21 @@
                                                    NSString *streamingPath = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
                                                    [self.streamingService startStreamingWithPath:streamingPath
                                                                                          success:nil
-                                                                                         failure:nil];
+                                                                                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                                                                                             [self restart];
+                                                                                         }];
                                                }
                                                
                                                self.isRegisting = NO;
-                                               
-                                               // re post
                                                [self performSelector:_cmd];
                                            } else {
                                                if (kEXStreamingServiceStateReady == self.streamingService.serviceState) {
                                                    NSString *streamingPath = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
                                                    [self.streamingService startStreamingWithPath:streamingPath
                                                                                          success:nil
-                                                                                         failure:nil];
+                                                                                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                                                                                             [self restart];
+                                                                                         }];
                                                }
                                            }
                                        }
@@ -203,18 +211,17 @@
                                    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                        if (operation.response.statusCode >= 400 &&
                                            operation.response.statusCode < 500) {
-                                           [self stop];
                                            [self _cleanUp];
-                                           
                                            self.isRegisting = NO;
-                                           [_lock unlock];
-                                           
-                                           [self performSelector:_cmd];
-                                       } else if (NSURLErrorTimedOut == error.code) {
-                                           [_lock unlock];
-                                           
-                                           [self performSelector:_cmd];
+                                           [self restart];
+                                       } else if (NSURLErrorTimedOut == error.code ||
+                                                  NSURLErrorCannotConnectToHost == error.code ||
+                                                  NSURLErrorNetworkConnectionLost == error.code ||
+                                                  kCFURLErrorNotConnectedToInternet == error.code) {
+                                           [self restart];
                                        }
+                                       
+                                       [_lock unlock];
                                    }];
 }
 
@@ -240,12 +247,17 @@
                                                          length:[data length]
                                                        encoding:[NSString defaultCStringEncoding]] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             
+            NSString *lastJSON = nil;
             NSArray *array = [string componentsSeparatedByString:@"\n"];
+            if ((char)([data bytes] + [data length] - 1) == '\n') {
+                lastJSON = [array lastObject];
+            } else if ([array count] >= 2) {
+                lastJSON = array[[array count] - 2];
+            }
             
             if ([array count] == 0) {
                 [self invokeUserCardUpdate];
-            } else {
-                NSString *lastJSON = [array lastObject];
+            } else if (lastJSON) {
                 data = [lastJSON dataUsingEncoding:NSUTF8StringEncoding];
                 
                 NSArray *cardsInDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];

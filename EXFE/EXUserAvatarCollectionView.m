@@ -419,36 +419,40 @@
         [self.delegate avatarCollectionView:self didEndLongPressCircleItemAtIndexPath:cell.indexPath];
     };
     
-    // animation
-    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-    
-    CATransform3D scale1 = CATransform3DMakeScale(0.3, 0.3, 1);
-    CATransform3D scale2 = CATransform3DMakeScale(1.2, 1.2, 1);
-    CATransform3D scale3 = CATransform3DMakeScale(0.9, 0.9, 1);
-    CATransform3D scale4 = CATransform3DMakeScale(1.0, 1.0, 1);
-    
-    NSArray *frameValues = [NSArray arrayWithObjects:
-                            [NSValue valueWithCATransform3D:scale1],
-                            [NSValue valueWithCATransform3D:scale2],
-                            [NSValue valueWithCATransform3D:scale3],
-                            [NSValue valueWithCATransform3D:scale4],
-                            nil];
-    [animation setValues:frameValues];
-    
-    NSArray *frameTimes = [NSArray arrayWithObjects:
-                           [NSNumber numberWithFloat:0.0],
-                           [NSNumber numberWithFloat:0.5],
-                           [NSNumber numberWithFloat:0.7],
-                           [NSNumber numberWithFloat:1.0],
-                           nil];
-    [animation setKeyTimes:frameTimes];
-    
-    animation.fillMode = kCAFillModeForwards;
-    animation.duration = 0.3f;
-    
-    [cell.layer addAnimation:animation forKey:@"animation.pop"];
-    
-    [self addSubview:cell];
+    double delayInSeconds = ((double)(random() % 30)) * 0.01f;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        // animation
+        CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+        
+        CATransform3D scale1 = CATransform3DMakeScale(0.3, 0.3, 1);
+        CATransform3D scale2 = CATransform3DMakeScale(1.2, 1.2, 1);
+        CATransform3D scale3 = CATransform3DMakeScale(0.9, 0.9, 1);
+        CATransform3D scale4 = CATransform3DMakeScale(1.0, 1.0, 1);
+        
+        NSArray *frameValues = [NSArray arrayWithObjects:
+                                [NSValue valueWithCATransform3D:scale1],
+                                [NSValue valueWithCATransform3D:scale2],
+                                [NSValue valueWithCATransform3D:scale3],
+                                [NSValue valueWithCATransform3D:scale4],
+                                nil];
+        [animation setValues:frameValues];
+        
+        NSArray *frameTimes = [NSArray arrayWithObjects:
+                               [NSNumber numberWithFloat:0.0],
+                               [NSNumber numberWithFloat:0.5],
+                               [NSNumber numberWithFloat:0.7],
+                               [NSNumber numberWithFloat:1.0],
+                               nil];
+        [animation setKeyTimes:frameTimes];
+        
+        animation.fillMode = kCAFillModeForwards;
+        animation.duration = 0.3f;
+        
+        [cell.layer addAnimation:animation forKey:@"animation.pop"];
+        
+        [self addSubview:cell];
+    });
 }
 
 - (void)_removeCircleItemCell:(EXCircleItemCell *)cell {

@@ -203,15 +203,11 @@
 
 #pragma mark - Private
 - (void)_setAvatarImage:(UIImage *)image animated:(BOOL)animated {
-    if (nil == image && self.isUsingDefaultAvatar)
-        return;
     if (nil == image) {
-        self.isUsingDefaultAvatar = YES;
-        image = [UIImage imageNamed:@"portrait_64.png"];
-    } else {
-        self.isUsingDefaultAvatar = NO;
+        image = [UIImage imageNamed:@"portrait_default.png"];
     }
     
+    NSAssert(image != nil, @"Unbelievable!!!!");
     self.currentVisibleAvatarImageView.image = image;
     
 //    UIImageView *otherImageView = nil;

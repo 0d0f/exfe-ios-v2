@@ -82,11 +82,11 @@
     
     CGRect containViewFrame = view.frame;
     CGPoint arrowPoint = CGPointZero;
-    EXArrowDirection finalArrowDirection = 0;
+    EXArrowDirection finalArrowDirection = kEXArrowDirectionUnknow;
     
     if (direction & kEXArrowDirectionDown) {
         arrowPoint = (CGPoint){CGRectGetMidX(rect), CGRectGetMinY(rect)};
-        CGFloat y = arrowPoint.y - maxViewHeight;
+        CGFloat y = arrowPoint.y - (maxViewHeight + CGRectGetMinY(view.frame));
         if (y >= 0.0f) {
             finalArrowDirection = kEXArrowDirectionDown;
             
@@ -101,15 +101,20 @@
                 x += kMinEdgeDistance;
             }
             
+            y += CGRectGetMinY(view.frame);
+            
             viewFrame.origin = (CGPoint){x, y};
         }
-    } else if ((direction & kEXArrowDirectionUp) && !finalArrowDirection) {
+    }
+    
+    if ((direction & kEXArrowDirectionUp) && (kEXArrowDirectionUnknow == finalArrowDirection)) {
         arrowPoint = (CGPoint){CGRectGetMidX(rect), CGRectGetMaxY(rect)};
-        CGFloat y = arrowPoint.y + maxViewHeight;
-        if (y <= CGRectGetHeight(containViewFrame)) {
+        CGFloat height = arrowPoint.y + maxViewHeight;
+        CGFloat y = arrowPoint.y;
+        if (height <= CGRectGetMaxY(containViewFrame)) {
             finalArrowDirection = kEXArrowDirectionUp;
             
-            y += kMinEdgeDistance;
+            y -= kMinEdgeDistance;
             
             CGFloat x = arrowPoint.x - halfMaxViewWidth;
             if (x <= 0) {
@@ -122,7 +127,9 @@
             
             viewFrame.origin = (CGPoint){x, y};
         }
-    } else if ((direction & kEXArrowDirectionRight) && !finalArrowDirection) {
+    }
+    
+    if ((direction & kEXArrowDirectionRight) && kEXArrowDirectionUnknow == finalArrowDirection) {
         arrowPoint = (CGPoint){CGRectGetMinX(rect), CGRectGetMidY(rect)};
         CGFloat x = arrowPoint.x - maxViewWidth;
         if (x >= 0) {
@@ -137,7 +144,9 @@
             
             viewFrame.origin = (CGPoint){x + kMinEdgeDistance, y + kMinEdgeDistance};
         }
-    } else if ((direction & kEXArrowDirectionLeft) && !finalArrowDirection) {
+    }
+    
+    if ((direction & kEXArrowDirectionLeft) && kEXArrowDirectionUnknow == finalArrowDirection) {
         arrowPoint = (CGPoint){CGRectGetMaxX(rect), CGRectGetMidY(rect)};
         CGFloat x = arrowPoint.x - maxViewWidth;
         if (x >= 0) {
@@ -225,7 +234,7 @@
 
 #pragma mark - Gesture
 - (void)tapHandler:(UITapGestureRecognizer *)gesture {
-    [self dismissWithAnimated:YES complete:nil];
+//    [self dismissWithAnimated:YES complete:nil];
 }
 
 @end

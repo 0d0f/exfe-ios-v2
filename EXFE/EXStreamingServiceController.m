@@ -96,17 +96,22 @@
     request.timeoutInterval = self.serviceTimeoutInterval = kDefaultServiceTimeoutInterval;
     AFHTTPRequestOperation *operation = [self.client HTTPRequestOperationWithRequest:request
                                                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                                 dispatch_async(dispatch_get_main_queue(), ^{
 #ifdef DEBUG
-                                                                                 NSLog(@"Start Streaming Success!");
+                                                                                     NSLog(@"Streaming Failure!");
 #endif
-                                                                                 if (_streamingSuccessHanlder) {
-                                                                                     _streamingSuccessHanlder(operation, responseObject);
+                                                                                     // make sure kvo on main thread
+                                                                                     self.serviceState = kEXStreamingServiceStateReady;
+                                                                                 });
+                                                                                 
+                                                                                 if (_streamingFailureHandler) {
+                                                                                     _streamingFailureHandler(operation, nil);
                                                                                  }
                                                                              }
                                                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                                                  dispatch_async(dispatch_get_main_queue(), ^{
 #ifdef DEBUG
-                                                                                     NSLog(@"Start Streaming Failure!");
+                                                                                     NSLog(@"Streaming Failure!");
 #endif
                                                                                      // make sure kvo on main thread
                                                                                      self.serviceState = kEXStreamingServiceStateReady;

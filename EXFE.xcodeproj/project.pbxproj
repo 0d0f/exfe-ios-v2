@@ -243,6 +243,7 @@
 		76A150441714879800751C92 /* livewave-48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76A14FE01714879800751C92 /* livewave-48@2x.png */; };
 		76A150451714879800751C92 /* livewave-49.png in Resources */ = {isa = PBXBuildFile; fileRef = 76A14FE11714879800751C92 /* livewave-49.png */; };
 		76A150461714879800751C92 /* livewave-49@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76A14FE21714879800751C92 /* livewave-49@2x.png */; };
+		76A1508217156EB600751C92 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A1508117156EB500751C92 /* AVFoundation.framework */; };
 		76A39BDC1708C066008D1FFE /* EXCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A39BDA1708C066008D1FFE /* EXCardViewController.m */; };
 		76A39BDD1708C066008D1FFE /* EXCardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76A39BDB1708C066008D1FFE /* EXCardViewController.xib */; };
 		76A39BE41708C075008D1FFE /* EXCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A39BE21708C075008D1FFE /* EXCardCell.m */; };
@@ -911,6 +912,7 @@
 		76A14FE01714879800751C92 /* livewave-48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "livewave-48@2x.png"; sourceTree = "<group>"; };
 		76A14FE11714879800751C92 /* livewave-49.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "livewave-49.png"; sourceTree = "<group>"; };
 		76A14FE21714879800751C92 /* livewave-49@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "livewave-49@2x.png"; sourceTree = "<group>"; };
+		76A1508117156EB500751C92 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		76A39BD91708C066008D1FFE /* EXCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCardViewController.h; sourceTree = "<group>"; };
 		76A39BDA1708C066008D1FFE /* EXCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCardViewController.m; sourceTree = "<group>"; };
 		76A39BDB1708C066008D1FFE /* EXCardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EXCardViewController.xib; sourceTree = "<group>"; };
@@ -1373,6 +1375,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76A1508217156EB600751C92 /* AVFoundation.framework in Frameworks */,
 				788C736016D6292100BDD594 /* CoreTelephony.framework in Frameworks */,
 				7882F80316A68372004309DF /* CoreImage.framework in Frameworks */,
 				78C6BA0116634C6F00483D23 /* AddressBook.framework in Frameworks */,
@@ -2161,6 +2164,7 @@
 		78A98E7C1560F832009E0806 = {
 			isa = PBXGroup;
 			children = (
+				76A1508117156EB500751C92 /* AVFoundation.framework */,
 				78A98ED615611028009E0806 /* RestKit.xcodeproj */,
 				78A98E911560F832009E0806 /* EXFE */,
 				4F1142DA16AE40B000C30179 /* EXFETests */,

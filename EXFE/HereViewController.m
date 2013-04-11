@@ -150,12 +150,21 @@
 
 #pragma mark - Motion Handle
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+    NSLog(@"Motion Began: %d", motion);
     if (motion == UIEventSubtypeMotionShake) {
         [self motionShakeBegan];
     }
 }
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+    NSLog(@"Motion Ended: %d", motion);
+    if (motion == UIEventSubtypeMotionShake) {
+        [self motionShakeEnded];
+    }
+}
+
+- (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+    NSLog(@"Motion Cancelled: %d", motion);
     if (motion == UIEventSubtypeMotionShake) {
         [self motionShakeEnded];
     }
@@ -172,22 +181,17 @@
                 [cardsToRemove addObject:cell.card];
             }
         }
-        
-        NSMutableSet *nowCards = [NSMutableSet setWithCapacity:[self.othersCards count]];
-        for (Card *card in self.othersCards) {
-            BOOL needRemove = NO;
-            for (Card *toRemoveCard in cardsToRemove) {
-                if ([card isEqualToCard:toRemoveCard]) {
-                    needRemove = YES;
-                    break;
-                }
-            }
-            if (!needRemove) {
-                [nowCards addObject:card];
+        NSSet *visbleCells = [_avatarlistview visibleCircleItemCells];
+        NSMutableSet *visibleCards = [NSMutableSet setWithCapacity:[unselectedCells count]];
+        for (EXCircleItemCell *cell in visbleCells) {
+            if (![cell.card isEqualToCard:self.meCard]) {
+                [visibleCards addObject:cell.card];
             }
         }
         
-        self.othersCards = nowCards;
+        [visibleCards minusSet:cardsToRemove];
+        
+        self.othersCards = visibleCards;
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -370,6 +374,8 @@
         ((EXPopoverCardViewController *)self.popoverCardViewController.contentViewController).card = cell.card;
     } else {
         EXPopoverCardViewController *contentViewController = [[EXPopoverCardViewController alloc] initWithCard:cell.card];
+        contentViewController.tableView.showsHorizontalScrollIndicator = NO;
+        contentViewController.tableView.showsVerticalScrollIndicator = NO;
         _popoverCardViewController = [[EXPopoverController alloc] initWithContentViewController:contentViewController];
         [contentViewController release];
     }
@@ -378,7 +384,7 @@
     
     [_popoverCardViewController presentFromRect:cell.frame
                                          inView:_avatarlistview
-                                 arrowDirection:kEXArrowDirectionAny
+                                 arrowDirection:kEXArrowDirectionUp | kEXArrowDirectionDown
                                        animated:YES
                                        complete:nil];
 }
@@ -548,7 +554,7 @@
 
 - (NSDictionary *)meCardParamsToSend {
     User *me = [User getDefaultUser];
-    NSMutableArray *identities = [[NSMutableArray alloc] initWithCapacity:me.identities.count];
+    NSMutableArray *identities = [[NSMutableArray alloc] initWithCapacity:[me.identities count]];
     
     if (self.cardViewController.identityPrivacyDict) {
         NSDictionary *identityPrivacyDict = self.cardViewController.identityPrivacyDict;
