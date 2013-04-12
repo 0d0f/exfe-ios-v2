@@ -189,7 +189,9 @@
                                                    [self.streamingService startStreamingWithPath:streamingPath
                                                                                          success:nil
                                                                                          failure:^(AFHTTPRequestOperation *operation, NSError *error){
-                                                                                             [self restart];
+                                                                                             if (error.code != NSURLErrorCancelled) {
+                                                                                                 [self restart];
+                                                                                             }
                                                                                          }];
                                                }
                                                
@@ -201,7 +203,9 @@
                                                    [self.streamingService startStreamingWithPath:streamingPath
                                                                                          success:nil
                                                                                          failure:^(AFHTTPRequestOperation *operation, NSError *error){
-                                                                                             [self restart];
+                                                                                             if (error.code != NSURLErrorCancelled) {
+                                                                                                 [self restart];
+                                                                                             }
                                                                                          }];
                                                }
                                            }
@@ -217,7 +221,7 @@
                                        } else if (NSURLErrorTimedOut == error.code ||
                                                   NSURLErrorCannotConnectToHost == error.code ||
                                                   NSURLErrorNetworkConnectionLost == error.code ||
-                                                  kCFURLErrorNotConnectedToInternet == error.code) {
+                                                  NSURLErrorNotConnectedToInternet == error.code) {
                                            [self restart];
                                        }
                                        
