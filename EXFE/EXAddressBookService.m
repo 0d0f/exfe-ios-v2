@@ -148,7 +148,10 @@
                     [people release];
                 }
             }
+        });
+    }
 }
+                       
 
 #pragma mark - Filter
 
