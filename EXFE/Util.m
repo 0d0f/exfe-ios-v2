@@ -1159,6 +1159,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
   }
   NSString *addr = wifiAddress ? wifiAddress : cellAddress;
   return addr ? addr : @"0.0.0.0";
+}
 
 + (void)checkUpdate
 {
