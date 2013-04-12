@@ -1569,7 +1569,7 @@
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		4F3C6D8016ACEE670095AA50 /* EditCrossDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditCrossDelegate.h; sourceTree = "<group>"; };
 		4F63DC4317172AA600136B7E /* 0d0f.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 0d0f.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F63DE1017172B0700136B7E /* Polit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Polit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F63DE1017172B0700136B7E /* Pilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F63DE121717339100136B7E /* Polit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Polit-Info.plist"; sourceTree = "<group>"; };
 		4F63DE14171733C500136B7E /* 0d0f-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "0d0f-Info.plist"; sourceTree = "<group>"; };
 		4F63E249169AD2B2003354D7 /* NSDateComponents+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateComponents+Helper.h"; sourceTree = "<group>"; };
@@ -2847,7 +2847,7 @@
 				78A98E871560F832009E0806 /* EXFE.app */,
 				4F1142D516AE40B000C30179 /* EXFETests.octest */,
 				4F63DC4317172AA600136B7E /* 0d0f.app */,
-				4F63DE1017172B0700136B7E /* Polit.app */,
+				4F63DE1017172B0700136B7E /* Pilot.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3233,7 +3233,7 @@
 			);
 			name = Pilot;
 			productName = EXFE;
-			productReference = 4F63DE1017172B0700136B7E /* Polit.app */;
+			productReference = 4F63DE1017172B0700136B7E /* Pilot.app */;
 			productType = "com.apple.product-type.application";
 		};
 		78A98E861560F832009E0806 /* EXFE */ = {
@@ -4925,7 +4925,7 @@
 					"-ObjC",
 					"-all_load",
 				);
-				PRODUCT_NAME = Polit;
+				PRODUCT_NAME = Pilot;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				WRAPPER_EXTENSION = app;
@@ -4954,7 +4954,7 @@
 					"-ObjC",
 					"-all_load",
 				);
-				PRODUCT_NAME = Polit;
+				PRODUCT_NAME = Pilot;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				WRAPPER_EXTENSION = app;
