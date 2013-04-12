@@ -139,6 +139,7 @@ static char mergetoken;
 - (void) createdb{
     [Flurry logEvent:@"CREATE_DB"];
   NSURL *baseURL = [NSURL URLWithString:API_ROOT];
+    NSLog(@"API Server: %@", baseURL);
   
   RKObjectManager *objectManager = [RKObjectManager sharedManager];
     if(objectManager == nil){
