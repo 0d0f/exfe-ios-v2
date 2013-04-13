@@ -112,10 +112,18 @@
                 if ([self isNull:obj]) {
                     self.identities = nil;
                 } else {
+                    int mailCount = 0;
                     NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:[obj count]];
                     for (NSDictionary *param in obj) {
                         CardIdentitiy *identity = [CardIdentitiy cardIdentityWithDictionary:param];
-                        [temp addObject:identity];
+                        if ([identity.provider isEqualToString:@"email"]) {
+                            [temp insertObject:identity atIndex:0];
+                            mailCount++;
+                        } else if ([identity.provider isEqualToString:@"phone"]) {
+                            [temp insertObject:identity atIndex:mailCount];
+                        } else {
+                            [temp addObject:identity];
+                        }
                     }
                     self.identities = [[temp copy] autorelease];
                     [temp release];
