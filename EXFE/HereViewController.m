@@ -198,7 +198,7 @@
 }
 
 - (void)motionShakeEnded {
-    self.meCard = self.liveService.latestMeCard;
+    self.meCard = self.liveService.latestMeCard ?: [Card cardWithDictionary:[self meCardParamsToSend]];
     self.othersCards = self.liveService.latestOthersCards;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -275,6 +275,10 @@
     Card *card = nil;
     if (NSOrderedSame == [indexPath compare:[NSIndexPath indexPathForRow:0 inSection:0]]) {
         // me
+        CGRect titleLabelFrame = cell.titleLabel.frame;
+        titleLabelFrame.origin.x = 0.0;
+        titleLabelFrame.size.width = 320.0f;
+        cell.titleLabel.frame = titleLabelFrame;
         card = self.meCard;
     } else {
         // others
@@ -411,7 +415,7 @@
 }
 
 - (void)cardViewControllerDidFinish:(EXCardViewController *)controller {
-    self.meCard = self.liveService.latestMeCard;
+    self.meCard = self.liveService.latestMeCard ?: [Card cardWithDictionary:[self meCardParamsToSend]];
     self.othersCards = self.liveService.latestOthersCards;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -571,7 +575,7 @@
         }
     }
     
-    NSDictionary *cardParams = @{@"id" : (self.liveService.cardID && self.liveService.cardID.length) ? self.liveService.cardID : @"" , @"name" : me.name, @"avatar" : me.avatar_filename, @"bio" : me.bio, @"identities" : identities, @"is_me": [NSNumber numberWithBool:YES]};
+    NSDictionary *cardParams = @{@"id" : (self.liveService.cardID && self.liveService.cardID.length) ? self.liveService.cardID : @"" , @"name" : [me.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], @"avatar" : me.avatar_filename, @"bio" : [me.bio stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], @"identities" : identities, @"is_me": [NSNumber numberWithBool:YES]};
     [identities release];
     
     return cardParams;

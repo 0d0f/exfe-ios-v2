@@ -50,14 +50,6 @@
         [self _setRunning:NO];
         self.isRegisting = NO;
         self.cleanUpWhenStoped = NO;
-        
-//        if (Token) {
-//            _token = [Token copy];
-//        }
-//        
-//        if (CardID) {
-//            _cardID = [CardID copy];
-//        }
     }
     
     return self;
@@ -236,7 +228,11 @@
                                            operation.response.statusCode < 500) {
                                            [self _cleanUp];
                                            self.isRegisting = NO;
-                                           [self restart];
+                                           
+                                           [self initStreamingService];
+                                           [self forceInvokeUserCardUpdate];
+                                           
+                                           [self _setRunning:YES];
                                        } else {
                                            [self restart];
                                        }
@@ -249,6 +245,8 @@
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode{
     switch (eventCode) {
         case NSStreamEventOpenCompleted:
+            [self forceInvokeUserCardUpdate];
+            
             NSLog(@"Stream opened");
             break;
         case NSStreamEventHasBytesAvailable:
@@ -298,6 +296,7 @@
                     NSLog(@"Card JSON:\n%@", lastJSON);
                     NSLog(@"\nMe:\n%@\nOthers:\n%@", meCard, othersCards);
 #endif
+                    NSLog(@"\nMe:\n%@\nOthers:\n%@", meCard, othersCards);
                     
                     self.latestMeCard = meCard;
                     self.latestOthersCards = others;

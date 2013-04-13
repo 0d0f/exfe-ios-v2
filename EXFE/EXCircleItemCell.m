@@ -110,6 +110,9 @@
         
         self.titleLabel.text = card.userName;
         [self.titleLabel sizeToFit];
+        CGPoint titleCenter = self.titleLabel.center;
+        titleCenter.x = CGRectGetWidth(self.frame) * 0.5f;
+        self.titleLabel.center = titleCenter;
         
         if (![card.avatarURLString isEqualToString:perCardAvatarURL]) {
             dispatch_queue_t image_queue = dispatch_queue_create("fetchimg thread", NULL);
@@ -138,6 +141,9 @@
             
             self.titleLabel.text = card.userName;
             [self.titleLabel sizeToFit];
+            CGPoint titleCenter = self.titleLabel.center;
+            titleCenter.x = CGRectGetWidth(self.frame) * 0.5f;
+            self.titleLabel.center = titleCenter;
             
             dispatch_queue_t image_queue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(image_queue, ^{
