@@ -17,7 +17,7 @@
 #define DBNAME @"exfe_v2_8.sqlite"
 
 //#ifdef DEBUG
-//#undef PANDA
+//#undef DEBUG
 //#endif
 
 #ifdef DEBUG
