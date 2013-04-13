@@ -95,10 +95,26 @@
         self.sortedUserIdentities = identities;
         
         self.identityPrivacyDict = [NSMutableDictionary dictionaryWithCapacity:[self.sortedUserIdentities count]];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *userKey = [NSString stringWithFormat:@"%lld", [_user.user_id longLongValue]];
+        NSMutableDictionary *cachedPrivacyDict = [[userDefaults valueForKey:userKey] mutableCopy];
+        if (!cachedPrivacyDict) {
+            cachedPrivacyDict = [[NSMutableDictionary alloc] initWithCapacity:[self.sortedUserIdentities count]];
+        }
+        
         for (Identity *identity in self.sortedUserIdentities) {
             NSString *key = [NSString stringWithFormat:@"%@%@%@", identity.external_id, identity.external_username, identity.provider];
-            [self.identityPrivacyDict setValue:[NSNumber numberWithBool:YES] forKey:key];
+            NSNumber *cachedValue = [cachedPrivacyDict valueForKey:key];
+            if (cachedValue) {
+                [self.identityPrivacyDict setValue:cachedValue forKey:key];
+            } else {
+                [self.identityPrivacyDict setValue:[NSNumber numberWithBool:YES] forKey:key];
+                [cachedPrivacyDict setValue:[NSNumber numberWithBool:YES] forKey:key];
+            }
         }
+        [userDefaults setValue:cachedPrivacyDict forKey:userKey];
+        [cachedPrivacyDict release];
+        [userDefaults synchronize];
     }
 }
 
@@ -149,6 +165,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row >= [self.sortedUserIdentities count])
         return;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *userKey = [NSString stringWithFormat:@"%lld", [_user.user_id longLongValue]];
+    NSMutableDictionary *cachedPrivacyDict = [[userDefaults valueForKey:userKey] mutableCopy];
     
     Identity *identity = [self.sortedUserIdentities objectAtIndex:indexPath.row];
     
@@ -162,16 +181,22 @@
         }
         if (i > 1) {
             [self.identityPrivacyDict setValue:[NSNumber numberWithBool:NO] forKey:key];
+            [cachedPrivacyDict setValue:[NSNumber numberWithBool:NO] forKey:key];
             if ([self.delegate respondsToSelector:@selector(cardViewControllerDidChangeUserPrivacy:)]) {
                 [self.delegate cardViewControllerDidChangeUserPrivacy:self];
             }
         }
     } else {
         [self.identityPrivacyDict setValue:[NSNumber numberWithBool:YES] forKey:key];
+        [cachedPrivacyDict setValue:[NSNumber numberWithBool:YES] forKey:key];
         if ([self.delegate respondsToSelector:@selector(cardViewControllerDidChangeUserPrivacy:)]) {
             [self.delegate cardViewControllerDidChangeUserPrivacy:self];
         }
     }
+    
+    [userDefaults setValue:cachedPrivacyDict forKey:userKey];
+    [cachedPrivacyDict release];
+    [userDefaults synchronize];
     
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }

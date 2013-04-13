@@ -50,7 +50,7 @@
 @end
 
 @interface EXHereHeaderView ()
-@property (nonatomic, retain) UILabel *tipLabel;
+@property (nonatomic, retain) UIView *tipView;
 @property (nonatomic, assign) UIWindow *originWindow;
 @property (nonatomic, retain) UIWindow *innerWindow;
 @property (nonatomic, assign) BOOL isTipViewPresented;
@@ -111,24 +111,72 @@
         [_littleArrowView addSubview:self.waveAnimationImageView];
         
         // tipView
-        UILabel *tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{15, 10}, {200, 80}}];
-        tipLabel.text = @"People accessing exfe.com by your side are shown below. If not found, put two phones together with speaker volume max.";
-        tipLabel.numberOfLines = 4;
+        UIView *tipView = [[UIView alloc] initWithFrame:(CGRect){{0, 0}, {300, 120}}];
+        tipView.backgroundColor = [UIColor clearColor];
+        
+        UILabel *tipTitleLabel = [[UILabel alloc] initWithFrame:(CGRect){{0, 10}, {300, 40}}];
+        tipTitleLabel.textColor = [UIColor whiteColor];
+        tipTitleLabel.textAlignment = NSTextAlignmentCenter;
+        tipTitleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
+        tipTitleLabel.backgroundColor = [UIColor clearColor];
+        tipTitleLabel.text = @"Gather people nearby";
+        [tipView addSubview:tipTitleLabel];
+        [tipTitleLabel release];
+        
+        UILabel *tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{0, 40}, {300, 21}}];
         tipLabel.textColor = [UIColor whiteColor];
         tipLabel.textAlignment = NSTextAlignmentCenter;
         tipLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
         tipLabel.backgroundColor = [UIColor clearColor];
+        tipLabel.text = @"Close two phones together to capture";
+        [tipView addSubview:tipLabel];
+        [tipLabel release];
         
-        _arrowView = [[EXArrowView alloc] initWithFrame:(CGRect){{15, 38}, {290, 100}}];
+        tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{0, 60}, {300, 21}}];
+        tipLabel.textColor = [UIColor whiteColor];
+        tipLabel.textAlignment = NSTextAlignmentCenter;
+        tipLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+        tipLabel.backgroundColor = [UIColor clearColor];
+        tipLabel.text = @"people using             . For those accessing";
+        [tipView addSubview:tipLabel];
+        [tipLabel release];
+        
+        tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{104, 61}, {90, 21}}];
+        tipLabel.textColor = [UIColor whiteColor];
+        tipLabel.textAlignment = NSTextAlignmentLeft;
+        tipLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+        tipLabel.backgroundColor = [UIColor clearColor];
+        tipLabel.text = @"Live ·X·";
+        [tipView addSubview:tipLabel];
+        [tipLabel release];
+        
+        tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{40, 81}, {90, 21}}];
+        tipLabel.textColor = [UIColor whiteColor];
+        tipLabel.textAlignment = NSTextAlignmentLeft;
+        tipLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+        tipLabel.backgroundColor = [UIColor clearColor];
+        tipLabel.text = @"exfe.com";
+        [tipView addSubview:tipLabel];
+        [tipLabel release];
+        
+        tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{26, 80}, {300, 21}}];
+        tipLabel.textColor = [UIColor whiteColor];
+        tipLabel.textAlignment = NSTextAlignmentCenter;
+        tipLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+        tipLabel.backgroundColor = [UIColor clearColor];
+        tipLabel.text = @"   , max their speaker volume.";
+        [tipView addSubview:tipLabel];
+        [tipLabel release];
+        
+        _arrowView = [[EXArrowView alloc] initWithFrame:(CGRect){{10, 38}, {300, 120}}];
         [_arrowView setPointPosition:(CGPoint){CGRectGetMidX(self.bounds) - 10, CGRectGetMidY(self.bounds)} andArrowDirection:kEXArrowDirectionUp];
         _arrowView.gradientColors = @[(id)[UIColor COLOR_RGB(0x36, 0x9F, 0xE9)].CGColor, (id)[UIColor COLOR_RGB(0x23, 0x55, 0x8C)].CGColor];
         _arrowView.strokeColor = [UIColor COLOR_RGBA(0x36, 0x9F, 0xE9, 178.0f)];
         _arrowView.alpha = 0.92f;
         [_arrowView setNeedsDisplay];
         
-        [_arrowView addSubview:tipLabel];
-        self.tipLabel = tipLabel;
-        [tipLabel release];
+        [_arrowView addSubview:tipView];
+        self.tipView = tipView;
         
         CATransform3D scaleTransform3D = CATransform3DMakeScale(0.073f, 0.25f, 1.0f);
         CATransform3D rotationTransform3D = CATransform3DMakeRotation(-M_PI_2, 0.0f, 0.0f, 1.0f);
@@ -137,7 +185,7 @@
         transform = CATransform3DConcat(transform, translateTransform3D);
         _arrowView.layer.transform = transform;
         
-        self.tipLabel.alpha = 0.0f;
+        self.tipView.alpha = 0.0f;
         _arrowView.alpha = 0.0f;
         
         [self addSubview:_arrowView];
@@ -203,7 +251,7 @@
                          
                          [UIView animateWithDuration:0.233f
                                           animations:^{
-                                              self.tipLabel.alpha = 1.0f;
+                                              self.tipView.alpha = 1.0f;
                                           }];
                      }];
 }
@@ -224,7 +272,7 @@
     
     [UIView animateWithDuration:0.233f
                      animations:^{
-                         self.tipLabel.alpha = 0.0f;
+                         self.tipView.alpha = 0.0f;
                      }
                      completion:^(BOOL finished){
                          [self.waveAnimationImageView startAnimating];
