@@ -114,11 +114,16 @@
         UIView *tipView = [[UIView alloc] initWithFrame:(CGRect){{0, 0}, {300, 120}}];
         tipView.backgroundColor = [UIColor clearColor];
         
+        CGSize shadowOffset = (CGSize){0, -1};
+        UIColor *shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5f];
+        
         UILabel *tipTitleLabel = [[UILabel alloc] initWithFrame:(CGRect){{0, 10}, {300, 40}}];
         tipTitleLabel.textColor = [UIColor whiteColor];
         tipTitleLabel.textAlignment = NSTextAlignmentCenter;
         tipTitleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
         tipTitleLabel.backgroundColor = [UIColor clearColor];
+        tipTitleLabel.shadowOffset = shadowOffset;
+        tipTitleLabel.shadowColor = shadowColor;
         tipTitleLabel.text = @"Gather people nearby";
         [tipView addSubview:tipTitleLabel];
         [tipTitleLabel release];
@@ -128,6 +133,8 @@
         tipLabel.textAlignment = NSTextAlignmentCenter;
         tipLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
         tipLabel.backgroundColor = [UIColor clearColor];
+        tipLabel.shadowOffset = shadowOffset;
+        tipLabel.shadowColor = shadowColor;
         tipLabel.text = @"Close two phones together to capture";
         [tipView addSubview:tipLabel];
         [tipLabel release];
@@ -137,6 +144,8 @@
         tipLabel.textAlignment = NSTextAlignmentCenter;
         tipLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
         tipLabel.backgroundColor = [UIColor clearColor];
+        tipLabel.shadowOffset = shadowOffset;
+        tipLabel.shadowColor = shadowColor;
         tipLabel.text = @"people using             . For those accessing";
         [tipView addSubview:tipLabel];
         [tipLabel release];
@@ -146,6 +155,8 @@
         tipLabel.textAlignment = NSTextAlignmentLeft;
         tipLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         tipLabel.backgroundColor = [UIColor clearColor];
+        tipLabel.shadowOffset = shadowOffset;
+        tipLabel.shadowColor = shadowColor;
         tipLabel.text = @"Live ·X·";
         [tipView addSubview:tipLabel];
         [tipLabel release];
@@ -155,6 +166,8 @@
         tipLabel.textAlignment = NSTextAlignmentLeft;
         tipLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         tipLabel.backgroundColor = [UIColor clearColor];
+        tipLabel.shadowOffset = shadowOffset;
+        tipLabel.shadowColor = shadowColor;
         tipLabel.text = @"exfe.com";
         [tipView addSubview:tipLabel];
         [tipLabel release];
