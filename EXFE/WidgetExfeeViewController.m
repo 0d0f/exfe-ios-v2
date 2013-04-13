@@ -266,7 +266,7 @@ typedef enum {
     [hereButton addTarget:self action:@selector(hereButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     [hereButton setBackgroundImage:[[UIImage imageNamed:@"btn_glass_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
-    [exfeeContainer addSubview:hereButton];
+    [invContent addSubview:hereButton];
     //_________________test end___________
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapContent:)];

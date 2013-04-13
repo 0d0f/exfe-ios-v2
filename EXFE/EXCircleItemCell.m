@@ -42,7 +42,7 @@
     _centerDistanceY = self.center.y - self.avatarBaseView.center.y;
     
     // label
-    EXVerticalAlignLabel *label = [[EXVerticalAlignLabel alloc] initWithFrame:(CGRect){{0, 68}, {75, 35}}];
+    EXVerticalAlignLabel *label = [[EXVerticalAlignLabel alloc] initWithFrame:(CGRect){{0, 69}, {74, 34}}];
     label.textColor = [UIColor whiteColor];//[UIColor COLOR_WA(0x33, 0xFF)];
     label.numberOfLines = 2;
     label.textAlignment = UITextAlignmentCenter;

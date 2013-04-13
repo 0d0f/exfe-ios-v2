@@ -277,7 +277,7 @@
         // me
         CGRect titleLabelFrame = cell.titleLabel.frame;
         titleLabelFrame.origin.x = 0.0;
-        titleLabelFrame.size.width = 320.0f;
+        titleLabelFrame.size.width = 200.0f;
         cell.titleLabel.frame = titleLabelFrame;
         card = self.meCard;
     } else {

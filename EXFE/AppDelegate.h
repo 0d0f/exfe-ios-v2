@@ -16,7 +16,9 @@
 #define APP_DB_VERSION 208
 #define DBNAME @"exfe_v2_8.sqlite"
 
-//#undef DEBUG
+//#ifdef DEBUG
+//#undef PANDA
+//#endif
 
 #ifdef DEBUG
 #define PANDA
