@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSTimer   *invokeTimer;
 @property (nonatomic, retain) NSTimer   *heartBeatTimer;
 @property (nonatomic, copy) NSString *path;
+@property (nonatomic, retain) AFHTTPRequestOperation *operation;
 @end
 
 @implementation EXStreamingServiceController
@@ -38,7 +39,9 @@
 }
 
 - (void)dealloc {
-    [self stopStreaming];
+    if (self.serviceState == kEXStreamingServiceStateGoing) {
+        [self stopStreaming];
+    }
     [_path release];
     [_outputStream release];
     [_client release];
@@ -60,6 +63,7 @@
 }
 
 #pragma mark - Public
+
 - (void)startStreamingWithPath:(NSString *)path
                        success:(StreamingSuccessBlock)successHandler
                        failure:(StreamingFailureBlock)failureHandler {
@@ -90,11 +94,11 @@
     });
     
     // request
-    NSMutableURLRequest *request = [self.client requestWithMethod:@"GET"
+    NSMutableURLRequest *request = [self.client requestWithMethod:@"POST"
                                                              path:path
                                                        parameters:nil];
     request.timeoutInterval = self.serviceTimeoutInterval = kDefaultServiceTimeoutInterval;
-    AFHTTPRequestOperation *operation = [self.client HTTPRequestOperationWithRequest:request
+    self.operation = [self.client HTTPRequestOperationWithRequest:request
                                                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                                                  dispatch_async(dispatch_get_main_queue(), ^{
 #ifdef DEBUG
@@ -115,39 +119,40 @@
 #endif
                                                                                      // make sure kvo on main thread
                                                                                      self.serviceState = kEXStreamingServiceStateReady;
+                                                                                     if (_streamingFailureHandler) {
+                                                                                         _streamingFailureHandler(operation, error);
+                                                                                     }
                                                                                  });
-                                                                                 
-                                                                                 if (_streamingFailureHandler) {
-                                                                                     _streamingFailureHandler(operation, error);
-                                                                                 }
                                                                              }];
     if (self.outputStream) {
-        operation.outputStream = self.outputStream;
+        _operation.outputStream = self.outputStream;
     }
     
     // start
-    [self.client.operationQueue addOperation:operation];
+    [self.client.operationQueue addOperation:_operation];
 }
 
 - (void)stopStreaming {
     self.serviceState = kEXStreamingServiceStateReady;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.heartBeatTimer isValid]) {
+        if ([_heartBeatTimer isValid]) {
             [self.heartBeatTimer invalidate];
             self.heartBeatTimer = nil;
         }
         
-        if ([self.invokeTimer isValid]) {
+        if ([_invokeTimer isValid]) {
             [self.invokeTimer invalidate];
             self.invokeTimer = nil;
         }
     });
-    if (self.outputStream) {
-        [self.outputStream close];
-        self.outputStream = nil;
+    
+    if (_operation.outputStream) {
+        [_operation.outputStream close];
+        _operation.outputStream = nil;
     }
-    [self.client cancelAllHTTPOperationsWithMethod:@"GET" path:self.path];
+    [_operation cancel];
+    [self.client.operationQueue cancelAllOperations];
 }
 
 @end

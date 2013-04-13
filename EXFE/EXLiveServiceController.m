@@ -13,6 +13,9 @@
 #import "User+EXFE.h"
 #import "Card.h"
 
+//static NSString *Token = nil;
+//static NSString *CardID = nil;
+
 #define kMinRegistCardsDuration             (5.0f)
 #define kServerStreamingTimeroutInterval    (60.0f)
 
@@ -44,21 +47,17 @@
 - (id)init {
     self = [super init];
     if (self) {
-        _streamingService = [[EXStreamingServiceController alloc] initWithBaseURL:[NSURL URLWithString:SERVICE_ROOT]];
-        
-        _streamingService.invokeHandler = ^{
-            if (self.shouldInvokeLater) {
-                [self sendLiveCardsRequest];
-                self.shouldInvokeLater = NO;
-            }
-        };
-        _streamingService.heartBeatHandler = ^{
-            [self sendLiveCardsRequest];
-        };
-        
         [self _setRunning:NO];
         self.isRegisting = NO;
         self.cleanUpWhenStoped = NO;
+        
+//        if (Token) {
+//            _token = [Token copy];
+//        }
+//        
+//        if (CardID) {
+//            _cardID = [CardID copy];
+//        }
     }
     
     return self;
@@ -76,11 +75,21 @@
     [super dealloc];
 }
 
+- (void)initStreamingService {
+    _streamingService = [[EXStreamingServiceController alloc] initWithBaseURL:[NSURL URLWithString:SERVICE_ROOT]];
+    _streamingService.invokeHandler = ^{
+        if (self.shouldInvokeLater) {
+            [self sendLiveCardsRequest];
+            self.shouldInvokeLater = NO;
+        }
+    };
+    _streamingService.heartBeatHandler = ^{
+        [self sendLiveCardsRequest];
+    };
+}
+
 - (void)start {
-    NSOutputStream *outputStream = [NSOutputStream outputStreamToMemory];
-    outputStream.delegate = self;
-    _streamingService.outputStream = outputStream;
-    
+    [self initStreamingService];
     [self invokeUserCardUpdate];
     
     [self _setRunning:YES];
@@ -94,8 +103,9 @@
 - (void)stop {
     [self _setRunning:NO];
     
-    if (self.streamingService.serviceState == kEXStreamingServiceStateGoing) {
+    if (self.streamingService) {
         [self.streamingService stopStreaming];
+        self.streamingService = nil;
     }
     
     if (self.cleanUpWhenStoped) {
@@ -173,7 +183,7 @@
                                                NSString *cardID = responseList[1];
                                                
                                                [self stop];
-                                               [self _cleanUp];
+                                               [self initStreamingService];
                                                
                                                _token = [token copy];
                                                _cardID = [cardID copy];
@@ -185,6 +195,10 @@
                                                }
                                                
                                                if (kEXStreamingServiceStateReady == self.streamingService.serviceState) {
+                                                   NSOutputStream *outputStream = [NSOutputStream outputStreamToMemory];
+                                                   [outputStream setDelegate:self];
+                                                   self.streamingService.outputStream = outputStream;
+                                                   
                                                    NSString *streamingPath = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
                                                    [self.streamingService startStreamingWithPath:streamingPath
                                                                                          success:nil
@@ -199,6 +213,10 @@
                                                [self performSelector:_cmd];
                                            } else {
                                                if (kEXStreamingServiceStateReady == self.streamingService.serviceState) {
+                                                   NSOutputStream *outputStream = [NSOutputStream outputStreamToMemory];
+                                                   [outputStream setDelegate:self];
+                                                   self.streamingService.outputStream = outputStream;
+                                                   
                                                    NSString *streamingPath = [NSString stringWithFormat:@"%@/%@?token=%@",SERVICE_ROOT, @"live/streaming", self.token];
                                                    [self.streamingService startStreamingWithPath:streamingPath
                                                                                          success:nil
@@ -213,15 +231,13 @@
                                        
                                        [_lock unlock];
                                    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       NSLog(@"%@", error);
                                        if (operation.response.statusCode >= 400 &&
                                            operation.response.statusCode < 500) {
                                            [self _cleanUp];
                                            self.isRegisting = NO;
                                            [self restart];
-                                       } else if (NSURLErrorTimedOut == error.code ||
-                                                  NSURLErrorCannotConnectToHost == error.code ||
-                                                  NSURLErrorNetworkConnectionLost == error.code ||
-                                                  NSURLErrorNotConnectedToInternet == error.code) {
+                                       } else {
                                            [self restart];
                                        }
                                        
@@ -236,10 +252,10 @@
             NSLog(@"Stream opened");
             break;
         case NSStreamEventHasBytesAvailable:
-            NSLog(@"HasBytesAvailable");
+            NSLog(@"Stream HasBytesAvailable");
             break;
         case NSStreamEventErrorOccurred:
-            NSLog(@"Can not connect to the host!");
+            NSLog(@"Stream Can not connect to the host!");
             break;
         case NSStreamEventEndEncountered:
             NSLog(@"Stream closed");

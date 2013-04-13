@@ -113,8 +113,6 @@
     _liveService.cleanUpWhenStoped = NO;
     _liveService.delegate = self;
     _liveService.dataSource = self;
-    
-    [self.liveService start];
 }
 
 - (BOOL)canBecomeFirstResponder {
@@ -145,7 +143,7 @@
         [self.locationManager startUpdatingLocation];
     }
     
-    [self.liveService invokeUserCardUpdate];
+    [self.liveService start];
 }
 
 #pragma mark - Motion Handle

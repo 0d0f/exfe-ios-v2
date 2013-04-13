@@ -101,19 +101,19 @@
 		4F9926FF16EF6E30003D784A /* ExfeeResponseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9926FE16EF6E30003D784A /* ExfeeResponseCell.m */; };
 		4F99270516F02AEE003D784A /* ExfeeRsvpCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F99270416F02AEE003D784A /* ExfeeRsvpCell.m */; };
 		4F99270D16F091FD003D784A /* Exfee+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F99270C16F091FD003D784A /* Exfee+EXFE.m */; };
-		4F9FE4E31702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */; };
-		4F9FE4E41702E12C0098B9B9 /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */; };
-		4F9FE4E51702E12C0098B9B9 /* PSTCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CC1702E12C0098B9B9 /* PSTCollectionViewCell.m */; };
-		4F9FE4E61702E12C0098B9B9 /* PSTCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CF1702E12C0098B9B9 /* PSTCollectionViewController.m */; };
-		4F9FE4E71702E12C0098B9B9 /* PSTCollectionViewData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D11702E12C0098B9B9 /* PSTCollectionViewData.m */; };
-		4F9FE4E81702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D31702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m */; };
-		4F9FE4E91702E12C0098B9B9 /* PSTCollectionViewItemKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D51702E12C0098B9B9 /* PSTCollectionViewItemKey.m */; };
-		4F9FE4EA1702E12C0098B9B9 /* PSTCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D81702E12C0098B9B9 /* PSTCollectionViewLayout.m */; };
-		4F9FE4EB1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DA1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m */; };
-		4F9FE4EC1702E12C0098B9B9 /* PSTGridLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DC1702E12C0098B9B9 /* PSTGridLayoutInfo.m */; };
-		4F9FE4ED1702E12C0098B9B9 /* PSTGridLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DE1702E12C0098B9B9 /* PSTGridLayoutItem.m */; };
-		4F9FE4EE1702E12C0098B9B9 /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E01702E12C0098B9B9 /* PSTGridLayoutRow.m */; };
-		4F9FE4EF1702E12C0098B9B9 /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */; };
+		4F9FE4E31702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4F9FE4E41702E12C0098B9B9 /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4F9FE4E51702E12C0098B9B9 /* PSTCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CC1702E12C0098B9B9 /* PSTCollectionViewCell.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4F9FE4E61702E12C0098B9B9 /* PSTCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CF1702E12C0098B9B9 /* PSTCollectionViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4F9FE4E71702E12C0098B9B9 /* PSTCollectionViewData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D11702E12C0098B9B9 /* PSTCollectionViewData.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4F9FE4E81702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D31702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4F9FE4E91702E12C0098B9B9 /* PSTCollectionViewItemKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D51702E12C0098B9B9 /* PSTCollectionViewItemKey.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4F9FE4EA1702E12C0098B9B9 /* PSTCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D81702E12C0098B9B9 /* PSTCollectionViewLayout.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4F9FE4EB1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DA1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4F9FE4EC1702E12C0098B9B9 /* PSTGridLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DC1702E12C0098B9B9 /* PSTGridLayoutInfo.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4F9FE4ED1702E12C0098B9B9 /* PSTGridLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DE1702E12C0098B9B9 /* PSTGridLayoutItem.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4F9FE4EE1702E12C0098B9B9 /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E01702E12C0098B9B9 /* PSTGridLayoutRow.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4F9FE4EF1702E12C0098B9B9 /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4F9FE56C1702EB6C0098B9B9 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FE5611702E8B70098B9B9 /* libBlocksKit.a */; };
 		4F9FE56F17049CAC0098B9B9 /* APIExfeServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE56E17049CAC0098B9B9 /* APIExfeServer.m */; };
 		4F9FE572170548770098B9B9 /* UIApplication+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE571170548770098B9B9 /* UIApplication+EXFE.m */; };
@@ -261,6 +261,7 @@
 		76A150451714879800751C92 /* livewave-49.png in Resources */ = {isa = PBXBuildFile; fileRef = 76A14FE11714879800751C92 /* livewave-49.png */; };
 		76A150461714879800751C92 /* livewave-49@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76A14FE21714879800751C92 /* livewave-49@2x.png */; };
 		76A1508217156EB600751C92 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76A1508117156EB500751C92 /* AVFoundation.framework */; };
+		76A150C51717F4BF00751C92 /* WidgetConvViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76A150C41717F4BF00751C92 /* WidgetConvViewController.xib */; };
 		76A39BDC1708C066008D1FFE /* EXCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A39BDA1708C066008D1FFE /* EXCardViewController.m */; };
 		76A39BDD1708C066008D1FFE /* EXCardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76A39BDB1708C066008D1FFE /* EXCardViewController.xib */; };
 		76A39BE41708C075008D1FFE /* EXCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A39BE21708C075008D1FFE /* EXCardCell.m */; };
@@ -993,6 +994,7 @@
 		76A14FE11714879800751C92 /* livewave-49.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "livewave-49.png"; sourceTree = "<group>"; };
 		76A14FE21714879800751C92 /* livewave-49@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "livewave-49@2x.png"; sourceTree = "<group>"; };
 		76A1508117156EB500751C92 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		76A150C41717F4BF00751C92 /* WidgetConvViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WidgetConvViewController.xib; sourceTree = "<group>"; };
 		76A39BD91708C066008D1FFE /* EXCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCardViewController.h; sourceTree = "<group>"; };
 		76A39BDA1708C066008D1FFE /* EXCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXCardViewController.m; sourceTree = "<group>"; };
 		76A39BDB1708C066008D1FFE /* EXCardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EXCardViewController.xib; sourceTree = "<group>"; };
@@ -1658,6 +1660,7 @@
 				4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */,
 				783F1D8B16DB5193005F85B3 /* WidgetConvViewController.h */,
 				783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */,
+				76A150C41717F4BF00751C92 /* WidgetConvViewController.xib */,
 				4F64BA8A16ED9A2700B9594E /* WidgetExfeeViewController.h */,
 				4F64BA8B16ED9A2700B9594E /* WidgetExfeeViewController.m */,
 				4F64BA8C16ED9A2700B9594E /* WidgetExfeeViewController.xib */,
@@ -3186,6 +3189,7 @@
 				4F67C3AC170D6307001AA816 /* btn_red_30inset@2x.png in Resources */,
 				4F67C3AF170D7CD4001AA816 /* exfee_bg.png in Resources */,
 				4F67C3B0170D7CD4001AA816 /* exfee_bg@2x.png in Resources */,
+				76A150C51717F4BF00751C92 /* WidgetConvViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
