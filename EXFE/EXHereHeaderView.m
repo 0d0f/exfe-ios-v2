@@ -128,7 +128,7 @@
         [tipView addSubview:tipTitleLabel];
         [tipTitleLabel release];
         
-        UILabel *tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{0, 40}, {300, 21}}];
+        UILabel *tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{0, 44}, {300, 21}}];
         tipLabel.textColor = [UIColor whiteColor];
         tipLabel.textAlignment = NSTextAlignmentCenter;
         tipLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
@@ -139,7 +139,7 @@
         [tipView addSubview:tipLabel];
         [tipLabel release];
         
-        tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{0, 60}, {300, 21}}];
+        tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{0, 62}, {300, 21}}];
         tipLabel.textColor = [UIColor whiteColor];
         tipLabel.textAlignment = NSTextAlignmentCenter;
         tipLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
@@ -150,7 +150,7 @@
         [tipView addSubview:tipLabel];
         [tipLabel release];
         
-        tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{104, 61}, {90, 21}}];
+        tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{104, 62}, {90, 22}}];
         tipLabel.textColor = [UIColor whiteColor];
         tipLabel.textAlignment = NSTextAlignmentLeft;
         tipLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
@@ -161,7 +161,7 @@
         [tipView addSubview:tipLabel];
         [tipLabel release];
         
-        tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{40, 81}, {90, 21}}];
+        tipLabel = [[UILabel alloc] initWithFrame:(CGRect){{40, 81}, {90, 22}}];
         tipLabel.textColor = [UIColor whiteColor];
         tipLabel.textAlignment = NSTextAlignmentLeft;
         tipLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];

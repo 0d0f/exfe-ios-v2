@@ -17,6 +17,8 @@
 @optional
 - (void)liveServiceController:(EXLiveServiceController *)serviceController didGetToken:(NSString *)totken andCardID:(NSString *)cardID;
 - (void)liveServiceControllerTokenDidInvalid:(EXLiveServiceController *)serviceController willRetry:(BOOL)retry;
+- (void)liveServiceControllerStreamDidOpen:(EXLiveServiceController *)serviceController;
+- (void)liveServiceControllerStreamDidFail:(EXLiveServiceController *)serviceController;
 @end
 
 @protocol EXLiveServiceControllerDataSource <NSObject>

@@ -82,7 +82,7 @@
 
 - (void)start {
     [self initStreamingService];
-    [self invokeUserCardUpdate];
+    [self forceInvokeUserCardUpdate];
     
     [self _setRunning:YES];
 }
@@ -196,6 +196,9 @@
                                                                                          success:nil
                                                                                          failure:^(AFHTTPRequestOperation *operation, NSError *error){
                                                                                              if (error.code != NSURLErrorCancelled) {
+                                                                                                 if ([self.delegate respondsToSelector:@selector(liveServiceControllerStreamDidFail:)]) {
+                                                                                                     [self.delegate liveServiceControllerStreamDidFail:self];
+                                                                                                 }
                                                                                                  [self restart];
                                                                                              }
                                                                                          }];
@@ -214,6 +217,9 @@
                                                                                          success:nil
                                                                                          failure:^(AFHTTPRequestOperation *operation, NSError *error){
                                                                                              if (error.code != NSURLErrorCancelled) {
+                                                                                                 if ([self.delegate respondsToSelector:@selector(liveServiceControllerStreamDidFail:)]) {
+                                                                                                     [self.delegate liveServiceControllerStreamDidFail:self];
+                                                                                                 }
                                                                                                  [self restart];
                                                                                              }
                                                                                          }];
@@ -226,14 +232,14 @@
                                        NSLog(@"%@", error);
                                        if (operation.response.statusCode >= 400 &&
                                            operation.response.statusCode < 500) {
+                                           if ([self.delegate respondsToSelector:@selector(liveServiceControllerTokenDidInvalid:willRetry:)]) {
+                                               [self.delegate liveServiceControllerTokenDidInvalid:self willRetry:YES];
+                                           }
                                            [self _cleanUp];
                                            self.isRegisting = NO;
                                            
-                                           [self initStreamingService];
-                                           [self forceInvokeUserCardUpdate];
-                                           
-                                           [self _setRunning:YES];
-                                       } else {
+                                           [self restart];
+                                       } else if (NSURLErrorCancelled != error.code) {
                                            [self restart];
                                        }
                                        
@@ -245,18 +251,21 @@
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode{
     switch (eventCode) {
         case NSStreamEventOpenCompleted:
+            if ([self.delegate respondsToSelector:@selector(liveServiceControllerStreamDidOpen:)]) {
+                [self.delegate liveServiceControllerStreamDidOpen:self];
+            }
             [self forceInvokeUserCardUpdate];
             
-            NSLog(@"Stream opened");
+//            NSLog(@"Stream opened");
             break;
         case NSStreamEventHasBytesAvailable:
-            NSLog(@"Stream HasBytesAvailable");
+//            NSLog(@"Stream HasBytesAvailable");
             break;
         case NSStreamEventErrorOccurred:
-            NSLog(@"Stream Can not connect to the host!");
+//            NSLog(@"Stream Can not connect to the host!");
             break;
         case NSStreamEventEndEncountered:
-            NSLog(@"Stream closed");
+//            NSLog(@"Stream closed");
             break;
         case NSStreamEventHasSpaceAvailable:
         {
@@ -296,8 +305,6 @@
                     NSLog(@"Card JSON:\n%@", lastJSON);
                     NSLog(@"\nMe:\n%@\nOthers:\n%@", meCard, othersCards);
 #endif
-                    NSLog(@"\nMe:\n%@\nOthers:\n%@", meCard, othersCards);
-                    
                     self.latestMeCard = meCard;
                     self.latestOthersCards = others;
                     
@@ -307,7 +314,7 @@
                 });
             }
             
-            NSLog(@"Stream HasSpaceAvailable");
+//            NSLog(@"Stream HasSpaceAvailable");
             break;
         }
         default:

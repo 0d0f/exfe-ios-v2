@@ -31,6 +31,8 @@
 @property (nonatomic, retain) Card *meCard;
 @property (nonatomic, retain) NSSet *othersCards;
 
+@property (nonatomic, retain) UILabel *networkLabel;
+
 @property (nonatomic, assign) BOOL canUpdateData;
 @end
 
@@ -45,6 +47,10 @@
       self.title = @"Here controller";
       self.view.backgroundColor=[UIColor whiteColor];
         _lock = [[NSRecursiveLock alloc] init];
+        
+        _cardViewController = [[EXCardViewController alloc] init];
+        _cardViewController.user = [User getDefaultUser];
+        _cardViewController.delegate = self;
     }
     
     return self;
@@ -54,6 +60,7 @@
     if (self.liveService.isRunning) {
         [self.liveService stop];
     }
+    [_networkLabel release];
     self.liveService = nil;
     self.locationManager = nil;
     self.currentLocation = nil;
@@ -107,6 +114,14 @@
     [self.view bringSubviewToFront:headerView];
     
     [_avatarlistview reloadData];
+    
+    // network label
+    UILabel *networkLabel = [[UILabel alloc] initWithFrame:(CGRect){{5, CGRectGetHeight(self.view.frame) - 12}, {310, 12}}];
+    networkLabel.backgroundColor = [UIColor clearColor];
+    networkLabel.textColor = [UIColor colorWithRed:255 green:255 blue:255 alpha:0.4f];
+    networkLabel.font = [UIFont systemFontOfSize:10];
+    [self.view addSubview:networkLabel];
+    _networkLabel = networkLabel;
     
     // live service
     self.liveService = [EXLiveServiceController defaultService];
@@ -216,7 +231,39 @@
     self.othersCards = cards;
     dispatch_async(dispatch_get_main_queue(), ^{
         [_avatarlistview reloadData];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"hh:mm";
+        self.networkLabel.text = [NSString stringWithFormat:@"DEBUG info: Stream got %d cards [timestamp: %@]", [cards count], [formatter stringFromDate:[NSDate date]]];
+        [formatter release];
     });
+}
+
+- (void)liveServiceController:(EXLiveServiceController *)serviceController didGetToken:(NSString *)totken andCardID:(NSString *)cardID {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"hh:mm";
+    self.networkLabel.text = [NSString stringWithFormat:@"DEBUG info: Got token:%@ [timestamp: %@]", totken, [formatter stringFromDate:[NSDate date]]];
+    [formatter release];
+}
+
+- (void)liveServiceControllerTokenDidInvalid:(EXLiveServiceController *)serviceController willRetry:(BOOL)retry {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"hh:mm";
+    self.networkLabel.text = [NSString stringWithFormat:@"DEBUG info: Token Invalid [timestamp: %@]", [formatter stringFromDate:[NSDate date]]];
+    [formatter release];
+}
+
+- (void)liveServiceControllerStreamDidOpen:(EXLiveServiceController *)serviceController {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"hh:mm";
+    self.networkLabel.text = [NSString stringWithFormat:@"DEBUG info: Stream opened [timestamp: %@]", [formatter stringFromDate:[NSDate date]]];
+    [formatter release];
+}
+
+- (void)liveServiceControllerStreamDidFail:(EXLiveServiceController *)serviceController {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"hh:mm";
+    self.networkLabel.text = [NSString stringWithFormat:@"DEBUG info: Stream failed [timestamp: %@]", [formatter stringFromDate:[NSDate date]]];
+    [formatter release];
 }
 
 #pragma mark - EXLiveServiceControllerDataSource
@@ -246,6 +293,11 @@
 	didUpdateToLocation:(CLLocation *)newLocation
 		   fromLocation:(CLLocation *)oldLocation {
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"hh:mm";
+        self.networkLabel.text = [NSString stringWithFormat:@"DEBUG info: Got location [timestamp: %@]", [formatter stringFromDate:[NSDate date]]];
+        [formatter release];
+        
         self.currentLocation = newLocation;
         [self.liveService invokeUserCardUpdate];
     });
@@ -255,6 +307,11 @@
 	 didUpdateLocations:(NSArray *)locations {
     CLLocation *newLocation = (CLLocation *)[locations lastObject];
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"hh:mm";
+        self.networkLabel.text = [NSString stringWithFormat:@"DEBUG info: Got location [timestamp: %@]", [formatter stringFromDate:[NSDate date]]];
+        [formatter release];
+        
         self.currentLocation = newLocation;
         [self.liveService invokeUserCardUpdate];
     });
@@ -349,12 +406,6 @@
                              }
                          }];
         
-        if (nil == _cardViewController) {
-            _cardViewController = [[EXCardViewController alloc] init];
-            _cardViewController.user = [User getDefaultUser];
-            _cardViewController.delegate = self;
-        }
-
         [_cardViewController presentFromViewController:self
                                               animated:YES
                                             completion:nil];
@@ -440,12 +491,20 @@
     
     NSSet *selectedCells = [_avatarlistview selectedCircleItemCells];
     NSMutableArray *identityParams = [[NSMutableArray alloc] initWithCapacity:[selectedCells count]];
+    NSMutableArray *noresponseIdentity = [[NSMutableArray alloc] init];
     for (EXCircleItemCell *cell in selectedCells) {
         NSArray *cardIdentities = cell.card.identities;
+        BOOL gotNoresponseIdentity = NO;
         for (CardIdentitiy *anIdentity in cardIdentities) {
+            if (!gotNoresponseIdentity) {
+                gotNoresponseIdentity = YES;
+                [noresponseIdentity addObject:[NSString stringWithFormat:@"%@%@", anIdentity.provider, anIdentity.externalUsername]];
+            }
             [identityParams addObject:[anIdentity dictionaryValue]];
         }
     }
+    
+//    NSLog(@"\n%@", noresponseIdentity);
     
     [APIExfee getIdentitiesFromIdentityParams:identityParams
                                        succes:^(NSArray *identities){
@@ -459,7 +518,17 @@
                                            for (Identity *identity in identities) {
                                                NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
                                                Invitation *invitation=[[[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
-                                               invitation.rsvp_status=@"NORESPONSE";
+                                               NSString *key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
+//                                               NSLog(@"\n key:%@", key);
+                                               for (NSString *aKey in noresponseIdentity) {
+                                                   if ([key isEqualToString:aKey]) {
+//                                                       NSLog(@"NORESPONSE");
+                                                       invitation.rsvp_status=@"NORESPONSE";
+                                                   } else {
+//                                                       NSLog(@"NOTIFICATION");
+                                                       invitation.rsvp_status=@"NOTIFICATION";
+                                                   }
+                                               }
                                                invitation.identity=identity;
                                                Invitation *myinvitation=[self.exfee getMyInvitation];
                                                if(myinvitation!=nil)
@@ -488,6 +557,8 @@
                                               [MBProgressHUD hideHUDForView:self.view animated:YES];
                                           });
                                       }];
+    [identityParams release];
+    [noresponseIdentity release];
 }
 
 #pragma mark -

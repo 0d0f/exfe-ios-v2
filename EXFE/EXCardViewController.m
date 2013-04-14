@@ -28,6 +28,7 @@
 @property (nonatomic, assign) CGFloat moveDistance;
 @property (nonatomic, retain) UIViewController *sourceViewController;
 @property (nonatomic, retain) NSArray *sortedUserIdentities;
+@property (nonatomic, retain) NSMutableDictionary *tempPrivacyDictionary;
 
 - (void)moveVertiallyWithDistance:(CGFloat)distance animated:(BOOL)animated completion:(void (^)(void))handler;
 @end
@@ -52,6 +53,7 @@
 }
 
 - (void)dealloc {
+    [_tempPrivacyDictionary release];
     [_identityPrivacyDict release];
     [_sortedUserIdentities release];
     [_window release];
@@ -182,16 +184,16 @@
         if (i > 1) {
             [self.identityPrivacyDict setValue:[NSNumber numberWithBool:NO] forKey:key];
             [cachedPrivacyDict setValue:[NSNumber numberWithBool:NO] forKey:key];
-            if ([self.delegate respondsToSelector:@selector(cardViewControllerDidChangeUserPrivacy:)]) {
-                [self.delegate cardViewControllerDidChangeUserPrivacy:self];
-            }
+//            if ([self.delegate respondsToSelector:@selector(cardViewControllerDidChangeUserPrivacy:)]) {
+//                [self.delegate cardViewControllerDidChangeUserPrivacy:self];
+//            }
         }
     } else {
         [self.identityPrivacyDict setValue:[NSNumber numberWithBool:YES] forKey:key];
         [cachedPrivacyDict setValue:[NSNumber numberWithBool:YES] forKey:key];
-        if ([self.delegate respondsToSelector:@selector(cardViewControllerDidChangeUserPrivacy:)]) {
-            [self.delegate cardViewControllerDidChangeUserPrivacy:self];
-        }
+//        if ([self.delegate respondsToSelector:@selector(cardViewControllerDidChangeUserPrivacy:)]) {
+//            [self.delegate cardViewControllerDidChangeUserPrivacy:self];
+//        }
     }
     
     [userDefaults setValue:cachedPrivacyDict forKey:userKey];
@@ -234,9 +236,36 @@
     [self moveVertiallyWithDistance:-CGRectGetHeight(self.view.bounds)
                            animated:YES
                          completion:handler];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *userKey = [NSString stringWithFormat:@"%lld", [_user.user_id longLongValue]];
+    NSDictionary *cachedDictionary = [userDefaults valueForKey:userKey];
+    if (cachedDictionary) {
+        _tempPrivacyDictionary = [cachedDictionary mutableCopy];
+    }
 }
 
 - (void)dismissWithAnimated:(BOOL)animated completion:(void (^)(void))handler {
+    if (!_tempPrivacyDictionary ||
+        [_tempPrivacyDictionary count] != [self.identityPrivacyDict count]) {
+        if ([self.delegate respondsToSelector:@selector(cardViewControllerDidChangeUserPrivacy:)]) {
+            [self.delegate cardViewControllerDidChangeUserPrivacy:self];
+        }
+    } else if (_tempPrivacyDictionary) {
+        __block BOOL didChange = NO;
+        [_tempPrivacyDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop){
+            if ([[self.identityPrivacyDict valueForKey:key] boolValue] != [value boolValue]) {
+                didChange = YES;
+                *stop = YES;
+            }
+        }];
+        if (didChange) {
+            if ([self.delegate respondsToSelector:@selector(cardViewControllerDidChangeUserPrivacy:)]) {
+                [self.delegate cardViewControllerDidChangeUserPrivacy:self];
+            }
+        }
+    }
+    
     CGFloat screenHeight = CGRectGetHeight([UIScreen mainScreen].bounds);
     CGFloat viewOriginY = CGRectGetMinY(self.view.frame);
     
@@ -254,6 +283,8 @@
                              if ([self.delegate respondsToSelector:@selector(cardViewControllerDidFinish:)]) {
                                  [self.delegate cardViewControllerDidFinish:self];
                              }
+                             
+                             self.tempPrivacyDictionary = nil;
                              
                              if (handler)
                                  handler();
