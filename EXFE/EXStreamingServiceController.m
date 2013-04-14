@@ -27,6 +27,7 @@
         self.baseURL = baseURL;
         self.client = [[[AFHTTPClient alloc] initWithBaseURL:self.baseURL] autorelease];
         self.client.parameterEncoding = AFJSONParameterEncoding;
+        [self.client setDefaultHeader:@"Accept" value:@"application/json"];
         
         // Default
         self.serviceState = kEXStreamingServiceStateReady;

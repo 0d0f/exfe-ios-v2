@@ -94,7 +94,7 @@
                 if ([self isNull:obj]) {
                     self.userName = nil;
                 } else {
-                    self.userName = [obj stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                    self.userName = obj;
                 }
             } else if ([key isEqualToString:@"avatar"]) {
                 if ([self isNull:obj]) {
@@ -106,7 +106,7 @@
                 if ([self isNull:obj]) {
                     self.bio = nil;
                 } else {
-                    self.bio = [obj stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                    self.bio = obj;
                 }
             } else if ([key isEqualToString:@"identities"]) {
                 if ([self isNull:obj]) {

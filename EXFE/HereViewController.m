@@ -646,7 +646,7 @@
         }
     }
     
-    NSDictionary *cardParams = @{@"id" : (self.liveService.cardID && self.liveService.cardID.length) ? self.liveService.cardID : @"" , @"name" : [me.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], @"avatar" : me.avatar_filename, @"bio" : [me.bio stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], @"identities" : identities, @"is_me": [NSNumber numberWithBool:YES]};
+    NSDictionary *cardParams = @{@"id" : (self.liveService.cardID && self.liveService.cardID.length) ? self.liveService.cardID : @"" , @"name" : me.name, @"avatar" : me.avatar_filename, @"bio" : me.bio, @"identities" : identities, @"is_me": [NSNumber numberWithBool:YES]};
     [identities release];
     
     return cardParams;

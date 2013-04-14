@@ -272,7 +272,7 @@
             NSData *data = (NSData *)[stream propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
             NSString *string = [[[NSString alloc] initWithBytes:[data bytes]
                                                          length:[data length]
-                                                       encoding:[NSString defaultCStringEncoding]] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                                                       encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             
             NSString *lastJSON = nil;
             NSArray *array = [string componentsSeparatedByString:@"\n"];
