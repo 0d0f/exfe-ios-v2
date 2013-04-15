@@ -1054,6 +1054,18 @@
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
 		4FED88F81712BCE500858D05 /* NSString+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FED88F71712BCE500858D05 /* NSString+EXFE.m */; };
+		4FF69551171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; };
+		4FF69552171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; };
+		4FF69553171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; };
+		4FF69554171BDF53003DF80B /* EFSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69550171BDF53003DF80B /* EFSignInViewController.xib */; };
+		4FF69555171BDF53003DF80B /* EFSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69550171BDF53003DF80B /* EFSignInViewController.xib */; };
+		4FF69556171BDF53003DF80B /* EFSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69550171BDF53003DF80B /* EFSignInViewController.xib */; };
+		4FF6955A171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; };
+		4FF6955B171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; };
+		4FF6955C171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; };
+		4FF6955D171BFA2B003DF80B /* EFLandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */; };
+		4FF6955E171BFA2B003DF80B /* EFLandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */; };
+		4FF6955F171BFA2B003DF80B /* EFLandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */; };
 		4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
 		4FFB149C16C0BFFF00F76D32 /* edit_30_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */; };
 		4FFB149D16C0BFFF00F76D32 /* edit_30_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */; };
@@ -1687,6 +1699,12 @@
 		4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
 		4FED88F61712BCE500858D05 /* NSString+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+EXFE.h"; sourceTree = "<group>"; };
 		4FED88F71712BCE500858D05 /* NSString+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+EXFE.m"; sourceTree = "<group>"; };
+		4FF6954E171BDF53003DF80B /* EFSignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSignInViewController.h; sourceTree = "<group>"; };
+		4FF6954F171BDF53003DF80B /* EFSignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSignInViewController.m; sourceTree = "<group>"; };
+		4FF69550171BDF53003DF80B /* EFSignInViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFSignInViewController.xib; sourceTree = "<group>"; };
+		4FF69557171BFA2A003DF80B /* EFLandingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLandingViewController.h; sourceTree = "<group>"; };
+		4FF69558171BFA2A003DF80B /* EFLandingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLandingViewController.m; sourceTree = "<group>"; };
+		4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFLandingViewController.xib; sourceTree = "<group>"; };
 		4FFB149316BFFB9600F76D32 /* SSTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSTextView.h; sourceTree = "<group>"; };
 		4FFB149416BFFB9600F76D32 /* SSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSTextView.m; sourceTree = "<group>"; };
 		4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30_pressed.png; sourceTree = "<group>"; };
@@ -2275,6 +2293,7 @@
 			isa = PBXGroup;
 			children = (
 				78409164156F3AA7006DF115 /* Cross */,
+				4FF69541171BC9B7003DF80B /* Login */,
 				782B3CC7156B918B00721150 /* User */,
 			);
 			name = VIewController;
@@ -2373,6 +2392,19 @@
 				4F64BA8C16ED9A2700B9594E /* WidgetExfeeViewController.xib */,
 			);
 			name = Tab;
+			sourceTree = "<group>";
+		};
+		4FF69541171BC9B7003DF80B /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				4FF69557171BFA2A003DF80B /* EFLandingViewController.h */,
+				4FF69558171BFA2A003DF80B /* EFLandingViewController.m */,
+				4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */,
+				4FF6954E171BDF53003DF80B /* EFSignInViewController.h */,
+				4FF6954F171BDF53003DF80B /* EFSignInViewController.m */,
+				4FF69550171BDF53003DF80B /* EFSignInViewController.xib */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 		76A150B41717D1CB00751C92 /* Service */ = {
@@ -3669,6 +3701,8 @@
 				4F63DC3C17172AA600136B7E /* exfee_bg.png in Resources */,
 				4F63DC3D17172AA600136B7E /* exfee_bg@2x.png in Resources */,
 				4FC7ED791717F46800582D84 /* WidgetConvViewController.xib in Resources */,
+				4FF69555171BDF53003DF80B /* EFSignInViewController.xib in Resources */,
+				4FF6955E171BFA2B003DF80B /* EFLandingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3973,6 +4007,8 @@
 				4F63DE0B17172B0700136B7E /* exfee_bg.png in Resources */,
 				4F63DE0C17172B0700136B7E /* exfee_bg@2x.png in Resources */,
 				4FC7ED811717F46900582D84 /* WidgetConvViewController.xib in Resources */,
+				4FF69556171BDF53003DF80B /* EFSignInViewController.xib in Resources */,
+				4FF6955F171BFA2B003DF80B /* EFLandingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4279,6 +4315,8 @@
 				4F63DE131717339100136B7E /* Polit-Info.plist in Resources */,
 				4F63DE15171733C500136B7E /* 0d0f-Info.plist in Resources */,
 				4FC7ED6F1717F3F700582D84 /* WidgetConvViewController.xib in Resources */,
+				4FF69554171BDF53003DF80B /* EFSignInViewController.xib in Resources */,
+				4FF6955D171BFA2B003DF80B /* EFLandingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4450,6 +4488,8 @@
 				4F63DAFF17172AA600136B7E /* UILabel+EXFE.m in Sources */,
 				4F63DB0017172AA600136B7E /* NSString+EXFE.m in Sources */,
 				76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */,
+				4FF69552171BDF53003DF80B /* EFSignInViewController.m in Sources */,
+				4FF6955B171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4591,6 +4631,8 @@
 				4F63DCCE17172B0700136B7E /* UILabel+EXFE.m in Sources */,
 				4F63DCCF17172B0700136B7E /* NSString+EXFE.m in Sources */,
 				76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */,
+				4FF69553171BDF53003DF80B /* EFSignInViewController.m in Sources */,
+				4FF6955C171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4731,6 +4773,8 @@
 				4F9FE572170548770098B9B9 /* UIApplication+EXFE.m in Sources */,
 				4F67C3A41709A52D001AA816 /* UILabel+EXFE.m in Sources */,
 				4FED88F81712BCE500858D05 /* NSString+EXFE.m in Sources */,
+				4FF69551171BDF53003DF80B /* EFSignInViewController.m in Sources */,
+				4FF6955A171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
