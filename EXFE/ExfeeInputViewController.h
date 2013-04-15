@@ -40,7 +40,7 @@
     UILabel *errorHintLabel;
     BOOL ifAddExfeeSend;
     NSArray *localcontacts;
-    NSArray *filteredlocalcontacts;
+    NSMutableArray *_filteredlocalcontacts;
     UIView *expandExfeeView;
     UIView *expandExfeeViewShadow;
     int addressbookType;
