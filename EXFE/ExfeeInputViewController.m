@@ -10,6 +10,7 @@
 #import "APIProfile.h"
 #import "APIExfee.h"
 #import "WCAlertView.h"
+#import "EXAddressBookService.h"
 
 @interface ExfeeInputViewController ()
 
@@ -136,18 +137,14 @@ static char identitykey;
     NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *filename = [docsPath stringByAppendingPathComponent:@"localcontacts"];
     localcontacts=[[NSKeyedUnarchiver unarchiveObjectWithFile:filename] copy];
-    filteredlocalcontacts=[localcontacts retain];
+//    _filteredlocalcontacts = [localcontacts retain];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
-//    NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-//    NSString *filename = [docsPath stringByAppendingPathComponent:@"localcontacts"];
     NSDate *localaddressbook_read_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"localaddressbook_read_at"];
     int offset=[[NSDate date] timeIntervalSince1970]-[localaddressbook_read_at timeIntervalSince1970];
     
-    //TODO: offset=10000 for debug, must be deleted before release.
-//    offset=100000;
-    if(offset > 1*24*60*60){
+    if (offset > 1 * 24 * 60 * 60) {
         MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode=MBProgressHUDModeCustomView;
         EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
@@ -155,37 +152,67 @@ static char identitykey;
         hud.customView=bigspin;
         [bigspin release];
         hud.labelText = @"Loading";
+        
+        if(!_filteredlocalcontacts) {
+            [_filteredlocalcontacts release];
+            _filteredlocalcontacts = nil;
+        }
+        
+        __block BOOL isProgressHubVisible = YES;
+        _filteredlocalcontacts = [[NSMutableArray alloc] initWithCapacity:[EXAddressBookService defaultService].peopleCount];
+        
+        UILogPush(@"Start Loading Contact.");
+        [[EXAddressBookService defaultService] fetchPeopleWithPageSize:40
+                                                pageLoadSuccessHandler:^(NSArray *people){
+                                                    [_filteredlocalcontacts addObjectsFromArray:people];
+                                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                                        UILogPush(@"Load a Page");
+                                                        [suggestionTable reloadData];
+                                                        if (isProgressHubVisible) {
+                                                            isProgressHubVisible = NO;
+                                                            [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                        }
+                                                    });
+                                                }
+                                                     completionHandler:^{
+                                                         UILogPush(@"End Loading Contact.");
+                                                         dispatch_queue_t fetcth_queue = dispatch_queue_create("queue.fetch", NULL);
+                                                         dispatch_async(fetcth_queue, ^{
+                                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                                 [self reloadLocalAddressBook];
+                                                             });
+                                                         });
+                                                     }
+                                                        failureHandler:nil];
+        
+//        dispatch_queue_t loadingQueue = dispatch_queue_create("loading addressbook", NULL);
+//        dispatch_async(loadingQueue, ^{
+//            [address UpdatePeople:nil];
+//          
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
+//                if(filteredlocalcontacts!=nil)
+//                  [filteredlocalcontacts release];
+//
+//                RKObjectManager *objectManager = [RKObjectManager sharedManager];
+//                filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain] ;
+//
+//                  if(addressbookType==LOCAL_ADDRESSBOOK)
+//                      [self reloadLocalAddressBook];
+//                [self copyMoreContactsFromIdx:200];
+//
+//                [MBProgressHUD hideHUDForView:self.view animated:YES];
+//            });
+//        });
+//        dispatch_release(loadingQueue);
 
-//      @synchronized(self){
-        dispatch_queue_t loadingQueue = dispatch_queue_create("loading addressbook", NULL);
-        dispatch_async(loadingQueue, ^{
-            [address UpdatePeople:nil];
-          
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
-                if(filteredlocalcontacts!=nil)
-                  [filteredlocalcontacts release];
-
-                RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain] ;
-
-                  if(addressbookType==LOCAL_ADDRESSBOOK)
-                      [self reloadLocalAddressBook];
-                [self copyMoreContactsFromIdx:200];
-
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-            });
-        });
-        dispatch_release(loadingQueue);
-//      }
-
-    }else{
+    } else {
       NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
-      if(filteredlocalcontacts!=nil)
-          [filteredlocalcontacts release];
+      if(_filteredlocalcontacts!=nil)
+          [_filteredlocalcontacts release];
       RKObjectManager *objectManager = [RKObjectManager sharedManager];
-      filteredlocalcontacts = [[objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil] retain];
-      if(addressbookType==LOCAL_ADDRESSBOOK)
+      _filteredlocalcontacts = [[objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil] mutableCopy];
+      if(addressbookType == LOCAL_ADDRESSBOOK)
           [self reloadLocalAddressBook];
     }
 }
@@ -197,10 +224,10 @@ static char identitykey;
         dispatch_async(dispatch_get_main_queue(), ^{
             @synchronized(self){
               NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
-              if(filteredlocalcontacts!=nil)
-                [filteredlocalcontacts release];
+              if(_filteredlocalcontacts!=nil)
+                [_filteredlocalcontacts release];
               RKObjectManager *objectManager = [RKObjectManager sharedManager];
-              filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+              _filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] mutableCopy];
             
               if(addressbookType==LOCAL_ADDRESSBOOK)
                   [self reloadLocalAddressBook];
@@ -715,7 +742,7 @@ static char identitykey;
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
     if(addressbookType==LOCAL_ADDRESSBOOK)
       @synchronized(self){
-        return [filteredlocalcontacts count];
+        return [_filteredlocalcontacts count];
       }
     else{
         if(suggestIdentities)
@@ -735,7 +762,7 @@ static char identitykey;
     }
     if(addressbookType==LOCAL_ADDRESSBOOK)
     {
-        LocalContact *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
+        LocalContact *person=[_filteredlocalcontacts objectAtIndex:indexPath.row];
 
         cell.title = person.name;
 
@@ -851,7 +878,7 @@ static char identitykey;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(addressbookType==LOCAL_ADDRESSBOOK){
-        LocalContact *person=[filteredlocalcontacts objectAtIndex:indexPath.row];
+        LocalContact *person=[_filteredlocalcontacts objectAtIndex:indexPath.row];
       [self addByInputIdentity:[[AddressBook getDefaultIdentity:person] objectForKey:@"external_id"] name:[[AddressBook getDefaultIdentity:person] objectForKey:@"name"] provider:[[AddressBook getDefaultIdentity:person] objectForKey:@"provider"] dismiss:NO];
     }else{
         Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
@@ -954,9 +981,9 @@ static char identitykey;
     }else if(addressbookType == LOCAL_ADDRESSBOOK){
         
         NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",[input stringByReplacingOccurrencesOfString:@" " withString:@"*"]];
-        if(filteredlocalcontacts!=nil){
-            [filteredlocalcontacts release];
-            filteredlocalcontacts=nil;
+        if(_filteredlocalcontacts != nil){
+            [_filteredlocalcontacts release];
+            _filteredlocalcontacts = nil;
         }
       
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
@@ -965,12 +992,12 @@ static char identitykey;
 
       
 //        NSFetchRequest* request = [LocalContact fetchRequest];
-        if(filteredlocalcontacts!=nil)
-            [filteredlocalcontacts release];
+        if(_filteredlocalcontacts != nil)
+            [_filteredlocalcontacts release];
         [request setPredicate:predicate];
 
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
-        filteredlocalcontacts= [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+        _filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] mutableCopy];
 
         [suggestionTable reloadData];
     }
@@ -993,7 +1020,7 @@ static char identitykey;
         else{
             selectedRowIndex=indexPath.row;
         }
-        LocalContact *localcontact=[filteredlocalcontacts objectAtIndex:indexPath.row];
+        LocalContact *localcontact=[_filteredlocalcontacts objectAtIndex:indexPath.row];
         
         NSArray* useridentities=[AddressBook getLocalIdentityObjects:localcontact];
         expandCellHeight=44+[useridentities count]/2*40+([useridentities count]%2)*40;

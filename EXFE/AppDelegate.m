@@ -90,11 +90,14 @@ static char mergetoken;
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
 
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    self.window.rootViewController=self.navigationController;
+    self.window.rootViewController = self.navigationController;
     [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
-    if(login==YES)
+    
+    UILogSetWindow(self.window);
+    
+    if (login)
         [APIProfile LoadUsrWithUserId:userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
           NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
           NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", userid];

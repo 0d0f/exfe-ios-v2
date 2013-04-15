@@ -1071,6 +1071,10 @@
 		4FFB149D16C0BFFF00F76D32 /* edit_30_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */; };
 		76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
+		76DED7C3171BEDE000C2F27E /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
+		76DED7CE171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
+		76DED7CF171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
+		76DED7D0171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
 		7803EB8B15AD801500291B69 /* EXButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7803EB8A15AD801500291B69 /* EXButton.m */; };
 		7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 780961FF15BDB70B0071E9D0 /* EXOverlayView.m */; };
 		780D27A4157F368900402460 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A3157F368900402460 /* Post.m */; };
@@ -1711,6 +1715,8 @@
 		4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30_pressed@2x.png"; sourceTree = "<group>"; };
 		76A150BC1717D23400751C92 /* EXAddressBookService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAddressBookService.h; sourceTree = "<group>"; };
 		76A150BD1717D23500751C92 /* EXAddressBookService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAddressBookService.m; sourceTree = "<group>"; };
+		76DED7CC171C06A900C2F27E /* UILog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILog.h; sourceTree = "<group>"; };
+		76DED7CD171C06A900C2F27E /* UILog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILog.m; sourceTree = "<group>"; };
 		7803EB8915AD801500291B69 /* EXButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXButton.h; sourceTree = "<group>"; };
 		7803EB8A15AD801500291B69 /* EXButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXButton.m; sourceTree = "<group>"; };
 		780961FE15BDB70B0071E9D0 /* EXOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXOverlayView.h; sourceTree = "<group>"; };
@@ -2346,6 +2352,7 @@
 		4FD9376116D6026B00ED6677 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				76DED7CB171C05FE00C2F27E /* Debug */,
 				4FD9376216D602A200ED6677 /* Extention */,
 				78C6B9FD166349A600483D23 /* AddressBook.h */,
 				78C6B9FE166349A600483D23 /* AddressBook.m */,
@@ -2414,6 +2421,15 @@
 				76A150BD1717D23500751C92 /* EXAddressBookService.m */,
 			);
 			name = Service;
+			sourceTree = "<group>";
+		};
+		76DED7CB171C05FE00C2F27E /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				76DED7CC171C06A900C2F27E /* UILog.h */,
+				76DED7CD171C06A900C2F27E /* UILog.m */,
+			);
+			name = Debug;
 			sourceTree = "<group>";
 		};
 		780EAC29165215EE00953D75 /* AddIdentity */ = {
@@ -4490,6 +4506,7 @@
 				76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */,
 				4FF69552171BDF53003DF80B /* EFSignInViewController.m in Sources */,
 				4FF6955B171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
+				76DED7CF171C06A900C2F27E /* UILog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4633,6 +4650,7 @@
 				76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */,
 				4FF69553171BDF53003DF80B /* EFSignInViewController.m in Sources */,
 				4FF6955C171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
+				76DED7D0171C06A900C2F27E /* UILog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4775,6 +4793,8 @@
 				4FED88F81712BCE500858D05 /* NSString+EXFE.m in Sources */,
 				4FF69551171BDF53003DF80B /* EFSignInViewController.m in Sources */,
 				4FF6955A171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
+				76DED7C3171BEDE000C2F27E /* EXAddressBookService.m in Sources */,
+				76DED7CE171C06A900C2F27E /* UILog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
