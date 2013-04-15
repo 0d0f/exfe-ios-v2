@@ -76,9 +76,9 @@ static char mergetoken;
   
    [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
     BOOL login=[self Checklogin];
-    if(login==NO){
-        [self ShowLanding];
-    }
+//    if(login==NO){
+//        [self ShowLanding];
+//    }
   
 //    NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
   

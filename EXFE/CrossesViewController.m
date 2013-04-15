@@ -22,6 +22,7 @@
 #import "Place+Helper.h"
 #import "NSString+EXFE.h"
 #import "CrossGroupViewController.h"
+#import "EFLandingViewController.h"
 
 
 @interface CrossesViewController ()
@@ -102,7 +103,13 @@
 //        NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
 //        if(newuser !=nil && [newuser isEqualToString:@"YES"])
 //            [self showWelcome];
+    } else {
+        [app ShowLanding];
+//        EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
+//        [self.navigationController presentModalViewController:viewController animated:NO];
     }
+    
+    
     default_background=[UIImage imageNamed:@"x_titlebg_default.jpg"];
 
     CGFloat scaleFactor = 1.0;
@@ -282,18 +289,18 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-
-    BOOL login=[app Checklogin];
-    if(login==YES)
-    {
-      //RESTKIT 0.20
-//        [self refreshPortrait];
-//        [self refreshCrosses:@"crossupdateview"];
-    }
-    else {
-        [app ShowLanding];
-    }
+//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+//
+//    BOOL login=[app Checklogin];
+//    if(login==YES)
+//    {
+//      //RESTKIT 0.20
+////        [self refreshPortrait];
+////        [self refreshCrosses:@"crossupdateview"];
+//    }
+//    else {
+//        [app ShowLanding];
+//    }
 }
 
 - (void)ShowProfileView{
