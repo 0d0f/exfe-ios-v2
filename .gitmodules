@@ -3,7 +3,7 @@
 	url = git://github.com/RestKit/RestKit.git
 [submodule "Vendor/BlocksKit"]
 	path = Vendor/BlocksKit
-	url = git://github.com/pandamonia/BlocksKit.git
+	url = git://github.com/stonyw/BlocksKit.git
 [submodule "Vendor/PSTCollectionView"]
 	path = Vendor/PSTCollectionView
-	url = git://github.com/steipete/PSTCollectionView.git
+	url = git://github.com/stonyw/PSTCollectionView.git
