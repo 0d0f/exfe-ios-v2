@@ -80,6 +80,9 @@
 		4F29C92A16F962CA001BB176 /* EXBasicMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92916F962CA001BB176 /* EXBasicMenu.m */; };
 		4F29C93016F9A5B5001BB176 /* User+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92F16F9A5B5001BB176 /* User+EXFE.m */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
+		4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
+		4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
+		4F358D6F171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
 		4F63DA7C17172AA600136B7E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E971560F832009E0806 /* main.m */; };
 		4F63DA7D17172AA600136B7E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E9B1560F832009E0806 /* AppDelegate.m */; };
 		4F63DA7E17172AA600136B7E /* APICrosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F02156117D8009E0806 /* APICrosses.m */; };
@@ -1583,6 +1586,8 @@
 		4F29C92F16F9A5B5001BB176 /* User+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "User+EXFE.m"; sourceTree = "<group>"; };
 		4F3355CE168C4F4700D398C0 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
+		4F358D6B171D66F5005C2EE7 /* EFPasswordField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPasswordField.h; sourceTree = "<group>"; };
+		4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPasswordField.m; sourceTree = "<group>"; };
 		4F3C6D8016ACEE670095AA50 /* EditCrossDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditCrossDelegate.h; sourceTree = "<group>"; };
 		4F63DC4317172AA600136B7E /* 0d0f.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 0d0f.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F63DE1017172B0700136B7E /* Pilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2873,6 +2878,8 @@
 				4F29C92516F85F7B001BB176 /* EXMenu.m */,
 				4F29C92816F962C9001BB176 /* EXBasicMenu.h */,
 				4F29C92916F962CA001BB176 /* EXBasicMenu.m */,
+				4F358D6B171D66F5005C2EE7 /* EFPasswordField.h */,
+				4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */,
 			);
 			name = Control;
 			sourceTree = "<group>";
@@ -4507,6 +4514,7 @@
 				4FF69552171BDF53003DF80B /* EFSignInViewController.m in Sources */,
 				4FF6955B171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
 				76DED7CF171C06A900C2F27E /* UILog.m in Sources */,
+				4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4651,6 +4659,7 @@
 				4FF69553171BDF53003DF80B /* EFSignInViewController.m in Sources */,
 				4FF6955C171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
 				76DED7D0171C06A900C2F27E /* UILog.m in Sources */,
+				4F358D6F171D66F5005C2EE7 /* EFPasswordField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4795,6 +4804,7 @@
 				4FF6955A171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
 				76DED7C3171BEDE000C2F27E /* EXAddressBookService.m in Sources */,
 				76DED7CE171C06A900C2F27E /* UILog.m in Sources */,
+				4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
