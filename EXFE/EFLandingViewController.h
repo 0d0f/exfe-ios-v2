@@ -14,4 +14,6 @@
 @property (nonatomic, retain) IBOutlet UILabel *labelDescription;
 @property (nonatomic, retain) IBOutlet UILabel *labelStart;
 
+@property (nonatomic, retain) UIViewController *currentViewController;
+
 @end
