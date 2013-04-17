@@ -80,9 +80,9 @@
 		4F29C92A16F962CA001BB176 /* EXBasicMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92916F962CA001BB176 /* EXBasicMenu.m */; };
 		4F29C93016F9A5B5001BB176 /* User+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92F16F9A5B5001BB176 /* User+EXFE.m */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
-		4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
-		4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
-		4F358D6F171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
+		4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4F358D6F171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4F63DA7C17172AA600136B7E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E971560F832009E0806 /* main.m */; };
 		4F63DA7D17172AA600136B7E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E9B1560F832009E0806 /* AppDelegate.m */; };
 		4F63DA7E17172AA600136B7E /* APICrosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F02156117D8009E0806 /* APICrosses.m */; };
@@ -1002,6 +1002,9 @@
 		4F9926FF16EF6E30003D784A /* ExfeeResponseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9926FE16EF6E30003D784A /* ExfeeResponseCell.m */; };
 		4F99270516F02AEE003D784A /* ExfeeRsvpCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F99270416F02AEE003D784A /* ExfeeRsvpCell.m */; };
 		4F99270D16F091FD003D784A /* Exfee+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F99270C16F091FD003D784A /* Exfee+EXFE.m */; };
+		4F9FACF3171DD02B00B1ADD9 /* EFAPIServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FACF2171DD02B00B1ADD9 /* EFAPIServer.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4F9FACFB171DD35700B1ADD9 /* EFAPIServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FACF2171DD02B00B1ADD9 /* EFAPIServer.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4F9FACFC171DD35700B1ADD9 /* EFAPIServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FACF2171DD02B00B1ADD9 /* EFAPIServer.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4F9FE4E31702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4F9FE4E41702E12C0098B9B9 /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4F9FE4E51702E12C0098B9B9 /* PSTCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CC1702E12C0098B9B9 /* PSTCollectionViewCell.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
@@ -1057,15 +1060,15 @@
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
 		4FED88F81712BCE500858D05 /* NSString+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FED88F71712BCE500858D05 /* NSString+EXFE.m */; };
-		4FF69551171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; };
-		4FF69552171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; };
-		4FF69553171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; };
+		4FF69551171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FF69552171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FF69553171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4FF69554171BDF53003DF80B /* EFSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69550171BDF53003DF80B /* EFSignInViewController.xib */; };
 		4FF69555171BDF53003DF80B /* EFSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69550171BDF53003DF80B /* EFSignInViewController.xib */; };
 		4FF69556171BDF53003DF80B /* EFSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69550171BDF53003DF80B /* EFSignInViewController.xib */; };
-		4FF6955A171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; };
-		4FF6955B171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; };
-		4FF6955C171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; };
+		4FF6955A171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FF6955B171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FF6955C171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4FF6955D171BFA2B003DF80B /* EFLandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */; };
 		4FF6955E171BFA2B003DF80B /* EFLandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */; };
 		4FF6955F171BFA2B003DF80B /* EFLandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */; };
@@ -1622,6 +1625,8 @@
 		4F99270416F02AEE003D784A /* ExfeeRsvpCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExfeeRsvpCell.m; sourceTree = "<group>"; };
 		4F99270B16F091FD003D784A /* Exfee+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Exfee+EXFE.h"; sourceTree = "<group>"; };
 		4F99270C16F091FD003D784A /* Exfee+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Exfee+EXFE.m"; sourceTree = "<group>"; };
+		4F9FACF1171DD02B00B1ADD9 /* EFAPIServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAPIServer.h; sourceTree = "<group>"; };
+		4F9FACF2171DD02B00B1ADD9 /* EFAPIServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFAPIServer.m; sourceTree = "<group>"; };
 		4F9FE4C71702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexPath+PSTCollectionViewAdditions.h"; sourceTree = "<group>"; };
 		4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexPath+PSTCollectionViewAdditions.m"; sourceTree = "<group>"; };
 		4F9FE4C91702E12C0098B9B9 /* PSTCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTCollectionView.h; sourceTree = "<group>"; };
@@ -3023,6 +3028,8 @@
 				7818FF1515EB415E0095E92F /* ObjectToDict.m */,
 				4F9FE56D17049CAC0098B9B9 /* APIExfeServer.h */,
 				4F9FE56E17049CAC0098B9B9 /* APIExfeServer.m */,
+				4F9FACF1171DD02B00B1ADD9 /* EFAPIServer.h */,
+				4F9FACF2171DD02B00B1ADD9 /* EFAPIServer.m */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -4515,6 +4522,7 @@
 				4FF6955B171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
 				76DED7CF171C06A900C2F27E /* UILog.m in Sources */,
 				4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */,
+				4F9FACFB171DD35700B1ADD9 /* EFAPIServer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4660,6 +4668,7 @@
 				4FF6955C171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
 				76DED7D0171C06A900C2F27E /* UILog.m in Sources */,
 				4F358D6F171D66F5005C2EE7 /* EFPasswordField.m in Sources */,
+				4F9FACFC171DD35700B1ADD9 /* EFAPIServer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4805,6 +4814,7 @@
 				76DED7C3171BEDE000C2F27E /* EXAddressBookService.m in Sources */,
 				76DED7CE171C06A900C2F27E /* UILog.m in Sources */,
 				4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */,
+				4F9FACF3171DD02B00B1ADD9 /* EFAPIServer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
