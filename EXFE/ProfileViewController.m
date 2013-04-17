@@ -511,7 +511,7 @@
 - (void) deleteIdentity:(int)identity_id{
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u/deleteIdentity",API_ROOT,app.userid];
+    NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/deleteIdentity",API_ROOT,app.userid];
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     objectManager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
     [objectManager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
@@ -585,7 +585,7 @@
 - (void) doVerify:(int)identity_id{
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
   NSString *callback=@"oauth://handleOAuthAddIdentity";
-  NSString *endpoint = [NSString stringWithFormat:@"%@/users/VerifyUserIdentity",API_ROOT];
+  NSString *endpoint = [NSString stringWithFormat:@"%@users/VerifyUserIdentity",API_ROOT];
   RKObjectManager *objectManager = [RKObjectManager sharedManager];
   objectManager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
   [objectManager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];

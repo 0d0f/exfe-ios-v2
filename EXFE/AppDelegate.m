@@ -118,7 +118,7 @@ static char mergetoken;
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         }];
   
-  NSString *endpoint = [NSString stringWithFormat:@"%@/Backgrounds/GetAvailableBackgrounds?token=%@",API_ROOT,self.accesstoken];
+  NSString *endpoint = [NSString stringWithFormat:@"%@Backgrounds/GetAvailableBackgrounds?token=%@",API_ROOT,self.accesstoken];
   [objectManager.HTTPClient getPath:endpoint parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
     if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
       NSDictionary *body=responseObject;
@@ -244,7 +244,7 @@ static char mergetoken;
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
         return;
   
-    NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u/regdevice?token=%@",API_ROOT,self.userid,self.accesstoken];
+    NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/regdevice?token=%@",API_ROOT,self.userid,self.accesstoken];
   RKObjectManager *manager=[RKObjectManager sharedManager] ;
   manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
   [manager.HTTPClient postPath:endpoint parameters:@{@"udid":tokenAsString,@"push_token":tokenAsString,@"os_name":@"iOS",@"brand":@"apple",@"model":@"",@"os_version":@"6"} success:^(AFHTTPRequestOperation *operation, id responseObject) {

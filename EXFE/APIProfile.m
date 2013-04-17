@@ -39,12 +39,12 @@
 +(void) LoadUsrWithUserId:(int)user_id success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
   
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u?token=%@",API_ROOT,user_id, app.accesstoken];
+  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u?token=%@",API_ROOT,user_id, app.accesstoken];
   [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:nil success:success failure:failure];
 }
 
 +(void) LoadUsrWithUserId:(int)user_id withToken:(NSString*)token success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
-  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u?token=%@",API_ROOT,user_id, token];
+  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u?token=%@",API_ROOT,user_id, token];
   [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:nil success:success failure:failure];
   
 }
@@ -54,7 +54,7 @@
                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
   
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u/mergeIdentities?token=%@",API_ROOT,app.userid, app.accesstoken];
+  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/mergeIdentities?token=%@",API_ROOT,app.userid, app.accesstoken];
   
   [RKObjectManager sharedManager].HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
   [[RKObjectManager sharedManager].HTTPClient postPath:endpoint parameters:@{@"browsing_identity_token":browsing_identity_token,@"identity_ids":ids} success:success failure:failure];
@@ -66,7 +66,7 @@
 
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSString *endpoint = [NSString stringWithFormat:@"%@/identities/complete?key=%@",API_ROOT,key];
+    NSString *endpoint = [NSString stringWithFormat:@"%@identities/complete?key=%@",API_ROOT,key];
   
   [[RKObjectManager sharedManager].HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
   [[RKObjectManager sharedManager].HTTPClient getPath:endpoint parameters:nil success:success failure:failure];
@@ -78,7 +78,7 @@
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSString *endpoint = [NSString stringWithFormat:@"%@/users/update?token=%@",API_ROOT,app.accesstoken];
+    NSString *endpoint = [NSString stringWithFormat:@"%@users/update?token=%@",API_ROOT,app.accesstoken];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
@@ -95,7 +95,7 @@
                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSString *endpoint = [NSString stringWithFormat:@"%@/identities/%i/update?token=%@", API_ROOT, [identity.identity_id intValue], app.accesstoken];
+    NSString *endpoint = [NSString stringWithFormat:@"%@identities/%i/update?token=%@", API_ROOT, [identity.identity_id intValue], app.accesstoken];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;

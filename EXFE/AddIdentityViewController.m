@@ -198,7 +198,7 @@
       NSString *json=@"";
       json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,textUsername.text];
       json=[NSString stringWithFormat:@"[%@]",json];
-      NSString *endpoint = [NSString stringWithFormat:@"%@/identities/get",API_ROOT];
+      NSString *endpoint = [NSString stringWithFormat:@"%@identities/get",API_ROOT];
       RKObjectManager *manager=[RKObjectManager sharedManager] ;
       manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
       [manager.HTTPClient postPath:endpoint parameters:@{@"identities":json} success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -242,7 +242,7 @@
 - (void) addIdentity:(id) sender{
     [spin setHidden:NO];
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u/addIdentity",API_ROOT,app.userid];
+  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/addIdentity",API_ROOT,app.userid];
   RKObjectManager *manager=[RKObjectManager sharedManager] ;
 
   NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:5];

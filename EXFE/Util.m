@@ -983,7 +983,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
   NSString *udid=[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"];
   if(udid==nil)
     udid=@"";
-  NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u/signout?token=%@",API_ROOT,app.userid,app.accesstoken];
+  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/signout?token=%@",API_ROOT,app.userid,app.accesstoken];
   RKObjectManager *manager=[RKObjectManager sharedManager] ;
   manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
   [manager.HTTPClient postPath:endpoint parameters:@{@"udid":udid,@"os_name":@"iOS"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
