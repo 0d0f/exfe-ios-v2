@@ -1069,8 +1069,41 @@
 		4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
 		4FFB149C16C0BFFF00F76D32 /* edit_30_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */; };
 		4FFB149D16C0BFFF00F76D32 /* edit_30_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */; };
+		763A0184171E93460082CC9E /* titleview.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0182171E93460082CC9E /* titleview.png */; };
+		763A0185171E93460082CC9E /* titleview.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0182171E93460082CC9E /* titleview.png */; };
+		763A0186171E93460082CC9E /* titleview.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0182171E93460082CC9E /* titleview.png */; };
+		763A0187171E93460082CC9E /* titleview@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0183171E93460082CC9E /* titleview@2x.png */; };
+		763A0188171E93460082CC9E /* titleview@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0183171E93460082CC9E /* titleview@2x.png */; };
+		763A0189171E93460082CC9E /* titleview@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0183171E93460082CC9E /* titleview@2x.png */; };
+		763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
+		763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
+		763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
+		763A0191171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */; };
+		763A0192171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */; };
+		763A0193171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */; };
+		763A0195171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */; };
+		763A0196171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */; };
+		763A0197171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */; };
 		76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
+		76D1A804171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */; };
+		76D1A805171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */; };
+		76D1A806171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */; };
+		76D1A807171D5DFB00A35BBD /* EFChoosePeopleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A803171D5DFA00A35BBD /* EFChoosePeopleViewController.xib */; };
+		76D1A808171D5DFB00A35BBD /* EFChoosePeopleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A803171D5DFA00A35BBD /* EFChoosePeopleViewController.xib */; };
+		76D1A809171D5DFB00A35BBD /* EFChoosePeopleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A803171D5DFA00A35BBD /* EFChoosePeopleViewController.xib */; };
+		76D1A80C171D610C00A35BBD /* exfee_22ga.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A80A171D610C00A35BBD /* exfee_22ga.png */; };
+		76D1A80D171D610C00A35BBD /* exfee_22ga.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A80A171D610C00A35BBD /* exfee_22ga.png */; };
+		76D1A80E171D610C00A35BBD /* exfee_22ga.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A80A171D610C00A35BBD /* exfee_22ga.png */; };
+		76D1A80F171D610C00A35BBD /* exfee_22ga@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A80B171D610C00A35BBD /* exfee_22ga@2x.png */; };
+		76D1A810171D610C00A35BBD /* exfee_22ga@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A80B171D610C00A35BBD /* exfee_22ga@2x.png */; };
+		76D1A811171D610C00A35BBD /* exfee_22ga@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A80B171D610C00A35BBD /* exfee_22ga@2x.png */; };
+		76D1A814171D704C00A35BBD /* btn_blue_30inset.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A812171D704C00A35BBD /* btn_blue_30inset.png */; };
+		76D1A815171D704C00A35BBD /* btn_blue_30inset.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A812171D704C00A35BBD /* btn_blue_30inset.png */; };
+		76D1A816171D704C00A35BBD /* btn_blue_30inset.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A812171D704C00A35BBD /* btn_blue_30inset.png */; };
+		76D1A817171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A813171D704C00A35BBD /* btn_blue_30inset@2x.png */; };
+		76D1A818171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A813171D704C00A35BBD /* btn_blue_30inset@2x.png */; };
+		76D1A819171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A813171D704C00A35BBD /* btn_blue_30inset@2x.png */; };
 		76DED7C3171BEDE000C2F27E /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76DED7CE171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
 		76DED7CF171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
@@ -1713,8 +1746,22 @@
 		4FFB149416BFFB9600F76D32 /* SSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSTextView.m; sourceTree = "<group>"; };
 		4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30_pressed.png; sourceTree = "<group>"; };
 		4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30_pressed@2x.png"; sourceTree = "<group>"; };
+		763A0182171E93460082CC9E /* titleview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = titleview.png; sourceTree = "<group>"; };
+		763A0183171E93460082CC9E /* titleview@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "titleview@2x.png"; sourceTree = "<group>"; };
+		763A018A171EAEB10082CC9E /* EFSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchBar.h; sourceTree = "<group>"; };
+		763A018B171EAEB10082CC9E /* EFSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchBar.m; sourceTree = "<group>"; };
+		763A018F171EE8BE0082CC9E /* EFChoosePeopleViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewCell.h; sourceTree = "<group>"; };
+		763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChoosePeopleViewCell.m; sourceTree = "<group>"; };
+		763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFChoosePeopleViewCell.xib; sourceTree = "<group>"; };
 		76A150BC1717D23400751C92 /* EXAddressBookService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAddressBookService.h; sourceTree = "<group>"; };
 		76A150BD1717D23500751C92 /* EXAddressBookService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAddressBookService.m; sourceTree = "<group>"; };
+		76D1A801171D5DFA00A35BBD /* EFChoosePeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewController.h; sourceTree = "<group>"; };
+		76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChoosePeopleViewController.m; sourceTree = "<group>"; };
+		76D1A803171D5DFA00A35BBD /* EFChoosePeopleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFChoosePeopleViewController.xib; sourceTree = "<group>"; };
+		76D1A80A171D610C00A35BBD /* exfee_22ga.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exfee_22ga.png; sourceTree = "<group>"; };
+		76D1A80B171D610C00A35BBD /* exfee_22ga@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfee_22ga@2x.png"; sourceTree = "<group>"; };
+		76D1A812171D704C00A35BBD /* btn_blue_30inset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_blue_30inset.png; sourceTree = "<group>"; };
+		76D1A813171D704C00A35BBD /* btn_blue_30inset@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_blue_30inset@2x.png"; sourceTree = "<group>"; };
 		76DED7CC171C06A900C2F27E /* UILog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILog.h; sourceTree = "<group>"; };
 		76DED7CD171C06A900C2F27E /* UILog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILog.m; sourceTree = "<group>"; };
 		7803EB8915AD801500291B69 /* EXButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXButton.h; sourceTree = "<group>"; };
@@ -2291,6 +2338,8 @@
 				788312A515738D2600D67103 /* Cell */,
 				78A0C1CC1683037F0073CCE5 /* Control */,
 				78C25AB7159D81ED002AED1E /* View */,
+				763A018A171EAEB10082CC9E /* EFSearchBar.h */,
+				763A018B171EAEB10082CC9E /* EFSearchBar.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2483,6 +2532,9 @@
 		7825A5C415A2CE3E00A853CD /* Gather */ = {
 			isa = PBXGroup;
 			children = (
+				76D1A801171D5DFA00A35BBD /* EFChoosePeopleViewController.h */,
+				76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */,
+				76D1A803171D5DFA00A35BBD /* EFChoosePeopleViewController.xib */,
 				78CEBFED15BFE7BE002BCA27 /* ExfeeInputViewController.h */,
 				78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */,
 				78CEBFEF15BFE7BE002BCA27 /* ExfeeInputViewController.xib */,
@@ -2540,6 +2592,12 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				763A0182171E93460082CC9E /* titleview.png */,
+				763A0183171E93460082CC9E /* titleview@2x.png */,
+				76D1A812171D704C00A35BBD /* btn_blue_30inset.png */,
+				76D1A813171D704C00A35BBD /* btn_blue_30inset@2x.png */,
+				76D1A80A171D610C00A35BBD /* exfee_22ga.png */,
+				76D1A80B171D610C00A35BBD /* exfee_22ga@2x.png */,
 				78CA7C1915ECD0A000AAD1DF /* appstore */,
 				78AFB5FA15B321B70069B139 /* cell */,
 				78B1FCE315DCAB6300DD1C56 /* common */,
@@ -2794,6 +2852,9 @@
 				4FA013AD16F3546A00F40CB6 /* ExfeeCollectionViewCell.m */,
 				4FA84B07170155DD0096FB5A /* ExfeeAddCollectionViewCell.h */,
 				4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */,
+				763A018F171EE8BE0082CC9E /* EFChoosePeopleViewCell.h */,
+				763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */,
+				763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -3719,6 +3780,14 @@
 				4FC7ED791717F46800582D84 /* WidgetConvViewController.xib in Resources */,
 				4FF69555171BDF53003DF80B /* EFSignInViewController.xib in Resources */,
 				4FF6955E171BFA2B003DF80B /* EFLandingViewController.xib in Resources */,
+				76D1A808171D5DFB00A35BBD /* EFChoosePeopleViewController.xib in Resources */,
+				76D1A80D171D610C00A35BBD /* exfee_22ga.png in Resources */,
+				76D1A810171D610C00A35BBD /* exfee_22ga@2x.png in Resources */,
+				76D1A815171D704C00A35BBD /* btn_blue_30inset.png in Resources */,
+				76D1A818171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */,
+				763A0185171E93460082CC9E /* titleview.png in Resources */,
+				763A0188171E93460082CC9E /* titleview@2x.png in Resources */,
+				763A0196171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4025,6 +4094,14 @@
 				4FC7ED811717F46900582D84 /* WidgetConvViewController.xib in Resources */,
 				4FF69556171BDF53003DF80B /* EFSignInViewController.xib in Resources */,
 				4FF6955F171BFA2B003DF80B /* EFLandingViewController.xib in Resources */,
+				76D1A809171D5DFB00A35BBD /* EFChoosePeopleViewController.xib in Resources */,
+				76D1A80E171D610C00A35BBD /* exfee_22ga.png in Resources */,
+				76D1A811171D610C00A35BBD /* exfee_22ga@2x.png in Resources */,
+				76D1A816171D704C00A35BBD /* btn_blue_30inset.png in Resources */,
+				76D1A819171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */,
+				763A0186171E93460082CC9E /* titleview.png in Resources */,
+				763A0189171E93460082CC9E /* titleview@2x.png in Resources */,
+				763A0197171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4333,6 +4410,14 @@
 				4FC7ED6F1717F3F700582D84 /* WidgetConvViewController.xib in Resources */,
 				4FF69554171BDF53003DF80B /* EFSignInViewController.xib in Resources */,
 				4FF6955D171BFA2B003DF80B /* EFLandingViewController.xib in Resources */,
+				76D1A807171D5DFB00A35BBD /* EFChoosePeopleViewController.xib in Resources */,
+				76D1A80C171D610C00A35BBD /* exfee_22ga.png in Resources */,
+				76D1A80F171D610C00A35BBD /* exfee_22ga@2x.png in Resources */,
+				76D1A814171D704C00A35BBD /* btn_blue_30inset.png in Resources */,
+				76D1A817171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */,
+				763A0184171E93460082CC9E /* titleview.png in Resources */,
+				763A0187171E93460082CC9E /* titleview@2x.png in Resources */,
+				763A0195171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4507,6 +4592,9 @@
 				4FF69552171BDF53003DF80B /* EFSignInViewController.m in Sources */,
 				4FF6955B171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
 				76DED7CF171C06A900C2F27E /* UILog.m in Sources */,
+				76D1A805171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */,
+				763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */,
+				763A0192171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4651,6 +4739,9 @@
 				4FF69553171BDF53003DF80B /* EFSignInViewController.m in Sources */,
 				4FF6955C171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
 				76DED7D0171C06A900C2F27E /* UILog.m in Sources */,
+				76D1A806171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */,
+				763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */,
+				763A0193171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4795,6 +4886,9 @@
 				4FF6955A171BFA2B003DF80B /* EFLandingViewController.m in Sources */,
 				76DED7C3171BEDE000C2F27E /* EXAddressBookService.m in Sources */,
 				76DED7CE171C06A900C2F27E /* UILog.m in Sources */,
+				76D1A804171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */,
+				763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */,
+				763A0191171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

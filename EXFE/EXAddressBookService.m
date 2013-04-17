@@ -136,6 +136,21 @@
             CFIndex count = CFArrayGetCount(peopleRef);
             CFIndex pageSize = count >= page ? page : count;
             
+            if (count == 0) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    if (pageSuccess) {
+                        pageSuccess([NSArray array]);
+                    }
+                    if (complete) {
+                        complete();
+                    }
+                });
+                
+                CFRelease(peopleRef);
+                
+                return ;
+            }
+            
             CFIndex pageNumber = (count / pageSize) + (((count % pageSize) != 0) ? 1 : 0);
             for (CFIndex pageIndex = 0; pageIndex < pageNumber; pageIndex++) {
                 @autoreleasepool {
@@ -152,7 +167,9 @@
                     }
                     
                     if (pageSuccess) {
-                        pageSuccess(people);
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            pageSuccess(people);
+                        });
                     }
                     
                     [people release];
@@ -162,7 +179,7 @@
             CFRelease(peopleRef);
             
             if (complete) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     complete();
                 });
             }
@@ -191,7 +208,7 @@
     } else if (success) {
         if (nil == keyWord ||
             0 == keyWord.length ||
-            0 == [existPeople count]) {
+            (existPeople && 0 == [existPeople count])) {
             // no key word or existPeople array is empty
             success([NSMutableArray array]);
         } else if (success) {
@@ -224,7 +241,7 @@
     if (!success && !failure)
         return;
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"compositeName CONTAINS[cd] %@", keyWord];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"indexfield CONTAINS[cd] %@", keyWord];
     [self filterPeopleWithExistPeople:nil
                               keyWord:keyWord
                             predicate:predicate

@@ -8,17 +8,16 @@
 
 #import "ABTableViewCell.h"
 
-@interface GatherExfeeInputCell : ABTableViewCell{
-    UIImage *avatar;
-    NSString *title;
-//    NSString *subtitle;
-    UIImage *providerIcon;
-//    NSArray *providerIconSet;
-}
+@class LocalContact;
+@class Identity;
+@interface GatherExfeeInputCell : ABTableViewCell
 
-@property (nonatomic,retain) UIImage* avatar;
-@property (nonatomic,retain) UIImage* providerIcon;
-@property (nonatomic,retain) NSString* title;
-//@property (nonatomic,retain) NSString* subtitle;
-@property (nonatomic,retain) NSArray *providerIconSet;
+@property (nonatomic, retain) UIImage *avatar;
+@property (nonatomic, retain) UIImage *providerIcon;
+@property (nonatomic, retain) NSString *title;
+@property (nonatomic, retain) NSArray *providerIconSet;
+
+- (void)customWithLocalContact:(LocalContact *)localContact;
+- (void)customWithIdentity:(Identity *)identity;
+
 @end
