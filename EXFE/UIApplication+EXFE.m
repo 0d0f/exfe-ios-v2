@@ -26,6 +26,7 @@
         return NO;
     }
     
+    // if ([nowVer compare:checkVersion options:NSNumericSearch] != NSOrderedAscending)
     NSArray *nowVerComps = [nowVer componentsSeparatedByString:@"."];
     NSArray *checkVerComps = [checkVersion componentsSeparatedByString:@"."];
     for (NSUInteger i = 0; i < checkVerComps.count; i ++) {
