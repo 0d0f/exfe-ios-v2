@@ -16,6 +16,7 @@
 #import "CrossesViewController.h"
 #import "LandingViewController.h"
 #import "EFAPIServer.h"
+#import "EFLandingViewController.h"
 
 @implementation AppDelegate
 @synthesize userid;
@@ -87,7 +88,7 @@ static char mergetoken;
     {
       [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
     }
-    crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
+    CrossesViewController *crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
 
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
@@ -175,15 +176,17 @@ static char mergetoken;
 
 }
 
--(void)ShowLanding{
-    LandingViewController *landingView=[[[LandingViewController alloc]initWithNibName:@"LandingViewController" bundle:nil]autorelease];
-    landingView.delegate=self;
-    double delayInSeconds = 0.1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self.navigationController presentModalViewController:landingView animated:NO];
-    });        
+-(void)ShowLanding:(UIViewController*)parent{
+//    LandingViewController *landingView=[[[LandingViewController alloc]initWithNibName:@"LandingViewController" bundle:nil]autorelease];
+//    landingView.delegate=self;
+//    double delayInSeconds = 0.1;
+//    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+//    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//        [self.navigationController presentModalViewController:landingView animated:NO];
+//    });        
     
+    EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
+    [parent presentModalViewController:viewController animated:NO];
 }
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -201,7 +204,9 @@ static char mergetoken;
 {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     if(self.userid>0){
-        [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+        [crossViewController refreshCrosses:@"crossupdateview"];
     }
 }
 
@@ -230,10 +235,12 @@ static char mergetoken;
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
 
-        [(CrossesViewController*)crossviewController initUI];
-        [(CrossesViewController*)crossviewController refreshCrosses:@"crossview_init"];
-        [(CrossesViewController*)crossviewController loadObjectsFromDataStore];
-        [self.navigationController dismissModalViewControllerAnimated:YES];
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+        [crossViewController refreshPortrait];
+        [crossViewController refreshCrosses:@"crossview_init"];
+        [crossViewController loadObjectsFromDataStore];
+        [crossViewController dismissModalViewControllerAnimated:YES];
     }
 }
 
@@ -471,17 +478,23 @@ static char mergetoken;
         }
     }
     else{
-        [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+        [crossViewController refreshCrosses:@"crossupdateview"];
     }
 }
 
 -(void)GatherCrossDidFinish{
-    [(CrossesViewController*)crossviewController refreshCrosses:@"gatherview"];
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+    [crossViewController refreshCrosses:@"gatherview"];
     [self.navigationController dismissModalViewControllerAnimated:YES];
 }
 -(void)CrossUpdateDidFinish:(int)cross_id{
 //    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
-    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview" withCrossId:cross_id];
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+    [crossViewController refreshCrosses:@"crossupdateview" withCrossId:cross_id];
     
 }
 -(void)SignoutDidFinish{
@@ -509,6 +522,7 @@ static char mergetoken;
     NSArray *viewControllers = app.navigationController.viewControllers;
     CrossesViewController *rootViewController = [viewControllers objectAtIndex:0];
     [rootViewController emptyView];
+    [self ShowLanding:rootViewController];
         
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

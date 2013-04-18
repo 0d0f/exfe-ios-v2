@@ -14,6 +14,10 @@
 #import "Util.h"
 #import "Identity+EXFE.h"
 #import "ImgCache.h"
+#import "CSLinearLayoutView.h"
+#import "OAuthLoginViewController.h"
+#import "SigninDelegate.h"
+
 
 typedef NS_ENUM(NSUInteger, EFStage){
     kStageStart,
@@ -25,7 +29,7 @@ typedef NS_ENUM(NSUInteger, EFStage){
 @interface EFSignInViewController (){
 
     EFStage _stage;
-    
+    SigninDelegate *_signindelegate;
 }
 @end
 
@@ -37,6 +41,8 @@ typedef NS_ENUM(NSUInteger, EFStage){
     if (self) {
         // Custom initialization
         _stage = kStageStart;
+        _signindelegate = [[SigninDelegate alloc]init];
+        _signindelegate.parent = self;
     }
     return self;
 }
@@ -50,61 +56,103 @@ typedef NS_ENUM(NSUInteger, EFStage){
     
     self.view.backgroundColor = [UIColor grayColor];
     
-    UITextField *textIdentity = [[UITextField alloc] initWithFrame:CGRectMake(15, 30, 290, 50)];
-    textIdentity.placeholder = @"Enter email or phone";
-    textIdentity.borderStyle = UITextBorderStyleRoundedRect;
-    textIdentity.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    [textIdentity addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    self.inputIdentity = textIdentity;
-    [self.view addSubview:self.inputIdentity];
+    // create the linear layout view
+    CSLinearLayoutView *linearLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:self.view.bounds] autorelease];
+    linearLayoutView.orientation = CSLinearLayoutViewOrientationVertical;
+    self.rootView = linearLayoutView;
+    [self.view addSubview:linearLayoutView];
     
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-    [imgView.layer setCornerRadius:4.0];
-    [imgView.layer setMasksToBounds:YES];
-    imgView.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
-    imgView.contentMode = UIViewContentModeCenter;
-    self.imageIdentity = imgView;
-    self.inputIdentity.leftView = imgView;
-    self.inputIdentity.leftViewMode = UITextFieldViewModeAlways;
+    {// Input Identity Field
+        UITextField *textfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        textfield.placeholder = @"Enter email or phone";
+        textfield.borderStyle = UITextBorderStyleRoundedRect;
+        textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [textfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+        self.inputIdentity = textfield;
+        self.inputIdentity.tag = 1;
+        //    [self.view addSubview:self.inputIdentity];
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+        [imageView.layer setCornerRadius:4.0];
+        [imageView.layer setMasksToBounds:YES];
+        imageView.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
+        imageView.contentMode = UIViewContentModeCenter;
+        self.imageIdentity = imageView;
+        self.inputIdentity.leftView = self.imageIdentity;
+        self.inputIdentity.leftViewMode = UITextFieldViewModeAlways;
+        
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+        button.backgroundColor = [UIColor blueColor];
+        [button addTarget:self action:@selector(expandIdentity:) forControlEvents:UIControlEventTouchUpInside];
+        self.extIdentity = button;
+        self.inputIdentity.rightView = self.extIdentity;
+        self.inputIdentity.rightViewMode = UITextFieldViewModeAlways;
+        
+        CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:self.inputIdentity];
+        item.padding = CSLinearLayoutMakePadding(10.0, 15, 5, 15);
+        item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item.fillMode = CSLinearLayoutItemFillModeNormal;
+        [linearLayoutView addItem:item];
+    }
     
-    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-    btn.backgroundColor = [UIColor blueColor];
-    [btn addTarget:self action:@selector(expandIdentity:) forControlEvents:UIControlEventTouchUpInside];
-    self.extIdentity = btn;
-    self.inputIdentity.rightView = btn;
-    self.inputIdentity.rightViewMode = UITextFieldViewModeAlways;
+    {// Input Password Field
+        UITextField *textPwd = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        textPwd.borderStyle = UITextBorderStyleRoundedRect;
+        textPwd.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.inputPassword = textPwd;
+        self.inputPassword.tag = 2;
+    }
     
-    UITextField *textPwd = [[EFPasswordField alloc] initWithFrame:CGRectMake(15, 85, 290, 50)];
-    textPwd.borderStyle = UITextBorderStyleRoundedRect;
-    textPwd.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    textPwd.hidden = YES;
-    self.inputPassword = textPwd;
-    [self.view addSubview:self.inputPassword];
+    {
+        UIButton *btnS = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        btnS.frame = CGRectMake(0, 0, 290, 48);
+        [btnS setTitle:@"Start" forState:UIControlStateNormal];
+        [btnS addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchUpInside];
+        self.btnStart = btnS;
+        self.btnStart.tag = 3;
+    }
     
     
-    UIButton *btnS = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    btnS.frame = CGRectMake(15, 140, 290, 48);
-    [btnS setTitle:@"Start" forState:UIControlStateNormal];
-    btnS.hidden = YES;
-    [btnS addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnStart = btnS;
-    [self.view addSubview:self.btnStart];
+    CSLinearLayoutView *snsLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 0, 296, 106)] autorelease];
+    snsLayoutView.backgroundColor = [UIColor lightGrayColor];
+    snsLayoutView.orientation = CSLinearLayoutViewOrientationHorizontal;
     
-    UIButton *btnF = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    btnF.frame = CGRectMake(45, 200, 50, 50);
-    [btnF setTitle:@"Facebook" forState:UIControlStateNormal];
-//    btnF.hidden = YES;
-    [btnF addTarget:self action:@selector(facebookSignIn:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnFacebook = btnF;
-    [self.view addSubview:self.btnFacebook];
+    CSLinearLayoutItem *snsItem = [CSLinearLayoutItem layoutItemForView:snsLayoutView];
+    snsItem.padding = CSLinearLayoutMakePadding(5, 12, 5, 12);
+    snsItem.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+    snsItem.fillMode = CSLinearLayoutItemFillModeNormal;
+    [linearLayoutView addItem:snsItem];
     
-    UIButton *btnT = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    btnT.frame = CGRectMake(205, 200, 50, 50);
-    [btnT setTitle:@"Twitter" forState:UIControlStateNormal];
-//    btnT.hidden = YES;
-    [btnT addTarget:self action:@selector(twitterSignIn:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnTwitter = btnT;
-    [self.view addSubview:self.btnTwitter];
+    {
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        button.frame = CGRectMake(0, 0, 50, 50);
+        [button setTitle:@"Facebook" forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(facebookSignIn:) forControlEvents:UIControlEventTouchUpInside];
+        self.btnFacebook = button;
+        self.btnFacebook.tag = 21;
+        //    [self.view addSubview:self.btnFacebook];
+        CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:self.btnFacebook];
+        item.padding = CSLinearLayoutMakePadding(23, 68, 0, 30);
+        item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item.fillMode = CSLinearLayoutItemFillModeNormal;
+        [snsLayoutView addItem:item];
+        
+    }
+    
+    {
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        button.frame = CGRectMake(0, 0, 50, 50);
+        [button setTitle:@"Twitter" forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(twitterSignIn:) forControlEvents:UIControlEventTouchUpInside];
+        self.btnTwitter = button;
+        self.btnTwitter.tag = 22;
+        //    [self.view addSubview:self.btnTwitter];
+        CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:self.btnTwitter];
+        item.padding = CSLinearLayoutMakePadding(23, 30, 0, 0);
+        item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item.fillMode = CSLinearLayoutItemFillModeNormal;
+        [snsLayoutView addItem:item];
+    }
     
     
     
@@ -136,6 +184,8 @@ typedef NS_ENUM(NSUInteger, EFStage){
     self.btnStartOver = nil;
     self.btnFacebook = nil;
     self.btnTwitter = nil;
+    
+    [_signindelegate release];
     [super dealloc];
 }
 
@@ -145,11 +195,30 @@ typedef NS_ENUM(NSUInteger, EFStage){
     switch (_stage){
         case kStageStart:
             break;
-        case kStageSignIn:
+        case kStageSignIn:{
             // show rest login form
-            _inputPassword.hidden = NO;
-            _btnStart.hidden = NO;
-            break;
+            
+            CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:self.inputIdentity.tag];
+            
+            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:self.inputPassword.tag];
+            if (item1 == nil) {
+                item1 = [CSLinearLayoutItem layoutItemForView:self.inputPassword];
+                item1.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
+                item1.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+                item1.fillMode = CSLinearLayoutItemFillModeNormal;
+                [self.rootView insertItem:item1 afterItem:baseItem];
+            }
+            
+            CSLinearLayoutItem *item2 = [self.rootView findItemByTag:self.btnStart.tag];
+            if (item2 == nil){
+                item2 = [CSLinearLayoutItem layoutItemForView:self.btnStart];
+                item2.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
+                item2.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+                item2.fillMode = CSLinearLayoutItemFillModeNormal;
+                [self.rootView insertItem:item2 afterItem:item1];
+            }
+            
+        }    break;
         case kStageSignUp:
             
             _inputPassword.hidden = NO;
@@ -232,9 +301,12 @@ typedef NS_ENUM(NSUInteger, EFStage){
                 switch (c) {
                     case 200:
                         NSLog(@"Signed In");
-                        
-                        UIViewController *parent = self.parentViewController;
-                        [parent.navigationController popToRootViewControllerAnimated:YES];
+//                        UIViewController *parent = self.parentViewController;
+//                        [parent dismissModalViewControllerAnimated:YES];
+//                        
+                        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                        [app SigninDidFinish];
+                        // save token
                         
                         // request for push
                         
@@ -258,11 +330,19 @@ typedef NS_ENUM(NSUInteger, EFStage){
 - (void)facebookSignIn:(id)sender
 {
     NSLog(@"facebook Sign In");
+    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+    oauth.provider = @"facebook";
+    oauth.delegate = _signindelegate;
+    [self presentModalViewController:oauth animated:YES];
 }
 
 - (void)twitterSignIn:(id)sender
 {
     NSLog(@"twitter Sign In");
+    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+    oauth.provider = @"twitter";
+    oauth.delegate = _signindelegate;
+    [self presentModalViewController:oauth animated:YES];
 }
 
 #pragma mark Textfiled Change

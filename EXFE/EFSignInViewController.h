@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CSLinearLayoutView.h"
 
 @interface EFSignInViewController : UIViewController
 
-
+@property (nonatomic, retain) CSLinearLayoutView *rootView;
 @property (nonatomic, retain) UITextField *inputIdentity;
 @property (nonatomic, retain) UIImageView *imageIdentity;
 @property (nonatomic, retain) UIButton *extIdentity;

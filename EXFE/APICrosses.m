@@ -53,6 +53,7 @@ static id sharedManager = nil;
 }
 
 
+// deprecated using api in EFAPIServer class
 +(void) LoadCrossWithUserId:(int)user_id updatedtime:(NSString*)updatedtime success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
 
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];

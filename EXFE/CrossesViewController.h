@@ -45,7 +45,6 @@
 - (void) refreshCrosses:(NSString*)source;
 - (void) refreshCrosses:(NSString*)source withCrossId:(int)cross_id;
 - (void) loadObjectsFromDataStore;
-- (void) initUI;
 - (void) emptyView;
 - (void) ShowProfileView;
 - (void) ShowGatherView;

@@ -6,8 +6,8 @@
 //
 //
 
-
 #import "EFAPIServer.h"
+#import "Util.h"
 
 @implementation EFAPIServer
 
@@ -73,6 +73,7 @@
     
 }
 
+// TODO not finished ,use ormapping isntead of httpclient
 - (void)getRegFlagBy:(NSString*)identity
                 withProvider:(Provider)provider
              success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
@@ -195,4 +196,30 @@
     } failure:failure];
 }
 
+- (void) loadCrossesAfter:(NSString*)updatedtime
+               success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+{
+    [self loadCrossesBy:self.user_id updatedtime:updatedtime success:success failure:failure];
+}
+
+
+- (void) loadCrossesBy:(NSInteger)user_id
+          updatedtime:(NSString*)updatedtime
+              success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+              failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+{
+    NSDictionary *param = nil;
+    if (updatedtime != nil && ![updatedtime isEqualToString:@""]){
+        updatedtime = [Util encodeToPercentEscapeString:updatedtime];
+        param = @{@"token": self.user_token,
+                  @"updated_at": updatedtime};
+    } else {
+        param = @{@"token": self.user_token};
+    }
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/crosses", self.user_id];
+    
+    [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:param success:success failure:failure];
+    
+}
 @end

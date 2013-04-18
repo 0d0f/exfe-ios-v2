@@ -65,7 +65,7 @@
     int userid;
     NSString *accesstoken;
     NSString *username;
-    UIViewController* crossviewController;
+//    UIViewController* crossviewController;
     NSString *token_formerge;
 //    NSString *ids_formerge;
 }
@@ -79,7 +79,7 @@
 -(void)SignoutDidFinish;
 -(void)GatherCrossDidFinish;
 -(void)CrossUpdateDidFinish:(int)cross_id;
--(void)ShowLanding;
+-(void)ShowLanding:(UIViewController*)parent;
 -(BOOL) Checklogin;
 - (void) cleandb;
 - (void) createdb;

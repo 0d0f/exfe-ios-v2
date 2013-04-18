@@ -34,6 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     // Do any additional setup after loading the view from its nib.
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     [self.view setFrame:appFrame];

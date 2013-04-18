@@ -40,4 +40,12 @@
        success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
+- (void) loadCrossesAfter:(NSString*)updatedtime
+                   success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+                   failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
+- (void) loadCrossesBy:(NSInteger)user_id
+           updatedtime:(NSString*)updatedtime
+               success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 @end
