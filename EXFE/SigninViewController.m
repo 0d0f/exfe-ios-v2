@@ -21,7 +21,7 @@
   NSString *provider=[Util findProvider:textUsername.text];
   NSString *username=[Util cleanInputName:textUsername.text provider:provider];
   
-  NSString *endpoint = [NSString stringWithFormat:@"%@/users/signin",API_ROOT];
+  NSString *endpoint = [NSString stringWithFormat:@"%@users/signin",API_ROOT];
   RKObjectManager *manager=[RKObjectManager sharedManager] ;
   NSDictionary *params=@{
     @"provider": provider,
@@ -54,7 +54,7 @@
   
   NSString *provider=[Util findProvider:textUsername.text];
   
-  NSString *endpoint = [NSString stringWithFormat:@"%@/users/signin",API_ROOT];
+  NSString *endpoint = [NSString stringWithFormat:@"%@users/signin",API_ROOT];
   RKObjectManager *manager=[RKObjectManager sharedManager] ;
   manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
   [manager.HTTPClient postPath:endpoint parameters:@{@"provider":provider,@"external_username":textUsername.text,@"name":textDisplayname.text,@"password":textPassword.text} success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -392,7 +392,7 @@
       textUsername.text=[Util formatPhoneNumber:textUsername.text];
 
     if(![provider isEqualToString:@""]){
-      NSString *endpoint = [NSString stringWithFormat:@"%@/users/GetRegistrationFlag?external_username=%@&provider=%@",API_ROOT,textUsername.text,provider];
+      NSString *endpoint = [NSString stringWithFormat:@"%@users/GetRegistrationFlag?external_username=%@&provider=%@",API_ROOT,textUsername.text,provider];
       RKObjectManager *manager=[RKObjectManager sharedManager] ;
       
       [manager.HTTPClient getPath:endpoint parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {

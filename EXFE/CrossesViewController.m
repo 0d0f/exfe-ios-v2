@@ -23,6 +23,7 @@
 #import "NSString+EXFE.h"
 #import "CrossGroupViewController.h"
 #import "EFLandingViewController.h"
+#import "EFAPIServer.h"
 
 
 @interface CrossesViewController ()
@@ -35,7 +36,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [self initUI];
         // Custom initialization
     }
     return self;
@@ -74,6 +74,7 @@
 {
     
     [Flurry logEvent:@"CROSS_LIST"];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     [self.view setFrame:appFrame];
@@ -98,15 +99,14 @@
     BOOL login=[app Checklogin];
     if(login==YES) {
         [self loadObjectsFromDataStore];
-        [self initUI];
+        [self refreshPortrait];
         [self refreshCrosses:@"crossupdateview"];
 //        NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
 //        if(newuser !=nil && [newuser isEqualToString:@"YES"])
 //            [self showWelcome];
     } else {
-        [app ShowLanding];
-//        EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
-//        [self.navigationController presentModalViewController:viewController animated:NO];
+        [app ShowLanding:self];
+
     }
     
     
@@ -191,12 +191,6 @@
     
 }
 
-- (void)initUI{
-    [self refreshPortrait];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
-    [self.navigationController.view setNeedsDisplay];
-}
-
 - (void) refreshPortrait{
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
   NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
@@ -224,6 +218,8 @@
         }
     }
 //    [users release];
+    
+    
 }
 // deprecated
 - (void) showWelcome{
@@ -324,7 +320,6 @@
 }
 
 - (void) refreshCrosses:(NSString*)source withCrossId:(int)cross_id{
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     NSString *updated_at=@"";
     NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
@@ -347,134 +342,136 @@
     }
     
     //  source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]
-    [APICrosses LoadCrossWithUserId:app.userid updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        
-        int notification=0;
-        if([[mappingResult array] count]>0)
-        {
-            //        NSString *source=[objectLoader.userData objectForKey:@"name" ];
-            //          NSString *exfee_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-            NSDate *last_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-            //          BOOL needsave=NO;
-            BOOL isError=NO;
-            Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-            if(meta!=nil){
-                if([meta.code intValue]!=200){
-                    [Util showErrorWithMetaObject:meta delegate:self];
-                    isError=YES;
-                }
-            }
-            if(isError==NO){
-                NSArray *crosses=(NSArray*)[[mappingResult dictionary] objectForKey:@"response.crosses"];
-                for (Cross *cross in crosses){
-                    id updated=cross.updated;
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-                    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-                    NSDate *cross_updated_at = [formatter dateFromString:cross.updated_at];
-                    [formatter release];
-                    
-                    if([updated isKindOfClass:[NSDictionary class]]){
-                        NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
-                        NSString *key=nil;
-                        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                        [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-                        
-                        while (key = [enumerator nextObject]){
-                            NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
-                            NSString *updated_at_str=[obj objectForKey:@"updated_at"];
-                            if([updated_at_str isKindOfClass:[NSString class]]) {
-                                NSDate *updated_at =[NSDate date];
-                                if([updated_at_str length]>19){
-                                    updated_at_str=[updated_at_str substringToIndex:19];
-                                    updated_at = [formatter dateFromString:updated_at_str];
-                                    
-                                    if(last_updated_at==nil)
-                                        last_updated_at=updated_at;
-                                    else{
-                                        last_updated_at=[updated_at laterDate:last_updated_at];
-                                    }
-                                    
-                                    
-                                }
-                                
-                                if([updated_at compare: cross_updated_at] == NSOrderedDescending || [updated_at compare: cross_updated_at] == NSOrderedSame) {
-                                    if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]]) {
-                                        NSNumber *identity_id=[obj objectForKey:@"identity_id"];
-                                        if([self isIdentityBelongsMe:[identity_id intValue]]==NO)
-                                            notification++;
-                                    }
-                                }
-                            }
-                        }
-                        [formatter release];
-                    }
-                    if(cross.updated_at!=nil){
-                        //                  if([source isEqualToString:@"crossview"]){
-                        //                      if(exfee_updated_at==nil){
-                        //                          cross.read_at=[NSDate date];
-                        //                          needsave=YES;
-                        //                      }
-                        //                  }
-                        if(last_updated_at==nil)
-                            last_updated_at=cross_updated_at;
-                        else{
-                            last_updated_at=[cross_updated_at laterDate:last_updated_at];
-                        }
-                    }
-                }
-                
-                [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                if(![source isEqualToString:@"crossview"] && notification>0){
-                    [customStatusBar showWithStatusMessage:[NSString stringWithFormat:@"%i updates...",notification]];
-                    [customStatusBar performSelector:@selector(hide) withObject:nil afterDelay:2];
-                }
-                if ([source isEqualToString:@"gatherview"]) {
-                    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-                    [app.navigationController dismissModalViewControllerAnimated:YES];
-                }
-                else if([source isEqualToString:@"pushtocross"]) {
-                    Cross *cross=[self crossWithId:cross_id];
-                    
-                    CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
-                    viewController.cross = cross;
-                    viewController.widgetId = kWidgetCross;
-                    [self.navigationController pushViewController:viewController animated:NO];
-                    [viewController release];
-                }
-                else if([source isEqualToString:@"pushtoconversation"]) {
-                    Cross *cross=[self crossWithId:cross_id];
-                    
-                    CrossGroupViewController *viewController = [[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
-                    viewController.cross = cross;
-                    viewController.widgetId = kWidgetConversation;
-                    [self.navigationController pushViewController:viewController animated:NO];
-                    [viewController release];
-                    
-                }
-                else if([source isEqualToString:@"crossupdateview"] || [source isEqualToString:@"crossview"] || [source isEqualToString:@"crossview_init"]) {
-                    [self loadObjectsFromDataStore];
-                }
-            }
-        }
-        [self loadObjectsFromDataStore];
-        
-        //
-        [self stopLoading];
-        if(hud)
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-        
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        if(alertShowflag==NO){
-            alertShowflag=YES;
-            [Util showConnectError:error delegate:self];
-        }
-        [self stopLoading];
-        if(hud)
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-    }];
+    [[EFAPIServer sharedInstance] loadCrossesAfter:updated_at
+                                           success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                               
+                                               int notification=0;
+                                               if([[mappingResult array] count]>0)
+                                               {
+                                                   //        NSString *source=[objectLoader.userData objectForKey:@"name" ];
+                                                   //          NSString *exfee_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
+                                                   NSDate *last_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
+                                                   //          BOOL needsave=NO;
+                                                   BOOL isError=NO;
+                                                   Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                                                   if(meta!=nil){
+                                                       if([meta.code intValue]!=200){
+                                                           [Util showErrorWithMetaObject:meta delegate:self];
+                                                           isError=YES;
+                                                       }
+                                                   }
+                                                   if(isError==NO){
+                                                       NSArray *crosses=(NSArray*)[[mappingResult dictionary] objectForKey:@"response.crosses"];
+                                                       for (Cross *cross in crosses){
+                                                           id updated=cross.updated;
+                                                           NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                                                           [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+                                                           [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                                                           NSDate *cross_updated_at = [formatter dateFromString:cross.updated_at];
+                                                           [formatter release];
+                                                           
+                                                           if([updated isKindOfClass:[NSDictionary class]]){
+                                                               NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
+                                                               NSString *key=nil;
+                                                               NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                                                               [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                                                               [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+                                                               
+                                                               while (key = [enumerator nextObject]){
+                                                                   NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
+                                                                   NSString *updated_at_str=[obj objectForKey:@"updated_at"];
+                                                                   if([updated_at_str isKindOfClass:[NSString class]]) {
+                                                                       NSDate *updated_at =[NSDate date];
+                                                                       if([updated_at_str length]>19){
+                                                                           updated_at_str=[updated_at_str substringToIndex:19];
+                                                                           updated_at = [formatter dateFromString:updated_at_str];
+                                                                           
+                                                                           if(last_updated_at==nil)
+                                                                               last_updated_at=updated_at;
+                                                                           else{
+                                                                               last_updated_at=[updated_at laterDate:last_updated_at];
+                                                                           }
+                                                                           
+                                                                           
+                                                                       }
+                                                                       
+                                                                       if([updated_at compare: cross_updated_at] == NSOrderedDescending || [updated_at compare: cross_updated_at] == NSOrderedSame) {
+                                                                           if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]]) {
+                                                                               NSNumber *identity_id=[obj objectForKey:@"identity_id"];
+                                                                               if([self isIdentityBelongsMe:[identity_id intValue]]==NO)
+                                                                                   notification++;
+                                                                           }
+                                                                       }
+                                                                   }
+                                                               }
+                                                               [formatter release];
+                                                           }
+                                                           if(cross.updated_at!=nil){
+                                                               //                  if([source isEqualToString:@"crossview"]){
+                                                               //                      if(exfee_updated_at==nil){
+                                                               //                          cross.read_at=[NSDate date];
+                                                               //                          needsave=YES;
+                                                               //                      }
+                                                               //                  }
+                                                               if(last_updated_at==nil)
+                                                                   last_updated_at=cross_updated_at;
+                                                               else{
+                                                                   last_updated_at=[cross_updated_at laterDate:last_updated_at];
+                                                               }
+                                                           }
+                                                       }
+                                                       
+                                                       [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
+                                                       [[NSUserDefaults standardUserDefaults] synchronize];
+                                                       if(![source isEqualToString:@"crossview"] && notification>0){
+                                                           [customStatusBar showWithStatusMessage:[NSString stringWithFormat:@"%i updates...",notification]];
+                                                           [customStatusBar performSelector:@selector(hide) withObject:nil afterDelay:2];
+                                                       }
+                                                       if ([source isEqualToString:@"gatherview"]) {
+                                                           AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                                                           [app.navigationController dismissModalViewControllerAnimated:YES];
+                                                       }
+                                                       else if([source isEqualToString:@"pushtocross"]) {
+                                                           Cross *cross=[self crossWithId:cross_id];
+                                                           
+                                                           CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+                                                           viewController.cross = cross;
+                                                           viewController.widgetId = kWidgetCross;
+                                                           [self.navigationController pushViewController:viewController animated:NO];
+                                                           [viewController release];
+                                                       }
+                                                       else if([source isEqualToString:@"pushtoconversation"]) {
+                                                           Cross *cross=[self crossWithId:cross_id];
+                                                           
+                                                           CrossGroupViewController *viewController = [[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+                                                           viewController.cross = cross;
+                                                           viewController.widgetId = kWidgetConversation;
+                                                           [self.navigationController pushViewController:viewController animated:NO];
+                                                           [viewController release];
+                                                           
+                                                       }
+                                                       else if([source isEqualToString:@"crossupdateview"] || [source isEqualToString:@"crossview"] || [source isEqualToString:@"crossview_init"]) {
+                                                           [self loadObjectsFromDataStore];
+                                                       }
+                                                   }
+                                               }
+                                               [self loadObjectsFromDataStore];
+                                               
+                                               //
+                                               [self stopLoading];
+                                               if(hud)
+                                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                               
+                                           }
+                                           failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                               if(alertShowflag==NO){
+                                                   alertShowflag=YES;
+                                                   [Util showConnectError:error delegate:self];
+                                               }
+                                               [self stopLoading];
+                                               if(hud)
+                                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                           }];
     
 }
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -540,7 +537,7 @@
         if (buttonIndex == alertView.firstOtherButtonIndex) {
             [Util signout];
             AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            [app ShowLanding];
+            [app ShowLanding:self];
         }
     }
 }

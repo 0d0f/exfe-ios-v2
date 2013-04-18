@@ -21,7 +21,7 @@
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSDictionary *rsvpdict = [NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",my_identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
     
-    NSString *endpoint = [NSString stringWithFormat:@"%@/exfee/%u/rsvp?token=%@",API_ROOT,exfee_id, app.accesstoken];
+    NSString *endpoint = [NSString stringWithFormat:@"%@exfee/%u/rsvp?token=%@",API_ROOT,exfee_id, app.accesstoken];
     
     RKObjectManager *manager=[RKObjectManager sharedManager] ;
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
@@ -36,7 +36,7 @@
     
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
      RKObjectManager* manager =[RKObjectManager sharedManager];
-    NSString *endpoint = [NSString stringWithFormat:@"%@/exfee/%u/edit?token=%@&by_identity_id=%u",API_ROOT, [exfee.exfee_id intValue], app.accesstoken, my_identity_id];
+    NSString *endpoint = [NSString stringWithFormat:@"%@exfee/%u/edit?token=%@&by_identity_id=%u",API_ROOT, [exfee.exfee_id intValue], app.accesstoken, my_identity_id];
     
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;

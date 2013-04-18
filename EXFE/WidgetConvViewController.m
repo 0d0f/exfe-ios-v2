@@ -638,7 +638,7 @@
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:myIdentity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
 
-    NSString *endpoint = [NSString stringWithFormat:@"%@/conversation/%u/add?token=%@",API_ROOT,exfee_id,app.accesstoken];
+    NSString *endpoint = [NSString stringWithFormat:@"%@conversation/%u/add?token=%@",API_ROOT,exfee_id,app.accesstoken];
     RKObjectManager *manager=[RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
     [manager.HTTPClient postPath:endpoint parameters:postdict success:^(AFHTTPRequestOperation *operation, id responseObject) {

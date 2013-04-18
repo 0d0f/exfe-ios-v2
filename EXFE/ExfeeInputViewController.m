@@ -415,7 +415,7 @@ static char identitykey;
       hud.customView=bigspin;
       [bigspin release];
         
-      NSString *endpoint = [NSString stringWithFormat:@"%@/identities/get",API_ROOT];
+      NSString *endpoint = [NSString stringWithFormat:@"%@identities/get",API_ROOT];
       RKObjectManager *manager=[RKObjectManager sharedManager] ;
       manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
 

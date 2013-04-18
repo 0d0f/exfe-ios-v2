@@ -19,7 +19,7 @@
   if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
     updatedtime=[Util encodeToPercentEscapeString:updatedtime];
   
-  NSString *endpoint = [NSString stringWithFormat:@"%@/conversation/%u?updated_at=%@&token=%@",API_ROOT,exfee_id, updatedtime,app.accesstoken];
+  NSString *endpoint = [NSString stringWithFormat:@"%@conversation/%u?updated_at=%@&token=%@",API_ROOT,exfee_id, updatedtime,app.accesstoken];
   [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:nil success:success failure:failure];
 }
 

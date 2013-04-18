@@ -84,6 +84,7 @@ extern NSString *const EXCrossListDidChangeNotification;
 + (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 + (UIImage *)scaleImage:(UIImage*)image toResolution:(int)resolution;
 + (NSString*) findProvider:(NSString*)external_id;
++ (Provider)candidateProvider:(NSString*)raw;
 + (Provider)matchedProvider:(NSString*)raw;
 + (NSDictionary*)parseIdentityString:(NSString*)raw;
 + (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber;

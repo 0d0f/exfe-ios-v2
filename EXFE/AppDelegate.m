@@ -12,9 +12,10 @@
 #import "APICrosses.h"
 #import "APIConversation.h"
 #import "APIProfile.h"
-#import "APIExfeServer.h"
 #import "CrossesViewController.h"
 #import "LandingViewController.h"
+#import "EFAPIServer.h"
+#import "EFLandingViewController.h"
 
 @implementation AppDelegate
 @synthesize userid;
@@ -57,7 +58,7 @@ static char mergetoken;
     }
     
 #ifdef DEBUG
-    RKLogConfigureByName("RestKit/Network", RKLogLevelOff);
+    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
 //    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
     RKLogConfigureByName("RestKit/CoreData", RKLogLevelOff);
 //    RKLogConfigureByName("RestKit/CoreData/Cache", RKLogLevelTrace);
@@ -86,7 +87,7 @@ static char mergetoken;
     {
       [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
     }
-    crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
+    CrossesViewController *crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
 
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
@@ -97,44 +98,47 @@ static char mergetoken;
     
 //    UILogSetWindow(self.window);
     
-    if (login)
-        [APIProfile LoadUsrWithUserId:userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-          NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-          NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", userid];
-          [request setPredicate:predicate];
-          RKObjectManager *objectManager = [RKObjectManager sharedManager];
-          NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
-          if(users!=nil && [users count] >0)
-          {
-              User* user=[users objectAtIndex:0];
-              NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:4];
-              for(Identity *identity in user.identities){
-                  [identities addObject:identity.identity_id];
-              }
-              [[NSUserDefaults standardUserDefaults] setObject:identities forKey:@"default_user_identities"];
-              [identities release];
-              [[NSUserDefaults standardUserDefaults] synchronize];
-          }
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        }];
-  
-  NSString *endpoint = [NSString stringWithFormat:@"%@/Backgrounds/GetAvailableBackgrounds?token=%@",API_ROOT,self.accesstoken];
-  [objectManager.HTTPClient getPath:endpoint parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-      NSDictionary *body=responseObject;
-      if([body isKindOfClass:[NSDictionary class]]) {
-          id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-          if(code)
-              if([code intValue]==200) {
-                  NSArray *backgrounds=[[body objectForKey:@"response"] objectForKey:@"backgrounds"];
-                  [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
-              }
-        }
-    }else {
+    if (login){
+        [[EFAPIServer sharedInstance] loadUserBy:userid
+                                         success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+                                             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", userid];
+                                             [request setPredicate:predicate];
+                                             RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                             NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+                                             if(users!=nil && [users count] >0)
+                                             {
+                                                 User* user=[users objectAtIndex:0];
+                                                 NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:4];
+                                                 for(Identity *identity in user.identities){
+                                                     [identities addObject:identity.identity_id];
+                                                 }
+                                                 [[NSUserDefaults standardUserDefaults] setObject:identities forKey:@"default_user_identities"];
+                                                 [identities release];
+                                                 [[NSUserDefaults standardUserDefaults] synchronize];
+                                             }
+                                         }
+                                         failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                         }];
     }
-  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-    
-  }];
+  
+    [[EFAPIServer sharedInstance] getAvailableBackgroundsWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+            NSDictionary *body=responseObject;
+            if([body isKindOfClass:[NSDictionary class]]) {
+                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                if(code)
+                    if([code intValue]==200) {
+                        NSArray *backgrounds=[[body objectForKey:@"response"] objectForKey:@"backgrounds"];
+                        [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
+                    }
+            }
+        }else {
+        }
+    }
+                                                             failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                 
+                                                             }];
 
     return YES;
 }
@@ -173,15 +177,17 @@ static char mergetoken;
 
 }
 
--(void)ShowLanding{
-    LandingViewController *landingView=[[[LandingViewController alloc]initWithNibName:@"LandingViewController" bundle:nil]autorelease];
-    landingView.delegate=self;
-    double delayInSeconds = 0.1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self.navigationController presentModalViewController:landingView animated:NO];
-    });        
+-(void)ShowLanding:(UIViewController*)parent{
+//    LandingViewController *landingView=[[[LandingViewController alloc]initWithNibName:@"LandingViewController" bundle:nil]autorelease];
+//    landingView.delegate=self;
+//    double delayInSeconds = 0.1;
+//    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+//    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//        [self.navigationController presentModalViewController:landingView animated:NO];
+//    });        
     
+    EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
+    [parent presentModalViewController:viewController animated:NO];
 }
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -199,7 +205,9 @@ static char mergetoken;
 {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     if(self.userid>0){
-        [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+        [crossViewController refreshCrosses:@"crossupdateview"];
     }
 }
 
@@ -219,7 +227,9 @@ static char mergetoken;
 -(void)SigninDidFinish{
     if([self Checklogin]==YES)
     {
+        // request for push
 //        NSString* devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"];
+        
         NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
         if( ifdevicetokenSave==nil)
         {
@@ -228,10 +238,14 @@ static char mergetoken;
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
 
-        [(CrossesViewController*)crossviewController initUI];
-        [(CrossesViewController*)crossviewController refreshCrosses:@"crossview_init"];
-        [(CrossesViewController*)crossviewController loadObjectsFromDataStore];
-        [self.navigationController dismissModalViewControllerAnimated:YES];
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+        [crossViewController refreshPortrait];
+        [crossViewController refreshCrosses:@"crossview_init"];
+        [crossViewController loadObjectsFromDataStore];
+        [crossViewController dismissModalViewControllerAnimated:YES];
+        
+        
     }
 }
 
@@ -244,7 +258,7 @@ static char mergetoken;
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
         return;
   
-    NSString *endpoint = [NSString stringWithFormat:@"%@/users/%u/regdevice?token=%@",API_ROOT,self.userid,self.accesstoken];
+    NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/regdevice?token=%@",API_ROOT,self.userid,self.accesstoken];
   RKObjectManager *manager=[RKObjectManager sharedManager] ;
   manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
   [manager.HTTPClient postPath:endpoint parameters:@{@"udid":tokenAsString,@"push_token":tokenAsString,@"os_name":@"iOS",@"brand":@"apple",@"model":@"",@"os_version":@"6"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -340,55 +354,58 @@ static char mergetoken;
     
     [params release];
     if(![token isEqualToString:@""]&& [user_id intValue]>0){
-      [APIProfile LoadUsrWithUserId:[user_id intValue] withToken:token success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-              if(operation.HTTPRequestOperation.response.statusCode==200){
-                  NSDictionary *body=[mappingResult dictionary];
-                  if([body isKindOfClass:[NSDictionary class]]) {
+        EFAPIServer *server = [EFAPIServer sharedInstance];
+        [server clearUserData];
+        server.user_token = token;
+        server.user_id = [user_id integerValue];
+        
+        [server loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            if(operation.HTTPRequestOperation.response.statusCode==200){
+                NSDictionary *body=[mappingResult dictionary];
+                if([body isKindOfClass:[NSDictionary class]]) {
                     Meta *meta=(Meta*)[body objectForKey:@"meta"];
                     if(meta)
                         if([meta.code intValue]==200) {
-                              NSString *ids_formerge=@"";
-                              User *user=(User*)[body objectForKey:@"response.user"];
-                              for (Identity *_identity in user.identities){
-                                  if([ids_formerge isEqualToString:@""])
-                                      ids_formerge = [ids_formerge stringByAppendingFormat:@"%u",
-                                                      [_identity.identity_id intValue]];
-                                  else
-                                      ids_formerge = [ids_formerge stringByAppendingFormat:@",%u",
-                                                  [_identity.identity_id intValue]];
-                              }
-                              ids_formerge=[NSString stringWithFormat:@"[%@]",ids_formerge];
-                            if([self Checklogin]==NO){
-                              AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-                              app.userid=[user_id intValue];
-                              app.accesstoken=token;
-                              
-                              [SigninDelegate saveSigninData:user];
-                              [self SigninDidFinish];
-                              [self processUrlHandler:url];
-                            }else{
-                              if([identity_id intValue] >0  && [user_id intValue] != self.userid) {
-                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Merge accounts" message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?",user.name] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Merge",nil];
-                                alert.tag=400;
-                                objc_setAssociatedObject (alert, &alertobject, ids_formerge,OBJC_ASSOCIATION_RETAIN);
-                                objc_setAssociatedObject (alert, &handleurlobject, url,OBJC_ASSOCIATION_RETAIN);
-                                objc_setAssociatedObject (alert, &mergetoken, token_formerge,OBJC_ASSOCIATION_RETAIN);
-                                
-                                
-                                
-                                [alert show];
-                                [alert release];
-                              }else{
-                                [self processUrlHandler:url];
-                              }
+                            NSString *ids_formerge=@"";
+                            User *user=(User*)[body objectForKey:@"response.user"];
+                            for (Identity *_identity in user.identities){
+                                if([ids_formerge isEqualToString:@""])
+                                    ids_formerge = [ids_formerge stringByAppendingFormat:@"%u",
+                                                    [_identity.identity_id intValue]];
+                                else
+                                    ids_formerge = [ids_formerge stringByAppendingFormat:@",%u",
+                                                    [_identity.identity_id intValue]];
                             }
-
-                          }
-                  }
-              }
-      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        
-      }];
+                            ids_formerge=[NSString stringWithFormat:@"[%@]",ids_formerge];
+                            if([self Checklogin]==NO){
+                                AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                                app.userid=[user_id intValue];
+                                app.accesstoken=token;
+                                
+                                [SigninDelegate saveSigninData:user];
+                                [self SigninDidFinish];
+                                [self processUrlHandler:url];
+                            }else{
+                                if([identity_id intValue] >0  && [user_id intValue] != self.userid) {
+                                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Merge accounts" message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?",user.name] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Merge",nil];
+                                    alert.tag=400;
+                                    objc_setAssociatedObject (alert, &alertobject, ids_formerge,OBJC_ASSOCIATION_RETAIN);
+                                    objc_setAssociatedObject (alert, &handleurlobject, url,OBJC_ASSOCIATION_RETAIN);
+                                    objc_setAssociatedObject (alert, &mergetoken, token_formerge,OBJC_ASSOCIATION_RETAIN);
+                                    
+                                    
+                                    
+                                    [alert show];
+                                    [alert release];
+                                }else{
+                                    [self processUrlHandler:url];
+                                }
+                            }
+                            
+                        }
+                }
+            }
+        } failure:nil];
     }else{
         [self processUrlHandler:url];
     }
@@ -469,17 +486,23 @@ static char mergetoken;
         }
     }
     else{
-        [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+        [crossViewController refreshCrosses:@"crossupdateview"];
     }
 }
 
 -(void)GatherCrossDidFinish{
-    [(CrossesViewController*)crossviewController refreshCrosses:@"gatherview"];
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+    [crossViewController refreshCrosses:@"gatherview"];
     [self.navigationController dismissModalViewControllerAnimated:YES];
 }
 -(void)CrossUpdateDidFinish:(int)cross_id{
 //    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
-    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview" withCrossId:cross_id];
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+    [crossViewController refreshCrosses:@"crossupdateview" withCrossId:cross_id];
     
 }
 -(void)SignoutDidFinish{
@@ -507,6 +530,7 @@ static char mergetoken;
     NSArray *viewControllers = app.navigationController.viewControllers;
     CrossesViewController *rootViewController = [viewControllers objectAtIndex:0];
     [rootViewController emptyView];
+    [self ShowLanding:rootViewController];
         
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -625,16 +649,14 @@ static char mergetoken;
           if([body isKindOfClass:[NSDictionary class]]) {
             id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
             if(code)
-              if([code intValue]==200) {
-                    [APIProfile LoadUsrWithUserId:app.userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                            if(operation.HTTPRequestOperation.response.statusCode==200){
-                                NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
-                                [self processUrlHandler:url];
-                          }
-                    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                      
-                    }];
-              }
+                if([code intValue]==200) {
+                    [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                        if(operation.HTTPRequestOperation.response.statusCode==200){
+                            NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
+                            [self processUrlHandler:url];
+                        }
+                    } failure:nil];
+                }
           }
         }
       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
