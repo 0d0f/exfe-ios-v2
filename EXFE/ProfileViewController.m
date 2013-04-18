@@ -14,6 +14,7 @@
 #import "CrossesViewController.h"
 #import "AppDelegate.h"
 #import "WCAlertView.h"
+#import "EFAPIServer.h"
 
 
 #define DECTOR_HEIGHT                    (100)
@@ -117,15 +118,15 @@
 }
 
 - (void) syncUser{
-    int user_id = [self.user.user_id intValue];
-    [APIProfile LoadUsrWithUserId:user_id
-                        success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                            self.user = [User getUserById:user_id];
-                            [self refreshUI];
-                        }
-                        failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                            NSLog(@"Error!:%@",error);
-                        }];
+    NSInteger user_id = [self.user.user_id integerValue];
+    [[EFAPIServer sharedInstance] loadUserBy:user_id
+                                     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                         self.user = [User getUserById:user_id];
+                                         [self refreshUI];
+                                     }
+                                     failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                         NSLog(@"Error!:%@",error);
+                                     }];
 }
 
 

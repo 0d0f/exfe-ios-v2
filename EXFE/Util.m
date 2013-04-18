@@ -10,10 +10,9 @@
 #import <math.h>
 #import <BlocksKit/BlocksKit.h>
 #import "UIApplication+EXFE.h"
-#import "APIExfeServer.h"
 #import "CrossTime.h"
 #import "EFTime.h"
-
+#import "EFAPIServer.h"
 
 // Notification Definition
 NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
@@ -1013,23 +1012,21 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return [domains containsObject:[domainname lowercaseString]];
 }
 + (void) signout{
-  AppDelegate* app=(AppDelegate*)[[UIApplication sharedApplication] delegate];
-  
-  NSString *udid=[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"];
-  if(udid==nil)
-    udid=@"";
-  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/signout?token=%@",API_ROOT,app.userid,app.accesstoken];
-  RKObjectManager *manager=[RKObjectManager sharedManager] ;
-  manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
-  [manager.HTTPClient postPath:endpoint parameters:@{@"udid":udid,@"os_name":@"iOS"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    
+    NSString *udid = [[NSUserDefaults standardUserDefaults] objectForKey:@"udid"];
+    if (udid == nil){
+        udid = @"";
     }
-    [app SignoutDidFinish];
-   
-  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-    [app SignoutDidFinish];
-  }];
-
+    [[EFAPIServer sharedInstance] signOutUsingUdid:udid success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+        }
+        [app SignoutDidFinish];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [app SignoutDidFinish];
+    }];
+    
 }
 
 + (NSString*) cleanInputName:(NSString*)username provider:(NSString*)provider{
@@ -1180,7 +1177,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         [formatter release];
     }
     if (last_time == nil || ABS([Util daysBetween:last_time and:[NSDate date]]) > 3){
-        [APIExfeServer checkAppVersionSuccess:^(AFHTTPRequestOperation *operation, id JSON) {
+        [[EFAPIServer sharedInstance] checkAppVersionSuccess:^(AFHTTPRequestOperation *operation, id JSON) {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterFullStyle];
             NSString *now_string = [formatter stringFromDate:[NSDate date]];

@@ -52,19 +52,6 @@ static id sharedManager = nil;
   [manager postObject:cross path:endpoint parameters:nil success:success failure:failure];
 }
 
-
-// deprecated using api in EFAPIServer class
-+(void) LoadCrossWithUserId:(int)user_id updatedtime:(NSString*)updatedtime success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
-
-  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-  if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
-      updatedtime=[Util encodeToPercentEscapeString:updatedtime];
-  
-  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/crosses?updated_at=%@&token=%@",API_ROOT,app.userid,updatedtime,app.accesstoken];
-  [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:nil success:success failure:failure];
-  
-}
-
 +(void) LoadCrossWithCrossId:(int)corss_id updatedtime:(NSString*)updatedtime success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
 
   AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];

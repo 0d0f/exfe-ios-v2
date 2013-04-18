@@ -19,23 +19,19 @@
 
 #ifdef DEBUG
     #ifdef WWW
-        #define API_SERVER @"https://www.exfe.com/"
         #define API_ROOT @"https://www.exfe.com/v2/"
         #define IMG_ROOT @"https://exfe.com/static/img"
         #define EXFE_OAUTH_LINK @"https://exfe.com/OAuth"
     #elif defined LOCAL
-        #define API_SERVER @"http://api.local.exfe.com/"
         #define API_ROOT @"http://api.local.exfe.com/v2/"
         #define IMG_ROOT @"http://local.exfe.com/static/img"
         #define EXFE_OAUTH_LINK @"http://local.exfe.com/OAuth"
     #elif (defined PANDA) || (defined PILOT)
-        #define API_SERVER @"http://api.panda.0d0f.com/"
         #define API_ROOT @"http://api.panda.0d0f.com/v2/"
         #define IMG_ROOT @"http://panda.0d0f.com/static/img"
         #define EXFE_OAUTH_LINK @"http://panda.0d0f.com/oAuth"
     #else
         // DEV
-        #define API_SERVER @"http://api.0d0f.com/"
         #define API_ROOT @"http://api.0d0f.com/v2/"
         #define IMG_ROOT @"http://0d0f.com/static/img"
         #define EXFE_OAUTH_LINK @"http://0d0f.com/OAuth"
@@ -43,7 +39,6 @@
     #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 #else
     // WWW
-    #define API_SERVER @"https://www.exfe.com/"
     #define API_ROOT @"https://www.exfe.com/v2/"
     #define IMG_ROOT @"https://exfe.com/static/img"
     #define EXFE_OAUTH_LINK @"https://exfe.com/OAuth"

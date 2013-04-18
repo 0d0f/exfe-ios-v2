@@ -12,7 +12,6 @@
 #import "APICrosses.h"
 #import "APIConversation.h"
 #import "APIProfile.h"
-#import "APIExfeServer.h"
 #import "CrossesViewController.h"
 #import "LandingViewController.h"
 #import "EFAPIServer.h"
@@ -100,25 +99,27 @@ static char mergetoken;
     UILogSetWindow(self.window);
     
     if (login){
-        [APIProfile LoadUsrWithUserId:userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-          NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-          NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", userid];
-          [request setPredicate:predicate];
-          RKObjectManager *objectManager = [RKObjectManager sharedManager];
-          NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
-          if(users!=nil && [users count] >0)
-          {
-              User* user=[users objectAtIndex:0];
-              NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:4];
-              for(Identity *identity in user.identities){
-                  [identities addObject:identity.identity_id];
-              }
-              [[NSUserDefaults standardUserDefaults] setObject:identities forKey:@"default_user_identities"];
-              [identities release];
-              [[NSUserDefaults standardUserDefaults] synchronize];
-          }
-        } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        }];
+        [[EFAPIServer sharedInstance] loadUserBy:userid
+                                         success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+                                             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", userid];
+                                             [request setPredicate:predicate];
+                                             RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                             NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+                                             if(users!=nil && [users count] >0)
+                                             {
+                                                 User* user=[users objectAtIndex:0];
+                                                 NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:4];
+                                                 for(Identity *identity in user.identities){
+                                                     [identities addObject:identity.identity_id];
+                                                 }
+                                                 [[NSUserDefaults standardUserDefaults] setObject:identities forKey:@"default_user_identities"];
+                                                 [identities release];
+                                                 [[NSUserDefaults standardUserDefaults] synchronize];
+                                             }
+                                         }
+                                         failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                         }];
     }
   
     [[EFAPIServer sharedInstance] getAvailableBackgroundsWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -226,7 +227,9 @@ static char mergetoken;
 -(void)SigninDidFinish{
     if([self Checklogin]==YES)
     {
+        // request for push
 //        NSString* devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"];
+        
         NSString* ifdevicetokenSave=[[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
         if( ifdevicetokenSave==nil)
         {
@@ -241,6 +244,8 @@ static char mergetoken;
         [crossViewController refreshCrosses:@"crossview_init"];
         [crossViewController loadObjectsFromDataStore];
         [crossViewController dismissModalViewControllerAnimated:YES];
+        
+        
     }
 }
 
@@ -349,55 +354,58 @@ static char mergetoken;
     
     [params release];
     if(![token isEqualToString:@""]&& [user_id intValue]>0){
-      [APIProfile LoadUsrWithUserId:[user_id intValue] withToken:token success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-              if(operation.HTTPRequestOperation.response.statusCode==200){
-                  NSDictionary *body=[mappingResult dictionary];
-                  if([body isKindOfClass:[NSDictionary class]]) {
+        EFAPIServer *server = [EFAPIServer sharedInstance];
+        [server clearUserData];
+        server.user_token = token;
+        server.user_id = [user_id integerValue];
+        
+        [server loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+            if(operation.HTTPRequestOperation.response.statusCode==200){
+                NSDictionary *body=[mappingResult dictionary];
+                if([body isKindOfClass:[NSDictionary class]]) {
                     Meta *meta=(Meta*)[body objectForKey:@"meta"];
                     if(meta)
                         if([meta.code intValue]==200) {
-                              NSString *ids_formerge=@"";
-                              User *user=(User*)[body objectForKey:@"response.user"];
-                              for (Identity *_identity in user.identities){
-                                  if([ids_formerge isEqualToString:@""])
-                                      ids_formerge = [ids_formerge stringByAppendingFormat:@"%u",
-                                                      [_identity.identity_id intValue]];
-                                  else
-                                      ids_formerge = [ids_formerge stringByAppendingFormat:@",%u",
-                                                  [_identity.identity_id intValue]];
-                              }
-                              ids_formerge=[NSString stringWithFormat:@"[%@]",ids_formerge];
-                            if([self Checklogin]==NO){
-                              AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-                              app.userid=[user_id intValue];
-                              app.accesstoken=token;
-                              
-                              [SigninDelegate saveSigninData:user];
-                              [self SigninDidFinish];
-                              [self processUrlHandler:url];
-                            }else{
-                              if([identity_id intValue] >0  && [user_id intValue] != self.userid) {
-                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Merge accounts" message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?",user.name] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Merge",nil];
-                                alert.tag=400;
-                                objc_setAssociatedObject (alert, &alertobject, ids_formerge,OBJC_ASSOCIATION_RETAIN);
-                                objc_setAssociatedObject (alert, &handleurlobject, url,OBJC_ASSOCIATION_RETAIN);
-                                objc_setAssociatedObject (alert, &mergetoken, token_formerge,OBJC_ASSOCIATION_RETAIN);
-                                
-                                
-                                
-                                [alert show];
-                                [alert release];
-                              }else{
-                                [self processUrlHandler:url];
-                              }
+                            NSString *ids_formerge=@"";
+                            User *user=(User*)[body objectForKey:@"response.user"];
+                            for (Identity *_identity in user.identities){
+                                if([ids_formerge isEqualToString:@""])
+                                    ids_formerge = [ids_formerge stringByAppendingFormat:@"%u",
+                                                    [_identity.identity_id intValue]];
+                                else
+                                    ids_formerge = [ids_formerge stringByAppendingFormat:@",%u",
+                                                    [_identity.identity_id intValue]];
                             }
-
-                          }
-                  }
-              }
-      } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        
-      }];
+                            ids_formerge=[NSString stringWithFormat:@"[%@]",ids_formerge];
+                            if([self Checklogin]==NO){
+                                AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+                                app.userid=[user_id intValue];
+                                app.accesstoken=token;
+                                
+                                [SigninDelegate saveSigninData:user];
+                                [self SigninDidFinish];
+                                [self processUrlHandler:url];
+                            }else{
+                                if([identity_id intValue] >0  && [user_id intValue] != self.userid) {
+                                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Merge accounts" message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?",user.name] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Merge",nil];
+                                    alert.tag=400;
+                                    objc_setAssociatedObject (alert, &alertobject, ids_formerge,OBJC_ASSOCIATION_RETAIN);
+                                    objc_setAssociatedObject (alert, &handleurlobject, url,OBJC_ASSOCIATION_RETAIN);
+                                    objc_setAssociatedObject (alert, &mergetoken, token_formerge,OBJC_ASSOCIATION_RETAIN);
+                                    
+                                    
+                                    
+                                    [alert show];
+                                    [alert release];
+                                }else{
+                                    [self processUrlHandler:url];
+                                }
+                            }
+                            
+                        }
+                }
+            }
+        } failure:nil];
     }else{
         [self processUrlHandler:url];
     }
@@ -641,16 +649,14 @@ static char mergetoken;
           if([body isKindOfClass:[NSDictionary class]]) {
             id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
             if(code)
-              if([code intValue]==200) {
-                    [APIProfile LoadUsrWithUserId:app.userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                            if(operation.HTTPRequestOperation.response.statusCode==200){
-                                NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
-                                [self processUrlHandler:url];
-                          }
-                    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                      
-                    }];
-              }
+                if([code intValue]==200) {
+                    [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                        if(operation.HTTPRequestOperation.response.statusCode==200){
+                            NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
+                            [self processUrlHandler:url];
+                        }
+                    } failure:nil];
+                }
           }
         }
       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

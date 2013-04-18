@@ -13,11 +13,6 @@
 
 
 @interface APIProfile : NSObject
-+(void) MappingUsers;
-+(void) MappingSuggest;
-+(void) LoadUsrWithUserId:(int)user_id success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
-
-+(void) LoadUsrWithUserId:(int)user_id withToken:(NSString*)token success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 +(void) MergeIdentities:(NSString*)browsing_identity_token Identities_ids:(NSString*)ids
                 success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success

@@ -30,7 +30,9 @@ typedef NS_ENUM(NSUInteger, EFStage){
 
     EFStage _stage;
     SigninDelegate *_signindelegate;
+   
 }
+@property  (nonatomic, copy) NSString *lastInputIdentity;
 @end
 
 @implementation EFSignInViewController
@@ -41,8 +43,9 @@ typedef NS_ENUM(NSUInteger, EFStage){
     if (self) {
         // Custom initialization
         _stage = kStageStart;
-        _signindelegate = [[SigninDelegate alloc]init];
+        _signindelegate = [[SigninDelegate alloc] init];
         _signindelegate.parent = self;
+        self.lastInputIdentity = @"";
     }
     return self;
 }
@@ -66,6 +69,8 @@ typedef NS_ENUM(NSUInteger, EFStage){
         UITextField *textfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
         textfield.placeholder = @"Enter email or phone";
         textfield.borderStyle = UITextBorderStyleRoundedRect;
+        textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        textfield.keyboardType = UIKeyboardTypeEmailAddress;
         textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         [textfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         self.inputIdentity = textfield;
@@ -73,8 +78,8 @@ typedef NS_ENUM(NSUInteger, EFStage){
         //    [self.view addSubview:self.inputIdentity];
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-        [imageView.layer setCornerRadius:4.0];
-        [imageView.layer setMasksToBounds:YES];
+        imageView.layer.cornerRadius = 4.0;
+        imageView.layer.masksToBounds = YES;
         imageView.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
         imageView.contentMode = UIViewContentModeCenter;
         self.imageIdentity = imageView;
@@ -104,17 +109,24 @@ typedef NS_ENUM(NSUInteger, EFStage){
     }
     
     {
-        UIButton *btnS = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        UIButton *btnS = [UIButton buttonWithType:UIButtonTypeCustom];
         btnS.frame = CGRectMake(0, 0, 290, 48);
         [btnS setTitle:@"Start" forState:UIControlStateNormal];
         [btnS addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchUpInside];
+        UIImage *btnImage = [UIImage imageNamed:@"btn_blue_30inset.png"];
+        btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
+        [btnS setBackgroundImage:btnImage forState:UIControlStateNormal];
         self.btnStart = btnS;
         self.btnStart.tag = 3;
     }
     
     
     CSLinearLayoutView *snsLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 0, 296, 106)] autorelease];
-    snsLayoutView.backgroundColor = [UIColor lightGrayColor];
+    snsLayoutView.backgroundColor = [UIColor whiteColor];
+    snsLayoutView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    snsLayoutView.layer.borderWidth = 3.0;
+    snsLayoutView.layer.masksToBounds = YES;
+    snsLayoutView.layer.cornerRadius = 6;
     snsLayoutView.orientation = CSLinearLayoutViewOrientationHorizontal;
     
     CSLinearLayoutItem *snsItem = [CSLinearLayoutItem layoutItemForView:snsLayoutView];
@@ -234,27 +246,32 @@ typedef NS_ENUM(NSUInteger, EFStage){
     }
 }
 
-- (void)fillIdentityImage:(NSDictionary*)identityDict
+- (void)fillIdentityImage:(NSDictionary*)identityDict{
+    NSString *avatar_filename = [identityDict valueForKeyPath:@"avatar_filename"];
+    if (avatar_filename.length > 0) {
+        UIImage *def = [UIImage imageNamed:@"portrait_default.png"];
+        _imageIdentity.contentMode = UIViewContentModeScaleAspectFill;
+        [[ImgCache sharedManager] fillAvatar:_imageIdentity with:avatar_filename byDefault:def];
+    }
+}
+
+- (void)fillIdentityHint:(Provider)provider;
 {
-    Provider provider =  [Identity getProviderCode: [identityDict valueForKeyPath:@"provider"]];
-    
-    //                                NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
-    //                                identityLeftIcon.image=[UIImage imageNamed:iconname];
-    
     switch (provider) {
         case kProviderEmail:{
-            NSString *avatar_filename = [identityDict valueForKeyPath:@"avatar_filename"];
-            if (avatar_filename.length > 0) {
-                UIImage *def = [UIImage imageNamed:@"portrait_default.png"];
-                _imageIdentity.contentMode = UIViewContentModeScaleAspectFill;
-                [[ImgCache sharedManager] fillAvatar:_imageIdentity with:avatar_filename byDefault:def];
-            } else {
-                _imageIdentity.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
-                _imageIdentity.contentMode = UIViewContentModeCenter;
-            }
+            _imageIdentity.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
+            _imageIdentity.contentMode = UIViewContentModeCenter;
         }   break;
         case kProviderPhone:
             _imageIdentity.image = [UIImage imageNamed:@"identity_phone_18_grey.png"];
+            _imageIdentity.contentMode = UIViewContentModeCenter;
+            break;
+        case kProviderFacebook:
+            _imageIdentity.image = [UIImage imageNamed:@"identity_facebook_18_grey.png"];
+            _imageIdentity.contentMode = UIViewContentModeCenter;
+            break;
+        case kProviderTwitter:
+            _imageIdentity.image = [UIImage imageNamed:@"identity_twitter_18_grey.png"];
             _imageIdentity.contentMode = UIViewContentModeCenter;
             break;
             
@@ -276,6 +293,8 @@ typedef NS_ENUM(NSUInteger, EFStage){
             [self setStage:kStageSignUp];
         } else if([self.regFlag isEqualToString:@"VERIFY"] ) {
             [self setStage:kStageVerificate];
+        } else if([self.regFlag isEqualToString:@"AUTHENTICATE"]){
+            
         } else {
             [self setStage:kStageSignIn];
         }
@@ -303,16 +322,19 @@ typedef NS_ENUM(NSUInteger, EFStage){
                         NSLog(@"Signed In");
 //                        UIViewController *parent = self.parentViewController;
 //                        [parent dismissModalViewControllerAnimated:YES];
-//                        
-                        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-                        [app SigninDidFinish];
-                        // save token
+//
+                        [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                            AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                            [app SigninDidFinish];
+                        }
+                                                            failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                                ;
+                                                            }];
                         
-                        // request for push
+                       
                         
-                        // get cross list
                         
-                        // get user  profile
+                        
                         break;
                     case 403:
                         // login fail
@@ -350,15 +372,21 @@ typedef NS_ENUM(NSUInteger, EFStage){
 {
     NSLog(@"TextChange");
     NSString *identity = _inputIdentity.text;
+    
+    if ([identity isEqualToString:self.lastInputIdentity]) {
+        return;
+    } else {
+        self.lastInputIdentity = identity;
+    }
     Provider provider = [Util candidateProvider:identity];
-    [self fillIdentityImage:@{@"provider": [Identity getProviderString:provider]}];
+    [self fillIdentityHint:provider];
     if (identity.length > 2) {
         if(provider != kProviderUnknown) {
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
             NSInteger start = MAX(identity.length, 3) - 3;
             NSString *domainext = [identity substringFromIndex:start];
             if([Util isCommonDomainName:domainext]){
-                [self performSelector:@selector(checkIdentityFlag:) withObject:identity];
+                [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.1];
             } else {
                 [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.8];
             }
@@ -382,11 +410,7 @@ typedef NS_ENUM(NSUInteger, EFStage){
                             NSDictionary *dic = [responseObject valueForKeyPath:@"response.identity"];
                             
                             if ([_inputIdentity.text isEqualToString:identity]) {
-                                if (dic != nil) {
-                                    self.identityDict = dic;
-                                } else {
-                                    self.identityDict = @{@"provider": [Identity getProviderString:provider]};
-                                }
+                                self.identityDict = dic;
                                 self.regFlag = flag;
                                 [self fillIdentityImage:self.identityDict];
                             }
