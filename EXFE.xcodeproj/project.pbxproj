@@ -17,6 +17,9 @@
 		4F14689C167F1C0700872F9D /* ProfileCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F14689B167F1C0600872F9D /* ProfileCard.m */; };
 		4F15C34816E99CD4008FD99B /* EXTabLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15C34516E99CD4008FD99B /* EXTabLayer.m */; };
 		4F15C34916E99CD4008FD99B /* EXTabWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15C34716E99CD4008FD99B /* EXTabWidget.m */; };
+		4F25A1BA171FB9FF000513B5 /* CSLinearLayoutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */; };
+		4F25A1C2171FBA2A000513B5 /* CSLinearLayoutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */; };
+		4F25A1C3171FBA2B000513B5 /* CSLinearLayoutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */; };
 		4F266F02168EC49900BDB9D5 /* EXLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F266F01168EC49900BDB9D5 /* EXLabel.m */; };
 		4F29C8C416F6D968001BB176 /* rsvp_accepted_18blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F29C8A416F6D966001BB176 /* rsvp_accepted_18blue.png */; };
 		4F29C8C516F6D968001BB176 /* rsvp_accepted_18blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F29C8A516F6D966001BB176 /* rsvp_accepted_18blue@2x.png */; };
@@ -1554,6 +1557,8 @@
 		4F15C34516E99CD4008FD99B /* EXTabLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabLayer.m; sourceTree = "<group>"; };
 		4F15C34616E99CD4008FD99B /* EXTabWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTabWidget.h; sourceTree = "<group>"; };
 		4F15C34716E99CD4008FD99B /* EXTabWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabWidget.m; sourceTree = "<group>"; };
+		4F25A1B8171FB9FF000513B5 /* CSLinearLayoutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLinearLayoutView.h; path = Vendor/CSLinearLayoutView/CSLinearLayoutView/CSLinearLayoutView.h; sourceTree = SOURCE_ROOT; };
+		4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLinearLayoutView.m; path = Vendor/CSLinearLayoutView/CSLinearLayoutView/CSLinearLayoutView.m; sourceTree = SOURCE_ROOT; };
 		4F266F00168EC49900BDB9D5 /* EXLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXLabel.h; sourceTree = "<group>"; };
 		4F266F01168EC49900BDB9D5 /* EXLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXLabel.m; sourceTree = "<group>"; };
 		4F29C8A416F6D966001BB176 /* rsvp_accepted_18blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rsvp_accepted_18blue.png; sourceTree = "<group>"; };
@@ -2758,6 +2763,8 @@
 		785FD54E158065610056590D /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				4F25A1B8171FB9FF000513B5 /* CSLinearLayoutView.h */,
+				4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */,
 				4F9FE4C61702E12C0098B9B9 /* PSTCollectionView */,
 				4FD9375E16D601B700ED6677 /* UIImage */,
 				78B46B6D15FC87DB006738D7 /* MBProgressHUD.h */,
@@ -4611,6 +4618,7 @@
 				76D1A805171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */,
 				763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */,
 				763A0192171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
+				4F25A1C2171FBA2A000513B5 /* CSLinearLayoutView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4760,6 +4768,7 @@
 				76D1A806171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */,
 				763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */,
 				763A0193171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
+				4F25A1C3171FBA2B000513B5 /* CSLinearLayoutView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4909,6 +4918,7 @@
 				76D1A804171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */,
 				763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */,
 				763A0191171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
+				4F25A1BA171FB9FF000513B5 /* CSLinearLayoutView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

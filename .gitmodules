@@ -7,3 +7,6 @@
 [submodule "Vendor/PSTCollectionView"]
 	path = Vendor/PSTCollectionView
 	url = git://github.com/stonyw/PSTCollectionView.git
+[submodule "Vendor/CSLinearLayoutView"]
+	path = Vendor/CSLinearLayoutView
+	url = git://github.com/stonyw/CSLinearLayoutView.git
