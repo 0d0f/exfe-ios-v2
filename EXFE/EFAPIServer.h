@@ -20,7 +20,24 @@
 + (EFAPIServer *)sharedInstance;
 
 - (void)getRegFlagBy:(NSString*)identity
-and:(Provider)provider
-success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+                with:(Provider)provider
+             success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+             failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)getAvailableBackgroundsWithSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                                   failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)signIn:(NSString*)identity
+          with:(Provider)provider
+      password:(NSString*)password
+       success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+       failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)signUp:(NSString*)identity
+          with:(Provider)provider
+          name:(NSString*)name
+      password:(NSString*)password
+       success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+       failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
 @end

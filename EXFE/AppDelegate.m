@@ -15,6 +15,7 @@
 #import "APIExfeServer.h"
 #import "CrossesViewController.h"
 #import "LandingViewController.h"
+#import "EFAPIServer.h"
 
 @implementation AppDelegate
 @synthesize userid;
@@ -57,7 +58,7 @@ static char mergetoken;
     }
     
 #ifdef DEBUG
-    RKLogConfigureByName("RestKit/Network", RKLogLevelOff);
+    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
 //    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
     RKLogConfigureByName("RestKit/CoreData", RKLogLevelOff);
 //    RKLogConfigureByName("RestKit/CoreData/Cache", RKLogLevelTrace);
@@ -97,7 +98,7 @@ static char mergetoken;
     
     UILogSetWindow(self.window);
     
-    if (login)
+    if (login){
         [APIProfile LoadUsrWithUserId:userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
           NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
           NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", userid];
@@ -117,24 +118,25 @@ static char mergetoken;
           }
         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         }];
-  
-  NSString *endpoint = [NSString stringWithFormat:@"%@Backgrounds/GetAvailableBackgrounds?token=%@",API_ROOT,self.accesstoken];
-  [objectManager.HTTPClient getPath:endpoint parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-      NSDictionary *body=responseObject;
-      if([body isKindOfClass:[NSDictionary class]]) {
-          id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-          if(code)
-              if([code intValue]==200) {
-                  NSArray *backgrounds=[[body objectForKey:@"response"] objectForKey:@"backgrounds"];
-                  [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
-              }
-        }
-    }else {
     }
-  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-    
-  }];
+  
+    [[EFAPIServer sharedInstance] getAvailableBackgroundsWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+            NSDictionary *body=responseObject;
+            if([body isKindOfClass:[NSDictionary class]]) {
+                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                if(code)
+                    if([code intValue]==200) {
+                        NSArray *backgrounds=[[body objectForKey:@"response"] objectForKey:@"backgrounds"];
+                        [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
+                    }
+            }
+        }else {
+        }
+    }
+                                                             failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                 
+                                                             }];
 
     return YES;
 }

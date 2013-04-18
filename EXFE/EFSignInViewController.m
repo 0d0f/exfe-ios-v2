@@ -13,10 +13,18 @@
 #import "EFAPIServer.h"
 #import "Util.h"
 #import "Identity+EXFE.h"
+#import "ImgCache.h"
+
+typedef NS_ENUM(NSUInteger, EFStage){
+    kStageStart,
+    kStageSignIn,
+    kStageSignUp,
+    kStageVerificate
+};
 
 @interface EFSignInViewController (){
 
-    NSUInteger stage;
+    EFStage _stage;
     
 }
 @end
@@ -28,7 +36,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        stage = 0;
+        _stage = kStageStart;
     }
     return self;
 }
@@ -46,13 +54,15 @@
     textIdentity.placeholder = @"Enter email or phone";
     textIdentity.borderStyle = UITextBorderStyleRoundedRect;
     textIdentity.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    [textIdentity addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     self.inputIdentity = textIdentity;
     [self.view addSubview:self.inputIdentity];
     
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
     [imgView.layer setCornerRadius:4.0];
     [imgView.layer setMasksToBounds:YES];
-    imgView.hidden = YES;
+    imgView.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
+    imgView.contentMode = UIViewContentModeCenter;
     self.imageIdentity = imgView;
     self.inputIdentity.leftView = imgView;
     self.inputIdentity.leftViewMode = UITextFieldViewModeAlways;
@@ -73,12 +83,30 @@
     
     
     UIButton *btnS = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    btnS.frame = CGRectMake(15, 130, 290, 48);
-    btnS.titleLabel.text = @"Start";
+    btnS.frame = CGRectMake(15, 140, 290, 48);
+    [btnS setTitle:@"Start" forState:UIControlStateNormal];
     btnS.hidden = YES;
     [btnS addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchUpInside];
     self.btnStart = btnS;
     [self.view addSubview:self.btnStart];
+    
+    UIButton *btnF = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    btnF.frame = CGRectMake(45, 200, 50, 50);
+    [btnF setTitle:@"Facebook" forState:UIControlStateNormal];
+//    btnF.hidden = YES;
+    [btnF addTarget:self action:@selector(facebookSignIn:) forControlEvents:UIControlEventTouchUpInside];
+    self.btnFacebook = btnF;
+    [self.view addSubview:self.btnFacebook];
+    
+    UIButton *btnT = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    btnT.frame = CGRectMake(205, 200, 50, 50);
+    [btnT setTitle:@"Twitter" forState:UIControlStateNormal];
+//    btnT.hidden = YES;
+    [btnT addTarget:self action:@selector(twitterSignIn:) forControlEvents:UIControlEventTouchUpInside];
+    self.btnTwitter = btnT;
+    [self.view addSubview:self.btnTwitter];
+    
+    
     
 }
 
@@ -111,83 +139,186 @@
     [super dealloc];
 }
 
+- (void)setStage:(EFStage)stage
+{
+    _stage = stage;
+    switch (_stage){
+        case kStageStart:
+            break;
+        case kStageSignIn:
+            // show rest login form
+            _inputPassword.hidden = NO;
+            _btnStart.hidden = NO;
+            break;
+        case kStageSignUp:
+            
+            _inputPassword.hidden = NO;
+            _inputUsername.hidden = NO;
+            _btnStartNewUser.hidden = NO;
+            break;
+        case kStageVerificate:
+            _inputPassword.hidden = NO;
+            _btnStartOver.hidden = NO;
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)fillIdentityImage:(NSDictionary*)identityDict
+{
+    Provider provider =  [Identity getProviderCode: [identityDict valueForKeyPath:@"provider"]];
+    
+    //                                NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
+    //                                identityLeftIcon.image=[UIImage imageNamed:iconname];
+    
+    switch (provider) {
+        case kProviderEmail:{
+            NSString *avatar_filename = [identityDict valueForKeyPath:@"avatar_filename"];
+            if (avatar_filename.length > 0) {
+                UIImage *def = [UIImage imageNamed:@"portrait_default.png"];
+                _imageIdentity.contentMode = UIViewContentModeScaleAspectFill;
+                [[ImgCache sharedManager] fillAvatar:_imageIdentity with:avatar_filename byDefault:def];
+            } else {
+                _imageIdentity.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
+                _imageIdentity.contentMode = UIViewContentModeCenter;
+            }
+        }   break;
+        case kProviderPhone:
+            _imageIdentity.image = [UIImage imageNamed:@"identity_phone_18_grey.png"];
+            _imageIdentity.contentMode = UIViewContentModeCenter;
+            break;
+            
+        default:
+            // no identity info, fall back to default
+            _imageIdentity.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
+            _imageIdentity.contentMode = UIViewContentModeCenter;
+            break;
+    }
+}
 
 #pragma mark Click handler
 - (void)expandIdentity:(id)sender
 {
-    if (stage == 0){
-        if (_inputIdentity.text.length > 0) {
-            
-            NSString *identity = _inputIdentity.text;
-            // start query
-            Provider provider = [Util matchedProvider:identity];
-            EFAPIServer *server = [EFAPIServer sharedInstance];
-            [server getRegFlagBy:identity and:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
-                    id code = [responseObject valueForKeyPath:@"meta.code"];
-                    if(code)
-                        if([code intValue] == 200) {
-                            NSString *registration_flag = [responseObject valueForKeyPath:@"response.registration_flag"];
-                            if([registration_flag isEqualToString:@"SIGN_IN"] ) {
-//                                [self setSigninView];
-                                NSDictionary *identity = [responseObject valueForKeyPath:@"response.identity"];
-                                NSString *avatar_filename = [identity valueForKeyPath:@"avatar_filename"];
-                                NSString *provider = [identity valueForKeyPath:@"provider"];
-                                
-//                                NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
-//                                identityLeftIcon.image=[UIImage imageNamed:iconname];
-//                                
-//                                if(avatar_filename!=nil) {
-//                                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-//                                    dispatch_async(imgQueue, ^{
-//                                        UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatar_filename];
-//                                        dispatch_async(dispatch_get_main_queue(), ^{
-//                                            if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-//                                                avatarview.image=avatar;
-//                                                avatarframeview.image=[UIImage imageNamed:@"signin_portrait_frame.png"];
-//                                            }
-//                                        });
-//                                    });
-//                                    dispatch_release(imgQueue);
-//                                }
-                            }
-                            else if([registration_flag isEqualToString:@"SIGN_UP"] ){
-//                                [self setSignupView];
-                            }
-                            else if([registration_flag isEqualToString:@"VERIFY"] ) {
-//                                [self setSigninView];
-                            }
-                        }
-                }
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                NSLog(@"get flag fail");
-            }];
-            
-            // show rest login form
-            _imageIdentity.hidden = NO;
-            _inputPassword.hidden = NO;
-            _btnStart.hidden = NO;
-            switch (provider) {
-                case kProviderEmail:
-                    _imageIdentity.image = [UIImage imageNamed:@"portrait_default.png"];
-                    break;
-                case kProviderPhone:
-                    _imageIdentity.image = [UIImage imageNamed:@"identity_phone_18_grey.png"];
-                    break;
-                    
-                default:
-                    _imageIdentity.image = nil;
-                    break;
-            }
+    //if (_stage == 0){
+        if([self.regFlag isEqualToString:@"SIGN_IN"] ) {
+            [self setStage:kStageSignIn];
+        } else if([self.regFlag isEqualToString:@"SIGN_UP"] ){
+            [self setStage:kStageSignUp];
+        } else if([self.regFlag isEqualToString:@"VERIFY"] ) {
+            [self setStage:kStageVerificate];
+        } else {
+            [self setStage:kStageSignIn];
         }
     
-    }
+    //}
     
 }
 
 - (void)signIn:(id)sender
 {
     NSLog(@"Start Sign In");
+    if (_inputIdentity.text.length == 0 || _inputPassword.text.length == 0) {
+        return;
+    }
+    NSLog(@"%@ %@", _inputIdentity.text, _inputPassword.text);
+    Provider provider = [Util matchedProvider:_inputIdentity.text];
+    [[EFAPIServer sharedInstance] signIn:_inputIdentity.text with:provider password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+            NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+            if (code) {
+                NSInteger c = [code integerValue];
+                switch (c) {
+                    case 200:
+                        NSLog(@"Signed In");
+                        
+                        UIViewController *parent = self.parentViewController;
+                        [parent.navigationController popToRootViewControllerAnimated:YES];
+                        
+                        // request for push
+                        
+                        // get cross list
+                        
+                        // get user  profile
+                        break;
+                    case 403:
+                        // login fail
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    } failure:nil];
+    
+    
 }
 
+- (void)facebookSignIn:(id)sender
+{
+    NSLog(@"facebook Sign In");
+}
+
+- (void)twitterSignIn:(id)sender
+{
+    NSLog(@"twitter Sign In");
+}
+
+#pragma mark Textfiled Change
+- (void)textFieldDidChange:(id)sender
+{
+    NSLog(@"TextChange");
+    NSString *identity = _inputIdentity.text;
+    Provider provider = [Util candidateProvider:identity];
+    [self fillIdentityImage:@{@"provider": [Identity getProviderString:provider]}];
+    if (identity.length > 2) {
+        if(provider != kProviderUnknown) {
+            [NSObject cancelPreviousPerformRequestsWithTarget:self];
+            NSInteger start = MAX(identity.length, 3) - 3;
+            NSString *domainext = [identity substringFromIndex:start];
+            if([Util isCommonDomainName:domainext]){
+                [self performSelector:@selector(checkIdentityFlag:) withObject:identity];
+            } else {
+                [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.8];
+            }
+        }
+    }
+}
+
+- (void)checkIdentityFlag:(NSString*)identity
+{
+    if (identity.length > 0) {
+        // start query
+        Provider provider = [Util matchedProvider:identity];
+        if (provider != kProviderUnknown) {
+            EFAPIServer *server = [EFAPIServer sharedInstance];
+            [server getRegFlagBy:identity with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+                    id code = [responseObject valueForKeyPath:@"meta.code"];
+                    if (code) {
+                        if([code intValue] == 200) {
+                            NSString *flag = [responseObject valueForKeyPath:@"response.registration_flag"];
+                            NSDictionary *dic = [responseObject valueForKeyPath:@"response.identity"];
+                            
+                            if ([_inputIdentity.text isEqualToString:identity]) {
+                                if (dic != nil) {
+                                    self.identityDict = dic;
+                                } else {
+                                    self.identityDict = @{@"provider": [Identity getProviderString:provider]};
+                                }
+                                self.regFlag = flag;
+                                [self fillIdentityImage:self.identityDict];
+                            }
+                        } else {
+                            NSLog(@"get flag fail");
+                        }
+                    }
+                }
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                NSLog(@"get flag fail");
+            }];
+        }
+    }
+}
 @end

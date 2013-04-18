@@ -23,7 +23,8 @@
 @property (nonatomic, retain) UIButton *btnFacebook;
 @property (nonatomic, retain) UIButton *btnTwitter;
 
-
+@property (nonatomic, retain) NSDictionary *identityDict;
+@property (nonatomic, retain) NSString *regFlag;
 @property (nonatomic, copy) id onExitBlock;
 
 @end

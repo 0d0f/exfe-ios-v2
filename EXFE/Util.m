@@ -499,32 +499,64 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return [Identity getProviderString:p];
 }
 
-+ (Provider)matchedProvider:(NSString*)raw
++ (Provider)candidateProvider:(NSString*)raw
 {
-    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSString *lowercase = [raw lowercaseString];
+    if ([lowercase hasSuffix:@"@twitter"]) {
+        return kProviderTwitter;
+    }
+    if ([lowercase hasSuffix:@"@facebook"]) {
+        return kProviderFacebook;
+    }
+    NSString *phoneRegex = @"^(\\+)?\\d+$";
+    NSPredicate *phonelTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", phoneRegex];
+    NSString* clean_phone=@"";
+    clean_phone = [lowercase stringByReplacingOccurrencesOfString:@"(" withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@")" withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@" " withString:@""];
+    clean_phone = [clean_phone stringByReplacingOccurrencesOfString:@"." withString:@""];
+    if ([phonelTest evaluateWithObject:clean_phone] == YES){
+        return kProviderPhone;
+    }
+    NSString *emailRegex = @"^[\\w-\\+][\\w-\\+\\.]*@[a-z0-9-.]*$";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
-    if ([emailTest evaluateWithObject:raw] == YES){
+    if ([emailTest evaluateWithObject:lowercase] == YES){
         return kProviderEmail;
     }
     
-    NSString *twitterRegex1 = @"@[A-Za-z0-9.-]+";
+    
+    return kProviderUnknown;
+}
+
++ (Provider)matchedProvider:(NSString*)raw
+{
+    NSString *lowercase = [raw lowercaseString];
+    NSString *emailRegex = @"^[_a-z0-9-\\+]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9]+)*(\\.[a-z]{2,})$";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    if ([emailTest evaluateWithObject:lowercase] == YES){
+        return kProviderEmail;
+    }
+    
+    NSString *twitterRegex1 = @"^@[a-z0-9.-]+$";
     NSPredicate *twitterTest1 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex1];
-    if ([twitterTest1 evaluateWithObject:raw] == YES){
+    if ([twitterTest1 evaluateWithObject:lowercase] == YES){
         return kProviderTwitter;
     }
-    NSString *twitterRegex2 = @"[A-Za-z0-9.-]+@twitter";
+    NSString *twitterRegex2 = @"^[a-z0-9.-]+@twitter$";
     NSPredicate *twitterTest2 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex2];
-    if ([twitterTest2 evaluateWithObject:raw] == YES){
+    if ([twitterTest2 evaluateWithObject:lowercase] == YES){
         return kProviderTwitter;
     }
     
-    NSString *facebookRegex = @"[A-Z0-9a-z._%+-]+@facebook";
+    NSString *facebookRegex = @"[0-9a-z._%+-]+@facebook";
     NSPredicate *facebookTest = [NSPredicate predicateWithFormat:@"SELF MATCHES[c] %@", facebookRegex];
-    if ([facebookTest evaluateWithObject:raw] == YES){
+    if ([facebookTest evaluateWithObject:lowercase] == YES){
         return kProviderFacebook;
     }
     
-    NSString *phone = [Util formatPhoneNumber:raw];
+    NSString *phone = [Util formatPhoneNumber:lowercase];
     if ([phone length] > 0){
         return kProviderPhone;
     }
@@ -612,40 +644,43 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 }
 
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber{
-  CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
-  CTCarrier *carrier = [netInfo subscriberCellularProvider];
-  NSString *mcc = [carrier mobileCountryCode];
-//  NSString *mnc = [carrier mobileNetworkCode];
-  NSString *isocode =[carrier isoCountryCode];
-  NSString* clean_phone=@"";
-  clean_phone=[phonenumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
-  clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@")" withString:@""];
-  clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
-  clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
-  clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@" " withString:@""];
-  clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"." withString:@""];
-  
-  NSString *cnphoneregex = @"1([3458]|7[1-8])\\d*";
-  NSPredicate *cnphoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", cnphoneregex];
-  NSString *phoneresult=@"";
-  if(([mcc isEqualToString:@"460"] || [isocode isEqualToString:@"cn"]) && [clean_phone length]>=11 ){
-    if([[clean_phone substringToIndex:2] isEqualToString:@"00"])
-      phoneresult =[@"+" stringByAppendingString: [clean_phone substringFromIndex:2]];
-    else if([[clean_phone substringToIndex:1] isEqualToString:@"+"])
-      phoneresult=clean_phone;
-    else if([cnphoneTest evaluateWithObject:clean_phone]==YES)
-      phoneresult=[@"+86" stringByAppendingString:clean_phone];
-  }
-  if(([mcc isEqualToString:@"310"] ||[mcc isEqualToString:@"311"] || [isocode isEqualToString:@"us"] || [isocode isEqualToString:@"ca"]) && [clean_phone length]>=10){
-    if([[clean_phone substringToIndex:1] isEqualToString:@"+"])
-      phoneresult=clean_phone;
-    else if([[clean_phone substringToIndex:1] isEqualToString:@"1"])
-      phoneresult=[@"+" stringByAppendingString:clean_phone];
-    else if([clean_phone characterAtIndex:0] >= '2' && [clean_phone characterAtIndex:0] <= '9' && [clean_phone length]>=7)
-      phoneresult=[@"+1" stringByAppendingString:clean_phone];
-  }
+    CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [netInfo subscriberCellularProvider];
+    NSString *mcc = [carrier mobileCountryCode];
+    //  NSString *mnc = [carrier mobileNetworkCode];
+    NSString *isocode =[carrier isoCountryCode];
+    NSString* clean_phone=@"";
+    clean_phone=[phonenumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
+    clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@")" withString:@""];
+    clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@" " withString:@""];
+    clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"." withString:@""];
+    
+    NSString *cnphoneregex = @"1([3458]|7[1-8])\\d*";
+    NSPredicate *cnphoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", cnphoneregex];
+    NSString *phoneresult=@"";
+    if(([mcc isEqualToString:@"460"] || [isocode isEqualToString:@"cn"]) && [clean_phone length]>=11 ){
+        if([[clean_phone substringToIndex:2] isEqualToString:@"00"])
+            phoneresult =[@"+" stringByAppendingString: [clean_phone substringFromIndex:2]];
+        else if([[clean_phone substringToIndex:1] isEqualToString:@"+"])
+            phoneresult=clean_phone;
+        else if([cnphoneTest evaluateWithObject:clean_phone]==YES)
+            phoneresult=[@"+86" stringByAppendingString:clean_phone];
+    }
+    if(([mcc isEqualToString:@"310"] ||[mcc isEqualToString:@"311"] || [isocode isEqualToString:@"us"] || [isocode isEqualToString:@"ca"]) && [clean_phone length]>=10){
+        if([[clean_phone substringToIndex:1] isEqualToString:@"+"])
+            phoneresult=clean_phone;
+        else if([[clean_phone substringToIndex:1] isEqualToString:@"1"])
+            phoneresult=[@"+" stringByAppendingString:clean_phone];
+        else if([clean_phone characterAtIndex:0] >= '2' && [clean_phone characterAtIndex:0] <= '9' && [clean_phone length]>=7)
+            phoneresult=[@"+1" stringByAppendingString:clean_phone];
+    }
+    if ([clean_phone hasPrefix:@"+"]) {
+        phoneresult = clean_phone;
+    }
     [netInfo release];
-  return phoneresult;
+    return phoneresult;
 }
 
 + (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime{
