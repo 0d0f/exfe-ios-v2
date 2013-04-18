@@ -14,6 +14,7 @@
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
 #import "NSString+EXFE.h"
+#import "EFChoosePeopleViewController.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -965,23 +966,30 @@
     if(index == self.sortedInvitations.count)
     {
         [self hideMenu];
-        ExfeeInputViewController *viewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
-        viewController.lastViewController = self;
-        viewController.exfee = self.cross.exfee;
-        viewController.needSubmit = NO;
-        viewController.onExitBlock = ^{
-            
-            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-            [self reFormatTitle];
-            [exfeeShowview reloadData];
-            if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [alert show];
-                [alert release];
-            }
-        };
-        [self presentModalViewController:viewController animated:YES];
+        EFChoosePeopleViewController *viewController = [[EFChoosePeopleViewController alloc] initWithNibName:@"EFChoosePeopleViewController"
+                                                                                                      bundle:nil];
+        [self presentViewController:viewController
+                           animated:YES
+                         completion:nil];
         [viewController release];
+//        
+//        ExfeeInputViewController *viewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
+//        viewController.lastViewController = self;
+//        viewController.exfee = self.cross.exfee;
+//        viewController.needSubmit = NO;
+//        viewController.onExitBlock = ^{
+//            
+//            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+//            [self reFormatTitle];
+//            [exfeeShowview reloadData];
+//            if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
+//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                [alert show];
+//                [alert release];
+//            }
+//        };
+//        [self presentModalViewController:viewController animated:YES];
+//        [viewController release];
 
     } else if(index < self.sortedInvitations.count){
         Invitation *invitation =[self.sortedInvitations objectAtIndex:index];

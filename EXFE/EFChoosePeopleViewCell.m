@@ -1,82 +1,67 @@
 //
-//  GatherExfeeInputCell.m
+//  EFChoosePeopleViewCell.m
 //  EXFE
 //
-//  Created by huoju on 8/9/12.
+//  Created by 0day on 13-4-17.
 //
 //
 
-#import "GatherExfeeInputCell.h"
+#import "EFChoosePeopleViewCell.h"
 
 #import <QuartzCore/QuartzCore.h>
-#import "LocalContact.h"
-#import "Identity.h"
-#import "ImgCache.h"
 #import "Util.h"
+#import "ImgCache.h"
+#import "LocalContact.h"
+#import "Identity+EXFE.h"
 
-@implementation GatherExfeeInputCell
+@interface EFChoosePeopleViewCell ()
+@property (nonatomic, retain) NSArray *backgroundColors;
+@end
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-//        contentView.backgroundColor = [UIColor clearColor];
-//        
-//        CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-//        gradientLayer.colors = @[(id)[UIColor COLOR_RGB(0xFC, 0xFC, 0xFC)].CGColor, (id)[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)].CGColor];
-//        gradientLayer.frame = (CGRect){{0, 0}, {320, 50}};
-//        [self.layer addSublayer:gradientLayer];
-//        
-//        CALayer *topLine = [CALayer layer];
-//        topLine.backgroundColor = [UIColor COLOR_RGBA(0, 0, 0, 30)].CGColor;
-//        topLine.frame = (CGRect){{0, 0}, {320.0f, 0.5f}};
-//        [self.layer addSublayer:topLine];
-//        
-//        CALayer *bottomLine = [CALayer layer];
-//        bottomLine.backgroundColor = [UIColor COLOR_RGBA(0, 0, 0, 30)].CGColor;
-//        bottomLine.frame = (CGRect){{0, 49.5f}, {320.0f, 0.5f}};
-//        [cell.contentView.layer addSublayer:bottomLine];
-    }
-    
+@implementation EFChoosePeopleViewCell
+
+- (id)init {
+    self = [[[[NSBundle mainBundle] loadNibNamed:@"EFChoosePeopleViewCell"
+                                           owner:nil
+                                         options:nil] lastObject] retain];
     return self;
 }
 
-#pragma mark - Getter && Setter
-- (void)setTitle:(NSString *)s {
-    [_title release];
-	_title = [s copy];
-	[self setNeedsDisplay]; 
+- (void)awakeFromNib {
+    self.avatarImageView.layer.cornerRadius = 3.0f;
+    self.avatarImageView.layer.masksToBounds = YES;
 }
 
-- (void)setAvatar:(UIImage *)a {
-	[_avatar release];
-	_avatar = [a copy];
-	[self setNeedsDisplay]; 
+- (void)dealloc {
+    [_avatarImageView release];
+    [_userNameLabel release];
+    [_providerIconSet release];
+    [_providerIcon release];
+    [super dealloc];
 }
 
-- (void)setProviderIcon:(UIImage *)a {
-	[_providerIcon release];
-	_providerIcon = [a copy];
-	[self setNeedsDisplay]; 
-}
-
-- (void)setProviderIconSet:(NSArray *)s{
-    if (_providerIconSet != nil) {
-        [_providerIconSet release];
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+    if (selected) {
+        self.backgroundColors = @[(id)[UIColor COLOR_RGB(0x3A, 0x6E, 0xA5)].CGColor,
+                                  (id)[UIColor COLOR_RGB(0x3B, 0x6E, 0xA5)].CGColor];
+    } else {
+        self.backgroundColors = @[(id)[UIColor COLOR_RGB(0xFC, 0xFC, 0xFC)].CGColor,
+                                  (id)[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)].CGColor];
     }
-    
-    _providerIconSet = [s copy];
     [self setNeedsDisplay];
 }
 
 #pragma mark - custom
 - (void)customWithLocalContact:(LocalContact *)person {
-    self.title = person.name;
+    self.userNameLabel.text = person.name;
     
     UIImage *avatar = [UIImage imageWithData:person.avatar];
     if (!avatar)
-        self.avatar = [UIImage imageNamed:@"portrait_default.png"];
+        self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
     else
-        self.avatar = avatar;
+        self.avatarImageView.image = avatar;
     
     NSMutableArray *iconset = [[NSMutableArray alloc] initWithCapacity:3];
     if (person.social) {
@@ -127,16 +112,17 @@
     if ([iconset count] > 1) {
         CGRect frame = CGRectMake(0.0, 0.0, (18 + 10) * ([iconset count] + 1), 110);
         button.frame = frame;
-//        [button addTarget:self action:@selector(checkButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
+        //        [button addTarget:self action:@selector(checkButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
         self.accessoryView = button;
     }
     [iconset release];
 }
 
 - (void)customWithIdentity:(Identity *)identity {
-    self.title = identity.name;
-    if (!self.title || [self.title isEqualToString:@""])
-        self.title = identity.external_username;
+    self.userNameLabel.text = identity.name;
+    if (!self.userNameLabel.text || [self.userNameLabel.text isEqualToString:@""]) {
+        self.userNameLabel.text = identity.external_username;
+    }
     
     if (identity.provider && ![identity.provider isEqualToString:@""]) {
         NSString *iconName = [NSString stringWithFormat:@"identity_%@_18_grey.png",identity.provider];
@@ -147,34 +133,27 @@
     if (identity.avatar_filename) {
         UIImage *avatar = [[ImgCache sharedManager] getImgFromCache:identity.avatar_filename];
         if (!avatar || [avatar isEqual:[NSNull null]]) {
-            self.avatar = [UIImage imageNamed:@"portrait_default.png"];
+            self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
             
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
             dispatch_async(imgQueue, ^{
                 UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                        self.avatar=avatar;
+                        self.avatarImageView.image = avatar;
                     }
                 });
             });
             dispatch_release(imgQueue);
         } else {
-            self.avatar=avatar;
+            self.avatarImageView.image = avatar;
         }
     }
-
 }
 
-#pragma mark -
+#pragma mark - DrawRect
 
-- (void)layoutSubviews {
-	CGRect b = [self bounds];
-	[contentView setFrame:b];
-    [super layoutSubviews];
-}
-
-- (void)drawContentView:(CGRect)r {
+- (void)drawRect:(CGRect)rect {
     //// General Declarations
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -183,9 +162,7 @@
     UIColor* strokeColor = [UIColor COLOR_RGBA(0, 0, 0, 30)];
     
     //// Gradient Declarations
-    NSArray* gradientColors = [NSArray arrayWithObjects:
-                               (id)[UIColor COLOR_RGB(0xFC, 0xFC, 0xFC)].CGColor,
-                               (id)[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)].CGColor, nil];
+    NSArray *gradientColors = self.backgroundColors;
     CGFloat gradientLocations[] = {0, 1};
     CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)gradientColors, gradientLocations);
     
@@ -201,13 +178,9 @@
     rectanglePath.lineWidth = 0.5f;
     [rectanglePath stroke];
     
-    
     //// Cleanup
     CGGradientRelease(gradient);
     CGColorSpaceRelease(colorSpace);
-    
-    [_title drawInRect:CGRectMake(60, 11, 190, 20) withFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentLeft];
-    [_avatar drawInRect:CGRectMake(10, 5, 40, 40)];
     
     if (_providerIconSet != nil) {
         [_providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, 13, 18, 18)];
