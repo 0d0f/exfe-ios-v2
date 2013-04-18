@@ -13,21 +13,30 @@
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
 #import "EXAddressBookService.h"
-#import "EFChoosePeopleViewCell.h"
 #import "Identity.h"
 #import "Invitation.h"
 #import "ImgCache.h"
 #import "Util.h"
 #import "EFSearchBar.h"
+#import "EFPersonIdentityCell.h"
 
 @interface EFChoosePeopleViewController ()
-@property (nonatomic, retain) NSMutableArray *exfePeople;
-@property (nonatomic, retain) NSMutableArray *localPeople;
-@property (nonatomic, retain) NSMutableArray *searchResultPeople;
+@property (nonatomic, retain) NSMutableArray *exfeePeople;
+@property (nonatomic, retain) NSMutableArray *contactPeople;
+@property (nonatomic, retain) NSMutableArray *searchResultExfeePeople;
+@property (nonatomic, retain) NSMutableArray *searchResultContactPeople;
 @property (nonatomic, copy) NSString *searchKey;
+@property (nonatomic, retain) NSMutableDictionary *selectedDict;
+@property (nonatomic, retain) NSIndexPath *insertIndexPath;
 
-- (void)loadExfePeople;
-- (void)loadLocalPeople;
+- (void)loadexfeePeople;
+- (void)loadcontactPeople;
+
+- (void)selectOrDeselectTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
+- (void)refreshSelectedDictWithObject:(id)obj selected:(BOOL *)selected;
+
+- (EFChoosePeopleViewCell *)choosePeopleViewCellWithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
+- (void)choosePeopleTableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)aCell forRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
@@ -37,15 +46,23 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        _exfePeople = [[NSMutableArray alloc] init];
-        _localPeople = [[NSMutableArray alloc] init];
+        _exfeePeople = [[NSMutableArray alloc] init];
+        _contactPeople = [[NSMutableArray alloc] init];
+        _selectedDict = [[NSMutableDictionary alloc] init];
     }
     return self;
+}
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    // register NIB
+    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([EFChoosePeopleViewCell class]) bundle:nil] forCellReuseIdentifier:[EFChoosePeopleViewCell reuseIdentifier]];
+    
     // background image
     UIImage *searchBackgroundImage = [UIImage imageNamed:@"textfield.png"];
     if ([searchBackgroundImage respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
@@ -77,20 +94,28 @@
     self.searchBar.tintColor = [UIColor COLOR_RGB(0xF4, 0xF4, 0xF4)];
     self.searchBar.backgroundColor = [UIColor COLOR_RGB(0xF4, 0xF4, 0xF4)];
     
-    // search bar cancel button
-    id cancelButtonAppearence = [UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil];
-    [cancelButtonAppearence setBackgroundImage:addButtonImage forState:UIControlStateNormal style:UIBarButtonItemStyleBordered barMetrics:UIBarMetricsDefault];
+    // textfield
+    for (UIView *view in self.searchBar.subviews){
+        if ([view isKindOfClass: [UITextField class]]) {
+            UITextField *tf = (UITextField *)view;
+            tf.delegate = self;
+            break;
+        }
+    }
     
     // load exfe people
-    [self loadExfePeople];
+    [self loadexfeePeople];
     
     // load local people
-    [self loadLocalPeople];
+    [self loadcontactPeople];
 }
 
 - (void)dealloc {
-    [_exfePeople release];
-    [_localPeople release];
+    [_selectedDict release];
+    [_exfeePeople release];
+    [_contactPeople release];
+    [_searchResultExfeePeople release];
+    [_searchResultContactPeople release];
     [_searchTextField release];
     [_searchBackgrounImageView release];
     [_tableView release];
@@ -114,11 +139,39 @@
 
 #pragma mark - Action
 - (IBAction)backButtonPressed:(id)sender {
+    [[EXAddressBookService defaultService] cancel];
     [self.presentingViewController dismissViewControllerAnimated:YES
                                                       completion:nil];
 }
 
 - (IBAction)addButtonPressed:(id)sender {
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+//    [self.searchDisplayController setActive:NO animated:YES];
+    
+    return YES;
+}
+
+#pragma mark - EFChoosePeopleViewCellDelegate
+- (void)choosePeopleViewCellButtonPressed:(EFChoosePeopleViewCell *)cell {
+    UITableView *tableView = self.tableView;
+    NSIndexPath *indexPath = [tableView indexPathForCell:cell];
+    if (!indexPath) {
+        tableView = self.searchDisplayController.searchResultsTableView;
+        indexPath = [tableView indexPathForCell:cell];
+    }
+    indexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+    
+    if (self.insertIndexPath) {
+        NSIndexPath *toRemoveIndexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
+        self.insertIndexPath = nil;
+        [tableView deleteRowsAtIndexPaths:@[toRemoveIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+    } else {
+        self.insertIndexPath = indexPath;
+        [tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+    }
 }
 
 #pragma mark - UISearchBarDelegate
@@ -127,11 +180,11 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"indexfield CONTAINS[cd] %@", searchText];
     if (!_searchKey || _searchKey.length == 0) {
         self.searchKey = searchText;
-        [[EXAddressBookService defaultService] filterPeopleWithExistPeople:self.localPeople
+        [[EXAddressBookService defaultService] filterPeopleWithExistPeople:self.contactPeople
                                                                    keyWord:searchText
                                                                  predicate:predicate
                                                             successHandler:^(NSArray *people){
-                                                                self.searchResultPeople = [NSMutableArray arrayWithArray:people];
+                                                                self.searchResultContactPeople = [NSMutableArray arrayWithArray:people];
                                                                 [self.searchDisplayController.searchResultsTableView reloadData];
                                                             }
                                                             failureHandler:nil];
@@ -139,12 +192,12 @@
         if ([searchText rangeOfString:_searchKey].location != NSNotFound && searchText.length != 0) {
             // searchText contain pre search text
             self.searchKey = searchText;
-            if (self.searchResultPeople) {
-                [[EXAddressBookService defaultService] filterPeopleWithExistPeople:self.searchResultPeople
+            if (self.searchResultContactPeople) {
+                [[EXAddressBookService defaultService] filterPeopleWithExistPeople:self.searchResultContactPeople
                                                                            keyWord:searchText
                                                                          predicate:predicate
                                                                     successHandler:^(NSArray *people){
-                                                                        self.searchResultPeople = [NSMutableArray arrayWithArray:people];
+                                                                        self.searchResultContactPeople = [NSMutableArray arrayWithArray:people];
                                                                         [self.searchDisplayController.searchResultsTableView reloadData];
                                                                     }
                                                                     failureHandler:nil];
@@ -152,11 +205,11 @@
         } else {
             // new search text
             self.searchKey = searchText;
-            [[EXAddressBookService defaultService] filterPeopleWithExistPeople:self.localPeople
+            [[EXAddressBookService defaultService] filterPeopleWithExistPeople:self.contactPeople
                                                                        keyWord:searchText
                                                                      predicate:predicate
                                                                 successHandler:^(NSArray *people){
-                                                                    self.searchResultPeople = [NSMutableArray arrayWithArray:people];
+                                                                    self.searchResultContactPeople = [NSMutableArray arrayWithArray:people];
                                                                     [self.searchDisplayController.searchResultsTableView reloadData];
                                                                 }
                                                                 failureHandler:nil];
@@ -165,6 +218,16 @@
 }
 
 #pragma mark - UISearchDisplayDelegate
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
+    [controller.searchResultsTableView registerNib:[UINib nibWithNibName:NSStringFromClass([EFChoosePeopleViewCell class]) bundle:nil]
+                            forCellReuseIdentifier:[EFChoosePeopleViewCell reuseIdentifier]];
+    controller.searchResultsTableView.allowsMultipleSelection = YES;
+    controller.searchResultsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+}
+
+- (void)searchDisplayController:(UISearchDisplayController *)controller willHideSearchResultsTableView:(UITableView *)tableView {
+    [self.tableView reloadData];
+}
 
 #pragma mark - UITableViewDataSource
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -172,24 +235,32 @@
     UIView *titleView = [[[UIView alloc] initWithFrame:(CGRect){{0, 0}, {CGRectGetWidth(screanBounds), 20}}] autorelease];
     titleView.backgroundColor = [UIColor clearColor];
     
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"titleview.png"]];
+    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"list_title.png"]];
     backgroundImageView.frame = titleView.bounds;
     [titleView addSubview:backgroundImageView];
     [backgroundImageView release];
     
     NSString *title = nil;
-    if (section == 0 && [self.exfePeople count]) {
-        // exfe
-        title = @"EXFE";
-    } else {
-        // local
-        title = @"Local Contact";
+    if (tableView == self.tableView) {
+        if (section == 0 && [self.exfeePeople count]) {
+            // exfees
+            title = @"Exfees";
+        } else {
+            // contact
+            title = @"Contacts";
+        }
+    } else if (tableView == self.searchDisplayController.searchResultsTableView) {
+        if ([self.searchResultExfeePeople count] && section == 0) {
+            title = @"Exfees";
+        } else {
+            title = @"Contacts";
+        }
     }
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{5, 0}, {300, 20}}];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{10, 0}, {300, 20}}];
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+    titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12];
     titleLabel.text = title;
     [titleView addSubview:titleLabel];
     [titleLabel release];
@@ -208,14 +279,19 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     NSUInteger sections = 0;
     if (tableView == self.tableView) {
-        if ([self.exfePeople count]) {
+        if ([self.exfeePeople count]) {
             sections++;
         }
-        if ([self.localPeople count]) {
+        if ([self.contactPeople count]) {
             sections++;
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
-        sections = 1;
+        if ([self.searchResultExfeePeople count]) {
+            sections++;
+        }
+        if ([self.searchResultContactPeople count]) {
+            sections++;
+        }
     }
     
     return sections;
@@ -223,52 +299,136 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSUInteger rows = 0;
+    NSInteger insertCellSection = NSNotFound;
+    if (self.insertIndexPath) {
+        insertCellSection = self.insertIndexPath.section;
+    }
+    
     if (tableView == self.tableView) {
-        if (section == 0 && [self.exfePeople count]) {
+        if (section == 0 && [self.exfeePeople count]) {
             // exfe
-            rows = [self.exfePeople count];
+            rows = [self.exfeePeople count];
         } else {
             // local
-            rows = [self.localPeople count];
+            rows = [self.contactPeople count];
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
-        rows = [self.searchResultPeople count];
+        if (section == 0 && [self.searchResultExfeePeople count]) {
+            // exfe
+            rows = [self.searchResultExfeePeople count];
+        } else {
+            // local
+            rows = [self.searchResultContactPeople count];
+        }
     }
+    
+    rows = (insertCellSection == section) ? rows + 1 : rows;
     
     return rows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell.ChoosePeople";
-    EFChoosePeopleViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[EFChoosePeopleViewCell alloc] init] autorelease];
-    }
-    
-    if (tableView == self.tableView) {
-        if(([self.exfePeople count] && indexPath.section == 1) ||
-           (![self.exfePeople count] && indexPath.section == 0)) {
-            LocalContact *person = self.localPeople[indexPath.row];
-            [cell customWithLocalContact:person];
+    if (self.insertIndexPath) {
+        NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
+        if (comparisionResult == NSOrderedSame) {
+            static NSString *Identifier = @"EFPersonIdentityCell";
+            EFPersonIdentityCell *cell = [tableView dequeueReusableCellWithIdentifier:Identifier];
+            if (!cell) {
+                cell = [[[EFPersonIdentityCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identifier] autorelease];
+            }
+            // TODO: set Data
+            return cell;
         } else {
-            Identity *identity = [self.exfePeople objectAtIndex:indexPath.row];
-            [cell customWithIdentity:identity];
+            if (indexPath.section == self.insertIndexPath.section) {
+                if (NSOrderedAscending == comparisionResult) {
+                    EFChoosePeopleViewCell *cell = [self choosePeopleViewCellWithTableView:tableView indexPath:indexPath];
+                    return cell;
+                } else {
+                    EFChoosePeopleViewCell *cell = [self choosePeopleViewCellWithTableView:tableView indexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+                    return cell;
+                }
+            } else {
+                EFChoosePeopleViewCell *cell = [self choosePeopleViewCellWithTableView:tableView indexPath:indexPath];
+                return cell;
+            }
         }
-    } else if (tableView == self.searchDisplayController.searchResultsTableView) {
-        LocalContact *person = self.searchResultPeople[indexPath.row];
-        [cell customWithLocalContact:person];
+    } else {
+        EFChoosePeopleViewCell *cell = [self choosePeopleViewCellWithTableView:tableView indexPath:indexPath];
+        return cell;
     }
-    
-    return cell;
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (self.insertIndexPath) {
+        UITableView *tableView = (UITableView *)scrollView;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
+        self.insertIndexPath = nil;
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+    }
 }
 
 #pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)aCell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.insertIndexPath) {
+        NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
+        if (comparisionResult != NSOrderedSame) {
+            if (indexPath.section == self.insertIndexPath.section) {
+                if (NSOrderedAscending) {
+                    [self choosePeopleTableView:tableView willDisplayCell:aCell forRowAtIndexPath:indexPath];
+                } else {
+                    [self choosePeopleTableView:tableView willDisplayCell:aCell forRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+                }
+            } else {
+                [self choosePeopleTableView:tableView willDisplayCell:aCell forRowAtIndexPath:indexPath];
+            }
+        }
+    } else {
+        [self choosePeopleTableView:tableView willDisplayCell:aCell forRowAtIndexPath:indexPath];
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (self.insertIndexPath) {
+        NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
+        if (comparisionResult != NSOrderedSame) {
+            if (indexPath.section == self.insertIndexPath.section) {
+                if (NSOrderedAscending) {
+                    [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
+                } else {
+                    [self selectOrDeselectTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+                }
+            } else {
+                [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
+            }
+        }
+    } else {
+        [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.insertIndexPath) {
+        NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
+        if (comparisionResult != NSOrderedSame) {
+            if (indexPath.section == self.insertIndexPath.section) {
+                if (NSOrderedAscending) {
+                    [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
+                } else {
+                    [self selectOrDeselectTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+                }
+            } else {
+                [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
+            }
+        }
+    } else {
+        [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
+    }
 }
 
 #pragma mark - Extension
-- (void)loadExfePeople {
+- (void)loadexfeePeople {
     UILogPush(@"Start fetch exfe people");
     
     dispatch_queue_t fetch_queue = dispatch_queue_create("queue.fecth", NULL);
@@ -282,9 +442,9 @@
         [request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
         
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
-        NSArray *recentExfePeople = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
-        [self.exfePeople removeAllObjects];
-        [self.exfePeople addObjectsFromArray:recentExfePeople];
+        NSArray *recentexfeePeople = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        [self.exfeePeople removeAllObjects];
+        [self.exfeePeople addObjectsFromArray:recentexfeePeople];
         
         UILogPush(@"End fetch exfe people");
         
@@ -295,7 +455,7 @@
     dispatch_release(fetch_queue);
 }
 
-- (void)loadLocalPeople {
+- (void)loadcontactPeople {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeCustomView;
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
@@ -307,29 +467,162 @@
     __block BOOL isProgressHubVisible = YES;
     
     UILogPush(@"Start Loading Contact.");
-    [[EXAddressBookService defaultService] fetchPeopleWithPageSize:40
-                                            pageLoadSuccessHandler:^(NSArray *people){
-                                                [_localPeople addObjectsFromArray:people];
-                                                dispatch_async(dispatch_get_main_queue(), ^{
-                                                    UILogPush(@"Load a Page");
-                                                    [self.tableView reloadData];
-                                                    
-                                                    if (isProgressHubVisible) {
-                                                        isProgressHubVisible = NO;
-                                                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    [[EXAddressBookService defaultService] checkAddressBookAuthorizationStatusWithCompletionHandler:^(BOOL granted){
+        if (granted) {
+            [[EXAddressBookService defaultService] fetchPeopleWithPageSize:40
+                                                    pageLoadSuccessHandler:^(NSArray *people){
+                                                        [_contactPeople addObjectsFromArray:people];
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            UILogPush(@"Load a Page");
+                                                            [self.tableView reloadData];
+                                                            
+                                                            if (isProgressHubVisible) {
+                                                                isProgressHubVisible = NO;
+                                                                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                            }
+                                                        });
                                                     }
-                                                });
-                                            }
-                                                 completionHandler:^{
-                                                     UILogPush(@"End Loading Contact.");
-                                                     dispatch_queue_t fetcth_queue = dispatch_queue_create("queue.fetch", NULL);
-                                                     dispatch_async(fetcth_queue, ^{
-                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                             [self.tableView reloadData];
-                                                         });
-                                                     });
-                                                 }
-                                                    failureHandler:nil];
+                                                         completionHandler:^{
+                                                             UILogPush(@"End Loading Contact.");
+                                                             dispatch_queue_t fetcth_queue = dispatch_queue_create("queue.fetch", NULL);
+                                                             dispatch_async(fetcth_queue, ^{
+                                                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                                                     [self.tableView reloadData];
+                                                                 });
+                                                             });
+                                                         }
+                                                            failureHandler:nil];
+        } else {
+            // TODO: Add alert
+        }
+    }];
+}
+
+- (void)refreshSelectedDictWithObject:(id)obj selected:(BOOL *)selected {
+    if ([obj isKindOfClass:[Identity class]]) {
+        Identity *identity = (Identity *)obj;
+        NSString *key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
+        if ([_selectedDict valueForKey:key]) {
+            [_selectedDict removeObjectForKey:key];
+            if (selected) {
+                *selected = NO;
+            }
+        } else {
+            [_selectedDict setValue:@"YES" forKey:key];
+            if (selected) {
+                *selected = YES;
+            }
+        }
+    } else if ([obj isKindOfClass:[LocalContact class]]) {
+        LocalContact *contact = (LocalContact *)obj;
+        NSString *key = contact.indexfield;
+        if ([_selectedDict valueForKey:key]) {
+            [_selectedDict removeObjectForKey:key];
+            if (selected) {
+                *selected = NO;
+            }
+        } else {
+            [_selectedDict setValue:@"YES" forKey:key];
+            if (selected) {
+                *selected = YES;
+            }
+        }
+    }
+}
+
+- (void)selectOrDeselectTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
+    BOOL selected = NO;
+    if (tableView == self.tableView) {
+        if(([self.exfeePeople count] && indexPath.section == 1) ||
+           (![self.exfeePeople count] && indexPath.section == 0)) {
+            LocalContact *person = self.contactPeople[indexPath.row];
+            [self refreshSelectedDictWithObject:person selected:&selected];
+        } else {
+            Identity *identity = [self.exfeePeople objectAtIndex:indexPath.row];
+            [self refreshSelectedDictWithObject:identity selected:&selected];
+        }
+    } else if (tableView == self.searchDisplayController.searchResultsTableView) {
+        if(([self.searchResultExfeePeople count] && indexPath.section == 1) ||
+           (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
+            LocalContact *person = self.searchResultContactPeople[indexPath.row];
+            [self refreshSelectedDictWithObject:person selected:&selected];
+        } else {
+            Identity *identity = [self.searchResultExfeePeople objectAtIndex:indexPath.row];
+            [self refreshSelectedDictWithObject:identity selected:&selected];
+        }
+    }
+    
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone]; //selected ? UITableViewRowAnimationNone : UITableViewRowAnimationFade];
+}
+
+- (EFChoosePeopleViewCell *)choosePeopleViewCellWithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath {
+    EFChoosePeopleViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[EFChoosePeopleViewCell reuseIdentifier]];
+    cell.delegate = self;
+    
+    if (tableView == self.tableView) {
+        if(([self.exfeePeople count] && indexPath.section == 1) ||
+           (![self.exfeePeople count] && indexPath.section == 0)) {
+            LocalContact *person = self.contactPeople[indexPath.row];
+            [cell customWithLocalContact:person];
+        } else {
+            Identity *identity = self.exfeePeople[indexPath.row];
+            [cell customWithIdentity:identity];
+        }
+    } else if (tableView == self.searchDisplayController.searchResultsTableView) {
+        if(([self.searchResultExfeePeople count] && indexPath.section == 1) ||
+           (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
+            LocalContact *person = self.searchResultContactPeople[indexPath.row];
+            [cell customWithLocalContact:person];
+        } else {
+            Identity *identity = self.searchResultExfeePeople[indexPath.row];
+            [cell customWithIdentity:identity];
+        }
+    }
+    
+    return cell;
+}
+
+- (void)choosePeopleTableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)aCell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    EFChoosePeopleViewCell *cell = (EFChoosePeopleViewCell *)aCell;
+    if (tableView == self.tableView) {
+        if (([self.exfeePeople count] && indexPath.section == 1) ||
+            (![self.exfeePeople count] && indexPath.section == 0)) {
+            LocalContact *person = self.contactPeople[indexPath.row];
+            NSString *key = person.indexfield;
+            if ([_selectedDict valueForKey:key]) {
+                [cell setSelected:YES animated:NO];
+            } else {
+                [cell setSelected:NO animated:NO];
+            }
+        } else {
+            Identity *identity = [self.exfeePeople objectAtIndex:indexPath.row];
+            NSString *key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
+            if ([_selectedDict valueForKey:key]) {
+                [cell setSelected:YES animated:NO];
+            } else {
+                [cell setSelected:NO animated:NO];
+            }
+        }
+    } else if (tableView == self.searchDisplayController.searchResultsTableView) {
+        if(([self.searchResultExfeePeople count] && indexPath.section == 1) ||
+           (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
+            LocalContact *person = self.searchResultContactPeople[indexPath.row];
+            NSString *key = person.indexfield;
+            if ([_selectedDict valueForKey:key]) {
+                [cell setSelected:YES animated:NO];
+            } else {
+                [cell setSelected:NO animated:NO];
+            }
+        } else {
+            Identity *identity = [self.searchResultExfeePeople objectAtIndex:indexPath.row];
+            NSString *key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
+            if ([_selectedDict valueForKey:key]) {
+                [cell setSelected:YES animated:NO];
+            } else {
+                [cell setSelected:NO animated:NO];
+            }
+        }
+    }
 }
 
 @end

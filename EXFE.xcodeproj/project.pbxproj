@@ -1069,12 +1069,6 @@
 		4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
 		4FFB149C16C0BFFF00F76D32 /* edit_30_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */; };
 		4FFB149D16C0BFFF00F76D32 /* edit_30_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */; };
-		763A0184171E93460082CC9E /* titleview.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0182171E93460082CC9E /* titleview.png */; };
-		763A0185171E93460082CC9E /* titleview.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0182171E93460082CC9E /* titleview.png */; };
-		763A0186171E93460082CC9E /* titleview.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0182171E93460082CC9E /* titleview.png */; };
-		763A0187171E93460082CC9E /* titleview@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0183171E93460082CC9E /* titleview@2x.png */; };
-		763A0188171E93460082CC9E /* titleview@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0183171E93460082CC9E /* titleview@2x.png */; };
-		763A0189171E93460082CC9E /* titleview@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0183171E93460082CC9E /* titleview@2x.png */; };
 		763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
@@ -1084,6 +1078,15 @@
 		763A0195171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */; };
 		763A0196171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */; };
 		763A0197171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */; };
+		763A019A171F9D390082CC9E /* list_title.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0198171F9D390082CC9E /* list_title.png */; };
+		763A019B171F9D390082CC9E /* list_title.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0198171F9D390082CC9E /* list_title.png */; };
+		763A019C171F9D390082CC9E /* list_title.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0198171F9D390082CC9E /* list_title.png */; };
+		763A019D171F9D390082CC9E /* list_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0199171F9D390082CC9E /* list_title@2x.png */; };
+		763A019E171F9D390082CC9E /* list_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0199171F9D390082CC9E /* list_title@2x.png */; };
+		763A019F171F9D390082CC9E /* list_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0199171F9D390082CC9E /* list_title@2x.png */; };
+		763A01A217202BBF0082CC9E /* EFPersonIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01A117202BBF0082CC9E /* EFPersonIdentityCell.m */; };
+		763A01A317202BBF0082CC9E /* EFPersonIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01A117202BBF0082CC9E /* EFPersonIdentityCell.m */; };
+		763A01A417202BBF0082CC9E /* EFPersonIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01A117202BBF0082CC9E /* EFPersonIdentityCell.m */; };
 		76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76D1A804171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */; };
@@ -1746,13 +1749,15 @@
 		4FFB149416BFFB9600F76D32 /* SSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSTextView.m; sourceTree = "<group>"; };
 		4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30_pressed.png; sourceTree = "<group>"; };
 		4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30_pressed@2x.png"; sourceTree = "<group>"; };
-		763A0182171E93460082CC9E /* titleview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = titleview.png; sourceTree = "<group>"; };
-		763A0183171E93460082CC9E /* titleview@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "titleview@2x.png"; sourceTree = "<group>"; };
 		763A018A171EAEB10082CC9E /* EFSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchBar.h; sourceTree = "<group>"; };
 		763A018B171EAEB10082CC9E /* EFSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchBar.m; sourceTree = "<group>"; };
 		763A018F171EE8BE0082CC9E /* EFChoosePeopleViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewCell.h; sourceTree = "<group>"; };
 		763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChoosePeopleViewCell.m; sourceTree = "<group>"; };
 		763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFChoosePeopleViewCell.xib; sourceTree = "<group>"; };
+		763A0198171F9D390082CC9E /* list_title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list_title.png; sourceTree = "<group>"; };
+		763A0199171F9D390082CC9E /* list_title@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list_title@2x.png"; sourceTree = "<group>"; };
+		763A01A017202BBE0082CC9E /* EFPersonIdentityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPersonIdentityCell.h; sourceTree = "<group>"; };
+		763A01A117202BBF0082CC9E /* EFPersonIdentityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPersonIdentityCell.m; sourceTree = "<group>"; };
 		76A150BC1717D23400751C92 /* EXAddressBookService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAddressBookService.h; sourceTree = "<group>"; };
 		76A150BD1717D23500751C92 /* EXAddressBookService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAddressBookService.m; sourceTree = "<group>"; };
 		76D1A801171D5DFA00A35BBD /* EFChoosePeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewController.h; sourceTree = "<group>"; };
@@ -2592,8 +2597,8 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				763A0182171E93460082CC9E /* titleview.png */,
-				763A0183171E93460082CC9E /* titleview@2x.png */,
+				763A0198171F9D390082CC9E /* list_title.png */,
+				763A0199171F9D390082CC9E /* list_title@2x.png */,
 				76D1A812171D704C00A35BBD /* btn_blue_30inset.png */,
 				76D1A813171D704C00A35BBD /* btn_blue_30inset@2x.png */,
 				76D1A80A171D610C00A35BBD /* exfee_22ga.png */,
@@ -2855,6 +2860,8 @@
 				763A018F171EE8BE0082CC9E /* EFChoosePeopleViewCell.h */,
 				763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */,
 				763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */,
+				763A01A017202BBE0082CC9E /* EFPersonIdentityCell.h */,
+				763A01A117202BBF0082CC9E /* EFPersonIdentityCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -3785,9 +3792,9 @@
 				76D1A810171D610C00A35BBD /* exfee_22ga@2x.png in Resources */,
 				76D1A815171D704C00A35BBD /* btn_blue_30inset.png in Resources */,
 				76D1A818171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */,
-				763A0185171E93460082CC9E /* titleview.png in Resources */,
-				763A0188171E93460082CC9E /* titleview@2x.png in Resources */,
 				763A0196171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */,
+				763A019B171F9D390082CC9E /* list_title.png in Resources */,
+				763A019E171F9D390082CC9E /* list_title@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4099,9 +4106,9 @@
 				76D1A811171D610C00A35BBD /* exfee_22ga@2x.png in Resources */,
 				76D1A816171D704C00A35BBD /* btn_blue_30inset.png in Resources */,
 				76D1A819171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */,
-				763A0186171E93460082CC9E /* titleview.png in Resources */,
-				763A0189171E93460082CC9E /* titleview@2x.png in Resources */,
 				763A0197171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */,
+				763A019C171F9D390082CC9E /* list_title.png in Resources */,
+				763A019F171F9D390082CC9E /* list_title@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4415,9 +4422,9 @@
 				76D1A80F171D610C00A35BBD /* exfee_22ga@2x.png in Resources */,
 				76D1A814171D704C00A35BBD /* btn_blue_30inset.png in Resources */,
 				76D1A817171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */,
-				763A0184171E93460082CC9E /* titleview.png in Resources */,
-				763A0187171E93460082CC9E /* titleview@2x.png in Resources */,
 				763A0195171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */,
+				763A019A171F9D390082CC9E /* list_title.png in Resources */,
+				763A019D171F9D390082CC9E /* list_title@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4595,6 +4602,7 @@
 				76D1A805171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */,
 				763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */,
 				763A0192171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
+				763A01A317202BBF0082CC9E /* EFPersonIdentityCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4742,6 +4750,7 @@
 				76D1A806171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */,
 				763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */,
 				763A0193171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
+				763A01A417202BBF0082CC9E /* EFPersonIdentityCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4889,6 +4898,7 @@
 				76D1A804171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */,
 				763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */,
 				763A0191171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
+				763A01A217202BBF0082CC9E /* EFPersonIdentityCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

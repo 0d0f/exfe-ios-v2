@@ -40,4 +40,6 @@
                      failureHandler:(void (^)(NSError *error))failure;
 - (void)filterPeopleWithKeyWord:(NSString *)keyWord successHandler:(void (^)(NSArray *people))success failureHandler:(void (^)(NSError *error))failure;
 
+- (void)cancel;
+
 @end

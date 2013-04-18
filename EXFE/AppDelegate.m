@@ -95,7 +95,7 @@ static char mergetoken;
     [self.window makeKeyAndVisible];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
     
-    UILogSetWindow(self.window);
+//    UILogSetWindow(self.window);
     
     if (login)
         [APIProfile LoadUsrWithUserId:userid success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {

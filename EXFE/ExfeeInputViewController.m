@@ -879,7 +879,10 @@ static char identitykey;
 {
     if(addressbookType==LOCAL_ADDRESSBOOK){
         LocalContact *person=[_filteredlocalcontacts objectAtIndex:indexPath.row];
-      [self addByInputIdentity:[[AddressBook getDefaultIdentity:person] objectForKey:@"external_id"] name:[[AddressBook getDefaultIdentity:person] objectForKey:@"name"] provider:[[AddressBook getDefaultIdentity:person] objectForKey:@"provider"] dismiss:NO];
+      [self addByInputIdentity:[[AddressBook getDefaultIdentity:person] objectForKey:@"external_id"]
+                          name:[[AddressBook getDefaultIdentity:person] objectForKey:@"name"]
+                      provider:[[AddressBook getDefaultIdentity:person] objectForKey:@"provider"]
+                       dismiss:NO];
     }else{
         Identity *identity=[suggestIdentities objectAtIndex:indexPath.row];
       

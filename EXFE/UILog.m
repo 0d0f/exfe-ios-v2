@@ -70,6 +70,9 @@
 }
 
 - (void)pushMessage:(NSString *)message {
+    if (!_window)
+        return;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         NSDate *now = [NSDate date];
         NSString *messageToPush = nil;

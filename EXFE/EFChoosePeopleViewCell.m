@@ -14,22 +14,197 @@
 #import "LocalContact.h"
 #import "Identity+EXFE.h"
 
+#pragma mark - BackgroundView
+@interface EFChoosePeopleBackgroundView : UIView
+@property (nonatomic, assign) EFChoosePeopleViewCell *cell;
+@end
+@implementation EFChoosePeopleBackgroundView
+
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.userInteractionEnabled = YES;
+    }
+    
+    return self;
+}
+
+- (void)drawRect:(CGRect)rect {
+    //// General Declarations
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    //// Color Declarations
+    UIColor* strokeColor = [UIColor COLOR_RGBA(0xCC, 0xCC, 0xCC, 84)];
+    
+    //// Gradient Declarations
+    NSArray *gradientColors = @[(id)[UIColor COLOR_RGB(0xFC, 0xFC, 0xFC)].CGColor,
+                                (id)[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)].CGColor];
+    CGFloat gradientLocations[] = {0, 1};
+    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)gradientColors, gradientLocations);
+    
+    //// Rectangle Drawing
+    UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRect: CGRectMake(-0.5f, -0.5f, CGRectGetWidth(self.frame) + 1.0f, CGRectGetHeight(self.frame) + 0.5f)];
+    CGContextSaveGState(context);
+    [rectanglePath addClip];
+    
+    CGContextDrawLinearGradient(context, gradient, CGPointMake(CGRectGetMidX(self.frame), 0), CGPointMake(CGRectGetMidX(self.frame), CGRectGetHeight(self.frame)), 0);
+    CGContextRestoreGState(context);
+    
+    [strokeColor setStroke];
+    rectanglePath.lineWidth = 0.5f;
+    [rectanglePath stroke];
+    
+    //// Cleanup
+    CGGradientRelease(gradient);
+    CGColorSpaceRelease(colorSpace);
+    
+    if (self.cell.providerIconSet != nil) {
+        [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
+        int i = 1;
+        for (UIImage *icon in self.cell.providerIconSet) {
+            [icon drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
+            [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
+            i++;
+        }
+    } else if(self.cell.providerIcon != nil) {
+        [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
+        [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * 3, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18 * 3, 18)];
+    }
+}
+@end
+
+#pragma mark - BackgroundView
+@interface EFChoosePeopleHightedBackgroundView : UIView
+@property (nonatomic, assign) EFChoosePeopleViewCell *cell;
+@end
+@implementation EFChoosePeopleHightedBackgroundView
+
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.userInteractionEnabled = YES;
+    }
+    
+    return self;
+}
+
+- (void)drawRect:(CGRect)rect {
+    //// General Declarations
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    //// Color Declarations
+    UIColor* strokeColor = [UIColor COLOR_RGBA(0xCC, 0xCC, 0xCC, 84)];
+    
+    //// Gradient Declarations
+    NSArray *gradientColors = @[(id)[UIColor COLOR_RGB(0xE6, 0xE6, 0xE6)].CGColor,
+                                (id)[UIColor COLOR_RGB(0xE6, 0xE6, 0xE6)].CGColor];
+    CGFloat gradientLocations[] = {0, 1};
+    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)gradientColors, gradientLocations);
+    
+    //// Rectangle Drawing
+    UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRect: CGRectMake(-0.5f, -0.5f, CGRectGetWidth(self.frame) + 1.0f, CGRectGetHeight(self.frame) + 0.5f)];
+    CGContextSaveGState(context);
+    [rectanglePath addClip];
+    
+    CGContextDrawLinearGradient(context, gradient, CGPointMake(CGRectGetMidX(self.frame), 0), CGPointMake(CGRectGetMidX(self.frame), CGRectGetHeight(self.frame)), 0);
+    CGContextRestoreGState(context);
+    
+    [strokeColor setStroke];
+    rectanglePath.lineWidth = 0.5f;
+    [rectanglePath stroke];
+    
+    //// Cleanup
+    CGGradientRelease(gradient);
+    CGColorSpaceRelease(colorSpace);
+    
+    if (self.cell.providerIconSet != nil) {
+        [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
+        int i = 1;
+        for (UIImage *icon in self.cell.providerIconSet) {
+            [icon drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
+            [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
+            i++;
+        }
+    } else if(self.cell.providerIcon != nil) {
+        [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
+        [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * 3, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18 * 3, 18)];
+    }
+}
+@end
+
+#pragma mark - SelectedBackgroundView
+@interface EFChoosePeopleSelectedBackgroundView : UIView
+@end
+@implementation EFChoosePeopleSelectedBackgroundView
+
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.userInteractionEnabled = YES;
+    }
+    
+    return self;
+}
+
+- (void)drawRect:(CGRect)rect {
+    //// General Declarations
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    //// Color Declarations
+    UIColor* strokeColor = [UIColor COLOR_RGBA(0xCC, 0xCC, 0xCC, 84)];
+    
+    //// Gradient Declarations
+    NSArray *gradientColors = @[(id)[UIColor COLOR_BLUE_EXFE].CGColor,
+                                (id)[UIColor COLOR_BLUE_EXFE].CGColor];
+    CGFloat gradientLocations[] = {0, 1};
+    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)gradientColors, gradientLocations);
+    
+    //// Rectangle Drawing
+    UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRect: CGRectMake(-0.5f, -0.5f, CGRectGetWidth(self.frame) + 1.0f, CGRectGetHeight(self.frame) + 0.5f)];
+    CGContextSaveGState(context);
+    [rectanglePath addClip];
+    
+    CGContextDrawLinearGradient(context, gradient, CGPointMake(CGRectGetMidX(self.frame), 0), CGPointMake(CGRectGetMidX(self.frame), CGRectGetHeight(self.frame)), 0);
+    CGContextRestoreGState(context);
+    
+    [strokeColor setStroke];
+    rectanglePath.lineWidth = 0.5f;
+    [rectanglePath stroke];
+    
+    //// Cleanup
+    CGGradientRelease(gradient);
+    CGColorSpaceRelease(colorSpace);
+    
+    [[UIImage imageNamed:@"rsvp_accepted_18w.png"] drawInRect:(CGRect){{CGRectGetWidth(self.frame) - 18 -10, (CGRectGetHeight(self.frame) - 18) * 0.5f}, {18, 18}}];
+}
+@end
+
+#pragma mark - EFChoosePeopleViewCell
 @interface EFChoosePeopleViewCell ()
-@property (nonatomic, retain) NSArray *backgroundColors;
+@property (nonatomic, assign) BOOL hasSelected;
 @end
 
 @implementation EFChoosePeopleViewCell
 
-- (id)init {
-    self = [[[[NSBundle mainBundle] loadNibNamed:@"EFChoosePeopleViewCell"
-                                           owner:nil
-                                         options:nil] lastObject] retain];
-    return self;
++ (NSString *)reuseIdentifier {
+    return NSStringFromClass([self class]);
 }
 
 - (void)awakeFromNib {
     self.avatarImageView.layer.cornerRadius = 3.0f;
     self.avatarImageView.layer.masksToBounds = YES;
+    self.hasSelected = NO;
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.backgroundColor = [UIColor clearColor];
+    [button addTarget:self
+               action:@selector(buttonPressed:)
+     forControlEvents:UIControlEventTouchUpInside];
+    button.frame = (CGRect){{270, 0}, {50, 50}};
+    [self.contentView addSubview:button];
 }
 
 - (void)dealloc {
@@ -40,17 +215,43 @@
     [super dealloc];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     if (selected) {
-        self.backgroundColors = @[(id)[UIColor COLOR_RGB(0x3A, 0x6E, 0xA5)].CGColor,
-                                  (id)[UIColor COLOR_RGB(0x3B, 0x6E, 0xA5)].CGColor];
+        self.hasSelected = YES;
+        EFChoosePeopleSelectedBackgroundView *backgroundView = [[EFChoosePeopleSelectedBackgroundView alloc] initWithFrame:self.bounds];
+        self.backgroundView = backgroundView;
+        self.userNameLabel.textColor = [UIColor whiteColor];
     } else {
-        self.backgroundColors = @[(id)[UIColor COLOR_RGB(0xFC, 0xFC, 0xFC)].CGColor,
-                                  (id)[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)].CGColor];
+        self.hasSelected = NO;
+        EFChoosePeopleBackgroundView *backgroundView = [[EFChoosePeopleBackgroundView alloc] initWithFrame:self.bounds];
+        backgroundView.cell = self;
+        self.backgroundView = backgroundView;
+        self.userNameLabel.textColor = [UIColor blackColor];
     }
-    [self setNeedsDisplay];
+}
+
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    if (!self.hasSelected) {
+        if (highlighted) {
+            EFChoosePeopleHightedBackgroundView *backgroundView = [[EFChoosePeopleHightedBackgroundView alloc] initWithFrame:self.bounds];
+            backgroundView.cell = self;
+            self.backgroundView = backgroundView;
+            self.userNameLabel.textColor = [UIColor blackColor];
+        } else {
+            EFChoosePeopleBackgroundView *backgroundView = [[EFChoosePeopleBackgroundView alloc] initWithFrame:self.bounds];
+            backgroundView.cell = self;
+            self.backgroundView = backgroundView;
+            self.userNameLabel.textColor = [UIColor blackColor];
+        }
+    }
+}
+
+#pragma mark - Action
+
+- (IBAction)buttonPressed:(id)sender {
+    if ([self.delegate respondsToSelector:@selector(choosePeopleViewCellButtonPressed:)]) {
+        [self.delegate choosePeopleViewCellButtonPressed:self];
+    }
 }
 
 #pragma mark - custom
@@ -148,50 +349,6 @@
         } else {
             self.avatarImageView.image = avatar;
         }
-    }
-}
-
-#pragma mark - DrawRect
-
-- (void)drawRect:(CGRect)rect {
-    //// General Declarations
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    //// Color Declarations
-    UIColor* strokeColor = [UIColor COLOR_RGBA(0, 0, 0, 30)];
-    
-    //// Gradient Declarations
-    NSArray *gradientColors = self.backgroundColors;
-    CGFloat gradientLocations[] = {0, 1};
-    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)gradientColors, gradientLocations);
-    
-    //// Rectangle Drawing
-    UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRect: CGRectMake(-0.5f, -0.5f, CGRectGetWidth(self.frame) + 1.0f, CGRectGetHeight(self.frame) + 0.5f)];
-    CGContextSaveGState(context);
-    [rectanglePath addClip];
-    
-    CGContextDrawLinearGradient(context, gradient, CGPointMake(CGRectGetMidX(self.frame), 0), CGPointMake(CGRectGetMidX(self.frame), CGRectGetHeight(self.frame)), 0);
-    CGContextRestoreGState(context);
-    
-    [strokeColor setStroke];
-    rectanglePath.lineWidth = 0.5f;
-    [rectanglePath stroke];
-    
-    //// Cleanup
-    CGGradientRelease(gradient);
-    CGColorSpaceRelease(colorSpace);
-    
-    if (_providerIconSet != nil) {
-        [_providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, 13, 18, 18)];
-        int i=1;
-        for(UIImage *icon in _providerIconSet){
-            [icon drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, 13, 18, 18)];
-            i++;
-        }
-    } else if(_providerIcon != nil) {
-        [_providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, 13, 18, 18)];
-        [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * 3, 13, 18 * 3, 18)];
     }
 }
 

@@ -8,13 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+#import "EFChoosePeopleViewCell.h"
+
 @class EFSearchBar;
 @interface EFChoosePeopleViewController : UIViewController
 <
 UITableViewDataSource,
 UITableViewDelegate,
 UISearchBarDelegate,
-UISearchDisplayDelegate
+UISearchDisplayDelegate,
+EFChoosePeopleViewCellDelegate,
+UITextFieldDelegate
 >
 
 @property (retain, nonatomic) IBOutlet EFSearchBar *searchBar;
