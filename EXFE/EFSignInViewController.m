@@ -166,8 +166,8 @@ typedef NS_ENUM(NSUInteger, EFStage){
         [snsLayoutView addItem:item];
     }
     
-    
-    
+    [self setStage:kStageStart];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -206,6 +206,8 @@ typedef NS_ENUM(NSUInteger, EFStage){
     _stage = stage;
     switch (_stage){
         case kStageStart:
+            
+            
             break;
         case kStageSignIn:{
             // show rest login form
@@ -283,24 +285,23 @@ typedef NS_ENUM(NSUInteger, EFStage){
     }
 }
 
+- (void)swithStagebyFlag:(NSString*)flag
+{
+    if([flag isEqualToString:@"SIGN_UP"] ){
+        [self setStage:kStageSignUp];
+    } else if([flag isEqualToString:@"VERIFY"] ) {
+        [self setStage:kStageVerificate];
+    } else if([flag isEqualToString:@"AUTHENTICATE"]){
+        
+    } else { //(self.regFlag isEqualToString:@"SIGN_IN"])
+        [self setStage:kStageSignIn];
+    }
+}
+
 #pragma mark Click handler
 - (void)expandIdentity:(id)sender
 {
-    //if (_stage == 0){
-        if([self.regFlag isEqualToString:@"SIGN_IN"] ) {
-            [self setStage:kStageSignIn];
-        } else if([self.regFlag isEqualToString:@"SIGN_UP"] ){
-            [self setStage:kStageSignUp];
-        } else if([self.regFlag isEqualToString:@"VERIFY"] ) {
-            [self setStage:kStageVerificate];
-        } else if([self.regFlag isEqualToString:@"AUTHENTICATE"]){
-            
-        } else {
-            [self setStage:kStageSignIn];
-        }
-    
-    //}
-    
+    [self swithStagebyFlag:self.regFlag];
 }
 
 - (void)signIn:(id)sender
@@ -377,20 +378,29 @@ typedef NS_ENUM(NSUInteger, EFStage){
         return;
     } else {
         self.lastInputIdentity = identity;
+        [self identityDidChange:identity];
     }
-    Provider provider = [Util candidateProvider:identity];
-    [self fillIdentityHint:provider];
-    if (identity.length > 2) {
-        if(provider != kProviderUnknown) {
-            [NSObject cancelPreviousPerformRequestsWithTarget:self];
-            NSInteger start = MAX(identity.length, 3) - 3;
-            NSString *domainext = [identity substringFromIndex:start];
-            if([Util isCommonDomainName:domainext]){
-                [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.1];
-            } else {
-                [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.8];
+}
+
+- (void)identityDidChange:(NSString*)identity
+{
+    if (_stage == kStageStart) {
+        Provider provider = [Util candidateProvider:identity];
+        [self fillIdentityHint:provider];
+        if (identity.length > 2) {
+            if(provider != kProviderUnknown) {
+                [NSObject cancelPreviousPerformRequestsWithTarget:self];
+                NSInteger start = MAX(identity.length, 3) - 3;
+                NSString *domainext = [identity substringFromIndex:start];
+                if([Util isCommonDomainName:domainext]){
+                    [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.1];
+                } else {
+                    [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.8];
+                }
             }
         }
+    } else {
+        [self setStage:kStageStart];
     }
 }
 
