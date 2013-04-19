@@ -14,5 +14,5 @@ echo $PROJECT $IPA_PATH $BUILD
 chmod 666 $IPA_PATH
 #scp $IPA_PATH $SERVER:/usr/local/www/exfeweb/static/img/
 #scp $IPA_PATH $SERVER:/usr/home/stony/beta/iOS/$BUILD
-scp $IPA_PATH $SERVER:/usr/local/www/app/ios
-scp $IPA_PATH $SERVER:/usr/local/www/app/ios/$BUILD
+scp $IPA_PATH $SERVER:/0d0f/app/ios
+scp $IPA_PATH $SERVER:/0d0f/app/ios/$BUILD
