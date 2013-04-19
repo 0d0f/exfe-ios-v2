@@ -29,6 +29,9 @@
 - (void)getAvailableBackgroundsWithSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
+- (void)checkAppVersionSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                       failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
 #pragma mark Sign In, Sign Out, Sign Up, Pre Check
 - (void)getRegFlagBy:(NSString*)identity
                 with:(Provider)provider
