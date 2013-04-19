@@ -17,6 +17,7 @@
 #import "CSLinearLayoutView.h"
 #import "OAuthLoginViewController.h"
 #import "SigninDelegate.h"
+#import "UILabel+EXFE.h"
 
 
 typedef NS_ENUM(NSUInteger, EFStage){
@@ -24,6 +25,20 @@ typedef NS_ENUM(NSUInteger, EFStage){
     kStageSignIn,
     kStageSignUp,
     kStageVerificate
+};
+
+typedef NS_ENUM(NSUInteger, EFViewTag) {
+    kViewTagNone,
+    kViewTagInputIdentity = 11,
+    kViewTagInputPassword = 12,
+    kViewTagInputUserName = 13,
+    kViewTagButtonStart = 21,
+    kViewTagButtonNewUser = 22,
+    kViewTagButtonStartOver = 23,
+    kViewTagVerificationTitle = 31,
+    kViewTagVerificationDescription = 32,
+    kViewTagErrorHint = 41
+    
 };
 
 @interface EFSignInViewController (){
@@ -46,6 +61,7 @@ typedef NS_ENUM(NSUInteger, EFStage){
         _signindelegate = [[SigninDelegate alloc] init];
         _signindelegate.parent = self;
         self.lastInputIdentity = @"";
+        self.identityCache = [NSMutableDictionary dictionaryWithCapacity:30];
     }
     return self;
 }
@@ -71,10 +87,11 @@ typedef NS_ENUM(NSUInteger, EFStage){
         textfield.borderStyle = UITextBorderStyleRoundedRect;
         textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
         textfield.keyboardType = UIKeyboardTypeEmailAddress;
+        textfield.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
         textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         [textfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         self.inputIdentity = textfield;
-        self.inputIdentity.tag = 1;
+        self.inputIdentity.tag = kViewTagInputIdentity;
         //    [self.view addSubview:self.inputIdentity];
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
@@ -101,25 +118,76 @@ typedef NS_ENUM(NSUInteger, EFStage){
     }
     
     {// Input Password Field
-        UITextField *textPwd = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-        textPwd.borderStyle = UITextBorderStyleRoundedRect;
-        textPwd.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        self.inputPassword = textPwd;
-        self.inputPassword.tag = 2;
+        UITextField *txtfield = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        txtfield.borderStyle = UITextBorderStyleRoundedRect;
+        txtfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.inputPassword = txtfield;
+        self.inputPassword.tag = kViewTagInputPassword;
     }
     
-    {
-        UIButton *btnS = [UIButton buttonWithType:UIButtonTypeCustom];
-        btnS.frame = CGRectMake(0, 0, 290, 48);
-        [btnS setTitle:@"Start" forState:UIControlStateNormal];
-        [btnS addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchUpInside];
+    {// Input Username
+        UITextField *txtfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        txtfield.borderStyle = UITextBorderStyleRoundedRect;
+        txtfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.inputUsername = txtfield;
+        self.inputUsername.tag = kViewTagInputUserName;
+    }
+    
+    {// Start button
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn.frame = CGRectMake(0, 0, 290, 48);
+        [btn setTitle:@"Start" forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchUpInside];
         UIImage *btnImage = [UIImage imageNamed:@"btn_blue_30inset.png"];
         btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
-        [btnS setBackgroundImage:btnImage forState:UIControlStateNormal];
-        self.btnStart = btnS;
-        self.btnStart.tag = 3;
+        [btn setBackgroundImage:btnImage forState:UIControlStateNormal];
+        self.btnStart = btn;
+        self.btnStart.tag = kViewTagButtonStart;
     }
     
+    {// Start with new account
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn.frame = CGRectMake(0, 0, 290, 48);
+        [btn setTitle:@"Start with new account" forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(signUp:) forControlEvents:UIControlEventTouchUpInside];
+        UIImage *btnImage = [UIImage imageNamed:@"btn_blue_30inset.png"];
+        btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
+        [btn setBackgroundImage:btnImage forState:UIControlStateNormal];
+        self.btnStartNewUser = btn;
+        self.btnStartNewUser.tag = kViewTagButtonNewUser;
+    }
+    
+    {// Start over
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn.frame = CGRectMake(0, 0, 290, 48);
+        [btn setTitle:@"Start Over" forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(startOver:) forControlEvents:UIControlEventTouchUpInside];
+        UIImage *btnImage = [UIImage imageNamed:@"btn_blue_30inset.png"];
+        btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
+        [btn setBackgroundImage:btnImage forState:UIControlStateNormal];
+        self.btnStartOver = btn;
+        self.btnStartOver.tag = kViewTagButtonNewUser;
+    }
+    
+    {// Verification Title
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
+        label.text = @"Verification";
+        label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0];
+        [label wrapContent];
+        self.labelVerifyTitle = label;
+        self.labelVerifyTitle.tag = kViewTagVerificationTitle;
+    }
+    
+    {// Verification Description
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 80)];
+        label.text = @"This number requires verification before proceeding. Verification request sent, please check your message for instructions.";
+        label.numberOfLines = 0;
+        label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
+        [label wrapContent];
+        label.lineBreakMode = UILineBreakModeWordWrap;
+        self.labelVerifyDescription = label;
+        self.labelVerifyDescription.tag = kViewTagVerificationDescription;
+    }
     
     CSLinearLayoutView *snsLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 0, 296, 106)] autorelease];
     snsLayoutView.backgroundColor = [UIColor whiteColor];
@@ -194,9 +262,12 @@ typedef NS_ENUM(NSUInteger, EFStage){
     self.btnStart = nil;
     self.btnStartNewUser = nil;
     self.btnStartOver = nil;
+    self.labelVerifyTitle = nil;
+    self.labelVerifyDescription = nil;
+    self.hintError = nil;
     self.btnFacebook = nil;
     self.btnTwitter = nil;
-    
+    self.identityCache = nil;
     [_signindelegate release];
     [super dealloc];
 }
@@ -206,11 +277,24 @@ typedef NS_ENUM(NSUInteger, EFStage){
     _stage = stage;
     switch (_stage){
         case kStageStart:
-            
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputPassword]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputUserName]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStart]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonNewUser]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStartOver]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationTitle]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
             
             break;
         case kStageSignIn:{
             // show rest login form
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputUserName]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonNewUser]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStartOver]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationTitle]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
             
             CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:self.inputIdentity.tag];
             
@@ -233,27 +317,110 @@ typedef NS_ENUM(NSUInteger, EFStage){
             }
             
         }    break;
-        case kStageSignUp:
+        case kStageSignUp:{
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStart]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStartOver]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationTitle]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
+           
+            CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:self.inputIdentity.tag];
             
-            _inputPassword.hidden = NO;
-            _inputUsername.hidden = NO;
-            _btnStartNewUser.hidden = NO;
-            break;
+            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:self.inputPassword.tag];
+            if (item1 == nil) {
+                item1 = [CSLinearLayoutItem layoutItemForView:self.inputPassword];
+                item1.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
+                item1.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+                item1.fillMode = CSLinearLayoutItemFillModeNormal;
+                [self.rootView insertItem:item1 afterItem:baseItem];
+            } else {
+                [self.rootView moveItem:item1 afterItem:baseItem];
+            }
+            
+            CSLinearLayoutItem *item2 = [self.rootView findItemByTag:self.inputUsername.tag];
+            if (item2 == nil) {
+                item2 = [CSLinearLayoutItem layoutItemForView:self.inputUsername];
+                item2.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
+                item2.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+                item2.fillMode = CSLinearLayoutItemFillModeNormal;
+                [self.rootView insertItem:item2 afterItem:item1];
+            } else {
+                [self.rootView moveItem:item2 afterItem:item1];
+            }
+            
+            CSLinearLayoutItem *item3 = [self.rootView findItemByTag:self.btnStartNewUser.tag];
+            if (item3 == nil){
+                item3 = [CSLinearLayoutItem layoutItemForView:self.btnStartNewUser];
+                item3.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
+                item3.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+                item3.fillMode = CSLinearLayoutItemFillModeNormal;
+                [self.rootView insertItem:item3 afterItem:item2];
+            } else {
+                [self.rootView moveItem:item3 afterItem:item2];
+            }
+           
+        }  break;
         case kStageVerificate:
-            _inputPassword.hidden = NO;
-            _btnStartOver.hidden = NO;
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputPassword]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputUserName]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStart]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonNewUser]];
+//            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStartOver]];
+//            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationTitle]];
+//            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
+            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
+            
+            CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:self.inputIdentity.tag];
+            
+            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:self.labelVerifyTitle.tag];
+            if (item1 == nil) {
+                item1 = [CSLinearLayoutItem layoutItemForView:self.labelVerifyTitle];
+                item1.padding = CSLinearLayoutMakePadding(5, 15, 0, 15);
+                item1.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+                item1.fillMode = CSLinearLayoutItemFillModeNormal;
+                [self.rootView insertItem:item1 afterItem:baseItem];
+            } else {
+                [self.rootView moveItem:item1 afterItem:baseItem];
+            }
+            
+            CSLinearLayoutItem *item2 = [self.rootView findItemByTag:self.labelVerifyDescription.tag];
+            if (item2 == nil) {
+                item2 = [CSLinearLayoutItem layoutItemForView:self.labelVerifyDescription];
+                item2.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
+                item2.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+                item2.fillMode = CSLinearLayoutItemFillModeNormal;
+                [self.rootView insertItem:item2 afterItem:item1];
+            } else {
+                [self.rootView moveItem:item2 afterItem:item1];
+            }
+            
+            CSLinearLayoutItem *item3 = [self.rootView findItemByTag:self.btnStartOver.tag];
+            if (item3 == nil){
+                item3 = [CSLinearLayoutItem layoutItemForView:self.btnStartOver];
+                item3.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
+                item3.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+                item3.fillMode = CSLinearLayoutItemFillModeNormal;
+                [self.rootView insertItem:item3 afterItem:item2];
+            } else {
+                [self.rootView moveItem:item3 afterItem:item2];
+            }
+            
             break;
         default:
             break;
     }
 }
 
-- (void)fillIdentityImage:(NSDictionary*)identityDict{
-    NSString *avatar_filename = [identityDict valueForKeyPath:@"avatar_filename"];
+- (void)fillIdentityResp:(NSDictionary*)respDict
+{
+    NSString *avatar_filename = [respDict valueForKeyPath:@"identity.avatar_filename"];
     if (avatar_filename.length > 0) {
         UIImage *def = [UIImage imageNamed:@"portrait_default.png"];
         _imageIdentity.contentMode = UIViewContentModeScaleAspectFill;
         [[ImgCache sharedManager] fillAvatar:_imageIdentity with:avatar_filename byDefault:def];
+    } else {
+        NSString *provider = [respDict valueForKeyPath:@"identity.provider"];
+        [self fillIdentityHint:[Identity getProviderCode:provider]];
     }
 }
 
@@ -301,7 +468,9 @@ typedef NS_ENUM(NSUInteger, EFStage){
 #pragma mark Click handler
 - (void)expandIdentity:(id)sender
 {
-    [self swithStagebyFlag:self.regFlag];
+    NSString* identity = _inputIdentity.text;
+    NSDictionary *resp = [self.identityCache objectForKey:identity];
+    [self swithStagebyFlag:[resp valueForKey:@"registration_flag"]];
 }
 
 - (void)signIn:(id)sender
@@ -346,8 +515,17 @@ typedef NS_ENUM(NSUInteger, EFStage){
             }
         }
     } failure:nil];
-    
-    
+}
+
+- (void)signUp:(id)sender
+{
+    NSLog(@"Start with new user");
+}
+
+- (void)startOver:(id)sender
+{
+    NSLog(@"Start over");
+    [self setStage:kStageStart];
 }
 
 - (void)facebookSignIn:(id)sender
@@ -371,7 +549,7 @@ typedef NS_ENUM(NSUInteger, EFStage){
 #pragma mark Textfiled Change
 - (void)textFieldDidChange:(id)sender
 {
-    NSLog(@"TextChange");
+    NSLog(@"TextChange notification");
     NSString *identity = _inputIdentity.text;
     
     if ([identity isEqualToString:self.lastInputIdentity]) {
@@ -384,24 +562,36 @@ typedef NS_ENUM(NSUInteger, EFStage){
 
 - (void)identityDidChange:(NSString*)identity
 {
-    if (_stage == kStageStart) {
-        Provider provider = [Util candidateProvider:identity];
-        [self fillIdentityHint:provider];
-        if (identity.length > 2) {
-            if(provider != kProviderUnknown) {
-                [NSObject cancelPreviousPerformRequestsWithTarget:self];
-                NSInteger start = MAX(identity.length, 3) - 3;
-                NSString *domainext = [identity substringFromIndex:start];
-                if([Util isCommonDomainName:domainext]){
-                    [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.1];
-                } else {
-                    [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.8];
-                }
-            }
-        }
-    } else {
+    NSLog(@"Identity text did change");
+    
+    Provider provider = [Util candidateProvider:identity];
+    NSDictionary *resp = [self.identityCache objectForKey:identity];
+    if (!resp){
+        resp = @{@"registration_flag":@"",
+                 @"identity":@{ @"external_username":identity,
+                                @"provider":[Identity getProviderString:provider]
+                                }
+                 };
+        [self.identityCache setObject:resp forKey:identity];
+    }
+    [self fillIdentityResp:resp];
+    
+    if (_stage != kStageStart) {
         [self setStage:kStageStart];
     }
+    if (identity.length > 2) {
+        if(provider != kProviderUnknown) {
+            [NSObject cancelPreviousPerformRequestsWithTarget:self];
+            NSInteger start = MAX(identity.length, 3) - 3;
+            NSString *domainext = [identity substringFromIndex:start];
+            if([Util isCommonDomainName:domainext]){
+                [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.1];
+            } else {
+                [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.8];
+            }
+        }
+    }
+   
 }
 
 - (void)checkIdentityFlag:(NSString*)identity
@@ -416,13 +606,18 @@ typedef NS_ENUM(NSUInteger, EFStage){
                     id code = [responseObject valueForKeyPath:@"meta.code"];
                     if (code) {
                         if([code intValue] == 200) {
-                            NSString *flag = [responseObject valueForKeyPath:@"response.registration_flag"];
-                            NSDictionary *dic = [responseObject valueForKeyPath:@"response.identity"];
+                            NSDictionary *resp = [responseObject valueForKeyPath:@"response"];
+                            if (![resp valueForKey:@"identity"]) {
+                                resp = @{@"registration_flag":[resp valueForKey:@"registration_flag"],
+                                         @"identity":@{ @"external_username":identity,
+                                                        @"provider":[Identity getProviderString:[Util candidateProvider:identity]]
+                                                        }
+                                         };
+                            }
+                            [self.identityCache setObject:resp forKey:identity];
                             
                             if ([_inputIdentity.text isEqualToString:identity]) {
-                                self.identityDict = dic;
-                                self.regFlag = flag;
-                                [self fillIdentityImage:self.identityDict];
+                                [self fillIdentityResp:resp];
                             }
                         } else {
                             NSLog(@"get flag fail");

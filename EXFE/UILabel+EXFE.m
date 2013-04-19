@@ -22,13 +22,13 @@
         CGSize size = [self sizeWrapContent:CGSizeMake(CGRectGetWidth(self.frame), MAXFLOAT)];
         frame.size.height = size.height;
         self.frame = frame;
-    } if (self.numberOfLines == 1){
+    } else if (self.numberOfLines == 1){
         CGRect frame1 = self.frame;
         [self sizeToFit];
         CGRect frame2 = self.frame;
         frame2.size.width = frame1.size.width;
         self.frame = frame2;
-    }else {
+    } else {
         CGRect frame = self.frame;
         CGSize size = [self sizeWrapContent:CGSizeMake(CGRectGetWidth(self.frame), MAXFLOAT)];
         

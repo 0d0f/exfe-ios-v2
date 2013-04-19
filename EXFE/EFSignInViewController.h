@@ -21,11 +21,15 @@
 @property (nonatomic, retain) UIButton *btnStartNewUser;
 @property (nonatomic, retain) UIButton *btnStartOver;
 
+@property (nonatomic, retain) UILabel *labelVerifyTitle;
+@property (nonatomic, retain) UILabel *labelVerifyDescription;
+
+@property (nonatomic, retain) UILabel * hintError;
+
 @property (nonatomic, retain) UIButton *btnFacebook;
 @property (nonatomic, retain) UIButton *btnTwitter;
 
-@property (nonatomic, retain) NSDictionary *identityDict;
-@property (nonatomic, retain) NSString *regFlag;
 @property (nonatomic, copy) id onExitBlock;
+@property (nonatomic, retain) NSMutableDictionary *identityCache;
 
 @end
