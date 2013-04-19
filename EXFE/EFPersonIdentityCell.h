@@ -10,4 +10,8 @@
 
 @interface EFPersonIdentityCell : UITableViewCell
 
+@property (nonatomic, retain) NSArray *idntities;
+
++ (CGFloat)heightWithIdentities:(NSArray *)identities;
+
 @end

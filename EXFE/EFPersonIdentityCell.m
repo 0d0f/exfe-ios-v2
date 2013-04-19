@@ -8,6 +8,8 @@
 
 #import "EFPersonIdentityCell.h"
 
+#define kLineHeight 44
+
 @implementation EFPersonIdentityCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -15,15 +17,15 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.contentView.backgroundColor = [UIColor blackColor];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
++ (CGFloat)heightWithIdentities:(NSArray *)identities {
+    NSUInteger count = [identities count];
+    NSUInteger numberOfLines = count / 2 +  count % 1;
+    return numberOfLines * kLineHeight;
 }
 
 @end
