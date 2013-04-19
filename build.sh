@@ -69,7 +69,7 @@ echo $BUILD_ACTION-ing $PROJECT
 $BUILD -target $PROJECT -configuration Release -scheme $SCHEME $BUILD_ACTION > $BUILD_OUTPUT
 APP_PATH=`cat $BUILD_OUTPUT|grep Validate|awk '{print $2}'`
 BUILD_PATH=`pwd`"/builds/"
-mkdir -p BUILD_PATH
+mkdir -p $BUILD_PATH
 IPA_PATH="$BUILD_PATH$PROJECT.ipa"
 echo Package $PROJECT
 /usr/bin/xcrun -sdk iphoneos PackageApplication -v "$APP_PATH" -o "$IPA_PATH"
