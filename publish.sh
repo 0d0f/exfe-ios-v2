@@ -1,6 +1,6 @@
 #!/bin/sh
 PROJECT="$1"
-SERVER="0d0f.com"
+SERVER="app.0d0f.com"
 EXT=".ipa"
 IPA_PATH=`pwd`"/builds/$PROJECT$EXT"
 SEED=$(date '+_%y%m%d')
