@@ -18,7 +18,7 @@
 #import "ImgCache.h"
 #import "Util.h"
 #import "EFSearchBar.h"
-#import "EFPersonIdentityCell.h"
+#import "LocalContact+EXFE.h"
 
 @interface EFChoosePeopleViewController ()
 @property (nonatomic, retain) NSMutableArray *exfeePeople;
@@ -37,6 +37,7 @@
 
 - (EFChoosePeopleViewCell *)choosePeopleViewCellWithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
 - (void)choosePeopleTableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)aCell forRowAtIndexPath:(NSIndexPath *)indexPath;
+- (NSArray *)roughIdentitiesForTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
 
 @end
 
@@ -152,6 +153,20 @@
 //    [self.searchDisplayController setActive:NO animated:YES];
     
     return YES;
+}
+
+#pragma mark - EFPersonIdentityCellDelegate
+- (void )personIdentityCell:(EFPersonIdentityCell *)cell didSelectRoughIdentity:(RoughIdentity *)roughIdentity {
+    UITableView *tableView = self.tableView;
+    if (self.searchDisplayController.isActive) {
+        tableView = self.searchDisplayController.searchResultsTableView;
+    }
+    
+    
+}
+
+- (void )personIdentityCell:(EFPersonIdentityCell *)cell didDeselectRoughIdentity:(RoughIdentity *)roughIdentity {
+
 }
 
 #pragma mark - EFChoosePeopleViewCellDelegate
@@ -273,7 +288,11 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 50.0f;
+    if (self.insertIndexPath && [self.insertIndexPath compare:indexPath] == NSOrderedSame) {
+        return [EFPersonIdentityCell heightWithRoughIdentities:[self roughIdentitiesForTableView:tableView indexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]]];
+    } else {
+        return 50.0f;
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -336,7 +355,7 @@
             if (!cell) {
                 cell = [[[EFPersonIdentityCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identifier] autorelease];
             }
-            // TODO: set Data
+            cell.roughIdentities = [self roughIdentitiesForTableView:tableView indexPath:indexPath];
             return cell;
         } else {
             if (indexPath.section == self.insertIndexPath.section) {
@@ -391,18 +410,23 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.insertIndexPath) {
-        NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
-        if (comparisionResult != NSOrderedSame) {
-            if (indexPath.section == self.insertIndexPath.section) {
-                if (NSOrderedAscending) {
-                    [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
-                } else {
-                    [self selectOrDeselectTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
-                }
-            } else {
-                [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
-            }
+        if ([self.insertIndexPath compare:indexPath] != NSOrderedSame) {
+            NSIndexPath *toDeleteIndexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
+            self.insertIndexPath = nil;
+            [tableView deleteRowsAtIndexPaths:@[toDeleteIndexPath] withRowAnimation:UITableViewRowAnimationTop];
         }
+//        NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
+//        if (comparisionResult != NSOrderedSame) {
+//            if (indexPath.section == self.insertIndexPath.section) {
+//                if (NSOrderedAscending) {
+//                    [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
+//                } else {
+//                    [self selectOrDeselectTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+//                }
+//            } else {
+//                [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
+//            }
+//        }
     } else {
         [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
     }
@@ -410,18 +434,24 @@
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.insertIndexPath) {
-        NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
-        if (comparisionResult != NSOrderedSame) {
-            if (indexPath.section == self.insertIndexPath.section) {
-                if (NSOrderedAscending) {
-                    [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
-                } else {
-                    [self selectOrDeselectTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
-                }
-            } else {
-                [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
-            }
-        }
+//        if ([self.insertIndexPath compare:indexPath] != NSOrderedSame) {
+//            NSIndexPath *toDeleteIndexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
+//            self.insertIndexPath = nil;
+//            [tableView deleteRowsAtIndexPaths:@[toDeleteIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+//        }
+        
+//        NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
+//        if (comparisionResult != NSOrderedSame) {
+//            if (indexPath.section == self.insertIndexPath.section) {
+//                if (NSOrderedAscending) {
+//                    [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
+//                } else {
+//                    [self selectOrDeselectTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+//                }
+//            } else {
+//                [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
+//            }
+//        }
     } else {
         [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
     }
@@ -623,6 +653,31 @@
             }
         }
     }
+}
+
+- (NSArray *)roughIdentitiesForTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath {
+    NSArray *roughIndentities = nil;
+    if (tableView == self.tableView) {
+        if(([self.exfeePeople count] && indexPath.section == 1) ||
+           (![self.exfeePeople count] && indexPath.section == 0)) {
+            LocalContact *person = self.contactPeople[indexPath.row - 1];
+            roughIndentities = [person roughIdentities];
+        } else {
+            Identity *identity = self.exfeePeople[indexPath.row - 1];
+            roughIndentities = @[[identity roughIdentityValue]];
+        }
+    } else if (tableView == self.searchDisplayController.searchResultsTableView) {
+        if(([self.searchResultExfeePeople count] && indexPath.section == 1) ||
+           (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
+            LocalContact *person = self.searchResultContactPeople[indexPath.row - 1];
+            roughIndentities = [person roughIdentities];
+        } else {
+            Identity *identity = self.searchResultExfeePeople[indexPath.row - 1];
+            roughIndentities = @[[identity roughIdentityValue]];
+        }
+    }
+    
+    return roughIndentities;
 }
 
 @end

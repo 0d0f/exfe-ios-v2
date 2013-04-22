@@ -8,10 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@class EFPersonIdentityCell, RoughIdentity;
+@protocol EFPersonIdentityCellDelegate <NSObject>
+@required
+- (void )personIdentityCell:(EFPersonIdentityCell *)cell didSelectRoughIdentity:(RoughIdentity *)roughIdentity;
+- (void )personIdentityCell:(EFPersonIdentityCell *)cell didDeselectRoughIdentity:(RoughIdentity *)roughIdentity;
+@end
+
 @interface EFPersonIdentityCell : UITableViewCell
 
-@property (nonatomic, retain) NSArray *idntities;
+@property (nonatomic, retain) NSArray *roughIdentities;
+@property (nonatomic, assign) id<EFPersonIdentityCellDelegate> delegate;
 
-+ (CGFloat)heightWithIdentities:(NSArray *)identities;
++ (CGFloat)heightWithRoughIdentities:(NSArray *)identities;
 
 @end

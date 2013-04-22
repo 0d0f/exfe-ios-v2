@@ -203,7 +203,7 @@
     [button addTarget:self
                action:@selector(buttonPressed:)
      forControlEvents:UIControlEventTouchUpInside];
-    button.frame = (CGRect){{270, 0}, {50, 50}};
+    button.frame = (CGRect){{160, 0}, {160, 50}}; // (CGRect){{270, 0}, {50, 50}};
     [self.contentView addSubview:button];
 }
 

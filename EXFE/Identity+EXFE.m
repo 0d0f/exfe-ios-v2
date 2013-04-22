@@ -8,6 +8,9 @@
 
 #import "Identity+EXFE.h"
 
+#import <RestKit/RestKit.h>
+#import "RoughIdentity.h"
+
 @implementation Identity (EXFE)
 
 
@@ -85,6 +88,33 @@
             break;
     }
     
+}
+
++ (Identity *)identityFromLocalRoughIdentity:(RoughIdentity *)roughIdentity {
+    Identity *identity = nil;
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((external_username == %@) AND (provider== %@))", roughIdentity.externalUsername, roughIdentity.provider];
+    [request setPredicate:predicate];
+    
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSArray *suggestwithselected = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+    
+    if([suggestwithselected count] > 0){
+        identity = [suggestwithselected objectAtIndex:0];
+    }
+    [suggestwithselected release];
+    
+    return identity;
+}
+
+- (RoughIdentity *)roughIdentityValue {
+    RoughIdentity *roughtIdentity = [RoughIdentity identity];
+    roughtIdentity.provider = self.provider;
+    roughtIdentity.externalUsername = self.external_username;
+    roughtIdentity.externalID = self.external_id;
+    
+    return roughtIdentity;
 }
 
 @end

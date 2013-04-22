@@ -1099,6 +1099,12 @@
 		763A01B017206F5C0082CC9E /* btn_blue_44@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A01AC17206F5C0082CC9E /* btn_blue_44@2x.png */; };
 		763A01B117206F5C0082CC9E /* btn_blue_44@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A01AC17206F5C0082CC9E /* btn_blue_44@2x.png */; };
 		763A01B217206F5C0082CC9E /* btn_blue_44@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A01AC17206F5C0082CC9E /* btn_blue_44@2x.png */; };
+		763A01C21721222D0082CC9E /* LocalContact+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01C11721222C0082CC9E /* LocalContact+EXFE.m */; };
+		763A01C31721222D0082CC9E /* LocalContact+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01C11721222C0082CC9E /* LocalContact+EXFE.m */; };
+		763A01C41721222D0082CC9E /* LocalContact+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01C11721222C0082CC9E /* LocalContact+EXFE.m */; };
+		763A01CF17212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
+		763A01D017212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
+		763A01D117212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
 		76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76D1A804171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */; };
@@ -1776,6 +1782,11 @@
 		763A01A117202BBF0082CC9E /* EFPersonIdentityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPersonIdentityCell.m; sourceTree = "<group>"; };
 		763A01AB17206F5C0082CC9E /* btn_blue_44.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_blue_44.png; sourceTree = "<group>"; };
 		763A01AC17206F5C0082CC9E /* btn_blue_44@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_blue_44@2x.png"; sourceTree = "<group>"; };
+		763A01C01721222B0082CC9E /* LocalContact+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LocalContact+EXFE.h"; sourceTree = "<group>"; };
+		763A01C11721222C0082CC9E /* LocalContact+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LocalContact+EXFE.m"; sourceTree = "<group>"; };
+		763A01CD17212B080082CC9E /* RoughIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoughIdentity.h; sourceTree = "<group>"; };
+		763A01CE17212B080082CC9E /* RoughIdentity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoughIdentity.m; sourceTree = "<group>"; };
+		763A01D2172130B20082CC9E /* EFDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDataDefines.h; sourceTree = "<group>"; };
 		76A150BC1717D23400751C92 /* EXAddressBookService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAddressBookService.h; sourceTree = "<group>"; };
 		76A150BD1717D23500751C92 /* EXAddressBookService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAddressBookService.m; sourceTree = "<group>"; };
 		76D1A801171D5DFA00A35BBD /* EFChoosePeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewController.h; sourceTree = "<group>"; };
@@ -2393,8 +2404,10 @@
 		4FD9375F16D6023400ED6677 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				763A01D2172130B20082CC9E /* EFDataDefines.h */,
+				763A01CC17212A090082CC9E /* Object */,
 				76A150B41717D1CB00751C92 /* Service */,
-				78A98EFC1561169E009E0806 /* Class */,
+				78A98EFC1561169E009E0806 /* Entity */,
 				4FD9376016D6025500ED6677 /* Extention */,
 			);
 			name = Model;
@@ -2417,6 +2430,8 @@
 				4FA013AA16F31B5400F40CB6 /* Identity+EXFE.m */,
 				4F29C92E16F9A5B5001BB176 /* User+EXFE.h */,
 				4F29C92F16F9A5B5001BB176 /* User+EXFE.m */,
+				763A01C01721222B0082CC9E /* LocalContact+EXFE.h */,
+				763A01C11721222C0082CC9E /* LocalContact+EXFE.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -2484,6 +2499,15 @@
 				4FF69550171BDF53003DF80B /* EFSignInViewController.xib */,
 			);
 			name = Login;
+			sourceTree = "<group>";
+		};
+		763A01CC17212A090082CC9E /* Object */ = {
+			isa = PBXGroup;
+			children = (
+				763A01CD17212B080082CC9E /* RoughIdentity.h */,
+				763A01CE17212B080082CC9E /* RoughIdentity.m */,
+			);
+			name = Object;
 			sourceTree = "<group>";
 		};
 		76A150B41717D1CB00751C92 /* Service */ = {
@@ -3058,7 +3082,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		78A98EFC1561169E009E0806 /* Class */ = {
+		78A98EFC1561169E009E0806 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
 				78FA8C3616B7CD7900D9E876 /* Cross.h */,
@@ -3086,7 +3110,7 @@
 				7835CC2716E0AEE0005001AA /* User.h */,
 				7835CC2816E0AEE1005001AA /* User.m */,
 			);
-			name = Class;
+			name = Entity;
 			sourceTree = "<group>";
 		};
 		78A98F00156117BE009E0806 /* API */ = {
@@ -4635,6 +4659,8 @@
 				763A0192171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
 				763A01A317202BBF0082CC9E /* EFPersonIdentityCell.m in Sources */,
 				4F25A1C2171FBA2A000513B5 /* CSLinearLayoutView.m in Sources */,
+				763A01C31721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
+				763A01D017212B080082CC9E /* RoughIdentity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4785,6 +4811,8 @@
 				763A0193171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
 				763A01A417202BBF0082CC9E /* EFPersonIdentityCell.m in Sources */,
 				4F25A1C3171FBA2B000513B5 /* CSLinearLayoutView.m in Sources */,
+				763A01C41721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
+				763A01D117212B080082CC9E /* RoughIdentity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4935,6 +4963,8 @@
 				763A0191171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
 				763A01A217202BBF0082CC9E /* EFPersonIdentityCell.m in Sources */,
 				4F25A1BA171FB9FF000513B5 /* CSLinearLayoutView.m in Sources */,
+				763A01C21721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
+				763A01CF17212B080082CC9E /* RoughIdentity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

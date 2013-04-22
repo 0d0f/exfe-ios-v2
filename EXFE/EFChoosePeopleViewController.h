@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "EFChoosePeopleViewCell.h"
+#import "EFPersonIdentityCell.h"
 
 @class EFSearchBar;
 @interface EFChoosePeopleViewController : UIViewController
@@ -18,6 +19,7 @@ UITableViewDelegate,
 UISearchBarDelegate,
 UISearchDisplayDelegate,
 EFChoosePeopleViewCellDelegate,
+EFPersonIdentityCellDelegate,
 UITextFieldDelegate
 >
 
