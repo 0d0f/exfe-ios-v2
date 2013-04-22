@@ -41,6 +41,7 @@
 - (void)selectOrDeselectTableView:(UITableView *)tableView selected:(BOOL)isSelected atIndexPath:(NSIndexPath *)indexPath;
 - (void)refreshSelectedDictWithObject:(id)obj selected:(BOOL)selected;
 - (BOOL)isObjectSelectedInTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
+- (id)objectForTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
@@ -198,10 +199,22 @@
         tableView = self.searchDisplayController.searchResultsTableView;
         indexPath = [tableView indexPathForCell:cell];
     }
+    indexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+    NSArray *roughtIdentities = [self roughIdentitiesForTableView:tableView indexPath:indexPath];
     
-    [self selectOrDeselectTableView:tableView
-                           selected:NO
-                        atIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+    BOOL shouldDeselect = YES;
+    for (RoughIdentity *roughIndentity in roughtIdentities) {
+        if ([self isRoughtIdentitySelected:roughIndentity]) {
+            shouldDeselect = NO;
+            break;
+        }
+    }
+    
+    if (shouldDeselect) {
+        [self selectOrDeselectTableView:tableView
+                               selected:NO
+                            atIndexPath:indexPath];
+    }
 }
 
 #pragma mark - EFPersonIdentityCellDataSource
@@ -431,7 +444,7 @@
                 cell.delegate = self;
                 cell.dataSource = self;
             }
-            cell.roughIdentities = [self roughIdentitiesForTableView:tableView indexPath:indexPath];
+            cell.roughIdentities = [self roughIdentitiesForTableView:tableView indexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
             
             return cell;
         } else {
@@ -489,7 +502,9 @@
         [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:indexPath];
     }
     
-    [tableView deselectRowAtIndexPath:indexPathParam animated:NO];
+    if (![self isObjectSelectedInTableView:tableView atIndexPath:indexPathParam]) {
+        [tableView deselectRowAtIndexPath:indexPathParam animated:NO];
+    }
 }
 
 #pragma mark - Category (Extension)
@@ -592,26 +607,7 @@
 
 - (BOOL)isObjectSelectedInTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     NSString *key = nil;
-    id object = nil;
-    if (tableView == self.tableView) {
-        if(([self.exfeePeople count] && indexPath.section == 1) ||
-           (![self.exfeePeople count] && indexPath.section == 0)) {
-            LocalContact *person = self.contactPeople[indexPath.row];
-            object = person;
-        } else {
-            Identity *identity = [self.exfeePeople objectAtIndex:indexPath.row];
-            object = identity;
-        }
-    } else if (tableView == self.searchDisplayController.searchResultsTableView) {
-        if(([self.searchResultExfeePeople count] && indexPath.section == 1) ||
-           (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
-            LocalContact *person = self.searchResultContactPeople[indexPath.row];
-            object = person;
-        } else {
-            Identity *identity = [self.searchResultExfeePeople objectAtIndex:indexPath.row];
-            object = identity;
-        }
-    }
+    id object = [self objectForTableView:tableView atIndexPath:indexPath];
     
     if ([object isKindOfClass:[Identity class]]) {
         Identity *identity = (Identity *)object;
@@ -624,7 +620,7 @@
     return !![_selectedDict valueForKey:key];
 }
 
-- (void)selectOrDeselectTableView:(UITableView *)tableView selected:(BOOL)isSelected atIndexPath:(NSIndexPath *)indexPath {
+- (id)objectForTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     id object = nil;
     if (tableView == self.tableView) {
         if(([self.exfeePeople count] && indexPath.section == 1) ||
@@ -646,6 +642,11 @@
         }
     }
     
+    return object;
+}
+
+- (void)selectOrDeselectTableView:(UITableView *)tableView selected:(BOOL)isSelected atIndexPath:(NSIndexPath *)indexPath {
+    id object = [self objectForTableView:tableView atIndexPath:indexPath];
     [self refreshSelectedDictWithObject:object selected:isSelected];
     
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -718,19 +719,19 @@
     if (tableView == self.tableView) {
         if(([self.exfeePeople count] && indexPath.section == 1) ||
            (![self.exfeePeople count] && indexPath.section == 0)) {
-            LocalContact *person = self.contactPeople[indexPath.row - 1];
+            LocalContact *person = self.contactPeople[indexPath.row];
             roughIndentities = [person roughIdentities];
         } else {
-            Identity *identity = self.exfeePeople[indexPath.row - 1];
+            Identity *identity = self.exfeePeople[indexPath.row];
             roughIndentities = @[[identity roughIdentityValue]];
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
         if(([self.searchResultExfeePeople count] && indexPath.section == 1) ||
            (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
-            LocalContact *person = self.searchResultContactPeople[indexPath.row - 1];
+            LocalContact *person = self.searchResultContactPeople[indexPath.row];
             roughIndentities = [person roughIdentities];
         } else {
-            Identity *identity = self.searchResultExfeePeople[indexPath.row - 1];
+            Identity *identity = self.searchResultExfeePeople[indexPath.row];
             roughIndentities = @[[identity roughIdentityValue]];
         }
     }
