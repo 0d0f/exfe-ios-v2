@@ -214,7 +214,6 @@
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    NSLog(@"%@", self.userNameLabel.text);
     if (selected) {
         EFChoosePeopleSelectedBackgroundView *backgroundView = [[EFChoosePeopleSelectedBackgroundView alloc] initWithFrame:self.bounds];
         self.backgroundView = backgroundView;
