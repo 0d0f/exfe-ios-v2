@@ -27,9 +27,12 @@
 @property (nonatomic, retain) NSMutableArray *contactPeople;
 @property (nonatomic, retain) NSMutableArray *searchResultExfeePeople;
 @property (nonatomic, retain) NSMutableArray *searchResultContactPeople;
+
 @property (nonatomic, copy) NSString *searchKey;
+
 @property (nonatomic, retain) NSMutableDictionary *selectedDict;
 @property (nonatomic, retain) NSMutableDictionary *selectedRoughIdentityDict;
+
 @property (nonatomic, retain) NSIndexPath *insertIndexPath;
 
 - (void)loadexfeePeople;
@@ -230,12 +233,18 @@
 #pragma mark - UISearchBarDelegate
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"indexfield CONTAINS[cd] %@", searchText];
+    NSPredicate *exfeePredicate = [NSPredicate predicateWithFormat:@"external_id CONTAINS[cd] %@ OR external_username CONTAINS[cd] %@ OR name CONTAINS[cd] %@ OR provider CONTAINS[cd] %@", searchText, searchText, searchText, searchText];
+    NSPredicate *contactPredicate = [NSPredicate predicateWithFormat:@"indexfield CONTAINS[cd] %@", searchText];
+    
     if (!_searchKey || _searchKey.length == 0) {
         self.searchKey = searchText;
+        
+        self.searchResultExfeePeople = [[[_exfeePeople filteredArrayUsingPredicate:exfeePredicate] mutableCopy] autorelease];
+        [self.searchDisplayController.searchResultsTableView reloadData];
+        
         [[EXAddressBookService defaultService] filterPeopleWithExistPeople:self.contactPeople
                                                                    keyWord:searchText
-                                                                 predicate:predicate
+                                                                 predicate:contactPredicate
                                                             successHandler:^(NSArray *people){
                                                                 self.searchResultContactPeople = [NSMutableArray arrayWithArray:people];
                                                                 [self.searchDisplayController.searchResultsTableView reloadData];
@@ -245,10 +254,14 @@
         if ([searchText rangeOfString:_searchKey].location != NSNotFound && searchText.length != 0) {
             // searchText contain pre search text
             self.searchKey = searchText;
+            
+            self.searchResultExfeePeople = [[[_exfeePeople filteredArrayUsingPredicate:exfeePredicate] mutableCopy] autorelease];
+            [self.searchDisplayController.searchResultsTableView reloadData];
+            
             if (self.searchResultContactPeople) {
                 [[EXAddressBookService defaultService] filterPeopleWithExistPeople:self.searchResultContactPeople
                                                                            keyWord:searchText
-                                                                         predicate:predicate
+                                                                         predicate:contactPredicate
                                                                     successHandler:^(NSArray *people){
                                                                         self.searchResultContactPeople = [NSMutableArray arrayWithArray:people];
                                                                         [self.searchDisplayController.searchResultsTableView reloadData];
@@ -258,9 +271,13 @@
         } else {
             // new search text
             self.searchKey = searchText;
+            
+            self.searchResultExfeePeople = [[[_exfeePeople filteredArrayUsingPredicate:exfeePredicate] mutableCopy] autorelease];
+            [self.searchDisplayController.searchResultsTableView reloadData];
+            
             [[EXAddressBookService defaultService] filterPeopleWithExistPeople:self.contactPeople
                                                                        keyWord:searchText
-                                                                     predicate:predicate
+                                                                     predicate:contactPredicate
                                                                 successHandler:^(NSArray *people){
                                                                     self.searchResultContactPeople = [NSMutableArray arrayWithArray:people];
                                                                     [self.searchDisplayController.searchResultsTableView reloadData];
