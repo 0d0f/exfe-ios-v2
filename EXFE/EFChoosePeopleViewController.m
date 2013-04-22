@@ -214,13 +214,17 @@
 
 - (BOOL)shouldChoosePeopleViewCellSelected:(EFChoosePeopleViewCell *)cell {
     UITableView *tableView = self.tableView;
-    NSIndexPath *indexPath = nil;
-    if (self.searchDisplayController.isActive) {
+    NSIndexPath *indexPath = [tableView indexPathForCell:cell];
+    if (!indexPath) {
         tableView = self.searchDisplayController.searchResultsTableView;
+        indexPath = [tableView indexPathForCell:cell];
     }
-    indexPath = [tableView indexPathForCell:cell];
     
-    return [self isObjectSelectedInTableView:tableView atIndexPath:indexPath];
+    if (indexPath) {
+        return [self isObjectSelectedInTableView:tableView atIndexPath:indexPath];
+    } else {
+        return NO;
+    }
 }
 
 #pragma mark - UISearchBarDelegate
