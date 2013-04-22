@@ -184,7 +184,6 @@
 
 #pragma mark - EFChoosePeopleViewCell
 @interface EFChoosePeopleViewCell ()
-@property (nonatomic, assign) BOOL hasSelected;
 @end
 
 @implementation EFChoosePeopleViewCell
@@ -196,7 +195,6 @@
 - (void)awakeFromNib {
     self.avatarImageView.layer.cornerRadius = 3.0f;
     self.avatarImageView.layer.masksToBounds = YES;
-    self.hasSelected = NO;
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.backgroundColor = [UIColor clearColor];
@@ -216,31 +214,35 @@
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    NSLog(@"%@", self.userNameLabel.text);
     if (selected) {
-        self.hasSelected = YES;
         EFChoosePeopleSelectedBackgroundView *backgroundView = [[EFChoosePeopleSelectedBackgroundView alloc] initWithFrame:self.bounds];
         self.backgroundView = backgroundView;
+        [backgroundView release];
         self.userNameLabel.textColor = [UIColor whiteColor];
     } else {
-        self.hasSelected = NO;
         EFChoosePeopleBackgroundView *backgroundView = [[EFChoosePeopleBackgroundView alloc] initWithFrame:self.bounds];
         backgroundView.cell = self;
         self.backgroundView = backgroundView;
+        [backgroundView release];
         self.userNameLabel.textColor = [UIColor blackColor];
     }
 }
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
-    if (!self.hasSelected) {
+    BOOL shouldSelect = [self.dataSource shouldChoosePeopleViewCellSelected:self];
+    if (!shouldSelect) {
         if (highlighted) {
             EFChoosePeopleHightedBackgroundView *backgroundView = [[EFChoosePeopleHightedBackgroundView alloc] initWithFrame:self.bounds];
             backgroundView.cell = self;
             self.backgroundView = backgroundView;
+            [backgroundView release];
             self.userNameLabel.textColor = [UIColor blackColor];
         } else {
             EFChoosePeopleBackgroundView *backgroundView = [[EFChoosePeopleBackgroundView alloc] initWithFrame:self.bounds];
             backgroundView.cell = self;
             self.backgroundView = backgroundView;
+            [backgroundView release];
             self.userNameLabel.textColor = [UIColor blackColor];
         }
     }

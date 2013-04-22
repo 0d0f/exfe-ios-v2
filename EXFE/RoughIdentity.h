@@ -16,6 +16,7 @@ NSCopying
 @property (nonatomic, copy) NSString *externalUsername;
 @property (nonatomic, copy) NSString *provider;
 @property (nonatomic, copy) NSString *externalID;
+@property (nonatomic, copy, readonly) NSString *key;
 
 + (RoughIdentity *)identity;
 

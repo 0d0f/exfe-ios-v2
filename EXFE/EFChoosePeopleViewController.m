@@ -19,7 +19,9 @@
 #import "Util.h"
 #import "EFSearchBar.h"
 #import "LocalContact+EXFE.h"
+#import "RoughIdentity.h"
 
+#pragma mark - Category (Extension)
 @interface EFChoosePeopleViewController ()
 @property (nonatomic, retain) NSMutableArray *exfeePeople;
 @property (nonatomic, retain) NSMutableArray *contactPeople;
@@ -27,19 +29,36 @@
 @property (nonatomic, retain) NSMutableArray *searchResultContactPeople;
 @property (nonatomic, copy) NSString *searchKey;
 @property (nonatomic, retain) NSMutableDictionary *selectedDict;
+@property (nonatomic, retain) NSMutableDictionary *selectedRoughIdentityDict;
 @property (nonatomic, retain) NSIndexPath *insertIndexPath;
 
 - (void)loadexfeePeople;
 - (void)loadcontactPeople;
 
-- (void)selectOrDeselectTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
-- (void)refreshSelectedDictWithObject:(id)obj selected:(BOOL *)selected;
-
-- (EFChoosePeopleViewCell *)choosePeopleViewCellWithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
-- (void)choosePeopleTableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)aCell forRowAtIndexPath:(NSIndexPath *)indexPath;
-- (NSArray *)roughIdentitiesForTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
+- (void)selectOrDeselectTableView:(UITableView *)tableView selected:(BOOL)isSelected atIndexPath:(NSIndexPath *)indexPath;
+- (void)refreshSelectedDictWithObject:(id)obj selected:(BOOL)selected;
+- (BOOL)isObjectSelectedInTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
 
 @end
+
+#pragma mark - Category (ChoosePeopleViewCellDisplay)
+
+@interface EFChoosePeopleViewController (ChoosePeopleViewCellDisplay)
+- (EFChoosePeopleViewCell *)choosePeopleViewCellWithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
+- (void)choosePeopleTableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)aCell forRowAtIndexPath:(NSIndexPath *)indexPath;
+@end
+
+#pragma mark - Category (PersonIdentityCellDisplay)
+
+@interface EFChoosePeopleViewController (PersonIdentityCellDisplay)
+- (NSArray *)roughIdentitiesForTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
+- (void)selectRoughIdentity:(RoughIdentity *)identity;
+- (void)deselectRoughIdentity:(RoughIdentity *)identity;
+- (BOOL)isRoughtIdentitySelected:(RoughIdentity *)identity;
+@end
+
+#pragma mark -
+#pragma mark - EFChoosePeopleViewController Implementation
 
 @implementation EFChoosePeopleViewController
 
@@ -50,6 +69,7 @@
         _exfeePeople = [[NSMutableArray alloc] init];
         _contactPeople = [[NSMutableArray alloc] init];
         _selectedDict = [[NSMutableDictionary alloc] init];
+        _selectedRoughIdentityDict = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -112,6 +132,7 @@
 }
 
 - (void)dealloc {
+    [_selectedRoughIdentityDict release];
     [_selectedDict release];
     [_exfeePeople release];
     [_contactPeople release];
@@ -148,28 +169,28 @@
 - (IBAction)addButtonPressed:(id)sender {
 }
 
-#pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldClear:(UITextField *)textField {
-//    [self.searchDisplayController setActive:NO animated:YES];
-    
-    return YES;
-}
-
 #pragma mark - EFPersonIdentityCellDelegate
+
 - (void )personIdentityCell:(EFPersonIdentityCell *)cell didSelectRoughIdentity:(RoughIdentity *)roughIdentity {
+    [self selectRoughIdentity:roughIdentity];
     UITableView *tableView = self.tableView;
     if (self.searchDisplayController.isActive) {
         tableView = self.searchDisplayController.searchResultsTableView;
     }
-    
-    
 }
 
 - (void )personIdentityCell:(EFPersonIdentityCell *)cell didDeselectRoughIdentity:(RoughIdentity *)roughIdentity {
+    [self deselectRoughIdentity:roughIdentity];
+}
 
+#pragma mark - EFPersonIdentityCellDataSource
+
+- (BOOL)shouldPersonIdentityCell:(EFPersonIdentityCell *)cell selectRoughIdentity:(RoughIdentity *)roughtIdentity {
+    return [self isRoughtIdentitySelected:roughtIdentity];
 }
 
 #pragma mark - EFChoosePeopleViewCellDelegate
+
 - (void)choosePeopleViewCellButtonPressed:(EFChoosePeopleViewCell *)cell {
     UITableView *tableView = self.tableView;
     NSIndexPath *indexPath = [tableView indexPathForCell:cell];
@@ -187,6 +208,19 @@
         self.insertIndexPath = indexPath;
         [tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
     }
+}
+
+#pragma mark - EFChoosePeopleViewCellDataSource
+
+- (BOOL)shouldChoosePeopleViewCellSelected:(EFChoosePeopleViewCell *)cell {
+    UITableView *tableView = self.tableView;
+    NSIndexPath *indexPath = nil;
+    if (self.searchDisplayController.isActive) {
+        tableView = self.searchDisplayController.searchResultsTableView;
+    }
+    indexPath = [tableView indexPathForCell:cell];
+    
+    return [self isObjectSelectedInTableView:tableView atIndexPath:indexPath];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -347,6 +381,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSIndexPath *indexPathParam = indexPath;;
     if (self.insertIndexPath) {
         NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
         if (comparisionResult == NSOrderedSame) {
@@ -354,27 +389,21 @@
             EFPersonIdentityCell *cell = [tableView dequeueReusableCellWithIdentifier:Identifier];
             if (!cell) {
                 cell = [[[EFPersonIdentityCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identifier] autorelease];
+                cell.delegate = self;
+                cell.dataSource = self;
             }
             cell.roughIdentities = [self roughIdentitiesForTableView:tableView indexPath:indexPath];
+            
             return cell;
         } else {
-            if (indexPath.section == self.insertIndexPath.section) {
-                if (NSOrderedAscending == comparisionResult) {
-                    EFChoosePeopleViewCell *cell = [self choosePeopleViewCellWithTableView:tableView indexPath:indexPath];
-                    return cell;
-                } else {
-                    EFChoosePeopleViewCell *cell = [self choosePeopleViewCellWithTableView:tableView indexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
-                    return cell;
-                }
-            } else {
-                EFChoosePeopleViewCell *cell = [self choosePeopleViewCellWithTableView:tableView indexPath:indexPath];
-                return cell;
+            if (indexPath.section == self.insertIndexPath.section && NSOrderedDescending == comparisionResult) {
+                indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
             }
         }
-    } else {
-        EFChoosePeopleViewCell *cell = [self choosePeopleViewCellWithTableView:tableView indexPath:indexPath];
-        return cell;
     }
+    EFChoosePeopleViewCell *cell = [self choosePeopleViewCellWithTableView:tableView indexPath:indexPathParam];
+    
+    return cell;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -390,77 +419,42 @@
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)aCell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSIndexPath *indexPathParam = indexPath;
+    
     if (self.insertIndexPath) {
         NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
-        if (comparisionResult != NSOrderedSame) {
-            if (indexPath.section == self.insertIndexPath.section) {
-                if (NSOrderedAscending) {
-                    [self choosePeopleTableView:tableView willDisplayCell:aCell forRowAtIndexPath:indexPath];
-                } else {
-                    [self choosePeopleTableView:tableView willDisplayCell:aCell forRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
-                }
-            } else {
-                [self choosePeopleTableView:tableView willDisplayCell:aCell forRowAtIndexPath:indexPath];
-            }
+        if (NSOrderedDescending == comparisionResult && indexPath.section == self.insertIndexPath.section) {
+            indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
         }
-    } else {
-        [self choosePeopleTableView:tableView willDisplayCell:aCell forRowAtIndexPath:indexPath];
     }
+    
+    [self choosePeopleTableView:tableView willDisplayCell:aCell forRowAtIndexPath:indexPathParam];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSIndexPath *indexPathParam = indexPath;
+    
     if (self.insertIndexPath) {
-        if ([self.insertIndexPath compare:indexPath] != NSOrderedSame) {
+        NSComparisonResult result = [indexPath compare:self.insertIndexPath];
+        if (result != NSOrderedSame) {
             NSIndexPath *toDeleteIndexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
             self.insertIndexPath = nil;
             [tableView deleteRowsAtIndexPaths:@[toDeleteIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+            
+            if (result == NSOrderedDescending) {
+                indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+            }
         }
-//        NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
-//        if (comparisionResult != NSOrderedSame) {
-//            if (indexPath.section == self.insertIndexPath.section) {
-//                if (NSOrderedAscending) {
-//                    [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
-//                } else {
-//                    [self selectOrDeselectTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
-//                }
-//            } else {
-//                [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
-//            }
-//        }
     } else {
-        [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
+        BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:indexPath];
+        [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:indexPath];
     }
-}
-
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.insertIndexPath) {
-//        if ([self.insertIndexPath compare:indexPath] != NSOrderedSame) {
-//            NSIndexPath *toDeleteIndexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
-//            self.insertIndexPath = nil;
-//            [tableView deleteRowsAtIndexPaths:@[toDeleteIndexPath] withRowAnimation:UITableViewRowAnimationTop];
-//        }
-        
-//        NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
-//        if (comparisionResult != NSOrderedSame) {
-//            if (indexPath.section == self.insertIndexPath.section) {
-//                if (NSOrderedAscending) {
-//                    [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
-//                } else {
-//                    [self selectOrDeselectTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
-//                }
-//            } else {
-//                [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
-//            }
-//        }
-    } else {
-        [self selectOrDeselectTableView:tableView atIndexPath:indexPath];;
-    }
-}
-
-#pragma mark - Extension
-- (void)loadexfeePeople {
-    UILogPush(@"Start fetch exfe people");
     
+    [tableView deselectRowAtIndexPath:indexPathParam animated:NO];
+}
+
+#pragma mark - Category (Extension)
+- (void)loadexfeePeople {
     dispatch_queue_t fetch_queue = dispatch_queue_create("queue.fecth", NULL);
     dispatch_async(fetch_queue, ^{
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
@@ -475,8 +469,6 @@
         NSArray *recentexfeePeople = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
         [self.exfeePeople removeAllObjects];
         [self.exfeePeople addObjectsFromArray:recentexfeePeople];
-        
-        UILogPush(@"End fetch exfe people");
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
@@ -528,66 +520,90 @@
     }];
 }
 
-- (void)refreshSelectedDictWithObject:(id)obj selected:(BOOL *)selected {
+- (void)refreshSelectedDictWithObject:(id)obj selected:(BOOL)selected {
+    NSString *key = nil;
     if ([obj isKindOfClass:[Identity class]]) {
         Identity *identity = (Identity *)obj;
-        NSString *key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
-        if ([_selectedDict valueForKey:key]) {
-            [_selectedDict removeObjectForKey:key];
-            if (selected) {
-                *selected = NO;
-            }
-        } else {
-            [_selectedDict setValue:@"YES" forKey:key];
-            if (selected) {
-                *selected = YES;
-            }
-        }
+        key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
     } else if ([obj isKindOfClass:[LocalContact class]]) {
         LocalContact *contact = (LocalContact *)obj;
-        NSString *key = contact.indexfield;
-        if ([_selectedDict valueForKey:key]) {
-            [_selectedDict removeObjectForKey:key];
-            if (selected) {
-                *selected = NO;
-            }
-        } else {
-            [_selectedDict setValue:@"YES" forKey:key];
-            if (selected) {
-                *selected = YES;
-            }
-        }
+        key = contact.indexfield;
+    }
+    
+    if (selected) {
+        [_selectedDict setValue:@"YES" forKey:key];
+    } else {
+        [_selectedDict removeObjectForKey:key];
     }
 }
 
-- (void)selectOrDeselectTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
-    BOOL selected = NO;
+- (BOOL)isObjectSelectedInTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
+    NSString *key = nil;
+    id object = nil;
     if (tableView == self.tableView) {
         if(([self.exfeePeople count] && indexPath.section == 1) ||
            (![self.exfeePeople count] && indexPath.section == 0)) {
             LocalContact *person = self.contactPeople[indexPath.row];
-            [self refreshSelectedDictWithObject:person selected:&selected];
+            object = person;
         } else {
             Identity *identity = [self.exfeePeople objectAtIndex:indexPath.row];
-            [self refreshSelectedDictWithObject:identity selected:&selected];
+            object = identity;
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
         if(([self.searchResultExfeePeople count] && indexPath.section == 1) ||
            (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
             LocalContact *person = self.searchResultContactPeople[indexPath.row];
-            [self refreshSelectedDictWithObject:person selected:&selected];
+            object = person;
         } else {
             Identity *identity = [self.searchResultExfeePeople objectAtIndex:indexPath.row];
-            [self refreshSelectedDictWithObject:identity selected:&selected];
+            object = identity;
         }
     }
     
-    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone]; //selected ? UITableViewRowAnimationNone : UITableViewRowAnimationFade];
+    if ([object isKindOfClass:[Identity class]]) {
+        Identity *identity = (Identity *)object;
+        key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
+    } else if ([object isKindOfClass:[LocalContact class]]) {
+        LocalContact *contact = (LocalContact *)object;
+        key = contact.indexfield;
+    }
+    
+    return !![_selectedDict valueForKey:key];
 }
+
+- (void)selectOrDeselectTableView:(UITableView *)tableView selected:(BOOL)isSelected atIndexPath:(NSIndexPath *)indexPath {
+    id object = nil;
+    if (tableView == self.tableView) {
+        if(([self.exfeePeople count] && indexPath.section == 1) ||
+           (![self.exfeePeople count] && indexPath.section == 0)) {
+            LocalContact *person = self.contactPeople[indexPath.row];
+            object = person;
+        } else {
+            Identity *identity = [self.exfeePeople objectAtIndex:indexPath.row];
+            object = identity;
+        }
+    } else if (tableView == self.searchDisplayController.searchResultsTableView) {
+        if(([self.searchResultExfeePeople count] && indexPath.section == 1) ||
+           (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
+            LocalContact *person = self.searchResultContactPeople[indexPath.row];
+            object = person;
+        } else {
+            Identity *identity = [self.searchResultExfeePeople objectAtIndex:indexPath.row];
+            object = identity;
+        }
+    }
+    
+    [self refreshSelectedDictWithObject:object selected:isSelected];
+    
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark - Category (ChoosePeopleViewCellDisplay)
 
 - (EFChoosePeopleViewCell *)choosePeopleViewCellWithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath {
     EFChoosePeopleViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[EFChoosePeopleViewCell reuseIdentifier]];
     cell.delegate = self;
+    cell.dataSource = self;
     
     if (tableView == self.tableView) {
         if(([self.exfeePeople count] && indexPath.section == 1) ||
@@ -614,46 +630,35 @@
 
 - (void)choosePeopleTableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)aCell forRowAtIndexPath:(NSIndexPath *)indexPath {
     EFChoosePeopleViewCell *cell = (EFChoosePeopleViewCell *)aCell;
+    NSString *key = nil;
     if (tableView == self.tableView) {
         if (([self.exfeePeople count] && indexPath.section == 1) ||
             (![self.exfeePeople count] && indexPath.section == 0)) {
             LocalContact *person = self.contactPeople[indexPath.row];
-            NSString *key = person.indexfield;
-            if ([_selectedDict valueForKey:key]) {
-                [cell setSelected:YES animated:NO];
-            } else {
-                [cell setSelected:NO animated:NO];
-            }
+            key = person.indexfield;
         } else {
             Identity *identity = [self.exfeePeople objectAtIndex:indexPath.row];
-            NSString *key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
-            if ([_selectedDict valueForKey:key]) {
-                [cell setSelected:YES animated:NO];
-            } else {
-                [cell setSelected:NO animated:NO];
-            }
+            key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
         if(([self.searchResultExfeePeople count] && indexPath.section == 1) ||
            (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
             LocalContact *person = self.searchResultContactPeople[indexPath.row];
-            NSString *key = person.indexfield;
-            if ([_selectedDict valueForKey:key]) {
-                [cell setSelected:YES animated:NO];
-            } else {
-                [cell setSelected:NO animated:NO];
-            }
+            key = person.indexfield;
         } else {
             Identity *identity = [self.searchResultExfeePeople objectAtIndex:indexPath.row];
-            NSString *key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
-            if ([_selectedDict valueForKey:key]) {
-                [cell setSelected:YES animated:NO];
-            } else {
-                [cell setSelected:NO animated:NO];
-            }
+            key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
         }
     }
+    
+    if ([_selectedDict valueForKey:key]) {
+        [cell setSelected:YES animated:NO];
+    } else {
+        [cell setSelected:NO animated:NO];
+    }
 }
+
+#pragma mark - Category (PersonIdentityCellDisplay)
 
 - (NSArray *)roughIdentitiesForTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath {
     NSArray *roughIndentities = nil;
@@ -678,6 +683,18 @@
     }
     
     return roughIndentities;
+}
+
+- (void)selectRoughIdentity:(RoughIdentity *)identity {
+    [_selectedRoughIdentityDict setValue:@"YES" forKey:identity.key];
+}
+
+- (void)deselectRoughIdentity:(RoughIdentity *)identity {
+    [_selectedRoughIdentityDict removeObjectForKey:identity.key];
+}
+
+- (BOOL)isRoughtIdentitySelected:(RoughIdentity *)identity {
+    return !![_selectedRoughIdentityDict valueForKey:identity.key];
 }
 
 @end

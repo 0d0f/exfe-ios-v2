@@ -213,8 +213,12 @@
         [button addTarget:self
                    action:@selector(buttonPressed:)
          forControlEvents:UIControlEventTouchUpInside];
+        
         RoughIdentity *roughIdentity = _roughIdentities[i];
+        BOOL shouldSelected = [self.dataSource shouldPersonIdentityCell:self
+                                                    selectRoughIdentity:roughIdentity];
         button.roughIdentity = roughIdentity;
+        button.isSelected = shouldSelected;
         
         [_buttons addObject:button];
         [_baseView addSubview:button];

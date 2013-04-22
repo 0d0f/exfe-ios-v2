@@ -19,7 +19,9 @@ UITableViewDelegate,
 UISearchBarDelegate,
 UISearchDisplayDelegate,
 EFChoosePeopleViewCellDelegate,
+EFChoosePeopleViewCellDataSource,
 EFPersonIdentityCellDelegate,
+EFPersonIdentityCellDataSource,
 UITextFieldDelegate
 >
 

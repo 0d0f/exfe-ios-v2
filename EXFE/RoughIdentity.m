@@ -9,12 +9,14 @@
 #import "RoughIdentity.h"
 
 @implementation RoughIdentity
+@synthesize key = _key;
 
 + (RoughIdentity *)identity {
     return [[[self alloc] init] autorelease];
 }
 
 - (void)dealloc {
+    [_key release];
     [_provider release];
     [_externalUsername release];
     [_externalID release];
@@ -30,9 +32,26 @@
     return copy;
 }
 
+- (NSString *)key {
+    if (_key && _key.length)
+        return [[_key copy] autorelease];
+    
+    NSString *key = nil;
+    if (_externalUsername && _externalUsername.length) {
+        key = [NSString stringWithFormat:@"%@%@", self.externalUsername, self.provider];
+    } else if (_externalID && _externalID.length) {
+        key = [NSString stringWithFormat:@"%@%@", self.externalID, self.provider];
+    }
+    
+    NSAssert(key != nil, @"key 为 nil");
+    
+    _key = [key retain];
+    
+    return [[key copy] autorelease];
+}
+
 - (BOOL)isEqualToRoughIdentity:(RoughIdentity *)anIdentity {
-    if (([anIdentity.provider isEqualToString:self.provider] && [anIdentity.externalUsername isEqualToString:self.externalUsername]) ||
-        ([anIdentity.provider isEqualToString:self.provider] && [anIdentity.externalID isEqualToString:self.externalID])) {
+    if ([self.key isEqualToString:anIdentity.key]) {
         return YES;
     } else {
         return NO;
