@@ -273,4 +273,46 @@
     NSString *endpoint = [NSString stringWithFormat:@"users/%u",user_id];
     [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:param success:success failure:failure];
 }
+
+#pragma mark - Identity API
+
+- (void)getIdentitiesWithParams:(NSArray *)params success:(void (^)(NSArray *))success failure:(void (^)(NSError *))failure {
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
+    manager.requestSerializationMIMEType = RKMIMETypeJSON;
+    
+    NSDictionary *param = @{@"identities": params};
+    NSString *path = [NSString stringWithFormat:@"%@identities/get", API_ROOT];
+    
+    [manager postObject:nil
+                   path:path
+             parameters:param
+                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
+                    if (operation.HTTPRequestOperation.response.statusCode == 200) {
+                        if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
+                            Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
+                            if ([meta.code intValue] == 200) {
+                                NSArray *identities = [[mappingResult dictionary] objectForKey:@"response.identities"];
+                                if (success) {
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        success(identities);
+                                    });
+                                }
+                            }
+                        }
+                    } else if (failure) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            failure(nil);
+                        });
+                    }
+                }
+                failure:^(RKObjectRequestOperation *operation, NSError *error){
+                    if (failure) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            failure(error);
+                        });
+                    }
+                }];
+}
+
 @end

@@ -15,6 +15,8 @@
 #import "EFTime+Helper.h"
 #import "NSString+EXFE.h"
 #import "EFChoosePeopleViewController.h"
+#import "MBProgressHUD.h"
+#import "EXSpinView.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -963,46 +965,37 @@
 
 #pragma mark EXImagesCollectionView delegate methods
 - (void)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
-    if(index == self.sortedInvitations.count)
-    {
+    if (index == self.sortedInvitations.count) {
         [self hideMenu];
+        
         EFChoosePeopleViewController *viewController = [[EFChoosePeopleViewController alloc] initWithNibName:@"EFChoosePeopleViewController"
                                                                                                       bundle:nil];
+        viewController.exfee = self.cross.exfee;
+        viewController.needSubmit = NO;
+        viewController.completionHandler = ^{
+            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+            [self reFormatTitle];
+            [exfeeShowview reloadData];
+            if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alert show];
+                [alert release];
+            }
+        };
         [self presentViewController:viewController
                            animated:YES
                          completion:nil];
         [viewController release];
-//        
-//        ExfeeInputViewController *viewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
-//        viewController.lastViewController = self;
-//        viewController.exfee = self.cross.exfee;
-//        viewController.needSubmit = NO;
-//        viewController.onExitBlock = ^{
-//            
-//            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-//            [self reFormatTitle];
-//            [exfeeShowview reloadData];
-//            if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
-//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//                [alert show];
-//                [alert release];
-//            }
-//        };
-//        [self presentModalViewController:viewController animated:YES];
-//        [viewController release];
-
-    } else if(index < self.sortedInvitations.count){
+    } else if (index < self.sortedInvitations.count) {
         Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
       
-        if([[User getDefaultUser] isMe:invitation.identity]){
+        if ([[User getDefaultUser] isMe:invitation.identity]) {
             [identitypicker setHidden:NO];
             [pickertoolbar setHidden:NO];
-        }else{
+        } else {
             [self showMenu:invitation items:[NSArray arrayWithObjects:@"Delete", nil]];
-            
         }
     }
-
 }
 
 #pragma mark MKMapViewDelegate

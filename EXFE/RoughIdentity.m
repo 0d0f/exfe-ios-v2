@@ -58,4 +58,20 @@
     }
 }
 
+- (NSDictionary *)dictionaryValue {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:3];
+    [dict setValue:self.provider forKey:@"provider"];
+    if (_externalUsername && _externalUsername.length) {
+        [dict setValue:self.externalUsername forKey:@"external_username"];
+    }
+    if (_externalID && _externalID.length) {
+        [dict setValue:self.externalID forKey:@"external_id"];
+    }
+    
+    NSDictionary *result = [[dict copy] autorelease];
+    [dict release];
+    
+    return result;
+}
+
 @end
