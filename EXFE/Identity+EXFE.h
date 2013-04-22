@@ -8,7 +8,6 @@
 
 #import "Identity.h"
 
-
 typedef NS_ENUM(NSUInteger, Provider){
     kProviderUnknown,
     kProviderEmail,
@@ -20,6 +19,7 @@ typedef NS_ENUM(NSUInteger, Provider){
     kProviderDropbox
 } ;
 
+@class RoughIdentity;
 @interface Identity (EXFE)
 
 - (NSString*)getDisplayName;
@@ -27,5 +27,9 @@ typedef NS_ENUM(NSUInteger, Provider){
 
 + (Provider)getProviderCode:(NSString*)str;
 + (NSString*)getProviderString:(Provider)code;
+
+// if there's no such identity, return nil.
++ (Identity *)identityFromLocalRoughIdentity:(RoughIdentity *)roughIdentity;
+- (RoughIdentity *)roughIdentityValue;
 
 @end

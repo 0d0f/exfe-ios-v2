@@ -184,7 +184,6 @@
 
 #pragma mark - EFChoosePeopleViewCell
 @interface EFChoosePeopleViewCell ()
-@property (nonatomic, assign) BOOL hasSelected;
 @end
 
 @implementation EFChoosePeopleViewCell
@@ -196,14 +195,13 @@
 - (void)awakeFromNib {
     self.avatarImageView.layer.cornerRadius = 3.0f;
     self.avatarImageView.layer.masksToBounds = YES;
-    self.hasSelected = NO;
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.backgroundColor = [UIColor clearColor];
     [button addTarget:self
                action:@selector(buttonPressed:)
      forControlEvents:UIControlEventTouchUpInside];
-    button.frame = (CGRect){{270, 0}, {50, 50}};
+    button.frame = (CGRect){{160, 0}, {160, 50}}; // (CGRect){{270, 0}, {50, 50}};
     [self.contentView addSubview:button];
 }
 
@@ -217,30 +215,33 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     if (selected) {
-        self.hasSelected = YES;
         EFChoosePeopleSelectedBackgroundView *backgroundView = [[EFChoosePeopleSelectedBackgroundView alloc] initWithFrame:self.bounds];
         self.backgroundView = backgroundView;
+        [backgroundView release];
         self.userNameLabel.textColor = [UIColor whiteColor];
     } else {
-        self.hasSelected = NO;
         EFChoosePeopleBackgroundView *backgroundView = [[EFChoosePeopleBackgroundView alloc] initWithFrame:self.bounds];
         backgroundView.cell = self;
         self.backgroundView = backgroundView;
+        [backgroundView release];
         self.userNameLabel.textColor = [UIColor blackColor];
     }
 }
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
-    if (!self.hasSelected) {
+    BOOL shouldSelect = [self.dataSource shouldChoosePeopleViewCellSelected:self];
+    if (!shouldSelect) {
         if (highlighted) {
             EFChoosePeopleHightedBackgroundView *backgroundView = [[EFChoosePeopleHightedBackgroundView alloc] initWithFrame:self.bounds];
             backgroundView.cell = self;
             self.backgroundView = backgroundView;
+            [backgroundView release];
             self.userNameLabel.textColor = [UIColor blackColor];
         } else {
             EFChoosePeopleBackgroundView *backgroundView = [[EFChoosePeopleBackgroundView alloc] initWithFrame:self.bounds];
             backgroundView.cell = self;
             self.backgroundView = backgroundView;
+            [backgroundView release];
             self.userNameLabel.textColor = [UIColor blackColor];
         }
     }

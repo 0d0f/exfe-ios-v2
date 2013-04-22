@@ -14,6 +14,11 @@
 - (void)choosePeopleViewCellButtonPressed:(EFChoosePeopleViewCell *)cell;
 @end
 
+@protocol EFChoosePeopleViewCellDataSource <NSObject>
+@required
+- (BOOL)shouldChoosePeopleViewCellSelected:(EFChoosePeopleViewCell *)cell;
+@end
+
 @class LocalContact, Identity;
 @interface EFChoosePeopleViewCell : UITableViewCell
 
@@ -22,6 +27,7 @@
 @property (nonatomic, retain) UIImage *providerIcon;
 @property (nonatomic, retain) NSArray *providerIconSet;
 @property (nonatomic, assign) id<EFChoosePeopleViewCellDelegate> delegate;
+@property (nonatomic, assign) id<EFChoosePeopleViewCellDataSource> dataSource;
 
 + (NSString *)reuseIdentifier;
 
