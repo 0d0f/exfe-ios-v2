@@ -176,14 +176,32 @@
 
 - (void )personIdentityCell:(EFPersonIdentityCell *)cell didSelectRoughIdentity:(RoughIdentity *)roughIdentity {
     [self selectRoughIdentity:roughIdentity];
+    
     UITableView *tableView = self.tableView;
-    if (self.searchDisplayController.isActive) {
+    NSIndexPath *indexPath = [tableView indexPathForCell:cell];
+    if (!indexPath) {
         tableView = self.searchDisplayController.searchResultsTableView;
+        indexPath = [tableView indexPathForCell:cell];
     }
+    
+    [self selectOrDeselectTableView:tableView
+                           selected:YES
+                        atIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
 }
 
 - (void )personIdentityCell:(EFPersonIdentityCell *)cell didDeselectRoughIdentity:(RoughIdentity *)roughIdentity {
     [self deselectRoughIdentity:roughIdentity];
+    
+    UITableView *tableView = self.tableView;
+    NSIndexPath *indexPath = [tableView indexPathForCell:cell];
+    if (!indexPath) {
+        tableView = self.searchDisplayController.searchResultsTableView;
+        indexPath = [tableView indexPathForCell:cell];
+    }
+    
+    [self selectOrDeselectTableView:tableView
+                           selected:NO
+                        atIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
 }
 
 #pragma mark - EFPersonIdentityCellDataSource
@@ -543,17 +561,31 @@
 
 - (void)refreshSelectedDictWithObject:(id)obj selected:(BOOL)selected {
     NSString *key = nil;
+    NSArray *roughtIdentities = nil;
     if ([obj isKindOfClass:[Identity class]]) {
         Identity *identity = (Identity *)obj;
+        roughtIdentities = @[[identity roughIdentityValue]];
         key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
     } else if ([obj isKindOfClass:[LocalContact class]]) {
         LocalContact *contact = (LocalContact *)obj;
+        roughtIdentities = [contact roughIdentities];
         key = contact.indexfield;
     }
     
     if (selected) {
+        if (![_selectedDict valueForKey:key]) {
+            // invoked by selecting cell
+            for (RoughIdentity *roughIndentity in roughtIdentities) {
+                [self selectRoughIdentity:roughIndentity];
+            }
+        }
+        
         [_selectedDict setValue:@"YES" forKey:key];
     } else {
+        for (RoughIdentity *roughIndentity in roughtIdentities) {
+            [self deselectRoughIdentity:roughIndentity];
+        }
+        
         [_selectedDict removeObjectForKey:key];
     }
 }
