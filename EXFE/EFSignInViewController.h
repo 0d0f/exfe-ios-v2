@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CSLinearLayoutView.h"
+#import "EFPasswordField.h"
 
 @interface EFSignInViewController : UIViewController
 
@@ -15,7 +16,7 @@
 @property (nonatomic, retain) UITextField *inputIdentity;
 @property (nonatomic, retain) UIImageView *imageIdentity;
 @property (nonatomic, retain) UIButton *extIdentity;
-@property (nonatomic, retain) UITextField *inputPassword;
+@property (nonatomic, retain) EFPasswordField *inputPassword;
 @property (nonatomic, retain) UITextField *inputUsername;
 @property (nonatomic, retain) UIButton *btnStart;
 @property (nonatomic, retain) UIButton *btnStartNewUser;

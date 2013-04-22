@@ -9,7 +9,6 @@
 #import "EFSignInViewController.h"
 #import <BlocksKit/BlocksKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import "EFPasswordField.h"
 #import "EFAPIServer.h"
 #import "Util.h"
 #import "Identity+EXFE.h"
@@ -104,8 +103,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         self.inputIdentity.leftViewMode = UITextFieldViewModeAlways;
         
         UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-        button.backgroundColor = [UIColor blueColor];
+        button.backgroundColor = [UIColor clearColor];
         [button addTarget:self action:@selector(expandIdentity:) forControlEvents:UIControlEventTouchUpInside];
+        [button setImage:[UIImage imageNamed:@"start_tri.png"] forState:UIControlStateNormal];
+        button.contentMode = UIViewContentModeCenter;
         self.extIdentity = button;
         self.inputIdentity.rightView = self.extIdentity;
         self.inputIdentity.rightViewMode = UITextFieldViewModeAlways;
@@ -118,9 +119,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     {// Input Password Field
-        UITextField *txtfield = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        EFPasswordField *txtfield = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
         txtfield.borderStyle = UITextBorderStyleRoundedRect;
         txtfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        
+        [txtfield.btnForgot addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
+        
         self.inputPassword = txtfield;
         self.inputPassword.tag = kViewTagInputPassword;
     }
@@ -187,6 +191,17 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         label.lineBreakMode = UILineBreakModeWordWrap;
         self.labelVerifyDescription = label;
         self.labelVerifyDescription.tag = kViewTagVerificationDescription;
+    }
+    
+    {
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
+        label.textColor = [UIColor COLOR_RGB(229, 46, 83)];
+        label.font = [UIFont fontWithName:@"HelveticaNeue" size:18.0];
+        label.numberOfLines = 1;
+        label.backgroundColor = [UIColor whiteColor];
+        label.hidden = YES;
+        self.hintError = label;
+        [self.view addSubview:self.hintError];
     }
     
     CSLinearLayoutView *snsLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 0, 296, 106)] autorelease];
@@ -286,6 +301,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
             
+            self.inputIdentity.rightView = self.extIdentity;
             break;
         case kStageSignIn:{
             // show rest login form
@@ -365,9 +381,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputUserName]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStart]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonNewUser]];
-//            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStartOver]];
-//            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationTitle]];
-//            [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
             
             CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:self.inputIdentity.tag];
@@ -454,23 +467,102 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)swithStagebyFlag:(NSString*)flag
 {
+    self.inputIdentity.rightView = nil;
     if([flag isEqualToString:@"SIGN_UP"] ){
         [self setStage:kStageSignUp];
     } else if([flag isEqualToString:@"VERIFY"] ) {
         [self setStage:kStageVerificate];
     } else if([flag isEqualToString:@"AUTHENTICATE"]){
-        
-    } else { //(self.regFlag isEqualToString:@"SIGN_IN"])
+        [self setStage:kStageSignIn];
+    } else if([flag isEqualToString:@"SIGN_IN"]){
+        [self setStage:kStageSignIn];
+    }else {
         [self setStage:kStageSignIn];
     }
+}
+
+- (void)showErrorInfo:(NSString*)error dockOn:(UIView*)view
+{
+    _hintError.text = error;
+    CGSize size = [_hintError.text sizeWithFont:_hintError.font];
+    if (size.width > 200){
+        size.width = 200;
+    }
+    CGRect frame = _hintError.bounds;
+    frame.size = size;
+    frame.origin.x = CGRectGetMaxX(view.frame) - 48 - CGRectGetWidth(frame);
+    frame.origin.y = CGRectGetMidY(view.frame) - CGRectGetMidY(frame);
+    _hintError.frame = frame;
+    _hintError.alpha = 1.0;
+    _hintError.hidden = NO;
+    [UIView animateWithDuration:0.5 delay:3 options:UIViewAnimationOptionTransitionNone animations:^{
+        _hintError.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        _hintError.hidden = YES;
+    }];
 }
 
 #pragma mark Click handler
 - (void)expandIdentity:(id)sender
 {
     NSString* identity = _inputIdentity.text;
+    Provider provider = [Util matchedProvider:identity];
+    if (provider == kProviderUnknown) {
+        [self showErrorInfo:@"Invalid identity." dockOn:_inputIdentity];
+        return;
+    }
+    
     NSDictionary *resp = [self.identityCache objectForKey:identity];
     [self swithStagebyFlag:[resp valueForKey:@"registration_flag"]];
+    
+    switch (_stage) {
+        case kStageVerificate:{
+            
+            NSDictionary *dict = [Util parseIdentityString:identity byProvider:provider];
+            NSString *external_username = [dict valueForKeyPath:@"external_username"];
+            [[EFAPIServer sharedInstance] verifyIdentity:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                    NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                    if (code) {
+                        NSInteger c = [code integerValue];
+                        switch (c) {
+                            case 200:{
+                                NSString *action = [responseObject valueForKeyPath:@"response.action"];
+                                if ([@"VERIFYING" isEqualToString:action]) {
+                                    // contiue wait;
+                                } else if ([@"REDIRECT" isEqualToString:action]){
+                                    NSString *url = [responseObject valueForKeyPath:@"response.url"];
+                                    if (url) {
+                                        // start oAuth by provider
+                                    }
+                                }
+                            }    break;
+                            case 400:{
+                                NSString *errorType = [responseObject valueForKeyPath:@"meta.code"];
+                                
+                                if ([@"identity_does_not_exist" isEqualToString:errorType]) {
+                                    // "meta.errorType": "identity_does_not_exist"
+                                    // _stage -> kStageSignUp
+                                    [self setStage:kStageSignUp];
+                                } else if ([@"no_need_to_verify" isEqualToString:errorType]) {
+                                    // "meta.errorType": "no_need_to_verify"
+                                    // _stage -> kStageSignIn
+                                    [self setStage:kStageSignIn];
+                                }
+                                
+                                
+                            }  break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            } failure:nil];
+        } break;
+            
+        default:
+            break;
+    }
 }
 
 - (void)signIn:(id)sender
@@ -480,8 +572,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         return;
     }
     NSLog(@"%@ %@", _inputIdentity.text, _inputPassword.text);
+    
     Provider provider = [Util matchedProvider:_inputIdentity.text];
-    [[EFAPIServer sharedInstance] signIn:_inputIdentity.text with:provider password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
+    NSString *external_username = [dict valueForKeyPath:@"external_username"];
+    [[EFAPIServer sharedInstance] signIn:external_username with:provider password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
             NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
@@ -489,7 +584,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 NSInteger c = [code integerValue];
                 switch (c) {
                     case 200:
-                        NSLog(@"Signed In");
+                        NSLog(@"Signed Up");
 //                        UIViewController *parent = self.parentViewController;
 //                        [parent dismissModalViewControllerAnimated:YES];
 //
@@ -508,6 +603,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         break;
                     case 403:
                         // login fail
+                        //response.body={"meta":{"code":403,"errorType":"failed","errorDetail":{"registration_flag":"SIGN_IN"}},"response":{}}
+                        [self showErrorInfo:@"Password incorrect.." dockOn:_inputPassword];
                         break;
                     default:
                         break;
@@ -520,6 +617,59 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 - (void)signUp:(id)sender
 {
     NSLog(@"Start with new user");
+    if (_inputIdentity.text.length == 0) {
+        // show "Invalid identity."
+        return;
+    }
+    if (_inputPassword.text.length == 0) {
+        // show "Invalid password."
+        return;
+    }
+    
+    if (_inputUsername.text.length == 0) {
+        // show "Invalid name."
+        return;
+    }
+    NSLog(@"%@ %@", _inputIdentity.text, _inputPassword.text);
+    
+    Provider provider = [Util matchedProvider:_inputIdentity.text];
+    NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
+    NSString *external_username = [dict valueForKeyPath:@"external_username"];
+    
+    [[EFAPIServer sharedInstance] signUp:external_username with:provider name:_inputUsername.text password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+            NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+            if (code) {
+                NSInteger c = [code integerValue];
+                switch (c) {
+                    case 200:
+                        NSLog(@"Signed In");
+                        //                        UIViewController *parent = self.parentViewController;
+                        //                        [parent dismissModalViewControllerAnimated:YES];
+                        //
+                        [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                            AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                            [app SigninDidFinish];
+                        }
+                                                            failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                                ;
+                                                            }];
+                        
+                        
+                        
+                        
+                        
+                        break;
+                    case 403:
+                        // login fail
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    } failure:nil];
 }
 
 - (void)startOver:(id)sender
@@ -544,6 +694,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     oauth.provider = @"twitter";
     oauth.delegate = _signindelegate;
     [self presentModalViewController:oauth animated:YES];
+}
+
+- (void)forgetPwd:(id)sender
+{
+    NSLog(@"Forget Password");
 }
 
 #pragma mark Textfiled Change
@@ -599,9 +754,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     if (identity.length > 0) {
         // start query
         Provider provider = [Util matchedProvider:identity];
+        NSDictionary *dict = [Util parseIdentityString:identity byProvider:provider];
+        NSString *external_username = [dict valueForKeyPath:@"external_username"];
         if (provider != kProviderUnknown) {
             EFAPIServer *server = [EFAPIServer sharedInstance];
-            [server getRegFlagBy:identity with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [server getRegFlagBy:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                     id code = [responseObject valueForKeyPath:@"meta.code"];
                     if (code) {

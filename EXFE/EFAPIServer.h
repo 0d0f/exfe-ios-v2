@@ -32,7 +32,22 @@
 - (void)checkAppVersionSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-#pragma mark Sign In, Sign Out, Sign Up, Pre Check
+#pragma mark Identity, password and token APIs
+// endpoint: VerifyIdentity
+- (void)verifyIdentity:(NSString*)identity
+                  with:(Provider)provider
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+// endpoint: VerifyUserIdentity
+
+// endpoint: ForgotPassword
+
+// endpoint: ResolveToken
+
+// endpoint: ResetPassword
+
+#pragma mark Sign In, Sign Out, Sign Up and Pre Check APIs
 - (void)getRegFlagBy:(NSString*)identity
                 with:(Provider)provider
              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
@@ -54,6 +69,8 @@
       password:(NSString*)password
        success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+// endpoint regdevice
 
 #pragma mark Cross API
 - (void)loadCrossesAfter:(NSString*)updatedtime

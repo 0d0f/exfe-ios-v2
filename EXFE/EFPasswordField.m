@@ -19,29 +19,36 @@
         
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
         imageView.frame = CGRectMake(0, 0, 40, 40);
-        imageView.backgroundColor = [UIColor greenColor];
+        imageView.image = [UIImage imageNamed:@"lock_18.png"];
+        imageView.contentMode = UIViewContentModeCenter;
+        imageView.backgroundColor = [UIColor clearColor];
         self.icon = imageView;
         self.leftView = self.icon;
         [imageView release];
         
         UIButton *btnS = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-        btnS.backgroundColor = [UIColor blueColor];
+        btnS.backgroundColor = [UIColor clearColor];
         [btnS addTarget:self action:@selector(touchdown:) forControlEvents:UIControlEventTouchDown];
         [btnS addTarget:self action:@selector(touchup:) forControlEvents:UIControlEventTouchUpInside];
         [btnS addTarget:self action:@selector(touchup:) forControlEvents:UIControlEventTouchUpOutside];
+        [btnS setImage:[UIImage imageNamed:@"pass_show.png"] forState:UIControlStateNormal];
+        btnS.imageView.contentMode = UIViewContentModeCenter;
         self.eye = btnS;
         [btnS release];
         
         UIButton *btnf = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-        btnf.backgroundColor = [UIColor redColor];
+        btnf.backgroundColor = [UIColor clearColor];
+        [btnf setImage:[UIImage imageNamed:@"pass_question.png"] forState:UIControlStateNormal];
+        btnf.imageView.contentMode = UIViewContentModeCenter;
         self.btnForgot = btnf;
         [btnf release];
+        
         
         self.leftViewMode = UITextFieldViewModeAlways;
         self.rightView = self.btnForgot;
         self.rightViewMode = UITextFieldViewModeAlways;
         
-        self.delegate = self;
+        [self addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     }
     return self;
 }
@@ -62,17 +69,15 @@
     self.secureTextEntry = NO;
 }
 
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+- (void)textFieldDidChange:(id)sender
 {
-    if (textField.text.length == 0) {
+    if (self.text.length == 0) {
         self.rightView = self.btnForgot;
     } else {
         if (self.rightView != self.eye) {
             self.rightView = self.eye;
         }
     }
-    return YES;
 }
 
 /*

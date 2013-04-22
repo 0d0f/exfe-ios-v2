@@ -87,6 +87,7 @@ extern NSString *const EXCrossListDidChangeNotification;
 + (Provider)candidateProvider:(NSString*)raw;
 + (Provider)matchedProvider:(NSString*)raw;
 + (NSDictionary*)parseIdentityString:(NSString*)raw;
++ (NSDictionary*)parseIdentityString:(NSString*)raw byProvider:(Provider)p;
 + (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber;
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber;
 + (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime;

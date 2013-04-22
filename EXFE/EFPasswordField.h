@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EFPasswordField : UITextField<UITextFieldDelegate>
+@interface EFPasswordField : UITextField
 
 @property (nonatomic, assign) UIImageView *icon;
 @property (nonatomic, retain) UIButton *eye;

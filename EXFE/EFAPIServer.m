@@ -11,6 +11,7 @@
 
 @implementation EFAPIServer
 
+#pragma mark Initializtion
 - (id)init
 {
     self = [super init];
@@ -34,6 +35,7 @@
     return sharedInstance;
 }
 
+#pragma mark Token and User ID manager
 - (void)saveUserData
 {
     NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
@@ -59,6 +61,7 @@
     [ud synchronize];
 }
 
+#pragma mark Public API (Token Free)
 - (void)getAvailableBackgroundsWithSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
@@ -82,6 +85,29 @@
     [manager.HTTPClient getPath:endpoint parameters:nil success:success failure:failure];
 }
 
+#pragma mark Identity, password and token APIs
+- (void)verifyIdentity:(NSString*)identity
+                  with:(Provider)provider
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSString *endpoint = [NSString stringWithFormat:@"users/verifyidentity"];
+    RKObjectManager *manager = [RKObjectManager sharedManager] ;
+    manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    
+    NSDictionary* params = @{@"external_username": identity, @"provider": [Identity getProviderString:provider]};
+    [manager.HTTPClient postPath:endpoint parameters:params success:success failure:failure];
+}
+
+// endpoint: VerifyUserIdentity
+
+// endpoint: ForgotPassword
+
+// endpoint: ResolveToken
+
+// endpoint: ResetPassword
+
+#pragma mark Sign In, Sign Out, Sign Up and Pre Check APIs
 - (void)getRegFlagBy:(NSString*)identity
                 with:(Provider)provider
              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
@@ -228,6 +254,7 @@
     } failure:failure];
 }
 
+#pragma mark Cross API
 - (void)loadCrossesAfter:(NSString*)updatedtime
                  success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                  failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
@@ -255,6 +282,7 @@
     
 }
 
+#pragma mark User API
 - (void)loadMeSuccess:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
            failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
 {
