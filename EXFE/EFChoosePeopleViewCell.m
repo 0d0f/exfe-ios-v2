@@ -24,17 +24,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.userInteractionEnabled = YES;
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer  alloc] initWithTarget:self
-                                                                               action:@selector(a)];
-        [self addGestureRecognizer:tap];
-        [tap release];
     }
     
     return self;
-}
-
-- (void)a {
-    NSLog(@"!!!");
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -71,13 +63,13 @@
         [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
         int i = 1;
         for (UIImage *icon in self.cell.providerIconSet) {
-            [icon drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
+            [icon drawInRect:CGRectMake(self.frame.size.width - (18 + 2) * i - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
             [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
             i++;
         }
     } else if(self.cell.providerIcon != nil) {
         [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
-        [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * 3, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18 * 3, 18)];
+        [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 2) * 3 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18 * 3, 18)];
     }
 }
 @end
@@ -131,13 +123,13 @@
         [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
         int i = 1;
         for (UIImage *icon in self.cell.providerIconSet) {
-            [icon drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
+            [icon drawInRect:CGRectMake(self.frame.size.width - (18 + 2) * i - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
             [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
             i++;
         }
     } else if(self.cell.providerIcon != nil) {
         [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
-        [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * 3, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18 * 3, 18)];
+        [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 2) * 3 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18 * 3, 18)];
     }
 }
 @end
