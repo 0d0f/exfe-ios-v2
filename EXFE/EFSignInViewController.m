@@ -77,6 +77,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     // create the linear layout view
     CSLinearLayoutView *linearLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:self.view.bounds] autorelease];
     linearLayoutView.orientation = CSLinearLayoutViewOrientationVertical;
+    linearLayoutView.alwaysBounceVertical = YES;
     self.rootView = linearLayoutView;
     [self.view addSubview:linearLayoutView];
     
@@ -584,6 +585,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     NSLog(@"%@ %@", _inputIdentity.text, _inputPassword.text);
     
+    // TODO:show pending on sender;
     Provider provider = [Util matchedProvider:_inputIdentity.text];
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
@@ -645,6 +647,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     
+    // TODO:show pending on sender;
     [[EFAPIServer sharedInstance] signUp:external_username with:provider name:_inputUsername.text password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
@@ -720,11 +723,40 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     
+    // TODO:show pending on sender;
     [[EFAPIServer sharedInstance] forgetPassword:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        ;
+        
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+            NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+            if (code) {
+                NSInteger c = [code integerValue];
+                switch (c) {
+                    case 200:
+                        NSLog(@"Forget Password sent");
+                        [UIAlertView showAlertViewWithTitle:@"Forget Password?" message:@"Password reset request sent, please check your email for instructions." cancelButtonTitle:@"OK" otherButtonTitles:nil handler:nil];
+                    case 400:{
+                        NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
+                        // 400 - no_external_username
+                        // 400 - no_provider
+                        // 400 - identity_does_not_exist
+                        //  Invalid account. Please check your input above.
+                        // 400 - identity_is_being_verified
+                        // 500 - failed
+//                        if ([@"weak_password" isEqualToString:errorType]) {
+//                            [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
+//                        } else if ([@"invalid_username" isEqualToString:errorType]) {
+//                            [self showErrorInfo:@"Invalid name." dockOn:_inputPassword];
+//                        }
+                    }  break;
+                    default:
+                        break;
+                }
+            }
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         ;
     }];
+    
     
 }
 

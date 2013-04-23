@@ -335,10 +335,9 @@ static char mergetoken;
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
     [Flurry logEvent:@"HANDLE_OPEN_URL"];
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-    NSArray *url_components=[url.absoluteString componentsSeparatedByString:@"?"];
-    if([url_components count] ==2){
-        
-        for (NSString *param in [[url_components objectAtIndex:1] componentsSeparatedByString:@"&"]) {
+    NSString *query = [url query];
+    if(query.length > 0){
+        for (NSString *param in [query componentsSeparatedByString:@"&"]) {
             NSArray *elts = [param componentsSeparatedByString:@"="];
             if([elts count] < 2) continue;
             [params setObject:[elts objectAtIndex:1] forKey:[elts objectAtIndex:0]];
@@ -349,16 +348,16 @@ static char mergetoken;
     NSString *identity_id=[params objectForKey:@"identity_id"];
     
     token_formerge=@"";
-    if([params objectForKey:@"token"] !=nil)
+    if ([params objectForKey:@"token"] !=nil ){
         token_formerge=[token_formerge stringByAppendingString:[params objectForKey:@"token"]];
-    
+    }
     [params release];
-    if(![token isEqualToString:@""]&& [user_id intValue]>0){
+    if (token.length > 0 && [user_id intValue]>0){
         EFAPIServer *server = [EFAPIServer sharedInstance];
         [server clearUserData];
         server.user_token = token;
         server.user_id = [user_id integerValue];
-        
+        [server saveUserData];
         [server loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
             if(operation.HTTPRequestOperation.response.statusCode==200){
                 NSDictionary *body=[mappingResult dictionary];
