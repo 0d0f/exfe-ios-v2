@@ -480,7 +480,7 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                     [social_array addObject:socialprofile];
                     
                     NSString *social_username = [socialprofile objectForKey:@"username"];
-                    if (social_username!=nil) {
+                    if (social_username != nil) {
                         if([[socialprofile objectForKey:@"service"] isEqualToString:@"twitter"])
                             social_username = [@"@" stringByAppendingString:social_username];
                         indexfield=[indexfield stringByAppendingFormat:@" %@",social_username];
@@ -512,7 +512,7 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                 
                 if ([im_array count] > 0) {
                     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:im_array];
-                    result.im=data;
+                    result.im = data;
                 }
             }
             result.indexfield = indexfield;

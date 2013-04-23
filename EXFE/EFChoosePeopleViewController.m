@@ -436,6 +436,12 @@
                             forCellReuseIdentifier:[EFChoosePeopleViewCell reuseIdentifier]];
     controller.searchResultsTableView.allowsMultipleSelection = YES;
     controller.searchResultsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    [self reloadSelectionCountLabelWithAnimated:YES];
+}
+
+- (void) searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
+    [self reloadSelectionCountLabelWithAnimated:YES];
 }
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller willHideSearchResultsTableView:(UITableView *)tableView {
@@ -897,7 +903,7 @@
             [animation setDuration:0.233f];
             [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
             [animation setType:@"cube"];
-            [animation setSubtype: kCATransitionFromBottom];
+            [animation setSubtype:((count > [self.selectionCountLabel.text integerValue]) || self.selectionCountLabel.text.length == 0) ? kCATransitionFromTop : kCATransitionFromBottom];
             [self.selectionCountLabel.layer addAnimation:animation forKey:@"cube"];
         }
         
