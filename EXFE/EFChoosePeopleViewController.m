@@ -222,7 +222,11 @@
             [[EFAPIServer sharedInstance] getIdentitiesWithParams:selectedRoughIndentityDicts
                                                           success:^(NSArray *identities){
                                                               BOOL hasAddedNoresponse = NO;
+                                                              RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                                              NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
+                                                              
                                                               for (Identity *identity in identities) {
+                                                                  NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
                                                                   Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
                                                                   
                                                                   if (!hasAddedNoresponse) {
@@ -257,8 +261,7 @@
                                  beforeDate:[NSDate distantFuture]];
     }
     
-    [self.exfee addInvitations:invitations];
-    NSLog(@"%@", invitations);
+    [self.exfee addInvitations:[[invitations copy] autorelease]];
     [invitations release];
     
     [MBProgressHUD hideHUDForView:self.view animated:YES];

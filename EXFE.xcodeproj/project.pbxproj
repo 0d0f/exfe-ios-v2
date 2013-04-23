@@ -1097,6 +1097,9 @@
 		4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
 		4FFB149C16C0BFFF00F76D32 /* edit_30_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */; };
 		4FFB149D16C0BFFF00F76D32 /* edit_30_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */; };
+		7601F5641725861000032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
+		7601F56C1725861100032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
+		7601F56D1725861200032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
@@ -4721,6 +4724,7 @@
 				4F25A1C2171FBA2A000513B5 /* CSLinearLayoutView.m in Sources */,
 				763A01C31721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
 				763A01D017212B080082CC9E /* RoughIdentity.m in Sources */,
+				7601F56C1725861100032044 /* ExfeeInputViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4872,6 +4876,7 @@
 				4F25A1C3171FBA2B000513B5 /* CSLinearLayoutView.m in Sources */,
 				763A01C41721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
 				763A01D117212B080082CC9E /* RoughIdentity.m in Sources */,
+				7601F56D1725861200032044 /* ExfeeInputViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5023,6 +5028,7 @@
 				4F25A1BA171FB9FF000513B5 /* CSLinearLayoutView.m in Sources */,
 				763A01C21721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
 				763A01CF17212B080082CC9E /* RoughIdentity.m in Sources */,
+				7601F5641725861000032044 /* ExfeeInputViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
