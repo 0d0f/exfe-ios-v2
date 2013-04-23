@@ -13,7 +13,7 @@
 @interface EFLandingViewController (){
 
     BOOL firstLoad;
-    
+    UIGestureRecognizer * tapBack;
 }
 @end
 
@@ -39,12 +39,21 @@
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     [self.view setFrame:appFrame];
     
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bg.png"]] ;
+    self.labelStart.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bar.png"]];
     
     UITapGestureRecognizer *tapStart = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-        NSLog(@"Click Start");
         [self swapChildViewController:1 param:nil];
     }];
     [_labelStart addGestureRecognizer:tapStart];
+    
+    tapBack = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+        if (self.currentViewController != nil) {
+            [self swapChildViewController:0 param:nil];
+        }
+    }];
+    tapBack.enabled = NO;
+    [self.view addGestureRecognizer:tapBack];
     
 }
 
@@ -67,10 +76,14 @@
         newF.origin.y = appFrame.size.height;
         self.labelStart.frame = newF;
         
+        CGRect logo_frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 150 : 110, 320, 300);
+        _imgEXFELogo.frame = CGRectMake(0, 10, 320, 300);
+        
         [UIView animateWithDuration:1 delay:0.1 options:UIViewAnimationOptionTransitionNone animations:^{
             _labelEXFE.alpha = 100;
             _labelDescription.alpha = 100;
             _labelStart.frame = frame;
+            _imgEXFELogo.frame = logo_frame;
         } completion:^(BOOL finished) {
             
         }];
@@ -110,6 +123,7 @@
     }
     
     CGRect newFrame = CGRectZero;
+    
     if (newVC) {
         [self addChildViewController:newVC];
         [self.view insertSubview:newVC.view aboveSubview:_labelStart];
@@ -120,20 +134,32 @@
     } else {
         
     }
+    
+    
+    
     __weak __block EFLandingViewController *weakSelf = self;
-    [UIView animateWithDuration:0.4 animations:^{
-        if (weakSelf.currentViewController) {
-            weakSelf.currentViewController.view.alpha = 0;
-        }
-        if (newVC) {
-            if (!CGRectIsEmpty(newFrame)) {
-                newVC.view.frame = newFrame;
-            }
-        }
-    }
+    [UIView animateWithDuration:0.4
+                     animations:^{
+                         
+                         if (weakSelf.currentViewController) {
+                             CGRect frame = weakSelf.currentViewController.view.bounds;
+                             weakSelf.currentViewController.view.frame = CGRectOffset(frame, CGRectGetMinX(_labelStart.frame), CGRectGetMinY(_labelStart.frame));
+                         }
+                         if (newVC) {
+                             if (!CGRectIsEmpty(newFrame)) {
+                                 newVC.view.frame = newFrame;
+                             }
+                             if (_imgEXFELogo) {
+                                 _imgEXFELogo.frame = CGRectMake(112, -25, 96, 90);
+                             }
+                         } else {
+                             if (_imgEXFELogo) {
+                                 _imgEXFELogo.frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 150 : 110, 320, 300);
+                             }
+                         }
+                     }
                      completion:^(BOOL finished){
                          if (weakSelf.currentViewController) {
-                             
                              [weakSelf.currentViewController.view removeFromSuperview];
                              [weakSelf.currentViewController willMoveToParentViewController:nil];
                              [weakSelf.currentViewController removeFromParentViewController];
@@ -143,6 +169,10 @@
                          if (newVC) {
                              [newVC didMoveToParentViewController:weakSelf];
                              weakSelf.currentViewController = [newVC autorelease];
+                             tapBack.enabled = YES;
+                         } else {
+                             tapBack.enabled = NO;
+                             
                          }
                          
                      }];

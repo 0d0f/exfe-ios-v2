@@ -72,7 +72,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     [self.view setFrame:CGRectMake(0, 36, appFrame.size.width, appFrame.size.height - 36)];
     
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor COLOR_SNOW];
     
     // create the linear layout view
     CSLinearLayoutView *linearLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:self.view.bounds] autorelease];
@@ -716,15 +716,16 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 - (void)forgetPwd:(id)sender
 {
     NSLog(@"Forget Password");
-//    Provider provider = [Util matchedProvider:_inputIdentity.text];
-//    NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
-//    NSString *external_username = [dict valueForKeyPath:@"external_username"];
-//    
-//    [[EFAPIServer sharedInstance] forgetPassword:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        ;
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        ;
-//    }];
+    Provider provider = [Util matchedProvider:_inputIdentity.text];
+    NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
+    NSString *external_username = [dict valueForKeyPath:@"external_username"];
+    
+    [[EFAPIServer sharedInstance] forgetPassword:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        ;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        ;
+    }];
+    
 }
 
 #pragma mark Textfiled Change
