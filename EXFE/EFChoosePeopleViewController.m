@@ -433,7 +433,7 @@
 #pragma mark - UITableViewDataSource
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     CGRect screanBounds = [UIScreen mainScreen].bounds;
-    UIView *titleView = [[[UIView alloc] initWithFrame:(CGRect){{0, 0}, {CGRectGetWidth(screanBounds), 20}}] autorelease];
+    UIView *titleView = [[[UIView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), 20}}] autorelease];
     titleView.backgroundColor = [UIColor clearColor];
     
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"list_title.png"]];
