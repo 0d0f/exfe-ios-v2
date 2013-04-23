@@ -101,4 +101,13 @@ NSString *kEFProviderNameTwitter = @"twitter";
     return result;
 }
 
+- (BOOL)hasAnyNotificationIdentity {
+    BOOL hasNotificationIdentity = NO;
+    if (self.phones || self.im || self.emails || self.social) {
+        hasNotificationIdentity = YES;
+    }
+    
+    return hasNotificationIdentity;
+}
+
 @end
