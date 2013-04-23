@@ -557,7 +557,18 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         }
                     }
                 }
-            } failure:nil];
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error){
+//                error.domain
+                switch (error.code) {
+                    case -1004:
+                        //
+                        
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }];
         } break;
             
         default:
@@ -602,9 +613,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         
                         break;
                     case 403:
-                        // login fail
-                        //response.body={"meta":{"code":403,"errorType":"failed","errorDetail":{"registration_flag":"SIGN_IN"}},"response":{}}
-                        [self showErrorInfo:@"Password incorrect.." dockOn:_inputPassword];
+                        [self showErrorInfo:@"Authentication failed." dockOn:_inputPassword];
                         break;
                     default:
                         break;
@@ -618,16 +627,16 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 {
     NSLog(@"Start with new user");
     if (_inputIdentity.text.length == 0) {
-        // show "Invalid identity."
         return;
     }
     if (_inputPassword.text.length == 0) {
-        // show "Invalid password."
+        [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
         return;
     }
     
     if (_inputUsername.text.length == 0) {
         // show "Invalid name."
+        [self showErrorInfo:@"Invalid name." dockOn:_inputPassword];
         return;
     }
     NSLog(@"%@ %@", _inputIdentity.text, _inputPassword.text);
@@ -661,6 +670,14 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         
                         
                         break;
+                    case 400:{
+                        NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
+                        if ([@"weak_password" isEqualToString:errorType]) {
+                            [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
+                        } else if ([@"invalid_username" isEqualToString:errorType]) {
+                            [self showErrorInfo:@"Invalid name." dockOn:_inputPassword];
+                        }
+                    }  break;
                     case 403:
                         // login fail
                         break;
