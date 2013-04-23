@@ -561,7 +561,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 //                error.domain
                 switch (error.code) {
                     case -1004:
-                        //
+                        // TODO: Failed to connect server.
                         
                         break;
                         
@@ -716,6 +716,15 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 - (void)forgetPwd:(id)sender
 {
     NSLog(@"Forget Password");
+//    Provider provider = [Util matchedProvider:_inputIdentity.text];
+//    NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
+//    NSString *external_username = [dict valueForKeyPath:@"external_username"];
+//    
+//    [[EFAPIServer sharedInstance] forgetPassword:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        ;
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        ;
+//    }];
 }
 
 #pragma mark Textfiled Change

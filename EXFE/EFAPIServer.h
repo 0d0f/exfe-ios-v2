@@ -42,6 +42,10 @@
 // endpoint: VerifyUserIdentity
 
 // endpoint: ForgotPassword
+- (void)forgetPassword:(NSString*)identity
+                  with:(Provider)provider
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 // endpoint: ResolveToken
 

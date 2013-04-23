@@ -101,7 +101,18 @@
 
 // endpoint: VerifyUserIdentity
 
-// endpoint: ForgotPassword
+- (void)forgetPassword:(NSString*)identity
+                  with:(Provider)provider
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSString *endpoint = [NSString stringWithFormat:@"users/forgotpassword"];
+    RKObjectManager *manager = [RKObjectManager sharedManager] ;
+    manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    
+    NSDictionary* params = @{@"external_username": identity, @"provider": [Identity getProviderString:provider]};
+    [manager.HTTPClient postPath:endpoint parameters:params success:success failure:failure];
+}
 
 // endpoint: ResolveToken
 
