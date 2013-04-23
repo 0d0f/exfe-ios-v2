@@ -312,4 +312,112 @@
     NSString *endpoint = [NSString stringWithFormat:@"users/%u",user_id];
     [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:param success:success failure:failure];
 }
+
+#pragma mark - Identity API
+
+- (void)getIdentitiesWithParams:(NSArray *)params success:(void (^)(NSArray *))success failure:(void (^)(NSError *))failure {
+    RKObjectManager* manager =[RKObjectManager sharedManager];
+    manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
+    manager.requestSerializationMIMEType = RKMIMETypeJSON;
+    
+    NSDictionary *param = @{@"identities": params};
+    NSString *path = [NSString stringWithFormat:@"%@identities/get", API_ROOT];
+    
+    [manager.HTTPClient postPath:path
+                      parameters:param
+                         success:^(AFHTTPRequestOperation *operation, id responseObject){
+                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+                                 NSDictionary *body = (NSDictionary*)responseObject;
+                                 id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
+                                 if (code) {
+                                     if ([code intValue] == 200) {
+                                         NSDictionary* response = [body objectForKey:@"response"];
+                                         NSArray *identities = [response objectForKey:@"identities"];
+                                         NSMutableArray *identityEntities = [[NSMutableArray alloc] initWithCapacity:[identities count]];
+                                         
+                                         for (NSDictionary *identitydict in identities) {
+                                             NSString *external_id = [identitydict objectForKey:@"external_id"];
+                                             NSString *provider = [identitydict objectForKey:@"provider"];
+                                             NSString *avatar_filename = [identitydict objectForKey:@"avatar_filename"];
+                                             NSString *identity_id = [identitydict objectForKey:@"id"];
+                                             NSString *name = [identitydict objectForKey:@"name"];
+                                             NSString *nickname = [identitydict objectForKey:@"nickname"];
+                                             NSString *external_username = [identitydict objectForKey:@"external_username"];
+                                             
+                                             NSEntityDescription *identityEntity = [NSEntityDescription entityForName:@"Identity" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
+                                             Identity *identity = [[[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+                                             identity.external_id = external_id;
+                                             identity.provider = provider;
+                                             identity.avatar_filename = avatar_filename;
+                                             identity.name = name;
+                                             identity.external_username = external_username;
+                                             identity.nickname = nickname;
+                                             identity.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
+                                             
+                                             [identityEntities addObject:identity];
+                                         }
+                                         
+                                         if (success) {
+                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                 success(identityEntities);
+                                             });
+                                         }
+                                         [identityEntities release];
+                                     } else {
+                                         if (failure) {
+                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                 failure(nil);
+                                             });
+                                         }
+                                     }
+                                 } else {
+                                     if (failure) {
+                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                             failure(nil);
+                                         });
+                                     }
+                                 }  // if (code) {} else {}
+                             }
+                         }
+                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             if (failure) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     failure(error);
+                                 });
+                             }
+                         }];
+    
+//    [manager postObject:nil
+//                   path:path
+//             parameters:param
+//                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
+//                    if (operation.HTTPRequestOperation.response.statusCode == 200) {
+//                        [[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext save:nil];
+//                        
+//                        if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
+//                            Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
+//                            if ([meta.code intValue] == 200) {
+//                                NSArray *identities = [[mappingResult dictionary] objectForKey:@"response.identities"];
+//                                if (success) {
+//                                    dispatch_async(dispatch_get_main_queue(), ^{
+//                                        success(identities);
+//                                    });
+//                                }
+//                            }
+//                        }
+//                    } else if (failure) {
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                            failure(nil);
+//                        });
+//                    }
+//                }
+//                failure:^(RKObjectRequestOperation *operation, NSError *error){
+//                    if (failure) {
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                            failure(error);
+//                        });
+//                    }
+//                }];
+}
+
 @end

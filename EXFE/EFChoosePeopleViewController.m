@@ -20,6 +20,9 @@
 #import "EFSearchBar.h"
 #import "LocalContact+EXFE.h"
 #import "RoughIdentity.h"
+#import "Exfee+EXFE.h"
+#import "User+EXFE.h"
+#import "EFAPIServer.h"
 
 #pragma mark - Category (Extension)
 @interface EFChoosePeopleViewController ()
@@ -74,6 +77,7 @@
         _contactPeople = [[NSMutableArray alloc] init];
         _selectedDict = [[NSMutableDictionary alloc] init];
         _selectedRoughIdentityDict = [[NSMutableDictionary alloc] init];
+        _needSubmit = NO;
     }
     return self;
 }
@@ -171,6 +175,102 @@
 }
 
 - (IBAction)addButtonPressed:(id)sender {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Adding...";
+    hud.mode = MBProgressHUDModeCustomView;
+    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+    [bigspin startAnimating];
+    hud.customView = bigspin;
+    [bigspin release];
+    
+    NSMutableSet *invitations = [[NSMutableSet alloc] init];
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
+    NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
+    
+    for (Identity *identity in self.exfeePeople) {
+        RoughIdentity *roughIdentity = [identity roughIdentityValue];
+        if ([self isRoughtIdentitySelected:roughIdentity]) {
+            Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
+            
+            invitation.rsvp_status = @"NORESPONSE";
+            invitation.identity = identity;
+            Invitation *myinvitation = [self.exfee getMyInvitation];
+            if (myinvitation != nil) {
+                invitation.updated_by = myinvitation.identity;
+            } else {
+                invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
+            }
+            
+            [invitations addObject:invitation];
+            [invitation release];
+        }
+    }
+    
+    __block NSUInteger count = 0;
+    for (LocalContact *contact in self.contactPeople) {
+        NSArray *roughIdentities = [contact roughIdentities];
+        NSMutableArray *selectedRoughIndentityDicts = [[NSMutableArray alloc] initWithCapacity:[roughIdentities count]];
+        for (RoughIdentity *roughIndentity in roughIdentities) {
+            if ([self isRoughtIdentitySelected:roughIndentity]) {
+                [selectedRoughIndentityDicts addObject:[roughIndentity dictionaryValue]];
+            }
+        }
+        
+        if ([selectedRoughIndentityDicts count]) {
+            ++count;
+            [[EFAPIServer sharedInstance] getIdentitiesWithParams:selectedRoughIndentityDicts
+                                                          success:^(NSArray *identities){
+                                                              BOOL hasAddedNoresponse = NO;
+                                                              RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                                              NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
+                                                              
+                                                              for (Identity *identity in identities) {
+                                                                  NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
+                                                                  Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
+                                                                  
+                                                                  if (!hasAddedNoresponse) {
+                                                                      invitation.rsvp_status = @"NORESPONSE";
+                                                                  } else {
+                                                                      hasAddedNoresponse = YES;
+                                                                      invitation.rsvp_status = @"NOTIFICATION";
+                                                                  }
+                                                                  
+                                                                  invitation.identity = identity;
+                                                                  Invitation *myinvitation = [self.exfee getMyInvitation];
+                                                                  if (myinvitation != nil) {
+                                                                      invitation.updated_by = myinvitation.identity;
+                                                                  } else {
+                                                                      invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
+                                                                  }
+                                                                  
+                                                                  [invitations addObject:invitation];
+                                                                  [invitation release];
+                                                              }
+                                                              --count;
+                                                          }
+                                                          failure:^(NSError *error){
+                                                              --count;
+                                                              NSLog(@"Oh! Shit! %@", error);
+                                                          }];
+        }
+    }
+    
+    while (count) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate distantFuture]];
+    }
+    
+    [self.exfee addInvitations:[[invitations copy] autorelease]];
+    [invitations release];
+    
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
+    
+    [self.presentingViewController dismissViewControllerAnimated:YES
+                                                      completion:^{
+                                                          if (_completionHandler)
+                                                              _completionHandler();
+                                                      }];
 }
 
 #pragma mark - EFPersonIdentityCellDelegate
@@ -740,7 +840,7 @@
 }
 
 - (void)selectRoughIdentity:(RoughIdentity *)identity {
-    [_selectedRoughIdentityDict setValue:@"YES" forKey:identity.key];
+    [_selectedRoughIdentityDict setValue:identity forKey:identity.key];
 }
 
 - (void)deselectRoughIdentity:(RoughIdentity *)identity {

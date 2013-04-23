@@ -16,7 +16,6 @@
 #import "Invitation+EXFE.h"
 #import "User+EXFE.h"
 #import "WidgetExfeeViewController.h"
-#import "ExfeeInputViewController.h"
 #import "CrossGroupViewController.h"
 #import "ExfeeCollectionViewCell.h"
 #import "ExfeeAddCollectionViewCell.h"
@@ -26,6 +25,7 @@
 #import "APICrosses.h"
 #import "APIExfee.h"
 #import "NSString+EXFE.h"
+#import "EFChoosePeopleViewController.h"
 
 
 #define kTagViewExfeeRoot         10
@@ -874,20 +874,21 @@ typedef enum {
     NSInteger section = indexPath.section;
     if (section == 1) {
         if (indexPath.row == self.sortedInvitations.count){
-//            [self hideMenu];
-            ExfeeInputViewController *viewController=[[ExfeeInputViewController alloc] initWithNibName:@"ExfeeInputViewController" bundle:nil];
-            viewController.lastViewController = self;
+            EFChoosePeopleViewController *viewController = [[EFChoosePeopleViewController alloc] initWithNibName:@"EFChoosePeopleViewController"
+                                                                                                          bundle:nil];
             viewController.exfee = self.exfee;
             viewController.needSubmit = YES;
-            viewController.onExitBlock = ^{
+            viewController.completionHandler = ^{
                 self.exfee = viewController.exfee;
                 
                 self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                 [exfeeContainer reloadData];
             };
-            [self presentModalViewController:viewController animated:YES];
+            [self presentViewController:viewController
+                               animated:YES
+                             completion:nil];
             [viewController release];
-        }else{
+        } else {
             [self hidePopupIfShown];
             PSTCollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
             [self clickCell:cell];

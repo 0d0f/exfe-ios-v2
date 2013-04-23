@@ -149,7 +149,6 @@
 		4F63DAA017172AA600136B7E /* EXInnerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FCF015B4680F00F5E4D3 /* EXInnerButton.m */; };
 		4F63DAA117172AA600136B7E /* EXNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FD3215B5498200F5E4D3 /* EXNavigationBar.m */; };
 		4F63DAA217172AA600136B7E /* EXOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 780961FF15BDB70B0071E9D0 /* EXOverlayView.m */; };
-		4F63DAA317172AA600136B7E /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		4F63DAA417172AA600136B7E /* ConversationInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB79E715D0ECFC00DF9D73 /* ConversationInputAccessoryView.m */; };
 		4F63DAA517172AA600136B7E /* CTUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC07DF15D224FC004BB482 /* CTUtil.m */; };
 		4F63DAA617172AA600136B7E /* GatherExfeeInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D2BB0215D3A3C800716819 /* GatherExfeeInputCell.m */; };
@@ -596,7 +595,6 @@
 		4F63DC6F17172B0700136B7E /* EXInnerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FCF015B4680F00F5E4D3 /* EXInnerButton.m */; };
 		4F63DC7017172B0700136B7E /* EXNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FD3215B5498200F5E4D3 /* EXNavigationBar.m */; };
 		4F63DC7117172B0700136B7E /* EXOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 780961FF15BDB70B0071E9D0 /* EXOverlayView.m */; };
-		4F63DC7217172B0700136B7E /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		4F63DC7317172B0700136B7E /* ConversationInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB79E715D0ECFC00DF9D73 /* ConversationInputAccessoryView.m */; };
 		4F63DC7417172B0700136B7E /* CTUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC07DF15D224FC004BB482 /* CTUtil.m */; };
 		4F63DC7517172B0700136B7E /* GatherExfeeInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D2BB0215D3A3C800716819 /* GatherExfeeInputCell.m */; };
@@ -1099,6 +1097,9 @@
 		4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
 		4FFB149C16C0BFFF00F76D32 /* edit_30_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */; };
 		4FFB149D16C0BFFF00F76D32 /* edit_30_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */; };
+		7601F5641725861000032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
+		7601F56C1725861100032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
+		7601F56D1725861200032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
@@ -1408,7 +1409,6 @@
 		78CD517D15EF61CF00086036 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD517915EF61CF00086036 /* Icon.png */; };
 		78CD517E15EF61CF00086036 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD517A15EF61CF00086036 /* Icon@2x.png */; };
 		78CD518115EF620600086036 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 78CD517F15EF620600086036 /* iTunesArtwork.png */; };
-		78CEBFF015BFE7BE002BCA27 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		78CEBFF115BFE7BE002BCA27 /* ExfeeInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78CEBFEF15BFE7BE002BCA27 /* ExfeeInputViewController.xib */; };
 		78D0A600158CFB4C00401BCA /* OAuthLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */; };
 		78D0A601158CFB5F00401BCA /* URLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FF158CFAD200401BCA /* URLParser.m */; };
@@ -4619,7 +4619,6 @@
 				4F63DAA017172AA600136B7E /* EXInnerButton.m in Sources */,
 				4F63DAA117172AA600136B7E /* EXNavigationBar.m in Sources */,
 				4F63DAA217172AA600136B7E /* EXOverlayView.m in Sources */,
-				4F63DAA317172AA600136B7E /* ExfeeInputViewController.m in Sources */,
 				4F63DAA417172AA600136B7E /* ConversationInputAccessoryView.m in Sources */,
 				4F63DAA517172AA600136B7E /* CTUtil.m in Sources */,
 				4F63DAA617172AA600136B7E /* GatherExfeeInputCell.m in Sources */,
@@ -4725,6 +4724,7 @@
 				4F25A1C2171FBA2A000513B5 /* CSLinearLayoutView.m in Sources */,
 				763A01C31721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
 				763A01D017212B080082CC9E /* RoughIdentity.m in Sources */,
+				7601F56C1725861100032044 /* ExfeeInputViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4771,7 +4771,6 @@
 				4F63DC6F17172B0700136B7E /* EXInnerButton.m in Sources */,
 				4F63DC7017172B0700136B7E /* EXNavigationBar.m in Sources */,
 				4F63DC7117172B0700136B7E /* EXOverlayView.m in Sources */,
-				4F63DC7217172B0700136B7E /* ExfeeInputViewController.m in Sources */,
 				4F63DC7317172B0700136B7E /* ConversationInputAccessoryView.m in Sources */,
 				4F63DC7417172B0700136B7E /* CTUtil.m in Sources */,
 				4F63DC7517172B0700136B7E /* GatherExfeeInputCell.m in Sources */,
@@ -4877,6 +4876,7 @@
 				4F25A1C3171FBA2B000513B5 /* CSLinearLayoutView.m in Sources */,
 				763A01C41721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
 				763A01D117212B080082CC9E /* RoughIdentity.m in Sources */,
+				7601F56D1725861200032044 /* ExfeeInputViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4923,7 +4923,6 @@
 				78B9FCF115B4680F00F5E4D3 /* EXInnerButton.m in Sources */,
 				78B9FD3315B5498200F5E4D3 /* EXNavigationBar.m in Sources */,
 				7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */,
-				78CEBFF015BFE7BE002BCA27 /* ExfeeInputViewController.m in Sources */,
 				78FB79E815D0ECFC00DF9D73 /* ConversationInputAccessoryView.m in Sources */,
 				78FC07E015D224FC004BB482 /* CTUtil.m in Sources */,
 				78D2BB0315D3A3C800716819 /* GatherExfeeInputCell.m in Sources */,
@@ -5029,6 +5028,7 @@
 				4F25A1BA171FB9FF000513B5 /* CSLinearLayoutView.m in Sources */,
 				763A01C21721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
 				763A01CF17212B080082CC9E /* RoughIdentity.m in Sources */,
+				7601F5641725861000032044 /* ExfeeInputViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

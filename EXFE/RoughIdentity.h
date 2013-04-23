@@ -21,5 +21,6 @@ NSCopying
 + (RoughIdentity *)identity;
 
 - (BOOL)isEqualToRoughIdentity:(RoughIdentity *)anIdentity;
+- (NSDictionary *)dictionaryValue;
 
 @end

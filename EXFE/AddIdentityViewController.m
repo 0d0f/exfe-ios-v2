@@ -8,6 +8,8 @@
 
 #import "AddIdentityViewController.h"
 
+#import "EFAPIServer.h"
+
 @interface AddIdentityViewController ()
 
 @end
@@ -194,48 +196,33 @@
     textUsername.text=[Util formatPhoneNumber:textUsername.text];
   
     if(![provider isEqualToString:@""]){
-        
-      NSString *json=@"";
-      json=[json stringByAppendingFormat:@"{\"provider\":\"%@\",\"external_username\":\"%@\"}",provider,textUsername.text];
-      json=[NSString stringWithFormat:@"[%@]",json];
-      NSString *endpoint = [NSString stringWithFormat:@"%@identities/get",API_ROOT];
-      RKObjectManager *manager=[RKObjectManager sharedManager] ;
-      manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
-      [manager.HTTPClient postPath:endpoint parameters:@{@"identities":json} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-          NSDictionary *body=responseObject;
-          if([body isKindOfClass:[NSDictionary class]]) {
-            id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-            if(code)
-                if([code intValue]==200) {
-                    NSDictionary* response = [body objectForKey:@"response"];
-                    NSArray *identities = [response objectForKey:@"identities"];
-                    if(identities && [identities count]>0){
-                        NSDictionary *identity = [identities objectAtIndex:0];
-                        NSString *avatar_filename=[identity objectForKey:@"avatar_filename"];
-                        NSString *provider=[identity objectForKey:@"provider"];
-                        NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
-                        identityLeftIcon.image=[UIImage imageNamed:iconname];
-                        if(avatar_filename!=nil) {
-                            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                            dispatch_async(imgQueue, ^{
-                                UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatar_filename];
-                                dispatch_async(dispatch_get_main_queue(), ^{
-                                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                                        avatarview.image=avatar;
-                                        avatarframeview.image=[UIImage imageNamed:@"signin_portrait_frame.png"];
-                                    }
-                                });
-                            });
-                            dispatch_release(imgQueue);
-                        }
-                    }
-                }
-              }
-          }
-      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-          [MBProgressHUD hideHUDForView:self.view animated:YES];
-      }];
+        [[EFAPIServer sharedInstance] getIdentitiesWithParams:@[@{@"provider": provider, @"external_username": textUsername.text}]
+                                                      success:^(NSArray *identities){
+                                                          if (identities && [identities count]) {
+                                                              Identity *identity = [identities objectAtIndex:0];
+                                                              NSString *avatarFilename = identity.avatar_filename;
+                                                              NSString *provider = identity.provider;
+                                                              NSString *iconName = [NSString stringWithFormat:@"identity_%@_18_grey.png", provider];
+                                                              identityLeftIcon.image = [UIImage imageNamed:iconName];
+                                                              
+                                                              if (avatarFilename != nil) {
+                                                                  dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                                                                  dispatch_async(imgQueue, ^{
+                                                                      UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatarFilename];
+                                                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                                                          if (avatar != nil && ![avatar isEqual:[NSNull null]]) {
+                                                                              avatarview.image = avatar;
+                                                                              avatarframeview.image = [UIImage imageNamed:@"signin_portrait_frame.png"];
+                                                                          }
+                                                                      });
+                                                                  });
+                                                                  dispatch_release(imgQueue);
+                                                              }
+                                                          }
+                                                      }
+                                                      failure:^(NSError *error){
+                                                          [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                      }];
     }
 }
 

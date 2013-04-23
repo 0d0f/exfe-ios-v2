@@ -101,4 +101,9 @@
 - (void)loadUserBy:(NSInteger)user_id
            success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
            failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
+#pragma mark - Identity API
+
+- (void)getIdentitiesWithParams:(NSArray *)params success:(void (^)(NSArray *identities))success failure:(void (^)(NSError *error))failure;
+
 @end

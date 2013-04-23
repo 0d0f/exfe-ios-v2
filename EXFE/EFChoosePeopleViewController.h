@@ -11,7 +11,9 @@
 #import "EFChoosePeopleViewCell.h"
 #import "EFPersonIdentityCell.h"
 
-@class EFSearchBar;
+typedef void (^CompletionBlock)(void);
+
+@class EFSearchBar, Exfee;
 @interface EFChoosePeopleViewController : UIViewController
 <
 UITableViewDataSource,
@@ -32,6 +34,10 @@ UITextFieldDelegate
 @property (retain, nonatomic) IBOutlet UITextField *searchTextField;
 @property (retain, nonatomic) IBOutlet UIButton *addButton;
 @property (retain, nonatomic) IBOutlet UIButton *backButton;
+
+@property (nonatomic, retain) Exfee *exfee;
+@property (nonatomic, assign) BOOL needSubmit;
+@property (nonatomic, copy) CompletionBlock completionHandler;
 
 - (IBAction)backButtonPressed:(id)sender;
 - (IBAction)addButtonPressed:(id)sender;
