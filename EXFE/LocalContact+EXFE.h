@@ -13,4 +13,6 @@
 // phone > facebook > mail > twitter > others
 - (NSArray *)roughIdentities;
 
+- (BOOL)hasAnyNotificationIdentity;
+
 @end

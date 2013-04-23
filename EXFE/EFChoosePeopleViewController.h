@@ -34,6 +34,7 @@ UITextFieldDelegate
 @property (retain, nonatomic) IBOutlet UITextField *searchTextField;
 @property (retain, nonatomic) IBOutlet UIButton *addButton;
 @property (retain, nonatomic) IBOutlet UIButton *backButton;
+@property (retain, nonatomic) IBOutlet UILabel *selectionCountLabel;
 
 @property (nonatomic, retain) Exfee *exfee;
 @property (nonatomic, assign) BOOL needSubmit;

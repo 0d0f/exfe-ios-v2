@@ -67,7 +67,7 @@ NSString *kEFProviderNameTwitter = @"twitter";
     NSArray *socials = self.social ? [NSKeyedUnarchiver unarchiveObjectWithData:self.social] : nil;
     if (socials && [socials count]) {
         for (NSDictionary *socialDict in socials) {
-            NSString *providerName = [socials valueForKey:@"service"];
+            NSString *providerName = [socialDict valueForKey:@"service"];
             if ([providerName isEqualToString:@"twitter"]) {
                 RoughIdentity *roughIdentity = [RoughIdentity identity];
                 roughIdentity.provider = kEFProviderNameTwitter;
@@ -99,6 +99,15 @@ NSString *kEFProviderNameTwitter = @"twitter";
     [identities release];
     
     return result;
+}
+
+- (BOOL)hasAnyNotificationIdentity {
+    BOOL hasNotificationIdentity = NO;
+    if (self.phones || self.im || self.emails || self.social) {
+        hasNotificationIdentity = YES;
+    }
+    
+    return hasNotificationIdentity;
 }
 
 @end

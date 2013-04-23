@@ -24,9 +24,17 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer  alloc] initWithTarget:self
+                                                                               action:@selector(a)];
+        [self addGestureRecognizer:tap];
+        [tap release];
     }
     
     return self;
+}
+
+- (void)a {
+    NSLog(@"!!!");
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -201,7 +209,7 @@
     [button addTarget:self
                action:@selector(buttonPressed:)
      forControlEvents:UIControlEventTouchUpInside];
-    button.frame = (CGRect){{160, 0}, {160, 50}}; // (CGRect){{270, 0}, {50, 50}};
+    button.frame = (CGRect){{260, 0}, {60, 50}};
     [self.contentView addSubview:button];
 }
 
@@ -310,13 +318,6 @@
     self.providerIconSet = iconset;
     self.providerIcon = nil;
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    if ([iconset count] > 1) {
-        CGRect frame = CGRectMake(0.0, 0.0, (18 + 10) * ([iconset count] + 1), 110);
-        button.frame = frame;
-        //        [button addTarget:self action:@selector(checkButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
-        self.accessoryView = button;
-    }
     [iconset release];
 }
 

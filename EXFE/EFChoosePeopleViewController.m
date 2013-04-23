@@ -64,6 +64,12 @@
 - (BOOL)isRoughtIdentitySelected:(RoughIdentity *)identity;
 @end
 
+#pragma mark - Category (SelectionCountLabel)
+
+@interface EFChoosePeopleViewController (SelectionCountLabel)
+- (void)reloadSelectionCountLabelWithAnimated:(BOOL)animated;
+@end
+
 #pragma mark -
 #pragma mark - EFChoosePeopleViewController Implementation
 
@@ -120,6 +126,7 @@
     // search bar
     [[UISearchBar appearance] setSearchFieldBackgroundImage:searchBackgroundImage forState:UIControlStateNormal];
     [[UISearchBar appearance] setImage:[UIImage imageNamed:@"exfee_22ga.png"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
+    [[UISearchBar appearance] setPositionAdjustment:(UIOffset){-6, -1} forSearchBarIcon:UISearchBarIconSearch];
     self.searchBar.tintColor = [UIColor COLOR_RGB(0xF4, 0xF4, 0xF4)];
     self.searchBar.backgroundColor = [UIColor COLOR_RGB(0xF4, 0xF4, 0xF4)];
     
@@ -131,6 +138,9 @@
             break;
         }
     }
+    
+    // hide count label
+    [self reloadSelectionCountLabelWithAnimated:NO];
     
     // load exfe people
     [self loadexfeePeople];
@@ -153,6 +163,7 @@
     [_addButton release];
     [_searchBar release];
     [_backButton release];
+    [_selectionCountLabel release];
     [super dealloc];
 }
 
@@ -164,6 +175,7 @@
     [self setAddButton:nil];
     [self setSearchBar:nil];
     [self setBackButton:nil];
+    [self setSelectionCountLabel:nil];
     [super viewDidUnload];
 }
 
@@ -424,6 +436,12 @@
                             forCellReuseIdentifier:[EFChoosePeopleViewCell reuseIdentifier]];
     controller.searchResultsTableView.allowsMultipleSelection = YES;
     controller.searchResultsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    [self reloadSelectionCountLabelWithAnimated:YES];
+}
+
+- (void) searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
+    [self reloadSelectionCountLabelWithAnimated:YES];
 }
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller willHideSearchResultsTableView:(UITableView *)tableView {
@@ -433,7 +451,7 @@
 #pragma mark - UITableViewDataSource
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     CGRect screanBounds = [UIScreen mainScreen].bounds;
-    UIView *titleView = [[[UIView alloc] initWithFrame:(CGRect){{0, 0}, {CGRectGetWidth(screanBounds), 20}}] autorelease];
+    UIView *titleView = [[[UIView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), 20}}] autorelease];
     titleView.backgroundColor = [UIColor clearColor];
     
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"list_title.png"]];
@@ -572,15 +590,20 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)aCell forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSIndexPath *indexPathParam = indexPath;
+    BOOL needRefreshCell = YES;
     
     if (self.insertIndexPath) {
         NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
         if (NSOrderedDescending == comparisionResult && indexPath.section == self.insertIndexPath.section) {
             indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+        } else  if (NSOrderedSame == comparisionResult) {
+            needRefreshCell = NO;
         }
     }
     
-    [self choosePeopleTableView:tableView willDisplayCell:aCell forRowAtIndexPath:indexPathParam];
+    if (needRefreshCell) {
+        [self choosePeopleTableView:tableView willDisplayCell:aCell forRowAtIndexPath:indexPathParam];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -647,7 +670,16 @@
         if (granted) {
             [[EXAddressBookService defaultService] fetchPeopleWithPageSize:40
                                                     pageLoadSuccessHandler:^(NSArray *people){
-                                                        [_contactPeople addObjectsFromArray:people];
+                                                        NSMutableArray *filteredContactPeople = [[NSMutableArray alloc] initWithCapacity:[people count]];
+                                                        for (LocalContact *localContact in people) {
+                                                            if ([localContact hasAnyNotificationIdentity]) {
+                                                                [filteredContactPeople addObject:localContact];
+                                                            }
+                                                        }
+                                                        
+                                                        [_contactPeople addObjectsFromArray:filteredContactPeople];
+                                                        [filteredContactPeople release];
+                                                        
                                                         dispatch_async(dispatch_get_main_queue(), ^{
                                                             UILogPush(@"Load a Page");
                                                             [self.tableView reloadData];
@@ -703,6 +735,8 @@
         
         [_selectedDict removeObjectForKey:key];
     }
+    
+    [self reloadSelectionCountLabelWithAnimated:YES];
 }
 
 - (BOOL)isObjectSelectedInTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
@@ -849,6 +883,32 @@
 
 - (BOOL)isRoughtIdentitySelected:(RoughIdentity *)identity {
     return !![_selectedRoughIdentityDict valueForKey:identity.key];
+}
+
+#pragma mark - Category (SelectionCountLabel)
+
+- (void)reloadSelectionCountLabelWithAnimated:(BOOL)animated {
+    NSUInteger count = [_selectedDict count];
+    if (!count) {
+        self.selectionCountLabel.hidden = YES;
+    } else {
+        if (self.searchDisplayController.isActive) {
+            self.selectionCountLabel.hidden = YES;
+        } else {
+            self.selectionCountLabel.hidden = NO;
+        }
+        
+        if (animated) {
+            CATransition *animation = [CATransition animation];
+            [animation setDuration:0.233f];
+            [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
+            [animation setType:@"cube"];
+            [animation setSubtype:((count > [self.selectionCountLabel.text integerValue]) || self.selectionCountLabel.text.length == 0) ? kCATransitionFromTop : kCATransitionFromBottom];
+            [self.selectionCountLabel.layer addAnimation:animation forKey:@"cube"];
+        }
+        
+        self.selectionCountLabel.text = [NSString stringWithFormat:@"%d", count];
+    }
 }
 
 @end
