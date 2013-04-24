@@ -39,7 +39,7 @@
     RKEntityMapping *identityMapping = [RKEntityMapping mappingForEntityForName:@"Identity" inManagedObjectStore:managedObjectStore];
     identityMapping.identificationAttributes = @[ @"identity_id" ];
     [identityMapping addAttributeMappingsFromDictionary:@{@"id": @"identity_id",@"order": @"a_order"}];
-    [identityMapping addAttributeMappingsFromArray:@[@"name", @"nickname", @"bio", @"provider", @"connected_user_id", @"external_id", @"external_username", @"avatar_filename", @"created_at", @"updated_at", @"unreachable", @"type"]];
+    [identityMapping addAttributeMappingsFromArray:@[@"name", @"nickname", @"bio", @"provider", @"connected_user_id", @"external_id", @"external_username", @"avatar_filename", @"created_at", @"updated_at", @"unreachable", @"type", @"status"]];
     
     RKResponseDescriptor *identityResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:identityMapping
                                                                                                pathPattern:nil
