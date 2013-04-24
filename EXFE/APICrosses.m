@@ -13,6 +13,7 @@
 #import "Identity.h"
 #import "Rsvp.h"
 #import "Util.h"
+#import "EFAPIServer.h"
 
 
 @implementation APICrosses
@@ -32,33 +33,30 @@ static id sharedManager = nil;
 }
 
 +(void) GatherCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     RKObjectManager* manager =[RKObjectManager sharedManager];
     NSString *endpoint = [NSString stringWithFormat:@"%@crosses/gather",API_ROOT];
     manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
-    [manager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+    [manager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
     [manager postObject:cross path:endpoint parameters:nil success:success failure:failure];
 }
 
 +(void) EditCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
-  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
   RKObjectManager* manager =[RKObjectManager sharedManager];
   
-  NSString *endpoint = [NSString stringWithFormat:@"%@crosses/%u/edit?token=%@",API_ROOT,[cross.cross_id intValue],app.accesstoken];
+  NSString *endpoint = [NSString stringWithFormat:@"%@crosses/%u/edit?token=%@",API_ROOT,[cross.cross_id intValue],[EFAPIServer sharedInstance].user_token];
   manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
   manager.requestSerializationMIMEType = RKMIMETypeJSON;
-  [manager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+  [manager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
   [manager postObject:cross path:endpoint parameters:nil success:success failure:failure];
 }
 
 +(void) LoadCrossWithCrossId:(int)corss_id updatedtime:(NSString*)updatedtime success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
 
-  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
   if(updatedtime!=nil && ![updatedtime isEqualToString:@""])
       updatedtime=[Util encodeToPercentEscapeString:updatedtime];
   
-  NSString *endpoint = [NSString stringWithFormat:@"%@crosses/%u?updated_at=%@&token=%@",API_ROOT,corss_id,updatedtime,app.accesstoken];
+  NSString *endpoint = [NSString stringWithFormat:@"%@crosses/%u?updated_at=%@&token=%@",API_ROOT,corss_id,updatedtime,[EFAPIServer sharedInstance].user_token];
   [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:nil success:success failure:failure];
 }
 

@@ -9,16 +9,21 @@
 #import "User+EXFE.h"
 #import "Identity+EXFE.h"
 #import "AppDelegate.h"
+#import "EFAPIServer.h"
 
 @implementation User (EXFE)
 
 - (BOOL) isMe:(Identity*)my_identity{
+    return [self isMeByIdentityId:my_identity.identity_id];
+}
+
+- (BOOL) isMeByIdentityId:(NSNumber *)identity_id
+{
     for(Identity *_identity in self.identities){
-        if([_identity.identity_id isEqual:my_identity.identity_id])
+        if([_identity.identity_id isEqual:identity_id])
             return YES;
     }
     return NO;
-    
 }
 
 - (NSArray*) sortedIdentiesBy:(NSSortDescriptor*) descriptor{
@@ -32,8 +37,7 @@
 
 
 + (User*) getDefaultUser{
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    return [User getUserById:app.userid];
+    return [User getUserById:[EFAPIServer sharedInstance].user_id];
 }
 
 + (User*) getUserById:(int)userId{

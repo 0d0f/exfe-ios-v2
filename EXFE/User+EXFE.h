@@ -11,6 +11,7 @@
 @interface User (EXFE)
 
 - (BOOL) isMe:(Identity*)my_identity;
+- (BOOL) isMeByIdentityId:(NSNumber *)identity_id;
 - (NSArray*) sortedIdentiesBy:(NSSortDescriptor*) descriptor;
 - (NSArray*) sortedIdentiesById;
 

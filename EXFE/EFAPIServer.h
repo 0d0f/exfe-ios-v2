@@ -24,6 +24,7 @@
 - (void)saveUserData;
 - (void)loaduserData;
 - (void)clearUserData;
+- (BOOL)isLoggedIn;
 
 #pragma mark Public API (Token Free)
 - (void)getAvailableBackgroundsWithSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success

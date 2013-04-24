@@ -48,6 +48,7 @@
 - (void)loaduserData
 {
     NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    [ud synchronize];
     self.user_token = [ud stringForKey:@"access_token"];
     self.user_id = [[ud stringForKey:@"userid"] integerValue];
 }
@@ -62,6 +63,18 @@
     [ud synchronize];
 }
 
+- (BOOL)isLoggedIn
+{
+    if (self.user_id > 0 && self.user_token.length > 0) {
+        return YES;
+    }
+    [self loaduserData];
+    if (self.user_id > 0 && self.user_token.length > 0) {
+        return YES;
+    }
+    return NO;
+}
+
 #pragma mark Public API (Token Free)
 - (void)getAvailableBackgroundsWithSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
@@ -74,7 +87,6 @@
 - (void)checkAppVersionSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     [Flurry logEvent:@"API_CHECK_UPDATE"];
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     RKObjectManager *manager = [RKObjectManager sharedManager];
     NSString *endpoint = [NSString stringWithFormat:@"/versions/"];
     
@@ -82,7 +94,7 @@
     //    manager.requestSerializationMIMEType = RKMIMETypeJSON;
     // Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
     //	[manager.HTTPClient setDefaultHeader:@"Accept" value:@"application/json"];
-    [manager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+    [manager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
     [manager.HTTPClient getPath:endpoint parameters:nil success:success failure:failure];
 }
 
