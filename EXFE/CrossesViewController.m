@@ -95,20 +95,17 @@
     [topview release];
     [super viewDidLoad];
     
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    BOOL login=[app Checklogin];
-    if(login==YES) {
+    if ([[EFAPIServer sharedInstance] isLoggedIn] == YES) {
         [self loadObjectsFromDataStore];
-        [self refreshPortrait];
         [self refreshCrosses:@"crossupdateview"];
 //        NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
 //        if(newuser !=nil && [newuser isEqualToString:@"YES"])
 //            [self showWelcome];
     } else {
+        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
         [app ShowLanding:self];
 
     }
-    
     
     default_background=[UIImage imageNamed:@"x_titlebg_default.jpg"];
 
@@ -191,36 +188,6 @@
     
 }
 
-- (void) refreshPortrait{
-  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
-  [request setPredicate:predicate];
-  
-  RKObjectManager *objectManager = [RKObjectManager sharedManager];
-  NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
-
-    if(users!=nil && [users count] >0){
-        User *user=[users objectAtIndex:0];
-        
-        if(user){
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-                UIImage *avatar_img=[[ImgCache sharedManager] getImgFrom:user.avatar_filename];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(avatar_img!=nil && ![avatar_img isEqual:[NSNull null]]){
-//                        settingButton.image=avatar_img;
-//                        [settingButton setNeedsDisplay];
-                    }
-                });
-            });
-            dispatch_release(imgQueue);
-        }
-    }
-//    [users release];
-    
-    
-}
 // deprecated
 - (void) showWelcome{
     WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:CGRectMake(4, tableView.frame.origin.y+4, self.view.frame.size.width-4-4, self.view.frame.size.height-44-4-4)];
@@ -285,18 +252,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//
-//    BOOL login=[app Checklogin];
-//    if(login==YES)
-//    {
-//      //RESTKIT 0.20
-////        [self refreshPortrait];
-////        [self refreshCrosses:@"crossupdateview"];
-//    }
-//    else {
-//        [app ShowLanding];
-//    }
 }
 
 - (void)ShowProfileView{
@@ -397,9 +352,10 @@
                                                                        
                                                                        if([updated_at compare: cross_updated_at] == NSOrderedDescending || [updated_at compare: cross_updated_at] == NSOrderedSame) {
                                                                            if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]]) {
-                                                                               NSNumber *identity_id=[obj objectForKey:@"identity_id"];
-                                                                               if([self isIdentityBelongsMe:[identity_id intValue]]==NO)
+                                                                               NSNumber *identity_id = [obj objectForKey:@"identity_id"];
+                                                                               if ([[User getDefaultUser] isMeByIdentityId:identity_id] == NO){
                                                                                    notification++;
+                                                                               }
                                                                            }
                                                                        }
                                                                    }
@@ -561,45 +517,22 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0){
-        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
-        [request setPredicate:predicate];
-      
-        RKObjectManager *objectManager = [RKObjectManager sharedManager];
-      
-        NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        
+        User *_user = [User getDefaultUser];
+        
         NSString* reuseIdentifier = @"Profile";
         ProfileCard *headerView =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
         if (nil == headerView) {
             headerView = [[ProfileCard alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Profile"];
         }
         
-        if(users != nil && [users count] > 0){
-            User *_user = [users objectAtIndex:0];
-            NSString* imgName = _user.avatar_filename;
-            headerView.avatar = nil;
-            if(imgName && imgName.length > 0){
-                UIImage *avatarImg=[[ImgCache sharedManager] getImgFromCache:imgName];
-                if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
-                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                    dispatch_async(imgQueue, ^{
-//                        NSLog(@"fetch profile img");
-                        UIImage *avatar = [[ImgCache sharedManager] getImgFrom:imgName];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
-//                                NSLog(@"fetched profile img");
-                                headerView.avatar = avatar;
-                                [headerView setNeedsDisplay];
-                            }
-                        });
-                    });
-                    dispatch_release(imgQueue);
-                }else{
-                    headerView.avatar = avatarImg;
-                }
-            }
-        }
+        NSString* imgName = _user.avatar_filename;
+        
+        [[ImgCache sharedManager] fillAvatarWith:imgName byDefault:nil using:^(UIImage *image) {
+            headerView.avatar = image;
+            [headerView setNeedsDisplay];
+        }];
+        
         [headerView addGatherTarget:self action:@selector(ShowGatherView)];
         [headerView addProfileTarget:self action:@selector(ShowProfileView)];
         return headerView;
@@ -678,10 +611,9 @@
         }
         
         NSString *avatarimgurl=nil;
-        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         for(Invitation *invitation in cross.exfee.invitations) {
-            NSInteger connected_uid = [invitation.identity.connected_user_id intValue];
-            if (connected_uid == app.userid) {
+            NSInteger connected_uid = [invitation.identity.connected_user_id integerValue];
+            if (connected_uid == [EFAPIServer sharedInstance].user_id) {
                 if(invitation && invitation.invited_by &&
                    invitation.invited_by.avatar_filename ) {
                     avatarimgurl=invitation.invited_by.avatar_filename;
@@ -691,7 +623,7 @@
                 // Unverified identity: connected_uid + identity_git id == 0
                 // Concern: performace issue?
 //                NSFetchRequest* request = [User fetchRequest];
-//                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", app.userid];
+//                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", [EFAPIServer sharedInstance].user_id];
 //                [request setPredicate:predicate];
 //                NSArray *users = [[User objectsWithFetchRequest:request] retain];
 //                if(users != nil && [users count] > 0)

@@ -657,9 +657,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 switch (c) {
                     case 200:
                         NSLog(@"Signed In");
-                        //                        UIViewController *parent = self.parentViewController;
-                        //                        [parent dismissModalViewControllerAnimated:YES];
-                        //
                         [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                             AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
                             [app SigninDidFinish];
@@ -845,5 +842,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }];
         }
     }
+}
+
+- (void)SigninDidFinish
+{
+    NSLog(@"Sign In Did finish");
+    [self.navigationController dismissModalViewControllerAnimated:YES];
 }
 @end

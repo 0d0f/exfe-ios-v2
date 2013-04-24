@@ -9,6 +9,7 @@
 #import "APIProfile.h"
 #import "ProfileCellView.h"
 #import "Identity+EXFE.h"
+#import "EFAPIServer.h"
 
 @implementation APIProfile
 
@@ -16,8 +17,7 @@
                 success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
   
-  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/mergeIdentities?token=%@",API_ROOT,app.userid, app.accesstoken];
+  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/mergeIdentities?token=%@",API_ROOT,[EFAPIServer sharedInstance].user_id, [EFAPIServer sharedInstance].user_token];
   
   [RKObjectManager sharedManager].HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
   [[RKObjectManager sharedManager].HTTPClient postPath:endpoint parameters:@{@"browsing_identity_token":browsing_identity_token,@"identity_ids":ids} success:success failure:failure];
@@ -26,12 +26,10 @@
 
 + (void) LoadSuggest:(NSString*)key success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
-
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     NSString *endpoint = [NSString stringWithFormat:@"%@identities/complete?key=%@",API_ROOT,key];
   
-  [[RKObjectManager sharedManager].HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+  [[RKObjectManager sharedManager].HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
   [[RKObjectManager sharedManager].HTTPClient getPath:endpoint parameters:nil success:success failure:failure];
    
 }
@@ -41,11 +39,11 @@
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSString *endpoint = [NSString stringWithFormat:@"%@users/update?token=%@",API_ROOT,app.accesstoken];
+    NSString *endpoint = [NSString stringWithFormat:@"%@users/update?token=%@",API_ROOT,[EFAPIServer sharedInstance].user_token];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
-    [objectManager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+    [objectManager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
     
     [objectManager.HTTPClient postPath:endpoint parameters:@{@"name":name} success:success failure:failure];
 }
@@ -58,11 +56,11 @@
                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     
     AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSString *endpoint = [NSString stringWithFormat:@"%@identities/%i/update?token=%@", API_ROOT, [identity.identity_id intValue], app.accesstoken];
+    NSString *endpoint = [NSString stringWithFormat:@"%@identities/%i/update?token=%@", API_ROOT, [identity.identity_id intValue], [EFAPIServer sharedInstance].user_token];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
-    [objectManager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+    [objectManager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
     if (name) {
         [dict setObject:name forKey:@"name"];

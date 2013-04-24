@@ -12,6 +12,7 @@
 #import "PostCell.h"
 #import "ImgCache.h"
 #import "Util.h"
+#import "EFAPIServer.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -635,10 +636,9 @@
 - (void) addPost:(NSString*)content{
     [Flurry logEvent:@"SEND_CONVERSATION"];
 
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:myIdentity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
 
-    NSString *endpoint = [NSString stringWithFormat:@"%@conversation/%u/add?token=%@",API_ROOT,exfee_id,app.accesstoken];
+    NSString *endpoint = [NSString stringWithFormat:@"%@conversation/%u/add?token=%@",API_ROOT,exfee_id,[EFAPIServer sharedInstance].user_token];
     RKObjectManager *manager=[RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
     [manager.HTTPClient postPath:endpoint parameters:postdict success:^(AFHTTPRequestOperation *operation, id responseObject) {

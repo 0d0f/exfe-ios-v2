@@ -53,8 +53,7 @@
 - (void) showWelcome;
 - (void) closeWelcome;
 - (void) alertsignout;
-- (BOOL) isIdentityBelongsMe:(int)identity_id;
-- (void) refreshPortrait;
+//- (BOOL) isIdentityBelongsMe:(int)identity_id;
 - (BOOL) PushToCross:(int)cross_id;
 - (BOOL) PushToConversation:(int)cross_id;
 - (void) onClickConversation:(UIView*)card;

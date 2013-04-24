@@ -510,12 +510,10 @@
 }
 
 - (void) deleteIdentity:(int)identity_id{
-    
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/deleteIdentity",API_ROOT,app.userid];
+    NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/deleteIdentity",API_ROOT, [EFAPIServer sharedInstance].user_id];
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     objectManager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
-    [objectManager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+    [objectManager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
     [objectManager.HTTPClient postPath:endpoint parameters:@{@"identity_id":[NSNumber numberWithInt:identity_id]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
       if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
         NSDictionary *body=responseObject;
@@ -530,7 +528,7 @@
                         if(identity_id_str!=nil && user_id_str!=nil){
                             int response_identity_id=[identity_id_str intValue];
                             int response_user_id=[user_id_str intValue];
-                            if(response_identity_id==identity_id && response_user_id==app.userid){
+                            if(response_identity_id==identity_id && response_user_id == [EFAPIServer sharedInstance].user_id){
                                 [self deleteIdentityUI:identity_id];
                             }
                         }
@@ -584,12 +582,11 @@
 }
 
 - (void) doVerify:(int)identity_id{
-  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
   NSString *callback=@"oauth://handleOAuthAddIdentity";
   NSString *endpoint = [NSString stringWithFormat:@"%@users/VerifyUserIdentity",API_ROOT];
   RKObjectManager *objectManager = [RKObjectManager sharedManager];
   objectManager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
-  [objectManager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+  [objectManager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
   [objectManager.HTTPClient postPath:endpoint parameters:@{@"identity_id":[NSNumber numberWithInt:identity_id],@"device_callback":callback,@"device":@"iOS"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
     if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
       NSDictionary *body=responseObject;

@@ -66,16 +66,15 @@
 }
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, retain) UINavigationController *navigationController;
-@property (nonatomic) int userid;
-@property (nonatomic, retain) NSString *accesstoken;
-@property (nonatomic, retain) NSString *username;
+//@property (nonatomic) int userid;
+//@property (nonatomic, retain) NSString *accesstoken;
+//@property (nonatomic, retain) NSString *username;
 
 -(void)SigninDidFinish;
 -(void)SignoutDidFinish;
 -(void)GatherCrossDidFinish;
 -(void)CrossUpdateDidFinish:(int)cross_id;
 -(void)ShowLanding:(UIViewController*)parent;
--(BOOL) Checklogin;
 - (void) cleandb;
 - (void) createdb;
 - (void) processUrlHandler:(NSURL*)url;

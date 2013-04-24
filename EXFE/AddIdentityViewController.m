@@ -228,8 +228,7 @@
 
 - (void) addIdentity:(id) sender{
     [spin setHidden:NO];
-  AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/addIdentity",API_ROOT,app.userid];
+  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/addIdentity",API_ROOT, [EFAPIServer sharedInstance].user_id];
   RKObjectManager *manager=[RKObjectManager sharedManager] ;
 
   NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:5];
@@ -245,7 +244,7 @@
 
   [dict setObject:provider forKey:@"provider"];
   manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
-  [manager.HTTPClient setDefaultHeader:@"token" value:app.accesstoken];
+  [manager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
 
   [manager.HTTPClient postPath:endpoint parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
     [spin setHidden:YES];
@@ -308,7 +307,7 @@
 //    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
 //    RKClient *client = [RKClient sharedClient];
 //    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/addIdentity",app.userid];
+//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/addIdentity",[EFAPIServer sharedInstance].user_id];
 //    
 //    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
 //    [client post:endpoint usingBlock:^(RKRequest *request){
