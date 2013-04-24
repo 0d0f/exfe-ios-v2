@@ -14,6 +14,7 @@
 @property (nonatomic, retain) IBOutlet UILabel *labelDescription;
 @property (nonatomic, retain) IBOutlet UIImageView *imgEXFELogo;
 @property (nonatomic, retain) IBOutlet UILabel *labelStart;
+@property (nonatomic, retain) IBOutlet UIImageView *imgHead;
 
 @property (nonatomic, retain) UIViewController *currentViewController;
 

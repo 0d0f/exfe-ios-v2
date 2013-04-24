@@ -117,7 +117,18 @@
 						</object>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 					</object>
-					<object class="IBUIImageView" id="936423294">
+					<object class="IBUIImageView" id="249653220">
+						<reference key="NSNextResponder" ref="191373211"/>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrameSize">{320, 50}</string>
+						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="699741562"/>
+						<string key="NSReuseIdentifierKey">_NS:9</string>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+					</object>
+					<object class="IBUIImageView" id="699741562">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{0, 30}, {320, 300}}</string>
@@ -176,7 +187,7 @@
 				<string key="NSFrame">{{0, 20}, {320, 548}}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
-				<reference key="NSNextKeyView" ref="936423294"/>
+				<reference key="NSNextKeyView" ref="249653220"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">1</int>
 					<bytes key="NSRGB">MCAwLjM0NTA3MzA4NDcgMC44MTk2NTA5NTc3AA</bytes>
@@ -240,9 +251,17 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">imgEXFELogo</string>
 						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="936423294"/>
+						<reference key="destination" ref="699741562"/>
 					</object>
 					<int key="connectionID">54</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">imgHead</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="249653220"/>
+					</object>
+					<int key="connectionID">57</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -260,7 +279,8 @@
 							<reference ref="280472174"/>
 							<reference ref="275702843"/>
 							<reference ref="700454403"/>
-							<reference ref="936423294"/>
+							<reference ref="699741562"/>
+							<reference ref="249653220"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -295,7 +315,12 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">53</int>
-						<reference key="object" ref="936423294"/>
+						<reference key="object" ref="699741562"/>
+						<reference key="parent" ref="191373211"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">56</int>
+						<reference key="object" ref="249653220"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 				</array>
@@ -322,12 +347,13 @@
 					</object>
 				</object>
 				<string key="53.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="56.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">55</int>
+			<int key="maxID">57</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -336,6 +362,7 @@
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="imgEXFELogo">UIImageView</string>
+						<string key="imgHead">UIImageView</string>
 						<string key="labelDescription">UILabel</string>
 						<string key="labelEXFE">UILabel</string>
 						<string key="labelStart">UILabel</string>
@@ -343,6 +370,10 @@
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="imgEXFELogo">
 							<string key="name">imgEXFELogo</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="imgHead">
+							<string key="name">imgHead</string>
 							<string key="candidateClassName">UIImageView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="labelDescription">

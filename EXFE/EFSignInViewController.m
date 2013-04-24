@@ -70,7 +70,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
-    [self.view setFrame:CGRectMake(0, 36, appFrame.size.width, appFrame.size.height - 36)];
+    [self.view setFrame:CGRectMake(0, 50, appFrame.size.width, appFrame.size.height - 50)];
     
     self.view.backgroundColor = [UIColor COLOR_SNOW];
     

@@ -39,8 +39,9 @@
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     [self.view setFrame:appFrame];
     
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bg.png"]] ;
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bg.png"]];
     self.labelStart.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bar.png"]];
+    self.imgHead.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bg.png"]];
     
     UITapGestureRecognizer *tapStart = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
         [self swapChildViewController:1 param:nil];
@@ -52,9 +53,9 @@
             [self swapChildViewController:0 param:nil];
         }
     }];
-    tapBack.enabled = NO;
-    [self.view addGestureRecognizer:tapBack];
-    
+    [self.imgHead addGestureRecognizer:tapBack];
+    self.imgHead.hidden = YES;
+    self.imgHead.userInteractionEnabled = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -79,11 +80,16 @@
         CGRect logo_frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 150 : 110, 320, 300);
         _imgEXFELogo.frame = CGRectMake(0, 10, 320, 300);
         
-        [UIView animateWithDuration:1 delay:0.1 options:UIViewAnimationOptionTransitionNone animations:^{
+        [UIView animateWithDuration:1.6 delay:0.1 options:UIViewAnimationOptionTransitionNone animations:^{
+            _imgEXFELogo.frame = logo_frame;
+        } completion:^(BOOL finished) {
+            
+        }];
+        
+        [UIView animateWithDuration:1 delay:0.8 options:UIViewAnimationOptionTransitionNone animations:^{
             _labelEXFE.alpha = 100;
             _labelDescription.alpha = 100;
             _labelStart.frame = frame;
-            _imgEXFELogo.frame = logo_frame;
         } completion:^(BOOL finished) {
             
         }];
@@ -129,7 +135,7 @@
         [self.view insertSubview:newVC.view aboveSubview:_labelStart];
         newFrame = newVC.view.frame;
         CGRect f = newVC.view.frame;
-        f.origin.y = CGRectGetMinY(_labelStart.frame);
+        f.origin.y = CGRectGetMaxY(_labelStart.frame);
         newVC.view.frame = f;
     } else {
         
@@ -143,14 +149,14 @@
                          
                          if (weakSelf.currentViewController) {
                              CGRect frame = weakSelf.currentViewController.view.bounds;
-                             weakSelf.currentViewController.view.frame = CGRectOffset(frame, CGRectGetMinX(_labelStart.frame), CGRectGetMinY(_labelStart.frame));
+                             weakSelf.currentViewController.view.frame = CGRectOffset(frame, CGRectGetMinX(_labelStart.frame), CGRectGetMaxY(_labelStart.frame));
                          }
                          if (newVC) {
                              if (!CGRectIsEmpty(newFrame)) {
                                  newVC.view.frame = newFrame;
                              }
                              if (_imgEXFELogo) {
-                                 _imgEXFELogo.frame = CGRectMake(112, -25, 96, 90);
+                                 _imgEXFELogo.frame = CGRectMake(112, -20, 96, 90);
                              }
                          } else {
                              if (_imgEXFELogo) {
@@ -169,10 +175,9 @@
                          if (newVC) {
                              [newVC didMoveToParentViewController:weakSelf];
                              weakSelf.currentViewController = [newVC autorelease];
-                             tapBack.enabled = YES;
+                             self.imgHead.hidden = NO;
                          } else {
-                             tapBack.enabled = NO;
-                             
+                             self.imgHead.hidden = YES;
                          }
                          
                      }];
