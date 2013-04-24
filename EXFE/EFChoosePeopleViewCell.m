@@ -192,24 +192,46 @@
 
 @implementation EFChoosePeopleViewCell
 
-+ (NSString *)reuseIdentifier {
-    return NSStringFromClass([self class]);
+- (id)init {
+    self = [[[[NSBundle mainBundle] loadNibNamed:@"EFChoosePeopleViewCell"
+                                           owner:nil
+                                         options:nil] lastObject] retain];
+    return self;
 }
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:(CGRect){{10, 5}, {40, 40}}];
+        imageView.layer.cornerRadius = 3.0f;
+        imageView.layer.masksToBounds = YES;
+        [self.contentView addSubview:imageView];
+        self.avatarImageView = imageView;
+        [imageView release];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:(CGRect){{60, 12}, {190, 26}}];
+        label.backgroundColor = [UIColor clearColor];
+        label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
+        label.textColor = [UIColor blackColor];
+        [self.contentView addSubview:label];
+        self.userNameLabel = label;
+        [label release];
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.backgroundColor = [UIColor clearColor];
+        [button addTarget:self
+                   action:@selector(buttonPressed:)
+         forControlEvents:UIControlEventTouchUpInside];
+        button.frame = (CGRect){{260, 0}, {60, 50}};
+        [self.contentView addSubview:button];
+        self.accessButton = button;
+    }
     
-    self.avatarImageView.layer.cornerRadius = 3.0f;
-    self.avatarImageView.layer.masksToBounds = YES;
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.backgroundColor = [UIColor clearColor];
-    [button addTarget:self
-               action:@selector(buttonPressed:)
-     forControlEvents:UIControlEventTouchUpInside];
-    button.frame = (CGRect){{260, 0}, {60, 50}};
-    [self.contentView addSubview:button];
-    self.accessButton = button;
+    return self;
+}
+
++ (NSString *)reuseIdentifier {
+    return NSStringFromClass([self class]);
 }
 
 - (void)dealloc {
