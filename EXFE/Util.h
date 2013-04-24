@@ -111,5 +111,9 @@ extern NSString *const EXCrossListDidChangeNotification;
 
 + (void)checkUpdate;
 
+
+// URL query param tool
++ (NSString*)concatenateQuery:(NSDictionary*)parameters;
++ (NSDictionary*)splitQuery:(NSString*)query;
 @end
 

@@ -91,6 +91,11 @@
               success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
+- (void) mergeIdentities:(NSArray *)ids
+                 byToken:(NSString *)token
+                 success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
 #pragma mark User API
 /**
  
@@ -104,8 +109,8 @@
               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 - (void)loadUserBy:(NSInteger)user_id
-           success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
-           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 #pragma mark - Exfee API
 

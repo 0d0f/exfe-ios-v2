@@ -20,10 +20,6 @@
 @synthesize window = _window;
 @synthesize navigationController=_navigationController;
 
-static char alertobject;
-static char handleurlobject;
-static char mergetoken;
-
 - (void)dealloc
 {
     [_window release];
@@ -61,7 +57,7 @@ static char mergetoken;
     // Setup DB version data
     NSNumber* db_version=[[NSUserDefaults standardUserDefaults] objectForKey:@"db_version"];
     
-    if(db_version==nil || [db_version intValue]<APP_DB_VERSION){
+    if(db_version==nil || [db_version intValue] < APP_DB_VERSION){
         
         [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
@@ -90,12 +86,7 @@ static char mergetoken;
     EFAPIServer *server = [EFAPIServer sharedInstance];
     // Load User
     if ([server isLoggedIn] == YES){
-        [server loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                       User *user = [User getDefaultUser];
-                       NSParameterAssert(user != nil);
-                   }
-                   failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                   }];
+        [server loadMeSuccess:nil failure:nil];
     }
     
     // Load Background List
@@ -251,75 +242,79 @@ static char mergetoken;
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
     [Flurry logEvent:@"HANDLE_OPEN_URL"];
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
     NSString *query = [url query];
-    if(query.length > 0){
-        for (NSString *param in [query componentsSeparatedByString:@"&"]) {
-            NSArray *elts = [param componentsSeparatedByString:@"="];
-            if([elts count] < 2) continue;
-            [params setObject:[elts objectAtIndex:1] forKey:[elts objectAtIndex:0]];
-        }
-    }
+    NSDictionary *params = [Util splitQuery:query];
     NSString *token = [params objectForKey:@"token"];
     NSString *user_id = [params objectForKey:@"user_id"];
-    NSString *identity_id = [params objectForKey:@"identity_id"];
-    
-    token_formerge = @"";
-    if ([params objectForKey:@"token"] !=nil ){
-        token_formerge = [token_formerge stringByAppendingString:[params objectForKey:@"token"]];
-    }
-    [params release];
-    if (token.length > 0 && [user_id intValue]>0){
+    //NSString *identity_id = [params objectForKey:@"identity_id"];
+
+    if (token.length > 0 && [user_id intValue] > 0){
         EFAPIServer *server = [EFAPIServer sharedInstance];
-        [server clearUserData];
-        server.user_token = token;
-        server.user_id = [user_id integerValue];
-        [server saveUserData];
-        [server loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-            if(operation.HTTPRequestOperation.response.statusCode==200){
-                NSDictionary *body=[mappingResult dictionary];
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    Meta *meta=(Meta*)[body objectForKey:@"meta"];
-                    if(meta)
-                        if([meta.code intValue]==200) {
-                            NSString *ids_formerge=@"";
-                            User *user=(User*)[body objectForKey:@"response.user"];
-                            for (Identity *_identity in user.identities){
-                                if([ids_formerge isEqualToString:@""])
-                                    ids_formerge = [ids_formerge stringByAppendingFormat:@"%u",
-                                                    [_identity.identity_id intValue]];
-                                else
-                                    ids_formerge = [ids_formerge stringByAppendingFormat:@",%u",
-                                                    [_identity.identity_id intValue]];
-                            }
-                            ids_formerge=[NSString stringWithFormat:@"[%@]",ids_formerge];
-                            if([[EFAPIServer sharedInstance] isLoggedIn]==NO){
-                                [EFAPIServer sharedInstance].user_id = [user_id integerValue];
-                                [EFAPIServer sharedInstance].user_token = token;
-                                [[EFAPIServer sharedInstance] saveUserData];
-                                [self SigninDidFinish];
-                                [self processUrlHandler:url];
-                            }else{
-                                if([identity_id intValue] >0  && [user_id intValue] != [EFAPIServer sharedInstance].user_id) {
-                                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Merge accounts" message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?",user.name] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Merge",nil];
-                                    alert.tag=400;
-                                    objc_setAssociatedObject (alert, &alertobject, ids_formerge,OBJC_ASSOCIATION_RETAIN);
-                                    objc_setAssociatedObject (alert, &handleurlobject, url,OBJC_ASSOCIATION_RETAIN);
-                                    objc_setAssociatedObject (alert, &mergetoken, token_formerge,OBJC_ASSOCIATION_RETAIN);
-                                    
-                                    
-                                    
-                                    [alert show];
-                                    [alert release];
-                                }else{
-                                    [self processUrlHandler:url];
-                                }
-                            }
-                            
-                        }
-                }
+        if (![server isLoggedIn]) {
+            // sign in
+            [server clearUserData];
+            server.user_token = token;
+            server.user_id = [user_id integerValue];
+            [server saveUserData];
+            [server loadMeSuccess:nil failure:nil];
+            [self SigninDidFinish];
+            [self processUrlHandler:url];
+        } else {
+            if ([user_id integerValue] == server.user_id) {
+                // refresh token
+                server.user_token = token;
+                [server saveUserData];
+                [self processUrlHandler:url];
+            } else {
+                // merge identities
+                
+                // Load identities to merge from another user
+                EFAPIServer *tempServer = [[[EFAPIServer alloc] init] autorelease];
+                tempServer.user_id = [user_id integerValue];
+                tempServer.user_token = token;
+                [tempServer loadUserBy:tempServer.user_id
+                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                   NSDictionary *body = responseObject;
+                                   if([body isKindOfClass:[NSDictionary class]]) {
+                                       NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                                       if(code){
+                                           if([code integerValue] == 200) {
+                                               NSString *name = [responseObject valueForKeyPath:@"response.user.name"];
+                                               NSArray *ids = [responseObject valueForKeyPath:@"response.user.identities.@distinctUnionOfObjects.id"];
+                                               
+                                               [UIAlertView showAlertViewWithTitle:@"Merge accounts"
+                                                                           message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?", name]
+                                                                 cancelButtonTitle:@"Cancel"
+                                                                 otherButtonTitles:@[@"Merge"]
+                                                                           handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                                                               if (buttonIndex == alertView.firstOtherButtonIndex ) {
+                                                                                   
+                                                                                   [server mergeIdentities:ids byToken:token success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                                       if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                                                                           NSDictionary *body=responseObject;
+                                                                                           if([body isKindOfClass:[NSDictionary class]]) {
+                                                                                               id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                                                                                               if(code)
+                                                                                                   if([code intValue]==200) {
+                                                                                                       [server loadMeSuccess:nil failure:nil];
+                                                                                                       [self processUrlHandler:url];
+                                                                                                   }
+                                                                                           }
+                                                                                       }
+                                                                                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                                       
+                                                                                   }];
+                                                                               }
+                                                                           }];
+                                           }
+                                       }
+                                   }
+                                   
+                               }
+                               failure:nil];
             }
-        } failure:nil];
+        }
+        
     }else{
         [self processUrlHandler:url];
     }
@@ -331,18 +326,7 @@ static char mergetoken;
 
 - (void) processUrlHandler:(NSURL*)url{
     NSString *host=[url host];
-    
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-    NSArray *url_components=[url.absoluteString componentsSeparatedByString:@"?"];
-    if([url_components count] ==2){
-        
-        for (NSString *param in [[url_components objectAtIndex:1] componentsSeparatedByString:@"&"]) {
-            NSArray *elts = [param componentsSeparatedByString:@"="];
-            if([elts count] < 2) continue;
-            [params setObject:[elts objectAtIndex:1] forKey:[elts objectAtIndex:0]];
-        }
-    }
-    
+    NSDictionary *params = [Util splitQuery:[url query]];
     NSArray *viewControllers = self.navigationController.viewControllers;
     CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
     
@@ -369,7 +353,6 @@ static char mergetoken;
     else if([host isEqualToString:@"profile"]){
         [crossViewController ShowProfileView];
     }
-    [params release];
 }
 
 - (void)ReceivePushData:(NSDictionary*)userInfo RunOnForeground:(BOOL)isForeground
@@ -481,36 +464,5 @@ static char mergetoken;
 //    [[objectStore managedObjectContextForCurrentThread] mergeChangesFromContextDidSaveNotification:notification];
 //}
 
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    
-    if(buttonIndex==1 && alertView.tag==400){
-        
-        NSString *token = (NSString *)objc_getAssociatedObject(alertView, &mergetoken);
-        
-        NSString *merge_identity = (NSString *)objc_getAssociatedObject(alertView, &alertobject);
-        
-        [APIProfile MergeIdentities:token Identities_ids:merge_identity success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                NSDictionary *body=responseObject;
-                if([body isKindOfClass:[NSDictionary class]]) {
-                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                    if(code)
-                        if([code intValue]==200) {
-                            [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                if(operation.HTTPRequestOperation.response.statusCode==200){
-                                    NSURL *url = (NSURL *)objc_getAssociatedObject(alertView, &handleurlobject);
-                                    [self processUrlHandler:url];
-                                }
-                            } failure:nil];
-                        }
-                }
-            }
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            
-        }];
-    }
-}
 
 @end

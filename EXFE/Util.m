@@ -1242,4 +1242,34 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         }];
     }
 }
+
+
+// URL query param tool
++ (NSString*)concatenateQuery:(NSDictionary*)parameters {
+    if (!parameters || [parameters count] == 0){
+       return nil; 
+    }
+    NSMutableString *query = [NSMutableString string];
+    for (NSString *parameter in [parameters allKeys]){
+        [query appendFormat:@"&%@=%@", [parameter stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding], [[parameters valueForKey:parameter] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+    }
+    return [query substringFromIndex:1];
+}
+
++ (NSDictionary*)splitQuery:(NSString*)query {
+    if ([query length] == 0){
+        return nil;
+    }
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    for(NSString *parameter in [query componentsSeparatedByString:@"&"]) {
+        NSRange range = [parameter rangeOfString:@"="];
+        if(range.location != NSNotFound){
+            [parameters setValue:[[parameter substringFromIndex:range.location+range.length] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding]
+                          forKey:[[parameter substringToIndex:range.location] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+        } else {
+            [parameters setValue:[[NSString alloc] init] forKey:[parameter stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+        }
+    }
+    return parameters;
+}
 @end

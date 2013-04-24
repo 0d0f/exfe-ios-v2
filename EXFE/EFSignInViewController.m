@@ -15,6 +15,7 @@
 #import "ImgCache.h"
 #import "CSLinearLayoutView.h"
 #import "UILabel+EXFE.h"
+#import "EFTextField.h"
 
 
 typedef NS_ENUM(NSUInteger, EFStage){
@@ -650,18 +651,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 switch (c) {
                     case 200:
                         NSLog(@"Signed In");
-                        [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                            AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-                            [app SigninDidFinish];
-                        }
-                                                            failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                                                ;
-                                                            }];
-                        
-                        
-                        
-                        
-                        
+                        [self loadUserAndExit];
                         break;
                     case 400:{
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];

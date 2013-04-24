@@ -280,7 +280,6 @@
         }
     } failure:failure];
 }
-
 #pragma mark Cross API
 - (void)loadCrossesAfter:(NSString*)updatedtime
                  success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
@@ -319,14 +318,37 @@
 }
 
 - (void)loadUserBy:(NSInteger)user_id
-           success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
-           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     NSParameterAssert(user_id > 0);
     NSParameterAssert(self.user_token.length > 0);
     NSDictionary *param = @{@"token": self.user_token};
     NSString *endpoint = [NSString stringWithFormat:@"users/%u",user_id];
-    [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:param success:success failure:failure];
+    [[RKObjectManager sharedManager].HTTPClient getPath:endpoint parameters:param success:success failure:failure];
+}
+
+- (void) mergeIdentities:(NSArray *)ids
+                 byToken:(NSString *)token
+                 success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSMutableString *idlist = [NSMutableString stringWithString:@"["];
+    BOOL first = YES;
+    for (NSNumber* identity_id in ids) {
+        if (first) {
+            first = NO;
+        } else {
+            [idlist appendString:@","];
+        }
+        [idlist appendFormat:@"%u", [identity_id integerValue]];
+    }
+    [idlist appendString:@"]"];
+    NSDictionary *param = @{@"browsing_identity_token":token, @"identity_ids":idlist};
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/mergeIdentities?token=%@", self.user_id, self.user_token];
+                     
+    [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    [[RKObjectManager sharedManager].HTTPClient postPath:endpoint parameters:param success:success failure:failure];
 }
 
 #pragma mark - Exfee API

@@ -118,10 +118,8 @@
 }
 
 - (void) syncUser{
-    NSInteger user_id = [self.user.user_id integerValue];
-    [[EFAPIServer sharedInstance] loadUserBy:user_id
-                                     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                         self.user = [User getUserById:user_id];
+    [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                         self.user = [User getDefaultUser];
                                          [self refreshUI];
                                      }
                                      failure:^(RKObjectRequestOperation *operation, NSError *error) {

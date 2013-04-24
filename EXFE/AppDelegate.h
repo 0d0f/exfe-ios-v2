@@ -56,14 +56,7 @@
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>{
-    int userid;
-    NSString *accesstoken;
-    NSString *username;
-//    UIViewController* crossviewController;
-    NSString *token_formerge;
-//    NSString *ids_formerge;
-}
+@interface AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, retain) UINavigationController *navigationController;
 
