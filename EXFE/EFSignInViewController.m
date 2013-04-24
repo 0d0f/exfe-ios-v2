@@ -502,6 +502,17 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 {
     NSString* identity = _inputIdentity.text;
     Provider provider = [Util matchedProvider:identity];
+    
+    if (provider == kProviderPhone) {
+        if (![identity hasPrefix:@"+"]) {
+            identity = [Util formatPhoneNumber:identity];
+            _inputIdentity.text = identity;
+            [self textFieldDidChange:_inputIdentity];
+            return;
+        }
+    }
+    
+    
     if (provider == kProviderUnknown) {
         [self showErrorInfo:@"Invalid identity." dockOn:_inputIdentity];
         return;

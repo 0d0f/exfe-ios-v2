@@ -605,6 +605,9 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
             return @{@"external_username": raw, @"external_id": raw, @"provider": provider};
         } break;
         case kProviderPhone:{
+//            if (![raw hasPrefix:@"+"]) {
+//                raw = [self formatPhoneNumber:raw];
+//            }
             return @{@"external_username":raw, @"external_id": raw, @"provider": provider};
         } break;
         case kProviderFacebook:{
