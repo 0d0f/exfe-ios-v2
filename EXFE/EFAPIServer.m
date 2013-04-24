@@ -8,6 +8,7 @@
 
 #import "EFAPIServer.h"
 #import "Util.h"
+#import "Exfee+EXFE.h"
 
 @implementation EFAPIServer
 
@@ -311,6 +312,82 @@
     NSDictionary *param = @{@"token": self.user_token};
     NSString *endpoint = [NSString stringWithFormat:@"users/%u",user_id];
     [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:param success:success failure:failure];
+}
+
+#pragma mark - Exfee API
+
+- (void)editExfee:(Exfee *)exfee byIdentity:(Identity *)identity success:(void (^)(Exfee *))successHandler failure:(void (^)(NSError *error))failureHandler {
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/edit?token=%@&by_identity_id=%u", [exfee.exfee_id intValue], self.user_token, [identity.identity_id intValue]];
+    
+    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
+    manager.requestSerializationMIMEType = RKMIMETypeJSON;
+    [manager.HTTPClient setDefaultHeader:@"token" value:self.user_token];
+    [manager postObject:exfee
+                   path:endpoint
+             parameters:nil
+                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
+                    if ([operation.HTTPRequestOperation.response statusCode] == 200){
+                        if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+                        {
+                            Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                            int code = [meta.code intValue];
+                            int type = code / 100;
+                            switch (type) {
+                                case 2: // HTTP OK
+                                {
+                                    if (code == 206) { // Too many people, still accept
+                                        NSLog(@"HTTP 206 Partial Successfully");
+                                    }
+                                    if(code == 200){
+                                        Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
+                                        if (successHandler) {
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                successHandler(respExfee);
+                                            });
+                                        }
+                                    }
+                                }
+                                    break;
+                                case 4: // Client Error
+                                {
+                                    // 400 Over people mac limited
+                                    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                    [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                                    if (failureHandler) {
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            failureHandler(nil);
+                                        });
+                                    }
+                                }
+                                    break;
+                                case 5: // Server Error
+                                {
+                                    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                    [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                                    if (failureHandler) {
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            failureHandler(nil);
+                                        });
+                                    }
+                                }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                }
+                failure:^(RKObjectRequestOperation *operation, NSError *error){
+                    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                    [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                    if (failureHandler) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            failureHandler(nil);
+                        });
+                    }
+                }];
+
 }
 
 #pragma mark - Identity API
