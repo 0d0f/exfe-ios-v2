@@ -65,7 +65,9 @@
         for (UIImage *icon in self.cell.providerIconSet) {
             [icon drawInRect:CGRectMake(self.frame.size.width - (18 + 2) * i - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
             [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
-            i++;
+            if (++i > 3) {
+                break;
+            }
         }
     } else if(self.cell.providerIcon != nil) {
         [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
@@ -125,7 +127,9 @@
         for (UIImage *icon in self.cell.providerIconSet) {
             [icon drawInRect:CGRectMake(self.frame.size.width - (18 + 2) * i - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
             [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
-            i++;
+            if (++i > 3) {
+                break;
+            }
         }
     } else if(self.cell.providerIcon != nil) {
         [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
@@ -193,6 +197,8 @@
 }
 
 - (void)awakeFromNib {
+    [super awakeFromNib];
+    
     self.avatarImageView.layer.cornerRadius = 3.0f;
     self.avatarImageView.layer.masksToBounds = YES;
     
@@ -203,9 +209,11 @@
      forControlEvents:UIControlEventTouchUpInside];
     button.frame = (CGRect){{260, 0}, {60, 50}};
     [self.contentView addSubview:button];
+    self.accessButton = button;
 }
 
 - (void)dealloc {
+    [_accessButton release];
     [_avatarImageView release];
     [_userNameLabel release];
     [_providerIconSet release];

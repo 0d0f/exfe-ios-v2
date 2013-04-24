@@ -1124,6 +1124,9 @@
 		7601F5641725861000032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		7601F56C1725861100032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		7601F56D1725861200032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
+		7601F5721727B94800032044 /* EFSearchIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7601F5711727B94700032044 /* EFSearchIdentityCell.m */; };
+		7601F5731727B94800032044 /* EFSearchIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7601F5711727B94700032044 /* EFSearchIdentityCell.m */; };
+		7601F5741727B94800032044 /* EFSearchIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7601F5711727B94700032044 /* EFSearchIdentityCell.m */; };
 		763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
@@ -1835,6 +1838,8 @@
 		4FFB149416BFFB9600F76D32 /* SSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSTextView.m; sourceTree = "<group>"; };
 		4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30_pressed.png; sourceTree = "<group>"; };
 		4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30_pressed@2x.png"; sourceTree = "<group>"; };
+		7601F5701727B94700032044 /* EFSearchIdentityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchIdentityCell.h; sourceTree = "<group>"; };
+		7601F5711727B94700032044 /* EFSearchIdentityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchIdentityCell.m; sourceTree = "<group>"; };
 		763A018A171EAEB10082CC9E /* EFSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchBar.h; sourceTree = "<group>"; };
 		763A018B171EAEB10082CC9E /* EFSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchBar.m; sourceTree = "<group>"; };
 		763A018F171EE8BE0082CC9E /* EFChoosePeopleViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewCell.h; sourceTree = "<group>"; };
@@ -2986,6 +2991,8 @@
 				763A018F171EE8BE0082CC9E /* EFChoosePeopleViewCell.h */,
 				763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */,
 				763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */,
+				7601F5701727B94700032044 /* EFSearchIdentityCell.h */,
+				7601F5711727B94700032044 /* EFSearchIdentityCell.m */,
 				763A01A017202BBE0082CC9E /* EFPersonIdentityCell.h */,
 				763A01A117202BBF0082CC9E /* EFPersonIdentityCell.m */,
 			);
@@ -4789,6 +4796,7 @@
 				763A01C31721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
 				763A01D017212B080082CC9E /* RoughIdentity.m in Sources */,
 				7601F56C1725861100032044 /* ExfeeInputViewController.m in Sources */,
+				7601F5731727B94800032044 /* EFSearchIdentityCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4941,6 +4949,7 @@
 				763A01C41721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
 				763A01D117212B080082CC9E /* RoughIdentity.m in Sources */,
 				7601F56D1725861200032044 /* ExfeeInputViewController.m in Sources */,
+				7601F5741727B94800032044 /* EFSearchIdentityCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5093,6 +5102,7 @@
 				763A01C21721222D0082CC9E /* LocalContact+EXFE.m in Sources */,
 				763A01CF17212B080082CC9E /* RoughIdentity.m in Sources */,
 				7601F5641725861000032044 /* ExfeeInputViewController.m in Sources */,
+				7601F5721727B94800032044 /* EFSearchIdentityCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

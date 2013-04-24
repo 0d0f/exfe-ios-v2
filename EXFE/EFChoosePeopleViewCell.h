@@ -28,6 +28,7 @@
 @property (nonatomic, retain) NSArray *providerIconSet;
 @property (nonatomic, assign) id<EFChoosePeopleViewCellDelegate> delegate;
 @property (nonatomic, assign) id<EFChoosePeopleViewCellDataSource> dataSource;
+@property (nonatomic, retain) UIButton *accessButton;
 
 + (NSString *)reuseIdentifier;
 
