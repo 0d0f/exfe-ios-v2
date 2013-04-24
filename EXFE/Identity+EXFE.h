@@ -31,5 +31,6 @@ typedef NS_ENUM(NSUInteger, Provider){
 // if there's no such identity, return nil.
 + (Identity *)identityFromLocalRoughIdentity:(RoughIdentity *)roughIdentity;
 - (RoughIdentity *)roughIdentityValue;
+- (BOOL)hasAnyNotificationIdentity;
 
 @end

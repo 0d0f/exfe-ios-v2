@@ -45,6 +45,7 @@
 - (void)refreshSelectedDictWithObject:(id)obj selected:(BOOL)selected;
 - (BOOL)isObjectSelectedInTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
 - (id)objectForTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
+- (void)reloadAddButtonState;
 
 @end
 
@@ -141,6 +142,9 @@
     
     // hide count label
     [self reloadSelectionCountLabelWithAnimated:NO];
+    
+    // add button state
+    [self reloadAddButtonState];
     
     // load exfe people
     [self loadexfeePeople];
@@ -438,10 +442,12 @@
     controller.searchResultsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     [self reloadSelectionCountLabelWithAnimated:YES];
+    [self reloadAddButtonState];
 }
 
 - (void) searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
     [self reloadSelectionCountLabelWithAnimated:YES];
+    [self reloadAddButtonState];
 }
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller willHideSearchResultsTableView:(UITableView *)tableView {
@@ -644,8 +650,17 @@
         
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
         NSArray *recentexfeePeople = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        NSMutableArray *filteredExfeePeople = [[NSMutableArray alloc] initWithCapacity:[recentexfeePeople count]];
+        
+        for (Identity *identity in recentexfeePeople) {
+            if ([identity hasAnyNotificationIdentity]) {
+                [filteredExfeePeople addObject:identity];
+            }
+        }
+        
         [self.exfeePeople removeAllObjects];
-        [self.exfeePeople addObjectsFromArray:recentexfeePeople];
+        [self.exfeePeople addObjectsFromArray:filteredExfeePeople];
+        [filteredExfeePeople release];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
@@ -737,6 +752,7 @@
     }
     
     [self reloadSelectionCountLabelWithAnimated:YES];
+    [self reloadAddButtonState];
 }
 
 - (BOOL)isObjectSelectedInTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
@@ -784,6 +800,11 @@
     [self refreshSelectedDictWithObject:object selected:isSelected];
     
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)reloadAddButtonState {
+    NSUInteger count = [_selectedDict count];
+    self.addButton.enabled = !!count;
 }
 
 #pragma mark - Category (ChoosePeopleViewCellDisplay)
@@ -891,6 +912,7 @@
     NSUInteger count = [_selectedDict count];
     if (!count) {
         self.selectionCountLabel.hidden = YES;
+        self.selectionCountLabel.text = @"0";
     } else {
         if (self.searchDisplayController.isActive) {
             self.selectionCountLabel.hidden = YES;

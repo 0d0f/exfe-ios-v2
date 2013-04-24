@@ -117,4 +117,26 @@
     return roughtIdentity;
 }
 
+- (BOOL)hasAnyNotificationIdentity {
+    Provider provider = [[self class] getProviderCode:self.provider];
+    BOOL hasNotification = NO;
+    
+    switch (provider) {
+        case kProviderEmail:
+        case kProviderPhone:
+        case kProviderTwitter:
+        case kProviderFacebook:
+            hasNotification = YES;
+            break;
+        case kProviderInstagram:
+        case kProviderFlickr:
+        case kProviderDropbox:
+        default:
+            hasNotification = NO;
+            break;
+    }
+    
+    return hasNotification;
+}
+
 @end
