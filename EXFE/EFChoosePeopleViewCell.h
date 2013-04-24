@@ -22,8 +22,8 @@
 @class LocalContact, Identity;
 @interface EFChoosePeopleViewCell : UITableViewCell
 
-@property (retain, nonatomic) IBOutlet UIImageView *avatarImageView;
-@property (retain, nonatomic) IBOutlet UILabel *userNameLabel;
+@property (retain, nonatomic) UIImageView *avatarImageView;
+@property (retain, nonatomic) UILabel *userNameLabel;
 @property (nonatomic, retain) UIImage *providerIcon;
 @property (nonatomic, retain) NSArray *providerIconSet;
 @property (nonatomic, assign) id<EFChoosePeopleViewCellDelegate> delegate;
