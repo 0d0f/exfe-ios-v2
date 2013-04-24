@@ -14,8 +14,6 @@
 #import "Identity+EXFE.h"
 #import "ImgCache.h"
 #import "CSLinearLayoutView.h"
-#import "OAuthLoginViewController.h"
-#import "SigninDelegate.h"
 #import "UILabel+EXFE.h"
 
 
@@ -43,7 +41,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 @interface EFSignInViewController (){
 
     EFStage _stage;
-    SigninDelegate *_signindelegate;
    
 }
 @property  (nonatomic, copy) NSString *lastInputIdentity;
@@ -57,8 +54,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     if (self) {
         // Custom initialization
         _stage = kStageStart;
-        _signindelegate = [[SigninDelegate alloc] init];
-        _signindelegate.parent = self;
         self.lastInputIdentity = @"";
         self.identityCache = [NSMutableDictionary dictionaryWithCapacity:30];
     }
@@ -256,10 +251,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
+//    CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
 
     
-    
+    [self.inputIdentity becomeFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning
@@ -284,7 +279,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     self.btnFacebook = nil;
     self.btnTwitter = nil;
     self.identityCache = nil;
-    [_signindelegate release];
     [super dealloc];
 }
 
@@ -598,20 +592,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 switch (c) {
                     case 200:
                         NSLog(@"Signed Up");
-//                        UIViewController *parent = self.parentViewController;
-//                        [parent dismissModalViewControllerAnimated:YES];
-//
-                        [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                            AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-                            [app SigninDidFinish];
-                        }
-                                                            failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                                                ;
-                                                            }];
                         
-                       
-                        
-                        
+                        [self loadUserAndExit];
                         
                         break;
                     case 403:
@@ -700,7 +682,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     NSLog(@"facebook Sign In");
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
     oauth.provider = @"facebook";
-    oauth.delegate = _signindelegate;
+    oauth.delegate = self;
     [self presentModalViewController:oauth animated:YES];
 }
 
@@ -709,7 +691,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     NSLog(@"twitter Sign In");
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
     oauth.provider = @"twitter";
-    oauth.delegate = _signindelegate;
+    oauth.delegate = self;
     [self presentModalViewController:oauth animated:YES];
 }
 
@@ -844,9 +826,47 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
 }
 
+
+- (void)loadUserAndExit
+{
+    [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        [self SigninDidFinish];
+    }
+                                        failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                            ;
+                                        }];
+}
 - (void)SigninDidFinish
 {
     NSLog(@"Sign In Did finish");
-    [self.navigationController dismissModalViewControllerAnimated:YES];
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [app SigninDidFinish];
 }
+
+
+
+
+#pragma Mark - OAuthlogin Delegate
+- (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
+    [oauthlogin dismissModalViewControllerAnimated:YES];
+    [oauthlogin release];
+    oauthlogin = nil;
+}
+
+-(void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
+{
+    [self.navigationController dismissModalViewControllerAnimated:YES];
+    
+    //save token/user id/ username
+    if ([userid integerValue] > 0 && token.length > 0) {
+        EFAPIServer *server = [EFAPIServer sharedInstance];
+        server.user_id = [userid integerValue];
+        server.user_token = token;
+//        server.user_name = username;
+        [server saveUserData];
+    }
+    
+    [self loadUserAndExit];
+}
+
 @end

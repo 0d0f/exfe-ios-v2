@@ -50,8 +50,6 @@
 - (void) ShowGatherView;
 - (Cross*) crossWithId:(int)cross_id;
 - (void) refreshTableViewWithCrossId:(int)cross_id;
-- (void) showWelcome;
-- (void) closeWelcome;
 - (void) alertsignout;
 //- (BOOL) isIdentityBelongsMe:(int)identity_id;
 - (BOOL) PushToCross:(int)cross_id;

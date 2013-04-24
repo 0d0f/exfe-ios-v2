@@ -98,9 +98,6 @@
     if ([[EFAPIServer sharedInstance] isLoggedIn] == YES) {
         [self loadObjectsFromDataStore];
         [self refreshCrosses:@"crossupdateview"];
-//        NSString *newuser=[[NSUserDefaults standardUserDefaults] objectForKey:@"NEWUSER"];
-//        if(newuser !=nil && [newuser isEqualToString:@"YES"])
-//            [self showWelcome];
     } else {
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
         [app ShowLanding:self];
@@ -188,32 +185,6 @@
     
 }
 
-// deprecated
-- (void) showWelcome{
-    WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:CGRectMake(4, tableView.frame.origin.y+4, self.view.frame.size.width-4-4, self.view.frame.size.height-44-4-4)];
-    [welcome setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5f]];
-    welcome.parent=self;
-
-    [self.view addSubview:welcome];
-    [self.view bringSubviewToFront:welcome];
-    self.tableView.bounces=NO;
-    [welcome release];
-    
-}
-// deprecated
-- (void) closeWelcome{
-    for(UIView *view in self.view.subviews)
-    {
-        if([view isKindOfClass:[WelcomeView class]])
-        {
-            [view removeFromSuperview];
-        }
-    }
-    self.tableView.bounces=YES;
-    [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"NEWUSER"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-
-}
 - (Cross*) crossWithId:(int)cross_id{
     for(Cross *c in self.crossList)
     {

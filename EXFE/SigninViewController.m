@@ -126,11 +126,11 @@
                         NSString *userid=[response objectForKey:@"user_id"];
                         NSString *username=[response objectForKey:@"username"];
                         [signindelegate loginSuccessWith:token userid:userid username:username];
-                        if([status isEqualToString:@"signup"])
-                        {
-                            [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"NEWUSER"];
-                            [[NSUserDefaults standardUserDefaults] synchronize];
-                        }
+//                        if([status isEqualToString:@"signup"])
+//                        {
+//                            [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"NEWUSER"];
+//                            [[NSUserDefaults standardUserDefaults] synchronize];
+//                        }
                     }
                 }
                 else{
@@ -332,7 +332,7 @@
     [loginbtn setHidden:YES];
 }
 - (void) welcomeButtonPress:(id) sender{
-    [(LandingViewController*)delegate dismissSigninView];
+//    [(LandingViewController*)delegate dismissSigninView];
 }
 
 - (void)viewDidUnload

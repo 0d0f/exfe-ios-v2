@@ -120,11 +120,11 @@
         {
         NSString *userid = [parser valueForVariable:@"userid"];
         NSString *name = [parser valueForVariable:@"name"];
-        NSString *identity_status = [parser valueForVariable:@"identity_status"];
-        if([identity_status isEqualToString:@"new"]){
-            [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"NEWUSER"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
+//        NSString *identity_status = [parser valueForVariable:@"identity_status"];
+//        if([identity_status isEqualToString:@"new"]){
+//            [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"NEWUSER"];
+//            [[NSUserDefaults standardUserDefaults] synchronize];
+//        }
 
         name=[Util decodeFromPercentEscapeString:name];
             

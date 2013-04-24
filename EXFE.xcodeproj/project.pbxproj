@@ -141,7 +141,6 @@
 		4F63DA8017172AA600136B7E /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 78E837F7156658A300763A60 /* Model.xcdatamodeld */; };
 		4F63DA8117172AA600136B7E /* EFTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CA4156A604A00721150 /* EFTime.m */; };
 		4F63DA8217172AA600136B7E /* CrossTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CAA156A604C00721150 /* CrossTime.m */; };
-		4F63DA8317172AA600136B7E /* LandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CB5156B809F00721150 /* LandingViewController.m */; };
 		4F63DA8417172AA600136B7E /* SigninViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CD7156B997200721150 /* SigninViewController.m */; };
 		4F63DA8517172AA600136B7E /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7840916B156F6AA5006DF115 /* Util.m */; };
 		4F63DA8617172AA600136B7E /* APIConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409171156F80A6006DF115 /* APIConversation.m */; };
@@ -180,9 +179,7 @@
 		4F63DAA817172AA600136B7E /* EXBubbleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB6B8C15D6C64000EF83B3 /* EXBubbleScrollView.m */; };
 		4F63DAA917172AA600136B7E /* EXQuoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B2AF6715DEAB5F00451EA2 /* EXQuoteView.m */; };
 		4F63DAAA17172AA600136B7E /* EXInvitationQuoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B22F9615DF4E5B008BEA47 /* EXInvitationQuoteView.m */; };
-		4F63DAAB17172AA600136B7E /* ProfileBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 783662D415E3EC9600F4AEAC /* ProfileBackgroundView.m */; };
 		4F63DAAC17172AA600136B7E /* FullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783662DA15E3F4F900F4AEAC /* FullScreenViewController.m */; };
-		4F63DAAD17172AA600136B7E /* LandingBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B5EF5815E4F85200F0E858 /* LandingBackgroundView.m */; };
 		4F63DAAE17172AA600136B7E /* SigninDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BAD15E76B8A0091A47C /* SigninDelegate.m */; };
 		4F63DAAF17172AA600136B7E /* SigninIconToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB315E78B2A0091A47C /* SigninIconToolbarView.m */; };
 		4F63DAB017172AA600136B7E /* EXBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB615E78F0D0091A47C /* EXBackgroundView.m */; };
@@ -286,7 +283,6 @@
 		4F63DB1417172AA600136B7E /* libFlurry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C4751216084B8A000B69F2 /* libFlurry.a */; };
 		4F63DB1617172AA600136B7E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 78A98E941560F832009E0806 /* InfoPlist.strings */; };
 		4F63DB1717172AA600136B7E /* CrossesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78E88741156244E70026D197 /* CrossesViewController.xib */; };
-		4F63DB1817172AA600136B7E /* LandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CB6156B809F00721150 /* LandingViewController.xib */; };
 		4F63DB1917172AA600136B7E /* SigninViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CD8156B997200721150 /* SigninViewController.xib */; };
 		4F63DB1A17172AA600136B7E /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 785F6F6315820A0000BF8EA0 /* ProfileViewController.xib */; };
 		4F63DB1B17172AA600136B7E /* ProfileCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A8340A1588BBEE0019FDF5 /* ProfileCellView.xib */; };
@@ -587,7 +583,6 @@
 		4F63DC4F17172B0700136B7E /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 78E837F7156658A300763A60 /* Model.xcdatamodeld */; };
 		4F63DC5017172B0700136B7E /* EFTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CA4156A604A00721150 /* EFTime.m */; };
 		4F63DC5117172B0700136B7E /* CrossTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CAA156A604C00721150 /* CrossTime.m */; };
-		4F63DC5217172B0700136B7E /* LandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CB5156B809F00721150 /* LandingViewController.m */; };
 		4F63DC5317172B0700136B7E /* SigninViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CD7156B997200721150 /* SigninViewController.m */; };
 		4F63DC5417172B0700136B7E /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7840916B156F6AA5006DF115 /* Util.m */; };
 		4F63DC5517172B0700136B7E /* APIConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409171156F80A6006DF115 /* APIConversation.m */; };
@@ -626,9 +621,7 @@
 		4F63DC7717172B0700136B7E /* EXBubbleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB6B8C15D6C64000EF83B3 /* EXBubbleScrollView.m */; };
 		4F63DC7817172B0700136B7E /* EXQuoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B2AF6715DEAB5F00451EA2 /* EXQuoteView.m */; };
 		4F63DC7917172B0700136B7E /* EXInvitationQuoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B22F9615DF4E5B008BEA47 /* EXInvitationQuoteView.m */; };
-		4F63DC7A17172B0700136B7E /* ProfileBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 783662D415E3EC9600F4AEAC /* ProfileBackgroundView.m */; };
 		4F63DC7B17172B0700136B7E /* FullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783662DA15E3F4F900F4AEAC /* FullScreenViewController.m */; };
-		4F63DC7C17172B0700136B7E /* LandingBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B5EF5815E4F85200F0E858 /* LandingBackgroundView.m */; };
 		4F63DC7D17172B0700136B7E /* SigninDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BAD15E76B8A0091A47C /* SigninDelegate.m */; };
 		4F63DC7E17172B0700136B7E /* SigninIconToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB315E78B2A0091A47C /* SigninIconToolbarView.m */; };
 		4F63DC7F17172B0700136B7E /* EXBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB615E78F0D0091A47C /* EXBackgroundView.m */; };
@@ -732,7 +725,6 @@
 		4F63DCE317172B0700136B7E /* libFlurry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C4751216084B8A000B69F2 /* libFlurry.a */; };
 		4F63DCE517172B0700136B7E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 78A98E941560F832009E0806 /* InfoPlist.strings */; };
 		4F63DCE617172B0700136B7E /* CrossesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78E88741156244E70026D197 /* CrossesViewController.xib */; };
-		4F63DCE717172B0700136B7E /* LandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CB6156B809F00721150 /* LandingViewController.xib */; };
 		4F63DCE817172B0700136B7E /* SigninViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CD8156B997200721150 /* SigninViewController.xib */; };
 		4F63DCE917172B0700136B7E /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 785F6F6315820A0000BF8EA0 /* ProfileViewController.xib */; };
 		4F63DCEA17172B0700136B7E /* ProfileCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A8340A1588BBEE0019FDF5 /* ProfileCellView.xib */; };
@@ -1223,8 +1215,6 @@
 		7827823915EF5332008D6F09 /* toolbar_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7827823715EF5332008D6F09 /* toolbar_pressed@2x.png */; };
 		782B3CA5156A604A00721150 /* EFTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CA4156A604A00721150 /* EFTime.m */; };
 		782B3CAB156A604C00721150 /* CrossTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CAA156A604C00721150 /* CrossTime.m */; };
-		782B3CB7156B80A000721150 /* LandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CB5156B809F00721150 /* LandingViewController.m */; };
-		782B3CB8156B80A000721150 /* LandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CB6156B809F00721150 /* LandingViewController.xib */; };
 		782B3CD9156B997200721150 /* SigninViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CD7156B997200721150 /* SigninViewController.m */; };
 		782B3CDA156B997200721150 /* SigninViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782B3CD8156B997200721150 /* SigninViewController.xib */; };
 		78335FAC1695912B00ADFE10 /* EXAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78335FAB1695912B00ADFE10 /* EXAlertView.m */; };
@@ -1232,7 +1222,6 @@
 		7835CC2916E0AEE3005001AA /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7835CC2816E0AEE1005001AA /* User.m */; };
 		783662D115E37C1E00F4AEAC /* exclamation.png in Resources */ = {isa = PBXBuildFile; fileRef = 783662CF15E37C1E00F4AEAC /* exclamation.png */; };
 		783662D215E37C1E00F4AEAC /* exclamation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783662D015E37C1E00F4AEAC /* exclamation@2x.png */; };
-		783662D515E3EC9600F4AEAC /* ProfileBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 783662D415E3EC9600F4AEAC /* ProfileBackgroundView.m */; };
 		783662DC15E3F4F900F4AEAC /* FullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783662DA15E3F4F900F4AEAC /* FullScreenViewController.m */; };
 		783662DD15E3F4F900F4AEAC /* FullScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 783662DB15E3F4F900F4AEAC /* FullScreenViewController.xib */; };
 		7838818716BA5D40008678B7 /* glassbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7838818516BA5D40008678B7 /* glassbar.png */; };
@@ -1408,7 +1397,6 @@
 		78B5EF5215E4DA7300F0E858 /* device_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B5EF4E15E4DA7300F0E858 /* device_iphone@2x.png */; };
 		78B5EF5515E4F69B00F0E858 /* exfe_170.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B5EF5315E4F69B00F0E858 /* exfe_170.png */; };
 		78B5EF5615E4F69B00F0E858 /* exfe_170@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B5EF5415E4F69B00F0E858 /* exfe_170@2x.png */; };
-		78B5EF5915E4F85300F0E858 /* LandingBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B5EF5815E4F85200F0E858 /* LandingBackgroundView.m */; };
 		78B91DD916882BE400BB98B1 /* ExfeeNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B91DD816882BE400BB98B1 /* ExfeeNumberView.m */; };
 		78B91DE016884F1800BB98B1 /* rsvp_accepted_stroke_26blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B91DDA16884F1800BB98B1 /* rsvp_accepted_stroke_26blue.png */; };
 		78B91DE116884F1800BB98B1 /* rsvp_accepted_stroke_26blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B91DDB16884F1800BB98B1 /* rsvp_accepted_stroke_26blue@2x.png */; };
@@ -1919,9 +1907,6 @@
 		782B3CA4156A604A00721150 /* EFTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTime.m; sourceTree = "<group>"; };
 		782B3CA9156A604C00721150 /* CrossTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossTime.h; sourceTree = "<group>"; };
 		782B3CAA156A604C00721150 /* CrossTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossTime.m; sourceTree = "<group>"; };
-		782B3CB4156B809F00721150 /* LandingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandingViewController.h; sourceTree = "<group>"; };
-		782B3CB5156B809F00721150 /* LandingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandingViewController.m; sourceTree = "<group>"; };
-		782B3CB6156B809F00721150 /* LandingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LandingViewController.xib; sourceTree = "<group>"; };
 		782B3CD6156B997200721150 /* SigninViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SigninViewController.h; sourceTree = "<group>"; };
 		782B3CD7156B997200721150 /* SigninViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SigninViewController.m; sourceTree = "<group>"; };
 		782B3CD8156B997200721150 /* SigninViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SigninViewController.xib; sourceTree = "<group>"; };
@@ -1933,8 +1918,6 @@
 		7835CC2816E0AEE1005001AA /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		783662CF15E37C1E00F4AEAC /* exclamation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exclamation.png; sourceTree = "<group>"; };
 		783662D015E37C1E00F4AEAC /* exclamation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exclamation@2x.png"; sourceTree = "<group>"; };
-		783662D315E3EC9600F4AEAC /* ProfileBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileBackgroundView.h; sourceTree = "<group>"; };
-		783662D415E3EC9600F4AEAC /* ProfileBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileBackgroundView.m; sourceTree = "<group>"; };
 		783662D915E3F4F900F4AEAC /* FullScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullScreenViewController.h; sourceTree = "<group>"; };
 		783662DA15E3F4F900F4AEAC /* FullScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullScreenViewController.m; sourceTree = "<group>"; };
 		783662DB15E3F4F900F4AEAC /* FullScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FullScreenViewController.xib; sourceTree = "<group>"; };
@@ -2151,8 +2134,6 @@
 		78B5EF4E15E4DA7300F0E858 /* device_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "device_iphone@2x.png"; sourceTree = "<group>"; };
 		78B5EF5315E4F69B00F0E858 /* exfe_170.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exfe_170.png; sourceTree = "<group>"; };
 		78B5EF5415E4F69B00F0E858 /* exfe_170@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfe_170@2x.png"; sourceTree = "<group>"; };
-		78B5EF5715E4F85100F0E858 /* LandingBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandingBackgroundView.h; sourceTree = "<group>"; };
-		78B5EF5815E4F85200F0E858 /* LandingBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandingBackgroundView.m; sourceTree = "<group>"; };
 		78B91DD716882BE400BB98B1 /* ExfeeNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExfeeNumberView.h; sourceTree = "<group>"; };
 		78B91DD816882BE400BB98B1 /* ExfeeNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExfeeNumberView.m; sourceTree = "<group>"; };
 		78B91DDA16884F1800BB98B1 /* rsvp_accepted_stroke_26blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rsvp_accepted_stroke_26blue.png; sourceTree = "<group>"; };
@@ -2679,16 +2660,9 @@
 				783662D915E3F4F900F4AEAC /* FullScreenViewController.h */,
 				783662DA15E3F4F900F4AEAC /* FullScreenViewController.m */,
 				783662DB15E3F4F900F4AEAC /* FullScreenViewController.xib */,
-				78B5EF5715E4F85100F0E858 /* LandingBackgroundView.h */,
-				78B5EF5815E4F85200F0E858 /* LandingBackgroundView.m */,
-				782B3CB4156B809F00721150 /* LandingViewController.h */,
-				782B3CB5156B809F00721150 /* LandingViewController.m */,
-				782B3CB6156B809F00721150 /* LandingViewController.xib */,
 				78D0A5FB158CFAD200401BCA /* OAuthLoginViewController.h */,
 				78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */,
 				78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */,
-				783662D315E3EC9600F4AEAC /* ProfileBackgroundView.h */,
-				783662D415E3EC9600F4AEAC /* ProfileBackgroundView.m */,
 				785F6F6115820A0000BF8EA0 /* ProfileViewController.h */,
 				785F6F6215820A0000BF8EA0 /* ProfileViewController.m */,
 				785F6F6315820A0000BF8EA0 /* ProfileViewController.xib */,
@@ -3625,7 +3599,6 @@
 			files = (
 				4F63DB1617172AA600136B7E /* InfoPlist.strings in Resources */,
 				4F63DB1717172AA600136B7E /* CrossesViewController.xib in Resources */,
-				4F63DB1817172AA600136B7E /* LandingViewController.xib in Resources */,
 				4F63DB1917172AA600136B7E /* SigninViewController.xib in Resources */,
 				4F63DB1A17172AA600136B7E /* ProfileViewController.xib in Resources */,
 				4F63DB1B17172AA600136B7E /* ProfileCellView.xib in Resources */,
@@ -3957,7 +3930,6 @@
 			files = (
 				4F63DCE517172B0700136B7E /* InfoPlist.strings in Resources */,
 				4F63DCE617172B0700136B7E /* CrossesViewController.xib in Resources */,
-				4F63DCE717172B0700136B7E /* LandingViewController.xib in Resources */,
 				4F63DCE817172B0700136B7E /* SigninViewController.xib in Resources */,
 				4F63DCE917172B0700136B7E /* ProfileViewController.xib in Resources */,
 				4F63DCEA17172B0700136B7E /* ProfileCellView.xib in Resources */,
@@ -4289,7 +4261,6 @@
 			files = (
 				78A98E961560F832009E0806 /* InfoPlist.strings in Resources */,
 				78E88743156244E70026D197 /* CrossesViewController.xib in Resources */,
-				782B3CB8156B80A000721150 /* LandingViewController.xib in Resources */,
 				782B3CDA156B997200721150 /* SigninViewController.xib in Resources */,
 				785F6F6515820A0000BF8EA0 /* ProfileViewController.xib in Resources */,
 				78A8340B1588BBEE0019FDF5 /* ProfileCellView.xib in Resources */,
@@ -4658,7 +4629,6 @@
 				4F63DA8017172AA600136B7E /* Model.xcdatamodeld in Sources */,
 				4F63DA8117172AA600136B7E /* EFTime.m in Sources */,
 				4F63DA8217172AA600136B7E /* CrossTime.m in Sources */,
-				4F63DA8317172AA600136B7E /* LandingViewController.m in Sources */,
 				4F63DA8417172AA600136B7E /* SigninViewController.m in Sources */,
 				4F63DA8517172AA600136B7E /* Util.m in Sources */,
 				4F63DA8617172AA600136B7E /* APIConversation.m in Sources */,
@@ -4697,9 +4667,7 @@
 				4F63DAA817172AA600136B7E /* EXBubbleScrollView.m in Sources */,
 				4F63DAA917172AA600136B7E /* EXQuoteView.m in Sources */,
 				4F63DAAA17172AA600136B7E /* EXInvitationQuoteView.m in Sources */,
-				4F63DAAB17172AA600136B7E /* ProfileBackgroundView.m in Sources */,
 				4F63DAAC17172AA600136B7E /* FullScreenViewController.m in Sources */,
-				4F63DAAD17172AA600136B7E /* LandingBackgroundView.m in Sources */,
 				4F63DAAE17172AA600136B7E /* SigninDelegate.m in Sources */,
 				4F63DAAF17172AA600136B7E /* SigninIconToolbarView.m in Sources */,
 				4F63DAB017172AA600136B7E /* EXBackgroundView.m in Sources */,
@@ -4811,7 +4779,6 @@
 				4F63DC4F17172B0700136B7E /* Model.xcdatamodeld in Sources */,
 				4F63DC5017172B0700136B7E /* EFTime.m in Sources */,
 				4F63DC5117172B0700136B7E /* CrossTime.m in Sources */,
-				4F63DC5217172B0700136B7E /* LandingViewController.m in Sources */,
 				4F63DC5317172B0700136B7E /* SigninViewController.m in Sources */,
 				4F63DC5417172B0700136B7E /* Util.m in Sources */,
 				4F63DC5517172B0700136B7E /* APIConversation.m in Sources */,
@@ -4850,9 +4817,7 @@
 				4F63DC7717172B0700136B7E /* EXBubbleScrollView.m in Sources */,
 				4F63DC7817172B0700136B7E /* EXQuoteView.m in Sources */,
 				4F63DC7917172B0700136B7E /* EXInvitationQuoteView.m in Sources */,
-				4F63DC7A17172B0700136B7E /* ProfileBackgroundView.m in Sources */,
 				4F63DC7B17172B0700136B7E /* FullScreenViewController.m in Sources */,
-				4F63DC7C17172B0700136B7E /* LandingBackgroundView.m in Sources */,
 				4F63DC7D17172B0700136B7E /* SigninDelegate.m in Sources */,
 				4F63DC7E17172B0700136B7E /* SigninIconToolbarView.m in Sources */,
 				4F63DC7F17172B0700136B7E /* EXBackgroundView.m in Sources */,
@@ -4964,7 +4929,6 @@
 				78E837F9156658A300763A60 /* Model.xcdatamodeld in Sources */,
 				782B3CA5156A604A00721150 /* EFTime.m in Sources */,
 				782B3CAB156A604C00721150 /* CrossTime.m in Sources */,
-				782B3CB7156B80A000721150 /* LandingViewController.m in Sources */,
 				782B3CD9156B997200721150 /* SigninViewController.m in Sources */,
 				7840916C156F6AA5006DF115 /* Util.m in Sources */,
 				78409172156F80A7006DF115 /* APIConversation.m in Sources */,
@@ -5003,9 +4967,7 @@
 				78FB6B8E15D6C64000EF83B3 /* EXBubbleScrollView.m in Sources */,
 				78B2AF6815DEABF400451EA2 /* EXQuoteView.m in Sources */,
 				78B22F9715DF4E5B008BEA47 /* EXInvitationQuoteView.m in Sources */,
-				783662D515E3EC9600F4AEAC /* ProfileBackgroundView.m in Sources */,
 				783662DC15E3F4F900F4AEAC /* FullScreenViewController.m in Sources */,
-				78B5EF5915E4F85300F0E858 /* LandingBackgroundView.m in Sources */,
 				78867BAE15E76B8C0091A47C /* SigninDelegate.m in Sources */,
 				78867BB415E78B2B0091A47C /* SigninIconToolbarView.m in Sources */,
 				78867BB715E78F0D0091A47C /* EXBackgroundView.m in Sources */,

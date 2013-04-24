@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAuthLoginViewController.h"
 #import "CSLinearLayoutView.h"
 #import "EFPasswordField.h"
 
-@interface EFSignInViewController : UIViewController
+@interface EFSignInViewController : UIViewController<OAuthLoginViewControllerDelegate>
 
 @property (nonatomic, retain) CSLinearLayoutView *rootView;
 @property (nonatomic, retain) UITextField *inputIdentity;
