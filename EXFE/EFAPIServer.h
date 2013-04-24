@@ -64,6 +64,8 @@
        success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
+
+
 - (void)signOutUsingUdid:(NSString*)udid
                  success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                  failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
@@ -75,7 +77,9 @@
        success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-// endpoint regdevice
+- (void)regDevice:(NSString*)pushToken
+          success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+          failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 #pragma mark Cross API
 - (void)loadCrossesAfter:(NSString*)updatedtime

@@ -255,11 +255,11 @@
           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    NSString *endpoint = [NSString stringWithFormat:@"users/%u/regdevice?token=%@",self.user_id, self.user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/regdevice?token=%@", self.user_id, self.user_token];
     RKObjectManager *manager = [RKObjectManager sharedManager] ;
     
     NSDictionary *param = @{@"udid":pushToken,
-                      @"push_token":pushToken,
+                            @"push_token":pushToken,
                             @"os_name":[[UIDevice currentDevice] systemName],
                             @"brand":@"apple",
                             @"model":[[UIDevice currentDevice] model],
@@ -270,11 +270,14 @@
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
             NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
             if ([code integerValue] == 200) {
-                    [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"ifdevicetokenSave"];
-                    [[NSUserDefaults standardUserDefaults] setObject:pushToken forKey:@"udid"];
+                [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"ifdevicetokenSave"];
+                [[NSUserDefaults standardUserDefaults] setObject:pushToken forKey:@"udid"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
             }
         }
-        success(operation, responseObject);
+        if (success) {
+            success(operation, responseObject);
+        }
     } failure:failure];
 }
 

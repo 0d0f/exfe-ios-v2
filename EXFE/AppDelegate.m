@@ -227,39 +227,20 @@ static char mergetoken;
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    
+    NSLog(@"Got push token");
     NSString * tokenAsString = [[[deviceToken description]
                                  stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]]
                                 stringByReplacingOccurrencesOfString:@" " withString:@""];
     
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
         return;
-    
-    NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/regdevice?token=%@",API_ROOT,[EFAPIServer sharedInstance].user_id,[EFAPIServer sharedInstance].user_token];
-    RKObjectManager *manager=[RKObjectManager sharedManager] ;
-    manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
-    [manager.HTTPClient postPath:endpoint parameters:@{@"udid":tokenAsString,@"push_token":tokenAsString,@"os_name":@"iOS",@"brand":@"apple",@"model":@"",@"os_version":@"6"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-            NSDictionary *body=responseObject;
-            if([body isKindOfClass:[NSDictionary class]]) {
-                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                if(code)
-                    if([code intValue]==200) {
-                        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"ifdevicetokenSave"];
-                        [[NSUserDefaults standardUserDefaults] setObject:tokenAsString forKey:@"udid"];
-                    }
-            }
-        }else {
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-    }];
-    
+    [[EFAPIServer sharedInstance] regDevice:tokenAsString success:nil failure:nil];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
     NSLog(@"Error in registration. Error: %@", err);
 }
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [Flurry logEvent:@"RECEIVE_REMOTE_NOTIFICATION"];
@@ -280,13 +261,13 @@ static char mergetoken;
             [params setObject:[elts objectAtIndex:1] forKey:[elts objectAtIndex:0]];
         }
     }
-    NSString *token=[params objectForKey:@"token"];
-    NSString *user_id=[params objectForKey:@"user_id"];
-    NSString *identity_id=[params objectForKey:@"identity_id"];
+    NSString *token = [params objectForKey:@"token"];
+    NSString *user_id = [params objectForKey:@"user_id"];
+    NSString *identity_id = [params objectForKey:@"identity_id"];
     
-    token_formerge=@"";
+    token_formerge = @"";
     if ([params objectForKey:@"token"] !=nil ){
-        token_formerge=[token_formerge stringByAppendingString:[params objectForKey:@"token"]];
+        token_formerge = [token_formerge stringByAppendingString:[params objectForKey:@"token"]];
     }
     [params release];
     if (token.length > 0 && [user_id intValue]>0){
@@ -432,13 +413,14 @@ static char mergetoken;
     [crossViewController refreshCrosses:@"gatherview"];
     [self.navigationController dismissModalViewControllerAnimated:YES];
 }
+
 -(void)CrossUpdateDidFinish:(int)cross_id{
     //    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
     NSArray *viewControllers = self.navigationController.viewControllers;
     CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
     [crossViewController refreshCrosses:@"crossupdateview" withCrossId:cross_id];
-    
 }
+
 -(void)SignoutDidFinish{
     [Flurry logEvent:@"ACTION_DID_SIGN_OUT"];
     
