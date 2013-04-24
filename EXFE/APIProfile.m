@@ -38,7 +38,6 @@
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSString *endpoint = [NSString stringWithFormat:@"%@users/update?token=%@",API_ROOT,[EFAPIServer sharedInstance].user_token];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
@@ -55,7 +54,6 @@
                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     
-    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSString *endpoint = [NSString stringWithFormat:@"%@identities/%i/update?token=%@", API_ROOT, [identity.identity_id intValue], [EFAPIServer sharedInstance].user_token];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];

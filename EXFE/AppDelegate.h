@@ -66,9 +66,6 @@
 }
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, retain) UINavigationController *navigationController;
-//@property (nonatomic) int userid;
-//@property (nonatomic, retain) NSString *accesstoken;
-//@property (nonatomic, retain) NSString *username;
 
 -(void)SigninDidFinish;
 -(void)SignoutDidFinish;
