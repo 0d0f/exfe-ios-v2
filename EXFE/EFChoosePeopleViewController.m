@@ -38,6 +38,8 @@
 
 @property (nonatomic, retain) NSIndexPath *insertIndexPath;
 
+- (void)dismiss;
+
 - (void)loadexfeePeople;
 - (void)loadcontactPeople;
 
@@ -280,13 +282,29 @@
     [self.exfee addInvitations:[[invitations copy] autorelease]];
     [invitations release];
     
-    [MBProgressHUD hideHUDForView:self.view animated:YES];
+    if (self.needSubmit) {
+        [self submitExfeBeforeDismiss];
+    } else {
+        [self dismiss];
+    }
+}
+
+- (void)submitExfeBeforeDismiss {
+    Exfee *exfee = [Exfee disconnectedEntity];
+    [exfee addToContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+    exfee.exfee_id = [self.exfee.exfee_id copy];
     
-    [self.presentingViewController dismissViewControllerAnimated:YES
-                                                      completion:^{
-                                                          if (_completionHandler)
-                                                              _completionHandler();
-                                                      }];
+    Identity *myidentity = [self.exfee getMyInvitation].identity;
+    
+    [[EFAPIServer sharedInstance] editExfee:exfee
+                                 byIdentity:myidentity
+                                    success:^(Exfee *editedExfee){
+                                        self.exfee = editedExfee;
+                                        [self dismiss];
+                                    }
+                                    failure:^(NSError *error){
+                                        NSLog(@"Oh! NO! %@", error);
+                                    }];
 }
 
 #pragma mark - EFPersonIdentityCellDelegate
@@ -805,6 +823,15 @@
 - (void)reloadAddButtonState {
     NSUInteger count = [_selectedDict count];
     self.addButton.enabled = !!count;
+}
+
+- (void)dismiss {
+    [self.presentingViewController dismissViewControllerAnimated:YES
+                                                      completion:^{
+                                                          if (_completionHandler) {
+                                                              _completionHandler();
+                                                          }
+                                                      }];
 }
 
 #pragma mark - Category (ChoosePeopleViewCellDisplay)

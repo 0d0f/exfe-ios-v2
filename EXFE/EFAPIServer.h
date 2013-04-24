@@ -10,8 +10,8 @@
 #import <RestKit/RestKit.h>
 #import "Identity+EXFE.h"
 
+@class Exfee;
 @interface EFAPIServer : NSObject
-
 
 @property (nonatomic, assign) NSInteger user_id;
 @property (nonatomic, copy) NSString *user_token;
@@ -102,6 +102,10 @@
 - (void)loadUserBy:(NSInteger)user_id
            success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
            failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
+#pragma mark - Exfee API
+
+- (void)editExfee:(Exfee *)exfee byIdentity:(Identity *)identity success:(void (^)(Exfee *editedExfee))successHandler failure:(void (^)(NSError *error))failureHandler;
 
 #pragma mark - Identity API
 
