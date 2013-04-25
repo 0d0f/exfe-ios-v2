@@ -152,10 +152,18 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(0, 0, 290, 48);
         [btn setTitle:@"Start" forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
+        btn.titleLabel.shadowOffset = CGSizeMake(0, -1);
+        btn.titleLabel.shadowColor = [UIColor COLOR_WA(0x00, 0x7F)];
         [btn addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchUpInside];
-        UIImage *btnImage = [UIImage imageNamed:@"btn_blue_30inset.png"];
+        UIImage *btnImage = [UIImage imageNamed:@"btn_blue_44.png"];
         btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
         [btn setBackgroundImage:btnImage forState:UIControlStateNormal];
+        btn.titleLabel.textColor = [UIColor whiteColor];
+        btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
+        btn.titleLabel.shadowOffset = CGSizeMake(0, -1);
+        btn.titleLabel.shadowColor = [UIColor COLOR_WA(0x00, 0x7F)];
         self.btnStart = btn;
         self.btnStart.tag = kViewTagButtonStart;
     }
@@ -164,8 +172,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(0, 0, 290, 48);
         [btn setTitle:@"Start with new account" forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
+        btn.titleLabel.shadowOffset = CGSizeMake(0, -1);
+        btn.titleLabel.shadowColor = [UIColor COLOR_WA(0x00, 0x7F)];
         [btn addTarget:self action:@selector(signUp:) forControlEvents:UIControlEventTouchUpInside];
-        UIImage *btnImage = [UIImage imageNamed:@"btn_blue_30inset.png"];
+        UIImage *btnImage = [UIImage imageNamed:@"btn_blue_44.png"];
         btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
         [btn setBackgroundImage:btnImage forState:UIControlStateNormal];
         self.btnStartNewUser = btn;
@@ -176,10 +188,15 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(0, 0, 290, 48);
         [btn setTitle:@"Start Over" forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
+        btn.titleLabel.shadowOffset = CGSizeMake(0, 1);
+        btn.titleLabel.shadowColor = [UIColor COLOR_WA(0xFF, 0xFF)];
         [btn addTarget:self action:@selector(startOver:) forControlEvents:UIControlEventTouchUpInside];
-        UIImage *btnImage = [UIImage imageNamed:@"btn_blue_30inset.png"];
+        UIImage *btnImage = [UIImage imageNamed:@"btn_white_44.png"];
         btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
         [btn setBackgroundImage:btnImage forState:UIControlStateNormal];
+        
         self.btnStartOver = btn;
         self.btnStartOver.tag = kViewTagButtonNewUser;
     }
@@ -204,7 +221,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         self.labelVerifyDescription.tag = kViewTagVerificationDescription;
     }
     
-    {
+    {// Overlay error hint
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
         label.textColor = [UIColor COLOR_RGB(229, 46, 83)];
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:18.0];
@@ -235,13 +252,19 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         [self.view addSubview:self.hintError];
     }
     
+    {// Inline error hint
+        
+    }
+    
     CSLinearLayoutView *snsLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 0, 296, 106)] autorelease];
-    snsLayoutView.backgroundColor = [UIColor whiteColor];
-    snsLayoutView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    snsLayoutView.layer.borderWidth = 3.0;
-    snsLayoutView.layer.masksToBounds = YES;
-    snsLayoutView.layer.cornerRadius = 6;
     snsLayoutView.orientation = CSLinearLayoutViewOrientationHorizontal;
+    
+    UIEdgeInsets insets = UIEdgeInsetsMake(6, 6, 6, 6);
+    UIImage *image = [UIImage imageNamed:@"table.png"];
+    UIImageView *background = [[UIImageView alloc] initWithFrame:snsLayoutView.bounds];
+    background.image = [image resizableImageWithCapInsets:insets];
+    [snsLayoutView addSubview:background];
+    [background release];
     
     CSLinearLayoutItem *snsItem = [CSLinearLayoutItem layoutItemForView:snsLayoutView];
     snsItem.padding = CSLinearLayoutMakePadding(10, 12, 240, 12);
@@ -250,15 +273,28 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [linearLayoutView addItem:snsItem];
     
     {
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        button.frame = CGRectMake(0, 0, 50, 50);
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(0, 0, 70, 70);
+        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [button setTitle:@"Facebook" forState:UIControlStateNormal];
+        button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
+        UIImage *image = [UIImage imageNamed:@"identity_facebook_50btn.png"];
+        [button setImage:image forState:UIControlStateNormal];
+        
+        //http://stackoverflow.com/questions/2451223/uibutton-how-to-center-an-image-and-a-text-using-imageedgeinsets-and-titleedgei
+        CGFloat spacing = 4.0;
+        CGSize imageSize = button.imageView.frame.size;
+        CGSize titleSize = button.titleLabel.frame.size;
+        button.titleEdgeInsets = UIEdgeInsetsMake(0.0, - imageSize.width, - (imageSize.height + spacing), 0.0);
+        titleSize = button.titleLabel.frame.size;
+        button.imageEdgeInsets = UIEdgeInsetsMake(- (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
         [button addTarget:self action:@selector(facebookSignIn:) forControlEvents:UIControlEventTouchUpInside];
         self.btnFacebook = button;
-        self.btnFacebook.tag = 21;
-        //    [self.view addSubview:self.btnFacebook];
+        self.btnFacebook.tag = 51;
+        
         CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:self.btnFacebook];
-        item.padding = CSLinearLayoutMakePadding(23, 68, 0, 30);
+        item.padding = CSLinearLayoutMakePadding(23, 58, 0, 20);
         item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
         item.fillMode = CSLinearLayoutItemFillModeNormal;
         [snsLayoutView addItem:item];
@@ -266,15 +302,27 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     {
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        button.frame = CGRectMake(0, 0, 50, 50);
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(0, 0, 70, 70);
+        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [button setTitle:@"Twitter" forState:UIControlStateNormal];
+        button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
+        UIImage *image = [UIImage imageNamed:@"identity_twitter_50btn.png"];
+        [button setImage:image forState:UIControlStateNormal];
+        
+        CGFloat spacing = 4.0;
+        CGSize imageSize = button.imageView.frame.size;
+        CGSize titleSize = button.titleLabel.frame.size;
+        button.titleEdgeInsets = UIEdgeInsetsMake(0.0, - imageSize.width, - (imageSize.height + spacing), 0.0);
+        titleSize = button.titleLabel.frame.size;
+        button.imageEdgeInsets = UIEdgeInsetsMake(- (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
         [button addTarget:self action:@selector(twitterSignIn:) forControlEvents:UIControlEventTouchUpInside];
         self.btnTwitter = button;
-        self.btnTwitter.tag = 22;
-        //    [self.view addSubview:self.btnTwitter];
+        self.btnTwitter.tag = 52;
+        
         CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:self.btnTwitter];
-        item.padding = CSLinearLayoutMakePadding(23, 30, 0, 0);
+        item.padding = CSLinearLayoutMakePadding(23, 20, 0, 0);
         item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
         item.fillMode = CSLinearLayoutItemFillModeNormal;
         [snsLayoutView addItem:item];
@@ -702,18 +750,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                             }    break;
                             case 400:{
                                 NSString *errorType = [responseObject valueForKeyPath:@"meta.code"];
-                                
                                 if ([@"identity_does_not_exist" isEqualToString:errorType]) {
-                                    // "meta.errorType": "identity_does_not_exist"
-                                    // _stage -> kStageSignUp
                                     [self setStage:kStageSignUp];
                                 } else if ([@"no_need_to_verify" isEqualToString:errorType]) {
-                                    // "meta.errorType": "no_need_to_verify"
-                                    // _stage -> kStageSignIn
                                     [self setStage:kStageSignIn];
                                 }
-                                
-                                
                             }  break;
                             default:
                                 break;
@@ -723,9 +764,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             } failure:^(AFHTTPRequestOperation *operation, NSError *error){
 //                error.domain
                 switch (error.code) {
-                    case -1004:
-                        // TODO: Failed to connect server.
-                        
+                    case -1004: 
+                        #pragma mark Failed to connect server.
+                        // TODO:Failed to connect server.
+                        // Failed to connect server. Please retry or wait awhile.
                         break;
                         
                     default:
@@ -880,6 +922,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 switch (c) {
                     case 200:
                         NSLog(@"Forget Password sent");
+                        // TODO: handle email/phone
                         [UIAlertView showAlertViewWithTitle:@"Forget Password?" message:@"Password reset request sent, please check your email for instructions." cancelButtonTitle:@"OK" otherButtonTitles:nil handler:nil];
                     case 400:{
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
@@ -894,6 +937,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 //                        } else if ([@"invalid_username" isEqualToString:errorType]) {
 //                            [self showErrorInfo:@"Invalid name." dockOn:_inputPassword];
 //                        }
+                    }  break;
+                    case 429:{
+                        // TODO: Request too frequently. Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.
                     }  break;
                     default:
                         break;

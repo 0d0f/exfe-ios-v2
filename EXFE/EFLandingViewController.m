@@ -81,8 +81,8 @@
         newF.origin.y = appFrame.size.height;
         self.labelStart.frame = newF;
         
-        CGRect logo_frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 150 : 110, 320, 300);
-        _imgEXFELogo.frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 67 : 64, 320, 300);
+        CGRect logo_frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 134 : 90, 320, 300);
+        _imgEXFELogo.frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 68 : 34, 320, 300);
         
         [UIView animateWithDuration:1.6 delay:0.1 options:UIViewAnimationOptionTransitionNone animations:^{
             _imgEXFELogo.frame = logo_frame;
@@ -164,7 +164,7 @@
                              }
                          } else {
                              if (_imgEXFELogo) {
-                                 _imgEXFELogo.frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 150 : 110, 320, 300);
+                                 _imgEXFELogo.frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 134 : 90, 320, 300);
                              }
                          }
                      }
