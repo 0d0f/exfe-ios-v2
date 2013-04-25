@@ -22,7 +22,6 @@
 #import "Place+Helper.h"
 #import "NSString+EXFE.h"
 #import "CrossGroupViewController.h"
-#import "EFLandingViewController.h"
 #import "EFAPIServer.h"
 
 
@@ -223,6 +222,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
 }
 
 - (void)ShowProfileView{
