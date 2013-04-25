@@ -19,6 +19,8 @@ NSCopying
 @property (nonatomic, copy, readonly) NSString *key;
 
 + (RoughIdentity *)identity;
++ (RoughIdentity *)identityWithDictionary:(NSDictionary *)dictionary;
+- (id)initWithDictionary:(NSDictionary *)dictionary;
 
 - (BOOL)isEqualToRoughIdentity:(RoughIdentity *)anIdentity;
 - (NSDictionary *)dictionaryValue;

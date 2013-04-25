@@ -13,6 +13,7 @@
 #import "ImgCache.h"
 #import "LocalContact.h"
 #import "Identity+EXFE.h"
+#import "RoughIdentity.h"
 
 #pragma mark - BackgroundView
 @interface EFChoosePeopleBackgroundView : UIView
@@ -373,6 +374,17 @@
         } else {
             self.avatarImageView.image = avatar;
         }
+    }
+}
+
+- (void)customWithRoughtIdentity:(RoughIdentity *)roughtIdentity {
+    self.userNameLabel.text = roughtIdentity.externalUsername;
+    self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
+    if (roughtIdentity.provider && ![roughtIdentity.provider isEqualToString:@""]) {
+        NSString *iconName = [NSString stringWithFormat:@"identity_%@_18_grey.png", roughtIdentity.provider];
+        UIImage *icon = [UIImage imageNamed:iconName];
+        self.providerIcon = icon;
+        self.providerIconSet = nil;
     }
 }
 

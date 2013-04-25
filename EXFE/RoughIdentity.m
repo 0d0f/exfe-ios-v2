@@ -12,7 +12,28 @@
 @synthesize key = _key;
 
 + (RoughIdentity *)identity {
-    return [[[self alloc] init] autorelease];
+    return [[[self alloc] initWithDictionary:nil] autorelease];
+}
+
++ (RoughIdentity *)identityWithDictionary:(NSDictionary *)dictionary {
+    return [[[self alloc] initWithDictionary:dictionary] autorelease];
+}
+
+- (id)initWithDictionary:(NSDictionary *)dictionary {
+    self = [super init];
+    if (self) {
+        [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+            if ([key isEqualToString:@"provider"]) {
+                self.provider = obj;
+            } else if ([key isEqualToString:@"external_username"]) {
+                self.externalUsername = obj;
+            } else if ([key isEqualToString:@"external_id"]) {
+                self.externalID = obj;
+            }
+        }];
+    }
+    
+    return self;
 }
 
 - (void)dealloc {
