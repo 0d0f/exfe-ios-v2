@@ -95,4 +95,8 @@
     return result;
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"provider:%@ externalID:%@ externalUsername:%@", self.provider, self.externalID, self.externalUsername];
+}
+
 @end
