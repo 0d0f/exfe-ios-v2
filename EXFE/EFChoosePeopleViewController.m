@@ -228,9 +228,52 @@
     }
     
     __block NSUInteger count = 0;
+    for (RoughIdentity *roughIdentity in self.searchAddPeople) {
+        NSArray *selectedRoughIndentityDicts = @[[roughIdentity dictionaryValue]];
+        
+        if ([selectedRoughIndentityDicts count]) {
+            ++count;
+            [[EFAPIServer sharedInstance] getIdentitiesWithParams:selectedRoughIndentityDicts
+                                                          success:^(NSArray *identities){
+                                                              BOOL hasAddedNoresponse = NO;
+                                                              RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                                              NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
+                                                              
+                                                              for (Identity *identity in identities) {
+                                                                  NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
+                                                                  Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
+                                                                  
+                                                                  if (!hasAddedNoresponse) {
+                                                                      invitation.rsvp_status = @"NORESPONSE";
+                                                                  } else {
+                                                                      hasAddedNoresponse = YES;
+                                                                      invitation.rsvp_status = @"NOTIFICATION";
+                                                                  }
+                                                                  
+                                                                  invitation.identity = identity;
+                                                                  Invitation *myinvitation = [self.exfee getMyInvitation];
+                                                                  if (myinvitation != nil) {
+                                                                      invitation.updated_by = myinvitation.identity;
+                                                                  } else {
+                                                                      invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
+                                                                  }
+                                                                  
+                                                                  [invitations addObject:invitation];
+                                                                  [invitation release];
+                                                              }
+                                                              --count;
+                                                          }
+                                                          failure:^(NSError *error){
+                                                              --count;
+                                                              NSLog(@"Oh! Shit! %@", error);
+                                                          }];
+        }
+
+    }
+    
     for (LocalContact *contact in self.contactPeople) {
         NSArray *roughIdentities = [contact roughIdentities];
-        NSMutableArray *selectedRoughIndentityDicts = [[NSMutableArray alloc] initWithCapacity:[roughIdentities count]];
+        NSMutableArray *selectedRoughIndentityDicts = [[[NSMutableArray alloc] initWithCapacity:[roughIdentities count]] autorelease];
         for (RoughIdentity *roughIndentity in roughIdentities) {
             if ([self isRoughtIdentitySelected:roughIndentity]) {
                 [selectedRoughIndentityDicts addObject:[roughIndentity dictionaryValue]];
