@@ -195,6 +195,10 @@
 }
 
 - (void)dismissWithAnimated:(BOOL)animated complete:(void (^)(void))handler {
+    if (!_flags.isPresnted)
+        return;
+    _flags.isPresnted = NO;
+    
     [UIView setAnimationsEnabled:animated];
     [UIView animateWithDuration:0.25f
                      animations:^{
@@ -212,8 +216,6 @@
                          
                          if (handler)
                              handler();
-                         
-                         _flags.isPresnted = NO;
                          
                          [self release];
                      }];
