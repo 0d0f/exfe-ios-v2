@@ -318,9 +318,17 @@
         indexPath = [tableView indexPathForCell:cell];
     }
     
+    NSIndexPath *indexPathParam = nil;
+    if (tableView == self.searchDisplayController.searchResultsTableView &&
+        self.searchBar.text.length &&
+        indexPath.section == 0) {
+        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 2 inSection:indexPath.section];
+    } else {
+        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+    }
     [self selectOrDeselectTableView:tableView
                            selected:YES
-                        atIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+                        atIndexPath:indexPathParam];
     [tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
@@ -334,7 +342,16 @@
         indexPath = [tableView indexPathForCell:cell];
     }
     indexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-    NSArray *roughtIdentities = [self roughIdentitiesForTableView:tableView indexPath:indexPath];
+    
+    NSIndexPath *indexPathParam = nil;
+    if (tableView == self.searchDisplayController.searchResultsTableView &&
+        self.searchBar.text.length &&
+        indexPath.section == 0) {
+        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+    } else {
+        indexPathParam = indexPath;
+    }
+    NSArray *roughtIdentities = [self roughIdentitiesForTableView:tableView indexPath:indexPathParam];
     
     BOOL shouldDeselect = YES;
     for (RoughIdentity *roughIndentity in roughtIdentities) {
@@ -347,7 +364,7 @@
     if (shouldDeselect) {
         [self selectOrDeselectTableView:tableView
                                selected:NO
-                            atIndexPath:indexPath];
+                            atIndexPath:indexPathParam];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
