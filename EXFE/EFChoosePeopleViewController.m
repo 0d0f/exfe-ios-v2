@@ -1004,7 +1004,7 @@
             self.selectionCountLabel.hidden = NO;
         }
         
-        if (animated) {
+        if (animated && count != [self.selectionCountLabel.text intValue]) {
             CATransition *animation = [CATransition animation];
             [animation setDuration:0.233f];
             [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
