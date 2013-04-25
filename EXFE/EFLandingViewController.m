@@ -34,6 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     // Do any additional setup after loading the view from its nib.
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
@@ -81,7 +82,7 @@
         self.labelStart.frame = newF;
         
         CGRect logo_frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 150 : 110, 320, 300);
-        _imgEXFELogo.frame = CGRectMake(0, 10, 320, 300);
+        _imgEXFELogo.frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 67 : 64, 320, 300);
         
         [UIView animateWithDuration:1.6 delay:0.1 options:UIViewAnimationOptionTransitionNone animations:^{
             _imgEXFELogo.frame = logo_frame;

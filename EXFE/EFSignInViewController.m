@@ -49,6 +49,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 @implementation EFSignInViewController
 
+
+#pragma mark -
+#pragma mark UIViewController lifecycle
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -78,17 +81,18 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [self.view addSubview:linearLayoutView];
     
     {// Input Identity Field
-        UITextField *textfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        UITextField *textfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
         textfield.placeholder = @"Enter email or phone";
         textfield.borderStyle = UITextBorderStyleRoundedRect;
         textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
         textfield.keyboardType = UIKeyboardTypeEmailAddress;
         textfield.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
         textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        textfield.borderStyle = UITextBorderStyleBezel;
+        textfield.delegate = self;
         [textfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         self.inputIdentity = textfield;
         self.inputIdentity.tag = kViewTagInputIdentity;
-        //    [self.view addSubview:self.inputIdentity];
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
         imageView.layer.cornerRadius = 4.0;
@@ -109,28 +113,38 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         self.inputIdentity.rightViewMode = UITextFieldViewModeAlways;
         
         CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:self.inputIdentity];
-        item.padding = CSLinearLayoutMakePadding(10.0, 15, 5, 15);
+        item.padding = CSLinearLayoutMakePadding(20.0, 15, 0, 15);
         item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
         item.fillMode = CSLinearLayoutItemFillModeNormal;
         [linearLayoutView addItem:item];
     }
     
     {// Input Password Field
-        EFPasswordField *txtfield = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-        txtfield.borderStyle = UITextBorderStyleRoundedRect;
-        txtfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        EFPasswordField *textfield = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
+        textfield.borderStyle = UITextBorderStyleRoundedRect;
+        textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        textfield.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
+        textfield.borderStyle = UITextBorderStyleBezel;
+        textfield.delegate = self;
+        [textfield.btnForgot addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
         
-        [txtfield.btnForgot addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
-        
-        self.inputPassword = txtfield;
+        self.inputPassword = textfield;
         self.inputPassword.tag = kViewTagInputPassword;
     }
     
     {// Input Username
-        UITextField *txtfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-        txtfield.borderStyle = UITextBorderStyleRoundedRect;
-        txtfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        self.inputUsername = txtfield;
+        UITextField *textfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
+        textfield.borderStyle = UITextBorderStyleRoundedRect;
+        textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        textfield.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
+        textfield.borderStyle = UITextBorderStyleBezel;
+        textfield.delegate = self;
+        textfield.placeholder = @"Set display name";
+        UIView *stub = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+        textfield.leftView = stub;
+        textfield.leftViewMode = UITextFieldViewModeAlways;
+        [stub release];
+        self.inputUsername = textfield;
         self.inputUsername.tag = kViewTagInputUserName;
     }
     
@@ -197,6 +211,26 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         label.numberOfLines = 1;
         label.backgroundColor = [UIColor whiteColor];
         label.hidden = YES;
+        label.textAlignment = UITextAlignmentRight;
+        UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+            
+            [self hide:sender.view withAnmated:NO];
+            CGPoint p = [sender.view convertPoint:location toView:self.inputIdentity.superview];
+            if (CGRectContainsPoint(self.inputIdentity.frame, p)) {
+                [self.inputIdentity becomeFirstResponder];
+                return;
+            }
+            if (CGRectContainsPoint(self.inputPassword.frame, p)) {
+                [self.inputPassword becomeFirstResponder];
+                return;
+            }
+            if (CGRectContainsPoint(self.inputUsername.frame, p)) {
+                [self.inputUsername becomeFirstResponder];
+                return;
+            }
+        }];
+        [label addGestureRecognizer:tap];
+        label.userInteractionEnabled = true;
         self.hintError = label;
         [self.view addSubview:self.hintError];
     }
@@ -210,7 +244,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     snsLayoutView.orientation = CSLinearLayoutViewOrientationHorizontal;
     
     CSLinearLayoutItem *snsItem = [CSLinearLayoutItem layoutItemForView:snsLayoutView];
-    snsItem.padding = CSLinearLayoutMakePadding(5, 12, 5, 12);
+    snsItem.padding = CSLinearLayoutMakePadding(10, 12, 240, 12);
     snsItem.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
     snsItem.fillMode = CSLinearLayoutItemFillModeNormal;
     [linearLayoutView addItem:snsItem];
@@ -255,7 +289,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 //    CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
 
     [self performBlock:^(id sender) {
-        [self.inputIdentity becomeFirstResponder];
+        [_inputIdentity becomeFirstResponder];
     } afterDelay:0.233];
 }
 
@@ -284,6 +318,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [super dealloc];
 }
 
+#pragma mark - UI Methos
 - (void)setStage:(EFStage)stage
 {
     _stage = stage;
@@ -299,6 +334,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
             
             self.inputIdentity.rightView = self.extIdentity;
+            self.inputIdentity.returnKeyType = UIReturnKeyNext;
             break;
         case kStageSignIn:{
             // show rest login form
@@ -309,26 +345,35 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
             
-            CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:self.inputIdentity.tag];
+            CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:_inputIdentity.tag];
             
-            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:self.inputPassword.tag];
+            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:_inputPassword.tag];
             if (item1 == nil) {
                 item1 = [CSLinearLayoutItem layoutItemForView:self.inputPassword];
-                item1.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
                 item1.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
                 item1.fillMode = CSLinearLayoutItemFillModeNormal;
                 [self.rootView insertItem:item1 afterItem:baseItem];
+            } else {
+                [self.rootView moveItem:item1 afterItem:baseItem];
             }
+            item1.padding = CSLinearLayoutMakePadding(0, 15, 4, 15);
             
-            CSLinearLayoutItem *item2 = [self.rootView findItemByTag:self.btnStart.tag];
+            CSLinearLayoutItem *item2 = [self.rootView findItemByTag:_btnStart.tag];
             if (item2 == nil){
                 item2 = [CSLinearLayoutItem layoutItemForView:self.btnStart];
-                item2.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
                 item2.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
                 item2.fillMode = CSLinearLayoutItemFillModeNormal;
                 [self.rootView insertItem:item2 afterItem:item1];
+            } else {
+                [self.rootView moveItem:item2 afterItem:item1];
             }
+            item2.padding = CSLinearLayoutMakePadding(6, 15, 0, 15);
             
+            
+            _inputIdentity.returnKeyType = UIReturnKeyNext;
+            _inputPassword.placeholder = @"Enter password";
+            _inputPassword.returnKeyType = UIReturnKeyDone;
+            [_inputPassword becomeFirstResponder];
         }    break;
         case kStageSignUp:{
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStart]];
@@ -337,41 +382,46 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
            
-            CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:self.inputIdentity.tag];
+            CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:_inputIdentity.tag];
             
-            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:self.inputPassword.tag];
+            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:_inputPassword.tag];
             if (item1 == nil) {
-                item1 = [CSLinearLayoutItem layoutItemForView:self.inputPassword];
-                item1.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
+                item1 = [CSLinearLayoutItem layoutItemForView:_inputPassword];
                 item1.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
                 item1.fillMode = CSLinearLayoutItemFillModeNormal;
                 [self.rootView insertItem:item1 afterItem:baseItem];
             } else {
                 [self.rootView moveItem:item1 afterItem:baseItem];
             }
+            item1.padding = CSLinearLayoutMakePadding(0, 15, 0, 15);
             
-            CSLinearLayoutItem *item2 = [self.rootView findItemByTag:self.inputUsername.tag];
+            CSLinearLayoutItem *item2 = [self.rootView findItemByTag:_inputUsername.tag];
             if (item2 == nil) {
-                item2 = [CSLinearLayoutItem layoutItemForView:self.inputUsername];
-                item2.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
+                item2 = [CSLinearLayoutItem layoutItemForView:_inputUsername];
                 item2.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
                 item2.fillMode = CSLinearLayoutItemFillModeNormal;
                 [self.rootView insertItem:item2 afterItem:item1];
             } else {
                 [self.rootView moveItem:item2 afterItem:item1];
             }
+            item2.padding = CSLinearLayoutMakePadding(0, 15, 4, 15);
             
-            CSLinearLayoutItem *item3 = [self.rootView findItemByTag:self.btnStartNewUser.tag];
+            CSLinearLayoutItem *item3 = [self.rootView findItemByTag:_btnStartNewUser.tag];
             if (item3 == nil){
-                item3 = [CSLinearLayoutItem layoutItemForView:self.btnStartNewUser];
-                item3.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
+                item3 = [CSLinearLayoutItem layoutItemForView:_btnStartNewUser];
                 item3.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
                 item3.fillMode = CSLinearLayoutItemFillModeNormal;
                 [self.rootView insertItem:item3 afterItem:item2];
             } else {
                 [self.rootView moveItem:item3 afterItem:item2];
             }
-           
+            item3.padding = CSLinearLayoutMakePadding(6, 15, 5, 15);
+            
+            _inputIdentity.returnKeyType = UIReturnKeyNext;
+            _inputPassword.placeholder = @"Set EXFE password";
+            _inputPassword.returnKeyType = UIReturnKeyNext;
+            _inputUsername.returnKeyType = UIReturnKeyDone;
+            [_inputPassword becomeFirstResponder];
         }  break;
         case kStageVerificate:
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputPassword]];
@@ -380,33 +430,33 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonNewUser]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
             
-            CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:self.inputIdentity.tag];
+            CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:_inputIdentity.tag];
             
-            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:self.labelVerifyTitle.tag];
+            CSLinearLayoutItem *item1 = [self.rootView findItemByTag:_labelVerifyTitle.tag];
             if (item1 == nil) {
-                item1 = [CSLinearLayoutItem layoutItemForView:self.labelVerifyTitle];
-                item1.padding = CSLinearLayoutMakePadding(5, 15, 0, 15);
+                item1 = [CSLinearLayoutItem layoutItemForView:_labelVerifyTitle];
                 item1.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
                 item1.fillMode = CSLinearLayoutItemFillModeNormal;
                 [self.rootView insertItem:item1 afterItem:baseItem];
             } else {
                 [self.rootView moveItem:item1 afterItem:baseItem];
             }
+            item1.padding = CSLinearLayoutMakePadding(5, 15, 0, 15);
             
-            CSLinearLayoutItem *item2 = [self.rootView findItemByTag:self.labelVerifyDescription.tag];
+            CSLinearLayoutItem *item2 = [self.rootView findItemByTag:_labelVerifyDescription.tag];
             if (item2 == nil) {
-                item2 = [CSLinearLayoutItem layoutItemForView:self.labelVerifyDescription];
-                item2.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
+                item2 = [CSLinearLayoutItem layoutItemForView:_labelVerifyDescription];
                 item2.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
                 item2.fillMode = CSLinearLayoutItemFillModeNormal;
                 [self.rootView insertItem:item2 afterItem:item1];
             } else {
                 [self.rootView moveItem:item2 afterItem:item1];
             }
+            item2.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
             
-            CSLinearLayoutItem *item3 = [self.rootView findItemByTag:self.btnStartOver.tag];
+            CSLinearLayoutItem *item3 = [self.rootView findItemByTag:_btnStartOver.tag];
             if (item3 == nil){
-                item3 = [CSLinearLayoutItem layoutItemForView:self.btnStartOver];
+                item3 = [CSLinearLayoutItem layoutItemForView:_btnStartOver];
                 item3.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
                 item3.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
                 item3.fillMode = CSLinearLayoutItemFillModeNormal;
@@ -481,10 +531,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 - (void)showErrorInfo:(NSString*)error dockOn:(UIView*)view
 {
     _hintError.text = error;
+    _hintError.backgroundColor = [UIColor COLOR_WA(250, 217)];
     CGSize size = [_hintError.text sizeWithFont:_hintError.font];
-    if (size.width > 200){
-        size.width = 200;
-    }
+//    if (size.width > 200){
+//        size.width = 200;
+//    }
+    size.width = 200;
     CGRect frame = _hintError.bounds;
     frame.size = size;
     frame.origin.x = CGRectGetMaxX(view.frame) - 48 - CGRectGetWidth(frame);
@@ -492,14 +544,117 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     _hintError.frame = frame;
     _hintError.alpha = 1.0;
     _hintError.hidden = NO;
-    [UIView animateWithDuration:0.5 delay:3 options:UIViewAnimationOptionTransitionNone animations:^{
-        _hintError.alpha = 0.0;
-    } completion:^(BOOL finished) {
-        _hintError.hidden = YES;
-    }];
+    [self performBlock:^(id sender) {
+        if (_hintError.hidden == NO) {
+            [self hide:_hintError withAnmated:YES];
+        }
+    }
+            afterDelay:5];
 }
 
-#pragma mark Click handler
+- (void) hide:(UIView *)view withAnmated:(BOOL)animated
+{
+    if (animated) {
+        [UIView animateWithDuration:0.5 animations:^{
+            _hintError.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            _hintError.hidden = YES;
+            _hintError.alpha = 1.0;
+        }];
+    } else {
+        _hintError.hidden = YES;
+        _hintError.alpha = 1.0;
+    }
+}
+
+#pragma mark Logic Methods
+- (void)identityDidChange:(NSString*)identity
+{
+    NSLog(@"Identity text did change");
+    
+    Provider provider = [Util candidateProvider:identity];
+    NSDictionary *resp = [self.identityCache objectForKey:identity];
+    if (!resp){
+        resp = @{@"registration_flag":@"",
+                 @"identity":@{ @"external_username":identity,
+                                @"provider":[Identity getProviderString:provider]
+                                }
+                 };
+        [self.identityCache setObject:resp forKey:identity];
+    }
+    [self fillIdentityResp:resp];
+    
+    if (_stage != kStageStart) {
+        [self setStage:kStageStart];
+    }
+    if (identity.length > 2) {
+        if(provider != kProviderUnknown) {
+            [NSObject cancelPreviousPerformRequestsWithTarget:self];
+            [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.233];
+        }
+    }
+    
+}
+
+- (void)checkIdentityFlag:(NSString*)identity
+{
+    if (identity.length > 0) {
+        // start query
+        Provider provider = [Util matchedProvider:identity];
+        NSDictionary *dict = [Util parseIdentityString:identity byProvider:provider];
+        NSString *external_username = [dict valueForKeyPath:@"external_username"];
+        if (provider != kProviderUnknown) {
+            EFAPIServer *server = [EFAPIServer sharedInstance];
+            [server getRegFlagBy:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+                    id code = [responseObject valueForKeyPath:@"meta.code"];
+                    if (code) {
+                        if([code intValue] == 200) {
+                            NSDictionary *resp = [responseObject valueForKeyPath:@"response"];
+                            if (![resp valueForKey:@"identity"]) {
+                                resp = @{@"registration_flag":[resp valueForKey:@"registration_flag"],
+                                         @"identity":@{ @"external_username":identity,
+                                                        @"provider":[Identity getProviderString:[Util candidateProvider:identity]]
+                                                        }
+                                         };
+                            }
+                            [self.identityCache setObject:resp forKey:identity];
+                            
+                            if ([_inputIdentity.text isEqualToString:identity]) {
+                                [self fillIdentityResp:resp];
+                            }
+                        } else {
+                            NSLog(@"get flag fail");
+                        }
+                    }
+                }
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                NSLog(@"get flag fail");
+            }];
+        }
+    }
+}
+
+
+- (void)loadUserAndExit
+{
+    [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        [self SigninDidFinish];
+    }
+                                        failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                            ;
+                                        }];
+}
+
+- (void)SigninDidFinish
+{
+    NSLog(@"Sign In Did finish");
+    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [app SigninDidFinish];
+}
+
+#pragma mark -
+#pragma mark Button / View Click Handler
 - (void)expandIdentity:(id)sender
 {
     NSString* identity = _inputIdentity.text;
@@ -609,9 +764,20 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         [self loadUserAndExit];
                         
                         break;
-                    case 403:
-                        [self showErrorInfo:@"Authentication failed." dockOn:_inputPassword];
-                        break;
+                    case 403:{
+                        // response.body={"meta":{"code":403,"errorType":"failed","errorDetail":{"registration_flag":"SIGN_UP"}},"response":{}}
+                        NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
+                        if ([@"failed" isEqualToString:errorType]) {
+                            NSString *registration_flag = [responseObject valueForKeyPath:@"meta.errorDetail.registration_flag"];
+                            if ([@"SIGN_UP" isEqualToString:registration_flag]) {
+                                _inputPassword.text = @"";
+                                [self setStage:kStageSignUp];
+                            }
+                        } else {
+                        
+                            [self showErrorInfo:@"Authentication failed." dockOn:_inputPassword];
+                        }
+                    }   break;
                     default:
                         break;
                 }
@@ -633,7 +799,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     if (_inputUsername.text.length == 0) {
         // show "Invalid name."
-        [self showErrorInfo:@"Invalid name." dockOn:_inputPassword];
+        [self showErrorInfo:@"Invalid name." dockOn:_inputUsername];
         return;
     }
     NSLog(@"%@ %@", _inputIdentity.text, _inputPassword.text);
@@ -741,7 +907,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
 }
 
-#pragma mark Textfiled Change
+#pragma mark Textfield Change Notification
 - (void)textFieldDidChange:(id)sender
 {
     NSLog(@"TextChange notification");
@@ -755,98 +921,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
 }
 
-- (void)identityDidChange:(NSString*)identity
-{
-    NSLog(@"Identity text did change");
-    
-    Provider provider = [Util candidateProvider:identity];
-    NSDictionary *resp = [self.identityCache objectForKey:identity];
-    if (!resp){
-        resp = @{@"registration_flag":@"",
-                 @"identity":@{ @"external_username":identity,
-                                @"provider":[Identity getProviderString:provider]
-                                }
-                 };
-        [self.identityCache setObject:resp forKey:identity];
-    }
-    [self fillIdentityResp:resp];
-    
-    if (_stage != kStageStart) {
-        [self setStage:kStageStart];
-    }
-    if (identity.length > 2) {
-        if(provider != kProviderUnknown) {
-            [NSObject cancelPreviousPerformRequestsWithTarget:self];
-            NSInteger start = MAX(identity.length, 3) - 3;
-            NSString *domainext = [identity substringFromIndex:start];
-            if([Util isCommonDomainName:domainext]){
-                [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.1];
-            } else {
-                [self performSelector:@selector(checkIdentityFlag:) withObject:identity afterDelay:0.8];
-            }
-        }
-    }
-   
-}
-
-- (void)checkIdentityFlag:(NSString*)identity
-{
-    if (identity.length > 0) {
-        // start query
-        Provider provider = [Util matchedProvider:identity];
-        NSDictionary *dict = [Util parseIdentityString:identity byProvider:provider];
-        NSString *external_username = [dict valueForKeyPath:@"external_username"];
-        if (provider != kProviderUnknown) {
-            EFAPIServer *server = [EFAPIServer sharedInstance];
-            [server getRegFlagBy:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
-                    id code = [responseObject valueForKeyPath:@"meta.code"];
-                    if (code) {
-                        if([code intValue] == 200) {
-                            NSDictionary *resp = [responseObject valueForKeyPath:@"response"];
-                            if (![resp valueForKey:@"identity"]) {
-                                resp = @{@"registration_flag":[resp valueForKey:@"registration_flag"],
-                                         @"identity":@{ @"external_username":identity,
-                                                        @"provider":[Identity getProviderString:[Util candidateProvider:identity]]
-                                                        }
-                                         };
-                            }
-                            [self.identityCache setObject:resp forKey:identity];
-                            
-                            if ([_inputIdentity.text isEqualToString:identity]) {
-                                [self fillIdentityResp:resp];
-                            }
-                        } else {
-                            NSLog(@"get flag fail");
-                        }
-                    }
-                }
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                NSLog(@"get flag fail");
-            }];
-        }
-    }
-}
-
-
-- (void)loadUserAndExit
-{
-    [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        [self SigninDidFinish];
-    }
-                                        failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                            ;
-                                        }];
-}
-
-- (void)SigninDidFinish
-{
-    NSLog(@"Sign In Did finish");
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [app SigninDidFinish];
-}
-
-#pragma Mark - OAuthlogin Delegate
+#pragma mark OAuthlogin Delegate
 - (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
     [oauthlogin dismissModalViewControllerAnimated:YES];
     [oauthlogin release];
@@ -869,4 +944,66 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [self loadUserAndExit];
 }
 
+#pragma mark UITextFieldDelegate
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self hide:_hintError withAnmated:NO];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+  
+        switch (textField.tag) {
+            case kViewTagInputIdentity:
+                switch (_stage) {
+                    case kStageStart:
+                        [_extIdentity sendActionsForControlEvents: UIControlEventTouchUpInside];
+                        return NO;
+                        break;
+                    case kStageSignIn:
+                    case kStageSignUp:
+                        [_inputPassword becomeFirstResponder];
+                        return NO;
+                        break;
+                    case kStageVerificate:
+                        return NO;
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case kViewTagInputPassword:
+                switch (_stage) {
+                    case kStageSignIn:
+                        [_btnStart sendActionsForControlEvents: UIControlEventTouchUpInside];
+                        return NO;
+                        break;
+                    case kStageSignUp:
+                        [_inputUsername becomeFirstResponder];
+                        return NO;
+                        break;
+                    default:
+                        break;
+                }
+            case kViewTagInputUserName:
+                switch (_stage) {
+                    case kStageSignUp:
+                        [_btnStartNewUser sendActionsForControlEvents: UIControlEventTouchUpInside];
+                        return NO;
+                        break;
+                    default:
+                        break;
+                }
+            
+            default:
+                break;
+        }
+    
+    
+    
+    return YES;
+}
+
+#pragma mark -
+#pragma mark Others
 @end

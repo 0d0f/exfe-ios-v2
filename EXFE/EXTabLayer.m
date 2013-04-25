@@ -103,7 +103,11 @@
 //}
 
 - (void) setimage:(UIImage*)image{
+    [CATransaction begin];
+    [CATransaction setValue:(id)kCFBooleanTrue
+                     forKey:kCATransactionDisableActions];
     _imglayer.contents = (id)image.CGImage;
     _imglayer.frame = self.bounds;
+    [CATransaction commit];
 }
 @end

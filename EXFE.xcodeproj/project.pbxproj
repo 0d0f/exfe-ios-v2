@@ -58,6 +58,9 @@
 		4F00546C172836F500D4B429 /* EFTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F00546B172836F400D4B429 /* EFTextField.m */; };
 		4F00546D172836F500D4B429 /* EFTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F00546B172836F400D4B429 /* EFTextField.m */; };
 		4F00546E172836F500D4B429 /* EFTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F00546B172836F400D4B429 /* EFTextField.m */; };
+		4F00547017292C2300D4B429 /* Pilot-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F00546F17292C2300D4B429 /* Pilot-Info.plist */; };
+		4F00547117292C2300D4B429 /* Pilot-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F00546F17292C2300D4B429 /* Pilot-Info.plist */; };
+		4F00547217292C2300D4B429 /* Pilot-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F00546F17292C2300D4B429 /* Pilot-Info.plist */; };
 		4F0E159B16A95C390086AC4A /* edit_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159916A95C390086AC4A /* edit_30.png */; };
 		4F0E159C16A95C390086AC4A /* edit_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159A16A95C390086AC4A /* edit_30@2x.png */; };
 		4F1142D716AE40B000C30179 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1142D616AE40B000C30179 /* SenTestingKit.framework */; };
@@ -1015,7 +1018,6 @@
 		4F63DE0A17172B0700136B7E /* btn_red_30inset@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F67C3AA170D6307001AA816 /* btn_red_30inset@2x.png */; };
 		4F63DE0B17172B0700136B7E /* exfee_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F67C3AD170D7CD3001AA816 /* exfee_bg.png */; };
 		4F63DE0C17172B0700136B7E /* exfee_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F67C3AE170D7CD4001AA816 /* exfee_bg@2x.png */; };
-		4F63DE131717339100136B7E /* Polit-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F63DE121717339100136B7E /* Polit-Info.plist */; };
 		4F63DE15171733C500136B7E /* 0d0f-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F63DE14171733C500136B7E /* 0d0f-Info.plist */; };
 		4F63E24B169AD2B3003354D7 /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24A169AD2B2003354D7 /* NSDateComponents+Helper.m */; };
 		4F63E24E169BFCD5003354D7 /* DateTimeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24D169BFCD4003354D7 /* DateTimeUtil.m */; };
@@ -1617,6 +1619,7 @@
 		4F00545A17266FD800D4B429 /* home_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_bar@2x.png"; sourceTree = "<group>"; };
 		4F00546A172836F300D4B429 /* EFTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTextField.h; sourceTree = "<group>"; };
 		4F00546B172836F400D4B429 /* EFTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTextField.m; sourceTree = "<group>"; };
+		4F00546F17292C2300D4B429 /* Pilot-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Pilot-Info.plist"; sourceTree = "<group>"; };
 		4F0E159916A95C390086AC4A /* edit_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30.png; sourceTree = "<group>"; };
 		4F0E159A16A95C390086AC4A /* edit_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30@2x.png"; sourceTree = "<group>"; };
 		4F1142D516AE40B000C30179 /* EXFETests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EXFETests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1707,7 +1710,6 @@
 		4F3C6D8016ACEE670095AA50 /* EditCrossDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditCrossDelegate.h; sourceTree = "<group>"; };
 		4F63DC4317172AA600136B7E /* 0d0f.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 0d0f.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F63DE1017172B0700136B7E /* Pilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F63DE121717339100136B7E /* Polit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Polit-Info.plist"; sourceTree = "<group>"; };
 		4F63DE14171733C500136B7E /* 0d0f-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "0d0f-Info.plist"; sourceTree = "<group>"; };
 		4F63E249169AD2B2003354D7 /* NSDateComponents+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateComponents+Helper.h"; sourceTree = "<group>"; };
 		4F63E24A169AD2B2003354D7 /* NSDateComponents+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateComponents+Helper.m"; sourceTree = "<group>"; };
@@ -3144,9 +3146,9 @@
 		78A98E921560F832009E0806 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4F63DE14171733C500136B7E /* 0d0f-Info.plist */,
 				78A98E931560F832009E0806 /* EXFE-Info.plist */,
-				4F63DE121717339100136B7E /* Polit-Info.plist */,
+				4F63DE14171733C500136B7E /* 0d0f-Info.plist */,
+				4F00546F17292C2300D4B429 /* Pilot-Info.plist */,
 				78A98E941560F832009E0806 /* InfoPlist.strings */,
 				78A98E971560F832009E0806 /* main.m */,
 				78A98E991560F832009E0806 /* EXFE-Prefix.pch */,
@@ -3943,6 +3945,7 @@
 				4F00545C17266FD800D4B429 /* home_bar.png in Resources */,
 				4F00545F17266FD800D4B429 /* home_bar@2x.png in Resources */,
 				7670127B1729086100B5445E /* EFSearchTipViewController.xib in Resources */,
+				4F00547117292C2300D4B429 /* Pilot-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4274,6 +4277,7 @@
 				4F00545D17266FD800D4B429 /* home_bar.png in Resources */,
 				4F00546017266FD800D4B429 /* home_bar@2x.png in Resources */,
 				7670127C1729086100B5445E /* EFSearchTipViewController.xib in Resources */,
+				4F00547217292C2300D4B429 /* Pilot-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4575,7 +4579,6 @@
 				4F67C3AC170D6307001AA816 /* btn_red_30inset@2x.png in Resources */,
 				4F67C3AF170D7CD4001AA816 /* exfee_bg.png in Resources */,
 				4F67C3B0170D7CD4001AA816 /* exfee_bg@2x.png in Resources */,
-				4F63DE131717339100136B7E /* Polit-Info.plist in Resources */,
 				4F63DE15171733C500136B7E /* 0d0f-Info.plist in Resources */,
 				4FC7ED6F1717F3F700582D84 /* WidgetConvViewController.xib in Resources */,
 				4FF69554171BDF53003DF80B /* EFSignInViewController.xib in Resources */,
@@ -4607,6 +4610,7 @@
 				4F00545B17266FD800D4B429 /* home_bar.png in Resources */,
 				4F00545E17266FD800D4B429 /* home_bar@2x.png in Resources */,
 				7670127A1729086100B5445E /* EFSearchTipViewController.xib in Resources */,
+				4F00547017292C2300D4B429 /* Pilot-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5277,7 +5281,7 @@
 					PILOT,
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
-				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Polit-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5306,7 +5310,7 @@
 					PILOT,
 				);
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**";
-				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Polit-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/EXFE/Pilot-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
