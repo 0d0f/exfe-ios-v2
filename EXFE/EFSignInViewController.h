@@ -26,10 +26,12 @@
 @property (nonatomic, retain) UILabel *labelVerifyTitle;
 @property (nonatomic, retain) UILabel *labelVerifyDescription;
 
-@property (nonatomic, retain) UILabel * hintError;
+@property (nonatomic, retain) UILabel *hintError;
+@property (nonatomic, retain) UIActivityIndicatorView *indicator;
 
 @property (nonatomic, retain) UIButton *btnFacebook;
 @property (nonatomic, retain) UIButton *btnTwitter;
+
 
 @property (nonatomic, copy) id onExitBlock;
 @property (nonatomic, retain) NSMutableDictionary *identityCache;

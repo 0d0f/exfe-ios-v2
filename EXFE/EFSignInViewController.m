@@ -81,7 +81,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [self.view addSubview:linearLayoutView];
     
     {// Input Identity Field
-        UITextField *textfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
+        UITextField *textfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
         textfield.placeholder = @"Enter email or phone";
         textfield.borderStyle = UITextBorderStyleRoundedRect;
         textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -120,7 +120,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     {// Input Password Field
-        EFPasswordField *textfield = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
+        EFPasswordField *textfield = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
         textfield.borderStyle = UITextBorderStyleRoundedRect;
         textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         textfield.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
@@ -133,7 +133,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     {// Input Username
-        UITextField *textfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
+        UITextField *textfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
         textfield.borderStyle = UITextBorderStyleRoundedRect;
         textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         textfield.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
@@ -328,6 +328,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         [snsLayoutView addItem:item];
     }
     
+    {
+        UIActivityIndicatorView *aiView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+        self.indicator = aiView;
+    }
+    
     [self setStage:kStageStart];
 
 }
@@ -360,9 +365,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     self.labelVerifyTitle = nil;
     self.labelVerifyDescription = nil;
     self.hintError = nil;
+    self.indicator = nil;
     self.btnFacebook = nil;
     self.btnTwitter = nil;
     self.identityCache = nil;
+    
     [super dealloc];
 }
 
@@ -381,8 +388,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
             
-            self.inputIdentity.rightView = self.extIdentity;
-            self.inputIdentity.returnKeyType = UIReturnKeyNext;
+            _inputIdentity.rightView = _extIdentity;
+            _inputIdentity.returnKeyType = UIReturnKeyNext;
             break;
         case kStageSignIn:{
             // show rest login form
@@ -422,6 +429,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _inputPassword.placeholder = @"Enter password";
             _inputPassword.returnKeyType = UIReturnKeyDone;
             [_inputPassword becomeFirstResponder];
+            _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
         }    break;
         case kStageSignUp:{
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStart]];
@@ -490,6 +498,18 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 [self.rootView moveItem:item1 afterItem:baseItem];
             }
             item1.padding = CSLinearLayoutMakePadding(5, 15, 0, 15);
+            
+            
+            Provider p = [Util matchedProvider:_inputIdentity.text];
+            switch (p) {
+                case kProviderPhone:
+                    _labelVerifyDescription.text = @"This number requires verification before proceeding. Verification request sent, please check your message for instructions.";
+                    break;
+                    
+                default:
+                    _labelVerifyDescription.text = @"This email requires verification before proceeding. Verification request sent, please check your email for instructions.";
+                    break;
+            }
             
             CSLinearLayoutItem *item2 = [self.rootView findItemByTag:_labelVerifyDescription.tag];
             if (item2 == nil) {
@@ -600,7 +620,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             afterDelay:5];
 }
 
-- (void) hide:(UIView *)view withAnmated:(BOOL)animated
+- (void)hide:(UIView *)view withAnmated:(BOOL)animated
 {
     if (animated) {
         [UIView animateWithDuration:0.5 animations:^{
@@ -613,6 +633,20 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         _hintError.hidden = YES;
         _hintError.alpha = 1.0;
     }
+}
+
+- (void)showIndicatorAt:(CGPoint)center
+{
+    [_indicator removeFromSuperview];
+    _indicator.center = center;
+    [self.rootView addSubview:_indicator];
+    [_indicator startAnimating];
+}
+
+- (void)hideIndicator
+{
+    [_indicator stopAnimating];
+    [_indicator removeFromSuperview];
 }
 
 #pragma mark Logic Methods
@@ -781,7 +815,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
 }
 
-- (void)signIn:(id)sender
+- (void)signIn:(UIControl *)sender
 {
     NSLog(@"Start Sign In");
     if (_inputIdentity.text.length == 0 || _inputPassword.text.length == 0) {
@@ -789,12 +823,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     NSLog(@"%@ %@", _inputIdentity.text, _inputPassword.text);
     
-    // TODO:show pending on sender;
+    [self showIndicatorAt:CGPointMake(285, sender.center.y)];
     Provider provider = [Util matchedProvider:_inputIdentity.text];
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     [[EFAPIServer sharedInstance] signIn:external_username with:provider password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+        [self hideIndicator];
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
             NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
             if (code) {
@@ -825,10 +859,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 }
             }
         }
-    } failure:nil];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        [self hideIndicator];
+    }];
 }
 
-- (void)signUp:(id)sender
+- (void)signUp:(UIControl *)sender
 {
     NSLog(@"Start with new user");
     if (_inputIdentity.text.length == 0) {
@@ -850,9 +886,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     
-    // TODO:show pending on sender;
+    [self showIndicatorAt:CGPointMake(285, sender.center.y)];
     [[EFAPIServer sharedInstance] signUp:external_username with:provider name:_inputUsername.text password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+        [self hideIndicator];
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
             NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
             if (code) {
@@ -878,7 +914,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 }
             }
         }
-    } failure:nil];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        [self hideIndicator];
+    }];
 }
 
 - (void)startOver:(id)sender
@@ -905,7 +943,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [self presentModalViewController:oauth animated:YES];
 }
 
-- (void)forgetPwd:(id)sender
+- (void)forgetPwd:(UIControl *)sender
 {
     NSLog(@"Forget Password");
     Provider provider = [Util matchedProvider:_inputIdentity.text];
@@ -913,8 +951,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     
     // TODO:show pending on sender;
+    [self showIndicatorAt:CGPointMake(285, sender.center.y)];
     [[EFAPIServer sharedInstance] forgetPassword:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+        [self hideIndicator];
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
             NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
             if (code) {
@@ -922,10 +961,19 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 switch (c) {
                     case 200:
                         NSLog(@"Forget Password sent");
-                        // TODO: handle email/phone
-                        [UIAlertView showAlertViewWithTitle:@"Forget Password?" message:@"Password reset request sent, please check your email for instructions." cancelButtonTitle:@"OK" otherButtonTitles:nil handler:nil];
+                        NSString *msg = nil;
+                        switch (provider) {
+                            case kProviderPhone:
+                                msg = @"Password reset request sent, please check your message for instructions.";
+                                break;
+                                
+                            default:
+                                msg = @"Password reset request sent, please check your email for instructions.";
+                                break;
+                        }
+                        [UIAlertView showAlertViewWithTitle:@"Forget Password?" message:msg cancelButtonTitle:@"OK" otherButtonTitles:nil handler:nil];
                     case 400:{
-                        NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
+                        // NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
                         // 400 - no_external_username
                         // 400 - no_provider
                         // 400 - identity_does_not_exist
@@ -947,7 +995,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        ;
+        [self hideIndicator];
     }];
     
     
