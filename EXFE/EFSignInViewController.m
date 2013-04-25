@@ -81,7 +81,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [self.view addSubview:linearLayoutView];
     
     {// Input Identity Field
-        UITextField *textfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        UITextField *textfield = [[EFTextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
         textfield.placeholder = @"Enter email or phone";
         textfield.borderStyle = UITextBorderStyleRoundedRect;
         textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -373,7 +373,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [super dealloc];
 }
 
-#pragma mark - UI Methos
+#pragma mark - UI Methods
 - (void)setStage:(EFStage)stage
 {
     _stage = stage;
@@ -429,6 +429,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _inputPassword.placeholder = @"Enter password";
             _inputPassword.returnKeyType = UIReturnKeyDone;
             [_inputPassword becomeFirstResponder];
+            _inputIdentity.rightView = nil;
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
         }    break;
         case kStageSignUp:{
@@ -478,6 +479,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _inputPassword.returnKeyType = UIReturnKeyNext;
             _inputUsername.returnKeyType = UIReturnKeyDone;
             [_inputPassword becomeFirstResponder];
+            _inputIdentity.rightView = nil;
+            _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
         }  break;
         case kStageVerificate:
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputPassword]];
@@ -532,7 +535,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             } else {
                 [self.rootView moveItem:item3 afterItem:item2];
             }
-            
+            _inputIdentity.rightView = nil;
+            _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
             break;
         default:
             break;
@@ -582,7 +586,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)swithStagebyFlag:(NSString*)flag
 {
-    self.inputIdentity.rightView = nil;
     if([flag isEqualToString:@"SIGN_UP"] ){
         [self setStage:kStageSignUp];
     } else if([flag isEqualToString:@"VERIFY"] ) {
@@ -652,8 +655,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 #pragma mark Logic Methods
 - (void)identityDidChange:(NSString*)identity
 {
-    NSLog(@"Identity text did change");
-    
     Provider provider = [Util candidateProvider:identity];
     NSDictionary *resp = [self.identityCache objectForKey:identity];
     if (!resp){
@@ -706,12 +707,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                 [self fillIdentityResp:resp];
                             }
                         } else {
-                            NSLog(@"get flag fail");
                         }
                     }
                 }
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                NSLog(@"get flag fail");
             }];
         }
     }
@@ -730,7 +729,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)SigninDidFinish
 {
-    NSLog(@"Sign In Did finish");
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [app SigninDidFinish];
 }
@@ -817,11 +815,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)signIn:(UIControl *)sender
 {
-    NSLog(@"Start Sign In");
     if (_inputIdentity.text.length == 0 || _inputPassword.text.length == 0) {
         return;
     }
-    NSLog(@"%@ %@", _inputIdentity.text, _inputPassword.text);
     
     [self showIndicatorAt:CGPointMake(285, sender.center.y)];
     Provider provider = [Util matchedProvider:_inputIdentity.text];
@@ -835,7 +831,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 NSInteger c = [code integerValue];
                 switch (c) {
                     case 200:
-                        NSLog(@"Signed Up");
                         
                         [self loadUserAndExit];
                         
@@ -866,7 +861,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)signUp:(UIControl *)sender
 {
-    NSLog(@"Start with new user");
     if (_inputIdentity.text.length == 0) {
         return;
     }
@@ -880,7 +874,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         [self showErrorInfo:@"Invalid name." dockOn:_inputUsername];
         return;
     }
-    NSLog(@"%@ %@", _inputIdentity.text, _inputPassword.text);
     
     Provider provider = [Util matchedProvider:_inputIdentity.text];
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
@@ -895,7 +888,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 NSInteger c = [code integerValue];
                 switch (c) {
                     case 200:
-                        NSLog(@"Signed In");
                         [self loadUserAndExit];
                         break;
                     case 400:{
@@ -921,13 +913,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)startOver:(id)sender
 {
-    NSLog(@"Start over");
     [self setStage:kStageStart];
 }
 
 - (void)facebookSignIn:(id)sender
 {
-    NSLog(@"facebook Sign In");
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
     oauth.provider = @"facebook";
     oauth.delegate = self;
@@ -936,7 +926,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)twitterSignIn:(id)sender
 {
-    NSLog(@"twitter Sign In");
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
     oauth.provider = @"twitter";
     oauth.delegate = self;
@@ -945,12 +934,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)forgetPwd:(UIControl *)sender
 {
-    NSLog(@"Forget Password");
     Provider provider = [Util matchedProvider:_inputIdentity.text];
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     
-    // TODO:show pending on sender;
     [self showIndicatorAt:CGPointMake(285, sender.center.y)];
     [[EFAPIServer sharedInstance] forgetPassword:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [self hideIndicator];
@@ -959,8 +946,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             if (code) {
                 NSInteger c = [code integerValue];
                 switch (c) {
-                    case 200:
-                        NSLog(@"Forget Password sent");
+                    case 200:{
                         NSString *msg = nil;
                         switch (provider) {
                             case kProviderPhone:
@@ -972,6 +958,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                 break;
                         }
                         [UIAlertView showAlertViewWithTitle:@"Forget Password?" message:msg cancelButtonTitle:@"OK" otherButtonTitles:nil handler:nil];
+                    } break;
                     case 400:{
                         // NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
                         // 400 - no_external_username
@@ -997,14 +984,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self hideIndicator];
     }];
-    
-    
 }
 
 #pragma mark Textfield Change Notification
 - (void)textFieldDidChange:(id)sender
 {
-    NSLog(@"TextChange notification");
     NSString *identity = _inputIdentity.text;
     
     if ([identity isEqualToString:self.lastInputIdentity]) {
