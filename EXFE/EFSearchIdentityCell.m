@@ -8,6 +8,9 @@
 
 #import "EFSearchIdentityCell.h"
 
+#import "EFPopoverController.h"
+#import "EFSearchTipViewController.h"
+
 @implementation EFSearchIdentityCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -15,6 +18,9 @@
     if (self) {
         [self.accessButton setImage:[UIImage imageNamed:@"pass_question.png"] forState:UIControlStateNormal];
         self.accessButton.imageEdgeInsets = (UIEdgeInsets){0, 0, 0, -21};
+        [self.accessButton addTarget:self
+                              action:@selector(tipButtonPressed:)
+                    forControlEvents:UIControlEventTouchUpInside];
         self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
         self.userNameLabel.font = [UIFont fontWithName:@"HelveticaNeue-LightItalic" size:21];
     }
@@ -24,6 +30,24 @@
 
 + (NSString *)reuseIdentifier {
     return NSStringFromClass([self class]);
+}
+
+- (void)tipButtonPressed:(id)sender {
+    EFSearchTipViewController *tipViewController = [[EFSearchTipViewController alloc] initWithNibName:@"EFSearchTipViewController" bundle:nil];
+    EFPopoverController *popoverController = [[EFPopoverController alloc] initWithContentViewController:tipViewController];
+    [popoverController setContentSize:tipViewController.view.frame.size animated:YES];
+    [tipViewController release];
+    
+    popoverController.backgroundArrowView.gradientColors = @[(id)[UIColor COLOR_RGBA(0x33, 0x33, 0x33, 245)].CGColor, (id)[UIColor COLOR_RGBA(0x22, 0x22, 0x22, 245)].CGColor];
+    popoverController.backgroundArrowView.strokeWidth = 0.0f;
+    popoverController.backgroundArrowView.strokeColor = [UIColor clearColor];
+    
+    [popoverController presentFromRect:(CGRect){{287, 0}, {33, 50}}
+                                inView:self
+                        arrowDirection:kEFArrowDirectionRight
+                              animated:YES
+                              complete:nil];
+    [popoverController release];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

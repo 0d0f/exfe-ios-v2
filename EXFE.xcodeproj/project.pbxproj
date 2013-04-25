@@ -1146,6 +1146,18 @@
 		763A01CF17212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
 		763A01D017212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
 		763A01D117212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
+		7670126E1729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
+		7670126F1729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
+		767012701729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
+		767012711729054500B5445E /* EFArrowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126B1729054500B5445E /* EFArrowView.m */; };
+		767012721729054500B5445E /* EFArrowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126B1729054500B5445E /* EFArrowView.m */; };
+		767012731729054500B5445E /* EFArrowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126B1729054500B5445E /* EFArrowView.m */; };
+		767012771729086100B5445E /* EFSearchTipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 767012751729086100B5445E /* EFSearchTipViewController.m */; };
+		767012781729086100B5445E /* EFSearchTipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 767012751729086100B5445E /* EFSearchTipViewController.m */; };
+		767012791729086100B5445E /* EFSearchTipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 767012751729086100B5445E /* EFSearchTipViewController.m */; };
+		7670127A1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
+		7670127B1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
+		7670127C1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
 		76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76D1A804171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */; };
@@ -1840,6 +1852,13 @@
 		763A01CD17212B080082CC9E /* RoughIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoughIdentity.h; sourceTree = "<group>"; };
 		763A01CE17212B080082CC9E /* RoughIdentity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoughIdentity.m; sourceTree = "<group>"; };
 		763A01D2172130B20082CC9E /* EFDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDataDefines.h; sourceTree = "<group>"; };
+		7670126A1729054500B5445E /* EFPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPopoverController.m; sourceTree = "<group>"; };
+		7670126B1729054500B5445E /* EFArrowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFArrowView.m; sourceTree = "<group>"; };
+		7670126C1729054500B5445E /* EFPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPopoverController.h; sourceTree = "<group>"; };
+		7670126D1729054500B5445E /* EFArrowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFArrowView.h; sourceTree = "<group>"; };
+		767012741729086100B5445E /* EFSearchTipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchTipViewController.h; sourceTree = "<group>"; };
+		767012751729086100B5445E /* EFSearchTipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchTipViewController.m; sourceTree = "<group>"; };
+		767012761729086100B5445E /* EFSearchTipViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFSearchTipViewController.xib; sourceTree = "<group>"; };
 		76A150BC1717D23400751C92 /* EXAddressBookService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAddressBookService.h; sourceTree = "<group>"; };
 		76A150BD1717D23500751C92 /* EXAddressBookService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAddressBookService.m; sourceTree = "<group>"; };
 		76D1A801171D5DFA00A35BBD /* EFChoosePeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewController.h; sourceTree = "<group>"; };
@@ -2480,6 +2499,7 @@
 		4FD9376116D6026B00ED6677 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				767012621729053400B5445E /* EFKit */,
 				76DED7CB171C05FE00C2F27E /* Debug */,
 				4FD9376216D602A200ED6677 /* Extention */,
 				78C6B9FD166349A600483D23 /* AddressBook.h */,
@@ -2549,6 +2569,17 @@
 				763A01CE17212B080082CC9E /* RoughIdentity.m */,
 			);
 			name = Object;
+			sourceTree = "<group>";
+		};
+		767012621729053400B5445E /* EFKit */ = {
+			isa = PBXGroup;
+			children = (
+				7670126C1729054500B5445E /* EFPopoverController.h */,
+				7670126A1729054500B5445E /* EFPopoverController.m */,
+				7670126D1729054500B5445E /* EFArrowView.h */,
+				7670126B1729054500B5445E /* EFArrowView.m */,
+			);
+			name = EFKit;
 			sourceTree = "<group>";
 		};
 		76A150B41717D1CB00751C92 /* Service */ = {
@@ -2640,6 +2671,9 @@
 				78606CE6169AD2910014806A /* TitleDescEditViewController.xib */,
 				78415361159D672A002B7A2E /* WildcardGestureRecognizer.h */,
 				78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */,
+				767012741729086100B5445E /* EFSearchTipViewController.h */,
+				767012751729086100B5445E /* EFSearchTipViewController.m */,
+				767012761729086100B5445E /* EFSearchTipViewController.xib */,
 			);
 			name = Gather;
 			sourceTree = "<group>";
@@ -3908,6 +3942,7 @@
 				4F005457172661DD00D4B429 /* exfe_glossy50.png in Resources */,
 				4F00545C17266FD800D4B429 /* home_bar.png in Resources */,
 				4F00545F17266FD800D4B429 /* home_bar@2x.png in Resources */,
+				7670127B1729086100B5445E /* EFSearchTipViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4238,6 +4273,7 @@
 				4F005458172661DE00D4B429 /* exfe_glossy50.png in Resources */,
 				4F00545D17266FD800D4B429 /* home_bar.png in Resources */,
 				4F00546017266FD800D4B429 /* home_bar@2x.png in Resources */,
+				7670127C1729086100B5445E /* EFSearchTipViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4570,6 +4606,7 @@
 				4F00544C17265C8500D4B429 /* home_bg@2x.png in Resources */,
 				4F00545B17266FD800D4B429 /* home_bar.png in Resources */,
 				4F00545E17266FD800D4B429 /* home_bar@2x.png in Resources */,
+				7670127A1729086100B5445E /* EFSearchTipViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4749,6 +4786,9 @@
 				7601F56C1725861100032044 /* ExfeeInputViewController.m in Sources */,
 				7601F5731727B94800032044 /* EFSearchIdentityCell.m in Sources */,
 				4F00546D172836F500D4B429 /* EFTextField.m in Sources */,
+				7670126F1729054500B5445E /* EFPopoverController.m in Sources */,
+				767012721729054500B5445E /* EFArrowView.m in Sources */,
+				767012781729086100B5445E /* EFSearchTipViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4898,6 +4938,9 @@
 				7601F56D1725861200032044 /* ExfeeInputViewController.m in Sources */,
 				7601F5741727B94800032044 /* EFSearchIdentityCell.m in Sources */,
 				4F00546E172836F500D4B429 /* EFTextField.m in Sources */,
+				767012701729054500B5445E /* EFPopoverController.m in Sources */,
+				767012731729054500B5445E /* EFArrowView.m in Sources */,
+				767012791729086100B5445E /* EFSearchTipViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5047,6 +5090,9 @@
 				7601F5641725861000032044 /* ExfeeInputViewController.m in Sources */,
 				7601F5721727B94800032044 /* EFSearchIdentityCell.m in Sources */,
 				4F00546C172836F500D4B429 /* EFTextField.m in Sources */,
+				7670126E1729054500B5445E /* EFPopoverController.m in Sources */,
+				767012711729054500B5445E /* EFArrowView.m in Sources */,
+				767012771729086100B5445E /* EFSearchTipViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
