@@ -566,48 +566,17 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 + (NSDictionary*)parseIdentityString:(NSString*)raw
 {
     Provider p = [self matchedProvider:raw];
-    NSString * provider = [Identity getProviderString:p];
-    switch (p) {
-        case kProviderEmail:{
-            return @{@"external_username": raw, @"external_id": raw, @"provider": provider};
-        } break;
-        case kProviderPhone:{
-            return @{@"external_username":raw, @"external_id": raw, @"provider": provider};
-        } break;
-        case kProviderFacebook:{
-            if ([raw hasSuffix:@"@facebook"]) {
-                NSString *name = [raw substringToIndex:raw.length - @"@facebook".length];
-                return @{@"external_username":name, @"external_id": @"", @"provider": provider};
-            }
-        } break;
-        case kProviderTwitter:{
-            if ([raw hasPrefix:@"@"]) {
-                return @{@"external_username":[raw substringFromIndex:1], @"external_id": @"", @"provider": provider};
-            }else{
-                if ([raw hasSuffix:@"@twitter"]) {
-                    NSString *name = [raw substringToIndex:raw.length - @"@twitter".length];
-                    return @{@"external_username":name, @"external_id": @"", @"provider": provider};
-                }
-            }
-        } break;
-        default:
-            break;
-    }
-    
-    return @{@"external_username":raw, @"external_id": @"", @"provider": provider};
+    return [self parseIdentityString:raw byProvider:p];
 }
 
 + (NSDictionary*)parseIdentityString:(NSString*)raw byProvider:(Provider)p
 {
-    NSString * provider = [Identity getProviderString:p];
+    NSString *provider = [Identity getProviderString:p];
     switch (p) {
         case kProviderEmail:{
             return @{@"external_username": raw, @"external_id": raw, @"provider": provider};
         } break;
         case kProviderPhone:{
-//            if (![raw hasPrefix:@"+"]) {
-//                raw = [self formatPhoneNumber:raw];
-//            }
             return @{@"external_username":raw, @"external_id": raw, @"provider": provider};
         } break;
         case kProviderFacebook:{
@@ -619,7 +588,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         case kProviderTwitter:{
             if ([raw hasPrefix:@"@"]) {
                 return @{@"external_username":[raw substringFromIndex:1], @"external_id": @"", @"provider": provider};
-            }else{
+            } else {
                 if ([raw hasSuffix:@"@twitter"]) {
                     NSString *name = [raw substringToIndex:raw.length - @"@twitter".length];
                     return @{@"external_username":name, @"external_id": @"", @"provider": provider};

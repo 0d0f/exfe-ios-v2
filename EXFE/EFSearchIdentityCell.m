@@ -11,7 +11,9 @@
 #import "EFPopoverController.h"
 #import "EFSearchTipViewController.h"
 
-@implementation EFSearchIdentityCell
+@implementation EFSearchIdentityCell {
+    EFPopoverController *_popoverController;
+}
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -28,26 +30,32 @@
     return self;
 }
 
+- (void)dealloc {
+    [_popoverController release];
+    [super dealloc];
+}
+
 + (NSString *)reuseIdentifier {
     return NSStringFromClass([self class]);
 }
 
 - (void)tipButtonPressed:(id)sender {
-    EFSearchTipViewController *tipViewController = [[EFSearchTipViewController alloc] initWithNibName:@"EFSearchTipViewController" bundle:nil];
-    EFPopoverController *popoverController = [[EFPopoverController alloc] initWithContentViewController:tipViewController];
-    [popoverController setContentSize:tipViewController.view.frame.size animated:YES];
-    [tipViewController release];
+    if (!_popoverController) {
+        EFSearchTipViewController *tipViewController = [[EFSearchTipViewController alloc] initWithNibName:@"EFSearchTipViewController" bundle:nil];
+        _popoverController = [[EFPopoverController alloc] initWithContentViewController:tipViewController];
+        [_popoverController setContentSize:tipViewController.view.frame.size animated:YES];
+        [tipViewController release];
+        
+        _popoverController.backgroundArrowView.gradientColors = @[(id)[UIColor COLOR_RGBA(0x33, 0x33, 0x33, 245)].CGColor, (id)[UIColor COLOR_RGBA(0x22, 0x22, 0x22, 245)].CGColor];
+        _popoverController.backgroundArrowView.strokeWidth = 0.0f;
+        _popoverController.backgroundArrowView.strokeColor = [UIColor clearColor];
+    }
     
-    popoverController.backgroundArrowView.gradientColors = @[(id)[UIColor COLOR_RGBA(0x33, 0x33, 0x33, 245)].CGColor, (id)[UIColor COLOR_RGBA(0x22, 0x22, 0x22, 245)].CGColor];
-    popoverController.backgroundArrowView.strokeWidth = 0.0f;
-    popoverController.backgroundArrowView.strokeColor = [UIColor clearColor];
-    
-    [popoverController presentFromRect:(CGRect){{287, 0}, {33, 50}}
+    [_popoverController presentFromRect:(CGRect){{287, 0}, {33, 50}}
                                 inView:self
                         arrowDirection:kEFArrowDirectionRight
                               animated:YES
                               complete:nil];
-    [popoverController release];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

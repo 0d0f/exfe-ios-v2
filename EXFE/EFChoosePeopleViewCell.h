@@ -19,7 +19,7 @@
 - (BOOL)shouldChoosePeopleViewCellSelected:(EFChoosePeopleViewCell *)cell;
 @end
 
-@class LocalContact, Identity;
+@class LocalContact, Identity, RoughIdentity;
 @interface EFChoosePeopleViewCell : UITableViewCell
 
 @property (retain, nonatomic) UIImageView *avatarImageView;
@@ -34,5 +34,6 @@
 
 - (void)customWithLocalContact:(LocalContact *)localContact;
 - (void)customWithIdentity:(Identity *)identity;
+- (void)customWithRoughtIdentity:(RoughIdentity *)roughtIdentity;
 
 @end

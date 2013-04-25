@@ -27,6 +27,7 @@
 
 #pragma mark - Category (Extension)
 @interface EFChoosePeopleViewController ()
+@property (nonatomic, retain) NSMutableArray *searchAddPeople;
 @property (nonatomic, retain) NSMutableArray *exfeePeople;
 @property (nonatomic, retain) NSMutableArray *contactPeople;
 @property (nonatomic, retain) NSMutableArray *searchResultExfeePeople;
@@ -83,6 +84,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        _searchAddPeople = [[NSMutableArray alloc] init];
         _exfeePeople = [[NSMutableArray alloc] init];
         _contactPeople = [[NSMutableArray alloc] init];
         _selectedDict = [[NSMutableDictionary alloc] init];
@@ -155,6 +157,7 @@
 }
 
 - (void)dealloc {
+    [_searchAddPeople release];
     [_selectedRoughIdentityDict release];
     [_selectedDict release];
     [_exfeePeople release];
@@ -501,7 +504,7 @@
     
     NSString *title = nil;
     if (tableView == self.tableView) {
-        if (section == 0 && [self.exfeePeople count]) {
+        if (section == 0 && ([self.exfeePeople count] || [self.searchAddPeople count])) {
             // exfees
             title = @"Exfees";
         } else {
@@ -549,7 +552,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     NSUInteger sections = 0;
     if (tableView == self.tableView) {
-        if ([self.exfeePeople count]) {
+        if ([self.exfeePeople count] || [self.searchAddPeople count]) {
             sections++;
         }
         if ([self.contactPeople count]) {
@@ -575,9 +578,9 @@
     }
     
     if (tableView == self.tableView) {
-        if (section == 0 && [self.exfeePeople count]) {
+        if (section == 0 && ([self.exfeePeople count] || [self.searchAddPeople count])) {
             // exfe
-            rows = [self.exfeePeople count];
+            rows = [self.exfeePeople count] + [self.searchAddPeople count];
         } else {
             // local
             rows = [self.contactPeople count];
@@ -682,7 +685,21 @@
         }
     } else {
         if (self.searchBar.text.length && indexPath.section == 0) {
-            if (indexPath.row) {
+            if (0 == indexPath.row) {
+                NSString *keyWord = self.searchBar.text;
+                Provider matchedProvider = [Util matchedProvider:keyWord];
+                if (kProviderUnknown != matchedProvider) {
+                    NSDictionary *matchedDictionary = [Util parseIdentityString:keyWord byProvider:matchedProvider];
+                    RoughIdentity *roughIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
+                    [_searchAddPeople addObject:roughIdentity];
+                    [self refreshSelectedDictWithObject:roughIdentity selected:YES];
+                    [self.searchDisplayController setActive:NO animated:YES];
+                } else {
+                    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
+                
+                return;
+            } else {
                 indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
             }
         }
@@ -793,6 +810,10 @@
         LocalContact *contact = (LocalContact *)obj;
         roughtIdentities = [contact roughIdentities];
         key = contact.indexfield;
+    } else if ([obj isKindOfClass:[RoughIdentity class]]) {
+        RoughIdentity *roughtIdentity = (RoughIdentity *)obj;
+        roughtIdentities = @[roughtIdentity];
+        key = roughtIdentity.key;
     }
     
     if (selected) {
@@ -826,6 +847,9 @@
     } else if ([object isKindOfClass:[LocalContact class]]) {
         LocalContact *contact = (LocalContact *)object;
         key = contact.indexfield;
+    } else if ([object isKindOfClass:[RoughIdentity class]]) {
+        RoughIdentity *roughtIdentity = (RoughIdentity *)object;
+        key = roughtIdentity.key;
     }
     
     return !![_selectedDict valueForKey:key];
@@ -834,21 +858,23 @@
 - (id)objectForTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     id object = nil;
     if (tableView == self.tableView) {
-        if(([self.exfeePeople count] && indexPath.section == 1) ||
+        if ([self.searchAddPeople count] && indexPath.section == 0 && indexPath.row < [self.searchAddPeople count]) {
+            RoughIdentity *roughtIdentity = self.searchAddPeople[indexPath.row];
+            object = roughtIdentity;
+        } else if(([self.exfeePeople count] && indexPath.section == 1) ||
            (![self.exfeePeople count] && indexPath.section == 0)) {
             LocalContact *person = self.contactPeople[indexPath.row];
             object = person;
-        } else {
-            Identity *identity = [self.exfeePeople objectAtIndex:indexPath.row];
+        } else if ([self.exfeePeople count] && indexPath.section == 0) {
+            Identity *identity = self.exfeePeople[indexPath.row - [self.searchAddPeople count]];
             object = identity;
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
-        if (([self.searchResultExfeePeople count] && indexPath.section == 1) ||
-            (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
+        if ([self.searchResultContactPeople count] && indexPath.section == 1) {
             LocalContact *person = self.searchResultContactPeople[indexPath.row];
             object = person;
-        } else {
-            Identity *identity = [self.searchResultExfeePeople objectAtIndex:indexPath.row];
+        } else if ([self.searchResultExfeePeople count] && indexPath.section == 0) {
+            Identity *identity = self.searchResultExfeePeople[indexPath.row];
             object = identity;
         }
     }
@@ -886,12 +912,15 @@
     }
     
     if (tableView == self.tableView) {
-        if(([self.exfeePeople count] && indexPath.section == 1) ||
+        if ([self.searchAddPeople count] && indexPath.section == 0 && indexPath.row < [self.searchAddPeople count]) {
+            RoughIdentity *roughtIdentity = [self.searchAddPeople objectAtIndex:indexPath.row];
+            [cell customWithRoughtIdentity:roughtIdentity];
+        } else if(([self.exfeePeople count] && indexPath.section == 1) ||
            (![self.exfeePeople count] && indexPath.section == 0)) {
             LocalContact *person = self.contactPeople[indexPath.row];
             [cell customWithLocalContact:person];
         } else {
-            Identity *identity = self.exfeePeople[indexPath.row];
+            Identity *identity = self.exfeePeople[indexPath.row - [self.searchAddPeople count]];
             [cell customWithIdentity:identity];
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
@@ -914,11 +943,10 @@
                 [cell customWithIdentity:identity];
             }
         } else {
-            if(([self.searchResultExfeePeople count] && indexPath.section == 1) ||
-               (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
+            if ([self.searchResultContactPeople count] && indexPath.section == 1) {
                 LocalContact *person = self.searchResultContactPeople[indexPath.row];
                 [cell customWithLocalContact:person];
-            } else {
+            } else if ([self.searchResultExfeePeople count] && indexPath.section == 0) {
                 Identity *identity = self.searchResultExfeePeople[indexPath.row];
                 [cell customWithIdentity:identity];
             }
@@ -932,29 +960,30 @@
     EFChoosePeopleViewCell *cell = (EFChoosePeopleViewCell *)aCell;
     NSString *key = nil;
     if (tableView == self.tableView) {
-        if (([self.exfeePeople count] && indexPath.section == 1) ||
+        if ([self.searchAddPeople count] && indexPath.section == 0 && indexPath.row < [self.searchAddPeople count]) {
+            RoughIdentity *roughtIdentity = [self.searchAddPeople objectAtIndex:indexPath.row];
+            key = roughtIdentity.key;
+        } else if (([self.exfeePeople count] && indexPath.section == 1) ||
             (![self.exfeePeople count] && indexPath.section == 0)) {
             LocalContact *person = self.contactPeople[indexPath.row];
             key = person.indexfield;
         } else {
-            Identity *identity = [self.exfeePeople objectAtIndex:indexPath.row];
+            Identity *identity = self.exfeePeople[indexPath.row - [self.searchAddPeople count]];
             key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
         if (indexPath.section == 0 && self.searchBar.text.length) {
             if (indexPath.row == 0) {
-#warning TODO : !!!
                 key = nil;
             } else  {
                 Identity *identity = [self.searchResultExfeePeople objectAtIndex:indexPath.row - 1];
                 key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
             }
         } else {
-            if(([self.searchResultExfeePeople count] && indexPath.section == 1) ||
-               (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
+            if ([self.searchResultContactPeople count] && indexPath.section == 1) {
                 LocalContact *person = self.searchResultContactPeople[indexPath.row];
                 key = person.indexfield;
-            } else {
+            } else if ([self.searchResultExfeePeople count] && indexPath.section == 0) {
                 Identity *identity = [self.searchResultExfeePeople objectAtIndex:indexPath.row];
                 key = [NSString stringWithFormat:@"%@%@", identity.provider, identity.external_username];
             }
@@ -973,20 +1002,22 @@
 - (NSArray *)roughIdentitiesForTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath {
     NSArray *roughIndentities = nil;
     if (tableView == self.tableView) {
-        if(([self.exfeePeople count] && indexPath.section == 1) ||
+        if ([self.searchAddPeople count] && indexPath.section == 0 && indexPath.row < [self.searchAddPeople count]) {
+            RoughIdentity *roughtIdentity = self.searchAddPeople[indexPath.row];
+            roughIndentities = @[roughtIdentity];
+        } else if(([self.exfeePeople count] && indexPath.section == 1) ||
            (![self.exfeePeople count] && indexPath.section == 0)) {
             LocalContact *person = self.contactPeople[indexPath.row];
             roughIndentities = [person roughIdentities];
         } else {
-            Identity *identity = self.exfeePeople[indexPath.row];
+            Identity *identity = self.exfeePeople[indexPath.row - [self.searchAddPeople count]];
             roughIndentities = @[[identity roughIdentityValue]];
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
-        if(([self.searchResultExfeePeople count] && indexPath.section == 1) ||
-           (![self.searchResultExfeePeople count] && indexPath.section == 0)) {
+        if ([self.searchResultContactPeople count] && indexPath.section == 1) {
             LocalContact *person = self.searchResultContactPeople[indexPath.row];
             roughIndentities = [person roughIdentities];
-        } else {
+        } else if ([self.searchResultExfeePeople count] && indexPath.section == 0) {
             Identity *identity = self.searchResultExfeePeople[indexPath.row];
             roughIndentities = @[[identity roughIdentityValue]];
         }
