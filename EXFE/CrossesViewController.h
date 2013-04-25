@@ -51,7 +51,6 @@
 - (Cross*) crossWithId:(int)cross_id;
 - (void) refreshTableViewWithCrossId:(int)cross_id;
 - (void) alertsignout;
-//- (BOOL) isIdentityBelongsMe:(int)identity_id;
 - (BOOL) PushToCross:(int)cross_id;
 - (BOOL) PushToConversation:(int)cross_id;
 - (void) onClickConversation:(UIView*)card;

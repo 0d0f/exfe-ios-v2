@@ -50,7 +50,10 @@
     
     tapBack = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
         if (self.currentViewController != nil) {
-            [self swapChildViewController:0 param:nil];
+            [self.view endEditing:YES];
+            [self performBlock:^(id sender) {
+                [self swapChildViewController:0 param:nil];
+            } afterDelay:0.233];
         }
     }];
     [self.imgHead addGestureRecognizer:tapBack];

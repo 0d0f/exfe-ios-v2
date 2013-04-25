@@ -325,64 +325,74 @@
 }
 
 - (void) processUrlHandler:(NSURL*)url{
-    NSString *host=[url host];
-    NSDictionary *params = [Util splitQuery:[url query]];
+    NSString *host = [url host];
+    NSArray *pathComps = [url pathComponents];
+//    NSDictionary *params = [Util splitQuery:[url query]];
     NSArray *viewControllers = self.navigationController.viewControllers;
     CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
     
     if([host isEqualToString:@"crosses"]){
-        if([params objectForKey:@"cross_id"]){
-            int cross_id=[[params objectForKey:@"cross_id"] intValue] ;
-            if(cross_id>0)
-            {
-                if([crossViewController PushToCross:cross_id]==NO)
+        if (self.navigationController.viewControllers.count > 1) {
+            [self.navigationController popToRootViewControllerAnimated:NO];
+        }
+        if(pathComps.count  == 2){
+            int cross_id = [[pathComps objectAtIndex:1] intValue];
+            if( cross_id > 0){
+                if ([crossViewController PushToCross:cross_id] == NO) {
                     [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+                }
+                return ;
             }
         }
-    }
-    else if([host isEqualToString:@"conversation"]){
-        if([params objectForKey:@"cross_id"]){
-            int cross_id=[[params objectForKey:@"cross_id"] intValue] ;
-            if(cross_id>0)
-            {
-                //                if([crossViewController PushToConversation:cross_id]==NO)
-                //                    [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+        
+    
+    } else if([host isEqualToString:@"conversation"]){
+        if (self.navigationController.viewControllers.count > 1) {
+            [self.navigationController popToRootViewControllerAnimated:NO];
+        }
+        if(pathComps.count  == 2){
+            int cross_id = [[pathComps objectAtIndex:1] intValue];
+            if (cross_id > 0){
+                if ([crossViewController PushToConversation:cross_id] == NO) {
+                    [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+                }
             }
         }
-    }
-    else if([host isEqualToString:@"profile"]){
+    } else if([host isEqualToString:@"profile"]){
+        if (self.navigationController.viewControllers.count > 1) {
+            [self.navigationController popToRootViewControllerAnimated:NO];
+        }
         [crossViewController ShowProfileView];
     }
 }
 
 - (void)ReceivePushData:(NSDictionary*)userInfo RunOnForeground:(BOOL)isForeground
 {
-    if(isForeground==NO){
+    if (isForeground == NO){
         NSArray *viewControllers = self.navigationController.viewControllers;
         CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
-        if(userInfo!=nil)
-        {
+        if (userInfo != nil) {
             id arg=[userInfo objectForKey:@"args"];
-            if([arg isKindOfClass:[NSDictionary class]])
-            {
+            if([arg isKindOfClass:[NSDictionary class]]) {
                 id cid=[arg objectForKey:@"cid"];
                 id msg_type=[arg objectForKey:@"t"];
-                if(cid !=nil && [cid isKindOfClass:[NSNumber class]] && msg_type!=nil && [msg_type isKindOfClass:[NSString class]])
-                {
-                    if([cid intValue]>0 )
-                    {
+                if (cid !=nil && [cid isKindOfClass:[NSNumber class]] && msg_type!=nil && [msg_type isKindOfClass:[NSString class]]) {
+                    if ([cid intValue]>0 ) {
                         int cross_id=[cid intValue];
                         NSString *type=(NSString*)msg_type;
                         if([type isEqualToString:@"i"])
-                            [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+                            if ([crossViewController PushToCross:cross_id] == NO) {
+                                [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+                            }
                         if([type isEqualToString:@"c"])
-                            [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+                            if ([crossViewController PushToConversation:cross_id] == NO) {
+                                [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+                            }
                     }
                 }
             }
         }
-    }
-    else{
+    } else {
         NSArray *viewControllers = self.navigationController.viewControllers;
         CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
         [crossViewController refreshCrosses:@"crossupdateview"];
@@ -410,7 +420,6 @@
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     [ud removeObjectForKey:@"access_token"];
     [ud removeObjectForKey:@"userid"];
-//    [ud removeObjectForKey:@"default_user_identities"];
     [ud removeObjectForKey:@"devicetoken"];
     [ud removeObjectForKey:@"exfee_updated_at"];
     [ud removeObjectForKey:@"ifdevicetokenSave"];

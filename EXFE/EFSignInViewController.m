@@ -254,8 +254,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 {
 //    CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
 
-    
-    [self.inputIdentity becomeFirstResponder];
+    [self performBlock:^(id sender) {
+        [self.inputIdentity becomeFirstResponder];
+    } afterDelay:0.233];
 }
 
 - (void)didReceiveMemoryWarning
@@ -837,15 +838,13 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                             ;
                                         }];
 }
+
 - (void)SigninDidFinish
 {
     NSLog(@"Sign In Did finish");
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [app SigninDidFinish];
 }
-
-
-
 
 #pragma Mark - OAuthlogin Delegate
 - (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {

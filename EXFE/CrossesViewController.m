@@ -449,14 +449,6 @@
     [self refreshWelcome];
     [self.tableView reloadData];
 }
-- (BOOL) isIdentityBelongsMe:(int)identity_id{
-    NSArray *identities=[[NSUserDefaults standardUserDefaults] objectForKey:@"default_user_identities"];
-    for (NSNumber *_identity_id in identities)
-        if([_identity_id intValue]==identity_id)
-            return YES;
-    
-    return NO;
-}
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -749,21 +741,15 @@
     [Util signout];
 }
 
-//- (void)gotoCrossDetail{
-//    CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-//    [self.navigationController pushViewController:viewController animated:YES];
-//    [viewController release];
-//}
-
 #pragma mark View Push methods
 - (BOOL) PushToCross:(int)cross_id{
     Cross *cross = [self crossWithId:cross_id];
     if(cross != nil){
-//        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-//        gatherViewController.cross=cross;
-//        [gatherViewController setViewMode];
-//        [self.navigationController pushViewController:gatherViewController animated:YES];
-//        [gatherViewController release];
+        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+        viewController.cross = cross;
+        viewController.widgetId = kWidgetCross;
+        [self.navigationController pushViewController:viewController animated:NO];
+        [viewController release];
         return YES;
     }
     return NO;
@@ -774,13 +760,11 @@
 - (BOOL) PushToConversation:(int)cross_id{
     Cross *cross=[self crossWithId:cross_id];
     if(cross!=nil){
-//        GatherViewController *gatherViewController=[[GatherViewController alloc] initWithNibName:@"GatherViewController" bundle:nil];
-//        
-//        gatherViewController.cross=cross;
-//        [gatherViewController setViewMode];
-//        [self.navigationController pushViewController:gatherViewController animated:YES];
-//        [gatherViewController toconversation];
-//        [gatherViewController release];
+        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
+        viewController.cross = cross;
+        viewController.widgetId = kWidgetConversation;
+        [self.navigationController pushViewController:viewController animated:NO];
+        [viewController release];
         return YES;
     }
     return NO;
@@ -800,12 +784,6 @@
         viewController.widgetId = kWidgetConversation;
         [self.navigationController pushViewController:viewController animated:NO];
         [viewController release];
-
-//        CrossDetailViewController *viewController=[[CrossDetailViewController alloc]initWithNibName:@"CrossDetailViewController" bundle:nil];
-//        viewController.cross = cross;
-//        [self.navigationController pushViewController:viewController animated:NO];
-//        [viewController toConversationAnimated:NO];
-//        [viewController release];
     }
 }
 
