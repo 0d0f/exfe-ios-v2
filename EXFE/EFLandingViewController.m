@@ -84,13 +84,8 @@
         CGRect logo_frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 134 : 90, 320, 300);
         _imgEXFELogo.frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 68 : 34, 320, 300);
         
-        [UIView animateWithDuration:1.6 delay:0.1 options:UIViewAnimationOptionTransitionNone animations:^{
+        [UIView animateWithDuration:0.5 delay:0.1 options:UIViewAnimationOptionTransitionNone animations:^{
             _imgEXFELogo.frame = logo_frame;
-        } completion:^(BOOL finished) {
-            
-        }];
-        
-        [UIView animateWithDuration:1 delay:0.8 options:UIViewAnimationOptionTransitionNone animations:^{
             _labelEXFE.alpha = 100;
             _labelDescription.alpha = 100;
             _labelStart.frame = frame;
@@ -98,8 +93,6 @@
             
         }];
     }
-    
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -148,7 +141,7 @@
     
     
     __weak __block EFLandingViewController *weakSelf = self;
-    [UIView animateWithDuration:0.5
+    [UIView animateWithDuration:0.4
                      animations:^{
                          
                          if (weakSelf.currentViewController) {
