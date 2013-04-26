@@ -280,19 +280,19 @@
         indexPath = [tableView indexPathForCell:cell];
     }
     
-    NSIndexPath *indexPathParam = nil;
-    if (tableView == self.searchDisplayController.searchResultsTableView &&
-        self.searchBar.text.length &&
-        indexPath.section == 0) {
-        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 2 inSection:indexPath.section];
-    } else {
-        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-    }
+    NSIndexPath *indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];;
+//    if (tableView == self.searchDisplayController.searchResultsTableView &&
+//        self.searchBar.text.length &&
+//        indexPath.section == 0) {
+//        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 2 inSection:indexPath.section];
+//    } else {
+//        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+//    }
     [self selectOrDeselectTableView:tableView
                            selected:YES
                         atIndexPath:indexPathParam];
     [tableView beginUpdates];
-    [tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+    [tableView reloadRowsAtIndexPaths:@[indexPathParam] withRowAnimation:UITableViewRowAnimationNone];
     [tableView endUpdates];
 }
 
@@ -309,7 +309,7 @@
         indexPath = [tableView indexPathForCell:cell];
     }
     indexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-    
+      
     NSIndexPath *indexPathParam = nil;
     if (tableView == self.searchDisplayController.searchResultsTableView &&
         self.searchBar.text.length &&
@@ -331,7 +331,7 @@
     if (shouldDeselect) {
         [self selectOrDeselectTableView:tableView
                                selected:NO
-                            atIndexPath:indexPathParam];
+                            atIndexPath:indexPath];
         [tableView beginUpdates];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         [tableView endUpdates];
@@ -377,9 +377,9 @@
     if (!indexPath) {
         tableView = self.searchDisplayController.searchResultsTableView;
         indexPath = [tableView indexPathForCell:cell];
-        if (indexPath && self.searchBar.text.length && indexPath.section == 0) {
-            indexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-        }
+//        if (indexPath && self.searchBar.text.length && indexPath.section == 0) {
+//            indexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+//        }
     }
     
     if (indexPath) {
@@ -699,8 +699,8 @@
         NSComparisonResult dataResult = [dataIndexPath compare:indexPath];
         if (dataResult == NSOrderedSame) {
             if (tableView == self.searchDisplayController.searchResultsTableView && indexPath.section == 0) {
-                BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:dataIndexPath.row - 1 inSection:dataIndexPath.section]];
-                [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:[NSIndexPath indexPathForRow:dataIndexPath.row - 1 inSection:dataIndexPath.section]];
+                BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:dataIndexPath];
+                [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:dataIndexPath];
                 [tableView beginUpdates];
                 [tableView reloadRowsAtIndexPaths:@[dataIndexPath, self.insertIndexPath] withRowAnimation:UITableViewRowAnimationNone];
                 [tableView endUpdates];
@@ -749,14 +749,14 @@
             }
         }
         
-        BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:indexPathParam];
-        [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:indexPathParam];
+        BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:indexPath];
+        [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:indexPath];
         [tableView beginUpdates];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         [tableView endUpdates];
     }
     
-    if (![self isObjectSelectedInTableView:tableView atIndexPath:indexPathParam]) {
+    if (![self isObjectSelectedInTableView:tableView atIndexPath:indexPath]) {
         [tableView deselectRowAtIndexPath:indexPathParam animated:NO];
     }
 }
@@ -925,7 +925,9 @@
             LocalContact *person = self.contactPeople[indexPath.row];
             object = person;
         } else if ([self.exfeePeople count] && indexPath.section == 0) {
-            Identity *identity = self.exfeePeople[indexPath.row - [self.searchAddPeople count]];
+            NSInteger index = indexPath.row - [self.searchAddPeople count];
+            index = index >= [self.exfeePeople count] ? [self.exfeePeople count] - 1 : index;
+            Identity *identity = self.exfeePeople[index];
             object = identity;
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
@@ -933,7 +935,10 @@
             LocalContact *person = self.searchResultContactPeople[indexPath.row];
             object = person;
         } else if ([self.searchResultExfeePeople count] && indexPath.section == 0) {
-            Identity *identity = self.searchResultExfeePeople[indexPath.row];
+            NSInteger index = indexPath.row - (self.searchBar.text.length ? 1 : 0) - ((self.insertIndexPath && (indexPath.section == self.insertIndexPath.section && indexPath.row > self.insertIndexPath.row)) ? 1 : 0);
+            index = index >= [self.searchResultExfeePeople count] ? [self.searchResultExfeePeople count] - 1 : index;
+            
+            Identity *identity = self.searchResultExfeePeople[index];
             object = identity;
         }
     }
