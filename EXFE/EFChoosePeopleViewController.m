@@ -850,6 +850,7 @@
     __block BOOL isProgressHubVisible = YES;
     
     UILogPush(@"Start Loading Contact.");
+    [[EXAddressBookService defaultService] reset];
     [[EXAddressBookService defaultService] checkAddressBookAuthorizationStatusWithCompletionHandler:^(BOOL granted){
         if (granted) {
             [[EXAddressBookService defaultService] fetchPeopleWithPageSize:40
