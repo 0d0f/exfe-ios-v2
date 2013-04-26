@@ -91,7 +91,6 @@
         _contactPeople = [[NSMutableArray alloc] init];
         _selectedDict = [[NSMutableDictionary alloc] init];
         _selectedRoughIdentityDict = [[NSMutableDictionary alloc] init];
-//        _needSubmit = NO;
     }
     return self;
 }
@@ -269,6 +268,9 @@
 #pragma mark - EFPersonIdentityCellDelegate
 
 - (void )personIdentityCell:(EFPersonIdentityCell *)cell didSelectRoughIdentity:(RoughIdentity *)roughIdentity {
+    if (!self.insertIndexPath)
+        return;
+    
     [self selectRoughIdentity:roughIdentity];
     
     UITableView *tableView = self.tableView;
@@ -289,10 +291,15 @@
     [self selectOrDeselectTableView:tableView
                            selected:YES
                         atIndexPath:indexPathParam];
+    [tableView beginUpdates];
     [tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+    [tableView endUpdates];
 }
 
 - (void )personIdentityCell:(EFPersonIdentityCell *)cell didDeselectRoughIdentity:(RoughIdentity *)roughIdentity {
+    if (!self.insertIndexPath)
+        return;
+    
     [self deselectRoughIdentity:roughIdentity];
     
     UITableView *tableView = self.tableView;
@@ -325,7 +332,9 @@
         [self selectOrDeselectTableView:tableView
                                selected:NO
                             atIndexPath:indexPathParam];
+        [tableView beginUpdates];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [tableView endUpdates];
     }
 }
 
@@ -349,10 +358,14 @@
     if (self.insertIndexPath) {
         NSIndexPath *toRemoveIndexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
         self.insertIndexPath = nil;
+        [tableView beginUpdates];
         [tableView deleteRowsAtIndexPaths:@[toRemoveIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+        [tableView endUpdates];
     } else {
         self.insertIndexPath = indexPath;
+        [tableView beginUpdates];
         [tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+        [tableView endUpdates];
     }
 }
 
@@ -640,7 +653,10 @@
         UITableView *tableView = (UITableView *)scrollView;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
         self.insertIndexPath = nil;
+        
+        [tableView beginUpdates];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+        [tableView endUpdates];
     }
 }
 
@@ -685,19 +701,25 @@
             if (tableView == self.searchDisplayController.searchResultsTableView && indexPath.section == 0) {
                 BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:dataIndexPath.row - 1 inSection:dataIndexPath.section]];
                 [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:[NSIndexPath indexPathForRow:dataIndexPath.row - 1 inSection:dataIndexPath.section]];
+                [tableView beginUpdates];
                 [tableView reloadRowsAtIndexPaths:@[dataIndexPath, self.insertIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+                [tableView endUpdates];
             } else {
                 BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:dataIndexPath];
                 [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:dataIndexPath];
+                [tableView beginUpdates];
                 [tableView reloadRowsAtIndexPaths:@[dataIndexPath, self.insertIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+                [tableView endUpdates];
             }
-            
         } else {
             NSComparisonResult result = [indexPath compare:self.insertIndexPath];
             if (result != NSOrderedSame) {
                 NSIndexPath *toDeleteIndexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
                 self.insertIndexPath = nil;
+                
+                [tableView beginUpdates];
                 [tableView deleteRowsAtIndexPaths:@[toDeleteIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+                [tableView endUpdates];
                 
                 if (result == NSOrderedDescending && indexPath.section == toDeleteIndexPath.section) {
                     indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
@@ -716,7 +738,9 @@
                     [self refreshSelectedDictWithObject:roughIdentity selected:YES];
                     [self.searchDisplayController setActive:NO animated:YES];
                 } else {
+                    [tableView beginUpdates];
                     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    [tableView endUpdates];
                 }
                 
                 return;
@@ -727,7 +751,9 @@
         
         BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:indexPathParam];
         [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:indexPathParam];
+        [tableView beginUpdates];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [tableView endUpdates];
     }
     
     if (![self isObjectSelectedInTableView:tableView atIndexPath:indexPathParam]) {
@@ -853,13 +879,17 @@
             }
         }
         
-        [_selectedDict setValue:@"YES" forKey:key];
+        if (key) {
+            [_selectedDict setValue:@"YES" forKey:key];
+        }
     } else {
         for (RoughIdentity *roughIndentity in roughtIdentities) {
             [self deselectRoughIdentity:roughIndentity];
         }
         
-        [_selectedDict removeObjectForKey:key];
+        if (key) {
+            [_selectedDict removeObjectForKey:key];
+        }
     }
     
     [self reloadSelectionCountLabelWithAnimated:YES];
