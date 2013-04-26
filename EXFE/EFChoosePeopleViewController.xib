@@ -180,6 +180,7 @@
 											<bytes key="NSRGB">MC45NTY4NjI3NDUxIDAuOTU2ODYyNzQ1MSAwLjk1Njg2Mjc0NTEAA</bytes>
 										</object>
 										<object class="IBUITextInputTraits" key="IBTextInputTraits">
+											<int key="IBUIKeyboardType">7</int>
 											<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 										</object>
 										<array key="IBScopeButtonTitles" id="0"/>
