@@ -24,6 +24,7 @@
 #import "User+EXFE.h"
 #import "EFAPIServer.h"
 #import "EFSearchIdentityCell.h"
+#import "WCAlertView.h"
 
 #pragma mark - Category (Extension)
 @interface EFChoosePeopleViewController ()
@@ -732,16 +733,39 @@
                 NSString *keyWord = self.searchBar.text;
                 Provider matchedProvider = [Util matchedProvider:keyWord];
                 if (kProviderUnknown != matchedProvider) {
-                    NSDictionary *matchedDictionary = [Util parseIdentityString:keyWord byProvider:matchedProvider];
-                    RoughIdentity *roughIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
-                    [_searchAddPeople addObject:roughIdentity];
-                    [self refreshSelectedDictWithObject:roughIdentity selected:YES];
-                    [self.searchDisplayController setActive:NO animated:YES];
-                } else {
-                    [tableView beginUpdates];
-                    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                    [tableView endUpdates];
+                    if (kProviderPhone == matchedProvider) {
+                        [WCAlertView showAlertWithTitle:@"Set invitee name"
+                                                message:nil
+                                     customizationBlock:^(WCAlertView *alertView) {
+                                         alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+                                     }
+                                        completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
+                                            if (buttonIndex == alertView.cancelButtonIndex) {
+                                                UITextField *field = [alertView textFieldAtIndex:0];
+                                                NSString *inputName = [NSString stringWithString:field.text];
+                                                
+                                                NSDictionary *matchedDictionary = [Util parseIdentityString:keyWord byProvider:matchedProvider];
+                                                RoughIdentity *roughIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
+                                                roughIdentity.externalUsername = inputName;
+                                                [_searchAddPeople addObject:roughIdentity];
+                                                [self refreshSelectedDictWithObject:roughIdentity selected:YES];
+                                                [self.searchDisplayController setActive:NO animated:YES];
+                                            }
+                                        }
+                                      cancelButtonTitle:@"Done"
+                                      otherButtonTitles:@"Cancel", nil];
+                    } else {
+                        NSDictionary *matchedDictionary = [Util parseIdentityString:keyWord byProvider:matchedProvider];
+                        RoughIdentity *roughIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
+                        [_searchAddPeople addObject:roughIdentity];
+                        [self refreshSelectedDictWithObject:roughIdentity selected:YES];
+                        [self.searchDisplayController setActive:NO animated:YES];
+                    }
                 }
+                
+                [tableView beginUpdates];
+                [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                [tableView endUpdates];
                 
                 return;
             } else {
