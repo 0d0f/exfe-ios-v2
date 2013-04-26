@@ -108,6 +108,15 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         button.backgroundColor = [UIColor clearColor];
         [button addTarget:self action:@selector(expandIdentity:) forControlEvents:UIControlEventTouchUpInside];
         [button setImage:[UIImage imageNamed:@"start_tri.png"] forState:UIControlStateNormal];
+        NSMutableArray *imgs = [NSMutableArray arrayWithCapacity:30];
+        for (NSUInteger i = 0; i < 30; i++) {
+            NSString *name = [NSString stringWithFormat:@"start_tri-%02u.png", i];
+            NSLog(@"%@", name);
+            [imgs addObject:[UIImage imageNamed:name]];
+        }
+        button.imageView.animationImages = imgs;
+        button.imageView.animationRepeatCount = 0;
+        [button.imageView startAnimating];
         button.contentMode = UIViewContentModeCenter;
         self.extIdentity = button;
         self.inputIdentity.rightView = self.extIdentity;
