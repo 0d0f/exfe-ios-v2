@@ -509,7 +509,8 @@
     } else if (self.insertIndexPath && [self.insertIndexPath compare:indexPath] == NSOrderedSame) {
         NSIndexPath *indexPathParam = nil;
         if (tableView == self.searchDisplayController.searchResultsTableView &&
-            self.searchBar.text.length) {
+            self.searchBar.text.length &&
+            0 == indexPath.section) {
             indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 2 inSection:indexPath.section];
         } else {
             indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
