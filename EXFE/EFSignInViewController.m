@@ -111,18 +111,18 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         self.inputIdentity.leftView = self.imageIdentity;
         self.inputIdentity.leftViewMode = UITextFieldViewModeAlways;
         
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
         button.backgroundColor = [UIColor clearColor];
         [button addTarget:self action:@selector(expandIdentity:) forControlEvents:UIControlEventTouchUpInside];
         [button setImage:[UIImage imageNamed:@"start_tri.png"] forState:UIControlStateNormal];
         NSMutableArray *imgs = [NSMutableArray arrayWithCapacity:30];
         for (NSUInteger i = 0; i < 30; i++) {
             NSString *name = [NSString stringWithFormat:@"start_tri-%02u.png", i];
-            NSLog(@"%@", name);
             [imgs addObject:[UIImage imageNamed:name]];
         }
         button.imageView.animationImages = imgs;
         button.imageView.animationRepeatCount = 0;
+        button.imageView.animationDuration = 2;
         [button.imageView startAnimating];
         button.contentMode = UIViewContentModeCenter;
         self.extIdentity = button;
@@ -238,7 +238,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     {// Overlay error hint
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
-        label.textColor = [UIColor COLOR_RGB(229, 46, 83)];
+        label.textColor = [UIColor COLOR_RED_EXFE];
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:18.0];
         label.numberOfLines = 1;
         label.backgroundColor = [UIColor whiteColor];
@@ -315,7 +315,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         self.btnFacebook.tag = 51;
         
         CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:self.btnFacebook];
-        item.padding = CSLinearLayoutMakePadding(23, 58, 0, 20);
+        item.padding = CSLinearLayoutMakePadding(21, 58, 0, 20);
         item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
         item.fillMode = CSLinearLayoutItemFillModeNormal;
         [snsLayoutView addItem:item];
@@ -343,7 +343,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         self.btnTwitter.tag = 52;
         
         CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:self.btnTwitter];
-        item.padding = CSLinearLayoutMakePadding(23, 20, 0, 0);
+        item.padding = CSLinearLayoutMakePadding(21, 20, 0, 0);
         item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
         item.fillMode = CSLinearLayoutItemFillModeNormal;
         [snsLayoutView addItem:item];
@@ -688,7 +688,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     [_inlineError setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
         NSRange titleRange = [[mutableAttributedString string] rangeOfString:title options:NSCaseInsensitiveSearch];
-        [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[[UIColor COLOR_RGB(229,46,83)] CGColor] range:titleRange];
+        [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[[UIColor COLOR_RED_EXFE] CGColor] range:titleRange];
         return mutableAttributedString;
     }];
     
@@ -933,15 +933,14 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                             if ([@"SIGN_UP" isEqualToString:registration_flag]) {
                                 _inputPassword.text = @"";
                                 [self setStage:kStageSignUp];
+                            }else if ([@"SIGN_IN" isEqualToString:registration_flag]){
+                                [self showErrorInfo:@"Authentication failed." dockOn:_inputPassword];
                             }
                             
-    //TODO: AUTHENTICATE
-    // AUTHENTICATE
-    // _setStage start
-    // oatuh
-                        } else {
-                        
-                            [self showErrorInfo:@"Authentication failed." dockOn:_inputPassword];
+                            //TODO: AUTHENTICATE
+                            // AUTHENTICATE
+                            // _setStage start
+                            // oatuh
                         }
                     }   break;
                     default:

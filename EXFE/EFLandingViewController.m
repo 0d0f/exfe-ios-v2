@@ -49,6 +49,12 @@
     }];
     [_labelStart addGestureRecognizer:tapStart];
     
+//    UITapGestureRecognizer *tapLogo = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+//        [self swapChildViewController:1 param:nil];
+//    }];
+//    [_imgEXFELogo addGestureRecognizer:tapLogo];
+//    _imgEXFELogo.userInteractionEnabled = true;
+    
     tapBack = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
         if (self.currentViewController != nil) {
             [self.view endEditing:YES];
@@ -84,7 +90,7 @@
         CGRect logo_frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 134 : 90, 320, 300);
         _imgEXFELogo.frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 68 : 34, 320, 300);
         
-        [UIView animateWithDuration:0.5 delay:0.1 options:UIViewAnimationOptionTransitionNone animations:^{
+        [UIView animateWithDuration:0.75 delay:0.5 options:UIViewAnimationOptionTransitionNone animations:^{
             _imgEXFELogo.frame = logo_frame;
             _labelEXFE.alpha = 100;
             _labelDescription.alpha = 100;

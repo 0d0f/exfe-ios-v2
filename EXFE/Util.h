@@ -56,6 +56,8 @@
 #define COLOR_BLUE_LAKE           COLOR_RGB(0x60, 0xAD, 0xFF)
 #define COLOR_BLUE_AQUA           COLOR_RGB(0xA9, 0xD3, 0xFF)
 
+#define COLOR_RED_EXFE            COLOR_RGB(0xDB, 0x13, 0x41)
+
 // Const
 #define HEADER_BACKGROUND_WIDTH     (880.0f)
 #define HEADER_BACKGFOUND_HEIGHT    (495.0f)
