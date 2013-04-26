@@ -970,9 +970,40 @@
         
         EFChoosePeopleViewController *viewController = [[EFChoosePeopleViewController alloc] initWithNibName:@"EFChoosePeopleViewController"
                                                                                                       bundle:nil];
-        viewController.exfee = self.cross.exfee;
-        viewController.needSubmit = NO;
-        viewController.completionHandler = ^{
+        viewController.completionHandler = ^(NSArray *identities){
+            NSMutableSet *invitations = [[NSMutableSet alloc] init];
+            for (NSArray *personIdentities in identities) {
+                BOOL hasAddedNoresponse = NO;
+                RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
+                
+                for (Identity *identity in personIdentities) {
+                    NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
+                    Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
+                    
+                    if (!hasAddedNoresponse) {
+                        invitation.rsvp_status = @"NORESPONSE";
+                    } else {
+                        hasAddedNoresponse = YES;
+                        invitation.rsvp_status = @"NOTIFICATION";
+                    }
+                    
+                    invitation.identity = identity;
+                    Invitation *myinvitation = [self.cross.exfee getMyInvitation];
+                    if (myinvitation != nil) {
+                        invitation.updated_by = myinvitation.identity;
+                    } else {
+                        invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
+                    }
+                    
+                    [invitations addObject:invitation];
+                    [invitation release];
+                }
+            }
+            
+            [self.cross.exfee addInvitations:invitations];
+            [invitations release];
+            
             self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
             [self reFormatTitle];
             [exfeeShowview reloadData];

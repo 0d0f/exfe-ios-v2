@@ -37,6 +37,7 @@
 
 @property (nonatomic, retain) NSMutableDictionary *selectedDict;
 @property (nonatomic, retain) NSMutableDictionary *selectedRoughIdentityDict;
+@property (nonatomic, retain) NSMutableDictionary *cachedRoughIdentityDict;
 
 @property (nonatomic, retain) NSIndexPath *insertIndexPath;
 
@@ -84,12 +85,13 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        _cachedRoughIdentityDict = [[NSMutableDictionary alloc] init];
         _searchAddPeople = [[NSMutableArray alloc] init];
         _exfeePeople = [[NSMutableArray alloc] init];
         _contactPeople = [[NSMutableArray alloc] init];
         _selectedDict = [[NSMutableDictionary alloc] init];
         _selectedRoughIdentityDict = [[NSMutableDictionary alloc] init];
-        _needSubmit = NO;
+//        _needSubmit = NO;
     }
     return self;
 }
@@ -157,6 +159,7 @@
 }
 
 - (void)dealloc {
+    [_cachedRoughIdentityDict release];
     [_searchAddPeople release];
     [_selectedRoughIdentityDict release];
     [_selectedDict release];
@@ -203,153 +206,64 @@
     hud.customView = bigspin;
     [bigspin release];
     
-    NSMutableSet *invitations = [[NSMutableSet alloc] init];
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
-    NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
+    NSMutableArray *selectedIdentities = [[NSMutableArray alloc] init];
     
     for (Identity *identity in self.exfeePeople) {
         RoughIdentity *roughIdentity = [identity roughIdentityValue];
         if ([self isRoughtIdentitySelected:roughIdentity]) {
-            Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
-            
-            invitation.rsvp_status = @"NORESPONSE";
-            invitation.identity = identity;
-            Invitation *myinvitation = [self.exfee getMyInvitation];
-            if (myinvitation != nil) {
-                invitation.updated_by = myinvitation.identity;
-            } else {
-                invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
-            }
-            
-            [invitations addObject:invitation];
-            [invitation release];
+            [selectedIdentities addObject:@[identity]];
         }
     }
     
-    __block NSUInteger count = 0;
-    for (RoughIdentity *roughIdentity in self.searchAddPeople) {
-        NSArray *selectedRoughIndentityDicts = @[[roughIdentity dictionaryValue]];
-        
-        if ([selectedRoughIndentityDicts count]) {
-            ++count;
-            [[EFAPIServer sharedInstance] getIdentitiesWithParams:selectedRoughIndentityDicts
-                                                          success:^(NSArray *identities){
-                                                              BOOL hasAddedNoresponse = NO;
-                                                              RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                                                              NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
-                                                              
-                                                              for (Identity *identity in identities) {
-                                                                  NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
-                                                                  Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
-                                                                  
-                                                                  if (!hasAddedNoresponse) {
-                                                                      invitation.rsvp_status = @"NORESPONSE";
-                                                                  } else {
-                                                                      hasAddedNoresponse = YES;
-                                                                      invitation.rsvp_status = @"NOTIFICATION";
-                                                                  }
-                                                                  
-                                                                  invitation.identity = identity;
-                                                                  Invitation *myinvitation = [self.exfee getMyInvitation];
-                                                                  if (myinvitation != nil) {
-                                                                      invitation.updated_by = myinvitation.identity;
-                                                                  } else {
-                                                                      invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
-                                                                  }
-                                                                  
-                                                                  [invitations addObject:invitation];
-                                                                  [invitation release];
-                                                              }
-                                                              --count;
-                                                          }
-                                                          failure:^(NSError *error){
-                                                              --count;
-                                                              NSLog(@"Oh! Shit! %@", error);
-                                                          }];
+    for (RoughIdentity *roughtIdentity in self.searchAddPeople) {
+        if ([self isRoughtIdentitySelected:roughtIdentity]) {
+            if (roughtIdentity.status == kEFRoughIdentityGetIdentityStatusSuccess) {
+                [selectedIdentities addObject:@[roughtIdentity.identity]];
+            } else if (roughtIdentity.status == kEFRoughIdentityGetIdentityStatusLoading) {
+                while (kEFRoughIdentityGetIdentityStatusSuccess == roughtIdentity.status || kEFRoughIdentityGetIdentityStatusFailure == roughtIdentity.status) {
+                    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                             beforeDate:[NSDate distantFuture]];
+                }
+                if (kEFRoughIdentityGetIdentityStatusSuccess == roughtIdentity.status) {
+                    [selectedIdentities addObject:@[roughtIdentity.identity]];
+                }
+            }
         }
-
     }
     
     for (LocalContact *contact in self.contactPeople) {
-        NSArray *roughIdentities = [contact roughIdentities];
-        NSMutableArray *selectedRoughIndentityDicts = [[[NSMutableArray alloc] initWithCapacity:[roughIdentities count]] autorelease];
-        for (RoughIdentity *roughIndentity in roughIdentities) {
-            if ([self isRoughtIdentitySelected:roughIndentity]) {
-                [selectedRoughIndentityDicts addObject:[roughIndentity dictionaryValue]];
+        NSArray *roughtIdentities = [contact roughIdentities];
+        NSMutableArray *contactRoughIdentities = [[NSMutableArray alloc] initWithCapacity:[roughtIdentities count]];
+        for (RoughIdentity *roughtIdentity in roughtIdentities) {
+            if ([self isRoughtIdentitySelected:roughtIdentity]) {
+                RoughIdentity *cachedRoughtIdentity = [_cachedRoughIdentityDict valueForKey:roughtIdentity.key];
+                if (cachedRoughtIdentity.status == kEFRoughIdentityGetIdentityStatusSuccess) {
+                    [contactRoughIdentities addObject:cachedRoughtIdentity.identity];
+                } else if (cachedRoughtIdentity.status == kEFRoughIdentityGetIdentityStatusLoading) {
+                    while (kEFRoughIdentityGetIdentityStatusSuccess == cachedRoughtIdentity.status || kEFRoughIdentityGetIdentityStatusFailure == cachedRoughtIdentity.status) {
+                        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                                 beforeDate:[NSDate distantFuture]];
+                    }
+                    if (kEFRoughIdentityGetIdentityStatusSuccess == cachedRoughtIdentity.status) {
+                        [selectedIdentities addObject:cachedRoughtIdentity.identity];
+                    }
+                }
             }
         }
-        
-        if ([selectedRoughIndentityDicts count]) {
-            ++count;
-            [[EFAPIServer sharedInstance] getIdentitiesWithParams:selectedRoughIndentityDicts
-                                                          success:^(NSArray *identities){
-                                                              BOOL hasAddedNoresponse = NO;
-                                                              RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                                                              NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
-                                                              
-                                                              for (Identity *identity in identities) {
-                                                                  NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
-                                                                  Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
-                                                                  
-                                                                  if (!hasAddedNoresponse) {
-                                                                      invitation.rsvp_status = @"NORESPONSE";
-                                                                  } else {
-                                                                      hasAddedNoresponse = YES;
-                                                                      invitation.rsvp_status = @"NOTIFICATION";
-                                                                  }
-                                                                  
-                                                                  invitation.identity = identity;
-                                                                  Invitation *myinvitation = [self.exfee getMyInvitation];
-                                                                  if (myinvitation != nil) {
-                                                                      invitation.updated_by = myinvitation.identity;
-                                                                  } else {
-                                                                      invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
-                                                                  }
-                                                                  
-                                                                  [invitations addObject:invitation];
-                                                                  [invitation release];
-                                                              }
-                                                              --count;
-                                                          }
-                                                          failure:^(NSError *error){
-                                                              --count;
-                                                              NSLog(@"Oh! Shit! %@", error);
-                                                          }];
+        if ([contactRoughIdentities count]) {
+            [selectedIdentities addObject:contactRoughIdentities];
         }
+        [contactRoughIdentities release];
     }
     
-    while (count) {
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
-                                 beforeDate:[NSDate distantFuture]];
+    if (_completionHandler) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.completionHandler(selectedIdentities);
+        });
     }
+    [selectedIdentities release];
     
-    [self.exfee addInvitations:[[invitations copy] autorelease]];
-    [invitations release];
-    
-    if (self.needSubmit) {
-        [self submitExfeBeforeDismiss];
-    } else {
-        [self dismiss];
-    }
-}
-
-- (void)submitExfeBeforeDismiss {
-    Exfee *exfee = [Exfee disconnectedEntity];
-    [exfee addToContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
-    exfee.exfee_id = [self.exfee.exfee_id copy];
-    
-    Identity *myidentity = [self.exfee getMyInvitation].identity;
-    
-    [[EFAPIServer sharedInstance] editExfee:exfee
-                                 byIdentity:myidentity
-                                    success:^(Exfee *editedExfee){
-                                        self.exfee = editedExfee;
-                                        [self dismiss];
-                                    }
-                                    failure:^(NSError *error){
-                                        NSLog(@"Oh! NO! %@", error);
-                                    }];
+    [self dismiss];    
 }
 
 #pragma mark - EFPersonIdentityCellDelegate
@@ -986,11 +900,7 @@
 
 - (void)dismiss {
     [self.presentingViewController dismissViewControllerAnimated:YES
-                                                      completion:^{
-                                                          if (_completionHandler) {
-                                                              _completionHandler();
-                                                          }
-                                                      }];
+                                                      completion:nil];
 }
 
 #pragma mark - Category (ChoosePeopleViewCellDisplay)
@@ -1119,6 +1029,10 @@
 }
 
 - (void)selectRoughIdentity:(RoughIdentity *)identity {
+    if (![_cachedRoughIdentityDict valueForKey:identity.key]) {
+        [_cachedRoughIdentityDict setValue:identity forKey:identity.key];
+        [identity getIdentityWithSuccess:nil failure:nil];
+    }
     [_selectedRoughIdentityDict setValue:identity forKey:identity.key];
 }
 
