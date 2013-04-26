@@ -81,15 +81,22 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     self.rootView = linearLayoutView;
     [self.view addSubview:linearLayoutView];
     
+    {// TextField Frame
+        UIImage *img = [[UIImage imageNamed:@"textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(6, 6, 6, 6)];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:img];
+        imageView.frame = CGRectMake(15, 20, 290, 50);
+        self.textFieldFrame = imageView;
+        [self.rootView addSubview:self.textFieldFrame];
+    }
+    
     {// Input Identity Field
         UITextField *textfield = [[EFTextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
         textfield.placeholder = @"Enter email or phone";
-        textfield.borderStyle = UITextBorderStyleRoundedRect;
+        textfield.borderStyle = UITextBorderStyleNone;
         textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
         textfield.keyboardType = UIKeyboardTypeEmailAddress;
         textfield.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
         textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        textfield.borderStyle = UITextBorderStyleBezel;
         textfield.delegate = self;
         [textfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         self.inputIdentity = textfield;
@@ -131,10 +138,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     {// Input Password Field
         EFPasswordField *textfield = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-        textfield.borderStyle = UITextBorderStyleRoundedRect;
+        textfield.borderStyle = UITextBorderStyleNone;
         textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         textfield.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
-        textfield.borderStyle = UITextBorderStyleBezel;
         textfield.delegate = self;
         [textfield.btnForgot addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -144,10 +150,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     {// Input Username
         UITextField *textfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-        textfield.borderStyle = UITextBorderStyleRoundedRect;
+        textfield.borderStyle = UITextBorderStyleNone;
         textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         textfield.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
-        textfield.borderStyle = UITextBorderStyleBezel;
         textfield.delegate = self;
         textfield.placeholder = @"Set display name";
         UIView *stub = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
@@ -405,7 +410,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
             [self.rootView removeItem:[self.rootView findItemByTag:_inlineError.tag]];
-            
+            _textFieldFrame.frame = CGRectMake(15, 20, 290, 50);
             _inputIdentity.rightView = _extIdentity;
             _inputIdentity.returnKeyType = UIReturnKeyNext;
             break;
@@ -443,7 +448,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }
             item2.padding = CSLinearLayoutMakePadding(6, 15, 0, 15);
             
-            
+            _textFieldFrame.frame = CGRectMake(15, 20, 290, 100);
             _inputIdentity.returnKeyType = UIReturnKeyNext;
             _inputPassword.placeholder = @"Enter password";
             _inputPassword.returnKeyType = UIReturnKeyDone;
@@ -494,6 +499,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }
             item3.padding = CSLinearLayoutMakePadding(6, 15, 5, 15);
             
+            _textFieldFrame.frame = CGRectMake(15, 20, 290, 150);
             _inputIdentity.returnKeyType = UIReturnKeyNext;
             _inputPassword.placeholder = @"Set EXFE password";
             _inputPassword.returnKeyType = UIReturnKeyNext;
@@ -502,7 +508,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _inputIdentity.rightView = nil;
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
         }  break;
-        case kStageVerificate:
+        case kStageVerificate:{
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputPassword]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagInputUserName]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStart]];
@@ -556,9 +562,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             } else {
                 [self.rootView moveItem:item3 afterItem:item2];
             }
+            
+            _textFieldFrame.frame = CGRectMake(15, 20, 290, 50);
             _inputIdentity.rightView = nil;
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
-            break;
+        }   break;
         default:
             break;
     }

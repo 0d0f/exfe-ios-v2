@@ -30,6 +30,7 @@
 @property (nonatomic, retain) UILabel *hintError;
 @property (nonatomic, retain) TTTAttributedLabel *inlineError;
 @property (nonatomic, retain) UIActivityIndicatorView *indicator;
+@property (nonatomic, retain) UIImageView *textFieldFrame;
 
 @property (nonatomic, retain) UIButton *btnFacebook;
 @property (nonatomic, retain) UIButton *btnTwitter;

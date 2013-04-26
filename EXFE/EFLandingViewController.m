@@ -148,7 +148,7 @@
     
     
     __weak __block EFLandingViewController *weakSelf = self;
-    [UIView animateWithDuration:0.4
+    [UIView animateWithDuration:0.5
                      animations:^{
                          
                          if (weakSelf.currentViewController) {
