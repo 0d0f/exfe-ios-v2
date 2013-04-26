@@ -26,6 +26,7 @@
 #import "APIExfee.h"
 #import "NSString+EXFE.h"
 #import "EFChoosePeopleViewController.h"
+#import "EFAPIServer.h"
 
 
 #define kTagViewExfeeRoot         10
@@ -876,14 +877,60 @@ typedef enum {
         if (indexPath.row == self.sortedInvitations.count){
             EFChoosePeopleViewController *viewController = [[EFChoosePeopleViewController alloc] initWithNibName:@"EFChoosePeopleViewController"
                                                                                                           bundle:nil];
-            viewController.exfee = self.exfee;
-            viewController.needSubmit = YES;
-            viewController.completionHandler = ^{
-                self.exfee = viewController.exfee;
+            
+            viewController.completionHandler = ^(NSArray *identities){
+                NSMutableSet *invitations = [[NSMutableSet alloc] init];
+                for (NSArray *personIdentities in identities) {
+                    BOOL hasAddedNoresponse = NO;
+                    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                    NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
+                    
+                    for (Identity *identity in personIdentities) {
+                        NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
+                        Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
+                        
+                        if (!hasAddedNoresponse) {
+                            invitation.rsvp_status = @"NORESPONSE";
+                        } else {
+                            hasAddedNoresponse = YES;
+                            invitation.rsvp_status = @"NOTIFICATION";
+                        }
+                        
+                        invitation.identity = identity;
+                        Invitation *myinvitation = [self.exfee getMyInvitation];
+                        if (myinvitation != nil) {
+                            invitation.updated_by = myinvitation.identity;
+                        } else {
+                            invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
+                        }
+                        
+                        [invitations addObject:invitation];
+                        [invitation release];
+                    }
+                }
                 
-                self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-                [exfeeContainer reloadData];
+                [self.exfee addInvitations:invitations];
+                [invitations release];
+                
+                Exfee *exfee = [Exfee disconnectedEntity];
+                [exfee addToContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+                exfee.exfee_id = [self.exfee.exfee_id copy];
+                
+                Identity *myidentity = [self.exfee getMyInvitation].identity;
+                
+                [[EFAPIServer sharedInstance] editExfee:exfee
+                                             byIdentity:myidentity
+                                                success:^(Exfee *editedExfee){
+                                                    self.exfee = editedExfee;
+                                                    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+                                                    [exfeeContainer reloadData];
+                                                }
+                                                failure:^(NSError *error){
+                                                    NSLog(@"Oh! NO! %@", error);
+                                                }];
+                
             };
+            
             [self presentViewController:viewController
                                animated:YES
                              completion:nil];

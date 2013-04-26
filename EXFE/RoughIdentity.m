@@ -8,6 +8,9 @@
 
 #import "RoughIdentity.h"
 
+#import "Identity+EXFE.h"
+#import "EFAPIServer.h"
+
 @implementation RoughIdentity
 @synthesize key = _key;
 
@@ -37,6 +40,7 @@
 }
 
 - (void)dealloc {
+    [_identity release];
     [_key release];
     [_provider release];
     [_externalUsername release];
@@ -97,6 +101,40 @@
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"provider:%@ externalID:%@ externalUsername:%@", self.provider, self.externalID, self.externalUsername];
+}
+
+- (void)setIdentity:(Identity *)identity {
+    if (identity == _identity)
+        return;
+    
+    if (_identity) {
+        [_identity release];
+        _identity = nil;
+    }
+    if (identity) {
+        _identity = [identity retain];
+        self.status = kEFRoughIdentityGetIdentityStatusSuccess;
+    } else {
+        self.status = kEFRoughIdentityGetIdentityStatusReady;
+    }
+}
+
+- (void)getIdentityWithSuccess:(void (^)(Identity *identity))success failure:(void (^)(NSError *error))failure {
+    self.status = kEFRoughIdentityGetIdentityStatusLoading;
+    [[EFAPIServer sharedInstance] getIdentitiesWithParams:@[[self dictionaryValue]]
+                                                  success:^(NSArray *identities){
+                                                      self.identity = identities[0];
+                                                      self.status = kEFRoughIdentityGetIdentityStatusSuccess;
+                                                      if (success) {
+                                                          success(self.identity);
+                                                      }
+                                                  }
+                                                  failure:^(NSError *error){
+                                                      self.status = kEFRoughIdentityGetIdentityStatusFailure;
+                                                      if (failure) {
+                                                          failure(error);
+                                                      }
+                                                  }];
 }
 
 @end
