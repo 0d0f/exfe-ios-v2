@@ -1031,7 +1031,9 @@
 - (void)selectRoughIdentity:(RoughIdentity *)identity {
     if (![_cachedRoughIdentityDict valueForKey:identity.key]) {
         [_cachedRoughIdentityDict setValue:identity forKey:identity.key];
-        [identity getIdentityWithSuccess:nil failure:nil];
+        if (identity.status == kEFRoughIdentityGetIdentityStatusReady) {
+            [identity getIdentityWithSuccess:nil failure:nil];
+        }
     }
     [_selectedRoughIdentityDict setValue:identity forKey:identity.key];
 }

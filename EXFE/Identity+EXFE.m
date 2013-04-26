@@ -113,6 +113,7 @@
     roughtIdentity.provider = self.provider;
     roughtIdentity.externalUsername = self.external_username;
     roughtIdentity.externalID = self.external_id;
+    roughtIdentity.identity = self;
     
     return roughtIdentity;
 }
