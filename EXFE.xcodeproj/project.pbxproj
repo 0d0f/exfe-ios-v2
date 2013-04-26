@@ -227,8 +227,6 @@
 		4F63DACA17172AA600136B7E /* EFTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCEA168D912E00409779 /* EFTime+Helper.m */; };
 		4F63DACB17172AA600136B7E /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 784D3740168EAE6E00987B6C /* Invitation.m */; };
 		4F63DACC17172AA600136B7E /* EXLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F266F01168EC49900BDB9D5 /* EXLabel.m */; };
-		4F63DACD17172AA600136B7E /* EXAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78335FAB1695912B00ADFE10 /* EXAlertView.m */; };
-		4F63DACE17172AA600136B7E /* NSObject+PerformBlockAfterDelay.m in Sources */ = {isa = PBXBuildFile; fileRef = 78335FAE16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m */; };
 		4F63DACF17172AA600136B7E /* CrossTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD642616968C7F001870FF /* CrossTime+Helper.m */; };
 		4F63DAD017172AA600136B7E /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24A169AD2B2003354D7 /* NSDateComponents+Helper.m */; };
 		4F63DAD117172AA600136B7E /* DateTimeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24D169BFCD4003354D7 /* DateTimeUtil.m */; };
@@ -666,8 +664,6 @@
 		4F63DC9917172B0700136B7E /* EFTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCEA168D912E00409779 /* EFTime+Helper.m */; };
 		4F63DC9A17172B0700136B7E /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 784D3740168EAE6E00987B6C /* Invitation.m */; };
 		4F63DC9B17172B0700136B7E /* EXLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F266F01168EC49900BDB9D5 /* EXLabel.m */; };
-		4F63DC9C17172B0700136B7E /* EXAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78335FAB1695912B00ADFE10 /* EXAlertView.m */; };
-		4F63DC9D17172B0700136B7E /* NSObject+PerformBlockAfterDelay.m in Sources */ = {isa = PBXBuildFile; fileRef = 78335FAE16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m */; };
 		4F63DC9E17172B0700136B7E /* CrossTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD642616968C7F001870FF /* CrossTime+Helper.m */; };
 		4F63DC9F17172B0700136B7E /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24A169AD2B2003354D7 /* NSDateComponents+Helper.m */; };
 		4F63DCA017172B0700136B7E /* DateTimeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E24D169BFCD4003354D7 /* DateTimeUtil.m */; };
@@ -1241,8 +1237,6 @@
 		7827823915EF5332008D6F09 /* toolbar_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7827823715EF5332008D6F09 /* toolbar_pressed@2x.png */; };
 		782B3CA5156A604A00721150 /* EFTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CA4156A604A00721150 /* EFTime.m */; };
 		782B3CAB156A604C00721150 /* CrossTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CAA156A604C00721150 /* CrossTime.m */; };
-		78335FAC1695912B00ADFE10 /* EXAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78335FAB1695912B00ADFE10 /* EXAlertView.m */; };
-		78335FAF16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m in Sources */ = {isa = PBXBuildFile; fileRef = 78335FAE16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m */; };
 		7835CC2916E0AEE3005001AA /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7835CC2816E0AEE1005001AA /* User.m */; };
 		783662D115E37C1E00F4AEAC /* exclamation.png in Resources */ = {isa = PBXBuildFile; fileRef = 783662CF15E37C1E00F4AEAC /* exclamation.png */; };
 		783662D215E37C1E00F4AEAC /* exclamation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783662D015E37C1E00F4AEAC /* exclamation@2x.png */; };
@@ -1945,10 +1939,6 @@
 		782B3CA4156A604A00721150 /* EFTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTime.m; sourceTree = "<group>"; };
 		782B3CA9156A604C00721150 /* CrossTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossTime.h; sourceTree = "<group>"; };
 		782B3CAA156A604C00721150 /* CrossTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossTime.m; sourceTree = "<group>"; };
-		78335FAA1695912B00ADFE10 /* EXAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAlertView.h; sourceTree = "<group>"; };
-		78335FAB1695912B00ADFE10 /* EXAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAlertView.m; sourceTree = "<group>"; };
-		78335FAD16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PerformBlockAfterDelay.h"; sourceTree = "<group>"; };
-		78335FAE16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PerformBlockAfterDelay.m"; sourceTree = "<group>"; };
 		7835CC2716E0AEE0005001AA /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		7835CC2816E0AEE1005001AA /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		783662CF15E37C1E00F4AEAC /* exclamation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exclamation.png; sourceTree = "<group>"; };
@@ -2915,8 +2905,6 @@
 				785F6F791585A5A200BF8EA0 /* PullRefreshTableViewController.h */,
 				785F6F7A1585A5A200BF8EA0 /* PullRefreshTableViewController.m */,
 				785FD54F158065820056590D /* UIInputToolbar */,
-				78335FAD16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.h */,
-				78335FAE16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m */,
 				4FFB149316BFFB9600F76D32 /* SSTextView.h */,
 				4FFB149416BFFB9600F76D32 /* SSTextView.m */,
 				4FA0C40816FB626B00E25C74 /* WCAlertView.h */,
@@ -3071,8 +3059,6 @@
 		78A0C1CC1683037F0073CCE5 /* Control */ = {
 			isa = PBXGroup;
 			children = (
-				78335FAA1695912B00ADFE10 /* EXAlertView.h */,
-				78335FAB1695912B00ADFE10 /* EXAlertView.m */,
 				789FBD8315F0980000E3BE80 /* EXCollectionMask.h */,
 				789FBD8415F0980000E3BE80 /* EXCollectionMask.m */,
 				78B91DD716882BE400BB98B1 /* ExfeeNumberView.h */,
@@ -4762,8 +4748,6 @@
 				4F63DACA17172AA600136B7E /* EFTime+Helper.m in Sources */,
 				4F63DACB17172AA600136B7E /* Invitation.m in Sources */,
 				4F63DACC17172AA600136B7E /* EXLabel.m in Sources */,
-				4F63DACD17172AA600136B7E /* EXAlertView.m in Sources */,
-				4F63DACE17172AA600136B7E /* NSObject+PerformBlockAfterDelay.m in Sources */,
 				4F63DACF17172AA600136B7E /* CrossTime+Helper.m in Sources */,
 				4F63DAD017172AA600136B7E /* NSDateComponents+Helper.m in Sources */,
 				4F63DAD117172AA600136B7E /* DateTimeUtil.m in Sources */,
@@ -4915,8 +4899,6 @@
 				4F63DC9917172B0700136B7E /* EFTime+Helper.m in Sources */,
 				4F63DC9A17172B0700136B7E /* Invitation.m in Sources */,
 				4F63DC9B17172B0700136B7E /* EXLabel.m in Sources */,
-				4F63DC9C17172B0700136B7E /* EXAlertView.m in Sources */,
-				4F63DC9D17172B0700136B7E /* NSObject+PerformBlockAfterDelay.m in Sources */,
 				4F63DC9E17172B0700136B7E /* CrossTime+Helper.m in Sources */,
 				4F63DC9F17172B0700136B7E /* NSDateComponents+Helper.m in Sources */,
 				4F63DCA017172B0700136B7E /* DateTimeUtil.m in Sources */,
@@ -5068,8 +5050,6 @@
 				4FC8FCEB168D912E00409779 /* EFTime+Helper.m in Sources */,
 				784D3741168EAE6E00987B6C /* Invitation.m in Sources */,
 				4F266F02168EC49900BDB9D5 /* EXLabel.m in Sources */,
-				78335FAC1695912B00ADFE10 /* EXAlertView.m in Sources */,
-				78335FAF16959CCC00ADFE10 /* NSObject+PerformBlockAfterDelay.m in Sources */,
 				4FAD642716968C7F001870FF /* CrossTime+Helper.m in Sources */,
 				4F63E24B169AD2B3003354D7 /* NSDateComponents+Helper.m in Sources */,
 				4F63E24E169BFCD5003354D7 /* DateTimeUtil.m in Sources */,

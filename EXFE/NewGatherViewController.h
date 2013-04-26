@@ -21,7 +21,6 @@
 #import "EXRSVPMenuView.h"
 #import "APICrosses.h"
 #import "EXLabel.h"
-#import "EXAlertView.h"
 #import "TitleDescEditViewController.h"
 #import "PlaceViewController.h"
 #import "TimeViewController.h"
