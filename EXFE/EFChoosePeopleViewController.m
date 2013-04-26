@@ -682,9 +682,16 @@
         NSIndexPath *dataIndexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row - 1 inSection:self.insertIndexPath.section];
         NSComparisonResult dataResult = [dataIndexPath compare:indexPath];
         if (dataResult == NSOrderedSame) {
-            BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:dataIndexPath];
-            [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:dataIndexPath];
-            [tableView reloadRowsAtIndexPaths:@[dataIndexPath, self.insertIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+            if (tableView == self.searchDisplayController.searchResultsTableView && indexPath.section == 0) {
+                BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:dataIndexPath.row - 1 inSection:dataIndexPath.section]];
+                [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:[NSIndexPath indexPathForRow:dataIndexPath.row - 1 inSection:dataIndexPath.section]];
+                [tableView reloadRowsAtIndexPaths:@[dataIndexPath, self.insertIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+            } else {
+                BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:dataIndexPath];
+                [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:dataIndexPath];
+                [tableView reloadRowsAtIndexPaths:@[dataIndexPath, self.insertIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+            }
+            
         } else {
             NSComparisonResult result = [indexPath compare:self.insertIndexPath];
             if (result != NSOrderedSame) {
