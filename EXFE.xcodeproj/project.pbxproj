@@ -1315,15 +1315,15 @@
 		7601F5721727B94800032044 /* EFSearchIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7601F5711727B94700032044 /* EFSearchIdentityCell.m */; };
 		7601F5731727B94800032044 /* EFSearchIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7601F5711727B94700032044 /* EFSearchIdentityCell.m */; };
 		7601F5741727B94800032044 /* EFSearchIdentityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7601F5711727B94700032044 /* EFSearchIdentityCell.m */; };
+		7615B33B172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
+		7615B33C172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
+		7615B33D172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
 		763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A0191171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */; };
 		763A0192171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */; };
 		763A0193171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */; };
-		763A0195171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */; };
-		763A0196171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */; };
-		763A0197171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */; };
 		763A019A171F9D390082CC9E /* list_title.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0198171F9D390082CC9E /* list_title.png */; };
 		763A019B171F9D390082CC9E /* list_title.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0198171F9D390082CC9E /* list_title.png */; };
 		763A019C171F9D390082CC9E /* list_title.png in Resources */ = {isa = PBXBuildFile; fileRef = 763A0198171F9D390082CC9E /* list_title.png */; };
@@ -2101,11 +2101,12 @@
 		4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30_pressed@2x.png"; sourceTree = "<group>"; };
 		7601F5701727B94700032044 /* EFSearchIdentityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchIdentityCell.h; sourceTree = "<group>"; };
 		7601F5711727B94700032044 /* EFSearchIdentityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchIdentityCell.m; sourceTree = "<group>"; };
+		7615B339172AB7D200C54031 /* EFLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLabel.h; sourceTree = "<group>"; };
+		7615B33A172AB7D200C54031 /* EFLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLabel.m; sourceTree = "<group>"; };
 		763A018A171EAEB10082CC9E /* EFSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchBar.h; sourceTree = "<group>"; };
 		763A018B171EAEB10082CC9E /* EFSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchBar.m; sourceTree = "<group>"; };
 		763A018F171EE8BE0082CC9E /* EFChoosePeopleViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewCell.h; sourceTree = "<group>"; };
 		763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChoosePeopleViewCell.m; sourceTree = "<group>"; };
-		763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFChoosePeopleViewCell.xib; sourceTree = "<group>"; };
 		763A0198171F9D390082CC9E /* list_title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list_title.png; sourceTree = "<group>"; };
 		763A0199171F9D390082CC9E /* list_title@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list_title@2x.png"; sourceTree = "<group>"; };
 		763A01A017202BBE0082CC9E /* EFPersonIdentityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPersonIdentityCell.h; sourceTree = "<group>"; };
@@ -3327,7 +3328,6 @@
 				4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */,
 				763A018F171EE8BE0082CC9E /* EFChoosePeopleViewCell.h */,
 				763A0190171EE8BE0082CC9E /* EFChoosePeopleViewCell.m */,
-				763A0194171EE8C90082CC9E /* EFChoosePeopleViewCell.xib */,
 				7601F5701727B94700032044 /* EFSearchIdentityCell.h */,
 				7601F5711727B94700032044 /* EFSearchIdentityCell.m */,
 				763A01A017202BBE0082CC9E /* EFPersonIdentityCell.h */,
@@ -3733,6 +3733,8 @@
 				78240AA01668935700738B7B /* UIBorderView.m */,
 				78F45F5116BBBA2100F364FE /* UIUnderlinedButton.h */,
 				78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */,
+				7615B339172AB7D200C54031 /* EFLabel.h */,
+				7615B33A172AB7D200C54031 /* EFLabel.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4262,7 +4264,6 @@
 				76D1A810171D610C00A35BBD /* exfee_22ga@2x.png in Resources */,
 				76D1A815171D704C00A35BBD /* btn_blue_30inset.png in Resources */,
 				76D1A818171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */,
-				763A0196171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */,
 				763A019B171F9D390082CC9E /* list_title.png in Resources */,
 				763A019E171F9D390082CC9E /* list_title@2x.png in Resources */,
 				763A01AE17206F5C0082CC9E /* btn_blue_44.png in Resources */,
@@ -4660,7 +4661,6 @@
 				76D1A811171D610C00A35BBD /* exfee_22ga@2x.png in Resources */,
 				76D1A816171D704C00A35BBD /* btn_blue_30inset.png in Resources */,
 				76D1A819171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */,
-				763A0197171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */,
 				763A019C171F9D390082CC9E /* list_title.png in Resources */,
 				763A019F171F9D390082CC9E /* list_title@2x.png in Resources */,
 				763A01AF17206F5C0082CC9E /* btn_blue_44.png in Resources */,
@@ -5059,7 +5059,6 @@
 				76D1A80F171D610C00A35BBD /* exfee_22ga@2x.png in Resources */,
 				76D1A814171D704C00A35BBD /* btn_blue_30inset.png in Resources */,
 				76D1A817171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */,
-				763A0195171EE8C90082CC9E /* EFChoosePeopleViewCell.xib in Resources */,
 				763A019A171F9D390082CC9E /* list_title.png in Resources */,
 				763A019D171F9D390082CC9E /* list_title@2x.png in Resources */,
 				763A01AD17206F5C0082CC9E /* btn_blue_44.png in Resources */,
@@ -5329,6 +5328,7 @@
 				767012721729054500B5445E /* EFArrowView.m in Sources */,
 				767012781729086100B5445E /* EFSearchTipViewController.m in Sources */,
 				4FDFA37E172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */,
+				7615B33C172AB7D200C54031 /* EFLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5480,6 +5480,7 @@
 				767012731729054500B5445E /* EFArrowView.m in Sources */,
 				767012791729086100B5445E /* EFSearchTipViewController.m in Sources */,
 				4FDFA37F172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */,
+				7615B33D172AB7D200C54031 /* EFLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5631,6 +5632,7 @@
 				767012711729054500B5445E /* EFArrowView.m in Sources */,
 				767012771729086100B5445E /* EFSearchTipViewController.m in Sources */,
 				4FDFA37D172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */,
+				7615B33B172AB7D200C54031 /* EFLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -210,7 +210,7 @@
         self.avatarImageView = imageView;
         [imageView release];
         
-        UILabel *label = [[UILabel alloc] initWithFrame:(CGRect){{60, 12}, {190, 26}}];
+        EFLabel *label = [[EFLabel alloc] initWithFrame:(CGRect){{56, 12}, {190, 26}}];
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
         label.textColor = [UIColor blackColor];

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "EFLabel.h"
+
 @class EFChoosePeopleViewCell;
 @protocol EFChoosePeopleViewCellDelegate <NSObject>
 @required
@@ -23,7 +25,7 @@
 @interface EFChoosePeopleViewCell : UITableViewCell
 
 @property (retain, nonatomic) UIImageView *avatarImageView;
-@property (retain, nonatomic) UILabel *userNameLabel;
+@property (retain, nonatomic) EFLabel *userNameLabel;
 @property (nonatomic, retain) UIImage *providerIcon;
 @property (nonatomic, retain) NSArray *providerIconSet;
 @property (nonatomic, assign) id<EFChoosePeopleViewCellDelegate> delegate;
