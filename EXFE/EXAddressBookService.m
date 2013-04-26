@@ -326,6 +326,32 @@ typedef void (^EFFetchPeopleCompleteBlock)(void);
                        failureHandler:failure];
 }
 
+#pragma mark - Task
+
+- (void)reset {
+    [self cancel];
+    
+    [_addressBookQueue addOperationWithBlock:^{
+        if (_addressBookRef) {
+            CFRelease(_addressBookRef);
+            _addressBookRef = NULL;
+        }
+        
+        // addressBookRef
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
+            CFErrorRef errorRef = NULL;
+            _addressBookRef = ABAddressBookCreateWithOptions(NULL, &errorRef);
+            if (!_addressBookRef && errorRef) {
+                NSLog(@"%@", (NSString *)CFErrorCopyDescription(errorRef));
+            }
+        } else if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")) {
+            _addressBookRef = ABAddressBookCreate();
+        }
+    }];
+    
+    [_addressBookQueue waitUntilAllOperationsAreFinished];
+}
+
 - (void)cancel {
     [_addressBookQueue cancelAllOperations];
 }
