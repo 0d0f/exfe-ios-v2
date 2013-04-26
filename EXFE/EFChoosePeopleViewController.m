@@ -741,6 +741,13 @@
             }
         }
         
+        [filteredExfeePeople sortUsingComparator:(NSComparator)^(id obj1, id obj2){
+            Identity *identity1 = (Identity *)obj1;
+            Identity *identity2 = (Identity *)obj2;
+            
+            return [identity1.name compare:identity2.name];
+        }];
+        
         [self.exfeePeople removeAllObjects];
         [self.exfeePeople addObjectsFromArray:filteredExfeePeople];
         [filteredExfeePeople release];
