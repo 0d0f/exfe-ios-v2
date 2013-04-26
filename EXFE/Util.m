@@ -577,7 +577,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
             return @{@"external_username": raw, @"external_id": raw, @"provider": provider};
         } break;
         case kProviderPhone:{
-            return @{@"external_username":raw, @"external_id": raw, @"provider": provider};
+            return @{@"external_username":[self formatPhoneNumber:raw], @"external_id": [self formatPhoneNumber:raw], @"provider": provider};
         } break;
         case kProviderFacebook:{
             if ([raw hasSuffix:@"@facebook"]) {

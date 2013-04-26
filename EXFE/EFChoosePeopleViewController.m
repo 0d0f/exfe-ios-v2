@@ -91,7 +91,6 @@
         _contactPeople = [[NSMutableArray alloc] init];
         _selectedDict = [[NSMutableDictionary alloc] init];
         _selectedRoughIdentityDict = [[NSMutableDictionary alloc] init];
-//        _needSubmit = NO;
     }
     return self;
 }
@@ -269,6 +268,9 @@
 #pragma mark - EFPersonIdentityCellDelegate
 
 - (void )personIdentityCell:(EFPersonIdentityCell *)cell didSelectRoughIdentity:(RoughIdentity *)roughIdentity {
+    if (!self.insertIndexPath)
+        return;
+    
     [self selectRoughIdentity:roughIdentity];
     
     UITableView *tableView = self.tableView;
@@ -289,10 +291,15 @@
     [self selectOrDeselectTableView:tableView
                            selected:YES
                         atIndexPath:indexPathParam];
+    [tableView beginUpdates];
     [tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+    [tableView endUpdates];
 }
 
 - (void )personIdentityCell:(EFPersonIdentityCell *)cell didDeselectRoughIdentity:(RoughIdentity *)roughIdentity {
+    if (!self.insertIndexPath)
+        return;
+    
     [self deselectRoughIdentity:roughIdentity];
     
     UITableView *tableView = self.tableView;
@@ -325,7 +332,9 @@
         [self selectOrDeselectTableView:tableView
                                selected:NO
                             atIndexPath:indexPathParam];
+        [tableView beginUpdates];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [tableView endUpdates];
     }
 }
 
@@ -349,10 +358,14 @@
     if (self.insertIndexPath) {
         NSIndexPath *toRemoveIndexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
         self.insertIndexPath = nil;
+        [tableView beginUpdates];
         [tableView deleteRowsAtIndexPaths:@[toRemoveIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+        [tableView endUpdates];
     } else {
         self.insertIndexPath = indexPath;
+        [tableView beginUpdates];
         [tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+        [tableView endUpdates];
     }
 }
 
@@ -509,7 +522,8 @@
     } else if (self.insertIndexPath && [self.insertIndexPath compare:indexPath] == NSOrderedSame) {
         NSIndexPath *indexPathParam = nil;
         if (tableView == self.searchDisplayController.searchResultsTableView &&
-            self.searchBar.text.length) {
+            self.searchBar.text.length &&
+            0 == indexPath.section) {
             indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 2 inSection:indexPath.section];
         } else {
             indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
@@ -639,7 +653,10 @@
         UITableView *tableView = (UITableView *)scrollView;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
         self.insertIndexPath = nil;
+        
+        [tableView beginUpdates];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+        [tableView endUpdates];
     }
 }
 
@@ -678,14 +695,35 @@
     NSIndexPath *indexPathParam = indexPath;
     
     if (self.insertIndexPath) {
-        NSComparisonResult result = [indexPath compare:self.insertIndexPath];
-        if (result != NSOrderedSame) {
-            NSIndexPath *toDeleteIndexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
-            self.insertIndexPath = nil;
-            [tableView deleteRowsAtIndexPaths:@[toDeleteIndexPath] withRowAnimation:UITableViewRowAnimationTop];
-            
-            if (result == NSOrderedDescending) {
-                indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+        NSIndexPath *dataIndexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row - 1 inSection:self.insertIndexPath.section];
+        NSComparisonResult dataResult = [dataIndexPath compare:indexPath];
+        if (dataResult == NSOrderedSame) {
+            if (tableView == self.searchDisplayController.searchResultsTableView && indexPath.section == 0) {
+                BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:dataIndexPath.row - 1 inSection:dataIndexPath.section]];
+                [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:[NSIndexPath indexPathForRow:dataIndexPath.row - 1 inSection:dataIndexPath.section]];
+                [tableView beginUpdates];
+                [tableView reloadRowsAtIndexPaths:@[dataIndexPath, self.insertIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+                [tableView endUpdates];
+            } else {
+                BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:dataIndexPath];
+                [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:dataIndexPath];
+                [tableView beginUpdates];
+                [tableView reloadRowsAtIndexPaths:@[dataIndexPath, self.insertIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+                [tableView endUpdates];
+            }
+        } else {
+            NSComparisonResult result = [indexPath compare:self.insertIndexPath];
+            if (result != NSOrderedSame) {
+                NSIndexPath *toDeleteIndexPath = [NSIndexPath indexPathForRow:self.insertIndexPath.row inSection:self.insertIndexPath.section];
+                self.insertIndexPath = nil;
+                
+                [tableView beginUpdates];
+                [tableView deleteRowsAtIndexPaths:@[toDeleteIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+                [tableView endUpdates];
+                
+                if (result == NSOrderedDescending && indexPath.section == toDeleteIndexPath.section) {
+                    indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+                }
             }
         }
     } else {
@@ -700,7 +738,9 @@
                     [self refreshSelectedDictWithObject:roughIdentity selected:YES];
                     [self.searchDisplayController setActive:NO animated:YES];
                 } else {
+                    [tableView beginUpdates];
                     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    [tableView endUpdates];
                 }
                 
                 return;
@@ -711,7 +751,9 @@
         
         BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:indexPathParam];
         [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:indexPathParam];
+        [tableView beginUpdates];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [tableView endUpdates];
     }
     
     if (![self isObjectSelectedInTableView:tableView atIndexPath:indexPathParam]) {
@@ -740,6 +782,13 @@
                 [filteredExfeePeople addObject:identity];
             }
         }
+        
+        [filteredExfeePeople sortUsingComparator:(NSComparator)^(id obj1, id obj2){
+            Identity *identity1 = (Identity *)obj1;
+            Identity *identity2 = (Identity *)obj2;
+            
+            return [identity1.name compare:identity2.name];
+        }];
         
         [self.exfeePeople removeAllObjects];
         [self.exfeePeople addObjectsFromArray:filteredExfeePeople];
@@ -830,13 +879,17 @@
             }
         }
         
-        [_selectedDict setValue:@"YES" forKey:key];
+        if (key) {
+            [_selectedDict setValue:@"YES" forKey:key];
+        }
     } else {
         for (RoughIdentity *roughIndentity in roughtIdentities) {
             [self deselectRoughIdentity:roughIndentity];
         }
         
-        [_selectedDict removeObjectForKey:key];
+        if (key) {
+            [_selectedDict removeObjectForKey:key];
+        }
     }
     
     [self reloadSelectionCountLabelWithAnimated:YES];
@@ -916,7 +969,12 @@
     if (tableView == self.tableView) {
         if ([self.searchAddPeople count] && indexPath.section == 0 && indexPath.row < [self.searchAddPeople count]) {
             RoughIdentity *roughtIdentity = [self.searchAddPeople objectAtIndex:indexPath.row];
-            [cell customWithRoughtIdentity:roughtIdentity];
+            RoughIdentity *cachedRoughIdentity = [self.cachedRoughIdentityDict valueForKey:roughtIdentity.key];
+            if (cachedRoughIdentity.status == kEFRoughIdentityGetIdentityStatusSuccess && cachedRoughIdentity.identity) {
+                [cell customWithIdentity:cachedRoughIdentity.identity];
+            } else {
+                [cell customWithRoughtIdentity:roughtIdentity];
+            }
         } else if(([self.exfeePeople count] && indexPath.section == 1) ||
            (![self.exfeePeople count] && indexPath.section == 0)) {
             LocalContact *person = self.contactPeople[indexPath.row];
@@ -1031,7 +1089,16 @@
 - (void)selectRoughIdentity:(RoughIdentity *)identity {
     if (![_cachedRoughIdentityDict valueForKey:identity.key]) {
         [_cachedRoughIdentityDict setValue:identity forKey:identity.key];
-        [identity getIdentityWithSuccess:nil failure:nil];
+        if (identity.status == kEFRoughIdentityGetIdentityStatusReady) {
+            [identity getIdentityWithSuccess:^(Identity *identity){
+                if (self.searchDisplayController.isActive) {
+                    [self.searchDisplayController.searchResultsTableView reloadData];
+                } else {
+                    [self.tableView reloadData];
+                }
+            }
+                                     failure:nil];
+        }
     }
     [_selectedRoughIdentityDict setValue:identity forKey:identity.key];
 }
