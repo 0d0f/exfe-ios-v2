@@ -501,7 +501,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 + (Provider)candidateProvider:(NSString*)raw
 {
     NSString *lowercase = [raw lowercaseString];
-    if ([lowercase hasSuffix:@"@twitter"]) {
+    if ([lowercase hasSuffix:@"@twitter"] || [lowercase hasPrefix:@"@"]) {
         return kProviderTwitter;
     }
     if ([lowercase hasSuffix:@"@facebook"]) {

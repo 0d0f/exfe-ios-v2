@@ -10,6 +10,7 @@
 #import "OAuthLoginViewController.h"
 #import "CSLinearLayoutView.h"
 #import "EFPasswordField.h"
+#import "TTTAttributedLabel.h"
 
 @interface EFSignInViewController : UIViewController<OAuthLoginViewControllerDelegate, UITextFieldDelegate>
 
@@ -27,6 +28,7 @@
 @property (nonatomic, retain) UILabel *labelVerifyDescription;
 
 @property (nonatomic, retain) UILabel *hintError;
+@property (nonatomic, retain) TTTAttributedLabel *inlineError;
 @property (nonatomic, retain) UIActivityIndicatorView *indicator;
 
 @property (nonatomic, retain) UIButton *btnFacebook;

@@ -9,6 +9,7 @@
 #import "EFSignInViewController.h"
 #import <BlocksKit/BlocksKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import <CoreText/CoreText.h>
 #import "EFAPIServer.h"
 #import "Util.h"
 #import "Identity+EXFE.h"
@@ -35,8 +36,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     kViewTagButtonStartOver = 23,
     kViewTagVerificationTitle = 31,
     kViewTagVerificationDescription = 32,
-    kViewTagErrorHint = 41
-    
+    kViewTagErrorHint = 41,
+    kViewTagErrorInline = 42
 };
 
 @interface EFSignInViewController (){
@@ -253,7 +254,13 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     {// Inline error hint
-        
+        TTTAttributedLabel *label = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 290, 80)];
+        label.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
+        label.textColor = [UIColor COLOR_WA(25, 0xFF)];
+        label.lineBreakMode = UILineBreakModeWordWrap;
+        label.numberOfLines = 0;
+        label.tag = kViewTagErrorInline;
+        self.inlineError = label;
     }
     
     CSLinearLayoutView *snsLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 0, 296, 106)] autorelease];
@@ -365,6 +372,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     self.labelVerifyTitle = nil;
     self.labelVerifyDescription = nil;
     self.hintError = nil;
+    self.inlineError = nil;
     self.indicator = nil;
     self.btnFacebook = nil;
     self.btnTwitter = nil;
@@ -387,6 +395,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationTitle]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
+            [self.rootView removeItem:[self.rootView findItemByTag:_inlineError.tag]];
             
             _inputIdentity.rightView = _extIdentity;
             _inputIdentity.returnKeyType = UIReturnKeyNext;
@@ -399,6 +408,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationTitle]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
+            [self.rootView removeItem:[self.rootView findItemByTag:_inlineError.tag]];
             
             CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:_inputIdentity.tag];
             
@@ -438,6 +448,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationTitle]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
+            [self.rootView removeItem:[self.rootView findItemByTag:_inlineError.tag]];
            
             CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:_inputIdentity.tag];
             
@@ -488,6 +499,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonStart]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagButtonNewUser]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
+            [self.rootView removeItem:[self.rootView findItemByTag:_inlineError.tag]];
             
             CSLinearLayoutItem *baseItem = [self.rootView findItemByTag:_inputIdentity.tag];
             
@@ -652,6 +664,44 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [_indicator removeFromSuperview];
 }
 
+- (void)showInlineError:(NSString *)title with:(NSString *)description
+{
+    
+    NSString* full = [NSString stringWithFormat:@"%@ %@", title, description];
+    
+    [_inlineError setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+        NSRange titleRange = [[mutableAttributedString string] rangeOfString:title options:NSCaseInsensitiveSearch];
+        [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[[UIColor COLOR_RGB(229,46,83)] CGColor] range:titleRange];
+        return mutableAttributedString;
+    }];
+    
+    CSLinearLayoutItem *baseitem = [self.rootView findItemByTag:kViewTagButtonStart];
+    if (baseitem == nil) {
+        baseitem = [self.rootView findItemByTag:kViewTagButtonNewUser];
+    }
+    if (baseitem == nil) {
+        baseitem = [self.rootView findItemByTag:kViewTagButtonStartOver];
+    }
+    
+    if (baseitem) {
+        CSLinearLayoutItem *item = [self.rootView findItemByTag:_inlineError.tag];
+        if (item == nil){
+            item = [CSLinearLayoutItem layoutItemForView:_inlineError];
+            item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+            item.fillMode = CSLinearLayoutItemFillModeNormal;
+            [self.rootView insertItem:item beforeItem:baseitem];
+        } else {
+            [self.rootView moveItem:item beforeItem:baseitem];
+        }
+        item.padding = CSLinearLayoutMakePadding(0, 15, 4, 15);
+    }
+}
+
+- (void)hideInlineError
+{
+    
+}
+
 #pragma mark Logic Methods
 - (void)identityDidChange:(NSString*)identity
 {
@@ -756,6 +806,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     NSDictionary *resp = [self.identityCache objectForKey:identity];
+    //TODO: AUTHENTICATE
+    // if registration_flag is AUTHENTICATE
+    // start oauth
+    // return
     [self swithStagebyFlag:[resp valueForKey:@"registration_flag"]];
     
     switch (_stage) {
@@ -794,12 +848,31 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                     }
                 }
             } failure:^(AFHTTPRequestOperation *operation, NSError *error){
-//                error.domain
+                //error.domain
                 switch (error.code) {
-                    case -1004: 
-                        #pragma mark Failed to connect server.
-                        // TODO:Failed to connect server.
-                        // Failed to connect server. Please retry or wait awhile.
+                    case -1003:
+                    case -1004:
+                    case -1005:
+                    case -1006: // network error
+                    case -1007:
+                    case -1008:
+                    case -1009:
+                    case -1010: // server error
+                        [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                        
+                        //NSURLErrorCannotFindHost = -1003,
+                        //NSURLErrorCannotConnectToHost = -1004,
+                        //NSURLErrorNetworkConnectionLost = -1005,
+                        //NSURLErrorDNSLookupFailed = -1006,
+                        //NSURLErrorHTTPTooManyRedirects = -1007,
+                        //NSURLErrorResourceUnavailable = -1008,
+                        //NSURLErrorNotConnectedToInternet = -1009,
+                        //NSURLErrorRedirectToNonExistentLocation = -1010,
+                        //NSURLErrorInternationalRoamingOff = -1018,
+                        //NSURLErrorCallIsActive = -1019,
+                        //NSURLErrorDataNotAllowed = -1020,
+                        //NSURLErrorSecureConnectionFailed = -1200,
+                        //NSURLErrorCannotLoadFromNetwork = -2000,
                         break;
                         
                     default:
@@ -844,6 +917,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                 _inputPassword.text = @"";
                                 [self setStage:kStageSignUp];
                             }
+                            
+    //TODO: AUTHENTICATE
+    // AUTHENTICATE
+    // _setStage start
+    // oatuh
                         } else {
                         
                             [self showErrorInfo:@"Authentication failed." dockOn:_inputPassword];
@@ -960,21 +1038,29 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         [UIAlertView showAlertViewWithTitle:@"Forget Password?" message:msg cancelButtonTitle:@"OK" otherButtonTitles:nil handler:nil];
                     } break;
                     case 400:{
-                        // NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
-                        // 400 - no_external_username
-                        // 400 - no_provider
-                        // 400 - identity_does_not_exist
-                        //  Invalid account. Please check your input above.
-                        // 400 - identity_is_being_verified
-                        // 500 - failed
-//                        if ([@"weak_password" isEqualToString:errorType]) {
-//                            [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
-//                        } else if ([@"invalid_username" isEqualToString:errorType]) {
-//                            [self showErrorInfo:@"Invalid name." dockOn:_inputPassword];
-//                        }
+                        NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
+                        if ([@"weak_password" isEqualToString:errorType]) {
+                            [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
+                        } else if ([@"identity_does_not_exist" isEqualToString:errorType]
+                                  || [@"identity_is_being_verified" isEqualToString:errorType]){
+                            [self showInlineError:@"Invalid account." with:@"Please check your input above."];
+                        }
                     }  break;
                     case 429:{
-                        // TODO: Request too frequently. Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.
+                        NSString *msg = nil;
+                        switch (provider) {
+                            case kProviderPhone:
+                                msg = @"Request should be responded usually in seconds, please wait for awhile.";
+                                break;
+                                
+                            default:
+                                msg = @"Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.";
+                                break;
+                        }
+                        [self showInlineError:@"Request too frequently." with:msg];
+                    }  break;
+                    case 500:{
+                        // 500 - failed
                     }  break;
                     default:
                         break;
@@ -1084,4 +1170,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 #pragma mark -
 #pragma mark Others
+
+
 @end

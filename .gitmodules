@@ -10,3 +10,6 @@
 [submodule "Vendor/CSLinearLayoutView"]
 	path = Vendor/CSLinearLayoutView
 	url = git://github.com/stonyw/CSLinearLayoutView.git
+[submodule "Vendor/TTTAttributedLabel"]
+	path = Vendor/TTTAttributedLabel
+	url = git://github.com/stonyw/TTTAttributedLabel.git

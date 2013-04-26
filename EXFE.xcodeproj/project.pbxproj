@@ -33,8 +33,6 @@
 		4F00543517252ADE00D4B429 /* start_tri@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00542F17252ADE00D4B429 /* start_tri@2x.png */; };
 		4F00543E17265BF600D4B429 /* exfe_glossy.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00543A17265BF500D4B429 /* exfe_glossy.png */; };
 		4F00543F17265BF600D4B429 /* exfe_glossy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00543B17265BF600D4B429 /* exfe_glossy@2x.png */; };
-		4F00544017265BF600D4B429 /* exfe_glossy50.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00543C17265BF600D4B429 /* exfe_glossy50.png */; };
-		4F00544117265BF600D4B429 /* exfe_glossy50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00543D17265BF600D4B429 /* exfe_glossy50@2x.png */; };
 		4F00544B17265C8500D4B429 /* home_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00544917265C8500D4B429 /* home_bg.png */; };
 		4F00544C17265C8500D4B429 /* home_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00544A17265C8500D4B429 /* home_bg@2x.png */; };
 		4F00544D172661CB00D4B429 /* home_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00544917265C8500D4B429 /* home_bg.png */; };
@@ -45,10 +43,6 @@
 		4F005452172661D300D4B429 /* exfe_glossy.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00543A17265BF500D4B429 /* exfe_glossy.png */; };
 		4F005453172661D500D4B429 /* exfe_glossy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00543B17265BF600D4B429 /* exfe_glossy@2x.png */; };
 		4F005454172661D600D4B429 /* exfe_glossy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00543B17265BF600D4B429 /* exfe_glossy@2x.png */; };
-		4F005455172661D900D4B429 /* exfe_glossy50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00543D17265BF600D4B429 /* exfe_glossy50@2x.png */; };
-		4F005456172661DA00D4B429 /* exfe_glossy50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00543D17265BF600D4B429 /* exfe_glossy50@2x.png */; };
-		4F005457172661DD00D4B429 /* exfe_glossy50.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00543C17265BF600D4B429 /* exfe_glossy50.png */; };
-		4F005458172661DE00D4B429 /* exfe_glossy50.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00543C17265BF600D4B429 /* exfe_glossy50.png */; };
 		4F00545B17266FD800D4B429 /* home_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00545917266FD800D4B429 /* home_bar.png */; };
 		4F00545C17266FD800D4B429 /* home_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00545917266FD800D4B429 /* home_bar.png */; };
 		4F00545D17266FD800D4B429 /* home_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00545917266FD800D4B429 /* home_bar.png */; };
@@ -1111,6 +1105,9 @@
 		4FC8FCEB168D912E00409779 /* EFTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCEA168D912E00409779 /* EFTime+Helper.m */; };
 		4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */; };
 		4FD9375516D4A57600ED6677 /* CrossGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */; };
+		4FDFA37D172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; };
+		4FDFA37E172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; };
+		4FDFA37F172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; };
 		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
@@ -1629,8 +1626,6 @@
 		4F00542F17252ADE00D4B429 /* start_tri@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start_tri@2x.png"; sourceTree = "<group>"; };
 		4F00543A17265BF500D4B429 /* exfe_glossy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exfe_glossy.png; sourceTree = "<group>"; };
 		4F00543B17265BF600D4B429 /* exfe_glossy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfe_glossy@2x.png"; sourceTree = "<group>"; };
-		4F00543C17265BF600D4B429 /* exfe_glossy50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exfe_glossy50.png; sourceTree = "<group>"; };
-		4F00543D17265BF600D4B429 /* exfe_glossy50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfe_glossy50@2x.png"; sourceTree = "<group>"; };
 		4F00544917265C8500D4B429 /* home_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_bg.png; sourceTree = "<group>"; };
 		4F00544A17265C8500D4B429 /* home_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_bg@2x.png"; sourceTree = "<group>"; };
 		4F00545917266FD800D4B429 /* home_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_bar.png; sourceTree = "<group>"; };
@@ -1842,6 +1837,8 @@
 		4FD9375116D4A57600ED6677 /* CrossGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossGroupViewController.h; sourceTree = "<group>"; };
 		4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossGroupViewController.m; sourceTree = "<group>"; };
 		4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossGroupViewController.xib; sourceTree = "<group>"; };
+		4FDFA37B172A5F0C00929BC9 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTAttributedLabel.h; path = Vendor/TTTAttributedLabel/TTTAttributedLabel/TTTAttributedLabel.h; sourceTree = SOURCE_ROOT; };
+		4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTAttributedLabel.m; path = Vendor/TTTAttributedLabel/TTTAttributedLabel/TTTAttributedLabel.m; sourceTree = SOURCE_ROOT; };
 		4FE8D3C51681926C00222420 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4FE8D3C61681926C00222420 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		4FE8D3C71681926C00222420 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
@@ -2740,8 +2737,6 @@
 				4F00544A17265C8500D4B429 /* home_bg@2x.png */,
 				4F00543A17265BF500D4B429 /* exfe_glossy.png */,
 				4F00543B17265BF600D4B429 /* exfe_glossy@2x.png */,
-				4F00543C17265BF600D4B429 /* exfe_glossy50.png */,
-				4F00543D17265BF600D4B429 /* exfe_glossy50@2x.png */,
 				4F00542E17252ADE00D4B429 /* start_tri.png */,
 				4F00542F17252ADE00D4B429 /* start_tri@2x.png */,
 				4F00541E17251E7E00D4B429 /* pass_question.png */,
@@ -2908,6 +2903,8 @@
 		785FD54E158065610056590D /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				4FDFA37B172A5F0C00929BC9 /* TTTAttributedLabel.h */,
+				4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */,
 				4F25A1B8171FB9FF000513B5 /* CSLinearLayoutView.h */,
 				4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */,
 				4F9FE4C61702E12C0098B9B9 /* PSTCollectionView */,
@@ -3970,8 +3967,6 @@
 				4F00544F172661CF00D4B429 /* home_bg@2x.png in Resources */,
 				4F005451172661D200D4B429 /* exfe_glossy.png in Resources */,
 				4F005453172661D500D4B429 /* exfe_glossy@2x.png in Resources */,
-				4F005455172661D900D4B429 /* exfe_glossy50@2x.png in Resources */,
-				4F005457172661DD00D4B429 /* exfe_glossy50.png in Resources */,
 				4F00545C17266FD800D4B429 /* home_bar.png in Resources */,
 				4F00545F17266FD800D4B429 /* home_bar@2x.png in Resources */,
 				7670127B1729086100B5445E /* EFSearchTipViewController.xib in Resources */,
@@ -4308,8 +4303,6 @@
 				4F005450172661CF00D4B429 /* home_bg@2x.png in Resources */,
 				4F005452172661D300D4B429 /* exfe_glossy.png in Resources */,
 				4F005454172661D600D4B429 /* exfe_glossy@2x.png in Resources */,
-				4F005456172661DA00D4B429 /* exfe_glossy50@2x.png in Resources */,
-				4F005458172661DE00D4B429 /* exfe_glossy50.png in Resources */,
 				4F00545D17266FD800D4B429 /* home_bar.png in Resources */,
 				4F00546017266FD800D4B429 /* home_bar@2x.png in Resources */,
 				7670127C1729086100B5445E /* EFSearchTipViewController.xib in Resources */,
@@ -4645,8 +4638,6 @@
 				4F00543317252ADE00D4B429 /* start_tri@2x.png in Resources */,
 				4F00543E17265BF600D4B429 /* exfe_glossy.png in Resources */,
 				4F00543F17265BF600D4B429 /* exfe_glossy@2x.png in Resources */,
-				4F00544017265BF600D4B429 /* exfe_glossy50.png in Resources */,
-				4F00544117265BF600D4B429 /* exfe_glossy50@2x.png in Resources */,
 				4F00544B17265C8500D4B429 /* home_bg.png in Resources */,
 				4F00544C17265C8500D4B429 /* home_bg@2x.png in Resources */,
 				4F00545B17266FD800D4B429 /* home_bar.png in Resources */,
@@ -4841,6 +4832,7 @@
 				7670126F1729054500B5445E /* EFPopoverController.m in Sources */,
 				767012721729054500B5445E /* EFArrowView.m in Sources */,
 				767012781729086100B5445E /* EFSearchTipViewController.m in Sources */,
+				4FDFA37E172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4993,6 +4985,7 @@
 				767012701729054500B5445E /* EFPopoverController.m in Sources */,
 				767012731729054500B5445E /* EFArrowView.m in Sources */,
 				767012791729086100B5445E /* EFSearchTipViewController.m in Sources */,
+				4FDFA37F172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5145,6 +5138,7 @@
 				7670126E1729054500B5445E /* EFPopoverController.m in Sources */,
 				767012711729054500B5445E /* EFArrowView.m in Sources */,
 				767012771729086100B5445E /* EFSearchTipViewController.m in Sources */,
+				4FDFA37D172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
