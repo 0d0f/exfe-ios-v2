@@ -10,6 +10,6 @@
 
 @interface EFLabel : UILabel
 
-@property (nonatomic, assign) UIEdgeInsets edgeInsets;  // Defaults as {0, 4, 0, 0}, support left ONLY
+@property (nonatomic, assign) UIEdgeInsets edgeInsets;  // Defaults as {0, 0, 0, 0}, support left ONLY
 
 @end

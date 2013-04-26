@@ -211,6 +211,7 @@
         [imageView release];
         
         EFLabel *label = [[EFLabel alloc] initWithFrame:(CGRect){{56, 12}, {190, 26}}];
+        label.edgeInsets = (UIEdgeInsets){0, 4, 0, 0};
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
         label.textColor = [UIColor blackColor];
