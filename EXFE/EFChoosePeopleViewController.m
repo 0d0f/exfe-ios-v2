@@ -450,6 +450,9 @@
     if (!indexPath) {
         tableView = self.searchDisplayController.searchResultsTableView;
         indexPath = [tableView indexPathForCell:cell];
+        if (indexPath && self.searchBar.text.length && indexPath.section == 0) {
+            indexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+        }
     }
     
     if (indexPath) {
@@ -536,6 +539,12 @@
 
 #pragma mark - UITableViewDataSource
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (tableView == self.searchDisplayController.searchResultsTableView && section == [tableView numberOfSections] - 1) {
+        UIView *headerView = [[[UIView alloc] initWithFrame:(CGRect){{0, 0}, {320, 0}}] autorelease];
+        headerView.backgroundColor = [UIColor clearColor];
+        return headerView;
+    }
+    
     CGRect screanBounds = [UIScreen mainScreen].bounds;
     UIView *titleView = [[[UIView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), 20}}] autorelease];
     titleView.backgroundColor = [UIColor clearColor];
@@ -574,11 +583,16 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (tableView == self.searchDisplayController.searchResultsTableView && section == [tableView numberOfSections] - 1) {
+        return 0.0f;
+    }
     return 19.0f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.insertIndexPath && [self.insertIndexPath compare:indexPath] == NSOrderedSame) {
+    if (tableView == self.searchDisplayController.searchResultsTableView && indexPath.section == [tableView numberOfSections] - 1) {
+        return 50.0f;
+    } else if (self.insertIndexPath && [self.insertIndexPath compare:indexPath] == NSOrderedSame) {
         NSIndexPath *indexPathParam = nil;
         if (tableView == self.searchDisplayController.searchResultsTableView &&
             self.searchBar.text.length) {
@@ -608,8 +622,10 @@
         if ([self.searchResultContactPeople count]) {
             sections++;
         }
+        // show all contact
+        sections++;
     }
-    
+
     return sections;
 }
 
@@ -638,6 +654,9 @@
         } else if (section == 0 && self.searchBar.text.length) {
             // search
             rows = 1;
+        } else if (section == [tableView numberOfSections] - 1) {
+            // show all contacts
+            rows = 1;
         } else {
             // local
             rows = [self.searchResultContactPeople count];
@@ -650,6 +669,24 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableView == self.searchDisplayController.searchResultsTableView && indexPath.section == [tableView numberOfSections] - 1) {
+        static NSString *ShowAllIdentity = @"ShowAllIdentity";
+        EFChoosePeopleViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ShowAllIdentity];
+        if (!cell) {
+            cell = [[[EFChoosePeopleViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ShowAllIdentity] autorelease];
+            UILabel *label = [[UILabel alloc] initWithFrame:(CGRect){{0, 0}, {320, 50}}];
+            label.textAlignment = UITextAlignmentCenter;
+            label.backgroundColor = [UIColor clearColor];
+            label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
+            label.textColor = [UIColor COLOR_ALUMINUM];
+            label.text = @"Show all contacts";
+            [cell.contentView addSubview:label];
+            [label release];
+        }
+        
+        return cell;
+    }
+    
     NSIndexPath *indexPathParam = indexPath;;
     if (self.insertIndexPath) {
         NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
@@ -695,6 +732,10 @@
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)aCell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableView == self.searchDisplayController.searchResultsTableView && indexPath.section == [tableView numberOfSections] - 1) {
+        return;
+    }
+    
     NSIndexPath *indexPathParam = indexPath;
     BOOL needRefreshCell = YES;
     
@@ -713,6 +754,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableView == self.searchDisplayController.searchResultsTableView && indexPath.section == [tableView numberOfSections] - 1) {
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+        [self.searchDisplayController setActive:NO animated:YES];
+        
+        return;
+    }
+    
     NSIndexPath *indexPathParam = indexPath;
     
     if (self.insertIndexPath) {
