@@ -48,7 +48,7 @@
     [self setContentSize:contentSize animated:NO];
 }
 
-- (void)presentFromRect:(CGRect)rect inView:(UIView *)view arrowDirection:(EFArrowDirection)direction animated:(BOOL)animated complete:(void (^)(void))handler {
+- (void)presentFromRect:(CGRect)rect inView:(UIView *)view containRect:(CGRect)frame arrowDirection:(EFArrowDirection)direction animated:(BOOL)animated complete:(void (^)(void))handler {
     if (_flags.isPresnted)
         return;
     _flags.isPresnted = YES;
@@ -95,8 +95,8 @@
             CGFloat x = arrowPoint.x - halfMaxViewWidth;
             if (x <= 0) {
                 x = kMinEdgeDistance;
-            } else if (x + maxViewWidth > CGRectGetWidth(screenBounds)) {
-                x = CGRectGetWidth(screenBounds) - maxViewWidth + kMinEdgeDistance;
+            } else if (x + maxViewWidth > CGRectGetWidth(frame)) {
+                x = CGRectGetWidth(frame) - maxViewWidth + kMinEdgeDistance;
             } else {
                 x += kMinEdgeDistance;
             }
@@ -119,8 +119,8 @@
             CGFloat x = arrowPoint.x - halfMaxViewWidth;
             if (x <= 0) {
                 x = kMinEdgeDistance;
-            } else if (x + maxViewWidth > CGRectGetWidth(screenBounds)) {
-                x = CGRectGetWidth(screenBounds) - maxViewWidth + kMinEdgeDistance;
+            } else if (x + maxViewWidth > CGRectGetWidth(frame)) {
+                x = CGRectGetWidth(frame) - maxViewWidth + kMinEdgeDistance;
             } else {
                 x += kMinEdgeDistance;
             }
@@ -136,10 +136,10 @@
             finalArrowDirection = kEFArrowDirectionRight;
             
             CGFloat y = arrowPoint.y - halfMaxViewHeight;
-            if (y <= 0) {
-                y = 0;
-            } else if (y + maxViewHeight > CGRectGetHeight(screenBounds)) {
-                y = 2 * y - CGRectGetHeight(screenBounds) + maxViewHeight;
+            if (y <= CGRectGetMinY(frame)) {
+                y = CGRectGetMinY(frame);
+            } else if (y + maxViewHeight > CGRectGetHeight(frame)) {
+                y = 2 * y - CGRectGetHeight(frame) + maxViewHeight;
             }
             
             viewFrame.origin = (CGPoint){x + kMinEdgeDistance, y + kMinEdgeDistance};
@@ -155,8 +155,8 @@
             CGFloat y = arrowPoint.y - halfMaxViewHeight;
             if (y <= 0) {
                 y = 0;
-            } else if (y + maxViewHeight > CGRectGetHeight(screenBounds)) {
-                y = 2 * y - CGRectGetHeight(screenBounds) + maxViewHeight;
+            } else if (y + maxViewHeight > CGRectGetHeight(frame)) {
+                y = 2 * y - CGRectGetHeight(frame) + maxViewHeight;
             }
             
             viewFrame.origin = (CGPoint){x + kMinEdgeDistance, y + kMinEdgeDistance};
