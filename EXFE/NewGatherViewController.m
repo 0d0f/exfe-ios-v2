@@ -341,7 +341,7 @@
     NSManagedObjectContext *context = [RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
     if (self.cross == nil) {
         NSEntityDescription *crossEntity = [NSEntityDescription entityForName:@"Cross" inManagedObjectContext:context];
-        self.cross = [[Cross alloc] initWithEntity:crossEntity insertIntoManagedObjectContext:context];
+        self.cross = [[[Cross alloc] initWithEntity:crossEntity insertIntoManagedObjectContext:context] autorelease];
     }
     
     NSArray *cross_default_backgrounds=[[NSUserDefaults standardUserDefaults] objectForKey:@"cross_default_backgrounds"];
@@ -450,7 +450,6 @@
         [self hideMenu];
         [self hideStatusView];
     }
-    
 }
 
 
@@ -472,7 +471,7 @@
             [context deleteObject:self.cross.time];
         }
         if(self.cross.exfee){
-            for (Invitation *invitation in self.sortedInvitations){
+            for (Invitation *invitation in self.cross.exfee.invitations){
                 [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:invitation];
                 [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
             }
