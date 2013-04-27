@@ -430,7 +430,7 @@
 #pragma mark - Identity API
 
 - (void)getIdentitiesWithParams:(NSArray *)params success:(void (^)(NSArray *))success failure:(void (^)(NSError *))failure {
-    RKObjectManager* manager =[RKObjectManager sharedManager];
+    RKObjectManager *manager =[RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
@@ -458,17 +458,47 @@
                                              NSString *nickname = [identitydict objectForKey:@"nickname"];
                                              NSString *external_username = [identitydict objectForKey:@"external_username"];
                                              
-                                             NSEntityDescription *identityEntity = [NSEntityDescription entityForName:@"Identity" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
-                                             Identity *identity = [[[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
-                                             identity.external_id = external_id;
-                                             identity.provider = provider;
-                                             identity.avatar_filename = avatar_filename;
-                                             identity.name = name;
-                                             identity.external_username = external_username;
-                                             identity.nickname = nickname;
-                                             identity.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
+                                             BOOL needInsertNew = NO;
+                                             if ([identity_id intValue] == 0) {
+                                                 // a new one
+                                                 needInsertNew = YES;
+                                             }
+                                             if (!needInsertNew) {
+                                                 // update if exist
+                                                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"provider LIKE %@ AND external_id LIKE %@", provider, external_id];
+                                                 NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
+                                                 fetchRequest.predicate = predicate;
+                                                 
+                                                 NSArray *cachedIdentitites = [manager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:fetchRequest error:nil];
+                                                 if (cachedIdentitites && [cachedIdentitites count]) {
+                                                     // update info
+                                                     Identity *cachedIdentitiy = cachedIdentitites[0];
+                                                     cachedIdentitiy.external_id = external_id;
+                                                     cachedIdentitiy.provider = provider;
+                                                     cachedIdentitiy.avatar_filename = avatar_filename;
+                                                     cachedIdentitiy.name = name;
+                                                     cachedIdentitiy.external_username = external_username;
+                                                     cachedIdentitiy.nickname = nickname;
+                                                     cachedIdentitiy.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
+                                                     [identityEntities addObject:cachedIdentitiy];
+                                                 } else {
+                                                     needInsertNew = YES;
+                                                 }
+                                             }
                                              
-                                             [identityEntities addObject:identity];
+                                             if (needInsertNew) {
+                                                 NSEntityDescription *identityEntity = [NSEntityDescription entityForName:@"Identity" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
+                                                 Identity *identity = [[[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+                                                 identity.external_id = external_id;
+                                                 identity.provider = provider;
+                                                 identity.avatar_filename = avatar_filename;
+                                                 identity.name = name;
+                                                 identity.external_username = external_username;
+                                                 identity.nickname = nickname;
+                                                 identity.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
+                                                 
+                                                 [identityEntities addObject:identity];
+                                             }
                                          }
                                          
                                          if (success) {

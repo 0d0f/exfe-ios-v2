@@ -36,8 +36,6 @@ UITextFieldDelegate
 @property (retain, nonatomic) IBOutlet UIButton *backButton;
 @property (retain, nonatomic) IBOutlet UILabel *selectionCountLabel;
 
-//@property (nonatomic, retain) Exfee *exfee;
-//@property (nonatomic, assign) BOOL needSubmit;
 @property (nonatomic, copy) CompletionBlock completionHandler;
 
 - (IBAction)backButtonPressed:(id)sender;
