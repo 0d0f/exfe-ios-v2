@@ -794,6 +794,8 @@
                     }
                 }
                 
+                [tableView deselectRowAtIndexPath:indexPath animated:NO];
+                
                 return;
             } else {
                 indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
@@ -932,10 +934,18 @@
     
     if (selected) {
         if (![_selectedDict valueForKey:key]) {
-            // invoked by selecting cell
+            BOOL alreadySelected = NO;
             for (RoughIdentity *roughIndentity in roughtIdentities) {
-                if ([Identity getProviderCode:roughIndentity.provider] != kProviderTwitter) {
-                    [self selectRoughIdentity:roughIndentity];
+                if ([self isRoughtIdentitySelected:roughIndentity]) {
+                    alreadySelected = YES;
+                    break;
+                }
+            }
+            if (!alreadySelected) {
+                for (RoughIdentity *roughIndentity in roughtIdentities) {
+                    if ([Identity getProviderCode:roughIndentity.provider] != kProviderTwitter) {
+                        [self selectRoughIdentity:roughIndentity];
+                    }
                 }
             }
         }
@@ -1057,17 +1067,17 @@
                     searchCell = [[[EFSearchIdentityCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[EFSearchIdentityCell reuseIdentifier]] autorelease];
                 }
                 NSString *keyWord = self.searchBar.text;
-                Provider candidateProvider = [Util candidateProvider:keyWord];
+//                Provider candidateProvider = [Util candidateProvider:keyWord];
                 Provider matchedProvider = [Util matchedProvider:keyWord];
                 
                 if (self.searchResultRoughtIdentity.identity) {
                     [searchCell customWithIdentityString:keyWord
-                                       candidateProvider:candidateProvider
+                                       candidateProvider:matchedProvider
                                            matchProvider:matchedProvider];
                     [searchCell customWithIdentity:self.searchResultRoughtIdentity.identity];
                 } else {
                     [searchCell customWithIdentityString:keyWord
-                                       candidateProvider:candidateProvider
+                                       candidateProvider:matchedProvider
                                            matchProvider:matchedProvider];
                 }
                 
