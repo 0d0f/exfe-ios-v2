@@ -794,6 +794,8 @@
                     }
                 }
                 
+                [tableView deselectRowAtIndexPath:indexPath animated:NO];
+                
                 return;
             } else {
                 indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
