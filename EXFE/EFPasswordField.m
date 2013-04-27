@@ -8,6 +8,12 @@
 
 #import "EFPasswordField.h"
 
+@interface EFPasswordField (){
+    double down;
+    
+}
+@end
+
 @implementation EFPasswordField
 
 - (id)initWithFrame:(CGRect)frame
@@ -54,6 +60,27 @@
 
 - (void)touchup:(id)target
 {
+    double now = CACurrentMediaTime();
+    if (now - down < 300) {
+        [self performSelector:@selector(protectText) withObject:nil afterDelay:0.3];
+    } else {
+        [self protectText];
+    }
+}
+
+- (void)touchdown:(id)target
+{
+    down = CACurrentMediaTime();
+    [self showText];
+}
+
+- (void)showText
+{
+    self.secureTextEntry = NO;
+}
+
+- (void)protectText
+{
     BOOL flag = [self isFirstResponder];
     self.enabled = NO;
     self.secureTextEntry = YES;
@@ -62,12 +89,7 @@
         [self becomeFirstResponder];
     }
 }
-
-- (void)touchdown:(id)target
-{
-    self.secureTextEntry = NO;
-}
-
+     
 - (void)textFieldDidChange:(id)sender
 {
     if (self.text.length == 0) {
