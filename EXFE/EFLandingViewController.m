@@ -173,6 +173,8 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
         }
     }
     
+    UIViewAnimationOptions options = UIViewAnimationOptionCurveEaseOut;
+    NSTimeInterval delay = 0;
     switch (type) {
         case kSwitchSubViewControllerShow:{
             _labelEXFE.alpha = 100;
@@ -181,6 +183,8 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
 //            _labelStart.frame = CGRectOffset(_labelStart.bounds, 0, CGRectGetHeight(self.view.bounds) - CGRectGetHeight(_labelStart.bounds));
         }   break;
         case kSwitchSubViewControllerDismiss:{
+            options = UIViewAnimationOptionCurveEaseIn;
+            delay = 0.25;
             _labelEXFE.alpha = 0;
             _labelDescription.alpha = 0;
 //            _labelStart.alpha = 0;
@@ -191,9 +195,9 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
     }
     
     
-    [UIView animateWithDuration:0.3
-                          delay:0
-                        options:UIViewAnimationOptionCurveEaseInOut
+    [UIView animateWithDuration:0.25
+                          delay:delay
+                        options:options
                      animations:^{
                          switch (type) {
                              case kSwitchSubViewControllerShow:{
@@ -213,9 +217,9 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
                      }];
     
     __weak __block EFLandingViewController *weakSelf = self;
-    [UIView animateWithDuration:0.4
+    [UIView animateWithDuration:0.5
                           delay:0
-                        options:UIViewAnimationOptionCurveEaseInOut
+                        options:UIViewAnimationOptionTransitionNone
                      animations:^{
                          
                          if (weakSelf.currentViewController) {
@@ -234,14 +238,13 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
                                  _imgEXFELogo.frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 134 : 90, 320, 300);
                              }
                          }
-//                         
+                         
 //                         switch (type) {
 //                             case kSwitchSubViewControllerShow:{
 //                                 _labelStart.alpha = 0;
 //                                 _labelStart.frame = CGRectOffset(_labelStart.bounds, 0, 0);
 //                             }   break;
 //                             case kSwitchSubViewControllerDismiss:{
-//                                 
 //                                 _labelStart.alpha = 100;
 //                                 _labelStart.frame = CGRectOffset(_labelStart.bounds, 0, CGRectGetHeight(self.view.bounds) - CGRectGetHeight(_labelStart.bounds));
 //                             }   break;
