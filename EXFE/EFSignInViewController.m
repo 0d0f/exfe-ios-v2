@@ -168,17 +168,13 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         btn.frame = CGRectMake(0, 0, 290, 48);
         [btn setTitle:@"Start" forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [btn setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
         btn.titleLabel.shadowOffset = CGSizeMake(0, -1);
-        btn.titleLabel.shadowColor = [UIColor COLOR_WA(0x00, 0x7F)];
         [btn addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchUpInside];
         UIImage *btnImage = [UIImage imageNamed:@"btn_blue_44.png"];
         btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
         [btn setBackgroundImage:btnImage forState:UIControlStateNormal];
-        btn.titleLabel.textColor = [UIColor whiteColor];
-        btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
-        btn.titleLabel.shadowOffset = CGSizeMake(0, -1);
-        btn.titleLabel.shadowColor = [UIColor COLOR_WA(0x00, 0x7F)];
         self.btnStart = btn;
         self.btnStart.tag = kViewTagButtonStart;
     }
@@ -188,9 +184,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         btn.frame = CGRectMake(0, 0, 290, 48);
         [btn setTitle:@"Start with new account" forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [btn setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
         btn.titleLabel.shadowOffset = CGSizeMake(0, -1);
-        btn.titleLabel.shadowColor = [UIColor COLOR_WA(0x00, 0x7F)];
         [btn addTarget:self action:@selector(signUp:) forControlEvents:UIControlEventTouchUpInside];
         UIImage *btnImage = [UIImage imageNamed:@"btn_blue_44.png"];
         btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
@@ -204,14 +200,13 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         btn.frame = CGRectMake(0, 0, 290, 48);
         [btn setTitle:@"Start over" forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [btn setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
         btn.titleLabel.shadowOffset = CGSizeMake(0, 1);
-        btn.titleLabel.shadowColor = [UIColor whiteColor];
         [btn addTarget:self action:@selector(startOver:) forControlEvents:UIControlEventTouchUpInside];
         UIImage *btnImage = [UIImage imageNamed:@"btn_white_44.png"];
         btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
         [btn setBackgroundImage:btnImage forState:UIControlStateNormal];
-        
         self.btnStartOver = btn;
         self.btnStartOver.tag = kViewTagButtonNewUser;
     }

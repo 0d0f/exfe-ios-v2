@@ -49,6 +49,7 @@
 #define COLOR_ALUMINUM            COLOR_RGB(0xB2, 0xB2, 0xB2)
 #define COLOR_GRAY                COLOR_RGB(0x7F, 0x7F, 0x7F)
 #define COLOR_CARBON              COLOR_RGB(0x33, 0x33, 0x33)
+#define COLOR_BLACK_19            COLOR_RGB(0x19, 0x19, 0x19)
 #define COLOR_BLACK               COLOR_RGB(0x00, 0x00, 0x00)
 
 #define COLOR_BLUE_EXFE           COLOR_RGB(0x3A, 0x6E, 0xA5)
@@ -56,7 +57,7 @@
 #define COLOR_BLUE_LAKE           COLOR_RGB(0x60, 0xAD, 0xFF)
 #define COLOR_BLUE_AQUA           COLOR_RGB(0xA9, 0xD3, 0xFF)
 
-#define COLOR_RED_EXFE            COLOR_RGB(0xDB, 0x13, 0x41)
+#define COLOR_RED_EXFE            COLOR_RGB(0xE5, 0x2E, 0x53)
 
 // Const
 #define HEADER_BACKGROUND_WIDTH     (880.0f)
