@@ -1065,17 +1065,17 @@
                     searchCell = [[[EFSearchIdentityCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[EFSearchIdentityCell reuseIdentifier]] autorelease];
                 }
                 NSString *keyWord = self.searchBar.text;
-                Provider candidateProvider = [Util candidateProvider:keyWord];
+//                Provider candidateProvider = [Util candidateProvider:keyWord];
                 Provider matchedProvider = [Util matchedProvider:keyWord];
                 
                 if (self.searchResultRoughtIdentity.identity) {
                     [searchCell customWithIdentityString:keyWord
-                                       candidateProvider:candidateProvider
+                                       candidateProvider:matchedProvider
                                            matchProvider:matchedProvider];
                     [searchCell customWithIdentity:self.searchResultRoughtIdentity.identity];
                 } else {
                     [searchCell customWithIdentityString:keyWord
-                                       candidateProvider:candidateProvider
+                                       candidateProvider:matchedProvider
                                            matchProvider:matchedProvider];
                 }
                 
