@@ -130,7 +130,7 @@
 - (CGRect)textRectForBounds:(CGRect)bounds
 {
     CGRect rect = [super textRectForBounds:bounds];
-    UIEdgeInsets insets = {0, 5, 0, 10};
+    UIEdgeInsets insets = {0, 10, 0, 10};
     return UIEdgeInsetsInsetRect(rect, insets);
 }
 
@@ -146,7 +146,7 @@
 - (CGRect)editingRectForBounds:(CGRect)bounds
 {
     CGRect rect = [super editingRectForBounds:bounds];
-    UIEdgeInsets insets = {0, 5, 0, 10};
+    UIEdgeInsets insets = {0, 10, 0, 10};
     return UIEdgeInsetsInsetRect(rect, insets);
 }
 

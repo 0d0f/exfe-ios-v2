@@ -173,10 +173,14 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         textfield.delegate = self;
         [textfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         textfield.placeholder = @"Set display name";
-        UIView *stub = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 40)];
+        UIView *stub = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 55, 40)];
         textfield.leftView = stub;
         textfield.leftViewMode = UITextFieldViewModeAlways;
         [stub release];
+        UIView *stub2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+        textfield.rightView = stub2;
+        textfield.rightViewMode = UITextFieldViewModeAlways;
+        [stub2 release];
         self.inputUsername = textfield;
         self.inputUsername.tag = kViewTagInputUserName;
     }
