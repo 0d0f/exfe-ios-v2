@@ -879,6 +879,10 @@ typedef enum {
                                                                                                           bundle:nil];
             
             viewController.completionHandler = ^(NSArray *identities){
+                Exfee *exfee = [Exfee disconnectedEntity];
+                [exfee addToContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+                exfee.exfee_id = [self.exfee.exfee_id copy];
+                
                 NSMutableSet *invitations = [[NSMutableSet alloc] init];
                 for (NSArray *personIdentities in identities) {
                     BOOL hasAddedNoresponse = NO;
@@ -909,12 +913,8 @@ typedef enum {
                     }
                 }
                 
-                [self.exfee addInvitations:invitations];
+                [exfee addInvitations:invitations];
                 [invitations release];
-                
-                Exfee *exfee = [Exfee disconnectedEntity];
-                [exfee addToContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
-                exfee.exfee_id = [self.exfee.exfee_id copy];
                 
                 Identity *myidentity = [self.exfee getMyInvitation].identity;
                 

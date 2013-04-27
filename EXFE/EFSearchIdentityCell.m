@@ -10,6 +10,7 @@
 
 #import "EFPopoverController.h"
 #import "EFSearchTipViewController.h"
+#import "RoughIdentity.h"
 
 @implementation EFSearchIdentityCell {
     EFPopoverController *_popoverController;
@@ -70,9 +71,16 @@
     self.userNameLabel.textColor = textColor;
 }
 
+- (void)customWithIdentity:(Identity *)identity {
+    [super customWithIdentity:identity];
+    self.accessButton.hidden = YES;
+    self.userNameLabel.textColor = [UIColor COLOR_BLUE_EXFE];
+}
+
 - (void)customWithIdentityString:(NSString *)string candidateProvider:(Provider)candidateProvider matchProvider:(Provider)matchProvider {
     NSString *providerName = nil;
     UIColor *textColor = [UIColor blackColor];
+    BOOL isIdentityFound = NO;
     
     switch (candidateProvider) {
         case kProviderUnknown:
@@ -101,16 +109,36 @@
         case kProviderFacebook:
         case kProviderEmail:
         case kProviderTwitter:
+        {
+            NSDictionary *matchedDictionary = [Util parseIdentityString:string byProvider:matchProvider];
+            RoughIdentity *roughtIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"provider LIKE %@ AND external_id LIKE %@", roughtIdentity.provider, roughtIdentity.externalID];
+            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
+            fetchRequest.predicate = predicate;
+            NSArray *identities =  [[RKObjectManager sharedManager].managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:fetchRequest error:nil];
+            
+            if (identities && [identities count]) {
+                [self customWithIdentity:identities[0]];
+                isIdentityFound = YES;
+                self.accessButton.hidden = YES;
+            }
+            
             textColor = [UIColor COLOR_BLUE_EXFE];
+        }
             break;
         default:
             break;
     }
     
-    UIImage *providerIcon = [UIImage imageNamed:[NSString stringWithFormat:@"identity_%@_18_grey.png", providerName]];
-    self.providerIcon = providerIcon;
+    if (!isIdentityFound) {
+        UIImage *providerIcon = [UIImage imageNamed:[NSString stringWithFormat:@"identity_%@_18_grey.png", providerName]];
+        self.providerIcon = providerIcon;
+        self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
+        
+        self.userNameLabel.text = string;
+    }
     
-    self.userNameLabel.text = string;
     self.userNameLabel.textColor = textColor;
 }
 
