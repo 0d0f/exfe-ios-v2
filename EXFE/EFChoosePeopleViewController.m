@@ -285,13 +285,7 @@
     }
     
     NSIndexPath *indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];;
-//    if (tableView == self.searchDisplayController.searchResultsTableView &&
-//        self.searchBar.text.length &&
-//        indexPath.section == 0) {
-//        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 2 inSection:indexPath.section];
-//    } else {
-//        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-//    }
+    
     [self selectOrDeselectTableView:tableView
                            selected:YES
                         atIndexPath:indexPathParam];
@@ -820,20 +814,28 @@
 
 #pragma mark - Category (Extension)
 - (void)loadexfeePeople {
-    dispatch_queue_t fetch_queue = dispatch_queue_create("queue.fecth", NULL);
-    dispatch_async(fetch_queue, ^{
+    __block NSArray *recentexfeePeople = nil;
+    void (^block)(void) = ^{
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
         
         NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:NO];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"provider != %@ AND provider != %@ AND connected_user_id !=0", @"iOSAPN", @"android"];
         
-        [request setPredicate:predicate];
-        [request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
+        request.predicate = predicate;
+        request.sortDescriptors = @[descriptor];
         
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
-        NSArray *recentexfeePeople = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        recentexfeePeople = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+    };
+    if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
+        dispatch_sync(dispatch_get_main_queue(), block);
+    } else {
+        block();
+    }
+    
+    dispatch_queue_t fetch_queue = dispatch_queue_create("queue.fecth", NULL);
+    dispatch_async(fetch_queue, ^{
         NSMutableArray *filteredExfeePeople = [[NSMutableArray alloc] initWithCapacity:[recentexfeePeople count]];
-        
         for (Identity *identity in recentexfeePeople) {
             if ([identity hasAnyNotificationIdentity]) {
                 [filteredExfeePeople addObject:identity];
