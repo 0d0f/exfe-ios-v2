@@ -984,9 +984,9 @@
                     Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
                     
                     if (!hasAddedNoresponse) {
+                        hasAddedNoresponse = YES;
                         invitation.rsvp_status = @"NORESPONSE";
                     } else {
-                        hasAddedNoresponse = YES;
                         invitation.rsvp_status = @"NOTIFICATION";
                     }
                     
