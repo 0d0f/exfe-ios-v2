@@ -66,7 +66,7 @@ BUILD_OUTPUT="build.output"
 echo Cleaning $PROJECT
 $BUILD -target $PROJECT -configuration Release -scheme $SCHEME clean > /dev/null
 echo $BUILD_ACTION-ing $PROJECT
-$BUILD -target $PROJECT -configuration Release -scheme $SCHEME $BUILD_ACTION > $BUILD_OUTPUT
+$BUILD -target $PROJECT -configuration Release -scheme $SCHEME $BUILD_ACTION
 APP_PATH=`cat $BUILD_OUTPUT|grep Validate|awk '{print $2}'`
 BUILD_PATH=`pwd`"/builds/"
 mkdir -p $BUILD_PATH

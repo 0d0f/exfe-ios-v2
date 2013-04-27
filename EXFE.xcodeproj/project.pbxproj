@@ -1101,9 +1101,9 @@
 		4FC8FCEB168D912E00409779 /* EFTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCEA168D912E00409779 /* EFTime+Helper.m */; };
 		4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */; };
 		4FD9375516D4A57600ED6677 /* CrossGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */; };
-		4FDFA37D172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; };
-		4FDFA37E172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; };
-		4FDFA37F172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; };
+		4FDFA37D172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FDFA37E172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FDFA37F172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4FDFA3C5172A794900929BC9 /* start_tri-00.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDFA389172A794800929BC9 /* start_tri-00.png */; };
 		4FDFA3C6172A794900929BC9 /* start_tri-00.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDFA389172A794800929BC9 /* start_tri-00.png */; };
 		4FDFA3C7172A794900929BC9 /* start_tri-00.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDFA389172A794800929BC9 /* start_tri-00.png */; };
