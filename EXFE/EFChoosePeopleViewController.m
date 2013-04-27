@@ -366,6 +366,12 @@
         [tableView deleteRowsAtIndexPaths:@[toRemoveIndexPath] withRowAnimation:UITableViewRowAnimationTop];
         [tableView endUpdates];
     } else {
+        CGPoint offset = tableView.contentOffset;
+        CGRect viewFrame = tableView.frame;
+        if (offset.y + CGRectGetHeight(viewFrame) == tableView.contentSize.height) {
+            [tableView setContentOffset:(CGPoint){offset.x, offset.y + [self tableView:tableView heightForRowAtIndexPath:indexPath]} animated:NO];
+        }
+        
         self.insertIndexPath = indexPath;
         [tableView beginUpdates];
         [tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
