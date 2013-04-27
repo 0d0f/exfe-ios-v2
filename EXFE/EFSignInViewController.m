@@ -16,7 +16,7 @@
 #import "ImgCache.h"
 #import "CSLinearLayoutView.h"
 #import "UILabel+EXFE.h"
-#import "EFTextField.h"
+#import "EFIdentityTextField.h"
 
 
 typedef NS_ENUM(NSUInteger, EFStage){
@@ -90,7 +90,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     {// Input Identity Field
-        UITextField *textfield = [[EFTextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        UITextField *textfield = [[EFIdentityTextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
         textfield.placeholder = @"Enter email or phone";
         textfield.borderStyle = UITextBorderStyleNone;
         textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -105,7 +105,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
         imageView.layer.cornerRadius = 4.0;
         imageView.layer.masksToBounds = YES;
-        imageView.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
+        imageView.image = nil;
         imageView.contentMode = UIViewContentModeCenter;
         self.imageIdentity = imageView;
         self.inputIdentity.leftView = self.imageIdentity;
@@ -155,7 +155,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         textfield.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
         textfield.delegate = self;
         textfield.placeholder = @"Set display name";
-        UIView *stub = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+        UIView *stub = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 40)];
         textfield.leftView = stub;
         textfield.leftViewMode = UITextFieldViewModeAlways;
         [stub release];
@@ -607,7 +607,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             
         default:
             // no identity info, fall back to default
-            _imageIdentity.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
+            _imageIdentity.image = nil;
             _imageIdentity.contentMode = UIViewContentModeCenter;
             break;
     }
@@ -632,14 +632,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 {
     _hintError.text = error;
     _hintError.backgroundColor = [UIColor COLOR_WA(250, 217)];
-    CGSize size = [_hintError.text sizeWithFont:_hintError.font];
-//    if (size.width > 200){
-//        size.width = 200;
-//    }
-    size.width = 200;
     CGRect frame = _hintError.bounds;
-    frame.size = size;
-    frame.origin.x = CGRectGetMaxX(view.frame) - 48 - CGRectGetWidth(frame);
+    frame.size.height = 46;
+    frame.size.width = 200;
+    frame.origin.x = CGRectGetMinX(view.frame) + 5 + 40 + 5;
     frame.origin.y = CGRectGetMidY(view.frame) - CGRectGetMidY(frame);
     _hintError.frame = frame;
     _hintError.alpha = 1.0;
@@ -722,7 +718,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 #pragma mark Logic Methods
 - (void)identityDidChange:(NSString*)identity
 {
-    Provider provider = [Util candidateProvider:identity];
+    Provider provider = [Util matchedProvider:identity];
     NSDictionary *resp = [self.identityCache objectForKey:identity];
     if (!resp){
         resp = @{@"registration_flag":@"",

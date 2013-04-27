@@ -1296,6 +1296,9 @@
 		4FDFA486172AE6A000929BC9 /* identity_twitter_50btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDFA482172AE69F00929BC9 /* identity_twitter_50btn@2x.png */; };
 		4FDFA487172AE6A000929BC9 /* identity_twitter_50btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDFA482172AE69F00929BC9 /* identity_twitter_50btn@2x.png */; };
 		4FDFA488172AE6A000929BC9 /* identity_twitter_50btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDFA482172AE69F00929BC9 /* identity_twitter_50btn@2x.png */; };
+		4FDFA48F172B9D8200929BC9 /* EFIdentityTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FDFA490172B9D8200929BC9 /* EFIdentityTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FDFA491172B9D8200929BC9 /* EFIdentityTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
@@ -2089,6 +2092,8 @@
 		4FDFA47A172A83C900929BC9 /* list_divider@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list_divider@2x.png"; sourceTree = "<group>"; };
 		4FDFA481172AE69E00929BC9 /* identity_facebook_50btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity_facebook_50btn@2x.png"; sourceTree = "<group>"; };
 		4FDFA482172AE69F00929BC9 /* identity_twitter_50btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity_twitter_50btn@2x.png"; sourceTree = "<group>"; };
+		4FDFA48D172B9D8100929BC9 /* EFIdentityTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFIdentityTextField.h; sourceTree = "<group>"; };
+		4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFIdentityTextField.m; sourceTree = "<group>"; };
 		4FE8D3C51681926C00222420 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4FE8D3C61681926C00222420 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		4FE8D3C71681926C00222420 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
@@ -3423,6 +3428,8 @@
 				4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */,
 				4F00546A172836F300D4B429 /* EFTextField.h */,
 				4F00546B172836F400D4B429 /* EFTextField.m */,
+				4FDFA48D172B9D8100929BC9 /* EFIdentityTextField.h */,
+				4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */,
 			);
 			name = Control;
 			sourceTree = "<group>";
@@ -5345,6 +5352,7 @@
 				767012781729086100B5445E /* EFSearchTipViewController.m in Sources */,
 				4FDFA37E172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */,
 				7615B33C172AB7D200C54031 /* EFLabel.m in Sources */,
+				4FDFA490172B9D8200929BC9 /* EFIdentityTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5497,6 +5505,7 @@
 				767012791729086100B5445E /* EFSearchTipViewController.m in Sources */,
 				4FDFA37F172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */,
 				7615B33D172AB7D200C54031 /* EFLabel.m in Sources */,
+				4FDFA491172B9D8200929BC9 /* EFIdentityTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5649,6 +5658,7 @@
 				767012771729086100B5445E /* EFSearchTipViewController.m in Sources */,
 				4FDFA37D172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */,
 				7615B33B172AB7D200C54031 /* EFLabel.m in Sources */,
+				4FDFA48F172B9D8200929BC9 /* EFIdentityTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
