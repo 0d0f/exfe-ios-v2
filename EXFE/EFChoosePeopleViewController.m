@@ -24,6 +24,7 @@
 #import "User+EXFE.h"
 #import "EFAPIServer.h"
 #import "EFSearchIdentityCell.h"
+#import "WCAlertView.h"
 
 #pragma mark - Category (Extension)
 @interface EFChoosePeopleViewController ()
@@ -280,19 +281,19 @@
         indexPath = [tableView indexPathForCell:cell];
     }
     
-    NSIndexPath *indexPathParam = nil;
-    if (tableView == self.searchDisplayController.searchResultsTableView &&
-        self.searchBar.text.length &&
-        indexPath.section == 0) {
-        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 2 inSection:indexPath.section];
-    } else {
-        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-    }
+    NSIndexPath *indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];;
+//    if (tableView == self.searchDisplayController.searchResultsTableView &&
+//        self.searchBar.text.length &&
+//        indexPath.section == 0) {
+//        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 2 inSection:indexPath.section];
+//    } else {
+//        indexPathParam = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+//    }
     [self selectOrDeselectTableView:tableView
                            selected:YES
                         atIndexPath:indexPathParam];
     [tableView beginUpdates];
-    [tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+    [tableView reloadRowsAtIndexPaths:@[indexPathParam] withRowAnimation:UITableViewRowAnimationNone];
     [tableView endUpdates];
 }
 
@@ -309,7 +310,7 @@
         indexPath = [tableView indexPathForCell:cell];
     }
     indexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-    
+      
     NSIndexPath *indexPathParam = nil;
     if (tableView == self.searchDisplayController.searchResultsTableView &&
         self.searchBar.text.length &&
@@ -331,7 +332,7 @@
     if (shouldDeselect) {
         [self selectOrDeselectTableView:tableView
                                selected:NO
-                            atIndexPath:indexPathParam];
+                            atIndexPath:indexPath];
         [tableView beginUpdates];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         [tableView endUpdates];
@@ -377,9 +378,9 @@
     if (!indexPath) {
         tableView = self.searchDisplayController.searchResultsTableView;
         indexPath = [tableView indexPathForCell:cell];
-        if (indexPath && self.searchBar.text.length && indexPath.section == 0) {
-            indexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-        }
+//        if (indexPath && self.searchBar.text.length && indexPath.section == 0) {
+//            indexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+//        }
     }
     
     if (indexPath) {
@@ -699,8 +700,8 @@
         NSComparisonResult dataResult = [dataIndexPath compare:indexPath];
         if (dataResult == NSOrderedSame) {
             if (tableView == self.searchDisplayController.searchResultsTableView && indexPath.section == 0) {
-                BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:[NSIndexPath indexPathForRow:dataIndexPath.row - 1 inSection:dataIndexPath.section]];
-                [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:[NSIndexPath indexPathForRow:dataIndexPath.row - 1 inSection:dataIndexPath.section]];
+                BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:dataIndexPath];
+                [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:dataIndexPath];
                 [tableView beginUpdates];
                 [tableView reloadRowsAtIndexPaths:@[dataIndexPath, self.insertIndexPath] withRowAnimation:UITableViewRowAnimationNone];
                 [tableView endUpdates];
@@ -732,16 +733,39 @@
                 NSString *keyWord = self.searchBar.text;
                 Provider matchedProvider = [Util matchedProvider:keyWord];
                 if (kProviderUnknown != matchedProvider) {
-                    NSDictionary *matchedDictionary = [Util parseIdentityString:keyWord byProvider:matchedProvider];
-                    RoughIdentity *roughIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
-                    [_searchAddPeople addObject:roughIdentity];
-                    [self refreshSelectedDictWithObject:roughIdentity selected:YES];
-                    [self.searchDisplayController setActive:NO animated:YES];
-                } else {
-                    [tableView beginUpdates];
-                    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                    [tableView endUpdates];
+                    if (kProviderPhone == matchedProvider) {
+                        [WCAlertView showAlertWithTitle:@"Set invitee name"
+                                                message:nil
+                                     customizationBlock:^(WCAlertView *alertView) {
+                                         alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+                                     }
+                                        completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
+                                            if (buttonIndex == alertView.cancelButtonIndex) {
+                                                UITextField *field = [alertView textFieldAtIndex:0];
+                                                NSString *inputName = [NSString stringWithString:field.text];
+                                                
+                                                NSDictionary *matchedDictionary = [Util parseIdentityString:keyWord byProvider:matchedProvider];
+                                                RoughIdentity *roughIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
+                                                roughIdentity.externalUsername = inputName;
+                                                [_searchAddPeople addObject:roughIdentity];
+                                                [self refreshSelectedDictWithObject:roughIdentity selected:YES];
+                                                [self.searchDisplayController setActive:NO animated:YES];
+                                            }
+                                        }
+                                      cancelButtonTitle:@"Done"
+                                      otherButtonTitles:@"Cancel", nil];
+                    } else {
+                        NSDictionary *matchedDictionary = [Util parseIdentityString:keyWord byProvider:matchedProvider];
+                        RoughIdentity *roughIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
+                        [_searchAddPeople addObject:roughIdentity];
+                        [self refreshSelectedDictWithObject:roughIdentity selected:YES];
+                        [self.searchDisplayController setActive:NO animated:YES];
+                    }
                 }
+                
+                [tableView beginUpdates];
+                [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                [tableView endUpdates];
                 
                 return;
             } else {
@@ -749,14 +773,14 @@
             }
         }
         
-        BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:indexPathParam];
-        [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:indexPathParam];
+        BOOL isSelected =  [self isObjectSelectedInTableView:tableView atIndexPath:indexPath];
+        [self selectOrDeselectTableView:tableView selected:!isSelected atIndexPath:indexPath];
         [tableView beginUpdates];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         [tableView endUpdates];
     }
     
-    if (![self isObjectSelectedInTableView:tableView atIndexPath:indexPathParam]) {
+    if (![self isObjectSelectedInTableView:tableView atIndexPath:indexPath]) {
         [tableView deselectRowAtIndexPath:indexPathParam animated:NO];
     }
 }
@@ -925,7 +949,9 @@
             LocalContact *person = self.contactPeople[indexPath.row];
             object = person;
         } else if ([self.exfeePeople count] && indexPath.section == 0) {
-            Identity *identity = self.exfeePeople[indexPath.row - [self.searchAddPeople count]];
+            NSInteger index = indexPath.row - [self.searchAddPeople count];
+            index = index >= [self.exfeePeople count] ? [self.exfeePeople count] - 1 : index;
+            Identity *identity = self.exfeePeople[index];
             object = identity;
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
@@ -933,7 +959,10 @@
             LocalContact *person = self.searchResultContactPeople[indexPath.row];
             object = person;
         } else if ([self.searchResultExfeePeople count] && indexPath.section == 0) {
-            Identity *identity = self.searchResultExfeePeople[indexPath.row];
+            NSInteger index = indexPath.row - (self.searchBar.text.length ? 1 : 0) - ((self.insertIndexPath && (indexPath.section == self.insertIndexPath.section && indexPath.row > self.insertIndexPath.row)) ? 1 : 0);
+            index = index >= [self.searchResultExfeePeople count] ? [self.searchResultExfeePeople count] - 1 : index;
+            
+            Identity *identity = self.searchResultExfeePeople[index];
             object = identity;
         }
     }
