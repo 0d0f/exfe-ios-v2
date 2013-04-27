@@ -429,6 +429,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 50);
             _inputIdentity.rightView = _extIdentity;
             _inputIdentity.returnKeyType = UIReturnKeyNext;
+            _inputPassword.text = @"";
+            _inputUsername.text = @"";
+            [_inputIdentity becomeFirstResponder];
             break;
         case kStageSignIn:{
             // show rest login form
@@ -470,7 +473,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _inputIdentity.returnKeyType = UIReturnKeyNext;
             _inputPassword.placeholder = @"Enter password";
             _inputPassword.returnKeyType = UIReturnKeyDone;
+            _inputPassword.btnForgot.hidden = NO;
             [_inputPassword becomeFirstResponder];
+            _inputUsername.text = @"";
             _inputIdentity.rightView = nil;
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
         }    break;
@@ -523,8 +528,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _inputIdentity.returnKeyType = UIReturnKeyNext;
             _inputPassword.placeholder = @"Set EXFE password";
             _inputPassword.returnKeyType = UIReturnKeyNext;
-            _inputUsername.returnKeyType = UIReturnKeyDone;
+            _inputPassword.btnForgot.hidden = YES;
             [_inputPassword becomeFirstResponder];
+            _inputUsername.returnKeyType = UIReturnKeyDone;
             _inputIdentity.rightView = nil;
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
         }  break;
@@ -955,18 +961,15 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         if ([@"failed" isEqualToString:errorType]) {
                             NSString *registration_flag = [responseObject valueForKeyPath:@"meta.errorDetail.registration_flag"];
                             if ([@"SIGN_UP" isEqualToString:registration_flag]) {
-                                _inputPassword.text = @"";
                             } else if ([@"SIGN_IN" isEqualToString:registration_flag]){
                                 [self showErrorInfo:@"Authentication failed." dockOn:_inputPassword];
+                                break;
                             } else if ([@"AUTHENTICATE" isEqualToString:registration_flag]){
                                 //TODO: AUTHENTICATE
                                 // AUTHENTICATE
                                 // _setStage start
                                 // oatuh
-                                _inputPassword.text = @"";
                             } else if ([@"VERIFY" isEqualToString:registration_flag]){
-                                _inputPassword.text = @"";
-                                [_inputIdentity becomeFirstResponder];
                             }
                             [self swithStagebyFlag:registration_flag];
                         }
@@ -1098,7 +1101,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     
-    [self showIndicatorAt:CGPointMake(285, sender.center.y)];
+    CGPoint p = [sender convertPoint:sender.center toView:self.rootView];
+    [self showIndicatorAt:CGPointMake(285, p.y)];
     [[EFAPIServer sharedInstance] forgetPassword:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [self hideIndicator];
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
@@ -1209,17 +1213,20 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 #pragma mark UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     
-    //If there is text in the text field
-    if (textField.text.length + (string.length - range.length) > 0)
-    {
-        //Set textfield font
-        textField.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
+    if (textField.tag == kViewTagInputIdentity) {
+        //If there is text in the text field
+        if (textField.text.length + (string.length - range.length) > 0)
+        {
+            //Set textfield font
+            textField.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
+        }
+        else
+        {
+            //Set textfield placeholder font (or so it appears)
+            textField.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+        }
     }
-    else
-    {
-        //Set textfield placeholder font (or so it appears)
-        textField.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
-    }
+    
     return YES;
 }
 

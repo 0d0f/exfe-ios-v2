@@ -24,9 +24,10 @@
         imageView.backgroundColor = [UIColor clearColor];
         self.icon = imageView;
         self.leftView = self.icon;
+        self.leftViewMode = UITextFieldViewModeAlways;
         [imageView release];
         
-        UIButton *btnS = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+        UIButton *btnS = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
         btnS.backgroundColor = [UIColor clearColor];
         [btnS addTarget:self action:@selector(touchdown:) forControlEvents:UIControlEventTouchDown];
         [btnS addTarget:self action:@selector(touchup:) forControlEvents:UIControlEventTouchUpInside];
@@ -36,15 +37,13 @@
         self.eye = btnS;
         [btnS release];
         
-        UIButton *btnf = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+        UIButton *btnf = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
         btnf.backgroundColor = [UIColor clearColor];
         [btnf setImage:[UIImage imageNamed:@"pass_question.png"] forState:UIControlStateNormal];
         btnf.imageView.contentMode = UIViewContentModeCenter;
         self.btnForgot = btnf;
         [btnf release];
         
-        
-        self.leftViewMode = UITextFieldViewModeAlways;
         self.rightView = self.btnForgot;
         self.rightViewMode = UITextFieldViewModeAlways;
         
