@@ -21,7 +21,7 @@ UIGestureRecognizerDelegate
 
 - (id)initWithContentViewController:(UIViewController *)controller;
 
-- (void)presentFromRect:(CGRect)rect inView:(UIView *)view arrowDirection:(EFArrowDirection)direction animated:(BOOL)animated complete:(void (^)(void))handler;
+- (void)presentFromRect:(CGRect)rect inView:(UIView *)view containRect:(CGRect)frame arrowDirection:(EFArrowDirection)direction animated:(BOOL)animated complete:(void (^)(void))handler;
 - (void)dismissWithAnimated:(BOOL)animated complete:(void (^)(void))handler;
 
 - (void)setContentSize:(CGSize)contentSize animated:(BOOL)animated;

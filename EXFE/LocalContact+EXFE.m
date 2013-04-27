@@ -42,8 +42,8 @@ NSString *kEFProviderNameTwitter = @"twitter";
             if ([providerName isEqualToString:@"Facebook"]) {
                 RoughIdentity *roughIdentity = [RoughIdentity identity];
                 roughIdentity.provider = kEFProviderNameFacebook;
-                roughIdentity.externalID = [imDict objectForKey:@"username"];
-                roughIdentity.externalUsername = self.name;
+                roughIdentity.externalID = nil;
+                roughIdentity.externalUsername = [imDict objectForKey:@"username"];
                 
                 [identities addObject:roughIdentity];
             }
@@ -71,15 +71,15 @@ NSString *kEFProviderNameTwitter = @"twitter";
             if ([providerName isEqualToString:@"twitter"]) {
                 RoughIdentity *roughIdentity = [RoughIdentity identity];
                 roughIdentity.provider = kEFProviderNameTwitter;
-                roughIdentity.externalID = [socialDict valueForKey:@"username"];
-                roughIdentity.externalUsername = self.name;
+                roughIdentity.externalID = [socialDict valueForKey:@"identifier"];
+                roughIdentity.externalUsername = [socialDict valueForKey:@"username"];
                 
                 [identities addObject:roughIdentity];
             } else if ([providerName isEqualToString:@"facebook"]) {
                 RoughIdentity *roughIdentity = [RoughIdentity identity];
                 roughIdentity.provider = kEFProviderNameFacebook;
-                roughIdentity.externalID = [socialDict valueForKey:@"username"];
-                roughIdentity.externalUsername = self.name;
+                roughIdentity.externalID = [socialDict valueForKey:@"identifier"];
+                roughIdentity.externalUsername = [socialDict valueForKey:@"username"];
                 
                 BOOL shouldSkip = NO;
                 for (RoughIdentity *identity in identities) {

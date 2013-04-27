@@ -926,7 +926,9 @@
         if (![_selectedDict valueForKey:key]) {
             // invoked by selecting cell
             for (RoughIdentity *roughIndentity in roughtIdentities) {
-                [self selectRoughIdentity:roughIndentity];
+                if ([Identity getProviderCode:roughIndentity.provider] != kProviderTwitter) {
+                    [self selectRoughIdentity:roughIndentity];
+                }
             }
         }
         

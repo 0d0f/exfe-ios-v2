@@ -52,8 +52,10 @@
         _popoverController.backgroundArrowView.strokeColor = [UIColor clearColor];
     }
     
+    CGRect screenBounds = [UIScreen mainScreen].bounds;
     [_popoverController presentFromRect:(CGRect){{287, 0}, {33, 50}}
                                 inView:self
+                            containRect:(CGRect){{0, 70}, {CGRectGetWidth(screenBounds), CGRectGetHeight(screenBounds) - 70}}
                         arrowDirection:kEFArrowDirectionRight
                               animated:YES
                               complete:nil];
