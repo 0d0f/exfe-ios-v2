@@ -863,14 +863,14 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             } failure:^(AFHTTPRequestOperation *operation, NSError *error){
                 //error.domain
                 switch (error.code) {
-                    case -1003:
-                    case -1004:
-                    case -1005:
-                    case -1006: // network error
-                    case -1007:
-                    case -1008:
-                    case -1009:
-                    case -1010: // server error
+                    case NSURLErrorCannotFindHost: //-1003
+                    case NSURLErrorCannotConnectToHost: //-1004
+                    case NSURLErrorNetworkConnectionLost: //-1005
+                    case NSURLErrorDNSLookupFailed: //-1006
+                    case NSURLErrorHTTPTooManyRedirects: //-1007
+                    case NSURLErrorResourceUnavailable: //-1008
+                    case NSURLErrorNotConnectedToInternet: //-1009
+                    case NSURLErrorRedirectToNonExistentLocation: //-1010
                         [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
                         
                         //NSURLErrorCannotFindHost = -1003,
@@ -901,7 +901,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)signIn:(UIControl *)sender
 {
-    if (_inputIdentity.text.length == 0 || _inputPassword.text.length == 0) {
+    if (_inputIdentity.text.length == 0) {
+        return;
+    }
+    if (_inputPassword.text.length == 0) {
+        [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
         return;
     }
     
@@ -928,15 +932,18 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                             NSString *registration_flag = [responseObject valueForKeyPath:@"meta.errorDetail.registration_flag"];
                             if ([@"SIGN_UP" isEqualToString:registration_flag]) {
                                 _inputPassword.text = @"";
-                                [self setStage:kStageSignUp];
-                            }else if ([@"SIGN_IN" isEqualToString:registration_flag]){
+                            } else if ([@"SIGN_IN" isEqualToString:registration_flag]){
                                 [self showErrorInfo:@"Authentication failed." dockOn:_inputPassword];
+                            } else if ([@"AUTHENTICATE" isEqualToString:registration_flag]){
+                                //TODO: AUTHENTICATE
+                                // AUTHENTICATE
+                                // _setStage start
+                                // oatuh
+                                _inputPassword.text = @"";
+                            } else if ([@"VERIFY" isEqualToString:registration_flag]){
+                                _inputPassword.text = @"";
                             }
-                            
-                            //TODO: AUTHENTICATE
-                            // AUTHENTICATE
-                            // _setStage start
-                            // oatuh
+                            [self swithStagebyFlag:registration_flag];
                         }
                     }   break;
                     default:
@@ -946,6 +953,24 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error){
         [self hideIndicator];
+        switch (error.code) {
+                //error.domain
+                switch (error.code) {
+                    case NSURLErrorCannotFindHost: //-1003
+                    case NSURLErrorCannotConnectToHost: //-1004
+                    case NSURLErrorNetworkConnectionLost: //-1005
+                    case NSURLErrorDNSLookupFailed: //-1006
+                    case NSURLErrorHTTPTooManyRedirects: //-1007
+                    case NSURLErrorResourceUnavailable: //-1008
+                    case NSURLErrorNotConnectedToInternet: //-1009
+                    case NSURLErrorRedirectToNonExistentLocation: //-1010
+                        [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                        break;
+                        
+                    default:
+                        break;
+                }
+        }
     }];
 }
 
@@ -998,6 +1023,24 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error){
         [self hideIndicator];
+        switch (error.code) {
+                //error.domain
+                switch (error.code) {
+                    case NSURLErrorCannotFindHost: //-1003
+                    case NSURLErrorCannotConnectToHost: //-1004
+                    case NSURLErrorNetworkConnectionLost: //-1005
+                    case NSURLErrorDNSLookupFailed: //-1006
+                    case NSURLErrorHTTPTooManyRedirects: //-1007
+                    case NSURLErrorResourceUnavailable: //-1008
+                    case NSURLErrorNotConnectedToInternet: //-1009
+                    case NSURLErrorRedirectToNonExistentLocation: //-1010
+                        [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                        break;
+                        
+                    default:
+                        break;
+                }
+        }
     }];
 }
 
@@ -1051,9 +1094,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                     } break;
                     case 400:{
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
-                        if ([@"weak_password" isEqualToString:errorType]) {
-                            [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
-                        } else if ([@"identity_does_not_exist" isEqualToString:errorType]
+                        if ([@"identity_does_not_exist" isEqualToString:errorType]
                                   || [@"identity_is_being_verified" isEqualToString:errorType]){
                             [self showInlineError:@"Invalid account." with:@"Please check your input above."];
                         }
@@ -1081,6 +1122,24 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self hideIndicator];
+        switch (error.code) {
+                //error.domain
+                switch (error.code) {
+                    case NSURLErrorCannotFindHost: //-1003
+                    case NSURLErrorCannotConnectToHost: //-1004
+                    case NSURLErrorNetworkConnectionLost: //-1005
+                    case NSURLErrorDNSLookupFailed: //-1006
+                    case NSURLErrorHTTPTooManyRedirects: //-1007
+                    case NSURLErrorResourceUnavailable: //-1008
+                    case NSURLErrorNotConnectedToInternet: //-1009
+                    case NSURLErrorRedirectToNonExistentLocation: //-1010
+                        [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                        break;
+                        
+                    default:
+                        break;
+                }
+        }
     }];
 }
 
