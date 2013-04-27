@@ -215,6 +215,9 @@
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
         label.textColor = [UIColor blackColor];
+        if ([label respondsToSelector:@selector(lineBreakMode)]) {
+            label.lineBreakMode = UILineBreakModeClip;
+        }
         [self.contentView addSubview:label];
         self.userNameLabel = label;
         [label release];
@@ -288,8 +291,10 @@
 }
 
 #pragma mark - custom
+
 - (void)customWithLocalContact:(LocalContact *)person {
     self.userNameLabel.text = person.name;
+    self.userNameLabel.frame = (CGRect){{56, 12}, {190, 26}};
     
     UIImage *avatar = [UIImage imageWithData:person.avatar];
     if (!avatar)
@@ -347,6 +352,8 @@
 
 - (void)customWithIdentity:(Identity *)identity {
     self.userNameLabel.text = identity.name;
+    self.userNameLabel.frame = (CGRect){{56, 12}, {190, 26}};
+    
     if (!self.userNameLabel.text || [self.userNameLabel.text isEqualToString:@""]) {
         self.userNameLabel.text = identity.external_username;
     }
@@ -380,6 +387,8 @@
 
 - (void)customWithRoughtIdentity:(RoughIdentity *)roughtIdentity {
     self.userNameLabel.text = roughtIdentity.externalUsername;
+    self.userNameLabel.frame = (CGRect){{56, 12}, {190, 26}};
+    
     self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
     if (roughtIdentity.provider && ![roughtIdentity.provider isEqualToString:@""]) {
         NSString *iconName = [NSString stringWithFormat:@"identity_%@_18_grey.png", roughtIdentity.provider];
