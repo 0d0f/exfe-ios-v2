@@ -228,7 +228,7 @@
 
 - (void) addIdentity:(id) sender{
     [spin setHidden:NO];
-  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/addIdentity",API_ROOT, [EFAPIServer sharedInstance].user_id];
+  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/addIdentity?token=%@",API_ROOT, [EFAPIServer sharedInstance].user_id, [EFAPIServer sharedInstance].user_token];
   RKObjectManager *manager=[RKObjectManager sharedManager] ;
 
   NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:5];
@@ -244,7 +244,6 @@
 
   [dict setObject:provider forKey:@"provider"];
   manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
-  [manager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
 
   [manager.HTTPClient postPath:endpoint parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
     [spin setHidden:YES];

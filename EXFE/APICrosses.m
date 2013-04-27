@@ -34,10 +34,9 @@ static id sharedManager = nil;
 
 +(void) GatherCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
     RKObjectManager* manager =[RKObjectManager sharedManager];
-    NSString *endpoint = [NSString stringWithFormat:@"%@crosses/gather",API_ROOT];
+    NSString *endpoint = [NSString stringWithFormat:@"%@crosses/gather?token=%@",API_ROOT,[EFAPIServer sharedInstance].user_token];
     manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
-    [manager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
     [manager postObject:cross path:endpoint parameters:nil success:success failure:failure];
 }
 
@@ -47,7 +46,6 @@ static id sharedManager = nil;
   NSString *endpoint = [NSString stringWithFormat:@"%@crosses/%u/edit?token=%@",API_ROOT,[cross.cross_id intValue],[EFAPIServer sharedInstance].user_token];
   manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
   manager.requestSerializationMIMEType = RKMIMETypeJSON;
-  [manager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
   [manager postObject:cross path:endpoint parameters:nil success:success failure:failure];
 }
 

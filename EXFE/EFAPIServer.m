@@ -94,7 +94,6 @@
     //    manager.requestSerializationMIMEType = RKMIMETypeJSON;
     // Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
     //	[manager.HTTPClient setDefaultHeader:@"Accept" value:@"application/json"];
-    [manager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
     [manager.HTTPClient getPath:endpoint parameters:nil success:success failure:failure];
 }
 
@@ -359,7 +358,6 @@
     
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
-    [manager.HTTPClient setDefaultHeader:@"token" value:self.user_token];
     [manager postObject:exfee
                    path:endpoint
              parameters:nil

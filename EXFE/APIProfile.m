@@ -27,9 +27,8 @@
 + (void) LoadSuggest:(NSString*)key success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     
-    NSString *endpoint = [NSString stringWithFormat:@"%@identities/complete?key=%@",API_ROOT,key];
-  
-  [[RKObjectManager sharedManager].HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"%@identities/complete?key=%@?token=%@",API_ROOT,key, [EFAPIServer sharedInstance].user_token];
+
   [[RKObjectManager sharedManager].HTTPClient getPath:endpoint parameters:nil success:success failure:failure];
    
 }
@@ -42,7 +41,6 @@
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
-    [objectManager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
     
     [objectManager.HTTPClient postPath:endpoint parameters:@{@"name":name} success:success failure:failure];
 }
@@ -58,7 +56,6 @@
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
-    [objectManager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
     if (name) {
         [dict setObject:name forKey:@"name"];

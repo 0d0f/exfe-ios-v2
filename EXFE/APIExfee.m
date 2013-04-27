@@ -38,7 +38,6 @@
     
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
-    [manager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
     [manager postObject:exfee path:endpoint parameters:nil success:success failure:failure];
 }
 

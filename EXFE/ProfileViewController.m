@@ -508,10 +508,9 @@
 }
 
 - (void) deleteIdentity:(int)identity_id{
-    NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/deleteIdentity",API_ROOT, [EFAPIServer sharedInstance].user_id];
+    NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/deleteIdentity?token=%@",API_ROOT, [EFAPIServer sharedInstance].user_id, [EFAPIServer sharedInstance].user_token];
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     objectManager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
-    [objectManager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
     [objectManager.HTTPClient postPath:endpoint parameters:@{@"identity_id":[NSNumber numberWithInt:identity_id]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
       if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
         NSDictionary *body=responseObject;
@@ -581,10 +580,9 @@
 
 - (void) doVerify:(int)identity_id{
   NSString *callback=@"oauth://handleOAuthAddIdentity";
-  NSString *endpoint = [NSString stringWithFormat:@"%@users/VerifyUserIdentity",API_ROOT];
+  NSString *endpoint = [NSString stringWithFormat:@"%@users/VerifyUserIdentity?token=%@",API_ROOT,[EFAPIServer sharedInstance].user_token];
   RKObjectManager *objectManager = [RKObjectManager sharedManager];
   objectManager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
-  [objectManager.HTTPClient setDefaultHeader:@"token" value:[EFAPIServer sharedInstance].user_token];
   [objectManager.HTTPClient postPath:endpoint parameters:@{@"identity_id":[NSNumber numberWithInt:identity_id],@"device_callback":callback,@"device":@"iOS"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
     if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
       NSDictionary *body=responseObject;
