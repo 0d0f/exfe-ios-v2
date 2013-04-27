@@ -158,6 +158,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         textfield.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
         textfield.delegate = self;
+        [textfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         [textfield.btnForgot addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
         
         self.inputPassword = textfield;
@@ -170,6 +171,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         textfield.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
         textfield.delegate = self;
+        [textfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         textfield.placeholder = @"Set display name";
         UIView *stub = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 40)];
         textfield.leftView = stub;
@@ -434,7 +436,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _inputIdentity.rightView = _extIdentity;
             _inputIdentity.returnKeyType = UIReturnKeyNext;
             _inputPassword.text = @"";
+            [self textFieldDidChange:_inputPassword];
             _inputUsername.text = @"";
+            [self textFieldDidChange:_inputUsername];
             [_inputIdentity becomeFirstResponder];
             break;
         case kStageSignIn:{
@@ -480,6 +484,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _inputPassword.btnForgot.hidden = NO;
             [_inputPassword becomeFirstResponder];
             _inputUsername.text = @"";
+            [self textFieldDidChange:_inputUsername];
             _inputIdentity.rightView = nil;
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
         }    break;
@@ -1079,7 +1084,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 - (void)startOver:(id)sender
 {
     _inputIdentity.text = @"";
-    [self textFieldDidChange:@""];
+    [self textFieldDidChange:_inputIdentity];
     [self setStage:kStageStart];
 }
 
@@ -1181,13 +1186,32 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 #pragma mark Textfield Change Notification
 - (void)textFieldDidChange:(id)sender
 {
-    NSString *identity = _inputIdentity.text;
+    UITextField *textField = sender;
+    //If there is text in the text field
+    if (textField.text.length > 0)
+    {
+        //Set textfield font
+        if (textField.tag == kViewTagInputIdentity) {
+            textField.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
+        } else {
+            textField.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+        }
+    }
+    else
+    {
+        //Set textfield placeholder font (or so it appears)
+        textField.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+    }
     
-    if ([identity isEqualToString:self.lastInputIdentity]) {
-        return;
-    } else {
-        self.lastInputIdentity = identity;
-        [self identityDidChange:identity];
+    if (textField.tag == kViewTagInputIdentity) {
+        NSString *identity = _inputIdentity.text;
+        
+        if ([identity isEqualToString:self.lastInputIdentity]) {
+            return;
+        } else {
+            self.lastInputIdentity = identity;
+            [self identityDidChange:identity];
+        }
     }
 }
 
@@ -1215,25 +1239,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 }
 
 #pragma mark UITextFieldDelegate
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    
-    if (textField.tag == kViewTagInputIdentity) {
-        //If there is text in the text field
-        if (textField.text.length + (string.length - range.length) > 0)
-        {
-            //Set textfield font
-            textField.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
-        }
-        else
-        {
-            //Set textfield placeholder font (or so it appears)
-            textField.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
-        }
-    }
-    
-    return YES;
-}
-
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     [self hide:_hintError withAnmated:NO];
