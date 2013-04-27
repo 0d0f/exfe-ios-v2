@@ -1147,22 +1147,27 @@
     NSArray *roughIndentities = nil;
     if (tableView == self.tableView) {
         if ([self.searchAddPeople count] && indexPath.section == 0 && indexPath.row < [self.searchAddPeople count]) {
-            RoughIdentity *roughtIdentity = self.searchAddPeople[indexPath.row];
+            NSInteger index = indexPath.row < [self.searchAddPeople count] ? indexPath.row : [self.searchAddPeople count] - 1;
+            RoughIdentity *roughtIdentity = self.searchAddPeople[index];
             roughIndentities = @[roughtIdentity];
         } else if(([self.exfeePeople count] && indexPath.section == 1) ||
            (![self.exfeePeople count] && indexPath.section == 0)) {
-            LocalContact *person = self.contactPeople[indexPath.row];
+            NSInteger index = indexPath.row < [self.contactPeople count] ? indexPath.row : [self.contactPeople count] - 1;
+            LocalContact *person = self.contactPeople[index];
             roughIndentities = [person roughIdentities];
         } else {
-            Identity *identity = self.exfeePeople[indexPath.row - [self.searchAddPeople count]];
+            NSInteger index = indexPath.row - [self.searchAddPeople count] < [self.exfeePeople count] ? indexPath.row - [self.searchAddPeople count] : [self.exfeePeople count] - 1;
+            Identity *identity = self.exfeePeople[index];
             roughIndentities = @[[identity roughIdentityValue]];
         }
     } else if (tableView == self.searchDisplayController.searchResultsTableView) {
         if ([self.searchResultContactPeople count] && indexPath.section == 1) {
-            LocalContact *person = self.searchResultContactPeople[indexPath.row];
+            NSInteger index = indexPath.row < [self.searchResultContactPeople count] ? indexPath.row : [self.searchResultContactPeople count] - 1;
+            LocalContact *person = self.searchResultContactPeople[index];
             roughIndentities = [person roughIdentities];
         } else if ([self.searchResultExfeePeople count] && indexPath.section == 0) {
-            Identity *identity = self.searchResultExfeePeople[indexPath.row];
+            NSInteger index = indexPath.row < [self.searchResultExfeePeople count] ? indexPath.row : [self.searchResultExfeePeople count] - 1;
+            Identity *identity = self.searchResultExfeePeople[index];
             roughIndentities = @[[identity roughIdentityValue]];
         }
     }
