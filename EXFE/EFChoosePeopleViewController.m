@@ -210,25 +210,32 @@
     [bigspin release];
     
     NSMutableArray *selectedIdentities = [[NSMutableArray alloc] init];
+    NSMutableDictionary *addIdentitiyDict = [[NSMutableDictionary alloc] init];
     
     for (Identity *identity in self.exfeePeople) {
         RoughIdentity *roughIdentity = [identity roughIdentityValue];
         if ([self isRoughtIdentitySelected:roughIdentity]) {
             [selectedIdentities addObject:@[identity]];
+            [addIdentitiyDict setValue:@"YES" forKey:roughIdentity.key];
         }
     }
     
-    for (RoughIdentity *roughtIdentity in self.searchAddPeople) {
-        if ([self isRoughtIdentitySelected:roughtIdentity]) {
-            if (roughtIdentity.status == kEFRoughIdentityGetIdentityStatusSuccess) {
-                [selectedIdentities addObject:@[roughtIdentity.identity]];
-            } else if (roughtIdentity.status == kEFRoughIdentityGetIdentityStatusLoading) {
-                while (kEFRoughIdentityGetIdentityStatusSuccess == roughtIdentity.status || kEFRoughIdentityGetIdentityStatusFailure == roughtIdentity.status) {
+    for (RoughIdentity *roughIdentity in self.searchAddPeople) {
+        if ([self isRoughtIdentitySelected:roughIdentity]) {
+            if ([addIdentitiyDict valueForKey:roughIdentity.key]) {
+                continue;
+            }
+            if (roughIdentity.status == kEFRoughIdentityGetIdentityStatusSuccess) {
+                [selectedIdentities addObject:@[roughIdentity.identity]];
+                [addIdentitiyDict setValue:@"YES" forKey:roughIdentity.key];
+            } else if (roughIdentity.status == kEFRoughIdentityGetIdentityStatusLoading) {
+                while (kEFRoughIdentityGetIdentityStatusSuccess == roughIdentity.status || kEFRoughIdentityGetIdentityStatusFailure == roughIdentity.status) {
                     [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                              beforeDate:[NSDate distantFuture]];
                 }
-                if (kEFRoughIdentityGetIdentityStatusSuccess == roughtIdentity.status) {
-                    [selectedIdentities addObject:@[roughtIdentity.identity]];
+                if (kEFRoughIdentityGetIdentityStatusSuccess == roughIdentity.status) {
+                    [selectedIdentities addObject:@[roughIdentity.identity]];
+                    [addIdentitiyDict setValue:@"YES" forKey:roughIdentity.key];
                 }
             }
         }
@@ -237,11 +244,15 @@
     for (LocalContact *contact in self.contactPeople) {
         NSArray *roughtIdentities = [contact roughIdentities];
         NSMutableArray *contactRoughIdentities = [[NSMutableArray alloc] initWithCapacity:[roughtIdentities count]];
-        for (RoughIdentity *roughtIdentity in roughtIdentities) {
-            if ([self isRoughtIdentitySelected:roughtIdentity]) {
-                RoughIdentity *cachedRoughtIdentity = [_cachedRoughIdentityDict valueForKey:roughtIdentity.key];
+        for (RoughIdentity *roughIdentity in roughtIdentities) {
+            if ([self isRoughtIdentitySelected:roughIdentity]) {
+                if ([addIdentitiyDict valueForKey:roughIdentity.key]) {
+                    continue;
+                }
+                RoughIdentity *cachedRoughtIdentity = [_cachedRoughIdentityDict valueForKey:roughIdentity.key];
                 if (cachedRoughtIdentity.status == kEFRoughIdentityGetIdentityStatusSuccess) {
                     [contactRoughIdentities addObject:cachedRoughtIdentity.identity];
+                    [addIdentitiyDict setValue:@"YES" forKey:roughIdentity.key];
                 } else if (cachedRoughtIdentity.status == kEFRoughIdentityGetIdentityStatusLoading) {
                     while (kEFRoughIdentityGetIdentityStatusSuccess == cachedRoughtIdentity.status || kEFRoughIdentityGetIdentityStatusFailure == cachedRoughtIdentity.status) {
                         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
@@ -249,6 +260,7 @@
                     }
                     if (kEFRoughIdentityGetIdentityStatusSuccess == cachedRoughtIdentity.status) {
                         [selectedIdentities addObject:cachedRoughtIdentity.identity];
+                        [addIdentitiyDict setValue:@"YES" forKey:roughIdentity.key];
                     }
                 }
             }
@@ -264,6 +276,8 @@
             self.completionHandler(selectedIdentities);
         });
     }
+    
+    [addIdentitiyDict release];
     [selectedIdentities release];
     
     [self dismiss];    
