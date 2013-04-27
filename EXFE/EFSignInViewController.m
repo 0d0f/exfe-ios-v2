@@ -103,7 +103,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         self.inputIdentity.tag = kViewTagInputIdentity;
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-        imageView.layer.cornerRadius = 4.0;
+        imageView.layer.cornerRadius = 1.0;
         imageView.layer.masksToBounds = YES;
         imageView.image = nil;
         imageView.contentMode = UIViewContentModeCenter;
