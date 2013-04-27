@@ -202,11 +202,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     {// Start over
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(0, 0, 290, 48);
-        [btn setTitle:@"Start Over" forState:UIControlStateNormal];
+        [btn setTitle:@"Start over" forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
         btn.titleLabel.shadowOffset = CGSizeMake(0, 1);
-        btn.titleLabel.shadowColor = [UIColor COLOR_WA(0xFF, 0xFF)];
+        btn.titleLabel.shadowColor = [UIColor whiteColor];
         [btn addTarget:self action:@selector(startOver:) forControlEvents:UIControlEventTouchUpInside];
         UIImage *btnImage = [UIImage imageNamed:@"btn_white_44.png"];
         btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
@@ -217,18 +217,20 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     {// Verification Title
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 40)];
         label.text = @"Verification";
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0];
+        label.backgroundColor = [UIColor clearColor];
         [label wrapContent];
         self.labelVerifyTitle = label;
         self.labelVerifyTitle.tag = kViewTagVerificationTitle;
     }
     
     {// Verification Description
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 80)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 80)];
         label.text = @"This number requires verification before proceeding. Verification request sent, please check your message for instructions.";
         label.numberOfLines = 0;
+        label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
         [label wrapContent];
         label.lineBreakMode = UILineBreakModeWordWrap;
@@ -237,9 +239,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     {// Overlay error hint
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 46)];
         label.textColor = [UIColor COLOR_RED_EXFE];
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:18.0];
+        label.backgroundColor = [UIColor clearColor];
         label.numberOfLines = 1;
         label.backgroundColor = [UIColor whiteColor];
         label.hidden = YES;
@@ -268,7 +271,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     {// Inline error hint
-        TTTAttributedLabel *label = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 290, 80)];
+        TTTAttributedLabel *label = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 280, 80)];
+        label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
         label.textColor = [UIColor COLOR_WA(25, 0xFF)];
         label.lineBreakMode = UILineBreakModeWordWrap;
@@ -527,7 +531,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             } else {
                 [self.rootView moveItem:item1 afterItem:baseItem];
             }
-            item1.padding = CSLinearLayoutMakePadding(5, 15, 0, 15);
+            item1.padding = CSLinearLayoutMakePadding(5, 20, 0, 20);
             
             
             Provider p = [Util matchedProvider:_inputIdentity.text];
@@ -550,18 +554,18 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             } else {
                 [self.rootView moveItem:item2 afterItem:item1];
             }
-            item2.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
+            item2.padding = CSLinearLayoutMakePadding(0, 20, 0, 20);
             
             CSLinearLayoutItem *item3 = [self.rootView findItemByTag:_btnStartOver.tag];
             if (item3 == nil){
                 item3 = [CSLinearLayoutItem layoutItemForView:_btnStartOver];
-                item3.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
                 item3.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
                 item3.fillMode = CSLinearLayoutItemFillModeNormal;
                 [self.rootView insertItem:item3 afterItem:item2];
             } else {
                 [self.rootView moveItem:item3 afterItem:item2];
             }
+            item3.padding = CSLinearLayoutMakePadding(10, 15, 17, 15);
             
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 50);
             _inputIdentity.rightView = nil;
@@ -679,7 +683,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)showInlineError:(NSString *)title with:(NSString *)description
 {
-    
     NSString* full = [NSString stringWithFormat:@"%@ %@", title, description];
     
     [_inlineError setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
@@ -697,6 +700,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     if (baseitem) {
+        [_inlineError wrapContent];
         CSLinearLayoutItem *item = [self.rootView findItemByTag:_inlineError.tag];
         if (item == nil){
             item = [CSLinearLayoutItem layoutItemForView:_inlineError];
@@ -706,7 +710,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         } else {
             [self.rootView moveItem:item beforeItem:baseitem];
         }
-        item.padding = CSLinearLayoutMakePadding(0, 15, 4, 15);
+        item.padding = CSLinearLayoutMakePadding(0, 20, 0, 20);
     }
 }
 
@@ -942,6 +946,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                 _inputPassword.text = @"";
                             } else if ([@"VERIFY" isEqualToString:registration_flag]){
                                 _inputPassword.text = @"";
+                                [_inputIdentity becomeFirstResponder];
                             }
                             [self swithStagebyFlag:registration_flag];
                         }
@@ -1046,6 +1051,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)startOver:(id)sender
 {
+    _inputIdentity.text = @"";
+    [self textFieldDidChange:@""];
     [self setStage:kStageStart];
 }
 
