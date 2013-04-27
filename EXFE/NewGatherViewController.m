@@ -219,7 +219,7 @@
 //    [pannel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.33]];
 
     UIButton *btngather=[UIButton buttonWithType:UIButtonTypeCustom];
-    [btngather setFrame:CGRectMake(99, 8.5, 122, 32)];
+    [btngather setFrame:CGRectMake(99, 8, 122, 32)];
     [btngather setTitle:@"Gather" forState:UIControlStateNormal];
     [btngather.titleLabel setShadowColor:[UIColor blackColor]];
     [btngather.titleLabel setShadowOffset:CGSizeMake(0, -1)];
