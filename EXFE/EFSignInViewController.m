@@ -37,7 +37,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     kViewTagVerificationTitle = 31,
     kViewTagVerificationDescription = 32,
     kViewTagErrorHint = 41,
-    kViewTagErrorInline = 42
+    kViewTagErrorInline = 42,
+    kViewTagSnsGroup = 51,
+    kViewTagSnsFacebook = 52,
+    kViewTagSnsTwitter = 53
 };
 
 @interface EFSignInViewController (){
@@ -289,6 +292,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     CSLinearLayoutView *snsLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 0, 296, 106)] autorelease];
+    snsLayoutView.tag = kViewTagSnsGroup;
     snsLayoutView.orientation = CSLinearLayoutViewOrientationHorizontal;
     
     UIEdgeInsets insets = UIEdgeInsetsMake(6, 6, 6, 6);
@@ -299,7 +303,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [background release];
     
     CSLinearLayoutItem *snsItem = [CSLinearLayoutItem layoutItemForView:snsLayoutView];
-    snsItem.padding = CSLinearLayoutMakePadding(10, 12, 240, 12);
+    snsItem.padding = CSLinearLayoutMakePadding(27, 12, 240, 12);
     snsItem.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
     snsItem.fillMode = CSLinearLayoutItemFillModeNormal;
     [linearLayoutView addItem:snsItem];
@@ -323,7 +327,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         button.imageEdgeInsets = UIEdgeInsetsMake(- (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
         [button addTarget:self action:@selector(facebookSignIn:) forControlEvents:UIControlEventTouchUpInside];
         self.btnFacebook = button;
-        self.btnFacebook.tag = 51;
+        self.btnFacebook.tag = kViewTagSnsFacebook;
         
         CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:self.btnFacebook];
         item.padding = CSLinearLayoutMakePadding(21, 58, 0, 20);
@@ -351,7 +355,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         button.imageEdgeInsets = UIEdgeInsetsMake(- (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
         [button addTarget:self action:@selector(twitterSignIn:) forControlEvents:UIControlEventTouchUpInside];
         self.btnTwitter = button;
-        self.btnTwitter.tag = 52;
+        self.btnTwitter.tag = kViewTagSnsTwitter;
         
         CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:self.btnTwitter];
         item.padding = CSLinearLayoutMakePadding(21, 20, 0, 0);
@@ -520,7 +524,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             } else {
                 [self.rootView moveItem:item3 afterItem:item2];
             }
-            item3.padding = CSLinearLayoutMakePadding(6, 15, 5, 15);
+            item3.padding = CSLinearLayoutMakePadding(6, 15, 0, 15);
             
             _line1.hidden = NO;
             _line2.hidden = NO;
@@ -587,7 +591,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             } else {
                 [self.rootView moveItem:item3 afterItem:item2];
             }
-            item3.padding = CSLinearLayoutMakePadding(10, 15, 17, 15);
+            item3.padding = CSLinearLayoutMakePadding(10, 15, 0, 15);
             
             _line1.hidden = NO;
             _line2.hidden = NO;
