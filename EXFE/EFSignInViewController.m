@@ -45,7 +45,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     EFStage _stage;
    
 }
-@property  (nonatomic, copy) NSString *lastInputIdentity;
+@property (nonatomic, copy) NSString *lastInputIdentity;
+@property (nonatomic, retain) UIImageView *line1;
+@property (nonatomic, retain) UIImageView *line2;
+
 @end
 
 @implementation EFSignInViewController
@@ -87,6 +90,16 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         imageView.frame = CGRectMake(15, 20, 290, 50);
         self.textFieldFrame = imageView;
         [self.rootView addSubview:self.textFieldFrame];
+    }
+    
+    {
+        UIImage *img = [UIImage imageNamed:@"list_divider.png"];
+        self.line1 = [[UIImageView alloc] initWithFrame:CGRectMake(15, 70, 290, 1)];
+        self.line2 = [[UIImageView alloc] initWithFrame:CGRectMake(15, 120, 290, 1)];
+        self.line1.image = img;
+        self.line2.image = img;
+        [self.rootView addSubview:self.line1];
+        [self.rootView addSubview:self.line2];
     }
     
     {// Input Identity Field
@@ -390,6 +403,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     self.btnTwitter = nil;
     self.identityCache = nil;
     
+    self.lastInputIdentity = nil;
+    self.line1 = nil;
+    self.line2 = nil;
     [super dealloc];
 }
 
@@ -408,6 +424,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagVerificationDescription]];
             [self.rootView removeItem:[self.rootView findItemByTag:kViewTagErrorHint]];
             [self.rootView removeItem:[self.rootView findItemByTag:_inlineError.tag]];
+            _line1.hidden = YES;
+            _line2.hidden = YES;
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 50);
             _inputIdentity.rightView = _extIdentity;
             _inputIdentity.returnKeyType = UIReturnKeyNext;
@@ -446,6 +464,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }
             item2.padding = CSLinearLayoutMakePadding(6, 15, 0, 15);
             
+            _line1.hidden = NO;
+            _line2.hidden = YES;
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 100);
             _inputIdentity.returnKeyType = UIReturnKeyNext;
             _inputPassword.placeholder = @"Enter password";
@@ -497,6 +517,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }
             item3.padding = CSLinearLayoutMakePadding(6, 15, 5, 15);
             
+            _line1.hidden = NO;
+            _line2.hidden = NO;
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 150);
             _inputIdentity.returnKeyType = UIReturnKeyNext;
             _inputPassword.placeholder = @"Set EXFE password";
@@ -561,6 +583,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }
             item3.padding = CSLinearLayoutMakePadding(10, 15, 17, 15);
             
+            _line1.hidden = NO;
+            _line2.hidden = NO;
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 50);
             _inputIdentity.rightView = nil;
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
