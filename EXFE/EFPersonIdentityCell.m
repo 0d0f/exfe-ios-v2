@@ -48,6 +48,10 @@
     label.textColor = [UIColor whiteColor];
     label.shadowColor = [UIColor blackColor];
     label.shadowOffset = (CGSize){0, 1};
+    if ([label respondsToSelector:@selector(lineBreakMode)]) {
+        // ios 6
+        label.lineBreakMode = UILineBreakModeClip;
+    }
     label.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:14];
     [button addSubview:label];
     button.providerExternalNameLabel = label;
@@ -116,7 +120,6 @@
             case kProviderTwitter:
                 providerImage = [UIImage imageNamed:@"identity_twitter_18_grey.png"];
                 break;
-                
             default:
                 // no identity info, fall back to default
                 providerImage = [UIImage imageNamed:@"identity_email_18_grey.png"];
