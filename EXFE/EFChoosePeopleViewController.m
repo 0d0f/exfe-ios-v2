@@ -932,10 +932,18 @@
     
     if (selected) {
         if (![_selectedDict valueForKey:key]) {
-            // invoked by selecting cell
+            BOOL alreadySelected = NO;
             for (RoughIdentity *roughIndentity in roughtIdentities) {
-                if ([Identity getProviderCode:roughIndentity.provider] != kProviderTwitter) {
-                    [self selectRoughIdentity:roughIndentity];
+                if ([self isRoughtIdentitySelected:roughIndentity]) {
+                    alreadySelected = YES;
+                    break;
+                }
+            }
+            if (!alreadySelected) {
+                for (RoughIdentity *roughIndentity in roughtIdentities) {
+                    if ([Identity getProviderCode:roughIndentity.provider] != kProviderTwitter) {
+                        [self selectRoughIdentity:roughIndentity];
+                    }
                 }
             }
         }

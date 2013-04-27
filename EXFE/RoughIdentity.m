@@ -62,10 +62,10 @@
         return [[_key copy] autorelease];
     
     NSString *key = nil;
-    if (_externalUsername && _externalUsername.length) {
-        key = [NSString stringWithFormat:@"%@%@", self.externalUsername, self.provider];
-    } else if (_externalID && _externalID.length) {
+    if (_externalID && _externalID.length) {
         key = [NSString stringWithFormat:@"%@%@", self.externalID, self.provider];
+    } else if (_externalUsername && _externalUsername.length) {
+        key = [NSString stringWithFormat:@"%@%@", self.externalUsername, self.provider];
     }
     
     NSAssert(key != nil, @"key 为 nil");

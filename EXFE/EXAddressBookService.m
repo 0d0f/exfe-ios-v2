@@ -412,9 +412,34 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
             
             // compositeName -> name
             CFStringRef compositeName = ABRecordCopyCompositeName(recordRef);
-            if ((NSString *)compositeName != nil){
+            if ((NSString *)compositeName != nil) {
                 result.name = (NSString *)compositeName;
                 indexfield = [indexfield stringByAppendingString:(NSString *)compositeName];
+                CFRelease(compositeName);
+            }
+            
+            // kABPersonFirstNamePhoneticProperty
+            CFStringRef firstNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonFirstNamePhoneticProperty);
+            if ((NSString *)firstNamePhoneticRef != nil) {
+                NSString *firstNamePhonetic = (NSString *)firstNamePhoneticRef;
+                indexfield = [indexfield stringByAppendingString:firstNamePhonetic];
+                CFRelease(firstNamePhoneticRef);
+            }
+            
+            // kABPersonLastNamePhoneticProperty
+            CFStringRef lastNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonLastNamePhoneticProperty);
+            if ((NSString *)lastNamePhoneticRef != nil) {
+                NSString *lastNamePhonetic = (NSString *)lastNamePhoneticRef;
+                indexfield = [indexfield stringByAppendingString:lastNamePhonetic];
+                CFRelease(lastNamePhoneticRef);
+            }
+            
+            // kABPersonMiddleNamePhoneticProperty
+            CFStringRef middleNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonMiddleNamePhoneticProperty);
+            if ((NSString *)middleNamePhoneticRef != nil) {
+                NSString *middleNamePhonetic = (NSString *)middleNamePhoneticRef;
+                indexfield = [indexfield stringByAppendingString:middleNamePhonetic];
+                CFRelease(middleNamePhoneticRef);
             }
             
             // thumbnail image -> avatar
