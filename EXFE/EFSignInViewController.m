@@ -95,7 +95,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         textfield.borderStyle = UITextBorderStyleNone;
         textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
         textfield.keyboardType = UIKeyboardTypeEmailAddress;
-        textfield.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
+        textfield.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
         textfield.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         textfield.delegate = self;
         [textfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
@@ -1183,6 +1183,22 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 }
 
 #pragma mark UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    
+    //If there is text in the text field
+    if (textField.text.length + (string.length - range.length) > 0)
+    {
+        //Set textfield font
+        textField.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
+    }
+    else
+    {
+        //Set textfield placeholder font (or so it appears)
+        textField.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+    }
+    return YES;
+}
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     [self hide:_hintError withAnmated:NO];
