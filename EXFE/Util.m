@@ -498,6 +498,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return [Identity getProviderString:p];
 }
 
+// Possible
 + (Provider)candidateProvider:(NSString*)raw
 {
     NSString *lowercase = [raw lowercaseString];
@@ -507,7 +508,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     if ([lowercase hasSuffix:@"@facebook"]) {
         return kProviderFacebook;
     }
-    NSString *phoneRegex = @"^(\\+)?\\d+$";
+    NSString *phoneRegex = @"^(\\+)?\\d{5,}$";
     NSPredicate *phonelTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", phoneRegex];
     NSString* clean_phone=@"";
     clean_phone = [lowercase stringByReplacingOccurrencesOfString:@"(" withString:@""];
