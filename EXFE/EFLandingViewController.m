@@ -10,6 +10,14 @@
 #import <BlocksKit/BlocksKit.h>
 #import "EFSignInViewController.h"
 
+
+typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
+    kSwitchSubViewControllerUnknown,
+    kSwitchSubViewControllerShow,
+    kSwitchSubViewControllerDismiss,
+    kSwitchSubViewControllerChange
+};
+
 @interface EFLandingViewController (){
 
     BOOL firstLoad;
@@ -41,31 +49,31 @@
     [self.view setFrame:appFrame];
     
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bg.png"]];
-    self.labelStart.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bar.png"]];
-    self.imgHead.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bg.png"]];
+    _labelStart.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bar.png"]];
+    _imgHead.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bg.png"]];
     
     UITapGestureRecognizer *tapStart = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-        [self swapChildViewController:1 param:nil];
+        [self showStart];
     }];
     [_labelStart addGestureRecognizer:tapStart];
     
-//    UITapGestureRecognizer *tapLogo = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-//        [self swapChildViewController:1 param:nil];
-//    }];
-//    [_imgEXFELogo addGestureRecognizer:tapLogo];
-//    _imgEXFELogo.userInteractionEnabled = true;
-    
-    tapBack = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-        if (self.currentViewController != nil) {
-            [self.view endEditing:YES];
-            [self performBlock:^(id sender) {
-                [self swapChildViewController:0 param:nil];
-            } afterDelay:0.233];
+    UITapGestureRecognizer *tapLogo = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+        if (_currentViewController) {
+            [self hideStart];
+        } else {
+            [self showStart];
         }
     }];
-    [self.imgHead addGestureRecognizer:tapBack];
-    self.imgHead.hidden = YES;
-    self.imgHead.userInteractionEnabled = YES;
+    [_imgEXFELogo addGestureRecognizer:tapLogo];
+    _imgEXFELogo.userInteractionEnabled = true;
+    
+    tapBack = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+        [self hideStart];
+        
+    }];
+    [_imgHead addGestureRecognizer:tapBack];
+    _imgHead.hidden = YES;
+    _imgHead.userInteractionEnabled = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -85,12 +93,12 @@
         CGRect frame = self.labelStart.frame;
         CGRect newF = frame;
         newF.origin.y = appFrame.size.height;
-        self.labelStart.frame = newF;
+        _labelStart.frame = newF;
         
         CGRect logo_frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 134 : 90, 320, 300);
         _imgEXFELogo.frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 68 : 34, 320, 300);
         
-        [UIView animateWithDuration:0.75 delay:0.5 options:UIViewAnimationOptionTransitionNone animations:^{
+        [UIView animateWithDuration:0.75 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             _imgEXFELogo.frame = logo_frame;
             _labelEXFE.alpha = 100;
             _labelDescription.alpha = 100;
@@ -107,8 +115,23 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+- (void)showStart
+{
+    [self swapChildViewController:1 param:nil];
+}
+
+- (void)hideStart
+{
+    if (self.currentViewController != nil) {
+        [self.view endEditing:YES];
+        [self performBlock:^(id sender) {
+            [self swapChildViewController:0 param:nil];
+        } afterDelay:0.233];
+    }
+}
+
 - (void)swapChildViewController:(NSInteger)widget_id param:(NSDictionary*)params{
-    
     UIViewController *newVC = nil;
     switch (widget_id) {
         case 1:
@@ -123,16 +146,11 @@
             
             newVC = viewController;
         }
-            
         default:
-            
-            
-            
             break;
     }
     
     CGRect newFrame = CGRectZero;
-    
     if (newVC) {
         [self addChildViewController:newVC];
         [self.view insertSubview:newVC.view aboveSubview:_labelStart];
@@ -140,14 +158,64 @@
         CGRect f = newVC.view.frame;
         f.origin.y = CGRectGetMaxY(_labelStart.frame);
         newVC.view.frame = f;
+    }
+    
+    SwitchSubViewControllerType type = kSwitchSubViewControllerUnknown;
+    if (newVC) {
+        if (_currentViewController) {
+            type = kSwitchSubViewControllerChange;
+        } else {
+            type = kSwitchSubViewControllerShow;
+        }
     } else {
-        
+        if (_currentViewController) {
+            type = kSwitchSubViewControllerDismiss;
+        }
+    }
+    
+    switch (type) {
+        case kSwitchSubViewControllerShow:{
+            _labelEXFE.alpha = 100;
+            _labelDescription.alpha = 100;
+//            _labelStart.alpha = 100;
+//            _labelStart.frame = CGRectOffset(_labelStart.bounds, 0, CGRectGetHeight(self.view.bounds) - CGRectGetHeight(_labelStart.bounds));
+        }   break;
+        case kSwitchSubViewControllerDismiss:{
+            _labelEXFE.alpha = 0;
+            _labelDescription.alpha = 0;
+//            _labelStart.alpha = 0;
+//            _labelStart.frame = CGRectOffset(_labelStart.bounds, 0, 0);
+        }   break;
+        default:
+            break;
     }
     
     
+    [UIView animateWithDuration:0.3
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         switch (type) {
+                             case kSwitchSubViewControllerShow:{
+                                 _labelEXFE.alpha = 0;
+                                 _labelDescription.alpha = 0;
+                             }   break;
+                             case kSwitchSubViewControllerDismiss:{
+                                 _labelEXFE.alpha = 100;
+                                 _labelDescription.alpha = 100;
+                             }   break;
+                             default:
+                                 break;
+                         }
+                     }
+                     completion:^(BOOL finished) {
+                         ;
+                     }];
     
     __weak __block EFLandingViewController *weakSelf = self;
     [UIView animateWithDuration:0.4
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          
                          if (weakSelf.currentViewController) {
@@ -166,7 +234,22 @@
                                  _imgEXFELogo.frame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds) == 568 ? 134 : 90, 320, 300);
                              }
                          }
-                     }
+//                         
+//                         switch (type) {
+//                             case kSwitchSubViewControllerShow:{
+//                                 _labelStart.alpha = 0;
+//                                 _labelStart.frame = CGRectOffset(_labelStart.bounds, 0, 0);
+//                             }   break;
+//                             case kSwitchSubViewControllerDismiss:{
+//                                 
+//                                 _labelStart.alpha = 100;
+//                                 _labelStart.frame = CGRectOffset(_labelStart.bounds, 0, CGRectGetHeight(self.view.bounds) - CGRectGetHeight(_labelStart.bounds));
+//                             }   break;
+//                             default:
+//                                 break;
+//                         }
+                         
+                    }
                      completion:^(BOOL finished){
                          if (weakSelf.currentViewController) {
                              [weakSelf.currentViewController.view removeFromSuperview];
