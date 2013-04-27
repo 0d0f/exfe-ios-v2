@@ -458,7 +458,7 @@
                                              NSString *nickname = [identitydict objectForKey:@"nickname"];
                                              NSString *external_username = [identitydict objectForKey:@"external_username"];
                                              
-                                             BOOL needInsertNew = NO;
+                                             __block BOOL needInsertNew = NO;
                                              if ([identity_id intValue] == 0) {
                                                  // a new one
                                                  needInsertNew = YES;
@@ -469,35 +469,49 @@
                                                  NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
                                                  fetchRequest.predicate = predicate;
                                                  
-                                                 NSArray *cachedIdentitites = [manager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:fetchRequest error:nil];
-                                                 if (cachedIdentitites && [cachedIdentitites count]) {
-                                                     // update info
-                                                     Identity *cachedIdentitiy = cachedIdentitites[0];
-                                                     cachedIdentitiy.external_id = external_id;
-                                                     cachedIdentitiy.provider = provider;
-                                                     cachedIdentitiy.avatar_filename = avatar_filename;
-                                                     cachedIdentitiy.name = name;
-                                                     cachedIdentitiy.external_username = external_username;
-                                                     cachedIdentitiy.nickname = nickname;
-                                                     cachedIdentitiy.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
-                                                     [identityEntities addObject:cachedIdentitiy];
+                                                 void (^block)(void) = ^{
+                                                     NSArray *cachedIdentitites = [manager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:fetchRequest error:nil];
+                                                     if (cachedIdentitites && [cachedIdentitites count]) {
+                                                         // update info
+                                                         Identity *cachedIdentitiy = cachedIdentitites[0];
+                                                         cachedIdentitiy.external_id = external_id;
+                                                         cachedIdentitiy.provider = provider;
+                                                         cachedIdentitiy.avatar_filename = avatar_filename;
+                                                         cachedIdentitiy.name = name;
+                                                         cachedIdentitiy.external_username = external_username;
+                                                         cachedIdentitiy.nickname = nickname;
+                                                         cachedIdentitiy.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
+                                                         [identityEntities addObject:cachedIdentitiy];
+                                                     } else {
+                                                         needInsertNew = YES;
+                                                     }
+                                                 };
+                                                 if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
+                                                     dispatch_sync(dispatch_get_main_queue(), block);
                                                  } else {
-                                                     needInsertNew = YES;
+                                                     block();
                                                  }
                                              }
                                              
                                              if (needInsertNew) {
-                                                 NSEntityDescription *identityEntity = [NSEntityDescription entityForName:@"Identity" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
-                                                 Identity *identity = [[[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
-                                                 identity.external_id = external_id;
-                                                 identity.provider = provider;
-                                                 identity.avatar_filename = avatar_filename;
-                                                 identity.name = name;
-                                                 identity.external_username = external_username;
-                                                 identity.nickname = nickname;
-                                                 identity.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
-                                                 
-                                                 [identityEntities addObject:identity];
+                                                 void (^block)(void) = ^{
+                                                     NSEntityDescription *identityEntity = [NSEntityDescription entityForName:@"Identity" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
+                                                     Identity *identity = [[[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+                                                     identity.external_id = external_id;
+                                                     identity.provider = provider;
+                                                     identity.avatar_filename = avatar_filename;
+                                                     identity.name = name;
+                                                     identity.external_username = external_username;
+                                                     identity.nickname = nickname;
+                                                     identity.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
+                                                     
+                                                     [identityEntities addObject:identity];
+                                                 };
+                                                 if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
+                                                     dispatch_sync(dispatch_get_main_queue(), block);
+                                                 } else {
+                                                     block();
+                                                 }
                                              }
                                          }
                                          

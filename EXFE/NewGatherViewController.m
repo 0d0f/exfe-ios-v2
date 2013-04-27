@@ -971,6 +971,8 @@
         EFChoosePeopleViewController *viewController = [[EFChoosePeopleViewController alloc] initWithNibName:@"EFChoosePeopleViewController"
                                                                                                       bundle:nil];
         viewController.completionHandler = ^(NSArray *identities){
+            NSAssert(dispatch_get_main_queue() == dispatch_get_current_queue(), @"WTF! MUST on main queue! boy!");
+            
             NSMutableSet *invitations = [[NSMutableSet alloc] init];
             for (NSArray *personIdentities in identities) {
                 BOOL hasAddedNoresponse = NO;
@@ -982,11 +984,13 @@
                     Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
                     
                     if (!hasAddedNoresponse) {
+                        hasAddedNoresponse = YES;
                         invitation.rsvp_status = @"NORESPONSE";
                     } else {
-                        hasAddedNoresponse = YES;
                         invitation.rsvp_status = @"NOTIFICATION";
                     }
+                    
+                    NSAssert(identity.managedObjectContext == invitation.managedObjectContext, @"WTF!!!");
                     
                     invitation.identity = identity;
                     Invitation *myinvitation = [self.cross.exfee getMyInvitation];
