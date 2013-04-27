@@ -114,7 +114,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
         button.backgroundColor = [UIColor clearColor];
         [button addTarget:self action:@selector(expandIdentity:) forControlEvents:UIControlEventTouchUpInside];
-        [button setImage:[UIImage imageNamed:@"start_tri.png"] forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"start_tri-00.png"] forState:UIControlStateNormal];
         NSMutableArray *imgs = [NSMutableArray arrayWithCapacity:30];
         for (NSUInteger i = 0; i < 30; i++) {
             NSString *name = [NSString stringWithFormat:@"start_tri-%02u.png", i];
@@ -122,9 +122,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
         button.imageView.animationImages = imgs;
         button.imageView.animationRepeatCount = 0;
-        button.imageView.animationDuration = 2;
+        button.imageView.animationDuration = 1.5;
         [button.imageView startAnimating];
-        button.contentMode = UIViewContentModeCenter;
+        button.contentMode = UIViewContentModeScaleAspectFill;
         self.extIdentity = button;
         self.inputIdentity.rightView = self.extIdentity;
         self.inputIdentity.rightViewMode = UITextFieldViewModeAlways;
@@ -267,7 +267,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         [label addGestureRecognizer:tap];
         label.userInteractionEnabled = true;
         self.hintError = label;
-        [self.view addSubview:self.hintError];
     }
     
     {// Inline error hint
@@ -634,15 +633,17 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)showErrorInfo:(NSString*)error dockOn:(UIView*)view
 {
+    [_hintError removeFromSuperview];
     _hintError.text = error;
     _hintError.backgroundColor = [UIColor COLOR_WA(250, 217)];
     CGRect frame = _hintError.bounds;
-    frame.size.height = 46;
+    frame.size.height = 44;
     frame.size.width = 200;
     frame.origin.x = CGRectGetMinX(view.frame) + 5 + 40 + 5;
     frame.origin.y = CGRectGetMidY(view.frame) - CGRectGetMidY(frame);
     _hintError.frame = frame;
     _hintError.alpha = 1.0;
+    [self.rootView addSubview:_hintError];
     _hintError.hidden = NO;
     [self performBlock:^(id sender) {
         if (_hintError.hidden == NO) {
