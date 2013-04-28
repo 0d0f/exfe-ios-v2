@@ -11,6 +11,7 @@
 #import "EFPopoverController.h"
 #import "EFSearchTipViewController.h"
 #import "RoughIdentity.h"
+#import "ImgCache.h"
 
 @implementation EFSearchIdentityCell {
     EFPopoverController *_popoverController;
@@ -73,16 +74,15 @@
     self.userNameLabel.textColor = textColor;
 }
 
-- (void)customWithIdentity:(Identity *)identity {
-    [super customWithIdentity:identity];
-    self.accessButton.hidden = YES;
-    self.userNameLabel.textColor = [UIColor COLOR_BLUE_EXFE];
-}
+//- (void)customWithIdentity:(Identity *)identity {
+//    [super customWithIdentity:identity];
+//    self.accessButton.hidden = YES;
+//    self.userNameLabel.textColor = [UIColor COLOR_BLUE_EXFE];
+//}
 
-- (void)customWithIdentityString:(NSString *)string candidateProvider:(Provider)candidateProvider matchProvider:(Provider)matchProvider {
+- (void)customWithIdentityString:(NSString *)string candidateProvider:(Provider)candidateProvider matchProvider:(Provider)matchProvider identity:(Identity *)identity {
     NSString *providerName = nil;
     UIColor *textColor = [UIColor blackColor];
-    BOOL isIdentityFound = NO;
     
     switch (candidateProvider) {
         case kProviderUnknown:
@@ -90,10 +90,8 @@
             break;
         case kProviderPhone:
         {
-            NSString *cachedString = string;
-            string = [Util formatPhoneNumber:string];
-            if (!string.length)
-                string = cachedString;
+            NSString *countryCode = [Util getTelephoneCountryCode];
+            string = [NSString stringWithFormat:@"+%@ %@", countryCode, string];
         }
         case kProviderFacebook:
         case kProviderEmail:
@@ -112,20 +110,11 @@
         case kProviderEmail:
         case kProviderTwitter:
         {
-            NSDictionary *matchedDictionary = [Util parseIdentityString:string byProvider:matchProvider];
-            RoughIdentity *roughtIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
-            
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"provider LIKE %@ AND external_id LIKE %@", roughtIdentity.provider, roughtIdentity.externalID];
-            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
-            fetchRequest.predicate = predicate;
-            NSArray *identities =  [[RKObjectManager sharedManager].managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:fetchRequest error:nil];
-            
-            if (identities && [identities count]) {
-                [self customWithIdentity:identities[0]];
-                isIdentityFound = YES;
-                self.accessButton.hidden = YES;
+            if ([Identity getProviderCode:identity.provider] != kProviderPhone || [identity.identity_id intValue] != 0) {
+                [self customWithIdentity:identity];
             }
             
+            self.accessButton.hidden = YES;
             textColor = [UIColor COLOR_BLUE_EXFE];
         }
             break;
@@ -133,10 +122,32 @@
             break;
     }
     
-    if (!isIdentityFound) {
+    if (!identity || ([Identity getProviderCode:identity.provider] == kProviderPhone && [identity.identity_id intValue] == 0)) {
         UIImage *providerIcon = [UIImage imageNamed:[NSString stringWithFormat:@"identity_%@_18_grey.png", providerName]];
         self.providerIcon = providerIcon;
-        self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
+        if (identity) {
+            if (identity.avatar_filename) {
+                UIImage *avatar = [[ImgCache sharedManager] getImgFromCache:identity.avatar_filename];
+                if (!avatar || [avatar isEqual:[NSNull null]]) {
+                    self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
+                    
+                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                    dispatch_async(imgQueue, ^{
+                        UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (avatar != nil && ![avatar isEqual:[NSNull null]]) {
+                                self.avatarImageView.image = avatar;
+                            }
+                        });
+                    });
+                    dispatch_release(imgQueue);
+                } else {
+                    self.avatarImageView.image = avatar;
+                }
+            }
+        } else {
+            self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
+        }
         
         self.userNameLabel.text = string;
     }
