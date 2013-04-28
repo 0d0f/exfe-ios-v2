@@ -210,8 +210,8 @@
     
     
     CGRect screenframe=[[UIScreen mainScreen] bounds];
-    UIView *pannel=[[UIView alloc] initWithFrame:CGRectMake(0,screenframe.size.height-44-20, self.view.frame.size.width, 44)];
-    UIImageView *pannelbackimg=[[UIImageView alloc] initWithFrame:CGRectMake(0,0, pannel.frame.size.width, 44)];
+    UIView *pannel=[[UIView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46 - 20, self.view.frame.size.width, 46)];
+    UIImageView *pannelbackimg=[[UIImageView alloc] initWithFrame:CGRectMake(0,0, pannel.frame.size.width, 46)];
     pannelbackimg.image=[UIImage imageNamed:@"glassbar.png"];
     [pannel addSubview:pannelbackimg];
     [pannelbackimg release];
@@ -221,9 +221,10 @@
     UIButton *btngather=[UIButton buttonWithType:UIButtonTypeCustom];
     [btngather setFrame:CGRectMake(99, 8, 122, 32)];
     [btngather setTitle:@"Gather" forState:UIControlStateNormal];
-    [btngather.titleLabel setShadowColor:[UIColor blackColor]];
+    btngather.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
+    [btngather.titleLabel setShadowColor:[UIColor COLOR_RGBA(0, 0, 0, 122)]];
     [btngather.titleLabel setShadowOffset:CGSizeMake(0, -1)];
-    btngather.layer.cornerRadius=2;
+    btngather.layer.cornerRadius = 2;
     [btngather addTarget:self action:@selector(Gather:) forControlEvents:UIControlEventTouchUpInside];
 
     [btngather setBackgroundImage:[[UIImage imageNamed:@"btn_glass_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
@@ -231,7 +232,7 @@
     [self.view addSubview:pannel];
     [pannel release];
 
-    pannellight=[[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height-44-20, self.view.frame.size.width, 46)];
+    pannellight=[[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46 - 20, self.view.frame.size.width, 46)];
     pannellight.image=[UIImage imageNamed:@"glassbar_light.png"];
     [self.view addSubview:pannellight];
     [self GlassBarlightAnimation];
