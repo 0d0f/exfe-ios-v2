@@ -215,8 +215,6 @@
     pannelbackimg.image=[UIImage imageNamed:@"glassbar.png"];
     [pannel addSubview:pannelbackimg];
     [pannelbackimg release];
-    
-//    [pannel setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.33]];
 
     UIButton *btngather=[UIButton buttonWithType:UIButtonTypeCustom];
     [btngather setFrame:CGRectMake(99, 8, 122, 32)];
@@ -232,11 +230,12 @@
     [self.view addSubview:pannel];
     [pannel release];
 
-    pannellight=[[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46 - 20, self.view.frame.size.width, 46)];
-    pannellight.image=[UIImage imageNamed:@"glassbar_light.png"];
+    pannellight = [[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46 - 20, self.view.frame.size.width, 46)];
+    pannellight.image = [UIImage imageNamed:@"glassbar_light.png"];
     [self.view addSubview:pannellight];
     [self GlassBarlightAnimation];
-    identitypicker=[[UIPickerView alloc] initWithFrame:CGRectMake(0, screenframe.size.height-216-[UIApplication sharedApplication].statusBarFrame.size.height, self.view.frame.size.width, 216)];
+    
+    identitypicker = [[UIPickerView alloc] initWithFrame:CGRectMake(0, screenframe.size.height-216-[UIApplication sharedApplication].statusBarFrame.size.height, self.view.frame.size.width, 216)];
     identitypicker.dataSource=self;
     identitypicker.delegate=self;
     identitypicker.showsSelectionIndicator = YES;
@@ -274,7 +273,7 @@
     
 }
 
-- (void) GlassBarlightAnimation{
+- (void)GlassBarlightAnimation{
 
     CABasicAnimation *opacityAnimation_out = [CABasicAnimation animationWithKeyPath:
                                           @"opacity"];
@@ -1025,8 +1024,16 @@
         Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
       
         if ([[User getDefaultUser] isMe:invitation.identity]) {
-            [identitypicker setHidden:NO];
-            [pickertoolbar setHidden:NO];
+            NSInteger connectedIdentityCount = 0;
+            for (Identity *identity in [User getDefaultUser].identities) {
+                if ([identity.status isEqualToString:@"CONNECTED"]) {
+                    connectedIdentityCount++;
+                }
+            }
+            if (connectedIdentityCount > 1) {
+                [identitypicker setHidden:NO];
+                [pickertoolbar setHidden:NO];
+            }
         } else {
             [self showMenu:invitation items:[NSArray arrayWithObjects:@"Delete", nil]];
         }
@@ -1207,7 +1214,13 @@
 }
 
 - (NSInteger)pickerView:(UIPickerView *)thePickerView numberOfRowsInComponent:(NSInteger)component {
-    return [[User getDefaultUser].identities count];
+    NSInteger count = 0;
+    for (Identity *identity in myIdentities) {
+        if ([identity.status isEqualToString:@"CONNECTED"]) {
+            count++;
+        }
+    }
+    return count;
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
@@ -1219,11 +1232,21 @@
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
-    NSString *username=((Identity*)[myIdentities objectAtIndex:row]).name;
+    NSInteger index = 0;
+    Identity *identity = nil;
+    for (Identity *anIdentity in myIdentities) {
+        if ([anIdentity.status isEqualToString:@"CONNECTED"]) {
+            if (index++ == row) {
+                identity = anIdentity;
+                break;
+            }
+        }
+    }
+    NSString *username = identity.name;
     if(username ==nil)
-      username=((Identity*)[myIdentities objectAtIndex:row]).external_username;
+      username = identity.external_username;
   
-    NSString *provider=((Identity*)[myIdentities objectAtIndex:row]).provider;
+    NSString *provider = identity.provider;
     
     CGRect rowFrame = CGRectMake(0.0f, 0.0f, 300, 40);
     
@@ -1252,9 +1275,22 @@
 //    NSLog(@"select %i",row);
 }
 
-- (void) pickdone{
-    int idx=[identitypicker selectedRowInComponent:0];
-    [[_cross.exfee getMyInvitation] replaceIdentity:[myIdentities objectAtIndex:idx]];
+- (void)pickdone {
+    int idx = [identitypicker selectedRowInComponent:0];
+    
+    NSInteger index = 0;
+    NSInteger temp = 0;
+    for (Identity *anIdentity in myIdentities) {
+        if ([anIdentity.status isEqualToString:@"CONNECTED"]) {
+            if (temp == idx) {
+                break;
+            }
+            temp++;
+        }
+        index++;
+    }
+    
+    [[_cross.exfee getMyInvitation] replaceIdentity:myIdentities[index]];
     [identitypicker setHidden:YES];
     [pickertoolbar setHidden:YES];
     [self reFormatTitle];
