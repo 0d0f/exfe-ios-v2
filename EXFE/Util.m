@@ -502,12 +502,24 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 + (Provider)candidateProvider:(NSString*)raw
 {
     NSString *lowercase = [raw lowercaseString];
-    if ([lowercase hasSuffix:@"@twitter"] || [lowercase hasPrefix:@"@"]) {
+    
+    NSString *twitterRegex1 = @"^@[a-z0-9-]{1,15}$";
+    NSPredicate *twitterTest1 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex1];
+    if ([twitterTest1 evaluateWithObject:lowercase] == YES){
         return kProviderTwitter;
     }
-    if ([lowercase hasSuffix:@"@facebook"]) {
+    NSString *twitterRegex2 = @"^[a-z0-9-]{1,15}@twitter$";
+    NSPredicate *twitterTest2 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex2];
+    if ([twitterTest2 evaluateWithObject:lowercase] == YES){
+        return kProviderTwitter;
+    }
+    
+    NSString *facebookRegex = @"[0-9a-z.]+@facebook";
+    NSPredicate *facebookTest = [NSPredicate predicateWithFormat:@"SELF MATCHES[c] %@", facebookRegex];
+    if ([facebookTest evaluateWithObject:lowercase] == YES){
         return kProviderFacebook;
     }
+    
     NSString *phoneRegex = @"^(\\+)?\\d{5,}$";
     NSPredicate *phonelTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", phoneRegex];
     NSString* clean_phone=@"";
@@ -520,7 +532,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     if ([phonelTest evaluateWithObject:clean_phone] == YES){
         return kProviderPhone;
     }
-    NSString *emailRegex = @"^[\\w-\\+][\\w-\\+\\.]*@[a-z0-9-.]*$";
+    NSString *emailRegex = @"^[_a-z0-9-\\+]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9]+)*(\\.[a-z]{2,})$";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     if ([emailTest evaluateWithObject:lowercase] == YES){
         return kProviderEmail;
@@ -539,18 +551,18 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         return kProviderEmail;
     }
     
-    NSString *twitterRegex1 = @"^@[a-z0-9.-]+$";
+    NSString *twitterRegex1 = @"^@[a-z0-9-]{1,15}$";
     NSPredicate *twitterTest1 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex1];
     if ([twitterTest1 evaluateWithObject:lowercase] == YES){
         return kProviderTwitter;
     }
-    NSString *twitterRegex2 = @"^[a-z0-9.-]+@twitter$";
+    NSString *twitterRegex2 = @"^[a-z0-9-]{1,15}@twitter$";
     NSPredicate *twitterTest2 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", twitterRegex2];
     if ([twitterTest2 evaluateWithObject:lowercase] == YES){
         return kProviderTwitter;
     }
     
-    NSString *facebookRegex = @"[0-9a-z._%+-]+@facebook";
+    NSString *facebookRegex = @"[0-9a-z.]+@facebook";
     NSPredicate *facebookTest = [NSPredicate predicateWithFormat:@"SELF MATCHES[c] %@", facebookRegex];
     if ([facebookTest evaluateWithObject:lowercase] == YES){
         return kProviderFacebook;
