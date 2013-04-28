@@ -13,6 +13,6 @@
 
 + (NSString *)reuseIdentifier;
 
-- (void)customWithIdentityString:(NSString *)string candidateProvider:(Provider)candidateProvider matchProvider:(Provider)matchProvider;
+- (void)customWithIdentityString:(NSString *)string candidateProvider:(Provider)candidateProvider matchProvider:(Provider)matchProvider identity:(Identity *)identity;
 
 @end

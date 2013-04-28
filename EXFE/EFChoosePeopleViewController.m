@@ -655,7 +655,7 @@
         return cell;
     }
     
-    NSIndexPath *indexPathParam = indexPath;;
+    NSIndexPath *indexPathParam = indexPath;
     if (self.insertIndexPath) {
         NSComparisonResult comparisionResult = [indexPath compare:self.insertIndexPath];
         if (comparisionResult == NSOrderedSame) {
@@ -772,7 +772,8 @@
                 NSString *keyWord = self.searchBar.text;
                 Provider matchedProvider = [Util matchedProvider:keyWord];
                 if (self.searchResultRoughtIdentity) {
-                    if (!self.searchResultRoughtIdentity.identity && kProviderPhone == matchedProvider) {
+                    if ((!self.searchResultRoughtIdentity.identity && kProviderPhone == matchedProvider) ||
+                        (self.searchResultRoughtIdentity.identity && kProviderPhone == matchedProvider && [self.searchResultRoughtIdentity.identity.identity_id intValue] == 0)) {
                         [WCAlertView showAlertWithTitle:@"Set invitee name"
                                                 message:nil
                                      customizationBlock:^(WCAlertView *alertView) {
@@ -784,6 +785,9 @@
                                                 NSString *inputName = [NSString stringWithString:field.text];
                                                 
                                                 self.searchResultRoughtIdentity.externalUsername = inputName;
+                                                if (self.searchResultRoughtIdentity.identity) {
+                                                    self.searchResultRoughtIdentity.identity.name = inputName;
+                                                }
                                                 [_searchAddPeople addObject:self.searchResultRoughtIdentity];
                                                 [self refreshSelectedDictWithObject:self.searchResultRoughtIdentity selected:YES];
                                                 [self.searchDisplayController setActive:NO animated:YES];
@@ -1081,18 +1085,20 @@
                     searchCell = [[[EFSearchIdentityCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[EFSearchIdentityCell reuseIdentifier]] autorelease];
                 }
                 NSString *keyWord = self.searchBar.text;
-//                Provider candidateProvider = [Util candidateProvider:keyWord];
+                Provider candidateProvider = [Util candidateProvider:keyWord];
                 Provider matchedProvider = [Util matchedProvider:keyWord];
                 
                 if (self.searchResultRoughtIdentity.identity) {
                     [searchCell customWithIdentityString:keyWord
-                                       candidateProvider:matchedProvider
-                                           matchProvider:matchedProvider];
-                    [searchCell customWithIdentity:self.searchResultRoughtIdentity.identity];
+                                       candidateProvider:candidateProvider
+                                           matchProvider:matchedProvider
+                                                identity:self.searchResultRoughtIdentity.identity];
+//                    [searchCell customWithIdentity:self.searchResultRoughtIdentity.identity];
                 } else {
                     [searchCell customWithIdentityString:keyWord
-                                       candidateProvider:matchedProvider
-                                           matchProvider:matchedProvider];
+                                       candidateProvider:candidateProvider
+                                           matchProvider:matchedProvider
+                                                identity:self.searchResultRoughtIdentity.identity];
                 }
                 
                 return searchCell;
