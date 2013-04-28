@@ -648,6 +648,32 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return NO;
 }
 
++ (NSString*)getTelephoneCountryCode:(NSString*)isocode
+{
+    
+    if ([@"us" isEqualToString:isocode]) {
+        return @"1";
+    } else if ([@"ca" isEqualToString:isocode]) {
+        return @"1";
+    } else if ([@"cn" isEqualToString:isocode]) {
+        return @"86";
+    }
+    return @"";
+}
+
++ (NSString*)getTelephoneCountryCode
+{
+    NSString *result = @"";
+    CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [netInfo subscriberCellularProvider];
+    if (carrier) {
+        NSString *isocode = [NSString stringWithString:[carrier isoCountryCode]];
+        result = [self getTelephoneCountryCode:isocode];
+    }
+    [netInfo release];
+    return result;
+}
+
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber{
     CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [netInfo subscriberCellularProvider];

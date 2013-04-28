@@ -761,7 +761,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 #pragma mark Logic Methods
 - (void)identityDidChange:(NSString*)identity
 {
-    Provider provider = [Util matchedProvider:identity];
+    Provider provider = [Util candidateProvider:identity];
     NSDictionary *resp = [self.identityCache objectForKey:identity];
     if (!resp){
         resp = @{@"registration_flag":@"",
@@ -844,21 +844,26 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 - (void)expandIdentity:(id)sender
 {
     NSString* identity = _inputIdentity.text;
-    Provider provider = [Util matchedProvider:identity];
-    
-    if (provider == kProviderPhone) {
-        if (![identity hasPrefix:@"+"]) {
-            identity = [Util formatPhoneNumber:identity];
-            _inputIdentity.text = identity;
-            [self textFieldDidChange:_inputIdentity];
-            return;
-        }
-    }
-    
+    Provider provider = [Util candidateProvider:identity];
     
     if (provider == kProviderUnknown) {
         [self showErrorInfo:@"Invalid identity." dockOn:_inputIdentity];
         return;
+    }
+    
+    if (provider == kProviderPhone) {
+        if (![identity hasPrefix:@"+"]) {
+            NSString *cc = [Util getTelephoneCountryCode];
+            _inputIdentity.text = [NSString stringWithFormat:@"+%@%@", cc, identity];
+            int start = 1;
+            int end = start + cc.length;
+            UITextPosition *startPosition = [_inputIdentity positionFromPosition:_inputIdentity.beginningOfDocument offset:start];
+            UITextPosition *endPosition = [_inputIdentity positionFromPosition:_inputIdentity.beginningOfDocument offset:end];
+            UITextRange *selection = [_inputIdentity textRangeFromPosition:startPosition toPosition:endPosition];
+            _inputIdentity.selectedTextRange = selection;
+            [self textFieldDidChange:_inputIdentity];
+            return;
+        }
     }
     
     NSDictionary *resp = [self.identityCache objectForKey:identity];

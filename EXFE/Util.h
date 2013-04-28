@@ -92,6 +92,8 @@ extern NSString *const EXCrossListDidChangeNotification;
 + (NSDictionary*)parseIdentityString:(NSString*)raw;
 + (NSDictionary*)parseIdentityString:(NSString*)raw byProvider:(Provider)p;
 + (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber;
++ (NSString*)getTelephoneCountryCode:(NSString*)isocode;
++ (NSString*)getTelephoneCountryCode;
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber;
 + (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime;
 
