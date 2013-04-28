@@ -654,14 +654,23 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
 }
 
-- (void)swithStagebyFlag:(NSString*)flag
+- (void)swithStagebyFlag:(NSString*)flag and:(Provider)provider
 {
     if([flag isEqualToString:@"SIGN_UP"] ){
         [self setStage:kStageSignUp];
     } else if([flag isEqualToString:@"VERIFY"] ) {
         [self setStage:kStageVerificate];
     } else if([flag isEqualToString:@"AUTHENTICATE"]){
-        [self setStage:kStageSignIn];
+        switch (provider) {
+            case kProviderTwitter:
+                [_btnTwitter sendActionsForControlEvents: UIControlEventTouchUpInside];
+                return;
+            case kProviderFacebook:
+                [_btnFacebook sendActionsForControlEvents: UIControlEventTouchUpInside];
+                return;
+            default:
+                break;
+        }
     } else if([flag isEqualToString:@"SIGN_IN"]){
         [self setStage:kStageSignIn];
     }else {
@@ -867,11 +876,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     NSDictionary *resp = [self.identityCache objectForKey:identity];
-    //TODO: AUTHENTICATE
-    // if registration_flag is AUTHENTICATE
-    // start oauth
-    // return
-    [self swithStagebyFlag:[resp valueForKey:@"registration_flag"]];
+    NSString *flag = [resp valueForKey:@"registration_flag"];
+    
+    [self swithStagebyFlag:flag and:provider];
     
     switch (_stage) {
         case kStageVerificate:{
@@ -983,13 +990,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                 [self showErrorInfo:@"Authentication failed." dockOn:_inputPassword];
                                 break;
                             } else if ([@"AUTHENTICATE" isEqualToString:registration_flag]){
-                                //TODO: AUTHENTICATE
-                                // AUTHENTICATE
-                                // _setStage start
-                                // oatuh
+                                
                             } else if ([@"VERIFY" isEqualToString:registration_flag]){
                             }
-                            [self swithStagebyFlag:registration_flag];
+                            [self swithStagebyFlag:registration_flag and:provider];
                         }
                     }   break;
                     default:
