@@ -33,6 +33,7 @@
 @property (nonatomic, retain) NSMutableArray *contactPeople;
 @property (nonatomic, retain) NSMutableArray *searchResultExfeePeople;
 @property (nonatomic, retain) NSMutableArray *searchResultContactPeople;
+@property (nonatomic, assign) BOOL hasExfeeNameSetCompletion;
 
 @property (nonatomic, retain) RoughIdentity *searchResultRoughtIdentity;
 
@@ -94,6 +95,7 @@
         _contactPeople = [[NSMutableArray alloc] init];
         _selectedDict = [[NSMutableDictionary alloc] init];
         _selectedRoughIdentityDict = [[NSMutableDictionary alloc] init];
+        self.hasExfeeNameSetCompletion = YES;
     }
     return self;
 }
@@ -201,6 +203,23 @@
 }
 
 - (IBAction)addButtonPressed:(id)sender {
+    // handle search text
+    NSString *searchKeyWord = self.searchBar.text;
+    if (searchKeyWord.length && self.searchDisplayController.isActive) {
+        [self tableView:self.searchDisplayController.searchResultsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    }
+    
+    // wait for setting name
+    while (!self.hasExfeeNameSetCompletion) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate distantFuture]];
+    }
+    
+    // ignore if no one selected
+    if (![_selectedDict count]) {
+        return;
+    }
+    
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"Adding...";
     hud.mode = MBProgressHUDModeCustomView;
@@ -774,6 +793,7 @@
                 if (self.searchResultRoughtIdentity) {
                     if ((!self.searchResultRoughtIdentity.identity && kProviderPhone == matchedProvider) ||
                         (self.searchResultRoughtIdentity.identity && kProviderPhone == matchedProvider && [self.searchResultRoughtIdentity.identity.identity_id intValue] == 0)) {
+                        self.hasExfeeNameSetCompletion = NO;
                         [WCAlertView showAlertWithTitle:@"Set invitee name"
                                                 message:nil
                                      customizationBlock:^(WCAlertView *alertView) {
@@ -792,6 +812,8 @@
                                                 [self refreshSelectedDictWithObject:self.searchResultRoughtIdentity selected:YES];
                                                 [self.searchDisplayController setActive:NO animated:YES];
                                             }
+                                            
+                                            self.hasExfeeNameSetCompletion = YES;
                                         }
                                       cancelButtonTitle:@"Done"
                                       otherButtonTitles:@"Cancel", nil];
@@ -1041,6 +1063,9 @@
 }
 
 - (void)reloadAddButtonState {
+    // do nothing now
+    return;
+    
     NSUInteger count = [_selectedDict count];
     self.addButton.enabled = !!count;
 }
