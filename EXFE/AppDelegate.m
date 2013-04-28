@@ -240,7 +240,15 @@
     [self ReceivePushData:userInfo RunOnForeground:isForeground];
 }
 
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+//{
+//    NSLog(@"application:openURL:sourceApplication:annotation: called");
+//    return YES;
+//}
+
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+//    NSLog(@"application:handleOpenURL: called");
+    
     [Flurry logEvent:@"HANDLE_OPEN_URL"];
     NSString *query = [url query];
     NSDictionary *params = [Util splitQuery:query];

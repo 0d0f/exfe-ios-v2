@@ -94,14 +94,11 @@
     [toolbar addSubview:titlelabel];
     [self.view addSubview:toolbar];
     
-    NSString *callback=@"oauth://handleTwitterLogin";
-    NSString *urlstr=[NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=twitter",EXFE_OAUTH_LINK,callback];
+    NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
+    NSAssert([schemes objectAtIndex:0] != nil, @"Missing url sheme in main bundle.");
     
-    if([provider isEqualToString:@"facebook"]){
-        callback=@"oauth://handleFacebookLogin";
-        urlstr=[NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=facebook",EXFE_OAUTH_LINK,callback];
-    }
-
+    NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
+    NSString *urlstr = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK,callback, provider];
     
     firstLoading=YES;
     [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstr]]];
@@ -112,27 +109,22 @@
 }
 
 - (BOOL)webView:(UIWebView *)webview shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-    NSString *URLString = [[request URL] absoluteString];
-    if ([URLString rangeOfString:@"token="].location != NSNotFound && ([URLString rangeOfString:@"oauth://handleTwitterLogin"].location != NSNotFound || [URLString rangeOfString:@"oauth://handleFacebookLogin"].location != NSNotFound)) {
-        URLParser *parser = [[[URLParser alloc] initWithURLString:URLString] autorelease];
+    if ([@"oauthcallback" isEqualToString:request.URL.host] && [request.URL.parameterString rangeOfString:@"token="].location != NSNotFound) {
+        
+        URLParser *parser = [[URLParser alloc] initWithURLString:request.URL.absoluteString];
         NSString *err = [parser valueForVariable:@"err"];
         if(!err)
         {
-        NSString *userid = [parser valueForVariable:@"userid"];
-        NSString *name = [parser valueForVariable:@"name"];
-//        NSString *identity_status = [parser valueForVariable:@"identity_status"];
-//        if([identity_status isEqualToString:@"new"]){
-//            [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"NEWUSER"];
-//            [[NSUserDefaults standardUserDefaults] synchronize];
-//        }
-
-        name=[Util decodeFromPercentEscapeString:name];
+            NSString *userid = [parser valueForVariable:@"userid"];
+            NSString *name = [parser valueForVariable:@"name"];
             
-        NSString *token = [parser valueForVariable:@"token"];
-        NSString *external_id = [parser valueForVariable:@"external_id"];
-        [self.delegate OAuthloginViewControllerDidSuccess:self userid:userid username:name external_id:external_id token:token];
-//        [parser release];
+            name = [Util decodeFromPercentEscapeString:name];
+            
+            NSString *token = [parser valueForVariable:@"token"];
+            NSString *external_id = [parser valueForVariable:@"external_id"];
+            [self.delegate OAuthloginViewControllerDidSuccess:self userid:userid username:name external_id:external_id token:token];
         }
+        [parser release];
         return NO;
     }
     return YES;

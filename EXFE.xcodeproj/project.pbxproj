@@ -2908,6 +2908,9 @@
 				4FF6954E171BDF53003DF80B /* EFSignInViewController.h */,
 				4FF6954F171BDF53003DF80B /* EFSignInViewController.m */,
 				4FF69550171BDF53003DF80B /* EFSignInViewController.xib */,
+				78D0A5FB158CFAD200401BCA /* OAuthLoginViewController.h */,
+				78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */,
+				78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -3035,9 +3038,6 @@
 				783662D915E3F4F900F4AEAC /* FullScreenViewController.h */,
 				783662DA15E3F4F900F4AEAC /* FullScreenViewController.m */,
 				783662DB15E3F4F900F4AEAC /* FullScreenViewController.xib */,
-				78D0A5FB158CFAD200401BCA /* OAuthLoginViewController.h */,
-				78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */,
-				78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */,
 				785F6F6115820A0000BF8EA0 /* ProfileViewController.h */,
 				785F6F6215820A0000BF8EA0 /* ProfileViewController.m */,
 				785F6F6315820A0000BF8EA0 /* ProfileViewController.xib */,
