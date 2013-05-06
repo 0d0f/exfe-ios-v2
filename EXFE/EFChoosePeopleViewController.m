@@ -114,7 +114,6 @@
     } else {
         searchBackgroundImage = [searchBackgroundImage stretchableImageWithLeftCapWidth:4 topCapHeight:15];
     }
-    self.searchBackgrounImageView.image = searchBackgroundImage;
     
     // navigation shadow
     CALayer *layer = self.navigationBar.layer;
@@ -172,8 +171,6 @@
     [_searchResultAddPeople release];
     [_searchResultExfeePeople release];
     [_searchResultContactPeople release];
-    [_searchTextField release];
-    [_searchBackgrounImageView release];
     [_tableView release];
     [_navigationBar release];
     [_addButton release];
@@ -184,8 +181,6 @@
 }
 
 - (void)viewDidUnload {
-    [self setSearchTextField:nil];
-    [self setSearchBackgrounImageView:nil];
     [self setTableView:nil];
     [self setNavigationBar:nil];
     [self setAddButton:nil];

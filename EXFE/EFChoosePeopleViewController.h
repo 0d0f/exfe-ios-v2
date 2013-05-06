@@ -30,8 +30,6 @@ UITextFieldDelegate
 @property (retain, nonatomic) IBOutlet EFSearchBar *searchBar;
 @property (retain, nonatomic) IBOutlet UIView *navigationBar;
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
-@property (retain, nonatomic) IBOutlet UIImageView *searchBackgrounImageView;
-@property (retain, nonatomic) IBOutlet UITextField *searchTextField;
 @property (retain, nonatomic) IBOutlet UIButton *addButton;
 @property (retain, nonatomic) IBOutlet UIButton *backButton;
 @property (retain, nonatomic) IBOutlet UILabel *selectionCountLabel;
