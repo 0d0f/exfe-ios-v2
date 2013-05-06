@@ -901,10 +901,6 @@
                         if (!hasContained) {
                             [_searchAddPeople addObject:self.searchResultRoughtIdentity];
                             [self refreshSelectedDictWithObject:self.searchResultRoughtIdentity selected:YES];
-                            
-                            [self.tableView beginUpdates];
-                            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                            [self.tableView endUpdates];
                         }
                         
                         [self.searchDisplayController setActive:NO animated:YES];
