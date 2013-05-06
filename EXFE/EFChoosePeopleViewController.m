@@ -48,8 +48,6 @@
 
 @property (nonatomic, retain) NSIndexPath *insertIndexPath;
 
-- (void)dismiss;
-
 - (void)loadexfeePeople;
 - (void)loadcontactPeople;
 
@@ -285,16 +283,14 @@
         [contactRoughIdentities release];
     }
     
-    if (_completionHandler) {
+    if (_addActionHandler) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.completionHandler(selectedIdentities);
+            self.addActionHandler(selectedIdentities);
         });
     }
     
     [addIdentitiyDict release];
     [selectedIdentities release];
-    
-    [self dismiss];    
 }
 
 #pragma mark - EFPersonIdentityCellDelegate
@@ -1144,11 +1140,6 @@
     
     NSUInteger count = [_selectedDict count];
     self.addButton.enabled = !!count;
-}
-
-- (void)dismiss {
-    [self.presentingViewController dismissViewControllerAnimated:YES
-                                                      completion:nil];
 }
 
 #pragma mark - Category (ChoosePeopleViewCellDisplay)
