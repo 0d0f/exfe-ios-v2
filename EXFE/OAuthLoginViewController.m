@@ -97,8 +97,10 @@
     NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
     NSAssert([schemes objectAtIndex:0] != nil, @"Missing url sheme in main bundle.");
     
+    // eg:  exfe://oauthcallback/
     NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
-    NSString *urlstr = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK,callback, provider];
+    
+    NSString *urlstr = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:provider]];
     
     firstLoading=YES;
     [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstr]]];

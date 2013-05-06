@@ -37,6 +37,20 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return [(NSString *)urlString autorelease];
     
 }
+
++ (NSString *) EFPercentEscapedQueryStringPairMemberFromString:(NSString *)string {
+    static NSString * const kEFCharactersToBeEscaped = @":/?&=;+!@#$()~";
+    static NSString * const kEFCharactersToLeaveUnescaped = @"[].";
+    
+	CFStringRef urlString = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                   (CFStringRef)string,
+                                                                   (CFStringRef)kEFCharactersToLeaveUnescaped,
+                                                                   (CFStringRef)kEFCharactersToBeEscaped,
+                                                                   kCFStringEncodingUTF8);
+    return [(NSString *)urlString autorelease];
+}
+
+
 + (UIColor*) getHighlightColor{
     return [UIColor colorWithRed:17/255.0f green:117/255.0f blue:165/255.0f alpha:1];
 }

@@ -75,6 +75,7 @@ extern NSString *const EXCrossListDidChangeNotification;
 
 + (NSString*) decodeFromPercentEscapeString:(NSString*)string;
 + (NSString*) encodeToPercentEscapeString:(NSString*)string;
++ (NSString *) EFPercentEscapedQueryStringPairMemberFromString:(NSString *)string;
 + (UIColor*) getHighlightColor;
 + (UIColor*) getRegularColor;
 + (NSDictionary*) crossTimeToString:(CrossTime*)crosstime;
