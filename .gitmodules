@@ -13,3 +13,6 @@
 [submodule "Vendor/TTTAttributedLabel"]
 	path = Vendor/TTTAttributedLabel
 	url = git://github.com/stonyw/TTTAttributedLabel.git
+[submodule "Vendor/TWReverseAuth"]
+	path = Vendor/TWReverseAuth
+	url = git://github.com/stonyw/TWReverseAuthSubmodule.git
