@@ -1003,24 +1003,23 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error){
         [self hideIndicator];
+        //error.domain
         switch (error.code) {
-                //error.domain
-                switch (error.code) {
-                    case NSURLErrorCannotFindHost: //-1003
-                    case NSURLErrorCannotConnectToHost: //-1004
-                    case NSURLErrorNetworkConnectionLost: //-1005
-                    case NSURLErrorDNSLookupFailed: //-1006
-                    case NSURLErrorHTTPTooManyRedirects: //-1007
-                    case NSURLErrorResourceUnavailable: //-1008
-                    case NSURLErrorNotConnectedToInternet: //-1009
-                    case NSURLErrorRedirectToNonExistentLocation: //-1010
-                        [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
-                        break;
-                        
-                    default:
-                        break;
-                }
+            case NSURLErrorCannotFindHost: //-1003
+            case NSURLErrorCannotConnectToHost: //-1004
+            case NSURLErrorNetworkConnectionLost: //-1005
+            case NSURLErrorDNSLookupFailed: //-1006
+            case NSURLErrorHTTPTooManyRedirects: //-1007
+            case NSURLErrorResourceUnavailable: //-1008
+            case NSURLErrorNotConnectedToInternet: //-1009
+            case NSURLErrorRedirectToNonExistentLocation: //-1010
+                [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                break;
+                
+            default:
+                break;
         }
+        
     }];
 }
 
@@ -1073,24 +1072,23 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error){
         [self hideIndicator];
+        //error.domain
         switch (error.code) {
-                //error.domain
-                switch (error.code) {
-                    case NSURLErrorCannotFindHost: //-1003
-                    case NSURLErrorCannotConnectToHost: //-1004
-                    case NSURLErrorNetworkConnectionLost: //-1005
-                    case NSURLErrorDNSLookupFailed: //-1006
-                    case NSURLErrorHTTPTooManyRedirects: //-1007
-                    case NSURLErrorResourceUnavailable: //-1008
-                    case NSURLErrorNotConnectedToInternet: //-1009
-                    case NSURLErrorRedirectToNonExistentLocation: //-1010
-                        [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
-                        break;
-                        
-                    default:
-                        break;
-                }
+            case NSURLErrorCannotFindHost: //-1003
+            case NSURLErrorCannotConnectToHost: //-1004
+            case NSURLErrorNetworkConnectionLost: //-1005
+            case NSURLErrorDNSLookupFailed: //-1006
+            case NSURLErrorHTTPTooManyRedirects: //-1007
+            case NSURLErrorResourceUnavailable: //-1008
+            case NSURLErrorNotConnectedToInternet: //-1009
+            case NSURLErrorRedirectToNonExistentLocation: //-1010
+                [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                break;
+                
+            default:
+                break;
         }
+        
     }];
 }
 
@@ -1175,23 +1173,21 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self hideIndicator];
+        //error.domain
         switch (error.code) {
-                //error.domain
-                switch (error.code) {
-                    case NSURLErrorCannotFindHost: //-1003
-                    case NSURLErrorCannotConnectToHost: //-1004
-                    case NSURLErrorNetworkConnectionLost: //-1005
-                    case NSURLErrorDNSLookupFailed: //-1006
-                    case NSURLErrorHTTPTooManyRedirects: //-1007
-                    case NSURLErrorResourceUnavailable: //-1008
-                    case NSURLErrorNotConnectedToInternet: //-1009
-                    case NSURLErrorRedirectToNonExistentLocation: //-1010
-                        [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
-                        break;
-                        
-                    default:
-                        break;
-                }
+            case NSURLErrorCannotFindHost: //-1003
+            case NSURLErrorCannotConnectToHost: //-1004
+            case NSURLErrorNetworkConnectionLost: //-1005
+            case NSURLErrorDNSLookupFailed: //-1006
+            case NSURLErrorHTTPTooManyRedirects: //-1007
+            case NSURLErrorResourceUnavailable: //-1008
+            case NSURLErrorNotConnectedToInternet: //-1009
+            case NSURLErrorRedirectToNonExistentLocation: //-1010
+                [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                break;
+                
+            default:
+                break;
         }
     }];
 }
