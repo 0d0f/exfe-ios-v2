@@ -825,10 +825,16 @@
                     if (!hasContained && ((!self.searchResultRoughtIdentity.identity && kProviderPhone == matchedProvider) ||
                         (self.searchResultRoughtIdentity.identity && kProviderPhone == matchedProvider && [self.searchResultRoughtIdentity.identity.identity_id intValue] == 0))) {
                         self.hasExfeeNameSetCompletion = NO;
+                        
+                        NSString *countryCode = [Util getTelephoneCountryCode];
+                        NSString *message = [NSString stringWithFormat:@"+%@ %@", countryCode, self.searchBar.text];
                         [WCAlertView showAlertWithTitle:@"Set invitee name"
-                                                message:nil
+                                                message:message
                                      customizationBlock:^(WCAlertView *alertView) {
                                          alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+                                         UITextField *textField = [alertView textFieldAtIndex:0];
+                                         textField.placeholder = @"Enter contact name";
+                                         textField.textAlignment = UITextAlignmentCenter;
                                      }
                                         completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
                                             if (buttonIndex == alertView.cancelButtonIndex) {
@@ -931,7 +937,7 @@
         request.sortDescriptors = @[descriptor];
         
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
-        recentexfeePeople = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        recentexfeePeople = [objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil];
     };
     if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
         dispatch_sync(dispatch_get_main_queue(), block);
@@ -1185,7 +1191,6 @@
                                        candidateProvider:candidateProvider
                                            matchProvider:matchedProvider
                                                 identity:self.searchResultRoughtIdentity.identity];
-//                    [searchCell customWithIdentity:self.searchResultRoughtIdentity.identity];
                 } else {
                     [searchCell customWithIdentityString:keyWord
                                        candidateProvider:candidateProvider

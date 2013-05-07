@@ -14,6 +14,7 @@
 #import "Rsvp.h"
 #import "Util.h"
 #import "EFAPIServer.h"
+#import "EFWarningHandlerCenter.h"
 
 
 @implementation APICrosses
@@ -32,12 +33,36 @@ static id sharedManager = nil;
   return sharedManager;
 }
 
-+(void) GatherCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
++ (void)GatherCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{
     RKObjectManager* manager =[RKObjectManager sharedManager];
     NSString *endpoint = [NSString stringWithFormat:@"%@crosses/gather?token=%@",API_ROOT,[EFAPIServer sharedInstance].user_token];
     manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
-    [manager postObject:cross path:endpoint parameters:nil success:success failure:failure];
+    
+    RKObjectRequestOperation *operation = [manager appropriateObjectRequestOperationWithObject:cross method:RKRequestMethodPOST path:endpoint parameters:nil];
+    
+    // warning handler
+    [operation setWillMapDeserializedResponseBlock:^id(id object){
+        if ([object isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *dictObject = (NSDictionary *)object;
+            NSDictionary *responseDict = [dictObject valueForKey:@"response"];
+            if (responseDict) {
+                NSNumber *exfeeQuota = [responseDict valueForKey:@"exfee_over_quota"];
+                if (exfeeQuota) {
+                    [[EFWarningHandlerCenter defaultCenter] showWarningWithType:kEFWarningHandlerCenterTypeAlert
+                                                                          Title:@"Quota limit exceeded"
+                                                                        message:[NSString stringWithFormat:@"%d people limit on gathering this ·X·. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!", [exfeeQuota intValue]]
+                                                              cancelButtonTitle:@"OK"
+                                                              otherButtonTitles:nil];
+                }
+            }
+        }
+        
+        return object;
+    }];
+    
+    [operation setCompletionBlockWithSuccess:success failure:failure];
+    [manager enqueueObjectRequestOperation:operation];
 }
 
 +(void) EditCross:(Cross*) cross success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure{

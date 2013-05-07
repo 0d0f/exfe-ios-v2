@@ -472,13 +472,19 @@
         }
         if(self.cross.exfee){
             for (Invitation *invitation in self.cross.exfee.invitations){
-                [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:invitation];
-                [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
+                [context deleteObject:invitation];
+                [context save:nil];
+                [context.parentContext performBlock:^{
+                    [context.parentContext save:nil];
+                }];
             }
             [context deleteObject:self.cross.exfee];
         }
         [context deleteObject:self.cross];
         [context save:nil];
+        [context.parentContext performBlock:^{
+            [context.parentContext save:nil];
+        }];
     }
     [objectManager.operationQueue cancelAllOperations];
     [self dismissModalViewControllerAnimated:YES];
@@ -512,7 +518,7 @@
     [self relayoutUI];
 }
 
-- (IBAction) Gather:(id) sender{
+- (IBAction)Gather:(id) sender{
     
     MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode=MBProgressHUDModeCustomView;
@@ -1012,11 +1018,11 @@
             self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
             [self reFormatTitle];
             [exfeeShowview reloadData];
-            if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [alert show];
-                [alert release];
-            }
+//            if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
+//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                [alert show];
+//                [alert release];
+//            }
         };
         [self presentViewController:viewController
                            animated:YES

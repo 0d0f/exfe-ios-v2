@@ -400,7 +400,7 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                     needUpdate = NO;
                 }
             } else {
-                NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+                NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.persistentStoreManagedObjectContext];
                 RKObjectManager *objectManager = [RKObjectManager sharedManager];
                 result = [[[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.persistentStoreManagedObjectContext] autorelease];
             }
