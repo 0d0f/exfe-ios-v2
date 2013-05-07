@@ -9,6 +9,7 @@
 #import "EFAPIServer.h"
 #import "Util.h"
 #import "Exfee+EXFE.h"
+#import "EFWarningHandlerCenter.h"
 
 @implementation EFAPIServer
 
@@ -394,72 +395,90 @@
     
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
-    [manager postObject:exfee
-                   path:endpoint
-             parameters:nil
-                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
-                    if ([operation.HTTPRequestOperation.response statusCode] == 200){
-                        if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-                        {
-                            Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                            int code = [meta.code intValue];
-                            int type = code / 100;
-                            switch (type) {
-                                case 2: // HTTP OK
-                                {
-                                    if (206 == code || 200 == code) {
-//                                        NSInteger overCount = NSNotFound;
-//                                        if (206 == code) {
-//                                            overCount = [[[mappingResult dictionary] valueForKey:@"exfee_over_quota"] integerValue];
-//                                        }
-                                        Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
-                                        if (successHandler) {
-                                            dispatch_async(dispatch_get_main_queue(), ^{
-                                                successHandler(respExfee);
-                                            });
-                                        }
-                                    }
-                                }
-                                    break;
-                                case 4: // Client Error
-                                {
-                                    // 400 Over people mac limited
-                                    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                                    [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
-                                    if (failureHandler) {
-                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                            failureHandler(nil);
-                                        });
-                                    }
-                                }
-                                    break;
-                                case 5: // Server Error
-                                {
-                                    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                                    [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
-                                    if (failureHandler) {
-                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                            failureHandler(nil);
-                                        });
-                                    }
-                                }
-                                    break;
-                                default:
-                                    break;
+    
+    RKObjectRequestOperation *operation = [manager appropriateObjectRequestOperationWithObject:exfee method:RKRequestMethodPOST path:endpoint parameters:nil];
+    
+    // warnming handler
+    [operation setWillMapDeserializedResponseBlock:^id(id object){
+        if ([object isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *dictObject = (NSDictionary *)object;
+            NSDictionary *responseDict = [dictObject valueForKey:@"response"];
+            if (responseDict) {
+                NSNumber *exfeeQuota = [responseDict valueForKey:@"exfee_over_quota"];
+                if (exfeeQuota) {
+                    [[EFWarningHandlerCenter defaultCenter] showWarningWithType:kEFWarningHandlerCenterTypeAlert
+                                                                          Title:@"Quota limit exceeded"
+                                                                        message:[NSString stringWithFormat:@"%d people limit on gathering this ·X·. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!", [exfeeQuota intValue]]
+                                                              cancelButtonTitle:@"OK"
+                                                              otherButtonTitles:nil];
+                }
+            }
+        }
+        
+        return object;
+    }];
+    
+    // set success && fail handler
+    [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
+        if ([operation.HTTPRequestOperation.response statusCode] == 200){
+            if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+            {
+                Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                int code = [meta.code intValue];
+                int type = code / 100;
+                switch (type) {
+                    case 2: // HTTP OK
+                    {
+                        if (206 == code || 200 == code) {
+                            Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
+                            if (successHandler) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    successHandler(respExfee);
+                                });
                             }
                         }
                     }
-                }
-                failure:^(RKObjectRequestOperation *operation, NSError *error){
-                    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                    [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
-                    if (failureHandler) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            failureHandler(nil);
-                        });
+                        break;
+                    case 4: // Client Error
+                    {
+                        // 400 Over people mac limited
+                        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                        [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                        if (failureHandler) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                failureHandler(nil);
+                            });
+                        }
                     }
-                }];
-
+                        break;
+                    case 5: // Server Error
+                    {
+                        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                        [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                        if (failureHandler) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                failureHandler(nil);
+                            });
+                        }
+                    }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+                                     failure:^(RKObjectRequestOperation *operation, NSError *error){
+                                         RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                         [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                                         if (failureHandler) {
+                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                 failureHandler(nil);
+                                             });
+                                         }
+                                     }];
+    
+    [manager enqueueObjectRequestOperation:operation];
 }
 
 #pragma mark - Identity API
@@ -579,38 +598,6 @@
                                  });
                              }
                          }];
-    
-//    [manager postObject:nil
-//                   path:path
-//             parameters:param
-//                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
-//                    if (operation.HTTPRequestOperation.response.statusCode == 200) {
-//                        [[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext save:nil];
-//                        
-//                        if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
-//                            Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
-//                            if ([meta.code intValue] == 200) {
-//                                NSArray *identities = [[mappingResult dictionary] objectForKey:@"response.identities"];
-//                                if (success) {
-//                                    dispatch_async(dispatch_get_main_queue(), ^{
-//                                        success(identities);
-//                                    });
-//                                }
-//                            }
-//                        }
-//                    } else if (failure) {
-//                        dispatch_async(dispatch_get_main_queue(), ^{
-//                            failure(nil);
-//                        });
-//                    }
-//                }
-//                failure:^(RKObjectRequestOperation *operation, NSError *error){
-//                    if (failure) {
-//                        dispatch_async(dispatch_get_main_queue(), ^{
-//                            failure(error);
-//                        });
-//                    }
-//                }];
 }
 
 @end

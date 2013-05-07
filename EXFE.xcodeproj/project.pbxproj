@@ -1381,6 +1381,9 @@
 		763A01CF17212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
 		763A01D017212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
 		763A01D117212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
+		7661C7EC1738B15400133F10 /* EFWarningHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFWarningHandlerCenter.m */; };
+		7661C7ED1738B15400133F10 /* EFWarningHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFWarningHandlerCenter.m */; };
+		7661C7EE1738B15400133F10 /* EFWarningHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFWarningHandlerCenter.m */; };
 		7670126E1729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
 		7670126F1729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
 		767012701729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
@@ -2173,6 +2176,8 @@
 		763A01CD17212B080082CC9E /* RoughIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoughIdentity.h; sourceTree = "<group>"; };
 		763A01CE17212B080082CC9E /* RoughIdentity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoughIdentity.m; sourceTree = "<group>"; };
 		763A01D2172130B20082CC9E /* EFDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDataDefines.h; sourceTree = "<group>"; };
+		7661C7EA1738B15400133F10 /* EFWarningHandlerCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFWarningHandlerCenter.h; sourceTree = "<group>"; };
+		7661C7EB1738B15400133F10 /* EFWarningHandlerCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFWarningHandlerCenter.m; sourceTree = "<group>"; };
 		7670126A1729054500B5445E /* EFPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPopoverController.m; sourceTree = "<group>"; };
 		7670126B1729054500B5445E /* EFArrowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFArrowView.m; sourceTree = "<group>"; };
 		7670126C1729054500B5445E /* EFPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPopoverController.h; sourceTree = "<group>"; };
@@ -3010,6 +3015,8 @@
 				7670126A1729054500B5445E /* EFPopoverController.m */,
 				7670126D1729054500B5445E /* EFArrowView.h */,
 				7670126B1729054500B5445E /* EFArrowView.m */,
+				7661C7EA1738B15400133F10 /* EFWarningHandlerCenter.h */,
+				7661C7EB1738B15400133F10 /* EFWarningHandlerCenter.m */,
 			);
 			name = EFKit;
 			sourceTree = "<group>";
@@ -5442,6 +5449,7 @@
 				4FB377EB17377CB4001FA1B2 /* TWAPIManager.m in Sources */,
 				4FB377EE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */,
 				4FB377F117377CB4001FA1B2 /* TWSignedRequest.m in Sources */,
+				7661C7ED1738B15400133F10 /* EFWarningHandlerCenter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5601,6 +5609,7 @@
 				4FB377EC17377CB4001FA1B2 /* TWAPIManager.m in Sources */,
 				4FB377EF17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */,
 				4FB377F217377CB4001FA1B2 /* TWSignedRequest.m in Sources */,
+				7661C7EE1738B15400133F10 /* EFWarningHandlerCenter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5760,6 +5769,7 @@
 				4FB377EA17377CB4001FA1B2 /* TWAPIManager.m in Sources */,
 				4FB377ED17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */,
 				4FB377F017377CB4001FA1B2 /* TWSignedRequest.m in Sources */,
+				7661C7EC1738B15400133F10 /* EFWarningHandlerCenter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
