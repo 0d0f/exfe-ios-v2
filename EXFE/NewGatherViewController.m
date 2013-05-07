@@ -472,13 +472,19 @@
         }
         if(self.cross.exfee){
             for (Invitation *invitation in self.cross.exfee.invitations){
-                [objectManager.managedObjectStore.mainQueueManagedObjectContext deleteObject:invitation];
-                [objectManager.managedObjectStore.mainQueueManagedObjectContext save:nil];
+                [context deleteObject:invitation];
+                [context save:nil];
+                [context.parentContext performBlock:^{
+                    [context.parentContext save:nil];
+                }];
             }
             [context deleteObject:self.cross.exfee];
         }
         [context deleteObject:self.cross];
         [context save:nil];
+        [context.parentContext performBlock:^{
+            [context.parentContext save:nil];
+        }];
     }
     [objectManager.operationQueue cancelAllOperations];
     [self dismissModalViewControllerAnimated:YES];
