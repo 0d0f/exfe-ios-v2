@@ -386,8 +386,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         self.indicator = aiView;
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTwitterAccounts) name:ACAccountStoreDidChangeNotification object:nil];
-    
     [self setStage:kStageStart];
 
 }
@@ -395,7 +393,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self refreshTwitterAccounts];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -1132,44 +1129,85 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 - (void)twitterSignIn:(id)sender
 {
 #if (defined PANDA) || (defined PILOT)
-    if (_accounts) {
-        if ([TWAPIManager isLocalTwitterAccountAvailable] && _accounts.count > 0) {
-            [self performReverseAuth:sender];
-        } else {
-            
-            //http://stackoverflow.com/questions/13335795/login-user-with-twitter-in-ios-what-to-use
-            if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
-                // iOS 6 http://stackoverflow.com/questions/13946062/twitter-framework-for-ios6-how-to-login-through-settings-from-app
-                SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-                tweetSheet.view.hidden = TRUE;
-                
-                [self presentViewController:tweetSheet animated:NO completion:^{
-                    [tweetSheet.view endEditing:YES];
-                }];
-            } else if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")){
-                // iOS 5 http://stackoverflow.com/questions/9667921/prompt-login-alert-with-twitter-framework-in-ios5
-                TWTweetComposeViewController *viewController = [[TWTweetComposeViewController alloc] init];
-                //hide the tweet screen
-                viewController.view.hidden = YES;
-                
-                //fire tweetComposeView to show "No Twitter Accounts" alert view on iOS5.1
-                viewController.completionHandler = ^(TWTweetComposeViewControllerResult result) {
-                    if (result == TWTweetComposeViewControllerResultCancelled) {
-                        [self dismissModalViewControllerAnimated:NO];
+    
+    ACAccountType *twitterType = [_accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+    
+    ACAccountStoreRequestAccessCompletionHandler handler = ^(BOOL granted, NSError *error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (granted) {
+                self.accounts = [_accountStore accountsWithAccountType:twitterType];
+                if ([TWAPIManager isLocalTwitterAccountAvailable] && _accounts.count > 0) {
+                    if ([TWAPIManager isLocalTwitterAccountAvailable]) {
+                        if (_accounts.count > 1) {
+                            UIActionSheet *sheet = [UIActionSheet actionSheetWithTitle:@"Choose an Account"];
+                            for (ACAccount *acct in _accounts) {
+                                [sheet addButtonWithTitle:acct.username handler:^{
+                                    [self performReverseAuthForAccount:acct];
+                                }];
+                            }
+                            sheet.cancelButtonIndex = [sheet setCancelButtonWithTitle:@"Cancel" handler:^{
+                                // cancel
+                            }];
+                            [sheet showInView:self.view];
+                        } else {
+                            [self performReverseAuthForAccount:_accounts[0]];
+                        }
                     }
-                };
-                [self presentModalViewController:viewController animated:NO];
-                
-                //hide the keyboard
-                [viewController.view endEditing:YES];
-                [viewController release];
+                } else {
+                    
+                    //http://stackoverflow.com/questions/13335795/login-user-with-twitter-in-ios-what-to-use
+                    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
+                        // iOS 6 http://stackoverflow.com/questions/13946062/twitter-framework-for-ios6-how-to-login-through-settings-from-app
+                        SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+                        tweetSheet.view.hidden = TRUE;
+                        
+                        [self presentViewController:tweetSheet animated:NO completion:^{
+                            [tweetSheet.view endEditing:YES];
+                        }];
+                    } else if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")){
+                        // iOS 5 http://stackoverflow.com/questions/9667921/prompt-login-alert-with-twitter-framework-in-ios5
+                        TWTweetComposeViewController *viewController = [[TWTweetComposeViewController alloc] init];
+                        //hide the tweet screen
+                        viewController.view.hidden = YES;
+                        
+                        //fire tweetComposeView to show "No Twitter Accounts" alert view on iOS5.1
+                        viewController.completionHandler = ^(TWTweetComposeViewControllerResult result) {
+                            if (result == TWTweetComposeViewControllerResultCancelled) {
+                                [self dismissModalViewControllerAnimated:NO];
+                            }
+                        };
+                        [self presentModalViewController:viewController animated:NO];
+                        
+                        //hide the keyboard
+                        [viewController.view endEditing:YES];
+                        [viewController release];
+                    } else {
+                        return;
+                    }
+//                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Accounts" message:@"Please configure a Twitter account in Settings.app" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                    [alert show];
+                }
             } else {
-                return;
+                self.accounts = [_accountStore accountsWithAccountType:twitterType];
+                NSLog(@"You were not granted access to the Twitter accounts.");
+                
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Permission" message:@"Please configure a Twitter account or enable the app in Settings.app" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alert show];
+                
             }
+        });
+    };
+    
+    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")){
+        //  This method changed in iOS6. If the new version isn't available, fall back to the original (which means that we're running on iOS5+).
+        if ([_accountStore respondsToSelector:@selector(requestAccessToAccountsWithType:options:completion:)]) {
+            [_accountStore requestAccessToAccountsWithType:twitterType options:nil completion:handler];
         }
-    } else {
-        // no permission
-        NSLog(@"NO access to twitter");
+        else {
+            [_accountStore requestAccessToAccountsWithType:twitterType withCompletionHandler:handler];
+        }
     }
 #else
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
@@ -1371,88 +1409,57 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     return YES;
 }
 
-#pragma mark - UIActionSheetDelegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != actionSheet.cancelButtonIndex) {
-        [_apiManager performReverseAuthForAccount:_accounts[buttonIndex] withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
-            if (responseData) {
-                NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-                
-                NSLog(@"Reverse Auth process returned: %@", responseStr);
-                
-                NSArray *parts = [responseStr componentsSeparatedByString:@"&"];
-                NSString *lined = [parts componentsJoinedByString:@"\n"];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:lined delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [alert show];
-                });
-            } else {
-                //TWALog(@"Reverse Auth process failed. Error returned was: %@\n", [error localizedDescription]);
-            }
-        }];
-    }
-}
-
-#pragma mark -
-#pragma mark Others
-
 #pragma mark - Private
 
-- (void)refreshTwitterAccounts
+- (void)performReverseAuthForAccount:(ACAccount*)acct
 {
-    //TWDLog(@"Refreshing Twitter Accounts \n");
-#if (defined PANDA) || (defined PILOT)
-    [self obtainAccessToAccountsWithBlock:^(BOOL granted) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (granted) {
-//                _reverseAuthBtn.enabled = YES;
-            } else {
-                //TWALog(@"You were not granted access to the Twitter accounts.");
-            }
-        });
+    [self.view endEditing:YES];
+    
+    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Signing in Twitter";
+    hud.mode=MBProgressHUDModeCustomView;
+    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+    [bigspin startAnimating];
+    hud.customView = bigspin;
+    [bigspin release];
+    
+    [_apiManager performReverseAuthForAccount:acct withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (responseData) {
+            NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            NSDictionary *params = [Util splitQuery:responseStr];
+            
+            MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.labelText = @"Signing in";
+            hud.mode=MBProgressHUDModeCustomView;
+            EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+            [bigspin startAnimating];
+            hud.customView = bigspin;
+            [bigspin release];
+            
+            [[EFAPIServer sharedInstance] reverseAuth:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                    
+                    NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                    if ([code integerValue] == 200) {
+                        [self loadUserAndExit];
+                    }
+                    //400: invalid_token
+                    //400: no_provider
+                    //400: unsupported_provider
+                }
+                
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                NSLog(@"login failure with %@", error);
+                // kCFURLErrorCannotDecodeContentData = -1016, unexpected error
+            }];
+        } else {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            NSLog(@"Reverse Auth process failed. Error returned was: %@\n", [error localizedDescription]);
+        }
     }];
-#endif
 }
 
-- (void)obtainAccessToAccountsWithBlock:(void (^)(BOOL))block
-{
-    ACAccountType *twitterType = [_accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
-    
-    ACAccountStoreRequestAccessCompletionHandler handler = ^(BOOL granted, NSError *error) {
-        if (granted) {
-            self.accounts = [_accountStore accountsWithAccountType:twitterType];
-        }
-        
-        block(granted);
-    };
-    
-    //  This method changed in iOS6. If the new version isn't available, fall back to the original (which means that we're running on iOS5+).
-    if ([_accountStore respondsToSelector:@selector(requestAccessToAccountsWithType:options:completion:)]) {
-        [_accountStore requestAccessToAccountsWithType:twitterType options:nil completion:handler];
-    }
-    else {
-        [_accountStore requestAccessToAccountsWithType:twitterType withCompletionHandler:handler];
-    }
-}
-
-- (void)performReverseAuth:(id)sender
-{
-    if ([TWAPIManager isLocalTwitterAccountAvailable]) {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Choose an Account" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
-        
-        for (ACAccount *acct in _accounts) {
-            [sheet addButtonWithTitle:acct.username];
-        }
-        
-        sheet.cancelButtonIndex = [sheet addButtonWithTitle:@"Cancel"];
-        [sheet showInView:self.view];
-    }
-    else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Accounts" message:@"Please configure a Twitter account in Settings.app" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
-    }
-}
 @end
