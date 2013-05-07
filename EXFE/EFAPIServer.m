@@ -250,6 +250,42 @@
                          failure:failure];
 }
 
+- (void)reverseAuth:(Provider)provider
+          withToken:(NSString*)token
+           andParam:(NSDictionary*) param
+            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSString *endpoint = [NSString stringWithFormat:@"/oauth/reverseauth"];
+    RKObjectManager *manager = [RKObjectManager sharedManager] ;
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params addEntriesFromDictionary:@{@"provider": [Identity getProviderString:provider], @"oauth_token": token}];
+    if (param) {
+        [params addEntriesFromDictionary:param];
+    }
+    
+    manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    [manager.HTTPClient postPath:endpoint
+                      parameters:params
+                         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                 
+                                 NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                                 if ([code integerValue] == 200) {
+                                     NSNumber *u = [responseObject valueForKeyPath:@"response.oauth_signin.user_id"];
+                                     NSString *t = [responseObject valueForKeyPath:@"response.oauth_signin.token"];
+                                     self.user_id  = [u integerValue];
+                                     self.user_token = t;
+                                     [self saveUserData];
+                                 }
+                             }
+                             if (success) {
+                                 success(operation, responseObject);
+                             }
+                         }
+                         failure:failure];
+}
+
 - (void)regDevice:(NSString*)pushToken
           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure

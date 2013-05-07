@@ -10,6 +10,9 @@
 #import <BlocksKit/BlocksKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import <CoreText/CoreText.h>
+#import <Social/Social.h>
+#import <Twitter/Twitter.h>
+#import <Accounts/Accounts.h>
 #import "EFAPIServer.h"
 #import "Util.h"
 #import "Identity+EXFE.h"
@@ -17,6 +20,7 @@
 #import "CSLinearLayoutView.h"
 #import "UILabel+EXFE.h"
 #import "EFIdentityTextField.h"
+#import "TWAPIManager.h"
 
 
 typedef NS_ENUM(NSUInteger, EFStage){
@@ -52,6 +56,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 @property (nonatomic, retain) UIImageView *line1;
 @property (nonatomic, retain) UIImageView *line2;
 
+@property (nonatomic, strong) ACAccountStore *accountStore;
+@property (nonatomic, strong) TWAPIManager *apiManager;
+@property (nonatomic, strong) NSArray *accounts;
+
 @end
 
 @implementation EFSignInViewController
@@ -67,6 +75,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         _stage = kStageStart;
         self.lastInputIdentity = @"";
         self.identityCache = [NSMutableDictionary dictionaryWithCapacity:30];
+        
+        _accountStore = [[ACAccountStore alloc] init];
+        _apiManager = [[TWAPIManager alloc] init];
     }
     return self;
 }
@@ -375,12 +386,21 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         self.indicator = aiView;
     }
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTwitterAccounts) name:ACAccountStoreDidChangeNotification object:nil];
+    
     [self setStage:kStageStart];
 
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self refreshTwitterAccounts];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
 //    CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
 
     [self performBlock:^(id sender) {
@@ -848,6 +868,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [app SigninDidFinish];
 }
 
+
+
 #pragma mark -
 #pragma mark Button / View Click Handler
 - (void)expandIdentity:(id)sender
@@ -1109,10 +1131,52 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)twitterSignIn:(id)sender
 {
+#if (defined PANDA) || (defined PILOT)
+    if (_accounts) {
+        if ([TWAPIManager isLocalTwitterAccountAvailable] && _accounts.count > 0) {
+            [self performReverseAuth:sender];
+        } else {
+            
+            //http://stackoverflow.com/questions/13335795/login-user-with-twitter-in-ios-what-to-use
+            if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
+                // iOS 6 http://stackoverflow.com/questions/13946062/twitter-framework-for-ios6-how-to-login-through-settings-from-app
+                SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+                tweetSheet.view.hidden = TRUE;
+                
+                [self presentViewController:tweetSheet animated:NO completion:^{
+                    [tweetSheet.view endEditing:YES];
+                }];
+            } else if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")){
+                // iOS 5 http://stackoverflow.com/questions/9667921/prompt-login-alert-with-twitter-framework-in-ios5
+                TWTweetComposeViewController *viewController = [[TWTweetComposeViewController alloc] init];
+                //hide the tweet screen
+                viewController.view.hidden = YES;
+                
+                //fire tweetComposeView to show "No Twitter Accounts" alert view on iOS5.1
+                viewController.completionHandler = ^(TWTweetComposeViewControllerResult result) {
+                    if (result == TWTweetComposeViewControllerResultCancelled) {
+                        [self dismissModalViewControllerAnimated:NO];
+                    }
+                };
+                [self presentModalViewController:viewController animated:NO];
+                
+                //hide the keyboard
+                [viewController.view endEditing:YES];
+                [viewController release];
+            } else {
+                return;
+            }
+        }
+    } else {
+        // no permission
+        NSLog(@"NO access to twitter");
+    }
+#else
     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
     oauth.provider = @"twitter";
     oauth.delegate = self;
     [self presentModalViewController:oauth animated:YES];
+#endif
 }
 
 - (void)forgetPwd:(UIControl *)sender
@@ -1307,8 +1371,88 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     return YES;
 }
 
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+        [_apiManager performReverseAuthForAccount:_accounts[buttonIndex] withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
+            if (responseData) {
+                NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+                
+                NSLog(@"Reverse Auth process returned: %@", responseStr);
+                
+                NSArray *parts = [responseStr componentsSeparatedByString:@"&"];
+                NSString *lined = [parts componentsJoinedByString:@"\n"];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:lined delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [alert show];
+                });
+            } else {
+                //TWALog(@"Reverse Auth process failed. Error returned was: %@\n", [error localizedDescription]);
+            }
+        }];
+    }
+}
+
 #pragma mark -
 #pragma mark Others
 
+#pragma mark - Private
 
+- (void)refreshTwitterAccounts
+{
+    //TWDLog(@"Refreshing Twitter Accounts \n");
+#if (defined PANDA) || (defined PILOT)
+    [self obtainAccessToAccountsWithBlock:^(BOOL granted) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (granted) {
+//                _reverseAuthBtn.enabled = YES;
+            } else {
+                //TWALog(@"You were not granted access to the Twitter accounts.");
+            }
+        });
+    }];
+#endif
+}
+
+- (void)obtainAccessToAccountsWithBlock:(void (^)(BOOL))block
+{
+    ACAccountType *twitterType = [_accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+    
+    ACAccountStoreRequestAccessCompletionHandler handler = ^(BOOL granted, NSError *error) {
+        if (granted) {
+            self.accounts = [_accountStore accountsWithAccountType:twitterType];
+        }
+        
+        block(granted);
+    };
+    
+    //  This method changed in iOS6. If the new version isn't available, fall back to the original (which means that we're running on iOS5+).
+    if ([_accountStore respondsToSelector:@selector(requestAccessToAccountsWithType:options:completion:)]) {
+        [_accountStore requestAccessToAccountsWithType:twitterType options:nil completion:handler];
+    }
+    else {
+        [_accountStore requestAccessToAccountsWithType:twitterType withCompletionHandler:handler];
+    }
+}
+
+- (void)performReverseAuth:(id)sender
+{
+    if ([TWAPIManager isLocalTwitterAccountAvailable]) {
+        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Choose an Account" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
+        
+        for (ACAccount *acct in _accounts) {
+            [sheet addButtonWithTitle:acct.username];
+        }
+        
+        sheet.cancelButtonIndex = [sheet addButtonWithTitle:@"Cancel"];
+        [sheet showInView:self.view];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Accounts" message:@"Please configure a Twitter account in Settings.app" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    }
+}
 @end
