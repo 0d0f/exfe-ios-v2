@@ -471,7 +471,8 @@
             [context deleteObject:self.cross.time];
         }
         if(self.cross.exfee){
-            for (Invitation *invitation in self.cross.exfee.invitations){
+            NSSet *invitations = [[self.cross.exfee.invitations copy] autorelease];
+            for (Invitation *invitation in invitations){
                 [context deleteObject:invitation];
                 [context save:nil];
                 [context.parentContext performBlock:^{

@@ -491,113 +491,142 @@
     NSDictionary *param = @{@"identities": params};
     NSString *path = [NSString stringWithFormat:@"%@identities/get", API_ROOT];
     
-    [manager.HTTPClient postPath:path
-                      parameters:param
-                         success:^(AFHTTPRequestOperation *operation, id responseObject){
-                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
-                                 NSDictionary *body = (NSDictionary*)responseObject;
-                                 id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
-                                 if (code) {
-                                     if ([code intValue] == 200) {
-                                         NSDictionary* response = [body objectForKey:@"response"];
-                                         NSArray *identities = [response objectForKey:@"identities"];
-                                         NSMutableArray *identityEntities = [[NSMutableArray alloc] initWithCapacity:[identities count]];
-                                         
-                                         for (NSDictionary *identitydict in identities) {
-                                             NSString *external_id = [identitydict objectForKey:@"external_id"];
-                                             NSString *provider = [identitydict objectForKey:@"provider"];
-                                             NSString *avatar_filename = [identitydict objectForKey:@"avatar_filename"];
-                                             NSString *identity_id = [identitydict objectForKey:@"id"];
-                                             NSString *name = [identitydict objectForKey:@"name"];
-                                             NSString *nickname = [identitydict objectForKey:@"nickname"];
-                                             NSString *external_username = [identitydict objectForKey:@"external_username"];
-                                             
-                                             __block BOOL needInsertNew = NO;
-                                             if ([identity_id intValue] == 0) {
-                                                 // a new one
-                                                 needInsertNew = YES;
-                                             }
-                                             if (!needInsertNew) {
-                                                 // update if exist
-                                                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"provider LIKE %@ AND external_id LIKE %@", provider, external_id];
-                                                 NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
-                                                 fetchRequest.predicate = predicate;
-                                                 
-                                                 void (^block)(void) = ^{
-                                                     NSArray *cachedIdentitites = [manager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:fetchRequest error:nil];
-                                                     if (cachedIdentitites && [cachedIdentitites count]) {
-                                                         // update info
-                                                         Identity *cachedIdentitiy = cachedIdentitites[0];
-                                                         cachedIdentitiy.external_id = external_id;
-                                                         cachedIdentitiy.provider = provider;
-                                                         cachedIdentitiy.avatar_filename = avatar_filename;
-                                                         cachedIdentitiy.name = name;
-                                                         cachedIdentitiy.external_username = external_username;
-                                                         cachedIdentitiy.nickname = nickname;
-                                                         cachedIdentitiy.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
-                                                         [identityEntities addObject:cachedIdentitiy];
-                                                     } else {
-                                                         needInsertNew = YES;
-                                                     }
-                                                 };
-                                                 if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
-                                                     dispatch_sync(dispatch_get_main_queue(), block);
-                                                 } else {
-                                                     block();
-                                                 }
-                                             }
-                                             
-                                             if (needInsertNew) {
-                                                 void (^block)(void) = ^{
-                                                     NSEntityDescription *identityEntity = [NSEntityDescription entityForName:@"Identity" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
-                                                     Identity *identity = [[[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
-                                                     identity.external_id = external_id;
-                                                     identity.provider = provider;
-                                                     identity.avatar_filename = avatar_filename;
-                                                     identity.name = name;
-                                                     identity.external_username = external_username;
-                                                     identity.nickname = nickname;
-                                                     identity.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
-                                                     
-                                                     [identityEntities addObject:identity];
-                                                 };
-                                                 if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
-                                                     dispatch_sync(dispatch_get_main_queue(), block);
-                                                 } else {
-                                                     block();
-                                                 }
-                                             }
-                                         }
-                                         
-                                         if (success) {
-                                             dispatch_async(dispatch_get_main_queue(), ^{
-                                                 success(identityEntities);
-                                             });
-                                         }
-                                         [identityEntities release];
-                                     } else {
-                                         if (failure) {
-                                             dispatch_async(dispatch_get_main_queue(), ^{
-                                                 failure(nil);
-                                             });
-                                         }
-                                     }
-                                 } else {
-                                     if (failure) {
-                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                             failure(nil);
-                                         });
-                                     }
-                                 }  // if (code) {} else {}
-                             }
-                         }
-                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
-                             if (failure) {
-                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                     failure(error);
-                                 });
-                             }
-                         }];
+    [manager postObject:nil
+                   path:path
+             parameters:param
+                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
+                    if (operation.HTTPRequestOperation.response.statusCode == 200) {
+                        if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
+                            Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
+                            if ([meta.code intValue] == 200) {
+                                NSArray *identities = [[mappingResult dictionary] objectForKey:@"response.identities"];
+                                if (success) {
+                                    success(identities);
+                                }
+                            } else if (failure) {
+                                failure(nil);
+                            }
+                        }
+                    } else if (failure) {
+                        failure(nil);
+                    }
+                }
+                failure:^(RKObjectRequestOperation *operation, NSError *error){
+                    if (failure) {
+                        failure(error);
+                    }
+                }];
+    
+//    [manager.HTTPClient postPath:path
+//                      parameters:param
+//                         success:^(AFHTTPRequestOperation *operation, id responseObject){
+//                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+//                                 NSDictionary *body = (NSDictionary*)responseObject;
+//                                 id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
+//                                 if (code) {
+//                                     if ([code intValue] == 200) {
+//                                         NSDictionary* response = [body objectForKey:@"response"];
+//                                         NSArray *identities = [response objectForKey:@"identities"];
+//                                         NSMutableArray *identityEntities = [[NSMutableArray alloc] initWithCapacity:[identities count]];
+//                                         
+//                                         for (NSDictionary *identitydict in identities) {
+//                                             NSString *external_id = [identitydict objectForKey:@"external_id"];
+//                                             NSString *provider = [identitydict objectForKey:@"provider"];
+//                                             NSString *avatar_filename = [identitydict objectForKey:@"avatar_filename"];
+//                                             NSString *identity_id = [identitydict objectForKey:@"id"];
+//                                             NSString *name = [identitydict objectForKey:@"name"];
+//                                             NSString *nickname = [identitydict objectForKey:@"nickname"];
+//                                             NSString *external_username = [identitydict objectForKey:@"external_username"];
+//                                             
+//                                             __block BOOL needInsertNew = NO;
+//                                             if ([identity_id intValue] == 0) {
+//                                                 // a new one
+//                                                 needInsertNew = YES;
+//                                             }
+//                                             if (!needInsertNew) {
+//                                                 // update if exist
+////                                                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"provider LIKE %@ AND external_id LIKE %@", provider, external_id];
+//                                                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identity_id == %@", [NSNumber numberWithInt:[identity_id intValue]]];
+//                                                 NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
+//                                                 fetchRequest.predicate = predicate;
+//                                                 
+//                                                 void (^block)(void) = ^{
+//                                                     NSArray *cachedIdentitites = [manager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:fetchRequest error:nil];
+//                                                     if (cachedIdentitites && [cachedIdentitites count]) {
+//                                                         // update info
+//                                                         Identity *cachedIdentitiy = cachedIdentitites[0];
+//                                                         cachedIdentitiy.external_id = external_id;
+//                                                         cachedIdentitiy.provider = provider;
+//                                                         cachedIdentitiy.avatar_filename = avatar_filename;
+//                                                         cachedIdentitiy.name = name;
+//                                                         cachedIdentitiy.external_username = external_username;
+//                                                         cachedIdentitiy.nickname = nickname;
+//                                                         cachedIdentitiy.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
+//                                                         [identityEntities addObject:cachedIdentitiy];
+//                                                     } else {
+//                                                         needInsertNew = YES;
+//                                                     }
+//                                                 };
+//                                                 if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
+//                                                     dispatch_sync(dispatch_get_main_queue(), block);
+//                                                 } else {
+//                                                     block();
+//                                                 }
+//                                             }
+//                                             
+//                                             if (needInsertNew) {
+//                                                 void (^block)(void) = ^{
+//                                                     NSEntityDescription *identityEntity = [NSEntityDescription entityForName:@"Identity" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
+//                                                     [manager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
+//                                                         Identity *identity = [[[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+//                                                         identity.external_id = external_id;
+//                                                         identity.provider = provider;
+//                                                         identity.avatar_filename = avatar_filename;
+//                                                         identity.name = name;
+//                                                         identity.external_username = external_username;
+//                                                         identity.nickname = nickname;
+//                                                         identity.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
+//                                                         
+//                                                         [identityEntities addObject:identity];
+//                                                     }];
+//                                                 };
+//                                                 if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
+//                                                     dispatch_sync(dispatch_get_main_queue(), block);
+//                                                 } else {
+//                                                     block();
+//                                                 }
+//                                             }
+//                                         }
+//                                         
+//                                         if (success) {
+//                                             dispatch_async(dispatch_get_main_queue(), ^{
+//                                                 success(identityEntities);
+//                                             });
+//                                         }
+//                                         [identityEntities release];
+//                                     } else {
+//                                         if (failure) {
+//                                             dispatch_async(dispatch_get_main_queue(), ^{
+//                                                 failure(nil);
+//                                             });
+//                                         }
+//                                     }
+//                                 } else {
+//                                     if (failure) {
+//                                         dispatch_async(dispatch_get_main_queue(), ^{
+//                                             failure(nil);
+//                                         });
+//                                     }
+//                                 }  // if (code) {} else {}
+//                             }
+//                         }
+//                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+//                             if (failure) {
+//                                 dispatch_async(dispatch_get_main_queue(), ^{
+//                                     failure(error);
+//                                 });
+//                             }
+//                         }];
 }
 
 @end

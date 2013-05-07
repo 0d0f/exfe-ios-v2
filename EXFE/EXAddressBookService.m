@@ -390,7 +390,11 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
         // init localcontact
         dispatch_sync(dispatch_get_main_queue(), ^{
             RKObjectManager *objectManager = [RKObjectManager sharedManager];
-            NSArray *localcontacts = [objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil];
+            __block NSArray *localcontacts;
+            [objectManager.managedObjectStore.persistentStoreManagedObjectContext performBlockAndWait:^{
+                localcontacts = [objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil];
+            }];
+            
             if ([localcontacts count] > 0) {
                 result= [localcontacts objectAtIndex:0];
                 
@@ -400,9 +404,11 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                     needUpdate = NO;
                 }
             } else {
-                NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.persistentStoreManagedObjectContext];
+                NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
                 RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                result = [[[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.persistentStoreManagedObjectContext] autorelease];
+                [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
+                    result = [[[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+                }];
             }
         });
         
