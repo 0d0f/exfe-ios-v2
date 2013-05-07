@@ -77,6 +77,12 @@
        success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
+- (void)reverseAuth:(Provider)provider
+          withToken:(NSString*)token
+           andParam:(NSDictionary*) param
+            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
 - (void)regDevice:(NSString*)pushToken
           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;

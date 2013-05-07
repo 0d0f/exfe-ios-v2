@@ -1080,6 +1080,33 @@
 		4FB30D251700A76B007BC66D /* widget_exfee_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB30D231700A76A007BC66D /* widget_exfee_30@2x.png */; };
 		4FB30D2B1700A7FD007BC66D /* widget_conv_30shine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB30D291700A7FC007BC66D /* widget_conv_30shine.png */; };
 		4FB30D2C1700A7FD007BC66D /* widget_conv_30shine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB30D2A1700A7FD007BC66D /* widget_conv_30shine@2x.png */; };
+		4FB377E117377CB4001FA1B2 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D617377CB4001FA1B2 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377E217377CB4001FA1B2 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D617377CB4001FA1B2 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377E317377CB4001FA1B2 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D617377CB4001FA1B2 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377E417377CB4001FA1B2 /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D817377CB4001FA1B2 /* OAuth+Additions.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377E517377CB4001FA1B2 /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D817377CB4001FA1B2 /* OAuth+Additions.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377E617377CB4001FA1B2 /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D817377CB4001FA1B2 /* OAuth+Additions.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377E717377CB4001FA1B2 /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DA17377CB4001FA1B2 /* OAuthCore.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377E817377CB4001FA1B2 /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DA17377CB4001FA1B2 /* OAuthCore.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377E917377CB4001FA1B2 /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DA17377CB4001FA1B2 /* OAuthCore.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377EA17377CB4001FA1B2 /* TWAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DC17377CB4001FA1B2 /* TWAPIManager.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377EB17377CB4001FA1B2 /* TWAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DC17377CB4001FA1B2 /* TWAPIManager.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377EC17377CB4001FA1B2 /* TWAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DC17377CB4001FA1B2 /* TWAPIManager.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377ED17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377EE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377EF17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377F017377CB4001FA1B2 /* TWSignedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377E017377CB4001FA1B2 /* TWSignedRequest.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377F117377CB4001FA1B2 /* TWSignedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377E017377CB4001FA1B2 /* TWSignedRequest.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377F217377CB4001FA1B2 /* TWSignedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377E017377CB4001FA1B2 /* TWSignedRequest.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377F417378324001FA1B2 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F317378324001FA1B2 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		4FB377F61737832E001FA1B2 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F51737832D001FA1B2 /* Twitter.framework */; };
+		4FB377F717378336001FA1B2 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F317378324001FA1B2 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		4FB377F81737833A001FA1B2 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F51737832D001FA1B2 /* Twitter.framework */; };
+		4FB377F917378342001FA1B2 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F317378324001FA1B2 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		4FB377FA17378347001FA1B2 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F51737832D001FA1B2 /* Twitter.framework */; };
+		4FB377FC173795C2001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; };
+		4FB377FD173795C9001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; };
+		4FB377FE173795D1001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; };
 		4FB4435716B7B62800DE220E /* navi_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB4435516B7B62800DE220E /* navi_btn.png */; };
 		4FB4435816B7B62800DE220E /* navi_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB4435616B7B62800DE220E /* navi_btn@2x.png */; };
 		4FB501A0169FC504005328BE /* EXCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5019F169FC504005328BE /* EXCurveView.m */; };
@@ -2002,6 +2029,21 @@
 		4FB30D231700A76A007BC66D /* widget_exfee_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_exfee_30@2x.png"; sourceTree = "<group>"; };
 		4FB30D291700A7FC007BC66D /* widget_conv_30shine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_conv_30shine.png; sourceTree = "<group>"; };
 		4FB30D2A1700A7FD007BC66D /* widget_conv_30shine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_conv_30shine@2x.png"; sourceTree = "<group>"; };
+		4FB377D517377CB4001FA1B2 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		4FB377D617377CB4001FA1B2 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		4FB377D717377CB4001FA1B2 /* OAuth+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OAuth+Additions.h"; sourceTree = "<group>"; };
+		4FB377D817377CB4001FA1B2 /* OAuth+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OAuth+Additions.m"; sourceTree = "<group>"; };
+		4FB377D917377CB4001FA1B2 /* OAuthCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthCore.h; sourceTree = "<group>"; };
+		4FB377DA17377CB4001FA1B2 /* OAuthCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthCore.m; sourceTree = "<group>"; };
+		4FB377DB17377CB4001FA1B2 /* TWAPIManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TWAPIManager.h; path = Vendor/TWReverseAuth/TWAPIManager.h; sourceTree = SOURCE_ROOT; };
+		4FB377DC17377CB4001FA1B2 /* TWAPIManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TWAPIManager.m; path = Vendor/TWReverseAuth/TWAPIManager.m; sourceTree = SOURCE_ROOT; };
+		4FB377DD17377CB4001FA1B2 /* TwitterReverseOAuthResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterReverseOAuthResponse.h; path = Vendor/TWReverseAuth/TwitterReverseOAuthResponse.h; sourceTree = SOURCE_ROOT; };
+		4FB377DE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterReverseOAuthResponse.m; path = Vendor/TWReverseAuth/TwitterReverseOAuthResponse.m; sourceTree = SOURCE_ROOT; };
+		4FB377DF17377CB4001FA1B2 /* TWSignedRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TWSignedRequest.h; path = Vendor/TWReverseAuth/TWSignedRequest.h; sourceTree = SOURCE_ROOT; };
+		4FB377E017377CB4001FA1B2 /* TWSignedRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TWSignedRequest.m; path = Vendor/TWReverseAuth/TWSignedRequest.m; sourceTree = SOURCE_ROOT; };
+		4FB377F317378324001FA1B2 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		4FB377F51737832D001FA1B2 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
+		4FB377FB173795C2001FA1B2 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		4FB4435516B7B62800DE220E /* navi_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navi_btn.png; sourceTree = "<group>"; };
 		4FB4435616B7B62800DE220E /* navi_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navi_btn@2x.png"; sourceTree = "<group>"; };
 		4FB5019E169FC503005328BE /* EXCurveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCurveView.h; sourceTree = "<group>"; };
@@ -2541,6 +2583,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FB377FD173795C9001FA1B2 /* Accounts.framework in Frameworks */,
+				4FB377F81737833A001FA1B2 /* Twitter.framework in Frameworks */,
+				4FB377F717378336001FA1B2 /* Social.framework in Frameworks */,
 				4F63DB0217172AA600136B7E /* libBlocksKit.a in Frameworks */,
 				4F63DB0317172AA600136B7E /* CoreTelephony.framework in Frameworks */,
 				4F63DB0417172AA600136B7E /* CoreImage.framework in Frameworks */,
@@ -2567,6 +2612,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FB377FC173795C2001FA1B2 /* Accounts.framework in Frameworks */,
+				4FB377FA17378347001FA1B2 /* Twitter.framework in Frameworks */,
+				4FB377F917378342001FA1B2 /* Social.framework in Frameworks */,
 				4F63DCD117172B0700136B7E /* libBlocksKit.a in Frameworks */,
 				4F63DCD217172B0700136B7E /* CoreTelephony.framework in Frameworks */,
 				4F63DCD317172B0700136B7E /* CoreImage.framework in Frameworks */,
@@ -2593,6 +2641,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FB377FE173795D1001FA1B2 /* Accounts.framework in Frameworks */,
+				4FB377F61737832E001FA1B2 /* Twitter.framework in Frameworks */,
+				4FB377F417378324001FA1B2 /* Social.framework in Frameworks */,
 				4F9FE56C1702EB6C0098B9B9 /* libBlocksKit.a in Frameworks */,
 				788C736016D6292100BDD594 /* CoreTelephony.framework in Frameworks */,
 				7882F80316A68372004309DF /* CoreImage.framework in Frameworks */,
@@ -2685,6 +2736,34 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		4FB377CC17377C7D001FA1B2 /* TWReverseAuth */ = {
+			isa = PBXGroup;
+			children = (
+				4FB377D417377CB4001FA1B2 /* OAuthCore */,
+				4FB377DB17377CB4001FA1B2 /* TWAPIManager.h */,
+				4FB377DC17377CB4001FA1B2 /* TWAPIManager.m */,
+				4FB377DD17377CB4001FA1B2 /* TwitterReverseOAuthResponse.h */,
+				4FB377DE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m */,
+				4FB377DF17377CB4001FA1B2 /* TWSignedRequest.h */,
+				4FB377E017377CB4001FA1B2 /* TWSignedRequest.m */,
+			);
+			name = TWReverseAuth;
+			sourceTree = "<group>";
+		};
+		4FB377D417377CB4001FA1B2 /* OAuthCore */ = {
+			isa = PBXGroup;
+			children = (
+				4FB377D517377CB4001FA1B2 /* NSData+Base64.h */,
+				4FB377D617377CB4001FA1B2 /* NSData+Base64.m */,
+				4FB377D717377CB4001FA1B2 /* OAuth+Additions.h */,
+				4FB377D817377CB4001FA1B2 /* OAuth+Additions.m */,
+				4FB377D917377CB4001FA1B2 /* OAuthCore.h */,
+				4FB377DA17377CB4001FA1B2 /* OAuthCore.m */,
+			);
+			name = OAuthCore;
+			path = Vendor/TWReverseAuth/OAuthCore;
+			sourceTree = SOURCE_ROOT;
 		};
 		4FC6E95416B0E6EC0023AD1C /* dock */ = {
 			isa = PBXGroup;
@@ -3235,6 +3314,7 @@
 		785FD54E158065610056590D /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				4FB377CC17377C7D001FA1B2 /* TWReverseAuth */,
 				4FDFA37B172A5F0C00929BC9 /* TTTAttributedLabel.h */,
 				4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */,
 				4F25A1B8171FB9FF000513B5 /* CSLinearLayoutView.h */,
@@ -3460,6 +3540,9 @@
 		78A98E8A1560F832009E0806 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4FB377FB173795C2001FA1B2 /* Accounts.framework */,
+				4FB377F51737832D001FA1B2 /* Twitter.framework */,
+				4FB377F317378324001FA1B2 /* Social.framework */,
 				788C735F16D6292000BDD594 /* CoreTelephony.framework */,
 				7882F80216A68372004309DF /* CoreImage.framework */,
 				78C6BA0016634C6F00483D23 /* AddressBook.framework */,
@@ -5353,6 +5436,12 @@
 				4FDFA37E172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */,
 				7615B33C172AB7D200C54031 /* EFLabel.m in Sources */,
 				4FDFA490172B9D8200929BC9 /* EFIdentityTextField.m in Sources */,
+				4FB377E217377CB4001FA1B2 /* NSData+Base64.m in Sources */,
+				4FB377E517377CB4001FA1B2 /* OAuth+Additions.m in Sources */,
+				4FB377E817377CB4001FA1B2 /* OAuthCore.m in Sources */,
+				4FB377EB17377CB4001FA1B2 /* TWAPIManager.m in Sources */,
+				4FB377EE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */,
+				4FB377F117377CB4001FA1B2 /* TWSignedRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5506,6 +5595,12 @@
 				4FDFA37F172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */,
 				7615B33D172AB7D200C54031 /* EFLabel.m in Sources */,
 				4FDFA491172B9D8200929BC9 /* EFIdentityTextField.m in Sources */,
+				4FB377E317377CB4001FA1B2 /* NSData+Base64.m in Sources */,
+				4FB377E617377CB4001FA1B2 /* OAuth+Additions.m in Sources */,
+				4FB377E917377CB4001FA1B2 /* OAuthCore.m in Sources */,
+				4FB377EC17377CB4001FA1B2 /* TWAPIManager.m in Sources */,
+				4FB377EF17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */,
+				4FB377F217377CB4001FA1B2 /* TWSignedRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5659,6 +5754,12 @@
 				4FDFA37D172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */,
 				7615B33B172AB7D200C54031 /* EFLabel.m in Sources */,
 				4FDFA48F172B9D8200929BC9 /* EFIdentityTextField.m in Sources */,
+				4FB377E117377CB4001FA1B2 /* NSData+Base64.m in Sources */,
+				4FB377E417377CB4001FA1B2 /* OAuth+Additions.m in Sources */,
+				4FB377E717377CB4001FA1B2 /* OAuthCore.m in Sources */,
+				4FB377EA17377CB4001FA1B2 /* TWAPIManager.m in Sources */,
+				4FB377ED17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */,
+				4FB377F017377CB4001FA1B2 /* TWSignedRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
