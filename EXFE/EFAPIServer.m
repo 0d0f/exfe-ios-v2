@@ -371,10 +371,11 @@
                             switch (type) {
                                 case 2: // HTTP OK
                                 {
-                                    if (code == 206) { // Too many people, still accept
-                                        NSLog(@"HTTP 206 Partial Successfully");
-                                    }
-                                    if(code == 200){
+                                    if (206 == code || 200 == code) {
+//                                        NSInteger overCount = NSNotFound;
+//                                        if (206 == code) {
+//                                            overCount = [[[mappingResult dictionary] valueForKey:@"exfee_over_quota"] integerValue];
+//                                        }
                                         Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
                                         if (successHandler) {
                                             dispatch_async(dispatch_get_main_queue(), ^{
