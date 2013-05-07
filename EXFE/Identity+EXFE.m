@@ -140,4 +140,20 @@
     return hasNotification;
 }
 
+- (BOOL)isEqualToIdentity:(Identity *)another {
+    return ([self compareWithIdentityId:another] && [self compareWithExternalIdAndProvider:another]);
+}
+
+- (BOOL)compareWithIdentityId:(Identity *)another {
+    if ([self.identity_id intValue] == [another.identity_id intValue])
+        return YES;
+    return NO;
+}
+
+- (BOOL)compareWithExternalIdAndProvider:(Identity *)another {
+    if ([self.external_id isEqualToString:another.external_id] && [self.provider isEqualToString:another.provider])
+        return YES;
+    return NO;
+}
+
 @end

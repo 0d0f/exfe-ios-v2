@@ -33,4 +33,9 @@ typedef NS_ENUM(NSUInteger, Provider){
 - (RoughIdentity *)roughIdentityValue;
 - (BOOL)hasAnyNotificationIdentity;
 
+// compare
+- (BOOL)isEqualToIdentity:(Identity *)another;  // compareWithIdentityId: && compareWithExternalIdAndProvider:
+- (BOOL)compareWithIdentityId:(Identity *)another;
+- (BOOL)compareWithExternalIdAndProvider:(Identity *)another;
+
 @end

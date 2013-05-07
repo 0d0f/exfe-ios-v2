@@ -988,6 +988,17 @@
                 NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
                 
                 for (Identity *identity in personIdentities) {
+                    BOOL isIndentityAddedToInvitation = NO;
+                    for (Invitation *invitation in self.cross.exfee.invitations) {
+                        if ([invitation.identity isEqualToIdentity:identity]) {
+                            isIndentityAddedToInvitation = YES;
+                            break;
+                        }
+                    }
+                    
+                    if (isIndentityAddedToInvitation)
+                        continue;
+                    
                     NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
                     Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
                     
