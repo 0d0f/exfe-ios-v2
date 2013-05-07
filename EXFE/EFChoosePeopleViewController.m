@@ -937,7 +937,7 @@
         request.sortDescriptors = @[descriptor];
         
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
-        recentexfeePeople = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        recentexfeePeople = [objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil];
     };
     if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
         dispatch_sync(dispatch_get_main_queue(), block);

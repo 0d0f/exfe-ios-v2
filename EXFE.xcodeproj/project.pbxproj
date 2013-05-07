@@ -2791,8 +2791,6 @@
 				788312A515738D2600D67103 /* Cell */,
 				78A0C1CC1683037F0073CCE5 /* Control */,
 				78C25AB7159D81ED002AED1E /* View */,
-				763A018A171EAEB10082CC9E /* EFSearchBar.h */,
-				763A018B171EAEB10082CC9E /* EFSearchBar.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -3487,6 +3485,8 @@
 		78A0C1CC1683037F0073CCE5 /* Control */ = {
 			isa = PBXGroup;
 			children = (
+				763A018A171EAEB10082CC9E /* EFSearchBar.h */,
+				763A018B171EAEB10082CC9E /* EFSearchBar.m */,
 				789FBD8315F0980000E3BE80 /* EXCollectionMask.h */,
 				789FBD8415F0980000E3BE80 /* EXCollectionMask.m */,
 				78B91DD716882BE400BB98B1 /* ExfeeNumberView.h */,
