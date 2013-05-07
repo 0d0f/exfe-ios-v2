@@ -473,7 +473,7 @@
                                          [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                                          if (failureHandler) {
                                              dispatch_async(dispatch_get_main_queue(), ^{
-                                                 failureHandler(nil);
+                                                 failureHandler(error);
                                              });
                                          }
                                      }];
