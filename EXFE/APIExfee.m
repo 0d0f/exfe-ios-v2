@@ -18,7 +18,7 @@
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    NSDictionary *rsvpdict = [NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",my_identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
+    NSDictionary *rsvpdict = [NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",@(my_identity_id),@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
     
     NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/rsvp?token=%@",exfee_id, [EFAPIServer sharedInstance].user_token];
     

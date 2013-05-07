@@ -969,8 +969,10 @@
         
         EFChoosePeopleViewController *viewController = [[EFChoosePeopleViewController alloc] initWithNibName:@"EFChoosePeopleViewController"
                                                                                                       bundle:nil];
-        viewController.completionHandler = ^(NSArray *identities){
+        viewController.addActionHandler = ^(NSArray *identities){
             NSAssert(dispatch_get_main_queue() == dispatch_get_current_queue(), @"WTF! MUST on main queue! boy!");
+            
+            [self dismissViewControllerAnimated:YES completion:nil];
             
             NSMutableSet *invitations = [[NSMutableSet alloc] init];
             for (NSArray *personIdentities in identities) {

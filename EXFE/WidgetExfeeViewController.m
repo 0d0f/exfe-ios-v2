@@ -27,6 +27,8 @@
 #import "NSString+EXFE.h"
 #import "EFChoosePeopleViewController.h"
 #import "EFAPIServer.h"
+#import "MBProgressHUD.h"
+#import "EXSpinView.h"
 
 
 #define kTagViewExfeeRoot         10
@@ -878,7 +880,18 @@ typedef enum {
             EFChoosePeopleViewController *viewController = [[EFChoosePeopleViewController alloc] initWithNibName:@"EFChoosePeopleViewController"
                                                                                                           bundle:nil];
             
-            viewController.completionHandler = ^(NSArray *identities){
+            viewController.addActionHandler = ^(NSArray *identities){
+                NSAssert(dispatch_get_main_queue() == dispatch_get_current_queue(), @"WTF! MUST on main queue! boy!");
+                
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.labelText = @"Adding...";
+                hud.mode = MBProgressHUDModeCustomView;
+                EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+                [bigspin startAnimating];
+                hud.customView = bigspin;
+                [bigspin release];
+
+                
                 Exfee *exfee = [Exfee disconnectedEntity];
                 [exfee addToContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
                 exfee.exfee_id = [self.exfee.exfee_id copy];
@@ -921,11 +934,16 @@ typedef enum {
                 [[EFAPIServer sharedInstance] editExfee:exfee
                                              byIdentity:myidentity
                                                 success:^(Exfee *editedExfee){
+                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                    
                                                     self.exfee = editedExfee;
                                                     self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                                                     [exfeeContainer reloadData];
+                                                    
+                                                    [self dismissViewControllerAnimated:YES completion:nil];
                                                 }
                                                 failure:^(NSError *error){
+                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                     NSLog(@"Oh! NO! %@", error);
                                                 }];
                 
