@@ -1128,8 +1128,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)twitterSignIn:(id)sender
 {
-#if (defined PANDA) || (defined PILOT)
-    
     ACAccountType *twitterType = [_accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
     
     ACAccountStoreRequestAccessCompletionHandler handler = ^(BOOL granted, NSError *error) {
@@ -1209,12 +1207,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [_accountStore requestAccessToAccountsWithType:twitterType withCompletionHandler:handler];
         }
     }
-#else
-    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-    oauth.provider = @"twitter";
-    oauth.delegate = self;
-    [self presentModalViewController:oauth animated:YES];
-#endif
+//    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+//    oauth.provider = @"twitter";
+//    oauth.delegate = self;
+//    [self presentModalViewController:oauth animated:YES];
+
 }
 
 - (void)forgetPwd:(UIControl *)sender
