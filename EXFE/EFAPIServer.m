@@ -257,10 +257,21 @@
             success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
             failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
+    
+    NSParameterAssert(provider != kProviderUnknown);
+    NSParameterAssert(token);
+    if (provider == kProviderUnknown) {
+        return;
+    }
+    if (token.length == 0) {
+        return;
+    }
+    
     NSString *endpoint = [NSString stringWithFormat:@"/oauth/reverseauth"];
     RKObjectManager *manager = [RKObjectManager sharedManager] ;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params addEntriesFromDictionary:@{@"provider": [Identity getProviderString:provider], @"oauth_token": token}];
+    [params setValue:[Identity getProviderString:provider] forKey:@"provider"];
+    [params setValue:token forKey:@"oauth_token"];
     if (param) {
         [params addEntriesFromDictionary:param];
     }
@@ -273,8 +284,8 @@
                                  
                                  NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
                                  if ([code integerValue] == 200) {
-                                     NSNumber *u = [responseObject valueForKeyPath:@"response.oauth_signin.user_id"];
-                                     NSString *t = [responseObject valueForKeyPath:@"response.oauth_signin.token"];
+                                     NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
+                                     NSString *t = [responseObject valueForKeyPath:@"response.token"];
                                      self.user_id  = [u integerValue];
                                      self.user_token = t;
                                      [self saveUserData];

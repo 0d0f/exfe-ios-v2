@@ -12,4 +12,13 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import "UILog.h"
+
+
+    #ifdef DEBUG
+        #define kTWConsumerKey @"VC3OxLBNSGPLOZ2zkgisA"
+        #define kTWConsumerSecret @"Lg6b5eHdPLFPsy4pI2aXPn6qEX6oxTwPyS0rr2g4A"
+    #else
+        #define kTWConsumerKey @"oGzqJNr6loHEsZOsIHTQ7w"
+        #define kTWConsumerSecret @"1q54ZzPppYc4kMWZEQi5dHKtSVVUFWPMLLQWeTOu90"
+    #endif
 #endif
