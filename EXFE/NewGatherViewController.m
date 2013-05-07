@@ -512,7 +512,7 @@
     [self relayoutUI];
 }
 
-- (IBAction) Gather:(id) sender{
+- (IBAction)Gather:(id) sender{
     
     MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode=MBProgressHUDModeCustomView;
@@ -1012,11 +1012,11 @@
             self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
             [self reFormatTitle];
             [exfeeShowview reloadData];
-            if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [alert show];
-                [alert release];
-            }
+//            if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
+//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                [alert show];
+//                [alert release];
+//            }
         };
         [self presentViewController:viewController
                            animated:YES
