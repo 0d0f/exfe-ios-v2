@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import <BlocksKit/BlocksKit.h>
+#import <FacebookSDK/FacebookSDK.h>
 #import "UIApplication+EXFE.h"
 #import "APICrosses.h"
 #import "APIConversation.h"
@@ -19,7 +20,6 @@
 @implementation AppDelegate
 @synthesize window = _window;
 @synthesize navigationController=_navigationController;
-@synthesize session = _session;
 
 - (void)dealloc
 {
@@ -138,14 +138,14 @@
 {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    [FBAppCall handleDidBecomeActiveWithSession:self.session];
+    [FBAppCall handleDidBecomeActiveWithSession:[FBSession activeSession]];
     [Util checkUpdate];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    [self.session close];
+    [[FBSession activeSession] close];
 }
 
 // request for APN
@@ -249,7 +249,7 @@
     
     return [FBAppCall handleOpenURL:url
                   sourceApplication:sourceApplication
-                        withSession:self.session];
+                        withSession:[FBSession activeSession]];
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{

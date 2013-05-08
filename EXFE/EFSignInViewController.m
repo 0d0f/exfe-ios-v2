@@ -776,6 +776,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     if (baseitem == nil) {
         baseitem = [self.rootView findItemByTag:kViewTagButtonStartOver];
     }
+    if (baseitem == nil) {
+        baseitem = [self.rootView findItemByTag:kViewTagSnsGroup];
+    }
     
     if (baseitem) {
         [_inlineError wrapContent];
@@ -1131,118 +1134,102 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [self setStage:kStageStart];
 }
 
+- (void)syncFBAccount
+{
+    ACAccountStore *accountStore;
+    ACAccountType *accountTypeFB;
+    if ((accountStore = [[ACAccountStore alloc] init]) &&
+        (accountTypeFB = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook] ) ){
+        
+        NSArray *fbAccounts = [accountStore accountsWithAccountType:accountTypeFB];
+        id account;
+        if (fbAccounts && [fbAccounts count] > 0 &&
+            (account = [fbAccounts objectAtIndex:0])){
+            
+            [accountStore renewCredentialsForAccount:account completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
+                //we don't actually need to inspect renewResult or error.
+                if (error){
+                    
+                }
+            }];
+        }
+    }
+}
+
 - (void)facebookSignIn:(id)sender
 {
     
-//    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-//    oauth.provider = @"facebook";
-//    oauth.delegate = self;
-//    [self presentModalViewController:oauth animated:YES];
     
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (!appDelegate.session) {
-        // create a fresh session object
-        appDelegate.session = [[FBSession alloc] init];
-    }
-    
-    
-//    // this button's job is to flip-flop the session from open to closed
-//    if (appDelegate.session.isOpen) {
-//        // if a user logs out explicitly, we delete any cached token information, and next
-//        // time they run the applicaiton they will be presented with log in UX again; most
-//        // users will simply close the app or switch away, without logging out; this will
-//        // cause the implicit cached-token login to occur on next launch of the application
-//        [appDelegate.session closeAndClearTokenInformation];
-//        
-//    }
-    if (appDelegate.session.isOpen) {
-        [appDelegate.session closeAndClearTokenInformation];
-    }
-    if (!appDelegate.session.isOpen) {
-        if (appDelegate.session.state != FBSessionStateCreated) {
-            // Create a new, logged out session.
-            appDelegate.session = [[FBSession alloc] init];
-        }
-//        [self.view endEditing:NO];
-        // if the session isn't open, let's open it now and present the login UX to the user
-        [appDelegate.session openWithCompletionHandler:^(FBSession *session,
-                                                         FBSessionState status,
-                                                         NSError *error) {
-            // and here we make sure to update our UX according to the new session state
-//            [self updateView];
-            if (session.isOpen) {
-                // valid account UI is shown whenever the session is open
-                
-                NSDictionary *params = @{@"oauth_expires": [NSString stringWithFormat:@"%f", session.accessTokenData.expirationDate.timeIntervalSince1970]};
-                
-                MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.labelText = @"Signing in Facebook";
-                hud.mode = MBProgressHUDModeCustomView;
-                EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-                [bigspin startAnimating];
-                hud.customView = bigspin;
-                [bigspin release];
-                
-                [[EFAPIServer sharedInstance] reverseAuth:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-                    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                        
-                        NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-                        if ([code integerValue] == 200) {
-                            [self loadUserAndExit];
-                        }
-                        //400: invalid_token
-                        //400: no_provider
-                        //400: unsupported_provider
-                    }
-                    
-                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                    NSLog(@"login failure with %@", error);
-                    // kCFURLErrorCannotDecodeContentData = -1016, unexpected error
-                }];
-//                [appDelegate.session closeAndClearTokenInformation];
-            } else {
-                // login-needed account UI is shown whenever the session is closed
-//                NSLog(@"no token, need login ");
-
-            }
-        }];
-    }
-    
-    
-    
+    [FBSession.activeSession closeAndClearTokenInformation];
     // If a user has *never* logged into your app, request one of
     // "email", "user_location", or "user_birthday". If you do not
     // pass in any permissions, "email" permissions will be automatically
     // requested for you. Other read permissions can also be included here.
-//    NSArray *permissions = @[@"email"];
-//    
-//    [FBSession openActiveSessionWithReadPermissions:permissions
-//                                       allowLoginUI:YES
-//                                  completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
-//                                      /* handle success + failure in block */
-//                                      
-//     if (session.isOpen){
-//         NSArray *permissions = @[@"user_photos", @"friends_photos"];
-//         
-//         
-//         [[FBSession activeSession] requestNewReadPermissions:permissions
-//                                                 completionHandler:^(FBSession *session, NSError *error) {
-//                                                     /* handle success + failure in block */
-//                                                     
-//                                                     // can include any of the "publish" or "manage" permissions
-//                                                     NSArray *permissions =
-//                                                     [NSArray arrayWithObjects:@"publish_actions", nil];
-//                                                      
-//                                                      [[FBSession activeSession] requestNewPublishPermissions:permissions
-//                                                                                                   defaultAudience:FBSessionDefaultAudienceFriends
-//                                                                                                 completionHandler:^(FBSession *session, NSError *error) {
-//                                                                                                     /* handle success + failure in block */
-//                                                                                                 }];
-//                                                 }];
-//     }
-//                                  }];
+    NSArray *permissions = @[@"email"];
+    
+    [FBSession openActiveSessionWithReadPermissions:permissions
+                                       allowLoginUI:YES
+                                  completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                                      /* handle success + failure in block */
+                                      
+                                      switch (session.state) {
+                                          case FBSessionStateOpen:{
+                                              NSDictionary *params = @{@"oauth_expires": [NSString stringWithFormat:@"%.0f", session.accessTokenData.expirationDate.timeIntervalSince1970]};
+                                              
+                                              MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                                              hud.labelText = @"Signing in Facebook";
+                                              hud.mode = MBProgressHUDModeCustomView;
+                                              EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+                                              [bigspin startAnimating];
+                                              hud.customView = bigspin;
+                                              [bigspin release];
+                                              
+                                              [[EFAPIServer sharedInstance] reverseAuth:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                  [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                  if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                                      
+                                                      NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                                                      switch ([code integerValue]) {
+                                                          case 200:{
+                                                              [self loadUserAndExit];
+                                                              // ask for more permissions
+                                                              //                            NSArray *permissions = @[@"user_photos", @"friends_photos"];
+                                                              //                            [[FBSession activeSession] requestNewReadPermissions:permissions completionHandler:^(FBSession *session, NSError *error) {
+                                                              //                                ;
+                                                              //                            }];
+                                                          }
+                                                              break;
+                                                          case 400:{
+                                                              if ([@"invalid_token" isEqualToString:[responseObject valueForKeyPath:@"meta.errorType"]] ) {
+                                                                  [self showInlineError:@"Invalid token" with:@"There is something wrong. Please try again later."];
+                                                                  
+                                                                  [self syncFBAccount];
+                                                                  
+                                                              }
+                                                          }
+                                                          default:
+                                                              break;
+                                                      }
+                                                  }
+                                              } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                  [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                  //                    NSLog(@"login failure with %@", error);
+                                                  // kCFURLErrorCannotDecodeContentData = -1016, unexpected error
+                                              }];
+                                          }
+                                              break;
+                                              
+                                          case FBSessionStateClosedLoginFailed:
+                                              [self showInlineError:@"Login Failed" with:@"There is something wrong. Please try again later."];
+                                              
+                                              [self syncFBAccount];
+                                              break;
+                                          default:
+                                              break;
+                                      }
+                                      
+                                      
+                                  }];
     
 }
 
@@ -1525,7 +1512,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 {
     [self.view endEditing:YES];
     
-    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"Signing in Twitter";
     hud.mode = MBProgressHUDModeCustomView;
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];

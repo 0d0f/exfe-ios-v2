@@ -10,7 +10,6 @@
 #import <RestKit/RestKit.h>
 #import "Flurry.h"
 #import <objc/runtime.h>
-#import <FacebookSDK/FacebookSDK.h>
 #import "User.h"
 #import "ModelMapping.h"
 
@@ -60,7 +59,6 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, retain) UINavigationController *navigationController;
-@property (strong, nonatomic) FBSession *session;
 
 -(void)SigninDidFinish;
 -(void)SignoutDidFinish;

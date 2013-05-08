@@ -54,7 +54,6 @@
 		4F00546E172836F500D4B429 /* EFTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F00546B172836F400D4B429 /* EFTextField.m */; };
 		4F00547017292C2300D4B429 /* Pilot-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F00546F17292C2300D4B429 /* Pilot-Info.plist */; };
 		4F00547117292C2300D4B429 /* Pilot-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F00546F17292C2300D4B429 /* Pilot-Info.plist */; };
-		4F00547217292C2300D4B429 /* Pilot-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F00546F17292C2300D4B429 /* Pilot-Info.plist */; };
 		4F00547717296C4100D4B429 /* btn_white_44.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00547517296C4100D4B429 /* btn_white_44.png */; };
 		4F00547817296C4100D4B429 /* btn_white_44@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00547617296C4100D4B429 /* btn_white_44@2x.png */; };
 		4F00548017296C4800D4B429 /* btn_white_44.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00547517296C4100D4B429 /* btn_white_44.png */; };
@@ -4813,7 +4812,6 @@
 				4F00545D17266FD800D4B429 /* home_bar.png in Resources */,
 				4F00546017266FD800D4B429 /* home_bar@2x.png in Resources */,
 				7670127C1729086100B5445E /* EFSearchTipViewController.xib in Resources */,
-				4F00547217292C2300D4B429 /* Pilot-Info.plist in Resources */,
 				4F00548217296C4900D4B429 /* btn_white_44.png in Resources */,
 				4F00548317296C4900D4B429 /* btn_white_44@2x.png in Resources */,
 				4F00548817296F6400D4B429 /* table.png in Resources */,
