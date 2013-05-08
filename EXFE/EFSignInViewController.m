@@ -13,6 +13,7 @@
 #import <Social/Social.h>
 #import <Twitter/Twitter.h>
 #import <Accounts/Accounts.h>
+#import <FacebookSDK/FacebookSDK.h>
 #import "EFAPIServer.h"
 #import "Util.h"
 #import "Identity+EXFE.h"
@@ -680,10 +681,22 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     } else if([flag isEqualToString:@"AUTHENTICATE"]){
         switch (provider) {
             case kProviderTwitter:
-                [_btnTwitter sendActionsForControlEvents: UIControlEventTouchUpInside];
+//                [_btnTwitter sendActionsForControlEvents: UIControlEventTouchUpInside];
+            {
+                OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+                oauth.provider = @"twitter";
+                oauth.delegate = self;
+                [self presentModalViewController:oauth animated:YES];
+            }
                 return;
             case kProviderFacebook:
-                [_btnFacebook sendActionsForControlEvents: UIControlEventTouchUpInside];
+//                [_btnFacebook sendActionsForControlEvents: UIControlEventTouchUpInside];
+            {
+                OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+                oauth.provider = @"facebook";
+                oauth.delegate = self;
+                [self presentModalViewController:oauth animated:YES];
+            }
                 return;
             default:
                 break;
@@ -1120,10 +1133,117 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)facebookSignIn:(id)sender
 {
-    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-    oauth.provider = @"facebook";
-    oauth.delegate = self;
-    [self presentModalViewController:oauth animated:YES];
+    
+//    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+//    oauth.provider = @"facebook";
+//    oauth.delegate = self;
+//    [self presentModalViewController:oauth animated:YES];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (!appDelegate.session) {
+        // create a fresh session object
+        appDelegate.session = [[FBSession alloc] init];
+    }
+    
+    
+//    // this button's job is to flip-flop the session from open to closed
+//    if (appDelegate.session.isOpen) {
+//        // if a user logs out explicitly, we delete any cached token information, and next
+//        // time they run the applicaiton they will be presented with log in UX again; most
+//        // users will simply close the app or switch away, without logging out; this will
+//        // cause the implicit cached-token login to occur on next launch of the application
+//        [appDelegate.session closeAndClearTokenInformation];
+//        
+//    }
+    if (appDelegate.session.isOpen) {
+        [appDelegate.session closeAndClearTokenInformation];
+    }
+    if (!appDelegate.session.isOpen) {
+        if (appDelegate.session.state != FBSessionStateCreated) {
+            // Create a new, logged out session.
+            appDelegate.session = [[FBSession alloc] init];
+        }
+//        [self.view endEditing:NO];
+        // if the session isn't open, let's open it now and present the login UX to the user
+        [appDelegate.session openWithCompletionHandler:^(FBSession *session,
+                                                         FBSessionState status,
+                                                         NSError *error) {
+            // and here we make sure to update our UX according to the new session state
+//            [self updateView];
+            if (session.isOpen) {
+                // valid account UI is shown whenever the session is open
+                
+                NSDictionary *params = @{@"oauth_expires": [NSString stringWithFormat:@"%f", session.accessTokenData.expirationDate.timeIntervalSince1970]};
+                
+                MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.labelText = @"Signing in Facebook";
+                hud.mode = MBProgressHUDModeCustomView;
+                EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+                [bigspin startAnimating];
+                hud.customView = bigspin;
+                [bigspin release];
+                
+                [[EFAPIServer sharedInstance] reverseAuth:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                        
+                        NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                        if ([code integerValue] == 200) {
+                            [self loadUserAndExit];
+                        }
+                        //400: invalid_token
+                        //400: no_provider
+                        //400: unsupported_provider
+                    }
+                    
+                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+//                    NSLog(@"login failure with %@", error);
+                    // kCFURLErrorCannotDecodeContentData = -1016, unexpected error
+                }];
+//                [appDelegate.session closeAndClearTokenInformation];
+            } else {
+                // login-needed account UI is shown whenever the session is closed
+//                NSLog(@"no token, need login ");
+
+            }
+        }];
+    }
+    
+    
+    
+    // If a user has *never* logged into your app, request one of
+    // "email", "user_location", or "user_birthday". If you do not
+    // pass in any permissions, "email" permissions will be automatically
+    // requested for you. Other read permissions can also be included here.
+//    NSArray *permissions = @[@"email"];
+//    
+//    [FBSession openActiveSessionWithReadPermissions:permissions
+//                                       allowLoginUI:YES
+//                                  completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+//                                      /* handle success + failure in block */
+//                                      
+//     if (session.isOpen){
+//         NSArray *permissions = @[@"user_photos", @"friends_photos"];
+//         
+//         
+//         [[FBSession activeSession] requestNewReadPermissions:permissions
+//                                                 completionHandler:^(FBSession *session, NSError *error) {
+//                                                     /* handle success + failure in block */
+//                                                     
+//                                                     // can include any of the "publish" or "manage" permissions
+//                                                     NSArray *permissions =
+//                                                     [NSArray arrayWithObjects:@"publish_actions", nil];
+//                                                      
+//                                                      [[FBSession activeSession] requestNewPublishPermissions:permissions
+//                                                                                                   defaultAudience:FBSessionDefaultAudienceFriends
+//                                                                                                 completionHandler:^(FBSession *session, NSError *error) {
+//                                                                                                     /* handle success + failure in block */
+//                                                                                                 }];
+//                                                 }];
+//     }
+//                                  }];
+    
 }
 
 - (void)twitterSignIn:(id)sender
@@ -1187,10 +1307,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 //                    [alert show];
                 }
             } else {
-                NSLog(@"You were not granted access to the Twitter accounts.");
                 
-                
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Permission" message:@"Please configure a Twitter account or enable the app in Settings.app" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Set up Twitter account" message:@"Please allow EXFE to use your Twitter account. Go to the Settings app, select Twitter to set up." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [alert show];
                 
             }
@@ -1206,10 +1324,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             [_accountStore requestAccessToAccountsWithType:twitterType withCompletionHandler:handler];
         }
     }
-//    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-//    oauth.provider = @"twitter";
-//    oauth.delegate = self;
-//    [self presentModalViewController:oauth animated:YES];
 
 }
 
@@ -1413,25 +1527,16 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"Signing in Twitter";
-    hud.mode=MBProgressHUDModeCustomView;
+    hud.mode = MBProgressHUDModeCustomView;
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
     [bigspin startAnimating];
     hud.customView = bigspin;
     [bigspin release];
     
     [_apiManager performReverseAuthForAccount:acct withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (responseData) {
             NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
             NSDictionary *params = [Util splitQuery:responseStr];
-            
-            MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            hud.labelText = @"Signing in";
-            hud.mode=MBProgressHUDModeCustomView;
-            EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-            [bigspin startAnimating];
-            hud.customView = bigspin;
-            [bigspin release];
             
             [[EFAPIServer sharedInstance] reverseAuth:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -1448,12 +1553,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-                NSLog(@"login failure with %@", error);
+//                NSLog(@"login failure with %@", error);
                 // kCFURLErrorCannotDecodeContentData = -1016, unexpected error
             }];
         } else {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            NSLog(@"Reverse Auth process failed. Error returned was: %@\n", [error localizedDescription]);
+//            NSLog(@"Reverse Auth process failed. Error returned was: %@\n", [error localizedDescription]);
         }
     }];
 }

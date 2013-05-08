@@ -36,8 +36,12 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb624471647582234</string>
+			</array>
+		</dict>
+		<dict>
 			<key>CFBundleURLName</key>
 			<string>com.0d0f.production</string>
 			<key>CFBundleURLSchemes</key>
@@ -48,6 +52,10 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>40</string>
+	<key>FacebookAppID</key>
+	<string>624471647582234</string>
+	<key>FacebookDisplayName</key>
+	<string>0D0F panda</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIPrerenderedIcon</key>

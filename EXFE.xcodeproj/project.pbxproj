@@ -1106,7 +1106,10 @@
 		4FB377FA17378347001FA1B2 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F51737832D001FA1B2 /* Twitter.framework */; };
 		4FB377FC173795C2001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; };
 		4FB377FD173795C9001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; };
-		4FB377FE173795D1001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; };
+		4FB377FE173795D1001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		4FB37804173A285C001FA1B2 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB37803173A285C001FA1B2 /* FacebookSDK.framework */; };
+		4FB3780C173A287E001FA1B2 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB37803173A285C001FA1B2 /* FacebookSDK.framework */; };
+		4FB3780D173A2893001FA1B2 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB37803173A285C001FA1B2 /* FacebookSDK.framework */; };
 		4FB4435716B7B62800DE220E /* navi_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB4435516B7B62800DE220E /* navi_btn.png */; };
 		4FB4435816B7B62800DE220E /* navi_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB4435616B7B62800DE220E /* navi_btn@2x.png */; };
 		4FB501A0169FC504005328BE /* EXCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5019F169FC504005328BE /* EXCurveView.m */; };
@@ -1126,6 +1129,12 @@
 		4FC7ED811717F46900582D84 /* WidgetConvViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FC7ED6E1717F3F700582D84 /* WidgetConvViewController.xib */; };
 		4FC8FCE8168D7E5700409779 /* Place+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCE7168D7E5700409779 /* Place+Helper.m */; };
 		4FC8FCEB168D912E00409779 /* EFTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8FCEA168D912E00409779 /* EFTime+Helper.m */; };
+		4FCC22E6173A349000E6DB50 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FCC22E5173A349000E6DB50 /* libsqlite3.dylib */; };
+		4FCC22EE173A34AE00E6DB50 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FCC22E5173A349000E6DB50 /* libsqlite3.dylib */; };
+		4FCC22EF173A34B600E6DB50 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FCC22E5173A349000E6DB50 /* libsqlite3.dylib */; };
+		4FCC22F1173A35BE00E6DB50 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FCC22F0173A35BE00E6DB50 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		4FCC22F2173A35F600E6DB50 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FCC22F0173A35BE00E6DB50 /* AdSupport.framework */; };
+		4FCC22F3173A35FD00E6DB50 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FCC22F0173A35BE00E6DB50 /* AdSupport.framework */; };
 		4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */; };
 		4FD9375516D4A57600ED6677 /* CrossGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */; };
 		4FDFA37D172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
@@ -2047,6 +2056,7 @@
 		4FB377F317378324001FA1B2 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		4FB377F51737832D001FA1B2 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		4FB377FB173795C2001FA1B2 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		4FB37803173A285C001FA1B2 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = Vendor/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		4FB4435516B7B62800DE220E /* navi_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navi_btn.png; sourceTree = "<group>"; };
 		4FB4435616B7B62800DE220E /* navi_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navi_btn@2x.png"; sourceTree = "<group>"; };
 		4FB5019E169FC503005328BE /* EXCurveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXCurveView.h; sourceTree = "<group>"; };
@@ -2068,6 +2078,8 @@
 		4FC8FCE7168D7E5700409779 /* Place+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Place+Helper.m"; sourceTree = "<group>"; };
 		4FC8FCE9168D912E00409779 /* EFTime+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFTime+Helper.h"; sourceTree = "<group>"; };
 		4FC8FCEA168D912E00409779 /* EFTime+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFTime+Helper.m"; sourceTree = "<group>"; };
+		4FCC22E5173A349000E6DB50 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		4FCC22F0173A35BE00E6DB50 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		4FD9375116D4A57600ED6677 /* CrossGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossGroupViewController.h; sourceTree = "<group>"; };
 		4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossGroupViewController.m; sourceTree = "<group>"; };
 		4FD9375316D4A57600ED6677 /* CrossGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossGroupViewController.xib; sourceTree = "<group>"; };
@@ -2588,6 +2600,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FCC22F2173A35F600E6DB50 /* AdSupport.framework in Frameworks */,
+				4FCC22EE173A34AE00E6DB50 /* libsqlite3.dylib in Frameworks */,
+				4FB3780C173A287E001FA1B2 /* FacebookSDK.framework in Frameworks */,
 				4FB377FD173795C9001FA1B2 /* Accounts.framework in Frameworks */,
 				4FB377F81737833A001FA1B2 /* Twitter.framework in Frameworks */,
 				4FB377F717378336001FA1B2 /* Social.framework in Frameworks */,
@@ -2617,6 +2632,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FCC22F3173A35FD00E6DB50 /* AdSupport.framework in Frameworks */,
+				4FCC22E6173A349000E6DB50 /* libsqlite3.dylib in Frameworks */,
+				4FB37804173A285C001FA1B2 /* FacebookSDK.framework in Frameworks */,
 				4FB377FC173795C2001FA1B2 /* Accounts.framework in Frameworks */,
 				4FB377FA17378347001FA1B2 /* Twitter.framework in Frameworks */,
 				4FB377F917378342001FA1B2 /* Social.framework in Frameworks */,
@@ -2646,6 +2664,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FCC22F1173A35BE00E6DB50 /* AdSupport.framework in Frameworks */,
+				4FCC22EF173A34B600E6DB50 /* libsqlite3.dylib in Frameworks */,
+				4FB3780D173A2893001FA1B2 /* FacebookSDK.framework in Frameworks */,
 				4FB377FE173795D1001FA1B2 /* Accounts.framework in Frameworks */,
 				4FB377F61737832E001FA1B2 /* Twitter.framework in Frameworks */,
 				4FB377F417378324001FA1B2 /* Social.framework in Frameworks */,
@@ -3548,25 +3569,28 @@
 			isa = PBXGroup;
 			children = (
 				4FB377FB173795C2001FA1B2 /* Accounts.framework */,
-				4FB377F51737832D001FA1B2 /* Twitter.framework */,
-				4FB377F317378324001FA1B2 /* Social.framework */,
-				788C735F16D6292000BDD594 /* CoreTelephony.framework */,
-				7882F80216A68372004309DF /* CoreImage.framework */,
 				78C6BA0016634C6F00483D23 /* AddressBook.framework */,
-				78AA793515CFB94C00883025 /* CoreText.framework */,
-				78F058031599C30200F360F2 /* CoreLocation.framework */,
-				78F058011599B1BD00F360F2 /* MapKit.framework */,
-				78A98EFA15611113009E0806 /* libxml2.dylib */,
-				78A98EF81561110C009E0806 /* QuartzCore.framework */,
-				78A98EF615611107009E0806 /* SystemConfiguration.framework */,
-				78A98EF415611100009E0806 /* Security.framework */,
-				78A98EF2156110FB009E0806 /* MobileCoreServices.framework */,
-				78A98EF0156110F5009E0806 /* CoreData.framework */,
+				4FCC22F0173A35BE00E6DB50 /* AdSupport.framework */,
 				78A98EEE156110F0009E0806 /* CFNetwork.framework */,
-				78A98E8B1560F832009E0806 /* UIKit.framework */,
-				78A98E8D1560F832009E0806 /* Foundation.framework */,
+				78A98EF0156110F5009E0806 /* CoreData.framework */,
 				78A98E8F1560F832009E0806 /* CoreGraphics.framework */,
+				7882F80216A68372004309DF /* CoreImage.framework */,
+				78F058031599C30200F360F2 /* CoreLocation.framework */,
+				788C735F16D6292000BDD594 /* CoreTelephony.framework */,
+				78AA793515CFB94C00883025 /* CoreText.framework */,
+				4FB37803173A285C001FA1B2 /* FacebookSDK.framework */,
+				78A98E8D1560F832009E0806 /* Foundation.framework */,
+				4FCC22E5173A349000E6DB50 /* libsqlite3.dylib */,
+				78A98EFA15611113009E0806 /* libxml2.dylib */,
+				78F058011599B1BD00F360F2 /* MapKit.framework */,
+				78A98EF2156110FB009E0806 /* MobileCoreServices.framework */,
+				78A98EF81561110C009E0806 /* QuartzCore.framework */,
+				78A98EF415611100009E0806 /* Security.framework */,
 				4F1142D616AE40B000C30179 /* SenTestingKit.framework */,
+				4FB377F317378324001FA1B2 /* Social.framework */,
+				78A98EF615611107009E0806 /* SystemConfiguration.framework */,
+				4FB377F51737832D001FA1B2 /* Twitter.framework */,
+				78A98E8B1560F832009E0806 /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -5888,6 +5912,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/FacebookSDK\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -5917,6 +5945,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/FacebookSDK\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -5946,6 +5978,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/FacebookSDK\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -5975,6 +6011,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/FacebookSDK\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -6076,6 +6116,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/FacebookSDK\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -6105,6 +6149,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/FacebookSDK\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EXFE/EXFE-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = RESTKIT_GENERATE_SEED_DB;

@@ -19,6 +19,7 @@
 @implementation AppDelegate
 @synthesize window = _window;
 @synthesize navigationController=_navigationController;
+@synthesize session = _session;
 
 - (void)dealloc
 {
@@ -137,13 +138,14 @@
 {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    
+    [FBAppCall handleDidBecomeActiveWithSession:self.session];
     [Util checkUpdate];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [self.session close];
 }
 
 // request for APN
@@ -240,11 +242,15 @@
     [self ReceivePushData:userInfo RunOnForeground:isForeground];
 }
 
-//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-//{
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
 //    NSLog(@"application:openURL:sourceApplication:annotation: called");
 //    return YES;
-//}
+    
+    return [FBAppCall handleOpenURL:url
+                  sourceApplication:sourceApplication
+                        withSession:self.session];
+}
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
 //    NSLog(@"application:handleOpenURL: called");

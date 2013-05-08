@@ -36,6 +36,12 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb176789085794356</string>
+			</array>
+		</dict>
+		<dict>
 			<key>CFBundleURLName</key>
 			<string>com.exfe.app</string>
 			<key>CFBundleURLSchemes</key>
@@ -46,6 +52,10 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>40</string>
+	<key>FacebookAppID</key>
+	<string>176789085794356</string>
+	<key>FacebookDisplayName</key>
+	<string>EXFE</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIPrerenderedIcon</key>
