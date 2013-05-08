@@ -1187,7 +1187,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 //                    [alert show];
                 }
             } else {
-                self.accounts = [_accountStore accountsWithAccountType:twitterType];
                 NSLog(@"You were not granted access to the Twitter accounts.");
                 
                 
