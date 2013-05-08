@@ -692,7 +692,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 oauth.provider = kProviderTwitter;
                 oauth.delegate = self;
                 if (username) {
-                    oauth.matchedURL = @"https://api.twitter.com/oauth/authorize?";
+                    // @"https://api.twitter.com/oauth/authorize?"
+                    // @"https://api.twitter.com/oauth/authenticate?"
+                    oauth.matchedURL = @"https://api.twitter.com/oauth/auth";
                     oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", username];
                 } else {
                     oauth.matchedURL = nil;
