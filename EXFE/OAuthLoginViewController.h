@@ -10,22 +10,23 @@
 #import "Util.h"
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
+#import "Identity+EXFE.h"
 
 @protocol OAuthLoginViewControllerDelegate;
 @interface OAuthLoginViewController : UIViewController
 {
     id<OAuthLoginViewControllerDelegate> delegate;
     UIView *toolbar;
-    IBOutlet UIWebView *webView;
+//    IBOutlet UIWebView *webView;
     bool firstLoading;
     UIButton *cancelbutton;
     UILabel *titlelabel;
-    NSString *provider;
 }
 @property (nonatomic, assign) id <OAuthLoginViewControllerDelegate> delegate;
-@property (nonatomic, assign)  UIWebView* webView;
-@property (nonatomic,retain) NSString *provider;
-
+@property (nonatomic, retain) IBOutlet UIWebView* webView;
+@property (nonatomic, assign) Provider provider;
+@property (nonatomic, copy) NSString* matchedURL;
+@property (nonatomic, copy) NSString* javaScriptString;
 
 @end
 

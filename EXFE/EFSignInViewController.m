@@ -679,22 +679,41 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     } else if([flag isEqualToString:@"VERIFY"] ) {
         [self setStage:kStageVerificate];
     } else if([flag isEqualToString:@"AUTHENTICATE"]){
+        
+        
+        Provider provider = [Util matchedProvider:_inputIdentity.text];
+        NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
+        NSString *username = [dict valueForKeyPath:@"external_username"];
+        
         switch (provider) {
             case kProviderTwitter:
-//                [_btnTwitter sendActionsForControlEvents: UIControlEventTouchUpInside];
             {
                 OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-                oauth.provider = @"twitter";
+                oauth.provider = kProviderTwitter;
                 oauth.delegate = self;
+                if (username) {
+                    oauth.matchedURL = @"https://api.twitter.com/oauth/authorize?";
+                    oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", username];
+                } else {
+                    oauth.matchedURL = nil;
+                    oauth.javaScriptString = nil;
+                }
+                
                 [self presentModalViewController:oauth animated:YES];
             }
                 return;
             case kProviderFacebook:
-//                [_btnFacebook sendActionsForControlEvents: UIControlEventTouchUpInside];
             {
                 OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-                oauth.provider = @"facebook";
+                oauth.provider = kProviderFacebook;
                 oauth.delegate = self;
+                if (username) {
+                    oauth.matchedURL = @"http://m.facebook.com/login.php?";
+                    oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", username];
+                } else {
+                    oauth.matchedURL = nil;
+                    oauth.javaScriptString = nil;
+                }
                 [self presentModalViewController:oauth animated:YES];
             }
                 return;

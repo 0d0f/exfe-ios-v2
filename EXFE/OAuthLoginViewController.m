@@ -13,9 +13,9 @@
 @end
 
 @implementation OAuthLoginViewController
-@synthesize webView;
+//@synthesize webView;
 @synthesize delegate;
-@synthesize provider;
+//@synthesize provider = _provider;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -53,6 +53,14 @@
     {
         firstLoading=NO;
         [MBProgressHUD hideHUDForView:self.webView animated:YES];
+        NSString *currentURL = webView.request.URL.absoluteString;
+        if (self.matchedURL && self.javaScriptString) {
+            if ([currentURL hasPrefix:self.matchedURL]) {
+                [webView stringByEvaluatingJavaScriptFromString:self.javaScriptString];
+            }
+        }
+        
+    
     }
 }
 - (void)viewDidLoad {
@@ -80,10 +88,16 @@
     [toolbar addSubview:cancelbutton];
     
     titlelabel=[[UILabel alloc] initWithFrame:CGRectMake(65, 10, 230, 24)];
-    if([provider isEqualToString:@"twitter"])
-        titlelabel.text=@"Twitter Authorization";
-    if([provider isEqualToString:@"facebook"])
-        titlelabel.text=@"Facebook Authorization";
+    switch (_provider) {
+        case kProviderTwitter:
+            titlelabel.text = @"Twitter Authorization";
+            break;
+        case kProviderFacebook:
+            titlelabel.text = @"Facebook Authorization";
+            break;
+        default:
+            break;
+    }
     
     titlelabel.backgroundColor=[UIColor clearColor];
     titlelabel.textAlignment=UITextAlignmentCenter;
@@ -100,10 +114,10 @@
     // eg:  exfe://oauthcallback/
     NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
     
-    NSString *urlstr = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:provider]];
+    NSString *urlstr = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:_provider]]];
     
     firstLoading=YES;
-    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstr]]];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstr]]];
 }
 
 - (void)cancel {
@@ -138,7 +152,7 @@
 }
 - (void)viewDidUnload
 {
-    [webView stopLoading];
+    [self.webView stopLoading];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;

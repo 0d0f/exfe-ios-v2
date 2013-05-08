@@ -22,7 +22,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 @implementation Util
 + (NSString*) decodeFromPercentEscapeString:(NSString*)string{
     CFStringRef sref = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,(CFStringRef) string,CFSTR(""),kCFStringEncodingUTF8);
-    NSString *s=[NSString stringWithFormat:@"0 Replies. %@", (NSString *)sref];
+    NSString *s=[NSString stringWithFormat:@"%@", (NSString *)sref];
     CFRelease(sref);
     return s;
 }
