@@ -49,7 +49,7 @@
 - (void) FacebookSigninButtonPress:(id)sender;
 - (void) oauthSuccess;
 - (void) clearIdentity;
-- (void) doOAuth:(NSString*)provider;
+- (void) doOAuth:(Provider)provider;
 - (void) MoreButtonPress:(id)sender;
 
 @end

@@ -641,7 +641,7 @@
 }
 
 
--(void) updateIdentity:(Identity*)identity
+- (void) updateIdentity:(Identity*)identity
                   name:(NSString*)name
                 andBio:(NSString*)bio
                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
@@ -662,16 +662,39 @@
 }
 
 
--(void) updateName:(NSString*)name
+- (void) updateName:(NSString*)name
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
     
-    NSString *endpoint = [NSString stringWithFormat:@"%@users/update?token=%@",API_ROOT,[EFAPIServer sharedInstance].user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"users/update?token=%@",[EFAPIServer sharedInstance].user_token];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
     [objectManager.HTTPClient postPath:endpoint parameters:@{@"name":name} success:success failure:failure];
+}
+
+- (void) addIdentityBy:(NSString*)external_username
+          withProvider:(Provider)provider
+                 param:(NSDictionary*)param
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/addIdentity?token=%@",[EFAPIServer sharedInstance].user_id, [EFAPIServer sharedInstance].user_token];
+    
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params addEntriesFromDictionary:@{@"external_username":external_username, @"provider": [Identity getProviderString:provider]}];
+    if (param) {
+        [params addEntriesFromDictionary:param];
+    }
+    
+    [objectManager.HTTPClient postPath:endpoint parameters:params success:success failure:failure];
+    
 }
 
 @end

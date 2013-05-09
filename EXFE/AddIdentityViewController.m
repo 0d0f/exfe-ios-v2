@@ -228,57 +228,54 @@
 
 - (void) addIdentity:(id) sender{
     [spin setHidden:NO];
-  NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/addIdentity?token=%@",API_ROOT, [EFAPIServer sharedInstance].user_id, [EFAPIServer sharedInstance].user_token];
-  RKObjectManager *manager=[RKObjectManager sharedManager] ;
+    
+    Provider p = [Util matchedProvider:textUsername.text];
+    NSDictionary *idDict = [Util parseIdentityString:textUsername.text];
 
-  NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:5];
-  NSString *provider=[Util findProvider:textUsername.text];
-  if([provider isEqualToString:@"twitter"] || [provider isEqualToString:@"facebook"]){
-      [dict setObject:@"" forKey:@"external_username"];
-      NSString *callback=@"oauth://handleOAuthAddIdentity";
-      [dict setObject:callback forKey:@"device_callback"];
-      [dict setObject:@"iOS" forKey:@"device"];
-  }
-  else
-      [dict setObject:textUsername.text forKey:@"external_username"];
-
-  [dict setObject:provider forKey:@"provider"];
-  manager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
-
-  [manager.HTTPClient postPath:endpoint parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    [spin setHidden:YES];
-    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-        NSDictionary *body=responseObject;
-        if([body isKindOfClass:[NSDictionary class]]) {
-            id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-            if(code){
-                if([code intValue]==200) {
-                    NSDictionary *responseobj=[body objectForKey:@"response"];
-                    if([responseobj isKindOfClass:[NSDictionary class]]){
-                        if([responseobj objectForKey:@"url"]!=nil){
-                            OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
-                            oauth.parentView=self;
-                            oauth.oauth_url=[responseobj objectForKey:@"url"];
-                            [self presentModalViewController:oauth animated:YES];
-                            [oauth release];
-                        }else{
-                            ProfileViewController *vc = (ProfileViewController*)profileview;
-                            [vc syncUser];
-                            [self.navigationController popViewControllerAnimated:YES];
+    NSDictionary *param = nil;
+    if (p == kProviderTwitter || p == kProviderFacebook) {
+        NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
+        NSAssert([schemes objectAtIndex:0] != nil, @"Missing url sheme in main bundle.");
+        
+        // eg:  exfe://oauthcallback/
+        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
+        
+        param = @{@"device_callback": callback, @"device": @"iOS"};
+    }
+    
+    [[EFAPIServer sharedInstance] addIdentityBy:[idDict valueForKeyPath:@"external_username"] withProvider:p param:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+            NSDictionary *body=responseObject;
+            if([body isKindOfClass:[NSDictionary class]]) {
+                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                if(code){
+                    if([code intValue]==200) {
+                        NSDictionary *responseobj=[body objectForKey:@"response"];
+                        if([responseobj isKindOfClass:[NSDictionary class]]){
+                            if([responseobj objectForKey:@"url"]!=nil){
+                                OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
+                                oauth.parentView=self;
+                                oauth.oauth_url=[responseobj objectForKey:@"url"];
+                                [self presentModalViewController:oauth animated:YES];
+                                [oauth release];
+                            }else{
+                                ProfileViewController *vc = (ProfileViewController*)profileview;
+                                [vc syncUser];
+                                [self.navigationController popViewControllerAnimated:YES];
+                            }
                         }
                     }
-                }
-                else{
-                    if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
-//                                NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
+                    else{
+                        if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
+                            //                                NSLog(@"error:%@",[[body objectForKey:@"meta"] objectForKey:@"errorType"]);
+                        }
                     }
                 }
             }
         }
-    }
-  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-    
-  }];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [spin setHidden:YES];
+    }];
 }
 
 - (void) oauthSuccess{
@@ -286,7 +283,7 @@
     [vc syncUser];
     [self.navigationController popViewControllerAnimated:YES];
 }
-- (void) doOAuth:(NSString*)provider{
+- (void) doOAuth:(Provider)provider{
     [textUsername resignFirstResponder];
     MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode=MBProgressHUDModeCustomView;
@@ -296,63 +293,50 @@
     [bigspin release];
     hud.labelText = @"Loading";
 
-//    RKParams* rsvpParams = [RKParams params];
-//    [rsvpParams setValue:@"" forParam:@"external_username"];
-//    NSString *callback=@"oauth://handleOAuthAddIdentity";
-//    [rsvpParams setValue:callback forParam:@"device_callback"];
-//    [rsvpParams setValue:@"iOS" forParam:@"device"];
-//    [rsvpParams setValue:provider forParam:@"provider"];
-//    
-//    AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    RKClient *client = [RKClient sharedClient];
-//    [client setBaseURL:[RKURL URLWithBaseURLString:API_V2_ROOT]];
-//    NSString *endpoint = [NSString stringWithFormat:@"/users/%u/addIdentity",[EFAPIServer sharedInstance].user_id];
-//    
-//    [client setValue:app.accesstoken forHTTPHeaderField:@"token"];
-//    [client post:endpoint usingBlock:^(RKRequest *request){
-//        request.method=RKRequestMethodPOST;
-//        request.params=rsvpParams;
-//        request.onDidLoadResponse=^(RKResponse *response){
-//            [MBProgressHUD hideHUDForView:self.view animated:YES];
-//            if (response.statusCode == 200) {
-//                NSDictionary *body=[response.body objectFromJSONData];
-//                if([body isKindOfClass:[NSDictionary class]]) {
-//                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                    if(code){
-//                        if([code intValue]==200) {
-//                            NSDictionary *responseobj=[body objectForKey:@"response"];
-//                            if([responseobj isKindOfClass:[NSDictionary class]]){
-//                                if([responseobj objectForKey:@"url"]!=nil){
-//                                    OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
-//                                    oauth.parentView=self;
-//                                    oauth.oauth_url=[responseobj objectForKey:@"url"];
-//                                    [self presentModalViewController:oauth animated:YES];
-//                                    [oauth release];
-//                                }
-//                            }
-//                        }
-//                        else{
-//                            if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            
-//        };
-//        request.onDidFailLoadWithError=^(NSError *error){
-////            NSLog(@"error %@",error);
-//            [MBProgressHUD hideHUDForView:self.view animated:YES];
-//        };
-//    }];
+    NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
+    NSAssert([schemes objectAtIndex:0] != nil, @"Missing url sheme in main bundle.");
+    
+    // eg:  exfe://oauthcallback/
+    NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
+    
+    [[EFAPIServer sharedInstance] addIdentityBy:@"" withProvider:provider param:@{@"device_callback": callback, @"device": @"iOS" }
+                                        success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (operation.response.statusCode == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *body = responseObject;
+            if([body isKindOfClass:[NSDictionary class]]) {
+                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                if(code){
+                    if([code intValue]==200) {
+                        NSDictionary *responseobj=[body objectForKey:@"response"];
+                        if([responseobj isKindOfClass:[NSDictionary class]]){
+                            if([responseobj objectForKey:@"url"]!=nil){
+                                OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
+                                oauth.parentView=self;
+                                oauth.oauth_url=[responseobj objectForKey:@"url"];
+                                [self presentModalViewController:oauth animated:YES];
+                                [oauth release];
+                            }
+                        }
+                    }
+                    else{
+                        if([[body objectForKey:@"meta"] objectForKey:@"errorType"]!=nil && [[[body objectForKey:@"meta"] objectForKey:@"errorType"] isEqualToString:@"no_connected_identity"] ){
+                        }
+                    }
+                }
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
   
 }
 - (void) FacebookSigninButtonPress:(id)sender{
-    [self doOAuth:@"facebook"];
+    [self doOAuth:kProviderFacebook];
 }
 
 - (void) TwitterSigninButtonPress:(id)sender{
-    [self doOAuth:@"twitter"];
+    [self doOAuth:kProviderTwitter];
 
 }
 - (void) MoreButtonPress:(id)sender{

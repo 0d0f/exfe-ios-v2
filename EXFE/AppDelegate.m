@@ -246,12 +246,15 @@
 //    NSLog(@"application:openURL:sourceApplication:annotation: called");
 //    return YES;
     
-    return [FBAppCall handleOpenURL:url
+    BOOL fb = [FBAppCall handleOpenURL:url
                   sourceApplication:sourceApplication
                         withSession:[FBSession activeSession]];
-}
+    
+    if (fb) {
+        return YES;
+    }
+    
 
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
 //    NSLog(@"application:handleOpenURL: called");
     
     [Flurry logEvent:@"HANDLE_OPEN_URL"];
