@@ -90,8 +90,10 @@
             break;
         case kProviderPhone:
         {
-            NSString *countryCode = [Util getTelephoneCountryCode];
-            string = [NSString stringWithFormat:@"+%@ %@", countryCode, string];
+            if (string && string.length && [string characterAtIndex:0] != '+') {
+                NSString *countryCode = [Util getTelephoneCountryCode];
+                string = [NSString stringWithFormat:@"+%@ %@", countryCode, string];
+            }
         }
         case kProviderFacebook:
         case kProviderEmail:
