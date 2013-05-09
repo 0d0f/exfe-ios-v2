@@ -142,7 +142,7 @@
     
     UIButton* btn = sender;
     NSUInteger idx = btn.tag - 1;
-    NSLog(@"widget clicked: index %i when current is %i/%i", idx, currentIndex, total);
+//    NSLog(@"widget clicked: index %i when current is %i/%i", idx, currentIndex, total);
     if (idx == currentIndex) {
         if (_stage == kStageNormal) {
             _enable = NO;

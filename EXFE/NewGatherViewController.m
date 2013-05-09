@@ -1168,7 +1168,7 @@
 }
 
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
-  NSLog(@"send rsvp");
+//  NSLog(@"send rsvp");
     //    NSError *error;
 //    Identity *myidentity=[_cross.exfee getMyInvitation].identity;
 //    NSDictionary *rsvpdict=[NSDictionary dictionaryWithObjectsAndKeys:_invitation.identity.identity_id,@"identity_id",myidentity.identity_id,@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];

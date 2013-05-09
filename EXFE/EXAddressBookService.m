@@ -154,7 +154,7 @@ typedef void (^EFFetchPeopleCompleteBlock)(void);
                 CFErrorRef errorRef = NULL;
                 _addressBookRef = ABAddressBookCreateWithOptions(NULL, &errorRef);
                 if (!_addressBookRef && errorRef) {
-                    NSLog(@"%@", (NSString *)CFErrorCopyDescription(errorRef));
+//                    NSLog(@"%@", (NSString *)CFErrorCopyDescription(errorRef));
                 }
             } else if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")) {
                 _addressBookRef = ABAddressBookCreate();
@@ -342,7 +342,7 @@ typedef void (^EFFetchPeopleCompleteBlock)(void);
             CFErrorRef errorRef = NULL;
             _addressBookRef = ABAddressBookCreateWithOptions(NULL, &errorRef);
             if (!_addressBookRef && errorRef) {
-                NSLog(@"%@", (NSString *)CFErrorCopyDescription(errorRef));
+//                NSLog(@"%@", (NSString *)CFErrorCopyDescription(errorRef));
             }
         } else if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")) {
             _addressBookRef = ABAddressBookCreate();

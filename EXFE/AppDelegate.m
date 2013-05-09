@@ -163,7 +163,7 @@
 - (void) createdb{
     [Flurry logEvent:@"CREATE_DB"];
     NSURL *baseURL = [NSURL URLWithString:API_ROOT];
-    NSLog(@"API Server: %@", baseURL);
+//    NSLog(@"API Server: %@", baseURL);
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     if(objectManager == nil){
@@ -219,7 +219,6 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    NSLog(@"Got push token");
     NSString * tokenAsString = [[[deviceToken description]
                                  stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]]
                                 stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -230,7 +229,7 @@
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-    NSLog(@"Error in registration. Error: %@", err);
+//    NSLog(@"Error in registration. Error: %@", err);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo

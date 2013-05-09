@@ -217,6 +217,7 @@
 }
 
 - (void)debugPrint{
+#ifdef DEBUG
     NSLog(@"exfee id: %@", self.exfee_id);
     NSLog(@"exfee accepted: %@", self.accepted);
     NSLog(@"exfee total: %@", self.total);
@@ -224,6 +225,7 @@
     for (Invitation *inv in self.invitations) {
         NSLog(@"exfee invitation item: %@", [inv.identity getDisplayName]);
     }
+#endif
 }
 
 

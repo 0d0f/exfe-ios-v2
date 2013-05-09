@@ -495,7 +495,7 @@ static char identitykey;
                            switch (type) {
                                case 2: // HTTP OK
                                    if (code == 206) { // Too many people, still accept
-                                       NSLog(@"HTTP 206 Partial Successfully");
+//                                       NSLog(@"HTTP 206 Partial Successfully");
                                    }
                                    if(code == 200){
                                        Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];

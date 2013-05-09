@@ -316,7 +316,6 @@ typedef enum {
 - (void)willMoveToParentViewController:(UIViewController *)parent
 {
     if (parent == nil) {
-        NSLog(@"willMoveToParentViewController widgetexfee.exfee");
         [self.exfee debugPrint];
         
         [self.onExitBlock invoke];
@@ -944,7 +943,6 @@ typedef enum {
                                                 }
                                                 failure:^(NSError *error){
                                                     [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                                    NSLog(@"Oh! NO! %@", error);
                                                 }];
                 
             };
@@ -1135,7 +1133,6 @@ typedef enum {
 //                                 [alert show];
 //                                 [alert release];
                              }else if([[meta objectForKey:@"code"] intValue]==200){
-                                 NSLog(@"submit rsvp sucessfully...");
                                  CrossGroupViewController *parent = (CrossGroupViewController*)self.parentViewController;
                                  [APICrosses LoadCrossWithCrossId:[parent.cross.cross_id intValue] updatedtime:@"" success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                      

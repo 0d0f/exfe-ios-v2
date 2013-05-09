@@ -1260,7 +1260,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
             }
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"check version fail");
+//            NSLog(@"check version fail");
         }];
     }
 }

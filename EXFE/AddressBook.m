@@ -44,7 +44,7 @@
 }
 
 - (void) CopyAllPeopleFrom:(int)idx{
-  NSLog(@"copy more people:%i",idx);
+//  NSLog(@"copy more people:%i",idx);
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople( addressBook );
     CFIndex count= CFArrayGetCount(allPeople);
     if(count>contactscount)
