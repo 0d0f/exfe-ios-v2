@@ -782,6 +782,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)showInlineError:(NSString *)title with:(NSString *)description
 {
+    
+    BOOL layoutFlag = NO;
     NSString* full = [NSString stringWithFormat:@"%@ %@", title, description];
     
     [_inlineError setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
@@ -798,6 +800,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         baseitem = [self.rootView findItemByTag:kViewTagButtonStartOver];
     }
     if (baseitem == nil) {
+        layoutFlag = YES;
         baseitem = [self.rootView findItemByTag:kViewTagSnsGroup];
     }
     
@@ -812,13 +815,17 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         } else {
             [self.rootView moveItem:item beforeItem:baseitem];
         }
-        item.padding = CSLinearLayoutMakePadding(0, 20, 0, 20);
+        CGFloat top = layoutFlag ? 27 : 0;
+        item.padding = CSLinearLayoutMakePadding(top, 20, 0, 20);
     }
 }
 
 - (void)hideInlineError
 {
-    
+    CSLinearLayoutItem *item = [self.rootView findItemByTag:_inlineError.tag];
+    if (item){
+        [self.rootView removeItem:item];
+    }
 }
 
 #pragma mark Logic Methods
@@ -972,35 +979,37 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                     }
                 }
             } failure:^(AFHTTPRequestOperation *operation, NSError *error){
-                //error.domain
-                switch (error.code) {
-                    case NSURLErrorCannotFindHost: //-1003
-                    case NSURLErrorCannotConnectToHost: //-1004
-                    case NSURLErrorNetworkConnectionLost: //-1005
-                    case NSURLErrorDNSLookupFailed: //-1006
-                    case NSURLErrorHTTPTooManyRedirects: //-1007
-                    case NSURLErrorResourceUnavailable: //-1008
-                    case NSURLErrorNotConnectedToInternet: //-1009
-                    case NSURLErrorRedirectToNonExistentLocation: //-1010
-                        [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
-                        
-                        //NSURLErrorCannotFindHost = -1003,
-                        //NSURLErrorCannotConnectToHost = -1004,
-                        //NSURLErrorNetworkConnectionLost = -1005,
-                        //NSURLErrorDNSLookupFailed = -1006,
-                        //NSURLErrorHTTPTooManyRedirects = -1007,
-                        //NSURLErrorResourceUnavailable = -1008,
-                        //NSURLErrorNotConnectedToInternet = -1009,
-                        //NSURLErrorRedirectToNonExistentLocation = -1010,
-                        //NSURLErrorInternationalRoamingOff = -1018,
-                        //NSURLErrorCallIsActive = -1019,
-                        //NSURLErrorDataNotAllowed = -1020,
-                        //NSURLErrorSecureConnectionFailed = -1200,
-                        //NSURLErrorCannotLoadFromNetwork = -2000,
-                        break;
-                        
-                    default:
-                        break;
+                if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                    switch (error.code) {
+                        case NSURLErrorTimedOut: //-1001
+                        case NSURLErrorCannotFindHost: //-1003
+                        case NSURLErrorCannotConnectToHost: //-1004
+                        case NSURLErrorNetworkConnectionLost: //-1005
+                        case NSURLErrorDNSLookupFailed: //-1006
+                        case NSURLErrorHTTPTooManyRedirects: //-1007
+                        case NSURLErrorResourceUnavailable: //-1008
+                        case NSURLErrorNotConnectedToInternet: //-1009
+                        case NSURLErrorRedirectToNonExistentLocation: //-1010
+                            [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                            //case NSURLErrorTimedOut = -1001,
+                            //NSURLErrorCannotFindHost = -1003,
+                            //NSURLErrorCannotConnectToHost = -1004,
+                            //NSURLErrorNetworkConnectionLost = -1005,
+                            //NSURLErrorDNSLookupFailed = -1006,
+                            //NSURLErrorHTTPTooManyRedirects = -1007,
+                            //NSURLErrorResourceUnavailable = -1008,
+                            //NSURLErrorNotConnectedToInternet = -1009,
+                            //NSURLErrorRedirectToNonExistentLocation = -1010,
+                            //NSURLErrorInternationalRoamingOff = -1018,
+                            //NSURLErrorCallIsActive = -1019,
+                            //NSURLErrorDataNotAllowed = -1020,
+                            //NSURLErrorSecureConnectionFailed = -1200,
+                            //NSURLErrorCannotLoadFromNetwork = -2000,
+                            break;
+                            
+                        default:
+                            break;
+                    }
                 }
             }];
         } break;
@@ -1019,6 +1028,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
         return;
     }
+    
+    [self hideInlineError];
     
     [self showIndicatorAt:CGPointMake(285, sender.center.y)];
     Provider provider = [Util matchedProvider:_inputIdentity.text];
@@ -1059,23 +1070,24 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error){
         [self hideIndicator];
-        //error.domain
-        switch (error.code) {
-            case NSURLErrorCannotFindHost: //-1003
-            case NSURLErrorCannotConnectToHost: //-1004
-            case NSURLErrorNetworkConnectionLost: //-1005
-            case NSURLErrorDNSLookupFailed: //-1006
-            case NSURLErrorHTTPTooManyRedirects: //-1007
-            case NSURLErrorResourceUnavailable: //-1008
-            case NSURLErrorNotConnectedToInternet: //-1009
-            case NSURLErrorRedirectToNonExistentLocation: //-1010
-                [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
-                break;
-                
-            default:
-                break;
+        if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+            switch (error.code) {
+                case NSURLErrorTimedOut: //-1001
+                case NSURLErrorCannotFindHost: //-1003
+                case NSURLErrorCannotConnectToHost: //-1004
+                case NSURLErrorNetworkConnectionLost: //-1005
+                case NSURLErrorDNSLookupFailed: //-1006
+                case NSURLErrorHTTPTooManyRedirects: //-1007
+                case NSURLErrorResourceUnavailable: //-1008
+                case NSURLErrorNotConnectedToInternet: //-1009
+                case NSURLErrorRedirectToNonExistentLocation: //-1010
+                    [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                    break;
+                    
+                default:
+                    break;
+            }
         }
-        
     }];
 }
 
@@ -1094,6 +1106,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         [self showErrorInfo:@"Invalid name." dockOn:_inputUsername];
         return;
     }
+    
+    [self hideInlineError];
     
     Provider provider = [Util matchedProvider:_inputIdentity.text];
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
@@ -1128,23 +1142,24 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error){
         [self hideIndicator];
-        //error.domain
-        switch (error.code) {
-            case NSURLErrorCannotFindHost: //-1003
-            case NSURLErrorCannotConnectToHost: //-1004
-            case NSURLErrorNetworkConnectionLost: //-1005
-            case NSURLErrorDNSLookupFailed: //-1006
-            case NSURLErrorHTTPTooManyRedirects: //-1007
-            case NSURLErrorResourceUnavailable: //-1008
-            case NSURLErrorNotConnectedToInternet: //-1009
-            case NSURLErrorRedirectToNonExistentLocation: //-1010
-                [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
-                break;
-                
-            default:
-                break;
+        if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+            switch (error.code) {
+                case NSURLErrorTimedOut: //-1001
+                case NSURLErrorCannotFindHost: //-1003
+                case NSURLErrorCannotConnectToHost: //-1004
+                case NSURLErrorNetworkConnectionLost: //-1005
+                case NSURLErrorDNSLookupFailed: //-1006
+                case NSURLErrorHTTPTooManyRedirects: //-1007
+                case NSURLErrorResourceUnavailable: //-1008
+                case NSURLErrorNotConnectedToInternet: //-1009
+                case NSURLErrorRedirectToNonExistentLocation: //-1010
+                    [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                    break;
+                    
+                default:
+                    break;
+            }
         }
-        
     }];
 }
 
@@ -1179,7 +1194,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)facebookSignIn:(id)sender
 {
-    
+    [self hideInlineError];
     
     [FBSession.activeSession closeAndClearTokenInformation];
     // If a user has *never* logged into your app, request one of
@@ -1256,6 +1271,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)twitterSignIn:(id)sender
 {
+    [self hideInlineError];
+    
     ACAccountType *twitterType = [_accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
     
     ACAccountStoreRequestAccessCompletionHandler handler = ^(BOOL granted, NSError *error) {
@@ -1393,21 +1410,23 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self hideIndicator];
-        //error.domain
-        switch (error.code) {
-            case NSURLErrorCannotFindHost: //-1003
-            case NSURLErrorCannotConnectToHost: //-1004
-            case NSURLErrorNetworkConnectionLost: //-1005
-            case NSURLErrorDNSLookupFailed: //-1006
-            case NSURLErrorHTTPTooManyRedirects: //-1007
-            case NSURLErrorResourceUnavailable: //-1008
-            case NSURLErrorNotConnectedToInternet: //-1009
-            case NSURLErrorRedirectToNonExistentLocation: //-1010
-                [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
-                break;
-                
-            default:
-                break;
+        if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+            switch (error.code) {
+                case NSURLErrorTimedOut: //-1001
+                case NSURLErrorCannotFindHost: //-1003
+                case NSURLErrorCannotConnectToHost: //-1004
+                case NSURLErrorNetworkConnectionLost: //-1005
+                case NSURLErrorDNSLookupFailed: //-1006
+                case NSURLErrorHTTPTooManyRedirects: //-1007
+                case NSURLErrorResourceUnavailable: //-1008
+                case NSURLErrorNotConnectedToInternet: //-1009
+                case NSURLErrorRedirectToNonExistentLocation: //-1010
+                    [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                    break;
+                    
+                default:
+                    break;
+            }
         }
     }];
 }
@@ -1561,12 +1580,46 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                NSLog(@"login failure with %@", error);
-                // kCFURLErrorCannotDecodeContentData = -1016, unexpected error
+                if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                    switch (error.code) {
+                        case NSURLErrorTimedOut: // -1001
+                        case NSURLErrorCannotFindHost: //-1003
+                        case NSURLErrorCannotConnectToHost: //-1004
+                        case NSURLErrorNetworkConnectionLost: //-1005
+                        case NSURLErrorDNSLookupFailed: //-1006
+                        case NSURLErrorHTTPTooManyRedirects: //-1007
+                        case NSURLErrorResourceUnavailable: //-1008
+                        case NSURLErrorNotConnectedToInternet: //-1009
+                        case NSURLErrorRedirectToNonExistentLocation: //-1010
+                            [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                }
             }];
         } else {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-//            NSLog(@"Reverse Auth process failed. Error returned was: %@\n", [error localizedDescription]);
+            if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                switch (error.code) {
+                    case NSURLErrorTimedOut: // -1001
+                    case NSURLErrorCannotFindHost: //-1003
+                    case NSURLErrorCannotConnectToHost: //-1004
+                    case NSURLErrorNetworkConnectionLost: //-1005
+                    case NSURLErrorDNSLookupFailed: //-1006
+                    case NSURLErrorHTTPTooManyRedirects: //-1007
+                    case NSURLErrorResourceUnavailable: //-1008
+                    case NSURLErrorNotConnectedToInternet: //-1009
+                    case NSURLErrorRedirectToNonExistentLocation: //-1010
+                        [self showInlineError:@"Failed to connect twitter server." with:@"Please retry or wait awhile."];
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            
         }
     }];
 }
