@@ -257,7 +257,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     {// Verification Description
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 80)];
-        label.text = @"This number requires verification before proceeding. Verification request sent, please check your message for instructions.";
+        label.text = @"This number requires verification before proceeding. Verification request is sent, please check your message for instructions.";
         label.numberOfLines = 0;
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
@@ -590,11 +590,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             Provider p = [Util matchedProvider:_inputIdentity.text];
             switch (p) {
                 case kProviderPhone:
-                    _labelVerifyDescription.text = @"This number requires verification before proceeding. Verification request sent, please check your message for instructions.";
+                    _labelVerifyDescription.text = @"This number requires verification before proceeding. Verification request is sent, please check your message for instructions.";
                     break;
                     
                 default:
-                    _labelVerifyDescription.text = @"This email requires verification before proceeding. Verification request sent, please check your email for instructions.";
+                    _labelVerifyDescription.text = @"This email requires verification before proceeding. Verification request is sent, please check your email for instructions.";
                     break;
             }
             
@@ -620,8 +620,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }
             item3.padding = CSLinearLayoutMakePadding(10, 15, 0, 15);
             
-            _line1.hidden = NO;
-            _line2.hidden = NO;
+            _line1.hidden = YES;
+            _line2.hidden = YES;
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 50);
             _inputIdentity.rightView = nil;
             _inputIdentity.clearButtonMode = UITextFieldViewModeAlways;
@@ -1210,6 +1210,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                       
                                       switch (session.state) {
                                           case FBSessionStateOpen:{
+                                              [self.view endEditing:YES];
+                                              
                                               NSDictionary *params = @{@"oauth_expires": [NSString stringWithFormat:@"%.0f", session.accessTokenData.expirationDate.timeIntervalSince1970]};
                                               
                                               MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -1237,7 +1239,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                                               break;
                                                           case 400:{
                                                               if ([@"invalid_token" isEqualToString:[responseObject valueForKeyPath:@"meta.errorType"]] ) {
-                                                                  [self showInlineError:@"Invalid token" with:@"There is something wrong. Please try again later."];
+                                                                  [self showInlineError:@"Invalid token." with:@"There is something wrong. Please try again later."];
                                                                   
                                                                   [self syncFBAccount];
                                                                   
@@ -1256,7 +1258,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                               break;
                                               
                                           case FBSessionStateClosedLoginFailed:
-                                              [self showInlineError:@"Login Failed" with:@"There is something wrong. Please try again later."];
+                                              [self showInlineError:@"Login Failed." with:@"There is something wrong. Please try again later."];
                                               
                                               [self syncFBAccount];
                                               break;
@@ -1371,11 +1373,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         NSString *msg = nil;
                         switch (provider) {
                             case kProviderPhone:
-                                msg = @"Password reset request sent, please check your message for instructions.";
+                                msg = @"Password reset request is sent, please check your message for instructions.";
                                 break;
                                 
                             default:
-                                msg = @"Password reset request sent, please check your email for instructions.";
+                                msg = @"Password reset request is sent, please check your email for instructions.";
                                 break;
                         }
                         [UIAlertView showAlertViewWithTitle:@"Forget Password?" message:msg cancelButtonTitle:@"OK" otherButtonTitles:nil handler:nil];
