@@ -71,19 +71,19 @@
 - (CGRect)clearButtonRectForBounds:(CGRect)bounds
 {
     CGRect rect = [super clearButtonRectForBounds:bounds];
-    return CGRectMake(CGRectGetWidth(bounds) - CGRectGetWidth(rect) / 2 - 15 - 5, CGRectGetMidY(bounds) - CGRectGetHeight(rect) / 2, CGRectGetWidth(rect) , CGRectGetHeight(rect));
+    return CGRectMake(CGRectGetWidth(bounds) - floor(CGRectGetWidth(rect) / 2) - 15 - 5, CGRectGetMidY(bounds) - CGRectGetHeight(rect) / 2, CGRectGetWidth(rect) , CGRectGetHeight(rect));
 }
 
 - (CGRect)leftViewRectForBounds:(CGRect)bounds
 {
     CGRect rect = [super leftViewRectForBounds:bounds];
-    return CGRectMake(5, CGRectGetMidY(bounds) - CGRectGetHeight(rect) / 2, CGRectGetWidth(rect), CGRectGetHeight(rect));
+    return CGRectMake(5, CGRectGetMidY(bounds) - floor(CGRectGetHeight(rect) / 2), CGRectGetWidth(rect), CGRectGetHeight(rect));
 }
 
 - (CGRect)rightViewRectForBounds:(CGRect)bounds
 {
     CGRect rect = [super rightViewRectForBounds:bounds];
-    return CGRectMake(CGRectGetWidth(bounds) - CGRectGetWidth(rect) / 2 - 15 - 5, CGRectGetMidY(bounds) - CGRectGetHeight(rect) / 2, CGRectGetWidth(rect) , CGRectGetHeight(rect));
+    return CGRectMake(CGRectGetWidth(bounds) - floor(CGRectGetWidth(rect) / 2) - 15 - 5, CGRectGetMidY(bounds) - floor(CGRectGetHeight(rect) / 2), CGRectGetWidth(rect) , CGRectGetHeight(rect));
 }
 
 @end

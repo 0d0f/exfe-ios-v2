@@ -100,7 +100,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [self.view addSubview:linearLayoutView];
     
     {// TextField Frame
-        UIImage *img = [[UIImage imageNamed:@"textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(6, 6, 6, 6)];
+        UIImage *img = [[UIImage imageNamed:@"textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 9, 15, 9)];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:img];
         imageView.frame = CGRectMake(15, 20, 290, 50);
         self.textFieldFrame = imageView;
