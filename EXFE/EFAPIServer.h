@@ -126,4 +126,13 @@
 
 - (void)getIdentitiesWithParams:(NSArray *)params success:(void (^)(NSArray *identities))success failure:(void (^)(NSError *error))failure;
 
+-(void) updateIdentity:(Identity*)identity
+                  name:(NSString*)name
+                andBio:(NSString*)bio
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+-(void) updateName:(NSString*)name
+           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 @end

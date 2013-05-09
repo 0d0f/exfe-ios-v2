@@ -1215,7 +1215,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                               NSDictionary *params = @{@"oauth_expires": [NSString stringWithFormat:@"%.0f", session.accessTokenData.expirationDate.timeIntervalSince1970]};
                                               
                                               MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                                              hud.labelText = @"Signing in Facebook";
+                                              hud.labelText = @"Authenticating...";
                                               hud.mode = MBProgressHUDModeCustomView;
                                               EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
                                               [bigspin startAnimating];
@@ -1555,7 +1555,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [self.view endEditing:YES];
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"Signing in Twitter";
+    hud.labelText = @"Authenticating...";
     hud.mode = MBProgressHUDModeCustomView;
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
     [bigspin startAnimating];

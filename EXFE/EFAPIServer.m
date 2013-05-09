@@ -640,4 +640,38 @@
 //                         }];
 }
 
+
+-(void) updateIdentity:(Identity*)identity
+                  name:(NSString*)name
+                andBio:(NSString*)bio
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"identities/%i/update?token=%@", [identity.identity_id intValue], self.user_token];
+    
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
+    if (name) {
+        [dict setObject:name forKey:@"name"];
+    }
+    if (bio) {
+        [dict setObject:bio forKey:@"bio"];
+    }
+    [objectManager.HTTPClient postPath:endpoint parameters:dict success:success failure:failure];
+}
+
+
+-(void) updateName:(NSString*)name
+           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"%@users/update?token=%@",API_ROOT,[EFAPIServer sharedInstance].user_token];
+    
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    
+    [objectManager.HTTPClient postPath:endpoint parameters:@{@"name":name} success:success failure:failure];
+}
+
 @end
