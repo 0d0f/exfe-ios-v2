@@ -404,6 +404,15 @@
     return nil;
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        int count = [[_identitiesData objectAtIndex:indexPath.section] count];
+        return count != indexPath.row;
+    }
+    return NO;
+}
+
 - (void) showRome{
     WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:self.view.bounds];
     [welcome setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5f]];
