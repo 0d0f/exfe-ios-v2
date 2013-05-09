@@ -13,21 +13,24 @@
 - (id)initWithPoint:(CGPoint)point size:(int)size{
     self = [super initWithFrame:CGRectMake(point.x, point.y, size, size)];
     if (self) {
-        if(size==18)
-            self.animationImages = [NSArray arrayWithObjects:
-                                             [UIImage imageNamed:@"spin_36_0.png"],
-                                             [UIImage imageNamed:@"spin_36_1.png"],
-                                             [UIImage imageNamed:@"spin_36_2.png"],
-                                             [UIImage imageNamed:@"spin_36_3.png"], nil];
-        else if(size==40)
-            self.animationImages = [NSArray arrayWithObjects:
-                                    [UIImage imageNamed:@"spin_80_0.png"],
-                                    [UIImage imageNamed:@"spin_80_1.png"],
-                                    [UIImage imageNamed:@"spin_80_2.png"],
-                                    [UIImage imageNamed:@"spin_80_3.png"], nil];
+//        if(size==18)
+//            self.animationImages = [NSArray arrayWithObjects:
+//                                             [UIImage imageNamed:@"spin_36_0.png"],
+//                                             [UIImage imageNamed:@"spin_36_1.png"],
+//                                             [UIImage imageNamed:@"spin_36_2.png"],
+//                                             [UIImage imageNamed:@"spin_36_3.png"], nil];
+//        else if(size==40)
+//            self.animationImages = [NSArray arrayWithObjects:
+//                                    [UIImage imageNamed:@"spin_80_0.png"],
+//                                    [UIImage imageNamed:@"spin_80_1.png"],
+//                                    [UIImage imageNamed:@"spin_80_2.png"],
+//                                    [UIImage imageNamed:@"spin_80_3.png"], nil];
 
-        self.animationDuration = 1.5f;
-        self.animationRepeatCount = 0;
+        
+        
+        
+//        self.animationDuration = 1.5f;
+//        self.animationRepeatCount = 0;
     }
     return self;
 }

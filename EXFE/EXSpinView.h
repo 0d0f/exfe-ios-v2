@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EXSpinView : UIImageView
+@interface EXSpinView : UIActivityIndicatorView
 
 - (id)initWithPoint:(CGPoint)point size:(int)size;
 
