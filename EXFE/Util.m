@@ -651,6 +651,9 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     //  NSString *mnc = [carrier mobileNetworkCode];
         isocode = [NSString stringWithString:[carrier isoCountryCode]];
         [netInfo release];
+    } else {
+        NSLocale *locale = [NSLocale currentLocale];
+        isocode = [[locale objectForKey:NSLocaleCountryCode] lowercaseString];
     }
 
     if(([@"460" isEqualToString:mcc] || [@"cn" isEqualToString:isocode]) && [clean_phone length] >= 11 ){
@@ -676,12 +679,12 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 
 + (NSString*)getTelephoneCountryCode:(NSString*)isocode
 {
-    
-    if ([@"us" isEqualToString:isocode]) {
+    NSString *lowcaseIsocode = [isocode lowercaseString];
+    if ([@"us" isEqualToString:lowcaseIsocode]) {
         return @"1";
-    } else if ([@"ca" isEqualToString:isocode]) {
+    } else if ([@"ca" isEqualToString:lowcaseIsocode]) {
         return @"1";
-    } else if ([@"cn" isEqualToString:isocode]) {
+    } else if ([@"cn" isEqualToString:lowcaseIsocode]) {
         return @"86";
     }
     return @"";
@@ -695,6 +698,10 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     if (carrier) {
         NSString *isocode = [NSString stringWithString:[carrier isoCountryCode]];
         result = [self getTelephoneCountryCode:isocode];
+    } else {
+        NSLocale *locale = [NSLocale currentLocale];
+        NSString *isocode = [[locale objectForKey:NSLocaleCountryCode] lowercaseString];
+        result = [self getTelephoneCountryCode:isocode];
     }
     [netInfo release];
     return result;
@@ -705,7 +712,13 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     CTCarrier *carrier = [netInfo subscriberCellularProvider];
     NSString *mcc = [carrier mobileCountryCode];
     //  NSString *mnc = [carrier mobileNetworkCode];
-    NSString *isocode =[carrier isoCountryCode];
+    NSString *isocode;
+    if (carrier) {
+        isocode = [carrier isoCountryCode];
+    } else {
+        NSLocale *locale = [NSLocale currentLocale];
+        isocode = [[locale objectForKey:NSLocaleCountryCode] lowercaseString];
+    }
     NSString* clean_phone=@"";
     clean_phone=[phonenumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
     clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@")" withString:@""];
