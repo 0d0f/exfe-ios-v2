@@ -1,3 +1,5 @@
+
+// deprecated
 @interface CustomStatusBar : UIWindow
 {
 @private

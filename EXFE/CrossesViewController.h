@@ -11,7 +11,6 @@
 #import "PullRefreshTableViewController.h"
 #import "ImgCache.h"
 #import "EXInnerButton.h"
-#import "CustomStatusBar.h"
 #import "WelcomeView.h"
 #import "EXSpinView.h"
 #import "MBProgressHUD.h"
@@ -27,7 +26,6 @@
     BOOL logoutflag;
     BOOL alertShowflag;
     int current_cellrow;
-    CustomStatusBar *customStatusBar;
     NSMutableAttributedString *gatherax;
     MBProgressHUD *hud;
     UIImage *default_background;

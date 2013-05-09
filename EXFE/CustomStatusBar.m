@@ -1,5 +1,5 @@
 #import "CustomStatusBar.h"
-
+// deprecated
 @implementation CustomStatusBar
 
 -(id)initWithFrame:(CGRect)frame

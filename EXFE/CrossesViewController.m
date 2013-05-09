@@ -81,7 +81,6 @@
     
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
 
-    customStatusBar = [[CustomStatusBar alloc] initWithFrame:CGRectZero];
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[[UIImage imageNamed:@"btn_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 6)]
                                                       forState:UIControlStateNormal
                                                     barMetrics:UIBarMetricsDefault];
@@ -212,7 +211,6 @@
 //    }
 //    [settingButton release];
 //    [gatherax release];
-    [customStatusBar release];
     [label_profile release];
     [label_gather release];
     [welcome_exfe release];
@@ -351,8 +349,7 @@
                                                        [[NSUserDefaults standardUserDefaults] setObject:last_updated_at forKey:@"exfee_updated_at"];
                                                        [[NSUserDefaults standardUserDefaults] synchronize];
                                                        if(![source isEqualToString:@"crossview"] && notification>0){
-                                                           [customStatusBar showWithStatusMessage:[NSString stringWithFormat:@"%i updates...",notification]];
-                                                           [customStatusBar performSelector:@selector(hide) withObject:nil afterDelay:2];
+                                                           // show update hints
                                                        }
                                                        if ([source isEqualToString:@"gatherview"]) {
                                                            AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
