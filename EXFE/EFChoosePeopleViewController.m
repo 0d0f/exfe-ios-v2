@@ -271,7 +271,7 @@
                                                  beforeDate:[NSDate distantFuture]];
                     }
                     if (kEFRoughIdentityGetIdentityStatusSuccess == cachedRoughtIdentity.status) {
-                        [selectedIdentities addObject:cachedRoughtIdentity.identity];
+                        [contactRoughIdentities addObject:cachedRoughtIdentity.identity];
                         [addIdentitiyDict setValue:@"YES" forKey:roughIdentity.key];
                     }
                 }
@@ -1316,11 +1316,11 @@
     return roughIndentities;
 }
 
-- (void)selectRoughIdentity:(RoughIdentity *)identity {
-    if (![_cachedRoughIdentityDict valueForKey:identity.key]) {
-        [_cachedRoughIdentityDict setValue:identity forKey:identity.key];
-        if (identity.status == kEFRoughIdentityGetIdentityStatusReady) {
-            [identity getIdentityWithSuccess:^(Identity *identity){
+- (void)selectRoughIdentity:(RoughIdentity *)roughIdentity {
+    if (![_cachedRoughIdentityDict valueForKey:roughIdentity.key]) {
+        [_cachedRoughIdentityDict setValue:roughIdentity forKey:roughIdentity.key];
+        if (roughIdentity.status == kEFRoughIdentityGetIdentityStatusReady) {
+            [roughIdentity getIdentityWithSuccess:^(Identity *identity){
                 if (self.searchDisplayController.isActive) {
                     [self.searchDisplayController.searchResultsTableView reloadData];
                 } else {
@@ -1330,7 +1330,7 @@
                                      failure:nil];
         }
     }
-    [_selectedRoughIdentityDict setValue:identity forKey:identity.key];
+    [_selectedRoughIdentityDict setValue:roughIdentity forKey:roughIdentity.key];
 }
 
 - (void)deselectRoughIdentity:(RoughIdentity *)identity {
