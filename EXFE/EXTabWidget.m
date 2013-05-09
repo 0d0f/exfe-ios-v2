@@ -26,14 +26,14 @@
         _enable = YES;
         _stage = kStageNormal;
         // Initialization code
-        CGRect frame = CGRectMake(0, 0, 30, 30);
+        CGRect frame = CGRectMake(0, 0, 50, 30);
         for (NSUInteger i = 0; i < items.count; i++) {
             EXTabWidgetItem *item = [items objectAtIndex:i];
             UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
             
             
             btn.backgroundColor = [UIColor clearColor];
-            
+            btn.imageEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10);
             [btn setImage:item.image forState:UIControlStateNormal];
             if (item.highlightedImage) {
                 [btn setImage:item.highlightedImage forState:UIControlStateApplication];
@@ -63,11 +63,12 @@
         _enable = YES;
         _stage = kStageNormal;
         // Initialization code
-        CGRect frame = CGRectMake(0, 0, 30, 30);
+        CGRect frame = CGRectMake(0, 0, 50, 30);
         for (NSUInteger i = 0; i < imgs.count; i++) {
             UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
             
             btn.backgroundColor = [UIColor clearColor];
+            btn.imageEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10);
             [btn setImage:[imgs objectAtIndex:i] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(widgetClick:) forControlEvents:UIControlEventTouchUpInside];
             btn.tag = i + 1;
@@ -97,7 +98,7 @@
 
 - (CGPoint)positionOfButton:(NSUInteger)pos{
     if (gravity == 1){
-        return CGPointMake(CGRectGetWidth(self.bounds) - (30 + 20) * (pos + 1) + 10 + 2, 3);
+        return CGPointMake(CGRectGetWidth(self.bounds) - (50) * (pos + 1) + + 2, 3);
     }
     return CGPointZero;
 }

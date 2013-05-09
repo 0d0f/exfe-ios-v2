@@ -154,13 +154,11 @@
                          
                     }
                         completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
-                            // Cancel 1
-                            // Set 0
-                            if (buttonIndex == 0) {
+                            if (buttonIndex == alertView.firstOtherButtonIndex) {
                                 UITextField *field = [alertView textFieldAtIndex:0];
                                 NSString *name = field.text;
                                 if (name && name.length > 0) {
-                                    [APIProfile updateName:name success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                    [[EFAPIServer sharedInstance] updateName:name success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                             NSDictionary *body=responseObject;
                                             if([body isKindOfClass:[NSDictionary class]]) {
@@ -406,6 +404,15 @@
     return nil;
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        int count = [[_identitiesData objectAtIndex:indexPath.section] count];
+        return count != indexPath.row;
+    }
+    return NO;
+}
+
 - (void) showRome{
     WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:self.view.bounds];
     [welcome setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5f]];
@@ -428,6 +435,12 @@
             [self.navigationController pushViewController:addidentityView animated:YES];
         }else {
             Identity *identity = [[_identitiesData objectAtIndex:[indexPath section]]  objectAtIndex:indexPath.row];
+            Provider p = [Identity getProviderCode:identity.provider];
+            if (p != kProviderEmail && p != kProviderPhone) {
+                [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                return;
+            }
+            
             [WCAlertView showAlertWithTitle:@"Set name for"
                                     message:[identity getDisplayIdentity]
                          customizationBlock:^(WCAlertView *alertView) {
@@ -437,14 +450,12 @@
                              field.placeholder = [identity getDisplayName];
                          }
                             completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
-                                // Cancel 1
-                                // Set 0
                                 [tableView deselectRowAtIndexPath:indexPath animated:YES];
-                                if (buttonIndex == 0) {
+                                if (buttonIndex == alertView.firstOtherButtonIndex) {
                                     UITextField *field = [alertView textFieldAtIndex:0];
                                     NSString *name = field.text;
                                     if (name && name.length > 0) {
-                                        [APIProfile updateIdentity:identity name:name andBio:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                        [[EFAPIServer sharedInstance] updateIdentity:identity name:name andBio:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                                 NSDictionary *body=responseObject;
                                                 if([body isKindOfClass:[NSDictionary class]]) {
