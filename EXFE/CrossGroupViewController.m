@@ -244,10 +244,11 @@
     [self.view addSubview:titleView];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    CGRect backFrame = CGRectMake(0, 0, 20, 50);
+    CGRect backFrame = CGRectMake(0, 0, 40, 50);
     backFrame.origin.y = DECTOR_HEIGHT / 2 - CGRectGetHeight(backFrame) / 2;
     btnBack.frame = backFrame;
-    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
+    btnBack.imageEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 20.0);
+    btnBack.backgroundColor = [UIColor clearColor];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];

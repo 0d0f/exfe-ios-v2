@@ -199,8 +199,9 @@
     [self.view addSubview:headview];
     
     btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
-    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 /2, 20, 44)];
-    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
+    [btnBack setFrame:CGRectMake(0, DECTOR_HEIGHT / 2 - 44 /2, 40, 44)];
+    btnBack.imageEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 20.0);
+    btnBack.backgroundColor = [UIColor clearColor];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
