@@ -247,7 +247,7 @@
     CGRect backFrame = CGRectMake(0, 0, 40, 50);
     backFrame.origin.y = DECTOR_HEIGHT / 2 - CGRectGetHeight(backFrame) / 2;
     btnBack.frame = backFrame;
-    btnBack.imageEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 20.0);
+    btnBack.imageEdgeInsets = UIEdgeInsetsMake(3.0, 0.0, 3.0, 20.0);
     btnBack.backgroundColor = [UIColor clearColor];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
