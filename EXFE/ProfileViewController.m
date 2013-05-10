@@ -7,6 +7,7 @@
 //
 
 #import "ProfileViewController.h"
+#import <BlocksKit/BlocksKit.h>
 #import "APIProfile.h"
 #import "ImgCache.h"
 #import "User+EXFE.h"
@@ -89,6 +90,14 @@
     [self.view  addSubview:btnBack];
     
 //    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"x_bg.png"]]];
+    
+    UISwipeGestureRecognizer *swipeHeaderTap = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
+        if (sender.state == UIGestureRecognizerStateEnded) {
+            [btnBack sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
+    }];
+    [headerView addGestureRecognizer:swipeHeaderTap];
+    
 
     tableview.backgroundColor = [UIColor clearColor];
     tableview.opaque = NO;

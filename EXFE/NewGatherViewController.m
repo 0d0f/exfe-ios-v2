@@ -7,6 +7,7 @@
 //
 
 #import "NewGatherViewController.h"
+#import <BlocksKit/BlocksKit.h>
 #import "Util.h"
 #import "ImgCache.h"
 #import "MapPin.h"
@@ -206,6 +207,13 @@
     [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnBack];
+    
+    UISwipeGestureRecognizer *swipeHeaderTap = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
+        if (sender.state == UIGestureRecognizerStateEnded) {
+            [btnBack sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
+    }];
+    [headview addGestureRecognizer:swipeHeaderTap];
     
     self.view.backgroundColor = [UIColor grayColor];
     

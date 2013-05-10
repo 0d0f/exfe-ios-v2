@@ -1317,7 +1317,7 @@
             return;
         }
         
-        if (CGRectContainsPoint([Util expandRect:[exfeeShowview frame]], location)) {
+        if (CGRectContainsPoint([Util expandRect:[exfeeShowview frame]], locInContainer)) {
             
             [self showTimeEditMenu:descView];
             [self switchTabWidget:3];
