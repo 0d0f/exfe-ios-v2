@@ -1444,7 +1444,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         if (textField.tag == kViewTagInputIdentity) {
             textField.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
         } else {
-            textField.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+            textField.font = [UIFont fontWithName:@"HelveticaNeue" size:18];
         }
     }
     else
