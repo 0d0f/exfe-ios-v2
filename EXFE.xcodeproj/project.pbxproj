@@ -1373,9 +1373,24 @@
 		763A01CF17212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
 		763A01D017212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
 		763A01D117212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
-		7661C7EC1738B15400133F10 /* EFWarningHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFWarningHandlerCenter.m */; };
-		7661C7ED1738B15400133F10 /* EFWarningHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFWarningHandlerCenter.m */; };
-		7661C7EE1738B15400133F10 /* EFWarningHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFWarningHandlerCenter.m */; };
+		764CD8F2173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
+		764CD8F3173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
+		764CD8F4173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
+		764CD8FE173A8F9400627237 /* cautionbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD8FC173A8F9400627237 /* cautionbar.png */; };
+		764CD8FF173A8F9400627237 /* cautionbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD8FC173A8F9400627237 /* cautionbar.png */; };
+		764CD900173A8F9400627237 /* cautionbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD8FC173A8F9400627237 /* cautionbar.png */; };
+		764CD901173A8F9400627237 /* cautionbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD8FD173A8F9400627237 /* cautionbar@2x.png */; };
+		764CD902173A8F9400627237 /* cautionbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD8FD173A8F9400627237 /* cautionbar@2x.png */; };
+		764CD903173A8F9400627237 /* cautionbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD8FD173A8F9400627237 /* cautionbar@2x.png */; };
+		764CD906173A914600627237 /* btn_white_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD904173A914600627237 /* btn_white_30.png */; };
+		764CD907173A914600627237 /* btn_white_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD904173A914600627237 /* btn_white_30.png */; };
+		764CD908173A914600627237 /* btn_white_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD904173A914600627237 /* btn_white_30.png */; };
+		764CD909173A914600627237 /* btn_white_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD905173A914600627237 /* btn_white_30@2x.png */; };
+		764CD90A173A914600627237 /* btn_white_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD905173A914600627237 /* btn_white_30@2x.png */; };
+		764CD90B173A914600627237 /* btn_white_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD905173A914600627237 /* btn_white_30@2x.png */; };
+		7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
+		7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
+		7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7670126E1729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
 		7670126F1729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
 		767012701729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
@@ -1412,6 +1427,9 @@
 		76DED7CE171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
 		76DED7CF171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
 		76DED7D0171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
+		76F6B30C1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
+		76F6B30D1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
+		76F6B30E1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
 		7803EB8B15AD801500291B69 /* EXButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7803EB8A15AD801500291B69 /* EXButton.m */; };
 		7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 780961FF15BDB70B0071E9D0 /* EXOverlayView.m */; };
 		780D27A4157F368900402460 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A3157F368900402460 /* Post.m */; };
@@ -2163,8 +2181,14 @@
 		763A01CD17212B080082CC9E /* RoughIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoughIdentity.h; sourceTree = "<group>"; };
 		763A01CE17212B080082CC9E /* RoughIdentity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoughIdentity.m; sourceTree = "<group>"; };
 		763A01D2172130B20082CC9E /* EFDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDataDefines.h; sourceTree = "<group>"; };
-		7661C7EA1738B15400133F10 /* EFWarningHandlerCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFWarningHandlerCenter.h; sourceTree = "<group>"; };
-		7661C7EB1738B15400133F10 /* EFWarningHandlerCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFWarningHandlerCenter.m; sourceTree = "<group>"; };
+		764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFNotificationBannerView.h; sourceTree = "<group>"; };
+		764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFNotificationBannerView.m; sourceTree = "<group>"; };
+		764CD8FC173A8F9400627237 /* cautionbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cautionbar.png; sourceTree = "<group>"; };
+		764CD8FD173A8F9400627237 /* cautionbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cautionbar@2x.png"; sourceTree = "<group>"; };
+		764CD904173A914600627237 /* btn_white_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_white_30.png; sourceTree = "<group>"; };
+		764CD905173A914600627237 /* btn_white_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_white_30@2x.png"; sourceTree = "<group>"; };
+		7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorHandlerCenter.h; sourceTree = "<group>"; };
+		7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorHandlerCenter.m; sourceTree = "<group>"; };
 		7670126A1729054500B5445E /* EFPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPopoverController.m; sourceTree = "<group>"; };
 		7670126B1729054500B5445E /* EFArrowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFArrowView.m; sourceTree = "<group>"; };
 		7670126C1729054500B5445E /* EFPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPopoverController.h; sourceTree = "<group>"; };
@@ -2183,6 +2207,9 @@
 		76D1A813171D704C00A35BBD /* btn_blue_30inset@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_blue_30inset@2x.png"; sourceTree = "<group>"; };
 		76DED7CC171C06A900C2F27E /* UILog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILog.h; sourceTree = "<group>"; };
 		76DED7CD171C06A900C2F27E /* UILog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILog.m; sourceTree = "<group>"; };
+		76F6B30A1740A59A008B39C1 /* EFErrorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorMessage.h; sourceTree = "<group>"; };
+		76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorMessage.m; sourceTree = "<group>"; };
+		76F6B3101740B5C1008B39C1 /* EFKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFKit.h; sourceTree = "<group>"; };
 		7803EB8915AD801500291B69 /* EXButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXButton.h; sourceTree = "<group>"; };
 		7803EB8A15AD801500291B69 /* EXButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXButton.m; sourceTree = "<group>"; };
 		780961FE15BDB70B0071E9D0 /* EXOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXOverlayView.h; sourceTree = "<group>"; };
@@ -2997,12 +3024,17 @@
 		767012621729053400B5445E /* EFKit */ = {
 			isa = PBXGroup;
 			children = (
+				76F6B3101740B5C1008B39C1 /* EFKit.h */,
 				7670126C1729054500B5445E /* EFPopoverController.h */,
 				7670126A1729054500B5445E /* EFPopoverController.m */,
 				7670126D1729054500B5445E /* EFArrowView.h */,
 				7670126B1729054500B5445E /* EFArrowView.m */,
-				7661C7EA1738B15400133F10 /* EFWarningHandlerCenter.h */,
-				7661C7EB1738B15400133F10 /* EFWarningHandlerCenter.m */,
+				76F6B30A1740A59A008B39C1 /* EFErrorMessage.h */,
+				76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */,
+				7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */,
+				7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */,
+				764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */,
+				764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */,
 			);
 			name = EFKit;
 			sourceTree = "<group>";
@@ -3124,6 +3156,10 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				764CD904173A914600627237 /* btn_white_30.png */,
+				764CD905173A914600627237 /* btn_white_30@2x.png */,
+				764CD8FC173A8F9400627237 /* cautionbar.png */,
+				764CD8FD173A8F9400627237 /* cautionbar@2x.png */,
 				4FDFA479172A83C900929BC9 /* list_divider.png */,
 				4FDFA47A172A83C900929BC9 /* list_divider@2x.png */,
 				4FDFA387172A792500929BC9 /* animation */,
@@ -4436,6 +4472,10 @@
 				4FDFA47F172A83CB00929BC9 /* list_divider@2x.png in Resources */,
 				4FDFA484172AE6A000929BC9 /* identity_facebook_50btn@2x.png in Resources */,
 				4FDFA487172AE6A000929BC9 /* identity_twitter_50btn@2x.png in Resources */,
+				764CD8FF173A8F9400627237 /* cautionbar.png in Resources */,
+				764CD902173A8F9400627237 /* cautionbar@2x.png in Resources */,
+				764CD907173A914600627237 /* btn_white_30.png in Resources */,
+				764CD90A173A914600627237 /* btn_white_30@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4826,6 +4866,10 @@
 				4FDFA480172A83CB00929BC9 /* list_divider@2x.png in Resources */,
 				4FDFA485172AE6A000929BC9 /* identity_facebook_50btn@2x.png in Resources */,
 				4FDFA488172AE6A000929BC9 /* identity_twitter_50btn@2x.png in Resources */,
+				764CD900173A8F9400627237 /* cautionbar.png in Resources */,
+				764CD903173A8F9400627237 /* cautionbar@2x.png in Resources */,
+				764CD908173A914600627237 /* btn_white_30.png in Resources */,
+				764CD90B173A914600627237 /* btn_white_30@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5218,6 +5262,10 @@
 				4FDFA47E172A83CB00929BC9 /* list_divider@2x.png in Resources */,
 				4FDFA483172AE6A000929BC9 /* identity_facebook_50btn@2x.png in Resources */,
 				4FDFA486172AE6A000929BC9 /* identity_twitter_50btn@2x.png in Resources */,
+				764CD8FE173A8F9400627237 /* cautionbar.png in Resources */,
+				764CD901173A8F9400627237 /* cautionbar@2x.png in Resources */,
+				764CD906173A914600627237 /* btn_white_30.png in Resources */,
+				764CD909173A914600627237 /* btn_white_30@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5407,7 +5455,9 @@
 				4FB377EB17377CB4001FA1B2 /* TWAPIManager.m in Sources */,
 				4FB377EE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */,
 				4FB377F117377CB4001FA1B2 /* TWSignedRequest.m in Sources */,
-				7661C7ED1738B15400133F10 /* EFWarningHandlerCenter.m in Sources */,
+				7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */,
+				764CD8F3173A5C4600627237 /* EFNotificationBannerView.m in Sources */,
+				76F6B30D1740A59B008B39C1 /* EFErrorMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5567,7 +5617,9 @@
 				4FB377EC17377CB4001FA1B2 /* TWAPIManager.m in Sources */,
 				4FB377EF17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */,
 				4FB377F217377CB4001FA1B2 /* TWSignedRequest.m in Sources */,
-				7661C7EE1738B15400133F10 /* EFWarningHandlerCenter.m in Sources */,
+				7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */,
+				764CD8F4173A5C4600627237 /* EFNotificationBannerView.m in Sources */,
+				76F6B30E1740A59B008B39C1 /* EFErrorMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5727,7 +5779,9 @@
 				4FB377EA17377CB4001FA1B2 /* TWAPIManager.m in Sources */,
 				4FB377ED17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */,
 				4FB377F017377CB4001FA1B2 /* TWSignedRequest.m in Sources */,
-				7661C7EC1738B15400133F10 /* EFWarningHandlerCenter.m in Sources */,
+				7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */,
+				764CD8F2173A5C4600627237 /* EFNotificationBannerView.m in Sources */,
+				76F6B30C1740A59B008B39C1 /* EFErrorMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

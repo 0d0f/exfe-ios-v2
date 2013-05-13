@@ -9,7 +9,7 @@
 #import "EFAPIServer.h"
 #import "Util.h"
 #import "Exfee+EXFE.h"
-#import "EFWarningHandlerCenter.h"
+#import "EFKit.h"
 
 @implementation EFAPIServer
 
@@ -417,11 +417,12 @@
             if (responseDict) {
                 NSNumber *exfeeQuota = [responseDict valueForKey:@"exfee_over_quota"];
                 if (exfeeQuota) {
-                    [[EFWarningHandlerCenter defaultCenter] showWarningWithType:kEFWarningHandlerCenterTypeAlert
-                                                                          Title:@"Quota limit exceeded"
-                                                                        message:[NSString stringWithFormat:@"%d people limit on gathering this ·X·. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!", [exfeeQuota intValue]]
-                                                              cancelButtonTitle:@"OK"
-                                                              otherButtonTitles:nil];
+                    EFErrorMessage *errorMessage = [EFErrorMessage errorMessageWithStyle:kEFErrorMessageStyleAlert
+                                                                                   title:@"Quota limit exceeded"
+                                                                                 message:[NSString stringWithFormat:@"%d people limit on gathering this ·X·. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!", [exfeeQuota intValue]]
+                                                                             buttonTitle:@"OK"
+                                                                     buttonActionHandler:nil];
+                    [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];
                 }
             }
         }

@@ -58,6 +58,7 @@
 #define COLOR_BLUE_AQUA           COLOR_RGB(0xA9, 0xD3, 0xFF)
 
 #define COLOR_RED_EXFE            COLOR_RGB(0xE5, 0x2E, 0x53)
+#define COLOR_RED_MEXICAN         COLOR_RGB(0xA3, 0x23, 0x3D)
 
 // Const
 #define HEADER_BACKGROUND_WIDTH     (880.0f)
