@@ -16,10 +16,10 @@
 //    RKRequestQueue *queue;
 }
 + (id) sharedManager;
--(void) GetTopPlaceFromGoogleNearby:(double)lat lng:(double)lng success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+-(void) GetTopPlaceFromGoogleNearby:(double)lat lng:(double)lng success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure DEPRECATED_ATTRIBUTE_MESSAGE("Use EFAPIServer (Place)");
 
--(void) GetPlacesFromGoogleNearby:(double)lat lng:(double)lng success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+-(void) GetPlacesFromGoogleNearby:(double)lat lng:(double)lng success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure DEPRECATED_ATTRIBUTE_MESSAGE("Use EFAPIServer (Place)");
 
--(void) GetPlacesFromGoogleByTitle:(NSString*) title lat:(double)lat lng:(double)lng success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+-(void) GetPlacesFromGoogleByTitle:(NSString*) title lat:(double)lat lng:(double)lng success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure DEPRECATED_ATTRIBUTE_MESSAGE("Use EFAPIServer (Place)");
 
 @end

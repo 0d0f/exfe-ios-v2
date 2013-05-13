@@ -15,6 +15,6 @@
 @interface APIProfile : NSObject
 
 +(void) LoadSuggest:(NSString*)key success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure DEPRECATED_ATTRIBUTE_MESSAGE("Use EFAPIServer (Profile)");
 
 @end

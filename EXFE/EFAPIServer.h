@@ -17,23 +17,29 @@
 @property (nonatomic, copy) NSString *user_token;
 
 #pragma mark Initializtion
+
 - (id)init;
 + (EFAPIServer *)sharedInstance;
 
 #pragma mark Token and User ID manager
+
 - (void)saveUserData;
 - (void)loaduserData;
 - (void)clearUserData;
 - (BOOL)isLoggedIn;
 
 #pragma mark Public API (Token Free)
+
 - (void)getAvailableBackgroundsWithSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 - (void)checkAppVersionSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
+- (void)getIdentitiesWithParams:(NSArray *)params success:(void (^)(NSArray *identities))success failure:(void (^)(NSError *error))failure;
+
 #pragma mark Identity, password and token APIs
+
 // endpoint: VerifyIdentity
 - (void)verifyIdentity:(NSString*)identity
                   with:(Provider)provider
@@ -53,6 +59,7 @@
 // endpoint: ResetPassword
 
 #pragma mark Sign In, Sign Out, Sign Up and Pre Check APIs
+
 - (void)getRegFlagBy:(NSString*)identity
                 with:(Provider)provider
              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
@@ -88,6 +95,7 @@
           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 #pragma mark Cross API
+
 - (void)loadCrossesAfter:(NSString*)updatedtime
                  success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                  failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
@@ -118,27 +126,21 @@
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-#pragma mark - Exfee API
-
-- (void)editExfee:(Exfee *)exfee byIdentity:(Identity *)identity success:(void (^)(Exfee *editedExfee))successHandler failure:(void (^)(NSError *error))failureHandler;
-
 #pragma mark - Identity API
 
-- (void)getIdentitiesWithParams:(NSArray *)params success:(void (^)(NSArray *identities))success failure:(void (^)(NSError *error))failure;
-
-- (void) updateIdentity:(Identity*)identity
+- (void)updateIdentity:(Identity*)identity
                   name:(NSString*)name
                 andBio:(NSString*)bio
                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-- (void) updateName:(NSString*)name
+- (void)updateName:(NSString*)name
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-- (void) addIdentityBy:(NSString*)external_username
-          withProvider:(Provider)provider
-                 param:(NSDictionary*)param
-               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (void)addIdentityBy:(NSString*)external_username
+         withProvider:(Provider)provider
+                param:(NSDictionary*)param
+              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 @end

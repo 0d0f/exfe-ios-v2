@@ -1423,6 +1423,21 @@
 		76D1A817171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A813171D704C00A35BBD /* btn_blue_30inset@2x.png */; };
 		76D1A818171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A813171D704C00A35BBD /* btn_blue_30inset@2x.png */; };
 		76D1A819171D704C00A35BBD /* btn_blue_30inset@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A813171D704C00A35BBD /* btn_blue_30inset@2x.png */; };
+		76D1FDE81740F08B00D271B2 /* EFAPIServer+Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FDE71740F08A00D271B2 /* EFAPIServer+Conversation.m */; };
+		76D1FDE91740F08B00D271B2 /* EFAPIServer+Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FDE71740F08A00D271B2 /* EFAPIServer+Conversation.m */; };
+		76D1FDEA1740F08B00D271B2 /* EFAPIServer+Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FDE71740F08A00D271B2 /* EFAPIServer+Conversation.m */; };
+		76D1FDF41740F34800D271B2 /* EFAPIServer+Crosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FDF31740F34800D271B2 /* EFAPIServer+Crosses.m */; };
+		76D1FDF51740F34800D271B2 /* EFAPIServer+Crosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FDF31740F34800D271B2 /* EFAPIServer+Crosses.m */; };
+		76D1FDF61740F34800D271B2 /* EFAPIServer+Crosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FDF31740F34800D271B2 /* EFAPIServer+Crosses.m */; };
+		76D1FDF91740F71900D271B2 /* EFAPIServer+Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FDF81740F71900D271B2 /* EFAPIServer+Exfee.m */; };
+		76D1FDFA1740F71900D271B2 /* EFAPIServer+Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FDF81740F71900D271B2 /* EFAPIServer+Exfee.m */; };
+		76D1FDFB1740F71900D271B2 /* EFAPIServer+Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FDF81740F71900D271B2 /* EFAPIServer+Exfee.m */; };
+		76D1FDFE1740F99200D271B2 /* EFAPIServer+Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FDFD1740F99100D271B2 /* EFAPIServer+Place.m */; };
+		76D1FDFF1740F99200D271B2 /* EFAPIServer+Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FDFD1740F99100D271B2 /* EFAPIServer+Place.m */; };
+		76D1FE001740F99200D271B2 /* EFAPIServer+Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FDFD1740F99100D271B2 /* EFAPIServer+Place.m */; };
+		76D1FE031740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */; };
+		76D1FE041740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */; };
+		76D1FE051740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */; };
 		76DED7C3171BEDE000C2F27E /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76DED7CE171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
 		76DED7CF171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
@@ -2208,6 +2223,17 @@
 		76D1A80B171D610C00A35BBD /* exfee_22ga@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exfee_22ga@2x.png"; sourceTree = "<group>"; };
 		76D1A812171D704C00A35BBD /* btn_blue_30inset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_blue_30inset.png; sourceTree = "<group>"; };
 		76D1A813171D704C00A35BBD /* btn_blue_30inset@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_blue_30inset@2x.png"; sourceTree = "<group>"; };
+		76D1FDE61740F08A00D271B2 /* EFAPIServer+Conversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFAPIServer+Conversation.h"; sourceTree = "<group>"; };
+		76D1FDE71740F08A00D271B2 /* EFAPIServer+Conversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFAPIServer+Conversation.m"; sourceTree = "<group>"; };
+		76D1FDF21740F34800D271B2 /* EFAPIServer+Crosses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFAPIServer+Crosses.h"; sourceTree = "<group>"; };
+		76D1FDF31740F34800D271B2 /* EFAPIServer+Crosses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFAPIServer+Crosses.m"; sourceTree = "<group>"; };
+		76D1FDF71740F71900D271B2 /* EFAPIServer+Exfee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFAPIServer+Exfee.h"; sourceTree = "<group>"; };
+		76D1FDF81740F71900D271B2 /* EFAPIServer+Exfee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFAPIServer+Exfee.m"; sourceTree = "<group>"; };
+		76D1FDFC1740F99100D271B2 /* EFAPIServer+Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFAPIServer+Place.h"; sourceTree = "<group>"; };
+		76D1FDFD1740F99100D271B2 /* EFAPIServer+Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFAPIServer+Place.m"; sourceTree = "<group>"; };
+		76D1FE011740FF9800D271B2 /* EFAPIServer+Profile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFAPIServer+Profile.h"; sourceTree = "<group>"; };
+		76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFAPIServer+Profile.m"; sourceTree = "<group>"; };
+		76D1FE06174100AA00D271B2 /* EFAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAPI.h; sourceTree = "<group>"; };
 		76DED7CC171C06A900C2F27E /* UILog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILog.h; sourceTree = "<group>"; };
 		76DED7CD171C06A900C2F27E /* UILog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILog.m; sourceTree = "<group>"; };
 		76F6B30A1740A59A008B39C1 /* EFErrorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorMessage.h; sourceTree = "<group>"; };
@@ -3689,8 +3715,19 @@
 				788B621016E89B200019B953 /* ModelMapping.m */,
 				7818FF1415EB415E0095E92F /* ObjectToDict.h */,
 				7818FF1515EB415E0095E92F /* ObjectToDict.m */,
+				76D1FE06174100AA00D271B2 /* EFAPI.h */,
 				4F9FACF1171DD02B00B1ADD9 /* EFAPIServer.h */,
 				4F9FACF2171DD02B00B1ADD9 /* EFAPIServer.m */,
+				76D1FDE61740F08A00D271B2 /* EFAPIServer+Conversation.h */,
+				76D1FDE71740F08A00D271B2 /* EFAPIServer+Conversation.m */,
+				76D1FDF21740F34800D271B2 /* EFAPIServer+Crosses.h */,
+				76D1FDF31740F34800D271B2 /* EFAPIServer+Crosses.m */,
+				76D1FDF71740F71900D271B2 /* EFAPIServer+Exfee.h */,
+				76D1FDF81740F71900D271B2 /* EFAPIServer+Exfee.m */,
+				76D1FDFC1740F99100D271B2 /* EFAPIServer+Place.h */,
+				76D1FDFD1740F99100D271B2 /* EFAPIServer+Place.m */,
+				76D1FE011740FF9800D271B2 /* EFAPIServer+Profile.h */,
+				76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -5466,6 +5503,11 @@
 				764CD8F3173A5C4600627237 /* EFNotificationBannerView.m in Sources */,
 				76F6B30D1740A59B008B39C1 /* EFErrorMessage.m in Sources */,
 				76F6B3161740DBCD008B39C1 /* EFStatusBar.m in Sources */,
+				76D1FDE91740F08B00D271B2 /* EFAPIServer+Conversation.m in Sources */,
+				76D1FDF51740F34800D271B2 /* EFAPIServer+Crosses.m in Sources */,
+				76D1FDFA1740F71900D271B2 /* EFAPIServer+Exfee.m in Sources */,
+				76D1FDFF1740F99200D271B2 /* EFAPIServer+Place.m in Sources */,
+				76D1FE041740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5629,6 +5671,11 @@
 				764CD8F4173A5C4600627237 /* EFNotificationBannerView.m in Sources */,
 				76F6B30E1740A59B008B39C1 /* EFErrorMessage.m in Sources */,
 				76F6B3171740DBCD008B39C1 /* EFStatusBar.m in Sources */,
+				76D1FDEA1740F08B00D271B2 /* EFAPIServer+Conversation.m in Sources */,
+				76D1FDF61740F34800D271B2 /* EFAPIServer+Crosses.m in Sources */,
+				76D1FDFB1740F71900D271B2 /* EFAPIServer+Exfee.m in Sources */,
+				76D1FE001740F99200D271B2 /* EFAPIServer+Place.m in Sources */,
+				76D1FE051740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5792,6 +5839,11 @@
 				764CD8F2173A5C4600627237 /* EFNotificationBannerView.m in Sources */,
 				76F6B30C1740A59B008B39C1 /* EFErrorMessage.m in Sources */,
 				76F6B3151740DBCD008B39C1 /* EFStatusBar.m in Sources */,
+				76D1FDE81740F08B00D271B2 /* EFAPIServer+Conversation.m in Sources */,
+				76D1FDF41740F34800D271B2 /* EFAPIServer+Crosses.m in Sources */,
+				76D1FDF91740F71900D271B2 /* EFAPIServer+Exfee.m in Sources */,
+				76D1FDFE1740F99200D271B2 /* EFAPIServer+Place.m in Sources */,
+				76D1FE031740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

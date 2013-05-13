@@ -19,17 +19,17 @@
         myIdentity:(int)my_identity_id
            onExfee:(int)exfee_id
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure DEPRECATED_ATTRIBUTE_MESSAGE("Use EFAPIServer (Exfee)");
 
 
 + (void)edit:(Exfee*)exfee
   myIdentity:(int)my_identity_id
      success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
-     failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+     failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure DEPRECATED_ATTRIBUTE_MESSAGE("Use EFAPIServer (Exfee)");
 
 + (void)addInvitations:(NSArray*)array
                     to:(int)exfee_id
               modifier:(int)my_identity_id
                success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
-               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure DEPRECATED_ATTRIBUTE_MESSAGE("No more invoke ?!");
 @end

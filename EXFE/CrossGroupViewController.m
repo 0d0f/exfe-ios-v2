@@ -7,6 +7,7 @@
 //
 
 #import "CrossGroupViewController.h"
+
 #import <QuartzCore/QuartzCore.h>
 #import <BlocksKit/BlocksKit.h>
 #import "Util.h"
@@ -20,14 +21,13 @@
 #import "Place+Helper.h"
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
-#import "APICrosses.h"
 #import "TitleDescEditViewController.h"
 #import "TimeViewController.h"
 #import "PlaceViewController.h"
 #import "WidgetConvViewController.h"
 #import "WidgetExfeeViewController.h"
-#import "APIExfee.h"
 #import "NSString+EXFE.h"
+#import "EFAPI.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -375,26 +375,24 @@
     [super viewDidAppear:animated];
     
     NSString *updated_at = _cross.updated_at;
-    [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue]
-                         updatedtime:updated_at
-                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                 
-                                 if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
-                                     Meta* meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                                     if ([meta.code intValue] == 403){
-                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                         alert.tag = 403;
-                                         [alert show];
-                                         [alert release];
-                                     } else if([meta.code intValue] == 200) {
-                                         [self refreshUI];
-                                     }
-                                     
-                                 }
-                             }
-                             failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                 
-                             }];
+    [[EFAPIServer sharedInstance] loadCrossWithCrossId:[_cross.cross_id intValue]
+                                           updatedtime:updated_at
+                                               success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                   if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
+                                                       Meta* meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                                                       if ([meta.code intValue] == 403){
+                                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                                           alert.tag = 403;
+                                                           [alert show];
+                                                           [alert release];
+                                                       } else if([meta.code intValue] == 200) {
+                                                           [self refreshUI];
+                                                       }
+                                                   }
+                                               }
+                                               failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                   
+                                               }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -1761,46 +1759,43 @@
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
     
     Identity *myidentity = [_cross.exfee getMyInvitation].identity;
-    [APIExfee submitRsvp: status
-                      on: _invitation
-              myIdentity: [myidentity.identity_id intValue]
-                 onExfee: [_cross.exfee.exfee_id intValue]
-                 success: ^(AFHTTPRequestOperation *operation, id responseObject) {
-                     
-                     if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                         if([responseObject isKindOfClass:[NSDictionary class]])
-                         {
-                             NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
-                             if([[meta objectForKey:@"code"] intValue]==403){
-                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                 alert.tag=403;
-                                 [alert show];
-                                 [alert release];
-                             }else if([[meta objectForKey:@"code"] intValue]==200){
-                                 [APICrosses LoadCrossWithCrossId:[_cross.cross_id intValue] updatedtime:@"" success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                     
-                                     if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-                                     {
-                                         Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                                         if([meta.code intValue]==200){
-                                             [self refreshUI];
+    
+    [[EFAPIServer sharedInstance] submitRsvp:status
+                                          on:_invitation
+                                  myIdentity:[myidentity.identity_id intValue]
+                                     onExfee:[_cross.exfee.exfee_id intValue]
+                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+                                             if([responseObject isKindOfClass:[NSDictionary class]]) {
+                                                 NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
+                                                 if ([[meta objectForKey:@"code"] intValue] == 403) {
+                                                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                                     alert.tag = 403;
+                                                     [alert show];
+                                                     [alert release];
+                                                 } else if ([[meta objectForKey:@"code"] intValue] == 200) {
+                                                     [[EFAPIServer sharedInstance] loadCrossWithCrossId:[_cross.cross_id intValue]
+                                                                                            updatedtime:@""
+                                                                                                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                                                                    if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
+                                                                                                        Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                                                                                                        if ([meta.code intValue]==200) {
+                                                                                                            [self refreshUI];
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                                                                }];
+                                                     
+                                                     [self refreshUI];
+                                                 }
+                                                 
+                                             }
                                          }
-                                         
                                      }
-                                 } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                     
-                                 }];
-                                 
-                                 [self refreshUI];
-                             }
-                             
-                         }
-                     }
-                 }
-                 failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
-                     [Util showConnectError:error delegate:self];
-                     
-                 }];
+                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                         [Util showConnectError:error delegate:self]; 
+                                     }];
 }
 
 #pragma mark Navigation
@@ -1849,38 +1844,36 @@
     [bigspin release];
     
     _cross.by_identity=[_cross.exfee getMyInvitation].identity;
-    [APICrosses EditCross:_cross
-                  success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                      AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-                      
-                      if(operation.HTTPRequestOperation.response.statusCode==200){
-                          if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-                          {
-                              Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                              if([meta.code intValue]==200){
-                                  Cross *responsecross=[[mappingResult dictionary] objectForKey:@"response.cross"];
-                                  if([responsecross.cross_id intValue]==[self.cross.cross_id intValue])
-                                  {
-                                      [app CrossUpdateDidFinish:[responsecross.cross_id intValue]];
-                                  }
-                              }else{
-                                  [Util showErrorWithMetaObject:meta delegate:self];
-                              }
-                          }
-                      }else{
-                          NSString *errormsg=@"Could not save this cross.";
-                          if(![errormsg isEqualToString:@""]){
-                              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
-                              alert.tag=201; // 201 = Save Cross
-                              [alert show];
-                              [alert release];
-                          }
-                      }
-                      [MBProgressHUD hideHUDForView:self.view animated:YES];
-                  }
-                  failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                      
-                  }];
+    [[EFAPIServer sharedInstance] editCross:_cross
+                                    success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                                        if (operation.HTTPRequestOperation.response.statusCode == 200) {
+                                            if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
+                                                Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                                                
+                                                if ([meta.code intValue] == 200) {
+                                                    Cross *responsecross = [[mappingResult dictionary] objectForKey:@"response.cross"];
+                                                    if ([responsecross.cross_id intValue] == [self.cross.cross_id intValue]) {
+                                                        [app CrossUpdateDidFinish:[responsecross.cross_id intValue]];
+                                                    }
+                                                } else {
+                                                    [Util showErrorWithMetaObject:meta delegate:self];
+                                                }
+                                            }
+                                        } else {
+                                            NSString *errormsg = @"Could not save this cross.";
+                                            if (![errormsg isEqualToString:@""]) {
+                                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
+                                                alert.tag = 201; // 201 = Save Cross
+                                                [alert show];
+                                                [alert release];
+                                            }
+                                        }
+                                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                    }
+                                    failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                        
+                                    }];
 }
 
 #pragma mark UIAlertView methods

@@ -7,12 +7,12 @@
 //
 
 #import "WidgetConvViewController.h"
+
 #import "Post.h"
-#import "APIConversation.h"
 #import "PostCell.h"
 #import "ImgCache.h"
 #import "Util.h"
-#import "EFAPIServer.h"
+#import "EFAPI.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -241,21 +241,24 @@
             updated_at=post.updated_at;
         }
     }
-    [APIConversation LoadConversationWithExfeeId:exfee_id updatedtime:updated_at success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-        if(meta!=nil){
-            if([meta.code intValue]==200){
-                [self loadObjectsFromDataStore];
-                [self showOrHideHint];
-            }
-        }else{
-            //show error hint
-        }
-        
-    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        [self showOrHideHint];
-    }];
+    [[EFAPIServer sharedInstance] loadConversationWithExfeeId:exfee_id
+                                                  updatedtime:updated_at
+                                                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                          Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
+                                                          if (meta != nil) {
+                                                              if ([meta.code intValue] == 200) {
+                                                                  [self loadObjectsFromDataStore];
+                                                                  [self showOrHideHint];
+                                                              }
+                                                          } else {
+                                                              //show error hint
+                                                          }
+                                                      }
+                                                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                          [self showOrHideHint];
+                                                      }];
 }
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [inputToolbar hidekeyboard];
 }
