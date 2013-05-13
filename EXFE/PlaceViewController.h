@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
-#import "APIPlace.h"
 #import "PlaceAnnotation.h"
 #import "NewGatherViewController.h"
 #import "EXPlaceEditView.h"

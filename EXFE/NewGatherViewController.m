@@ -18,6 +18,7 @@
 #import "EFChoosePeopleViewController.h"
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
+#import "EFAPI.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -550,15 +551,16 @@
       _cross.time.begin_at.timezone = [DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];
     }
     [Flurry logEvent:@"GATHER_SEND"];
-    [APICrosses GatherCross:_cross
-                    success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                        [MBProgressHUD hideHUDForView:self.view animated:YES];
-                        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-                        [app GatherCrossDidFinish];
-                    }
-                    failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                        [MBProgressHUD hideHUDForView:self.view animated:YES];
-                    }];
+    
+    [[EFAPIServer sharedInstance] gatherCross:_cross
+                                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                          [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                          AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                                          [app GatherCrossDidFinish];
+                                      }
+                                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                          [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                      }];
 }
 
 - (void) ShowPlaceView:(NSString*)status{

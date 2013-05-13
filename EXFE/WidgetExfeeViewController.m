@@ -22,13 +22,13 @@
 #import "Util.h"
 #import "ImgCache.h"
 #import "DateTimeUtil.h"
-#import "APICrosses.h"
-#import "APIExfee.h"
 #import "NSString+EXFE.h"
 #import "EFChoosePeopleViewController.h"
 #import "EFAPIServer.h"
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
+#import "Cross.h"
+#import "EFAPI.h"
 
 
 #define kTagViewExfeeRoot         10
@@ -352,41 +352,18 @@ typedef enum {
         _selected_invitation.rsvp_status = @"REMOVED";
         
         Identity *myidentity = [self.exfee getMyInvitation].identity;
-        [APIExfee edit:self.exfee
-            myIdentity:[myidentity.identity_id intValue]
-               success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                   if ([operation.HTTPRequestOperation.response statusCode] == 200){
-                       if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-                       {
-                           Meta* meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                           int code = [meta.code intValue];
-                           int type = code /100;
-                           switch (type) {
-                               case 2: // HTTP OK
-                                   if(code == 200){
-                                       Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
-                                       //[self.exfee removeInvitationsObject:selected_invitation];
-                                       _selected_invitation = nil;
-                                       self.exfee = respExfee;
-                                       self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-                                       
-                                       [exfeeContainer reloadData];
-                                       [self reloadSelected];
-                                       
-                                   }
-                                   break;
-                               default:
-                                   break;
-                           }
-                           
-                           
-                           
-                       }
-                   }
-               }
-               failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                   ;
-               }];
+        [[EFAPIServer sharedInstance] editExfee:self.exfee
+                                     byIdentity:myidentity
+                                        success:^(Exfee *exfee) {
+                                            _selected_invitation = nil;
+                                            self.exfee = exfee;
+                                            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+                                            
+                                            [exfeeContainer reloadData];
+                                            [self reloadSelected];
+                                        }
+                                        failure:^(NSError *error) {
+                                        }];
     }
 }
 
@@ -1117,49 +1094,49 @@ typedef enum {
 - (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
     
     Identity *myidentity = [self.exfee getMyInvitation].identity;
-    [APIExfee submitRsvp: status
-                      on: _invitation
-              myIdentity: [myidentity.identity_id intValue]
-                 onExfee: [self.exfee.exfee_id intValue]
-                 success: ^(AFHTTPRequestOperation *operation, id responseObject) {
-                     
-                     if ([operation.response statusCode] == 200){
-                         if([responseObject isKindOfClass:[NSDictionary class]])
-                         {
-                             NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
-                             if([[meta objectForKey:@"code"] intValue]==403){
-//                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//                                 alert.tag=403;
-//                                 [alert show];
-//                                 [alert release];
-                             }else if([[meta objectForKey:@"code"] intValue]==200){
-                                 CrossGroupViewController *parent = (CrossGroupViewController*)self.parentViewController;
-                                 [APICrosses LoadCrossWithCrossId:[parent.cross.cross_id intValue] updatedtime:@"" success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                     
-                                     if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-                                     {
-                                         Meta* meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                                         if([meta.code intValue]==200){
-                                             self.exfee = parent.cross.exfee;
-                                             self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-                                             [exfeeContainer reloadData];
-                                             [self reloadSelected];
-                                         }
+    [[EFAPIServer sharedInstance] submitRsvp:status
+                                          on:_invitation
+                                  myIdentity:[myidentity.identity_id intValue]
+                                     onExfee:[self.exfee.exfee_id intValue]
+                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                          
+                                         if ([operation.response statusCode] == 200){
+                                             if([responseObject isKindOfClass:[NSDictionary class]])
+                                             {
+                                                 NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
+                                                 if([[meta objectForKey:@"code"] intValue]==403){
+                                                     //                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                                     //                                 alert.tag=403;
+                                                     //                                 [alert show];
+                                                     //                                 [alert release];
+                                                 }else if([[meta objectForKey:@"code"] intValue]==200){
+                                                     CrossGroupViewController *parent = (CrossGroupViewController*)self.parentViewController;
+                                                     [[EFAPIServer sharedInstance] loadCrossWithCrossId:[parent.cross.cross_id intValue]
+                                                                                            updatedtime:@""
+                                                                                                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                                                                    if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
+                                                                                                        Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                                                                                                        if ([meta.code intValue]==200) {
+                                                                                                            self.exfee = parent.cross.exfee;
+                                                                                                            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+                                                                                                            [exfeeContainer reloadData];
+                                                                                                            [self reloadSelected];
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                                                                }];
+                                                     
+                                                     self.exfee = parent.cross.exfee;
+                                                     [exfeeContainer reloadData];
+                                                 }
+                                                 
+                                             }
+                                         }
                                      }
-                                 } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                     
-                                 }];
-                                 self.exfee = parent.cross.exfee;
-                                 [exfeeContainer reloadData];
-                             }
-                             
-                         }
-                     }
-                 }
-                 failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
-                     [Util showConnectError:error delegate:self];
-                 }];
+                                     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                         [Util showConnectError:error delegate:self];
+                                     }];
 }
 
 #pragma mark UIAlertViewDelegate

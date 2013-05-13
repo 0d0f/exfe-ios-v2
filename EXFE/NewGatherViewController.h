@@ -19,7 +19,6 @@
 #import "Place+Helper.h"
 #import "EXImagesCollectionGatherView.h"
 #import "EXRSVPMenuView.h"
-#import "APICrosses.h"
 #import "EXLabel.h"
 #import "TitleDescEditViewController.h"
 #import "PlaceViewController.h"

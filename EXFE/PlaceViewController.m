@@ -8,6 +8,8 @@
 
 #import "PlaceViewController.h"
 
+#import "EFAPI.h"
+
 @interface PlaceViewController ()
 
 @end
@@ -364,29 +366,30 @@
     place.lat=[NSString stringWithFormat:@"%f",annotation.coordinate.latitude];
     place.lng=[NSString stringWithFormat:@"%f",annotation.coordinate.longitude];
     place.provider=@"";
-    if(newPlace==YES){
-      [[APIPlace sharedManager] GetTopPlaceFromGoogleNearby:annotation.coordinate.latitude lng:annotation.coordinate.longitude success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-          NSDictionary *body=(NSDictionary*)responseObject;
-          if([body isKindOfClass:[NSDictionary class]]) {
-            NSString *status=[body objectForKey:@"status"];
-            if(status!=nil &&[status isEqualToString:@"OK"])
-            {
-              NSArray *results=[body objectForKey:@"results"] ;
-              if([results count]>0){
-                NSDictionary *p = [results objectAtIndex:0];
-                if([results count]>1)
-                  p = [results objectAtIndex:1];
-                
-                  NSDictionary *dict=[[[NSDictionary alloc] initWithObjectsAndKeys:[p objectForKey:@"name"],@"title",[p objectForKey:@"vicinity"],@"description",[[[p objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[p objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[p objectForKey:@"id"],@"external_id",@"google",@"provider", nil] autorelease];
-                [self fillTopPlace:dict];
-              }
-            }
-          }
-        }
-      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-      }];
+    
+    if (newPlace) {
+        [[EFAPIServer sharedInstance] getTopPlaceNearbyWithLocation:annotation.coordinate
+                                                            success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+                                                                    NSDictionary *body = (NSDictionary*)responseObject;
+                                                                    if ([body isKindOfClass:[NSDictionary class]]) {
+                                                                        NSString *status = [body objectForKey:@"status"];
+                                                                        if (status != nil &&[status isEqualToString:@"OK"]) {
+                                                                            NSArray *results = [body objectForKey:@"results"];
+                                                                            if ([results count] > 0) {
+                                                                                NSDictionary *p = [results objectAtIndex:0];
+                                                                                if ([results count] > 1)
+                                                                                    p = [results objectAtIndex:1];
+                                                                                
+                                                                                NSDictionary *dict = [[[NSDictionary alloc] initWithObjectsAndKeys:[p objectForKey:@"name"],@"title",[p objectForKey:@"vicinity"],@"description",[[[p objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"],@"lng",[[[p objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"],@"lat",[p objectForKey:@"id"],@"external_id",@"google",@"provider", nil] autorelease];
+                                                                                [self fillTopPlace:dict];
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                            }];
     }
 }
 
@@ -458,24 +461,22 @@
         [map setRegion:region animated:YES];
         
         CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
-        if(meters<0 || meters>500)
-        {
-          [[APIPlace sharedManager] GetPlacesFromGoogleNearby:location.latitude lng:location.longitude success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-              NSDictionary *body=(NSDictionary*)responseObject;
-              if([body isKindOfClass:[NSDictionary class]]) {
-                NSString *status=[body objectForKey:@"status"];
-                if(status!=nil &&[status isEqualToString:@"OK"])
-                {
-                  NSArray *results=[body objectForKey:@"results"] ;
-                  [self processResultFromPlaceAPI:results];
-                }
-              }
-            }
-          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            
-          }];
-//            [[APIPlace sharedManager] GetPlacesFromGoogleNearby:location.latitude lng:location.longitude delegate:self];
+        if (meters < 0 || meters > 500) {
+            [[EFAPIServer sharedInstance] getPlacesNearbyWithLocation:location
+                                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                  if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+                                                                      NSDictionary *body = (NSDictionary*)responseObject;
+                                                                      if ([body isKindOfClass:[NSDictionary class]]) {
+                                                                          NSString *status = [body objectForKey:@"status"];
+                                                                          if (status != nil && [status isEqualToString:@"OK"]) {
+                                                                              NSArray *results = [body objectForKey:@"results"];
+                                                                              [self processResultFromPlaceAPI:results];
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              }
+                                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) { 
+                                                              }];
         }
     }
     lng=location.longitude;
@@ -908,24 +909,25 @@
   [self reloadPlaceData:local_results];
   
 }
-- (void) getPlacefromapi{
-  [[APIPlace sharedManager] GetPlacesFromGoogleByTitle:inputplace.text lat:lat lng:lng success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-      NSDictionary *body=(NSDictionary*)responseObject;
-      if([body isKindOfClass:[NSDictionary class]]) {
-        NSString *status=[body objectForKey:@"status"];
-        if(status!=nil &&[status isEqualToString:@"OK"])
-        {
-          NSArray *results=[body objectForKey:@"results"] ;
-          [self processResultFromPlaceAPI:results];
-        }
-      }
-    }
-    
-  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-    
-  }];
+- (void)getPlacefromapi{
+    [[EFAPIServer sharedInstance] getPlacesByTitle:inputplace.text
+                                          location:CLLocationCoordinate2DMake(lat, lng)
+                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                               if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+                                                   NSDictionary *body = (NSDictionary*)responseObject;
+                                                   if ([body isKindOfClass:[NSDictionary class]]) {
+                                                       NSString *status = [body objectForKey:@"status"];
+                                                       if (status != nil && [status isEqualToString:@"OK"]) {
+                                                           NSArray *results = [body objectForKey:@"results"];
+                                                           [self processResultFromPlaceAPI:results];
+                                                       }
+                                                   }
+                                               }
+                                           }
+                                           failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                           }];
 }
+
 - (void) getPlace{
     if(CFAbsoluteTimeGetCurrent()-editinginterval>0.8)
       [self getPlacefromapi];

@@ -7,8 +7,8 @@
 //
 
 #import "ExfeeInputViewController.h"
-#import "APIProfile.h"
-#import "APIExfee.h"
+
+#import "EFAPI.h"
 #import "WCAlertView.h"
 #import "EXAddressBookService.h"
 
@@ -481,56 +481,18 @@ static char identitykey;
     exfee.exfee_id = [self.exfee.exfee_id copy];
     NSSet *set = [NSSet setWithArray:invitations];
     [exfee addInvitations:set];
+    
     Identity *myidentity = [self.exfee getMyInvitation].identity;
-    [APIExfee edit:exfee
-        myIdentity:[myidentity.identity_id intValue]
-           success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-               {
-                   if ([operation.HTTPRequestOperation.response statusCode] == 200){
-                       if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
-                       {
-                           Meta* meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                           int code = [meta.code intValue];
-                           int type = code /100;
-                           switch (type) {
-                               case 2: // HTTP OK
-                                   if (code == 206) { // Too many people, still accept
-//                                       NSLog(@"HTTP 206 Partial Successfully");
-                                   }
-                                   if(code == 200){
-                                       Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
-                                       self.exfee = respExfee;
-                                       [self dissmisModal];
-                                   }
-                                   break;
-                               case 4: // Client Error
-                               {
-                                   // 400 Over people mac limited
-                                   RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                                   [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
-                               }
-                                   break;
-                               case 5: // Server Error
-                               {
-                                   RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                                   [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
-                               }
-                                   break;
-                               default:
-                                   break;
-                           }
-                           
-                           
-                           
-                       }
-                   }
-               }
-           } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-               RKObjectManager *objectManager = [RKObjectManager sharedManager];
-               [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
-           }];
-    
-    
+    [[EFAPIServer sharedInstance] editExfee:exfee
+                                 byIdentity:myidentity
+                                    success:^(Exfee *exfee) {
+                                        self.exfee = exfee;
+                                        [self dissmisModal];
+                                    }
+                                    failure:^(NSError *error) {
+                                        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                        [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                                    }];
 }
 
 - (void)dissmisModal{
@@ -553,11 +515,12 @@ static char identitykey;
     if(addressbookType== EXFE_ADDRESSBOOK){
         if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
             showInputinSuggestion=YES;
-          [APIProfile LoadSuggest:exfeeInput.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            [self loadIdentitiesFromDataStore:[exfeeList getInput]];
-          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            
-          }];
+            [[EFAPIServer sharedInstance] loadSuggest:exfeeInput.text
+                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                  [self loadIdentitiesFromDataStore:[exfeeList getInput]];
+                                              }
+                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                              }];
         }
         if(exfeeInput.text==nil || [exfeeInput.text isEqualToString:@""])
         {
@@ -966,11 +929,13 @@ static char identitykey;
             if([self showErrorHint]==YES)
                 return YES;
             showInputinSuggestion=YES;
-            [APIProfile LoadSuggest:input success:^(AFHTTPRequestOperation *operation, id responseObject) {
-              [self loadIdentitiesFromDataStore:[exfeeList getInput]];
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-              
-            }];
+            [[EFAPIServer sharedInstance] loadSuggest:input
+                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                  [self loadIdentitiesFromDataStore:[exfeeList getInput]];
+                                              }
+                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                              }];
+            
             [self loadIdentitiesFromDataStore:input];
         }
         if(input==nil || [input isEqualToString:@""])

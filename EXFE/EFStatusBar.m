@@ -9,6 +9,7 @@
 #import "EFStatusBar.h"
 
 #import "Util.h"
+#import "AppDelegate.h"
 
 #define kRight
 
@@ -54,6 +55,9 @@
         
         [window addSubview:self];
         [window makeKeyAndVisible];
+        
+        UIWindow *keyWindow = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
+        [keyWindow makeKeyWindow];
     }
     return self;
 }
