@@ -7,9 +7,15 @@
 //
 
 #import "EFAPIServer.h"
+
 #import "Util.h"
 #import "Exfee+EXFE.h"
 #import "EFKit.h"
+
+@interface EFAPIServer (Private)
+- (void)_handleSuccessWithRequestOperation:(NSOperation *)operation andResponseObject:(id)object;
+- (void)_handleFailureWithRequestOperation:(NSOperation *)operation andError:(NSError *)error;
+@end
 
 @implementation EFAPIServer
 
@@ -82,7 +88,26 @@
 {
     NSString *endpoint = [NSString stringWithFormat:@"Backgrounds/GetAvailableBackgrounds"];
     RKObjectManager *manager = [RKObjectManager sharedManager] ;
-    [manager.HTTPClient getPath:endpoint parameters:nil success:success failure:failure];
+    [manager.HTTPClient getPath:endpoint
+                     parameters:nil
+                        success:^(AFHTTPRequestOperation *operation, id responseObject){
+                            [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                            
+                            if (success) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    success(operation, responseObject);
+                                });
+                            }
+                        }
+                        failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                            [self _handleFailureWithRequestOperation:operation andError:error];
+                            
+                            if (failure) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    failure(operation, error);
+                                });
+                            }
+                        }];
 }
 
 - (void)checkAppVersionSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
@@ -95,7 +120,26 @@
     //    manager.requestSerializationMIMEType = RKMIMETypeJSON;
     // Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
     //	[manager.HTTPClient setDefaultHeader:@"Accept" value:@"application/json"];
-    [manager.HTTPClient getPath:endpoint parameters:nil success:success failure:failure];
+    [manager.HTTPClient getPath:endpoint
+                     parameters:nil
+                        success:^(AFHTTPRequestOperation *operation, id responseObject){
+                            [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                            
+                            if (success) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    success(operation, responseObject);
+                                });
+                            }
+                        }
+                        failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                            [self _handleFailureWithRequestOperation:operation andError:error];
+                            
+                            if (failure) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    failure(operation, error);
+                                });
+                            }
+                        }];
 }
 
 #pragma mark Identity, password and token APIs
@@ -109,7 +153,26 @@
     manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
     NSDictionary* params = @{@"external_username": identity, @"provider": [Identity getProviderString:provider]};
-    [manager.HTTPClient postPath:endpoint parameters:params success:success failure:failure];
+    [manager.HTTPClient postPath:endpoint
+                      parameters:params
+                         success:^(AFHTTPRequestOperation *operation, id responseObject){
+                             [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                             
+                             if (success) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     success(operation, responseObject);
+                                 });
+                             }
+                         }
+                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             [self _handleFailureWithRequestOperation:operation andError:error];
+                             
+                             if (failure) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     failure(operation, error);
+                                 });
+                             }
+                         }];
 }
 
 // endpoint: VerifyUserIdentity
@@ -124,7 +187,26 @@
     manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
     NSDictionary* params = @{@"external_username": identity, @"provider": [Identity getProviderString:provider]};
-    [manager.HTTPClient postPath:endpoint parameters:params success:success failure:failure];
+    [manager.HTTPClient postPath:endpoint
+                      parameters:params
+                         success:^(AFHTTPRequestOperation *operation, id responseObject){
+                             [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                             
+                             if (success) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     success(operation, responseObject);
+                                 });
+                             }
+                         }
+                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             [self _handleFailureWithRequestOperation:operation andError:error];
+                             
+                             if (failure) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     failure(operation, error);
+                                 });
+                             }
+                         }];
 }
 
 // endpoint: ResolveToken
@@ -144,8 +226,26 @@
     
     
     NSDictionary* params = @{@"external_username": identity, @"provider": [Identity getProviderString:provider]};
-    [manager.HTTPClient getPath:endpoint parameters:params success:success failure:failure];
-    
+    [manager.HTTPClient getPath:endpoint
+                     parameters:params
+                        success:^(AFHTTPRequestOperation *operation, id responseObject){
+                            [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                            
+                            if (success) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    success(operation, responseObject);
+                                });
+                            }
+                        }
+                        failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                            [self _handleFailureWithRequestOperation:operation andError:error];
+                            
+                            if (failure) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    failure(operation, error);
+                                });
+                            }
+                        }];
 }
 
 // TODO not finished ,use ormapping isntead of httpclient
@@ -161,9 +261,27 @@
     
     
     NSDictionary* params = @{@"external_username": identity, @"provider": [Identity getProviderString:provider]};
-    [manager getObject:nil path:endpoint parameters:params success:success failure:failure];
-
-    
+    [manager getObject:nil
+                  path:endpoint
+            parameters:params
+               success:^(RKObjectRequestOperation *operation, id responseObject){
+                   [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                   
+                   if (success) {
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                           success(operation, responseObject);
+                       });
+                   }
+               }
+               failure:^(RKObjectRequestOperation *operation, NSError *error){
+                   [self _handleFailureWithRequestOperation:operation andError:error];
+                   
+                   if (failure) {
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                           failure(operation, error);
+                       });
+                   }
+               }];
 }
 
 - (void)signIn:(NSString*)identity
@@ -184,8 +302,9 @@
     [manager.HTTPClient postPath:endpoint
                       parameters:params
                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                 
+                             [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                             
+                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                                  NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
                                  if ([code integerValue] == 200) {
                                      NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
@@ -196,10 +315,19 @@
                                  }
                              }
                              if (success) {
-                                 success(operation, responseObject);
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     success(operation, responseObject);
+                                 });
                              }
                          }
-                         failure:failure];
+                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             [self _handleFailureWithRequestOperation:operation andError:error];
+                             if (failure) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     failure(operation, error);
+                                 });
+                             }
+                         }];
 }
 
 - (void)signOutUsingUdid:(NSString*)udid
@@ -210,7 +338,26 @@
     RKObjectManager *manager = [RKObjectManager sharedManager] ;
     NSDictionary *params = @{@"udid":udid,@"os_name":@"iOS"};
     manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
-    [manager.HTTPClient postPath:endpoint parameters:params success:success failure:failure];
+    [manager.HTTPClient postPath:endpoint
+                      parameters:params
+                         success:^(AFHTTPRequestOperation *operation, id responseObject){
+                             [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                             
+                             if (success) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     success(operation, responseObject);
+                                 });
+                             }
+                         }
+                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             [self _handleFailureWithRequestOperation:operation andError:error];
+                             
+                             if (failure) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     failure(operation, error);
+                                 });
+                             }
+                         }];
 }
 
 - (void)signUp:(NSString*)identity
@@ -233,8 +380,9 @@
     [manager.HTTPClient postPath:endpoint
                       parameters:params
                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                 
+                             [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                             
+                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                                  NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
                                  if ([code integerValue] == 200) {
                                      NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
@@ -245,10 +393,20 @@
                                  }
                              }
                              if (success) {
-                                 success(operation, responseObject);
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     success(operation, responseObject);
+                                 });
                              }
                          }
-                         failure:failure];
+                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             [self _handleFailureWithRequestOperation:operation andError:error];
+                             
+                             if (failure) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     failure(operation, error);
+                                 });
+                             }
+                         }];
 }
 
 - (void)reverseAuth:(Provider)provider
@@ -280,8 +438,9 @@
     [manager.HTTPClient postPath:endpoint
                       parameters:params
                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                 
+                             [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                             
+                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                                  NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
                                  if ([code integerValue] == 200) {
                                      NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
@@ -292,10 +451,20 @@
                                  }
                              }
                              if (success) {
-                                 success(operation, responseObject);
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     success(operation, responseObject);
+                                 });
                              }
                          }
-                         failure:failure];
+                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             [self _handleFailureWithRequestOperation:operation andError:error];
+                             
+                             if (failure) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     failure(operation, error);
+                                 });
+                             }
+                         }];
 }
 
 - (void)regDevice:(NSString*)pushToken
@@ -313,26 +482,59 @@
                             @"os_version":[[UIDevice currentDevice] systemVersion]};
     
     manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
-    [manager.HTTPClient postPath:endpoint parameters:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-            NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-            if ([code integerValue] == 200) {
-                [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"ifdevicetokenSave"];
-                [[NSUserDefaults standardUserDefaults] setObject:pushToken forKey:@"udid"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-            }
-        }
-        if (success) {
-            success(operation, responseObject);
-        }
-    } failure:failure];
+    [manager.HTTPClient postPath:endpoint
+                      parameters:param
+                         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                             [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                             
+                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+                                 NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                                 if ([code integerValue] == 200) {
+                                     [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"ifdevicetokenSave"];
+                                     [[NSUserDefaults standardUserDefaults] setObject:pushToken forKey:@"udid"];
+                                     [[NSUserDefaults standardUserDefaults] synchronize];
+                                 }
+                             }
+                             if (success) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     success(operation, responseObject);
+                                 });
+                             }
+                         } failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             [self _handleFailureWithRequestOperation:operation andError:error];
+                             
+                             if (failure) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     failure(operation, error);
+                                 });
+                             }
+                         }];
 }
 #pragma mark Cross API
 - (void)loadCrossesAfter:(NSString*)updatedtime
                  success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                  failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
 {
-    [self loadCrossesBy:self.user_id updatedtime:updatedtime success:success failure:failure];
+    [self loadCrossesBy:self.user_id
+            updatedtime:updatedtime
+                success:^(RKObjectRequestOperation *operation, id responseObject){
+                    [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                    
+                    if (success) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            success(operation, responseObject);
+                        });
+                    }
+                }
+                failure:^(RKObjectRequestOperation *operation, NSError *error){
+                    [self _handleFailureWithRequestOperation:operation andError:error];
+                    
+                    if (failure) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            failure(operation, error);
+                        });
+                    }
+                }];
 }
 
 
@@ -351,7 +553,26 @@
     }
     NSString *endpoint = [NSString stringWithFormat:@"users/%u/crosses", self.user_id];
     
-    [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:param success:success failure:failure];
+    [[RKObjectManager sharedManager] getObjectsAtPath:endpoint
+                                           parameters:param
+                                              success:^(RKObjectRequestOperation *operation, id responseObject){
+                                                  [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                                                  
+                                                  if (success) {
+                                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                                          success(operation, responseObject);
+                                                      });
+                                                  }
+                                              }
+                                              failure:^(RKObjectRequestOperation *operation, NSError *error){
+                                                  [self _handleFailureWithRequestOperation:operation andError:error];
+                                                  
+                                                  if (failure) {
+                                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                                          failure(operation, error);
+                                                      });
+                                                  }
+                                              }];
     
 }
 
@@ -361,7 +582,26 @@
 {
     NSDictionary *param = @{@"token": self.user_token};
     NSString *endpoint = [NSString stringWithFormat:@"users/%u", self.user_id];
-    [[RKObjectManager sharedManager] getObjectsAtPath:endpoint parameters:param success:success failure:failure];
+    [[RKObjectManager sharedManager] getObjectsAtPath:endpoint
+                                           parameters:param
+                                              success:^(RKObjectRequestOperation *operation, id responseObject){
+                                                  [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                                                  
+                                                  if (success) {
+                                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                                          success(operation, responseObject);
+                                                      });
+                                                  }
+                                              }
+                                              failure:^(RKObjectRequestOperation *operation, NSError *error){
+                                                  [self _handleFailureWithRequestOperation:operation andError:error];
+                                                  
+                                                  if (failure) {
+                                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                                          failure(operation, error);
+                                                      });
+                                                  }
+                                              }];
 }
 
 - (void)loadUserBy:(NSInteger)user_id
@@ -372,7 +612,26 @@
     NSParameterAssert(self.user_token.length > 0);
     NSDictionary *param = @{@"token": self.user_token};
     NSString *endpoint = [NSString stringWithFormat:@"users/%u",user_id];
-    [[RKObjectManager sharedManager].HTTPClient getPath:endpoint parameters:param success:success failure:failure];
+    [[RKObjectManager sharedManager].HTTPClient getPath:endpoint
+                                             parameters:param
+                                                success:^(AFHTTPRequestOperation *operation, id responseObject){
+                                                    [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                                                    
+                                                    if (success) {
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            success(operation, responseObject);
+                                                        });
+                                                    }
+                                                }
+                                                failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                                                    [self _handleFailureWithRequestOperation:operation andError:error];
+                                                    
+                                                    if (failure) {
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            failure(operation, error);
+                                                        });
+                                                    }
+                                                }];
 }
 
 - (void) mergeIdentities:(NSArray *)ids
@@ -395,7 +654,26 @@
     NSString *endpoint = [NSString stringWithFormat:@"users/%u/mergeIdentities?token=%@", self.user_id, self.user_token];
                      
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
-    [[RKObjectManager sharedManager].HTTPClient postPath:endpoint parameters:param success:success failure:failure];
+    [[RKObjectManager sharedManager].HTTPClient postPath:endpoint
+                                              parameters:param
+                                                 success:^(AFHTTPRequestOperation *operation, id responseObject){
+                                                     [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                                                     
+                                                     if (success) {
+                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                             success(operation, responseObject);
+                                                         });
+                                                     }
+                                                 }
+                                                 failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                                                     [self _handleFailureWithRequestOperation:operation andError:error];
+                                                     
+                                                     if (failure) {
+                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                             failure(operation, error);
+                                                         });
+                                                     }
+                                                 }];
 }
 
 #pragma mark - Exfee API
@@ -432,6 +710,8 @@
     
     // set success && fail handler
     [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
+        [self _handleSuccessWithRequestOperation:operation andResponseObject:mappingResult];
+        
         if ([operation.HTTPRequestOperation.response statusCode] == 200){
             if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
             {
@@ -481,6 +761,8 @@
         }
     }
                                      failure:^(RKObjectRequestOperation *operation, NSError *error){
+                                         [self _handleFailureWithRequestOperation:operation andError:error];
+                                         
                                          RKObjectManager *objectManager = [RKObjectManager sharedManager];
                                          [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
                                          if (failureHandler) {
@@ -532,6 +814,8 @@
     [manager.HTTPClient postPath:path
                       parameters:param
                          success:^(AFHTTPRequestOperation *operation, id responseObject){
+                             [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                             
                              if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                                  NSDictionary *body = (NSDictionary*)responseObject;
                                  id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
@@ -633,6 +917,8 @@
                              }
                          }
                          failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                             [self _handleFailureWithRequestOperation:operation andError:error];
+                             
                              if (failure) {
                                  dispatch_async(dispatch_get_main_queue(), ^{
                                      failure(error);
@@ -659,7 +945,26 @@
     if (bio) {
         [dict setObject:bio forKey:@"bio"];
     }
-    [objectManager.HTTPClient postPath:endpoint parameters:dict success:success failure:failure];
+    [objectManager.HTTPClient postPath:endpoint
+                            parameters:dict
+                               success:^(AFHTTPRequestOperation *operation, id responseObject){
+                                   [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                                   
+                                   if (success) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           success(operation, responseObject);
+                                       });
+                                   }
+                               }
+                               failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                                   [self _handleFailureWithRequestOperation:operation andError:error];
+                                   
+                                   if (failure) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           failure(operation, error);
+                                       });
+                                   }
+                               }];
 }
 
 
@@ -673,7 +978,26 @@
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
-    [objectManager.HTTPClient postPath:endpoint parameters:@{@"name":name} success:success failure:failure];
+    [objectManager.HTTPClient postPath:endpoint
+                            parameters:@{@"name":name}
+                               success:^(AFHTTPRequestOperation *operation, id responseObject){
+                                   [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                                   
+                                   if (success) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           success(operation, responseObject);
+                                       });
+                                   }
+                               }
+                               failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                                   [self _handleFailureWithRequestOperation:operation andError:error];
+                                   
+                                   if (failure) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           failure(operation, error);
+                                       });
+                                   }
+                               }];
 }
 
 - (void) addIdentityBy:(NSString*)external_username
@@ -694,8 +1018,48 @@
         [params addEntriesFromDictionary:param];
     }
     
-    [objectManager.HTTPClient postPath:endpoint parameters:params success:success failure:failure];
-    
+    [objectManager.HTTPClient postPath:endpoint
+                            parameters:params
+                               success:^(AFHTTPRequestOperation *operation, id responseObject){
+                                   [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                                   
+                                   if (success) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           success(operation, responseObject);
+                                       });
+                                   }
+                               }
+                               failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                                   [self _handleFailureWithRequestOperation:operation andError:error];
+                                   
+                                   if (failure) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           failure(operation, error);
+                                       });
+                                   }
+                               }];
+}
+
+#pragma mark - Private
+
+- (void)_handleSuccessWithRequestOperation:(NSOperation *)operation andResponseObject:(id)object {
+    if ([[EFStatusBar defaultStatusBar].currentPresentedMessage isEqualToString:@" Network error "]) {
+        [[EFStatusBar defaultStatusBar] dismiss];
+    }
+}
+
+- (void)_handleFailureWithRequestOperation:(NSOperation *)operation andError:(NSError *)error {
+    if ([error.domain isEqualToString:NSURLErrorDomain]) {
+        if (NSURLErrorCannotConnectToHost == error.code ||
+            NSURLErrorNetworkConnectionLost == error.code ||
+            NSURLErrorNotConnectedToInternet == error.code) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[EFStatusBar defaultStatusBar] presentMessage:@" Network error "
+                                                 withTextColor:[UIColor whiteColor]
+                                               backgroundColor:[UIColor COLOR_RED_MEXICAN]];
+            });
+        }
+    }
 }
 
 @end

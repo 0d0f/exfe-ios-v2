@@ -15,4 +15,6 @@
 #import "EFErrorMessage.h"
 #import "EFErrorHandlerCenter.h"
 
+#import "EFStatusBar.h"
+
 #endif

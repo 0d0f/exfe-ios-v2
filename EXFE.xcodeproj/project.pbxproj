@@ -1430,6 +1430,9 @@
 		76F6B30C1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
 		76F6B30D1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
 		76F6B30E1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
+		76F6B3151740DBCD008B39C1 /* EFStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B3141740DBCC008B39C1 /* EFStatusBar.m */; };
+		76F6B3161740DBCD008B39C1 /* EFStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B3141740DBCC008B39C1 /* EFStatusBar.m */; };
+		76F6B3171740DBCD008B39C1 /* EFStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B3141740DBCC008B39C1 /* EFStatusBar.m */; };
 		7803EB8B15AD801500291B69 /* EXButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7803EB8A15AD801500291B69 /* EXButton.m */; };
 		7809620015BDB70B0071E9D0 /* EXOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 780961FF15BDB70B0071E9D0 /* EXOverlayView.m */; };
 		780D27A4157F368900402460 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 780D27A3157F368900402460 /* Post.m */; };
@@ -2210,6 +2213,8 @@
 		76F6B30A1740A59A008B39C1 /* EFErrorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorMessage.h; sourceTree = "<group>"; };
 		76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorMessage.m; sourceTree = "<group>"; };
 		76F6B3101740B5C1008B39C1 /* EFKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFKit.h; sourceTree = "<group>"; };
+		76F6B3131740DBCB008B39C1 /* EFStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFStatusBar.h; sourceTree = "<group>"; };
+		76F6B3141740DBCC008B39C1 /* EFStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFStatusBar.m; sourceTree = "<group>"; };
 		7803EB8915AD801500291B69 /* EXButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXButton.h; sourceTree = "<group>"; };
 		7803EB8A15AD801500291B69 /* EXButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXButton.m; sourceTree = "<group>"; };
 		780961FE15BDB70B0071E9D0 /* EXOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXOverlayView.h; sourceTree = "<group>"; };
@@ -3035,6 +3040,8 @@
 				7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */,
 				764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */,
 				764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */,
+				76F6B3131740DBCB008B39C1 /* EFStatusBar.h */,
+				76F6B3141740DBCC008B39C1 /* EFStatusBar.m */,
 			);
 			name = EFKit;
 			sourceTree = "<group>";
@@ -5458,6 +5465,7 @@
 				7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */,
 				764CD8F3173A5C4600627237 /* EFNotificationBannerView.m in Sources */,
 				76F6B30D1740A59B008B39C1 /* EFErrorMessage.m in Sources */,
+				76F6B3161740DBCD008B39C1 /* EFStatusBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5620,6 +5628,7 @@
 				7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */,
 				764CD8F4173A5C4600627237 /* EFNotificationBannerView.m in Sources */,
 				76F6B30E1740A59B008B39C1 /* EFErrorMessage.m in Sources */,
+				76F6B3171740DBCD008B39C1 /* EFStatusBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5782,6 +5791,7 @@
 				7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */,
 				764CD8F2173A5C4600627237 /* EFNotificationBannerView.m in Sources */,
 				76F6B30C1740A59B008B39C1 /* EFErrorMessage.m in Sources */,
+				76F6B3151740DBCD008B39C1 /* EFStatusBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
