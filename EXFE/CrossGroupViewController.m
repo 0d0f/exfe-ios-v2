@@ -1756,8 +1756,7 @@
 }
 
 #pragma mark API request for modification.
-- (void) sendrsvp:(NSString*)status invitation:(Invitation*)_invitation{
-    
+- (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
     Identity *myidentity = [_cross.exfee getMyInvitation].identity;
     
     [[EFAPIServer sharedInstance] submitRsvp:status
