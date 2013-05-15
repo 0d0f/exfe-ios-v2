@@ -469,10 +469,12 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)Close:(UIButton*)sender{
-    //    [self.navigationController popToRootViewControllerAnimated:YES];
+- (void)Close:(UIButton*)sender {
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
+    
+    [objectManager.operationQueue cancelAllOperations];
+    
     if (self.cross) {
         [context performBlockAndWait:^{
             if (self.cross.time.begin_at) {
@@ -485,21 +487,18 @@
                 NSSet *invitations = [[self.cross.exfee.invitations copy] autorelease];
                 for (Invitation *invitation in invitations){
                     [context deleteObject:invitation];
-                    [context save:nil];
-                    [context.parentContext performBlock:^{
-                        [context.parentContext save:nil];
-                    }];
                 }
                 [context deleteObject:self.cross.exfee];
             }
             [context deleteObject:self.cross];
+            
             [context save:nil];
-            [context.parentContext performBlock:^{
+            [context.parentContext performBlockAndWait:^{
                 [context.parentContext save:nil];
             }];
         }];
     }
-    [objectManager.operationQueue cancelAllOperations];
+    
     [self dismissModalViewControllerAnimated:YES];
 }
 
