@@ -991,7 +991,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         case NSURLErrorNotConnectedToInternet: //-1009
                         case NSURLErrorRedirectToNonExistentLocation: //-1010
                         case NSURLErrorServerCertificateUntrusted: //-1202
-                            [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                            [Util showConnectError:error delegate:nil];
+//                            [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                            
                             //case NSURLErrorTimedOut = -1001,
                             //NSURLErrorCannotFindHost = -1003,
                             //NSURLErrorCannotConnectToHost = -1004,
@@ -1083,7 +1085,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 case NSURLErrorNotConnectedToInternet: //-1009
                 case NSURLErrorRedirectToNonExistentLocation: //-1010
                 case NSURLErrorServerCertificateUntrusted: //-1202
-                    [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                    [Util showConnectError:error delegate:nil];
+//                    [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
                     break;
                     
                 default:
@@ -1156,7 +1159,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 case NSURLErrorNotConnectedToInternet: //-1009
                 case NSURLErrorRedirectToNonExistentLocation: //-1010
                 case NSURLErrorServerCertificateUntrusted: //-1202
-                    [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                    [Util showConnectError:error delegate:nil];
+//                    [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
                     break;
                     
                 default:
@@ -1265,7 +1269,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                                           case NSURLErrorNotConnectedToInternet: //-1009
                                                           case NSURLErrorRedirectToNonExistentLocation: //-1010
                                                           case NSURLErrorServerCertificateUntrusted: //-1202
-                                                              [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                                                              [Util showConnectError:error delegate:nil];
+//                                                              [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
                                                               break;
                                                               
                                                           default:
@@ -1445,7 +1450,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 case NSURLErrorNotConnectedToInternet: //-1009
                 case NSURLErrorRedirectToNonExistentLocation: //-1010
                 case NSURLErrorServerCertificateUntrusted: //-1202
-                    [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                    [Util showConnectError:error delegate:nil];
+//                    [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
                     break;
                     
                 default:
@@ -1616,7 +1622,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         case NSURLErrorNotConnectedToInternet: //-1009
                         case NSURLErrorRedirectToNonExistentLocation: //-1010
                         case NSURLErrorServerCertificateUntrusted: //-1202
-                            [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                            [Util showConnectError:error delegate:nil];
+//                            [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
                             break;
                             
                         default:
@@ -1638,7 +1645,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                     case NSURLErrorNotConnectedToInternet: //-1009
                     case NSURLErrorRedirectToNonExistentLocation: //-1010
                     case NSURLErrorServerCertificateUntrusted: //-1202
-                        [self showInlineError:@"Failed to connect twitter server." with:@"Please retry or wait awhile."];
+                        [Util showConnectError:error delegate:nil];
+//                        [self showInlineError:@"Failed to connect twitter server." with:@"Please retry or wait awhile."];
                         break;
                         
                     default:
