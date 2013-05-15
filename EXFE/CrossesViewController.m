@@ -8,7 +8,6 @@
 
 #import "CrossesViewController.h"
 #import "ProfileViewController.h"
-#import "APICrosses.h"
 #import "Cross.h"
 #import "Exfee+EXFE.h"
 #import "User+EXFE.h"
@@ -404,17 +403,35 @@
 }
 
 - (void)loadObjectsFromDataStore {
-  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Cross"];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Cross"];
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
-  RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
     
-    self.crossList = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
-  
-  [self refreshWelcome];
-  [self.tableView reloadData];
+    // ignore duplicate objects
+    [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
+        NSArray *crosses = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        NSMutableArray *filteredCrosses = [[NSMutableArray alloc] initWithCapacity:[crosses count]];
+        @autoreleasepool {
+            NSMutableDictionary *crossAddDict = [NSMutableDictionary dictionaryWithCapacity:[crosses count]];
+            
+            for (Cross *cross in crosses) {
+                NSString *key = [NSString stringWithFormat:@"%d", [cross.cross_id intValue]];
+                if (![crossAddDict valueForKey:key]) {
+                    [filteredCrosses addObject:cross];
+                    [crossAddDict setValue:@"YES" forKey:key];
+                }
+            }
+        }
+        
+        self.crossList = filteredCrosses;
+        [filteredCrosses release];
+    }];
     
+    [self refreshWelcome];
+    [self.tableView reloadData];
 }
+
 - (void)refresh
 {
     [self refreshCrosses:@"crossupdateview"];

@@ -32,7 +32,7 @@
     RKResponseDescriptor *metaresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:metaMapping
                                                                                            pathPattern:nil
                                                                                                keyPath:@"meta"
-                                                                                           statusCodes:nil];
+                                                                                           statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:metaresponseDescriptor];
     
     // Identity Entity
@@ -93,7 +93,7 @@
      @"name": @"name",
      @"timezone": @"timezone"}];
     [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identities" toKeyPath:@"identities" withMapping:identityMapping]];
-    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping pathPattern:nil keyPath:@"response.user" statusCodes:nil];
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping pathPattern:nil keyPath:@"response.user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:responseDescriptor];
     
     // EFTime Entity
@@ -146,10 +146,10 @@
     [conversationMapping addAttributeMappingsFromArray:@[@"content",@"created_at",@"updated_at",@"postable_id",@"postable_type"]];
     [conversationMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"by_identity" toKeyPath:@"by_identity" withMapping:identityMapping]];
     
-    RKResponseDescriptor *crossesresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.crosses" statusCodes:nil];
+    RKResponseDescriptor *crossesresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.crosses" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:crossesresponseDescriptor];
     
-    RKResponseDescriptor *crossresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.cross" statusCodes:nil];
+    RKResponseDescriptor *crossresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:crossMapping pathPattern:nil keyPath:@"response.cross" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:crossresponseDescriptor];
     
     // Cross Request Object
@@ -171,10 +171,10 @@
     RKRequestDescriptor *exfeeRequestDescriptor = [RKRequestDescriptor requestDescriptorWithMapping:exfeerequestMapping objectClass:[Exfee class] rootKeyPath:@"exfee"];
     [objectManager addRequestDescriptor:exfeeRequestDescriptor];
     
-    RKResponseDescriptor *exfeeResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:exfeeMapping pathPattern:nil keyPath:@"response.exfee" statusCodes:nil];
+    RKResponseDescriptor *exfeeResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:exfeeMapping pathPattern:nil keyPath:@"response.exfee" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:exfeeResponseDescriptor];
     
-    RKResponseDescriptor *conversationresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:conversationMapping pathPattern:nil keyPath:@"response.conversation" statusCodes:nil];
+    RKResponseDescriptor *conversationresponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:conversationMapping pathPattern:nil keyPath:@"response.conversation" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:conversationresponseDescriptor];
 }
 @end

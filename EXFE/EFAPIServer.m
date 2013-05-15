@@ -629,12 +629,12 @@
     NSString *endpoint = [NSString stringWithFormat:@"users/%u/regdevice?token=%@", self.user_id, self.user_token];
     RKObjectManager *manager = [RKObjectManager sharedManager] ;
     
-    NSDictionary *param = @{@"udid":pushToken,
-                            @"push_token":pushToken,
-                            @"os_name":[[UIDevice currentDevice] systemName],
-                            @"brand":@"apple",
-                            @"model":[[UIDevice currentDevice] model],
-                            @"os_version":[[UIDevice currentDevice] systemVersion]};
+    NSDictionary *param = @{@"udid": pushToken,
+                            @"push_token": pushToken,
+                            @"os_name": @"iOS",
+                            @"brand": @"apple",
+                            @"model": [[UIDevice currentDevice] model],
+                            @"os_version": [[UIDevice currentDevice] systemVersion]};
     
     manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     [manager.HTTPClient postPath:endpoint
