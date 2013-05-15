@@ -2234,6 +2234,7 @@
 		76D1FE011740FF9800D271B2 /* EFAPIServer+Profile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFAPIServer+Profile.h"; sourceTree = "<group>"; };
 		76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFAPIServer+Profile.m"; sourceTree = "<group>"; };
 		76D1FE06174100AA00D271B2 /* EFAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAPI.h; sourceTree = "<group>"; };
+		76D9657A1743D07000485325 /* EFConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFConfig.h; sourceTree = "<group>"; };
 		76DED7CC171C06A900C2F27E /* UILog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILog.h; sourceTree = "<group>"; };
 		76DED7CD171C06A900C2F27E /* UILog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILog.m; sourceTree = "<group>"; };
 		76F6B30A1740A59A008B39C1 /* EFErrorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorMessage.h; sourceTree = "<group>"; };
@@ -2917,6 +2918,7 @@
 				78D0A5FF158CFAD200401BCA /* URLParser.m */,
 				7840916A156F6AA4006DF115 /* Util.h */,
 				7840916B156F6AA5006DF115 /* Util.m */,
+				76D9657A1743D07000485325 /* EFConfig.h */,
 			);
 			name = Util;
 			sourceTree = "<group>";

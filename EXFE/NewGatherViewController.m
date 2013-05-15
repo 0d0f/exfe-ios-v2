@@ -473,28 +473,30 @@
     //    [self.navigationController popToRootViewControllerAnimated:YES];
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
-    if(self.cross){
-        if(self.cross.time.begin_at){
-            [context deleteObject:self.cross.time.begin_at];
-        }
-        if(self.cross.time){
-            [context deleteObject:self.cross.time];
-        }
-        if(self.cross.exfee){
-            NSSet *invitations = [[self.cross.exfee.invitations copy] autorelease];
-            for (Invitation *invitation in invitations){
-                [context deleteObject:invitation];
-                [context save:nil];
-                [context.parentContext performBlock:^{
-                    [context.parentContext save:nil];
-                }];
+    if (self.cross) {
+        [context performBlockAndWait:^{
+            if (self.cross.time.begin_at) {
+                [context deleteObject:self.cross.time.begin_at];
             }
-            [context deleteObject:self.cross.exfee];
-        }
-        [context deleteObject:self.cross];
-        [context save:nil];
-        [context.parentContext performBlock:^{
-            [context.parentContext save:nil];
+            if (self.cross.time) {
+                [context deleteObject:self.cross.time];
+            }
+            if (self.cross.exfee) {
+                NSSet *invitations = [[self.cross.exfee.invitations copy] autorelease];
+                for (Invitation *invitation in invitations){
+                    [context deleteObject:invitation];
+                    [context save:nil];
+                    [context.parentContext performBlock:^{
+                        [context.parentContext save:nil];
+                    }];
+                }
+                [context deleteObject:self.cross.exfee];
+            }
+            [context deleteObject:self.cross];
+            [context save:nil];
+            [context.parentContext performBlock:^{
+                [context.parentContext save:nil];
+            }];
         }];
     }
     [objectManager.operationQueue cancelAllOperations];
