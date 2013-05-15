@@ -32,7 +32,7 @@
 {
     // Setup Flurry
     [Flurry setAppVersion:[UIApplication appVersion]];
-    [Flurry startSession:@"8R2R8KZG35DK6S6MDHGS"];
+    [Flurry startSession:kFlurryKey];
 #ifdef DEBUG
     [Flurry logEvent:@"START_DEBUG_VERSION"];
 #else
