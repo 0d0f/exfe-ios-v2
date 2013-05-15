@@ -956,11 +956,28 @@
 }
 
 - (void)_handleFailureWithRequestOperation:(NSOperation *)operation andError:(NSError *)error {
+    NSParameterAssert(NSURLErrorBadURL != error.code);
+    NSParameterAssert(NSURLErrorUnsupportedURL != error.code);
+    NSParameterAssert(NSURLErrorCannotDecodeRawData != error.code);
+    NSParameterAssert(NSURLErrorCannotDecodeContentData != error.code);
+    NSParameterAssert(NSURLErrorCannotParseResponse != error.code);
+    
     if ([error.domain isEqualToString:NSURLErrorDomain]) {
         if (NSURLErrorCannotConnectToHost == error.code ||
             NSURLErrorNetworkConnectionLost == error.code ||
             NSURLErrorNotConnectedToInternet == error.code ||
-            NSURLErrorServerCertificateUntrusted == error.code) {
+            NSURLErrorCannotFindHost == error.code ||
+            NSURLErrorDNSLookupFailed == error.code ||
+            NSURLErrorHTTPTooManyRedirects == error.code ||
+            NSURLErrorRedirectToNonExistentLocation == error.code ||
+            NSURLErrorZeroByteResource == error.code ||
+            NSURLErrorServerCertificateUntrusted == error.code ||
+            NSURLErrorBadServerResponse == error.code ||
+            NSURLErrorSecureConnectionFailed == error.code ||
+            NSURLErrorServerCertificateHasBadDate == error.code ||
+            NSURLErrorServerCertificateHasUnknownRoot == error.code ||
+            NSURLErrorServerCertificateNotYetValid == error.code ||
+            NSURLErrorClientCertificateRejected == error.code) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[EFStatusBar defaultStatusBar] presentMessage:@" Network error "
                                                  withTextColor:[UIColor whiteColor]

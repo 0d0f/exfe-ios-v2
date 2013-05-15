@@ -990,6 +990,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         case NSURLErrorResourceUnavailable: //-1008
                         case NSURLErrorNotConnectedToInternet: //-1009
                         case NSURLErrorRedirectToNonExistentLocation: //-1010
+                        case NSURLErrorServerCertificateUntrusted: //-1202
                             [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
                             //case NSURLErrorTimedOut = -1001,
                             //NSURLErrorCannotFindHost = -1003,
@@ -1081,6 +1082,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 case NSURLErrorResourceUnavailable: //-1008
                 case NSURLErrorNotConnectedToInternet: //-1009
                 case NSURLErrorRedirectToNonExistentLocation: //-1010
+                case NSURLErrorServerCertificateUntrusted: //-1202
                     [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
                     break;
                     
@@ -1153,6 +1155,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 case NSURLErrorResourceUnavailable: //-1008
                 case NSURLErrorNotConnectedToInternet: //-1009
                 case NSURLErrorRedirectToNonExistentLocation: //-1010
+                case NSURLErrorServerCertificateUntrusted: //-1202
                     [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
                     break;
                     
@@ -1250,9 +1253,27 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                                       }
                                                   }
                                               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                  if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                                                      switch (error.code) {
+                                                          case NSURLErrorTimedOut: //-1001
+                                                          case NSURLErrorCannotFindHost: //-1003
+                                                          case NSURLErrorCannotConnectToHost: //-1004
+                                                          case NSURLErrorNetworkConnectionLost: //-1005
+                                                          case NSURLErrorDNSLookupFailed: //-1006
+                                                          case NSURLErrorHTTPTooManyRedirects: //-1007
+                                                          case NSURLErrorResourceUnavailable: //-1008
+                                                          case NSURLErrorNotConnectedToInternet: //-1009
+                                                          case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                                          case NSURLErrorServerCertificateUntrusted: //-1202
+                                                              [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                                                              break;
+                                                              
+                                                          default:
+                                                              break;
+                                                      }
+                                                  }
+                                                  
                                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                                  //                    NSLog(@"login failure with %@", error);
-                                                  // kCFURLErrorCannotDecodeContentData = -1016, unexpected error
                                               }];
                                           }
                                               break;
@@ -1423,6 +1444,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 case NSURLErrorResourceUnavailable: //-1008
                 case NSURLErrorNotConnectedToInternet: //-1009
                 case NSURLErrorRedirectToNonExistentLocation: //-1010
+                case NSURLErrorServerCertificateUntrusted: //-1202
                     [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
                     break;
                     
@@ -1593,6 +1615,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         case NSURLErrorResourceUnavailable: //-1008
                         case NSURLErrorNotConnectedToInternet: //-1009
                         case NSURLErrorRedirectToNonExistentLocation: //-1010
+                        case NSURLErrorServerCertificateUntrusted: //-1202
                             [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
                             break;
                             
@@ -1614,6 +1637,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                     case NSURLErrorResourceUnavailable: //-1008
                     case NSURLErrorNotConnectedToInternet: //-1009
                     case NSURLErrorRedirectToNonExistentLocation: //-1010
+                    case NSURLErrorServerCertificateUntrusted: //-1202
                         [self showInlineError:@"Failed to connect twitter server." with:@"Please retry or wait awhile."];
                         break;
                         
