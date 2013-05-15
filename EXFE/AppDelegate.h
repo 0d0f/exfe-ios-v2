@@ -19,7 +19,7 @@
 
 #ifdef DEBUG
     #ifdef WWW
-        #define API_ROOT @"https://www.exfe.com/v2/"
+        #define API_ROOT @"https://api.exfe.com/v2/"
         #define IMG_ROOT @"https://exfe.com/static/img"
         #define EXFE_OAUTH_LINK @"https://exfe.com/OAuth"
     #elif defined LOCAL
@@ -39,7 +39,7 @@
     #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"
 #else
     // WWW
-    #define API_ROOT @"https://www.exfe.com/v2/"
+    #define API_ROOT @"https://api.exfe.com/v2/"
     #define IMG_ROOT @"https://exfe.com/static/img"
     #define EXFE_OAUTH_LINK @"https://exfe.com/OAuth"
     #define GOOGLE_API_KEY @"AIzaSyDTc7JJomGg5SW7Zn7lTN0N6mqAI9T3tFg"

@@ -49,6 +49,10 @@
     RKLogConfigureByName("*", RKLogLevelOff);
 #endif
     
+#ifdef DEBUG
+    NSLog(@"API ROOT: %@", API_ROOT);
+#endif
+    
     
     
     //    [[NSNotificationCenter defaultCenter] addObserver:self

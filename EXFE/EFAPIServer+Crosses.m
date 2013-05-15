@@ -56,13 +56,12 @@
             failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
     RKObjectManager* manager =[RKObjectManager sharedManager];
     
-    NSDictionary *param = @{@"token": self.user_token};
-    NSString *endpoint = @"crosses/gather";
+    NSString *endpoint = [NSString stringWithFormat:@"crosses/gather?token=%@", self.user_token];
     
     RKObjectRequestOperation *operation = [manager appropriateObjectRequestOperationWithObject:cross
                                                                                         method:RKRequestMethodPOST
                                                                                           path:endpoint
-                                                                                    parameters:param];
+                                                                                    parameters:nil];
     
     // warning handler
     [operation setWillMapDeserializedResponseBlock:^id(id object){
@@ -85,7 +84,6 @@
         return object;
     }];
     
-    // handle block
     [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, id responseObject){
         [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
                    withObject:operation
@@ -109,7 +107,6 @@
                                          }
                                      }];
     
-    // enqueue
     [manager enqueueObjectRequestOperation:operation];
 }
 
@@ -118,12 +115,11 @@
           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
     RKObjectManager* manager =[RKObjectManager sharedManager];
     
-    NSDictionary *param = @{@"token": self.user_token};
-    NSString *endpoint = [NSString stringWithFormat:@"crosses/%u/edit", [cross.cross_id intValue]];
+    NSString *endpoint = [NSString stringWithFormat:@"crosses/%u/edit?token=%@", [cross.cross_id intValue], self.user_token];
     
     [manager postObject:cross
                    path:endpoint
-             parameters:param
+             parameters:nil
                 success:^(RKObjectRequestOperation *operation, id responseObject){
                     [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
                                withObject:operation

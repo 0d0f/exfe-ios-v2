@@ -21,12 +21,13 @@
            onExfee:(int)exfee_id
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
-    NSDictionary *rsvpdict = [NSDictionary dictionaryWithObjectsAndKeys:invitation.identity.identity_id,@"identity_id",@(my_identity_id),@"by_identity_id",status,@"rsvp_status",@"rsvp",@"type", nil];
+    NSDictionary *rsvpdict = @{@"identity_id": invitation.identity.identity_id, @"by_identity_id": @(my_identity_id), @"rsvp_status": status, @"type": @"rsvp"};
+    NSDictionary *param = @{@"rsvps": @[rsvpdict]};
     
-    NSDictionary *param = @{@"rsvps":@[rsvpdict], @"token": self.user_token};
-    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/rsvp?token=%@",exfee_id, [EFAPIServer sharedInstance].user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/rsvp?token=%@",exfee_id, self.user_token];
     
-    RKObjectManager *manager=[RKObjectManager sharedManager];
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     
     [manager.HTTPClient postPath:endpoint
                       parameters:param
@@ -64,7 +65,10 @@
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
-    RKObjectRequestOperation *operation = [manager appropriateObjectRequestOperationWithObject:exfee method:RKRequestMethodPOST path:endpoint parameters:nil];
+    RKObjectRequestOperation *operation = [manager appropriateObjectRequestOperationWithObject:exfee
+                                                                                        method:RKRequestMethodPOST
+                                                                                          path:endpoint
+                                                                                    parameters:nil];
     
     // warnming handler
     [operation setWillMapDeserializedResponseBlock:^id(id object){
@@ -96,7 +100,7 @@
         if ([operation.HTTPRequestOperation.response statusCode] == 200){
             if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
             {
-                Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
+                Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
                 int code = [meta.code intValue];
                 int type = code / 100;
                 switch (type) {
