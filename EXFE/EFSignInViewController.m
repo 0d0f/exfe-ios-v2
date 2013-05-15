@@ -767,9 +767,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
 }
 
-- (void)showIndicatorAt:(CGPoint)center
+- (void)showIndicatorAt:(CGPoint)center style:(UIActivityIndicatorViewStyle)style
 {
     [_indicator removeFromSuperview];
+    _indicator.activityIndicatorViewStyle = style;
     _indicator.center = center;
     [self.rootView addSubview:_indicator];
     [_indicator startAnimating];
@@ -1025,22 +1026,28 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)signIn:(UIControl *)sender
 {
+    sender.enabled = NO;
+    
     if (_inputIdentity.text.length == 0) {
+        sender.enabled = YES;
         return;
     }
     if (_inputPassword.text.length == 0) {
         [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
+        sender.enabled = YES;
         return;
     }
     
     [self hideInlineError];
     
-    [self showIndicatorAt:CGPointMake(285, sender.center.y)];
+    [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
     Provider provider = [Util matchedProvider:_inputIdentity.text];
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     [[EFAPIServer sharedInstance] signIn:external_username with:provider password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        sender.enabled = YES;
         [self hideIndicator];
+        
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
             NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
             if (code) {
@@ -1073,7 +1080,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        sender.enabled = YES;
         [self hideIndicator];
+        
         if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
             switch (error.code) {
                 case NSURLErrorTimedOut: //-1001
@@ -1099,17 +1108,20 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)signUp:(UIControl *)sender
 {
+    sender.enabled = NO;
     if (_inputIdentity.text.length == 0) {
         return;
     }
     if (_inputPassword.text.length == 0) {
         [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
+        sender.enabled = YES;
         return;
     }
     
     if (_inputUsername.text.length == 0) {
         // show "Invalid name."
         [self showErrorInfo:@"Invalid name." dockOn:_inputUsername];
+        sender.enabled = YES;
         return;
     }
     
@@ -1119,9 +1131,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     
-    [self showIndicatorAt:CGPointMake(285, sender.center.y)];
+    [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
     [[EFAPIServer sharedInstance] signUp:external_username with:provider name:_inputUsername.text password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        sender.enabled = YES;
         [self hideIndicator];
+        
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
             NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
             if (code) {
@@ -1147,7 +1161,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        sender.enabled = YES;
         [self hideIndicator];
+        
         if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
             switch (error.code) {
                 case NSURLErrorTimedOut: //-1001
@@ -1383,12 +1399,13 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)forgetPwd:(UIControl *)sender
 {
+    sender.enabled = NO;
     Provider provider = [Util matchedProvider:_inputIdentity.text];
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     
     CGPoint p = [sender.superview convertPoint:sender.center toView:self.rootView];
-    [self showIndicatorAt:CGPointMake(285, p.y)];
+    [self showIndicatorAt:CGPointMake(285, p.y) style:UIActivityIndicatorViewStyleGray];
     
     CATransform3D scaleTransform = CATransform3DMakeScale(0.0f, 0.0f, 0.0f);
     CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
@@ -1400,6 +1417,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [sender.layer addAnimation:scaleAnimation forKey:@"scale"];
     
     [[EFAPIServer sharedInstance] forgetPassword:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        sender.enabled = YES;
         [sender.layer removeAllAnimations];
         sender.layer.transform = CATransform3DIdentity;
         [self hideIndicator];
@@ -1450,6 +1468,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        sender.enabled = YES;
         [sender.layer removeAllAnimations];
         sender.layer.transform = CATransform3DIdentity;
         [self hideIndicator];
