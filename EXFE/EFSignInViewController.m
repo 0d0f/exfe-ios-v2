@@ -383,7 +383,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     {
-        UIActivityIndicatorView *aiView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+        UIActivityIndicatorView *aiView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        aiView.frame = (CGRect){{0, 0}, {20, 20}};
         self.indicator = aiView;
     }
     
@@ -1386,9 +1387,21 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     
-    CGPoint p = [sender convertPoint:sender.center toView:self.rootView];
+    CGPoint p = [sender.superview convertPoint:sender.center toView:self.rootView];
     [self showIndicatorAt:CGPointMake(285, p.y)];
+    
+    CATransform3D scaleTransform = CATransform3DMakeScale(0.0f, 0.0f, 0.0f);
+    CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
+    scaleAnimation.duration = 0.1f;
+    scaleAnimation.fromValue = [NSValue valueWithCATransform3D:sender.layer.transform];
+    scaleAnimation.toValue = [NSValue valueWithCATransform3D:scaleTransform];
+    scaleAnimation.fillMode = kCAFillModeForwards;
+    scaleAnimation.removedOnCompletion = NO;
+    [sender.layer addAnimation:scaleAnimation forKey:@"scale"];
+    
     [[EFAPIServer sharedInstance] forgetPassword:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [sender.layer removeAllAnimations];
+        sender.layer.transform = CATransform3DIdentity;
         [self hideIndicator];
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
             NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
@@ -1437,6 +1450,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [sender.layer removeAllAnimations];
+        sender.layer.transform = CATransform3DIdentity;
         [self hideIndicator];
         if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
             switch (error.code) {
