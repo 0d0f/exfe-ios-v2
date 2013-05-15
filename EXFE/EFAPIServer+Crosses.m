@@ -55,6 +55,8 @@
             success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
             failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
     RKObjectManager* manager =[RKObjectManager sharedManager];
+    manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
+    manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
     NSString *endpoint = [NSString stringWithFormat:@"crosses/gather?token=%@", self.user_token];
     
@@ -114,6 +116,8 @@
           success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
     RKObjectManager* manager =[RKObjectManager sharedManager];
+    manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
+    manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
     NSString *endpoint = [NSString stringWithFormat:@"crosses/%u/edit?token=%@", [cross.cross_id intValue], self.user_token];
     
