@@ -959,7 +959,8 @@
     if ([error.domain isEqualToString:NSURLErrorDomain]) {
         if (NSURLErrorCannotConnectToHost == error.code ||
             NSURLErrorNetworkConnectionLost == error.code ||
-            NSURLErrorNotConnectedToInternet == error.code) {
+            NSURLErrorNotConnectedToInternet == error.code ||
+            NSURLErrorServerCertificateUntrusted == error.code) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[EFStatusBar defaultStatusBar] presentMessage:@" Network error "
                                                  withTextColor:[UIColor whiteColor]

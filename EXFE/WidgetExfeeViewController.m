@@ -1135,7 +1135,7 @@ typedef enum {
                                          }
                                      }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                         [Util showConnectError:error delegate:self];
+                                         [Util showConnectError:error delegate:self];
                                      }];
 }
 

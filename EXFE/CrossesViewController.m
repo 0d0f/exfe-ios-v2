@@ -387,10 +387,10 @@
                                                
                                            }
                                            failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//                                               if(alertShowflag==NO){
-//                                                   alertShowflag=YES;
-//                                                   [Util showConnectError:error delegate:self];
-//                                               }
+                                               if(alertShowflag==NO){
+                                                   alertShowflag=YES;
+                                                   [Util showConnectError:error delegate:self];
+                                               }
                                                [self stopLoading];
                                                if(hud)
                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
