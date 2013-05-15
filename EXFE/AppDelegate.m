@@ -423,7 +423,7 @@
     NSArray *viewControllers = self.navigationController.viewControllers;
     CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
     [crossViewController refreshCrosses:@"gatherview"];
-    [self.navigationController dismissModalViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)CrossUpdateDidFinish:(int)cross_id{

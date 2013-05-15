@@ -499,7 +499,7 @@
         }];
     }
     
-    [self dismissModalViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) reFormatTitle{
