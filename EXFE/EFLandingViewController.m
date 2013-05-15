@@ -23,6 +23,8 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
     BOOL firstLoad;
     UIGestureRecognizer * tapBack;
 }
+
+@property (nonatomic, retain) EFSignInViewController *signInViewController;
 @end
 
 @implementation EFLandingViewController
@@ -142,13 +144,28 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
     switch (widget_id) {
         case 1:
         {
-            EFSignInViewController *viewController = [[EFSignInViewController alloc] initWithNibName:@"EFSignInViewController" bundle:nil];
-            if (params) {
+            static CGFloat frameY = 0.0f;
+            EFSignInViewController *viewController = nil;
+            if (!self.signInViewController) {
+                viewController = [[EFSignInViewController alloc] initWithNibName:@"EFSignInViewController" bundle:nil];
+                if (params) {
+                    
+                }
+                viewController.onExitBlock = ^{
+                    ;
+                };
+                self.signInViewController = viewController;
+                [viewController release];
                 
+                CGRect frame = viewController.view.frame;
+                frameY = CGRectGetMinY(frame);
+            } else {
+                viewController = self.signInViewController;
             }
-            viewController.onExitBlock = ^{
-                ;
-            };
+            
+            CGRect frame = viewController.view.frame;
+            frame.origin.y = frameY;
+            viewController.view.frame = frame;
             
             newVC = viewController;
         }
@@ -269,7 +286,7 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
                          
                          if (newVC) {
                              [newVC didMoveToParentViewController:weakSelf];
-                             weakSelf.currentViewController = [newVC autorelease];
+                             weakSelf.currentViewController = newVC;
                              self.imgHead.hidden = NO;
                          } else {
                              self.imgHead.hidden = YES;
