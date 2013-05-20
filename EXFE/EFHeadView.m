@@ -21,6 +21,7 @@
 #define kTitleLayerBlank    (3.0f)
 #define kTitleLayerAnimationDelay   (0.05f)
 #define kTitleLayerAnimationCommonDelay (0.08f)
+#define kTitleLayerY    (8.0f)
 
 @interface EFHeadViewTopLayer : CALayer
 @end
@@ -107,7 +108,7 @@
         mask.frame = kAvatarViewFrame;
         [avatarView.layer addSublayer:mask];
         
-        avatarView.center = self.center;
+        avatarView.center = (CGPoint){CGRectGetMidX(self.frame), CGRectGetHeight(self.frame) * 0.5f};
         [self addSubview:avatarView];
         
         self.avatarView = avatarView;
@@ -116,7 +117,7 @@
         // title View
         UIView *titleView = [[UIView alloc] initWithFrame:kTitleViewFrame];
         titleView.backgroundColor = [UIColor clearColor];
-        titleView.center = self.center;
+        titleView.center = (CGPoint){CGRectGetMidX(self.frame), kTitleLayerY + kHalfTitleHeight};
         titleView.layer.shadowColor = [UIColor blackColor].CGColor;
         titleView.layer.shadowOffset = (CGSize){0.0f, 1.0f};
         titleView.layer.shadowOpacity = 0.3f;
@@ -267,12 +268,12 @@
 #pragma mark - Private
 
 - (void)headShowAnimation {
-    CATransform3D newTransform = CATransform3DMakeTranslation(-120.0f, 0.0f, 0.0f);
+    CATransform3D newTransform = CATransform3DMakeTranslation(-121.0f, 0.0f, 0.0f);
     
     CABasicAnimation *avatarAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
     avatarAnimation.fillMode = kCAFillModeForwards;
     avatarAnimation.duration = 0.9f;
-    avatarAnimation.fromValue = [self.avatarView.layer valueForKeyPath:@"transform"]; // [NSValue valueWithCATransform3D:CATransform3DIdentity];
+    avatarAnimation.fromValue = [self.avatarView.layer valueForKeyPath:@"transform"];
     avatarAnimation.toValue = [NSValue valueWithCATransform3D:newTransform];
     avatarAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55];
     avatarAnimation.delegate = self;
@@ -287,7 +288,7 @@
     CABasicAnimation *avatarAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
     avatarAnimation.fillMode = kCAFillModeForwards;
     avatarAnimation.duration = 0.9f;
-    avatarAnimation.fromValue = [self.avatarView.layer valueForKeyPath:@"transform"]; // [NSValue valueWithCATransform3D:CATransform3DMakeTranslation(-120.0f, 0.0f, 0.0f)];
+    avatarAnimation.fromValue = [self.avatarView.layer valueForKeyPath:@"transform"];
     avatarAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
     avatarAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55];
     avatarAnimation.delegate = self;

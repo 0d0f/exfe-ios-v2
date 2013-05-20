@@ -78,7 +78,7 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     // Head View
-    EFHeadView *headView = [[EFHeadView alloc] initWithFrame:(CGRect){{0.0f, 4.0f}, {320.0f, 56.0f}}];
+    EFHeadView *headView = [[EFHeadView alloc] initWithFrame:(CGRect){{0.0f, 9.0f}, {320.0f, 56.0f}}];
     headView.headPressedHandler = ^{
         [self ShowProfileView];
     };
@@ -526,9 +526,25 @@
             profileCell.selectionStyle = UITableViewCellSelectionStyleNone;
             profileCell.contentView.backgroundColor = [UIColor clearColor];
             profileCell.backgroundColor = [UIColor clearColor];
+            
+            self.headView.layer.transform = CATransform3DMakeScale(0.0f, 0.0f, 0.0f);
+            
             [profileCell.contentView addSubview:self.headView];
             
-            double delayInSeconds = 0.3f;
+            CAKeyframeAnimation *popAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+            popAnimation.values = @[
+                                    [self.headView.layer valueForKey:@"transform"],
+                                    [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.1f, 1.1f, 1.1f)],
+                                    [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.9f, 0.9f, 0.9f)],
+                                    [NSValue valueWithCATransform3D:CATransform3DIdentity]
+                                    ];
+            popAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+            popAnimation.duration = 0.55f;
+            popAnimation.fillMode = kCAFillModeForwards;
+            [self.headView.layer addAnimation:popAnimation forKey:@"pop"];
+            self.headView.layer.transform = CATransform3DIdentity;
+            
+            double delayInSeconds = 0.6f;
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 [self.headView show];
@@ -714,7 +730,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(indexPath.section == 0){
-        return 66;
+        return 70;
     }else {
         return 90;
     }
