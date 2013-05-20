@@ -1406,6 +1406,12 @@
 		769206131749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
 		769206141749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
 		769206151749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
+		7692061F1749E08100B3D64A /* portrait_circle_clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 7692061D1749E08100B3D64A /* portrait_circle_clear.png */; };
+		769206201749E08100B3D64A /* portrait_circle_clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 7692061D1749E08100B3D64A /* portrait_circle_clear.png */; };
+		769206211749E08100B3D64A /* portrait_circle_clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 7692061D1749E08100B3D64A /* portrait_circle_clear.png */; };
+		769206221749E08100B3D64A /* portrait_circle_clear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7692061E1749E08100B3D64A /* portrait_circle_clear@2x.png */; };
+		769206231749E08100B3D64A /* portrait_circle_clear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7692061E1749E08100B3D64A /* portrait_circle_clear@2x.png */; };
+		769206241749E08100B3D64A /* portrait_circle_clear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7692061E1749E08100B3D64A /* portrait_circle_clear@2x.png */; };
 		76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76D1A804171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */; };
@@ -2219,6 +2225,8 @@
 		767012761729086100B5445E /* EFSearchTipViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFSearchTipViewController.xib; sourceTree = "<group>"; };
 		769206111749DB0700B3D64A /* EFHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFHeadView.h; sourceTree = "<group>"; };
 		769206121749DB0700B3D64A /* EFHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFHeadView.m; sourceTree = "<group>"; };
+		7692061D1749E08100B3D64A /* portrait_circle_clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_circle_clear.png; sourceTree = "<group>"; };
+		7692061E1749E08100B3D64A /* portrait_circle_clear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_circle_clear@2x.png"; sourceTree = "<group>"; };
 		76A150BC1717D23400751C92 /* EXAddressBookService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAddressBookService.h; sourceTree = "<group>"; };
 		76A150BD1717D23500751C92 /* EXAddressBookService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAddressBookService.m; sourceTree = "<group>"; };
 		76D1A801171D5DFA00A35BBD /* EFChoosePeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewController.h; sourceTree = "<group>"; };
@@ -3196,6 +3204,8 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				7692061D1749E08100B3D64A /* portrait_circle_clear.png */,
+				7692061E1749E08100B3D64A /* portrait_circle_clear@2x.png */,
 				764CD904173A914600627237 /* btn_white_30.png */,
 				764CD905173A914600627237 /* btn_white_30@2x.png */,
 				764CD8FC173A8F9400627237 /* cautionbar.png */,
@@ -4529,6 +4539,8 @@
 				764CD902173A8F9400627237 /* cautionbar@2x.png in Resources */,
 				764CD907173A914600627237 /* btn_white_30.png in Resources */,
 				764CD90A173A914600627237 /* btn_white_30@2x.png in Resources */,
+				769206201749E08100B3D64A /* portrait_circle_clear.png in Resources */,
+				769206231749E08100B3D64A /* portrait_circle_clear@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4923,6 +4935,8 @@
 				764CD903173A8F9400627237 /* cautionbar@2x.png in Resources */,
 				764CD908173A914600627237 /* btn_white_30.png in Resources */,
 				764CD90B173A914600627237 /* btn_white_30@2x.png in Resources */,
+				769206211749E08100B3D64A /* portrait_circle_clear.png in Resources */,
+				769206241749E08100B3D64A /* portrait_circle_clear@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5319,6 +5333,8 @@
 				764CD901173A8F9400627237 /* cautionbar@2x.png in Resources */,
 				764CD906173A914600627237 /* btn_white_30.png in Resources */,
 				764CD909173A914600627237 /* btn_white_30@2x.png in Resources */,
+				7692061F1749E08100B3D64A /* portrait_circle_clear.png in Resources */,
+				769206221749E08100B3D64A /* portrait_circle_clear@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

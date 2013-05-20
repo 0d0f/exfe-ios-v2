@@ -22,10 +22,11 @@
 #import "NSString+EXFE.h"
 #import "CrossGroupViewController.h"
 #import "EFAPIServer.h"
+#import "EFHeadView.h"
 
 
 @interface CrossesViewController ()
-
+@property (nonatomic, retain) EFHeadView *headView;
 @end
 
 @implementation CrossesViewController
@@ -70,10 +71,28 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
+    
     
     [Flurry logEvent:@"CROSS_LIST"];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
+    // Head View
+    EFHeadView *headView = [[EFHeadView alloc] initWithFrame:(CGRect){{0.0f, 8.0f}, {320.0f, 56.0f}}];
+    headView.showCompletionHandler = ^{
+        [self.tableView beginUpdates];
+        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView endUpdates];
+    };
+    headView.dismissCompletionHandler = ^{
+        [self.tableView beginUpdates];
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView endUpdates];
+    };
+    self.headView = headView;
+    [headView release];
+    
+    //
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     [self.view setFrame:appFrame];
     self.view.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
@@ -203,6 +222,7 @@
     }
     
     self.crossList = nil;
+    [_headView release];
     
 //    if(cellDateTime){
 //        [cellDateTime release];
@@ -475,48 +495,62 @@
     }
 }
 
-#pragma mark UITableViewDataSource methods
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
+#pragma mark - UITableViewDataSource methods
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return self.headView.isShowed ? 2 : 1;
 }
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    
-    if (section == 0){
+    if (0 == section) {
         return 1;
-    }else if (section == 1){
+    } else if (1 == section) {
         return [self getCrossCount];
-    }else {
+    } else {
         return 0;
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 0){
+    if (0 == indexPath.section) {
+        NSString *reuseIdentifier = @"Profile";
+        static UITableViewCell *profileCell = nil;
+        if (!profileCell) {
+            profileCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+            profileCell.contentView.backgroundColor = [UIColor clearColor];
+            profileCell.backgroundColor = [UIColor clearColor];
+            [profileCell.contentView addSubview:self.headView];
+        }
         
         User *_user = [User getDefaultUser];
-        
-        NSString* reuseIdentifier = @"Profile";
-        ProfileCard *headerView =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-        if (nil == headerView) {
-            headerView = [[ProfileCard alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Profile"];
-        }
-        
-        NSString* imgName = _user.avatar_filename;
+        NSString *imgName = _user.avatar_filename;
         
         [[ImgCache sharedManager] fillAvatarWith:imgName byDefault:nil using:^(UIImage *image) {
-            headerView.avatar = image;
-            [headerView setNeedsDisplay];
+            self.headView.headImage = image;
         }];
         
-        [headerView addGatherTarget:self action:@selector(ShowGatherView)];
-        [headerView addProfileTarget:self action:@selector(ShowProfileView)];
-        return headerView;
-    }else if (indexPath.section == 1){
-        if(self.crossList == nil){
+        return profileCell;
+        
+//        ProfileCard *headerView =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+//        if (nil == headerView) {
+//            headerView = [[ProfileCard alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Profile"];
+//        }
+//        NSString* imgName = _user.avatar_filename;
+//        
+//        [[ImgCache sharedManager] fillAvatarWith:imgName byDefault:nil using:^(UIImage *image) {
+//            headerView.avatar = image;
+//            [headerView setNeedsDisplay];
+//        }];
+//        
+//        [headerView addGatherTarget:self action:@selector(ShowGatherView)];
+//        [headerView addProfileTarget:self action:@selector(ShowProfileView)];
+//        return headerView;
+    } else if (1 == indexPath.section) {
+        if (self.crossList == nil) {
             return nil;
         }
+        
         NSString* reuseIdentifier = @"Card Cell";
         CrossCard *cell =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
         if (nil == cell) {

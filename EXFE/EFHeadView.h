@@ -8,10 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^HeadViewShowCompletionBlock)(void);
+typedef void (^HeadViewDismissCompletionBlock)(void);
+
 @interface EFHeadView : UIView
 
 @property (nonatomic, retain) UIImage *headImage;
 @property (nonatomic, retain) UILabel *titleLabel;
+@property (nonatomic, assign, getter = isShowed) BOOL showed;
+@property (nonatomic, copy) HeadViewShowCompletionBlock showCompletionHandler;
+@property (nonatomic, copy) HeadViewDismissCompletionBlock dismissCompletionHandler;
 
 - (void)show;
 - (void)dismiss;

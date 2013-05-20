@@ -28,8 +28,6 @@
 @property (nonatomic, retain) UIView *titleView;
 @property (nonatomic, retain) NSArray *titleLayers;
 
-@property (nonatomic, assign) BOOL isShowed;
-
 - (void)headShowAnimation;
 - (void)headDismissAnimation;
 
@@ -69,7 +67,7 @@
         self.avatarLayer = avatarLayer;
         
         CALayer *mask = [CALayer layer];
-        mask.contents = (id)[UIImage imageNamed:@"portrait_circle@2x.png"].CGImage;
+        mask.contents = (id)[UIImage imageNamed:@"portrait_circle_clear.png"].CGImage;
         mask.frame = kAvatarViewFrame;
         [avatarView.layer addSublayer:mask];
         
@@ -136,7 +134,7 @@
         self.titleView = titleView;
         [titleView release];
         
-        self.isShowed = NO;
+        self.showed = NO;
     }
     return self;
 }
@@ -180,15 +178,25 @@
 #pragma mark - Public
 
 - (void)show {
-    self.isShowed = YES;
+    self.showed = YES;
     [self headShowAnimation];
     [self titleShowAnimation];
 }
 
 - (void)dismiss {
-    self.isShowed = NO;
+    self.showed = NO;
     [self headDismissAnimation];
     [self titleDismissAnimation];
+}
+
+#pragma mark - Animation Delegate
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    if (self.isShowed && _showCompletionHandler) {
+        self.showCompletionHandler();
+    } else if (!self.isShowed && _dismissCompletionHandler) {
+        self.dismissCompletionHandler();
+    }
 }
 
 #pragma mark - Private
@@ -202,6 +210,7 @@
     avatarAnimation.fromValue = [self.avatarView.layer valueForKeyPath:@"transform"]; // [NSValue valueWithCATransform3D:CATransform3DIdentity];
     avatarAnimation.toValue = [NSValue valueWithCATransform3D:newTransform];
     avatarAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55];
+    avatarAnimation.delegate = self;
     
     [self.avatarView.layer addAnimation:avatarAnimation forKey:@"show"];
     self.avatarView.layer.transform = newTransform;
@@ -216,6 +225,7 @@
     avatarAnimation.fromValue = [self.avatarView.layer valueForKeyPath:@"transform"]; // [NSValue valueWithCATransform3D:CATransform3DMakeTranslation(-120.0f, 0.0f, 0.0f)];
     avatarAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
     avatarAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55];
+    avatarAnimation.delegate = self;
     
     [self.avatarView.layer addAnimation:avatarAnimation forKey:@"dismiss"];
     self.avatarView.layer.transform = newTransform;
