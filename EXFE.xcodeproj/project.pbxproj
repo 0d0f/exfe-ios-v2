@@ -1403,6 +1403,9 @@
 		7670127A1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
 		7670127B1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
 		7670127C1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
+		769206131749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
+		769206141749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
+		769206151749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
 		76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76D1A804171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */; };
@@ -2214,6 +2217,8 @@
 		767012741729086100B5445E /* EFSearchTipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchTipViewController.h; sourceTree = "<group>"; };
 		767012751729086100B5445E /* EFSearchTipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchTipViewController.m; sourceTree = "<group>"; };
 		767012761729086100B5445E /* EFSearchTipViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFSearchTipViewController.xib; sourceTree = "<group>"; };
+		769206111749DB0700B3D64A /* EFHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFHeadView.h; sourceTree = "<group>"; };
+		769206121749DB0700B3D64A /* EFHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFHeadView.m; sourceTree = "<group>"; };
 		76A150BC1717D23400751C92 /* EXAddressBookService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAddressBookService.h; sourceTree = "<group>"; };
 		76A150BD1717D23500751C92 /* EXAddressBookService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAddressBookService.m; sourceTree = "<group>"; };
 		76D1A801171D5DFA00A35BBD /* EFChoosePeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewController.h; sourceTree = "<group>"; };
@@ -3538,6 +3543,8 @@
 		78A0C1CC1683037F0073CCE5 /* Control */ = {
 			isa = PBXGroup;
 			children = (
+				769206111749DB0700B3D64A /* EFHeadView.h */,
+				769206121749DB0700B3D64A /* EFHeadView.m */,
 				763A018A171EAEB10082CC9E /* EFSearchBar.h */,
 				763A018B171EAEB10082CC9E /* EFSearchBar.m */,
 				789FBD8315F0980000E3BE80 /* EXCollectionMask.h */,
@@ -5510,6 +5517,7 @@
 				76D1FDFA1740F71900D271B2 /* EFAPIServer+Exfee.m in Sources */,
 				76D1FDFF1740F99200D271B2 /* EFAPIServer+Place.m in Sources */,
 				76D1FE041740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */,
+				769206141749DB0700B3D64A /* EFHeadView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5678,6 +5686,7 @@
 				76D1FDFB1740F71900D271B2 /* EFAPIServer+Exfee.m in Sources */,
 				76D1FE001740F99200D271B2 /* EFAPIServer+Place.m in Sources */,
 				76D1FE051740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */,
+				769206151749DB0700B3D64A /* EFHeadView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5846,6 +5855,7 @@
 				76D1FDF91740F71900D271B2 /* EFAPIServer+Exfee.m in Sources */,
 				76D1FDFE1740F99200D271B2 /* EFAPIServer+Place.m in Sources */,
 				76D1FE031740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */,
+				769206131749DB0700B3D64A /* EFHeadView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
