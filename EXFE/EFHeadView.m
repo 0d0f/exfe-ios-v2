@@ -113,12 +113,6 @@
         self.avatarView = avatarView;
         [avatarView release];
         
-        // gesture
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                              action:@selector(tapHandler:)];
-        [avatarView addGestureRecognizer:tap];
-        [tap release];
-        
         // title View
         UIView *titleView = [[UIView alloc] initWithFrame:kTitleViewFrame];
         titleView.backgroundColor = [UIColor clearColor];
@@ -180,6 +174,17 @@
         [titleView.layer addSublayer:topLayer];
         self.topLayer = topLayer;
         
+        // gesture
+        UITapGestureRecognizer *headTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                  action:@selector(tapHandler:)];
+        [avatarView addGestureRecognizer:headTap];
+        [headTap release];
+        
+        UITapGestureRecognizer *titleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                   action:@selector(tapHandler:)];
+        [titleView addGestureRecognizer:titleTap];
+        [titleTap release];
+        
         [self insertSubview:titleView belowSubview:avatarView];
         self.titleView = titleView;
         [titleView release];
@@ -200,10 +205,20 @@
 #pragma mark - Gesture
 
 - (void)tapHandler:(UITapGestureRecognizer *)gesture {
-    if (self.isShowed) {
-        [self dismiss];
-    } else {
-        [self show];
+    switch (gesture.state) {
+        case UIGestureRecognizerStateEnded:
+        {
+            if (gesture.view == self.avatarView && _headPressedHandler) {
+                self.headPressedHandler();
+            } else if (gesture.view == self.titleView && _titlePressedHandler) {
+                if (CGRectContainsPoint((CGRect){{CGRectGetMidX(self.titleView.frame), 0.0f}, {CGRectGetWidth(self.titleView.frame) * 0.5f, CGRectGetHeight(self.titleView.frame)}}, [gesture locationInView:self.titleView])) {
+                    self.titlePressedHandler();
+                }
+            }
+        }
+            break;
+        default:
+            break;
     }
 }
 

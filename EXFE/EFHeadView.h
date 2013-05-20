@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^HeadViewHeadPressedBlock)(void);
+typedef void (^HeadViewTitlePressedBlock)(void);
 typedef void (^HeadViewShowCompletionBlock)(void);
 typedef void (^HeadViewDismissCompletionBlock)(void);
 
@@ -16,6 +18,12 @@ typedef void (^HeadViewDismissCompletionBlock)(void);
 @property (nonatomic, retain) UIImage *headImage;
 @property (nonatomic, retain) UILabel *titleLabel;
 @property (nonatomic, assign, getter = isShowed) BOOL showed;
+
+// action handler
+@property (nonatomic, copy) HeadViewHeadPressedBlock headPressedHandler;
+@property (nonatomic, copy) HeadViewTitlePressedBlock titlePressedHandler;
+
+// completion handler
 @property (nonatomic, copy) HeadViewShowCompletionBlock showCompletionHandler;
 @property (nonatomic, copy) HeadViewDismissCompletionBlock dismissCompletionHandler;
 

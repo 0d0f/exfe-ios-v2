@@ -79,6 +79,12 @@
     
     // Head View
     EFHeadView *headView = [[EFHeadView alloc] initWithFrame:(CGRect){{0.0f, 4.0f}, {320.0f, 56.0f}}];
+    headView.headPressedHandler = ^{
+        [self ShowProfileView];
+    };
+    headView.titlePressedHandler = ^{
+        [self ShowGatherView];
+    };
     headView.showCompletionHandler = ^{
         [self.tableView beginUpdates];
         [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
@@ -512,7 +518,6 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (0 == indexPath.section) {
         NSString *reuseIdentifier = @"Profile";
         static UITableViewCell *profileCell = nil;
@@ -522,6 +527,12 @@
             profileCell.contentView.backgroundColor = [UIColor clearColor];
             profileCell.backgroundColor = [UIColor clearColor];
             [profileCell.contentView addSubview:self.headView];
+            
+            double delayInSeconds = 0.3f;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self.headView show];
+            });
         }
         
         User *_user = [User getDefaultUser];
@@ -532,21 +543,6 @@
         }];
         
         return profileCell;
-        
-//        ProfileCard *headerView =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-//        if (nil == headerView) {
-//            headerView = [[ProfileCard alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Profile"];
-//        }
-//        NSString* imgName = _user.avatar_filename;
-//        
-//        [[ImgCache sharedManager] fillAvatarWith:imgName byDefault:nil using:^(UIImage *image) {
-//            headerView.avatar = image;
-//            [headerView setNeedsDisplay];
-//        }];
-//        
-//        [headerView addGatherTarget:self action:@selector(ShowGatherView)];
-//        [headerView addProfileTarget:self action:@selector(ShowProfileView)];
-//        return headerView;
     } else if (1 == indexPath.section) {
         if (self.crossList == nil) {
             return nil;
