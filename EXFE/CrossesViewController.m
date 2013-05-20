@@ -118,9 +118,55 @@
     [super viewDidLoad];
     
     if ([[EFAPIServer sharedInstance] isLoggedIn] == YES) {
+        // 过渡动画
+        UIGraphicsBeginImageContext(self.view.bounds.size);
+        [[UIImage imageNamed:@"home_bg.png"] drawInRect:self.view.bounds];
+        UIImage *defaultBackgroundImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        UIColor *backgroundColor = [UIColor colorWithPatternImage:defaultBackgroundImage];
+        
+        UIView *defaultView = [[UIView alloc] initWithFrame:self.view.bounds];
+        defaultView.backgroundColor = backgroundColor;
+        [self.view addSubview:defaultView];
+        [defaultView release];
+        
+        self.headView.layer.transform = CATransform3DMakeScale(0.0f, 0.0f, 0.0f);
+        self.tableView.scrollEnabled = NO;
+        [UIView animateWithDuration:0.233f
+                         animations:^{
+                             defaultView.alpha = 0.0f;
+                         }
+                         completion:^(BOOL finished){
+                             [defaultView removeFromSuperview];
+                             
+                             CAKeyframeAnimation *popAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+                             popAnimation.values = @[
+                                                     [self.headView.layer valueForKey:@"transform"],
+                                                     [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.1f, 1.1f, 1.1f)],
+                                                     [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.9f, 0.9f, 0.9f)],
+                                                     [NSValue valueWithCATransform3D:CATransform3DIdentity]
+                                                     ];
+                             popAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                             popAnimation.duration = 0.55f;
+                             popAnimation.fillMode = kCAFillModeForwards;
+                             [self.headView.layer addAnimation:popAnimation forKey:@"pop"];
+                             self.headView.layer.transform = CATransform3DIdentity;
+                             
+                             double delayInSeconds = 0.6f;
+                             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                 [self.headView show];
+                             });
+                             
+                             self.tableView.scrollEnabled = YES;
+                         }];
+        
         [self loadObjectsFromDataStore];
         [self refreshCrosses:@"crossupdateview"];
     } else {
+        [self.headView show];
+        
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
         [app ShowLanding:self];
 
@@ -527,28 +573,7 @@
             profileCell.contentView.backgroundColor = [UIColor clearColor];
             profileCell.backgroundColor = [UIColor clearColor];
             
-            self.headView.layer.transform = CATransform3DMakeScale(0.0f, 0.0f, 0.0f);
-            
             [profileCell.contentView addSubview:self.headView];
-            
-            CAKeyframeAnimation *popAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-            popAnimation.values = @[
-                                    [self.headView.layer valueForKey:@"transform"],
-                                    [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.1f, 1.1f, 1.1f)],
-                                    [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.9f, 0.9f, 0.9f)],
-                                    [NSValue valueWithCATransform3D:CATransform3DIdentity]
-                                    ];
-            popAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            popAnimation.duration = 0.55f;
-            popAnimation.fillMode = kCAFillModeForwards;
-            [self.headView.layer addAnimation:popAnimation forKey:@"pop"];
-            self.headView.layer.transform = CATransform3DIdentity;
-            
-            double delayInSeconds = 0.6f;
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                [self.headView show];
-            });
         }
         
         User *_user = [User getDefaultUser];
