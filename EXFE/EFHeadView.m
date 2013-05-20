@@ -9,17 +9,51 @@
 #import "EFHeadView.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import "Util.h"
 
 #define kDefaultHeight      (56.0f)
 #define kAvatarLayerFrame   ((CGRect){{0.0f, 0.0f}, {50.0f, 50.0f}})
 #define kAvatarViewFrame    ((CGRect){{0.0f, 0.0f}, {kDefaultHeight, kDefaultHeight}})
 #define kHalfTitleHeight    (22.0f)
-#define kTitleViewWidth     (300.0f)
+#define kTitleViewWidth     (306.0f)
 #define kTitleViewFrame     ((CGRect){{0.0f, 0.0f}, {kTitleViewWidth, kHalfTitleHeight * 2}})
 #define kTitleLayerStartFrame     ((CGRect){{0.0f, 0.0f}, {10.0f, kHalfTitleHeight * 2}})
 #define kTitleLayerBlank    (3.0f)
 #define kTitleLayerAnimationDelay   (0.05f)
 #define kTitleLayerAnimationCommonDelay (0.08f)
+
+@interface EFHeadViewTopLayer : CALayer
+@end
+
+@implementation EFHeadViewTopLayer
+
+- (void)dealloc {
+    [super dealloc];
+}
+
+- (void)drawInContext:(CGContextRef)ctx {
+    UIColor *color = nil;
+    
+    UIGraphicsPushContext(ctx);
+    
+    color = [UIColor COLOR_CARBON];
+    [color set];
+    [@"Gather a" drawAtPoint:CGPointMake(179.0f, 10.0f)
+                    forWidth:200.0f
+                    withFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:21]
+              lineBreakMode:UILineBreakModeClip];
+    
+    color = [UIColor COLOR_BLUE_EXFE];
+    [color set];
+    [@"·X·" drawAtPoint:CGPointMake(262.0f, 10.0f)
+               forWidth:40.0f
+               withFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:21]
+          lineBreakMode:UILineBreakModeClip];
+    
+    UIGraphicsPopContext();
+}
+
+@end
 
 @interface EFHeadView ()
 @property (nonatomic, retain) UIView *avatarView;
@@ -27,6 +61,8 @@
 
 @property (nonatomic, retain) UIView *titleView;
 @property (nonatomic, retain) NSArray *titleLayers;
+
+@property (nonatomic, retain) EFHeadViewTopLayer *topLayer;
 
 - (void)headShowAnimation;
 - (void)headDismissAnimation;
@@ -94,6 +130,7 @@
         titleView.layer.shouldRasterize = YES;
         titleView.layer.rasterizationScale = [UIScreen mainScreen].scale;
         
+        // layers
         NSMutableArray *layers = [[NSMutableArray alloc] initWithCapacity:4];
         for (int i = 0; i < 4; i++) {
             CALayer *layer = i < 3 ? [CALayer layer] : [CAGradientLayer layer];
@@ -102,6 +139,8 @@
             layer.cornerRadius = kHalfTitleHeight;
             layer.masksToBounds = YES;
             layer.position = (CGPoint){CGRectGetWidth(titleView.frame) * 0.5f - i * kTitleLayerBlank, CGRectGetHeight(titleView.frame) * 0.5f};
+            
+            layer.contentsScale = [UIScreen mainScreen].scale;
             
             layer.backgroundColor = [UIColor colorWithWhite:(1.0f - (3.0f - i) / 3.0f)  alpha:1.0f].CGColor;
             
@@ -125,10 +164,21 @@
                                                                  alpha:1.0f].CGColor;
         
         ((CAGradientLayer *)layers[3]).colors = @[(id)[UIColor colorWithRed:(238.0f / 255.0f) green:(238.0f / 255.0f) blue:(238.0f / 255.0f) alpha:1.0f].CGColor,
-                                                  (id)[UIColor whiteColor].CGColor];
+                                                     (id)[UIColor whiteColor].CGColor];
         
         self.titleLayers = layers;
         [layers release];
+        
+        // topLayer
+        EFHeadViewTopLayer *topLayer = [EFHeadViewTopLayer layer];
+        topLayer.contentsScale = [UIScreen mainScreen].scale;
+        topLayer.frame = titleView.frame;
+        topLayer.position = (CGPoint){0.0f, CGRectGetHeight(titleView.frame) * 0.5f};
+        topLayer.backgroundColor = [UIColor clearColor].CGColor;
+        [topLayer setNeedsDisplay];
+        topLayer.opacity = 0.0f;
+        [titleView.layer addSublayer:topLayer];
+        self.topLayer = topLayer;
         
         [self insertSubview:titleView belowSubview:avatarView];
         self.titleView = titleView;
@@ -140,7 +190,7 @@
 }
 
 - (void)dealloc {
-    [_titleLabel release];
+    [_topLayer release];
     [_avatarView release];
     [_headImage release];
     [_titleLabel release];
@@ -248,15 +298,6 @@
             layer.position = newPosition;
             [CATransaction commit];
             
-//            if (i != 3) {
-//                CABasicAnimation *alphaAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-//                alphaAnimation.duration = 0.9f;
-//                alphaAnimation.removedOnCompletion = NO;
-//                alphaAnimation.fromValue = [NSNumber numberWithDouble:0.0f];
-//                alphaAnimation.toValue = [NSNumber numberWithDouble:1.0f];
-//                [layer addAnimation:alphaAnimation forKey:@"alpha"];
-//            }
-//            
             [CATransaction begin];
             [CATransaction setAnimationDuration:0.65f];
             [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55]];
@@ -264,12 +305,17 @@
             [CATransaction commit];
         });
     }
-//    CABasicAnimation *alphaAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-//    alphaAnimation.duration = 0.9f;
-//    alphaAnimation.removedOnCompletion = NO;
-//    alphaAnimation.fromValue = [NSNumber numberWithDouble:0.0f];
-//    alphaAnimation.toValue = [NSNumber numberWithDouble:1.0f];
-//    [self.titleView.layer addAnimation:alphaAnimation forKey:@"alpha"];
+    
+    double delayInSeconds = kTitleLayerAnimationCommonDelay;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:0.65f];
+        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        self.topLayer.opacity = 1.0f;
+        self.topLayer.position = (CGPoint){CGRectGetMidX(self.titleView.frame) - 4 * kTitleLayerBlank, CGRectGetHeight(self.titleView.frame) * 0.5f};
+        [CATransaction commit];
+    });
 }
 
 - (void)titleDismissAnimation {
@@ -288,15 +334,6 @@
             layer.position = newPosition;
             [CATransaction commit];
             
-            //            if (i != 3) {
-            //                CABasicAnimation *alphaAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-            //                alphaAnimation.duration = 0.9f;
-            //                alphaAnimation.removedOnCompletion = NO;
-            //                alphaAnimation.fromValue = [NSNumber numberWithDouble:0.0f];
-            //                alphaAnimation.toValue = [NSNumber numberWithDouble:1.0f];
-            //                [layer addAnimation:alphaAnimation forKey:@"alpha"];
-            //            }
-            //
             [CATransaction begin];
             [CATransaction setAnimationDuration:0.65f];
             [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55]];
@@ -304,6 +341,17 @@
             [CATransaction commit];
         });
     }
+    
+    double delayInSeconds = kTitleLayerAnimationCommonDelay;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:0.6f];
+        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        self.topLayer.opacity = 0.0f;
+        self.topLayer.position = (CGPoint){0.0f, CGRectGetHeight(self.titleView.frame) * 0.5f};
+        [CATransaction commit];
+    });
 }
 
 @end

@@ -78,7 +78,7 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     // Head View
-    EFHeadView *headView = [[EFHeadView alloc] initWithFrame:(CGRect){{0.0f, 8.0f}, {320.0f, 56.0f}}];
+    EFHeadView *headView = [[EFHeadView alloc] initWithFrame:(CGRect){{0.0f, 4.0f}, {320.0f, 56.0f}}];
     headView.showCompletionHandler = ^{
         [self.tableView beginUpdates];
         [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
@@ -518,6 +518,7 @@
         static UITableViewCell *profileCell = nil;
         if (!profileCell) {
             profileCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+            profileCell.selectionStyle = UITableViewCellSelectionStyleNone;
             profileCell.contentView.backgroundColor = [UIColor clearColor];
             profileCell.backgroundColor = [UIColor clearColor];
             [profileCell.contentView addSubview:self.headView];
@@ -709,16 +710,15 @@
         cell.delegate = self;
       
         return cell;
-    }else{
+    } else {
         return nil;
     }
-  
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(indexPath.section == 0){
-        return 64;
+        return 66;
     }else {
         return 90;
     }
