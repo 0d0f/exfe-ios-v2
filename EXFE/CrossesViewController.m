@@ -752,8 +752,10 @@
                 }
 //                NSError *saveError;
 //                [[Cross currentContext] save:&saveError];
-                [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: indexPath]
-                                      withRowAnimation: UITableViewRowAnimationNone];
+                [self.tableView beginUpdates];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath]
+                                      withRowAnimation:UITableViewRowAnimationNone];
+                [self.tableView endUpdates];
             }
             
         }
@@ -767,22 +769,28 @@
         current_cellrow = indexPath.row;
     }
 }
-- (void) refreshTableViewWithCrossId:(int)cross_id{
+
+- (void)refreshTableViewWithCrossId:(int)cross_id {
     for (int i = 0; i < [self.crossList count]; i++) {
         Cross *c = [self.crossList objectAtIndex:i];
-        if ([c.cross_id intValue] == cross_id){
-            [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: [NSIndexPath indexPathForRow:i inSection:1]]
-                                  withRowAnimation: UITableViewRowAnimationNone];
+        if ([c.cross_id intValue] == cross_id) {
+            [self.tableView beginUpdates];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:1]]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+            [self.tableView endUpdates];
         }
     }
 }
-- (void) refreshCell{
-    
-    if(current_cellrow>=0)
-        [self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: [NSIndexPath indexPathForRow:current_cellrow inSection:0]]
-                          withRowAnimation: UITableViewRowAnimationNone];
 
-    current_cellrow=-1;
+- (void)refreshCell {
+    if( current_cellrow>=0 ) {
+        [self.tableView beginUpdates];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:current_cellrow inSection:0]]
+                          withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
+    }
+
+    current_cellrow = -1;
 }
 
 - (void) alertsignout{
