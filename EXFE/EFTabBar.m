@@ -24,7 +24,7 @@
 #define kButtonNormalStyleFrame         ((CGRect){{0.0f, 3.0f}, {44.0f, 44.0f}})
 #define kButtonDoubleheightStyleFrame   ((CGRect){{0.0f, 18.0f}, {44.0f, 44.0f}})
 
-#define kDefaultBackgroundImage [UIImage imageNamed:@"paris.jpg"]
+#define kDefaultBackgroundImage [UIImage imageNamed:@"x_titlebg_default.jpg"]
 
 #pragma mark - EFTabBarBackgroundView
 
@@ -80,6 +80,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     animation.fromValue = (id)self.maskLayer.path;
     animation.toValue = (id)maskPath;
     animation.fillMode = kCAFillModeForwards;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     animation.removedOnCompletion = NO;
     
     [self.maskLayer addAnimation:animation forKey:@"maskAnimation"];
@@ -93,6 +94,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     animation.fromValue = (id)self.maskLayer.path;
     animation.toValue = (id)maskPath;
     animation.fillMode = kCAFillModeForwards;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     animation.removedOnCompletion = NO;
     
     [self.maskLayer addAnimation:animation forKey:@"maskAnimation"];
