@@ -1346,6 +1346,18 @@
 		7615B33B172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
 		7615B33C172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
 		7615B33D172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
+		76295DBA174B2112002F5CEF /* EFTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB3174B2112002F5CEF /* EFTabBar.m */; };
+		76295DBB174B2112002F5CEF /* EFTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB3174B2112002F5CEF /* EFTabBar.m */; };
+		76295DBC174B2112002F5CEF /* EFTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB3174B2112002F5CEF /* EFTabBar.m */; };
+		76295DBD174B2112002F5CEF /* EFTabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB5174B2112002F5CEF /* EFTabBarItem.m */; };
+		76295DBE174B2112002F5CEF /* EFTabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB5174B2112002F5CEF /* EFTabBarItem.m */; };
+		76295DBF174B2112002F5CEF /* EFTabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB5174B2112002F5CEF /* EFTabBarItem.m */; };
+		76295DC0174B2112002F5CEF /* EFTabBarItemControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB7174B2112002F5CEF /* EFTabBarItemControl.m */; };
+		76295DC1174B2112002F5CEF /* EFTabBarItemControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB7174B2112002F5CEF /* EFTabBarItemControl.m */; };
+		76295DC2174B2112002F5CEF /* EFTabBarItemControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB7174B2112002F5CEF /* EFTabBarItemControl.m */; };
+		76295DC3174B2112002F5CEF /* EFTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB9174B2112002F5CEF /* EFTabBarViewController.m */; };
+		76295DC4174B2112002F5CEF /* EFTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB9174B2112002F5CEF /* EFTabBarViewController.m */; };
+		76295DC5174B2112002F5CEF /* EFTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76295DB9174B2112002F5CEF /* EFTabBarViewController.m */; };
 		763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
@@ -2193,6 +2205,14 @@
 		7601F5711727B94700032044 /* EFSearchIdentityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchIdentityCell.m; sourceTree = "<group>"; };
 		7615B339172AB7D200C54031 /* EFLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLabel.h; sourceTree = "<group>"; };
 		7615B33A172AB7D200C54031 /* EFLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLabel.m; sourceTree = "<group>"; };
+		76295DB2174B2112002F5CEF /* EFTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTabBar.h; sourceTree = "<group>"; };
+		76295DB3174B2112002F5CEF /* EFTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTabBar.m; sourceTree = "<group>"; };
+		76295DB4174B2112002F5CEF /* EFTabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTabBarItem.h; sourceTree = "<group>"; };
+		76295DB5174B2112002F5CEF /* EFTabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTabBarItem.m; sourceTree = "<group>"; };
+		76295DB6174B2112002F5CEF /* EFTabBarItemControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTabBarItemControl.h; sourceTree = "<group>"; };
+		76295DB7174B2112002F5CEF /* EFTabBarItemControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTabBarItemControl.m; sourceTree = "<group>"; };
+		76295DB8174B2112002F5CEF /* EFTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTabBarViewController.h; sourceTree = "<group>"; };
+		76295DB9174B2112002F5CEF /* EFTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTabBarViewController.m; sourceTree = "<group>"; };
 		763A018A171EAEB10082CC9E /* EFSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchBar.h; sourceTree = "<group>"; };
 		763A018B171EAEB10082CC9E /* EFSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchBar.m; sourceTree = "<group>"; };
 		763A018F171EE8BE0082CC9E /* EFChoosePeopleViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewCell.h; sourceTree = "<group>"; };
@@ -3058,6 +3078,47 @@
 			name = Login;
 			sourceTree = "<group>";
 		};
+		76295DA8174B20B3002F5CEF /* Popover */ = {
+			isa = PBXGroup;
+			children = (
+				7670126C1729054500B5445E /* EFPopoverController.h */,
+				7670126A1729054500B5445E /* EFPopoverController.m */,
+				7670126D1729054500B5445E /* EFArrowView.h */,
+				7670126B1729054500B5445E /* EFArrowView.m */,
+			);
+			name = Popover;
+			sourceTree = "<group>";
+		};
+		76295DB0174B20D3002F5CEF /* ErrorMessage */ = {
+			isa = PBXGroup;
+			children = (
+				76F6B30A1740A59A008B39C1 /* EFErrorMessage.h */,
+				76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */,
+				7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */,
+				7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */,
+				764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */,
+				764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */,
+				76F6B3131740DBCB008B39C1 /* EFStatusBar.h */,
+				76F6B3141740DBCC008B39C1 /* EFStatusBar.m */,
+			);
+			name = ErrorMessage;
+			sourceTree = "<group>";
+		};
+		76295DB1174B2101002F5CEF /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				76295DB2174B2112002F5CEF /* EFTabBar.h */,
+				76295DB3174B2112002F5CEF /* EFTabBar.m */,
+				76295DB4174B2112002F5CEF /* EFTabBarItem.h */,
+				76295DB5174B2112002F5CEF /* EFTabBarItem.m */,
+				76295DB6174B2112002F5CEF /* EFTabBarItemControl.h */,
+				76295DB7174B2112002F5CEF /* EFTabBarItemControl.m */,
+				76295DB8174B2112002F5CEF /* EFTabBarViewController.h */,
+				76295DB9174B2112002F5CEF /* EFTabBarViewController.m */,
+			);
+			name = TabBar;
+			sourceTree = "<group>";
+		};
 		763A01CC17212A090082CC9E /* Object */ = {
 			isa = PBXGroup;
 			children = (
@@ -3071,18 +3132,9 @@
 			isa = PBXGroup;
 			children = (
 				76F6B3101740B5C1008B39C1 /* EFKit.h */,
-				7670126C1729054500B5445E /* EFPopoverController.h */,
-				7670126A1729054500B5445E /* EFPopoverController.m */,
-				7670126D1729054500B5445E /* EFArrowView.h */,
-				7670126B1729054500B5445E /* EFArrowView.m */,
-				76F6B30A1740A59A008B39C1 /* EFErrorMessage.h */,
-				76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */,
-				7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */,
-				7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */,
-				764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */,
-				764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */,
-				76F6B3131740DBCB008B39C1 /* EFStatusBar.h */,
-				76F6B3141740DBCC008B39C1 /* EFStatusBar.m */,
+				76295DB1174B2101002F5CEF /* TabBar */,
+				76295DB0174B20D3002F5CEF /* ErrorMessage */,
+				76295DA8174B20B3002F5CEF /* Popover */,
 			);
 			name = EFKit;
 			sourceTree = "<group>";
@@ -5534,6 +5586,10 @@
 				76D1FDFF1740F99200D271B2 /* EFAPIServer+Place.m in Sources */,
 				76D1FE041740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */,
 				769206141749DB0700B3D64A /* EFHeadView.m in Sources */,
+				76295DBB174B2112002F5CEF /* EFTabBar.m in Sources */,
+				76295DBE174B2112002F5CEF /* EFTabBarItem.m in Sources */,
+				76295DC1174B2112002F5CEF /* EFTabBarItemControl.m in Sources */,
+				76295DC4174B2112002F5CEF /* EFTabBarViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5703,6 +5759,10 @@
 				76D1FE001740F99200D271B2 /* EFAPIServer+Place.m in Sources */,
 				76D1FE051740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */,
 				769206151749DB0700B3D64A /* EFHeadView.m in Sources */,
+				76295DBC174B2112002F5CEF /* EFTabBar.m in Sources */,
+				76295DBF174B2112002F5CEF /* EFTabBarItem.m in Sources */,
+				76295DC2174B2112002F5CEF /* EFTabBarItemControl.m in Sources */,
+				76295DC5174B2112002F5CEF /* EFTabBarViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5872,6 +5932,10 @@
 				76D1FDFE1740F99200D271B2 /* EFAPIServer+Place.m in Sources */,
 				76D1FE031740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */,
 				769206131749DB0700B3D64A /* EFHeadView.m in Sources */,
+				76295DBA174B2112002F5CEF /* EFTabBar.m in Sources */,
+				76295DBD174B2112002F5CEF /* EFTabBarItem.m in Sources */,
+				76295DC0174B2112002F5CEF /* EFTabBarItemControl.m in Sources */,
+				76295DC3174B2112002F5CEF /* EFTabBarViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

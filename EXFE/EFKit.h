@@ -14,7 +14,10 @@
 
 #import "EFErrorMessage.h"
 #import "EFErrorHandlerCenter.h"
-
 #import "EFStatusBar.h"
+
+#import "EFTabBar.h"
+#import "EFTabBarItem.h"
+#import "EFTabBarViewController.h"
 
 #endif
