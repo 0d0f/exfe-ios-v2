@@ -17,7 +17,8 @@
 #define kHalfTitleHeight    (22.0f)
 #define kTitleViewWidth     (306.0f)
 #define kTitleViewFrame     ((CGRect){{0.0f, 0.0f}, {kTitleViewWidth, kHalfTitleHeight * 2}})
-#define kTitleLayerStartFrame     ((CGRect){{0.0f, 0.0f}, {10.0f, kHalfTitleHeight * 2}})
+#define kTitleLayerWidth    (282.0f)
+#define kTitleLayerFrame     ((CGRect){{0.0f, 0.0f}, {kTitleLayerWidth, kDefaultHeight}})
 #define kTitleLayerBlank    (3.0f)
 #define kTitleLayerAnimationDelay   (0.05f)
 #define kTitleLayerAnimationCommonDelay (0.08f)
@@ -66,10 +67,7 @@
 @property (nonatomic, retain) EFHeadViewTopLayer *topLayer;
 
 - (void)headShowAnimation;
-- (void)headDismissAnimation;
-
 - (void)titleShowAnimation;
-- (void)titleDismissAnimation;
 
 @end
 
@@ -88,7 +86,7 @@
         avatarView.backgroundColor = [UIColor clearColor];
         
         CALayer *leftAvatarLayer = [CALayer layer];
-        leftAvatarLayer.bounds = (CGRect){{0.0f, 0.0f}, {200.0f, CGRectGetHeight(kAvatarViewFrame)}};
+        leftAvatarLayer.bounds = (CGRect){{0.0f, 0.0f}, {200.0f, CGRectGetHeight(kAvatarViewFrame) + 4}};
         leftAvatarLayer.backgroundColor = backgroundColor.CGColor;
         leftAvatarLayer.anchorPoint = (CGPoint){1.0f, 0.5f};
         leftAvatarLayer.position = (CGPoint){CGRectGetWidth(avatarView.frame) * 0.5f, CGRectGetHeight(avatarView.frame) * 0.5f};
@@ -118,48 +116,44 @@
         UIView *titleView = [[UIView alloc] initWithFrame:kTitleViewFrame];
         titleView.backgroundColor = [UIColor clearColor];
         titleView.center = (CGPoint){CGRectGetMidX(self.frame), kTitleLayerY + kHalfTitleHeight};
-        titleView.layer.shadowColor = [UIColor blackColor].CGColor;
-        titleView.layer.shadowOffset = (CGSize){0.0f, 1.0f};
-        titleView.layer.shadowOpacity = 0.3f;
-        titleView.layer.shadowRadius = 0.5f;
-        titleView.layer.shouldRasterize = YES;
-        titleView.layer.rasterizationScale = [UIScreen mainScreen].scale;
         
         // layers
         NSMutableArray *layers = [[NSMutableArray alloc] initWithCapacity:4];
-        for (int i = 0; i < 4; i++) {
-            CALayer *layer = i < 3 ? [CALayer layer] : [CAGradientLayer layer];
-            CGRect frame = kTitleLayerStartFrame;
-            layer.frame = frame;
-            layer.cornerRadius = kHalfTitleHeight;
-            layer.masksToBounds = YES;
-            layer.position = (CGPoint){CGRectGetWidth(titleView.frame) * 0.5f - i * kTitleLayerBlank, CGRectGetHeight(titleView.frame) * 0.5f};
-            
+        CGRect frame = kTitleLayerFrame;
+        frame.size.width = CGRectGetWidth(frame) * 0.5f;
+        
+        for (int i = 3; i >= 0; i--) {
+            CALayer *layer = [CALayer layer];
+            layer.bounds = (CGRect){{0.0f, 0.0f}, {10.0f, CGRectGetHeight(kTitleLayerFrame)}};
+            layer.hidden = YES;
+            layer.contentsGravity = kCAGravityTopRight;
+            layer.contents = (id)[UIImage imageNamed:[NSString stringWithFormat:@"xlist_top_%d.png", i]].CGImage;
+            layer.anchorPoint = (CGPoint){1.0f, 0.0f};
+            layer.position = (CGPoint){CGRectGetWidth(titleView.frame) * 0.5f, -(CGRectGetHeight(kTitleLayerFrame) - CGRectGetHeight(kTitleViewFrame)) * 0.5f};
             layer.contentsScale = [UIScreen mainScreen].scale;
-            
-            layer.backgroundColor = [UIColor colorWithWhite:(1.0f - (3.0f - i) / 3.0f)  alpha:1.0f].CGColor;
+            layer.backgroundColor = [UIColor clearColor].CGColor;
             
             [titleView.layer addSublayer:layer];
             [layers addObject:layer];
         }
         
-        ((CALayer *)layers[0]).backgroundColor = [UIColor colorWithRed:(24.0f / 255.0f)
-                                                                 green:(80.0f / 255.0f)
-                                                                  blue:(140.0f / 255.0f)
-                                                                 alpha:1.0f].CGColor;
-        
-        ((CALayer *)layers[1]).backgroundColor = [UIColor colorWithRed:(54.0f / 255.0f)
-                                                                 green:(135.0f / 255.0f)
-                                                                  blue:(221.0f / 255.0f)
-                                                                 alpha:1.0f].CGColor;
-        
-        ((CALayer *)layers[2]).backgroundColor = [UIColor colorWithRed:(150.0f / 255.0f)
-                                                                 green:(201.0f / 255.0f)
-                                                                  blue:1.0f
-                                                                 alpha:1.0f].CGColor;
-        
-        ((CAGradientLayer *)layers[3]).colors = @[(id)[UIColor colorWithRed:(238.0f / 255.0f) green:(238.0f / 255.0f) blue:(238.0f / 255.0f) alpha:1.0f].CGColor,
-                                                     (id)[UIColor whiteColor].CGColor];
+//        ((CALayer *)layers[0]).backgroundColor = [UIColor colorWithRed:(24.0f / 255.0f)
+//                                                                 green:(80.0f / 255.0f)
+//                                                                  blue:(140.0f / 255.0f)
+//                                                                 alpha:1.0f].CGColor;
+//        
+//        ((CALayer *)layers[1]).backgroundColor = [UIColor colorWithRed:(54.0f / 255.0f)
+//                                                                 green:(135.0f / 255.0f)
+//                                                                  blue:(221.0f / 255.0f)
+//                                                                 alpha:1.0f].CGColor;
+//        
+//        ((CALayer *)layers[2]).backgroundColor = [UIColor colorWithRed:(150.0f / 255.0f)
+//                                                                 green:(201.0f / 255.0f)
+//                                                                  blue:1.0f
+//                                                                 alpha:1.0f].CGColor;
+//        
+//        ((CAGradientLayer *)layers[3]).colors = @[(id)[UIColor colorWithRed:(238.0f / 255.0f) green:(238.0f / 255.0f) blue:(238.0f / 255.0f) alpha:1.0f].CGColor,
+//                                                     (id)[UIColor whiteColor].CGColor];
         
         self.titleLayers = layers;
         [layers release];
@@ -249,12 +243,6 @@
     [self titleShowAnimation];
 }
 
-- (void)dismiss {
-    self.showed = NO;
-    [self headDismissAnimation];
-    [self titleDismissAnimation];
-}
-
 #pragma mark - Animation Delegate
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
@@ -282,28 +270,13 @@
     self.avatarView.layer.transform = newTransform;
 }
 
-- (void)headDismissAnimation {
-    CATransform3D newTransform = CATransform3DIdentity;
-    
-    CABasicAnimation *avatarAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
-    avatarAnimation.fillMode = kCAFillModeForwards;
-    avatarAnimation.duration = 0.9f;
-    avatarAnimation.fromValue = [self.avatarView.layer valueForKeyPath:@"transform"];
-    avatarAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
-    avatarAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55];
-    avatarAnimation.delegate = self;
-    
-    [self.avatarView.layer addAnimation:avatarAnimation forKey:@"dismiss"];
-    self.avatarView.layer.transform = newTransform;
-}
-
 - (void)titleShowAnimation {
     for (int i = 0; i < 4; i++) {
         CALayer *layer = self.titleLayers[i];
+        layer.hidden = NO;
         
-        CGPoint newPosition = (CGPoint){kTitleViewWidth * 0.5f - i * kTitleLayerBlank, CGRectGetHeight(layer.bounds) * 0.5f};      
-        CGRect newBounds = layer.bounds;
-        newBounds.size = (CGSize){kTitleViewWidth - 3 * kTitleLayerBlank, CGRectGetHeight(layer.bounds)};
+        CGPoint newPosition = (CGPoint){kTitleViewWidth, -(CGRectGetHeight(kTitleLayerFrame) - CGRectGetHeight(kTitleViewFrame)) * 0.5f};
+        CGRect newBounds = kTitleLayerFrame;
         
         double delayInSeconds = (3 - i) * kTitleLayerAnimationDelay + kTitleLayerAnimationCommonDelay;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -315,7 +288,7 @@
             [CATransaction commit];
             
             [CATransaction begin];
-            [CATransaction setAnimationDuration:0.65f];
+            [CATransaction setAnimationDuration:0.9f];
             [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55]];
             layer.bounds = newBounds;
             [CATransaction commit];
@@ -330,42 +303,6 @@
         [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
         self.topLayer.opacity = 1.0f;
         self.topLayer.position = (CGPoint){CGRectGetMidX(self.titleView.frame) - 4 * kTitleLayerBlank, CGRectGetHeight(self.titleView.frame) * 0.5f};
-        [CATransaction commit];
-    });
-}
-
-- (void)titleDismissAnimation {
-    for (int i = 0; i < 4; i++) {
-        CALayer *layer = self.titleLayers[i];
-        
-        CGPoint newPosition = (CGPoint){kTitleViewWidth * 0.5f - i * kTitleLayerBlank, CGRectGetHeight(layer.frame) * 0.5f};
-        CGRect newBounds = kTitleLayerStartFrame;
-        
-        double delayInSeconds = (3 - i) * 0.015f + kTitleLayerAnimationCommonDelay;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [CATransaction begin];
-            [CATransaction setAnimationDuration:0.9f];
-            [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55]];
-            layer.position = newPosition;
-            [CATransaction commit];
-            
-            [CATransaction begin];
-            [CATransaction setAnimationDuration:0.65f];
-            [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55]];
-            layer.bounds = newBounds;
-            [CATransaction commit];
-        });
-    }
-    
-    double delayInSeconds = kTitleLayerAnimationCommonDelay;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [CATransaction begin];
-        [CATransaction setAnimationDuration:0.6f];
-        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        self.topLayer.opacity = 0.0f;
-        self.topLayer.position = (CGPoint){0.0f, CGRectGetHeight(self.titleView.frame) * 0.5f};
         [CATransaction commit];
     });
 }
