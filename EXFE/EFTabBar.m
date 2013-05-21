@@ -166,6 +166,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
 - (EFTabBarItemControl *)_selectedButton;
 - (CGRect)_buttonFrameAtIndex:(NSUInteger)index;
 - (void)_setSelectedIndex:(NSUInteger)index;
+- (void)_changeTitleFrameAimated:(BOOL)animated;
 @end
 
 @interface EFTabBar (Action)
@@ -246,12 +247,19 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
         // other default values
         self.isButtonsShowed = NO;
         
+        [self.titleLabel addObserver:self
+                          forKeyPath:@"text"
+                             options:NSKeyValueObservingOptionNew
+                             context:NULL];
+        
         self.tabBarStyle = style;
     }
     return self;
 }
 
 - (void)dealloc {
+    [self.titleLabel removeObserver:self
+                         forKeyPath:@"text"];
     self.tabBarViewController = nil;
     [_gestureView release];
     [_backgroundView release];
@@ -259,6 +267,14 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     [_leftButton release];
     [_titleLabel release];
     [super dealloc];
+}
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (object == self.titleLabel && [keyPath isEqualToString:@"text"]) {
+        [self _changeTitleFrameAimated:YES];
+    }
 }
 
 #pragma mark - Getter && Setter
@@ -284,34 +300,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
         return;
     
     _tabBarStyle = tabBarStyle;
-    
-    // resize frame
-    CGRect viewFrame = CGRectZero;
-    CGRect leftButtonFrame = CGRectZero;
-    
-    if (kEFTabBarStyleDoubleHeight == tabBarStyle) {
-        viewFrame = kDoubleheightStyleFrame;
-        leftButtonFrame = kButtonDoubleheightStyleFrame;
-        self.titleLabel.numberOfLines = 2;
-    } else {
-        viewFrame = kNormalStyleFrame;
-        leftButtonFrame = kButtonNormalStyleFrame;
-        self.titleLabel.numberOfLines = 1;
-    }
-    
-    // resize label frame
-    CGSize titleLabelSize = (CGSize){CGRectGetWidth(viewFrame) - kTitleEdgeBlank * 2, 1000};
-    titleLabelSize = [self.titleLabel.text sizeWithFont:self.titleLabel.font
-                                      constrainedToSize:titleLabelSize
-                                          lineBreakMode:self.titleLabel.lineBreakMode];
-    titleLabelSize.width = CGRectGetWidth(viewFrame) - kTitleEdgeBlank * 2;
-    
-    [UIView animateWithDuration:0.233f
-                     animations:^{
-                         self.frame = viewFrame;
-                         self.leftButton.frame = leftButtonFrame;
-                         self.titleLabel.frame = (CGRect){{kTitleEdgeBlank, floor((CGRectGetHeight(viewFrame) - 20.0f - titleLabelSize.height) * 0.5f)}, titleLabelSize};
-                     }];
+    [self _changeTitleFrameAimated:YES];
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage {
@@ -662,6 +651,41 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
                          completion:^(BOOL finished){
                          }];
     }
+}
+
+- (void)_changeTitleFrameAimated:(BOOL)animated {
+    // resize frame
+    CGRect viewFrame = CGRectZero;
+    CGRect leftButtonFrame = CGRectZero;
+    
+    if (kEFTabBarStyleDoubleHeight == self.tabBarStyle) {
+        viewFrame = kDoubleheightStyleFrame;
+        leftButtonFrame = kButtonDoubleheightStyleFrame;
+        self.titleLabel.numberOfLines = 2;
+    } else {
+        viewFrame = kNormalStyleFrame;
+        leftButtonFrame = kButtonNormalStyleFrame;
+        self.titleLabel.numberOfLines = 1;
+    }
+    
+    CGSize titleLabelSize = (CGSize){CGRectGetWidth(viewFrame) - kTitleEdgeBlank * 2, 1000};
+    NSString *text = self.titleLabel.text;
+    
+    titleLabelSize = [text sizeWithFont:self.titleLabel.font
+                      constrainedToSize:titleLabelSize
+                          lineBreakMode:self.titleLabel.lineBreakMode];
+    titleLabelSize.width = CGRectGetWidth(viewFrame) - kTitleEdgeBlank * 2;
+    
+    [UIView setAnimationsEnabled:animated];
+    [UIView animateWithDuration:0.233f
+                     animations:^{
+                         self.frame = viewFrame;
+                         self.leftButton.frame = leftButtonFrame;
+                         self.titleLabel.frame = (CGRect){{kTitleEdgeBlank, floor((CGRectGetHeight(viewFrame) - 20.0f - titleLabelSize.height) * 0.5f)}, titleLabelSize};
+                     }
+                     completion:^(BOOL finished){
+                         [UIView setAnimationsEnabled:YES];
+                     }];
 }
 
 @end
