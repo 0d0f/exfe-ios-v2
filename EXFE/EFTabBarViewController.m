@@ -36,7 +36,7 @@
         _cache.appFrame = appFrame;
         
         // tabBar
-        EFTabBar *tabBar = [[EFTabBar alloc] initWithStyle:kEFTabBarStyleNormal];
+        EFTabBar *tabBar = [[EFTabBar alloc] initWithStyle:((UIViewController<EFTabBarDataSource> *)viewControllers[0]).tabBarStyle];
         tabBar.tabBarViewController = self;
         [self.view addSubview:tabBar];
         _tabBar = tabBar;
@@ -178,8 +178,13 @@
                       duration:0.233f
                        options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionCrossDissolve
                     animations:^{
+                        [self.preSelectedViewController willMoveToParentViewController:nil];
                         [self.preSelectedViewController.view removeFromSuperview];
+                        [self.preSelectedViewController removeFromParentViewController];
+                        
+                        [self addChildViewController:viewController];
                         [self.containView addSubview:viewController.view];
+                        [viewController didMoveToParentViewController:self];
                     }
                     completion:^(BOOL finished){
                     }];

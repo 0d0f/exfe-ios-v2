@@ -48,8 +48,8 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
 @property (nonatomic, retain) UIImage *backgroundImage;
 @property (nonatomic, retain) CAShapeLayer *maskLayer;
 
-- (void)showButtonWithPath:(CGPathRef)maskPath;
-- (void)dismissButtonWithPath:(CGPathRef)maskPath;
+- (void)showButtonWithPath:(CGPathRef)maskPath animated:(BOOL)animated;
+- (void)dismissButtonWithPath:(CGPathRef)maskPath animated:(BOOL)animated;
 
 @end
 
@@ -73,31 +73,37 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     [super dealloc];
 }
 
-- (void)showButtonWithPath:(CGPathRef)maskPath {
-    // mask animation
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
-    animation.duration = 0.233f;
-    animation.fromValue = (id)self.maskLayer.path;
-    animation.toValue = (id)maskPath;
-    animation.fillMode = kCAFillModeForwards;
-    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    animation.removedOnCompletion = NO;
+- (void)showButtonWithPath:(CGPathRef)maskPath animated:(BOOL)animated {
+    if (animated) {
+        // mask animation
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
+        animation.duration = 0.233f;
+        animation.fromValue = (id)self.maskLayer.path;
+        animation.toValue = (id)maskPath;
+        animation.fillMode = kCAFillModeForwards;
+        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        animation.removedOnCompletion = NO;
+        
+        [self.maskLayer addAnimation:animation forKey:@"maskAnimation"];
+    }
     
-    [self.maskLayer addAnimation:animation forKey:@"maskAnimation"];
     self.maskLayer.path = maskPath;
 }
 
-- (void)dismissButtonWithPath:(CGPathRef)maskPath {
-    // mask animation
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
-    animation.duration = 0.233f;
-    animation.fromValue = (id)self.maskLayer.path;
-    animation.toValue = (id)maskPath;
-    animation.fillMode = kCAFillModeForwards;
-    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    animation.removedOnCompletion = NO;
+- (void)dismissButtonWithPath:(CGPathRef)maskPath animated:(BOOL)animated {
+    if (animated) {
+        // mask animation
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
+        animation.duration = 0.233f;
+        animation.fromValue = (id)self.maskLayer.path;
+        animation.toValue = (id)maskPath;
+        animation.fillMode = kCAFillModeForwards;
+        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        animation.removedOnCompletion = NO;
+        
+        [self.maskLayer addAnimation:animation forKey:@"maskAnimation"];
+    }
     
-    [self.maskLayer addAnimation:animation forKey:@"maskAnimation"];
     self.maskLayer.path = maskPath;
 }
 
@@ -472,7 +478,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     CGPoint endPoint = (CGPoint){startPoint.x - 122.0f, floor(CGRectGetHeight(self.bounds) - 20.0f)};
     
     CGPathRef maskPath = CreateMaskPath(self.bounds, startPoint, endPoint);
-    [self.backgroundView showButtonWithPath:maskPath];
+    [self.backgroundView showButtonWithPath:maskPath animated:animated];
     CGPathRelease(maskPath);
     
     // buttons animation
@@ -528,7 +534,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     CGPoint endPoint = (CGPoint){startPoint.x - 122.0f, floor(CGRectGetHeight(self.bounds) - 20.0f)};
     
     CGPathRef maskPath = CreateMaskPath(self.bounds, startPoint, endPoint);
-    [self.backgroundView dismissButtonWithPath:maskPath];
+    [self.backgroundView dismissButtonWithPath:maskPath animated:animated];
     CGPathRelease(maskPath);
     
     if (animated) {
@@ -616,7 +622,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
         CGPoint endPoint = (CGPoint){startPoint.x - 122.0f, floor(CGRectGetHeight(self.bounds) - 20.0f)};
         
         CGPathRef maskPath = CreateMaskPath(self.bounds, startPoint, endPoint);
-        [self.backgroundView dismissButtonWithPath:maskPath];
+        [self.backgroundView dismissButtonWithPath:maskPath animated:YES];
         CGPathRelease(maskPath);
         
         // selected button animation
