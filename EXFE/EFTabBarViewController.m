@@ -155,7 +155,7 @@
     self.tabBar.tabBarStyle = selectedViewController.tabBarStyle;
     [self _resizeContainViewAnimated:YES];
     
-    self.preSelectedViewController = selectedViewController;
+    self.preSelectedViewController = _selectedViewController;
     
     [self willChangeValueForKey:@"selectedViewController"];
     _selectedViewController = selectedViewController;
@@ -187,6 +187,7 @@
                         [viewController didMoveToParentViewController:self];
                     }
                     completion:^(BOOL finished){
+                        self.containView.backgroundColor = viewController.view.backgroundColor;
                     }];
 }
 
