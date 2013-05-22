@@ -49,13 +49,14 @@
 {
     CGRect b = self.view.bounds;
     CGRect a = [[UIScreen mainScreen] applicationFrame];
-    CGRect f = CGRectMake(0, DECTOR_HEIGHT, CGRectGetWidth(a), CGRectGetHeight(a) - DECTOR_HEIGHT);
-    [self.view setFrame:f];
+    
+    CGRect frame = (CGRect){{0.0f, 0.0f}, {CGRectGetWidth(a), CGRectGetHeight(a) - DECTOR_HEIGHT}};
+    self.view.frame = frame;
 
     [super viewDidLoad];
     [Flurry logEvent:@"WIDGET_CONVERSATION"];
     
-    _tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(f), CGRectGetHeight(f) - kDefaultToolbarHeight + 2)];
+    _tableView=[[ConversationTableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame) - kDefaultToolbarHeight + 2)];
     _tableView.dataSource=self;
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
@@ -80,7 +81,7 @@
     hintGroup.hidden = YES;
     [self.view  addSubview:hintGroup];
     
-    CGRect toolbarframe=CGRectMake(0, CGRectGetHeight(f) - kDefaultToolbarHeight, CGRectGetWidth(f), kDefaultToolbarHeight);
+    CGRect toolbarframe=CGRectMake(0, CGRectGetHeight(frame) - kDefaultToolbarHeight, CGRectGetWidth(frame), kDefaultToolbarHeight);
     
     inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
     inputToolbar.backgroundColor=[UIColor clearColor];

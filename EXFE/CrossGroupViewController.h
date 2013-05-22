@@ -15,6 +15,7 @@
 #import "EXTabLayer.h"
 #import "EXTabWidget.h"
 #import "EXRSVPStatusView.h"
+#import "EFKit.h"
 
 @class Cross;
 @class User;
@@ -27,7 +28,19 @@
 #define kWidgetConversation    2
 #define kWidgetExfee           3
 
-@interface CrossGroupViewController : UIViewController<EXImagesCollectionDataSource, EXImagesCollectionDelegate, MKMapViewDelegate, EXRSVPMenuDelegate, EditCrossDelegate, EXTabWidgetDelegate, UIGestureRecognizerDelegate,UIAlertViewDelegate, UIScrollViewDelegate, EXRSVPStatusViewDelegate>{
+@interface CrossGroupViewController : UIViewController
+<
+EXImagesCollectionDataSource,
+EXImagesCollectionDelegate,
+MKMapViewDelegate,
+EXRSVPMenuDelegate,
+EditCrossDelegate,
+UIGestureRecognizerDelegate,
+UIAlertViewDelegate,
+UIScrollViewDelegate,
+EXRSVPStatusViewDelegate,
+EFTabBarDataSource
+> {
     
     
     CGFloat exfeeSuggestHeight;
@@ -45,8 +58,8 @@
     UIButton *placeEditMenu;
     UIButton *titleAndDescEditMenu;
     
-    // Header
-    UILabel* titleView;
+//    // Header
+//    UILabel* titleView;
     // Content
     //    UIScrollView* xContainer;
     //    UIView* container;
@@ -60,14 +73,14 @@
     UILabel *placeDescView;
     MKMapView *mapView;
     UIView *mapShadow;
-    // WidgetTab
-    EXTabLayer *tabLayer;
-    EXTabWidget* tabWidget;
-    // Navigation
-    UIButton* btnBack;
+//    // WidgetTab
+//    EXTabLayer *tabLayer;
+//    EXTabWidget* tabWidget;
+//    // Navigation
+//    UIButton* btnBack;
     
     
-    UIImageView *headerShadow;
+//    UIImageView *headerShadow;
     
     
     UISwipeGestureRecognizer *swipeRightRecognizer;
@@ -80,6 +93,11 @@
 @property (nonatomic, assign) NSUInteger widgetId;
 @property (nonatomic, retain) NSArray *sortedInvitations;
 
--(void)swapViewControllers:(UIViewController*)childViewController;
+// EFTabBarDataSource
+@property (nonatomic, retain) EFTabBarItem *customTabBarItem;
+@property (nonatomic, assign) EFTabBarStyle tabBarStyle;
+@property (nonatomic, assign) EFTabBarViewController *tabBarViewController;
+
+- (void)showPopup:(NSInteger)ctrlId;
 
 @end

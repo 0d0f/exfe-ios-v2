@@ -79,7 +79,9 @@
         NSMutableArray *tabBarItems = [[NSMutableArray alloc] initWithCapacity:[viewControllers count]];
         for (UIViewController<EFTabBarDataSource> *viewController in viewControllers) {
             [tabBarItems addObject:viewController.customTabBarItem];
+            viewController.tabBarViewController = self;
         }
+        
         _tabBar.tabBarItems = tabBarItems;
         [tabBarItems release];
         
@@ -129,14 +131,23 @@
     [self didChangeValueForKey:@"defaultViewController"];
 }
 
+- (void)setTitlePressedHandler:(EFTabBarTitlePressedBlock)titlePressedHandler {
+    if (_titlePressedHandler == titlePressedHandler)
+        return;
+    
+    [self.tabBar performSelector:@selector(setTitlePressedBlock:)
+                      withObject:titlePressedHandler];
+}
+
 #pragma mark - Public
 
 - (void)setSelectedIndex:(NSUInteger)selectedIndex animated:(BOOL)animated {
     NSParameterAssert(self.viewControllers.count);
     NSParameterAssert(selectedIndex >= 0 && selectedIndex < self.viewControllers.count);
     
-    if (_selectedIndex == selectedIndex)
+    if (_selectedIndex == selectedIndex) {
         return;
+    }
     
     [self willChangeValueForKey:@"selectedIndex"];
     _selectedIndex = selectedIndex;
@@ -153,7 +164,7 @@
         return;
     
     self.tabBar.tabBarStyle = selectedViewController.tabBarStyle;
-    [self _resizeContainViewAnimated:YES];
+    [self _resizeContainViewAnimated:animated];
     
     self.preSelectedViewController = _selectedViewController;
     
@@ -162,6 +173,18 @@
     [self didChangeValueForKey:@"selectedViewController"];
     
     [self _layoutSelectedViewController];
+}
+
+- (NSArray *)viewControllersForClass:(Class)controllerClass {
+    NSMutableArray *viewControllers = [[[NSMutableArray alloc] initWithCapacity:[self.viewControllers count]] autorelease];
+    
+    for (UIViewController *viewController in self.viewControllers) {
+        if ([viewController isKindOfClass:controllerClass]) {
+            [viewControllers addObject:viewController];
+        }
+    }
+    
+    return [[viewControllers copy] autorelease];
 }
 
 #pragma mark - Private

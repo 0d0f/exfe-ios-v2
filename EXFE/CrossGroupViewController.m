@@ -92,9 +92,11 @@
 #define kViewTagPlaceDescription         (0120302)
 
 @interface CrossGroupViewController ()
+@end
 
-- (void) changeHeaderStyle:(NSInteger)style;
-
+@interface CrossGroupViewController (Private)
+- (void)_showMenu:(UIView *)view from:(UIView *)sender animated:(BOOL)animated;
+- (void)_dismissMenu:(UIView *)view animated:(BOOL)animated;
 @end
 
 @implementation CrossGroupViewController
@@ -117,7 +119,8 @@
     return self;
 }
 
-#pragma mark ViewController life cycle & callbacks
+#pragma mark - ViewController life cycle & callbacks
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -125,12 +128,14 @@
     // Do any additional setup after loading the view from its nib.
     CGRect b = self.view.bounds;
     CGRect a = [UIScreen mainScreen].applicationFrame;
-    self.view.frame = a;
+    
+    CGRect viewFrame = (CGRect){{0.0f, 0.0f}, {CGRectGetWidth(b), CGRectGetHeight(a) - DECTOR_HEIGHT}};
+    self.view.frame = viewFrame;
     
     CGFloat head_bg_img_scale = CGRectGetWidth(self.view.bounds) / HEADER_BACKGROUND_WIDTH;
     head_bg_img_startY = 0 - HEADER_BACKGROUND_Y_OFFSET * head_bg_img_scale;
     
-    container = [[UIScrollView alloc] initWithFrame:CGRectMake(0, DECTOR_HEIGHT, CGRectGetWidth(b), CGRectGetHeight(a) - DECTOR_HEIGHT)];
+    container = [[UIScrollView alloc] initWithFrame:viewFrame];
     container.backgroundColor = [UIColor COLOR_SNOW];
     container.alwaysBounceVertical = YES;
     container.delegate = self;
@@ -217,97 +222,26 @@
     }
     [self.view addSubview:container];
     
-    headerShadow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow.png"]];
-    headerShadow.frame = CGRectMake(0, CGRectGetMinY(container.frame) - 5, 640, 30);
-    [self.view addSubview:headerShadow];
-    {
-        tabLayer = [[EXTabLayer alloc] init];
-        tabLayer.frame = CGRectMake(0, head_bg_img_startY, HEADER_BACKGROUND_WIDTH * head_bg_img_scale, HEADER_BACKGFOUND_HEIGHT * head_bg_img_scale);
-        tabLayer.curveParamBase = CGPointMake(198, DECTOR_HEIGHT - head_bg_img_startY);
-        [tabLayer setNeedsLayout];
-        //[tabLayer setNeedsDisplay];
-        head_bg_point = tabLayer.mask.position;
-        [self.view.layer addSublayer:tabLayer];
-    }
-    
-    titleView = [[UILabel alloc] initWithFrame:CGRectMake(25, DECTOR_HEIGHT / 2 - 50 / 2, 290, 50)];
-    titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
-    titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
-    titleView.backgroundColor = [UIColor clearColor];
-    titleView.lineBreakMode = UILineBreakModeWordWrap;
-    titleView.numberOfLines = 2;
-    titleView.textAlignment = NSTextAlignmentCenter;
-    titleView.shadowColor = [UIColor blackColor];
-    titleView.shadowOffset = CGSizeMake(0.0f, 1.0f);
-    titleView.userInteractionEnabled = YES;
-    titleView.tag = kViewTagTitle;
-    [self.view addSubview:titleView];
-    
-    btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    CGRect backFrame = CGRectMake(0, 0, 40, 50);
-    backFrame.origin.y = DECTOR_HEIGHT / 2 - CGRectGetHeight(backFrame) / 2;
-    btnBack.frame = backFrame;
-    btnBack.imageEdgeInsets = UIEdgeInsetsMake(3.0, 0.0, 3.0, 20.0);
-    btnBack.backgroundColor = [UIColor clearColor];
-    [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
-    [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
-    btnBack.tag = kViewTagBack;
-    [self.view  addSubview:btnBack];
-    
-    // Gesture handler: need merge
-    UITapGestureRecognizer *singleHeaderTap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
-        if (_currentViewController == nil) {
-            if (titleView.hidden == NO){
-                [self showPopup:kPopupTypeEditTitle];
-                return;
-            }
-        }
-        [self hidePopupIfShown];
-    } delay:0.18];
-    [titleView addGestureRecognizer:singleHeaderTap];
-    
-    UITapGestureRecognizer *doubleHeaderTap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
-        [singleHeaderTap cancel];
-        [self hidePopupIfShown];
-        if (_currentViewController) {
-            [tabWidget switchTo:1 animated:NO];
-            [self swapChildViewController:1];
-        }
-    }];
-    doubleHeaderTap.numberOfTapsRequired = 2;
-    [titleView addGestureRecognizer:doubleHeaderTap];
-    
-    UISwipeGestureRecognizer *swipeHeaderTap = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
-        [self hidePopupIfShown];
-        if (sender.state == UIGestureRecognizerStateEnded) {
-            [self hidePopupIfShown];
-            
-            [self goBack];
-        }
-    }];
-    [titleView addGestureRecognizer:swipeHeaderTap];
-    
-    
-    
     UITapGestureRecognizer *mapTap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
         [self hidePopupIfShown];
+        UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
         
         NSInteger tagId = mapView.superview.tag;
         if (tagId == kViewTagContainer) {
+            CGRect f2 = [rootView convertRect:mapView.frame fromView:mapView.superview];
             [mapView removeFromSuperview];
-            CGRect f2 = [self.view convertRect:mapView.frame fromView:mapView.superview];
-            mapView.frame = CGRectOffset(f2, 0, CGRectGetMinY(container.frame) - container.contentOffset.y + 20);
+            mapView.frame = f2;
             savedFrame = mapView.frame;
             savedScrollEnable = mapView.scrollEnabled;
             mapView.scrollEnabled = YES;
-            [self.view addSubview:mapView];
+            [rootView addSubview:mapView];
             
-            [UIView animateWithDuration:0.233 animations:^{
-                mapView.frame = self.view.bounds;
+            container.scrollEnabled = NO;
+            [UIView animateWithDuration:0.233f animations:^{
+                mapView.frame = rootView.bounds;
             }];
-        }else{
-            [UIView animateWithDuration:0.233 animations:^{
+        } else {
+            [UIView animateWithDuration:0.233f animations:^{
                 mapView.frame = savedFrame;
             } completion:^(BOOL finished){
                 mapView.scrollEnabled = savedScrollEnable;
@@ -315,6 +249,7 @@
                 [mapShadow.superview insertSubview:mapView belowSubview:mapShadow];
                 [self setLayoutDirty];
                 [self relayoutUI];
+                container.scrollEnabled = YES;
             }];
             
             
@@ -322,13 +257,6 @@
     }];
     mapTap.delegate = self;
     [mapView addGestureRecognizer:mapTap];
-    
-    
-//    UITapGestureRecognizer *mapTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
-//    mapTap.delegate = self;
-//    [mapView addGestureRecognizer:mapTap];
-//    [mapTap release];
-    
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [container addGestureRecognizer:gestureRecognizer];
@@ -359,14 +287,7 @@
     [self refreshUI];
     
     if (_widgetId > kWidgetCross) {
-        [self swapChildViewController:_widgetId];
-    }
-    
-    if (tabWidget == nil) {
-        NSArray* imgs = [NSArray arrayWithObjects:[UIImage imageNamed:@"widget_x_30"], [UIImage imageNamed:@"widget_conv_30"], [UIImage imageNamed:@"widget_exfee_30"], nil];
-        tabWidget = [[EXTabWidget alloc] initWithFrame:CGRectMake(0, 65, CGRectGetWidth(self.view.bounds), 40) withImages:imgs current:_widgetId - 1];
-        tabWidget.delegate = self;
-        [self.view insertSubview:tabWidget belowSubview:btnBack];
+//        [self swapChildViewController:_widgetId];
     }
 }
 
@@ -397,25 +318,11 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [self hidePopupIfShown];
     [super viewWillDisappear:animated];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc{
-    [titleView release];
-//    [dectorView release];
-//    [headerView release];
-    
+- (void)dealloc {
     [descView release];
     [exfeeShowview release];
     [timeRelView release];
@@ -426,11 +333,6 @@
     [mapView release];
     [mapShadow release];
     [container release];
-    
-    [tabLayer release];
-    [tabWidget release];
-    
-    [headerShadow release];
 
     [_sortedInvitations release];
     
@@ -440,84 +342,43 @@
     [super dealloc];
 }
 
-#pragma mark == Update UI Views
-- (void)refreshUI{
+#pragma mark - Update UI Views
+
+- (void)refreshUI {
     [self fillCross:self.cross];
 }
 
-- (void)fillCross:(Cross*) x{
-    if (x != nil){
-        [self fillTitle:x];
-        [self fillBackground:x.widget];
+- (void)fillCross:(Cross*)x {
+    if (x != nil) {
         [self fillDescription:x];
         [self fillExfee:x.exfee];
         [self fillTime:x.time];
         [self fillPlace:x.place];
         [self fillConversationCount:x.conversation_count];
     }
+    
     [self relayoutUI];
 }
 
-- (void) fillTitle:(Cross*)x{
-    [titleView setText:x.title];
-}
-
-- (void) fillBackground:(NSArray*)widgets{
-    BOOL flag = NO;
-    for(NSDictionary *widget in widgets) {
-        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-            NSString* url = [widget objectForKey:@"image"];
-            if (url && url.length > 0) {
-                NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
-                UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
-                if(backimg == nil || [backimg isEqual:[NSNull null]]){
-                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                    dispatch_async(imgQueue, ^{
-                        // Not in Cache
-                        [tabLayer setimage:[UIImage imageNamed:@"x_titlebg_default.jpg"]];
-                        UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
-                                // Fill after download
-                                [tabLayer setimage:backimg];
-                            }
-                        });
-                    });
-                    dispatch_release(imgQueue);
-                }else{
-                    // Find in cache
-                    [tabLayer setimage:backimg];
-                }
-                flag = YES;
-                break;
-            }
-        }
-    }
-    if (flag == NO){
-        // Missing Background widget
-        [tabLayer setimage:[UIImage imageNamed:@"x_titlebg_default.jpg"]];
-    }
-}
-
-- (void) fillDescription:(Cross*)x{
+- (void)fillDescription:(Cross*)x {
     if (x.cross_description == nil || x.cross_description.length == 0){
         descView.hidden = YES;
         descView.text = @"";
         [self setLayoutDirty];
-    }else{
+    } else {
         descView.text = x.cross_description;
         descView.hidden = NO;
         [self setLayoutDirty];
     }
 }
 
-- (void)fillExfee:(Exfee*)exfee{
+- (void)fillExfee:(Exfee*)exfee {
     self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
     [exfeeShowview reloadData];
 }
 
-- (void)fillTime:(CrossTime*)time{
-    if (time != nil){
+- (void)fillTime:(CrossTime*)time {
+    if (time != nil) {
         NSString *title = [[time getTimeTitle] sentenceCapitalizedString];
         [title retain];
         if (title == nil || title.length == 0) {
@@ -527,13 +388,13 @@
             timeAbsView.hidden = NO;
             timeZoneView.text = @"";
             timeZoneView.hidden = YES;
-        }else{
+        } else {
             timeRelView.text = title;
             
             timeAbsView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
-            NSString* desc = [[time getTimeDescription] sentenceCapitalizedString];
+            NSString *desc = [[time getTimeDescription] sentenceCapitalizedString];
             [desc retain];
-            if(desc != nil && desc.length > 0){
+            if (desc != nil && desc.length > 0) {
                 timeAbsView.text = desc;
                 timeAbsView.hidden = NO;
                 [timeAbsView sizeToFit];
@@ -544,13 +405,13 @@
                     timeZoneView.hidden = NO;
                     timeZoneView.text = [NSString stringWithFormat:@"(%@)", tz];
                     [timeZoneView sizeToFit];
-                }else{
+                } else {
                     timeZoneView.hidden = YES;
                     timeZoneView.text = @"";
                 }
                 [tz release];
                 
-            }else{
+            } else {
                 timeAbsView.text = @"";
                 timeAbsView.hidden = YES;
                 timeZoneView.hidden = YES;
@@ -559,7 +420,7 @@
             [desc release];
         }
         [title release];
-    }else{
+    } else {
         timeRelView.text = @"Sometime";
         timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
         timeAbsView.text = @"Pick a time";
@@ -567,37 +428,38 @@
         timeZoneView.text = @"";
         timeZoneView.hidden = YES;
     }
+    
     [self setLayoutDirty];
 }
 
-- (void)fillPlace:(Place*)place{
-    if(place == nil || [place isEmpty]){
+- (void)fillPlace:(Place*)place {
+    if (place == nil || [place isEmpty]) {
         placeTitleView.text = @"Somewhere";
         placeDescView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
         placeDescView.text = @"Choose a place";
         placeDescView.hidden = NO;
         mapView.hidden = YES;
         [self setLayoutDirty];
-    }else {
+    } else {
         placeDescView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
-        if ([place hasTitle]){
+        if ([place hasTitle]) {
             placeTitleView.text = place.title;
             
-            if ([place hasDescription]){
+            if ([place hasDescription]) {
                 placeDescView.text = place.place_description;
                 placeDescView.hidden = NO;
                 [placeDescView sizeToFit];
-            }else{
+            } else {
                 placeDescView.text = @"";
                 placeDescView.hidden = YES;
             }
-        }else{
+        } else {
             placeTitleView.text = @"Somewhere";
             placeDescView.hidden = YES;
             //mapView.hidden = YES;
         }
         
-        if ([place hasGeo]){
+        if ([place hasGeo]) {
             mapView.hidden = NO;
             float delta = 0.005;
             CLLocationCoordinate2D location;
@@ -620,8 +482,7 @@
             [mapView addAnnotation:pin];
             [pin release];
             mapView.showsUserLocation = YES;
-            
-        }else{
+        } else {
             mapView.showsUserLocation = NO;
             mapView.hidden = YES;
         }
@@ -629,7 +490,7 @@
     }
 }
 
-- (void)fillConversationCount:(NSNumber*)count{
+- (void)fillConversationCount:(NSNumber*)count {
 //    if ([count intValue] > 0){
 //        widgetTabBar.contents = [NSArray arrayWithObjects:@"", [count stringValue], nil];
 //        tabBar.contents = [NSArray arrayWithObjects:@"", [count stringValue], nil];
@@ -639,13 +500,14 @@
 //    }
 }
 
-#pragma mark ==== Relayout methods
-- (void)relayoutUI{
+#pragma mark - Relayout methods
+
+- (void)relayoutUI {
     [self relayoutUIwithAnimation:NO];
 }
 
-- (void)relayoutUIwithAnimation:(BOOL)Animated{
-    if (layoutDirty == YES){
+- (void)relayoutUIwithAnimation:(BOOL)animated {
+    if (layoutDirty) {
         CGRect c = container.frame;
         
         float left = CONTAINER_VERTICAL_PADDING;
@@ -658,25 +520,31 @@
         if (descView.hidden == NO) {
             CGSize size = [descView sizeThatFits:CGSizeMake(width, INFINITY)];
             //descView.frame = CGRectMake(left , baseY, descView.frame.size.width, descView.frame.size.height);
-            if (Animated) {
-                [UIView beginAnimations:nil context:NULL];
-                [UIView setAnimationDuration:0.233];
-            }
-            CGRect newRect = CGRectMake(left , baseY, width, size.height);
-            descView.center = CGPointMake(CGRectGetMidX(newRect), CGRectGetMidY(newRect));
-            descView.bounds = CGRectMake(0 , 0, width, size.height);
-            if (Animated) {
-                [UIView commitAnimations];
-            }
+            
+//            [UIView setAnimationsEnabled:animated];
+//            [UIView beginAnimations:nil context:NULL];
+//            [UIView setAnimationDuration:0.233];
+            
+            [UIView animateWithDuration:0.233f
+                             animations:^{
+                                 CGRect newRect = CGRectMake(left , baseY, width, size.height);
+                                 descView.center = CGPointMake(CGRectGetMidX(newRect), CGRectGetMidY(newRect));
+                                 descView.bounds = CGRectMake(0 , 0, width, size.height);
+                             }
+                             completion:^(BOOL finished){
+                                 [UIView setAnimationsEnabled:YES];
+                             }];
+            
             baseX = left + size.width;
             baseY = baseY + size.height;
         }
-        if (Animated) {
+        
+        if (animated) {
             [UIView beginAnimations:nil context:NULL];
             [UIView setAnimationDuration:0.233];
         }
         // Exfee
-        if (exfeeShowview.hidden == NO){
+        if (exfeeShowview.hidden == NO) {
             if (descView.hidden == NO) {
                 baseY += DESC_BOTTOM_MARGIN;
             }
@@ -686,7 +554,7 @@
         }
         
         // Time
-        if (timeRelView.hidden == NO){
+        if (timeRelView.hidden == NO) {
             baseY += EXFEE_BOTTOM_MARGIN;
             CGSize timeRelSize = [timeRelView.text sizeWithFont:timeRelView.font];
             timeRelView.frame = CGRectMake(left, baseY, timeRelSize.width, timeRelSize.height);
@@ -695,7 +563,7 @@
                 baseY = CGRectGetMaxY(timeRelView.frame);
             }
             
-            if (timeAbsView.hidden == NO){
+            if (timeAbsView.hidden == NO) {
                 baseY += TIME_RELATIVE_BOTTOM_MARGIN;
             }else{
                 baseY += ADDITIONAL_SLOT;
@@ -703,7 +571,7 @@
             CGSize timeAbsSize = [timeAbsView.text sizeWithFont:timeAbsView.font];
             timeAbsView.frame = CGRectMake(left, baseY, timeAbsSize.width, timeAbsSize.height);
             
-            if (timeZoneView.hidden == NO){
+            if (timeZoneView.hidden == NO) {
                 CGSize timeZoneSize = CGSizeZero;
                 timeZoneSize = [timeZoneView.text sizeWithFont:timeZoneView.font];
                 if (baseX + timeZoneSize.width <= width){
@@ -712,20 +580,20 @@
                     timeZoneView.frame = CGRectMake(baseX, baseY, timeZoneSize.width, timeZoneSize.height);
                     baseX = CGRectGetMinX(timeAbsView.frame);
                     baseY = CGRectGetMaxY(timeAbsView.frame);
-                }else{
+                } else {
                     baseX = CGRectGetMinX(timeAbsView.frame);
                     baseY = CGRectGetMaxY(timeAbsView.frame) + SMALL_SLOT;
                     timeZoneView.frame = CGRectMake(baseX, baseY, timeZoneSize.width, timeZoneSize.height);
                     baseX = CGRectGetMinX(timeZoneView.frame);
                     baseY = CGRectGetMaxY(timeZoneView.frame);
                 }
-            }else if (timeAbsView.hidden == NO){
+            } else if (timeAbsView.hidden == NO){
                 baseY = CGRectGetMaxY(timeAbsView.frame);
             }
         }
         
         //Place
-        if (placeTitleView.hidden == NO){
+        if (placeTitleView.hidden == NO) {
             baseY += TIME_BOTTOM_MARGIN;
             CGSize placeTitleSize = [placeTitleView.text sizeWithFont:placeTitleView.font forWidth:placeTitleView.frame.size.width lineBreakMode:NSLineBreakByWordWrapping];
             placeTitleView.frame = CGRectMake(baseX, baseY, c.size.width  -  CONTAINER_VERTICAL_PADDING * 2 , placeTitleSize.height);
@@ -737,19 +605,19 @@
             baseY += PLACE_TITLE_BOTTOM_MARGIN;
         }
         
-        if (placeDescView.hidden == NO){
+        if (placeDescView.hidden == NO) {
             CGSize constraintSize;
             constraintSize.width = width;
             constraintSize.height = MAXFLOAT;
             CGSize placeDescSize = [placeDescView.text sizeWithFont:placeDescView.font constrainedToSize:constraintSize lineBreakMode:placeDescView.lineBreakMode];
             CGFloat ph = placeDescSize.height;
-            if (ph < PLACE_DESC_MIN_HEIGHT){
+            if (ph < PLACE_DESC_MIN_HEIGHT) {
                 ph = PLACE_DESC_MIN_HEIGHT;
-            }else if (ph > PLACE_DESC_MAX_HEIGHT){
+            } else if (ph > PLACE_DESC_MAX_HEIGHT) {
                 ph = PLACE_DESC_MAX_HEIGHT;
             }
             placeDescView.frame = CGRectMake(baseX, baseY, width, ph);
-        }else{
+        } else {
             placeDescView.frame = CGRectMake(baseX, baseY, 0, ADDITIONAL_SLOT);
         }
         
@@ -761,114 +629,99 @@
         mapShadow.hidden = mapView.hidden;
         
         CGSize s = container.contentSize;
-        if (mapView.hidden){
+        if (mapView.hidden) {
             s.height = CGRectGetMaxY(placeDescView.frame);
-        }else{
+        } else {
             s.height = CGRectGetMaxY(mapView.frame);
         }
         container.contentSize = s;
         
-        if (Animated) {
+        if (animated) {
             [UIView commitAnimations];
         }
         [self clearLayoutDirty];
     }
 }
 
-- (void)setLayoutDirty{
+- (void)setLayoutDirty {
     layoutDirty = YES;
 }
 
-- (void)clearLayoutDirty{
+- (void)clearLayoutDirty {
     layoutDirty = NO;
 }
 
-#pragma mark ==== Others
-- (void)showDescriptionFullContent:(BOOL)needfull{
-    if (needfull){
+#pragma mark - Others
+
+- (void)showDescriptionFullContent:(BOOL)needfull {
+    if (needfull) {
         if (descView.numberOfLines != 0){
             descView.numberOfLines = 0;
             [self setLayoutDirty];
         }
-    }else{
-        if (descView.numberOfLines == 0){
+    } else {
+        if (descView.numberOfLines == 0) {
             descView.numberOfLines = 4;
             [self setLayoutDirty];
         }
     }
+    
     [self relayoutUIwithAnimation:YES];
 }
 
-#pragma mark ==== Helpers
+#pragma mark - EXRSVPStatusViewDelegate methods
 
-
-#pragma mark == selector/delegate from UI Views
-- (void)gotoBack:(id)sender{
-    [self goBack];
-}
-
-- (void)switchWidget:(id)sender{
-    [self hidePopupIfShown];
-    UIView *v = sender;
-    [self swapChildViewController:v.tag];
-}
-
-- (void)switchTabWidget:(NSUInteger)idx
-{
-    [self switchTabWidget:idx param:nil];
-}
-- (void)switchTabWidget:(NSUInteger)idx param:(NSDictionary*)params
-{
-    [tabWidget switchTo:idx animated:NO];
-    [self swapChildViewController:idx param:params];
-    [self performSelector:@selector(hidePopupIfShown) withObject:tabWidget afterDelay:1];
-}
-
-#pragma mark EXRSVPStatusViewDelegate methods
-- (void)RSVPStatusView:(EXRSVPStatusView*)view clickfor:(Invitation*)invitation
-{
+- (void)RSVPStatusView:(EXRSVPStatusView *)view clickfor:(Invitation *)invitation {
     view.hidden = YES;
-    [self switchTabWidget:3 param:@{@"selected_invitation": invitation}];
+    NSArray *controllers = [self.tabBarViewController viewControllersForClass:[WidgetExfeeViewController class]];
+    
+    NSAssert(controllers.count, @"Should contain a WidgetExfeeViewController");
+    
+    WidgetExfeeViewController *exfeeViewController = controllers[0];
+    exfeeViewController.selected_invitation = invitation;
+    NSUInteger index = [self.tabBarViewController.viewControllers indexOfObject:exfeeViewController];
+    [self.tabBarViewController.tabBar setSelectedIndex:index];
+    [self performSelector:@selector(hidePopupIfShown) withObject:nil afterDelay:1.0f];
 }
 
-#pragma mark EXImagesCollectionView Datasource methods
+#pragma mark - EXImagesCollectionView Datasource methods
 
-- (NSInteger) numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
+- (NSInteger)numberOfimageCollectionView:(EXImagesCollectionView *)imageCollectionView{
     return [self.sortedInvitations count];
 }
-- (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index{
-    Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
-    EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
+
+- (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index {
+    Invitation *invitation = [self.sortedInvitations objectAtIndex:index];
+    EXInvitationItem *item = [[EXInvitationItem alloc] initWithInvitation:invitation];
     item.isMe = [[User getDefaultUser] isMe:invitation.identity];
     
     [[ImgCache sharedManager] fillAvatarWith:invitation.identity.avatar_filename
                                    byDefault:[UIImage imageNamed:@"portrait_default.png"]
-                                      using:^(UIImage *image) {
-                                          item.avatar = image;
-                                          [item setNeedsDisplay];
+                                       using:^(UIImage *image) {
+                                           item.avatar = image;
+                                           [item setNeedsDisplay];
                                       }];
     
     return [item autorelease];
 }
 
-- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height{
-    if (height > 0){
+- (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height {
+    if (height > 0) {
         exfeeSuggestHeight = height;
     }
+    
     [self setLayoutDirty];
     [self relayoutUI];
-    
 }
 
-#pragma mark EXImagesCollectionView delegate methods
+#pragma mark - EXImagesCollectionView delegate methods
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView didSelectRowAtIndex:(int)index row:(int)row col:(int)col frame:(CGRect)rect {
+    UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
     
-    if(index == [self.sortedInvitations count]){
-        
-    } else if(index < [self.sortedInvitations count]){
-        Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
-        CGPoint location = CGPointMake(CGRectGetMinX(exfeeShowview.frame) + (col+1)*(50+5*2)+5, CGRectGetMinY(exfeeShowview.frame) + row*(50+5*2)+y_start_offset);
-        CGPoint newLocation = [self.view convertPoint:location fromView:exfeeShowview.superview];
+    if (index < [self.sortedInvitations count]) {
+        Invitation *invitation = [self.sortedInvitations objectAtIndex:index];
+        CGPoint location = CGPointMake(CGRectGetMinX(exfeeShowview.frame) + (col + 1) * (50 + 5 * 2) + 5, CGRectGetMinY(exfeeShowview.frame) + row * (50 + 5 * 2) + y_start_offset);
+        CGPoint newLocation = [rootView convertPoint:location fromView:exfeeShowview.superview];
         
         int x = newLocation.x;
         int y = newLocation.y;
@@ -876,66 +729,68 @@
         if(x + 180 > self.view.frame.size.width){
             x = x - 180;
         }
-        if(rsvpstatusview==nil){
-            rsvpstatusview = [[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y-55, 180+12, 56)];
+        if (rsvpstatusview == nil) {
+            rsvpstatusview = [[EXRSVPStatusView alloc] initWithFrame:CGRectMake(x, y - 55, 180+12, 56)];
             rsvpstatusview.delegate = self;
-            [self.view addSubview:rsvpstatusview];
+            rsvpstatusview.hidden = YES;
+            [rootView addSubview:rsvpstatusview];
         }
-        rsvpstatusview.invitation=invitation;
-        
+        rsvpstatusview.invitation = invitation;
         
         float avatar_center = rect.origin.x + rect.size.width / 2;
         int rsvpstatus_x = avatar_center - rsvpstatusview.frame.size.width /2;
-        if(rsvpstatus_x < 0)
-            rsvpstatus_x = 0;
-        if(rsvpstatus_x + rsvpstatusview.frame.size.width > self.view.frame.size.width)
-            rsvpstatus_x = self.view.frame.size.width - rsvpstatusview.frame.size.width;
         
-        if([[User getDefaultUser] isMe:invitation.identity]){
+        if (rsvpstatus_x < 0) {
+            rsvpstatus_x = 0;
+        }
+        
+        if (rsvpstatus_x + rsvpstatusview.frame.size.width > self.view.frame.size.width) {
+            rsvpstatus_x = self.view.frame.size.width - rsvpstatusview.frame.size.width;
+        }
+        
+        if ([[User getDefaultUser] isMe:invitation.identity]) {
             NSInteger ctrlId = popupCtrolId;
             [self hidePopupIfShown:kPopupTypeEditStatus];
             if (ctrlId != kPopupTypeEditStatus) {
-                [self showMenu:invitation items:[NSArray arrayWithObjects:@"I'm in",@"Unavailable", nil]];
+                [self showMenu:invitation items:[NSArray arrayWithObjects:@"I'm in", @"Unavailable", nil]];
             }
-        }else{
-            [rsvpstatusview setHidden:NO];
+        } else {
+            rsvpstatusview.hidden = NO;
             
             [rsvpstatusview setFrame:CGRectMake(rsvpstatus_x, y-rsvpstatusview.frame.size.height, rsvpstatusview.frame.size.width, rsvpstatusview.frame.size.height)];
             
-            rsvpstatus_x-=rsvpstatusview.frame.origin.x;
-            CABasicAnimation *moveAnimation = [CABasicAnimation animationWithKeyPath:
-                                               @"transform.translation.y"];
-            moveAnimation.duration= 0.233;
-            moveAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+            rsvpstatus_x -= rsvpstatusview.frame.origin.x;
             
-            moveAnimation.fromValue =[NSNumber numberWithFloat:y-rsvpstatusview.frame.size.height+30-rsvpstatusview.frame.origin.y];
-            moveAnimation.toValue =[NSNumber numberWithFloat:y-rsvpstatusview.frame.size.height-rsvpstatusview.frame.origin.y+7];
+            CGFloat translationY = y - rsvpstatusview.frame.size.height - rsvpstatusview.frame.origin.y + 7;
+            CABasicAnimation *moveAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
+            moveAnimation.duration = 0.233f;
+            moveAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+            moveAnimation.fromValue = [NSNumber numberWithDouble:y - rsvpstatusview.frame.size.height + 30 - rsvpstatusview.frame.origin.y];
+            moveAnimation.toValue = [NSNumber numberWithDouble:translationY];
             moveAnimation.removedOnCompletion = NO;
             moveAnimation.fillMode = kCAFillModeForwards;
+            
             [[rsvpstatusview layer] addAnimation:moveAnimation forKey:@"moveAnimation"];
             
-            CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:
-                                                @"transform.scale"];
-            scaleAnimation.duration= 0.233;
+            CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+            scaleAnimation.duration = 0.233f;
             scaleAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-            
-            scaleAnimation.fromValue =[NSNumber numberWithInt:0.1];
-            scaleAnimation.toValue =[NSNumber numberWithInt:1];
+            scaleAnimation.fromValue = [NSNumber numberWithDouble:0.1f];
+            scaleAnimation.toValue = [NSNumber numberWithDouble:1.0f];
             scaleAnimation.removedOnCompletion = NO;
             scaleAnimation.fillMode = kCAFillModeForwards;
+            
             [[rsvpstatusview layer] addAnimation:scaleAnimation forKey:@"scaleAnimation"];
             
-            CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:
-                                                  @"opacity"];
+            CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
             opacityAnimation.duration= 0.3;
             opacityAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-            
-            opacityAnimation.fromValue =[NSNumber numberWithInt:0];
-            opacityAnimation.toValue =[NSNumber numberWithInt:1];
+            opacityAnimation.fromValue =[NSNumber numberWithDouble:0.0f];
+            opacityAnimation.toValue =[NSNumber numberWithDouble:1.0f];
             opacityAnimation.removedOnCompletion = NO;
             opacityAnimation.fillMode = kCAFillModeForwards;
-            [[rsvpstatusview layer] addAnimation:opacityAnimation forKey:@"opacityAnimation"];
             
+            [[rsvpstatusview layer] addAnimation:opacityAnimation forKey:@"opacityAnimation"];
             
             [rsvpstatusview setNeedsDisplay];
             [self hidePopupIfShown:kPopupTypeVewStatus];
@@ -943,22 +798,22 @@
     }
 }
 
-#pragma mark MKMapViewDelegate
-- (void)mapView:(MKMapView *)map didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated{
+#pragma mark - MKMapViewDelegate
+- (void)mapView:(MKMapView *)map didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated {
     
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *)map viewForAnnotation:(id < MKAnnotation >)annotation{
+- (MKAnnotationView *)mapView:(MKMapView *)map viewForAnnotation:(id < MKAnnotation >)annotation {
     MKAnnotationView *pinView = nil;
-    if(annotation != nil)
-    {
+    if (annotation != nil) {
         if ([annotation class] == MKUserLocation.class) {
             return nil;
         }
         
         static NSString *defaultPinID = @"com.exfe.pin";
         pinView = (MKAnnotationView *)[map dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
-        if ( pinView == nil ){
+        
+        if (pinView == nil) {
             pinView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID] autorelease];
             pinView.canShowCallout = YES;
             pinView.image = [UIImage imageNamed:@"map_pin_blue.png"];
@@ -967,44 +822,19 @@
             btnNav.frame = CGRectMake(0, 0, 30, 30);
             [btnNav setImage:[UIImage imageNamed:@"navi_btn.png"] forState:UIControlStateNormal];
             pinView.rightCalloutAccessoryView = btnNav;
-        }else{
+        } else {
             pinView.annotation = annotation;
         }
     }
     return pinView;
 }
 
-- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
     id<MKAnnotation> annotation = view.annotation;
     //NSString *title = annotation.title;
     CLLocationDegrees latitude = annotation.coordinate.latitude;
     CLLocationDegrees longitude = annotation.coordinate.longitude;
     //int zoom = 13;
-    
-    //    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
-    //        MKPlacemark *endLocation = [[MKPlacemark alloc] initWithCoordinate:annotation.coordinate addressDictionary:nil];
-    //        MKMapItem *endingItem = [[MKMapItem alloc] initWithPlacemark:endLocation];
-    //        NSMutableDictionary *launchOptions = [[NSMutableDictionary alloc] init];
-    //        [launchOptions setObject:MKLaunchOptionsDirectionsModeDriving forKey:MKLaunchOptionsDirectionsModeKey];
-    //        [endingItem openInMapsWithLaunchOptions:launchOptions];
-    //        [launchOptions release];
-    //        [endLocation release];
-    //        [endingItem release];
-    //    }else{
-    //        //NSString * query = [NSString stringWithFormat:@"q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
-    //        NSString * query = [NSString stringWithFormat:@"q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
-    //
-    //        NSString *mapurl = [NSString stringWithFormat:@"maps://maps?%@", query];
-    //        NSString *url4google = [NSString stringWithFormat:@"http://maps.google.com/maps?%@", query];
-    //        NSString *url4apple = [NSString stringWithFormat:@"http://maps.apple.com/?%@", query];
-    //        NSURL *url = [NSURL URLWithString:mapurl];
-    //        if ([[UIApplication sharedApplication] canOpenURL:url]) {
-    //            [[UIApplication sharedApplication] openURL:url];
-    //        }else{
-    //            url = [NSURL URLWithString:url4google];
-    //            [[UIApplication sharedApplication] openURL:url];
-    //        }
-    //    }
     
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0"))
     {
@@ -1013,237 +843,54 @@
         CLLocationCoordinate2D coordinate = annotation.coordinate; //CLLocationCoordinate2DMake(latitude,longitude);
         
         //create MKMapItem out of coordinates
-        MKPlacemark* placeMark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil];
-        MKMapItem* destination =  [[MKMapItem alloc] initWithPlacemark:placeMark];
+        MKPlacemark *placeMark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil];
+        MKMapItem *destination =  [[MKMapItem alloc] initWithPlacemark:placeMark];
         //        // Open in own app
         //        [destination openInMapsWithLaunchOptions:@{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving}];
         // Open in map app
-        [MKMapItem openMapsWithItems:[NSArray arrayWithObject:destination] launchOptions:@{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving}];
+        [MKMapItem openMapsWithItems:[NSArray arrayWithObject:destination] launchOptions:@{MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving}];
         [destination release];
         [placeMark release];
     } else{
         
         //using iOS 5 which has the Google Maps application
-        NSString* mapurl = [NSString stringWithFormat: @"maps://maps?saddr=Current+Location&daddr=Destination@%f,%f", latitude, longitude];
+        NSString *mapurl = [NSString stringWithFormat: @"maps://maps?saddr=Current+Location&daddr=Destination@%f,%f", latitude, longitude];
         // hide saddr=My+Location for web
-        NSString* mapurl4google = [NSString stringWithFormat: @"http://maps.google.com/maps?daddr=Destination@%f,%f", latitude, longitude];
+        NSString *mapurl4google = [NSString stringWithFormat: @"http://maps.google.com/maps?daddr=Destination@%f,%f", latitude, longitude];
         //        //add place title
         //        // title need encoding: invalide char->%xx & space->+
         //        // also change maps.google.com to maps.apple.com
         //        NSString *t = [title stringByReplacingOccurrencesOfString:@" " withString:@"+"];
         //        NSString* url = [NSString stringWithFormat: @"http://maps.google.com/maps?daddr=%@@%f,%f", t, latitude, longitude];
+        
         NSURL *url = [NSURL URLWithString:mapurl];
         if ([[UIApplication sharedApplication] canOpenURL:url]) {
             [[UIApplication sharedApplication] openURL:url];
-        }else{
+        } else {
             url = [NSURL URLWithString:mapurl4google];
             [[UIApplication sharedApplication] openURL:url];
         }
     }
-    
-    
 }
 
+#pragma mark － TODO gesture handler
 
-#pragma mark == ViewController Navigation
-- (void) goBack{
-    RKObjectManager* manager =[RKObjectManager sharedManager];
-    [manager.operationQueue cancelAllOperations];
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
--(void)moveLayer:(CALayer*)layer to:(CGPoint)point
-{
-    [self moveLayer:layer to:point duration:0.2];
-}
-
--(void)moveLayer:(CALayer*)layer to:(CGPoint)point duration:(NSTimeInterval)time
-{
-    // Prepare the animation from the current position to the new position
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
-    animation.duration = time;
-    animation.fromValue = [layer valueForKey:@"position"];
-    // iOS
-    animation.toValue = [NSValue valueWithCGPoint:point];
-    
-    // Update the layer's position so that the layer doesn't snap back when the animation completes.
-    layer.position = point;
-    
-    // Add the animation, overriding the implicit animation.
-    [layer addAnimation:animation forKey:@"position"];
-}
-
-#pragma mark == Helper methods for Header
-- (void) changeHeaderStyle:(NSInteger)style{
-    //CGRect a = [UIScreen mainScreen].applicationFrame;
-    switch (style) {
-        case kHeaderStyleHalf:{
-            titleView.frame = CGRectMake(25, 0, 290, 50);
-            titleView.lineBreakMode = UILineBreakModeTailTruncation;
-            titleView.numberOfLines = 1;
-            CGRect backFrame = btnBack.bounds;
-            backFrame.origin = CGPointMake(0, 0);
-            btnBack.frame = backFrame;
-            tabWidget.frame = CGRectMake(0, 65 - 30, CGRectGetWidth(self.view.bounds), 40);
-            [self moveLayer:tabLayer.mask to:CGPointMake(head_bg_point.x, head_bg_point.y - 30)];
-            tabLayer.maskPosition = CGPointMake(head_bg_point.x, head_bg_point.y - 30);
-        }   break;
-            
-        default:{
-            titleView.frame = CGRectMake(25, DECTOR_HEIGHT / 2 - CGRectGetHeight(titleView.bounds) / 2, 290, 50);
-            titleView.lineBreakMode = UILineBreakModeWordWrap;
-            titleView.numberOfLines = 2;
-            CGRect backFrame = btnBack.bounds;
-            backFrame.origin = CGPointMake(0, DECTOR_HEIGHT / 2 - CGRectGetHeight(backFrame) / 2);
-            btnBack.frame = backFrame;
-            tabWidget.frame = CGRectMake(0, 65, CGRectGetWidth(self.view.bounds), 40);
-            [self moveLayer:tabLayer.mask to:head_bg_point];
-            tabLayer.maskPosition = head_bg_point;
-        }  break;
-    }
-    _headerStyle = style;
-}
-
-#pragma mark == Helper methods for Content
--(void)swapViewControllers:childViewController{
-    //UIViewController *aNewViewController = [[UIViewController alloc] initWithNibName:@"childViewController" bundle:nil] ;
-    
-    
-    //[aNewViewController.view layoutIfNeeded];
-    // Custom new view controller UI;
-    
-    [self.currentViewController willMoveToParentViewController:nil];
-    [self addChildViewController:childViewController];
-    
-    __weak __block CrossGroupViewController *weakSelf=self;
-    [self transitionFromViewController:self.currentViewController
-                      toViewController:childViewController
-                              duration:1.0
-                               options:UIViewAnimationOptionTransitionCurlUp
-                            animations:nil
-                            completion:^(BOOL finished) {
-                                
-                                [weakSelf.currentViewController removeFromParentViewController];
-                                [childViewController didMoveToParentViewController:weakSelf];
-                                
-                                weakSelf.currentViewController = [childViewController autorelease];
-                            }];
-}
-- (void)swapChildViewController:(NSInteger)widget_id{
-    [self swapChildViewController:widget_id param:nil];
-}
-
-- (void)swapChildViewController:(NSInteger)widget_id param:(NSDictionary*)params{
-    
-    UIViewController *newVC = nil;
-    NSUInteger style = kHeaderStyleFull;
-    switch (widget_id) {
-        case kWidgetConversation:
-        {
-            WidgetConvViewController * conversationView =  [[WidgetConvViewController alloc]initWithNibName:@"WidgetConvViewController" bundle:nil] ;
-            // prepare data for conversation
-            conversationView.exfee_id = [_cross.exfee.exfee_id intValue];
-            Invitation* myInv = [_cross.exfee getMyInvitation];
-            if (myInv != nil){
-                conversationView.myIdentity = myInv.identity;
-            }
-            
-            // clean up data
-            _cross.conversation_count = 0;
-            [self fillConversationCount:0];
-            [NSNotificationCenter.defaultCenter postNotificationName:EXCrossListDidChangeNotification object:self];
-            
-            newVC = conversationView;
-            style = kHeaderStyleHalf;
-        }
-            break;
-        case kWidgetExfee:
-        {
-            WidgetExfeeViewController *exfeeView = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
-            exfeeView.exfee = _cross.exfee;
-            if (params) {
-                Invitation* inv = [params objectForKey:@"selected_invitation"];
-                if (inv != nil) {
-                    exfeeView.selected_invitation = inv;
-                }
-            }
-            exfeeView.onExitBlock = ^{
-                [self fillExfee:exfeeView.exfee];
-            };
-            
-            newVC = exfeeView;
-            style = kHeaderStyleHalf;
-        }
-            
-        default:
-            
-            
-            
-            break;
-    }
-    
-    BOOL needChangeHeadStyle = _headerStyle != style;
-    
-    if (newVC) {
-        [self addChildViewController:newVC];
-        [self.view insertSubview:newVC.view aboveSubview:headerShadow];
-        newVC.view.alpha = 0;
-        
-        swipeRightRecognizer.enabled = NO;
-        swipeLeftRecognizer.enabled = NO;
-    } else {
-        swipeRightRecognizer.enabled = YES;
-        swipeLeftRecognizer.enabled = YES;
-    }
-    __weak __block CrossGroupViewController *weakSelf = self;
-    [UIView animateWithDuration:0.233 animations:^{
-        if (weakSelf.currentViewController) {
-            weakSelf.currentViewController.view.alpha = 0;
-        }
-        if (newVC) {
-            newVC.view.alpha = 1;
-        }
-    }
-                     completion:^(BOOL finished){
-                         if (weakSelf.currentViewController) {
-                             
-                             [weakSelf.currentViewController.view removeFromSuperview];
-                             [weakSelf.currentViewController willMoveToParentViewController:nil];
-                             [weakSelf.currentViewController removeFromParentViewController];
-                             weakSelf.currentViewController = nil;
-                         }
-                         
-                         if (newVC) {
-                             [newVC didMoveToParentViewController:weakSelf];
-                             weakSelf.currentViewController = [newVC autorelease];
-                         }
-                         if (needChangeHeadStyle) {
-                             [UIView animateWithDuration:0.2
-                                              animations:^{
-                                                  [self changeHeaderStyle:style];
-                                              }];
-                         }
-                         
-                     }];
-}
-
-
-#pragma mark TODO gesture handler
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     CGPoint location = [gestureRecognizer locationInView:gestureRecognizer.view];
     CGPoint center = gestureRecognizer.view.center;
-    if (ABS(location.x - center.x) < 30 && ABS(location.y - center.y) < 30){
+    
+    if (ABS(location.x - center.x) < 30 && ABS(location.y - center.y) < 30) {
         return NO;
     }
     
     return YES;
 }
 
-- (void)hidePopupIfShown{
+- (void)hidePopupIfShown {
     [self hidePopupIfShown:0];
 }
 
-- (void)hidePopupIfShown:(NSInteger)skipId{
+- (void)hidePopupIfShown:(NSInteger)skipId {
     NSInteger ctrlid = skipId & MASK_LOW_BITS;
     
     if (ctrlid != (kPopupTypeEditStatus & MASK_LOW_BITS)) {
@@ -1268,7 +915,7 @@
     popupCtrolId = skipId;
 }
 
-- (void)showPopup:(NSInteger)ctrlId{
+- (void)showPopup:(NSInteger)ctrlId {
     if (ctrlId == 0 ) {
         [self hidePopupIfShown];
         return;
@@ -1279,7 +926,7 @@
         [self hidePopupIfShown:ctrlId];
         switch (low) {
             case kPopupTypeEditTitle & MASK_LOW_BITS:
-                [self showTtitleAndDescEditMenu:titleView];
+                [self showTtitleAndDescEditMenu:self.tabBarViewController.tabBar.titleLabel];
                 break;
             case kPopupTypeEditDescription & MASK_LOW_BITS:
                 [self showTtitleAndDescEditMenu:descView];
@@ -1302,7 +949,7 @@
     }
 }
 
-- (void)handleSwipe:(UISwipeGestureRecognizer*)sender{
+- (void)handleSwipe:(UISwipeGestureRecognizer*)sender {
     CGPoint location = [sender locationInView:sender.view];
     
     if (sender.state == UIGestureRecognizerStateEnded) {
@@ -1312,13 +959,6 @@
         if (descView.hidden == NO && CGRectContainsPoint([Util expandRect:descView.frame], locInContainer)) {
             [self showTimeEditMenu:descView];
             [self clickforTitleAndDescEdit:descView];
-            return;
-        }
-        
-        if (CGRectContainsPoint([Util expandRect:[exfeeShowview frame]], locInContainer)) {
-            
-            [self showTimeEditMenu:descView];
-            [self switchTabWidget:3];
             return;
         }
         
@@ -1353,13 +993,10 @@
             [self clickforPlaceEdit:placeTitleView];
             return;
         }
-        
-        
-        
     }
 }
 
-- (void)handleTap:(UITapGestureRecognizer*)sender{
+- (void)handleTap:(UITapGestureRecognizer*)sender {
     CGPoint location = [sender locationInView:sender.view];
     
     if (sender.state == UIGestureRecognizerStateEnded) {
@@ -1414,46 +1051,49 @@
 
 
 #pragma mark TODO trigger from gesture
-- (void)clickforTitleAndDescEdit:(id)sender{
+
+- (void)clickforTitleAndDescEdit:(id)sender {
     [self showTitleAndDescView];
-    [self performSelector:@selector(hidePopupIfShown) withObject:sender afterDelay:1];
+    [self performSelector:@selector(hidePopupIfShown) withObject:nil afterDelay:1];
     // title & desc need the current popupctrlid info to determing the focus. keep the sequence.
 }
 
-- (void)clickforTimeEdit:(id)sender{
-    [self performSelector:@selector(hidePopupIfShown) withObject:sender afterDelay:1];
-    //[self hidePopupIfShown];
+- (void)clickforTimeEdit:(id)sender {
+    [self performSelector:@selector(hidePopupIfShown) withObject:nil afterDelay:1];
     [self showTimeView];
 }
 
-- (void)clickforPlaceEdit:(id)sender{
-    [self performSelector:@selector(hidePopupIfShown) withObject:sender afterDelay:1];
-    [self ShowPlaceView:@"search"];
+- (void)clickforPlaceEdit:(id)sender {
+    [self performSelector:@selector(hidePopupIfShown) withObject:nil afterDelay:1];
+    [self showPlaceView:@"search"];
 }
 
-- (void)clickforMenuEdit:(id)sender{
+- (void)clickforMenuEdit:(id)sender {
     UIView *v = sender;
     switch (v.tag) {
         case kViewTagTitle & kViewTagMaskLayerTwo:
         case kViewTagDescription & kViewTagMaskLayerTwo:
             [self showTitleAndDescView];
-            [self performSelector:@selector(hidePopupIfShown) withObject:sender afterDelay:1];
+            [self performSelector:@selector(hidePopupIfShown) withObject:nil afterDelay:1];
             break;
         case kViewTagTimeTitle & kViewTagMaskLayerTwo:
-            [self performSelector:@selector(hidePopupIfShown) withObject:sender afterDelay:1];
+            [self performSelector:@selector(hidePopupIfShown) withObject:nil afterDelay:1];
             [self showTimeView];
             break;
         case kViewTagPlaceTitle & kViewTagMaskLayerTwo:
-            [self performSelector:@selector(hidePopupIfShown) withObject:sender afterDelay:1];
-            [self ShowPlaceView:@"search"];
+            [self performSelector:@selector(hidePopupIfShown) withObject:nil afterDelay:1];
+            [self showPlaceView:@"search"];
             break;
         default:
             break;
     }
 }
 
-#pragma mark Edit Menu API
-- (void) showTtitleAndDescEditMenu:(UIView*)sender{
+#pragma mark - Edit Menu API
+
+- (void)showTtitleAndDescEditMenu:(UIView *)sender {
+    UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    
     if (titleAndDescEditMenu == nil) {
         titleAndDescEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
         titleAndDescEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
@@ -1465,40 +1105,19 @@
         titleAndDescEditMenu.layer.cornerRadius = 1.5;
         titleAndDescEditMenu.layer.masksToBounds = YES;
         [titleAndDescEditMenu addTarget:self action:@selector(clickforTitleAndDescEdit:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:titleAndDescEditMenu];
+        [rootView addSubview:titleAndDescEditMenu];
     }
-    CGPoint newLocation = [self.view convertPoint:sender.frame.origin fromView:sender.superview];
-    CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), newLocation.y + SMALL_SLOT, 50, 44);
-    titleAndDescEditMenu.frame = original;
-    titleAndDescEditMenu.hidden = NO;
     
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
-    [titleAndDescEditMenu setFrame:CGRectOffset(titleAndDescEditMenu.frame, 2 - CGRectGetWidth(titleAndDescEditMenu.frame), 0)];
-    [UIView commitAnimations];
+    [self _showMenu:titleAndDescEditMenu from:sender animated:YES];
 }
 
-
-- (void) hideTitleAndDescEditMenuWithAnimation:(BOOL)animated{
-    if (animated) {
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.3];
-        [titleAndDescEditMenu setFrame:CGRectOffset(titleAndDescEditMenu.frame, CGRectGetWidth(self.view.frame) - CGRectGetWidth(titleAndDescEditMenu.frame), 0)];
-        [UIView setAnimationDidStopSelector:@selector(hideTitleAndDescEditMenuNow)];
-        [UIView commitAnimations];
-    }else{
-        [self hideTitleAndDescEditMenuNow];
-    }
+- (void)hideTitleAndDescEditMenuWithAnimation:(BOOL)animated {
+    [self _dismissMenu:titleAndDescEditMenu animated:animated];
 }
 
-- (void)hideTitleAndDescEditMenuNow{
-    if (titleAndDescEditMenu != nil && titleAndDescEditMenu.hidden == NO) {
-        titleAndDescEditMenu.hidden = YES;
-    }
-}
-
-
-- (void) showTimeEditMenu:(UIView*)sender{
+- (void)showTimeEditMenu:(UIView*)sender {
+    UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    
     if (timeEditMenu == nil) {
         timeEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
         timeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
@@ -1510,39 +1129,19 @@
         timeEditMenu.layer.cornerRadius = 1.5;
         timeEditMenu.layer.masksToBounds = YES;
         [timeEditMenu addTarget:self action:@selector(clickforTimeEdit:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:timeEditMenu];
+        [rootView addSubview:timeEditMenu];
     }
-    CGPoint newLocation = [timeEditMenu.superview convertPoint:sender.frame.origin fromView:sender.superview];
-    CGRect original = CGRectMake(CGRectGetWidth(timeEditMenu.superview.bounds), newLocation.y + SMALL_SLOT, 50, 44);
-    timeEditMenu.frame = original;
-    timeEditMenu.hidden = NO;
     
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
-    [timeEditMenu setFrame:CGRectOffset(timeEditMenu.frame, 2 - CGRectGetWidth(timeEditMenu.frame), 0)];
-    [UIView commitAnimations];
+    [self _showMenu:timeEditMenu from:sender animated:YES];
 }
 
-
-- (void) hideTimeEditMenuWithAnimation:(BOOL)animated{
-    if (animated) {
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.3];
-        [timeEditMenu setFrame:CGRectOffset(timeEditMenu.frame, CGRectGetWidth(self.view.frame) - CGRectGetWidth(timeEditMenu.frame), 0)];
-        [UIView setAnimationDidStopSelector:@selector(hideTimeEditMenuNow)];
-        [UIView commitAnimations];
-    }else{
-        [self hideTimeEditMenuNow];
-    }
+- (void)hideTimeEditMenuWithAnimation:(BOOL)animated {
+    [self _dismissMenu:timeEditMenu animated:animated];
 }
 
-- (void)hideTimeEditMenuNow{
-    if (timeEditMenu != nil && timeEditMenu.hidden == NO) {
-        timeEditMenu.hidden = YES;
-    }
-}
-
-- (void) showPlaceEditMenu:(UIView*)sender{
+- (void)showPlaceEditMenu:(UIView*)sender {
+    UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    
     if (placeEditMenu == nil) {
         placeEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
         placeEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
@@ -1554,130 +1153,37 @@
         placeEditMenu.layer.cornerRadius = 1.5;
         placeEditMenu.layer.masksToBounds = YES;
         [placeEditMenu addTarget:self action:@selector(clickforPlaceEdit:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:placeEditMenu];
+        [rootView addSubview:placeEditMenu];
     }
-    CGPoint newLocation = [placeEditMenu.superview convertPoint:sender.frame.origin fromView:sender.superview];
-    CGRect original = CGRectMake(CGRectGetWidth(placeEditMenu.superview.bounds), newLocation.y + SMALL_SLOT, 50, 44);
-    placeEditMenu.frame = original;
-    placeEditMenu.hidden = NO;
+
+    // show animation
+    [self _showMenu:placeEditMenu from:sender animated:YES];
+}
+
+- (void)hidePlaceEditMenuWithAnimation:(BOOL)animated {
+    [self _dismissMenu:placeEditMenu animated:animated];
     
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
-    [placeEditMenu setFrame:CGRectOffset(placeEditMenu.frame, 2 - CGRectGetWidth(placeEditMenu.frame), 0)];
-    [UIView commitAnimations];
 }
 
-- (void) hidePlaceEditMenuWithAnimation:(BOOL)animated{
-    if (animated) {
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.3];
-        [placeEditMenu setFrame:CGRectOffset(placeEditMenu.frame, CGRectGetWidth(self.view.frame) - CGRectGetWidth(placeEditMenu.frame), 0)];
-        [UIView setAnimationDidStopSelector:@selector(hidePlaceEditMenuNow)];
-        [UIView commitAnimations];
-    }else{
-        [self hidePlaceEditMenuNow];
-    }
-}
-
-- (void)hidePlaceEditMenuNow{
-    if (placeEditMenu != nil && placeEditMenu.hidden == NO) {
-        placeEditMenu.hidden = YES;
-    }
-}
-
-- (void) showPopupEditMenu:(UIView*)sender{
-    UIButton* _popupEditMenu = nil;
-    if (_popupEditMenu == nil) {
-        _popupEditMenu = [UIButton buttonWithType:UIButtonTypeCustom];
-        _popupEditMenu.frame = CGRectMake(CGRectGetWidth(self.view.frame), CGRectGetMinY(sender.frame), 50, 44);
-        [_popupEditMenu setImage:[UIImage imageNamed:@"edit_30.png"] forState:UIControlStateNormal];
-        [_popupEditMenu setImage:[UIImage imageNamed:@"edit_30_pressed.png"] forState:UIControlStateHighlighted];
-        _popupEditMenu.backgroundColor = [UIColor COLOR_WA(0x33, 0xF5)];
-        _popupEditMenu.layer.borderWidth = 0.5;
-        _popupEditMenu.layer.borderColor = [UIColor COLOR_WA(0xFF, 0x20)].CGColor;
-        _popupEditMenu.layer.cornerRadius = 1.5;
-        _popupEditMenu.layer.masksToBounds = YES;
-        [_popupEditMenu addTarget:self action:@selector(clickforMenuEdit:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:_popupEditMenu];
-    }
-    CGPoint newLocation = [_popupEditMenu.superview convertPoint:sender.frame.origin fromView:sender.superview];
-    CGRect original = CGRectMake(CGRectGetWidth(_popupEditMenu.superview.bounds), newLocation.y + SMALL_SLOT, 50, 44);
-    _popupEditMenu.frame = original;
-    _popupEditMenu.hidden = NO;
-    _popupEditMenu.tag = sender.tag;
+- (void)showMenu:(Invitation*)_invitation items:(NSArray*)itemslist {
+    UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
     
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
-    [_popupEditMenu setFrame:CGRectOffset(_popupEditMenu.frame, 2 - CGRectGetWidth(_popupEditMenu.frame), 0)];
-    [UIView commitAnimations];
-}
-
-- (void) hidePopupEditMenuWithAnimation:(BOOL)animated{
-    UIButton* _popupEditMenu = nil;
-    if (animated) {
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.3];
-        [_popupEditMenu setFrame:CGRectOffset(_popupEditMenu.frame, CGRectGetWidth(self.view.frame) - CGRectGetWidth(_popupEditMenu.frame), 0)];
-        [UIView setAnimationDidStopSelector:@selector(hidePopupEditMenuNow)];
-        [UIView commitAnimations];
-    }else{
-        [self hidePopupEditMenuNow];
+    if (rsvpmenu == nil) {
+        rsvpmenu = [[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44) withDelegate:self items:itemslist showTitleBar:YES];
+        [rootView addSubview:rsvpmenu];
     }
-}
-
-- (void)hidePopupEditMenuNow{
-    UIButton* _popupEditMenu = nil;
-    if (_popupEditMenu != nil && _popupEditMenu.hidden == NO) {
-        _popupEditMenu.hidden = YES;
-    }
-}
-
-
-- (void) showMenu:(Invitation*)_invitation items:(NSArray*)itemslist{
-    if(rsvpmenu == nil){
-        rsvpmenu=[[EXRSVPMenuView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, exfeeShowview.frame.origin.y-20, 125, 20+[itemslist count]*44) withDelegate:self items:itemslist showTitleBar:YES];
-        [self.view addSubview:rsvpmenu];
-    }
-    CGPoint newLocation = [rsvpmenu.superview convertPoint:exfeeShowview.frame.origin fromView:exfeeShowview.superview];
+    
+    CGPoint newLocation = [rootView convertPoint:exfeeShowview.frame.origin fromView:exfeeShowview.superview];
     [rsvpmenu setFrame:CGRectMake(CGRectGetWidth(rsvpmenu.superview.bounds), newLocation.y - 20, 125, 20+[itemslist count]*44)];
     
     rsvpmenu.invitation = _invitation;
     rsvpmenu.hidden = NO;
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
-    rsvpmenu.frame = CGRectOffset(rsvpmenu.frame, 0 - CGRectGetWidth(rsvpmenu.frame), 0);
-    [UIView commitAnimations];
     
-    //    [UIView beginAnimations:nil context:NULL];
-    //    [UIView setAnimationDuration:0.3];
-    //
-    //    if(rsvpstatusview!=nil)
-    //       [rsvpstatusview setHidden:YES];
-    //
-    //    [UIView commitAnimations];
-    
+    [self _showMenu:rsvpmenu from:nil animated:YES];
 }
-
-
-
 
 - (void)hideMenuWithAnimation:(BOOL)animated{
-    if (animated) {
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.3];
-        [rsvpmenu setFrame:CGRectMake(self.view.frame.size.width, rsvpmenu.frame.origin.y, 125, 152)];
-        [UIView setAnimationDidStopSelector:@selector(hideMenuNow)];
-        [UIView commitAnimations];
-    }else{
-        [self hideMenuNow];
-    }
-    
-}
-
-- (void)hideMenuNow{
-    if (rsvpmenu != nil && rsvpmenu.hidden == NO) {
-        rsvpmenu.hidden = YES;
-    }
+    [self _dismissMenu:rsvpmenu animated:animated];
 }
 
 - (void)hideStatusView{
@@ -1686,76 +1192,83 @@
     }
 }
 
+#pragma mark - RSVP Action Handler
+
 - (void)RSVPAcceptedMenuView:(EXRSVPMenuView *) menu{
     [self sendrsvp:@"ACCEPTED" invitation:menu.invitation];
     [self hidePopupIfShown];
-    //[self hideMenuWithAnimation:YES];
 }
 
 - (void)RSVPUnavailableMenuView:(EXRSVPMenuView *) menu{
     [self sendrsvp:@"DECLINED" invitation:menu.invitation];
     [self hidePopupIfShown];
-    //[self hideMenuWithAnimation:YES];
 }
 
 - (void)RSVPPendingMenuView:(EXRSVPMenuView *) menu{
     [self sendrsvp:@"INTERESTED" invitation:menu.invitation];
     [self hidePopupIfShown];
-    //[self hideMenuWithAnimation:YES];
 }
 
-#pragma mark show Edit View Controller
-- (void) showTitleAndDescView{
-    TitleDescEditViewController *titleViewController=[[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
-    titleViewController.delegate=self;
+#pragma mark - Show Edit View Controller
+
+- (void)showTitleAndDescView {
+    TitleDescEditViewController *titleViewController = [[TitleDescEditViewController alloc] initWithNibName:@"TitleDescEditViewController" bundle:nil];
+    titleViewController.delegate = self;
     NSString *imgurl = nil;
-    for(NSDictionary *widget in (NSArray*)_cross.widget) {
-        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+    for (NSDictionary *widget in (NSArray*)_cross.widget) {
+        if ([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
             imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
             break;
         }
     }
-    titleViewController.imgurl=imgurl;
+    titleViewController.imgurl = imgurl;
     titleViewController.editFieldHint = popupCtrolId & MASK_LOW_BITS;
-    [self presentModalViewController:titleViewController animated:YES];
+    [self.tabBarViewController presentViewController:titleViewController
+                                            animated:YES
+                                          completion:nil];
     [titleViewController setCrossTitle:_cross.title desc:_cross.cross_description];
     [titleViewController release];
 }
 
-- (void) showTimeView{
-    TimeViewController *timeViewController=[[TimeViewController alloc] initWithNibName:@"TimeViewController" bundle:nil];
-    timeViewController.delegate=self;
+- (void)showTimeView {
+    TimeViewController *timeViewController = [[TimeViewController alloc] initWithNibName:@"TimeViewController" bundle:nil];
+    timeViewController.delegate = self;
     [timeViewController setDateTime:_cross.time];
-    [self presentModalViewController:timeViewController animated:YES];
+    [self.tabBarViewController presentViewController:timeViewController
+                                            animated:YES
+                                          completion:nil];
     [timeViewController release];
 }
 
-- (void) ShowPlaceView:(NSString*)status{
-    PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
-    placeViewController.delegate=self;
-    if(_cross.place!=nil){
-        if(![_cross.place.title isEqualToString:@""] || ( ![_cross.place.lat isEqualToString:@""] || ![_cross.place.lng isEqualToString:@""])){
+- (void)showPlaceView:(NSString*)status {
+    PlaceViewController *placeViewController = [[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
+    placeViewController.delegate = self;
+    
+    if (_cross.place != nil) {
+        if (![_cross.place.title isEqualToString:@""] || ( ![_cross.place.lat isEqualToString:@""] || ![_cross.place.lng isEqualToString:@""])) {
             [placeViewController setPlace:_cross.place isedit:YES];
-        }
-        else{
-            placeViewController.isaddnew=YES;
-            placeViewController.showtableview=YES;
+        } else {
+            placeViewController.isaddnew = YES;
+            placeViewController.showtableview = YES;
             status=@"search";
-            
         }
-    }else{
+    } else {
         placeViewController.isaddnew=YES;
     }
-    if([status isEqualToString:@"detail"]){
-        placeViewController.showdetailview=YES;
-    }else if([status isEqualToString:@"search"]){
-        placeViewController.showtableview=YES;
+    
+    if ([status isEqualToString:@"detail"]) {
+        placeViewController.showdetailview = YES;
+    } else if([status isEqualToString:@"search"]) {
+        placeViewController.showtableview = YES;
     }
-    [self presentModalViewController:placeViewController animated:YES];
+    
+    [self.tabBarViewController presentViewController:placeViewController
+                                            animated:YES
+                                          completion:nil];
     [placeViewController release];
 }
 
-#pragma mark API request for modification.
+#pragma mark - API request for modification.
 - (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
     Identity *myidentity = [_cross.exfee getMyInvitation].identity;
     
@@ -1797,43 +1310,40 @@
                                      }];
 }
 
-#pragma mark Navigation
+#pragma mark - EditCrossDelegate
 
-#pragma mark EditCrossDelegate
-- (void) addExfee:(NSArray*) invitations{
+- (void)addExfee:(NSArray *)invitations {
     [_cross.exfee addInvitations:[NSSet setWithArray:invitations]];
     //[self saveCrossUpdate];
     [self fillExfee:_cross.exfee];
 }
 
-- (void) setTime:(CrossTime*)time{
-    _cross.time=time;
+- (void)setTime:(CrossTime *)time {
+    _cross.time = time;
     [self saveCrossUpdate];
     [self fillTime:time];
     [self relayoutUI];
 }
 
-- (void) setPlace:(Place*)place{
-    _cross.place=place;
+- (void)setPlace:(Place*)place {
+    _cross.place = place;
     [self saveCrossUpdate];
     [self fillPlace:place];
     [self relayoutUI];
 }
 
-- (void) setTitle:(NSString*)title Description:(NSString*)desc{
-    if(_cross.title!=title){
+- (void)setTitle:(NSString*)title Description:(NSString*)desc {
+    if (_cross.title != title) {
         //title_be_edit=YES;
     }
-    _cross.title=title;
-    _cross.cross_description=desc;
+    _cross.title = title;
+    _cross.cross_description = desc;
     [self saveCrossUpdate];
-    [self fillTitle:_cross];
     [self fillDescription:_cross];
     [self relayoutUI];
 }
 
-- (void)saveCrossUpdate{
-    
+- (void)saveCrossUpdate {
     MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"Saving";
     hud.mode=MBProgressHUDModeCustomView;
@@ -1875,9 +1385,9 @@
                                     }];
 }
 
-#pragma mark UIAlertView methods
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
+#pragma mark - UIAlertView methods
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     //tag 101: save cross
     //tag 102: save exfee
     switch (alertView.tag) {
@@ -1921,8 +1431,9 @@
     }
 }
 
-#pragma mark UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     [self hidePopupIfShown];
     
     CGPoint offset = scrollView.contentOffset;
@@ -1930,44 +1441,63 @@
         CGSize size = scrollView.contentSize;
         if (size.height - offset.y <= CGRectGetHeight(scrollView.bounds) + 5) {
             mapView.scrollEnabled = YES;
-//            mapView.userInteractionEnabled = YES;
-        }else{
-//            mapView.userInteractionEnabled = NO;
+        } else {
             mapView.scrollEnabled = NO;
         }
     }
-    
-    if (offset.y < 0) {
-        headerShadow.hidden = YES;
-    }else{
-        if (headerShadow.hidden == YES) {
-            headerShadow.hidden = NO;
-        }
-    }
 }
 
-#pragma mark EXTabWidgetDelegate
-- (void)widgetClick:(id)tab withButton:(id)widget{
-    [self switchWidget:widget];
-}
+#pragma mark - Private
 
-- (void)updateLayout:(id)sender animationWithParam:(NSDictionary*)param{
-    // @"width"
-    // @"animationTime"
-    NSString *w = [param objectForKey:@"width"];
-    CGFloat width = [w floatValue];
-    NSString *t = [param objectForKey:@"animationTime"];
-    NSTimeInterval time = [t doubleValue];
+- (void)_showMenu:(UIView *)view from:(UIView *)sender animated:(BOOL)animated {
+    if ([view.layer animationForKey:@"show"])
+        return;
     
-    CGPoint p = head_bg_point;
-    CGPoint c = tabLayer.curveParamBase;
-    float offset = 0;
-    if (_headerStyle == kHeaderStyleHalf) {
-        offset = 30;
+    UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    
+    if (sender) {
+        CGPoint newLocation = [rootView convertPoint:sender.frame.origin fromView:sender.superview];
+        CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), newLocation.y + SMALL_SLOT, 50, 44);
+        view.frame = original;
     }
     
-    [self moveLayer:tabLayer.mask to:CGPointMake(p.x - c.x + width, p.y - offset) duration:time];
+    view.hidden = NO;
+    
+    // show animation
+    CATransform3D newTransform = CATransform3DMakeTranslation(2.0f - CGRectGetWidth(view.frame), 0.0f, 0.0f);
+    
+    if (animated) {
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+        animation.duration = 0.233f;
+        animation.fromValue = [view.layer valueForKey:@"transform"];
+        animation.toValue = [NSValue valueWithCATransform3D:newTransform];
+        animation.fillMode = kCAFillModeForwards;
+        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        
+        [view.layer addAnimation:animation forKey:@"show"];
+    }
+    
+    view.layer.transform = newTransform;
 }
 
+- (void)_dismissMenu:(UIView *)view animated:(BOOL)animated {
+    if ([view.layer animationForKey:@"hide"])
+        return;
+    
+    CATransform3D newTransform = CATransform3DIdentity;
+    
+    if (animated) {
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+        animation.duration = 0.233f;
+        animation.fromValue = [view.layer valueForKey:@"transform"];
+        animation.toValue = [NSValue valueWithCATransform3D:newTransform];
+        animation.fillMode = kCAFillModeForwards;
+        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        
+        [view.layer addAnimation:animation forKey:@"hide"];
+    }
+    
+    view.layer.transform = newTransform;
+}
 
 @end

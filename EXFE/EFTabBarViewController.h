@@ -10,13 +10,15 @@
 
 #import "EFTabBar.h"
 
+typedef void (^EFTabBarTitlePressedBlock)(void);
 typedef void (^EFTabBarBackButtonBlock)(void);
 
-@class EFTabBarItem;
+@class EFTabBarItem, EFTabBarViewController;
 @protocol EFTabBarDataSource <NSObject>
 @required
 @property (nonatomic, retain) EFTabBarItem *customTabBarItem;
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
+@property (nonatomic, assign) EFTabBarViewController *tabBarViewController;     // You DON'T need to set this, tabBarViewController will set it.
 @end
 
 @class EFTabBar;
@@ -31,11 +33,14 @@ typedef void (^EFTabBarBackButtonBlock)(void);
 @property (nonatomic, assign) NSUInteger defaultIndex;
 @property (nonatomic, assign) UIViewController<EFTabBarDataSource> *defaultViewController;
 
+@property (nonatomic, copy) EFTabBarTitlePressedBlock titlePressedHandler;      // Default as nil
 @property (nonatomic, copy) EFTabBarBackButtonBlock backButtonActionHandler;    // Default as nil, if you set it, you should handle the dismiss or pop action
 
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 
 - (void)setSelectedViewController:(UIViewController<EFTabBarDataSource> *)selectedViewController animated:(BOOL)animated;
 - (void)setSelectedIndex:(NSUInteger)selectedIndex animated:(BOOL)animated;
+
+- (NSArray *)viewControllersForClass:(Class)controllerClass;    // return an empty array if has not found.
 
 @end

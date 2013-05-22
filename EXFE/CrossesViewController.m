@@ -23,6 +23,9 @@
 #import "CrossGroupViewController.h"
 #import "EFAPIServer.h"
 #import "EFHeadView.h"
+#import "EFKit.h"
+#import "WidgetConvViewController.h"
+#import "WidgetExfeeViewController.h"
 
 
 @interface CrossesViewController ()
@@ -768,39 +771,132 @@
         if(cross.updated!=nil)
         {
             id updated=cross.updated;
-            if([updated isKindOfClass:[NSDictionary class]]){
-                NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
-                NSString *key=nil;
+            if ([updated isKindOfClass:[NSDictionary class]]) {
+                NSEnumerator *enumerator = [(NSDictionary*)updated keyEnumerator];
+                NSString *key = nil;
                 
-                while (key = [enumerator nextObject]){
-                    NSDictionary *obj=[(NSDictionary*) updated objectForKey:key];
-                    NSString *updated_at_str=[obj objectForKey:@"updated_at"];
-                    if(updated_at_str!=nil && [updated_at_str length]>19)
-                        updated_at_str=[updated_at_str substringToIndex:19];
+                while (key = [enumerator nextObject]) {
+                    NSDictionary *obj = [(NSDictionary*) updated objectForKey:key];
+                    NSString *updated_at_str = [obj objectForKey:@"updated_at"];
+                    if (updated_at_str != nil && [updated_at_str length] > 19)
+                        updated_at_str = [updated_at_str substringToIndex:19];
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
                     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                     NSDate *updated_at = [formatter dateFromString:updated_at_str];
                     [formatter release];
-                    if(cross.read_at==nil)
+                    if (cross.read_at == nil)
                         cross.read_at=updated_at;
                     else
                         cross.read_at=[cross.read_at laterDate:updated_at];
                 }
-//                NSError *saveError;
-//                [[Cross currentContext] save:&saveError];
                 [self.tableView beginUpdates];
                 [self.tableView reloadRowsAtIndexPaths:@[indexPath]
                                       withRowAnimation:UITableViewRowAnimationNone];
                 [self.tableView endUpdates];
             }
-            
         }
-        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
-        viewController.widgetId = kWidgetCross;
-        viewController.cross = cross;
-        [self.navigationController pushViewController:viewController animated:YES];
-        [viewController release];
+        
+        // CrossGroupViewController
+        CrossGroupViewController *crossGroupViewController = [[CrossGroupViewController alloc] initWithNibName:@"CrossGroupViewController" bundle:nil];
+        crossGroupViewController.cross = cross;
+        
+        EFTabBarItem *tabBarItem1 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_x_30.png"]];
+        crossGroupViewController.customTabBarItem = tabBarItem1;
+        crossGroupViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
+        
+        // ConvViewController
+        WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithNibName:@"WidgetConvViewController" bundle:nil] ;
+        // prepare data for conversation
+        conversationViewController.exfee_id = [cross.exfee.exfee_id intValue];
+        Invitation* myInvitation = [cross.exfee getMyInvitation];
+        if (myInvitation != nil) {
+            conversationViewController.myIdentity = myInvitation.identity;
+        }
+        
+        // clean up data
+        cross.conversation_count = 0;
+        
+        EFTabBarItem *tabBarItem2 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_conv_30.png"]];
+        tabBarItem2.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
+        
+        conversationViewController.customTabBarItem = tabBarItem2;
+        conversationViewController.tabBarStyle = kEFTabBarStyleNormal;
+        
+        // ExfeeViewController
+        WidgetExfeeViewController *exfeeViewController = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
+        exfeeViewController.exfee = cross.exfee;
+        exfeeViewController.onExitBlock = ^{
+            [crossGroupViewController performSelector:@selector(fillExfee:)
+                                           withObject:exfeeViewController.exfee];
+        };
+        
+        EFTabBarItem *tabBarItem3 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_exfee_30.png"]];
+        
+        exfeeViewController.customTabBarItem = tabBarItem3;
+        exfeeViewController.tabBarStyle = kEFTabBarStyleNormal;
+        
+        // Init TabBarViewController
+        EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController]];
+        
+        [crossGroupViewController release];
+        [conversationViewController release];
+        [exfeeViewController release];
+        
+        tabBarViewController.titlePressedHandler = ^{
+            NSInteger arg = 0x0101;
+            [crossGroupViewController showPopup:arg];
+        };
+        
+        tabBarViewController.backButtonActionHandler = ^{
+            RKObjectManager* manager = [RKObjectManager sharedManager];
+            [manager.operationQueue cancelAllOperations];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        };
+        
+        tabBarViewController.title = cross.title;
+        
+        // Fetch background image
+        BOOL flag = NO;
+        for(NSDictionary *widget in cross.widget) {
+            if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+                NSString* url = [widget objectForKey:@"image"];
+                
+                if (url && url.length > 0) {
+                    NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+                    UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
+                    
+                    if (backimg == nil || [backimg isEqual:[NSNull null]]) {
+                        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                        dispatch_async(imgQueue, ^{
+                            // Not in Cache
+                            tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+                            UIImage *backimg = [[ImgCache sharedManager] getImgFrom:imgurl];
+                            
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                if (backimg != nil && ![backimg isEqual:[NSNull null]]) {
+                                    // Fill after download
+                                    tabBarViewController.tabBar.backgroundImage = backimg;
+                                }
+                            });
+                        });
+                        dispatch_release(imgQueue);
+                    } else {
+                        // Find in cache
+                        tabBarViewController.tabBar.backgroundImage = backimg;
+                    }
+                    flag = YES;
+                    break;
+                }
+            }
+        }
+        if (flag == NO) {
+            // Missing Background widget
+            tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+        }
+        
+        [self.navigationController pushViewController:tabBarViewController animated:YES];
+        [tabBarViewController release];
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         current_cellrow = indexPath.row;

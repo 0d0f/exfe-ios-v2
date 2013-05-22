@@ -9,6 +9,7 @@
 #import "PSTCollectionView.h"
 #import "EXBasicMenu.h"
 #import "UIBorderLabel.h"
+#import "EFKit.h"
 
 typedef enum {
     ScrollDirectionNone,
@@ -19,7 +20,19 @@ typedef enum {
     ScrollDirectionCrazy,
 } ScrollDirection;
 
-@interface WidgetExfeeViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, PSTCollectionViewDataSource, PSTCollectionViewDelegate, PSTCollectionViewDelegateFlowLayout, EXBasicMenuDelegate,UIActionSheetDelegate, UIAlertViewDelegate>{
+@interface WidgetExfeeViewController : UIViewController
+<
+UITableViewDataSource,
+UITableViewDelegate,
+UIScrollViewDelegate,
+PSTCollectionViewDataSource,
+PSTCollectionViewDelegate,
+PSTCollectionViewDelegateFlowLayout,
+EXBasicMenuDelegate,
+UIActionSheetDelegate,
+UIAlertViewDelegate,
+EFTabBarDataSource
+> {
     
     UIScrollView *invContent;
     UILabel *invName;
@@ -62,5 +75,10 @@ typedef enum {
 @property (nonatomic, retain) Invitation* selected_invitation;
 @property (nonatomic, retain) NSArray *sortedInvitations;
 @property (nonatomic, copy) id onExitBlock;
+
+// EFTabBarDataSource
+@property (nonatomic, retain) EFTabBarItem *customTabBarItem;
+@property (nonatomic, assign) EFTabBarStyle tabBarStyle;
+@property (nonatomic, assign) EFTabBarViewController *tabBarViewController;
 
 @end

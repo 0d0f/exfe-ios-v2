@@ -25,4 +25,6 @@ typedef enum {
 
 - (id)initWithStyle:(EFTabBarStyle)style;
 
+- (void)setSelectedIndex:(NSUInteger)index;
+
 @end

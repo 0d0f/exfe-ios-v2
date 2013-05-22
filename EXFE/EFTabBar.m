@@ -155,6 +155,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
 @property (nonatomic, assign) NSUInteger preSelectedIndex;
 @property (nonatomic, assign) EFTabBarItemState preSelectedTabBarItemState;
 @property (nonatomic, retain) UIView *gestureView;
+@property (nonatomic, copy) EFTabBarTitlePressedBlock titlePressedBlock;
 @end
 
 @interface EFTabBar (Private)
@@ -163,6 +164,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
 - (void)_showButtonsAnimated:(BOOL)animated;
 - (void)_dismissButtonsAnimated:(BOOL)animated;
 - (void)_addGestureRecognizers;
+- (EFTabBarItemControl *)_preSelectedButton;
 - (EFTabBarItemControl *)_selectedButton;
 - (CGRect)_buttonFrameAtIndex:(NSUInteger)index;
 - (void)_setSelectedIndex:(NSUInteger)index;
@@ -237,7 +239,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
         // shadow
         UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow"]];
         shadowImageView.frame = (CGRect){{0, CGRectGetHeight(frame) - 25}, {640, 30}};
-        [self addSubview:shadowImageView];
+//        [self addSubview:shadowImageView];
         self.shadowImageView = shadowImageView;
         [shadowImageView release];
         
@@ -318,6 +320,12 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     self.backgroundView.backgroundImage = backgroundImage;
 }
 
+#pragma mark - Public
+
+- (void)setSelectedIndex:(NSUInteger)index {
+    [self _setSelectedIndex:index];
+}
+
 #pragma mark - Action
 
 - (void)buttonPressed:(EFTabBarItemControl *)sender {
@@ -362,6 +370,12 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
 - (void)doubleTapHandler:(UITapGestureRecognizer *)gesture {
     if (UIGestureRecognizerStateEnded == gesture.state) {
         [self _setSelectedIndex:self.tabBarViewController.defaultIndex];
+    }
+}
+
+- (void)singleTapHandler:(UITapGestureRecognizer *)gesture {
+    if (UIGestureRecognizerStateEnded == gesture.state && _titlePressedBlock) {
+        self.titlePressedBlock();
     }
 }
 
@@ -570,6 +584,15 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     doubleTap.numberOfTapsRequired = 2;
     [self.gestureView addGestureRecognizer:doubleTap];
     [doubleTap release];
+    
+    // single tap
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                action:@selector(singleTapHandler:)];
+    singleTap.numberOfTapsRequired = 1;
+    [self.gestureView addGestureRecognizer:singleTap];
+    [singleTap release];
+    
+    [singleTap requireGestureRecognizerToFail:doubleTap];
     
     // swipe
     UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self

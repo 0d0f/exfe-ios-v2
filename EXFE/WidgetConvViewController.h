@@ -18,6 +18,7 @@
 #import "GatherExfeeInputCell.h"
 #import "CTUtil.h"
 #import "CrossesViewController.h"
+#import "EFKit.h"
 
 #define kNavBarHeight 44
 #define kStatusBarHeight 20
@@ -25,7 +26,14 @@
 #define kKeyboardHeightPortrait 216
 #define kKeyboardHeightLandscape 140
 
-@interface WidgetConvViewController : UIViewController  <UIInputToolbarDelegate,UIExpandingTextViewDelegate,UITableViewDataSource,UITableViewDelegate>{
+@interface WidgetConvViewController : UIViewController
+<
+UIInputToolbarDelegate,
+UIExpandingTextViewDelegate,
+UITableViewDataSource,
+UITableViewDelegate,
+EFTabBarDataSource
+> {
     ConversationTableView* _tableView;
     UIInputToolbar *inputToolbar;
     UIImage *cellbackground;
@@ -50,6 +58,11 @@
 @property (nonatomic, retain) Identity* myIdentity;
 @property (nonatomic, retain) UIInputToolbar* inputToolbar;
 @property (nonatomic, copy) id onExitBlock;
+
+// EFTabBarDataSource
+@property (nonatomic, retain) EFTabBarItem *customTabBarItem;
+@property (nonatomic, assign) EFTabBarStyle tabBarStyle;
+@property (nonatomic, assign) EFTabBarViewController *tabBarViewController;
 
 - (void) refreshConversation;
 - (void) loadObjectsFromDataStore;
