@@ -56,30 +56,19 @@
         self.titleLabel = label;
         [label release];
         
+        // tap
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                               action:@selector(touchUpInside:)];
         [self addGestureRecognizer:tap];
         [tap release];
         
-//        // action
-//        [self addTarget:self
-//                 action:@selector(touchUpInside:)
-//       forControlEvents:UIControlEventTouchUpInside];
+        // Pan
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                                    action:@selector(panHandler:)];
+        [self addGestureRecognizer:pan];
+        [pan release];
         
-        // swipe
-        UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self
-                                                                                    action:@selector(swipeHandler:)];
-        swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
-        [self addGestureRecognizer:swipeLeft];
-        [swipeLeft release];
-        [swipeLeft requireGestureRecognizerToFail:tap];
-        
-        UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self
-                                                                                        action:@selector(swipeHandler:)];
-        swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
-        [self addGestureRecognizer:swipeRight];
-        [swipeRight release];
-        [swipeRight requireGestureRecognizerToFail:tap];
+        [tap requireGestureRecognizerToFail:pan];
         
         self.touchEnable = YES;
         self.swipeEnable = YES;
@@ -106,9 +95,17 @@
 
 #pragma mark - Gesture
 
-- (void)swipeHandler:(UISwipeGestureRecognizer *)gesture {
-    if (self.swipeEnable && _swipeActionHandler) {
-        self.swipeActionHandler(self, gesture.direction);
+- (void)panHandler:(UIPanGestureRecognizer *)gesture {
+    if (self.swipeEnable &&
+        _swipeActionHandler &&
+        UIGestureRecognizerStateEnded == gesture.state) {
+        CGPoint velocity = [gesture velocityInView:self];
+        
+        if (velocity.x > 150.0f) {
+            self.swipeActionHandler(self, UISwipeGestureRecognizerDirectionRight);
+        } else if (velocity.x < -150.0f) {
+            self.swipeActionHandler(self, UISwipeGestureRecognizerDirectionLeft);
+        }
     }
 }
 
