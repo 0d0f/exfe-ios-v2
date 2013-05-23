@@ -34,7 +34,8 @@
 {
     [super viewDidLoad];
     [Flurry logEvent:@"EDIT_PLACE"];
-    originplace=[[NSMutableDictionary alloc] initWithCapacity:5];
+    self.customPlace = [NSMutableDictionary dictionaryWithCapacity:10];
+    self.placeResults = [NSMutableArray arrayWithCapacity:20];
 
     toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
@@ -103,45 +104,51 @@
     [placeedit setHidden:YES];
     [map addSubview:placeedit];
 
-    if(place==nil) {
+    if(self.selecetedPlace == nil) {
       
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
         NSEntityDescription *placeEntity = [NSEntityDescription entityForName:@"Place" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-        place=[[[Place alloc] initWithEntity:placeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
-        place.title=@"";
-        place.place_description=@"";
-        place.lat=@"";
-        place.lng=@"";
-        place.external_id=@"";
-        place.provider=@"";
+        self.selecetedPlace = [[[Place alloc] initWithEntity:placeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+        self.selecetedPlace.title = @"";
+        self.selecetedPlace.place_description = @"";
+        self.selecetedPlace.lat = @"";
+        self.selecetedPlace.lng = @"";
+        self.selecetedPlace.external_id = @"";
+        self.selecetedPlace.provider = @"";
 
-    }
-    else{
+    } else{
 
-        if(place.title==nil)
-            place.title=@"";
-        if(place.place_description==nil)
-            place.place_description=@"";
-        if(place.lat==nil)
-            place.lat=@"";
-        if(place.lng==nil)
-            place.lng=@"";
-        if(place.external_id==nil)
-            place.external_id=@"";
-        if(place.provider==nil)
-            place.provider=@"";
+        if (self.selecetedPlace.title == nil) {
+            self.selecetedPlace.title = @"";
+        }
+        if (self.selecetedPlace.place_description == nil) {
+            self.selecetedPlace.place_description = @"";
+        }
+        if (self.selecetedPlace.lat == nil) {
+            self.selecetedPlace.lat = @"";
+        }
+        if (self.selecetedPlace.lng == nil) {
+            self.selecetedPlace.lng = @"";
+        }
+        if (self.selecetedPlace.external_id == nil) {
+            self.selecetedPlace.external_id = @"";
+        }
+        if (self.selecetedPlace.provider == nil) {
+            self.selecetedPlace.provider = @"";
+        }
         
-        [originplace setObject:place.external_id forKey:@"external_id"];
-        [originplace setObject:place.lat forKey:@"lat"];
-        [originplace setObject:place.lng forKey:@"lng"];
-        [originplace setObject:place.place_description forKey:@"place_description"];
-        [originplace setObject:place.provider forKey:@"provider"];
-        [originplace setObject:place.title forKey:@"title"];
-        showtableview=NO;
+//        [originplace setObject:self.selecetedPlace.external_id forKey:@"external_id"];
+//        [originplace setObject:self.selecetedPlace.lat forKey:@"lat"];
+//        [originplace setObject:self.selecetedPlace.lng forKey:@"lng"];
+//        [originplace setObject:self.selecetedPlace.place_description forKey:@"place_description"];
+//        [originplace setObject:self.selecetedPlace.provider forKey:@"provider"];
+//        [originplace setObject:self.selecetedPlace.title forKey:@"title"];
+        showtableview = NO;
         [self initPlaceView];
     }
+    
     // TODO PLACEID
-    if([place.place_id intValue]==0){
+    if([self.selecetedPlace.place_id intValue]==0){
        // place.place_id=[NSNumber numberWithInt:-[((NewGatherViewController*)gatherview).cross.cross_id intValue]];
     }
 
@@ -165,9 +172,9 @@
     [clearbutton setImage:[UIImage imageNamed:@"textfield_clear.png"] forState:UIControlStateNormal];
     [self.view addSubview:clearbutton];
     
-    if([inputplace.text length]>1){
+    if([inputplace.text length] > 1){
         [clearbutton setHidden:NO];
-    }else if([inputplace.text isEqualToString:@""] || place==nil){
+    } else if([inputplace.text isEqualToString:@""] || self.selecetedPlace ==nil){
         [clearbutton setHidden:YES];
     }
     [inputplace setReturnKeyType:UIReturnKeySearch];
@@ -187,16 +194,17 @@
 
 - (void) initPlaceView{
     CLLocationCoordinate2D location;
-    location.latitude =[place.lat doubleValue];
-    location.longitude =[place.lng doubleValue];
+    location.latitude = [self.selecetedPlace.lat doubleValue];
+    location.longitude = [self.selecetedPlace.lng doubleValue];
     
-    PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:place.title description:place.place_description];
-    annotation.external_id=place.external_id;
+    PlaceAnnotation *annotation = [[PlaceAnnotation alloc] initWithCoordinate:location withTitle:self.selecetedPlace.title description:self.selecetedPlace.place_description];
+    annotation.external_id = self.selecetedPlace.external_id;
     
-    annotation.index=-2;
-    if(![place.lat isEqualToString:@""] && ![place.lng isEqualToString:@""]){
+    annotation.index = -2;
+    // custome place
+    if ([self.selecetedPlace hasGeo]){
         [map addAnnotation:annotation];
-        PlaceAnnotation *mapannotation=[[map annotations] objectAtIndex:0];
+        PlaceAnnotation *mapannotation = [[map annotations] objectAtIndex:0];
         MKAnnotationView* annoview = [map viewForAnnotation: mapannotation];
         annoview.image=[UIImage imageNamed:@"map_pin_blue.png"];
     }
@@ -208,8 +216,8 @@
     
     MKCoordinateRegion region;
     region.center = mapcenter;
-    float delta=0.02;
-    if([place.lat isEqualToString:@""] && [place.lng isEqualToString:@""]){
+    float delta = 0.02;
+    if (![self.selecetedPlace hasGeo]){
         delta=120;
         CLLocationCoordinate2D location_center;
         location_center.latitude =33.431441;
@@ -222,8 +230,8 @@
     [map setRegion:region animated:YES];
     inputplace.text=@"";
     
-    if(place!=nil){
-        [self addPlaceEdit:place];
+    if (self.selecetedPlace != nil){
+        [self addPlaceEdit:self.selecetedPlace];
     }
 }
 
@@ -233,27 +241,26 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editingDidBegan:) name:UITextFieldTextDidBeginEditingNotification object:inputplace];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:placeedit.PlaceTitle];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:placeedit.PlaceDesc];
-    
 }
 
 - (void)regEvent
 {
     UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maplongpress:)];
-    longpress.minimumPressDuration = 0.610;
+    longpress.minimumPressDuration = 1.0;
     [map addGestureRecognizer:longpress];
     [longpress release];
     
-    WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
-    tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
-        UITouch * touch = [touches anyObject];
-        if (!CGRectContainsPoint([placeedit frame], [touch locationInView:map]))
-        {
-            [placeedit resignFirstResponder];
-        }
-        [self setViewStyle:EXPlaceViewStyleMap];
-    };
-    [map addGestureRecognizer:tapInterceptor];
-    [tapInterceptor release];
+//    WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
+//    tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
+//        UITouch * touch = [touches anyObject];
+//        if (!CGRectContainsPoint([placeedit frame], [touch locationInView:map]))
+//        {
+//            [placeedit resignFirstResponder];
+//        }
+//        [self setViewStyle:EXPlaceViewStyleMap];
+//    };
+//    [map addGestureRecognizer:tapInterceptor];
+//    [tapInterceptor release];
 }
 
 
@@ -318,6 +325,7 @@
         [_tableView setHidden:NO];
         [placeedit setHidden:YES];
         [placeedit resignFirstResponder];
+        
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDelay:0];
         [UIView setAnimationDuration:0.25];
@@ -327,45 +335,45 @@
         [UIView commitAnimations];
     }
 }
-- (void) setPlace:(Place*)_place isedit:(BOOL)editstate{
-    place=_place;
-    isedit=editstate;
-    
+- (void) setPlace:(Place*)place isedit:(BOOL)editstate{
+    self.selecetedPlace = place;
+    isedit = editstate;
 }
+
 - (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer{
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-    }
-    else {
-        
         CGPoint touchPoint = [gestureRecognizer locationInView:map];
         CLLocationCoordinate2D touchMapCoordinate =[map convertPoint:touchPoint toCoordinateFromView:map];
         [self addCustomAnnotation:touchMapCoordinate];
-
     }
 }
 
 - (void) addCustomAnnotation:(CLLocationCoordinate2D)location{
     [map removeAnnotations: map.annotations];
-    BOOL newPlace=NO;
-    if([place.title isEqualToString:@""] || [place.title isEqualToString:@"Right there on the map"]){
-        place.title=@"Right there on the map";
+    BOOL newPlace = NO;
+    if(![self.selecetedPlace hasTitle]){
+        self.selecetedPlace.title = @"Right there on the map";
         [placeedit setPlaceTitleText:@"Right there on the map"];
-        newPlace=YES;
     }
-    if([place.place_description isEqualToString:@""] )
+    
+    if(![self.selecetedPlace hasDescription]) {
         [placeedit setPlaceDescText:@""];
+        newPlace = YES;
+    }
     
     [placeedit setHidden:NO];
-    PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:place.title description:place.place_description];
-    if([[map annotations] count]==0)
-        annotation.index=-2;
+    PlaceAnnotation *annotation = [[PlaceAnnotation alloc] initWithCoordinate:location withTitle:self.selecetedPlace.title description:self.selecetedPlace.place_description];
+    if ([[map annotations] count] == 0) {
+        annotation.index = -2;
+        // custome place
+    }
     [map addAnnotation:annotation];
     [annotation release];
     [clearbutton setHidden:YES];
     
-    place.lat=[NSString stringWithFormat:@"%f",annotation.coordinate.latitude];
-    place.lng=[NSString stringWithFormat:@"%f",annotation.coordinate.longitude];
-    place.provider=@"";
+    self.selecetedPlace.lat = [NSString stringWithFormat:@"%f",annotation.coordinate.latitude];
+    self.selecetedPlace.lng = [NSString stringWithFormat:@"%f",annotation.coordinate.longitude];
+    self.selecetedPlace.provider = @"";
     
     if (newPlace) {
         [[EFAPIServer sharedInstance] getTopPlaceNearbyWithLocation:annotation.coordinate
@@ -395,26 +403,27 @@
 
 - (void) fillTopPlace:(NSDictionary*)topPlace{
     placeedit.PlaceDesc.text =[topPlace objectForKey:@"description"];
-    place.place_description=[topPlace objectForKey:@"description"];
+    self.selecetedPlace.place_description=[topPlace objectForKey:@"description"];
     [placeedit setNeedsDisplay];
 }
 
 - (void) done{
+    
     if (_tableView.hidden) {
         if (placeedit.PlaceTitle.text.length == 0) {
             if (placeedit.PlaceDesc.text.length > 0) {
                 // Hack: temp walkaround to hide clear popup
                 return;
             }
-            place.title=@"";
-            place.place_description=@"";
-            place.lat=@"";
-            place.lng=@"";
-            place.external_id=@"";
-            place.provider=@"";
+            self.selecetedPlace.title=@"";
+            self.selecetedPlace.place_description=@"";
+            self.selecetedPlace.lat=@"";
+            self.selecetedPlace.lng=@"";
+            self.selecetedPlace.external_id=@"";
+            self.selecetedPlace.provider=@"";
         }else{
-            place.title = placeedit.PlaceTitle.text;
-            place.place_description = placeedit.PlaceDesc.text;
+            self.selecetedPlace.title = placeedit.PlaceTitle.text;
+            self.selecetedPlace.place_description = placeedit.PlaceDesc.text;
         }
     }else{
         NSIndexPath *index = [_tableView indexPathForSelectedRow];
@@ -424,14 +433,14 @@
         }
         
         if (index.row - tipline >= 0) {
-            place.title = placeedit.PlaceTitle.text;
-            place.place_description = placeedit.PlaceDesc.text;
+            self.selecetedPlace.title = placeedit.PlaceTitle.text;
+            self.selecetedPlace.place_description = placeedit.PlaceDesc.text;
         }else{
-            place.title = inputplace.text;
+            self.selecetedPlace.title = inputplace.text;
         }
     }
     
-    [delegate setPlace:place];
+    [delegate setPlace:self.selecetedPlace];
     [self dismissModalViewControllerAnimated:YES];
 }
 - (void)didReceiveMemoryWarning
@@ -452,8 +461,7 @@
     CLLocationCoordinate2D location;
     location.latitude = newLocation.coordinate.latitude;
     location.longitude = newLocation.coordinate.longitude;
-    if( (isedit==NO && place==nil) || isaddnew==YES)
-    {
+    if( (isedit == NO && self.selecetedPlace == nil) || isaddnew == YES) {
         MKCoordinateRegion region;
         region.center = location;
         region.span.longitudeDelta = 0.02;
@@ -462,34 +470,63 @@
         
         CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
         if (meters < 0 || meters > 500) {
-            [[EFAPIServer sharedInstance] getPlacesNearbyWithLocation:location
-                                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                                  if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
-                                                                      NSDictionary *body = (NSDictionary*)responseObject;
-                                                                      if ([body isKindOfClass:[NSDictionary class]]) {
-                                                                          NSString *status = [body objectForKey:@"status"];
-                                                                          if (status != nil && [status isEqualToString:@"OK"]) {
-                                                                              NSArray *results = [body objectForKey:@"results"];
-                                                                              [self processResultFromPlaceAPI:results];
-                                                                          }
-                                                                      }
-                                                                  }
-                                                              }
-                                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) { 
-                                                              }];
+            [self searchNearByPlaces:location];
         }
     }
-    lng=location.longitude;
-    lat=location.latitude;
+    lng = location.longitude;
+    lat = location.latitude;
 }
 
-- (void) reloadPlaceData:(NSArray*)places {
-    [_places release];
-    _places=places;
-    [_tableView reloadData];
-    [self drawMapAnnontations:-1];
-    [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+- (void)searchNearByPlaces:(CLLocationCoordinate2D)location
+{
+    
+    [[EFAPIServer sharedInstance] getPlacesNearbyWithLocation:location
+                                                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                          if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+                                                              NSDictionary *body = (NSDictionary*)responseObject;
+                                                              if ([body isKindOfClass:[NSDictionary class]]) {
+                                                                  NSString *status = [body objectForKey:@"status"];
+                                                                  if (status != nil && [status isEqualToString:@"OK"]) {
+                                                                      NSArray *results = [body objectForKey:@"results"];
+                                                                      
+                                                                      [self reloadPlaceData:results withKeyword:nil];
+                                                                  }
+                                                              }
+                                                          }
+                                                      }
+                                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                      }];
+    
+}
 
+- (void) reloadPlaceData:(NSArray*)results withKeyword:(NSString*)keyword{
+    
+    NSString *inputText = inputplace.text;
+    
+    if (keyword == nil || [keyword isEqualToString:inputText]) {
+        
+        [self.customPlace removeAllObjects];
+        if (keyword != nil) {
+            [self.customPlace setValue:keyword forKey:@"title"];
+        }
+        
+        [self.placeResults removeAllObjects];
+        [self saveResultsFromGooglePlaceAPI:results];
+        [_tableView reloadData];
+        
+        if (keyword != nil) {
+            [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+        }
+        
+        [self drawMapAnnontations:self.placeResults];
+        
+        if (keyword != nil) {
+            if (self.placeResults.count > 0) {
+                [self selectPlace:[self.placeResults objectAtIndex:0]];
+            }
+        }
+        [self setViewStyle:EXPlaceViewStyleShowPlaceDetail];
+    }
 }
 
 - (void)dealloc {
@@ -497,81 +534,68 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidBeginEditingNotification object:nil];
 
     [locationManager release];
-    [_places release];
-    [_annotations release];
+    self.placeResults = nil;
+    self.customPlace = nil;
     [_tableView release];
     [placeedit release];
     [actionsheet release];
-    [originplace release];
     [mapShadow release];
     [inputplace release];
     [super dealloc];
 }
 
-- (void) drawMapAnnontations:(int)idx{
-
-    NSMutableArray *annotations=[[NSMutableArray alloc] initWithCapacity:[_places count]];
-    int i=0;
-    for(NSDictionary *placedict in _places)
-    {
-        if (i==idx || idx<0){
-            CLLocationCoordinate2D location;
-            
-            location.latitude = [[placedict objectForKey:@"lat"] doubleValue];
-            location.longitude = [[placedict objectForKey:@"lng"] doubleValue];
-            PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[placedict objectForKey:@"title"]  description:[placedict objectForKey:@"description"]];
-            annotation.external_id=[placedict objectForKey:@"external_id"];
-            annotation.index=i;
-            [annotations addObject:annotation];
-            [annotation release];
-        }
-        i++;
-    }
-    if(_annotations!=nil){
-    [map removeAnnotations:_annotations];
-    [_annotations release];
+- (void) drawMapAnnontations:(NSArray *)places{
+    NSMutableArray *annotations = [[NSMutableArray alloc] initWithCapacity:self.placeResults.count];
+    int i = 0;
+    for (NSDictionary *placedict in places) {
         
+        CLLocationCoordinate2D location;
+        
+        location.latitude = [[placedict objectForKey:@"lat"] doubleValue];
+        location.longitude = [[placedict objectForKey:@"lng"] doubleValue];
+        PlaceAnnotation *annotation=[[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[placedict objectForKey:@"title"]  description:[placedict objectForKey:@"description"]];
+        annotation.external_id=[placedict objectForKey:@"external_id"];
+        annotation.index=i;
+        [annotations addObject:annotation];
+        [annotation release];
     }
-    _annotations=annotations;
-    [map addAnnotations:_annotations];
-    if(idx>0 && [_annotations count]>0)
-    {
-       PlaceAnnotation *annotation= [_annotations objectAtIndex:0];
-        CLLocationCoordinate2D location= annotation.coordinate;
-        location.latitude=location.latitude-0.0040;
+    [map removeAnnotations:map.annotations];
+    [map addAnnotations:annotations];
+}
 
-        MKCoordinateRegion region;
-        region.center = location;
-        region.span.longitudeDelta = 0.02;
-        region.span.latitudeDelta = 0.02;
-        [map setRegion:region animated:YES];
-    }
+- (void) drawMapAnnontation:(NSDictionary*)placedict{
+    CLLocationCoordinate2D location;
+    
+    location.latitude = [[placedict objectForKey:@"lat"] doubleValue];
+    location.longitude = [[placedict objectForKey:@"lng"] doubleValue];
+    PlaceAnnotation *annotation = [[PlaceAnnotation alloc] initWithCoordinate:location withTitle:[placedict valueForKey:@"title"]  description:[placedict valueForKey:@"description"]];
+    annotation.external_id = [placedict valueForKey:@"external_id"];
+    annotation.index = 0;
+    
+    [map removeAnnotations:map.annotations];
+    [map addAnnotation:annotation];
+    
+    CLLocationCoordinate2D location2 = location;
+    location2.latitude = location2.latitude - 0.0040;
+    [map setCenterCoordinate:location2 animated:YES];
+    [annotation release];
 }
 
 - (void) clearplace{
-    isnotinputplace=YES;
-//    place.title=@"";
-//    place.place_description=@"";
-//    place.lat=@"";
-//    place.lng=@"";
+    isnotinputplace = YES;
     [map removeAnnotations:[map annotations]];
     [placeedit setHidden:YES];
     [placeedit resignFirstResponder];
     [inputplace becomeFirstResponder];
-    inputplace.text=@"";
-//    [revert setHidden:NO];
+    inputplace.text = @"";
     [clearbutton setHidden:YES];
-    isnotinputplace=NO;
-
-    [_places release];
-    _places=nil;
+    
+    isnotinputplace = NO;
+    self.placeResults = nil;
+    [self.customPlace removeAllObjects];
     [_tableView reloadData];
 }
-- (BOOL) isPlaceNull{
-    if([place.title isEqualToString:@""] && [place.place_description isEqualToString:@""] && [place.lat isEqualToString:@""] && [place.lng isEqualToString:@""])
-        return YES;
-    return NO;
-}
+
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
     MKAnnotationView *aV;
     for (aV in views) {
@@ -595,7 +619,7 @@
         [placeedit setHidden:YES];
         [placeedit resignFirstResponder];
         [map removeAnnotations:[map annotations]];
-        place=nil;
+        self.selecetedPlace = nil;
     }
 }
 
@@ -612,33 +636,64 @@
 #pragma mark UITableView Delegate methods
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int tipline=0;
-    if([inputplace.text length]>0)
-        tipline=1;
-//    isedit=YES;
-    [self selectPlace:indexPath.row-tipline editing:NO];
-    [self setViewStyle:EXPlaceViewStyleShowPlaceDetail];
-//    [self done];
+    NSInteger section = indexPath.section;
+    switch (section) {
+        case 0:
+            [self selectPlace:self.customPlace];
+            [self setViewStyle:EXPlaceViewStyleShowPlaceDetail];
+            break;
+            
+        case 1:
+            [self selectPlace:[self.placeResults objectAtIndex:indexPath.row]];
+            [self setViewStyle:EXPlaceViewStyleShowPlaceDetail];
+            break;
+        default:
+            break;
+    }
+    
 }
 
 #pragma mark UITableView Datasource methods
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
+}
+
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    int tipline=0;
-//    && ![inputplace.text isEqualToString:place.title]
-    if([inputplace.text length]>0 )
-        tipline=1;
-    if(_places)
-        return [_places count]+tipline;
-    return tipline;
+    switch (section) {
+        case 0:{
+            NSString *title = [self.customPlace valueForKey:@"title"];
+            if (title.length > 0 ) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }   break;
+            
+        case 1:
+            return self.placeResults.count;
+            break;
+        default:
+            return 0;
+            break;
+    }
 }
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    int tipline=0;
-    if([inputplace.text length]>0 )
-        tipline=1;
-    [self selectPlace:indexPath.row-tipline editing:YES];
-    if(indexPath.row-tipline>=0)
-      [self drawMapAnnontations:indexPath.row-tipline];
+    NSInteger section = indexPath.section;
+    
+    switch (section) {
+        case 0:
+            [self editPlace:self.customPlace];
+            break;
+         
+        case 1:
+            [self editPlace:[self.placeResults objectAtIndex:indexPath.row]];
+            [self drawMapAnnontation:[self.placeResults objectAtIndex:indexPath.row]];
+            break;
+        default:
+            break;
+    }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -659,26 +714,32 @@
     [[cell detailTextLabel] setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
     [[cell textLabel] setTextColor:FONT_COLOR_25];
     [[cell detailTextLabel] setTextColor:[UIColor colorWithRed:127/255.0f green:127/255.0f blue:127/255.0f alpha:1] ];
-
-//    if([inputplace.text length]>0 && )
-//        cell.textLabel.text=inputplace.text;
-        if(indexPath.row==0 && [inputplace.text length]>0 )
-        {
+    
+    NSInteger section = indexPath.section;
+    switch (section) {
+        case 0:{
             [[cell textLabel] setTextColor:FONT_COLOR_HL];
-            cell.textLabel.text=inputplace.text;
-            cell.detailTextLabel.text=@"No place found. Tap arrow to edit.";
-        }else{
-            int hitline=0;
-            if([inputplace.text length]>0){
-                hitline=1;
-            }
-            NSDictionary *placedict=[_places objectAtIndex:indexPath.row-hitline];
-            if([placedict objectForKey:@"title"]!=nil)
-                cell.textLabel.text = [placedict objectForKey:@"title"];
-            if([placedict objectForKey:@"description"]!=nil);
-            cell.detailTextLabel.text=[placedict objectForKey:@"description"];
+            cell.textLabel.text = [self.customPlace valueForKey:@"title"];
+            cell.detailTextLabel.text = @"No place found. Tap arrow to edit.";
         }
-
+            break;
+        case 1:{
+            NSDictionary *placedict =[self.placeResults objectAtIndex:indexPath.row];
+            if ([placedict objectForKey:@"title"] != nil) {
+                cell.textLabel.text = [placedict objectForKey:@"title"];
+            } else {
+                cell.textLabel.text = @"";
+            }
+            if ([placedict objectForKey:@"description"] != nil){
+                cell.detailTextLabel.text = [placedict objectForKey:@"description"];
+            } else {
+                cell.detailTextLabel.text = @"";
+            }
+        }
+            break;
+        default:
+            break;
+    }
     return cell;
     
 }
@@ -696,25 +757,25 @@
 
     if ([annotation isKindOfClass:[MKUserLocation class]]){
         return nil;
-//        MKAnnotationView* annotationView = [mapView viewForAnnotation:userLocation];
-//        annotationView.canShowCallout = NO;
     }
-    MKAnnotationView *annView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil] autorelease];
-    annView.canShowCallout = NO;
     
-    if([((PlaceAnnotation*)annotation).external_id isEqualToString:place.external_id])
-            annView.image=[UIImage imageNamed:@"map_pin_blue.png"];
-    else{
+    MKAnnotationView *annView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil] autorelease];
+    annView.canShowCallout = YES;
+    
+    if ([((PlaceAnnotation*)annotation).external_id isEqualToString:self.selecetedPlace.external_id]) {
+            annView.image=[UIImage imageNamed:@"drawMapAnnontations"];
+    } else {
             annView.image=[UIImage imageNamed:@"map_pin_red.png"];
     }
     [annView setCenterOffset:CGPointMake(0, -12)];
     UIButton* butt = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-    butt.tag=((PlaceAnnotation*)annotation).index;
+    butt.tag = ((PlaceAnnotation*)annotation).index;
     [butt addTarget:self action:@selector(selectOnMap:) forControlEvents: UIControlEventTouchUpInside];
     annView.rightCalloutAccessoryView = butt;
     [annView setEnabled:YES];
     return annView;
 }
+
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
 
     if ([view.annotation isKindOfClass:[MKUserLocation class]]){
@@ -741,36 +802,92 @@
         
         PlaceAnnotation *annot = view.annotation;
         if(annot.index==-2){
+            // custome place
             [self selectPlace:annot.index editing:YES];
             return;
         }
-        NSDictionary *placedict=[_places objectAtIndex:annot.index];
-        place.title=[placedict objectForKey:@"title"];
-        place.place_description=[placedict objectForKey:@"description"];
-        place.lat=[[placedict objectForKey:@"lat"] stringValue];
-        place.lng=[[placedict objectForKey:@"lng"] stringValue];
-        place.external_id=[placedict objectForKey:@"external_id"];
-        place.provider=[placedict objectForKey:@"provider"];
+        NSDictionary *placedict=[self.placeResults objectAtIndex:annot.index];
+        self.selecetedPlace.title=[placedict objectForKey:@"title"];
+        self.selecetedPlace.place_description=[placedict objectForKey:@"description"];
+        self.selecetedPlace.lat=[[placedict objectForKey:@"lat"] stringValue];
+        self.selecetedPlace.lng=[[placedict objectForKey:@"lng"] stringValue];
+        self.selecetedPlace.external_id=[placedict objectForKey:@"external_id"];
+        self.selecetedPlace.provider=[placedict objectForKey:@"provider"];
 
     }
 }
+
+- (void)selectPlace:(NSDictionary *)placedict
+{
+    isedit = NO;
+   
+    self.selecetedPlace.title = [placedict valueForKey:@"title"];
+    self.selecetedPlace.place_description = [placedict valueForKey:@"description"];
+    
+    id value = [placedict valueForKey:@"lat"];
+    if (value != nil) {
+        self.selecetedPlace.lat = [[placedict valueForKey:@"lat"] stringValue];
+    }
+    value = [placedict valueForKey:@"lng"];
+    if (value != nil) {
+        self.selecetedPlace.lng = [[placedict valueForKey:@"lng"] stringValue];
+    }
+    self.selecetedPlace.external_id = [placedict valueForKey:@"external_id"];
+    self.selecetedPlace.provider = [placedict valueForKey:@"provider"];
+    
+    
+    NSArray *annotations = [map annotations];
+    
+    for (PlaceAnnotation* annotation in annotations){
+        if([annotation isKindOfClass:[PlaceAnnotation class]]){
+            MKAnnotationView* annoview = [map viewForAnnotation: annotation];
+            if([annotation.external_id isEqualToString:self.selecetedPlace.external_id]){
+                annoview.image=[UIImage imageNamed:@"map_pin_blue.png"];
+                [annoview.superview bringSubviewToFront:annoview];
+                [annoview bringSubviewToFront:map];
+            } else {
+                annoview.image=[UIImage imageNamed:@"map_pin_red.png"];
+            }
+        }
+    }
+    
+    if ([self.selecetedPlace hasGeo]) {
+        CLLocationCoordinate2D location;
+        location.latitude = [self.selecetedPlace.lat doubleValue];
+        location.longitude = [self.selecetedPlace.lng doubleValue];
+        CGPoint p = [map convertCoordinate:location toPointToView:map];
+        p.y -= 10; // move pin 10 points down
+        CLLocationCoordinate2D newCenter = [map convertPoint:p toCoordinateFromView:map];
+        [map setCenterCoordinate:newCenter animated:YES];
+    }
+    [self addPlaceEdit:self.selecetedPlace];
+    
+    return;
+}
+
+- (void) editPlace:(NSDictionary *)placedict
+{
+    isedit = YES;
+}
+
 - (void) selectPlace:(int)index editing:(BOOL)editing{
     CLLocationCoordinate2D location;
     location.latitude=0;
     location.longitude=0;
-    isedit=editing;
+    isedit = editing;
     if(index==-2) {
+        // cutome place
         NSArray *annotations=[map annotations];
         if([annotations count]>0) {
             PlaceAnnotation *annotation=[annotations objectAtIndex:0];
-            place.title=annotation.place_title;
-            place.place_description=annotation.place_description;
-            place.lat=[NSString stringWithFormat:@"%f",annotation.coordinate.latitude];
-            place.lng=[NSString stringWithFormat:@"%f",annotation.coordinate.longitude];
-            place.external_id=@"";
-            place.provider=@"";
+            self.selecetedPlace.title=annotation.place_title;
+            self.selecetedPlace.place_description=annotation.place_description;
+            self.selecetedPlace.lat=[NSString stringWithFormat:@"%f",annotation.coordinate.latitude];
+            self.selecetedPlace.lng=[NSString stringWithFormat:@"%f",annotation.coordinate.longitude];
+            self.selecetedPlace.external_id=@"";
+            self.selecetedPlace.provider=@"";
 
-            [self addPlaceEdit:place];
+            [self addPlaceEdit:self.selecetedPlace];
             location.latitude = annotation.coordinate.latitude;
             location.longitude = annotation.coordinate.longitude;
 
@@ -778,41 +895,58 @@
             annoview.image=[UIImage imageNamed:@"map_pin_blue.png"];
         }
     }else if(index==-1){
-        place.title=inputplace.text;
-        place.place_description=@"";
-        place.lat=@"";
-        place.lng=@"";
-        place.external_id=@"";
-        place.provider=@"";
-        placeedit.PlaceTitle.text=place.title;
+        self.selecetedPlace.title=inputplace.text;
+        self.selecetedPlace.place_description=@"";
+        self.selecetedPlace.lat=@"";
+        self.selecetedPlace.lng=@"";
+        self.selecetedPlace.external_id=@"";
+        self.selecetedPlace.provider=@"";
+        placeedit.PlaceTitle.text=self.selecetedPlace.title;
         placeedit.PlaceDesc.text=@"";
     }else{
-        NSDictionary *placedict=[_places objectAtIndex:index];
-        place.title=[placedict objectForKey:@"title"];
-        place.place_description=[placedict objectForKey:@"description"];
-        place.lat=[[placedict objectForKey:@"lat"] stringValue];
-        place.lng=[[placedict objectForKey:@"lng"] stringValue];
-        place.external_id=[placedict objectForKey:@"external_id"];
-        place.provider=[placedict objectForKey:@"provider"];
-        [self addPlaceEdit:place];
+        NSDictionary *placedict = [self.placeResults objectAtIndex:index];
+        self.selecetedPlace.title = [placedict objectForKey:@"title"];
+        self.selecetedPlace.place_description = [placedict objectForKey:@"description"];
+        self.selecetedPlace.lat = [[placedict objectForKey:@"lat"] stringValue];
+        self.selecetedPlace.lng = [[placedict objectForKey:@"lng"] stringValue];
+        self.selecetedPlace.external_id = [placedict objectForKey:@"external_id"];
+        self.selecetedPlace.provider = [placedict objectForKey:@"provider"];
+        [self addPlaceEdit:self.selecetedPlace];
         location.latitude = [[placedict objectForKey:@"lat"] doubleValue];
         location.longitude = [[placedict objectForKey:@"lng"] doubleValue];
 
-        NSArray *annotations=[map annotations];
+        NSArray *annotations = [map annotations];
 
         for (PlaceAnnotation* annotation in annotations){
             if([annotation isKindOfClass:[PlaceAnnotation class]]){
                 MKAnnotationView* annoview = [map viewForAnnotation: annotation];
-                if([annotation.external_id isEqualToString:place.external_id]){
+                if([annotation.external_id isEqualToString:self.selecetedPlace.external_id]){
                     annoview.image=[UIImage imageNamed:@"map_pin_blue.png"];
                     [annoview.superview bringSubviewToFront:annoview];
-//                    [annoview bringSubviewToFront:map];
-                }
-                else
+                    [annoview bringSubviewToFront:map];
+                } else {
                     annoview.image=[UIImage imageNamed:@"map_pin_red.png"];
-
+                }
             }
         }
+        
+        float delta = 0.02;
+        
+        CLLocationCoordinate2D newll;
+        MKCoordinateRegion region;
+        newll.latitude = [self.selecetedPlace.lat doubleValue];
+        newll.longitude = [self.selecetedPlace.lng doubleValue];
+        region.center = newll;
+        region.span.longitudeDelta = delta;
+        region.span.latitudeDelta = delta;
+        
+        CLLocationCoordinate2D mapcenter = location;
+        mapcenter.latitude = mapcenter.latitude - 0.0040;
+        
+        [map setRegion:region animated:YES];
+        [placeedit setHidden:NO];
+        [placeedit becomeFirstResponder];
+        return;
     }
 //        MKCoordinateRegion region;
 //        region.center = location;
@@ -827,8 +961,8 @@
         
         CLLocationCoordinate2D newll;// =[map convertPoint:point toCoordinateFromView:map];
         MKCoordinateRegion region;
-        newll.latitude=[place.lat doubleValue];
-        newll.longitude=[place.lng doubleValue];
+        newll.latitude=[self.selecetedPlace.lat doubleValue];
+        newll.longitude=[self.selecetedPlace.lng doubleValue];
         if(location.latitude==0 && location.longitude==0 && index==-1)
         {
             delta=120;
@@ -838,11 +972,11 @@
         region.center = newll;
         region.span.longitudeDelta = delta;
         region.span.latitudeDelta = delta;
-        
+    
         CLLocationCoordinate2D mapcenter =location;
         mapcenter.latitude=mapcenter.latitude-0.0040;
 
-        [map setRegion:region animated:YES];
+        [map setRegion:region animated:NO];
         [placeedit setHidden:NO];
         [placeedit becomeFirstResponder];
 //    }
@@ -855,63 +989,66 @@
     [self selectPlace:index editing:YES];
 }
 
-- (void) addPlaceEdit:(Place*)_place{
-    if(_place.title !=nil )
-        [placeedit setPlaceTitleText:place.title];
-    if(_place.place_description!=nil)
-        [placeedit setPlaceDescText:place.place_description];
+- (void) addPlaceEdit:(Place*)place{
+    if(place.title !=nil )
+        [placeedit setPlaceTitleText:self.selecetedPlace.title];
+    if(place.place_description!=nil)
+        [placeedit setPlaceDescText:self.selecetedPlace.place_description];
     [placeedit setHidden:NO];
     [placeedit becomeFirstResponder];
 }
 
-- (void) processResultFromPlaceAPI:(NSArray*)results{
-  if([results count]>0)
-  {
-    NSDictionary *dict=[results objectAtIndex:0];
-    NSNumber *_lng=[[[dict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"];
-    NSNumber *_lat=[[[dict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"];
-    MKCoordinateRegion region;
-    float delta=0.02;
-    CLLocationCoordinate2D location_center;
-    location_center.latitude =[_lat doubleValue];
-    location_center.longitude =[_lng doubleValue];
-    region.center=location_center;
-    region.span.longitudeDelta = delta;
-    region.span.latitudeDelta = delta;
-    [map setRegion:region animated:YES];
-  }
-  NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]] ;
-  for(NSDictionary *placedict in results)
-  {
-    NSString *_name=[placedict objectForKey:@"name"];
-    if(_name==nil)
-      _name=@"";
-    NSString *_formatted_address=[placedict objectForKey:@"formatted_address"];
-    if(_formatted_address==nil){
-      _formatted_address=[placedict objectForKey:@"vicinity"];
-      if(_formatted_address==nil)
-        _formatted_address=@"";
+- (void) saveResultsFromGooglePlaceAPI:(NSArray*)results{
+    if ([results count] > 0) {
+        NSDictionary *dict = [results objectAtIndex:0];
+        NSNumber *_lng = [[[dict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"];
+        NSNumber *_lat = [[[dict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"];
+        MKCoordinateRegion region;
+        float delta = 0.02;
+        CLLocationCoordinate2D location_center;
+        location_center.latitude = [_lat doubleValue];
+        location_center.longitude = [_lng doubleValue];
+        region.center = location_center;
+        region.span.longitudeDelta = delta;
+        region.span.latitudeDelta = delta;
+        [map setRegion:region animated:YES];
     }
-    NSString *_lng=[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"];
-    if(_lng==nil)
-      _lng=@"";
-    NSString *_lat=[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"];
-    if(_lat==nil)
-      _lat=@"";
-    NSString *_id=[[[placedict objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"id"];
-    if(_id==nil)
-      _id=@"";
-
-    NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:_name,@"title",_formatted_address,@"description",_lng,@"lng",_lat,@"lat",_id,@"external_id",@"google",@"provider",nil];
-    [local_results addObject:dict];
-    [dict release];
-  }
-  [self reloadPlaceData:local_results];
-  
+    NSMutableArray *local_results=[[NSMutableArray alloc] initWithCapacity:[results count]] ;
+    for(NSDictionary *placedict in results)
+    {
+        NSString *_name=[placedict objectForKey:@"name"];
+        if (_name == nil) {
+            _name=@"";
+        }
+        NSString *_formatted_address=[placedict objectForKey:@"formatted_address"];
+        if (_formatted_address == nil){
+            _formatted_address = [placedict objectForKey:@"vicinity"];
+            if(_formatted_address == nil) {
+                _formatted_address = @"";
+            }
+        }
+        NSString *_lng = [[[placedict objectForKey: @"geometry"] objectForKey:@"location"] objectForKey: @"lng"];
+        if (_lng == nil) {
+            _lng = @"";
+        }
+        NSString *_lat = [[[placedict objectForKey: @"geometry"] objectForKey:@"location"] objectForKey: @"lat"];
+        if(_lat == nil) {
+            _lat = @"";
+        }
+        NSString *_id = [placedict objectForKey:@"id"];
+        if (_id == nil) {
+            _id = @"";
+        }
+        
+        NSDictionary * dict = @{@"title":_name, @"description":_formatted_address, @"lng":_lng, @"lat":_lat, @"external_id":_id, @"provider":@"google"};
+        [local_results addObject:dict];
+    }
+    [self.placeResults addObjectsFromArray:local_results];
 }
-- (void)getPlacefromapi{
-    [[EFAPIServer sharedInstance] getPlacesByTitle:inputplace.text
-                                          location:CLLocationCoordinate2DMake(lat, lng)
+
+- (void)searchPlaceByKeyword:(NSString*)keyword near:(CLLocationCoordinate2D)location{
+    [[EFAPIServer sharedInstance] getPlacesByTitle:keyword
+                                          location:location
                                            success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                                                    NSDictionary *body = (NSDictionary*)responseObject;
@@ -919,7 +1056,7 @@
                                                        NSString *status = [body objectForKey:@"status"];
                                                        if (status != nil && [status isEqualToString:@"OK"]) {
                                                            NSArray *results = [body objectForKey:@"results"];
-                                                           [self processResultFromPlaceAPI:results];
+                                                           [self reloadPlaceData:results withKeyword:keyword];
                                                        }
                                                    }
                                                }
@@ -928,53 +1065,47 @@
                                            }];
 }
 
-- (void) getPlace{
-    if(CFAbsoluteTimeGetCurrent()-editinginterval>0.8)
-      [self getPlacefromapi];
+- (void) getPlace:(NSString *)keyword{
+    if (CFAbsoluteTimeGetCurrent() - editinginterval > 0.8) {
+        [self searchPlaceByKeyword: keyword near:CLLocationCoordinate2DMake(lat, lng)];
+    }
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
-  [self getPlacefromapi];
+    [self searchPlaceByKeyword: inputplace.text near:CLLocationCoordinate2DMake(lat, lng)];
     return YES;
 }
 
 - (void)textDidChange:(NSNotification*)notification
 {
-    if(isnotinputplace==YES){
+    if (isnotinputplace == YES){
         return;
     }
-    UITextField *textField=(UITextField*)notification.object;
-    if(textField.tag==401){
-        if([textField.text length]>2 && textField.tag==401)
-        {
-            editinginterval=CFAbsoluteTimeGetCurrent();
-            [self performSelector:@selector(getPlace) withObject:self afterDelay:0.8];
-        }
-//         && ![textField.text isEqualToString:place.title] && place.title!=nil
-        if(![textField.text isEqualToString:@""]){
+    
+    UITextField *textField = (UITextField*) notification.object;
+    if (textField.tag == 401){
+        if (textField.text.length > 0) {
+            // search by keywords
+            editinginterval = CFAbsoluteTimeGetCurrent();
+            
+            [self performSelector:@selector(getPlace:) withObject:textField.text afterDelay:0.8];
+            
+        } else {
             [clearbutton setHidden:NO];
+            // search nearby
+            [self searchNearByPlaces:CLLocationCoordinate2DMake(lat, lng)];
         }
-        [_tableView reloadData];
-//        place.title=@"";
-//        place.place_description=@"";
-//        place.lat=@"";
-//        place.lng=@"";
-//        place.external_id=@"";
-//        place.provider=@"";
-        [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-    }if(textField.tag==402){
+    }
+    
+    if(textField.tag==402){
         //place title editor
-//        if([textField.text isEqualToString:@""]){
-//            [actionsheet showInView:self.view];
-//        }
     }
 
 }
 - (void) editingDidBegan:(NSNotification*)notification{
-//    isedit=NO;
     willUserScroll=YES;
     UITextField *textField=(UITextField*)notification.object;
 
-    [self drawMapAnnontations:-1];
+    [self drawMapAnnontations:self.placeResults];
     [self setViewStyle:EXPlaceViewStyleTableview];
     [textField becomeFirstResponder];
     

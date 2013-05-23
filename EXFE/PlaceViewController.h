@@ -18,6 +18,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import "EditCrossDelegate.h"
 
+typedef NS_ENUM(NSUInteger, EFPlaceUIMode) {
+	EFPlaceUIModeSearch,
+	EFPlaceUIModeEdit,
+	EFPlaceUIModeSearchVenuePopup
+};
+
 typedef enum {
     EXPlaceViewStyleDefault,
     EXPlaceViewStyleMap,
@@ -34,16 +40,10 @@ typedef enum {
     IBOutlet MKMapView *map;
     UIView *mapShadow;
     UITextField *inputplace;
-//    IBOutlet UIBarButtonItem *rightbutton;
     UIButton *rightbutton;
     UIButton *clearbutton;
     UIButton *revert;
-    NSArray* _places;
-    NSArray* _annotations;
     UITableView* _tableView;
-//    NSMutableDictionary* gatherplace;
-    Place *place;
-    //UIViewController *gatherview;
     id delegate;
     EXPlaceEditView *placeedit;
     UIActionSheet *actionsheet;
@@ -55,7 +55,6 @@ typedef enum {
     BOOL showdetailview;
     BOOL showtableview;
     BOOL willUserScroll;
-    NSMutableDictionary *originplace;
     
     double editinginterval;
 
@@ -69,27 +68,31 @@ typedef enum {
 @property BOOL showdetailview;
 @property BOOL showtableview;
 @property BOOL isaddnew;
-    
-- (void) PlaceEditClose:(id) sender;
-- (void) textDidChange:(NSNotification*)notification;
-- (void) editingDidBegan:(NSNotification*)notification;
-- (void) reloadPlaceData:(NSArray*)places;
-- (void) fillTopPlace:(NSDictionary*)topPlace;
-- (void) drawMapAnnontations:(int)idx;
 
-- (void) selectOnMap:(id) sender;
-- (void) selectPlace:(int)index editing:(BOOL)editing;
-- (void) addPlaceEdit:(Place*)_place;
-- (void) getPlace;
-- (void) getPlacefromapi;
-- (void) setRightButton:(NSString*) title Selector:(SEL)aSelector;
-- (void) done;
-- (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer;
-- (void) setPlace:(Place*)_place isedit:(BOOL)editstate;
-- (void) setViewStyle:(EXPlaceViewStyle)style;
-- (void) clearplace;
-- (void) initPlaceView;
-- (BOOL) isPlaceNull;
-- (void) addCustomAnnotation:(CLLocationCoordinate2D)location;
-- (void) processResultFromPlaceAPI:(NSArray*)results;
+@property (nonatomic, retain) Place *selecetedPlace;
+@property (nonatomic, retain) NSMutableDictionary *customPlace;
+@property (nonatomic, retain) NSMutableArray *placeResults;
+    
+//- (void) PlaceEditClose:(id) sender;
+//- (void) textDidChange:(NSNotification*)notification;
+//- (void) editingDidBegan:(NSNotification*)notification;
+//- (void) reloadPlaceData:(NSArray*)places;
+//- (void) fillTopPlace:(NSDictionary*)topPlace;
+//- (void) drawMapAnnontations:(int)idx;
+//
+//- (void) selectOnMap:(id) sender;
+//- (void) selectPlace:(int)index editing:(BOOL)editing;
+//- (void) addPlaceEdit:(Place*)_place;
+//- (void) getPlace;
+//- (void) getPlacefromapi;
+//- (void) setRightButton:(NSString*) title Selector:(SEL)aSelector;
+//- (void) done;
+//- (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer;
+//- (void) setPlace:(Place*)_place isedit:(BOOL)editstate;
+//- (void) setViewStyle:(EXPlaceViewStyle)style;
+//- (void) clearplace;
+//- (void) initPlaceView;
+//- (BOOL) isPlaceNull;
+//- (void) addCustomAnnotation:(CLLocationCoordinate2D)location;
+//- (void) saveResultsFromGooglePlaceAPI:(NSArray*)results;
 @end
