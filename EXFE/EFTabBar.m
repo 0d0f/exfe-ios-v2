@@ -156,6 +156,9 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
 @property (nonatomic, assign) EFTabBarItemState preSelectedTabBarItemState;
 @property (nonatomic, retain) UIView *gestureView;
 @property (nonatomic, copy) EFTabBarTitlePressedBlock titlePressedBlock;
+
+@property (nonatomic, assign) UIWindow *originWindow;
+@property (nonatomic, retain) UIWindow *window;
 @end
 
 @interface EFTabBar (Private)
@@ -169,6 +172,8 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
 - (CGRect)_buttonFrameAtIndex:(NSUInteger)index;
 - (void)_setSelectedIndex:(NSUInteger)index;
 - (void)_changeTitleFrameAimated:(BOOL)animated;
+- (void)_addMaskWindow;
+- (void)_removeMaskWindow;
 @end
 
 @interface EFTabBar (Action)
@@ -262,6 +267,8 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
 - (void)dealloc {
     [self.titleLabel removeObserver:self
                          forKeyPath:@"text"];
+    self.originWindow = nil;
+    self.window = nil;
     self.tabBarViewController = nil;
     [_gestureView release];
     [_backgroundView release];
@@ -374,16 +381,38 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
 }
 
 - (void)singleTapHandler:(UITapGestureRecognizer *)gesture {
-    if (UIGestureRecognizerStateEnded == gesture.state && _titlePressedBlock) {
-        self.titlePressedBlock();
+    if (UIGestureRecognizerStateEnded == gesture.state) {
+        if (self.isButtonsShowed) {
+            [self _dismissButtonsAnimated:YES];
+        }
+        
+        if (_titlePressedBlock) {
+            self.titlePressedBlock();
+        }
     }
 }
 
 - (void)swipeHandler:(UISwipeGestureRecognizer *)gesture {
     if (UIGestureRecognizerStateEnded == gesture.state) {
+        if (self.isButtonsShowed) {
+            [self _dismissButtonsAnimated:YES];
+        }
+        
         if (UISwipeGestureRecognizerDirectionRight == gesture.direction) {
             [self _back];
         }
+    }
+}
+
+- (void)windowTapHandler:(UITapGestureRecognizer *)gesture {
+    if (UIGestureRecognizerStateEnded == gesture.state) {
+        [self _dismissButtonsAnimated:YES];
+    }
+}
+
+- (void)windowPanHandler:(UIPanGestureRecognizer *)gesture {
+    if (UIGestureRecognizerStateEnded == gesture.state) {
+        [self _dismissButtonsAnimated:YES];
     }
 }
 
@@ -511,9 +540,13 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
                          [self.buttonBaseView addSubview:selectedButton];
                          [UIView setAnimationsEnabled:YES];
                      }];
+    
+    [self _addMaskWindow];
 }
 
 - (void)_dismissButtonsAnimated:(BOOL)animated {
+    [self _removeMaskWindow];
+    
     ((UIViewController<EFTabBarDataSource> *)(self.tabBarViewController.viewControllers[self.preSelectedIndex])).customTabBarItem.tabBarItemState = self.preSelectedTabBarItemState;
     
     // enable the contol swipe
@@ -709,6 +742,39 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
                      completion:^(BOOL finished){
                          [UIView setAnimationsEnabled:YES];
                      }];
+}
+
+- (void)_addMaskWindow {
+    CGRect frame = [UIScreen mainScreen].bounds;
+    frame = CGRectOffset(frame, 0.0f, CGRectGetHeight(self.bounds) + CGRectGetHeight([UIApplication sharedApplication].statusBarFrame));
+    
+    if (!self.window) {
+        UIWindow *window = [[[UIWindow alloc] initWithFrame:frame] autorelease];
+        window.backgroundColor = [UIColor clearColor];
+        
+        UITapGestureRecognizer *windowTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                    action:@selector(windowTapHandler:)];
+        [window addGestureRecognizer:windowTap];
+        [windowTap release];
+        
+        UIPanGestureRecognizer *windowPan = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                                          action:@selector(windowPanHandler:)];
+        [window addGestureRecognizer:windowPan];
+        [windowPan release];
+        
+        self.window = window;
+    }
+    
+    self.window.frame = frame;
+    self.originWindow = [UIApplication sharedApplication].keyWindow;
+    [self.window makeKeyAndVisible];
+}
+
+- (void)_removeMaskWindow {
+    if (!self.window.hidden) {
+        self.window.hidden = YES;
+        [self.originWindow makeKeyAndVisible];
+    }
 }
 
 @end
