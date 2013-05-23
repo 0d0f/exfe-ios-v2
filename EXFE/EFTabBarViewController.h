@@ -20,6 +20,7 @@ typedef void (^EFTabBarWillDisappearBlock)(void);
 @property (nonatomic, retain) EFTabBarItem *customTabBarItem;
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
 @property (nonatomic, assign) EFTabBarViewController *tabBarViewController;     // You DON'T need to set this, tabBarViewController will set it.
+@property (nonatomic, copy) UIColor *shadowColor;   // outer shadow color
 @end
 
 @class EFTabBar;

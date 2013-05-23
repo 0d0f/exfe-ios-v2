@@ -286,8 +286,8 @@ typedef enum {
     [super viewDidUnload];
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
+    [_shadowColor release];
     [invName release];
     [invHostFlag release];
     [invHostText release];

@@ -97,6 +97,7 @@ EFTabBarDataSource
 @property (nonatomic, retain) EFTabBarItem *customTabBarItem;
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
 @property (nonatomic, assign) EFTabBarViewController *tabBarViewController;
+@property (nonatomic, copy) UIColor *shadowColor;
 
 - (void)showPopup:(NSInteger)ctrlId;
 

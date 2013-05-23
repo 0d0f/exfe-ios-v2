@@ -799,6 +799,7 @@
         EFTabBarItem *tabBarItem1 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_x_30.png"]];
         crossGroupViewController.customTabBarItem = tabBarItem1;
         crossGroupViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
+        crossGroupViewController.shadowColor = [UIColor whiteColor];
         
         // ConvViewController
         WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithNibName:@"WidgetConvViewController" bundle:nil] ;
@@ -817,6 +818,7 @@
         
         conversationViewController.customTabBarItem = tabBarItem2;
         conversationViewController.tabBarStyle = kEFTabBarStyleNormal;
+        conversationViewController.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
         
         // ExfeeViewController
         WidgetExfeeViewController *exfeeViewController = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
@@ -830,6 +832,7 @@
         
         exfeeViewController.customTabBarItem = tabBarItem3;
         exfeeViewController.tabBarStyle = kEFTabBarStyleNormal;
+        exfeeViewController.shadowColor = [UIColor whiteColor];
         
         // Init TabBarViewController
         EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController]];
