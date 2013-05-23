@@ -55,6 +55,14 @@
     return self;
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    if (_tabBarWillDisappearHandler) {
+        self.tabBarWillDisappearHandler();
+    }
+    
+    [super viewWillDisappear:animated];
+}
+
 - (void)dealloc {
     [_containView release];
     [_tabBar release];

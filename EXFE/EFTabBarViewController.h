@@ -12,6 +12,7 @@
 
 typedef void (^EFTabBarTitlePressedBlock)(void);
 typedef void (^EFTabBarBackButtonBlock)(void);
+typedef void (^EFTabBarWillDisappearBlock)(void);
 
 @class EFTabBarItem, EFTabBarViewController;
 @protocol EFTabBarDataSource <NSObject>
@@ -33,8 +34,9 @@ typedef void (^EFTabBarBackButtonBlock)(void);
 @property (nonatomic, assign) NSUInteger defaultIndex;
 @property (nonatomic, assign) UIViewController<EFTabBarDataSource> *defaultViewController;
 
-@property (nonatomic, copy) EFTabBarTitlePressedBlock titlePressedHandler;      // Default as nil
-@property (nonatomic, copy) EFTabBarBackButtonBlock backButtonActionHandler;    // Default as nil, if you set it, you should handle the dismiss or pop action
+@property (nonatomic, copy) EFTabBarTitlePressedBlock titlePressedHandler;      // Default as nil.
+@property (nonatomic, copy) EFTabBarBackButtonBlock backButtonActionHandler;    // Default as nil, if you set it, you should handle the dismiss or pop action.
+@property (nonatomic, copy) EFTabBarWillDisappearBlock tabBarWillDisappearHandler;    // Default as nil, called when tabBarViewController will dismiss.
 
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 
