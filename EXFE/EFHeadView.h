@@ -25,9 +25,7 @@ typedef void (^HeadViewDismissCompletionBlock)(void);
 
 // completion handler
 @property (nonatomic, copy) HeadViewShowCompletionBlock showCompletionHandler;
-@property (nonatomic, copy) HeadViewDismissCompletionBlock dismissCompletionHandler;
 
 - (void)show;
-- (void)dismiss;
 
 @end

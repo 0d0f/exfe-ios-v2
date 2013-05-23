@@ -65,9 +65,13 @@
 @property (nonatomic, retain) NSArray *titleLayers;
 
 @property (nonatomic, retain) EFHeadViewTopLayer *topLayer;
+@property (assign) NSUInteger animationCount;
 
 - (void)headShowAnimation;
 - (void)titleShowAnimation;
+
+- (void)plusAnimationCount;
+- (void)minusAnimationCount;
 
 @end
 
@@ -137,24 +141,6 @@
             [layers addObject:layer];
         }
         
-//        ((CALayer *)layers[0]).backgroundColor = [UIColor colorWithRed:(24.0f / 255.0f)
-//                                                                 green:(80.0f / 255.0f)
-//                                                                  blue:(140.0f / 255.0f)
-//                                                                 alpha:1.0f].CGColor;
-//        
-//        ((CALayer *)layers[1]).backgroundColor = [UIColor colorWithRed:(54.0f / 255.0f)
-//                                                                 green:(135.0f / 255.0f)
-//                                                                  blue:(221.0f / 255.0f)
-//                                                                 alpha:1.0f].CGColor;
-//        
-//        ((CALayer *)layers[2]).backgroundColor = [UIColor colorWithRed:(150.0f / 255.0f)
-//                                                                 green:(201.0f / 255.0f)
-//                                                                  blue:1.0f
-//                                                                 alpha:1.0f].CGColor;
-//        
-//        ((CAGradientLayer *)layers[3]).colors = @[(id)[UIColor colorWithRed:(238.0f / 255.0f) green:(238.0f / 255.0f) blue:(238.0f / 255.0f) alpha:1.0f].CGColor,
-//                                                     (id)[UIColor whiteColor].CGColor];
-        
         self.titleLayers = layers;
         [layers release];
         
@@ -185,6 +171,7 @@
         [titleView release];
         
         self.showed = NO;
+        self.animationCount = 0;
     }
     return self;
 }
@@ -238,7 +225,6 @@
 #pragma mark - Public
 
 - (void)show {
-    self.showed = YES;
     [self headShowAnimation];
     [self titleShowAnimation];
 }
@@ -246,11 +232,7 @@
 #pragma mark - Animation Delegate
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    if (self.isShowed && _showCompletionHandler) {
-        self.showCompletionHandler();
-    } else if (!self.isShowed && _dismissCompletionHandler) {
-        self.dismissCompletionHandler();
-    }
+    [self minusAnimationCount];
 }
 
 #pragma mark - Private
@@ -266,6 +248,7 @@
     avatarAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55];
     avatarAnimation.delegate = self;
     
+    [self plusAnimationCount];
     [self.avatarView.layer addAnimation:avatarAnimation forKey:@"show"];
     self.avatarView.layer.transform = newTransform;
 }
@@ -281,15 +264,23 @@
         double delayInSeconds = (3 - i) * kTitleLayerAnimationDelay + kTitleLayerAnimationCommonDelay;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [self plusAnimationCount];
             [CATransaction begin];
             [CATransaction setAnimationDuration:0.9f];
             [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55]];
+            [CATransaction setCompletionBlock:^{
+                [self minusAnimationCount];
+            }];
             layer.position = newPosition;
             [CATransaction commit];
             
+            [self plusAnimationCount];
             [CATransaction begin];
             [CATransaction setAnimationDuration:0.9f];
             [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55]];
+            [CATransaction setCompletionBlock:^{
+                [self minusAnimationCount];
+            }];
             layer.bounds = newBounds;
             [CATransaction commit];
         });
@@ -298,13 +289,33 @@
     double delayInSeconds = kTitleLayerAnimationCommonDelay;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self plusAnimationCount];
         [CATransaction begin];
         [CATransaction setAnimationDuration:0.65f];
         [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [CATransaction setCompletionBlock:^{
+            [self minusAnimationCount];
+        }];
         self.topLayer.opacity = 1.0f;
         self.topLayer.position = (CGPoint){CGRectGetMidX(self.titleView.frame) - 4 * kTitleLayerBlank, CGRectGetHeight(self.titleView.frame) * 0.5f};
         [CATransaction commit];
     });
+}
+
+- (void)plusAnimationCount {
+    self.animationCount += 1;
+}
+
+- (void)minusAnimationCount {
+    self.animationCount -= 1;
+    
+    if (!self.animationCount) {
+        self.showed = YES;
+    }
+    
+    if (self.showed && _showCompletionHandler) {
+        self.showCompletionHandler();
+    }
 }
 
 @end

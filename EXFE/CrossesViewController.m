@@ -93,11 +93,6 @@
         [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView endUpdates];
     };
-    headView.dismissCompletionHandler = ^{
-        [self.tableView beginUpdates];
-        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView endUpdates];
-    };
     self.headView = headView;
     [headView release];
     
