@@ -56,6 +56,7 @@
 #define COLOR_BLUE_SEA            COLOR_RGB(0x37, 0x84, 0xD5)
 #define COLOR_BLUE_LAKE           COLOR_RGB(0x60, 0xAD, 0xFF)
 #define COLOR_BLUE_AQUA           COLOR_RGB(0xA9, 0xD3, 0xFF)
+#define COLOR_BLUE_NAVY           COLOR_RGB(0x15, 0x33, 0x53)
 
 #define COLOR_RED_EXFE            COLOR_RGB(0xE5, 0x2E, 0x53)
 #define COLOR_RED_MEXICAN         COLOR_RGB(0xA3, 0x23, 0x3D)
