@@ -87,7 +87,7 @@
     
 #ifdef DEBUG
     CGRect windowBounds = [UIScreen mainScreen].bounds;
-    CGFloat width = 190.0f;
+    CGFloat width = 100.0f;
     
     UIWindow *versionWindow = [[UIWindow alloc] initWithFrame:(CGRect){{(CGRectGetWidth(windowBounds) - width) * 0.5f, 0.0f}, width, 12.0f}];
     versionWindow.layer.cornerRadius = 2.0f;
@@ -116,9 +116,9 @@
     UILabel *label = [[UILabel alloc] initWithFrame:versionWindow.bounds];
     label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor lightTextColor];
-    label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:9];
+    label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
     label.textAlignment = NSTextAlignmentCenter;
-    label.text = [NSString stringWithFormat:@"Server: %@ Version: %@ (build: %@)", serverName, version, buildNumber];
+    label.text = [NSString stringWithFormat:@"%@#%@ @ %@", version, buildNumber, serverName];
     [versionWindow addSubview:label];
     [label release];
     
