@@ -391,23 +391,28 @@
     if (isForeground == NO){
         NSArray *viewControllers = self.navigationController.viewControllers;
         CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+        
         if (userInfo != nil) {
-            id arg=[userInfo objectForKey:@"args"];
+            id arg = [userInfo objectForKey:@"args"];
             if([arg isKindOfClass:[NSDictionary class]]) {
-                id cid=[arg objectForKey:@"cid"];
-                id msg_type=[arg objectForKey:@"t"];
-                if (cid !=nil && [cid isKindOfClass:[NSNumber class]] && msg_type!=nil && [msg_type isKindOfClass:[NSString class]]) {
-                    if ([cid intValue]>0 ) {
-                        int cross_id=[cid intValue];
-                        NSString *type=(NSString*)msg_type;
-                        if([type isEqualToString:@"i"])
+                id cid = [arg objectForKey:@"cid"];
+                id msg_type = [arg objectForKey:@"t"];
+                
+                if (cid != nil && [cid isKindOfClass:[NSNumber class]] && msg_type != nil && [msg_type isKindOfClass:[NSString class]]) {
+                    if ([cid intValue] > 0 ) {
+                        int cross_id = [cid intValue];
+                        NSString *type = (NSString *)msg_type;
+                        if ([type isEqualToString:@"i"]) {
                             if ([crossViewController PushToCross:cross_id] == NO) {
                                 [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
                             }
-                        if([type isEqualToString:@"c"])
+                        }
+                        
+                        if ([type isEqualToString:@"c"]) {
                             if ([crossViewController PushToConversation:cross_id] == NO) {
                                 [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
                             }
+                        }
                     }
                 }
             }
