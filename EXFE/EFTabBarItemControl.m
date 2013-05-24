@@ -10,8 +10,8 @@
 
 #import "EFTabBarItem.h"
 
-#define kDefaultFrame       ((CGRect){{0.0f, 0.0f}, {44.0f, 44.0f}})
-#define kDefaultImageFrame  ((CGRect){{7.0f, 10.0f}, {30.0f, 30.0f}})
+#define kDefaultFrame       ((CGRect){{-10.0f, 0.0f}, {54.0f, 44.0f}})
+#define kDefaultImageFrame  ((CGRect){{17.0f, 10.0f}, {30.0f, 30.0f}})
 #define kDefaultLabelFrame  ((CGRect){{5.0f, 14.5f}, {28.0f, 18.0f}})
 
 @interface EFTabBarItemControl ()

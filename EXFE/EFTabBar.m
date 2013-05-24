@@ -15,8 +15,8 @@
 
 #define kTitleEdgeBlank                 (30.0f)
 #define kTabBarItemSize                 ((CGSize){30.0f, 30.0f})
-#define kTabBarButtonSize               ((CGSize){44.0f, 44.0f})
-#define kButtonSpacing                  (16.0f)
+#define kTabBarButtonSize               ((CGSize){54.0f, 44.0f})
+#define kButtonSpacing                  (6.0f)
 
 #define kInnserShadowRadius             (2.0f)
 #define kOuterShadowRadius              (10.0f)

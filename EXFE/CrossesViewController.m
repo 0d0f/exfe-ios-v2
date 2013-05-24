@@ -797,6 +797,8 @@
         crossGroupViewController.cross = cross;
         
         EFTabBarItem *tabBarItem1 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_x_30.png"]];
+        tabBarItem1.highlightImage = [UIImage imageNamed:@"widget_x_30shine.png"];
+        
         crossGroupViewController.customTabBarItem = tabBarItem1;
         crossGroupViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
         crossGroupViewController.shadowColor = [UIColor whiteColor];
@@ -829,6 +831,7 @@
         };
         
         EFTabBarItem *tabBarItem3 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_exfee_30.png"]];
+        tabBarItem3.highlightImage = [UIImage imageNamed:@"widget_exfee_30shine.png"];
         
         exfeeViewController.customTabBarItem = tabBarItem3;
         exfeeViewController.tabBarStyle = kEFTabBarStyleNormal;
