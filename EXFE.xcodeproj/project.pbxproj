@@ -1372,6 +1372,9 @@
 		76073D0D174F6EA5007CBFC3 /* EFRomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76073D09174F6EA5007CBFC3 /* EFRomeViewController.xib */; };
 		76073D0E174F6EA5007CBFC3 /* EFRomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76073D09174F6EA5007CBFC3 /* EFRomeViewController.xib */; };
 		76073D0F174F6EA5007CBFC3 /* EFRomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76073D09174F6EA5007CBFC3 /* EFRomeViewController.xib */; };
+		76073D11174F8802007CBFC3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76073D10174F8802007CBFC3 /* MessageUI.framework */; };
+		76073D12174F880B007CBFC3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76073D10174F8802007CBFC3 /* MessageUI.framework */; };
+		76073D13174F8811007CBFC3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76073D10174F8802007CBFC3 /* MessageUI.framework */; };
 		7615B33B172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
 		7615B33C172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
 		7615B33D172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
@@ -2269,6 +2272,7 @@
 		76073D07174F6EA5007CBFC3 /* EFRomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRomeViewController.h; sourceTree = "<group>"; };
 		76073D08174F6EA5007CBFC3 /* EFRomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRomeViewController.m; sourceTree = "<group>"; };
 		76073D09174F6EA5007CBFC3 /* EFRomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFRomeViewController.xib; sourceTree = "<group>"; };
+		76073D10174F8802007CBFC3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		7615B339172AB7D200C54031 /* EFLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLabel.h; sourceTree = "<group>"; };
 		7615B33A172AB7D200C54031 /* EFLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLabel.m; sourceTree = "<group>"; };
 		76295DB2174B2112002F5CEF /* EFTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTabBar.h; sourceTree = "<group>"; };
@@ -2733,6 +2737,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76073D12174F880B007CBFC3 /* MessageUI.framework in Frameworks */,
 				4FCC22F2173A35F600E6DB50 /* AdSupport.framework in Frameworks */,
 				4FCC22EE173A34AE00E6DB50 /* libsqlite3.dylib in Frameworks */,
 				4FB3780C173A287E001FA1B2 /* FacebookSDK.framework in Frameworks */,
@@ -2765,6 +2770,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76073D13174F8811007CBFC3 /* MessageUI.framework in Frameworks */,
 				4FCC22F3173A35FD00E6DB50 /* AdSupport.framework in Frameworks */,
 				4FCC22E6173A349000E6DB50 /* libsqlite3.dylib in Frameworks */,
 				4FB37804173A285C001FA1B2 /* FacebookSDK.framework in Frameworks */,
@@ -2797,6 +2803,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76073D11174F8802007CBFC3 /* MessageUI.framework in Frameworks */,
 				4FCC22F1173A35BE00E6DB50 /* AdSupport.framework in Frameworks */,
 				4FCC22EF173A34B600E6DB50 /* libsqlite3.dylib in Frameworks */,
 				4FB3780D173A2893001FA1B2 /* FacebookSDK.framework in Frameworks */,
@@ -3780,6 +3787,7 @@
 		78A98E8A1560F832009E0806 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				76073D10174F8802007CBFC3 /* MessageUI.framework */,
 				4FB377FB173795C2001FA1B2 /* Accounts.framework */,
 				78C6BA0016634C6F00483D23 /* AddressBook.framework */,
 				4FCC22F0173A35BE00E6DB50 /* AdSupport.framework */,

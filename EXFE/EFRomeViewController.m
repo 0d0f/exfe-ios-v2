@@ -51,4 +51,25 @@
     }
 }
 
+- (IBAction)sendButtonPressed:(id)sender {
+    if ([MFMailComposeViewController canSendMail]) {
+        NSString *version = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"];
+        NSString *buildNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
+        
+        MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc] init];
+        mailController.mailComposeDelegate = self;
+        [mailController setToRecipients:@[@"feedback@exfe.com"]];
+        [mailController setSubject:[NSString stringWithFormat:@"Feedback(%@#%@)", version, buildNumber]];
+        [self.view.window.rootViewController presentViewController:mailController animated:YES completion:nil];
+        [mailController release];
+    }
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    [controller.presentingViewController dismissViewControllerAnimated:YES
+                                                            completion:nil];
+}
+
 @end

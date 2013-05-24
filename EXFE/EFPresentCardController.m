@@ -27,6 +27,7 @@ typedef void (^completionBlock)(void);
 
 @interface EFPresentCardController (Private)
 - (void)_initUI;
+- (void)_addGestures;
 - (void)_presentAnimated:(BOOL)animated;
 - (void)_dismissAnimated:(BOOL)animated completionHandler:(void (^)(void))handler;
 @end
@@ -62,11 +63,60 @@ typedef void (^completionBlock)(void);
     self.presentdingViewController = viewController;
     
     [self _initUI];
+    [self _addGestures];
     [self _presentAnimated:animated];
 }
 
 - (void)dismissAnimated:(BOOL)animated withCompletionHandler:(void (^)(void))handler {
     [self _dismissAnimated:animated completionHandler:handler];
+}
+
+#pragma mark - Gesture Handler
+
+- (void)handleTap:(UITapGestureRecognizer *)gesture {
+    if (UIGestureRecognizerStateEnded == gesture.state) {
+        CGPoint location = [gesture locationInView:self.backgroundMaskView];
+        if (!CGRectContainsPoint(self.cardView.frame, location)) {
+            [self dismissAnimated:YES withCompletionHandler:nil];
+        }
+    }
+}
+
+- (void)handlePan:(UIPanGestureRecognizer *)gesture {
+    static CGPoint startLocation = (CGPoint){0.0f, 0.0f};
+    
+    switch (gesture.state) {
+        case UIGestureRecognizerStateBegan:
+        {
+            startLocation = [gesture locationInView:self.cardView];
+        }
+            break;
+        case UIGestureRecognizerStateChanged:
+        {
+            CGPoint translation = [gesture translationInView:self.cardView];
+            CGFloat opacity = (1.0f - (translation.y) / self.contentSize.height);
+            
+            if (opacity >= 0.0f && opacity <= 1.0f) {
+                self.backgroundMaskView.layer.opacity = opacity;
+                CATransform3D newTransform = CATransform3DMakeTranslation(0.0f, translation.y, 0.0f);
+                self.cardView.layer.transform = newTransform;
+            }
+        }
+            break;
+        case UIGestureRecognizerStateEnded:
+        {
+            CGPoint velocity = [gesture velocityInView:self.cardView];
+            
+            if (velocity.y < 0) {
+                [self _presentAnimated:YES];
+            } else {
+                [self dismissAnimated:YES withCompletionHandler:nil];
+            }
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - Aimation delegate
@@ -107,6 +157,22 @@ typedef void (^completionBlock)(void);
     [rootView addSubview:cardView];
     self.cardView = cardView;
     [cardView release];
+}
+
+- (void)_addGestures {
+    // tap
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                          action:@selector(handleTap:)];
+    [self.backgroundMaskView addGestureRecognizer:tap];
+    [tap release];
+    
+    // pan
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                          action:@selector(handlePan:)];
+    [self.cardView addGestureRecognizer:pan];
+    [pan release];
+    
+    [tap requireGestureRecognizerToFail:pan];
 }
 
 - (void)_presentAnimated:(BOOL)animated {
