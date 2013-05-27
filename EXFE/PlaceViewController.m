@@ -1094,6 +1094,7 @@
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
     [self searchPlaceByKeyword: inputplace.text near:CLLocationCoordinate2DMake(lat, lng)];
+    [inputplace resignFirstResponder];
     return YES;
 }
 
