@@ -16,6 +16,7 @@
 #import "CrossesViewController.h"
 #import "EFAPIServer.h"
 #import "EFLandingViewController.h"
+#import "Util.h"
 
 @implementation AppDelegate
 @synthesize window = _window;
@@ -53,8 +54,6 @@
     NSLog(@"API ROOT: %@", API_ROOT);
 #endif
     
-    
-    
     //    [[NSNotificationCenter defaultCenter] addObserver:self
     //                                             selector:@selector(observeContextSave:)
     //                                                 name:NSManagedObjectContextDidSaveNotification
@@ -85,6 +84,48 @@
     [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
+    
+#ifdef DEBUG
+    CGRect windowBounds = [UIScreen mainScreen].bounds;
+    CGFloat width = 100.0f;
+    
+    UIWindow *versionWindow = [[UIWindow alloc] initWithFrame:(CGRect){{(CGRectGetWidth(windowBounds) - width) * 0.5f, 0.0f}, width, 12.0f}];
+    versionWindow.layer.cornerRadius = 2.0f;
+    versionWindow.layer.shouldRasterize = YES;
+    versionWindow.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    versionWindow.layer.contentsScale = [UIScreen mainScreen].scale;
+    versionWindow.layer.masksToBounds = YES;
+    
+    versionWindow.windowLevel = UIWindowLevelStatusBar;
+    versionWindow.alpha = 0.9f;
+    UIColor *backgroundColor = [UIColor COLOR_BLUE_EXFE];
+    NSString *serverName = @"EXFE";
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"];
+    NSString *buildNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
+    
+    #ifdef PILOT
+        backgroundColor = [UIColor purpleColor];
+        serverName = @"Panda";
+    #elif DEV
+        backgroundColor = [UIColor purpleColor];
+        serverName = @"Black";
+    #endif
+    
+    versionWindow.backgroundColor = backgroundColor;
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:versionWindow.bounds];
+    label.backgroundColor = [UIColor clearColor];
+    label.textColor = [UIColor lightTextColor];
+    label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.text = [NSString stringWithFormat:@"%@#%@ @ %@", version, buildNumber, serverName];
+    [versionWindow addSubview:label];
+    [label release];
+    
+    [versionWindow makeKeyAndVisible];
+    
+    [self.window makeKeyAndVisible];
+#endif
     
     //    UILogSetWindow(self.window);
     
@@ -391,23 +432,28 @@
     if (isForeground == NO){
         NSArray *viewControllers = self.navigationController.viewControllers;
         CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+        
         if (userInfo != nil) {
-            id arg=[userInfo objectForKey:@"args"];
+            id arg = [userInfo objectForKey:@"args"];
             if([arg isKindOfClass:[NSDictionary class]]) {
-                id cid=[arg objectForKey:@"cid"];
-                id msg_type=[arg objectForKey:@"t"];
-                if (cid !=nil && [cid isKindOfClass:[NSNumber class]] && msg_type!=nil && [msg_type isKindOfClass:[NSString class]]) {
-                    if ([cid intValue]>0 ) {
-                        int cross_id=[cid intValue];
-                        NSString *type=(NSString*)msg_type;
-                        if([type isEqualToString:@"i"])
+                id cid = [arg objectForKey:@"cid"];
+                id msg_type = [arg objectForKey:@"t"];
+                
+                if (cid != nil && [cid isKindOfClass:[NSNumber class]] && msg_type != nil && [msg_type isKindOfClass:[NSString class]]) {
+                    if ([cid intValue] > 0 ) {
+                        int cross_id = [cid intValue];
+                        NSString *type = (NSString *)msg_type;
+                        if ([type isEqualToString:@"i"]) {
                             if ([crossViewController PushToCross:cross_id] == NO) {
                                 [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
                             }
-                        if([type isEqualToString:@"c"])
+                        }
+                        
+                        if ([type isEqualToString:@"c"]) {
                             if ([crossViewController PushToConversation:cross_id] == NO) {
                                 [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
                             }
+                        }
                     }
                 }
             }

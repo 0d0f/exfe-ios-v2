@@ -11,7 +11,6 @@
 #import "PullRefreshTableViewController.h"
 #import "ImgCache.h"
 #import "EXInnerButton.h"
-#import "WelcomeView.h"
 #import "EXSpinView.h"
 #import "MBProgressHUD.h"
 #import "ProfileCard.h"

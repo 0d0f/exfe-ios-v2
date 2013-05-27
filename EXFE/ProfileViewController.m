@@ -16,6 +16,8 @@
 #import "AppDelegate.h"
 #import "WCAlertView.h"
 #import "EFAPIServer.h"
+#import "EFRomeViewController.h"
+#import "EFKit.h"
 
 
 #define DECTOR_HEIGHT                    (100)
@@ -422,17 +424,21 @@
     return NO;
 }
 
-- (void) showRome{
-    WelcomeView *welcome=[[WelcomeView alloc] initWithFrame:self.view.bounds];
-    [welcome setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5f]];
-//    welcome.parent=self;
+- (void)showRome {
+    EFRomeViewController *romeViewController = [[EFRomeViewController alloc] init];
+    EFPresentCardController *presentCardController = [[EFPresentCardController alloc] initWithContentViewController:romeViewController];
+    romeViewController.closeButtonPressedHandler = ^{
+        [presentCardController dismissAnimated:YES
+                         withCompletionHandler:nil];
+    };
     
-    [self.view addSubview:welcome];
-    [self.view bringSubviewToFront:welcome];
-//    self.tableView.bounces=NO;
-    [welcome release];
-
+    [presentCardController presentFromViewController:self
+                                            animated:YES];
+    
+    [presentCardController release];
+    [romeViewController release];
 }
+
 #pragma mark UITableViewDelegate methods
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

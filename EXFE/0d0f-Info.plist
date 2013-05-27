@@ -14,8 +14,8 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>Icon@2x.png</string>
-				<string>Icon.png</string>
+				<string>0d0f_Icon@2x.png</string>
+				<string>0d0f_Icon.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>
@@ -54,6 +54,8 @@
 	<string>44</string>
 	<key>FacebookAppID</key>
 	<string>434182423298466</string>
+	<key>EXFE-build</key>
+	<string>m2B35P</string>
 	<key>FacebookDisplayName</key>
 	<string>0D0F</string>
 	<key>LSRequiresIPhoneOS</key>

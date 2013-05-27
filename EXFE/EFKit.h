@@ -9,6 +9,8 @@
 #ifndef EXFE_EFKit_h
 #define EXFE_EFKit_h
 
+#import "EFPresentCardController.h"
+
 #import "EFPopoverController.h"
 #import "EFArrowView.h"
 

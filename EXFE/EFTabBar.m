@@ -15,8 +15,11 @@
 
 #define kTitleEdgeBlank                 (30.0f)
 #define kTabBarItemSize                 ((CGSize){30.0f, 30.0f})
-#define kTabBarButtonSize               ((CGSize){44.0f, 44.0f})
-#define kButtonSpacing                  (16.0f)
+#define kTabBarButtonSize               ((CGSize){54.0f, 44.0f})
+#define kButtonSpacing                  (6.0f)
+
+#define kInnserShadowRadius             (2.0f)
+#define kOuterShadowRadius              (10.0f)
 
 #define kNormalStyleFrame               ((CGRect){{0.0f, 0.0f}, {320.0f, 70.0f}})
 #define kDoubleheightStyleFrame         ((CGRect){{0.0f, 0.0f}, {320.0f, 100.0f}})
@@ -28,7 +31,7 @@
 
 #pragma mark - EFTabBarBackgroundView
 
-inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CGPoint endPoint) {
+inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CGPoint endPoint) {
     CGPoint controlPoint1 = (CGPoint){startPoint.x - 47.0f, startPoint.y};
     CGPoint controlPoint2 = (CGPoint){endPoint.x + 75.0f, endPoint.y};
     
@@ -39,6 +42,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     CGPathAddLineToPoint(maskPath, NULL, startPoint.x, startPoint.y);
     CGPathAddCurveToPoint(maskPath, NULL, controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endPoint.x, endPoint.y);
     CGPathAddLineToPoint(maskPath, NULL, 0.0f, endPoint.y);
+    CGPathCloseSubpath(maskPath);
     
     return maskPath;
 }
@@ -46,10 +50,12 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
 @interface EFTabBarBackgroundView : UIView
 
 @property (nonatomic, retain) UIImage *backgroundImage;
-@property (nonatomic, retain) CAShapeLayer *maskLayer;
 
-- (void)showButtonWithPath:(CGPathRef)maskPath animated:(BOOL)animated;
-- (void)dismissButtonWithPath:(CGPathRef)maskPath animated:(BOOL)animated;
+@property (nonatomic, retain) CAShapeLayer *maskLayer;
+@property (nonatomic, retain) CAShapeLayer *innerShadowLayer;
+
+- (void)showButtonWithMaskPath:(CGPathRef)maskPath innerShadowPath:(CGPathRef)shadowPath  animated:(BOOL)animated;
+- (void)dismissButtonWithMaskPath:(CGPathRef)maskPath innerShadowPath:(CGPathRef)shadowPath animated:(BOOL)animated;
 
 @end
 
@@ -60,51 +66,87 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     if (self) {
         CAShapeLayer *maskLayer = [CAShapeLayer layer];
         maskLayer.fillRule = kCAFillRuleEvenOdd;
-        self.maskLayer = maskLayer;
         self.layer.mask = maskLayer;
+        
+        self.maskLayer = maskLayer;
+        
+        CAShapeLayer *innerShadowLayer = [CAShapeLayer layer];
+        innerShadowLayer.needsDisplayOnBoundsChange = YES;
+        innerShadowLayer.shouldRasterize = YES;
+        innerShadowLayer.rasterizationScale = [UIScreen mainScreen].scale;
+        innerShadowLayer.contentsScale = [UIScreen mainScreen].scale;
+        innerShadowLayer.shadowColor = [UIColor blackColor].CGColor;
+        innerShadowLayer.shadowOffset = (CGSize){0.0f, 0.0f};
+        innerShadowLayer.shadowOpacity = 1.0f;
+        innerShadowLayer.shadowRadius = kInnserShadowRadius;
+        innerShadowLayer.fillRule = kCAFillRuleEvenOdd;
+        [self.layer addSublayer:innerShadowLayer];
+        
+        self.innerShadowLayer = innerShadowLayer;
     }
     
     return self;
 }
 
 - (void)dealloc {
+    [_innerShadowLayer release];
     [_maskLayer release];
     [_backgroundImage release];
     [super dealloc];
 }
 
-- (void)showButtonWithPath:(CGPathRef)maskPath animated:(BOOL)animated {
+- (void)showButtonWithMaskPath:(CGPathRef)maskPath innerShadowPath:(CGPathRef)shadowPath  animated:(BOOL)animated {
     if (animated) {
         // mask animation
-        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
-        animation.duration = 0.233f;
-        animation.fromValue = (id)self.maskLayer.path;
-        animation.toValue = (id)maskPath;
-        animation.fillMode = kCAFillModeForwards;
-        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        animation.removedOnCompletion = NO;
+        CABasicAnimation *maskAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+        maskAnimation.duration = 0.233f;
+        maskAnimation.fromValue = (id)self.maskLayer.path;
+        maskAnimation.toValue = (id)maskPath;
+        maskAnimation.fillMode = kCAFillModeForwards;
+        maskAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         
-        [self.maskLayer addAnimation:animation forKey:@"maskAnimation"];
+        [self.maskLayer addAnimation:maskAnimation forKey:@"maskAnimation"];
+        
+        // shadow animation
+        CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+        shadowAnimation.duration = 0.233f;
+        shadowAnimation.fromValue = (id)self.innerShadowLayer.path;
+        shadowAnimation.toValue = (id)shadowPath;
+        shadowAnimation.fillMode = kCAFillModeForwards;
+        shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        
+        [self.innerShadowLayer addAnimation:shadowAnimation forKey:@"shadowAnimation"];
     }
     
     self.maskLayer.path = maskPath;
+    self.innerShadowLayer.path = shadowPath;
 }
 
-- (void)dismissButtonWithPath:(CGPathRef)maskPath animated:(BOOL)animated {
+- (void)dismissButtonWithMaskPath:(CGPathRef)maskPath innerShadowPath:(CGPathRef)shadowPath animated:(BOOL)animated {
     if (animated) {
         // mask animation
-        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"path"];
-        animation.duration = 0.233f;
-        animation.fromValue = (id)self.maskLayer.path;
-        animation.toValue = (id)maskPath;
-        animation.fillMode = kCAFillModeForwards;
-        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        animation.removedOnCompletion = NO;
+        CABasicAnimation *maskAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+        maskAnimation.duration = 0.233f;
+        maskAnimation.fromValue = (id)self.maskLayer.path;
+        maskAnimation.toValue = (id)maskPath;
+        maskAnimation.fillMode = kCAFillModeForwards;
+        maskAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         
-        [self.maskLayer addAnimation:animation forKey:@"maskAnimation"];
+        [self.maskLayer addAnimation:maskAnimation forKey:@"maskAnimation"];
+        
+        // shadow animation
+        CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+        shadowAnimation.duration = 0.233f;
+        shadowAnimation.fromValue = (id)self.innerShadowLayer.path;
+        shadowAnimation.toValue = (id)shadowPath;
+        shadowAnimation.fillMode = kCAFillModeForwards;
+        shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        
+        [self.innerShadowLayer addAnimation:shadowAnimation forKey:@"shadowAnimation"];
     }
     
     self.maskLayer.path = maskPath;
+    self.innerShadowLayer.path = shadowPath;
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage {
@@ -152,6 +194,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
 @property (nonatomic, assign) BOOL isButtonsShowed;
 @property (nonatomic, retain) UIImageView *shadowImageView;
 @property (nonatomic, retain) EFTabBarBackgroundView *backgroundView;
+@property (nonatomic, retain) CAShapeLayer *outerShadowLayer;
 @property (nonatomic, assign) NSUInteger preSelectedIndex;
 @property (nonatomic, assign) EFTabBarItemState preSelectedTabBarItemState;
 @property (nonatomic, retain) UIView *gestureView;
@@ -212,10 +255,30 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
         // default background image
         self.backgroundImage = kDefaultBackgroundImage;
         
+        // outer shadow
+        UIView *outerShadowView = [[UIView alloc] initWithFrame:frame];
+        outerShadowView.backgroundColor = [UIColor clearColor];
+        
+        CAShapeLayer *outerShadowLayer = [CAShapeLayer layer];
+        outerShadowLayer.shouldRasterize = YES;
+        outerShadowLayer.rasterizationScale = [UIScreen mainScreen].scale;
+        outerShadowLayer.contentsScale = [UIScreen mainScreen].scale;
+        outerShadowLayer.fillMode = kCAFillRuleEvenOdd;
+        outerShadowLayer.shadowOffset = (CGSize){0.0f, 0.0f};
+        outerShadowLayer.shadowOpacity = 1.0f;
+        outerShadowLayer.shadowRadius = kOuterShadowRadius;
+        
+        [outerShadowView.layer addSublayer:outerShadowLayer];
+        self.outerShadowLayer = outerShadowLayer;
+        
+        [self insertSubview:outerShadowView belowSubview:label];
+        
+        [outerShadowView release];
+        
         // backgroundView
         _backgroundView = [[EFTabBarBackgroundView alloc] initWithFrame:kDoubleheightStyleFrame];
         _backgroundView.backgroundImage = self.backgroundImage;
-        [self insertSubview:_backgroundView atIndex:0];
+        [self insertSubview:_backgroundView belowSubview:label];
         
         // left button
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -270,6 +333,7 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     self.originWindow = nil;
     self.window = nil;
     self.tabBarViewController = nil;
+    [_outerShadowLayer release];
     [_gestureView release];
     [_backgroundView release];
     [_buttons release];
@@ -283,6 +347,9 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (object == self.titleLabel && [keyPath isEqualToString:@"text"]) {
         [self _changeTitleFrameAimated:YES];
+    } else if (object == self.tabBarViewController && [keyPath isEqualToString:@"selectedIndex"]) {
+        UIViewController<EFTabBarDataSource> *viewController = (UIViewController<EFTabBarDataSource> *)self.tabBarViewController.viewControllers[self.tabBarViewController.selectedIndex];
+        self.outerShadowLayer.shadowColor = viewController.shadowColor.CGColor;
     }
 }
 
@@ -325,6 +392,24 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     }
     
     self.backgroundView.backgroundImage = backgroundImage;
+}
+
+- (void)setTabBarViewController:(EFTabBarViewController *)tabBarViewController {
+    if (_tabBarViewController == tabBarViewController)
+        return;
+    
+    if (_tabBarViewController) {
+        [_tabBarViewController removeObserver:self
+                                   forKeyPath:@"selectedIndex"];
+        _tabBarViewController = nil;
+    }
+    if (tabBarViewController) {
+        [tabBarViewController addObserver:self
+                               forKeyPath:@"selectedIndex"
+                                  options:NSKeyValueObservingOptionNew
+                                  context:NULL];
+        _tabBarViewController = tabBarViewController;
+    }
 }
 
 #pragma mark - Public
@@ -510,8 +595,34 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     CGPoint endPoint = (CGPoint){startPoint.x - 122.0f, floor(CGRectGetHeight(self.bounds) - 20.0f)};
     
     CGPathRef maskPath = CreateMaskPath(self.bounds, startPoint, endPoint);
-    [self.backgroundView showButtonWithPath:maskPath animated:animated];
+    
+    CGRect largerRect = CGRectMake(self.bounds.origin.x,
+                                   self.bounds.origin.y,
+                                   self.bounds.size.width,
+                                   self.bounds.size.height + kInnserShadowRadius);
+    CGPoint largerStartPoint = (CGPoint){startPoint.x, startPoint.y + kInnserShadowRadius};
+    CGPoint largerEndPoint = (CGPoint){endPoint.x, endPoint.y + kInnserShadowRadius};
+    
+    CGMutablePathRef shadowPath = CreateMaskPath(largerRect, largerStartPoint, largerEndPoint);
+    CGPathAddPath(shadowPath, NULL, maskPath);
+    CGPathCloseSubpath(shadowPath);
+    
+    [self.backgroundView showButtonWithMaskPath:maskPath
+                                innerShadowPath:shadowPath
+                                       animated:YES];
+    
+    CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+    shadowAnimation.duration = 0.233f;
+    shadowAnimation.fromValue = (id)self.outerShadowLayer.path;
+    shadowAnimation.toValue = (id)maskPath;
+    shadowAnimation.fillMode = kCAFillModeForwards;
+    shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    [self.outerShadowLayer addAnimation:shadowAnimation forKey:@"shadowAnimation"];
+    self.outerShadowLayer.path = maskPath;
+    
     CGPathRelease(maskPath);
+    CGPathRelease(shadowPath);
     
     // buttons animation
     [UIView setAnimationsEnabled:animated];
@@ -570,8 +681,34 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
     CGPoint endPoint = (CGPoint){startPoint.x - 122.0f, floor(CGRectGetHeight(self.bounds) - 20.0f)};
     
     CGPathRef maskPath = CreateMaskPath(self.bounds, startPoint, endPoint);
-    [self.backgroundView dismissButtonWithPath:maskPath animated:animated];
+    
+    CGRect largerRect = CGRectMake(self.bounds.origin.x,
+                                   self.bounds.origin.y,
+                                   self.bounds.size.width,
+                                   self.bounds.size.height + kInnserShadowRadius);
+    CGPoint largerStartPoint = (CGPoint){startPoint.x, startPoint.y + kInnserShadowRadius};
+    CGPoint largerEndPoint = (CGPoint){endPoint.x, endPoint.y + kInnserShadowRadius};
+    
+    CGMutablePathRef shadowPath = CreateMaskPath(largerRect, largerStartPoint, largerEndPoint);
+    CGPathAddPath(shadowPath, NULL, maskPath);
+    CGPathCloseSubpath(shadowPath);
+    
+    [self.backgroundView dismissButtonWithMaskPath:maskPath
+                                   innerShadowPath:shadowPath
+                                          animated:YES];
+    
+    CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+    shadowAnimation.duration = 0.233f;
+    shadowAnimation.fromValue = (id)self.outerShadowLayer.path;
+    shadowAnimation.toValue = (id)maskPath;
+    shadowAnimation.fillMode = kCAFillModeForwards;
+    shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    [self.outerShadowLayer addAnimation:shadowAnimation forKey:@"shadowAnimation"];
+    self.outerShadowLayer.path = maskPath;
+    
     CGPathRelease(maskPath);
+    CGPathRelease(shadowPath);
     
     if (animated) {
         // selected button animation
@@ -667,8 +804,34 @@ inline static CGPathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CG
         CGPoint endPoint = (CGPoint){startPoint.x - 122.0f, floor(CGRectGetHeight(self.bounds) - 20.0f)};
         
         CGPathRef maskPath = CreateMaskPath(self.bounds, startPoint, endPoint);
-        [self.backgroundView dismissButtonWithPath:maskPath animated:YES];
+        
+        CGRect largerRect = CGRectMake(self.bounds.origin.x,
+                                       self.bounds.origin.y,
+                                       self.bounds.size.width,
+                                       self.bounds.size.height + kInnserShadowRadius);
+        CGPoint largerStartPoint = (CGPoint){startPoint.x, startPoint.y + kInnserShadowRadius};
+        CGPoint largerEndPoint = (CGPoint){endPoint.x, endPoint.y + kInnserShadowRadius};
+        
+        CGMutablePathRef shadowPath = CreateMaskPath(largerRect, largerStartPoint, largerEndPoint);
+        CGPathAddPath(shadowPath, NULL, maskPath);
+        CGPathCloseSubpath(shadowPath);
+        
+        [self.backgroundView dismissButtonWithMaskPath:maskPath
+                                       innerShadowPath:shadowPath
+                                              animated:YES];
+        
+        CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+        shadowAnimation.duration = 0.233f;
+        shadowAnimation.fromValue = (id)self.outerShadowLayer.path;
+        shadowAnimation.toValue = (id)maskPath;
+        shadowAnimation.fillMode = kCAFillModeForwards;
+        shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        
+        [self.outerShadowLayer addAnimation:shadowAnimation forKey:@"shadowAnimation"];
+        self.outerShadowLayer.path = maskPath;
+        
         CGPathRelease(maskPath);
+        CGPathRelease(shadowPath);
         
         // selected button animation
         CGRect preButtonFrame = preButton.frame;
