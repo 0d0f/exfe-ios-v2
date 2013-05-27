@@ -100,8 +100,7 @@
     versionWindow.alpha = 0.9f;
     UIColor *backgroundColor = [UIColor COLOR_BLUE_EXFE];
     NSString *serverName = @"EXFE";
-    NSString *version = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"];
-    NSString *buildNumber = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"EXFE-build"];
     
     #ifdef PILOT
         backgroundColor = [UIColor purpleColor];
@@ -118,7 +117,7 @@
     label.textColor = [UIColor lightTextColor];
     label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
     label.textAlignment = NSTextAlignmentCenter;
-    label.text = [NSString stringWithFormat:@"%@#%@ @ %@", version, buildNumber, serverName];
+    label.text = [NSString stringWithFormat:@"%@ @ %@", version, serverName];
     [versionWindow addSubview:label];
     [label release];
     
