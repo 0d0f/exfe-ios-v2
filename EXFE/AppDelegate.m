@@ -398,7 +398,7 @@
         if(pathComps.count  == 2){
             int cross_id = [[pathComps objectAtIndex:1] intValue];
             if( cross_id > 0){
-                if ([crossViewController PushToCross:cross_id] == NO) {
+                if ([crossViewController pushToCross:cross_id] == NO) {
                     [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
                 }
                 return ;
@@ -413,7 +413,7 @@
         if(pathComps.count  == 2){
             int cross_id = [[pathComps objectAtIndex:1] intValue];
             if (cross_id > 0){
-                if ([crossViewController PushToConversation:cross_id] == NO) {
+                if ([crossViewController pushToConversation:cross_id] == NO) {
                     [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
                 }
             }
@@ -443,13 +443,13 @@
                         int cross_id = [cid intValue];
                         NSString *type = (NSString *)msg_type;
                         if ([type isEqualToString:@"i"]) {
-                            if ([crossViewController PushToCross:cross_id] == NO) {
+                            if ([crossViewController pushToCross:cross_id] == NO) {
                                 [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
                             }
                         }
                         
                         if ([type isEqualToString:@"c"]) {
-                            if ([crossViewController PushToConversation:cross_id] == NO) {
+                            if ([crossViewController pushToConversation:cross_id] == NO) {
                                 [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
                             }
                         }

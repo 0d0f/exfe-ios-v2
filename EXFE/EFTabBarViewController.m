@@ -55,12 +55,36 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if (_viewWillAppearHandler) {
+        self.viewWillAppearHandler();
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if (_viewDidAppearHandler) {
+        self.viewDidAppearHandler();
+    }
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
-    if (_tabBarWillDisappearHandler) {
-        self.tabBarWillDisappearHandler();
+    if (_viewWillDisappearHandler) {
+        self.viewWillDisappearHandler();
     }
     
     [super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    if (_viewDidDisappearHandler) {
+        self.viewDidDisappearHandler();
+    }
+    
+    [super viewDidDisappear:animated];
 }
 
 - (void)dealloc {
@@ -193,6 +217,29 @@
     }
     
     return [[viewControllers copy] autorelease];
+}
+
+- (NSUInteger)indexOfViewControllerForClass:(Class)viewControllerClass {
+    NSParameterAssert(viewControllerClass);
+    
+    NSUInteger index = NSNotFound;
+    NSUInteger currentIndex = 0;
+    for (UIViewController *viewController in self.viewControllers) {
+        if ([viewController isKindOfClass:viewControllerClass]) {
+            index = currentIndex;
+            break;
+        }
+        
+        currentIndex++;
+    }
+    
+    return index;
+}
+
+- (NSUInteger)indexOfViewController:(UIViewController<EFTabBarDataSource> *)viewController {
+    NSParameterAssert(viewController);
+    
+    return [self indexOfViewControllerForClass:[viewController class]];
 }
 
 #pragma mark - Private

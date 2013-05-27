@@ -32,6 +32,10 @@
 @property (nonatomic, retain) EFHeadView *headView;
 @end
 
+@interface CrossesViewController (Private)
+- (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross;
+@end
+
 @implementation CrossesViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -312,19 +316,18 @@
     [self refreshCrosses:(NSString*)source withCrossId:0];
 }
 
-- (void) refreshCrosses:(NSString*)source withCrossId:(int)cross_id{
+- (void)refreshCrosses:(NSString*)source withCrossId:(int)cross_id {
     
     NSString *updated_at=@"";
-    NSDate *date_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-    if(date_updated_at!=nil)
-    {
+    NSDate *date_updated_at = [[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
+    if (date_updated_at != nil) {
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         updated_at = [formatter stringFromDate:date_updated_at];
         [formatter release];
     }
-    if([source isEqualToString:@"crossview_init"]){
+    if ([source isEqualToString:@"crossview_init"]) {
         //        hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
         //        hud.labelText = @"Loading";
         //        hud.mode=MBProgressHUDModeCustomView;
@@ -425,23 +428,24 @@
                                                            [app.navigationController dismissModalViewControllerAnimated:YES];
                                                        }
                                                        else if([source isEqualToString:@"pushtocross"]) {
-                                                           Cross *cross=[self crossWithId:cross_id];
+                                                           Cross *cross = [self crossWithId:cross_id];
                                                            
-                                                           CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
-                                                           viewController.cross = cross;
-                                                           viewController.widgetId = kWidgetCross;
-                                                           [self.navigationController pushViewController:viewController animated:NO];
-                                                           [viewController release];
+                                                           EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
+                                                           [self.navigationController pushViewController:tabBarViewController animated:NO];
                                                        }
                                                        else if([source isEqualToString:@"pushtoconversation"]) {
-                                                           Cross *cross=[self crossWithId:cross_id];
+                                                           Cross *cross = [self crossWithId:cross_id];
                                                            
-                                                           CrossGroupViewController *viewController = [[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
-                                                           viewController.cross = cross;
-                                                           viewController.widgetId = kWidgetConversation;
-                                                           [self.navigationController pushViewController:viewController animated:NO];
-                                                           [viewController release];
+                                                           Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
+                                                           EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
+                                                           tabBarViewController.viewWillAppearHandler = ^{
+                                                               NSUInteger toJumpIndex = [tabBarViewController indexOfViewControllerForClass:toJumpClass];
+                                                               NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
+                                                               
+                                                               [tabBarViewController.tabBar setSelectedIndex:toJumpIndex];
+                                                           };
                                                            
+                                                           [self.navigationController pushViewController:tabBarViewController animated:NO];
                                                        }
                                                        else if([source isEqualToString:@"crossupdateview"] || [source isEqualToString:@"crossview"] || [source isEqualToString:@"crossview_init"]) {
                                                            [self loadObjectsFromDataStore];
@@ -759,13 +763,12 @@
     }
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 1){
-        Cross *cross=[self.crossList objectAtIndex:indexPath.row];
-        if(cross.updated!=nil)
-        {
-            id updated=cross.updated;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 1) {
+        Cross *cross = [self.crossList objectAtIndex:indexPath.row];
+        
+        if (cross.updated != nil) {
+            id updated = cross.updated;
             if ([updated isKindOfClass:[NSDictionary class]]) {
                 NSEnumerator *enumerator = [(NSDictionary*)updated keyEnumerator];
                 NSString *key = nil;
@@ -773,18 +776,23 @@
                 while (key = [enumerator nextObject]) {
                     NSDictionary *obj = [(NSDictionary*) updated objectForKey:key];
                     NSString *updated_at_str = [obj objectForKey:@"updated_at"];
-                    if (updated_at_str != nil && [updated_at_str length] > 19)
+                    
+                    if (updated_at_str != nil && [updated_at_str length] > 19) {
                         updated_at_str = [updated_at_str substringToIndex:19];
+                    }
+                    
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
                     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                     NSDate *updated_at = [formatter dateFromString:updated_at_str];
                     [formatter release];
-                    if (cross.read_at == nil)
+                    if (cross.read_at == nil) {
                         cross.read_at=updated_at;
-                    else
+                    } else {
                         cross.read_at=[cross.read_at laterDate:updated_at];
+                    }
                 }
+                
                 [self.tableView beginUpdates];
                 [self.tableView reloadRowsAtIndexPaths:@[indexPath]
                                       withRowAnimation:UITableViewRowAnimationNone];
@@ -792,112 +800,8 @@
             }
         }
         
-        // CrossGroupViewController
-        CrossGroupViewController *crossGroupViewController = [[CrossGroupViewController alloc] initWithNibName:@"CrossGroupViewController" bundle:nil];
-        crossGroupViewController.cross = cross;
-        
-        EFTabBarItem *tabBarItem1 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_x_30.png"]];
-        tabBarItem1.highlightImage = [UIImage imageNamed:@"widget_x_30shine.png"];
-        
-        crossGroupViewController.customTabBarItem = tabBarItem1;
-        crossGroupViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
-        crossGroupViewController.shadowColor = [UIColor whiteColor];
-        
-        // ConvViewController
-        WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithNibName:@"WidgetConvViewController" bundle:nil] ;
-        // prepare data for conversation
-        conversationViewController.exfee_id = [cross.exfee.exfee_id intValue];
-        Invitation* myInvitation = [cross.exfee getMyInvitation];
-        if (myInvitation != nil) {
-            conversationViewController.myIdentity = myInvitation.identity;
-        }
-        
-        // clean up data
-        cross.conversation_count = 0;
-        
-        EFTabBarItem *tabBarItem2 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_conv_30.png"]];
-        tabBarItem2.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
-        
-        conversationViewController.customTabBarItem = tabBarItem2;
-        conversationViewController.tabBarStyle = kEFTabBarStyleNormal;
-        conversationViewController.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
-        
-        // ExfeeViewController
-        WidgetExfeeViewController *exfeeViewController = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
-        exfeeViewController.exfee = cross.exfee;
-        exfeeViewController.onExitBlock = ^{
-            [crossGroupViewController performSelector:@selector(fillExfee:)
-                                           withObject:exfeeViewController.exfee];
-        };
-        
-        EFTabBarItem *tabBarItem3 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_exfee_30.png"]];
-        tabBarItem3.highlightImage = [UIImage imageNamed:@"widget_exfee_30shine.png"];
-        
-        exfeeViewController.customTabBarItem = tabBarItem3;
-        exfeeViewController.tabBarStyle = kEFTabBarStyleNormal;
-        exfeeViewController.shadowColor = [UIColor whiteColor];
-        
-        // Init TabBarViewController
-        EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController]];
-        
-        [crossGroupViewController release];
-        [conversationViewController release];
-        [exfeeViewController release];
-        
-        tabBarViewController.titlePressedHandler = ^{
-            NSInteger arg = 0x0101;
-            [crossGroupViewController showPopup:arg];
-        };
-        
-        tabBarViewController.backButtonActionHandler = ^{
-            RKObjectManager* manager = [RKObjectManager sharedManager];
-            [manager.operationQueue cancelAllOperations];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        };
-        
-        tabBarViewController.title = cross.title;
-        
-        // Fetch background image
-        BOOL flag = NO;
-        for(NSDictionary *widget in cross.widget) {
-            if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
-                NSString* url = [widget objectForKey:@"image"];
-                
-                if (url && url.length > 0) {
-                    NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
-                    UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
-                    
-                    if (backimg == nil || [backimg isEqual:[NSNull null]]) {
-                        dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                        dispatch_async(imgQueue, ^{
-                            // Not in Cache
-                            tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
-                            UIImage *backimg = [[ImgCache sharedManager] getImgFrom:imgurl];
-                            
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                if (backimg != nil && ![backimg isEqual:[NSNull null]]) {
-                                    // Fill after download
-                                    tabBarViewController.tabBar.backgroundImage = backimg;
-                                }
-                            });
-                        });
-                        dispatch_release(imgQueue);
-                    } else {
-                        // Find in cache
-                        tabBarViewController.tabBar.backgroundImage = backimg;
-                    }
-                    flag = YES;
-                    break;
-                }
-            }
-        }
-        if (flag == NO) {
-            // Missing Background widget
-            tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
-        }
-        
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
         [self.navigationController pushViewController:tabBarViewController animated:YES];
-        [tabBarViewController release];
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         current_cellrow = indexPath.row;
@@ -931,50 +835,173 @@
     [Util signout];
 }
 
-#pragma mark View Push methods
-- (BOOL) PushToCross:(int)cross_id{
+#pragma mark - View Push methods
+
+- (BOOL)pushToCross:(int)cross_id {
     Cross *cross = [self crossWithId:cross_id];
-    if(cross != nil){
-        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
-        viewController.cross = cross;
-        viewController.widgetId = kWidgetCross;
-        [self.navigationController pushViewController:viewController animated:NO];
-        [viewController release];
+    
+    if (cross != nil) {
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
+        
+        [self.navigationController pushViewController:tabBarViewController animated:NO];
+        
         return YES;
     }
+    
     return NO;
 }
 
-
-
-- (BOOL) PushToConversation:(int)cross_id{
-    Cross *cross=[self crossWithId:cross_id];
-    if(cross!=nil){
-        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
-        viewController.cross = cross;
-        viewController.widgetId = kWidgetConversation;
-        [self.navigationController pushViewController:viewController animated:NO];
-        [viewController release];
+- (BOOL)pushToConversation:(int)cross_id {
+    Cross *cross = [self crossWithId:cross_id];
+    
+    if (cross != nil) {
+        Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
+        tabBarViewController.viewWillAppearHandler = ^{
+            NSUInteger toJumpIndex = [tabBarViewController indexOfViewControllerForClass:toJumpClass];
+            NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
+            
+            [tabBarViewController.tabBar setSelectedIndex:toJumpIndex];
+        };
+        
+        [self.navigationController pushViewController:tabBarViewController animated:NO];
+        
         return YES;
     }
+    
     return NO;
 }
 
+#pragma mark - CrossCardDelegate
 
-#pragma mark CrossCardDelegate
-- (void) onClickConversation:(UIView*)card{
+- (void)onClickConversation:(UIView*)card {
     [Flurry logEvent:@"CLICK_CROSS_CARD_CONVERSATION"];
     CrossCard* c = (CrossCard*)card;
     int cross_id = [c.cross_id intValue];
     
     Cross *cross = [self crossWithId:cross_id];
-    if(cross != nil){
-        CrossGroupViewController *viewController=[[CrossGroupViewController alloc]initWithNibName:@"CrossGroupViewController" bundle:nil];
-        viewController.cross = cross;
-        viewController.widgetId = kWidgetConversation;
-        [self.navigationController pushViewController:viewController animated:NO];
-        [viewController release];
+    if (cross != nil) {
+        Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
+        tabBarViewController.viewWillAppearHandler = ^{
+            NSUInteger toJumpIndex = [tabBarViewController indexOfViewControllerForClass:toJumpClass];
+            NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
+            
+            [tabBarViewController.tabBar setSelectedIndex:toJumpIndex];
+        };
+        
+        [self.navigationController pushViewController:tabBarViewController animated:NO];
     }
+}
+
+#pragma mark - Private
+
+- (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross {
+    // CrossGroupViewController
+    CrossGroupViewController *crossGroupViewController = [[CrossGroupViewController alloc] initWithNibName:@"CrossGroupViewController" bundle:nil];
+    crossGroupViewController.cross = cross;
+    
+    EFTabBarItem *tabBarItem1 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_x_30.png"]];
+    tabBarItem1.highlightImage = [UIImage imageNamed:@"widget_x_30shine.png"];
+    
+    crossGroupViewController.customTabBarItem = tabBarItem1;
+    crossGroupViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
+    crossGroupViewController.shadowColor = [UIColor whiteColor];
+    
+    // ConvViewController
+    WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithNibName:@"WidgetConvViewController" bundle:nil] ;
+    // prepare data for conversation
+    conversationViewController.exfee_id = [cross.exfee.exfee_id intValue];
+    Invitation* myInvitation = [cross.exfee getMyInvitation];
+    if (myInvitation != nil) {
+        conversationViewController.myIdentity = myInvitation.identity;
+    }
+    
+    // clean up data
+    cross.conversation_count = 0;
+    
+    EFTabBarItem *tabBarItem2 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_conv_30.png"]];
+    tabBarItem2.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
+    
+    conversationViewController.customTabBarItem = tabBarItem2;
+    conversationViewController.tabBarStyle = kEFTabBarStyleNormal;
+    conversationViewController.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+    
+    // ExfeeViewController
+    WidgetExfeeViewController *exfeeViewController = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
+    exfeeViewController.exfee = cross.exfee;
+    exfeeViewController.onExitBlock = ^{
+        [crossGroupViewController performSelector:@selector(fillExfee:)
+                                       withObject:exfeeViewController.exfee];
+    };
+    
+    EFTabBarItem *tabBarItem3 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_exfee_30.png"]];
+    tabBarItem3.highlightImage = [UIImage imageNamed:@"widget_exfee_30shine.png"];
+    
+    exfeeViewController.customTabBarItem = tabBarItem3;
+    exfeeViewController.tabBarStyle = kEFTabBarStyleNormal;
+    exfeeViewController.shadowColor = [UIColor whiteColor];
+    
+    // Init TabBarViewController
+    EFTabBarViewController *tabBarViewController = [[[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController]] autorelease];
+    
+    [crossGroupViewController release];
+    [conversationViewController release];
+    [exfeeViewController release];
+    
+    tabBarViewController.titlePressedHandler = ^{
+        NSInteger arg = 0x0101;
+        [crossGroupViewController showPopup:arg];
+    };
+    
+    tabBarViewController.backButtonActionHandler = ^{
+        RKObjectManager* manager = [RKObjectManager sharedManager];
+        [manager.operationQueue cancelAllOperations];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    };
+    
+    tabBarViewController.title = cross.title;
+    
+    // Fetch background image
+    BOOL flag = NO;
+    for(NSDictionary *widget in cross.widget) {
+        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+            NSString* url = [widget objectForKey:@"image"];
+            
+            if (url && url.length > 0) {
+                NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+                UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
+                
+                if (backimg == nil || [backimg isEqual:[NSNull null]]) {
+                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+                    dispatch_async(imgQueue, ^{
+                        // Not in Cache
+                        tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+                        UIImage *backimg = [[ImgCache sharedManager] getImgFrom:imgurl];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (backimg != nil && ![backimg isEqual:[NSNull null]]) {
+                                // Fill after download
+                                tabBarViewController.tabBar.backgroundImage = backimg;
+                            }
+                        });
+                    });
+                    dispatch_release(imgQueue);
+                } else {
+                    // Find in cache
+                    tabBarViewController.tabBar.backgroundImage = backimg;
+                }
+                flag = YES;
+                break;
+            }
+        }
+    }
+    if (flag == NO) {
+        // Missing Background widget
+        tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+    }
+    
+    return tabBarViewController;
 }
 
 @end

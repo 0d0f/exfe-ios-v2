@@ -286,8 +286,34 @@
     
     [self refreshUI];
     
-    if (_widgetId > kWidgetCross) {
-//        [self swapChildViewController:_widgetId];
+    switch (_widgetId) {
+        case kWidgetConversation:
+        {
+            NSArray *controllers = [self.tabBarViewController viewControllersForClass:[WidgetConvViewController class]];
+            
+            NSAssert(controllers.count, @"Should contain a WidgetExfeeViewController");
+            
+            WidgetConvViewController *exfeeViewController = controllers[0];
+            NSUInteger index = [self.tabBarViewController.viewControllers indexOfObject:exfeeViewController];
+            [self.tabBarViewController.tabBar setSelectedIndex:index];
+            [self performSelector:@selector(hidePopupIfShown) withObject:nil afterDelay:1.0f];
+        }
+            break;
+        case kWidgetExfee:
+        {
+            NSArray *controllers = [self.tabBarViewController viewControllersForClass:[WidgetExfeeViewController class]];
+            
+            NSAssert(controllers.count, @"Should contain a WidgetExfeeViewController");
+            
+            WidgetExfeeViewController *exfeeViewController = controllers[0];
+            NSUInteger index = [self.tabBarViewController.viewControllers indexOfObject:exfeeViewController];
+            [self.tabBarViewController.tabBar setSelectedIndex:index];
+            [self performSelector:@selector(hidePopupIfShown) withObject:nil afterDelay:1.0f];
+        }
+            break;
+        case kWidgetCross:
+        default:
+            break;
     }
 }
 
