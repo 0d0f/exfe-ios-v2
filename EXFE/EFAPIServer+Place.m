@@ -7,8 +7,7 @@
 //
 
 #import "EFAPIServer+Place.h"
-
-#import "AppDelegate.h"
+#import "Util.h"
 
 @implementation EFAPIServer (Place)
 
@@ -16,13 +15,21 @@
                               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
-    NSString *endpoint = [NSString stringWithFormat:@"%@/maps/api/place/search/json?location=%g,%g&radius=100&language=%@&sensor=true&key=%@",@"https://maps.googleapis.com", location.latitude, location.longitude, language, GOOGLE_API_KEY];
+    // should be replaced by GeoCoding api: https://developers.google.com/maps/documentation/geocoding/
+    NSString *endpoint = @"https://maps.googleapis.com/maps/api/place/search/json";
+    
+    
+    NSDictionary *params = @{@"location": [NSString stringWithFormat:@"%g,%g", location.latitude, location.longitude],
+                             @"radius": @"1000",
+                             @"language": language,
+                             @"sensor": @"true",
+                             @"key": GOOGLE_API_KEY};
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     [manager.HTTPClient.operationQueue cancelAllOperations];
     
     [manager.HTTPClient getPath:endpoint
-                     parameters:nil
+                     parameters:params
                         success:^(AFHTTPRequestOperation *operation, id responseObject){
                             [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
                                        withObject:operation
@@ -51,13 +58,20 @@
                             success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                             failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
-    NSString *endpoint = [NSString stringWithFormat:@"%@/maps/api/place/search/json?location=%g,%g&radius=1000&language=%@&sensor=true&key=%@",@"https://maps.googleapis.com", location.latitude, location.longitude, language, GOOGLE_API_KEY];
+    NSString *endpoint = @"https://maps.googleapis.com/maps/api/place/search/json";
+    
+    NSDictionary *params = @{@"location": [NSString stringWithFormat:@"%g,%g", location.latitude, location.longitude],
+                             @"radius": @"1000",
+                             @"language": language,
+                             @"sensor": @"true",
+                             @"key": GOOGLE_API_KEY};
+    
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     [manager.HTTPClient.operationQueue cancelAllOperations];
     
     [manager.HTTPClient getPath:endpoint
-                     parameters:nil
+                     parameters:params
                         success:^(AFHTTPRequestOperation *operation, id responseObject){
                             [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
                                        withObject:operation
@@ -87,19 +101,25 @@
                  success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                  failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
-    NSString *endpoint = nil;
+    NSString *endpoint = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json"];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:6];
+    
+    [params addEntriesFromDictionary:@{@"query": title, @"language": language, @"sensor": @"true", @"key": GOOGLE_API_KEY}];
     
     if (location.longitude == 0 && location.latitude == 0) {
-        endpoint = [NSString stringWithFormat:@"%@//maps/api/place/textsearch/json?query=%@&language=%@&sensor=true&key=%@", @"https://maps.googleapis.com", title, language, GOOGLE_API_KEY];
+        
     } else {
-        endpoint = [NSString stringWithFormat:@"%@/maps/api/place/textsearch/json?query=%@&location=%g,%g&radius=1000&language=%@&sensor=true&key=%@", @"https://maps.googleapis.com", title, location.latitude, location.longitude, language, GOOGLE_API_KEY];
+        [params addEntriesFromDictionary:@{
+         @"location": [NSString stringWithFormat:@"%g,%g", location.latitude, location.longitude],
+         @"radius": @"1000"}];
     }
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     [manager.HTTPClient.operationQueue cancelAllOperations];
     
     [manager.HTTPClient getPath:endpoint
-                     parameters:nil
+                     parameters:params
                         success:^(AFHTTPRequestOperation *operation, id responseObject){
                             [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
                                        withObject:operation
