@@ -567,11 +567,11 @@
 - (void) ShowPlaceView:(NSString*)status{
     PlaceViewController *placeViewController=[[PlaceViewController alloc]initWithNibName:@"PlaceViewController" bundle:nil];
     placeViewController.delegate=self;
-    if(_cross.place!=nil){
-            if(![_cross.place.title isEqualToString:@""] || ( ![_cross.place.lat isEqualToString:@""] || ![_cross.place.lng isEqualToString:@""])){
-                [placeViewController setPlace:_cross.place isedit:YES];
-            }
-            else{
+    if(_cross.place != nil){
+            if(![_cross.place isEmpty]){
+//                [placeViewController setPlace:_cross.place isedit:YES];
+                placeViewController.selecetedPlace = _cross.place;
+            } else {
                 placeViewController.isaddnew=YES;
                 placeViewController.showtableview=YES;
                 status=@"search";

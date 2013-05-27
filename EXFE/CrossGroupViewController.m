@@ -1246,8 +1246,8 @@
     placeViewController.delegate = self;
     
     if (_cross.place != nil) {
-        if (![_cross.place.title isEqualToString:@""] || ( ![_cross.place.lat isEqualToString:@""] || ![_cross.place.lng isEqualToString:@""])) {
-            [placeViewController setPlace:_cross.place isedit:YES];
+        if(![_cross.place isEmpty]){
+            placeViewController.selecetedPlace = _cross.place;
         } else {
             placeViewController.isaddnew = YES;
             placeViewController.showtableview = YES;
