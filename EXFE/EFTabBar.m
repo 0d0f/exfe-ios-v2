@@ -241,6 +241,8 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
         label.backgroundColor = [UIColor clearColor];
         label.textColor = [UIColor whiteColor];
+        label.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+        label.shadowOffset = (CGSize){0, 0.5f};
         label.numberOfLines = (style == kEFTabBarStyleDoubleHeight) ? 2 : 1;
         [self addSubview:label];
         _titleLabel = label;
