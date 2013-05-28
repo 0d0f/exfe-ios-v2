@@ -25,7 +25,7 @@
     UIView *lasttimeview;
     CrossTime *_crosstime;
     UIButton *lasttimebutton;
-    BOOL datechanged;
+    BOOL datechanged; // deprecated
     UITextField *timeInput;
     double editinginterval;
 }

@@ -200,6 +200,7 @@
     
 }
 
+// deprecated
 - (void) dateChanged:(id) sender{
     datechanged=YES;
 }
@@ -292,8 +293,8 @@
     
 }
 - (IBAction) Done:(id) sender{
-    if(datechanged==YES)
-        [self saveDate:nil];
+//    if(datechanged==YES)
+    [self saveDate:nil];
     [self dismissModalViewControllerAnimated:YES];
 //    
 }
