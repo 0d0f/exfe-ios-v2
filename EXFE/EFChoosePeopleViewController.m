@@ -263,6 +263,7 @@
                 }
                 RoughIdentity *cachedRoughtIdentity = [_cachedRoughIdentityDict valueForKey:roughIdentity.key];
                 if (cachedRoughtIdentity.status == kEFRoughIdentityGetIdentityStatusSuccess) {
+                    cachedRoughtIdentity.identity.name = contact.name;
                     [contactRoughIdentities addObject:cachedRoughtIdentity.identity];
                     [addIdentitiyDict setValue:@"YES" forKey:roughIdentity.key];
                 } else if (cachedRoughtIdentity.status == kEFRoughIdentityGetIdentityStatusLoading) {
@@ -271,6 +272,7 @@
                                                  beforeDate:[NSDate distantFuture]];
                     }
                     if (kEFRoughIdentityGetIdentityStatusSuccess == cachedRoughtIdentity.status) {
+                        cachedRoughtIdentity.identity.name = contact.name;
                         [contactRoughIdentities addObject:cachedRoughtIdentity.identity];
                         [addIdentitiyDict setValue:@"YES" forKey:roughIdentity.key];
                     }
@@ -826,8 +828,14 @@
                         (self.searchResultRoughtIdentity.identity && kProviderPhone == matchedProvider && [self.searchResultRoughtIdentity.identity.identity_id intValue] == 0))) {
                         self.hasExfeeNameSetCompletion = NO;
                         
-                        NSString *countryCode = [Util getTelephoneCountryCode];
-                        NSString *message = [NSString stringWithFormat:@"+%@ %@", countryCode, self.searchBar.text];
+                        NSString *message = nil;
+                        if ([self.searchBar.text hasPrefix:@"+"]) {
+                            message = self.searchBar.text;
+                        } else {
+                            NSString *countryCode = [Util getTelephoneCountryCode];
+                            message = [NSString stringWithFormat:@"+%@ %@", countryCode, self.searchBar.text];
+                        }
+                        
                         [WCAlertView showAlertWithTitle:@"Set invitee name"
                                                 message:message
                                      customizationBlock:^(WCAlertView *alertView) {
@@ -928,6 +936,8 @@
 - (void)loadexfeePeople {
     __block NSArray *recentexfeePeople = nil;
     void (^block)(void) = ^{
+        User *me = [User getDefaultUser];
+        
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
         
         NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:NO];
@@ -937,7 +947,23 @@
         request.sortDescriptors = @[descriptor];
         
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
-        recentexfeePeople = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        NSArray *exfees = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:exfees.count];
+        
+        for (Identity *identity in exfees) {
+            BOOL isMe = NO;
+            for (Identity *meIdentity in me.identities) {
+                if ([identity isEqualToIdentity:meIdentity]) {
+                    isMe = YES;
+                    break;
+                }
+            }
+            if (!isMe) {
+                [result addObject:identity];
+            }
+        }
+        
+        recentexfeePeople = [result autorelease];
     };
     if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
         dispatch_sync(dispatch_get_main_queue(), block);
@@ -1371,4 +1397,3 @@
 }
 
 @end
-;
