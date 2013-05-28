@@ -831,7 +831,7 @@
     current_cellrow = -1;
 }
 
-- (void) alertsignout{
+- (void)alertsignout {
     [Util signout];
 }
 
@@ -890,7 +890,7 @@
             [tabBarViewController.tabBar setSelectedIndex:toJumpIndex];
         };
         
-        [self.navigationController pushViewController:tabBarViewController animated:NO];
+        [self.navigationController pushViewController:tabBarViewController animated:YES];
     }
 }
 
