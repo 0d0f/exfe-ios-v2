@@ -11,6 +11,7 @@
 @class EFTabBarItemControl;
 typedef void (^TouchUpInsideBlock)(EFTabBarItemControl *control);
 typedef void (^SwipeBlock)(EFTabBarItemControl *control, UISwipeGestureRecognizerDirection direction);
+typedef void (^TabBarItemTitleDidChangeBlock)(EFTabBarItemControl *control);
 
 @class EFTabBarItem;
 @interface EFTabBarItemControl : UIView
@@ -22,6 +23,8 @@ typedef void (^SwipeBlock)(EFTabBarItemControl *control, UISwipeGestureRecognize
 
 @property (nonatomic, assign) BOOL swipeEnable; // Default as YES
 @property (nonatomic, copy) SwipeBlock swipeActionHandler;
+
+@property (nonatomic, copy) TabBarItemTitleDidChangeBlock tabBarItemTitleDidChangeHandler;
 
 + (EFTabBarItemControl *)controlWithTabBarItem:(EFTabBarItem *)item;
 - (id)initWithTabBarItem:(EFTabBarItem *)item;

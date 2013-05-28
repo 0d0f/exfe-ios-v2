@@ -13,6 +13,7 @@
 #import "ImgCache.h"
 #import "Util.h"
 #import "EFAPI.h"
+#import "CrossGroupViewController.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -43,6 +44,17 @@
         // Custom initialization
     }
     return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // Clear Data
+    NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
+    NSAssert(viewControllers != nil && viewControllers.count, @"viewControllers 不应该为空");
+    
+    CrossGroupViewController *crossGroupViewController = viewControllers[0];
+    crossGroupViewController.cross.conversation_count = 0;
 }
 
 - (void)viewDidLoad

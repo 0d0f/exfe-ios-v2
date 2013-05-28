@@ -369,6 +369,50 @@
     [super dealloc];
 }
 
+#pragma mark - Setter && Getter
+
+- (void)setCross:(Cross *)cross {
+    if (cross == _cross)
+        return;
+    
+    if (_cross) {
+        [_cross removeObserver:self
+                    forKeyPath:@"conversation_count"];
+        [_cross release];
+        _cross = nil;
+    }
+    
+    if (cross) {
+        _cross = [cross retain];
+        
+        // kvo
+        [cross addObserver:self
+                forKeyPath:@"conversation_count"
+                   options:NSKeyValueObservingOptionNew
+                   context:NULL];
+    }
+}
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (object == self.cross) {
+        if ([keyPath isEqualToString:@"conversation_count"]) {
+            NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"WidgetConvViewController")];
+            NSAssert(viewControllers != nil && viewControllers.count, @"viewControllers 不应该为 nil 或 空");
+            
+            WidgetConvViewController *conversationViewController = viewControllers[0];
+            
+            NSUInteger count = [self.cross.conversation_count unsignedIntegerValue];
+            if (count) {
+                conversationViewController.customTabBarItem.title = [NSString stringWithFormat:@"%u", count];
+            } else {
+                conversationViewController.customTabBarItem.title = nil;
+            }
+        }
+    }
+}
+
 #pragma mark - Update UI Views
 
 - (void)refreshUI {

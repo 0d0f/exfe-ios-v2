@@ -12,7 +12,7 @@
 
 #define kDefaultFrame       ((CGRect){{-10.0f, 0.0f}, {54.0f, 44.0f}})
 #define kDefaultImageFrame  ((CGRect){{17.0f, 10.0f}, {30.0f, 30.0f}})
-#define kDefaultLabelFrame  ((CGRect){{5.0f, 14.5f}, {28.0f, 18.0f}})
+#define kDefaultLabelFrame  ((CGRect){{15.0f, 14.5f}, {28.0f, 18.0f}})
 
 @interface EFTabBarItemControl ()
 @property (nonatomic, retain) UILabel *titleLabel;
@@ -188,6 +188,20 @@
 
 - (void)_tabBarItemTitleDidChange {
     self.titleLabel.text = self.tabBarItem.title;
+    
+    if (self.tabBarItem.titleEnable) {
+        if (self.tabBarItem.title.length) {
+            self.tabBarItem.tabBarItemState = kEFTabBarItemStateHighlight;
+        } else {
+            self.tabBarItem.tabBarItemState = kEFTabBarItemStateNormal;
+        }
+    } else {
+        self.tabBarItem.tabBarItemState = kEFTabBarItemStateNormal;
+    }
+
+    if (_tabBarItemTitleDidChangeHandler) {
+        self.tabBarItemTitleDidChangeHandler(self);
+    }
 }
 
 - (void)_tabBarItemStateDidChange {

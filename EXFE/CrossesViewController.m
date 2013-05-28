@@ -847,8 +847,9 @@
     Cross *cross = [self crossWithId:cross_id];
     
     if (cross != nil) {
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
+        [self.navigationController popToRootViewControllerAnimated:NO];
         
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
         [self.navigationController pushViewController:tabBarViewController animated:NO];
         
         return YES;
@@ -861,6 +862,8 @@
     Cross *cross = [self crossWithId:cross_id];
     
     if (cross != nil) {
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        
         Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
         EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
         tabBarViewController.viewWillAppearHandler = ^{
@@ -880,7 +883,7 @@
 
 #pragma mark - CrossCardDelegate
 
-- (void)onClickConversation:(UIView*)card {
+- (void)onClickConversation:(UIView *)card {
     [Flurry logEvent:@"CLICK_CROSS_CARD_CONVERSATION"];
     CrossCard* c = (CrossCard*)card;
     int cross_id = [c.cross_id intValue];
@@ -923,11 +926,12 @@
         conversationViewController.myIdentity = myInvitation.identity;
     }
     
-    // clean up data
-    cross.conversation_count = 0;
+    NSUInteger conversationCount = [cross.conversation_count unsignedIntegerValue];
     
     EFTabBarItem *tabBarItem2 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_conv_30.png"]];
     tabBarItem2.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
+    tabBarItem2.titleEnable = YES;
+    tabBarItem2.title = conversationCount > 0 ? [NSString stringWithFormat:@"%u", conversationCount] : nil;
     
     conversationViewController.customTabBarItem = tabBarItem2;
     conversationViewController.tabBarStyle = kEFTabBarStyleNormal;

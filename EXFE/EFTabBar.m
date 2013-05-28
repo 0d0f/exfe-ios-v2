@@ -80,7 +80,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         innerShadowLayer.shadowOpacity = 0.5f;
         innerShadowLayer.shadowRadius = kInnserShadowRadius;
         innerShadowLayer.fillRule = kCAFillRuleEvenOdd;
-        [self.layer addSublayer:innerShadowLayer];
+//        [self.layer addSublayer:innerShadowLayer];
         
         self.innerShadowLayer = innerShadowLayer;
     }
@@ -212,6 +212,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 @interface EFTabBar ()
 @property (nonatomic, retain) UIButton *leftButton;
 @property (nonatomic, retain) NSArray *buttons;
+@property (nonatomic, assign) EFTabBarItemControl *alertButton;
 @property (nonatomic, retain) UIView *buttonBaseView;
 @property (nonatomic, assign) BOOL isButtonsShowed;
 @property (nonatomic, retain) UIImageView *shadowImageView;
@@ -329,9 +330,10 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         [baseView release];
         
         // shadow
-        UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow"]];
-        shadowImageView.frame = (CGRect){{0, CGRectGetHeight(frame) - 25}, {640, 30}};
-//        [self addSubview:shadowImageView];
+        UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow.png"]];
+        shadowImageView.contentMode = UIViewContentModeTopLeft;
+        shadowImageView.frame = (CGRect){{0, CGRectGetHeight(frame) - 26}, {640, 44}};
+        [self addSubview:shadowImageView];
         self.shadowImageView = shadowImageView;
         [shadowImageView release];
         
@@ -527,6 +529,14 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 
 #pragma mark - Private
 
+- (void)_popButton:(EFTabBarItemControl *)button {
+#warning TODO
+}
+
+- (void)_dismissButton:(EFTabBarItemControl *)button {
+#warning TODO    
+}
+
 - (void)_resetButtons {
     // remove pre buttons
     if (self.buttons) {
@@ -550,6 +560,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         button.touchUpInsideActionHandler = ^(EFTabBarItemControl *control){
             [self buttonPressed:control];
         };
+        
         button.swipeActionHandler = ^(EFTabBarItemControl *control, UISwipeGestureRecognizerDirection direction){
             NSAssert(self.tabBarViewController.viewControllers.count, @"TabBarViewController.viewController can't be empty.");
             
@@ -562,6 +573,14 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
                     nextIndex = self.tabBarViewController.viewControllers.count - 1;
                 }
                 [self _setSelectedIndex:nextIndex];
+            }
+        };
+        
+        button.tabBarItemTitleDidChangeHandler = ^(EFTabBarItemControl *control){
+            if (control.tabBarItem.title.length) {
+                [self _popButton:control];
+            } else {
+                [self _dismissButton:control];
             }
         };
         
