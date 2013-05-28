@@ -956,8 +956,10 @@
     [exfeeViewController release];
     
     tabBarViewController.titlePressedHandler = ^{
-        NSInteger arg = 0x0101;
-        [crossGroupViewController showPopup:arg];
+        if (crossGroupViewController == tabBarViewController.selectedViewController) {
+            NSInteger arg = 0x0101;
+            [crossGroupViewController showPopup:arg];
+        }
     };
     
     tabBarViewController.backButtonActionHandler = ^{
