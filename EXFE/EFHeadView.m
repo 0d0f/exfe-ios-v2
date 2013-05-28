@@ -17,7 +17,7 @@
 #define kHalfTitleHeight    (22.0f)
 #define kTitleViewWidth     (306.0f)
 #define kTitleViewFrame     ((CGRect){{0.0f, 0.0f}, {kTitleViewWidth, kHalfTitleHeight * 2}})
-#define kTitleLayerWidth    (282.0f)
+#define kTitleLayerWidth    (320.0f)
 #define kTitleLayerFrame     ((CGRect){{0.0f, 0.0f}, {kTitleLayerWidth, kDefaultHeight}})
 #define kTitleLayerBlank    (3.0f)
 #define kTitleLayerAnimationDelay   (0.05f)
@@ -261,7 +261,7 @@
         CALayer *layer = self.titleLayers[i];
         layer.hidden = NO;
         
-        CGPoint newPosition = (CGPoint){kTitleViewWidth, -(CGRectGetHeight(kTitleLayerFrame) - CGRectGetHeight(kTitleViewFrame)) * 0.5f};
+        CGPoint newPosition = (CGPoint){CGRectGetMaxX(self.titleView.frame), -(CGRectGetHeight(kTitleLayerFrame) - CGRectGetHeight(kTitleViewFrame)) * 0.5f};
         CGRect newBounds = kTitleLayerFrame;
         
         if (animated) {
