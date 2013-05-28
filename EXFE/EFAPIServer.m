@@ -914,13 +914,63 @@
               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     
-    NSString *endpoint = [NSString stringWithFormat:@"users/%u/addIdentity?token=%@",[EFAPIServer sharedInstance].user_id, [EFAPIServer sharedInstance].user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/addIdentity?token=%@", [EFAPIServer sharedInstance].user_id, [EFAPIServer sharedInstance].user_token];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params addEntriesFromDictionary:@{@"external_username":external_username, @"provider": [Identity getProviderString:provider]}];
+    if (param) {
+        [params addEntriesFromDictionary:param];
+    }
+    
+    [objectManager.HTTPClient postPath:endpoint
+                            parameters:params
+                               success:^(AFHTTPRequestOperation *operation, id responseObject){
+                                   [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                                   
+                                   if (success) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           success(operation, responseObject);
+                                       });
+                                   }
+                               }
+                               failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                                   [self _handleFailureWithRequestOperation:operation andError:error];
+                                   
+                                   if (failure) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           failure(operation, error);
+                                       });
+                                   }
+                               }];
+}
+
+- (void)addReverseAuthIdentity:(Provider)provider
+                     withToken:(NSString*)token
+                      andParam:(NSDictionary*) param
+                       success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                       failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    
+    NSParameterAssert(provider != kProviderUnknown);
+    NSParameterAssert(token);
+    if (provider == kProviderUnknown) {
+        return;
+    }
+    if (token.length == 0) {
+        return;
+    }
+    
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/addIdentity?token=%@", [EFAPIServer sharedInstance].user_id, [EFAPIServer sharedInstance].user_token];
+    
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setValue:[Identity getProviderString:provider] forKey:@"provider"];
+    [params setValue:token forKey:@"oauth_token"];
     if (param) {
         [params addEntriesFromDictionary:param];
     }

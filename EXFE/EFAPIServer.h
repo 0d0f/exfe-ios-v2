@@ -143,4 +143,12 @@
                 param:(NSDictionary*)param
               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)addReverseAuthIdentity:(Provider)provider
+                     withToken:(NSString*)token
+                      andParam:(NSDictionary*) param
+                       success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                       failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 @end
+
+

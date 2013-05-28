@@ -7,10 +7,19 @@
 //
 
 #import "AddIdentityViewController.h"
-
+#import <BlocksKit/BlocksKit.h>
+#import <Social/Social.h>
+#import <Twitter/Twitter.h>
+#import <Accounts/Accounts.h>
+#import <FacebookSDK/FacebookSDK.h>
 #import "EFAPIServer.h"
+#import "TWAPIManager.h"
 
 @interface AddIdentityViewController ()
+
+@property (nonatomic, strong) ACAccountStore *accountStore;
+@property (nonatomic, strong) TWAPIManager *apiManager;
+@property (nonatomic, strong) NSArray *accounts;
 
 @end
 
@@ -22,6 +31,9 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        
+        _accountStore = [[ACAccountStore alloc] init];
+        _apiManager = [[TWAPIManager alloc] init];
     }
     return self;
 }
@@ -153,6 +165,12 @@
     [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside];
     [self.view  addSubview:btnBack];
+}
+
+- (void)dealloc
+{
+    self.accountStore = nil;
+    self.apiManager = nil;
 }
 
 - (void)gotoBack:(UIButton*)sender{
@@ -331,14 +349,14 @@
     }];
   
 }
-- (void) FacebookSigninButtonPress:(id)sender{
-    [self doOAuth:kProviderFacebook];
-}
-
-- (void) TwitterSigninButtonPress:(id)sender{
-    [self doOAuth:kProviderTwitter];
-
-}
+//- (void) FacebookSigninButtonPress:(id)sender{
+//    [self doOAuth:kProviderFacebook];
+//}
+//
+//- (void) TwitterSigninButtonPress:(id)sender{
+//    [self doOAuth:kProviderTwitter];
+//
+//}
 - (void) MoreButtonPress:(id)sender{
     [textUsername resignFirstResponder];
 }
@@ -347,5 +365,314 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+- (void)FacebookSigninButtonPress:(id)sender
+{
+//    [self hideInlineError];
+    
+    [FBSession.activeSession closeAndClearTokenInformation];
+    // If a user has *never* logged into your app, request one of
+    // "email", "user_location", or "user_birthday". If you do not
+    // pass in any permissions, "email" permissions will be automatically
+    // requested for you. Other read permissions can also be included here.
+    NSArray *permissions = @[@"email"];
+    
+    [FBSession openActiveSessionWithReadPermissions:permissions
+                                       allowLoginUI:YES
+                                  completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                                      /* handle success + failure in block */
+                                      
+                                      switch (session.state) {
+                                          case FBSessionStateOpen:{
+                                              [self.view endEditing:YES];
+                                              
+                                              NSDictionary *params = @{@"oauth_expires": [NSString stringWithFormat:@"%.0f", session.accessTokenData.expirationDate.timeIntervalSince1970]};
+                                              
+                                              MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                                              hud.labelText = @"Authenticating...";
+                                              hud.mode = MBProgressHUDModeCustomView;
+                                              EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+                                              [bigspin startAnimating];
+                                              hud.customView = bigspin;
+                                              [bigspin release];
+                                              
+                                              [[EFAPIServer sharedInstance] addReverseAuthIdentity:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                  [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                  if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                                      
+                                                      NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                                                      switch ([code integerValue]) {
+                                                          case 200:{
+                                                              [self loadUserAndExit];
+                                                              // ask for more permissions
+                                                              //                            NSArray *permissions = @[@"user_photos", @"friends_photos"];
+                                                              //                            [[FBSession activeSession] requestNewReadPermissions:permissions completionHandler:^(FBSession *session, NSError *error) {
+                                                              //                                ;
+                                                              //                            }];
+                                                          }
+                                                              break;
+                                                          case 400:{
+                                                              if ([@"invalid_token" isEqualToString:[responseObject valueForKeyPath:@"meta.errorType"]] ) {
+//                                                                  [self showInlineError:@"Invalid token." with:@"There is something wrong. Please try again later."];
+                                                                  
+                                                                  [self syncFBAccount];
+                                                                  
+                                                              }
+                                                          }
+                                                          default:
+                                                              break;
+                                                      }
+                                                  }
+                                              } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                  if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                                                      switch (error.code) {
+                                                          case NSURLErrorTimedOut: //-1001
+                                                          case NSURLErrorCannotFindHost: //-1003
+                                                          case NSURLErrorCannotConnectToHost: //-1004
+                                                          case NSURLErrorNetworkConnectionLost: //-1005
+                                                          case NSURLErrorDNSLookupFailed: //-1006
+                                                          case NSURLErrorHTTPTooManyRedirects: //-1007
+                                                          case NSURLErrorResourceUnavailable: //-1008
+                                                          case NSURLErrorNotConnectedToInternet: //-1009
+                                                          case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                                          case NSURLErrorServerCertificateUntrusted: //-1202
+                                                              [Util showConnectError:error delegate:nil];
+                                                              //                                                              [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                                                              break;
+                                                              
+                                                          default:
+                                                              break;
+                                                      }
+                                                  }
+                                                  
+                                                  [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                              }];
+                                          }
+                                              break;
+                                              
+                                          case FBSessionStateClosedLoginFailed:
+//                                              [self showInlineError:@"Login Failed." with:@"There is something wrong. Please try again later."];
+                                              
+                                              [self syncFBAccount];
+                                              break;
+                                          default:
+                                              break;
+                                      }
+                                      
+                                      
+                                  }];
+    
+}
+
+- (void)TwitterSigninButtonPress:(id)sender
+{
+//    [self hideInlineError];
+    
+    ACAccountType *twitterType = [_accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+    
+    ACAccountStoreRequestAccessCompletionHandler handler = ^(BOOL granted, NSError *error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (granted) {
+                self.accounts = [_accountStore accountsWithAccountType:twitterType];
+                if ([TWAPIManager isLocalTwitterAccountAvailable] && _accounts.count > 0) {
+                    if ([TWAPIManager isLocalTwitterAccountAvailable]) {
+                        if (_accounts.count > 1) {
+                            UIActionSheet *sheet = [UIActionSheet actionSheetWithTitle:@"Choose an Account"];
+                            for (ACAccount *acct in _accounts) {
+                                [sheet addButtonWithTitle:acct.username handler:^{
+                                    [self performReverseAuthForAccount:acct];
+                                }];
+                            }
+                            sheet.cancelButtonIndex = [sheet setCancelButtonWithTitle:@"Cancel" handler:^{
+                                // cancel
+                            }];
+                            [sheet showInView:self.view];
+                        } else {
+                            [self performReverseAuthForAccount:_accounts[0]];
+                        }
+                    }
+                } else {
+                    
+                    //http://stackoverflow.com/questions/13335795/login-user-with-twitter-in-ios-what-to-use
+                    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
+                        // iOS 6 http://stackoverflow.com/questions/13946062/twitter-framework-for-ios6-how-to-login-through-settings-from-app
+                        SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+                        tweetSheet.view.hidden = TRUE;
+                        
+                        [self presentViewController:tweetSheet animated:NO completion:^{
+                            [tweetSheet.view endEditing:YES];
+                        }];
+                    } else if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")){
+                        // iOS 5 http://stackoverflow.com/questions/9667921/prompt-login-alert-with-twitter-framework-in-ios5
+                        TWTweetComposeViewController *viewController = [[TWTweetComposeViewController alloc] init];
+                        //hide the tweet screen
+                        viewController.view.hidden = YES;
+                        
+                        //fire tweetComposeView to show "No Twitter Accounts" alert view on iOS5.1
+                        viewController.completionHandler = ^(TWTweetComposeViewControllerResult result) {
+                            if (result == TWTweetComposeViewControllerResultCancelled) {
+                                [self dismissModalViewControllerAnimated:NO];
+                            }
+                        };
+                        [self presentModalViewController:viewController animated:NO];
+                        
+                        //hide the keyboard
+                        [viewController.view endEditing:YES];
+                        [viewController release];
+                    } else {
+                        return;
+                    }
+                    //                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Accounts" message:@"Please configure a Twitter account in Settings.app" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    //                    [alert show];
+                }
+            } else {
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Set up Twitter account" message:@"Please allow EXFE to use your Twitter account. Go to the Settings app, select Twitter to set up." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alert show];
+                
+            }
+        });
+    };
+    
+    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")){
+        //  This method changed in iOS6. If the new version isn't available, fall back to the original (which means that we're running on iOS5+).
+        if ([_accountStore respondsToSelector:@selector(requestAccessToAccountsWithType:options:completion:)]) {
+            [_accountStore requestAccessToAccountsWithType:twitterType options:nil completion:handler];
+        }
+        else {
+            [_accountStore requestAccessToAccountsWithType:twitterType withCompletionHandler:handler];
+        }
+    }
+    
+}
+
+- (void)syncFBAccount
+{
+    ACAccountStore *accountStore;
+    ACAccountType *accountTypeFB;
+    if ((accountStore = [[ACAccountStore alloc] init]) &&
+        (accountTypeFB = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook] ) ){
+        
+        NSArray *fbAccounts = [accountStore accountsWithAccountType:accountTypeFB];
+        id account;
+        if (fbAccounts && [fbAccounts count] > 0 &&
+            (account = [fbAccounts objectAtIndex:0])){
+            
+            [accountStore renewCredentialsForAccount:account completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
+                //we don't actually need to inspect renewResult or error.
+                if (error){
+                    
+                }
+            }];
+        }
+    }
+}
+
+#pragma mark - Private
+
+- (void)performReverseAuthForAccount:(ACAccount*)acct
+{
+    [self.view endEditing:YES];
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Authenticating...";
+    hud.mode = MBProgressHUDModeCustomView;
+    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+    [bigspin startAnimating];
+    hud.customView = bigspin;
+    [bigspin release];
+    
+    [_apiManager performReverseAuthForAccount:acct withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
+        if (responseData) {
+            NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            NSDictionary *params = [Util splitQuery:responseStr];
+            
+            [[EFAPIServer sharedInstance] addReverseAuthIdentity:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                    
+                    NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                    if ([code integerValue] == 200) {
+                        [self loadUserAndExit];
+                    }
+                    //400: invalid_token
+                    //400: no_provider
+                    //400: unsupported_provider
+                }
+                
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                    switch (error.code) {
+                        case NSURLErrorTimedOut: // -1001
+                        case NSURLErrorCannotFindHost: //-1003
+                        case NSURLErrorCannotConnectToHost: //-1004
+                        case NSURLErrorNetworkConnectionLost: //-1005
+                        case NSURLErrorDNSLookupFailed: //-1006
+                        case NSURLErrorHTTPTooManyRedirects: //-1007
+                        case NSURLErrorResourceUnavailable: //-1008
+                        case NSURLErrorNotConnectedToInternet: //-1009
+                        case NSURLErrorRedirectToNonExistentLocation: //-1010
+                        case NSURLErrorServerCertificateUntrusted: //-1202
+                            [Util showConnectError:error delegate:nil];
+                            //                            [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                }
+            }];
+        } else {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                switch (error.code) {
+                    case NSURLErrorTimedOut: // -1001
+                    case NSURLErrorCannotFindHost: //-1003
+                    case NSURLErrorCannotConnectToHost: //-1004
+                    case NSURLErrorNetworkConnectionLost: //-1005
+                    case NSURLErrorDNSLookupFailed: //-1006
+                    case NSURLErrorHTTPTooManyRedirects: //-1007
+                    case NSURLErrorResourceUnavailable: //-1008
+                    case NSURLErrorNotConnectedToInternet: //-1009
+                    case NSURLErrorRedirectToNonExistentLocation: //-1010
+                    case NSURLErrorServerCertificateUntrusted: //-1202
+                        [Util showConnectError:error delegate:nil];
+                        //                        [self showInlineError:@"Failed to connect twitter server." with:@"Please retry or wait awhile."];
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            
+        }
+    }];
+}
+
+- (void)loadUserAndExit
+{
+    ProfileViewController *vc = (ProfileViewController*)profileview;
+    [vc syncUser];
+    
+    
+    [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        [self SigninDidFinish];
+    }
+                                        failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                            [self SigninDidFinish];
+                                        }];
+}
+
+- (void)SigninDidFinish
+{
+//    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    [app SigninDidFinish];
+//    
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 @end

@@ -901,7 +901,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         [self SigninDidFinish];
     }
                                         failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                            ;
+                                            [self SigninDidFinish];
                                         }];
 }
 
