@@ -396,7 +396,7 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
             }];
             
             if ([localcontacts count] > 0) {
-                result= [localcontacts objectAtIndex:0];
+                result= [[localcontacts objectAtIndex:0] retain];
                 
                 // check need update
                 NSDate *recordModicationDate = ABRecordCopyValue(recordRef, kABPersonModificationDateProperty);
@@ -407,7 +407,7 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                 NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
                 RKObjectManager *objectManager = [RKObjectManager sharedManager];
                 [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
-                    result = [[[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+                    result = [[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
                 }];
             }
         });
@@ -581,6 +581,5 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
     CFRelease(multi_socialprofile);
     CFRelease(multi_im);
     
-    
-    return result;
+    return [result autorelease];
 }

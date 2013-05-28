@@ -241,7 +241,7 @@
                 [selectedIdentities addObject:@[roughIdentity.identity]];
                 [addIdentitiyDict setValue:@"YES" forKey:roughIdentity.key];
             } else if (roughIdentity.status == kEFRoughIdentityGetIdentityStatusLoading) {
-                while (kEFRoughIdentityGetIdentityStatusSuccess == roughIdentity.status || kEFRoughIdentityGetIdentityStatusFailure == roughIdentity.status) {
+                while ((kEFRoughIdentityGetIdentityStatusSuccess != roughIdentity.status) && (kEFRoughIdentityGetIdentityStatusFailure != roughIdentity.status)) {
                     [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                              beforeDate:[NSDate distantFuture]];
                 }
@@ -266,7 +266,7 @@
                     [contactRoughIdentities addObject:cachedRoughtIdentity.identity];
                     [addIdentitiyDict setValue:@"YES" forKey:roughIdentity.key];
                 } else if (cachedRoughtIdentity.status == kEFRoughIdentityGetIdentityStatusLoading) {
-                    while (kEFRoughIdentityGetIdentityStatusSuccess == cachedRoughtIdentity.status || kEFRoughIdentityGetIdentityStatusFailure == cachedRoughtIdentity.status) {
+                    while ((kEFRoughIdentityGetIdentityStatusSuccess != cachedRoughtIdentity.status) && (kEFRoughIdentityGetIdentityStatusFailure != cachedRoughtIdentity.status)) {
                         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                                  beforeDate:[NSDate distantFuture]];
                     }
@@ -1119,12 +1119,14 @@
             if (indexPath.row < [self.searchResultAddPeople count]) {
                 NSInteger index = indexPath.row - (self.searchBar.text.length ? 1 : 0) - ((self.insertIndexPath && (indexPath.section == self.insertIndexPath.section && indexPath.row > self.insertIndexPath.row)) ? 1 : 0);
                 index = index >= [self.searchResultAddPeople count] ? [self.searchResultAddPeople count] - 1 : index;
+                index = index < 0 ? 0 : index;
                 
                 RoughIdentity *identity = self.searchResultAddPeople[index];
                 object = identity;
-            } else {
+            } else if ([self.searchResultExfeePeople count]) {
                 NSInteger index = indexPath.row - (self.searchBar.text.length ? 1 : 0) - ((self.insertIndexPath && (indexPath.section == self.insertIndexPath.section && indexPath.row > self.insertIndexPath.row)) ? 1 : 0);
                 index = index >= [self.searchResultExfeePeople count] ? [self.searchResultExfeePeople count] - 1 : index;
+                index = index < 0 ? 0 : index;
                 
                 Identity *identity = self.searchResultExfeePeople[index];
                 object = identity;
