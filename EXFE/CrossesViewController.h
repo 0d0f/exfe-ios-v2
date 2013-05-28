@@ -40,6 +40,7 @@ CrossCardDelegate
 
 @property (nonatomic, retain) NSArray* crossList;
 @property (nonatomic, retain) id crossChangeObserver;
+@property (nonatomic, assign) BOOL needHeaderAnimation;
 
 - (void)refreshCell;
 - (void)refreshCrosses:(NSString*)source;

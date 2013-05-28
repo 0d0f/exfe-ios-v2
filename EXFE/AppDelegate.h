@@ -32,7 +32,7 @@
 -(void)gatherCrossDidFinish;
 -(void)crossUpdateDidFinish:(int)cross_id;
 -(void)showLanding:(UIViewController*)parent;
-- (void) cleandb;
-- (void) createdb;
-- (void) processUrlHandler:(NSURL*)url;
+- (void)cleandb;
+- (void)createdb;
+- (void)processUrlHandler:(NSURL*)url;
 @end

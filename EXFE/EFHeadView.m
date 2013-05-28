@@ -67,8 +67,8 @@
 @property (nonatomic, retain) EFHeadViewTopLayer *topLayer;
 @property (assign) NSUInteger animationCount;
 
-- (void)headShowAnimation;
-- (void)titleShowAnimation;
+- (void)headShowAnimated:(BOOL)animated;
+- (void)titleShowAnimated:(BOOL)animated;
 
 - (void)plusAnimationCount;
 - (void)minusAnimationCount;
@@ -224,9 +224,9 @@
 
 #pragma mark - Public
 
-- (void)show {
-    [self headShowAnimation];
-    [self titleShowAnimation];
+- (void)showAnimated:(BOOL)animated {
+    [self headShowAnimated:animated];
+    [self titleShowAnimated:animated];
 }
 
 #pragma mark - Animation Delegate
@@ -237,23 +237,26 @@
 
 #pragma mark - Private
 
-- (void)headShowAnimation {
+- (void)headShowAnimated:(BOOL)animated {
     CATransform3D newTransform = CATransform3DMakeTranslation(-121.0f, 0.0f, 0.0f);
     
-    CABasicAnimation *avatarAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
-    avatarAnimation.fillMode = kCAFillModeForwards;
-    avatarAnimation.duration = 0.9f;
-    avatarAnimation.fromValue = [self.avatarView.layer valueForKeyPath:@"transform"];
-    avatarAnimation.toValue = [NSValue valueWithCATransform3D:newTransform];
-    avatarAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55];
-    avatarAnimation.delegate = self;
+    if (animated) {
+        CABasicAnimation *avatarAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
+        avatarAnimation.fillMode = kCAFillModeForwards;
+        avatarAnimation.duration = 0.9f;
+        avatarAnimation.fromValue = [self.avatarView.layer valueForKeyPath:@"transform"];
+        avatarAnimation.toValue = [NSValue valueWithCATransform3D:newTransform];
+        avatarAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55];
+        avatarAnimation.delegate = self;
+        
+        [self.avatarView.layer addAnimation:avatarAnimation forKey:@"show"];
+    }
     
     [self plusAnimationCount];
-    [self.avatarView.layer addAnimation:avatarAnimation forKey:@"show"];
     self.avatarView.layer.transform = newTransform;
 }
 
-- (void)titleShowAnimation {
+- (void)titleShowAnimated:(BOOL)animated {
     for (int i = 0; i < 4; i++) {
         CALayer *layer = self.titleLayers[i];
         layer.hidden = NO;
@@ -261,45 +264,61 @@
         CGPoint newPosition = (CGPoint){kTitleViewWidth, -(CGRectGetHeight(kTitleLayerFrame) - CGRectGetHeight(kTitleViewFrame)) * 0.5f};
         CGRect newBounds = kTitleLayerFrame;
         
-        double delayInSeconds = (3 - i) * kTitleLayerAnimationDelay + kTitleLayerAnimationCommonDelay;
+        if (animated) {
+            double delayInSeconds = (3 - i) * kTitleLayerAnimationDelay + kTitleLayerAnimationCommonDelay;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self plusAnimationCount];
+                [CATransaction begin];
+                [CATransaction setAnimationDuration:0.9f];
+                [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55]];
+                [CATransaction setCompletionBlock:^{
+                    [self minusAnimationCount];
+                }];
+                layer.position = newPosition;
+                [CATransaction commit];
+                
+                [self plusAnimationCount];
+                [CATransaction begin];
+                [CATransaction setAnimationDuration:0.9f];
+                [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55]];
+                [CATransaction setCompletionBlock:^{
+                    [self minusAnimationCount];
+                }];
+                layer.bounds = newBounds;
+                [CATransaction commit];
+            });
+        } else {
+            layer.position = newPosition;
+            layer.bounds = newBounds;
+        }
+    }
+    
+    CGPoint topLayerPosition = (CGPoint){CGRectGetMidX(self.titleView.frame) - 4 * kTitleLayerBlank, CGRectGetHeight(self.titleView.frame) * 0.5f};
+    if (animated) {
+        double delayInSeconds = kTitleLayerAnimationCommonDelay;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             [self plusAnimationCount];
             [CATransaction begin];
-            [CATransaction setAnimationDuration:0.9f];
-            [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55]];
+            [CATransaction setAnimationDuration:0.65f];
+            [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
             [CATransaction setCompletionBlock:^{
                 [self minusAnimationCount];
             }];
-            layer.position = newPosition;
-            [CATransaction commit];
-            
-            [self plusAnimationCount];
-            [CATransaction begin];
-            [CATransaction setAnimationDuration:0.9f];
-            [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.68 :-0.55 :0.265 :1.55]];
-            [CATransaction setCompletionBlock:^{
-                [self minusAnimationCount];
-            }];
-            layer.bounds = newBounds;
+            self.topLayer.opacity = 1.0f;
+            self.topLayer.position = topLayerPosition;
             [CATransaction commit];
         });
-    }
-    
-    double delayInSeconds = kTitleLayerAnimationCommonDelay;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self plusAnimationCount];
-        [CATransaction begin];
-        [CATransaction setAnimationDuration:0.65f];
-        [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [CATransaction setCompletionBlock:^{
-            [self minusAnimationCount];
-        }];
+    } else {
         self.topLayer.opacity = 1.0f;
-        self.topLayer.position = (CGPoint){CGRectGetMidX(self.titleView.frame) - 4 * kTitleLayerBlank, CGRectGetHeight(self.titleView.frame) * 0.5f};
-        [CATransaction commit];
-    });
+        self.topLayer.position = topLayerPosition;
+        
+        self.showed = YES;
+        if (_showCompletionHandler) {
+            self.showCompletionHandler();
+        }
+    }
 }
 
 - (void)plusAnimationCount {

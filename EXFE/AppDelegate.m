@@ -61,13 +61,11 @@
     // Setup DB version data
     NSNumber* db_version=[[NSUserDefaults standardUserDefaults] objectForKey:@"db_version"];
     
-    if(db_version==nil || [db_version intValue] < APP_DB_VERSION){
-        
+    if (db_version==nil || [db_version intValue] < APP_DB_VERSION) {
         [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
     }
     
-
     // Setup AFNetwork
     [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
     [self createdb];
@@ -75,8 +73,12 @@
     // Setup APN Push
     [self requestForPush];
     
+    NSDictionary *userinfo = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    
     // Setup root UIViewController
     CrossesViewController *crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
+    crossviewController.needHeaderAnimation = userinfo ? NO : YES;
+    
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
     
     self.crossesViewController = crossviewController;
@@ -85,8 +87,15 @@
     self.window.rootViewController = self.navigationController;
     [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
+    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
     
+    // Handle Remote notification
+    if (userinfo) {
+        [self receivePushData:userinfo isOnForeground:NO];
+    }
+    
+    // Version info
 #ifdef DEBUG
     CGRect windowBounds = [UIScreen mainScreen].bounds;
     CGFloat width = 100.0f;
@@ -128,8 +137,6 @@
     [self.window makeKeyAndVisible];
 #endif
     
-    //    UILogSetWindow(self.window);
-    
     EFAPIServer *server = [EFAPIServer sharedInstance];
     // Load User
     if ([server isLoggedIn] == YES){
@@ -138,22 +145,19 @@
     
     // Load Background List
     [server getAvailableBackgroundsWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-            NSDictionary *body=responseObject;
-            if([body isKindOfClass:[NSDictionary class]]) {
-                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                if(code)
-                    if([code intValue]==200) {
-                        NSArray *backgrounds=[[body objectForKey:@"response"] objectForKey:@"backgrounds"];
-                        [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
-                    }
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *body = responseObject;
+            if ([body isKindOfClass:[NSDictionary class]]) {
+                id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
+                if(code && 200 == [code intValue]) {
+                    NSArray *backgrounds = [[body objectForKey:@"response"] objectForKey:@"backgrounds"];
+                    [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
+                }
             }
-        }else {
         }
     }
-                                                             failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                 
-                                                             }];
+                                       failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       }];
     
     return YES;
 }
@@ -192,6 +196,7 @@
     [[FBSession activeSession] close];
 }
 
+#pragma mark - Push Notification
 // request for APN
 - (void)requestForPush
 {
@@ -204,7 +209,68 @@
     }
 }
 
-- (void) createdb{
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSString * tokenAsString = [[[deviceToken description]
+                                 stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]]
+                                stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
+        return;
+    [[EFAPIServer sharedInstance] regDevice:tokenAsString success:nil failure:nil];
+}
+
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+    //    NSLog(@"Error in registration. Error: %@", err);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [Flurry logEvent:@"RECEIVE_REMOTE_NOTIFICATION"];
+    
+    BOOL isForeground = YES;
+    if (UIApplicationStateActive != application.applicationState) {
+        isForeground = NO;
+    }
+    
+    [self receivePushData:userInfo isOnForeground:isForeground];
+}
+
+- (void)receivePushData:(NSDictionary *)userInfo isOnForeground:(BOOL)isForeground {
+    if (isForeground == NO) {
+        CrossesViewController *crossViewController = self.crossesViewController;
+        
+        if (userInfo != nil) {
+            id arg = [userInfo objectForKey:@"args"];
+            if([arg isKindOfClass:[NSDictionary class]]) {
+                id cid = [arg objectForKey:@"cid"];
+                id msg_type = [arg objectForKey:@"t"];
+                
+                if (cid != nil && [cid isKindOfClass:[NSNumber class]] && msg_type != nil && [msg_type isKindOfClass:[NSString class]]) {
+                    if ([cid intValue] > 0 ) {
+                        int cross_id = [cid intValue];
+                        NSString *type = (NSString *)msg_type;
+                        if ([type isEqualToString:@"i"]) {
+                            if ([crossViewController pushToCross:cross_id] == NO) {
+                                [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+                            }
+                        }
+                        
+                        if ([type isEqualToString:@"c"]) {
+                            if ([crossViewController pushToConversation:cross_id] == NO) {
+                                [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        CrossesViewController *crossViewController = self.crossesViewController;
+        [crossViewController refreshCrosses:@"crossupdateview"];
+    }
+}
+
+#pragma mark -
+- (void)createdb {
     [Flurry logEvent:@"CREATE_DB"];
     NSURL *baseURL = [NSURL URLWithString:API_ROOT];
 //    NSLog(@"API Server: %@", baseURL);
@@ -255,29 +321,6 @@
         [crossViewController loadObjectsFromDataStore];
         [crossViewController dismissModalViewControllerAnimated:YES];
     }
-}
-
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    NSString * tokenAsString = [[[deviceToken description]
-                                 stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]]
-                                stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-    if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
-        return;
-    [[EFAPIServer sharedInstance] regDevice:tokenAsString success:nil failure:nil];
-}
-
-- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-//    NSLog(@"Error in registration. Error: %@", err);
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    [Flurry logEvent:@"RECEIVE_REMOTE_NOTIFICATION"];
-    BOOL isForeground=TRUE;
-    if(application.applicationState != UIApplicationStateActive)
-        isForeground=FALSE;
-    [self ReceivePushData:userInfo RunOnForeground:isForeground];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -416,41 +459,6 @@
             [self.navigationController popToRootViewControllerAnimated:NO];
         }
         [crossViewController ShowProfileView];
-    }
-}
-
-- (void)ReceivePushData:(NSDictionary*)userInfo RunOnForeground:(BOOL)isForeground {
-    if (isForeground == NO) {
-        CrossesViewController *crossViewController = self.crossesViewController;
-        
-        if (userInfo != nil) {
-            id arg = [userInfo objectForKey:@"args"];
-            if([arg isKindOfClass:[NSDictionary class]]) {
-                id cid = [arg objectForKey:@"cid"];
-                id msg_type = [arg objectForKey:@"t"];
-                
-                if (cid != nil && [cid isKindOfClass:[NSNumber class]] && msg_type != nil && [msg_type isKindOfClass:[NSString class]]) {
-                    if ([cid intValue] > 0 ) {
-                        int cross_id = [cid intValue];
-                        NSString *type = (NSString *)msg_type;
-                        if ([type isEqualToString:@"i"]) {
-                            if ([crossViewController pushToCross:cross_id] == NO) {
-                                [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
-                            }
-                        }
-                        
-                        if ([type isEqualToString:@"c"]) {
-                            if ([crossViewController pushToConversation:cross_id] == NO) {
-                                [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    } else {
-        CrossesViewController *crossViewController = self.crossesViewController;
-        [crossViewController refreshCrosses:@"crossupdateview"];
     }
 }
 

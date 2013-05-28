@@ -110,7 +110,7 @@
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[[UIImage imageNamed:@"btn_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 6)]
                                                       forState:UIControlStateNormal
                                                     barMetrics:UIBarMetricsDefault];
-    current_cellrow=-1;
+    current_cellrow = -1;
     self.tableView.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
     //UIView *topview = [[UIView alloc] initWithFrame:CGRectOffset(screenframe, 0, CGRectGetHeight(screenframe))];
     UIView *topview = [[UIView alloc] initWithFrame:CGRectMake(0, -480, 320, 480)];
@@ -119,7 +119,7 @@
     [topview release];
     [super viewDidLoad];
     
-    if ([[EFAPIServer sharedInstance] isLoggedIn] == YES) {
+    if ([[EFAPIServer sharedInstance] isLoggedIn]) {
         // 过渡动画
         UIGraphicsBeginImageContext(self.view.bounds.size);
         [[UIImage imageNamed:@"home_bg.png"] drawInRect:self.view.bounds];
@@ -133,43 +133,49 @@
         [self.view addSubview:defaultView];
         [defaultView release];
         
-        self.headView.layer.transform = CATransform3DMakeScale(0.0f, 0.0f, 0.0f);
-        self.tableView.scrollEnabled = NO;
-        [UIView animateWithDuration:0.233f
-                         animations:^{
-                             defaultView.alpha = 0.0f;
-                         }
-                         completion:^(BOOL finished){
-                             [defaultView removeFromSuperview];
-                             
-                             CAKeyframeAnimation *popAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-                             popAnimation.values = @[
-                                                     [self.headView.layer valueForKey:@"transform"],
-                                                     [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.1f, 1.1f, 1.1f)],
-                                                     [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.9f, 0.9f, 0.9f)],
-                                                     [NSValue valueWithCATransform3D:CATransform3DIdentity]
-                                                     ];
-                             popAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-                             popAnimation.duration = 0.55f;
-                             popAnimation.fillMode = kCAFillModeForwards;
-                             [self.headView.layer addAnimation:popAnimation forKey:@"pop"];
-                             self.headView.layer.transform = CATransform3DIdentity;
-                             
-                             double delayInSeconds = 0.6f;
-                             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                                 [self.headView show];
-                             });
-                             
-                             self.tableView.scrollEnabled = YES;
-                         }];
+        if (self.needHeaderAnimation) {
+            self.headView.layer.transform = CATransform3DMakeScale(0.0f, 0.0f, 0.0f);
+            self.tableView.scrollEnabled = NO;
+            [UIView animateWithDuration:0.233f
+                             animations:^{
+                                 defaultView.alpha = 0.0f;
+                             }
+                             completion:^(BOOL finished){
+                                 [defaultView removeFromSuperview];
+                                 
+                                 CAKeyframeAnimation *popAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+                                 popAnimation.values = @[
+                                                         [self.headView.layer valueForKey:@"transform"],
+                                                         [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.1f, 1.1f, 1.1f)],
+                                                         [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.9f, 0.9f, 0.9f)],
+                                                         [NSValue valueWithCATransform3D:CATransform3DIdentity]
+                                                         ];
+                                 popAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                                 popAnimation.duration = 0.55f;
+                                 popAnimation.fillMode = kCAFillModeForwards;
+                                 [self.headView.layer addAnimation:popAnimation forKey:@"pop"];
+                                 self.headView.layer.transform = CATransform3DIdentity;
+                                 
+                                 double delayInSeconds = 0.6f;
+                                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                     [self.headView showAnimated:YES];
+                                 });
+                                 
+                                 self.tableView.scrollEnabled = YES;
+                             }];
+        } else {
+            defaultView.alpha = 0.0f;
+            [defaultView removeFromSuperview];
+            [self.headView showAnimated:NO];
+        }
         
         [self loadObjectsFromDataStore];
         [self refreshCrosses:@"crossupdateview"];
     } else {
-        [self.headView show];
+        [self.headView showAnimated:NO];
         
-        AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [app showLanding:self];
 
     }
