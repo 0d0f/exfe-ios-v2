@@ -18,7 +18,7 @@
 #define kTabBarButtonSize               ((CGSize){54.0f, 44.0f})
 #define kButtonSpacing                  (6.0f)
 
-#define kInnserShadowRadius             (2.0f)
+#define kInnserShadowRadius             (4.0f)
 #define kOuterShadowRadius              (10.0f)
 
 #define kNormalStyleFrame               ((CGRect){{0.0f, 0.0f}, {320.0f, 70.0f}})
@@ -32,8 +32,8 @@
 #pragma mark - EFTabBarBackgroundView
 
 inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPoint, CGPoint endPoint) {
-    CGPoint controlPoint1 = (CGPoint){startPoint.x - 47.0f, startPoint.y};
-    CGPoint controlPoint2 = (CGPoint){endPoint.x + 75.0f, endPoint.y};
+    CGPoint controlPoint1 = (CGPoint){floor(startPoint.x - 47.0f), startPoint.y};
+    CGPoint controlPoint2 = (CGPoint){floor(endPoint.x + 75.0f), endPoint.y};
     
     CGMutablePathRef maskPath = CGPathCreateMutable();
     CGPathMoveToPoint(maskPath, NULL, 0.0f, 0.0f);
@@ -77,7 +77,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         innerShadowLayer.contentsScale = [UIScreen mainScreen].scale;
         innerShadowLayer.shadowColor = [UIColor blackColor].CGColor;
         innerShadowLayer.shadowOffset = (CGSize){0.0f, 0.0f};
-        innerShadowLayer.shadowOpacity = 1.0f;
+        innerShadowLayer.shadowOpacity = 0.5f;
         innerShadowLayer.shadowRadius = kInnserShadowRadius;
         innerShadowLayer.fillRule = kCAFillRuleEvenOdd;
         [self.layer addSublayer:innerShadowLayer];
@@ -171,8 +171,16 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 }
 
 - (void)drawRect:(CGRect)rect {
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGFloat locations[2] = {0.0, 1.0};
+    CGFloat components1[8] = {0.0f, 0.0f, 0.0f, 0.12f,  // Start color
+                             0.0f, 0.0f, 0.0f, 0.33f};  // End color
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
+    
+    CGContextSetAllowsAntialiasing(context, YES);
+    CGContextSetAllowsFontSmoothing(context, YES);
     
     CGRect imageRect = kDoubleheightStyleFrame;
     CGSize imageSize = self.backgroundImage.size;
@@ -180,7 +188,21 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     imageRect.origin.y = CGRectGetHeight(kDoubleheightStyleFrame) - CGRectGetHeight(imageRect);
     [self.backgroundImage drawInRect:imageRect];
     
+    // gradient 1
+    CGGradientRef gradient1 = CGGradientCreateWithColorComponents(colorSpace, components1, locations, 2);
+    CGContextDrawLinearGradient(context, gradient1, (CGPoint){CGRectGetMidX(kDoubleheightStyleFrame), 0.0f}, (CGPoint){CGRectGetMidX(kDoubleheightStyleFrame), CGRectGetHeight(kDoubleheightStyleFrame)}, kCGGradientDrawsBeforeStartLocation);
+    CGGradientRelease(gradient1);
+    
+    CGFloat components2[8] = {0.0f, 0.0f, 0.0f, 0.25f,  // Start color
+                              0.0f, 0.0f, 0.0f, 0.0f};  // End color
+    
+    // gradient 2
+    CGGradientRef gradient2 = CGGradientCreateWithColorComponents(colorSpace, components2, locations, 2);
+    CGContextDrawLinearGradient(context, gradient2, (CGPoint){0.0f, CGRectGetMidY(kDoubleheightStyleFrame)}, (CGPoint){50.0f, CGRectGetMidY(kDoubleheightStyleFrame)}, kCGGradientDrawsBeforeStartLocation);
+    CGGradientRelease(gradient2);
+    
     CGContextRestoreGState(context);
+    CGColorSpaceRelease(colorSpace);
 }
 
 @end
@@ -242,7 +264,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         label.backgroundColor = [UIColor clearColor];
         label.textColor = [UIColor whiteColor];
         label.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
-        label.shadowOffset = (CGSize){0, 0.5f};
+        label.shadowOffset = (CGSize){0, 1.0f};
         label.numberOfLines = (style == kEFTabBarStyleDoubleHeight) ? 2 : 1;
         [self addSubview:label];
         _titleLabel = label;
@@ -270,7 +292,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         outerShadowLayer.shadowOpacity = 1.0f;
         outerShadowLayer.shadowRadius = kOuterShadowRadius;
         
-        [outerShadowView.layer addSublayer:outerShadowLayer];
+//        [outerShadowView.layer addSublayer:outerShadowLayer];
         self.outerShadowLayer = outerShadowLayer;
         
         [self insertSubview:outerShadowView belowSubview:label];

@@ -12,7 +12,8 @@
 
 typedef void (^EFTabBarTitlePressedBlock)(void);
 typedef void (^EFTabBarBackButtonBlock)(void);
-typedef void (^EFTabBarWillDisappearBlock)(void);
+
+typedef void (^EFTabBarViewControllerBehaviorBlock)(void);
 
 @class EFTabBarItem, EFTabBarViewController;
 @protocol EFTabBarDataSource <NSObject>
@@ -35,9 +36,15 @@ typedef void (^EFTabBarWillDisappearBlock)(void);
 @property (nonatomic, assign) NSUInteger defaultIndex;
 @property (nonatomic, assign) UIViewController<EFTabBarDataSource> *defaultViewController;
 
+// action handler
 @property (nonatomic, copy) EFTabBarTitlePressedBlock titlePressedHandler;      // Default as nil.
 @property (nonatomic, copy) EFTabBarBackButtonBlock backButtonActionHandler;    // Default as nil, if you set it, you should handle the dismiss or pop action.
-@property (nonatomic, copy) EFTabBarWillDisappearBlock tabBarWillDisappearHandler;    // Default as nil, called when tabBarViewController will dismiss.
+
+// behavior handler
+@property (nonatomic, copy) EFTabBarViewControllerBehaviorBlock viewWillAppearHandler;
+@property (nonatomic, copy) EFTabBarViewControllerBehaviorBlock viewDidAppearHandler;
+@property (nonatomic, copy) EFTabBarViewControllerBehaviorBlock viewWillDisappearHandler;
+@property (nonatomic, copy) EFTabBarViewControllerBehaviorBlock viewDidDisappearHandler;
 
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 
@@ -45,5 +52,7 @@ typedef void (^EFTabBarWillDisappearBlock)(void);
 - (void)setSelectedIndex:(NSUInteger)selectedIndex animated:(BOOL)animated;
 
 - (NSArray *)viewControllersForClass:(Class)controllerClass;    // return an empty array if has not found.
+- (NSUInteger)indexOfViewControllerForClass:(Class)viewControllerClass; // start from 0, return the first index that found. NOTE: viewControllerClass CANNOT be nil!
+- (NSUInteger)indexOfViewController:(UIViewController<EFTabBarDataSource> *)viewController; // start from 0, return the first index that found. NOTE: viewController CANNOT be nil!
 
 @end

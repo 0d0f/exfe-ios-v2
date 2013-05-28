@@ -1092,10 +1092,10 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     [[EFAPIServer sharedInstance] signOutUsingUdid:udid success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
         }
-        [app SignoutDidFinish];
+        [app signoutDidFinish];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [app SignoutDidFinish];
+        [app signoutDidFinish];
     }];
     
 }

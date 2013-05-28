@@ -557,7 +557,7 @@
                                       success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                           [MBProgressHUD hideHUDForView:self.view animated:YES];
                                           AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-                                          [app GatherCrossDidFinish];
+                                          [app gatherCrossDidFinish];
                                       }
                                       failure:^(RKObjectRequestOperation *operation, NSError *error) {
                                           [MBProgressHUD hideHUDForView:self.view animated:YES];

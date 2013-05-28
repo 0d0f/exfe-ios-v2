@@ -19,8 +19,11 @@
 
 #define CARD_VERTICAL_MARGIN      (15)
 
-@interface CrossesViewController : PullRefreshTableViewController <UIAlertViewDelegate, CrossCardDelegate>
-{
+@interface CrossesViewController : PullRefreshTableViewController
+<
+UIAlertViewDelegate,
+CrossCardDelegate
+> {
     IBOutlet UITableView* tableView;
     BOOL logoutflag;
     BOOL alertShowflag;
@@ -37,18 +40,20 @@
 
 @property (nonatomic, retain) NSArray* crossList;
 @property (nonatomic, retain) id crossChangeObserver;
+@property (nonatomic, assign) BOOL needHeaderAnimation;
 
-- (void) refreshCell;
-- (void) refreshCrosses:(NSString*)source;
-- (void) refreshCrosses:(NSString*)source withCrossId:(int)cross_id;
-- (void) loadObjectsFromDataStore;
-- (void) emptyView;
-- (void) ShowProfileView;
-- (void) ShowGatherView;
-- (Cross*) crossWithId:(int)cross_id;
-- (void) refreshTableViewWithCrossId:(int)cross_id;
-- (void) alertsignout;
-- (BOOL) PushToCross:(int)cross_id;
-- (BOOL) PushToConversation:(int)cross_id;
-- (void) onClickConversation:(UIView*)card;
+- (void)refreshCell;
+- (void)refreshCrosses:(NSString*)source;
+- (void)refreshCrosses:(NSString*)source withCrossId:(int)cross_id;
+- (void)loadObjectsFromDataStore;
+- (void)emptyView;
+- (void)ShowProfileView;
+- (void)ShowGatherView;
+- (Cross*)crossWithId:(int)cross_id;
+- (void)refreshTableViewWithCrossId:(int)cross_id;
+- (void)alertsignout;
+- (BOOL)pushToCross:(int)cross_id;
+- (BOOL)pushToConversation:(int)cross_id;
+- (void)onClickConversation:(UIView*)card;
+
 @end

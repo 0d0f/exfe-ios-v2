@@ -61,13 +61,11 @@
     // Setup DB version data
     NSNumber* db_version=[[NSUserDefaults standardUserDefaults] objectForKey:@"db_version"];
     
-    if(db_version==nil || [db_version intValue] < APP_DB_VERSION){
-        
+    if (db_version==nil || [db_version intValue] < APP_DB_VERSION) {
         [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
     }
     
-
     // Setup AFNetwork
     [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
     [self createdb];
@@ -75,16 +73,29 @@
     // Setup APN Push
     [self requestForPush];
     
+    NSDictionary *userinfo = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    
     // Setup root UIViewController
     CrossesViewController *crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
+    crossviewController.needHeaderAnimation = userinfo ? NO : YES;
+    
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
+    
+    self.crossesViewController = crossviewController;
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.rootViewController = self.navigationController;
     [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
+    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
     
+    // Handle Remote notification
+    if (userinfo) {
+        [self receivePushData:userinfo isOnForeground:NO];
+    }
+    
+    // Version info
 #ifdef DEBUG
     CGRect windowBounds = [UIScreen mainScreen].bounds;
     CGFloat width = 100.0f;
@@ -126,8 +137,6 @@
     [self.window makeKeyAndVisible];
 #endif
     
-    //    UILogSetWindow(self.window);
-    
     EFAPIServer *server = [EFAPIServer sharedInstance];
     // Load User
     if ([server isLoggedIn] == YES){
@@ -136,22 +145,19 @@
     
     // Load Background List
     [server getAvailableBackgroundsWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-            NSDictionary *body=responseObject;
-            if([body isKindOfClass:[NSDictionary class]]) {
-                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                if(code)
-                    if([code intValue]==200) {
-                        NSArray *backgrounds=[[body objectForKey:@"response"] objectForKey:@"backgrounds"];
-                        [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
-                    }
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *body = responseObject;
+            if ([body isKindOfClass:[NSDictionary class]]) {
+                id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
+                if(code && 200 == [code intValue]) {
+                    NSArray *backgrounds = [[body objectForKey:@"response"] objectForKey:@"backgrounds"];
+                    [[NSUserDefaults standardUserDefaults] setObject:backgrounds forKey:@"cross_default_backgrounds"];
+                }
             }
-        }else {
         }
     }
-                                                             failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                 
-                                                             }];
+                                       failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                       }];
     
     return YES;
 }
@@ -168,13 +174,11 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
+- (void)applicationWillEnterForeground:(UIApplication *)application {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    if([EFAPIServer sharedInstance].user_id > 0){
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
-        [crossViewController refreshCrosses:@"crossupdateview"];
+    
+    if ([EFAPIServer sharedInstance].user_id > 0) {
+        [self.crossesViewController refreshCrosses:@"crossupdateview"];
     }
 }
 
@@ -192,6 +196,7 @@
     [[FBSession activeSession] close];
 }
 
+#pragma mark - Push Notification
 // request for APN
 - (void)requestForPush
 {
@@ -204,7 +209,68 @@
     }
 }
 
-- (void) createdb{
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSString * tokenAsString = [[[deviceToken description]
+                                 stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]]
+                                stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
+        return;
+    [[EFAPIServer sharedInstance] regDevice:tokenAsString success:nil failure:nil];
+}
+
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+    //    NSLog(@"Error in registration. Error: %@", err);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [Flurry logEvent:@"RECEIVE_REMOTE_NOTIFICATION"];
+    
+    BOOL isForeground = YES;
+    if (UIApplicationStateActive != application.applicationState) {
+        isForeground = NO;
+    }
+    
+    [self receivePushData:userInfo isOnForeground:isForeground];
+}
+
+- (void)receivePushData:(NSDictionary *)userInfo isOnForeground:(BOOL)isForeground {
+    if (isForeground == NO) {
+        CrossesViewController *crossViewController = self.crossesViewController;
+        
+        if (userInfo != nil) {
+            id arg = [userInfo objectForKey:@"args"];
+            if([arg isKindOfClass:[NSDictionary class]]) {
+                id cid = [arg objectForKey:@"cid"];
+                id msg_type = [arg objectForKey:@"t"];
+                
+                if (cid != nil && [cid isKindOfClass:[NSNumber class]] && msg_type != nil && [msg_type isKindOfClass:[NSString class]]) {
+                    if ([cid intValue] > 0 ) {
+                        int cross_id = [cid intValue];
+                        NSString *type = (NSString *)msg_type;
+                        if ([type isEqualToString:@"i"]) {
+                            if ([crossViewController pushToCross:cross_id] == NO) {
+                                [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+                            }
+                        }
+                        
+                        if ([type isEqualToString:@"c"]) {
+                            if ([crossViewController pushToConversation:cross_id] == NO) {
+                                [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        CrossesViewController *crossViewController = self.crossesViewController;
+        [crossViewController refreshCrosses:@"crossupdateview"];
+    }
+}
+
+#pragma mark -
+- (void)createdb {
     [Flurry logEvent:@"CREATE_DB"];
     NSURL *baseURL = [NSURL URLWithString:API_ROOT];
 //    NSLog(@"API Server: %@", baseURL);
@@ -238,51 +304,23 @@
     
 }
 
--(void)ShowLanding:(UIViewController*)parent{
-    
+- (void)showLanding:(UIViewController*)parent {
     EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
     [parent presentModalViewController:viewController animated:NO];
 }
 
--(void)SigninDidFinish{
-    if([[EFAPIServer sharedInstance] isLoggedIn] == YES)
-    {
+- (void)signinDidFinish {
+    if ([[EFAPIServer sharedInstance] isLoggedIn]) {
         [self requestForPush];
         
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
         
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+        CrossesViewController *crossViewController = self.crossesViewController;
         [crossViewController refreshCrosses:@"crossview_init"];
         [crossViewController loadObjectsFromDataStore];
         [crossViewController dismissModalViewControllerAnimated:YES];
-        
-        
     }
-}
-
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    NSString * tokenAsString = [[[deviceToken description]
-                                 stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]]
-                                stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-    if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
-        return;
-    [[EFAPIServer sharedInstance] regDevice:tokenAsString success:nil failure:nil];
-}
-
-- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-//    NSLog(@"Error in registration. Error: %@", err);
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    [Flurry logEvent:@"RECEIVE_REMOTE_NOTIFICATION"];
-    BOOL isForeground=TRUE;
-    if(application.applicationState != UIApplicationStateActive)
-        isForeground=FALSE;
-    [self ReceivePushData:userInfo RunOnForeground:isForeground];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -317,7 +355,7 @@
             server.user_id = [user_id integerValue];
             [server saveUserData];
             [server loadMeSuccess:nil failure:nil];
-            [self SigninDidFinish];
+            [self signinDidFinish];
             [self processUrlHandler:url];
         } else {
             if ([user_id integerValue] == server.user_id) {
@@ -384,41 +422,39 @@
     return YES;
 }
 
-- (void) processUrlHandler:(NSURL*)url{
+- (void)processUrlHandler:(NSURL*)url {
     NSString *host = [url host];
     NSArray *pathComps = [url pathComponents];
-//    NSDictionary *params = [Util splitQuery:[url query]];
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+    CrossesViewController *crossViewController = self.crossesViewController;
     
-    if([host isEqualToString:@"crosses"]){
+    if ([host isEqualToString:@"crosses"]) {
         if (self.navigationController.viewControllers.count > 1) {
             [self.navigationController popToRootViewControllerAnimated:NO];
         }
-        if(pathComps.count  == 2){
+        
+        if (pathComps.count  == 2) {
             int cross_id = [[pathComps objectAtIndex:1] intValue];
-            if( cross_id > 0){
-                if ([crossViewController PushToCross:cross_id] == NO) {
+            if ( cross_id > 0) {
+                if ([crossViewController pushToCross:cross_id] == NO) {
                     [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
                 }
+                
                 return ;
             }
         }
-        
-    
-    } else if([host isEqualToString:@"conversation"]){
+    } else if ([host isEqualToString:@"conversation"]) {
         if (self.navigationController.viewControllers.count > 1) {
             [self.navigationController popToRootViewControllerAnimated:NO];
         }
-        if(pathComps.count  == 2){
+        if (pathComps.count  == 2) {
             int cross_id = [[pathComps objectAtIndex:1] intValue];
             if (cross_id > 0){
-                if ([crossViewController PushToConversation:cross_id] == NO) {
+                if ([crossViewController pushToConversation:cross_id] == NO) {
                     [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
                 }
             }
         }
-    } else if([host isEqualToString:@"profile"]){
+    } else if([host isEqualToString:@"profile"]) {
         if (self.navigationController.viewControllers.count > 1) {
             [self.navigationController popToRootViewControllerAnimated:NO];
         }
@@ -426,59 +462,18 @@
     }
 }
 
-- (void)ReceivePushData:(NSDictionary*)userInfo RunOnForeground:(BOOL)isForeground
-{
-    if (isForeground == NO){
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
-        
-        if (userInfo != nil) {
-            id arg = [userInfo objectForKey:@"args"];
-            if([arg isKindOfClass:[NSDictionary class]]) {
-                id cid = [arg objectForKey:@"cid"];
-                id msg_type = [arg objectForKey:@"t"];
-                
-                if (cid != nil && [cid isKindOfClass:[NSNumber class]] && msg_type != nil && [msg_type isKindOfClass:[NSString class]]) {
-                    if ([cid intValue] > 0 ) {
-                        int cross_id = [cid intValue];
-                        NSString *type = (NSString *)msg_type;
-                        if ([type isEqualToString:@"i"]) {
-                            if ([crossViewController PushToCross:cross_id] == NO) {
-                                [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
-                            }
-                        }
-                        
-                        if ([type isEqualToString:@"c"]) {
-                            if ([crossViewController PushToConversation:cross_id] == NO) {
-                                [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    } else {
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
-        [crossViewController refreshCrosses:@"crossupdateview"];
-    }
-}
-
--(void)GatherCrossDidFinish{
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+- (void)gatherCrossDidFinish {
+    CrossesViewController *crossViewController = self.crossesViewController;
     [crossViewController refreshCrosses:@"gatherview"];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(void)CrossUpdateDidFinish:(int)cross_id{
-    //    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+- (void)crossUpdateDidFinish:(int)cross_id {
+    CrossesViewController *crossViewController = self.crossesViewController;
     [crossViewController refreshCrosses:@"crossupdateview" withCrossId:cross_id];
 }
 
--(void)SignoutDidFinish{
+- (void)signoutDidFinish {
     [Flurry logEvent:@"ACTION_DID_SIGN_OUT"];
     
     [[EFAPIServer sharedInstance] clearUserData];
@@ -495,10 +490,9 @@
 
     [self cleandb];
     
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    CrossesViewController *rootViewController = [viewControllers objectAtIndex:0];
+    CrossesViewController *rootViewController = self.crossesViewController;
     [rootViewController emptyView];
-    [self ShowLanding:rootViewController];
+    [self showLanding:rootViewController];
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

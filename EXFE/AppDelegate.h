@@ -21,17 +21,18 @@
 #define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
-
+@class CrossesViewController;
 @interface AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, retain) UINavigationController *navigationController;
+@property (nonatomic, retain) CrossesViewController *crossesViewController;
 
--(void)SigninDidFinish;
--(void)SignoutDidFinish;
--(void)GatherCrossDidFinish;
--(void)CrossUpdateDidFinish:(int)cross_id;
--(void)ShowLanding:(UIViewController*)parent;
-- (void) cleandb;
-- (void) createdb;
-- (void) processUrlHandler:(NSURL*)url;
+-(void)signinDidFinish;
+-(void)signoutDidFinish;
+-(void)gatherCrossDidFinish;
+-(void)crossUpdateDidFinish:(int)cross_id;
+-(void)showLanding:(UIViewController*)parent;
+- (void)cleandb;
+- (void)createdb;
+- (void)processUrlHandler:(NSURL*)url;
 @end
