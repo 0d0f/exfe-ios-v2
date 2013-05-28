@@ -163,7 +163,7 @@
 - (void)dealloc {
     RKObjectManager* manager =[RKObjectManager sharedManager];
     [manager.operationQueue cancelAllOperations];
-    [_shadowColor release];
+    [_shadowImage release];
 	[_posts release];
     [cellbackground release];
     [cellsepator release];

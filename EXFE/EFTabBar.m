@@ -330,7 +330,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         [baseView release];
         
         // shadow
-        UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x_shadow.png"]];
+        UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tabshadow_x.png"]];
         shadowImageView.contentMode = UIViewContentModeTopLeft;
         shadowImageView.frame = (CGRect){{0, CGRectGetHeight(frame) - 26}, {640, 44}};
         [self addSubview:shadowImageView];
@@ -375,7 +375,8 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         [self _changeTitleFrameAimated:YES];
     } else if (object == self.tabBarViewController && [keyPath isEqualToString:@"selectedIndex"]) {
         UIViewController<EFTabBarDataSource> *viewController = (UIViewController<EFTabBarDataSource> *)self.tabBarViewController.viewControllers[self.tabBarViewController.selectedIndex];
-        self.outerShadowLayer.shadowColor = viewController.shadowColor.CGColor;
+//        self.outerShadowLayer.shadowColor = viewController.shadowColor.CGColor;
+        self.shadowImageView.image = viewController.shadowImage;
     }
 }
 
@@ -451,6 +452,13 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     
     if (self.isButtonsShowed) {
         if (index != self.tabBarViewController.selectedIndex) {
+            self.shadowImageView.alpha = 0.0f;
+            [UIView animateWithDuration:0.233f
+                             animations:^{
+                                 self.shadowImageView.alpha = 1.0f;
+                             } completion:^(BOOL finished){
+                             }];
+            
             [self.tabBarViewController setSelectedIndex:index
                                                animated:YES];
         }
@@ -824,11 +832,29 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 
 - (void)_setSelectedIndex:(NSUInteger)index {
     if (self.isButtonsShowed) {
+        if (index != self.tabBarViewController.selectedIndex) {
+            self.shadowImageView.alpha = 0.0f;
+            [UIView animateWithDuration:0.233f
+                             animations:^{
+                                 self.shadowImageView.alpha = 1.0f;
+                             } completion:^(BOOL finished){
+                             }];
+        }
+        
         [self.tabBarViewController setSelectedIndex:index
                                            animated:YES];
         [self _dismissButtonsAnimated:YES];
     } else if (index != self.tabBarViewController.selectedIndex) {
         EFTabBarItemControl *preButton = [self _selectedButton];
+        
+        if (index != self.tabBarViewController.selectedIndex) {
+            self.shadowImageView.alpha = 0.0f;
+            [UIView animateWithDuration:0.233f
+                             animations:^{
+                                 self.shadowImageView.alpha = 1.0f;
+                             } completion:^(BOOL finished){
+                             }];
+        }
         
         [self.tabBarViewController setSelectedIndex:index
                                            animated:YES];

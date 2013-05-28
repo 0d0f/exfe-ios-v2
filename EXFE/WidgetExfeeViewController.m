@@ -287,7 +287,7 @@ typedef enum {
 }
 
 - (void)dealloc {
-    [_shadowColor release];
+    [_shadowImage release];
     [invName release];
     [invHostFlag release];
     [invHostText release];

@@ -349,7 +349,7 @@
 }
 
 - (void)dealloc {
-    [_shadowColor release];
+    [_shadowImage release];
     [descView release];
     [exfeeShowview release];
     [timeRelView release];

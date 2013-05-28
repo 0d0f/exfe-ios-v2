@@ -299,7 +299,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    [self.tableView reloadData];
 }
 
 - (void)ShowProfileView{
@@ -916,7 +918,7 @@
     
     crossGroupViewController.customTabBarItem = tabBarItem1;
     crossGroupViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
-    crossGroupViewController.shadowColor = [UIColor whiteColor];
+    crossGroupViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
     
     // ConvViewController
     WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithNibName:@"WidgetConvViewController" bundle:nil] ;
@@ -936,7 +938,7 @@
     
     conversationViewController.customTabBarItem = tabBarItem2;
     conversationViewController.tabBarStyle = kEFTabBarStyleNormal;
-    conversationViewController.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+    conversationViewController.shadowImage = [UIImage imageNamed:@"tabshadow_conv.png"];
     
     // ExfeeViewController
     WidgetExfeeViewController *exfeeViewController = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
@@ -951,7 +953,7 @@
     
     exfeeViewController.customTabBarItem = tabBarItem3;
     exfeeViewController.tabBarStyle = kEFTabBarStyleNormal;
-    exfeeViewController.shadowColor = [UIColor whiteColor];
+    exfeeViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
     
     // Init TabBarViewController
     EFTabBarViewController *tabBarViewController = [[[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController]] autorelease];

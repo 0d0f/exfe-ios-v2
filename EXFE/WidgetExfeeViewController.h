@@ -80,6 +80,6 @@ EFTabBarDataSource
 @property (nonatomic, retain) EFTabBarItem *customTabBarItem;
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
 @property (nonatomic, assign) EFTabBarViewController *tabBarViewController;
-@property (nonatomic, copy) UIColor *shadowColor;
+@property (nonatomic, copy) UIImage *shadowImage;
 
 @end
