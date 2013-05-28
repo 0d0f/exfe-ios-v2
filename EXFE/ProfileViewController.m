@@ -165,7 +165,7 @@
                          
                     }
                         completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
-                            if (buttonIndex == alertView.firstOtherButtonIndex) {
+                            if (buttonIndex == 0 /*alertView.firstOtherButtonIndex*/) {
                                 UITextField *field = [alertView textFieldAtIndex:0];
                                 NSString *name = field.text;
                                 if (name && name.length > 0) {
@@ -466,7 +466,7 @@
                          }
                             completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
                                 [tableView deselectRowAtIndexPath:indexPath animated:YES];
-                                if (buttonIndex == alertView.firstOtherButtonIndex) {
+                                if (buttonIndex == 0 /*alertView.firstOtherButtonIndex*/) {
                                     UITextField *field = [alertView textFieldAtIndex:0];
                                     NSString *name = field.text;
                                     if (name && name.length > 0) {
