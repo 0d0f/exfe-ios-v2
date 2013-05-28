@@ -307,6 +307,7 @@
     [manager.HTTPClient.operationQueue cancelAllOperations];
     ProfileViewController *profileViewController=[[ProfileViewController alloc]initWithNibName:@"ProfileViewController" bundle:nil];
     profileViewController.user = [User getDefaultUser];
+    [profileViewController syncUser];
     [self.navigationController pushViewController:profileViewController animated:YES];
     [profileViewController release];
     

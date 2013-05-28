@@ -524,7 +524,7 @@ typedef enum {
                 invRsvpImage.image = [UIImage imageNamed:@"rsvp_unavailable_stroke_26g5"];
                 
                 CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-                NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Declined"
+                NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Unavailable"
                                                                                      attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
                                                (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
                 invRsvpLabel.attributedText = pending;
