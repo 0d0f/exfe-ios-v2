@@ -263,6 +263,7 @@
                 }
                 RoughIdentity *cachedRoughtIdentity = [_cachedRoughIdentityDict valueForKey:roughIdentity.key];
                 if (cachedRoughtIdentity.status == kEFRoughIdentityGetIdentityStatusSuccess) {
+                    cachedRoughtIdentity.identity.name = contact.name;
                     [contactRoughIdentities addObject:cachedRoughtIdentity.identity];
                     [addIdentitiyDict setValue:@"YES" forKey:roughIdentity.key];
                 } else if (cachedRoughtIdentity.status == kEFRoughIdentityGetIdentityStatusLoading) {
@@ -271,6 +272,7 @@
                                                  beforeDate:[NSDate distantFuture]];
                     }
                     if (kEFRoughIdentityGetIdentityStatusSuccess == cachedRoughtIdentity.status) {
+                        cachedRoughtIdentity.identity.name = contact.name;
                         [contactRoughIdentities addObject:cachedRoughtIdentity.identity];
                         [addIdentitiyDict setValue:@"YES" forKey:roughIdentity.key];
                     }
@@ -826,8 +828,14 @@
                         (self.searchResultRoughtIdentity.identity && kProviderPhone == matchedProvider && [self.searchResultRoughtIdentity.identity.identity_id intValue] == 0))) {
                         self.hasExfeeNameSetCompletion = NO;
                         
-                        NSString *countryCode = [Util getTelephoneCountryCode];
-                        NSString *message = [NSString stringWithFormat:@"+%@ %@", countryCode, self.searchBar.text];
+                        NSString *message = nil;
+                        if ([self.searchBar.text hasPrefix:@"+"]) {
+                            message = self.searchBar.text;
+                        } else {
+                            NSString *countryCode = [Util getTelephoneCountryCode];
+                            message = [NSString stringWithFormat:@"+%@ %@", countryCode, self.searchBar.text];
+                        }
+                        
                         [WCAlertView showAlertWithTitle:@"Set invitee name"
                                                 message:message
                                      customizationBlock:^(WCAlertView *alertView) {
