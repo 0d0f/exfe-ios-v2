@@ -530,13 +530,12 @@
     [self relayoutUI];
 }
 
-- (IBAction)Gather:(id) sender{
-    
-    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.mode=MBProgressHUDModeCustomView;
+- (IBAction)Gather:(id)sender {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeCustomView;
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
     [bigspin startAnimating];
-    hud.customView=bigspin;
+    hud.customView = bigspin;
     [bigspin release];
     hud.labelText = @"Loading";
   
@@ -544,7 +543,7 @@
     NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
     
     _cross.by_identity = [myIdentities objectAtIndex:0];
-    if(_cross.time == nil){
+    if (_cross.time == nil) {
       NSEntityDescription *crosstimeEntity = [NSEntityDescription entityForName:@"CrossTime" inManagedObjectContext:context];
       _cross.time = [[[CrossTime alloc] initWithEntity:crosstimeEntity insertIntoManagedObjectContext:context] autorelease];
       NSEntityDescription *eftimeEntity = [NSEntityDescription entityForName:@"EFTime" inManagedObjectContext:context];
@@ -646,7 +645,6 @@
                                 fadeinAnimation.fromValue=[NSNumber numberWithFloat:0.0];
                                 fadeinAnimation.toValue=[NSNumber numberWithFloat:1.0];
                                 [dectorView.layer addAnimation:fadeinAnimation forKey:@"fadein"];
-
                             }
                         });
                     });
@@ -686,19 +684,19 @@
     [exfeeShowview reloadData];
 }
 
-- (void) setTime:(CrossTime*)time{
-    _cross.time=time;
+- (void)setTime:(CrossTime*)time {
+    _cross.time = time;
     [self fillTime:time];
     [self relayoutUI];
 }
 
-- (void) setPlace:(Place*)place{
+- (void)setPlace:(Place*)place {
     _cross.place=place;
     [self fillPlace:place];
     [self relayoutUI];
 }
 
-- (void)fillTime:(CrossTime*)time{
+- (void)fillTime:(CrossTime *)time {
     if (time != nil){
         NSString *title = [[time getTimeTitle] sentenceCapitalizedString];
         [title retain];
