@@ -531,6 +531,10 @@
 }
 
 - (IBAction)Gather:(id)sender {
+    if (!_cross.time && !_cross.place && self.sortedInvitations.count <= 1 && !_cross.cross_description.length) {
+        return;
+    }
+    
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeCustomView;
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
