@@ -81,7 +81,7 @@ typedef enum {
 //- (void) drawMapAnnontations:(int)idx;
 //
 //- (void) selectOnMap:(id) sender;
-//- (void) selectPlace:(int)index editing:(BOOL)editing;
+- (void) selectPlace:(int)index editing:(BOOL)editing;
 //- (void) addPlaceEdit:(Place*)_place;
 //- (void) getPlace;
 //- (void) getPlacefromapi;
