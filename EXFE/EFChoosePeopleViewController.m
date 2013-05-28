@@ -936,6 +936,8 @@
 - (void)loadexfeePeople {
     __block NSArray *recentexfeePeople = nil;
     void (^block)(void) = ^{
+        User *me = [User getDefaultUser];
+        
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
         
         NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:NO];
@@ -945,7 +947,23 @@
         request.sortDescriptors = @[descriptor];
         
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
-        recentexfeePeople = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        NSArray *exfees = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
+        NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:exfees.count];
+        
+        for (Identity *identity in exfees) {
+            BOOL isMe = NO;
+            for (Identity *meIdentity in me.identities) {
+                if ([identity isEqualToIdentity:meIdentity]) {
+                    isMe = YES;
+                    break;
+                }
+            }
+            if (!isMe) {
+                [result addObject:identity];
+            }
+        }
+        
+        recentexfeePeople = [result autorelease];
     };
     if (dispatch_get_current_queue() != dispatch_get_main_queue()) {
         dispatch_sync(dispatch_get_main_queue(), block);
