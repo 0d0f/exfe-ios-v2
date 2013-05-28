@@ -1109,15 +1109,18 @@ typedef enum {
                                                      //                                 alert.tag=403;
                                                      //                                 [alert show];
                                                      //                                 [alert release];
-                                                 }else if([[meta objectForKey:@"code"] intValue]==200){
-                                                     CrossGroupViewController *parent = (CrossGroupViewController*)self.parentViewController;
-                                                     [[EFAPIServer sharedInstance] loadCrossWithCrossId:[parent.cross.cross_id intValue]
+                                                 } else if ([[meta objectForKey:@"code"] intValue] == 200) {
+                                                     NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
+                                                     NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
+                                                     
+                                                     CrossGroupViewController *crossGroupViewController = viewControllers[0];
+                                                     [[EFAPIServer sharedInstance] loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue]
                                                                                             updatedtime:@""
                                                                                                 success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                                                                     if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
                                                                                                         Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
                                                                                                         if ([meta.code intValue]==200) {
-                                                                                                            self.exfee = parent.cross.exfee;
+                                                                                                            self.exfee = crossGroupViewController.cross.exfee;
                                                                                                             self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                                                                                                             [exfeeContainer reloadData];
                                                                                                             [self reloadSelected];
@@ -1127,7 +1130,7 @@ typedef enum {
                                                                                                 failure:^(RKObjectRequestOperation *operation, NSError *error) {
                                                                                                 }];
                                                      
-                                                     self.exfee = parent.cross.exfee;
+                                                     self.exfee = crossGroupViewController.cross.exfee;
                                                      [exfeeContainer reloadData];
                                                  }
                                                  
