@@ -170,7 +170,7 @@
         [self.headView show];
         
         AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [app ShowLanding:self];
+        [app showLanding:self];
 
     }
     
@@ -544,7 +544,7 @@
         if (buttonIndex == alertView.firstOtherButtonIndex) {
             [Util signout];
             AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            [app ShowLanding:self];
+            [app showLanding:self];
         }
     }
 }

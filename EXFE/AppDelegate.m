@@ -79,6 +79,8 @@
     CrossesViewController *crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
     
+    self.crossesViewController = crossviewController;
+    
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.rootViewController = self.navigationController;
     [self.window addSubview:self.navigationController.view];
@@ -168,13 +170,11 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
+- (void)applicationWillEnterForeground:(UIApplication *)application {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    if([EFAPIServer sharedInstance].user_id > 0){
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
-        [crossViewController refreshCrosses:@"crossupdateview"];
+    
+    if ([EFAPIServer sharedInstance].user_id > 0) {
+        [self.crossesViewController refreshCrosses:@"crossupdateview"];
     }
 }
 
@@ -238,27 +238,22 @@
     
 }
 
--(void)ShowLanding:(UIViewController*)parent{
-    
+- (void)showLanding:(UIViewController*)parent {
     EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
     [parent presentModalViewController:viewController animated:NO];
 }
 
--(void)SigninDidFinish{
-    if([[EFAPIServer sharedInstance] isLoggedIn] == YES)
-    {
+- (void)signinDidFinish {
+    if ([[EFAPIServer sharedInstance] isLoggedIn]) {
         [self requestForPush];
         
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
         
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+        CrossesViewController *crossViewController = self.crossesViewController;
         [crossViewController refreshCrosses:@"crossview_init"];
         [crossViewController loadObjectsFromDataStore];
         [crossViewController dismissModalViewControllerAnimated:YES];
-        
-        
     }
 }
 
@@ -317,7 +312,7 @@
             server.user_id = [user_id integerValue];
             [server saveUserData];
             [server loadMeSuccess:nil failure:nil];
-            [self SigninDidFinish];
+            [self signinDidFinish];
             [self processUrlHandler:url];
         } else {
             if ([user_id integerValue] == server.user_id) {
@@ -384,33 +379,31 @@
     return YES;
 }
 
-- (void) processUrlHandler:(NSURL*)url{
+- (void)processUrlHandler:(NSURL*)url {
     NSString *host = [url host];
     NSArray *pathComps = [url pathComponents];
-//    NSDictionary *params = [Util splitQuery:[url query]];
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+    CrossesViewController *crossViewController = self.crossesViewController;
     
-    if([host isEqualToString:@"crosses"]){
+    if ([host isEqualToString:@"crosses"]) {
         if (self.navigationController.viewControllers.count > 1) {
             [self.navigationController popToRootViewControllerAnimated:NO];
         }
-        if(pathComps.count  == 2){
+        
+        if (pathComps.count  == 2) {
             int cross_id = [[pathComps objectAtIndex:1] intValue];
-            if( cross_id > 0){
+            if ( cross_id > 0) {
                 if ([crossViewController pushToCross:cross_id] == NO) {
                     [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
                 }
+                
                 return ;
             }
         }
-        
-    
-    } else if([host isEqualToString:@"conversation"]){
+    } else if ([host isEqualToString:@"conversation"]) {
         if (self.navigationController.viewControllers.count > 1) {
             [self.navigationController popToRootViewControllerAnimated:NO];
         }
-        if(pathComps.count  == 2){
+        if (pathComps.count  == 2) {
             int cross_id = [[pathComps objectAtIndex:1] intValue];
             if (cross_id > 0){
                 if ([crossViewController pushToConversation:cross_id] == NO) {
@@ -418,7 +411,7 @@
                 }
             }
         }
-    } else if([host isEqualToString:@"profile"]){
+    } else if([host isEqualToString:@"profile"]) {
         if (self.navigationController.viewControllers.count > 1) {
             [self.navigationController popToRootViewControllerAnimated:NO];
         }
@@ -426,11 +419,9 @@
     }
 }
 
-- (void)ReceivePushData:(NSDictionary*)userInfo RunOnForeground:(BOOL)isForeground
-{
-    if (isForeground == NO){
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+- (void)ReceivePushData:(NSDictionary*)userInfo RunOnForeground:(BOOL)isForeground {
+    if (isForeground == NO) {
+        CrossesViewController *crossViewController = self.crossesViewController;
         
         if (userInfo != nil) {
             id arg = [userInfo objectForKey:@"args"];
@@ -458,27 +449,23 @@
             }
         }
     } else {
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+        CrossesViewController *crossViewController = self.crossesViewController;
         [crossViewController refreshCrosses:@"crossupdateview"];
     }
 }
 
--(void)GatherCrossDidFinish{
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+- (void)gatherCrossDidFinish {
+    CrossesViewController *crossViewController = self.crossesViewController;
     [crossViewController refreshCrosses:@"gatherview"];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(void)CrossUpdateDidFinish:(int)cross_id{
-    //    [(CrossesViewController*)crossviewController refreshCrosses:@"crossupdateview"];
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    CrossesViewController *crossViewController = [viewControllers objectAtIndex:0];
+- (void)crossUpdateDidFinish:(int)cross_id {
+    CrossesViewController *crossViewController = self.crossesViewController;
     [crossViewController refreshCrosses:@"crossupdateview" withCrossId:cross_id];
 }
 
--(void)SignoutDidFinish{
+- (void)signoutDidFinish {
     [Flurry logEvent:@"ACTION_DID_SIGN_OUT"];
     
     [[EFAPIServer sharedInstance] clearUserData];
@@ -495,10 +482,9 @@
 
     [self cleandb];
     
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    CrossesViewController *rootViewController = [viewControllers objectAtIndex:0];
+    CrossesViewController *rootViewController = self.crossesViewController;
     [rootViewController emptyView];
-    [self ShowLanding:rootViewController];
+    [self showLanding:rootViewController];
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

@@ -1390,7 +1390,7 @@
                                                 if ([meta.code intValue] == 200) {
                                                     Cross *responsecross = [[mappingResult dictionary] objectForKey:@"response.cross"];
                                                     if ([responsecross.cross_id intValue] == [self.cross.cross_id intValue]) {
-                                                        [app CrossUpdateDidFinish:[responsecross.cross_id intValue]];
+                                                        [app crossUpdateDidFinish:[responsecross.cross_id intValue]];
                                                     }
                                                 } else {
                                                     [Util showErrorWithMetaObject:meta delegate:self];

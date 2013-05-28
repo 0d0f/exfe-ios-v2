@@ -908,7 +908,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 - (void)SigninDidFinish
 {
     AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [app SigninDidFinish];
+    [app signinDidFinish];
 }
 
 
