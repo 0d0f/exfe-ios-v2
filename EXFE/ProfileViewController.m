@@ -534,36 +534,35 @@
 }
 
 - (void) deleteIdentity:(int)identity_id{
-    NSString *endpoint = [NSString stringWithFormat:@"%@users/%u/deleteIdentity?token=%@",API_ROOT, [EFAPIServer sharedInstance].user_id, [EFAPIServer sharedInstance].user_token];
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    objectManager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
-    [objectManager.HTTPClient postPath:endpoint parameters:@{@"identity_id":[NSNumber numberWithInt:identity_id]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-      if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-        NSDictionary *body=responseObject;
-        if([body isKindOfClass:[NSDictionary class]]) {
-            id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-            if(code){
-                if([code intValue]==200) {
-                    NSDictionary *responseobj=[body objectForKey:@"response"];
-                    if([responseobj isKindOfClass:[NSDictionary class]]){
-                        NSString *identity_id_str=[responseobj objectForKey:@"identity_id"];
-                        NSString *user_id_str=[responseobj objectForKey:@"user_id"];
-                        if(identity_id_str!=nil && user_id_str!=nil){
-                            int response_identity_id=[identity_id_str intValue];
-                            int response_user_id=[user_id_str intValue];
-                            if(response_identity_id==identity_id && response_user_id == [EFAPIServer sharedInstance].user_id){
-                                [self deleteIdentityUI:identity_id];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-      }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-      
-    }];
+    
+    [[EFAPIServer sharedInstance] removeUserIdentity:identity_id
+                                             success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                                     NSDictionary *body=responseObject;
+                                                     if([body isKindOfClass:[NSDictionary class]]) {
+                                                         id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                                                         if(code){
+                                                             if([code intValue]==200) {
+                                                                 NSDictionary *responseobj=[body objectForKey:@"response"];
+                                                                 if([responseobj isKindOfClass:[NSDictionary class]]){
+                                                                     NSString *identity_id_str=[responseobj objectForKey:@"identity_id"];
+                                                                     NSString *user_id_str=[responseobj objectForKey:@"user_id"];
+                                                                     if(identity_id_str!=nil && user_id_str!=nil){
+                                                                         int response_identity_id=[identity_id_str intValue];
+                                                                         int response_user_id=[user_id_str intValue];
+                                                                         if(response_identity_id==identity_id && response_user_id == [EFAPIServer sharedInstance].user_id){
+                                                                             [self deleteIdentityUI:identity_id];
+                                                                         }
+                                                                     }
+                                                                 }
+                                                             }
+                                                         }
+                                                     }
+                                                 }
+                                             }
+                                             failure:nil];
 }
+
 - (void) Logout {
     [Util signout];
 }
@@ -606,43 +605,32 @@
 
 - (void) doVerify:(int)identity_id{
     
-    NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
-    NSAssert([schemes objectAtIndex:0] != nil, @"Missing url sheme in main bundle.");
-    
-    // eg:  exfe://oauthcallback/
-    NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
-    
-    NSString *endpoint = [NSString stringWithFormat:@"%@users/VerifyUserIdentity?token=%@",API_ROOT,[EFAPIServer sharedInstance].user_token];
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    objectManager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
-    [objectManager.HTTPClient postPath:endpoint parameters:@{@"identity_id":[NSNumber numberWithInt:identity_id],@"device_callback":callback,@"device":@"iOS"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-            NSDictionary *body=responseObject;
-            if([body isKindOfClass:[NSDictionary class]]) {
-                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                if(code){
-                    if([code intValue]==200) {
-                        NSDictionary *responseobj=[body objectForKey:@"response"];
-                        if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"])
-                        {
-                            OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
-                            oauth.parentView=self;
-                            oauth.oauth_url=[responseobj objectForKey:@"url"];
-                            [self presentModalViewController:oauth animated:YES];
-                            [oauth release];
-                            
-                        }
-                    }
-                    else{
-                    }
-                }
-            }
-        }
-        
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-    }];
+    [[EFAPIServer sharedInstance] verifyUserIdentity:identity_id
+                                             success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                                     NSDictionary *body=responseObject;
+                                                     if([body isKindOfClass:[NSDictionary class]]) {
+                                                         id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                                                         if(code){
+                                                             if([code intValue]==200) {
+                                                                 NSDictionary *responseobj=[body objectForKey:@"response"];
+                                                                 if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"])
+                                                                 {
+                                                                     OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
+                                                                     oauth.parentView=self;
+                                                                     oauth.oauth_url=[responseobj objectForKey:@"url"];
+                                                                     [self presentModalViewController:oauth animated:YES];
+                                                                     [oauth release];
+                                                                     
+                                                                 }
+                                                             }
+                                                             else{
+                                                             }
+                                                         }
+                                                     }
+                                                 }
+                                             }
+                                             failure:nil];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

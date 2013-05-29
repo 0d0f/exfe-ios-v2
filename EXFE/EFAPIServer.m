@@ -833,6 +833,76 @@
                                                  }];
 }
 
+- (void)verifyUserIdentity:(int)identity_id
+                   success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                   failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
+    NSAssert([schemes objectAtIndex:0] != nil, @"Missing url sheme in main bundle.");
+    
+    // eg:  exfe://oauthcallback/
+    NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
+    
+    NSString *endpoint = [NSString stringWithFormat:@"users/VerifyUserIdentity?token=%@", self.user_token];
+    NSDictionary *param = @{@"identity_id":[NSNumber numberWithInt:identity_id],@"device_callback":callback,@"device":@"iOS"};
+    
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    [objectManager.HTTPClient postPath:endpoint
+                            parameters:param
+                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                   [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                                   
+                                   if (success) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           success(operation, responseObject);
+                                       });
+                                   }
+                                   
+                               }
+                               failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                   [self _handleFailureWithRequestOperation:operation andError:error];
+                                   
+                                   if (failure) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           failure(operation, error);
+                                       });
+                                   }
+                               }];
+}
+
+- (void)removeUserIdentity:(int)identity_id
+                   success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                   failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/deleteIdentity?token=%@", self.user_id, self.user_token];
+    NSDictionary *param = @{@"identity_id":[NSNumber numberWithInt:identity_id]};
+                            
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    objectManager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
+    [objectManager.HTTPClient postPath:endpoint
+                            parameters:param
+                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                   [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                                   
+                                   if (success) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           success(operation, responseObject);
+                                       });
+                                   }
+                                   
+                               }
+                               failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                   [self _handleFailureWithRequestOperation:operation andError:error];
+                                   
+                                   if (failure) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           failure(operation, error);
+                                       });
+                                   }
+                               }];
+}
+
 #pragma mark - Identity API
 
 - (void)updateIdentity:(Identity*)identity
