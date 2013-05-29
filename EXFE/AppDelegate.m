@@ -50,7 +50,6 @@
 #ifdef DEBUG
     NSLog(@"API ROOT: %@", API_ROOT);
 #endif
-    
     //    [[NSNotificationCenter defaultCenter] addObserver:self
     //                                             selector:@selector(observeContextSave:)
     //                                                 name:NSManagedObjectContextDidSaveNotification
@@ -69,7 +68,6 @@
     
     // Setup APN Push
     [self requestForPush];
-    
     NSDictionary *userinfo = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     
     // Setup root UIViewController
@@ -79,7 +77,6 @@
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
     
     self.crossesViewController = crossviewController;
-    
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.rootViewController = self.navigationController;
     [self.window addSubview:self.navigationController.view];
@@ -139,7 +136,6 @@
     if ([server isLoggedIn] == YES){
         [server loadMeSuccess:nil failure:nil];
     }
-    
     // Load Background List
     [server getAvailableBackgroundsWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
@@ -323,7 +319,6 @@
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
 //    NSLog(@"application:openURL:sourceApplication:annotation: called");
-//    return YES;
     
     BOOL fb = [FBAppCall handleOpenURL:url
                   sourceApplication:sourceApplication
@@ -332,17 +327,16 @@
     if (fb) {
         return YES;
     }
-    
 
-//    NSLog(@"application:handleOpenURL: called");
     
     [Flurry logEvent:@"HANDLE_OPEN_URL"];
+    
     NSString *query = [url query];
     NSDictionary *params = [Util splitQuery:query];
     NSString *token = [params objectForKey:@"token"];
     NSString *user_id = [params objectForKey:@"user_id"];
     //NSString *identity_id = [params objectForKey:@"identity_id"];
-
+    
     if (token.length > 0 && [user_id intValue] > 0){
         EFAPIServer *server = [EFAPIServer sharedInstance];
         if (![server isLoggedIn]) {
@@ -415,14 +409,15 @@
     }
     
     
-    
     return YES;
 }
 
 - (void)processUrlHandler:(NSURL*)url {
+    
     NSString *host = [url host];
     NSArray *pathComps = [url pathComponents];
     CrossesViewController *crossViewController = self.crossesViewController;
+    
     
     if ([host isEqualToString:@"crosses"]) {
         if (self.navigationController.viewControllers.count > 1) {
@@ -432,10 +427,11 @@
         if (pathComps.count  == 2) {
             int cross_id = [[pathComps objectAtIndex:1] intValue];
             if ( cross_id > 0) {
-                if ([crossViewController pushToCross:cross_id] == NO) {
-                    [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+                if ([[EFAPIServer sharedInstance] isLoggedIn]) {
+                    if ([crossViewController pushToCross:cross_id] == NO) {
+                        [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
+                    }
                 }
-                
                 return ;
             }
         }
@@ -446,8 +442,10 @@
         if (pathComps.count  == 2) {
             int cross_id = [[pathComps objectAtIndex:1] intValue];
             if (cross_id > 0){
-                if ([crossViewController pushToConversation:cross_id] == NO) {
-                    [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+                if ([[EFAPIServer sharedInstance] isLoggedIn]) {
+                    if ([crossViewController pushToConversation:cross_id] == NO) {
+                        [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
+                    }
                 }
             }
         }
@@ -455,7 +453,9 @@
         if (self.navigationController.viewControllers.count > 1) {
             [self.navigationController popToRootViewControllerAnimated:NO];
         }
-        [crossViewController ShowProfileView];
+        if ([[EFAPIServer sharedInstance] isLoggedIn]) {
+            [crossViewController ShowProfileView];
+        }
     }
 }
 

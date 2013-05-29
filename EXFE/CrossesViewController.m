@@ -455,6 +455,7 @@
                                                            };
                                                            
                                                            [self.navigationController pushViewController:tabBarViewController animated:NO];
+                                                           
                                                        }
                                                        else if([source isEqualToString:@"crossupdateview"] || [source isEqualToString:@"crossview"] || [source isEqualToString:@"crossview_init"]) {
                                                            [self loadObjectsFromDataStore];
@@ -848,7 +849,6 @@
 
 - (BOOL)pushToCross:(int)cross_id {
     Cross *cross = [self crossWithId:cross_id];
-    
     if (cross != nil) {
         [self.navigationController popToRootViewControllerAnimated:NO];
         

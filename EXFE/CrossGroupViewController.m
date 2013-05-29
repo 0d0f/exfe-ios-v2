@@ -276,13 +276,6 @@
 {
     [super viewWillAppear:animated];
     // fill data & relayout
-    if(_cross == nil){
-
-        RKObjectManager *objectManager = [RKObjectManager sharedManager];
-        NSEntityDescription *crossEntity = [NSEntityDescription entityForName:@"Cross" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-        _cross = [[[Cross alloc] initWithEntity:crossEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
-        _cross.cross_description = @"";
-    }
     
     [self refreshUI];
     
@@ -1489,7 +1482,9 @@
         case 403:{
             if (buttonIndex == alertView.cancelButtonIndex) {
                 // remove self from local storage
-                [[self.cross managedObjectContext] deleteObject:self.cross];
+                if (self.cross) {
+                    [[self.cross managedObjectContext] deleteObject:self.cross];
+                }
                 // exit current page
                 [self.navigationController popToRootViewControllerAnimated:YES];
                 // notify the list to reload from local
