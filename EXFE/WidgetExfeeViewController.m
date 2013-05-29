@@ -118,7 +118,7 @@ typedef enum {
     [Flurry logEvent:@"WIDGET_EXFEE"];
     // Do any additional setup after loading the view from its nib.
     CGRect a = [UIScreen mainScreen].applicationFrame;
-    CGRect b = self.view.bounds;
+    CGRect b = self.initFrame;
     self.view.tag = kTagViewExfeeRoot;
     
     if (self.exfee) {
@@ -126,7 +126,7 @@ typedef enum {
     }
     
     flowLayout = [[PSTCollectionViewFlowLayout alloc] init];
-    exfeeContainer = [[PSTCollectionView alloc] initWithFrame:CGRectMake(0, kYOffset, CGRectGetWidth(b), CGRectGetHeight(a) - kYOffset) collectionViewLayout:flowLayout];
+    exfeeContainer = [[PSTCollectionView alloc] initWithFrame:CGRectMake(0, kYOffset, CGRectGetWidth(b), CGRectGetHeight(b) - kYOffset) collectionViewLayout:flowLayout];
     exfeeContainer.delegate = self;
     exfeeContainer.dataSource = self;
     [exfeeContainer registerClass:[ExfeeCollectionViewCell class] forCellWithReuseIdentifier:@"Exfee Cell"];

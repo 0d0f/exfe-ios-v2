@@ -249,6 +249,7 @@
     
     CGFloat subviewY = CGRectGetHeight(self.tabBar.frame) - CGRectGetMinY(self.containView.frame) - 20.0f;
     CGRect subviewFrame = (CGRect){{0.0f, subviewY}, {CGRectGetWidth(self.containView.frame), CGRectGetHeight(self.containView.frame) - subviewY}};
+    viewController.initFrame = subviewFrame;
     viewController.view.frame = subviewFrame; // self.containView.bounds;
     
     // trasition

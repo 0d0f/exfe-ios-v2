@@ -128,6 +128,7 @@
     // Do any additional setup after loading the view from its nib.
     CGRect b = self.view.bounds;
     CGRect a = [UIScreen mainScreen].applicationFrame;
+//    CGRect b = self.initFrame;
     
     CGRect viewFrame = (CGRect){{0.0f, 0.0f}, {CGRectGetWidth(b), CGRectGetHeight(a) - DECTOR_HEIGHT}};
     self.view.frame = viewFrame;

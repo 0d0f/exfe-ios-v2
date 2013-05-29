@@ -64,6 +64,7 @@
 {
     CGRect b = self.view.bounds;
     CGRect a = [[UIScreen mainScreen] applicationFrame];
+//    CGRect b = self.initFrame;
     
     CGRect frame = (CGRect){{0.0f, 0.0f}, {CGRectGetWidth(a), CGRectGetHeight(a) - DECTOR_HEIGHT}};
     self.view.frame = frame;
@@ -75,9 +76,6 @@
     _tableView.dataSource=self;
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
-    
-    
-    
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [_tableView addGestureRecognizer:gestureRecognizer];
