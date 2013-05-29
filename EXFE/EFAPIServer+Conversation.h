@@ -15,4 +15,11 @@
                             success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                             failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
+
+- (void)postConversation:(NSString*)content
+                      by:(Identity*)myIdentity
+                      on:(int)exfee_id
+                 success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
 @end

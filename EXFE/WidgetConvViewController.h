@@ -45,7 +45,7 @@ EFTabBarDataSource
     ConversationInputAccessoryView *inputaccessoryview;
     CATextLayer *timetextlayer;
     CATextLayer *floattimetextlayer;
-    NSArray* _posts;
+    
     BOOL istimehidden;
     int showTimeMode; //0 relativetime 1 time
     int topcellPath;
@@ -64,6 +64,8 @@ EFTabBarDataSource
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
 @property (nonatomic, assign) EFTabBarViewController *tabBarViewController;
 @property (nonatomic, copy) UIImage *shadowImage;
+
+
 
 - (void) refreshConversation;
 - (void) loadObjectsFromDataStore;

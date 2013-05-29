@@ -20,8 +20,11 @@
         updatedtime = [Util encodeToPercentEscapeString:updatedtime];
     }
     
-    NSDictionary *param = @{@"token": self.user_token};
-    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u?updated_at=%@", exfee_id, updatedtime];
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{@"token": self.user_token}];
+    if (updatedtime.length > 0) {
+        [param addEntriesFromDictionary:@{ @"updated_at": updatedtime}];
+    }
+    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u", exfee_id];
     
     [[RKObjectManager sharedManager] getObjectsAtPath:endpoint
                                            parameters:param
@@ -47,6 +50,46 @@
                                                       });
                                                   }
                                               }];
+}
+
+- (void)postConversation:(NSString*)content
+                      by:(Identity*)myIdentity
+                      on:(int)exfee_id
+                 success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSDictionary *postdict = @{@"by_identity_id": myIdentity.identity_id,
+                               @"content": content ,
+                               @"relative": [NSArray arrayWithObjects:nil],
+                               @"type": @"post",
+                               @"via": @"iOS"};
+    
+    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u/add?token=%@", exfee_id, self.user_token];
+    RKObjectManager *manager=[RKObjectManager sharedManager];
+    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
+    
+    [manager.HTTPClient postPath:endpoint parameters:postdict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                   withObject:operation
+                   withObject:responseObject];
+        
+        if (success) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                success(operation, responseObject);
+            });
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                   withObject:operation
+                   withObject:error];
+        
+        if (failure) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                failure(operation, error);
+            });
+        }
+    }];
+    
 }
 
 @end

@@ -29,6 +29,8 @@
 
 @interface WidgetConvViewController ()
 
+@property (nonatomic, retain) NSMutableArray* posts;
+
 @end
 
 @implementation WidgetConvViewController
@@ -42,6 +44,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.posts = [NSMutableArray array];
     }
     return self;
 }
@@ -72,7 +75,9 @@
     _tableView.dataSource=self;
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
-    [self refreshConversation];
+    
+    
+    
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [_tableView addGestureRecognizer:gestureRecognizer];
@@ -99,7 +104,7 @@
     inputToolbar.backgroundColor=[UIColor clearColor];
     inputToolbar.delegate = self;
     inputToolbar.textView.delegate=self;
-    [inputToolbar.textView.internalTextView setReturnKeyType:UIReturnKeySend];
+    [inputToolbar.textView setReturnKeyType:UIReturnKeySend];
     [self.view addSubview:inputToolbar];
 //    [self statusbarResize];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -115,9 +120,7 @@
     cellbackground=[UIImage imageNamed:@"conv_bg.png"];
     cellsepator=[UIImage imageNamed:@"conv_line_h.png"];
     avatarframe=[UIImage imageNamed:@"conv_portrait_frame.png"];
-//    CGRect _tableviewrect=_tableView.frame;
-//    _tableviewrect.size.height=_tableviewrect.size.height-kDefaultToolbarHeight-44;
-//    [_tableView setFrame:_tableviewrect];
+    
     _tableView.backgroundColor=[UIColor colorWithPatternImage:cellbackground];
     _tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     
@@ -129,14 +132,9 @@
     [inputaccessoryview setBackgroundColor:[UIColor lightGrayColor]];
     [inputaccessoryview setAlpha: 0.8];
     
-//    floatTime=[[UILabel alloc] initWithFrame:CGRectMake(0, 80, 60, 26)];
-//    floatTime.text=@"label time";
-//    [self.view addSubview:floatTime];
+    [self loadObjectsFromDataStore];
     
-    
-    
-    
-//    [self showOrHideHint];
+    [self refreshConversation];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
@@ -164,7 +162,7 @@
     RKObjectManager* manager =[RKObjectManager sharedManager];
     [manager.operationQueue cancelAllOperations];
     [_shadowImage release];
-	[_posts release];
+	self.posts = nil;;
     [cellbackground release];
     [cellsepator release];
     [avatarframe release];
@@ -238,11 +236,10 @@
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
+
 -(void) refreshConversation{
-    if(_posts==nil)
-        [self loadObjectsFromDataStore];
-    NSString *updated_at=@"";
-    if(_posts!=nil && [_posts count]>0)
+    NSString *updated_at = @"";
+    if([_posts count] > 0)
     {
         Post *post=[_posts objectAtIndex:0];
         if(post && post.updated_at!=nil)
@@ -252,7 +249,7 @@
 //            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
 //            updated_at = [formatter stringFromDate:post.updated_at];
 //            [formatter release];
-            updated_at=post.updated_at;
+            updated_at = post.updated_at;
         }
     }
     [[EFAPIServer sharedInstance] loadConversationWithExfeeId:exfee_id
@@ -262,7 +259,6 @@
                                                           if (meta != nil) {
                                                               if ([meta.code intValue] == 200) {
                                                                   [self loadObjectsFromDataStore];
-                                                                  [self showOrHideHint];
                                                               }
                                                           } else {
                                                               //show error hint
@@ -277,34 +273,33 @@
     [inputToolbar hidekeyboard];
 }
 - (void)loadObjectsFromDataStore {
-	[_posts release];
-
-  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
-  NSPredicate *predicate = [NSPredicate
-                            predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
-                            @"exfee", exfee_id];
-
-  [request setPredicate:predicate];
-  
-  
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
+    NSPredicate *predicate = [NSPredicate
+                              predicateWithFormat:@"(postable_type = %@) AND (postable_id = %u)",
+                              @"exfee", exfee_id];
+    
+    [request setPredicate:predicate];
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"created_at" ascending:YES];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
     
-  RKObjectManager *objectManager = [RKObjectManager sharedManager];
-  _posts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
-
-  
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSArray *list = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
     
-    [_tableView reloadData];
-    if(_tableView.contentSize.height>_tableView.frame.size.height) {
-        CGPoint bottomOffset = CGPointMake(0, _tableView.contentSize.height - _tableView.frame.size.height);
-        showfloattime=NO;
-        [_tableView setContentOffset:bottomOffset animated:NO];
+    if (list) {
+        [_posts removeAllObjects];
+        [_posts addObjectsFromArray: list];
+        [_tableView reloadData];
+        if(_tableView.contentSize.height>_tableView.frame.size.height) {
+            CGPoint bottomOffset = CGPointMake(0, _tableView.contentSize.height - _tableView.frame.size.height);
+            showfloattime=NO;
+            [_tableView setContentOffset:bottomOffset animated:NO];
+        }
     }
-    [inputToolbar setInputEnabled:YES];
-    [inputToolbar hidekeyboard];
-
+    [self showOrHideHint];
+    
 }
+
 - (CGSize)textWidthForHeight:(CGFloat)inHeight withAttributedString:(NSAttributedString *)attributedString {
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef) attributedString);
     int textLength = [attributedString length];
@@ -619,72 +614,46 @@
     if(indexPath.row!=0)
         cell.separator=cellsepator;
     [cell setShowTime:NO];
-    if(post.by_identity.avatar_filename!=nil) {
-        
-        UIImage *avatar = [[ImgCache sharedManager] getImgFromCache:post.by_identity.avatar_filename];
-        if(avatar==nil || [avatar isEqual:[NSNull null]]){
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-                UIImage *avatar = [[ImgCache sharedManager] getImgFrom:post.by_identity.avatar_filename];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                        cell.avatar = avatar;
-                    }else{
-                        cell.avatar = [UIImage imageNamed:@"portrait_default.png"];
-                    }
-                });
-            });
-            dispatch_release(imgQueue);
-        }
-        else{
-            cell.avatar=avatar;
-        }
-    }else{
-        cell.avatar = [UIImage imageNamed:@"portrait_default.png"];
-    }
+    
+    
+    [[ImgCache sharedManager] fillAvatarWith:post.by_identity.avatar_filename
+                                   byDefault:[UIImage imageNamed:@"portrait_default.png"]
+                                       using:^(UIImage *image) {
+                                           cell.avatar = image;
+                                       }];
+    
+    
+    
 	return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [inputToolbar setInputEnabled:NO];
     [inputToolbar hidekeyboard];
 }
 - (void) addPost:(NSString*)content{
     [Flurry logEvent:@"SEND_CONVERSATION"];
-
-    NSDictionary *postdict=[NSDictionary dictionaryWithObjectsAndKeys:myIdentity.identity_id,@"by_identity_id",content,@"content",[NSArray arrayWithObjects:nil],@"relative", @"post",@"type", @"iOS",@"via",nil];
-
-    NSString *endpoint = [NSString stringWithFormat:@"%@conversation/%u/add?token=%@",API_ROOT,exfee_id,[EFAPIServer sharedInstance].user_token];
-    RKObjectManager *manager=[RKObjectManager sharedManager];
-    manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
-    [manager.HTTPClient postPath:endpoint parameters:postdict success:^(AFHTTPRequestOperation *operation, id responseObject) {
-      if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-          [self refreshConversation];
-          [inputToolbar.textView clearText];
-      }else {
-      }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-      [inputToolbar setInputEnabled:YES];
-      [Util showConnectError:error delegate:self];
-    }];
-}
--(void)inputButtonPressed:(NSString *)inputText{
-    [self addPost:inputText];
+    
+    [inputToolbar setInputEnabled:NO];
+    [[EFAPIServer sharedInstance] postConversation:content
+                                                by:myIdentity
+                                                on:exfee_id
+                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                               [inputToolbar setInputEnabled:YES];
+                                               if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                                   [inputToolbar.textView clearText];
+                                                   [self refreshConversation];
+                                               } else {
+                                               }
+                                           }
+                                           failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                               [inputToolbar setInputEnabled:YES];
+                                               [Util showConnectError:error delegate:self];
+                                           }];
+    
 }
 
 - (void)showOrHideHint{
-    if (_posts == nil || _posts.count == 0) {
-        hintGroup.hidden = NO;
-    }else{
-        hintGroup.hidden = YES;
-    }
+    hintGroup.hidden = (_posts.count > 0);
 }
-
-#pragma mark UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    // nothing yet
-}
-
-
 @end

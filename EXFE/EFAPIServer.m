@@ -151,7 +151,7 @@
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
     NSDictionary *param = @{@"identities": params};
-    NSString *path = [NSString stringWithFormat:@"%@identities/get", API_ROOT];
+    NSString *path = [NSString stringWithFormat:@"identities/get"];
     
     //    [manager postObject:nil
     //                   path:path

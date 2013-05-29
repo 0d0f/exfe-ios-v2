@@ -430,7 +430,7 @@
 			} 
             else 
             {
-				[textView resignFirstResponder];
+//				[textView resignFirstResponder];
 				return NO;
 			}
 		}
