@@ -1403,6 +1403,14 @@
     }
     _cross.title = title;
     _cross.cross_description = desc;
+    
+    // walkaround.
+    // we should use notification to update title.
+    if ([self.parentViewController isKindOfClass:[EFTabBarViewController class]]) {
+        EFTabBarViewController *vc = (EFTabBarViewController *)self.parentViewController;
+        vc.tabBar.titleLabel.text = title;
+    }
+
     [self saveCrossUpdate];
     [self fillDescription:_cross];
     [self relayoutUI];
