@@ -8,7 +8,6 @@
 
 #import "ProfileViewController.h"
 #import <BlocksKit/BlocksKit.h>
-#import "APIProfile.h"
 #import "ImgCache.h"
 #import "User+EXFE.h"
 #import "Identity+EXFE.h"

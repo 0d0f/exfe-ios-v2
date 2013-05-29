@@ -153,13 +153,11 @@
 		4F358D6F171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4F63DA7C17172AA600136B7E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E971560F832009E0806 /* main.m */; };
 		4F63DA7D17172AA600136B7E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E9B1560F832009E0806 /* AppDelegate.m */; };
-		4F63DA7E17172AA600136B7E /* APICrosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F02156117D8009E0806 /* APICrosses.m */; };
 		4F63DA7F17172AA600136B7E /* CrossesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E88740156244E70026D197 /* CrossesViewController.m */; };
 		4F63DA8017172AA600136B7E /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 78E837F7156658A300763A60 /* Model.xcdatamodeld */; };
 		4F63DA8117172AA600136B7E /* EFTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CA4156A604A00721150 /* EFTime.m */; };
 		4F63DA8217172AA600136B7E /* CrossTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CAA156A604C00721150 /* CrossTime.m */; };
 		4F63DA8517172AA600136B7E /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7840916B156F6AA5006DF115 /* Util.m */; };
-		4F63DA8617172AA600136B7E /* APIConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409171156F80A6006DF115 /* APIConversation.m */; };
 		4F63DA8717172AA600136B7E /* ImgCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 788312AA1574A5DE00D67103 /* ImgCache.m */; };
 		4F63DA8817172AA600136B7E /* ABTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78615B3B15788BCD003CF68A /* ABTableViewCell.m */; };
 		4F63DA8917172AA600136B7E /* Rsvp.m in Sources */ = {isa = PBXBuildFile; fileRef = 78920EBB157CB0E1004F3901 /* Rsvp.m */; };
@@ -169,7 +167,6 @@
 		4F63DA8D17172AA600136B7E /* UIExpandingTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 785FD5841580797F0056590D /* UIExpandingTextViewInternal.m */; };
 		4F63DA8E17172AA600136B7E /* UIInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 785FD5861580797F0056590D /* UIInputToolbar.m */; };
 		4F63DA8F17172AA600136B7E /* ConversationTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E4EE591581D02B00AE6211 /* ConversationTableView.m */; };
-		4F63DA9017172AA600136B7E /* APIProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F531581DE4C00BF8EA0 /* APIProfile.m */; };
 		4F63DA9117172AA600136B7E /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F6215820A0000BF8EA0 /* ProfileViewController.m */; };
 		4F63DA9217172AA600136B7E /* PullRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F7A1585A5A200BF8EA0 /* PullRefreshTableViewController.m */; };
 		4F63DA9317172AA600136B7E /* ProfileCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A834081588BBDB0019FDF5 /* ProfileCellView.m */; };
@@ -178,7 +175,6 @@
 		4F63DA9617172AA600136B7E /* URLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FF158CFAD200401BCA /* URLParser.m */; };
 		4F63DA9717172AA600136B7E /* EXImagesCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 789C8CAC1591D9B700580624 /* EXImagesCollectionView.m */; };
 		4F63DA9817172AA600136B7E /* PlaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F057FD1599A57B00F360F2 /* PlaceViewController.m */; };
-		4F63DA9917172AA600136B7E /* APIPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F0580A159B708F00F360F2 /* APIPlace.m */; };
 		4F63DA9A17172AA600136B7E /* PlaceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415345159C3F5C002B7A2E /* PlaceAnnotation.m */; };
 		4F63DA9B17172AA600136B7E /* WildcardGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */; };
 		4F63DA9C17172AA600136B7E /* EXPlaceEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C25AB9159D8211002AED1E /* EXPlaceEditView.m */; };
@@ -257,7 +253,6 @@
 		4F63DAEB17172AA600136B7E /* EXBasicMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92916F962CA001BB176 /* EXBasicMenu.m */; };
 		4F63DAEC17172AA600136B7E /* User+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92F16F9A5B5001BB176 /* User+EXFE.m */; };
 		4F63DAED17172AA600136B7E /* WCAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA0C40916FB626B00E25C74 /* WCAlertView.m */; };
-		4F63DAEE17172AA600136B7E /* APIExfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB30D1C17003BFE007BC66D /* APIExfee.m */; };
 		4F63DAEF17172AA600136B7E /* ExfeeAddCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */; };
 		4F63DAF017172AA600136B7E /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4F63DAF117172AA600136B7E /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
@@ -582,13 +577,11 @@
 		4F63DC3D17172AA600136B7E /* exfee_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F67C3AE170D7CD4001AA816 /* exfee_bg@2x.png */; };
 		4F63DC4B17172B0700136B7E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E971560F832009E0806 /* main.m */; };
 		4F63DC4C17172B0700136B7E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E9B1560F832009E0806 /* AppDelegate.m */; };
-		4F63DC4D17172B0700136B7E /* APICrosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F02156117D8009E0806 /* APICrosses.m */; };
 		4F63DC4E17172B0700136B7E /* CrossesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E88740156244E70026D197 /* CrossesViewController.m */; };
 		4F63DC4F17172B0700136B7E /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 78E837F7156658A300763A60 /* Model.xcdatamodeld */; };
 		4F63DC5017172B0700136B7E /* EFTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CA4156A604A00721150 /* EFTime.m */; };
 		4F63DC5117172B0700136B7E /* CrossTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CAA156A604C00721150 /* CrossTime.m */; };
 		4F63DC5417172B0700136B7E /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7840916B156F6AA5006DF115 /* Util.m */; };
-		4F63DC5517172B0700136B7E /* APIConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409171156F80A6006DF115 /* APIConversation.m */; };
 		4F63DC5617172B0700136B7E /* ImgCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 788312AA1574A5DE00D67103 /* ImgCache.m */; };
 		4F63DC5717172B0700136B7E /* ABTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78615B3B15788BCD003CF68A /* ABTableViewCell.m */; };
 		4F63DC5817172B0700136B7E /* Rsvp.m in Sources */ = {isa = PBXBuildFile; fileRef = 78920EBB157CB0E1004F3901 /* Rsvp.m */; };
@@ -598,7 +591,6 @@
 		4F63DC5C17172B0700136B7E /* UIExpandingTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 785FD5841580797F0056590D /* UIExpandingTextViewInternal.m */; };
 		4F63DC5D17172B0700136B7E /* UIInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 785FD5861580797F0056590D /* UIInputToolbar.m */; };
 		4F63DC5E17172B0700136B7E /* ConversationTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E4EE591581D02B00AE6211 /* ConversationTableView.m */; };
-		4F63DC5F17172B0700136B7E /* APIProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F531581DE4C00BF8EA0 /* APIProfile.m */; };
 		4F63DC6017172B0700136B7E /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F6215820A0000BF8EA0 /* ProfileViewController.m */; };
 		4F63DC6117172B0700136B7E /* PullRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F7A1585A5A200BF8EA0 /* PullRefreshTableViewController.m */; };
 		4F63DC6217172B0700136B7E /* ProfileCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A834081588BBDB0019FDF5 /* ProfileCellView.m */; };
@@ -607,7 +599,6 @@
 		4F63DC6517172B0700136B7E /* URLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0A5FF158CFAD200401BCA /* URLParser.m */; };
 		4F63DC6617172B0700136B7E /* EXImagesCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 789C8CAC1591D9B700580624 /* EXImagesCollectionView.m */; };
 		4F63DC6717172B0700136B7E /* PlaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F057FD1599A57B00F360F2 /* PlaceViewController.m */; };
-		4F63DC6817172B0700136B7E /* APIPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F0580A159B708F00F360F2 /* APIPlace.m */; };
 		4F63DC6917172B0700136B7E /* PlaceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415345159C3F5C002B7A2E /* PlaceAnnotation.m */; };
 		4F63DC6A17172B0700136B7E /* WildcardGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */; };
 		4F63DC6B17172B0700136B7E /* EXPlaceEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C25AB9159D8211002AED1E /* EXPlaceEditView.m */; };
@@ -686,7 +677,6 @@
 		4F63DCBA17172B0700136B7E /* EXBasicMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92916F962CA001BB176 /* EXBasicMenu.m */; };
 		4F63DCBB17172B0700136B7E /* User+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92F16F9A5B5001BB176 /* User+EXFE.m */; };
 		4F63DCBC17172B0700136B7E /* WCAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA0C40916FB626B00E25C74 /* WCAlertView.m */; };
-		4F63DCBD17172B0700136B7E /* APIExfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB30D1C17003BFE007BC66D /* APIExfee.m */; };
 		4F63DCBE17172B0700136B7E /* ExfeeAddCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */; };
 		4F63DCBF17172B0700136B7E /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4F63DCC017172B0700136B7E /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
@@ -1058,7 +1048,6 @@
 		4FAE4E6416AF9F82001479F8 /* x_titlebg_default.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */; };
 		4FB1635716B25756005B1D3C /* profile_title_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635516B25756005B1D3C /* profile_title_mask.png */; };
 		4FB1635816B25756005B1D3C /* profile_title_mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB1635616B25756005B1D3C /* profile_title_mask@2x.png */; };
-		4FB30D1D17003BFE007BC66D /* APIExfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB30D1C17003BFE007BC66D /* APIExfee.m */; };
 		4FB30D241700A76B007BC66D /* widget_exfee_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB30D221700A76A007BC66D /* widget_exfee_30.png */; };
 		4FB30D251700A76B007BC66D /* widget_exfee_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB30D231700A76A007BC66D /* widget_exfee_30@2x.png */; };
 		4FB30D2B1700A7FD007BC66D /* widget_conv_30shine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB30D291700A7FC007BC66D /* widget_conv_30shine.png */; };
@@ -1594,7 +1583,6 @@
 		783F52E716774C4100331746 /* btn_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783F52E516774C4100331746 /* btn_blue@2x.png */; };
 		783F52E91677777600331746 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783F52E81677777600331746 /* back@2x.png */; };
 		7840916C156F6AA5006DF115 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7840916B156F6AA5006DF115 /* Util.m */; };
-		78409172156F80A7006DF115 /* APIConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78409171156F80A6006DF115 /* APIConversation.m */; };
 		7841389A15AD36C2002E1030 /* EXIconToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7841389915AD36C2002E1030 /* EXIconToolBar.m */; };
 		78415346159C3F5C002B7A2E /* PlaceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415345159C3F5C002B7A2E /* PlaceAnnotation.m */; };
 		78415363159D6766002B7A2E /* WildcardGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 78415362159D672A002B7A2E /* WildcardGestureRecognizer.m */; };
@@ -1620,7 +1608,6 @@
 		7852709015FC74C0001AF618 /* spin_80_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 7852708815FC74C0001AF618 /* spin_80_3.png */; };
 		7852709C15FC7A1E001AF618 /* EXSpinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7852709B15FC7A1E001AF618 /* EXSpinView.m */; };
 		785659FC15F3AD660003CDF8 /* CustomStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */; };
-		785F6F541581DE4C00BF8EA0 /* APIProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F531581DE4C00BF8EA0 /* APIProfile.m */; };
 		785F6F6415820A0000BF8EA0 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F6215820A0000BF8EA0 /* ProfileViewController.m */; };
 		785F6F6515820A0000BF8EA0 /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 785F6F6315820A0000BF8EA0 /* ProfileViewController.xib */; };
 		785F6F7D1585A95D00BF8EA0 /* PullRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 785F6F7A1585A5A200BF8EA0 /* PullRefreshTableViewController.m */; };
@@ -1714,7 +1701,6 @@
 		78A98EF715611107009E0806 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF615611107009E0806 /* SystemConfiguration.framework */; };
 		78A98EF91561110C009E0806 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF81561110C009E0806 /* QuartzCore.framework */; };
 		78A98EFB15611113009E0806 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EFA15611113009E0806 /* libxml2.dylib */; };
-		78A98F03156117D8009E0806 /* APICrosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98F02156117D8009E0806 /* APICrosses.m */; };
 		78AA793615CFB94C00883025 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78AA793515CFB94C00883025 /* CoreText.framework */; };
 		78AC855215FA6FFE00550A95 /* place_18.png in Resources */ = {isa = PBXBuildFile; fileRef = 78AC855015FA6FFE00550A95 /* place_18.png */; };
 		78AC855315FA6FFE00550A95 /* place_18@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78AC855115FA6FFE00550A95 /* place_18@2x.png */; };
@@ -1785,7 +1771,6 @@
 		78F058001599A57C00F360F2 /* PlaceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78F057FE1599A57C00F360F2 /* PlaceViewController.xib */; };
 		78F058021599B1BE00F360F2 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F058011599B1BD00F360F2 /* MapKit.framework */; };
 		78F058041599C30200F360F2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F058031599C30200F360F2 /* CoreLocation.framework */; };
-		78F0580B159B708F00F360F2 /* APIPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F0580A159B708F00F360F2 /* APIPlace.m */; };
 		78F45F2616BB6AC400F364FE /* portrait_circle_accepted.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F45F2216BB6AC300F364FE /* portrait_circle_accepted.png */; };
 		78F45F2716BB6AC400F364FE /* portrait_circle_accepted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F45F2316BB6AC300F364FE /* portrait_circle_accepted@2x.png */; };
 		78F45F2816BB6AC400F364FE /* portrait_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F45F2416BB6AC400F364FE /* portrait_circle.png */; };
@@ -2129,8 +2114,6 @@
 		4FAE4E6316AF9F82001479F8 /* x_titlebg_default.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = x_titlebg_default.jpg; sourceTree = "<group>"; };
 		4FB1635516B25756005B1D3C /* profile_title_mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_title_mask.png; sourceTree = "<group>"; };
 		4FB1635616B25756005B1D3C /* profile_title_mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_title_mask@2x.png"; sourceTree = "<group>"; };
-		4FB30D1B17003BFE007BC66D /* APIExfee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIExfee.h; sourceTree = "<group>"; };
-		4FB30D1C17003BFE007BC66D /* APIExfee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIExfee.m; sourceTree = "<group>"; };
 		4FB30D221700A76A007BC66D /* widget_exfee_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_exfee_30.png; sourceTree = "<group>"; };
 		4FB30D231700A76A007BC66D /* widget_exfee_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_exfee_30@2x.png"; sourceTree = "<group>"; };
 		4FB30D291700A7FC007BC66D /* widget_conv_30shine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_conv_30shine.png; sourceTree = "<group>"; };
@@ -2437,8 +2420,6 @@
 		783F52E81677777600331746 /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
 		7840916A156F6AA4006DF115 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		7840916B156F6AA5006DF115 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
-		78409170156F80A6006DF115 /* APIConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIConversation.h; sourceTree = "<group>"; };
-		78409171156F80A6006DF115 /* APIConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIConversation.m; sourceTree = "<group>"; };
 		7841389815AD36C2002E1030 /* EXIconToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXIconToolBar.h; sourceTree = "<group>"; };
 		7841389915AD36C2002E1030 /* EXIconToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXIconToolBar.m; sourceTree = "<group>"; };
 		78415344159C3F5C002B7A2E /* PlaceAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceAnnotation.h; sourceTree = "<group>"; };
@@ -2472,8 +2453,6 @@
 		7852709B15FC7A1E001AF618 /* EXSpinView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXSpinView.m; sourceTree = "<group>"; };
 		785659F915F3ACD60003CDF8 /* CustomStatusBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomStatusBar.h; sourceTree = "<group>"; };
 		785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomStatusBar.m; sourceTree = "<group>"; };
-		785F6F521581DE4C00BF8EA0 /* APIProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIProfile.h; sourceTree = "<group>"; };
-		785F6F531581DE4C00BF8EA0 /* APIProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIProfile.m; sourceTree = "<group>"; };
 		785F6F6115820A0000BF8EA0 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		785F6F6215820A0000BF8EA0 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		785F6F6315820A0000BF8EA0 /* ProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewController.xib; sourceTree = "<group>"; };
@@ -2590,8 +2569,6 @@
 		78A98EF615611107009E0806 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		78A98EF81561110C009E0806 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		78A98EFA15611113009E0806 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		78A98F01156117D8009E0806 /* APICrosses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APICrosses.h; sourceTree = "<group>"; };
-		78A98F02156117D8009E0806 /* APICrosses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APICrosses.m; sourceTree = "<group>"; };
 		78AA793515CFB94C00883025 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		78AC855015FA6FFE00550A95 /* place_18.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = place_18.png; sourceTree = "<group>"; };
 		78AC855115FA6FFE00550A95 /* place_18@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "place_18@2x.png"; sourceTree = "<group>"; };
@@ -2684,8 +2661,6 @@
 		78F057FE1599A57C00F360F2 /* PlaceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceViewController.xib; sourceTree = "<group>"; };
 		78F058011599B1BD00F360F2 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		78F058031599C30200F360F2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		78F05809159B708F00F360F2 /* APIPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIPlace.h; sourceTree = "<group>"; };
-		78F0580A159B708F00F360F2 /* APIPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIPlace.m; sourceTree = "<group>"; };
 		78F45F2216BB6AC300F364FE /* portrait_circle_accepted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_circle_accepted.png; sourceTree = "<group>"; };
 		78F45F2316BB6AC300F364FE /* portrait_circle_accepted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_circle_accepted@2x.png"; sourceTree = "<group>"; };
 		78F45F2416BB6AC400F364FE /* portrait_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_circle.png; sourceTree = "<group>"; };
@@ -3901,16 +3876,6 @@
 		78A98F00156117BE009E0806 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				78409170156F80A6006DF115 /* APIConversation.h */,
-				78409171156F80A6006DF115 /* APIConversation.m */,
-				78A98F01156117D8009E0806 /* APICrosses.h */,
-				78A98F02156117D8009E0806 /* APICrosses.m */,
-				4FB30D1B17003BFE007BC66D /* APIExfee.h */,
-				4FB30D1C17003BFE007BC66D /* APIExfee.m */,
-				78F05809159B708F00F360F2 /* APIPlace.h */,
-				78F0580A159B708F00F360F2 /* APIPlace.m */,
-				785F6F521581DE4C00BF8EA0 /* APIProfile.h */,
-				785F6F531581DE4C00BF8EA0 /* APIProfile.m */,
 				788B620F16E89B200019B953 /* ModelMapping.h */,
 				788B621016E89B200019B953 /* ModelMapping.m */,
 				7818FF1415EB415E0095E92F /* ObjectToDict.h */,
@@ -5608,13 +5573,11 @@
 			files = (
 				4F63DA7C17172AA600136B7E /* main.m in Sources */,
 				4F63DA7D17172AA600136B7E /* AppDelegate.m in Sources */,
-				4F63DA7E17172AA600136B7E /* APICrosses.m in Sources */,
 				4F63DA7F17172AA600136B7E /* CrossesViewController.m in Sources */,
 				4F63DA8017172AA600136B7E /* Model.xcdatamodeld in Sources */,
 				4F63DA8117172AA600136B7E /* EFTime.m in Sources */,
 				4F63DA8217172AA600136B7E /* CrossTime.m in Sources */,
 				4F63DA8517172AA600136B7E /* Util.m in Sources */,
-				4F63DA8617172AA600136B7E /* APIConversation.m in Sources */,
 				4F63DA8717172AA600136B7E /* ImgCache.m in Sources */,
 				4F63DA8817172AA600136B7E /* ABTableViewCell.m in Sources */,
 				4F63DA8917172AA600136B7E /* Rsvp.m in Sources */,
@@ -5624,7 +5587,6 @@
 				4F63DA8D17172AA600136B7E /* UIExpandingTextViewInternal.m in Sources */,
 				4F63DA8E17172AA600136B7E /* UIInputToolbar.m in Sources */,
 				4F63DA8F17172AA600136B7E /* ConversationTableView.m in Sources */,
-				4F63DA9017172AA600136B7E /* APIProfile.m in Sources */,
 				4F63DA9117172AA600136B7E /* ProfileViewController.m in Sources */,
 				4F63DA9217172AA600136B7E /* PullRefreshTableViewController.m in Sources */,
 				4F63DA9317172AA600136B7E /* ProfileCellView.m in Sources */,
@@ -5633,7 +5595,6 @@
 				4F63DA9617172AA600136B7E /* URLParser.m in Sources */,
 				4F63DA9717172AA600136B7E /* EXImagesCollectionView.m in Sources */,
 				4F63DA9817172AA600136B7E /* PlaceViewController.m in Sources */,
-				4F63DA9917172AA600136B7E /* APIPlace.m in Sources */,
 				4F63DA9A17172AA600136B7E /* PlaceAnnotation.m in Sources */,
 				4F63DA9B17172AA600136B7E /* WildcardGestureRecognizer.m in Sources */,
 				4F63DA9C17172AA600136B7E /* EXPlaceEditView.m in Sources */,
@@ -5712,7 +5673,6 @@
 				4F63DAEB17172AA600136B7E /* EXBasicMenu.m in Sources */,
 				4F63DAEC17172AA600136B7E /* User+EXFE.m in Sources */,
 				4F63DAED17172AA600136B7E /* WCAlertView.m in Sources */,
-				4F63DAEE17172AA600136B7E /* APIExfee.m in Sources */,
 				4F63DAEF17172AA600136B7E /* ExfeeAddCollectionViewCell.m in Sources */,
 				4F63DAF017172AA600136B7E /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
 				4F63DAF117172AA600136B7E /* PSTCollectionView.m in Sources */,
@@ -5783,13 +5743,11 @@
 			files = (
 				4F63DC4B17172B0700136B7E /* main.m in Sources */,
 				4F63DC4C17172B0700136B7E /* AppDelegate.m in Sources */,
-				4F63DC4D17172B0700136B7E /* APICrosses.m in Sources */,
 				4F63DC4E17172B0700136B7E /* CrossesViewController.m in Sources */,
 				4F63DC4F17172B0700136B7E /* Model.xcdatamodeld in Sources */,
 				4F63DC5017172B0700136B7E /* EFTime.m in Sources */,
 				4F63DC5117172B0700136B7E /* CrossTime.m in Sources */,
 				4F63DC5417172B0700136B7E /* Util.m in Sources */,
-				4F63DC5517172B0700136B7E /* APIConversation.m in Sources */,
 				4F63DC5617172B0700136B7E /* ImgCache.m in Sources */,
 				4F63DC5717172B0700136B7E /* ABTableViewCell.m in Sources */,
 				4F63DC5817172B0700136B7E /* Rsvp.m in Sources */,
@@ -5799,7 +5757,6 @@
 				4F63DC5C17172B0700136B7E /* UIExpandingTextViewInternal.m in Sources */,
 				4F63DC5D17172B0700136B7E /* UIInputToolbar.m in Sources */,
 				4F63DC5E17172B0700136B7E /* ConversationTableView.m in Sources */,
-				4F63DC5F17172B0700136B7E /* APIProfile.m in Sources */,
 				4F63DC6017172B0700136B7E /* ProfileViewController.m in Sources */,
 				4F63DC6117172B0700136B7E /* PullRefreshTableViewController.m in Sources */,
 				4F63DC6217172B0700136B7E /* ProfileCellView.m in Sources */,
@@ -5808,7 +5765,6 @@
 				4F63DC6517172B0700136B7E /* URLParser.m in Sources */,
 				4F63DC6617172B0700136B7E /* EXImagesCollectionView.m in Sources */,
 				4F63DC6717172B0700136B7E /* PlaceViewController.m in Sources */,
-				4F63DC6817172B0700136B7E /* APIPlace.m in Sources */,
 				4F63DC6917172B0700136B7E /* PlaceAnnotation.m in Sources */,
 				4F63DC6A17172B0700136B7E /* WildcardGestureRecognizer.m in Sources */,
 				4F63DC6B17172B0700136B7E /* EXPlaceEditView.m in Sources */,
@@ -5887,7 +5843,6 @@
 				4F63DCBA17172B0700136B7E /* EXBasicMenu.m in Sources */,
 				4F63DCBB17172B0700136B7E /* User+EXFE.m in Sources */,
 				4F63DCBC17172B0700136B7E /* WCAlertView.m in Sources */,
-				4F63DCBD17172B0700136B7E /* APIExfee.m in Sources */,
 				4F63DCBE17172B0700136B7E /* ExfeeAddCollectionViewCell.m in Sources */,
 				4F63DCBF17172B0700136B7E /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
 				4F63DCC017172B0700136B7E /* PSTCollectionView.m in Sources */,
@@ -5958,13 +5913,11 @@
 			files = (
 				78A98E981560F832009E0806 /* main.m in Sources */,
 				78A98E9C1560F832009E0806 /* AppDelegate.m in Sources */,
-				78A98F03156117D8009E0806 /* APICrosses.m in Sources */,
 				78E88742156244E70026D197 /* CrossesViewController.m in Sources */,
 				78E837F9156658A300763A60 /* Model.xcdatamodeld in Sources */,
 				782B3CA5156A604A00721150 /* EFTime.m in Sources */,
 				782B3CAB156A604C00721150 /* CrossTime.m in Sources */,
 				7840916C156F6AA5006DF115 /* Util.m in Sources */,
-				78409172156F80A7006DF115 /* APIConversation.m in Sources */,
 				788312AB1574A63600D67103 /* ImgCache.m in Sources */,
 				78615B3C15788BD5003CF68A /* ABTableViewCell.m in Sources */,
 				78920EBC157CB0E1004F3901 /* Rsvp.m in Sources */,
@@ -5974,7 +5927,6 @@
 				785FD5881580797F0056590D /* UIExpandingTextViewInternal.m in Sources */,
 				785FD5891580797F0056590D /* UIInputToolbar.m in Sources */,
 				78E4EE5A1581D02B00AE6211 /* ConversationTableView.m in Sources */,
-				785F6F541581DE4C00BF8EA0 /* APIProfile.m in Sources */,
 				785F6F6415820A0000BF8EA0 /* ProfileViewController.m in Sources */,
 				785F6F7D1585A95D00BF8EA0 /* PullRefreshTableViewController.m in Sources */,
 				78A834091588BBDC0019FDF5 /* ProfileCellView.m in Sources */,
@@ -5983,7 +5935,6 @@
 				78D0A601158CFB5F00401BCA /* URLParser.m in Sources */,
 				789C8CAD1591D9B700580624 /* EXImagesCollectionView.m in Sources */,
 				78F057FF1599A57C00F360F2 /* PlaceViewController.m in Sources */,
-				78F0580B159B708F00F360F2 /* APIPlace.m in Sources */,
 				78415346159C3F5C002B7A2E /* PlaceAnnotation.m in Sources */,
 				78415363159D6766002B7A2E /* WildcardGestureRecognizer.m in Sources */,
 				78C25ABA159D8211002AED1E /* EXPlaceEditView.m in Sources */,
@@ -6062,7 +6013,6 @@
 				4F29C92A16F962CA001BB176 /* EXBasicMenu.m in Sources */,
 				4F29C93016F9A5B5001BB176 /* User+EXFE.m in Sources */,
 				4FA0C40A16FB626B00E25C74 /* WCAlertView.m in Sources */,
-				4FB30D1D17003BFE007BC66D /* APIExfee.m in Sources */,
 				4FA84B09170155DD0096FB5A /* ExfeeAddCollectionViewCell.m in Sources */,
 				4F9FE4E31702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
 				4F9FE4E41702E12C0098B9B9 /* PSTCollectionView.m in Sources */,

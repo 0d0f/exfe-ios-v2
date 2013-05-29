@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "APICrosses.h"
 #import "PullRefreshTableViewController.h"
 #import "ImgCache.h"
 #import "EXInnerButton.h"

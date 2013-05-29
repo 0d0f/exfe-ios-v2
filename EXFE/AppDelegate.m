@@ -10,9 +10,6 @@
 #import <BlocksKit/BlocksKit.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import "UIApplication+EXFE.h"
-#import "APICrosses.h"
-#import "APIConversation.h"
-#import "APIProfile.h"
 #import "CrossesViewController.h"
 #import "EFAPIServer.h"
 #import "EFLandingViewController.h"
