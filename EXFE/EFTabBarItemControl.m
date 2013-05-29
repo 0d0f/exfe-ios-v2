@@ -199,7 +199,7 @@
         self.tabBarItem.tabBarItemState = kEFTabBarItemStateNormal;
     }
 
-    if (_tabBarItemTitleDidChangeHandler) {
+    if (_tabBarItemTitleDidChangeHandler && self.tabBarItem.titleEnable) {
         self.tabBarItemTitleDidChangeHandler(self);
     }
 }
