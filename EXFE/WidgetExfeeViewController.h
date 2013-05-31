@@ -58,9 +58,9 @@ EFTabBarDataSource
     CALayer *layer3;
     CALayer *layer4;
     
-//    UITableView* invTable;
-//    ExfeeRsvpCell *tableHeader;
-//    ABTableViewCell *tableFooter;
+    UITableView* invTable;
+    ExfeeRsvpCell *tableHeader;
+    ABTableViewCell *tableFooter;
     PSTCollectionView *exfeeContainer;
     
     CGPoint _lastContentOffset;
@@ -72,7 +72,7 @@ EFTabBarDataSource
 }
 
 @property (nonatomic, retain) Exfee *exfee;
-@property (nonatomic, retain) Invitation* selected_invitation;
+@property (nonatomic, retain) NSArray* selected_invitations;
 @property (nonatomic, retain) NSArray *sortedInvitations;
 @property (nonatomic, copy) id onExitBlock;
 

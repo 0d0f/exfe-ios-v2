@@ -13,7 +13,7 @@ typedef NS_ENUM(NSUInteger, RsvpCode){
     kRsvpAccepted,
     kRsvpInterested,
     kRsvpDeclined,
-    kRsvpRmoved,
+    kRsvpRemoved,
     kRsvpNotification,
     kRsvpIgnored,
 };

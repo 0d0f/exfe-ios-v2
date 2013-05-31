@@ -438,7 +438,8 @@
 }
 
 - (void)fillExfee:(Exfee*)exfee {
-    self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+    //self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+    self.sortedInvitations = [exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
     [exfeeShowview reloadData];
 }
 
@@ -743,7 +744,7 @@
     NSAssert(controllers.count, @"Should contain a WidgetExfeeViewController");
     
     WidgetExfeeViewController *exfeeViewController = controllers[0];
-    exfeeViewController.selected_invitation = invitation;
+    exfeeViewController.selected_invitations = [NSArray arrayWithObject:invitation];
     NSUInteger index = [self.tabBarViewController.viewControllers indexOfObject:exfeeViewController];
     [self.tabBarViewController.tabBar setSelectedIndex:index];
     [self performSelector:@selector(hidePopupIfShown) withObject:nil afterDelay:1.0f];
@@ -756,7 +757,7 @@
 }
 
 - (EXInvitationItem *)imageCollectionView:(EXImagesCollectionView *)imageCollectionView itemAtIndex:(int)index {
-    Invitation *invitation = [self.sortedInvitations objectAtIndex:index];
+    Invitation *invitation = [(NSArray*)[self.sortedInvitations objectAtIndex:index] objectAtIndex:0];
     EXInvitationItem *item = [[EXInvitationItem alloc] initWithInvitation:invitation];
     item.isMe = [[User getDefaultUser] isMe:invitation.identity];
     
@@ -784,7 +785,7 @@
     UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
     
     if (index < [self.sortedInvitations count]) {
-        Invitation *invitation = [self.sortedInvitations objectAtIndex:index];
+        Invitation *invitation = [(NSArray*)[self.sortedInvitations objectAtIndex:index] objectAtIndex:0];
         CGPoint location = CGPointMake(CGRectGetMinX(exfeeShowview.frame) + (col + 1) * (50 + 5 * 2) + 5, CGRectGetMinY(exfeeShowview.frame) + row * (50 + 5 * 2) + y_start_offset);
         CGPoint newLocation = [rootView convertPoint:location fromView:exfeeShowview.superview];
         

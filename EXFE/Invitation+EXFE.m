@@ -20,7 +20,7 @@
     } else if ([@"DECLINED" isEqualToString:str]) {
         return kRsvpDeclined;
     } else if ([@"REMOVED" isEqualToString:str]) {
-        return kRsvpRmoved;
+        return kRsvpRemoved;
     } else if ([@"NOTIFICATION" isEqualToString:str]) {
         return kRsvpNotification;
     } else if ([@"IGNORED" isEqualToString:str]) {
@@ -41,7 +41,7 @@
         case kRsvpDeclined:
             return @"DECLINED";
             //break;
-        case kRsvpRmoved:
+        case kRsvpRemoved:
             return @"REMOVED";
             //break;
         case kRsvpNotification:

@@ -29,6 +29,8 @@ typedef NS_ENUM(NSInteger, InvitationSortType){
 - (NSArray*)getSortedInvitations;
 - (NSArray*)getSortedInvitations:(InvitationSortType)sortType;
 
+- (NSArray*)getSortedMergedInvitations:(InvitationSortType)sortType;
+
 - (NSArray*)getMyInvitations;
 //-(NSArray*)getMergedInvitationSet;
 - (BOOL)hasInvitation:(Invitation*)invitation;
