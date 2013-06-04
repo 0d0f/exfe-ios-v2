@@ -32,11 +32,33 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(receiveRefreshNotification:)
+                                                     name:NotificationRefreshUserSelf
+                                                   object:nil];
+
     }
     return self;
 }
+
+- (void) receiveRefreshNotification:(NSNotification *) notification
+{
+    // [notification name] should always be @"TestNotification"
+    // unless you use this method for observation of other notifications
+    // as well.
+    
+    if ([NotificationRefreshUserSelf isEqualToString:[notification name]]){
+        NSLog (@"Successfully received the test notification!");
+        
+        [self syncUser];
+    }
+}
+
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     [username release];
     [useravatar release];
     
@@ -178,7 +200,7 @@
                                                         NSDictionary *responseobj=[body objectForKey:@"response"];
                                                         if([responseobj isKindOfClass:[NSDictionary class]]){
                                                             // We need new server api to support restful action to avoid following requests.
-                                                            [self syncUser];
+                                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"TestNotification" object:self];
                                                         }
                                                     }
                                                 }
@@ -445,8 +467,11 @@
     int count = [[_identitiesData objectAtIndex:indexPath.section] count];
     if (indexPath.section == 0) {
         if (count == indexPath.row) {
-            AddIdentityViewController *addidentityView=[[[AddIdentityViewController alloc]initWithNibName:@"AddIdentityViewController" bundle:nil] autorelease];
-            addidentityView.profileview=self;
+//            AddIdentityViewController *addidentityView=[[[AddIdentityViewController alloc]initWithNibName:@"AddIdentityViewController" bundle:nil] autorelease];
+//            addidentityView.profileview=self;
+            
+            EFAddIdentityViewController *addidentityView=[[[EFAddIdentityViewController alloc]initWithNibName:@"EFAddIdentityViewController" bundle:nil] autorelease];
+//            addidentityView.profileview=self;
             [self.navigationController pushViewController:addidentityView animated:YES];
         }else {
             Identity *identity = [[_identitiesData objectAtIndex:[indexPath section]]  objectAtIndex:indexPath.row];
@@ -479,7 +504,7 @@
                                                             NSDictionary *responseobj=[body objectForKey:@"response"];
                                                             if([responseobj isKindOfClass:[NSDictionary class]]){
                                                                 // We need new server api to support restful action to avoid following requests.
-                                                                [self syncUser];
+                                                                [[NSNotificationCenter defaultCenter] postNotificationName:@"TestNotification" object:self];
                                                             }
                                                         }
                                                     }

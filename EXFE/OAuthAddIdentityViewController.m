@@ -78,12 +78,11 @@
     
 //    NSLog(@"%@",URLString);
     if ([URLString rangeOfString:@"token="].location != NSNotFound && [URLString rangeOfString:@"://oauthcallback/"].location != NSNotFound) {
-        if([parentView isKindOfClass:[AddIdentityViewController class]])
+        if([parentView isKindOfClass:[AddIdentityViewController class]]){
             [((AddIdentityViewController*)parentView) oauthSuccess];
-        if([parentView isKindOfClass:[ProfileViewController class]]){
-            ProfileViewController *vc = (ProfileViewController*)parentView;
-            [vc syncUser];
         }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshUserSelf object:self];
 
         [MBProgressHUD hideHUDForView:self.webview animated:YES];
         [self dismissModalViewControllerAnimated:YES];

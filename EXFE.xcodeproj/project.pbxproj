@@ -72,6 +72,15 @@
 		4F005491172977E200D4B429 /* identity_twitter_50btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00548D172977E200D4B429 /* identity_twitter_50btn.png */; };
 		4F005492172977E200D4B429 /* identity_twitter_50btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00548D172977E200D4B429 /* identity_twitter_50btn.png */; };
 		4F005493172977E200D4B429 /* identity_twitter_50btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F00548D172977E200D4B429 /* identity_twitter_50btn.png */; };
+		4F05D43F175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F05D43D175C6CB00050A726 /* EFAddIdentityViewController.m */; };
+		4F05D440175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F05D43D175C6CB00050A726 /* EFAddIdentityViewController.m */; };
+		4F05D441175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F05D43D175C6CB00050A726 /* EFAddIdentityViewController.m */; };
+		4F05D442175C6CB00050A726 /* EFAddIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F05D43E175C6CB00050A726 /* EFAddIdentityViewController.xib */; };
+		4F05D443175C6CB00050A726 /* EFAddIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F05D43E175C6CB00050A726 /* EFAddIdentityViewController.xib */; };
+		4F05D444175C6CB00050A726 /* EFAddIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F05D43E175C6CB00050A726 /* EFAddIdentityViewController.xib */; };
+		4F05D458175DAFAC0050A726 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F05D457175DAFAC0050A726 /* Constants.m */; };
+		4F05D459175DAFAC0050A726 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F05D457175DAFAC0050A726 /* Constants.m */; };
+		4F05D45A175DAFAC0050A726 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F05D457175DAFAC0050A726 /* Constants.m */; };
 		4F0E159B16A95C390086AC4A /* edit_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159916A95C390086AC4A /* edit_30.png */; };
 		4F0E159C16A95C390086AC4A /* edit_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159A16A95C390086AC4A /* edit_30@2x.png */; };
 		4F1142D716AE40B000C30179 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1142D616AE40B000C30179 /* SenTestingKit.framework */; };
@@ -1946,6 +1955,11 @@
 		4F00548517296F6400D4B429 /* table@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table@2x.png"; sourceTree = "<group>"; };
 		4F00548C172977E100D4B429 /* identity_facebook_50btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity_facebook_50btn.png; sourceTree = "<group>"; };
 		4F00548D172977E200D4B429 /* identity_twitter_50btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity_twitter_50btn.png; sourceTree = "<group>"; };
+		4F05D43C175C6CB00050A726 /* EFAddIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAddIdentityViewController.h; sourceTree = "<group>"; };
+		4F05D43D175C6CB00050A726 /* EFAddIdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFAddIdentityViewController.m; sourceTree = "<group>"; };
+		4F05D43E175C6CB00050A726 /* EFAddIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFAddIdentityViewController.xib; sourceTree = "<group>"; };
+		4F05D456175DAFAC0050A726 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		4F05D457175DAFAC0050A726 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		4F0E159916A95C390086AC4A /* edit_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30.png; sourceTree = "<group>"; };
 		4F0E159A16A95C390086AC4A /* edit_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30@2x.png"; sourceTree = "<group>"; };
 		4F1142D516AE40B000C30179 /* EXFETests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EXFETests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3016,6 +3030,8 @@
 				78D0A5FF158CFAD200401BCA /* URLParser.m */,
 				7840916A156F6AA4006DF115 /* Util.h */,
 				7840916B156F6AA5006DF115 /* Util.m */,
+				4F05D456175DAFAC0050A726 /* Constants.h */,
+				4F05D457175DAFAC0050A726 /* Constants.m */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -3138,6 +3154,9 @@
 				78D0A5FB158CFAD200401BCA /* OAuthLoginViewController.h */,
 				78D0A5FC158CFAD200401BCA /* OAuthLoginViewController.m */,
 				78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */,
+				4F05D43C175C6CB00050A726 /* EFAddIdentityViewController.h */,
+				4F05D43D175C6CB00050A726 /* EFAddIdentityViewController.m */,
+				4F05D43E175C6CB00050A726 /* EFAddIdentityViewController.xib */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -4706,6 +4725,7 @@
 				76073D0E174F6EA5007CBFC3 /* EFRomeViewController.xib in Resources */,
 				76C29C211754E9D10084C27F /* tabshadow_conv.png in Resources */,
 				76C29C241754E9D10084C27F /* tabshadow_conv@2x.png in Resources */,
+				4F05D443175C6CB00050A726 /* EFAddIdentityViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5121,6 +5141,7 @@
 				76073D0F174F6EA5007CBFC3 /* EFRomeViewController.xib in Resources */,
 				76C29C221754E9D10084C27F /* tabshadow_conv.png in Resources */,
 				76C29C251754E9D10084C27F /* tabshadow_conv@2x.png in Resources */,
+				4F05D444175C6CB00050A726 /* EFAddIdentityViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5534,6 +5555,7 @@
 				76073D0D174F6EA5007CBFC3 /* EFRomeViewController.xib in Resources */,
 				76C29C201754E9D10084C27F /* tabshadow_conv.png in Resources */,
 				76C29C231754E9D10084C27F /* tabshadow_conv@2x.png in Resources */,
+				4F05D442175C6CB00050A726 /* EFAddIdentityViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5734,6 +5756,8 @@
 				76295DC4174B2112002F5CEF /* EFTabBarViewController.m in Sources */,
 				76073D05174F6241007CBFC3 /* EFPresentCardController.m in Sources */,
 				76073D0B174F6EA5007CBFC3 /* EFRomeViewController.m in Sources */,
+				4F05D440175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
+				4F05D459175DAFAC0050A726 /* Constants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5904,6 +5928,8 @@
 				76295DC5174B2112002F5CEF /* EFTabBarViewController.m in Sources */,
 				76073D06174F6241007CBFC3 /* EFPresentCardController.m in Sources */,
 				76073D0C174F6EA5007CBFC3 /* EFRomeViewController.m in Sources */,
+				4F05D441175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
+				4F05D45A175DAFAC0050A726 /* Constants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6074,6 +6100,8 @@
 				76295DC3174B2112002F5CEF /* EFTabBarViewController.m in Sources */,
 				76073D04174F6241007CBFC3 /* EFPresentCardController.m in Sources */,
 				76073D0A174F6EA5007CBFC3 /* EFRomeViewController.m in Sources */,
+				4F05D43F175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
+				4F05D458175DAFAC0050A726 /* Constants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,6 +13,7 @@
 #import "Util.h"
 #import "FullScreenViewController.h"
 #import "AddIdentityViewController.h"
+#import "EFAddIdentityViewController.h"
 #import "CustomAttributedTextView.h"
 #import "UIUnderlinedButton.h"
 

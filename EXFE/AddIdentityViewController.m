@@ -171,6 +171,8 @@
 {
     self.accountStore = nil;
     self.apiManager = nil;
+    
+    [super dealloc];
 }
 
 - (void)gotoBack:(UIButton*)sender{
@@ -277,8 +279,7 @@
                                 [self presentModalViewController:oauth animated:YES];
                                 [oauth release];
                             }else{
-                                ProfileViewController *vc = (ProfileViewController*)profileview;
-                                [vc syncUser];
+                                [[NSNotificationCenter defaultCenter] postNotificationName:@"TestNotification" object:self];
                                 [self.navigationController popViewControllerAnimated:YES];
                             }
                         }
@@ -297,8 +298,6 @@
 }
 
 - (void) oauthSuccess{
-    ProfileViewController *vc = (ProfileViewController*)profileview;
-    [vc syncUser];
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (void) doOAuth:(Provider)provider{
@@ -654,8 +653,7 @@
 
 - (void)loadUserAndExit
 {
-    ProfileViewController *vc = (ProfileViewController*)profileview;
-    [vc syncUser];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"TestNotification" object:self];
     
     
     [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
