@@ -26,6 +26,7 @@
 #import "EXSpinView.h"
 #import "EFAPI.h"
 #import "OAuthAddIdentityViewController.h"
+#import "OAuthLoginViewController.h"
 
 typedef NS_ENUM(NSUInteger, EFViewTag) {
     kViewTagNone,
@@ -555,21 +556,30 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                     id code = [responseObject valueForKeyPath:@"meta.code"];
                     if (code) {
-                        if([code intValue] == 200) {
-                            NSDictionary *resp = [responseObject valueForKeyPath:@"response"];
-                            if (![resp valueForKey:@"identity"]) {
-                                resp = @{@"registration_flag":[resp valueForKey:@"registration_flag"],
-                                         @"identity":@{ @"external_username":identity,
-                                                        @"provider":[Identity getProviderString:[Util candidateProvider:identity]]
-                                                        }
-                                         };
+                        NSInteger type = [code integerValue] / 100;
+                        
+                        switch (type) {
+                            case 2:{
+                                // [code integerValue] == 200
+                                NSDictionary *resp = [responseObject valueForKeyPath:@"response"];
+                                if (![resp valueForKey:@"identity"]) {
+                                    resp = @{@"registration_flag":[resp valueForKey:@"registration_flag"],
+                                             @"identity":@{ @"external_username":identity,
+                                                            @"provider":[Identity getProviderString:[Util candidateProvider:identity]]
+                                                            }
+                                             };
+                                }
+                                [self.identityCache setObject:resp forKey:identity];
+                                
+                                if ([_inputIdentity.text isEqualToString:identity]) {
+                                    [self fillIdentityResp:resp];
+                                }
+                            }   break;
+                            case 4:{
                             }
-                            [self.identityCache setObject:resp forKey:identity];
-                            
-                            if ([_inputIdentity.text isEqualToString:identity]) {
-                                [self fillIdentityResp:resp];
-                            }
-                        } else {
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }
@@ -581,18 +591,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)loadUserAndExit
 {
-    [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        [self SigninDidFinish];
-    }
-                                        failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                            [self SigninDidFinish];
-                                        }];
-}
-
-- (void)SigninDidFinish
-{
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [app signinDidFinish];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshUserSelf object:self];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -637,7 +637,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
-//    NSString *external_username = [dict valueForKeyPath:@"external_username"];
+    NSString *username = [dict valueForKeyPath:@"external_username"];
     
     NSDictionary *param = nil;
     if (provider == kProviderTwitter || provider == kProviderFacebook) {
@@ -657,41 +657,52 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
             NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
             if (code) {
-                NSInteger c = [code integerValue];
-                switch (c) {
-                    case 200:{
-                        NSDictionary *responseobj=[responseObject objectForKey:@"response"];
+                NSInteger type = [code integerValue] / 100;
+                
+                switch (type) {
+                    case 2:{
+                        // [code integerValue] == 200
+                        NSDictionary *responseobj = [responseObject objectForKey:@"response"];
                         if([responseobj isKindOfClass:[NSDictionary class]]){
-                            if([responseobj objectForKey:@"url"]!=nil){
-                                OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
-                                oauth.parentView=self;
-                                oauth.oauth_url=[responseobj objectForKey:@"url"];
+                            if([responseobj objectForKey:@"url"] != nil){
+                                OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+//                                oauth.parentView = self; // call back?
+                                oauth.provider = provider;
+                                oauth.delegate = self;
+                                oauth.oAuthURL = [responseobj objectForKey:@"url"];
+                                if (username) {
+                                    switch (provider) {
+                                        case kProviderTwitter:
+                                            oauth.matchedURL = @"https://api.twitter.com/oauth/auth";
+                                            oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", username];
+                                            break;
+                                        case kProviderFacebook:
+                                            oauth.matchedURL = @"http://m.facebook.com/login.php?";
+                                            oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", username];
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                } else {
+                                    oauth.matchedURL = nil;
+                                    oauth.javaScriptString = nil;
+                                }
                                 [self presentModalViewController:oauth animated:YES];
                                 [oauth release];
+                                
                             }else{
-                                [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshUserSelf object:self];
-                                [self.navigationController popViewControllerAnimated:YES];
+                                
+                                [self loadUserAndExit];
                             }
                         }
-                        
-                        //                        [self loadUserAndExit];
-                        
                     }   break;
-                    case 403:{
-                        // response.body={"meta":{"code":403,"errorType":"failed","errorDetail":{"registration_flag":"SIGN_UP"}},"response":{}}
+                    case 4:{
+                        // [code integerValue] == 403
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
                         if ([@"failed" isEqualToString:errorType]) {
-//                            NSString *registration_flag = [responseObject valueForKeyPath:@"meta.errorDetail.registration_flag"];
-//                            if ([@"SIGN_UP" isEqualToString:registration_flag]) {
-//                            } else if ([@"SIGN_IN" isEqualToString:registration_flag]){
-////                                [self showErrorInfo:@"Authentication failed." dockOn:_inputPassword];
-//                                break;
-//                            } else if ([@"AUTHENTICATE" isEqualToString:registration_flag]){
-//                                
-//                            } else if ([@"VERIFY" isEqualToString:registration_flag]){
-//                            }
                         }
-                    }   break;
+                    }
+                        break;
                     default:
                         break;
                 }
@@ -777,31 +788,36 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                               hud.customView = bigspin;
                                               [bigspin release];
                                               
-                                              [[EFAPIServer sharedInstance] reverseAuth:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                              [[EFAPIServer sharedInstance] addReverseAuthIdentity:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                   if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                                      
                                                       NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-                                                      switch ([code integerValue]) {
-                                                          case 200:{
-                                                              [self loadUserAndExit];
-                                                              // ask for more permissions
-                                                              //                            NSArray *permissions = @[@"user_photos", @"friends_photos"];
-                                                              //                            [[FBSession activeSession] requestNewReadPermissions:permissions completionHandler:^(FBSession *session, NSError *error) {
-                                                              //                                ;
-                                                              //                            }];
-                                                          }
-                                                              break;
-                                                          case 400:{
-                                                              if ([@"invalid_token" isEqualToString:[responseObject valueForKeyPath:@"meta.errorType"]] ) {
-                                                                  [self showInlineError:@"Invalid token." with:@"There is something wrong. Please try again later."];
-                                                                  
-                                                                  [self syncFBAccount];
-                                                                  
+                                                      if (code) {
+                                                          NSInteger type = [code integerValue] / 100;
+                                                          
+                                                          switch (type) {
+                                                              case 2:{
+                                                                  // [code integerValue] == 200
+                                                                  [self loadUserAndExit];
+                                                                  // ask for more permissions
+                                                                  //                            NSArray *permissions = @[@"user_photos", @"friends_photos"];
+                                                                  //                            [[FBSession activeSession] requestNewReadPermissions:permissions completionHandler:^(FBSession *session, NSError *error) {
+                                                                  //                                ;
+                                                                  //
+                                                              }   break;
+                                                              case 4:{
+                                                                  // [code integerValue] == 403
+                                                                  if ([@"invalid_token" isEqualToString:[responseObject valueForKeyPath:@"meta.errorType"]] ) {
+                                                                      [self showInlineError:@"Invalid token." with:@"There is something wrong. Please try again later."];
+                                                                      
+                                                                      [self syncFBAccount];
+                                                                      
+                                                                  }
                                                               }
+                                                                  break;
+                                                              default:
+                                                                  break;
                                                           }
-                                                          default:
-                                                              break;
                                                       }
                                                   }
                                               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -959,25 +975,13 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 #pragma mark OAuthlogin Delegate
 - (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
     [oauthlogin dismissModalViewControllerAnimated:YES];
-    [oauthlogin release];
-    oauthlogin = nil;
 }
 
-//- (void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
-//{
-//    [self.navigationController dismissModalViewControllerAnimated:YES];
-//    
-//    //save token/user id/ username
-//    if ([userid integerValue] > 0 && token.length > 0) {
-//        EFAPIServer *server = [EFAPIServer sharedInstance];
-//        server.user_id = [userid integerValue];
-//        server.user_token = token;
-//        //        server.user_name = username;
-//        [server saveUserData];
-//    }
-//    
-//    [self loadUserAndExit];
-//}
+- (void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
+{
+    [self.navigationController dismissModalViewControllerAnimated:YES];
+    [self loadUserAndExit];
+}
 
 
 #pragma mark UITextFieldDelegate
@@ -1011,17 +1015,26 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
             NSDictionary *params = [Util splitQuery:responseStr];
             
-            [[EFAPIServer sharedInstance] reverseAuth:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [[EFAPIServer sharedInstance] addReverseAuthIdentity:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                     
                     NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-                    if ([code integerValue] == 200) {
-                        [self loadUserAndExit];
+                    NSInteger type = [code integerValue] / 100;
+                    
+                    switch (type) {
+                        case 2:
+                            // [code integerValue] == 200 
+                            [self loadUserAndExit];
+                            break;
+                        case 4:{
+                            //400: invalid_token
+                            //400: no_provider
+                            //400: unsupported_provider
+                        }   break;
+                        default:
+                            break;
                     }
-                    //400: invalid_token
-                    //400: no_provider
-                    //400: unsupported_provider
                 }
                 
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

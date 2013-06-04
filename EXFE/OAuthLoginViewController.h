@@ -25,8 +25,9 @@
 @property (nonatomic, assign) id <OAuthLoginViewControllerDelegate> delegate;
 @property (nonatomic, retain) IBOutlet UIWebView* webView;
 @property (nonatomic, assign) Provider provider;
-@property (nonatomic, copy) NSString* matchedURL;
-@property (nonatomic, copy) NSString* javaScriptString;
+@property (nonatomic, copy) NSString *oAuthURL;
+@property (nonatomic, copy) NSString *matchedURL;
+@property (nonatomic, copy) NSString *javaScriptString;
 
 @end
 

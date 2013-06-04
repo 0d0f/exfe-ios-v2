@@ -108,16 +108,8 @@
     [toolbar addSubview:titlelabel];
     [self.view addSubview:toolbar];
     
-    NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
-    NSAssert([schemes objectAtIndex:0] != nil, @"Missing url sheme in main bundle.");
-    
-    // eg:  exfe://oauthcallback/
-    NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
-    
-    NSString *urlstr = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:_provider]]];
-    
-    firstLoading=YES;
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlstr]]];
+    firstLoading = YES;
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.oAuthURL]]];
 }
 
 - (void)cancel {
@@ -139,6 +131,7 @@
             NSString *token = [parser valueForVariable:@"token"];
             NSString *external_id = [parser valueForVariable:@"external_id"];
             [self.delegate OAuthloginViewControllerDidSuccess:self userid:userid username:name external_id:external_id token:token];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshUserSelf object:self];
         }
         [parser release];
         return NO;

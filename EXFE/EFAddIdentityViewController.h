@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAuthLoginViewController.h"
 
-@interface EFAddIdentityViewController : UIViewController<UITextFieldDelegate>
+@interface EFAddIdentityViewController : UIViewController<OAuthLoginViewControllerDelegate, UITextFieldDelegate>
 
 @property (nonatomic, copy) id onExitBlock;
 

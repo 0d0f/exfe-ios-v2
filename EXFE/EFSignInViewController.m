@@ -686,12 +686,19 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
         NSString *username = [dict valueForKeyPath:@"external_username"];
         
+        NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
+        NSAssert([schemes objectAtIndex:0] != nil, @"Missing url sheme in main bundle.");
+        
+        // eg:  exfe://oauthcallback/
+        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
+        
         switch (provider) {
             case kProviderTwitter:
             {
                 OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
                 oauth.provider = kProviderTwitter;
                 oauth.delegate = self;
+                oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
                 if (username) {
                     // @"https://api.twitter.com/oauth/authorize?"
                     // @"https://api.twitter.com/oauth/authenticate?"
@@ -703,6 +710,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 }
                 
                 [self presentModalViewController:oauth animated:YES];
+                [oauth release];
             }
                 return;
             case kProviderFacebook:
@@ -710,6 +718,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
                 oauth.provider = kProviderFacebook;
                 oauth.delegate = self;
+                oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
                 if (username) {
                     oauth.matchedURL = @"http://m.facebook.com/login.php?";
                     oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", username];
@@ -718,6 +727,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                     oauth.javaScriptString = nil;
                 }
                 [self presentModalViewController:oauth animated:YES];
+                [oauth release];
             }
                 return;
             default:
@@ -1526,8 +1536,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 #pragma mark OAuthlogin Delegate
 - (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
     [oauthlogin dismissModalViewControllerAnimated:YES];
-    [oauthlogin release];
-    oauthlogin = nil;
 }
 
 -(void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
