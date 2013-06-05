@@ -1446,6 +1446,9 @@
 		764CD909173A914600627237 /* btn_white_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD905173A914600627237 /* btn_white_30@2x.png */; };
 		764CD90A173A914600627237 /* btn_white_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD905173A914600627237 /* btn_white_30@2x.png */; };
 		764CD90B173A914600627237 /* btn_white_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD905173A914600627237 /* btn_white_30@2x.png */; };
+		765A82D4175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
+		765A82D5175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
+		765A82D6175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
 		7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
@@ -2303,6 +2306,8 @@
 		764CD8FD173A8F9400627237 /* cautionbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cautionbar@2x.png"; sourceTree = "<group>"; };
 		764CD904173A914600627237 /* btn_white_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_white_30.png; sourceTree = "<group>"; };
 		764CD905173A914600627237 /* btn_white_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_white_30@2x.png"; sourceTree = "<group>"; };
+		765A82D2175F076C00448B64 /* EFContactDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFContactDataSource.h; sourceTree = "<group>"; };
+		765A82D3175F076C00448B64 /* EFContactDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFContactDataSource.m; sourceTree = "<group>"; };
 		7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorHandlerCenter.h; sourceTree = "<group>"; };
 		7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorHandlerCenter.m; sourceTree = "<group>"; };
 		7670126A1729054500B5445E /* EFPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPopoverController.m; sourceTree = "<group>"; };
@@ -2962,8 +2967,9 @@
 			isa = PBXGroup;
 			children = (
 				763A01D2172130B20082CC9E /* EFDataDefines.h */,
-				763A01CC17212A090082CC9E /* Object */,
+				765A82D1175F074200448B64 /* DataSource */,
 				76A150B41717D1CB00751C92 /* Service */,
+				763A01CC17212A090082CC9E /* Object */,
 				78A98EFC1561169E009E0806 /* Entity */,
 				4FD9376016D6025500ED6677 /* Extention */,
 			);
@@ -3211,6 +3217,15 @@
 				763A01CE17212B080082CC9E /* RoughIdentity.m */,
 			);
 			name = Object;
+			sourceTree = "<group>";
+		};
+		765A82D1175F074200448B64 /* DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				765A82D2175F076C00448B64 /* EFContactDataSource.h */,
+				765A82D3175F076C00448B64 /* EFContactDataSource.m */,
+			);
+			name = DataSource;
 			sourceTree = "<group>";
 		};
 		767012621729053400B5445E /* EFKit */ = {
@@ -5718,6 +5733,7 @@
 				76073D0B174F6EA5007CBFC3 /* EFRomeViewController.m in Sources */,
 				4F05D440175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
 				4F05D459175DAFAC0050A726 /* Constants.m in Sources */,
+				765A82D5175F076C00448B64 /* EFContactDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5888,6 +5904,7 @@
 				76073D0C174F6EA5007CBFC3 /* EFRomeViewController.m in Sources */,
 				4F05D441175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
 				4F05D45A175DAFAC0050A726 /* Constants.m in Sources */,
+				765A82D6175F076C00448B64 /* EFContactDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6058,6 +6075,7 @@
 				76073D0A174F6EA5007CBFC3 /* EFRomeViewController.m in Sources */,
 				4F05D43F175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
 				4F05D458175DAFAC0050A726 /* Constants.m in Sources */,
+				765A82D4175F076C00448B64 /* EFContactDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
