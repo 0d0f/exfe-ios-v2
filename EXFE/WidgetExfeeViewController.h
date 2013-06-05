@@ -10,6 +10,7 @@
 #import "EXBasicMenu.h"
 #import "UIBorderLabel.h"
 #import "EFKit.h"
+#import "ExfeeRsvpCell.h"
 
 typedef enum {
     ScrollDirectionNone,
