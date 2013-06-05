@@ -59,7 +59,7 @@
         MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc] init];
         mailController.mailComposeDelegate = self;
         [mailController setToRecipients:@[@"feedback@exfe.com"]];
-        [mailController setSubject:[NSString stringWithFormat:@"Feedback(%@#%@)", version, buildNumber]];
+        [mailController setSubject:[NSString stringWithFormat:@"Feedback (%@#%@)", version, buildNumber]];
         [self.view.window.rootViewController presentViewController:mailController animated:YES completion:nil];
         [mailController release];
     }
