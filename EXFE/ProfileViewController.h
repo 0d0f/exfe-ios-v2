@@ -12,12 +12,12 @@
 #import "User.h"
 #import "Util.h"
 #import "FullScreenViewController.h"
-#import "AddIdentityViewController.h"
 #import "EFAddIdentityViewController.h"
 #import "CustomAttributedTextView.h"
 #import "UIUnderlinedButton.h"
+#import "OAuthLoginViewController.h"
 
-@interface ProfileViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>{
+@interface ProfileViewController : UIViewController<OAuthLoginViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>{
 //    IBOutlet UIToolbar* toolbar;
     
     UIImageView* useravatar;

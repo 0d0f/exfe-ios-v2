@@ -25,7 +25,6 @@
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
 #import "EFAPI.h"
-#import "OAuthAddIdentityViewController.h"
 #import "OAuthLoginViewController.h"
 
 typedef NS_ENUM(NSUInteger, EFViewTag) {
@@ -181,7 +180,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     {// Start button
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(0, 0, 290, 48);
-        [btn setTitle:@"Start" forState:UIControlStateNormal];
+        [btn setTitle:@"Add and verify" forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [btn setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
@@ -664,9 +663,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         // [code integerValue] == 200
                         NSDictionary *responseobj = [responseObject objectForKey:@"response"];
                         if([responseobj isKindOfClass:[NSDictionary class]]){
-                            if([responseobj objectForKey:@"url"] != nil){
+                            if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"] && [responseobj objectForKey:@"url"] != nil){
                                 OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-//                                oauth.parentView = self; // call back?
                                 oauth.provider = provider;
                                 oauth.delegate = self;
                                 oauth.oAuthURL = [responseobj objectForKey:@"url"];

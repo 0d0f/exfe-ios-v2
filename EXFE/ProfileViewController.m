@@ -639,11 +639,37 @@
                                                          if(code){
                                                              if([code intValue]==200) {
                                                                  NSDictionary *responseobj=[body objectForKey:@"response"];
-                                                                 if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"])
+                                                                 if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"]  && [responseobj objectForKey:@"url"] != nil)
                                                                  {
-                                                                     OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
-                                                                     oauth.parentView=self;
-                                                                     oauth.oauth_url=[responseobj objectForKey:@"url"];
+//                                                                     OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
+//                                                                     oauth.parentView=self;
+//                                                                     oauth.oauth_url=[responseobj objectForKey:@"url"];
+//                                                                     [self presentModalViewController:oauth animated:YES];
+//                                                                     [oauth release];
+                                                                     Identity *identity = [self getIdentityById:identity_id];
+                                                                     Provider provider = [Identity getProviderCode:identity.provider];
+                                                                     
+                                                                     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+                                                                     oauth.provider = provider;
+                                                                     oauth.delegate = self;
+                                                                     oauth.oAuthURL = [responseobj objectForKey:@"url"];
+                                                                     if (username) {
+                                                                         switch (provider) {
+                                                                             case kProviderTwitter:
+                                                                                 oauth.matchedURL = @"https://api.twitter.com/oauth/auth";
+                                                                                 oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", username];
+                                                                                 break;
+                                                                             case kProviderFacebook:
+                                                                                 oauth.matchedURL = @"http://m.facebook.com/login.php?";
+                                                                                 oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", username];
+                                                                                 break;
+                                                                             default:
+                                                                                 break;
+                                                                         }
+                                                                     } else {
+                                                                         oauth.matchedURL = nil;
+                                                                         oauth.javaScriptString = nil;
+                                                                     }
                                                                      [self presentModalViewController:oauth animated:YES];
                                                                      [oauth release];
                                                                      
@@ -670,6 +696,17 @@
             [self doVerify:identity_id];
         }
     }
+}
+
+#pragma mark OAuthlogin Delegate
+- (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
+    [oauthlogin dismissModalViewControllerAnimated:YES];
+}
+
+- (void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
+{
+    [self.navigationController dismissModalViewControllerAnimated:YES];
+    [self syncUser];
 }
 
 @end
