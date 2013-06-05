@@ -10,6 +10,7 @@
 #import "EXBasicMenu.h"
 #import "UIBorderLabel.h"
 #import "EFKit.h"
+#import "ExfeeRsvpCell.h"
 
 typedef enum {
     ScrollDirectionNone,
@@ -41,12 +42,12 @@ EFTabBarDataSource
     UIImageView *invRsvpImage;
     EXAttributedLabel *invRsvpLabel;
     UILabel *invRsvpAltLabel;
-    UIImageView *identityProvider;
-    UIImageView *identityWaring;
-    UIBorderLabel *identityName;
-    UILabel *bioTitle;
-    UILabel *bioContent;
-    UIButton *ActionMenu;
+//    UIImageView *identityProvider;
+//    UIImageView *identityWaring;
+//    UIBorderLabel *identityName;
+//    UILabel *bioTitle;
+//    UILabel *bioContent;
+//    UIButton *ActionMenu;
     UIButton *RemoveButton;
     
     PSTCollectionViewFlowLayout *flowLayout;
@@ -59,8 +60,8 @@ EFTabBarDataSource
     CALayer *layer4;
     
     UITableView* invTable;
-    ExfeeRsvpCell *tableHeader;
-    ABTableViewCell *tableFooter;
+    UITableViewCell *tableHeader;
+    UITableViewCell *tableFooter;
     PSTCollectionView *exfeeContainer;
     
     CGPoint _lastContentOffset;

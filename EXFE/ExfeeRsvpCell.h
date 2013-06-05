@@ -6,28 +6,26 @@
 //
 //
 
-#import "ABTableViewCell.h"
+#import "TTTAttributedLabel.h"
 #import "EXAttributedLabel.h"
+#import "Invitation+EXFE.h"
 
-@interface ExfeeRsvpCell : ABTableViewCell{
-    EXAttributedLabel *main;
-    UILabel *alt;
-    UILabel *name;
-    UILabel *host;
-    UIImageView *host_star;
-    UIImageView *rsvp_status;
+
+@interface ExfeeRsvpCell : UITableViewCell{
+    UILabel *invName;
+    UIImageView *invHostFlag;
+    UILabel *invHostText;
+    UIImageView *invRsvpImage;
+    EXAttributedLabel *invRsvpLabel;
+    UILabel *invRsvpAltLabel;
     
-    NSString *_NameText;
-    BOOL _isHost;
-    NSString *_AltText;
-    NSAttributedString *_MainText;
-    NSString *_RsvpString;
 }
 
-@property (nonatomic, copy) NSString *NameText;
+@property (nonatomic, copy) NSString *name;
 @property (nonatomic, assign) BOOL isHost;
-@property (nonatomic, copy) NSAttributedString *MainText;
-@property (nonatomic, copy) NSString *AltText;
-@property (nonatomic, copy) NSString *RsvpString;
+@property (nonatomic, assign) BOOL unreachable;
+@property (nonatomic, assign) RsvpCode rsvp;
+@property (nonatomic, assign) NSInteger mates;
+@property (nonatomic, copy) NSString *additionalText;
 
 @end

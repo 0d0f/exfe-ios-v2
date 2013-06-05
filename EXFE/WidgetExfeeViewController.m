@@ -141,129 +141,139 @@ typedef enum {
     [self.view addSubview:exfeeContainer];
     
     CGFloat exfee_content_height = CGRectGetHeight(exfeeContainer.frame) - 94 * (2 + (CGRectGetHeight(a) > 480 ? 1 : 0)) - kBottomMargin;
-    invContent = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0 + kYOffset, CGRectGetWidth(b), exfee_content_height )];
-    invContent.backgroundColor = [UIColor COLOR_SNOW];
-    invContent.alwaysBounceVertical = YES;
-    invContent.delegate = self;
-    invContent.tag = kTableOrigin;
-    {
-        layer1 = [CALayer layer];
-        layer1.frame = CGRectMake(0, 45, 320, 1);
-        layer1.contents = (id)[UIImage imageNamed:@"exfee_line_h1.png"].CGImage;
-        layer2 = [CALayer layer];
-        layer2.frame = CGRectMake(0, 105, 320, 1);
-        layer2.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
-        layer3 = [CALayer layer];
-        layer3.frame = CGRectMake(0, 137, 320, 1);
-        layer3.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
-        layer4 = [CALayer layer];
-        layer4.frame = CGRectMake(65, 45, 1, 180);
-        layer4.contents = (id)[UIImage imageNamed:@"exfee_line_v.png"].CGImage;
-        [invContent.layer addSublayer:layer1];
-        [invContent.layer addSublayer:layer2];
-        [invContent.layer addSublayer:layer3];
-        [invContent.layer addSublayer:layer4];
-        
-        
-        invName = [[UILabel alloc] initWithFrame:CGRectMake(25, 16 , 230, 25)];
-        invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
-        invName.textColor = [UIColor COLOR_CARBON];
-        invName.backgroundColor = [UIColor clearColor];
-        invName.numberOfLines = 3;
-        invName.tag = kTagIdName;
-        [invContent addSubview:invName];
-        
-        invHostFlag = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_host_blue.png"]];
-        invHostFlag.frame = CGRectMake(162, 21, CGRectGetWidth(invHostFlag.frame), CGRectGetHeight(invHostFlag.frame));
-        invHostFlag.tag = kTagIdHostFlag;
-        [invContent addSubview:invHostFlag];
-        
-        invHostText = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
-        invHostText.text = @"HOST";
-        invHostText.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
-        invHostText.textColor = [UIColor COLOR_BLUE_EXFE];
-        [invHostText sizeToFit];
-        [invContent addSubview:invHostText];
-        
-        invRsvpImage = [[UIImageView alloc] initWithFrame:CGRectMake(33, 57, 26, 26)];
-        invRsvpImage.tag = kTagIdRSVPImage;
-        [invContent addSubview:invRsvpImage];
-        
-        invRsvpLabel = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(75, 60, 200, 22)];
-        invRsvpLabel.tag = kTagIdRSVPLabel;
-        [invContent addSubview:invRsvpLabel];
-        
-        invRsvpAltLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 86, 180, 12)];
-        invRsvpAltLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
-        invRsvpAltLabel.textColor = [UIColor COLOR_GRAY];
-        invRsvpAltLabel.backgroundColor = [UIColor clearColor];
-//        invRsvpAltLabel.numberOfLines = 0;
-        invRsvpAltLabel.tag = kTagIdRSVPAltLabel;
-        [invContent addSubview:invRsvpAltLabel];
-        
-        identityProvider = [[UIImageView alloc] initWithFrame:CGRectMake(37, 112, 18, 18)];
-        identityProvider.tag = kTagIdIdentityProvider;
-        [invContent addSubview:identityProvider];
-        
-        identityWaring = [[UIImageView alloc] initWithFrame:CGRectMake(75, 112, 18, 18)];
-        identityWaring.tag = kTagIdIdentityWarninng;
-        [invContent addSubview:identityWaring];
-        
-        identityName = [[UIBorderLabel alloc] initWithFrame:CGRectMake(70, 106, 225, 32)];
-        identityName.leftInset = 5;
-        identityName.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
-        identityName.textColor = [UIColor COLOR_BLACK];
-        identityName.backgroundColor = [UIColor clearColor];
-        identityName.tag = kTagIdIdentityName;
-        [invContent addSubview:identityName];
-        
-        bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(36, 115 + 32, 40, 33)];
-        bioTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
-        bioTitle.text = @"Bio";
-        [bioTitle sizeToFit];
-        bioTitle.textColor = [UIColor COLOR_BLACK];
-        bioTitle.backgroundColor = [UIColor clearColor];
-        bioTitle.tag = kTagIdBioTitle;
-        [invContent addSubview:bioTitle];
-        
-        bioContent = [[UILabel alloc] initWithFrame:CGRectMake(75, 115 + 32, 220, 80)];
-        bioContent.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
-        bioContent.textColor = [UIColor COLOR_BLACK];
-        bioContent.backgroundColor = [UIColor clearColor];
-        bioContent.numberOfLines = 0;
-        bioContent.tag = kTagIdBioContent;
-        [invContent addSubview:bioContent];
-        
-        ActionMenu = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        ActionMenu.frame = CGRectMake(255, 146, 40, 31);
-        ActionMenu.hidden = YES;
-        ActionMenu.tag = kTagIdActionMenu;
-        [invContent addSubview:ActionMenu];
-        
-        
-        RemoveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage* img = [[UIImage imageNamed:@"btn_red_30inset.png"] stretchableImageWithLeftCapWidth:8.0f topCapHeight:0.0f];
-        [RemoveButton setBackgroundImage:img forState:UIControlStateNormal];
-        [RemoveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        RemoveButton.titleLabel.font = [UIFont boldSystemFontOfSize:16];
-        RemoveButton.titleLabel.shadowColor = [UIColor lightGrayColor];
-        RemoveButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
-        [RemoveButton setTitle:@"Delete" forState:UIControlStateNormal];
-        RemoveButton.frame = CGRectMake(0, 0, 70, 30);
-        RemoveButton.hidden = YES;
-        [RemoveButton addTarget:self action:@selector(removeInvitation:) forControlEvents:UIControlEventTouchUpInside];
-        [invContent addSubview:RemoveButton];
-    }
-    [self.view addSubview:invContent];
-    _floatingOffset = CGSizeMake(0, 0);
+//    invContent = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0 + kYOffset, CGRectGetWidth(b), exfee_content_height )];
+//    invContent.backgroundColor = [UIColor COLOR_SNOW];
+//    invContent.alwaysBounceVertical = YES;
+//    invContent.delegate = self;
+//    invContent.tag = kTableOrigin;
+//    {
+//        layer1 = [CALayer layer];
+//        layer1.frame = CGRectMake(0, 45, 320, 1);
+//        layer1.contents = (id)[UIImage imageNamed:@"exfee_line_h1.png"].CGImage;
+//        layer2 = [CALayer layer];
+//        layer2.frame = CGRectMake(0, 105, 320, 1);
+//        layer2.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
+//        layer3 = [CALayer layer];
+//        layer3.frame = CGRectMake(0, 137, 320, 1);
+//        layer3.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
+//        layer4 = [CALayer layer];
+//        layer4.frame = CGRectMake(65, 45, 1, 180);
+//        layer4.contents = (id)[UIImage imageNamed:@"exfee_line_v.png"].CGImage;
+//        [invContent.layer addSublayer:layer1];
+//        [invContent.layer addSublayer:layer2];
+//        [invContent.layer addSublayer:layer3];
+//        [invContent.layer addSublayer:layer4];
+//        
+//        
+//        invName = [[UILabel alloc] initWithFrame:CGRectMake(25, 16 , 230, 25)];
+//        invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
+//        invName.textColor = [UIColor COLOR_CARBON];
+//        invName.backgroundColor = [UIColor clearColor];
+//        invName.numberOfLines = 3;
+//        invName.tag = kTagIdName;
+//        [invContent addSubview:invName];
+//        
+//        invHostFlag = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_host_blue.png"]];
+//        invHostFlag.frame = CGRectMake(162, 21, CGRectGetWidth(invHostFlag.frame), CGRectGetHeight(invHostFlag.frame));
+//        invHostFlag.tag = kTagIdHostFlag;
+//        [invContent addSubview:invHostFlag];
+//        
+//        invHostText = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
+//        invHostText.text = @"HOST";
+//        invHostText.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
+//        invHostText.textColor = [UIColor COLOR_BLUE_EXFE];
+//        [invHostText sizeToFit];
+//        [invContent addSubview:invHostText];
+//        
+//        invRsvpImage = [[UIImageView alloc] initWithFrame:CGRectMake(33, 57, 26, 26)];
+//        invRsvpImage.tag = kTagIdRSVPImage;
+//        [invContent addSubview:invRsvpImage];
+//        
+//        invRsvpLabel = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(75, 60, 200, 22)];
+//        invRsvpLabel.tag = kTagIdRSVPLabel;
+//        [invContent addSubview:invRsvpLabel];
+//        
+//        invRsvpAltLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 86, 180, 12)];
+//        invRsvpAltLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
+//        invRsvpAltLabel.textColor = [UIColor COLOR_GRAY];
+//        invRsvpAltLabel.backgroundColor = [UIColor clearColor];
+////        invRsvpAltLabel.numberOfLines = 0;
+//        invRsvpAltLabel.tag = kTagIdRSVPAltLabel;
+//        [invContent addSubview:invRsvpAltLabel];
+//        
+//        identityProvider = [[UIImageView alloc] initWithFrame:CGRectMake(37, 112, 18, 18)];
+//        identityProvider.tag = kTagIdIdentityProvider;
+//        [invContent addSubview:identityProvider];
+//        
+//        identityWaring = [[UIImageView alloc] initWithFrame:CGRectMake(75, 112, 18, 18)];
+//        identityWaring.tag = kTagIdIdentityWarninng;
+//        [invContent addSubview:identityWaring];
+//        
+//        identityName = [[UIBorderLabel alloc] initWithFrame:CGRectMake(70, 106, 225, 32)];
+//        identityName.leftInset = 5;
+//        identityName.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
+//        identityName.textColor = [UIColor COLOR_BLACK];
+//        identityName.backgroundColor = [UIColor clearColor];
+//        identityName.tag = kTagIdIdentityName;
+//        [invContent addSubview:identityName];
+//        
+//        bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(36, 115 + 32, 40, 33)];
+//        bioTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+//        bioTitle.text = @"Bio";
+//        [bioTitle sizeToFit];
+//        bioTitle.textColor = [UIColor COLOR_BLACK];
+//        bioTitle.backgroundColor = [UIColor clearColor];
+//        bioTitle.tag = kTagIdBioTitle;
+//        [invContent addSubview:bioTitle];
+//        
+//        bioContent = [[UILabel alloc] initWithFrame:CGRectMake(75, 115 + 32, 220, 80)];
+//        bioContent.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+//        bioContent.textColor = [UIColor COLOR_BLACK];
+//        bioContent.backgroundColor = [UIColor clearColor];
+//        bioContent.numberOfLines = 0;
+//        bioContent.tag = kTagIdBioContent;
+//        [invContent addSubview:bioContent];
+//        
+//        ActionMenu = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//        ActionMenu.frame = CGRectMake(255, 146, 40, 31);
+//        ActionMenu.hidden = YES;
+//        ActionMenu.tag = kTagIdActionMenu;
+//        [invContent addSubview:ActionMenu];
+//        
+//        
+//        RemoveButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//        UIImage* img = [[UIImage imageNamed:@"btn_red_30inset.png"] stretchableImageWithLeftCapWidth:8.0f topCapHeight:0.0f];
+//        [RemoveButton setBackgroundImage:img forState:UIControlStateNormal];
+//        [RemoveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        RemoveButton.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+//        RemoveButton.titleLabel.shadowColor = [UIColor lightGrayColor];
+//        RemoveButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
+//        [RemoveButton setTitle:@"Delete" forState:UIControlStateNormal];
+//        RemoveButton.frame = CGRectMake(0, 0, 70, 30);
+//        RemoveButton.hidden = YES;
+//        [RemoveButton addTarget:self action:@selector(removeInvitation:) forControlEvents:UIControlEventTouchUpInside];
+//        [invContent addSubview:RemoveButton];
+//    }
+//    [self.view addSubview:invContent];
+//    _floatingOffset = CGSizeMake(0, 0);
+//    
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapContent:)];
+//    [invContent addGestureRecognizer:tap];
+//    [tap release];
+//    
+//    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swypeDelete:)];
+//    [invContent addGestureRecognizer:swipe];
+//    [swipe release];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapContent:)];
-    [invContent addGestureRecognizer:tap];
-    [tap release];
     
-    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swypeDelete:)];
-    [invContent addGestureRecognizer:swipe];
-    [swipe release];
+    invTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 0 + kYOffset, CGRectGetWidth(b), exfee_content_height )];
+    invTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    invTable.backgroundColor = [UIColor COLOR_SNOW];
+    invTable.alwaysBounceVertical = YES;
+    invTable.delegate = self;
+    invTable.dataSource = self;
+    invTable.tag = kTableOrigin;
+    [self.view addSubview:invTable];
     
 }
 
@@ -289,18 +299,19 @@ typedef enum {
 
 - (void)dealloc {
     [_shadowImage release];
-    [invName release];
-    [invHostFlag release];
-    [invHostText release];
-    [invRsvpImage release];
-    [invRsvpLabel release];
-    [invRsvpAltLabel release];
-    [identityProvider release];
-    [identityWaring release];
-    [identityName release];
-    [bioTitle release];
-    [bioContent release];
-    [invContent release];
+//    [invName release];
+//    [invHostFlag release];
+//    [invHostText release];
+//    [invRsvpImage release];
+//    [invRsvpLabel release];
+//    [invRsvpAltLabel release];
+//    [identityProvider release];
+//    [identityWaring release];
+//    [identityName release];
+//    [bioTitle release];
+//    [bioContent release];
+//    [invContent release];
+    [invTable release];
     [flowLayout release];
     
     [exfeeContainer release];
@@ -374,14 +385,14 @@ typedef enum {
     
     if (sender.state == UIGestureRecognizerStateEnded) {
         
-        if (CGRectContainsPoint([Util expandRect:identityProvider.frame with:identityName.frame], location)) {
-            [self hidePopupIfShown:kPopupIdRemoveIdentity];
-            CGRect f = RemoveButton.frame;
-            f.origin.x = CGRectGetWidth(invContent.bounds) - CGRectGetWidth(f) - 15;
-            f.origin.y = CGRectGetMinY(identityName.frame);
-            RemoveButton.frame = f;
-            RemoveButton.hidden = NO;
-        }
+//        if (CGRectContainsPoint([Util expandRect:identityProvider.frame with:identityName.frame], location)) {
+//            [self hidePopupIfShown:kPopupIdRemoveIdentity];
+//            CGRect f = RemoveButton.frame;
+//            f.origin.x = CGRectGetWidth(invContent.bounds) - CGRectGetWidth(f) - 15;
+//            f.origin.y = CGRectGetMinY(identityName.frame);
+//            RemoveButton.frame = f;
+//            RemoveButton.hidden = NO;
+//        }
     }
 }
 
@@ -423,11 +434,12 @@ typedef enum {
 #pragma mark Fill content and Layout
 - (void)fillInvitationContent:(NSArray*)list
 {
-    Invitation *inv = [list objectAtIndex:0];
-    [self fillIdentity:inv.identity];
-    [self fillHost:inv];
-    [self fillRsvp:inv];
-    [self LayoutViews];
+//    Invitation *inv = [list objectAtIndex:0];
+//    [self fillIdentity:inv.identity];
+//    [self fillHost:inv];
+//    [self fillRsvp:inv];
+//    [self LayoutViews];
+    [invTable reloadData];
 }
 
 - (void)fillIdentity:(Identity*)ident
@@ -440,33 +452,33 @@ typedef enum {
             [self setNeedLayout:invName.tag];
         }
         
-        NSString* at_id = [ident getDisplayIdentity];
-        if (![identityName.text isEqualToString:at_id]) {
-            identityName.text = at_id;
-        }
-
-        Provider p = [Identity getProviderCode:ident.provider];
-        switch(p){
-            case kProviderEmail:
-                identityProvider.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
-                break;
-            case kProviderPhone:
-                identityProvider.image = [UIImage imageNamed:@"identity_phone_18_grey.png"];
-                break;
-            case kProviderTwitter:
-                identityProvider.image = [UIImage imageNamed:@"identity_twitter_18_grey.png"];
-                break;
-            case kProviderFacebook:
-                identityProvider.image = [UIImage imageNamed:@"identity_facebook_18_grey.png"];
-                break;
-            default:
-                identityProvider.image = nil;
-                break;
-        }
+//        NSString* at_id = [ident getDisplayIdentity];
+//        if (![identityName.text isEqualToString:at_id]) {
+//            identityName.text = at_id;
+//        }
+//
+//        Provider p = [Identity getProviderCode:ident.provider];
+//        switch(p){
+//            case kProviderEmail:
+//                identityProvider.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
+//                break;
+//            case kProviderPhone:
+//                identityProvider.image = [UIImage imageNamed:@"identity_phone_18_grey.png"];
+//                break;
+//            case kProviderTwitter:
+//                identityProvider.image = [UIImage imageNamed:@"identity_twitter_18_grey.png"];
+//                break;
+//            case kProviderFacebook:
+//                identityProvider.image = [UIImage imageNamed:@"identity_facebook_18_grey.png"];
+//                break;
+//            default:
+//                identityProvider.image = nil;
+//                break;
+//        }
         
-        bioTitle.hidden = !(ident && ident.bio.length > 0);
-        bioContent.text = ident.bio;
-        [bioContent wrapContent];
+//        bioTitle.hidden = !(ident && ident.bio.length > 0);
+//        bioContent.text = ident.bio;
+//        [bioContent wrapContent];
     }
 }
 
@@ -682,21 +694,21 @@ typedef enum {
             layer2.frame = frame;
             [CATransaction commit];
             
-            frame = identityProvider.frame;
-            frame.origin.y = CGRectGetMaxY(layer2.frame) + 6;
-            identityProvider.frame = frame;
-            
-            frame = identityWaring.frame;
-            frame.origin.y = CGRectGetMaxY(layer2.frame) + 6;
-            identityWaring.frame = frame;
-            
-            frame = identityName.frame;
-            frame.origin.y = CGRectGetMaxY(layer2.frame) + 0;
-            identityName.frame = frame;
+//            frame = identityProvider.frame;
+//            frame.origin.y = CGRectGetMaxY(layer2.frame) + 6;
+//            identityProvider.frame = frame;
+//            
+//            frame = identityWaring.frame;
+//            frame.origin.y = CGRectGetMaxY(layer2.frame) + 6;
+//            identityWaring.frame = frame;
+//            
+//            frame = identityName.frame;
+//            frame.origin.y = CGRectGetMaxY(layer2.frame) + 0;
+//            identityName.frame = frame;
         }
-        
-        start.x = CGRectGetMaxX(identityProvider.frame);
-        start.y = MAX(CGRectGetMaxY(identityProvider.frame), CGRectGetMaxY(identityName.frame));
+//
+//        start.x = CGRectGetMaxX(identityProvider.frame);
+//        start.y = MAX(CGRectGetMaxY(identityProvider.frame), CGRectGetMaxY(identityName.frame));
         
         if (layoutLevel >= kTagIdBioContent) {
             [CATransaction begin];
@@ -706,24 +718,383 @@ typedef enum {
             layer3.frame = frame;
             [CATransaction commit];
             
-            frame = bioTitle.frame;
-            frame.origin.y = CGRectGetMaxY(layer3.frame) + 16;
-            bioTitle.frame = frame;
-            
-            frame = bioContent.frame;
-            frame.origin.y = CGRectGetMaxY(layer3.frame) + 16;
-            bioContent.frame = frame;
+//            frame = bioTitle.frame;
+//            frame.origin.y = CGRectGetMaxY(layer3.frame) + 16;
+//            bioTitle.frame = frame;
+//            
+//            frame = bioContent.frame;
+//            frame.origin.y = CGRectGetMaxY(layer3.frame) + 16;
+//            bioContent.frame = frame;
         }
         
-        start.x = CGRectGetMaxX(bioContent.frame);
-        start.y = MAX(CGRectGetMaxY(bioTitle.frame), CGRectGetMaxY(bioContent.frame));
+//        start.x = CGRectGetMaxX(bioContent.frame);
+//        start.y = MAX(CGRectGetMaxY(bioTitle.frame), CGRectGetMaxY(bioContent.frame));
         
         invContent.contentSize = CGSizeMake(MAX(CGRectGetWidth(invContent.frame), start.x), start.y + 10);
         [self clearLayoutLevel];
     }
 }
 
+#pragma mark UITableViewDataSource
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 3;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    switch (section) {
+        case 0:
+            return 1;
+//            break;
+        case 1:
+            return _selected_invitations.count;
+//            break;
+        case 2:
+            return 1;
+//            break;
+        default:
+            return 0;
+//            break;
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger section = indexPath.section;
+    switch (section) {
+        case 0:{
+            NSString *reuseIdentifier = @"Invitation_head";
+            if (!tableHeader) {
+                tableHeader = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+                
+                invName = [[UILabel alloc] initWithFrame:CGRectMake(25, 16 , 230, 25)];
+                invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
+                invName.textColor = [UIColor COLOR_CARBON];
+                invName.backgroundColor = [UIColor clearColor];
+                invName.numberOfLines = 3;
+                invName.tag = kTagIdName;
+                [tableHeader.contentView addSubview:invName];
+                
+                invHostFlag = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_host_blue.png"]];
+                invHostFlag.frame = CGRectMake(162, 21, CGRectGetWidth(invHostFlag.frame), CGRectGetHeight(invHostFlag.frame));
+                invHostFlag.tag = kTagIdHostFlag;
+                [tableHeader.contentView addSubview:invHostFlag];
+                
+                invHostText = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
+                invHostText.text = @"HOST";
+                invHostText.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
+                invHostText.textColor = [UIColor COLOR_BLUE_EXFE];
+                [invHostText sizeToFit];
+                [tableHeader.contentView addSubview:invHostText];
+                
+                invRsvpImage = [[UIImageView alloc] initWithFrame:CGRectMake(33, 57, 26, 26)];
+                invRsvpImage.tag = kTagIdRSVPImage;
+                [tableHeader.contentView addSubview:invRsvpImage];
+                
+                invRsvpLabel = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(75, 60, 200, 22)];
+                invRsvpLabel.tag = kTagIdRSVPLabel;
+                [tableHeader.contentView addSubview:invRsvpLabel];
+                
+                invRsvpAltLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 86, 180, 12)];
+                invRsvpAltLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
+                invRsvpAltLabel.textColor = [UIColor COLOR_GRAY];
+                invRsvpAltLabel.backgroundColor = [UIColor clearColor];
+                //        invRsvpAltLabel.numberOfLines = 0;
+                invRsvpAltLabel.tag = kTagIdRSVPAltLabel;
+                [tableHeader.contentView addSubview:invRsvpAltLabel];
+            }
+            
+            Invitation *inv = [_selected_invitations objectAtIndex:0];
+            Identity *identity = inv.identity;
+            
+            if (inv) {
+                NSUInteger changeFlag = kTagIdNone;
+                RsvpCode rsvp = [Invitation getRsvpCode:inv.rsvp_status];
+                
+                NSString* name = [identity getDisplayName];
+                if (![invName.text isEqualToString:name]) {
+                    invName.text = name;
+                    [invName wrapContent];
+//                    [self setNeedLayout:invName.tag];
+                }
+                
+                BOOL shouldHidden = ![inv.host boolValue];
+                if (invHostText.hidden != shouldHidden) {
+                    invHostText.hidden = shouldHidden;
+//                    [self setNeedLayout:kTagIdHostFlag];
+                }
+                
+                if (invHostFlag.hidden != shouldHidden) {
+                    invHostFlag.hidden = shouldHidden;
+//                    [self setNeedLayout:kTagIdHostFlag];
+                }
+                
+                switch (rsvp) {
+                    case kRsvpAccepted:
+                    {
+                        invRsvpImage.image = [UIImage imageNamed:@"rsvp_accepted_stroke_26blue"];
+                        
+                        CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+                        CTFontRef textfontref2 = CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 18.0, NULL);
+                        NSAttributedString *acceptStr = [[NSMutableAttributedString alloc] initWithString:@"Accepted"
+                                                                                               attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                                         (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
+                        
+                        if ([inv.mates intValue] > 0) {
+                            NSString *strWithMates = [NSString stringWithFormat:@"[Accepted] with %i mates", [inv.mates intValue]];
+                            NSMutableAttributedString *fullStr = [[NSMutableAttributedString alloc] initWithString:strWithMates
+                                                                                                        attributes:@{(NSString*)kCTFontAttributeName:(id)textfontref2,
+                                                                  (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
+                            [fullStr replaceCharactersInRange:[strWithMates rangeOfString:@"[Accepted]"] withAttributedString:acceptStr];
+                            invRsvpLabel.attributedText = fullStr;
+                            [invRsvpLabel setNeedsDisplay];
+                            [fullStr release];
+                        }else{
+                            invRsvpLabel.attributedText = acceptStr;
+                            [invRsvpLabel setNeedsDisplay];
+                        }
+                        [acceptStr release];
+                        CFRelease(textfontref);
+                        CFRelease(textfontref2);
+                    }
+                        break;
+                    case kRsvpDeclined:
+                    {
+                        invRsvpImage.image = [UIImage imageNamed:@"rsvp_unavailable_stroke_26g5"];
+                        
+                        CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+                        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Unavailable"
+                                                                                             attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                                       (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
+                        invRsvpLabel.attributedText = pending;
+                        [invRsvpLabel setNeedsDisplay];
+                        [pending release];
+                        CFRelease(textfontref);
+                    }
+                        break;
+                    case kRsvpInterested:
+                    {
+                        invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
+                        
+                        CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+                        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Intersted"
+                                                                                             attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                                       (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
+                        invRsvpLabel.attributedText = pending;
+                        [invRsvpLabel setNeedsDisplay];
+                        [pending release];
+                        CFRelease(textfontref);
+                    }
+                        break;
+                        // no use
+                    case kRsvpRemoved:
+                    case kRsvpNotification:
+                        // should not be used here
+                        break;
+                        
+                        //pending
+                    case kRsvpIgnored:
+                    case kRsvpNoResponse:
+                    default:{
+                        invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
+                        
+                        CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+                        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Pending"
+                                                                                             attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                                       (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
+                        invRsvpLabel.attributedText = pending;
+                        [invRsvpLabel setNeedsDisplay];
+                        [pending release];
+                        CFRelease(textfontref);
+                    }
+                        break;
+                }
+                if ([inv.identity.unreachable boolValue]){
+                    CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+                    NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Unreachable contact"
+                                                                                         attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                                   (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)].CGColor}];
+                    invRsvpLabel.attributedText = pending;
+                    [invRsvpLabel setNeedsDisplay];
+                    [pending release];
+                    CFRelease(textfontref);
+                }
+                
+                NSString *altString = @"";
+                if (inv.updated_at != nil) {
+                    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+                    NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit |NSTimeZoneCalendarUnit) fromDate:inv.updated_at];
+                    [gregorian release];
+                    altString = [DateTimeUtil GetRelativeTime:comps format:0];
+                }
+                if ([inv.updated_by.connected_user_id intValue]!= [inv.identity.connected_user_id intValue]){
+                    if (altString && altString.length > 0) {
+                        altString = [NSString stringWithFormat:@"Set by %@ %@", [inv.updated_by getDisplayName], altString];
+                    }else{
+                        altString = [NSString stringWithFormat:@"Set by %@", [inv.updated_by getDisplayName]];
+                    }
+                }
+                invRsvpAltLabel.text = [altString sentenceCapitalizedString];
+                [invRsvpAltLabel wrapContent];
+//                [self setNeedLayout:changeFlag];
+            }
+                
+            
+            return tableHeader;
+            
+        }   //break;
+        case 1:{
+            NSString *reuseIdentifier = @"Invitation_cell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+            UIImageView *identityProvider = nil;
+            UIImageView *identityWaring = nil;
+            UIBorderLabel *identityName = nil;
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                
+                identityProvider = [[UIImageView alloc] initWithFrame:CGRectMake(37, 6, 18, 18)];
+                identityProvider.tag = kTagIdIdentityProvider;
+                [cell.contentView addSubview:identityProvider];
+                
+                identityWaring = [[UIImageView alloc] initWithFrame:CGRectMake(75, 6, 18, 18)];
+                identityWaring.tag = kTagIdIdentityWarninng;
+                [cell.contentView addSubview:identityWaring];
+                
+                identityName = [[UIBorderLabel alloc] initWithFrame:CGRectMake(70, 0, 225, 32)];
+                identityName.leftInset = 5;
+                identityName.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
+                identityName.textColor = [UIColor COLOR_BLACK];
+                identityName.backgroundColor = [UIColor clearColor];
+                identityName.tag = kTagIdIdentityName;
+                [cell.contentView addSubview:identityName];
+                
+            } else {
+                identityProvider = (UIImageView *)[cell.contentView viewWithTag:kTagIdIdentityProvider];
+                identityWaring = (UIImageView *)[cell.contentView viewWithTag:kTagIdIdentityWarninng];
+                identityName = (UIBorderLabel *)[cell.contentView viewWithTag:kTagIdIdentityName];
+            }
+            
+            Invitation *inv = [_selected_invitations objectAtIndex:indexPath.row];
+            Identity *ident = inv.identity;
+            if (ident) {
+
+                
+                NSString* at_id = [ident getDisplayIdentity];
+                if (![identityName.text isEqualToString:at_id]) {
+                    identityName.text = at_id;
+                }
+                
+                Provider p = [Identity getProviderCode:ident.provider];
+                switch(p){
+                    case kProviderEmail:
+                        identityProvider.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
+                        break;
+                    case kProviderPhone:
+                        identityProvider.image = [UIImage imageNamed:@"identity_phone_18_grey.png"];
+                        break;
+                    case kProviderTwitter:
+                        identityProvider.image = [UIImage imageNamed:@"identity_twitter_18_grey.png"];
+                        break;
+                    case kProviderFacebook:
+                        identityProvider.image = [UIImage imageNamed:@"identity_facebook_18_grey.png"];
+                        break;
+                    default:
+                        identityProvider.image = nil;
+                        break;
+                }
+            }
+            
+            
+            return cell;
+            
+        }   //break;
+        case 2:{
+            NSString *reuseIdentifier = @"Invitation_foot";
+            UILabel *bioTitle = nil;
+            UILabel *bioContent = nil;
+            UIButton *ActionMenu = nil;
+            if (!tableFooter) {
+                tableFooter = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+                tableFooter.selectionStyle = UITableViewCellSelectionStyleNone;
+                
+                bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(36, 0, 40, 33)];
+                bioTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+                bioTitle.text = @"Bio";
+                [bioTitle sizeToFit];
+                bioTitle.textColor = [UIColor COLOR_BLACK];
+                bioTitle.backgroundColor = [UIColor clearColor];
+                bioTitle.tag = kTagIdBioTitle;
+                [tableFooter.contentView addSubview:bioTitle];
+                
+                bioContent = [[UILabel alloc] initWithFrame:CGRectMake(75, 0, 220, 80)];
+                bioContent.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+                bioContent.textColor = [UIColor COLOR_BLACK];
+                bioContent.backgroundColor = [UIColor clearColor];
+                bioContent.numberOfLines = 0;
+                bioContent.tag = kTagIdBioContent;
+                [tableFooter.contentView addSubview:bioContent];
+                
+                ActionMenu = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                ActionMenu.frame = CGRectMake(255, 1, 40, 31);
+                ActionMenu.tag = kTagIdActionMenu;
+                [tableFooter.contentView addSubview:ActionMenu];
+            } else {
+                bioTitle = (UILabel *)[tableFooter.contentView viewWithTag:kTagIdBioTitle];
+                bioContent = (UILabel *)[tableFooter.contentView viewWithTag:kTagIdBioContent];
+                ActionMenu = (UIButton *)[tableFooter.contentView viewWithTag:kTagIdActionMenu];
+            }
+            
+            Invitation *inv = [_selected_invitations objectAtIndex:0];
+            Identity *identity = inv.identity;
+            bioTitle.hidden = !(identity && identity.bio.length > 0);
+            bioContent.text = identity.bio;
+            [bioContent wrapContent];
+            
+            return tableFooter;
+        }   //break;
+        default:
+            break;
+    }
+    return nil;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+#pragma mark UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger section = indexPath.section;
+    switch (section) {
+        case 0:
+            return 100.f;
+            //            break;
+        case 1:
+            return 32.0f;
+            //            break;
+        case 2:
+            return 100.0f;
+            //            break;
+        default:
+            return 0;
+            //            break;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
 #pragma mark UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(PSTCollectionView *)collectionView
 {
@@ -756,7 +1127,7 @@ typedef enum {
         {
             if (row == self.sortedInvitations.count) {
                 ExfeeAddCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Add Cell" forIndexPath:indexPath];
-                cell.description.text = [NSString stringWithFormat:@"%u / %u", [self.exfee.accepted integerValue], [self.exfee.total integerValue]];
+                cell.description.text = [NSString stringWithFormat:@"%u / %u", [self.exfee.accepted integerValue], self.sortedInvitations.count];
                 return cell;
             } else {
                 ExfeeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Exfee Cell" forIndexPath:indexPath];
@@ -797,7 +1168,8 @@ typedef enum {
     NSInteger seq = row % 4;
     switch (section) {
         case 0:
-            return CGSizeMake(300, CGRectGetHeight(invContent.frame) + kBottomMargin);
+//            return CGSizeMake(300, CGRectGetHeight(invContent.frame) + kBottomMargin);
+            return CGSizeMake(300, CGRectGetHeight(invTable.frame) + kBottomMargin);
         case 1:
             switch (seq) {
                 case 0:

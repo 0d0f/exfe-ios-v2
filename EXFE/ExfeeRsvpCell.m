@@ -7,95 +7,10 @@
 //
 
 #import "ExfeeRsvpCell.h"
+#import <QuartzCore/QuartzCore.h>
 #import "Util.h"
 
 @implementation ExfeeRsvpCell
-
--(NSString *)getNameText
-{
-    return _NameText;
-}
-
--(void)setNameText:(NSString *)newText
-{
-    if (newText != _NameText)
-    {
-        [_NameText release];
-        _NameText = [newText copy];
-        [name setText:_NameText];
-        [self setNeedsDisplay];
-        // need layout
-    }
-}
-
--(BOOL)isHost
-{
-    return _isHost;
-}
-
--(void)setHost:(BOOL)h
-{
-    if (h != _isHost)
-    {
-        _isHost = h;
-        host.hidden = !h;
-        host_star.hidden = !h;
-        [self setNeedsDisplay];
-    }
-}
-
--(NSAttributedString *)getMainText
-{
-    return _MainText;
-}
-
--(void)setMainText:(NSAttributedString *)newText
-{
-    if (newText != _MainText)
-    {
-        [_MainText release];
-        _MainText = [newText copy];
-        [main setAttributedText:_MainText];
-        [self setNeedsDisplay];
-    }
-}
-
--(NSString *)getAltText
-{
-    return _AltText;
-}
-
--(void)setAltText:(NSString *)newText
-{
-    if (newText != _AltText)
-    {
-        [_AltText release];
-        _AltText = [newText copy];
-        [alt setText:_AltText];
-        [self setNeedsDisplay];
-    }
-}
-
--(NSString *)getRsvpString
-{
-    return _RsvpString;
-}
-
--(void)setRsvpString:(NSString *)newText
-{
-    if (newText != _RsvpString)
-    {
-        [_RsvpString release];
-        _RsvpString = [newText copy];
-        if ([@"ACCEPTED" isEqualToString:_RsvpString]) {
-            [rsvp_status setImage:[UIImage imageNamed:@"rsvp_accepted_stroke_26blue"]];
-        } else {
-            [rsvp_status setImage:[UIImage imageNamed:@"rsvp_pending_stroke_26g5"]];
-        }
-        [self setNeedsDisplay];
-    }
-}
-
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -103,34 +18,104 @@
     if (self) {
         // Initialization code
         
-        name = [[UILabel alloc] initWithFrame:CGRectMake(25, 16, 230, 25)];
-        name.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
-        name.textColor = [UIColor COLOR_CARBON];
-        [contentView addSubview:name];
+        CALayer *layer1 = [CALayer layer];
+        layer1.frame = CGRectMake(0, 45, 320, 1);
+        layer1.contents = (id)[UIImage imageNamed:@"exfee_line_h1.png"].CGImage;
+        CALayer *layer2 = [CALayer layer];
+        layer2.frame = CGRectMake(0, 105, 320, 1);
+        layer2.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
+        CALayer *layer4 = [CALayer layer];
+        layer4.frame = CGRectMake(65, 45, 1, 180);
+        layer4.contents = (id)[UIImage imageNamed:@"exfee_line_v.png"].CGImage;
+        [self.contentView.layer addSublayer:layer1];
+        [self.contentView.layer addSublayer:layer2];
+        [self.contentView.layer addSublayer:layer4];
+
+
+        invName = [[UILabel alloc] initWithFrame:CGRectMake(25, 16 , 230, 25)];
+        invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
+        invName.textColor = [UIColor COLOR_CARBON];
+        invName.backgroundColor = [UIColor clearColor];
+        invName.numberOfLines = 3;
         
-        host = [[UILabel alloc] initWithFrame:CGRectMake(180, 23, 60, 15)];
-        host.text = @"HOST";
-        host.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
-        host.textColor = [UIColor COLOR_RGB(0x3A, 0x6E, 0xA5)];
-        [contentView addSubview:host];
+        invName.backgroundColor = [UIColor greenColor];
+//        invName.tag = kTagIdName;
+        [self.contentView addSubview:invName];
+
+        invHostFlag = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_host_blue.png"]];
+        invHostFlag.frame = CGRectMake(162, 21, CGRectGetWidth(invHostFlag.frame), CGRectGetHeight(invHostFlag.frame));
+//        invHostFlag.tag = kTagIdHostFlag;
+        [self.contentView addSubview:invHostFlag];
+
+        invHostText = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
+        invHostText.text = @"HOST";
+        invHostText.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
+        invHostText.textColor = [UIColor COLOR_BLUE_EXFE];
+        [invHostText sizeToFit];
+        [self.contentView addSubview:invHostText];
+
+        invRsvpImage = [[UIImageView alloc] initWithFrame:CGRectMake(33, 57, 26, 26)];
+//        invRsvpImage.tag = kTagIdRSVPImage;
+        [self.contentView addSubview:invRsvpImage];
+
+        invRsvpLabel = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(75, 60, 200, 22)];
+//        invRsvpLabel.tag = kTagIdRSVPLabel;
+        [self.contentView addSubview:invRsvpLabel];
+
+        invRsvpAltLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 86, 180, 12)];
+        invRsvpAltLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
+        invRsvpAltLabel.textColor = [UIColor COLOR_GRAY];
+        invRsvpAltLabel.backgroundColor = [UIColor clearColor];
+//        invRsvpAltLabel.numberOfLines = 0;
+//        invRsvpAltLabel.tag = kTagIdRSVPAltLabel;
+        [self.contentView addSubview:invRsvpAltLabel];
         
-        host_star = [[UIImageView alloc] initWithFrame:CGRectMake(160, 16, 20, 20)];
-        host_star.backgroundColor = [UIColor grayColor];
-        [contentView addSubview:host_star];
         
-        main = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(25, 65, 190, 22)];
-        main.backgroundColor = [UIColor clearColor];
-        [contentView addSubview:main];
-        
-        alt = [[UILabel alloc] initWithFrame:CGRectMake(25, 90, 190, 13)];
-        alt.font = [UIFont fontWithName:@"HelveticaNeue" size:11];
-        alt.textColor = [UIColor COLOR_GRAY];
-        [contentView addSubview:alt];
-        
-        rsvp_status = [[UIImageView alloc] initWithFrame:CGRectMake(269, 65, 26, 26)];
-        [contentView addSubview:rsvp_status];
+        [self addObserver:self
+                forKeyPath:@"name"
+                   options:NSKeyValueObservingOptionNew
+                   context:NULL];
+        [self addObserver:self
+               forKeyPath:@"isHost"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+        [self addObserver:self
+               forKeyPath:@"unreachable"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+        [self addObserver:self
+               forKeyPath:@"rsvp"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+        [self addObserver:self
+               forKeyPath:@"mates"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+        [self addObserver:self
+               forKeyPath:@"additionalText"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"name"];
+    [self removeObserver:self forKeyPath:@"isHost"];
+    [self removeObserver:self forKeyPath:@"unreachable"];
+    [self removeObserver:self forKeyPath:@"rsvp"];
+    [self removeObserver:self forKeyPath:@"mates"];
+    [self removeObserver:self forKeyPath:@"additionalText"];
+    
+    [invName release];
+    [invHostFlag release];
+    [invHostText release];
+    [invRsvpImage release];
+    [invRsvpLabel release];
+    [invRsvpAltLabel release];
+    
+    [super dealloc];
 }
 
 /*
@@ -146,4 +131,140 @@
 //{
 //	// subclasses should implement this
 //}
+
+#pragma mark - KVO
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    BOOL isChanged = NO;
+    if ([keyPath isEqualToString:@"name"]) {
+        isChanged = YES;
+    } else if ([keyPath isEqualToString:@"isHost"]) {
+        isChanged = YES;
+    } else if ([keyPath isEqualToString:@"unreachable"]) {
+        isChanged = YES;
+    } else if ([keyPath isEqualToString:@"rsvp"]) {
+        isChanged = YES;
+    } else if ([keyPath isEqualToString:@"mates"]) {
+        isChanged = YES;
+    } else if ([keyPath isEqualToString:@"additionalText"]) {
+        isChanged = YES;
+    }
+    
+    if (isChanged) {
+        [self refresh];
+    }
+    
+}
+
+- (void) refresh
+{
+    switch (self.rsvp) {
+        case kRsvpAccepted:
+        {
+            invRsvpImage.image = [UIImage imageNamed:@"rsvp_accepted_stroke_26blue"];
+            
+            CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+            CTFontRef textfontref2 = CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 18.0, NULL);
+            NSAttributedString *acceptStr = [[NSMutableAttributedString alloc] initWithString:@"Accepted"
+                                                                                   attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                             (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
+            
+            if (self.mates > 0) {
+                NSString *strWithMates = [NSString stringWithFormat:@"[Accepted] with %i mates", self.mates];
+                NSMutableAttributedString *fullStr = [[NSMutableAttributedString alloc] initWithString:strWithMates
+                                                                                            attributes:@{(NSString*)kCTFontAttributeName:(id)textfontref2,
+                                                      (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
+                [fullStr replaceCharactersInRange:[strWithMates rangeOfString:@"[Accepted]"] withAttributedString:acceptStr];
+                invRsvpLabel.attributedText = fullStr;
+                [invRsvpLabel setNeedsDisplay];
+                [fullStr release];
+            }else{
+                invRsvpLabel.attributedText = acceptStr;
+                [invRsvpLabel setNeedsDisplay];
+            }
+            [acceptStr release];
+            CFRelease(textfontref);
+            CFRelease(textfontref2);
+        }
+            break;
+        case kRsvpDeclined:
+        {
+            invRsvpImage.image = [UIImage imageNamed:@"rsvp_unavailable_stroke_26g5"];
+            
+            CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+            NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Unavailable"
+                                                                                 attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                           (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
+            invRsvpLabel.attributedText = pending;
+            [invRsvpLabel setNeedsDisplay];
+            [pending release];
+            CFRelease(textfontref);
+        }
+            break;
+        case kRsvpInterested:
+        {
+            invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
+            
+            CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+            NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Intersted"
+                                                                                 attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                           (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
+            invRsvpLabel.attributedText = pending;
+            [invRsvpLabel setNeedsDisplay];
+            [pending release];
+            CFRelease(textfontref);
+        }
+            break;
+            // no use
+        case kRsvpRemoved:
+        case kRsvpNotification:
+            // should not be used here
+            break;
+            
+            //pending
+        case kRsvpIgnored:
+        case kRsvpNoResponse:
+        default:{
+            invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
+            
+            CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+            NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Pending"
+                                                                                 attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                           (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
+            invRsvpLabel.attributedText = pending;
+            [invRsvpLabel setNeedsDisplay];
+            [pending release];
+            CFRelease(textfontref);
+        }
+            break;
+    }
+    if (self.unreachable){
+        CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
+        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Unreachable contact"
+                                                                             attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                       (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)].CGColor}];
+        invRsvpLabel.attributedText = pending;
+        [invRsvpLabel setNeedsDisplay];
+        [pending release];
+        CFRelease(textfontref);
+    }
+    
+//    NSString *altString = @"";
+//    if (inv.updated_at != nil) {
+//        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+//        NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit |NSTimeZoneCalendarUnit) fromDate:inv.updated_at];
+//        [gregorian release];
+//        altString = [DateTimeUtil GetRelativeTime:comps format:0];
+//    }
+//    if ([inv.updated_by.connected_user_id intValue]!= [inv.identity.connected_user_id intValue]){
+//        if (altString && altString.length > 0) {
+//            altString = [NSString stringWithFormat:@"Set by %@ %@", [inv.updated_by getDisplayName], altString];
+//        }else{
+//            altString = [NSString stringWithFormat:@"Set by %@", [inv.updated_by getDisplayName]];
+//        }
+//    }
+//    invRsvpAltLabel.text = [altString sentenceCapitalizedString];
+//    [invRsvpAltLabel wrapContent];
+    
+}
 @end
