@@ -42,12 +42,6 @@ EFTabBarDataSource
     UIImageView *invRsvpImage;
     EXAttributedLabel *invRsvpLabel;
     UILabel *invRsvpAltLabel;
-//    UIImageView *identityProvider;
-//    UIImageView *identityWaring;
-//    UIBorderLabel *identityName;
-//    UILabel *bioTitle;
-//    UILabel *bioContent;
-//    UIButton *ActionMenu;
     UIButton *RemoveButton;
     
     PSTCollectionViewFlowLayout *flowLayout;
@@ -61,6 +55,7 @@ EFTabBarDataSource
     
     UITableView* invTable;
     UITableViewCell *tableHeader;
+    UITableViewCell *tableRsvp;
     UITableViewCell *tableFooter;
     PSTCollectionView *exfeeContainer;
     

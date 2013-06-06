@@ -122,7 +122,6 @@ typedef enum {
     self.view.tag = kTagViewExfeeRoot;
     
     if (self.exfee) {
-//        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
         self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
     }
     
@@ -141,54 +140,7 @@ typedef enum {
     [self.view addSubview:exfeeContainer];
     
     CGFloat exfee_content_height = CGRectGetHeight(exfeeContainer.frame) - 94 * (2 + (CGRectGetHeight(a) > 480 ? 1 : 0)) - kBottomMargin;
-//    invContent = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0 + kYOffset, CGRectGetWidth(b), exfee_content_height )];
-//    invContent.backgroundColor = [UIColor COLOR_SNOW];
-//    invContent.alwaysBounceVertical = YES;
-//    invContent.delegate = self;
-//    invContent.tag = kTableOrigin;
-//    {
-//        layer1 = [CALayer layer];
-//        layer1.frame = CGRectMake(0, 45, 320, 1);
-//        layer1.contents = (id)[UIImage imageNamed:@"exfee_line_h1.png"].CGImage;
-//        layer2 = [CALayer layer];
-//        layer2.frame = CGRectMake(0, 105, 320, 1);
-//        layer2.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
-//        layer3 = [CALayer layer];
-//        layer3.frame = CGRectMake(0, 137, 320, 1);
-//        layer3.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
-//        layer4 = [CALayer layer];
-//        layer4.frame = CGRectMake(65, 45, 1, 180);
-//        layer4.contents = (id)[UIImage imageNamed:@"exfee_line_v.png"].CGImage;
-//        [invContent.layer addSublayer:layer1];
-//        [invContent.layer addSublayer:layer2];
-//        [invContent.layer addSublayer:layer3];
-//        [invContent.layer addSublayer:layer4];
-//
-//        RemoveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        UIImage* img = [[UIImage imageNamed:@"btn_red_30inset.png"] stretchableImageWithLeftCapWidth:8.0f topCapHeight:0.0f];
-//        [RemoveButton setBackgroundImage:img forState:UIControlStateNormal];
-//        [RemoveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//        RemoveButton.titleLabel.font = [UIFont boldSystemFontOfSize:16];
-//        RemoveButton.titleLabel.shadowColor = [UIColor lightGrayColor];
-//        RemoveButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
-//        [RemoveButton setTitle:@"Delete" forState:UIControlStateNormal];
-//        RemoveButton.frame = CGRectMake(0, 0, 70, 30);
-//        RemoveButton.hidden = YES;
-//        [RemoveButton addTarget:self action:@selector(removeInvitation:) forControlEvents:UIControlEventTouchUpInside];
-//        [invContent addSubview:RemoveButton];
-//    }
-//    [self.view addSubview:invContent];
-//    _floatingOffset = CGSizeMake(0, 0);
-//    
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapContent:)];
-//    [invContent addGestureRecognizer:tap];
-//    [tap release];
-//    
-//    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swypeDelete:)];
-//    [invContent addGestureRecognizer:swipe];
-//    [swipe release];
-    
-    
+
     invTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 0 + kYOffset, CGRectGetWidth(b), exfee_content_height )];
     invTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     invTable.backgroundColor = [UIColor COLOR_SNOW];
@@ -228,9 +180,6 @@ typedef enum {
 //    [invRsvpImage release];
 //    [invRsvpLabel release];
 //    [invRsvpAltLabel release];
-//    [identityProvider release];
-//    [identityWaring release];
-//    [identityName release];
 //    [bioTitle release];
 //    [bioContent release];
 //    [invContent release];
@@ -257,28 +206,9 @@ typedef enum {
     }
 }
 #pragma mark Click handler
-- (void)removeInvitation:(id)sender
-{
-    UIView *btn = sender;
-    btn.hidden = YES;
-    
-    NSString *title = @"People will no longer have access to any information in this ·X·. Please confirm to remove.";
-    NSString *destTitle = @"Remove from this ·X·";
-    if ([[User getDefaultUser] isMe:[(Invitation*)[_selected_invitations objectAtIndex:0] identity]]) {
-        title = @"You will no longer have access to any information in this ·X· once left. Please confirm to leave.";
-        destTitle = @"Leave from this ·X·";
-    }
-    
-    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:title
-                                                            delegate:self
-                                                   cancelButtonTitle:@"Cancel"
-                                              destructiveButtonTitle:destTitle
-                                                   otherButtonTitles:nil];
-	popupQuery.actionSheetStyle = UIActionSheetStyleDefault;
-    
-	[popupQuery showInView:self.view];
-	[popupQuery release];
-}
+
+
+
 
 #pragma mark UIActionSheetDelegate
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -302,195 +232,40 @@ typedef enum {
 }
 
 #pragma mark Gesture Handler
-- (void)swypeDelete:(UITapGestureRecognizer*)sender
-{
-    CGPoint location = [sender locationInView:sender.view];
-    
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        
-//        if (CGRectContainsPoint([Util expandRect:identityProvider.frame with:identityName.frame], location)) {
-//            [self hidePopupIfShown:kPopupIdRemoveIdentity];
-//            CGRect f = RemoveButton.frame;
-//            f.origin.x = CGRectGetWidth(invContent.bounds) - CGRectGetWidth(f) - 15;
-//            f.origin.y = CGRectGetMinY(identityName.frame);
-//            RemoveButton.frame = f;
-//            RemoveButton.hidden = NO;
-//        }
-    }
-}
-
-- (void)tapContent:(UITapGestureRecognizer*)sender
-{
-    CGPoint location = [sender locationInView:sender.view];
-    
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        //UIView *tappedView = [sender.view hitTest:[sender locationInView:sender.view] withEvent:nil];
-        
-        if (CGRectContainsPoint([Util expandRect:invRsvpImage.frame with:invRsvpLabel.frame with:invRsvpAltLabel.frame], location)) {
-            [self hidePopupIfShown:kPopupIdRsvpMenu];
-            
-            NSDictionary *data = rsvpDict;
-            
-            if ([[User getDefaultUser] isMe:[(Invitation*)[_selected_invitations objectAtIndex:0] identity]]) {
-                data = myRsvpDict;
-            }
-            
-            if (rsvpMenu == nil) {
-                rsvpMenu = [[EXBasicMenu alloc] initWithFrame:CGRectMake(0, 0, 125, 20 + 44 * 3) andContent:
-                            data];
-                rsvpMenu.delegate = self;
-                rsvpMenu.tag = kMenuTagRsvp;
-                [self.view addSubview:rsvpMenu];
-            }else{
-                [rsvpMenu setContent:data];
-            }
-            
-            [self show:rsvpMenu at:[sender.view convertPoint:invRsvpLabel.frame.origin toView:self.view] withAnimation:YES];
-            
-            return;
-        } else if (RemoveButton.hidden == NO  && CGRectContainsPoint(RemoveButton.frame, location) ) {
-            [RemoveButton sendActionsForControlEvents: UIControlEventTouchUpInside];
-        }
-    }
-}
 
 #pragma mark Fill content and Layout
 - (void)fillInvitationContent:(NSArray*)list
 {
-//    Invitation *inv = [list objectAtIndex:0];
-//    [self fillIdentity:inv.identity];
-//    [self fillHost:inv];
-//    [self fillRsvp:inv];
-//    [self LayoutViews];
     [invTable reloadData];
 }
 
-- (void)setNeedLayout
+#pragma mark Actions
+- (void)removeInvitation
 {
-    [self setNeedLayout:kTagIdMax];
-}
-
-- (void)setNeedLayout:(NSUInteger)level
-{
-    if (level > layoutLevel) {
-        layoutLevel = level;
+    
+    NSString *title = @"People will no longer have access to any information in this ·X·. Please confirm to remove.";
+    NSString *destTitle = @"Remove from this ·X·";
+    if ([[User getDefaultUser] isMe:[(Invitation*)[_selected_invitations objectAtIndex:0] identity]]) {
+        title = @"You will no longer have access to any information in this ·X· once left. Please confirm to leave.";
+        destTitle = @"Leave from this ·X·";
     }
-}
-
-- (void)clearLayoutLevel
-{
-    layoutLevel = kTagIdNone;
-}
-
-- (void)LayoutViews
-{
-    if (layoutLevel > kTagIdNone) {
-        CGPoint start = CGPointZero;
-        
-        if (layoutLevel >= kTagIdName) {
-
-                CGSize size = [invName sizeWrapContent:CGSizeMake(CGRectGetWidth(invName.bounds), MAXFLOAT)];
-                CGFloat w = size.width;
-//                if (w > CGRectGetWidth(invName.bounds)) {
-//                    w = CGRectGetWidth(invName.bounds);
-//                }
-                CGFloat x = w + CGRectGetMinX(invName.frame);
-                CGRect f1 = invHostFlag.frame;
-                f1.origin.x = x + 12;
-                invHostFlag.frame = f1;
-                
-                CGRect f2 = invHostText.frame;
-                f2.origin.x = CGRectGetMaxX(f1);
-                invHostText.frame = f2;
-            
-        }
-        
-        start.x = CGRectGetMaxX(invHostText.frame);
-        start.y = MAX(CGRectGetMaxY(invHostText.frame), CGRectGetMaxY(invName.frame));
-        
-        if (layoutLevel >= kTagIdRSVPAltLabel) {
-            
-//            [CATransaction begin];
-//            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
-//            CGRect frame = layer1.frame;
-//            frame.origin.y = start.y + 4;
-//            layer1.frame = frame;
-//            
-//            frame = layer4.frame;
-//            frame.origin.y = start.y + 4;
-//            layer4.frame = frame;
-//            [CATransaction commit];
-//            
-//            frame = invRsvpImage.frame;
-//            frame.origin.y = CGRectGetMaxY(layer1.frame) + 12;
-//            invRsvpImage.frame = frame;
-//            
-//            frame = invRsvpLabel.frame;
-//            frame.origin.y = CGRectGetMaxY(layer1.frame) + 14;
-//            invRsvpLabel.frame = frame;
-//            
-//            frame = invRsvpAltLabel.frame;
-//            frame.origin.y = CGRectGetMaxY(invRsvpLabel.frame) + 1;
-//            invRsvpAltLabel.frame = frame;
-        }
-        
-        start.x = CGRectGetMaxX(invRsvpLabel.frame);
-        start.y = MAX(CGRectGetMaxY(invRsvpImage.frame), CGRectGetMaxY(invRsvpAltLabel.frame));
-        
-        if (layoutLevel >= kTagIdIdentityName) {
-//            [CATransaction begin];
-//            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
-//            CGRect frame = layer2.frame;
-//            frame.origin.y = start.y + 9;
-//            layer2.frame = frame;
-//            [CATransaction commit];
-            
-//            frame = identityProvider.frame;
-//            frame.origin.y = CGRectGetMaxY(layer2.frame) + 6;
-//            identityProvider.frame = frame;
-//            
-//            frame = identityWaring.frame;
-//            frame.origin.y = CGRectGetMaxY(layer2.frame) + 6;
-//            identityWaring.frame = frame;
-//            
-//            frame = identityName.frame;
-//            frame.origin.y = CGRectGetMaxY(layer2.frame) + 0;
-//            identityName.frame = frame;
-        }
-//
-//        start.x = CGRectGetMaxX(identityProvider.frame);
-//        start.y = MAX(CGRectGetMaxY(identityProvider.frame), CGRectGetMaxY(identityName.frame));
-        
-        if (layoutLevel >= kTagIdBioContent) {
-//            [CATransaction begin];
-//            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
-//            CGRect frame = layer3.frame;
-//            frame.origin.y = start.y + 0;
-//            layer3.frame = frame;
-//            [CATransaction commit];
-            
-//            frame = bioTitle.frame;
-//            frame.origin.y = CGRectGetMaxY(layer3.frame) + 16;
-//            bioTitle.frame = frame;
-//            
-//            frame = bioContent.frame;
-//            frame.origin.y = CGRectGetMaxY(layer3.frame) + 16;
-//            bioContent.frame = frame;
-        }
-        
-//        start.x = CGRectGetMaxX(bioContent.frame);
-//        start.y = MAX(CGRectGetMaxY(bioTitle.frame), CGRectGetMaxY(bioContent.frame));
-        
-        invContent.contentSize = CGSizeMake(MAX(CGRectGetWidth(invContent.frame), start.x), start.y + 10);
-        [self clearLayoutLevel];
-    }
+    
+    UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:title
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Cancel"
+                                              destructiveButtonTitle:destTitle
+                                                   otherButtonTitles:nil];
+	popupQuery.actionSheetStyle = UIActionSheetStyleDefault;
+    
+	[popupQuery showInView:self.view];
+	[popupQuery release];
 }
 
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -498,16 +273,14 @@ typedef enum {
     switch (section) {
         case 0:
             return 1;
-//            break;
         case 1:
-            return _selected_invitations.count;
-//            break;
-        case 2:
             return 1;
-//            break;
+        case 2:
+            return _selected_invitations.count;
+        case 3:
+            return 1;
         default:
             return 0;
-//            break;
     }
 }
 
@@ -516,77 +289,43 @@ typedef enum {
     NSInteger section = indexPath.section;
     switch (section) {
         case 0:{
+            
+            return tableHeader;
+        }   //break;
+        case 1:{
             NSString *reuseIdentifier = @"Invitation_head";
-            if (!tableHeader) {
-                tableHeader = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
-                tableHeader.selectionStyle = UITableViewCellSelectionStyleNone;
-                
-                invName = [[UILabel alloc] initWithFrame:CGRectMake(25, 16 , 230, 25)];
-                invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
-                invName.textColor = [UIColor COLOR_CARBON];
-                invName.backgroundColor = [UIColor clearColor];
-                invName.numberOfLines = 3;
-                invName.tag = kTagIdName;
-                [tableHeader.contentView addSubview:invName];
-                
-                invHostFlag = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_host_blue.png"]];
-                invHostFlag.frame = CGRectMake(162, 21, CGRectGetWidth(invHostFlag.frame), CGRectGetHeight(invHostFlag.frame));
-                invHostFlag.tag = kTagIdHostFlag;
-                [tableHeader.contentView addSubview:invHostFlag];
-                
-                invHostText = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
-                invHostText.text = @"HOST";
-                invHostText.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
-                invHostText.textColor = [UIColor COLOR_BLUE_EXFE];
-                [invHostText sizeToFit];
-                [tableHeader.contentView addSubview:invHostText];
+            if (!tableRsvp) {
+                tableRsvp = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+                tableRsvp.selectionStyle = UITableViewCellSelectionStyleNone;
                 
                 CALayer * layerLine = [CALayer layer];
-                layerLine.frame = CGRectMake(0, 45, 320, 1);
+                layerLine.frame = CGRectMake(0, 0, 320, 1);
                 layerLine.contents = (id)[UIImage imageNamed:@"exfee_line_h1.png"].CGImage;
-                [tableHeader.contentView.layer addSublayer:layerLine];
+                [tableRsvp.contentView.layer addSublayer:layerLine];
                 
-                invRsvpImage = [[UIImageView alloc] initWithFrame:CGRectMake(33, 57, 26, 26)];
+                invRsvpImage = [[UIImageView alloc] initWithFrame:CGRectMake(33, 12, 26, 26)];
                 invRsvpImage.tag = kTagIdRSVPImage;
-                [tableHeader.contentView addSubview:invRsvpImage];
+                [tableRsvp.contentView addSubview:invRsvpImage];
                 
-                invRsvpLabel = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(75, 60, 200, 22)];
+                invRsvpLabel = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(75, 15, 200, 22)];
                 invRsvpLabel.tag = kTagIdRSVPLabel;
-                [tableHeader.contentView addSubview:invRsvpLabel];
+                [tableRsvp.contentView addSubview:invRsvpLabel];
                 
-                invRsvpAltLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 86, 180, 12)];
+                invRsvpAltLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 41, 180, 12)];
                 invRsvpAltLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
                 invRsvpAltLabel.textColor = [UIColor COLOR_GRAY];
                 invRsvpAltLabel.backgroundColor = [UIColor clearColor];
                 //        invRsvpAltLabel.numberOfLines = 0;
                 invRsvpAltLabel.tag = kTagIdRSVPAltLabel;
-                [tableHeader.contentView addSubview:invRsvpAltLabel];
+                [tableRsvp.contentView addSubview:invRsvpAltLabel];
             }
             
             Invitation *inv = [_selected_invitations objectAtIndex:0];
-            Identity *identity = inv.identity;
             
             if (inv) {
                 NSUInteger changeFlag = kTagIdNone;
                 RsvpCode rsvp = [Invitation getRsvpCode:inv.rsvp_status];
                 
-                NSString* name = [identity getDisplayName];
-                if (![invName.text isEqualToString:name]) {
-                    invName.text = name;
-                    [invName wrapContent];
-//                    [self setNeedLayout:invName.tag];
-                }
-                
-                BOOL shouldHidden = ![inv.host boolValue];
-                if (invHostText.hidden != shouldHidden) {
-                    invHostText.hidden = shouldHidden;
-//                    [self setNeedLayout:kTagIdHostFlag];
-                }
-                
-                if (invHostFlag.hidden != shouldHidden) {
-                    invHostFlag.hidden = shouldHidden;
-//                    [self setNeedLayout:kTagIdHostFlag];
-                }
                 
                 switch (rsvp) {
                     case kRsvpAccepted:
@@ -696,13 +435,34 @@ typedef enum {
                 invRsvpAltLabel.text = [altString sentenceCapitalizedString];
                 [invRsvpAltLabel wrapContent];
 //                [self setNeedLayout:changeFlag];
-            }
                 
-            
-            return tableHeader;
-            
+                
+                //            [CATransaction begin];
+                //            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
+                //            CGRect frame = layer1.frame;
+                //            frame.origin.y = start.y + 4;
+                //            layer1.frame = frame;
+                //
+                //            frame = layer4.frame;
+                //            frame.origin.y = start.y + 4;
+                //            layer4.frame = frame;
+                //            [CATransaction commit];
+                //
+                //            frame = invRsvpImage.frame;
+                //            frame.origin.y = CGRectGetMaxY(layer1.frame) + 12;
+                //            invRsvpImage.frame = frame;
+                //
+                //            frame = invRsvpLabel.frame;
+                //            frame.origin.y = CGRectGetMaxY(layer1.frame) + 14;
+                //            invRsvpLabel.frame = frame;
+                //            
+                //            frame = invRsvpAltLabel.frame;
+                //            frame.origin.y = CGRectGetMaxY(invRsvpLabel.frame) + 1;
+                //            invRsvpAltLabel.frame = frame;
+            }
+            return tableRsvp;
         }   //break;
-        case 1:{
+        case 2:{
             NSString *reuseIdentifier = @"Invitation_cell";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
             UIImageView *identityProvider = nil;
@@ -743,7 +503,6 @@ typedef enum {
             Identity *ident = inv.identity;
             if (ident) {
 
-                
                 NSString* at_id = [ident getDisplayIdentity];
                 if (![identityName.text isEqualToString:at_id]) {
                     identityName.text = at_id;
@@ -767,14 +526,132 @@ typedef enum {
                         identityProvider.image = nil;
                         break;
                 }
+                
+                //            [CATransaction begin];
+                //            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
+                //            CGRect frame = layer2.frame;
+                //            frame.origin.y = start.y + 9;
+                //            layer2.frame = frame;
+                //            [CATransaction commit];
+                
+                //            frame = identityProvider.frame;
+                //            frame.origin.y = CGRectGetMaxY(layer2.frame) + 6;
+                //            identityProvider.frame = frame;
+                //
+                //            frame = identityWaring.frame;
+                //            frame.origin.y = CGRectGetMaxY(layer2.frame) + 6;
+                //            identityWaring.frame = frame;
+                //            
+                //            frame = identityName.frame;
+                //            frame.origin.y = CGRectGetMaxY(layer2.frame) + 0;
+                //            identityName.frame = frame;
+            }
+            return cell;
+        }   //break;
+        case 3:{
+            return tableFooter;
+        }   //break;
+        default:
+            break;
+    }
+    return nil;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger section = indexPath.section;
+    switch (section) {
+        case 1:
+            return YES;
+        //  break;
+        case 2:
+            return indexPath.row == 0;
+//            return YES;
+        default:
+            return NO;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self removeInvitation];
+}
+
+#pragma mark UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger section = indexPath.section;
+    switch (section) {
+        case 0:{
+            NSString *reuseIdentifier = @"Invitation_head";
+            if (!tableHeader) {
+                tableHeader = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+                tableHeader.selectionStyle = UITableViewCellSelectionStyleNone;
+                
+                invName = [[UILabel alloc] initWithFrame:CGRectMake(25, 16 , 230, 25)];
+                invName.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:21];
+                invName.textColor = [UIColor COLOR_CARBON];
+                invName.backgroundColor = [UIColor clearColor];
+                invName.numberOfLines = 3;
+                invName.tag = kTagIdName;
+                [tableHeader.contentView addSubview:invName];
+                
+                invHostFlag = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"exfee_host_blue.png"]];
+                invHostFlag.frame = CGRectMake(162, 21, CGRectGetWidth(invHostFlag.frame), CGRectGetHeight(invHostFlag.frame));
+                invHostFlag.tag = kTagIdHostFlag;
+                [tableHeader.contentView addSubview:invHostFlag];
+                
+                invHostText = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
+                invHostText.text = @"HOST";
+                invHostText.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
+                invHostText.textColor = [UIColor COLOR_BLUE_EXFE];
+                [invHostText sizeToFit];
+                [tableHeader.contentView addSubview:invHostText];
             }
             
+            Invitation *inv = [_selected_invitations objectAtIndex:0];
+            Identity *identity = inv.identity;
             
-            return cell;
-            
-        }   //break;
-        case 2:{
-            NSLog(@"Get foot View ...");
+            if (inv) {
+                NSString* name = [identity getDisplayName];
+                if (![invName.text isEqualToString:name]) {
+                    invName.text = name;
+                    [invName wrapContent];
+                }
+                
+                BOOL shouldHidden = ![inv.host boolValue];
+                if (invHostText.hidden != shouldHidden) {
+                    invHostText.hidden = shouldHidden;
+                }
+                
+                if (invHostFlag.hidden != shouldHidden) {
+                    invHostFlag.hidden = shouldHidden;
+                }
+                
+                if (!shouldHidden) {
+                    CGSize size = [invName sizeWrapContent:CGSizeMake(CGRectGetWidth(invName.bounds), MAXFLOAT)];
+                    CGFloat w = size.width;
+                    if (w > CGRectGetWidth(invName.bounds)) {
+                        w = CGRectGetWidth(invName.bounds);
+                    }
+                    CGFloat x = w + CGRectGetMinX(invName.frame);
+                    CGRect f1 = invHostFlag.frame;
+                    f1.origin.x = x + 12;
+                    invHostFlag.frame = f1;
+                    
+                    CGRect f2 = invHostText.frame;
+                    f2.origin.x = CGRectGetMaxX(f1);
+                    invHostText.frame = f2;
+                }
+            }
+            return CGRectGetMaxY(invName.frame) + 4;
+        }
+//            return 45.f;
+        case 1:
+            return 62.f;
+        case 2:
+            return 32.f;
+        case 3:{
             NSString *reuseIdentifier = @"Invitation_foot";
             UILabel *bioTitle = nil;
             UILabel *bioContent = nil;
@@ -806,7 +683,7 @@ typedef enum {
                 [tableFooter.contentView addSubview:bioContent];
                 
                 ActionMenu = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                ActionMenu.frame = CGRectMake(255, 17, 40, 31);
+                ActionMenu.frame = CGRectMake(270, 17, 50, 50);
                 ActionMenu.tag = kTagIdActionMenu;
                 [tableFooter.contentView addSubview:ActionMenu];
             } else {
@@ -821,140 +698,49 @@ typedef enum {
             bioContent.text = identity.bio;
             [bioContent wrapContent];
             
-            return tableFooter;
+            return MAX(CGRectGetMaxY(bioContent.frame), CGRectGetMaxY(ActionMenu.frame)) + 3;
         }   //break;
         default:
-            break;
-    }
-    return nil;
-}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSInteger section = indexPath.section;
-    switch (section) {
-        case 0:
-            return NO;
-            //            break;
-        case 1:
-            return YES;
-            //            break;
-        case 2:
-            return NO;
-            //            break;
-        default:
-            return NO;
-            //            break;
-    }
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-}
-
-#pragma mark UITableViewDelegate
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSInteger section = indexPath.section;
-    switch (section) {
-        case 0:
-            return 107.f;
-            //            break;
-        case 1:
-            return 32.0f;
-            //            break;
-        case 2:
-            NSLog(@"Get foot View Height ...");
-            return 100.0f;
-            //            break;
-        default:
             return 0;
-            //            break;
     }
 }
-
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-//{
-//    switch (section) {
-//        case 0:
-//            return 0.f;
-//            //            break;
-//        case 1:
-//            NSLog(@"Get foot View height for section index 1 ...");
-//            return 100.f;
-//            //            break;
-//        default:
-//            return 0;
-//            //            break;
-//    }
-//}
-//
-//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-//{
-//    switch (section) {
-//        case 0:
-//            return nil;
-//            //            break;
-//        case 1:{
-//            NSLog(@"Get foot View for section index 1 ...");
-//            NSString *reuseIdentifier = @"Invitation_foot";
-//            UILabel *bioTitle = nil;
-//            UILabel *bioContent = nil;
-//            UIButton *ActionMenu = nil;
-//            if (!tableFooter) {
-//                tableFooter = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
-//                tableFooter.selectionStyle = UITableViewCellSelectionStyleNone;
-//                
-//                CALayer * layerLine = [CALayer layer];
-//                layerLine.frame = CGRectMake(0, 0, 320, 1);
-//                layerLine.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
-//                [tableFooter.contentView.layer addSublayer:layerLine];
-//                
-//                bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(36, 16, 40, 33)];
-//                bioTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
-//                bioTitle.text = @"Bio";
-//                [bioTitle sizeToFit];
-//                bioTitle.textColor = [UIColor COLOR_BLACK];
-//                bioTitle.backgroundColor = [UIColor clearColor];
-//                bioTitle.tag = kTagIdBioTitle;
-//                [tableFooter.contentView addSubview:bioTitle];
-//                
-//                bioContent = [[UILabel alloc] initWithFrame:CGRectMake(75, 16, 220, 80)];
-//                bioContent.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
-//                bioContent.textColor = [UIColor COLOR_BLACK];
-//                bioContent.backgroundColor = [UIColor clearColor];
-//                bioContent.numberOfLines = 0;
-//                bioContent.tag = kTagIdBioContent;
-//                [tableFooter.contentView addSubview:bioContent];
-//                
-//                ActionMenu = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//                ActionMenu.frame = CGRectMake(255, 17, 40, 31);
-//                ActionMenu.tag = kTagIdActionMenu;
-//                [tableFooter.contentView addSubview:ActionMenu];
-//            } else {
-//                bioTitle = (UILabel *)[tableFooter.contentView viewWithTag:kTagIdBioTitle];
-//                bioContent = (UILabel *)[tableFooter.contentView viewWithTag:kTagIdBioContent];
-//                ActionMenu = (UIButton *)[tableFooter.contentView viewWithTag:kTagIdActionMenu];
-//            }
-//            
-//            Invitation *inv = [_selected_invitations objectAtIndex:0];
-//            Identity *identity = inv.identity;
-//            bioTitle.hidden = !(identity && identity.bio.length > 0);
-//            bioContent.text = identity.bio;
-//            [bioContent wrapContent];
-//            
-//            return tableFooter;
-//        }  //            break;
-//        default:
-//            return nil;
-//            //            break;
-//    }
-//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    NSInteger section = indexPath.section;
+    switch (section) {
+        case 0:
+            break;
+        case 1:{
+            [self hidePopupIfShown:kPopupIdRsvpMenu];
+            
+            NSDictionary *data = rsvpDict;
+            
+            if ([[User getDefaultUser] isMe:[(Invitation*)[_selected_invitations objectAtIndex:0] identity]]) {
+                data = myRsvpDict;
+            }
+            
+            if (rsvpMenu == nil) {
+                rsvpMenu = [[EXBasicMenu alloc] initWithFrame:CGRectMake(0, 0, 125, 20 + 44 * 3) andContent:
+                            data];
+                rsvpMenu.delegate = self;
+                rsvpMenu.tag = kMenuTagRsvp;
+                [self.view addSubview:rsvpMenu];
+            }else{
+                [rsvpMenu setContent:data];
+            }
+            
+            
+            ;
+            [self show:rsvpMenu at:[tableView convertPoint:[tableView cellForRowAtIndexPath:indexPath].frame.origin toView:self.view] withAnimation:YES];
+        }    break;
+        case 2:
+            break;
+        case 3:
+            break;
+        default:
+            break;
+    }
 }
 #pragma mark UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(PSTCollectionView *)collectionView
@@ -1167,7 +953,7 @@ typedef enum {
             [self hidePopupIfShown];
             PSTCollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
             [self clickCell:cell];
-            _selected_invitations = [self.sortedInvitations objectAtIndex:indexPath.row];
+            self.selected_invitations = [self.sortedInvitations objectAtIndex:indexPath.row];
             [self fillInvitationContent:_selected_invitations];
         }
     }
