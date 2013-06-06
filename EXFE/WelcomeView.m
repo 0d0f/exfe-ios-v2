@@ -45,7 +45,7 @@
 }
 - (void) initWelcome1{
     
-    NSString *str1=@"Thanks for using EXFE\nA utility for gathering with friends.\n\nWe save you from calling up every one RSVP, losing in endless emails and messages off the point.\n\n·X· (cross) is a gathering of people, for any intent. It’s private by default, everything inside is accessible to only attendees. When you get an idea to call up friends to do something together, just Gather a ·X·.\n\nEXFE your friends.";
+    NSString *str1=@"Thanks for using EXFE\nThe group utility for gathering.\n\nWe save you from calling up every one RSVP, losing in endless emails and messages off the point.\n\n·X· (cross) is a gathering of people, for any intent. It’s private by default, everything inside is accessible to only attendees. When you get an idea to call up friends to do something together, just Gather a ·X·.\n\nEXFE your friends.";
     
     
     welcome1 = [[NSMutableAttributedString alloc] initWithString:str1];
@@ -70,7 +70,7 @@
         {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
     };
     CTParagraphStyleRef pstyle = CTParagraphStyleCreate(psetting, 3);
-    [welcome1 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)pstyle range:NSMakeRange(0,[@"Thanks for using EXFE\nA utility for gathering with friends." length])];
+    [welcome1 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)pstyle range:NSMakeRange(0,[@"Thanks for using EXFE\nThe group utility for gathering." length])];
     [welcome1 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 15.0, NULL) range:NSMakeRange(0,[welcome1 length])];
 
     [welcome1 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL) range:NSMakeRange(0,[@"Thanks for using EXFE" length])];
@@ -78,7 +78,7 @@
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor whiteColor].CGColor range:NSMakeRange(0,[welcome1 length])];
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[@"Thanks for using " length],4)];
 
-    [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[@"Thanks for using EXFE\nA utility for gathering with friends.\n\nWe save you from calling up every one RSVP, losing in endless emails and messages off the point.\n\n" length],3)];
+    [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[@"Thanks for using EXFE\nThe group utility for gathering.\n\nWe save you from calling up every one RSVP, losing in endless emails and messages off the point.\n\n" length],3)];
 
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([welcome1 length]-[@".\n\nEXFE your friends." length]-3,3)];
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([welcome1 length]-[@" your friends." length]-4,4)];

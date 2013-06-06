@@ -243,7 +243,7 @@
     welcome_more.textColor = [UIColor COLOR_WA(0x6B, 0xFF)];
     welcome_more.textAlignment = NSTextAlignmentRight;
     welcome_more.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
-    welcome_more.text = @"A utility for gathering with friends.";
+    welcome_more.text = @"The group utility for gathering.";
     [welcome_more sizeToFit];
     //welcome_more.hidden = YES;
     welcome_more.frame = CGRectOffset(welcome_more.frame, 160 - CGRectGetMidX(welcome_more.frame), 0);
