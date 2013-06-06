@@ -16,8 +16,8 @@
         return [NSString string];
     }
     NSString *uppercase = [[self substringToIndex:1] uppercaseString];
-    NSString *lowercase = [[self substringFromIndex:1] lowercaseString];
-    return [uppercase stringByAppendingString:lowercase];
+    NSString *rest = [self substringFromIndex:1];
+    return [uppercase stringByAppendingString:rest];
 }
 
 - (NSString *)realSentenceCapitalizedString {
