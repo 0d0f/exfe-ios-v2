@@ -21,7 +21,9 @@ typedef void (^ActionBlock)(void);
 
 - (NSUInteger)numberOfSections;
 - (NSUInteger)numberOfRowsInSection:(NSUInteger)section;
+
 - (NSUInteger)numberOfSelectedContactObjects;
+- (NSArray *)selectedContactObjects;
 
 - (NSString *)titleForSection:(NSUInteger)section;  // maybe nil.
 
@@ -34,7 +36,9 @@ typedef void (^ActionBlock)(void);
 - (void)selectContactObject:(EFContactObject *)object;
 - (void)deselectContactObject:(EFContactObject *)object;
 
+- (void)clearRecentData;
 - (void)deselectAllData;
+
 - (void)clearData;
 - (void)loadData;
 

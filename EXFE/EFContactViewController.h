@@ -11,6 +11,8 @@
 #import "EFChoosePeopleViewCell.h"
 #import "EFPersonIdentityCell.h"
 
+typedef void (^AddActionBlock)(NSArray *);
+
 @class EFSearchBar;
 @interface EFContactViewController : UIViewController
 <
@@ -29,6 +31,8 @@ UISearchDisplayDelegate
 @property (retain, nonatomic) IBOutlet EFSearchBar *contactSearchBar;
 @property (retain, nonatomic) IBOutlet UIView *navigationView;
 @property (retain, nonatomic) IBOutlet UILabel *selectCountLabel;
+
+@property (nonatomic, copy) AddActionBlock addActionHandler;    // Default as nil. You should set this to handle Add-Button pressed event. This block will receive a array of EFContactObject object.
 
 - (IBAction)backButtonPressed:(id)sender;
 - (IBAction)addButtonPressed:(id)sender;
