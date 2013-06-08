@@ -54,10 +54,10 @@ EFTabBarDataSource
     
     EXBasicMenu *rsvpMenu;
     
-    CALayer *layer1;
-    CALayer *layer2;
-    CALayer *layer3;
-    CALayer *layer4;
+//    CALayer *layer1;
+//    CALayer *layer2;
+//    CALayer *layer3;
+//    CALayer *layer4;
     
     UITableView* invTable;
     UITableViewCell *tableHeader;
