@@ -180,7 +180,7 @@
 
     }
     
-    default_background = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+    default_background=[UIImage imageNamed:@"x_titlebg_default.jpg"];
 
     CGFloat scaleFactor = 1.0;
     CGSize targetSize = CGSizeMake((320 - CARD_VERTICAL_MARGIN * 2) * [UIScreen mainScreen].scale, 44 * [UIScreen mainScreen].scale);
@@ -193,7 +193,7 @@
     
     CGRect rect = CGRectMake((targetSize.width / 2 - default_background.size.width / 2 * scaleFactor),(0 - default_background.size.height * 198.0f / 495.0f * scaleFactor),default_background.size.width * scaleFactor,default_background.size.height * scaleFactor);
     [default_background drawInRect:rect];
-    default_background = [UIGraphicsGetImageFromCurrentImageContext() retain];
+    default_background = UIGraphicsGetImageFromCurrentImageContext();
     
     label_profile = [[UILabel alloc] initWithFrame:CGRectMake(15, 70, 130, 31)];
     label_profile.backgroundColor = [UIColor clearColor];
@@ -276,7 +276,6 @@
 }
 
 - (void)dealloc {
-    [default_background release];
     
     if (self.crossChangeObserver) {
         [[NSNotificationCenter defaultCenter] removeObserver:self.crossChangeObserver];
@@ -730,38 +729,34 @@
             }
         }
       CGSize targetSize = CGSizeMake((320 - CARD_VERTICAL_MARGIN * 2) * [UIScreen mainScreen].scale, 44 * [UIScreen mainScreen].scale);
-        
-      if (backimgurl == nil || backimgurl.length <= 5) {
-          cell.bannerimg = default_background;
-      } else {
-          NSString *extname=[backimgurl substringFromIndex:[backimgurl length]-3];
-          if ([extname isEqualToString:@"bg/"]) {
-              cell.bannerimg = default_background;
-          } else {
-              UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:backimgurl withSize:targetSize];
-              if (backimg != nil && ![backimg isEqual:[NSNull null]]) {
-                  cell.bannerimg = backimg;
-              } else {
-                  dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                  dispatch_async(imgQueue, ^{
-                      UIImage *image = [[ImgCache sharedManager] getImgFrom:backimgurl withSize:targetSize];
-                      if (image) {
-                          dispatch_async(dispatch_get_main_queue(), ^{
-                              cell.bannerimg = image;
-                          });
-                      } else {
-                          dispatch_async(dispatch_get_main_queue(), ^{
-                              cell.bannerimg = default_background;
-                          });
-                      }
-                  });
-                  dispatch_release(imgQueue);
-              }
+      if(backimgurl==nil || backimgurl.length<=5){
+        cell.bannerimg=nil;
+      }else{
+        NSString *extname=[backimgurl substringFromIndex:[backimgurl length]-3];
+        if([extname isEqualToString:@"bg/"]){
+          cell.bannerimg=nil;
+        }else{
+          UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:backimgurl withSize:targetSize];
+          if(backimg != nil && ![backimg isEqual:[NSNull null]]){
+            cell.bannerimg=backimg;
           }
+          else
+          {
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
+            dispatch_async(imgQueue, ^{
+              UIImage *image=[[ImgCache sharedManager] getImgFrom:backimgurl withSize:targetSize];
+              cell.bannerimg=nil;
+              dispatch_async(dispatch_get_main_queue(), ^{
+                cell.bannerimg = image;
+              });
+            });
+            dispatch_release(imgQueue);
+          }
+        }
       }
 
         cell.delegate = self;
-        
+      
         return cell;
     } else {
         return nil;
