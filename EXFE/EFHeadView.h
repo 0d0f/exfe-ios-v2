@@ -10,8 +10,8 @@
 
 typedef void (^HeadViewHeadPressedBlock)(void);
 typedef void (^HeadViewTitlePressedBlock)(void);
-typedef void (^HeadViewShowCompletionBlock)(void);
-typedef void (^HeadViewDismissCompletionBlock)(void);
+typedef void (^HeadViewWillShowBlock)(void);
+typedef void (^HeadViewDidShowBlock)(void);
 
 @interface EFHeadView : UIView
 
@@ -24,7 +24,8 @@ typedef void (^HeadViewDismissCompletionBlock)(void);
 @property (nonatomic, copy) HeadViewTitlePressedBlock titlePressedHandler;
 
 // completion handler
-@property (nonatomic, copy) HeadViewShowCompletionBlock showCompletionHandler;
+@property (nonatomic, copy) HeadViewWillShowBlock willShowHandler;
+@property (nonatomic, copy) HeadViewDidShowBlock didShowHandler;
 
 - (void)showAnimated:(BOOL)animated;
 
