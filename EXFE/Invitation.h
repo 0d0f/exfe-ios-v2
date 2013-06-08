@@ -23,8 +23,11 @@
 @property (nonatomic, retain) NSString * via;
 @property (nonatomic, retain) Identity *identity;
 @property (nonatomic, retain) Identity *invited_by;
-@property (nonatomic, retain) NSOrderedSet *notification_identities;
 @property (nonatomic, retain) Identity *updated_by;
+@property (nonatomic, retain) NSOrderedSet *notification_identities;
+
+@property (nonatomic, readonly, retain) NSArray *notification_identity_array;
+
 @end
 
 @interface Invitation (CoreDataGeneratedAccessors)
@@ -39,4 +42,5 @@
 - (void)removeNotification_identitiesObject:(IdentityId *)value;
 - (void)addNotification_identities:(NSOrderedSet *)values;
 - (void)removeNotification_identities:(NSOrderedSet *)values;
+
 @end

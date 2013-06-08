@@ -244,7 +244,7 @@
             
             for (EFContactObject *contactObject in selectedObjects) {
                 for (RoughIdentity *roughIdentity in contactObject.roughIdentities) {
-                    while (kEFRoughIdentityGetIdentityStatusSuccess != roughIdentity.status || kEFRoughIdentityGetIdentityStatusFailure != roughIdentity.status) {
+                    while (kEFRoughIdentityGetIdentityStatusSuccess != roughIdentity.status && kEFRoughIdentityGetIdentityStatusFailure != roughIdentity.status) {
                         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                                  beforeDate:[NSDate distantFuture]];
                     }

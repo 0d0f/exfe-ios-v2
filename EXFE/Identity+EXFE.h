@@ -19,7 +19,7 @@ typedef NS_ENUM(NSUInteger, Provider){
     kProviderDropbox
 } ;
 
-@class RoughIdentity;
+@class RoughIdentity, IdentityId;
 @interface Identity (EXFE)
 
 - (NSString*)getDisplayName;
@@ -32,6 +32,8 @@ typedef NS_ENUM(NSUInteger, Provider){
 + (Identity *)identityFromLocalRoughIdentity:(RoughIdentity *)roughIdentity;
 - (RoughIdentity *)roughIdentityValue;
 - (BOOL)hasAnyNotificationIdentity;
+
+- (IdentityId *)identityIdValue;
 
 // compare
 - (BOOL)isEqualToIdentity:(Identity *)another;  // compareWithIdentityId: && compareWithExternalIdAndProvider:
