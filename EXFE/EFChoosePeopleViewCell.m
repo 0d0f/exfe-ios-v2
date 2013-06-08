@@ -360,7 +360,7 @@
                     if ([addDict valueForKey:imageName]) {
                         continue;
                     }
-                    [iconList addObject:[UIImage imageNamed:imageName]];
+                    [iconList insertObject:[UIImage imageNamed:imageName] atIndex:0];
                     [addDict setValue:@"YES" forKey:imageName];
                 }
             }

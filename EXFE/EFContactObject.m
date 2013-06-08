@@ -46,6 +46,22 @@
         for (Identity *identity in identities) {
             [roughIdentities addObject:[identity roughIdentityValue]];
         }
+        [roughIdentities sortUsingComparator:^(id obj1, id obj2){
+            Identity *identity1 = (Identity *)obj1;
+            Identity *identity2 = (Identity *)obj2;
+            
+            Provider provider1 = [Identity getProviderCode:identity1.provider];
+            Provider provider2 = [Identity getProviderCode:identity2.provider];
+            
+            if (provider1 == provider2) {
+                return NSOrderedSame;
+            } else if (provider1 > provider2) {
+                return NSOrderedDescending;
+            } else {
+                return NSOrderedAscending;
+            }
+        }];
+        
         self.roughIdentities = roughIdentities;
         [roughIdentities release];
         

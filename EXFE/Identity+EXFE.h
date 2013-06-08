@@ -9,11 +9,11 @@
 #import "Identity.h"
 
 typedef NS_ENUM(NSUInteger, Provider){
-    kProviderUnknown,
-    kProviderEmail,
+    kProviderUnknown = 0,
     kProviderPhone,
-    kProviderTwitter,
     kProviderFacebook,
+    kProviderEmail,
+    kProviderTwitter,
     kProviderInstagram,
     kProviderFlickr,
     kProviderDropbox
