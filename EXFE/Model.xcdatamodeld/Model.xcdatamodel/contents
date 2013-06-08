@@ -57,9 +57,6 @@
     <entity name="IdentityId" representedClassName="IdentityId" syncable="YES">
         <attribute name="identity_id" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="IdentitySet" representedClassName="IdentitySet" syncable="YES">
-        <relationship name="identities" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="IdentityId" syncable="YES"/>
-    </entity>
     <entity name="Invitation" representedClassName="Invitation" syncable="YES">
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="host" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -71,7 +68,7 @@
         <attribute name="via" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="identity" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
         <relationship name="invited_by" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
-        <relationship name="notification_identities" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="IdentitySet" syncable="YES"/>
+        <relationship name="notification_identities" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="IdentityId" syncable="YES"/>
         <relationship name="updated_by" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Identity" syncable="YES"/>
     </entity>
     <entity name="LocalContact" representedClassName="LocalContact" syncable="YES">
@@ -134,7 +131,8 @@
         <element name="EFTime" positionX="-9" positionY="528" width="128" height="120"/>
         <element name="Exfee" positionX="-153" positionY="60" width="128" height="120"/>
         <element name="Identity" positionX="367" positionY="126" width="128" height="285"/>
-        <element name="Invitation" positionX="90" positionY="-0" width="128" height="223"/>
+        <element name="IdentityId" positionX="478" positionY="508" width="128" height="58"/>
+        <element name="Invitation" positionX="90" positionY="-0" width="128" height="225"/>
         <element name="LocalContact" positionX="520" positionY="-126" width="128" height="165"/>
         <element name="Meta" positionX="342" positionY="-117" width="128" height="90"/>
         <element name="Place" positionX="-47" positionY="300" width="128" height="195"/>
@@ -142,7 +140,5 @@
         <element name="Rsvp" positionX="99" positionY="-132" width="128" height="105"/>
         <element name="User" positionX="547" positionY="66" width="128" height="150"/>
         <element name="Widget" positionX="-306" positionY="381" width="128" height="60"/>
-        <element name="IdentityId" positionX="478" positionY="508" width="128" height="58"/>
-        <element name="IdentitySet" positionX="223" positionY="489" width="128" height="58"/>
     </elements>
 </model>

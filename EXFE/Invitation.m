@@ -8,7 +8,7 @@
 
 #import "Invitation.h"
 #import "Identity.h"
-#import "IdentitySet.h"
+#import "IdentityId.h"
 
 
 @implementation Invitation
@@ -23,7 +23,7 @@
 @dynamic via;
 @dynamic identity;
 @dynamic invited_by;
-@dynamic updated_by;
 @dynamic notification_identities;
+@dynamic updated_by;
 
 @end
