@@ -10,6 +10,7 @@
 
 #import "Identity+EXFE.h"
 #import "EFAPIServer.h"
+#import "IdentityId.h"
 
 @implementation RoughIdentity
 @synthesize key = _key;
@@ -99,6 +100,15 @@
     [dict release];
     
     return result;
+}
+
+- (IdentityId *)identityIdValue {
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"IdentityId" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    IdentityId *identityId = [[[IdentityId alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+    identityId.identity_id = [NSString stringWithFormat:@"%@@%@", self.externalID, self.provider];
+    
+    return identityId;
 }
 
 - (NSString *)description {

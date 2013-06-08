@@ -15,7 +15,7 @@ typedef enum {
     kEFRoughIdentityGetIdentityStatusFailure
 } EFRoughIdentityGetIdentityStatus;
 
-@class Identity;
+@class Identity, IdentityId;
 @interface RoughIdentity : NSObject
 <
 NSCopying
@@ -37,7 +37,9 @@ NSCopying
 - (id)initWithDictionary:(NSDictionary *)dictionary;
 
 - (BOOL)isEqualToRoughIdentity:(RoughIdentity *)anIdentity;
+
 - (NSDictionary *)dictionaryValue;
+- (IdentityId *)identityIdValue;
 
 - (void)getIdentityWithSuccess:(void (^)(Identity *identity))identity failure:(void (^)(NSError *error))failure;
 

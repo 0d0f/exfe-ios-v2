@@ -21,8 +21,8 @@
 #import "EFAPI.h"
 #import "EFContactObject.h"
 #import "RoughIdentity.h"
-#import "IdentitySet.h"
 #import "IdentityId.h"
+#import "Identity+EXFE.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -1027,6 +1027,11 @@
                     invitation.updated_by = myinvitation.identity;
                 } else {
                     invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
+                }
+                
+                for (int i = 1; i < object.roughIdentities.count; i++) {
+                    IdentityId *identityId = [object.roughIdentities[i] identityIdValue];
+                    [invitation addNotification_identitiesObject:identityId];
                 }
                 
                 [invitations addObject:invitation];
