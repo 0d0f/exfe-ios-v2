@@ -10,6 +10,7 @@
 
 #import <RestKit/RestKit.h>
 #import "RoughIdentity.h"
+#import "IdentityId.h"
 
 @implementation Identity (EXFE)
 
@@ -138,6 +139,15 @@
     }
     
     return hasNotification;
+}
+
+- (IdentityId *)identityIdValue {
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"IdentityId" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+    IdentityId *identityId = [[[IdentityId alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+    identityId.identity_id = [NSString stringWithFormat:@"%@@%@", self.external_id, self.provider];
+    
+    return identityId;
 }
 
 - (BOOL)isEqualToIdentity:(Identity *)another {
