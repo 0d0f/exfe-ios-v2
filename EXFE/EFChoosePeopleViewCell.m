@@ -14,6 +14,8 @@
 #import "LocalContact.h"
 #import "Identity+EXFE.h"
 #import "RoughIdentity.h"
+#import "EFContactObject.h"
+#import "EFImageManager.h"
 
 #pragma mark - BackgroundView
 @interface EFChoosePeopleBackgroundView : UIView
@@ -60,10 +62,10 @@
     CGGradientRelease(gradient);
     CGColorSpaceRelease(colorSpace);
     
-    if (self.cell.providerIconSet != nil) {
+    if (self.cell.providerIconList != nil) {
         [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
         int i = 1;
-        for (UIImage *icon in self.cell.providerIconSet) {
+        for (UIImage *icon in self.cell.providerIconList) {
             [icon drawInRect:CGRectMake(self.frame.size.width - (18 + 2) * i - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
             [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
             if (++i > 3) {
@@ -122,10 +124,10 @@
     CGGradientRelease(gradient);
     CGColorSpaceRelease(colorSpace);
     
-    if (self.cell.providerIconSet != nil) {
+    if (self.cell.providerIconList != nil) {
         [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
         int i = 1;
-        for (UIImage *icon in self.cell.providerIconSet) {
+        for (UIImage *icon in self.cell.providerIconList) {
             [icon drawInRect:CGRectMake(self.frame.size.width - (18 + 2) * i - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
             [[UIImage imageWithData:nil] drawInRect:CGRectMake(self.frame.size.width - (18 + 10) * i, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
             if (++i > 3) {
@@ -193,23 +195,28 @@
 
 @implementation EFChoosePeopleViewCell
 
-- (id)init {
-    self = [[[[NSBundle mainBundle] loadNibNamed:@"EFChoosePeopleViewCell"
-                                           owner:nil
-                                         options:nil] lastObject] retain];
-    return self;
++ (NSString *)reuseIdentifier {
+    return NSStringFromClass([self class]);
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        CGRect bounds = (CGRect){{0.0f, 0.0f}, 320.0f, 50.0f};
+        
+        self.contentView.backgroundColor = [UIColor clearColor];
+        
+        // avatar image view
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:(CGRect){{10, 5}, {40, 40}}];
         imageView.layer.cornerRadius = 3.0f;
         imageView.layer.masksToBounds = YES;
+        imageView.layer.shouldRasterize = YES;
+        imageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
         [self.contentView addSubview:imageView];
         self.avatarImageView = imageView;
         [imageView release];
         
+        // username label
         EFLabel *label = [[EFLabel alloc] initWithFrame:(CGRect){{56, 12}, {190, 26}}];
         label.edgeInsets = (UIEdgeInsets){0, 4, 0, 0};
         label.backgroundColor = [UIColor clearColor];
@@ -222,6 +229,7 @@
         self.userNameLabel = label;
         [label release];
         
+        // button
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.backgroundColor = [UIColor clearColor];
         [button addTarget:self
@@ -230,55 +238,56 @@
         button.frame = (CGRect){{260, 0}, {60, 50}};
         [self.contentView addSubview:button];
         self.accessButton = button;
+        
+        EFChoosePeopleBackgroundView *backgroundView = [[EFChoosePeopleBackgroundView alloc] initWithFrame:bounds];
+        backgroundView.cell = self;
+        self.backgroundView = backgroundView;
+        [backgroundView release];
+        
+        EFChoosePeopleSelectedBackgroundView *selectedBackgroundView = [[EFChoosePeopleSelectedBackgroundView alloc] initWithFrame:bounds];
+        self.multipleSelectionBackgroundView = selectedBackgroundView;
+        [selectedBackgroundView release];
     }
     
     return self;
-}
-
-+ (NSString *)reuseIdentifier {
-    return NSStringFromClass([self class]);
 }
 
 - (void)dealloc {
     [_accessButton release];
     [_avatarImageView release];
     [_userNameLabel release];
-    [_providerIconSet release];
+    [_providerIconList release];
     [_providerIcon release];
     [super dealloc];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     if (selected) {
-        EFChoosePeopleSelectedBackgroundView *backgroundView = [[EFChoosePeopleSelectedBackgroundView alloc] initWithFrame:self.bounds];
-        self.backgroundView = backgroundView;
-        [backgroundView release];
         self.userNameLabel.textColor = [UIColor whiteColor];
     } else {
-        EFChoosePeopleBackgroundView *backgroundView = [[EFChoosePeopleBackgroundView alloc] initWithFrame:self.bounds];
-        backgroundView.cell = self;
-        self.backgroundView = backgroundView;
-        [backgroundView release];
         self.userNameLabel.textColor = [UIColor blackColor];
     }
+    
+    [super setSelected:selected animated:animated];
 }
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
     BOOL shouldSelect = [self.dataSource shouldChoosePeopleViewCellSelected:self];
+    
     if (!shouldSelect) {
         if (highlighted) {
             EFChoosePeopleHightedBackgroundView *backgroundView = [[EFChoosePeopleHightedBackgroundView alloc] initWithFrame:self.bounds];
             backgroundView.cell = self;
             self.backgroundView = backgroundView;
             [backgroundView release];
-            self.userNameLabel.textColor = [UIColor blackColor];
         } else {
             EFChoosePeopleBackgroundView *backgroundView = [[EFChoosePeopleBackgroundView alloc] initWithFrame:self.bounds];
             backgroundView.cell = self;
             self.backgroundView = backgroundView;
             [backgroundView release];
-            self.userNameLabel.textColor = [UIColor blackColor];
         }
+        
+        self.userNameLabel.textColor = [UIColor blackColor];
     }
 }
 
@@ -290,111 +299,77 @@
     }
 }
 
-#pragma mark - custom
+#pragma mark - Getter && Setter
 
-- (void)customWithLocalContact:(LocalContact *)person {
-    self.userNameLabel.text = person.name;
-    self.userNameLabel.frame = (CGRect){{56, 12}, {190, 26}};
+- (void)setContactObject:(EFContactObject *)contactObject {
+    if (contactObject == _contactObject)
+        return;
     
-    UIImage *avatar = [UIImage imageWithData:person.avatar];
-    if (!avatar)
-        self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
-    else
-        self.avatarImageView.image = avatar;
-    
-    NSMutableArray *iconset = [[NSMutableArray alloc] initWithCapacity:3];
-    if (person.social) {
-        NSArray *socialArray = [NSKeyedUnarchiver unarchiveObjectWithData:person.social];
-        if (socialArray && [socialArray isKindOfClass:[NSArray class]]) {
-            for (NSDictionary *socialdict in socialArray) {
-                if ([[socialdict objectForKey:@"service"] isEqualToString:@"twitter"]) {
-                    [iconset addObject:[UIImage imageNamed:@"identity_twitter_18_grey.png"]];
-                }
-                if ([[socialdict objectForKey:@"service"] isEqualToString:@"facebook"]) {
-                    [iconset addObject:[UIImage imageNamed:@"identity_facebook_18_grey.png"]];
-                }
-            }
-        }
+    if (_contactObject) {
+        [_contactObject release];
+        _contactObject = nil;
     }
-    
-    if (person.im) {
-        NSArray *imArray = [NSKeyedUnarchiver unarchiveObjectWithData:person.im];
-        if (imArray && [imArray isKindOfClass: [NSArray class]]) {
-            for (NSDictionary *imdict in imArray) {
-                if([[imdict objectForKey:@"service"] isEqualToString:@"Facebook"]){
-                    [iconset addObject:[UIImage imageNamed:@"identity_facebook_18_grey.png"]];
-                }
-            }
-        }
-    }
-    
-    if (person.emails) {
-        NSArray *emailsArray = [NSKeyedUnarchiver unarchiveObjectWithData:person.emails];
+    if (contactObject) {
+        _contactObject = [contactObject retain];
         
-        if (emailsArray && [emailsArray isKindOfClass:[NSArray class]]) {
-            [iconset addObject:[UIImage imageNamed:@"identity_email_18_grey.png"]];
-        }
-    }
-    
-    if (person.phones) {
-        NSArray *phonesArray = [NSKeyedUnarchiver unarchiveObjectWithData:person.phones];
-        
-        if (phonesArray && [phonesArray isKindOfClass:[NSArray class]]) {
-            [iconset addObject:[UIImage imageNamed:@"identity_phone_18_grey.png"]];
-        }
-    }
-    
-    self.providerIconSet = iconset;
-    self.providerIcon = nil;
-    
-    [iconset release];
-}
-
-- (void)customWithIdentity:(Identity *)identity {
-    self.userNameLabel.text = identity.name;
-    self.userNameLabel.frame = (CGRect){{56, 12}, {190, 26}};
-    
-    if (!self.userNameLabel.text || [self.userNameLabel.text isEqualToString:@""]) {
-        self.userNameLabel.text = identity.external_username;
-    }
-    
-    if (identity.provider && ![identity.provider isEqualToString:@""]) {
-        NSString *iconName = [NSString stringWithFormat:@"identity_%@_18_grey.png",identity.provider];
-        UIImage *icon = [UIImage imageNamed:iconName];
-        self.providerIcon = icon;
-        self.providerIconSet = nil;
-    }
-    if (identity.avatar_filename) {
-        UIImage *avatar = [[ImgCache sharedManager] getImgFromCache:identity.avatar_filename];
-        if (!avatar || [avatar isEqual:[NSNull null]]) {
-            self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
-            
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-                UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                        self.avatarImageView.image = avatar;
-                    }
-                });
-            });
-            dispatch_release(imgQueue);
+        self.userNameLabel.text = contactObject.name;
+        self.userNameLabel.frame = (CGRect){{56, 12}, {190, 26}};
+        if (contactObject.imageKey) {
+            [[EFImageManager defaultManager] imageForKey:contactObject.imageKey
+                                       completionHandler:^(UIImage *image){
+                                           if (image && contactObject == self.contactObject) {
+                                               self.avatarImageView.image = image;
+                                           } else {
+                                               self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
+                                           }
+                                        }];
         } else {
-            self.avatarImageView.image = avatar;
+            self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
         }
-    }
-}
-
-- (void)customWithRoughtIdentity:(RoughIdentity *)roughtIdentity {
-    self.userNameLabel.text = roughtIdentity.externalUsername;
-    self.userNameLabel.frame = (CGRect){{56, 12}, {190, 26}};
-    
-    self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
-    if (roughtIdentity.provider && ![roughtIdentity.provider isEqualToString:@""]) {
-        NSString *iconName = [NSString stringWithFormat:@"identity_%@_18_grey.png", roughtIdentity.provider];
-        UIImage *icon = [UIImage imageNamed:iconName];
-        self.providerIcon = icon;
-        self.providerIconSet = nil;
+        
+        if (1 == contactObject.roughIdentities.count) {
+            NSString *iconName = [NSString stringWithFormat:@"identity_%@_18_grey.png", ((RoughIdentity *)contactObject.roughIdentities[0]).provider];
+            UIImage *icon = [UIImage imageNamed:iconName];
+            
+            self.providerIcon = icon;
+            self.providerIconList = nil;
+        } else {
+            NSMutableArray *iconList = [[NSMutableArray alloc] initWithCapacity:contactObject.roughIdentities.count];
+            NSMutableDictionary *addDict = [[NSMutableDictionary alloc] initWithCapacity:contactObject.roughIdentities.count];
+            
+            for (RoughIdentity *roughtIdentity in contactObject.roughIdentities) {
+                NSString *imageName = nil;
+                switch ([Identity getProviderCode:roughtIdentity.provider]) {
+                    case kProviderTwitter:
+                        imageName = @"identity_twitter_18_grey.png";
+                        break;
+                    case kProviderFacebook:
+                        imageName = @"identity_facebook_18_grey.png";
+                        break;
+                    case kProviderEmail:
+                        imageName = @"identity_email_18_grey.png";
+                        break;
+                    case kProviderPhone:
+                        imageName = @"identity_phone_18_grey.png";
+                        break;
+                    default:
+                        break;
+                }
+                
+                if (imageName) {
+                    if ([addDict valueForKey:imageName]) {
+                        continue;
+                    }
+                    [iconList addObject:[UIImage imageNamed:imageName]];
+                    [addDict setValue:@"YES" forKey:imageName];
+                }
+            }
+            
+            self.providerIcon = nil;
+            self.providerIconList = iconList;
+            [iconList release];
+            [addDict release];
+        }
     }
 }
 

@@ -30,6 +30,8 @@ NSCopying
 @property (nonatomic, assign) EFRoughIdentityGetIdentityStatus status;
 @property (nonatomic, retain) Identity *identity;
 
+@property (nonatomic, assign, getter = isSelected) BOOL selected;   // Default as NO.
+
 + (RoughIdentity *)identity;
 + (RoughIdentity *)identityWithDictionary:(NSDictionary *)dictionary;
 - (id)initWithDictionary:(NSDictionary *)dictionary;

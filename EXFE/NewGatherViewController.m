@@ -15,7 +15,8 @@
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
 #import "NSString+EXFE.h"
-#import "EFChoosePeopleViewController.h"
+//#import "EFChoosePeopleViewController.h"
+#import "EFContactViewController.h"
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
 #import "EFAPI.h"
@@ -988,72 +989,71 @@
     if (index == self.sortedInvitations.count) {
         [self hideMenu];
         
-        EFChoosePeopleViewController *viewController = [[EFChoosePeopleViewController alloc] initWithNibName:@"EFChoosePeopleViewController"
-                                                                                                      bundle:nil];
-        viewController.addActionHandler = ^(NSArray *identities){
-            NSAssert(dispatch_get_main_queue() == dispatch_get_current_queue(), @"WTF! MUST on main queue! boy!");
-            
-            [self dismissViewControllerAnimated:YES completion:nil];
-            
-            NSMutableSet *invitations = [[NSMutableSet alloc] init];
-            for (NSArray *personIdentities in identities) {
-                BOOL hasAddedNoresponse = NO;
-                RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
-                
-                for (Identity *identity in personIdentities) {
-                    BOOL isIndentityAddedToInvitation = NO;
-                    for (Invitation *invitation in self.cross.exfee.invitations) {
-                        if ([invitation.identity isEqualToIdentity:identity]) {
-                            isIndentityAddedToInvitation = YES;
-                            break;
-                        }
-                    }
-                    
-                    if (isIndentityAddedToInvitation)
-                        continue;
-                    
-                    NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
-                    Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
-                    
-                    if (!hasAddedNoresponse) {
-                        hasAddedNoresponse = YES;
-                        invitation.rsvp_status = @"NORESPONSE";
-                    } else {
-                        invitation.rsvp_status = @"NOTIFICATION";
-                    }
-                    
-                    NSAssert(identity.managedObjectContext == invitation.managedObjectContext, @"WTF!!!");
-                    
-                    invitation.identity = identity;
-                    Invitation *myinvitation = [self.cross.exfee getMyInvitation];
-                    if (myinvitation != nil) {
-                        invitation.updated_by = myinvitation.identity;
-                    } else {
-                        invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
-                    }
-                    
-                    [invitations addObject:invitation];
-                    [invitation release];
-                }
-            }
-            
-            [self.cross.exfee addInvitations:invitations];
-            [invitations release];
-            
-            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-            [self reFormatTitle];
-            [exfeeShowview reloadData];
-//            if ([self.sortedInvitations count] >= 12) { // TODO we want to move the hard limit to server result
-//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exfees Limit" message:[NSString stringWithFormat:@"This ·X· is limited to 12 participants."] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//                [alert show];
-//                [alert release];
-//            }
-        };
-        [self presentViewController:viewController
-                           animated:YES
-                         completion:nil];
+        EFContactViewController *viewController = [[EFContactViewController alloc] initWithNibName:@"EFContactViewController" bundle:nil];
+        [self presentViewController:viewController animated:YES completion:nil];
         [viewController release];
+        
+//        EFChoosePeopleViewController *viewController = [[EFChoosePeopleViewController alloc] initWithNibName:@"EFChoosePeopleViewController"
+//                                                                                                      bundle:nil];
+//        viewController.addActionHandler = ^(NSArray *identities){
+//            NSAssert(dispatch_get_main_queue() == dispatch_get_current_queue(), @"WTF! MUST on main queue! boy!");
+//            
+//            [self dismissViewControllerAnimated:YES completion:nil];
+//            
+//            NSMutableSet *invitations = [[NSMutableSet alloc] init];
+//            for (NSArray *personIdentities in identities) {
+//                BOOL hasAddedNoresponse = NO;
+//                RKObjectManager *objectManager = [RKObjectManager sharedManager];
+//                NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
+//                
+//                for (Identity *identity in personIdentities) {
+//                    BOOL isIndentityAddedToInvitation = NO;
+//                    for (Invitation *invitation in self.cross.exfee.invitations) {
+//                        if ([invitation.identity isEqualToIdentity:identity]) {
+//                            isIndentityAddedToInvitation = YES;
+//                            break;
+//                        }
+//                    }
+//                    
+//                    if (isIndentityAddedToInvitation)
+//                        continue;
+//                    
+//                    NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
+//                    Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
+//                    
+//                    if (!hasAddedNoresponse) {
+//                        hasAddedNoresponse = YES;
+//                        invitation.rsvp_status = @"NORESPONSE";
+//                    } else {
+//                        invitation.rsvp_status = @"NOTIFICATION";
+//                    }
+//                    
+//                    NSAssert(identity.managedObjectContext == invitation.managedObjectContext, @"WTF!!!");
+//                    
+//                    invitation.identity = identity;
+//                    Invitation *myinvitation = [self.cross.exfee getMyInvitation];
+//                    if (myinvitation != nil) {
+//                        invitation.updated_by = myinvitation.identity;
+//                    } else {
+//                        invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
+//                    }
+//                    
+//                    [invitations addObject:invitation];
+//                    [invitation release];
+//                }
+//            }
+//            
+//            [self.cross.exfee addInvitations:invitations];
+//            [invitations release];
+//            
+//            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+//            [self reFormatTitle];
+//            [exfeeShowview reloadData];
+//        };
+//        [self presentViewController:viewController
+//                           animated:YES
+//                         completion:nil];
+//        [viewController release];
     } else if (index < self.sortedInvitations.count) {
         Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
       

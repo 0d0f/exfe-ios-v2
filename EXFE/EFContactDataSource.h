@@ -10,23 +10,34 @@
 
 typedef void (^ActionBlock)(void);
 
+@class EFContactObject;
 @interface EFContactDataSource : NSObject
 
-@property (nonatomic, copy) ActionBlock didChangeHandler;   // default as nil. if set, it'll be invoke on main thread.
-@property (nonatomic, readonly, assign, getter = isLoading) BOOL loading;
+@property (nonatomic, copy) ActionBlock dataDidChangeHandler;       // default as nil. if set, it'll be invoke on main thread.
+@property (nonatomic, copy) ActionBlock selectionDidChangeHandler;  // default as nil. if set, it'll be invoke on main thread.
+@property (nonatomic, readonly, getter = isLoading) BOOL loading;
 
 + (EFContactDataSource *)defaultDataSource;
 
 - (NSUInteger)numberOfSections;
 - (NSUInteger)numberOfRowsInSection:(NSUInteger)section;
+- (NSUInteger)numberOfSelectedContactObjects;
 
-- (NSString *)titleForSection;  // maybe nil.
+- (NSString *)titleForSection:(NSUInteger)section;  // maybe nil.
 
 - (BOOL)isContactObjectAtIndexPathSelected:(NSIndexPath *)indexPath;
-- (id)contactObjectAtIndexPath:(NSIndexPath *)indexPath;
-- (NSIndexPath *)indexPathForObject;    // if not found, it'll be {NSNotFound, 0}. You should always check the indexPath.location.
+- (BOOL)isContactObjectSelected:(EFContactObject *)object;
+- (EFContactObject *)contactObjectAtIndexPath:(NSIndexPath *)indexPath;
 
 - (void)selectContactObjectAtIndexPath:(NSIndexPath *)indexPath;
 - (void)deselectContactObjectAtIndexPath:(NSIndexPath *)indexPath;
+- (void)selectContactObject:(EFContactObject *)object;
+- (void)deselectContactObject:(EFContactObject *)object;
+
+- (void)deselectAllData;
+- (void)clearData;
+- (void)loadData;
+
+- (void)addContactObjectToRecent:(EFContactObject *)contactObject;
 
 @end

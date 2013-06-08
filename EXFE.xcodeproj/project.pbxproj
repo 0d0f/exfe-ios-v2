@@ -1456,6 +1456,27 @@
 		765A82D4175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
 		765A82D5175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
 		765A82D6175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
+		765A82D9175F0D5700448B64 /* EFSearchContactDataSouce.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D8175F0D5700448B64 /* EFSearchContactDataSouce.m */; };
+		765A82DA175F0D5700448B64 /* EFSearchContactDataSouce.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D8175F0D5700448B64 /* EFSearchContactDataSouce.m */; };
+		765A82DB175F0D5700448B64 /* EFSearchContactDataSouce.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D8175F0D5700448B64 /* EFSearchContactDataSouce.m */; };
+		765A82DE175F0FEF00448B64 /* EFContactObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82DD175F0FEF00448B64 /* EFContactObject.m */; };
+		765A82DF175F0FEF00448B64 /* EFContactObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82DD175F0FEF00448B64 /* EFContactObject.m */; };
+		765A82E0175F0FEF00448B64 /* EFContactObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82DD175F0FEF00448B64 /* EFContactObject.m */; };
+		765A82E4175F120D00448B64 /* EFImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82E3175F120D00448B64 /* EFImageCache.m */; };
+		765A82E5175F120D00448B64 /* EFImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82E3175F120D00448B64 /* EFImageCache.m */; };
+		765A82E6175F120D00448B64 /* EFImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82E3175F120D00448B64 /* EFImageCache.m */; };
+		765A82E9175F217400448B64 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82E8175F217400448B64 /* NSString+MD5.m */; };
+		765A82EA175F217400448B64 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82E8175F217400448B64 /* NSString+MD5.m */; };
+		765A82EB175F217400448B64 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82E8175F217400448B64 /* NSString+MD5.m */; };
+		765A82F3175F255800448B64 /* EFImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82F2175F255800448B64 /* EFImageManager.m */; };
+		765A82F4175F255800448B64 /* EFImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82F2175F255800448B64 /* EFImageManager.m */; };
+		765A82F5175F255800448B64 /* EFImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82F2175F255800448B64 /* EFImageManager.m */; };
+		765A82F9175F4F4C00448B64 /* EFContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82F7175F4F4B00448B64 /* EFContactViewController.m */; };
+		765A82FA175F4F4C00448B64 /* EFContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82F7175F4F4B00448B64 /* EFContactViewController.m */; };
+		765A82FB175F4F4C00448B64 /* EFContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82F7175F4F4B00448B64 /* EFContactViewController.m */; };
+		765A82FC175F4F4C00448B64 /* EFContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 765A82F8175F4F4C00448B64 /* EFContactViewController.xib */; };
+		765A82FD175F4F4C00448B64 /* EFContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 765A82F8175F4F4C00448B64 /* EFContactViewController.xib */; };
+		765A82FE175F4F4C00448B64 /* EFContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 765A82F8175F4F4C00448B64 /* EFContactViewController.xib */; };
 		7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
@@ -1488,12 +1509,6 @@
 		76C29C231754E9D10084C27F /* tabshadow_conv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76C29C1F1754E9D10084C27F /* tabshadow_conv@2x.png */; };
 		76C29C241754E9D10084C27F /* tabshadow_conv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76C29C1F1754E9D10084C27F /* tabshadow_conv@2x.png */; };
 		76C29C251754E9D10084C27F /* tabshadow_conv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76C29C1F1754E9D10084C27F /* tabshadow_conv@2x.png */; };
-		76D1A804171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */; };
-		76D1A805171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */; };
-		76D1A806171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */; };
-		76D1A807171D5DFB00A35BBD /* EFChoosePeopleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A803171D5DFA00A35BBD /* EFChoosePeopleViewController.xib */; };
-		76D1A808171D5DFB00A35BBD /* EFChoosePeopleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A803171D5DFA00A35BBD /* EFChoosePeopleViewController.xib */; };
-		76D1A809171D5DFB00A35BBD /* EFChoosePeopleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A803171D5DFA00A35BBD /* EFChoosePeopleViewController.xib */; };
 		76D1A80C171D610C00A35BBD /* exfee_22ga.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A80A171D610C00A35BBD /* exfee_22ga.png */; };
 		76D1A80D171D610C00A35BBD /* exfee_22ga.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A80A171D610C00A35BBD /* exfee_22ga.png */; };
 		76D1A80E171D610C00A35BBD /* exfee_22ga.png in Resources */ = {isa = PBXBuildFile; fileRef = 76D1A80A171D610C00A35BBD /* exfee_22ga.png */; };
@@ -2320,6 +2335,19 @@
 		764CD905173A914600627237 /* btn_white_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_white_30@2x.png"; sourceTree = "<group>"; };
 		765A82D2175F076C00448B64 /* EFContactDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFContactDataSource.h; sourceTree = "<group>"; };
 		765A82D3175F076C00448B64 /* EFContactDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFContactDataSource.m; sourceTree = "<group>"; };
+		765A82D7175F0D5700448B64 /* EFSearchContactDataSouce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchContactDataSouce.h; sourceTree = "<group>"; };
+		765A82D8175F0D5700448B64 /* EFSearchContactDataSouce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchContactDataSouce.m; sourceTree = "<group>"; };
+		765A82DC175F0FEF00448B64 /* EFContactObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFContactObject.h; sourceTree = "<group>"; };
+		765A82DD175F0FEF00448B64 /* EFContactObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFContactObject.m; sourceTree = "<group>"; };
+		765A82E2175F120D00448B64 /* EFImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFImageCache.h; sourceTree = "<group>"; };
+		765A82E3175F120D00448B64 /* EFImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFImageCache.m; sourceTree = "<group>"; };
+		765A82E7175F217400448B64 /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
+		765A82E8175F217400448B64 /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
+		765A82F1175F255800448B64 /* EFImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFImageManager.h; sourceTree = "<group>"; };
+		765A82F2175F255800448B64 /* EFImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFImageManager.m; sourceTree = "<group>"; };
+		765A82F6175F4F4B00448B64 /* EFContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFContactViewController.h; sourceTree = "<group>"; };
+		765A82F7175F4F4B00448B64 /* EFContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFContactViewController.m; sourceTree = "<group>"; };
+		765A82F8175F4F4C00448B64 /* EFContactViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFContactViewController.xib; sourceTree = "<group>"; };
 		7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorHandlerCenter.h; sourceTree = "<group>"; };
 		7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorHandlerCenter.m; sourceTree = "<group>"; };
 		7670126A1729054500B5445E /* EFPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPopoverController.m; sourceTree = "<group>"; };
@@ -3045,6 +3073,8 @@
 				4F67C3A31709A52D001AA816 /* UILabel+EXFE.m */,
 				4FED88F61712BCE500858D05 /* NSString+EXFE.h */,
 				4FED88F71712BCE500858D05 /* NSString+EXFE.m */,
+				765A82E7175F217400448B64 /* NSString+MD5.h */,
+				765A82E8175F217400448B64 /* NSString+MD5.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -3225,6 +3255,8 @@
 			children = (
 				763A01CD17212B080082CC9E /* RoughIdentity.h */,
 				763A01CE17212B080082CC9E /* RoughIdentity.m */,
+				765A82DC175F0FEF00448B64 /* EFContactObject.h */,
+				765A82DD175F0FEF00448B64 /* EFContactObject.m */,
 			);
 			name = Object;
 			sourceTree = "<group>";
@@ -3234,14 +3266,28 @@
 			children = (
 				765A82D2175F076C00448B64 /* EFContactDataSource.h */,
 				765A82D3175F076C00448B64 /* EFContactDataSource.m */,
+				765A82D7175F0D5700448B64 /* EFSearchContactDataSouce.h */,
+				765A82D8175F0D5700448B64 /* EFSearchContactDataSouce.m */,
 			);
 			name = DataSource;
+			sourceTree = "<group>";
+		};
+		765A82E1175F11F800448B64 /* Cache & Load Image */ = {
+			isa = PBXGroup;
+			children = (
+				765A82F1175F255800448B64 /* EFImageManager.h */,
+				765A82F2175F255800448B64 /* EFImageManager.m */,
+				765A82E2175F120D00448B64 /* EFImageCache.h */,
+				765A82E3175F120D00448B64 /* EFImageCache.m */,
+			);
+			name = "Cache & Load Image";
 			sourceTree = "<group>";
 		};
 		767012621729053400B5445E /* EFKit */ = {
 			isa = PBXGroup;
 			children = (
 				76F6B3101740B5C1008B39C1 /* EFKit.h */,
+				765A82E1175F11F800448B64 /* Cache & Load Image */,
 				76073D01174F61BB007CBFC3 /* PresentCard */,
 				76295DB1174B2101002F5CEF /* TabBar */,
 				76295DB0174B20D3002F5CEF /* ErrorMessage */,
@@ -3306,6 +3352,9 @@
 		7825A5C415A2CE3E00A853CD /* Gather */ = {
 			isa = PBXGroup;
 			children = (
+				765A82F6175F4F4B00448B64 /* EFContactViewController.h */,
+				765A82F7175F4F4B00448B64 /* EFContactViewController.m */,
+				765A82F8175F4F4C00448B64 /* EFContactViewController.xib */,
 				76D1A801171D5DFA00A35BBD /* EFChoosePeopleViewController.h */,
 				76D1A802171D5DFA00A35BBD /* EFChoosePeopleViewController.m */,
 				76D1A803171D5DFA00A35BBD /* EFChoosePeopleViewController.xib */,
@@ -4600,7 +4649,6 @@
 				4FC7ED791717F46800582D84 /* WidgetConvViewController.xib in Resources */,
 				4FF69555171BDF53003DF80B /* EFSignInViewController.xib in Resources */,
 				4FF6955E171BFA2B003DF80B /* EFLandingViewController.xib in Resources */,
-				76D1A808171D5DFB00A35BBD /* EFChoosePeopleViewController.xib in Resources */,
 				76D1A80D171D610C00A35BBD /* exfee_22ga.png in Resources */,
 				76D1A810171D610C00A35BBD /* exfee_22ga@2x.png in Resources */,
 				76D1A815171D704C00A35BBD /* btn_blue_30inset.png in Resources */,
@@ -4721,6 +4769,7 @@
 				76C29C211754E9D10084C27F /* tabshadow_conv.png in Resources */,
 				76C29C241754E9D10084C27F /* tabshadow_conv@2x.png in Resources */,
 				4F05D443175C6CB00050A726 /* EFAddIdentityViewController.xib in Resources */,
+				765A82FD175F4F4C00448B64 /* EFContactViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5015,7 +5064,6 @@
 				4FC7ED811717F46900582D84 /* WidgetConvViewController.xib in Resources */,
 				4FF69556171BDF53003DF80B /* EFSignInViewController.xib in Resources */,
 				4FF6955F171BFA2B003DF80B /* EFLandingViewController.xib in Resources */,
-				76D1A809171D5DFB00A35BBD /* EFChoosePeopleViewController.xib in Resources */,
 				76D1A80E171D610C00A35BBD /* exfee_22ga.png in Resources */,
 				76D1A811171D610C00A35BBD /* exfee_22ga@2x.png in Resources */,
 				76D1A816171D704C00A35BBD /* btn_blue_30inset.png in Resources */,
@@ -5135,6 +5183,7 @@
 				76C29C221754E9D10084C27F /* tabshadow_conv.png in Resources */,
 				76C29C251754E9D10084C27F /* tabshadow_conv@2x.png in Resources */,
 				4F05D444175C6CB00050A726 /* EFAddIdentityViewController.xib in Resources */,
+				765A82FE175F4F4C00448B64 /* EFContactViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5430,7 +5479,6 @@
 				4FC7ED6F1717F3F700582D84 /* WidgetConvViewController.xib in Resources */,
 				4FF69554171BDF53003DF80B /* EFSignInViewController.xib in Resources */,
 				4FF6955D171BFA2B003DF80B /* EFLandingViewController.xib in Resources */,
-				76D1A807171D5DFB00A35BBD /* EFChoosePeopleViewController.xib in Resources */,
 				76D1A80C171D610C00A35BBD /* exfee_22ga.png in Resources */,
 				76D1A80F171D610C00A35BBD /* exfee_22ga@2x.png in Resources */,
 				76D1A814171D704C00A35BBD /* btn_blue_30inset.png in Resources */,
@@ -5547,6 +5595,7 @@
 				76C29C201754E9D10084C27F /* tabshadow_conv.png in Resources */,
 				76C29C231754E9D10084C27F /* tabshadow_conv@2x.png in Resources */,
 				4F05D442175C6CB00050A726 /* EFAddIdentityViewController.xib in Resources */,
+				765A82FC175F4F4C00448B64 /* EFContactViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5706,7 +5755,6 @@
 				76DED7CF171C06A900C2F27E /* UILog.m in Sources */,
 				4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */,
 				4F9FACFB171DD35700B1ADD9 /* EFAPIServer.m in Sources */,
-				76D1A805171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */,
 				763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */,
 				763A0192171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
 				763A01A317202BBF0082CC9E /* EFPersonIdentityCell.m in Sources */,
@@ -5750,6 +5798,12 @@
 				4FFD6FF3176300F0009836F5 /* IdentitySet.m in Sources */,
 				4FFD6FFF176300F1009836F5 /* IdentityId.m in Sources */,
 				4FFD700417630288009836F5 /* Invitation.m in Sources */,
+				765A82DA175F0D5700448B64 /* EFSearchContactDataSouce.m in Sources */,
+				765A82DF175F0FEF00448B64 /* EFContactObject.m in Sources */,
+				765A82E5175F120D00448B64 /* EFImageCache.m in Sources */,
+				765A82EA175F217400448B64 /* NSString+MD5.m in Sources */,
+				765A82F4175F255800448B64 /* EFImageManager.m in Sources */,
+				765A82FA175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5879,7 +5933,6 @@
 				76DED7D0171C06A900C2F27E /* UILog.m in Sources */,
 				4F358D6F171D66F5005C2EE7 /* EFPasswordField.m in Sources */,
 				4F9FACFC171DD35700B1ADD9 /* EFAPIServer.m in Sources */,
-				76D1A806171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */,
 				763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */,
 				763A0193171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
 				763A01A417202BBF0082CC9E /* EFPersonIdentityCell.m in Sources */,
@@ -5923,6 +5976,12 @@
 				4FFD6FF4176300F0009836F5 /* IdentitySet.m in Sources */,
 				4FFD7000176300F1009836F5 /* IdentityId.m in Sources */,
 				4FFD700517630288009836F5 /* Invitation.m in Sources */,
+				765A82DB175F0D5700448B64 /* EFSearchContactDataSouce.m in Sources */,
+				765A82E0175F0FEF00448B64 /* EFContactObject.m in Sources */,
+				765A82E6175F120D00448B64 /* EFImageCache.m in Sources */,
+				765A82EB175F217400448B64 /* NSString+MD5.m in Sources */,
+				765A82F5175F255800448B64 /* EFImageManager.m in Sources */,
+				765A82FB175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6052,7 +6111,6 @@
 				76DED7CE171C06A900C2F27E /* UILog.m in Sources */,
 				4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */,
 				4F9FACF3171DD02B00B1ADD9 /* EFAPIServer.m in Sources */,
-				76D1A804171D5DFB00A35BBD /* EFChoosePeopleViewController.m in Sources */,
 				763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */,
 				763A0191171EE8BE0082CC9E /* EFChoosePeopleViewCell.m in Sources */,
 				763A01A217202BBF0082CC9E /* EFPersonIdentityCell.m in Sources */,
@@ -6096,6 +6154,12 @@
 				4FFD6FF2176300F0009836F5 /* IdentitySet.m in Sources */,
 				4FFD6FFE176300F1009836F5 /* IdentityId.m in Sources */,
 				4FFD700317630288009836F5 /* Invitation.m in Sources */,
+				765A82D9175F0D5700448B64 /* EFSearchContactDataSouce.m in Sources */,
+				765A82DE175F0FEF00448B64 /* EFContactObject.m in Sources */,
+				765A82E4175F120D00448B64 /* EFImageCache.m in Sources */,
+				765A82E9175F217400448B64 /* NSString+MD5.m in Sources */,
+				765A82F3175F255800448B64 /* EFImageManager.m in Sources */,
+				765A82F9175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
