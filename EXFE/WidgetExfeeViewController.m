@@ -126,7 +126,6 @@ typedef enum {
     
     if (self.exfee) {
         self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-//        self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
     }
     
     flowLayout = [[PSTCollectionViewFlowLayout alloc] init];
@@ -227,7 +226,6 @@ typedef enum {
                                             self.selected_invitation = nil;
                                             self.exfee = exfee;
                                             self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-//                                            self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
                                             [exfeeContainer reloadData];
                                             [self reloadSelected];
                                         }
@@ -308,6 +306,11 @@ typedef enum {
                 layerLine.frame = CGRectMake(0, 0, 320, 1);
                 layerLine.contents = (id)[UIImage imageNamed:@"exfee_line_h1.png"].CGImage;
                 [tableRsvp.contentView.layer addSublayer:layerLine];
+                
+                CAShapeLayer *centerline = [CAShapeLayer layer];
+                centerline.backgroundColor = [UIColor COLOR_RGB(0xE6, 0xE6, 0xE6)].CGColor;
+                centerline.frame = CGRectMake(65, 0, 1, 62);
+                [tableRsvp.contentView.layer addSublayer:centerline];
                 
                 invRsvpImage = [[UIImageView alloc] initWithFrame:CGRectMake(33, 12, 26, 26)];
                 invRsvpImage.tag = kTagIdRSVPImage;
@@ -482,6 +485,11 @@ typedef enum {
                 layerLine.frame = CGRectMake(0, 0, 320, 1);
                 layerLine.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
                 [cell.contentView.layer addSublayer:layerLine];
+                
+                CAShapeLayer *centerline = [CAShapeLayer layer];
+                centerline.backgroundColor = [UIColor COLOR_RGB(0xE6, 0xE6, 0xE6)].CGColor;
+                centerline.frame = CGRectMake(65, 0, 1, 32);
+                [cell.contentView.layer addSublayer:centerline];
                 
                 identityProvider = [[UIImageView alloc] initWithFrame:CGRectMake(37, 6, 18, 18)];
                 identityProvider.tag = kTagIdIdentityProvider;
@@ -681,6 +689,11 @@ typedef enum {
                 layerLine.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
                 [tableFooter.contentView.layer addSublayer:layerLine];
                 
+                CALayer * vLine = [CALayer layer];
+                vLine.frame = CGRectMake(65, 0, 1, 180);
+                vLine.contents = (id)[UIImage imageNamed:@"exfee_line_v.png"].CGImage;
+                [tableFooter.contentView.layer addSublayer:vLine];
+                
                 bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(36, 16, 40, 33)];
                 bioTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
                 bioTitle.text = @"Bio";
@@ -798,7 +811,7 @@ typedef enum {
             } else {
                 ExfeeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Exfee Cell" forIndexPath:indexPath];
                 
-                Invitation* inv = [(NSArray*)[self.sortedInvitations objectAtIndex:row] objectAtIndex:0];
+                Invitation* inv = [self.sortedInvitations objectAtIndex:row];
                 cell.name.text = inv.identity.name;
                 [cell setRsvp:[Invitation getRsvpCode:inv.rsvp_status] andUnreachable:[inv.identity.unreachable boolValue] withHost:[inv.host boolValue]];
                 NSInteger seq = row % 4;
@@ -949,8 +962,7 @@ typedef enum {
                                                     [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                     
                                                     self.exfee = editedExfee;
-//                                                    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-                                                    self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
+                                                    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                                                     [exfeeContainer reloadData];
                                                     
                                                     [self dismissViewControllerAnimated:YES completion:nil];
@@ -1161,7 +1173,6 @@ typedef enum {
                                                                                                         if ([meta.code intValue]==200) {
                                                                                                             self.exfee = crossGroupViewController.cross.exfee;
                                                                                                             self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-//                                                                                                            self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
                                                                                                             [exfeeContainer reloadData];
                                                                                                             [self reloadSelected];
                                                                                                         }
@@ -1232,7 +1243,7 @@ typedef enum {
     BOOL flag = NO;
     NSNumber *inv_id = _selected_invitation.invitation_id;
     for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
-        Invitation* inv = [(NSArray*)[self.sortedInvitations objectAtIndex:i] objectAtIndex:0];
+        Invitation* inv = [self.sortedInvitations objectAtIndex:i];
         if ([inv.invitation_id integerValue] == [inv_id integerValue]) {
             flag = YES;
             NSIndexPath * indexPath = [NSIndexPath indexPathForRow:i inSection:1];
