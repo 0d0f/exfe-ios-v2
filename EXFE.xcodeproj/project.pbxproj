@@ -1325,15 +1325,12 @@
 		4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
 		4FFB149C16C0BFFF00F76D32 /* edit_30_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */; };
 		4FFB149D16C0BFFF00F76D32 /* edit_30_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */; };
-		4FFD6FF2176300F0009836F5 /* IdentitySet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD6FF1176300F0009836F5 /* IdentitySet.m */; };
-		4FFD6FF3176300F0009836F5 /* IdentitySet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD6FF1176300F0009836F5 /* IdentitySet.m */; };
-		4FFD6FF4176300F0009836F5 /* IdentitySet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD6FF1176300F0009836F5 /* IdentitySet.m */; };
 		4FFD6FFE176300F1009836F5 /* IdentityId.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD6FFD176300F1009836F5 /* IdentityId.m */; };
 		4FFD6FFF176300F1009836F5 /* IdentityId.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD6FFD176300F1009836F5 /* IdentityId.m */; };
 		4FFD7000176300F1009836F5 /* IdentityId.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD6FFD176300F1009836F5 /* IdentityId.m */; };
-		4FFD700317630288009836F5 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD700217630288009836F5 /* Invitation.m */; };
-		4FFD700417630288009836F5 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD700217630288009836F5 /* Invitation.m */; };
-		4FFD700517630288009836F5 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD700217630288009836F5 /* Invitation.m */; };
+		4FFD701617633A46009836F5 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD701517633A46009836F5 /* Invitation.m */; };
+		4FFD701717633A46009836F5 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD701517633A46009836F5 /* Invitation.m */; };
+		4FFD701817633A46009836F5 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD701517633A46009836F5 /* Invitation.m */; };
 		7601F5641725861000032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		7601F56C1725861100032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		7601F56D1725861200032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
@@ -2272,12 +2269,10 @@
 		4FFB149416BFFB9600F76D32 /* SSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSTextView.m; sourceTree = "<group>"; };
 		4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30_pressed.png; sourceTree = "<group>"; };
 		4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30_pressed@2x.png"; sourceTree = "<group>"; };
-		4FFD6FF0176300F0009836F5 /* IdentitySet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentitySet.h; sourceTree = "<group>"; };
-		4FFD6FF1176300F0009836F5 /* IdentitySet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentitySet.m; sourceTree = "<group>"; };
 		4FFD6FFC176300F1009836F5 /* IdentityId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityId.h; sourceTree = "<group>"; };
 		4FFD6FFD176300F1009836F5 /* IdentityId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityId.m; sourceTree = "<group>"; };
-		4FFD700117630288009836F5 /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
-		4FFD700217630288009836F5 /* Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
+		4FFD701417633A46009836F5 /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
+		4FFD701517633A46009836F5 /* Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
 		7601F5701727B94700032044 /* EFSearchIdentityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchIdentityCell.h; sourceTree = "<group>"; };
 		7601F5711727B94700032044 /* EFSearchIdentityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchIdentityCell.m; sourceTree = "<group>"; };
 		76073CDD174F3178007CBFC3 /* widget_exfee_30shine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_exfee_30shine.png; sourceTree = "<group>"; };
@@ -3914,14 +3909,12 @@
 				782B3CA4156A604A00721150 /* EFTime.m */,
 				78FA8C3116B7CD1000D9E876 /* Exfee.h */,
 				78FA8C3216B7CD1000D9E876 /* Exfee.m */,
-				4FFD700117630288009836F5 /* Invitation.h */,
-				4FFD700217630288009836F5 /* Invitation.m */,
+				4FFD701417633A46009836F5 /* Invitation.h */,
+				4FFD701517633A46009836F5 /* Invitation.m */,
 				78FA8C2E16B7CCB900D9E876 /* Identity.h */,
 				78FA8C2F16B7CCB900D9E876 /* Identity.m */,
 				4FFD6FFC176300F1009836F5 /* IdentityId.h */,
 				4FFD6FFD176300F1009836F5 /* IdentityId.m */,
-				4FFD6FF0176300F0009836F5 /* IdentitySet.h */,
-				4FFD6FF1176300F0009836F5 /* IdentitySet.m */,
 				7879B47616BE77AF00D3BE3C /* LocalContact.h */,
 				7879B47716BE77AF00D3BE3C /* LocalContact.m */,
 				78DABCE7158B236C004447B5 /* Meta.h */,
@@ -5795,15 +5788,14 @@
 				4F05D440175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
 				4F05D459175DAFAC0050A726 /* Constants.m in Sources */,
 				765A82D5175F076C00448B64 /* EFContactDataSource.m in Sources */,
-				4FFD6FF3176300F0009836F5 /* IdentitySet.m in Sources */,
 				4FFD6FFF176300F1009836F5 /* IdentityId.m in Sources */,
-				4FFD700417630288009836F5 /* Invitation.m in Sources */,
 				765A82DA175F0D5700448B64 /* EFSearchContactDataSouce.m in Sources */,
 				765A82DF175F0FEF00448B64 /* EFContactObject.m in Sources */,
 				765A82E5175F120D00448B64 /* EFImageCache.m in Sources */,
 				765A82EA175F217400448B64 /* NSString+MD5.m in Sources */,
 				765A82F4175F255800448B64 /* EFImageManager.m in Sources */,
 				765A82FA175F4F4C00448B64 /* EFContactViewController.m in Sources */,
+				4FFD701717633A46009836F5 /* Invitation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5973,15 +5965,14 @@
 				4F05D441175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
 				4F05D45A175DAFAC0050A726 /* Constants.m in Sources */,
 				765A82D6175F076C00448B64 /* EFContactDataSource.m in Sources */,
-				4FFD6FF4176300F0009836F5 /* IdentitySet.m in Sources */,
 				4FFD7000176300F1009836F5 /* IdentityId.m in Sources */,
-				4FFD700517630288009836F5 /* Invitation.m in Sources */,
 				765A82DB175F0D5700448B64 /* EFSearchContactDataSouce.m in Sources */,
 				765A82E0175F0FEF00448B64 /* EFContactObject.m in Sources */,
 				765A82E6175F120D00448B64 /* EFImageCache.m in Sources */,
 				765A82EB175F217400448B64 /* NSString+MD5.m in Sources */,
 				765A82F5175F255800448B64 /* EFImageManager.m in Sources */,
 				765A82FB175F4F4C00448B64 /* EFContactViewController.m in Sources */,
+				4FFD701817633A46009836F5 /* Invitation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6151,15 +6142,14 @@
 				4F05D43F175C6CB00050A726 /* EFAddIdentityViewController.m in Sources */,
 				4F05D458175DAFAC0050A726 /* Constants.m in Sources */,
 				765A82D4175F076C00448B64 /* EFContactDataSource.m in Sources */,
-				4FFD6FF2176300F0009836F5 /* IdentitySet.m in Sources */,
 				4FFD6FFE176300F1009836F5 /* IdentityId.m in Sources */,
-				4FFD700317630288009836F5 /* Invitation.m in Sources */,
 				765A82D9175F0D5700448B64 /* EFSearchContactDataSouce.m in Sources */,
 				765A82DE175F0FEF00448B64 /* EFContactObject.m in Sources */,
 				765A82E4175F120D00448B64 /* EFImageCache.m in Sources */,
 				765A82E9175F217400448B64 /* NSString+MD5.m in Sources */,
 				765A82F3175F255800448B64 /* EFImageManager.m in Sources */,
 				765A82F9175F4F4C00448B64 /* EFContactViewController.m in Sources */,
+				4FFD701617633A46009836F5 /* Invitation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

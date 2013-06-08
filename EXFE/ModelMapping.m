@@ -60,14 +60,6 @@
     RKObjectMapping *identityIdrequestMapping = [RKObjectMapping requestMapping];
     [identityIdrequestMapping addAttributeMappingsFromArray:@[@"identity_id" ]];
     
-    // IdentityId Entity
-    RKEntityMapping *identitySetMapping = [RKEntityMapping mappingForEntityForName:@"IdentitySet" inManagedObjectStore:managedObjectStore];
-    [identitySetMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identities" toKeyPath:@"identities" withMapping:identityIdMapping]];
-    
-    // IdentityId Request Object
-    RKObjectMapping *identitySetrequestMapping = [RKObjectMapping requestMapping];
-    [identitySetrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identities" toKeyPath:@"identities" withMapping:identityIdrequestMapping]];
-    
     // Invitation Entity
     RKEntityMapping *invitationMapping = [RKEntityMapping mappingForEntityForName:@"Invitation" inManagedObjectStore:managedObjectStore];
     invitationMapping.identificationAttributes = @[ @"invitation_id" ];
@@ -76,7 +68,7 @@
     [invitationMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identity" toKeyPath:@"identity" withMapping:identityMapping]];
     [invitationMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"invited_by" toKeyPath:@"invited_by" withMapping:identityMapping]];
     [invitationMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"updated_by" toKeyPath:@"updated_by" withMapping:identityMapping]];
-    [invitationMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"notification_identities" toKeyPath:@"notification_identities" withMapping:identitySetMapping]];
+    [invitationMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"notification_identities" toKeyPath:@"notification_identities" withMapping:identityIdMapping]];
     
     // Invitation Request Object
     RKObjectMapping *invitationrequestMapping = [RKObjectMapping requestMapping];
@@ -85,7 +77,7 @@
     [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identity" toKeyPath:@"identity" withMapping:identityrequestMapping]];
     [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"invited_by" toKeyPath:@"invited_by" withMapping:identityrequestMapping]];
     [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"updated_by" toKeyPath:@"updated_by" withMapping:identityrequestMapping]];
-    [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"notification_identities" toKeyPath:@"notification_identities" withMapping:identitySetMapping]];
+    [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"notification_identities" toKeyPath:@"notification_identities" withMapping:identityIdMapping]];
     
     // Exfee Entity
     RKEntityMapping *exfeeMapping = [RKEntityMapping mappingForEntityForName:@"Exfee" inManagedObjectStore:managedObjectStore];
