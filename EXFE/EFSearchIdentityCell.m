@@ -12,6 +12,7 @@
 #import "EFSearchTipViewController.h"
 #import "RoughIdentity.h"
 #import "ImgCache.h"
+#import "EFContactObject.h"
 
 @implementation EFSearchIdentityCell {
     EFPopoverController *_popoverController;
@@ -27,6 +28,8 @@
                     forControlEvents:UIControlEventTouchUpInside];
         self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
         self.userNameLabel.font = [UIFont fontWithName:@"HelveticaNeue-LightItalic" size:21];
+        
+        self.multipleSelectionBackgroundView = self.backgroundView;
     }
     
     return self;
@@ -112,10 +115,6 @@
         case kProviderEmail:
         case kProviderTwitter:
         {
-            if ([Identity getProviderCode:identity.provider] != kProviderPhone || [identity.identity_id intValue] != 0) {
-                [self customWithIdentity:identity];
-            }
-            
             self.accessButton.hidden = YES;
             textColor = [UIColor COLOR_BLUE_EXFE];
         }

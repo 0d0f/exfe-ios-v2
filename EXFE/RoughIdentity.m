@@ -34,6 +34,8 @@
                 self.externalID = obj;
             }
         }];
+        
+        self.selected = NO;
     }
     
     return self;

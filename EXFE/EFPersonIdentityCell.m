@@ -175,8 +175,10 @@
     RoughIdentity *roughIdentity = _roughIdentities[index];
     
     if (button.isSelected) {
+        roughIdentity.selected = YES;
         [self.delegate personIdentityCell:self didSelectRoughIdentity:roughIdentity];
     } else {
+        roughIdentity.selected = NO;
         [self.delegate personIdentityCell:self didDeselectRoughIdentity:roughIdentity];
     }
 }
@@ -188,12 +190,11 @@
 }
 
 - (void)setRoughIdentities:(NSArray *)roughIdentities {
-    if (_roughIdentities == roughIdentities)
-        return;
     if (_roughIdentities) {
         [_roughIdentities release];
         _roughIdentities = nil;
     }
+    
     if (roughIdentities) {
         _roughIdentities = [roughIdentities retain];
         [self layoutButtons];
@@ -218,10 +219,8 @@
          forControlEvents:UIControlEventTouchUpInside];
         
         RoughIdentity *roughIdentity = _roughIdentities[i];
-        BOOL shouldSelected = [self.dataSource shouldPersonIdentityCell:self
-                                                    selectRoughIdentity:roughIdentity];
         button.roughIdentity = roughIdentity;
-        button.isSelected = shouldSelected;
+        button.isSelected = roughIdentity.isSelected;
         
         [_buttons addObject:button];
         [_baseView addSubview:button];

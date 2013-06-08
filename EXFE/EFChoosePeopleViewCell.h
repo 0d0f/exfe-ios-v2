@@ -21,21 +21,19 @@
 - (BOOL)shouldChoosePeopleViewCellSelected:(EFChoosePeopleViewCell *)cell;
 @end
 
-@class LocalContact, Identity, RoughIdentity;
+@class EFContactObject;
 @interface EFChoosePeopleViewCell : UITableViewCell
 
 @property (retain, nonatomic) UIImageView *avatarImageView;
 @property (retain, nonatomic) EFLabel *userNameLabel;
 @property (nonatomic, retain) UIImage *providerIcon;
-@property (nonatomic, retain) NSArray *providerIconSet;
+@property (nonatomic, retain) NSArray *providerIconList;
 @property (nonatomic, assign) id<EFChoosePeopleViewCellDelegate> delegate;
 @property (nonatomic, assign) id<EFChoosePeopleViewCellDataSource> dataSource;
 @property (nonatomic, retain) UIButton *accessButton;
 
-+ (NSString *)reuseIdentifier;
+@property (nonatomic, retain) EFContactObject *contactObject;
 
-- (void)customWithLocalContact:(LocalContact *)localContact;
-- (void)customWithIdentity:(Identity *)identity;
-- (void)customWithRoughtIdentity:(RoughIdentity *)roughtIdentity;
++ (NSString *)reuseIdentifier;
 
 @end
