@@ -28,6 +28,7 @@
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
 #import "Cross.h"
+#import "IdentityId+EXFE.h"
 #import "EFAPI.h"
 #import "RoughIdentity.h"
 #import "EFContactObject.h"
@@ -124,7 +125,8 @@ typedef enum {
     self.view.tag = kTagViewExfeeRoot;
     
     if (self.exfee) {
-        self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
+        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+//        self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
     }
     
     flowLayout = [[PSTCollectionViewFlowLayout alloc] init];
@@ -216,15 +218,16 @@ typedef enum {
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     if (buttonIndex == actionSheet.destructiveButtonIndex) {
-        [(Invitation*)[_selected_invitations objectAtIndex:0] setRsvp_status:@"REMOVED"];
+        [_selected_invitation setRsvp_status:@"REMOVED"];
         
         Identity *myidentity = [self.exfee getMyInvitation].identity;
         [[EFAPIServer sharedInstance] editExfee:self.exfee
                                      byIdentity:myidentity
                                         success:^(Exfee *exfee) {
-                                            self.selected_invitations = nil;
+                                            self.selected_invitation = nil;
                                             self.exfee = exfee;
-                                            self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
+                                            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+//                                            self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
                                             [exfeeContainer reloadData];
                                             [self reloadSelected];
                                         }
@@ -236,7 +239,7 @@ typedef enum {
 #pragma mark Gesture Handler
 
 #pragma mark Fill content and Layout
-- (void)fillInvitationContent:(NSArray*)list
+- (void)fillInvitationContent:(Invitation*)inv
 {
     [invTable reloadData];
 }
@@ -247,7 +250,7 @@ typedef enum {
     
     NSString *title = @"People will no longer have access to any information in this ·X·. Please confirm to remove.";
     NSString *destTitle = @"Remove from this ·X·";
-    if ([[User getDefaultUser] isMe:[(Invitation*)[_selected_invitations objectAtIndex:0] identity]]) {
+    if ([[User getDefaultUser] isMe:_selected_invitation.identity]) {
         title = @"You will no longer have access to any information in this ·X· once left. Please confirm to leave.";
         destTitle = @"Leave from this ·X·";
     }
@@ -278,7 +281,7 @@ typedef enum {
         case 1:
             return 1;
         case 2:
-            return _selected_invitations.count;
+            return _selected_invitation.notification_identities.count + 1;
         case 3:
             return 1;
         default:
@@ -289,6 +292,7 @@ typedef enum {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
     switch (section) {
         case 0:{
             
@@ -322,7 +326,7 @@ typedef enum {
                 [tableRsvp.contentView addSubview:invRsvpAltLabel];
             }
             
-            Invitation *inv = [_selected_invitations objectAtIndex:0];
+            Invitation *inv = _selected_invitation;
             
             if (inv) {
                 NSUInteger changeFlag = kTagIdNone;
@@ -501,34 +505,44 @@ typedef enum {
                 identityName = (UIBorderLabel *)[cell.contentView viewWithTag:kTagIdIdentityName];
             }
             
-            Invitation *inv = [_selected_invitations objectAtIndex:indexPath.row];
-            Identity *ident = inv.identity;
-            if (ident) {
-
-                NSString* at_id = [ident getDisplayIdentity];
-                if (![identityName.text isEqualToString:at_id]) {
-                    identityName.text = at_id;
+            Invitation *inv = _selected_invitation;
+            
+            NSString * diplayIdentity = @"";
+            Provider p = kProviderUnknown;
+            
+            if (row == 0){
+                Identity *ident = inv.identity;
+                if (ident) {
+                    NSString* at_id = [ident getDisplayIdentity];
+                    diplayIdentity = at_id;
+                    
+                    p = [Identity getProviderCode:ident.provider];
                 }
-                
-                Provider p = [Identity getProviderCode:ident.provider];
-                switch(p){
-                    case kProviderEmail:
-                        identityProvider.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
-                        break;
-                    case kProviderPhone:
-                        identityProvider.image = [UIImage imageNamed:@"identity_phone_18_grey.png"];
-                        break;
-                    case kProviderTwitter:
-                        identityProvider.image = [UIImage imageNamed:@"identity_twitter_18_grey.png"];
-                        break;
-                    case kProviderFacebook:
-                        identityProvider.image = [UIImage imageNamed:@"identity_facebook_18_grey.png"];
-                        break;
-                    default:
-                        identityProvider.image = nil;
-                        break;
-                }
-                
+            } else {
+                IdentityId * identId = [inv.notification_identities objectAtIndex:row - 1];
+                diplayIdentity = [identId displayIdentity];
+                p = [Identity getProviderCode:[identId provider]];
+            }
+            
+            identityName.text = diplayIdentity;
+            switch(p){
+                case kProviderEmail:
+                    identityProvider.image = [UIImage imageNamed:@"identity_email_18_grey.png"];
+                    break;
+                case kProviderPhone:
+                    identityProvider.image = [UIImage imageNamed:@"identity_phone_18_grey.png"];
+                    break;
+                case kProviderTwitter:
+                    identityProvider.image = [UIImage imageNamed:@"identity_twitter_18_grey.png"];
+                    break;
+                case kProviderFacebook:
+                    identityProvider.image = [UIImage imageNamed:@"identity_facebook_18_grey.png"];
+                    break;
+                default:
+                    identityProvider.image = nil;
+                    break;
+            }
+            
                 //            [CATransaction begin];
                 //            [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
                 //            CGRect frame = layer2.frame;
@@ -547,7 +561,7 @@ typedef enum {
                 //            frame = identityName.frame;
                 //            frame.origin.y = CGRectGetMaxY(layer2.frame) + 0;
                 //            identityName.frame = frame;
-            }
+            
             return cell;
         }   //break;
         case 3:{
@@ -611,7 +625,7 @@ typedef enum {
                 [tableHeader.contentView addSubview:invHostText];
             }
             
-            Invitation *inv = [_selected_invitations objectAtIndex:0];
+            Invitation *inv = _selected_invitation;
             Identity *identity = inv.identity;
             
             if (inv) {
@@ -687,6 +701,9 @@ typedef enum {
                 ActionMenu = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                 ActionMenu.frame = CGRectMake(270, 17, 50, 50);
                 ActionMenu.tag = kTagIdActionMenu;
+                ActionMenu.hidden = YES;
+//                [ActionMenu addTarget:self action:@selector(actionPress:) forControlEvents:UIControlEventTouchUpInside];
+                
                 [tableFooter.contentView addSubview:ActionMenu];
             } else {
                 bioTitle = (UILabel *)[tableFooter.contentView viewWithTag:kTagIdBioTitle];
@@ -694,7 +711,7 @@ typedef enum {
                 ActionMenu = (UIButton *)[tableFooter.contentView viewWithTag:kTagIdActionMenu];
             }
             
-            Invitation *inv = [_selected_invitations objectAtIndex:0];
+            Invitation *inv = _selected_invitation;
             Identity *identity = inv.identity;
             bioTitle.hidden = !(identity && identity.bio.length > 0);
             bioContent.text = identity.bio;
@@ -718,7 +735,7 @@ typedef enum {
             
             NSDictionary *data = rsvpDict;
             
-            if ([[User getDefaultUser] isMe:[(Invitation*)[_selected_invitations objectAtIndex:0] identity]]) {
+            if ([[User getDefaultUser] isMe:[_selected_invitation identity]]) {
                 data = myRsvpDict;
             }
             
@@ -953,8 +970,8 @@ typedef enum {
             [self hidePopupIfShown];
             PSTCollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
             [self clickCell:cell];
-            self.selected_invitations = [self.sortedInvitations objectAtIndex:indexPath.row];
-            [self fillInvitationContent:_selected_invitations];
+            self.selected_invitation = [self.sortedInvitations objectAtIndex:indexPath.row];
+            [self fillInvitationContent:_selected_invitation];
         }
     }
 }
@@ -1087,7 +1104,7 @@ typedef enum {
         {
             [self hidePopupIfShown];
             NSInteger abc = [index integerValue];
-            Invitation * inv = [_selected_invitations objectAtIndex:0];
+            Invitation * inv = _selected_invitation;
             switch (abc) {
                 case 0:
                     if (inv && [Invitation getRsvpCode:inv.rsvp_status] != kRsvpAccepted) {
@@ -1143,8 +1160,8 @@ typedef enum {
                                                                                                         Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
                                                                                                         if ([meta.code intValue]==200) {
                                                                                                             self.exfee = crossGroupViewController.cross.exfee;
-//                                                                                                            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-                                                                                                            self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
+                                                                                                            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+//                                                                                                            self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
                                                                                                             [exfeeContainer reloadData];
                                                                                                             [self reloadSelected];
                                                                                                         }
@@ -1213,7 +1230,7 @@ typedef enum {
 - (void)reloadSelected
 {
     BOOL flag = NO;
-    NSNumber *inv_id = [(Invitation*)[self.selected_invitations objectAtIndex:0] invitation_id];
+    NSNumber *inv_id = _selected_invitation.invitation_id;
     for (NSUInteger i = 0; i < self.sortedInvitations.count; i++) {
         Invitation* inv = [(NSArray*)[self.sortedInvitations objectAtIndex:i] objectAtIndex:0];
         if ([inv.invitation_id integerValue] == [inv_id integerValue]) {
@@ -1222,11 +1239,11 @@ typedef enum {
             PSTCollectionViewCell* cell = [exfeeContainer cellForItemAtIndexPath:indexPath];
             if (cell != nil) {
                 [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionNone];
-                [self fillInvitationContent:_selected_invitations];
+                [self fillInvitationContent:_selected_invitation];
                 [self clickCell:cell];
             } else {
                 [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionBottom];
-                [self fillInvitationContent:_selected_invitations];
+                [self fillInvitationContent:_selected_invitation];
                 
                 double delayInSeconds = 0.01;
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
@@ -1240,13 +1257,13 @@ typedef enum {
         }
     }
     if (flag == NO) {
-        self.selected_invitations = nil;
+        self.selected_invitation = nil;
     }
-    if (self.selected_invitations == nil) {
-        self.selected_invitations = [self.sortedInvitations objectAtIndex:0];
+    if (self.selected_invitation == nil) {
+        self.selected_invitation = [self.sortedInvitations objectAtIndex:0];
         NSIndexPath * indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
         [exfeeContainer selectItemAtIndexPath:indexPath animated:NO scrollPosition:PSTCollectionViewScrollPositionNone];
-        [self fillInvitationContent:_selected_invitations];
+        [self fillInvitationContent:_selected_invitation];
     }
 }
 @end
