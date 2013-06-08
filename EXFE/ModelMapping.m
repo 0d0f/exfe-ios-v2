@@ -10,7 +10,7 @@
 #import <RestKit/RestKit.h>
 #import "Cross.h"
 #import "Exfee+EXFE.h"
-
+#import "IdentityId.h"
 
 @implementation ModelMapping
 + (void) buildMapping{
@@ -54,11 +54,13 @@
     
     // IdentityId Entity
     RKEntityMapping *identityIdMapping = [RKEntityMapping mappingForEntityForName:@"IdentityId" inManagedObjectStore:managedObjectStore];
-    [identityIdMapping addAttributeMappingsFromArray: @[ @"identity_id" ] ];
+    [identityIdMapping addPropertyMapping:[RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@"identity_id"]];
     
-    // IdentityId Request Object
-    RKObjectMapping *identityIdrequestMapping = [RKObjectMapping requestMapping];
-    [identityIdrequestMapping addAttributeMappingsFromArray:@[@"identity_id" ]];
+    RKResponseDescriptor *identityIdResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:identityIdMapping
+                                                                                                 pathPattern:nil
+                                                                                                     keyPath:@"notification_identities"
+                                                                                                 statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [objectManager addResponseDescriptor:identityIdResponseDescriptor];
     
     // Invitation Entity
     RKEntityMapping *invitationMapping = [RKEntityMapping mappingForEntityForName:@"Invitation" inManagedObjectStore:managedObjectStore];
@@ -72,12 +74,11 @@
     
     // Invitation Request Object
     RKObjectMapping *invitationrequestMapping = [RKObjectMapping requestMapping];
-    [invitationrequestMapping addAttributeMappingsFromDictionary:@{@"invitation_id": @"id"}];
+    [invitationrequestMapping addAttributeMappingsFromDictionary:@{@"invitation_id": @"id", @"notification_identity_array": @"notification_identities"}];
     [invitationrequestMapping addAttributeMappingsFromArray:@[@"rsvp_status",@"host",@"mates",@"via",@"updated_at",@"created_at",@"type"]];
     [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identity" toKeyPath:@"identity" withMapping:identityrequestMapping]];
     [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"invited_by" toKeyPath:@"invited_by" withMapping:identityrequestMapping]];
     [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"updated_by" toKeyPath:@"updated_by" withMapping:identityrequestMapping]];
-    [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"notification_identities" toKeyPath:@"notification_identities" withMapping:identityIdMapping]];
     
     // Exfee Entity
     RKEntityMapping *exfeeMapping = [RKEntityMapping mappingForEntityForName:@"Exfee" inManagedObjectStore:managedObjectStore];

@@ -932,7 +932,7 @@ typedef enum {
                                                     [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                     
                                                     self.exfee = editedExfee;
-                                                    //                                                    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+//                                                    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
                                                     self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
                                                     [exfeeContainer reloadData];
                                                     
