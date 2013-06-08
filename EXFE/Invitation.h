@@ -2,14 +2,14 @@
 //  Invitation.h
 //  EXFE
 //
-//  Created by huoju on 12/29/12.
+//  Created by Stony Wang on 13-6-8.
 //
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Identity;
+@class Identity, IdentitySet;
 
 @interface Invitation : NSManagedObject
 
@@ -24,5 +24,6 @@
 @property (nonatomic, retain) Identity *identity;
 @property (nonatomic, retain) Identity *invited_by;
 @property (nonatomic, retain) Identity *updated_by;
+@property (nonatomic, retain) IdentitySet *notification_identities;
 
 @end

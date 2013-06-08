@@ -12,8 +12,8 @@
 /**
  * DB version && name
  */
-#define APP_DB_VERSION 208
-#define DBNAME @"exfe_v2_8.sqlite"
+#define APP_DB_VERSION 209
+#define DBNAME @"exfe_v2_9.sqlite"
 
 /**
  * Flurry key

@@ -2,12 +2,13 @@
 //  Invitation.m
 //  EXFE
 //
-//  Created by huoju on 12/29/12.
+//  Created by Stony Wang on 13-6-8.
 //
 //
 
 #import "Invitation.h"
 #import "Identity.h"
+#import "IdentitySet.h"
 
 
 @implementation Invitation
@@ -23,5 +24,6 @@
 @dynamic identity;
 @dynamic invited_by;
 @dynamic updated_by;
+@dynamic notification_identities;
 
 @end
