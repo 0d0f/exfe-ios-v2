@@ -212,10 +212,10 @@
     [self reloadSelectionCountLabelWithAnimated:NO];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
+- (void)viewDidDisappear:(BOOL)animated {
     [self.contactDataSource clearRecentData];
     [self.contactDataSource deselectAllData];
-    [super viewWillDisappear:animated];
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark - Action

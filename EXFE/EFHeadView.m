@@ -257,6 +257,10 @@
 }
 
 - (void)titleShowAnimated:(BOOL)animated {
+    if (_willShowHandler) {
+        self.willShowHandler();
+    }
+    
     for (int i = 0; i < 4; i++) {
         CALayer *layer = self.titleLayers[i];
         layer.hidden = NO;
@@ -315,8 +319,8 @@
         self.topLayer.position = topLayerPosition;
         
         self.showed = YES;
-        if (_showCompletionHandler) {
-            self.showCompletionHandler();
+        if (_didShowHandler) {
+            self.didShowHandler();
         }
     }
 }
@@ -332,8 +336,8 @@
         self.showed = YES;
     }
     
-    if (self.showed && _showCompletionHandler) {
-        self.showCompletionHandler();
+    if (self.showed && _didShowHandler) {
+        self.didShowHandler();
     }
 }
 
