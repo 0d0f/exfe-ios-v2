@@ -68,7 +68,7 @@ EFTabBarDataSource
 }
 
 @property (nonatomic, retain) Exfee *exfee;
-@property (nonatomic, retain) NSArray* selected_invitations;
+@property (nonatomic, retain) Invitation* selected_invitation;
 @property (nonatomic, retain) NSArray *sortedInvitations;
 @property (nonatomic, copy) id onExitBlock;
 

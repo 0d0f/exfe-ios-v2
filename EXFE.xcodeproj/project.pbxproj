@@ -1331,6 +1331,9 @@
 		4FFD701617633A46009836F5 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD701517633A46009836F5 /* Invitation.m */; };
 		4FFD701717633A46009836F5 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD701517633A46009836F5 /* Invitation.m */; };
 		4FFD701817633A46009836F5 /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD701517633A46009836F5 /* Invitation.m */; };
+		4FFD701B17638546009836F5 /* IdentityId+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD701A17638546009836F5 /* IdentityId+EXFE.m */; };
+		4FFD701C17638546009836F5 /* IdentityId+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD701A17638546009836F5 /* IdentityId+EXFE.m */; };
+		4FFD701D17638546009836F5 /* IdentityId+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD701A17638546009836F5 /* IdentityId+EXFE.m */; };
 		7601F5641725861000032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		7601F56C1725861100032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
 		7601F56D1725861200032044 /* ExfeeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CEBFEE15BFE7BE002BCA27 /* ExfeeInputViewController.m */; };
@@ -2273,6 +2276,8 @@
 		4FFD6FFD176300F1009836F5 /* IdentityId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityId.m; sourceTree = "<group>"; };
 		4FFD701417633A46009836F5 /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Invitation.h; sourceTree = "<group>"; };
 		4FFD701517633A46009836F5 /* Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Invitation.m; sourceTree = "<group>"; };
+		4FFD701917638546009836F5 /* IdentityId+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IdentityId+EXFE.h"; sourceTree = "<group>"; };
+		4FFD701A17638546009836F5 /* IdentityId+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IdentityId+EXFE.m"; sourceTree = "<group>"; };
 		7601F5701727B94700032044 /* EFSearchIdentityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchIdentityCell.h; sourceTree = "<group>"; };
 		7601F5711727B94700032044 /* EFSearchIdentityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchIdentityCell.m; sourceTree = "<group>"; };
 		76073CDD174F3178007CBFC3 /* widget_exfee_30shine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_exfee_30shine.png; sourceTree = "<group>"; };
@@ -3028,6 +3033,8 @@
 				4F29C92F16F9A5B5001BB176 /* User+EXFE.m */,
 				763A01C01721222B0082CC9E /* LocalContact+EXFE.h */,
 				763A01C11721222C0082CC9E /* LocalContact+EXFE.m */,
+				4FFD701917638546009836F5 /* IdentityId+EXFE.h */,
+				4FFD701A17638546009836F5 /* IdentityId+EXFE.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -5796,6 +5803,7 @@
 				765A82F4175F255800448B64 /* EFImageManager.m in Sources */,
 				765A82FA175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 				4FFD701717633A46009836F5 /* Invitation.m in Sources */,
+				4FFD701C17638546009836F5 /* IdentityId+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5973,6 +5981,7 @@
 				765A82F5175F255800448B64 /* EFImageManager.m in Sources */,
 				765A82FB175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 				4FFD701817633A46009836F5 /* Invitation.m in Sources */,
+				4FFD701D17638546009836F5 /* IdentityId+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6150,6 +6159,7 @@
 				765A82F3175F255800448B64 /* EFImageManager.m in Sources */,
 				765A82F9175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 				4FFD701617633A46009836F5 /* Invitation.m in Sources */,
+				4FFD701B17638546009836F5 /* IdentityId+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
