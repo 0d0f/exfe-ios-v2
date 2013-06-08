@@ -99,6 +99,23 @@
     return count;
 }
 
+- (NSArray *)selectedContactObjects {
+    NSUInteger count = [self numberOfSelectedContactObjects];
+    if (0 == count)
+        return nil;
+    
+    NSMutableArray *objects = [NSMutableArray arrayWithCapacity:count];
+    for (NSArray *list in self.sections) {
+        for (EFContactObject *contactObject in list) {
+            if (contactObject.isSelected) {
+                [objects addObject:contactObject];
+            }
+        }
+    }
+    
+    return objects;
+}
+
 - (NSString *)titleForSection:(NSUInteger)section {
     NSArray *list = ((NSArray *)self.sections[section]);
     NSString *title = list.count ? self.sectionTitles[section] : nil;
@@ -143,6 +160,10 @@
     if (_selectionDidChangeHandler) {
         self.selectionDidChangeHandler();
     }
+}
+
+- (void)clearRecentData {
+    [self.recentList removeAllObjects];
 }
 
 - (void)deselectAllData {

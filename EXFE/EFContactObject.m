@@ -128,6 +128,11 @@
         } else {
             roughIdentity.selected = selected;
         }
+        
+        if (selected && (kEFRoughIdentityGetIdentityStatusReady == roughIdentity.status || kEFRoughIdentityGetIdentityStatusFailure == roughIdentity.status)) {
+            [roughIdentity getIdentityWithSuccess:nil
+                                          failure:nil];
+        }
     }
     
     [self didChangeValueForKey:@"selected"];

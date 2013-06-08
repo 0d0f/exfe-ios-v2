@@ -18,6 +18,8 @@
 #import "EFSearchIdentityCell.h"
 #import "EFAPI.h"
 #import "WCAlertView.h"
+#import "MBProgressHUD.h"
+#import "EXSpinView.h"
 
 @interface EFContactTableViewSectionHeaderView : UIView
 @property (nonatomic, retain) UILabel *titleLabel;
@@ -79,6 +81,8 @@
 
 - (UITableViewCell *)_contactDataCellForTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
 - (UITableViewCell *)_identityCellForTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
+
+- (void)_selectSearchResultWithCompleteHandler:(void (^)(void))handler;
 @end
 
 @interface EFContactViewController (ContactTableViewDisplay)
@@ -209,6 +213,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [self.contactDataSource clearRecentData];
     [self.contactDataSource deselectAllData];
     [super viewWillDisappear:animated];
 }
@@ -220,7 +225,45 @@
 }
 
 - (IBAction)addButtonPressed:(id)sender {
+    if (!_addActionHandler)
+        return;
     
+    void (^block)(void) = ^{
+        NSArray *selectedObjects = [self.contactDataSource selectedContactObjects];
+        
+        if (nil == selectedObjects || 0 == selectedObjects.count) {
+            return ;
+        } else {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.labelText = @"Adding...";
+            hud.mode = MBProgressHUDModeCustomView;
+            EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+            [bigspin startAnimating];
+            hud.customView = bigspin;
+            [bigspin release];
+            
+            for (EFContactObject *contactObject in selectedObjects) {
+                for (RoughIdentity *roughIdentity in contactObject.roughIdentities) {
+                    while (kEFRoughIdentityGetIdentityStatusSuccess != roughIdentity.status || kEFRoughIdentityGetIdentityStatusFailure != roughIdentity.status) {
+                        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                                 beforeDate:[NSDate distantFuture]];
+                    }
+                }
+            }
+            
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            
+            _addActionHandler(selectedObjects);
+        }
+    };
+    
+    if (self.contactSearchBar.text.length && self.searchDisplayController.isActive) {
+        [self _selectSearchResultWithCompleteHandler:^{
+            block();
+        }];
+    } else {
+        block();
+    }
 }
 
 #pragma mark -
@@ -542,53 +585,7 @@
     if (NSOrderedSame == [indexPath compare:[NSIndexPath indexPathForItem:0 inSection:0]]) {
         [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:NO];
         
-        NSString *keyWord = self.contactSearchBar.text;
-        Provider matchedProvider = [Util matchedProvider:keyWord];
-        
-        if (kProviderUnknown != matchedProvider) {
-            EFChoosePeopleViewCell *cell = (EFChoosePeopleViewCell *)[self.searchDisplayController.searchResultsTableView cellForRowAtIndexPath:indexPath];
-            EFContactObject *contactObject = cell.contactObject;
-            contactObject.selected = YES;
-            [self.contactDataSource addContactObjectToRecent:contactObject];
-            
-            if (kProviderPhone == matchedProvider) {
-                NSString *message = nil;
-                if ([self.contactSearchBar.text hasPrefix:@"+"]) {
-                    message = self.contactSearchBar.text;
-                } else {
-                    NSString *countryCode = [Util getTelephoneCountryCode];
-                    message = [NSString stringWithFormat:@"+%@ %@", countryCode, self.contactSearchBar.text];
-                }
-                
-                [WCAlertView showAlertWithTitle:@"Set invitee name"
-                                        message:message
-                             customizationBlock:^(WCAlertView *alertView) {
-                                 alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-                                 UITextField *textField = [alertView textFieldAtIndex:0];
-                                 textField.placeholder = @"Enter contact name";
-                                 textField.textAlignment = UITextAlignmentCenter;
-                             }
-                                completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
-                                    if (buttonIndex == alertView.cancelButtonIndex) {
-                                        UITextField *field = [alertView textFieldAtIndex:0];
-                                        NSString *inputName = [NSString stringWithString:field.text];
-                                        
-                                        contactObject.name = inputName;
-                                        self.searchResultRoughIdentity.externalUsername = inputName;
-                                        if (self.searchResultRoughIdentity.identity) {
-                                            self.searchResultRoughIdentity.identity.name = inputName;
-                                        }
-                                        
-                                        [self.searchDisplayController setActive:NO animated:YES];
-                                    }
-                                }
-                              cancelButtonTitle:@"Done"
-                              otherButtonTitles:@"Cancel", nil];
-
-            } else {
-                [self.searchDisplayController setActive:NO animated:YES];
-            }
-        }
+        [self _selectSearchResultWithCompleteHandler:nil];
         
         return;
     }
@@ -854,6 +851,72 @@
         }
         
         self.selectCountLabel.text = [NSString stringWithFormat:@"%d", count];
+    }
+}
+
+- (void)_selectSearchResultWithCompleteHandler:(void (^)(void))handler {
+    NSString *keyWord = self.contactSearchBar.text;
+    Provider matchedProvider = [Util matchedProvider:keyWord];
+    
+    if (kProviderUnknown != matchedProvider) {
+        EFChoosePeopleViewCell *cell = (EFChoosePeopleViewCell *)[self.searchDisplayController.searchResultsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+        EFContactObject *contactObject = cell.contactObject;
+        
+        if (kProviderPhone == matchedProvider) {
+            NSString *message = nil;
+            if ([self.contactSearchBar.text hasPrefix:@"+"]) {
+                message = self.contactSearchBar.text;
+            } else {
+                NSString *countryCode = [Util getTelephoneCountryCode];
+                message = [NSString stringWithFormat:@"+%@ %@", countryCode, self.contactSearchBar.text];
+            }
+            
+            [WCAlertView showAlertWithTitle:@"Set invitee name"
+                                    message:message
+                         customizationBlock:^(WCAlertView *alertView) {
+                             alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+                             UITextField *textField = [alertView textFieldAtIndex:0];
+                             textField.placeholder = @"Enter contact name";
+                             textField.textAlignment = UITextAlignmentCenter;
+                         }
+                            completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
+                                if (buttonIndex == alertView.cancelButtonIndex) {
+                                    UITextField *field = [alertView textFieldAtIndex:0];
+                                    NSString *inputName = [NSString stringWithString:field.text];
+                                    
+                                    if (inputName && inputName.length) {
+                                        contactObject.name = inputName;
+                                        self.searchResultRoughIdentity.externalUsername = inputName;
+                                        if (self.searchResultRoughIdentity.identity) {
+                                            self.searchResultRoughIdentity.identity.name = inputName;
+                                        }
+                                    }
+                                    
+                                    contactObject.selected = YES;
+                                    [self.contactDataSource addContactObjectToRecent:contactObject];
+                                    [self.searchDisplayController setActive:NO animated:YES];
+                                    
+                                    if (handler) {
+                                        handler();
+                                    }
+                                }
+                            }
+                          cancelButtonTitle:@"Done"
+                          otherButtonTitles:@"Cancel", nil];
+            
+        } else {
+            contactObject.selected = YES;
+            [self.contactDataSource addContactObjectToRecent:contactObject];
+            [self.searchDisplayController setActive:NO animated:YES];
+            
+            if (handler) {
+                handler();
+            }
+        }
+    } else {
+        if (handler) {
+            handler();
+        }
     }
 }
 

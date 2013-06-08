@@ -90,19 +90,20 @@
 
 - (void)selectContactObjectAtIndexPath:(NSIndexPath *)indexPath {
     EFContactObject *contactObject = [self contactObjectAtIndexPath:indexPath];
-    contactObject.selected = YES;
+    [self selectContactObject:contactObject];
 }
 
 - (void)deselectContactObjectAtIndexPath:(NSIndexPath *)indexPath {
     EFContactObject *contactObject = [self contactObjectAtIndexPath:indexPath];
-    contactObject.selected = NO;
+    [self deselectContactObject:contactObject];
 }
 
 - (void)selectContactObject:(EFContactObject *)object {
+    object.selected = YES;
 }
 
 - (void)deselectContactObject:(EFContactObject *)object {
-
+    object.selected = NO;
 }
 
 #pragma mark - Private
