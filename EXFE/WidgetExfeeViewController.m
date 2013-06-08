@@ -23,12 +23,14 @@
 #import "ImgCache.h"
 #import "DateTimeUtil.h"
 #import "NSString+EXFE.h"
-//#import "EFChoosePeopleViewController.h"
+#import "EFContactViewController.h"
 #import "EFAPIServer.h"
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
 #import "Cross.h"
 #import "EFAPI.h"
+#import "RoughIdentity.h"
+#import "EFContactObject.h"
 
 
 #define kTagViewExfeeRoot         10
@@ -873,82 +875,80 @@ typedef enum {
     NSInteger section = indexPath.section;
     if (section == 1) {
         if (indexPath.row == self.sortedInvitations.count){
-//            EFChoosePeopleViewController *viewController = [[EFChoosePeopleViewController alloc] initWithNibName:@"EFChoosePeopleViewController"
-//                                                                                                          bundle:nil];
-//            
-//            viewController.addActionHandler = ^(NSArray *identities){
-//                NSAssert(dispatch_get_main_queue() == dispatch_get_current_queue(), @"WTF! MUST on main queue! boy!");
-//                
-//                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-//                hud.labelText = @"Adding...";
-//                hud.mode = MBProgressHUDModeCustomView;
-//                EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-//                [bigspin startAnimating];
-//                hud.customView = bigspin;
-//                [bigspin release];
-//
-//                
-//                Exfee *exfee = [Exfee disconnectedEntity];
-//                [exfee addToContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
-//                exfee.exfee_id = [self.exfee.exfee_id copy];
-//                
-//                NSMutableSet *invitations = [[NSMutableSet alloc] init];
-//                for (NSArray *personIdentities in identities) {
-//                    BOOL hasAddedNoresponse = NO;
-//                    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-//                    NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
-//                    
-//                    for (Identity *identity in personIdentities) {
-//                        NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
-//                        Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
-//                        
-//                        if (!hasAddedNoresponse) {
-//                            hasAddedNoresponse = YES;
-//                            invitation.rsvp_status = @"NORESPONSE";
-//                        } else {
-//                            invitation.rsvp_status = @"NOTIFICATION";
-//                        }
-//                        
-//                        invitation.identity = identity;
-//                        Invitation *myinvitation = [self.exfee getMyInvitation];
-//                        if (myinvitation != nil) {
-//                            invitation.updated_by = myinvitation.identity;
-//                        } else {
-//                            invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
-//                        }
-//                        
-//                        [invitations addObject:invitation];
-//                        [invitation release];
-//                    }
-//                }
-//                
-//                [exfee addInvitations:invitations];
-//                [invitations release];
-//                
-//                Identity *myidentity = [self.exfee getMyInvitation].identity;
-//                
-//                [[EFAPIServer sharedInstance] editExfee:exfee
-//                                             byIdentity:myidentity
-//                                                success:^(Exfee *editedExfee){
-//                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                                                    
-//                                                    self.exfee = editedExfee;
-////                                                    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
-//                                                    self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
-//                                                    [exfeeContainer reloadData];
-//                                                    
-//                                                    [self dismissViewControllerAnimated:YES completion:nil];
-//                                                }
-//                                                failure:^(NSError *error){
-//                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                                                }];
-//                
-//            };
-//            
-//            [self presentViewController:viewController
-//                               animated:YES
-//                             completion:nil];
-//            [viewController release];
+            void (^addActionHandler)(NSArray *contactObjects) = ^(NSArray *contactObjects){
+                NSAssert(dispatch_get_main_queue() == dispatch_get_current_queue(), @"WTF! MUST on main queue! boy!");
+                
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.labelText = @"Adding...";
+                hud.mode = MBProgressHUDModeCustomView;
+                EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+                [bigspin startAnimating];
+                hud.customView = bigspin;
+                [bigspin release];
+                
+                
+                Exfee *exfee = [Exfee disconnectedEntity];
+                [exfee addToContext:[RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext];
+                exfee.exfee_id = [self.exfee.exfee_id copy];
+                
+                NSMutableSet *invitations = [[NSMutableSet alloc] init];
+                RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
+                
+                for (EFContactObject *object in contactObjects) {
+                    RoughIdentity *roughIdentity = object.roughIdentities[0];
+                    Identity *identity = roughIdentity.identity;
+                    identity.name = object.name;
+                    
+                    NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
+                    Invitation *invitation = [[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:context];
+                    invitation.rsvp_status = @"NORESPONSE";
+                    invitation.identity = identity;
+                    
+                    Invitation *myinvitation = [self.exfee getMyInvitation];
+                    if (myinvitation != nil) {
+                        invitation.updated_by = myinvitation.identity;
+                    } else {
+                        invitation.updated_by = [[[User getDefaultUser].identities allObjects] objectAtIndex:0];
+                    }
+                    
+                    for (int i = 1; i < object.roughIdentities.count; i++) {
+                        IdentityId *identityId = [object.roughIdentities[i] identityIdValue];
+                        [invitation addNotification_identitiesObject:identityId];
+                    }
+                    
+                    [invitations addObject:invitation];
+                    [invitation release];
+                }
+                
+                [exfee addInvitations:invitations];
+                [invitations release];
+                
+                Identity *myidentity = [self.exfee getMyInvitation].identity;
+                
+                [[EFAPIServer sharedInstance] editExfee:exfee
+                                             byIdentity:myidentity
+                                                success:^(Exfee *editedExfee){
+                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                    
+                                                    self.exfee = editedExfee;
+                                                    //                                                    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+                                                    self.sortedInvitations = [self.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
+                                                    [exfeeContainer reloadData];
+                                                    
+                                                    [self dismissViewControllerAnimated:YES completion:nil];
+                                                }
+                                                failure:^(NSError *error){
+                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                }];
+            };
+            
+            EFContactViewController *viewController = [[EFContactViewController alloc] initWithNibName:@"EFContactViewController" bundle:nil];
+            viewController.addActionHandler = addActionHandler;
+            [self presentViewController:viewController
+                               animated:YES
+                             completion:nil];
+            [viewController release];
         } else {
             [self hidePopupIfShown];
             PSTCollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
