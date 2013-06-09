@@ -44,7 +44,10 @@
         
         NSMutableArray *roughIdentities = [[NSMutableArray alloc] initWithCapacity:identities.count];
         for (Identity *identity in identities) {
-            [roughIdentities addObject:[identity roughIdentityValue]];
+            RoughIdentity *roughIdentity = [identity roughIdentityValue];
+            NSParameterAssert(roughIdentity);
+            
+            [roughIdentities addObject:roughIdentity];
         }
         [roughIdentities sortUsingComparator:^(id obj1, id obj2){
             Identity *identity1 = (Identity *)obj1;
