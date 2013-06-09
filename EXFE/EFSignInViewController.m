@@ -588,7 +588,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             item1.padding = CSLinearLayoutMakePadding(5, 20, 0, 20);
             
             
-            Provider p = [Util matchedProvider:_inputIdentity.text];
+            Provider p = [Util matchedProvider:[_inputIdentity.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
             switch (p) {
                 case kProviderPhone:
                     _labelVerifyDescription.text = @"This number requires verification before proceeding. Verification request is sent, please check your message for instructions.";
@@ -681,9 +681,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         [self setStage:kStageVerificate];
     } else if([flag isEqualToString:@"AUTHENTICATE"]){
         
-        
-        Provider provider = [Util matchedProvider:_inputIdentity.text];
-        NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
+        NSString * identityText = [_inputIdentity.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        Provider provider = [Util matchedProvider:identityText];
+        NSDictionary *dict = [Util parseIdentityString:identityText byProvider:provider];
         NSString *username = [dict valueForKeyPath:@"external_username"];
         
         NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
@@ -871,8 +871,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 {
     if (identity.length > 0) {
         // start query
-        Provider provider = [Util matchedProvider:identity];
-        NSDictionary *dict = [Util parseIdentityString:identity byProvider:provider];
+        NSString *identityText = [identity stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+        Provider provider = [Util matchedProvider:identityText];
+        NSDictionary *dict = [Util parseIdentityString:identityText byProvider:provider];
         NSString *external_username = [dict valueForKeyPath:@"external_username"];
         if (provider != kProviderUnknown) {
             EFAPIServer *server = [EFAPIServer sharedInstance];
@@ -889,9 +891,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                                         }
                                          };
                             }
-                            [self.identityCache setObject:resp forKey:identity];
+                            [self.identityCache setObject:resp forKey:identityText];
                             
-                            if ([_inputIdentity.text isEqualToString:identity]) {
+                            NSString *identityText2 = [_inputIdentity.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                            
+                            if ([identityText2 isEqualToString:identityText]) {
                                 [self fillIdentityResp:resp];
                             }
                         } else {
@@ -927,7 +931,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 #pragma mark Button / View Click Handler
 - (void)expandIdentity:(id)sender
 {
-    NSString* identity = _inputIdentity.text;
+    NSString* identity = [_inputIdentity.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     Provider provider = [Util candidateProvider:identity];
     
     if (provider == kProviderUnknown) {
@@ -1036,7 +1040,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)signIn:(UIControl *)sender
 {
-    if (_inputIdentity.text.length == 0) {
+    NSString *identityText = [_inputIdentity.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (identityText.length == 0) {
         return;
     }
     if (_inputPassword.text.length == 0) {
@@ -1047,8 +1052,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [self hideInlineError];
     
     [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
-    Provider provider = [Util matchedProvider:_inputIdentity.text];
-    NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
+    Provider provider = [Util matchedProvider:identityText];
+    NSDictionary *dict = [Util parseIdentityString:identityText byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     [[EFAPIServer sharedInstance] signIn:external_username with:provider password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
         sender.enabled = YES;
@@ -1115,7 +1120,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 - (void)signUp:(UIControl *)sender
 {
     sender.enabled = NO;
-    if (_inputIdentity.text.length == 0) {
+    NSString *identityText = [_inputIdentity.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if (identityText.length == 0) {
         return;
     }
     if (_inputPassword.text.length == 0) {
@@ -1133,8 +1140,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     [self hideInlineError];
     
-    Provider provider = [Util matchedProvider:_inputIdentity.text];
-    NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
+    Provider provider = [Util matchedProvider:identityText];
+    NSDictionary *dict = [Util parseIdentityString:identityText byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     
     [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
@@ -1307,8 +1314,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                               break;
                                               
                                           case FBSessionStateClosedLoginFailed:
-                                              [self showInlineError:@"Login Failed." with:@"There is something wrong. Please try again later."];
-                                              
+//                                              [self showInlineError:@"Login Failed." with:@"There is something wrong. Please try again later."];
+                                              [self showInlineError:@"Authorization failed." with:@"Please check your network connection and account setting in Settings app."];
                                               [self syncFBAccount];
                                               break;
                                           default:
@@ -1405,9 +1412,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)forgetPwd:(UIControl *)sender
 {
+    NSString *identityText = [_inputIdentity.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     sender.enabled = NO;
-    Provider provider = [Util matchedProvider:_inputIdentity.text];
-    NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
+    Provider provider = [Util matchedProvider:identityText];
+    NSDictionary *dict = [Util parseIdentityString:identityText byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     
     CGPoint p = [sender.superview convertPoint:sender.center toView:self.rootView];
@@ -1522,7 +1530,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     if (textField.tag == kViewTagInputIdentity) {
-        NSString *identity = _inputIdentity.text;
+        NSString *identity = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         if ([identity isEqualToString:self.lastInputIdentity]) {
             return;
@@ -1629,7 +1637,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [bigspin release];
     
     [_apiManager performReverseAuthForAccount:acct withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
-        if (responseData) {
+        if (!error) {
             NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
             NSDictionary *params = [Util splitQuery:responseStr];
             
@@ -1686,7 +1694,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         [Util showConnectError:error delegate:nil];
 //                        [self showInlineError:@"Failed to connect twitter server." with:@"Please retry or wait awhile."];
                         break;
-                        
+                    case NSURLErrorUserCancelledAuthentication:
+                        [self showInlineError:@"Authorization failed." with:@"Please check your network connection and account setting in Settings app."];
+                        break;
                     default:
                         break;
                 }

@@ -193,33 +193,33 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         self.btnStart.tag = kViewTagButtonStart;
         
         CSLinearLayoutItem *item = [CSLinearLayoutItem layoutItemForView:self.btnStart];
-        item.padding = CSLinearLayoutMakePadding(10.0, 15, 0, 15);
+        item.padding = CSLinearLayoutMakePadding(10.0, 15, 6, 15);
         item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
         item.fillMode = CSLinearLayoutItemFillModeNormal;
         [linearLayoutView addItem:item];
     }
     
-    {// Verification Title
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 40)];
-        label.text = @"Verification";
-        label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0];
-        label.backgroundColor = [UIColor clearColor];
-        [label wrapContent];
-        self.labelVerifyTitle = label;
-        self.labelVerifyTitle.tag = kViewTagVerificationTitle;
-    }
-    
-    {// Verification Description
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 80)];
-        label.text = @"This number requires verification before proceeding. Verification request is sent, please check your message for instructions.";
-        label.numberOfLines = 0;
-        label.backgroundColor = [UIColor clearColor];
-        label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
-        [label wrapContent];
-        label.lineBreakMode = UILineBreakModeWordWrap;
-        self.labelVerifyDescription = label;
-        self.labelVerifyDescription.tag = kViewTagVerificationDescription;
-    }
+//    {// Verification Title
+//        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 40)];
+//        label.text = @"Verification";
+//        label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0];
+//        label.backgroundColor = [UIColor clearColor];
+//        [label wrapContent];
+//        self.labelVerifyTitle = label;
+//        self.labelVerifyTitle.tag = kViewTagVerificationTitle;
+//    }
+//    
+//    {// Verification Description
+//        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 80)];
+//        label.text = @"This number requires verification before proceeding. Verification request is sent, please check your message for instructions.";
+//        label.numberOfLines = 0;
+//        label.backgroundColor = [UIColor clearColor];
+//        label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
+//        [label wrapContent];
+//        label.lineBreakMode = UILineBreakModeWordWrap;
+//        self.labelVerifyDescription = label;
+//        self.labelVerifyDescription.tag = kViewTagVerificationDescription;
+//    }
     
     {// Overlay error hint
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 46)];
@@ -267,7 +267,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [background release];
     
     CSLinearLayoutItem *snsItem = [CSLinearLayoutItem layoutItemForView:snsLayoutView];
-    snsItem.padding = CSLinearLayoutMakePadding(27, 12, 240, 12);
+    snsItem.padding = CSLinearLayoutMakePadding(21, 12, 240, 12);
     snsItem.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
     snsItem.fillMode = CSLinearLayoutItemFillModeNormal;
     [linearLayoutView addItem:snsItem];
@@ -476,7 +476,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 - (void)showInlineError:(NSString *)title with:(NSString *)description
 {
     
-    BOOL layoutFlag = NO;
     NSString* full = [NSString stringWithFormat:@"%@ %@", title, description];
     
     [_inlineError setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
@@ -486,11 +485,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }];
     
     CSLinearLayoutItem *baseitem = [self.rootView findItemByTag:kViewTagButtonStart];
-    if (baseitem == nil) {
-        layoutFlag = YES;
-        baseitem = [self.rootView findItemByTag:kViewTagSnsGroup];
-    }
-    
     if (baseitem) {
         [_inlineError wrapContent];
         CSLinearLayoutItem *item = [self.rootView findItemByTag:_inlineError.tag];
@@ -498,12 +492,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             item = [CSLinearLayoutItem layoutItemForView:_inlineError];
             item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
             item.fillMode = CSLinearLayoutItemFillModeNormal;
-            [self.rootView insertItem:item beforeItem:baseitem];
+            [self.rootView insertItem:item afterItem:baseitem];
         } else {
-            [self.rootView moveItem:item beforeItem:baseitem];
+            [self.rootView moveItem:item afterItem:baseitem];
         }
-        CGFloat top = layoutFlag ? 27 : 0;
-        item.padding = CSLinearLayoutMakePadding(top, 20, 0, 20);
+        item.padding = CSLinearLayoutMakePadding(0, 20, 0, 20);
     }
 }
 
@@ -609,15 +602,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     sender.enabled = NO;
     [self hideInlineError];
 
-    
-    
-    NSString* identity = _inputIdentity.text;
-    Provider provider = [Util matchedProvider:identity];
-    if (provider == kProviderUnknown) {
-        [self showErrorInfo:@"Invalid identity." dockOn:_inputIdentity];
-        return;
-    }
-    
+    NSString* identity = [_inputIdentity.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    Provider provider = [Util candidateProvider:identity];
     if (provider == kProviderPhone) {
         if (![identity hasPrefix:@"+"]) {
             NSString *cc = [Util getTelephoneCountryCode];
@@ -632,6 +618,13 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             sender.enabled = YES;
             return;
         }
+    }
+    
+    provider = [Util matchedProvider:identity];
+    if (provider == kProviderUnknown) {
+        [self showErrorInfo:@"Invalid identity." dockOn:_inputIdentity];
+        sender.enabled = YES;
+        return;
     }
     
     [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
@@ -689,8 +682,16 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                 [oauth release];
                                 
                             }else{
+                                NSString * message = @"Verification is sent. Please check your email for instructions.";
+                                if (provider == kProviderPhone) {
+                                    message = @"Verification is sent. Please check your message for instructions.";
+                                }
                                 
-                                [self loadUserAndExit];
+                                UIAlertView *alertView = [UIAlertView alertViewWithTitle:@"Verification" message:message];
+                                [alertView addButtonWithTitle:@"OK" handler:^{
+                                    [self loadUserAndExit];
+                                }];
+                                [alertView show];
                             }
                         }
                     }   break;
@@ -698,6 +699,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         // [code integerValue] == 403
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
                         if ([@"failed" isEqualToString:errorType]) {
+                            [self showInlineError:@"Adding invitation failed." with:@"Please check spell and retry."];
                         }
                     }
                         break;
@@ -846,7 +848,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                               break;
                                               
                                           case FBSessionStateClosedLoginFailed:
-                                              [self showInlineError:@"Login Failed." with:@"There is something wrong. Please try again later."];
+                                              [self showInlineError:@"Authorization failed." with:@"Please check your network connection and account setting in Settings app."];
                                               
                                               [self syncFBAccount];
                                               break;
@@ -1009,7 +1011,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [bigspin release];
     
     [_apiManager performReverseAuthForAccount:acct withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
-        if (responseData) {
+        if (!error) {
             NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
             NSDictionary *params = [Util splitQuery:responseStr];
             
@@ -1075,7 +1077,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         [Util showConnectError:error delegate:nil];
                         //                        [self showInlineError:@"Failed to connect twitter server." with:@"Please retry or wait awhile."];
                         break;
-                        
+                    case NSURLErrorUserCancelledAuthentication:
+                        [self showInlineError:@"Authorization failed." with:@"Please check your network connection and account setting in Settings app."];
                     default:
                         break;
                 }
