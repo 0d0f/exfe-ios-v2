@@ -320,12 +320,12 @@
         if (0 == section) {
             return 0.0f;
         } else {
-            return 19.0f;
+            return [self tableView:tableView numberOfRowsInSection:section] ? 19.0f : 0.0f;
         }
     }
     
     if (0 != section && section + 1 < [self searchTableViewNumberOfSections]) {
-        return 19.0f;
+        return [self tableView:tableView numberOfRowsInSection:section] ? 19.0f : 0.0f;
     } else {
         return 0.0f;
     }
