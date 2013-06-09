@@ -11,19 +11,17 @@
 
 @implementation EFAPIServer (Place)
 
-- (void)getTopPlaceNearbyWithLocation:(CLLocationCoordinate2D)location
+- (void)reverseGeocodingWithLocation:(CLLocationCoordinate2D)location
                               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
-    // should be replaced by GeoCoding api: https://developers.google.com/maps/documentation/geocoding/
-    NSString *endpoint = @"https://maps.googleapis.com/maps/api/place/search/json";
+    NSString *endpoint = @"https://maps.googleapis.com/maps/api/geocode/json";
     
     
-    NSDictionary *params = @{@"location": [NSString stringWithFormat:@"%g,%g", location.latitude, location.longitude],
-                             @"radius": @"1000",
+    NSDictionary *params = @{@"latlng": [NSString stringWithFormat:@"%g,%g", location.latitude, location.longitude],
                              @"language": language,
-                             @"sensor": @"true",
-                             @"key": GOOGLE_API_KEY};
+                             @"sensor": @"true"};
+    //@"key": GOOGLE_API_KEY
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     [manager.HTTPClient.operationQueue cancelAllOperations];

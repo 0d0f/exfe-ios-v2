@@ -46,7 +46,6 @@ typedef enum {
     UITableView* _tableView;
     id delegate;
     EXPlaceEditView *placeedit;
-    UIActionSheet *actionsheet;
     UIImageView *inputbackgroundImage;
     UIView *backgroundview;
     BOOL isedit;
@@ -72,27 +71,6 @@ typedef enum {
 @property (nonatomic, retain) Place *selecetedPlace;
 @property (nonatomic, retain) NSMutableDictionary *customPlace;
 @property (nonatomic, retain) NSMutableArray *placeResults;
-    
-//- (void) PlaceEditClose:(id) sender;
-//- (void) textDidChange:(NSNotification*)notification;
-//- (void) editingDidBegan:(NSNotification*)notification;
-//- (void) reloadPlaceData:(NSArray*)places;
-//- (void) fillTopPlace:(NSDictionary*)topPlace;
-//- (void) drawMapAnnontations:(int)idx;
-//
-//- (void) selectOnMap:(id) sender;
+
 - (void) selectPlace:(int)index editing:(BOOL)editing;
-//- (void) addPlaceEdit:(Place*)_place;
-//- (void) getPlace;
-//- (void) getPlacefromapi;
-//- (void) setRightButton:(NSString*) title Selector:(SEL)aSelector;
-//- (void) done;
-//- (void) maplongpress:(UILongPressGestureRecognizer *)gestureRecognizer;
-//- (void) setPlace:(Place*)_place isedit:(BOOL)editstate;
-//- (void) setViewStyle:(EXPlaceViewStyle)style;
-//- (void) clearplace;
-//- (void) initPlaceView;
-//- (BOOL) isPlaceNull;
-//- (void) addCustomAnnotation:(CLLocationCoordinate2D)location;
-//- (void) saveResultsFromGooglePlaceAPI:(NSArray*)results;
 @end
