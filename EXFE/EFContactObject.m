@@ -62,8 +62,23 @@
             }
         }];
         
-        self.roughIdentities = roughIdentities;
+        NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:roughIdentities.count];
+        for (RoughIdentity *roughIdentity1 in roughIdentities) {
+            BOOL isContained = NO;
+            for (RoughIdentity *roughIdentity2 in result) {
+                if ([roughIdentity1 isEqualToRoughIdentity:roughIdentity2]) {
+                    isContained = YES;
+                    break;
+                }
+            }
+            if (!isContained) {
+                [result addObject:roughIdentity1];
+            }
+        }
         [roughIdentities release];
+        
+        self.roughIdentities = result;
+        [result release];
         
         Identity *defaultIdentity = identities[0];
         

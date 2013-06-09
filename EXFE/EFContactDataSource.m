@@ -26,7 +26,6 @@
 @property (nonatomic, retain) NSMutableArray *exfeeList;
 @property (nonatomic, retain) NSMutableArray *contactList;
 
-@property (nonatomic, assign, getter = isLoaded) BOOL loaded;
 @end
 
 @interface EFContactDataSource (Private)

@@ -126,17 +126,21 @@
     [super viewDidLoad];
     
     // Contact DataSource
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.mode = MBProgressHUDModeCustomView;
-    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-    [bigspin startAnimating];
-    hud.customView = bigspin;
-    [bigspin release];
-    hud.labelText = @"Loading";
-    
-    __block BOOL isProgressHubVisible = YES;
-    
     EFContactDataSource *contactDataSource = [EFContactDataSource defaultDataSource];
+    
+    __block BOOL isProgressHubVisible = NO;
+    if (!contactDataSource.isLoaded) {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeCustomView;
+        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+        [bigspin startAnimating];
+        hud.customView = bigspin;
+        [bigspin release];
+        hud.labelText = @"Loading";
+        
+        isProgressHubVisible = YES;
+    }
+    
     contactDataSource.dataDidChangeHandler = ^{
         [self.tableView reloadData];
     };
