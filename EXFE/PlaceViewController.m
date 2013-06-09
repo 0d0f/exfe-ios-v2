@@ -1244,7 +1244,8 @@
 
 - (void) editingDidBegan:(NSNotification*)notification{
     willUserScroll = YES;
-    [self setViewStyle:EXPlaceViewStyleTableview];
+    [self setViewStyle:EXPlaceViewStyleBigTableview];
+//    [self setViewStyle:EXPlaceViewStyleTableview];
     
 }
 - (void) setRightButton:(NSString*) title Selector:(SEL)aSelector{
