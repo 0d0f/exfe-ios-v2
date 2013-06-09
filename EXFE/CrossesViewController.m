@@ -92,11 +92,12 @@
     headView.titlePressedHandler = ^{
         [self ShowGatherView];
     };
-    headView.didShowHandler = ^{
+    headView.willShowHandler = ^{
         [self.tableView beginUpdates];
         [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView endUpdates];
     };
+    
     self.headView = headView;
     [headView release];
     
@@ -156,7 +157,7 @@
                                  [self.headView.layer addAnimation:popAnimation forKey:@"pop"];
                                  self.headView.layer.transform = CATransform3DIdentity;
                                  
-                                 double delayInSeconds = 0.6f;
+                                 double delayInSeconds = 0.1f;
                                  dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
                                  dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                                      [self.headView showAnimated:YES];

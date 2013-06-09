@@ -26,7 +26,6 @@
 @property (nonatomic, retain) NSMutableArray *exfeeList;
 @property (nonatomic, retain) NSMutableArray *contactList;
 
-@property (nonatomic, assign, getter = isLoaded) BOOL loaded;
 @end
 
 @interface EFContactDataSource (Private)
@@ -272,16 +271,6 @@
 }
 
 - (void)_loadContacts {
-//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-//    hud.mode = MBProgressHUDModeCustomView;
-//    EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-//    [bigspin startAnimating];
-//    hud.customView = bigspin;
-//    [bigspin release];
-//    hud.labelText = @"Loading";
-//    
-//    __block BOOL isProgressHubVisible = YES;
-    
     UILogPush(@"Start Loading Contact.");
     [[EXAddressBookService defaultService] reset];
     [[EXAddressBookService defaultService] checkAddressBookAuthorizationStatusWithCompletionHandler:^(BOOL granted){
@@ -303,10 +292,10 @@
                                                             if (_dataDidChangeHandler) {
                                                                 self.dataDidChangeHandler();
                                                             }
-//                                                            if (isProgressHubVisible) {
-//                                                                isProgressHubVisible = NO;
-//                                                                [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                                                            }
+                                                            
+                                                            if (_didLoadAPageOfContactHandler) {
+                                                                self.didLoadAPageOfContactHandler();
+                                                            }
                                                         });
                                                     }
                                                          completionHandler:^{

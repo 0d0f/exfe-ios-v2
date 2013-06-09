@@ -127,8 +127,28 @@
     
     // Contact DataSource
     EFContactDataSource *contactDataSource = [EFContactDataSource defaultDataSource];
+    
+    __block BOOL isProgressHubVisible = NO;
+    if (!contactDataSource.isLoaded) {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeCustomView;
+        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+        [bigspin startAnimating];
+        hud.customView = bigspin;
+        [bigspin release];
+        hud.labelText = @"Loading";
+        
+        isProgressHubVisible = YES;
+    }
+    
     contactDataSource.dataDidChangeHandler = ^{
         [self.tableView reloadData];
+    };
+    contactDataSource.didLoadAPageOfContactHandler = ^{
+        if (isProgressHubVisible) {
+            isProgressHubVisible = NO;
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        }
     };
     contactDataSource.selectionDidChangeHandler = ^{
         [self reloadSelectionCountLabelWithAnimated:YES];
@@ -304,12 +324,12 @@
         if (0 == section) {
             return 0.0f;
         } else {
-            return 19.0f;
+            return [self tableView:tableView numberOfRowsInSection:section] ? 19.0f : 0.0f;
         }
     }
     
     if (0 != section && section + 1 < [self searchTableViewNumberOfSections]) {
-        return 19.0f;
+        return [self tableView:tableView numberOfRowsInSection:section] ? 19.0f : 0.0f;
     } else {
         return 0.0f;
     }
