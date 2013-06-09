@@ -225,6 +225,12 @@
 #pragma mark - Public
 
 - (void)showAnimated:(BOOL)animated {
+    self.showed = YES;
+    
+    if (_willShowHandler) {
+        self.willShowHandler();
+    }
+    
     [self headShowAnimated:animated];
     [self titleShowAnimated:animated];
 }
@@ -257,10 +263,6 @@
 }
 
 - (void)titleShowAnimated:(BOOL)animated {
-    if (_willShowHandler) {
-        self.willShowHandler();
-    }
-    
     for (int i = 0; i < 4; i++) {
         CALayer *layer = self.titleLayers[i];
         layer.hidden = NO;
@@ -318,7 +320,6 @@
         self.topLayer.opacity = 1.0f;
         self.topLayer.position = topLayerPosition;
         
-        self.showed = YES;
         if (_didShowHandler) {
             self.didShowHandler();
         }

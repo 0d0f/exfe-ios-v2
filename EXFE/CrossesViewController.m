@@ -92,11 +92,16 @@
     headView.titlePressedHandler = ^{
         [self ShowGatherView];
     };
-    headView.didShowHandler = ^{
+    headView.willShowHandler = ^{
         [self.tableView beginUpdates];
         [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView endUpdates];
     };
+//    headView.didShowHandler = ^{
+//        [self.tableView beginUpdates];
+//        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+//        [self.tableView endUpdates];
+//    };
     self.headView = headView;
     [headView release];
     
