@@ -399,8 +399,18 @@
             
             NSUInteger count = [self.cross.conversation_count unsignedIntegerValue];
             if (count) {
-                conversationViewController.customTabBarItem.title = [NSString stringWithFormat:@"%u", count];
+                if (count > 55) {
+                    conversationViewController.customTabBarItem.image = [UIImage imageNamed:@"widget_conv_many_30shine.png"];
+                    conversationViewController.customTabBarItem.highlightImage = [UIImage imageNamed:@"widget_conv_many_30shine.png"];
+                    conversationViewController.customTabBarItem.title = nil;
+                } else {
+                    conversationViewController.customTabBarItem.image = [UIImage imageNamed:@"widget_conv_30.png"];
+                    conversationViewController.customTabBarItem.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
+                    conversationViewController.customTabBarItem.title = [NSString stringWithFormat:@"%u", count];
+                }
             } else {
+                conversationViewController.customTabBarItem.image = [UIImage imageNamed:@"widget_conv_30.png"];
+                conversationViewController.customTabBarItem.highlightImage = [UIImage imageNamed:@"widget_conv_30shine.png"];
                 conversationViewController.customTabBarItem.title = nil;
             }
         }
