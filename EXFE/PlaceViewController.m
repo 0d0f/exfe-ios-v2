@@ -303,6 +303,7 @@
 
 #pragma mark handler
 - (void) Close{
+    [[RKObjectManager sharedManager].operationQueue cancelAllOperations];
     [self dismissModalViewControllerAnimated:YES];
 }
 
