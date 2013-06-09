@@ -15,7 +15,9 @@ typedef void (^ActionBlock)(void);
 
 @property (nonatomic, copy) ActionBlock dataDidChangeHandler;       // default as nil. if set, it'll be invoke on main thread.
 @property (nonatomic, copy) ActionBlock selectionDidChangeHandler;  // default as nil. if set, it'll be invoke on main thread.
+
 @property (nonatomic, readonly, getter = isLoading) BOOL loading;
+@property (nonatomic, copy) ActionBlock didLoadAPageOfContactHandler;
 
 + (EFContactDataSource *)defaultDataSource;
 
