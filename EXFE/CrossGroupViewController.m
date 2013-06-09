@@ -438,7 +438,7 @@
 }
 
 - (void)fillExfee:(Exfee*)exfee {
-    self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+    self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
     [exfeeShowview reloadData];
 }
 

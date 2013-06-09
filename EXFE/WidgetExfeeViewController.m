@@ -125,7 +125,7 @@ typedef enum {
     self.view.tag = kTagViewExfeeRoot;
     
     if (self.exfee) {
-        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+        self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
     }
     
     flowLayout = [[PSTCollectionViewFlowLayout alloc] init];
@@ -225,7 +225,7 @@ typedef enum {
                                         success:^(Exfee *exfee) {
                                             self.selected_invitation = nil;
                                             self.exfee = exfee;
-                                            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+                                            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
                                             [exfeeContainer reloadData];
                                             [self reloadSelected];
                                         }
@@ -395,11 +395,11 @@ typedef enum {
                         break;
                         // no use
                     case kRsvpRemoved:
-                    case kRsvpNotification:
                         // should not be used here
                         break;
                         
                         //pending
+                    case kRsvpNotification:
                     case kRsvpIgnored:
                     case kRsvpNoResponse:
                     default:{
@@ -962,7 +962,7 @@ typedef enum {
                                                     [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                     
                                                     self.exfee = editedExfee;
-                                                    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+                                                    self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
                                                     [exfeeContainer reloadData];
                                                     
                                                     [self dismissViewControllerAnimated:YES completion:nil];
@@ -1172,7 +1172,7 @@ typedef enum {
                                                                                                         Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
                                                                                                         if ([meta.code intValue]==200) {
                                                                                                             self.exfee = crossGroupViewController.cross.exfee;
-                                                                                                            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+                                                                                                            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
                                                                                                             [exfeeContainer reloadData];
                                                                                                             [self reloadSelected];
                                                                                                         }

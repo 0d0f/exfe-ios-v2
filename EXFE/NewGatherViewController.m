@@ -381,7 +381,7 @@
     self.cross.exfee.invitations = [[[NSMutableSet alloc] initWithCapacity:12] autorelease];
     [self.cross.exfee addDefaultInvitationBy:default_identity];
     
-    self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+    self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
 }
 
 - (void)dealloc {
@@ -688,7 +688,7 @@
 }
 
 - (void)fillExfee:(Exfee*)exfee{
-    self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+    self.sortedInvitations = [exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
     [exfeeShowview reloadData];
 }
 
@@ -1041,7 +1041,7 @@
             [self.cross.exfee addInvitations:invitations];
             [invitations release];
             
-            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+            self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
             [self reFormatTitle];
             [exfeeShowview reloadData];
         };
@@ -1162,7 +1162,7 @@
     
     if ([self.cross.exfee hasInvitation:menu.invitation]) {
         [self.cross.exfee removeInvitationsObject:menu.invitation];
-        self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptNoNotifications];
+        self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
         [exfeeShowview reloadData];
         [self reFormatTitle];
         return;
