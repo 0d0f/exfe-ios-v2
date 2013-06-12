@@ -688,11 +688,11 @@ typedef enum {
                 layerLine.frame = CGRectMake(0, 0, 320, 1);
                 layerLine.contents = (id)[UIImage imageNamed:@"exfee_line_h2.png"].CGImage;
                 [tableFooter.contentView.layer addSublayer:layerLine];
-                
-                CALayer * vLine = [CALayer layer];
-                vLine.frame = CGRectMake(65, 0, 1, 180);
-                vLine.contents = (id)[UIImage imageNamed:@"exfee_line_v.png"].CGImage;
-                [tableFooter.contentView.layer addSublayer:vLine];
+
+                CAGradientLayer *gradient = [CAGradientLayer layer];
+                gradient.frame = CGRectMake(65, 0, 1, 50);
+                gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor COLOR_WA(0xE6, 0xFF)] CGColor], (id)[[UIColor COLOR_WA(0xE6, 0x00)] CGColor], nil];
+                [tableFooter.contentView.layer addSublayer:gradient];
                 
                 bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(36, 16, 40, 33)];
                 bioTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
