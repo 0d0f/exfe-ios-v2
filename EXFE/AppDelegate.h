@@ -22,10 +22,13 @@
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
 @class CrossesViewController;
+@class EXFEModel;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) UIWindow *window;
-@property (nonatomic, retain) UINavigationController *navigationController;
-@property (nonatomic, retain) CrossesViewController *crossesViewController;
+@property (nonatomic, retain, readwrite) EXFEModel *model;
+@property (nonatomic, retain, readwrite) UINavigationController *navigationController;
+@property (nonatomic, retain, readwrite) CrossesViewController *crossesViewController;
 
 -(void)signinDidFinish;
 -(void)signoutDidFinish;

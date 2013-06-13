@@ -154,6 +154,12 @@
 		4F29C92616F85F7B001BB176 /* EXMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92516F85F7B001BB176 /* EXMenu.m */; };
 		4F29C92A16F962CA001BB176 /* EXBasicMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92916F962CA001BB176 /* EXBasicMenu.m */; };
 		4F29C93016F9A5B5001BB176 /* User+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92F16F9A5B5001BB176 /* User+EXFE.m */; };
+		4F2D22D2176994EE00FEA139 /* EXFEModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22D1176994EE00FEA139 /* EXFEModel.m */; };
+		4F2D22D3176994EE00FEA139 /* EXFEModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22D1176994EE00FEA139 /* EXFEModel.m */; };
+		4F2D22D4176994EE00FEA139 /* EXFEModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22D1176994EE00FEA139 /* EXFEModel.m */; };
+		4F2D22DE176998D800FEA139 /* EXFEContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22DD176998D800FEA139 /* EXFEContext.m */; };
+		4F2D22DF176998D800FEA139 /* EXFEContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22DD176998D800FEA139 /* EXFEContext.m */; };
+		4F2D22E0176998D800FEA139 /* EXFEContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22DD176998D800FEA139 /* EXFEContext.m */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
 		4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
@@ -2047,6 +2053,10 @@
 		4F29C92916F962CA001BB176 /* EXBasicMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXBasicMenu.m; sourceTree = "<group>"; };
 		4F29C92E16F9A5B5001BB176 /* User+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "User+EXFE.h"; sourceTree = "<group>"; };
 		4F29C92F16F9A5B5001BB176 /* User+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "User+EXFE.m"; sourceTree = "<group>"; };
+		4F2D22D0176994EE00FEA139 /* EXFEModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXFEModel.h; sourceTree = "<group>"; };
+		4F2D22D1176994EE00FEA139 /* EXFEModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXFEModel.m; sourceTree = "<group>"; };
+		4F2D22DC176998D800FEA139 /* EXFEContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXFEContext.h; sourceTree = "<group>"; };
+		4F2D22DD176998D800FEA139 /* EXFEContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXFEContext.m; sourceTree = "<group>"; };
 		4F3355CE168C4F4700D398C0 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		4F358D6B171D66F5005C2EE7 /* EFPasswordField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPasswordField.h; sourceTree = "<group>"; };
@@ -3002,6 +3012,10 @@
 				763A01CC17212A090082CC9E /* Object */,
 				78A98EFC1561169E009E0806 /* Entity */,
 				4FD9376016D6025500ED6677 /* Extention */,
+				4F2D22D0176994EE00FEA139 /* EXFEModel.h */,
+				4F2D22D1176994EE00FEA139 /* EXFEModel.m */,
+				4F2D22DC176998D800FEA139 /* EXFEContext.h */,
+				4F2D22DD176998D800FEA139 /* EXFEContext.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -5788,6 +5802,8 @@
 				765A82FA175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 				4FFD701717633A46009836F5 /* Invitation.m in Sources */,
 				4FFD701C17638546009836F5 /* IdentityId+EXFE.m in Sources */,
+				4F2D22D3176994EE00FEA139 /* EXFEModel.m in Sources */,
+				4F2D22DF176998D800FEA139 /* EXFEContext.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5966,6 +5982,8 @@
 				765A82FB175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 				4FFD701817633A46009836F5 /* Invitation.m in Sources */,
 				4FFD701D17638546009836F5 /* IdentityId+EXFE.m in Sources */,
+				4F2D22D4176994EE00FEA139 /* EXFEModel.m in Sources */,
+				4F2D22E0176998D800FEA139 /* EXFEContext.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6144,6 +6162,8 @@
 				765A82F9175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 				4FFD701617633A46009836F5 /* Invitation.m in Sources */,
 				4FFD701B17638546009836F5 /* IdentityId+EXFE.m in Sources */,
+				4F2D22D2176994EE00FEA139 /* EXFEModel.m in Sources */,
+				4F2D22DE176998D800FEA139 /* EXFEContext.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
