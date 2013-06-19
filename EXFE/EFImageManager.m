@@ -35,11 +35,11 @@
 #pragma mark - Getter && Setter
 
 - (NSString *)cachePath {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *path = [documentsDirectory stringByAppendingPathComponent:@"/images"];
     
-    BOOL writedir=[[NSFileManager defaultManager] isWritableFileAtPath:path];
+    BOOL writedir = [[NSFileManager defaultManager] isWritableFileAtPath:path];
     if (!writedir) {
         [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
     }

@@ -1471,6 +1471,12 @@
 		765A82FC175F4F4C00448B64 /* EFContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 765A82F8175F4F4C00448B64 /* EFContactViewController.xib */; };
 		765A82FD175F4F4C00448B64 /* EFContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 765A82F8175F4F4C00448B64 /* EFContactViewController.xib */; };
 		765A82FE175F4F4C00448B64 /* EFContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 765A82F8175F4F4C00448B64 /* EFContactViewController.xib */; };
+		765BAC20176AF58F007ADD83 /* EFDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 765BAC1F176AF58F007ADD83 /* EFDataCache.m */; };
+		765BAC21176AF58F007ADD83 /* EFDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 765BAC1F176AF58F007ADD83 /* EFDataCache.m */; };
+		765BAC22176AF58F007ADD83 /* EFDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 765BAC1F176AF58F007ADD83 /* EFDataCache.m */; };
+		765BAC2C176AF683007ADD83 /* EFDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 765BAC2B176AF683007ADD83 /* EFDataManager.m */; };
+		765BAC2D176AF683007ADD83 /* EFDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 765BAC2B176AF683007ADD83 /* EFDataManager.m */; };
+		765BAC2E176AF683007ADD83 /* EFDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 765BAC2B176AF683007ADD83 /* EFDataManager.m */; };
 		7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
@@ -1497,6 +1503,18 @@
 		769206241749E08100B3D64A /* portrait_circle_clear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7692061E1749E08100B3D64A /* portrait_circle_clear@2x.png */; };
 		76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
+		76BC7B0A176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
+		76BC7B0B176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
+		76BC7B0C176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
+		76BC7B11176EB9C7003F4FBA /* EFRunLoopOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B10176EB9C7003F4FBA /* EFRunLoopOperation.m */; };
+		76BC7B12176EB9C7003F4FBA /* EFRunLoopOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B10176EB9C7003F4FBA /* EFRunLoopOperation.m */; };
+		76BC7B13176EB9C7003F4FBA /* EFRunLoopOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B10176EB9C7003F4FBA /* EFRunLoopOperation.m */; };
+		76BC7B2D17701E4B003F4FBA /* EFIOOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B2C17701E4A003F4FBA /* EFIOOperation.m */; };
+		76BC7B2E17701E4B003F4FBA /* EFIOOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B2C17701E4A003F4FBA /* EFIOOperation.m */; };
+		76BC7B2F17701E4B003F4FBA /* EFIOOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B2C17701E4A003F4FBA /* EFIOOperation.m */; };
+		76BC7B7417706C35003F4FBA /* EFIOManagementOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B7317706C35003F4FBA /* EFIOManagementOperation.m */; };
+		76BC7B7517706C35003F4FBA /* EFIOManagementOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B7317706C35003F4FBA /* EFIOManagementOperation.m */; };
+		76BC7B7617706C35003F4FBA /* EFIOManagementOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B7317706C35003F4FBA /* EFIOManagementOperation.m */; };
 		76C29C201754E9D10084C27F /* tabshadow_conv.png in Resources */ = {isa = PBXBuildFile; fileRef = 76C29C1E1754E9D10084C27F /* tabshadow_conv.png */; };
 		76C29C211754E9D10084C27F /* tabshadow_conv.png in Resources */ = {isa = PBXBuildFile; fileRef = 76C29C1E1754E9D10084C27F /* tabshadow_conv.png */; };
 		76C29C221754E9D10084C27F /* tabshadow_conv.png in Resources */ = {isa = PBXBuildFile; fileRef = 76C29C1E1754E9D10084C27F /* tabshadow_conv.png */; };
@@ -2340,6 +2358,10 @@
 		765A82F6175F4F4B00448B64 /* EFContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFContactViewController.h; sourceTree = "<group>"; };
 		765A82F7175F4F4B00448B64 /* EFContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFContactViewController.m; sourceTree = "<group>"; };
 		765A82F8175F4F4C00448B64 /* EFContactViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFContactViewController.xib; sourceTree = "<group>"; };
+		765BAC1E176AF58F007ADD83 /* EFDataCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDataCache.h; sourceTree = "<group>"; };
+		765BAC1F176AF58F007ADD83 /* EFDataCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFDataCache.m; sourceTree = "<group>"; };
+		765BAC2A176AF683007ADD83 /* EFDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDataManager.h; sourceTree = "<group>"; };
+		765BAC2B176AF683007ADD83 /* EFDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFDataManager.m; sourceTree = "<group>"; };
 		7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorHandlerCenter.h; sourceTree = "<group>"; };
 		7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorHandlerCenter.m; sourceTree = "<group>"; };
 		7670126A1729054500B5445E /* EFPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPopoverController.m; sourceTree = "<group>"; };
@@ -2355,6 +2377,17 @@
 		7692061E1749E08100B3D64A /* portrait_circle_clear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_circle_clear@2x.png"; sourceTree = "<group>"; };
 		76A150BC1717D23400751C92 /* EXAddressBookService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAddressBookService.h; sourceTree = "<group>"; };
 		76A150BD1717D23500751C92 /* EXAddressBookService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAddressBookService.m; sourceTree = "<group>"; };
+		76BC7B08176EAC3D003F4FBA /* EFQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFQueueManager.h; sourceTree = "<group>"; };
+		76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFQueueManager.m; sourceTree = "<group>"; };
+		76BC7B0F176EB9C7003F4FBA /* EFRunLoopOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRunLoopOperation.h; sourceTree = "<group>"; };
+		76BC7B10176EB9C7003F4FBA /* EFRunLoopOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRunLoopOperation.m; sourceTree = "<group>"; };
+		76BC7B2B17701E4A003F4FBA /* EFIOOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFIOOperation.h; sourceTree = "<group>"; };
+		76BC7B2C17701E4A003F4FBA /* EFIOOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFIOOperation.m; sourceTree = "<group>"; };
+		76BC7B71177067DA003F4FBA /* EFQueueDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFQueueDefines.h; sourceTree = "<group>"; };
+		76BC7B7217706C34003F4FBA /* EFIOManagementOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFIOManagementOperation.h; sourceTree = "<group>"; };
+		76BC7B7317706C35003F4FBA /* EFIOManagementOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFIOManagementOperation.m; sourceTree = "<group>"; };
+		76BC7B7C17719C87003F4FBA /* EFQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFQueue.h; sourceTree = "<group>"; };
+		76BC7B7D17719CC6003F4FBA /* EFCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFCache.h; sourceTree = "<group>"; };
 		76C29C1E1754E9D10084C27F /* tabshadow_conv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabshadow_conv.png; sourceTree = "<group>"; };
 		76C29C1F1754E9D10084C27F /* tabshadow_conv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabshadow_conv@2x.png"; sourceTree = "<group>"; };
 		76D1A801171D5DFA00A35BBD /* EFChoosePeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewController.h; sourceTree = "<group>"; };
@@ -3266,22 +3299,25 @@
 			name = DataSource;
 			sourceTree = "<group>";
 		};
-		765A82E1175F11F800448B64 /* Cache & Load Image */ = {
+		765A82E1175F11F800448B64 /* Cache */ = {
 			isa = PBXGroup;
 			children = (
+				76BC7B7D17719CC6003F4FBA /* EFCache.h */,
+				76BC7B7E17719D45003F4FBA /* Base */,
 				765A82F1175F255800448B64 /* EFImageManager.h */,
 				765A82F2175F255800448B64 /* EFImageManager.m */,
 				765A82E2175F120D00448B64 /* EFImageCache.h */,
 				765A82E3175F120D00448B64 /* EFImageCache.m */,
 			);
-			name = "Cache & Load Image";
+			name = Cache;
 			sourceTree = "<group>";
 		};
 		767012621729053400B5445E /* EFKit */ = {
 			isa = PBXGroup;
 			children = (
 				76F6B3101740B5C1008B39C1 /* EFKit.h */,
-				765A82E1175F11F800448B64 /* Cache & Load Image */,
+				76BC7B07176EAC27003F4FBA /* Queue */,
+				765A82E1175F11F800448B64 /* Cache */,
 				76073D01174F61BB007CBFC3 /* PresentCard */,
 				76295DB1174B2101002F5CEF /* TabBar */,
 				76295DB0174B20D3002F5CEF /* ErrorMessage */,
@@ -3297,6 +3333,58 @@
 				76A150BD1717D23500751C92 /* EXAddressBookService.m */,
 			);
 			name = Service;
+			sourceTree = "<group>";
+		};
+		76BC7B07176EAC27003F4FBA /* Queue */ = {
+			isa = PBXGroup;
+			children = (
+				76BC7B7C17719C87003F4FBA /* EFQueue.h */,
+				76BC7B791771543D003F4FBA /* Base */,
+				76BC7B7B17715475003F4FBA /* Network */,
+				76BC7B7A17715456003F4FBA /* IO */,
+			);
+			name = Queue;
+			sourceTree = "<group>";
+		};
+		76BC7B791771543D003F4FBA /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				76BC7B71177067DA003F4FBA /* EFQueueDefines.h */,
+				76BC7B08176EAC3D003F4FBA /* EFQueueManager.h */,
+				76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */,
+				76BC7B0F176EB9C7003F4FBA /* EFRunLoopOperation.h */,
+				76BC7B10176EB9C7003F4FBA /* EFRunLoopOperation.m */,
+			);
+			name = Base;
+			sourceTree = "<group>";
+		};
+		76BC7B7A17715456003F4FBA /* IO */ = {
+			isa = PBXGroup;
+			children = (
+				76BC7B2B17701E4A003F4FBA /* EFIOOperation.h */,
+				76BC7B2C17701E4A003F4FBA /* EFIOOperation.m */,
+				76BC7B7217706C34003F4FBA /* EFIOManagementOperation.h */,
+				76BC7B7317706C35003F4FBA /* EFIOManagementOperation.m */,
+			);
+			name = IO;
+			sourceTree = "<group>";
+		};
+		76BC7B7B17715475003F4FBA /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
+		76BC7B7E17719D45003F4FBA /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				765BAC2A176AF683007ADD83 /* EFDataManager.h */,
+				765BAC2B176AF683007ADD83 /* EFDataManager.m */,
+				765BAC1E176AF58F007ADD83 /* EFDataCache.h */,
+				765BAC1F176AF58F007ADD83 /* EFDataCache.m */,
+			);
+			name = Base;
 			sourceTree = "<group>";
 		};
 		76DED7CB171C05FE00C2F27E /* Debug */ = {
@@ -5788,6 +5876,12 @@
 				765A82FA175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 				4FFD701717633A46009836F5 /* Invitation.m in Sources */,
 				4FFD701C17638546009836F5 /* IdentityId+EXFE.m in Sources */,
+				765BAC21176AF58F007ADD83 /* EFDataCache.m in Sources */,
+				765BAC2D176AF683007ADD83 /* EFDataManager.m in Sources */,
+				76BC7B0B176EAC3D003F4FBA /* EFQueueManager.m in Sources */,
+				76BC7B12176EB9C7003F4FBA /* EFRunLoopOperation.m in Sources */,
+				76BC7B2E17701E4B003F4FBA /* EFIOOperation.m in Sources */,
+				76BC7B7517706C35003F4FBA /* EFIOManagementOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5966,6 +6060,12 @@
 				765A82FB175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 				4FFD701817633A46009836F5 /* Invitation.m in Sources */,
 				4FFD701D17638546009836F5 /* IdentityId+EXFE.m in Sources */,
+				765BAC22176AF58F007ADD83 /* EFDataCache.m in Sources */,
+				765BAC2E176AF683007ADD83 /* EFDataManager.m in Sources */,
+				76BC7B0C176EAC3D003F4FBA /* EFQueueManager.m in Sources */,
+				76BC7B13176EB9C7003F4FBA /* EFRunLoopOperation.m in Sources */,
+				76BC7B2F17701E4B003F4FBA /* EFIOOperation.m in Sources */,
+				76BC7B7617706C35003F4FBA /* EFIOManagementOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6144,6 +6244,12 @@
 				765A82F9175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 				4FFD701617633A46009836F5 /* Invitation.m in Sources */,
 				4FFD701B17638546009836F5 /* IdentityId+EXFE.m in Sources */,
+				765BAC20176AF58F007ADD83 /* EFDataCache.m in Sources */,
+				765BAC2C176AF683007ADD83 /* EFDataManager.m in Sources */,
+				76BC7B0A176EAC3D003F4FBA /* EFQueueManager.m in Sources */,
+				76BC7B11176EB9C7003F4FBA /* EFRunLoopOperation.m in Sources */,
+				76BC7B2D17701E4B003F4FBA /* EFIOOperation.m in Sources */,
+				76BC7B7417706C35003F4FBA /* EFIOManagementOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
