@@ -13,7 +13,7 @@
 - (void)loadSuggest:(NSString*)key
             success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
             failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
-    NSDictionary *param = @{@"token": self.user_token};
+    NSDictionary *param = @{@"token": self.model.userToken};
     NSString *endpoint = [NSString stringWithFormat:@"identities/complete?key=%@", key];
     
     [[RKObjectManager sharedManager].HTTPClient getPath:endpoint

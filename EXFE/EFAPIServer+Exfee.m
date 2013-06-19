@@ -24,7 +24,7 @@
     NSDictionary *rsvpdict = @{@"identity_id": invitation.identity.identity_id, @"by_identity_id": @(my_identity_id), @"rsvp_status": status, @"type": @"rsvp"};
     NSDictionary *param = @{@"rsvps": @[rsvpdict]};
     
-    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/rsvp?token=%@",exfee_id, self.user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/rsvp?token=%@",exfee_id, self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
@@ -60,7 +60,7 @@
           success:(void (^)(Exfee *))successHandler
           failure:(void (^)(NSError *error))failureHandler {
     RKObjectManager *manager = [RKObjectManager sharedManager];
-    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/edit?token=%@&by_identity_id=%u", [exfee.exfee_id intValue], self.user_token, [identity.identity_id intValue]];
+    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/edit?token=%@&by_identity_id=%u", [exfee.exfee_id intValue], self.model.userToken, [identity.identity_id intValue]];
     
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;

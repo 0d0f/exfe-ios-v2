@@ -358,7 +358,8 @@
         CLLocationDistance meters = [newLocation distanceFromLocation:oldLocation];
         if (meters < 0 || meters > 500) {
             
-            [[EFAPIServer sharedInstance] getPlacesNearbyWithLocation:location
+            AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            [app.model.apiServer getPlacesNearbyWithLocation:location
                                                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                                   if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                                                                       NSDictionary *body = (NSDictionary*)responseObject;
@@ -544,7 +545,8 @@
     
     [self showMapOverviewNear:kCLLocationCoordinate2DInvalid];
     
-    [[EFAPIServer sharedInstance] reverseGeocodingWithLocation:annotation.coordinate
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer reverseGeocodingWithLocation:annotation.coordinate
                                                        success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                            if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                                                                NSDictionary *body = (NSDictionary*)responseObject;
@@ -626,7 +628,8 @@
 - (void)searchNearByPlaces:(CLLocationCoordinate2D)location
 {
     
-    [[EFAPIServer sharedInstance] getPlacesNearbyWithLocation:location
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer getPlacesNearbyWithLocation:location
                                                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                           if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                                                               NSDictionary *body = (NSDictionary*)responseObject;
@@ -1195,7 +1198,8 @@
 }
 
 - (void)searchPlaceByKeyword:(NSString*)keyword near:(CLLocationCoordinate2D)location{
-    [[EFAPIServer sharedInstance] getPlacesByTitle:keyword
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer getPlacesByTitle:keyword
                                           location:location
                                            success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {

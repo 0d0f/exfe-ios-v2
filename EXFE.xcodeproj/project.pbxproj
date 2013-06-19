@@ -154,6 +154,12 @@
 		4F29C92616F85F7B001BB176 /* EXMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92516F85F7B001BB176 /* EXMenu.m */; };
 		4F29C92A16F962CA001BB176 /* EXBasicMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92916F962CA001BB176 /* EXBasicMenu.m */; };
 		4F29C93016F9A5B5001BB176 /* User+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92F16F9A5B5001BB176 /* User+EXFE.m */; };
+		4F2D22D2176994EE00FEA139 /* EXFEModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22D1176994EE00FEA139 /* EXFEModel.m */; };
+		4F2D22D3176994EE00FEA139 /* EXFEModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22D1176994EE00FEA139 /* EXFEModel.m */; };
+		4F2D22D4176994EE00FEA139 /* EXFEModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22D1176994EE00FEA139 /* EXFEModel.m */; };
+		4F2D22E4176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */; };
+		4F2D22E5176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */; };
+		4F2D22E6176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
 		4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
@@ -2065,6 +2071,10 @@
 		4F29C92916F962CA001BB176 /* EXBasicMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXBasicMenu.m; sourceTree = "<group>"; };
 		4F29C92E16F9A5B5001BB176 /* User+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "User+EXFE.h"; sourceTree = "<group>"; };
 		4F29C92F16F9A5B5001BB176 /* User+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "User+EXFE.m"; sourceTree = "<group>"; };
+		4F2D22D0176994EE00FEA139 /* EXFEModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXFEModel.h; sourceTree = "<group>"; };
+		4F2D22D1176994EE00FEA139 /* EXFEModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXFEModel.m; sourceTree = "<group>"; };
+		4F2D22E2176AF32E00FEA139 /* RecursiveDeleteOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecursiveDeleteOperation.h; sourceTree = "<group>"; };
+		4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecursiveDeleteOperation.m; sourceTree = "<group>"; };
 		4F3355CE168C4F4700D398C0 /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		4F358D6B171D66F5005C2EE7 /* EFPasswordField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPasswordField.h; sourceTree = "<group>"; };
@@ -2902,6 +2912,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		4F2D22E1176AF31500FEA139 /* Operation */ = {
+			isa = PBXGroup;
+			children = (
+				4F2D22E2176AF32E00FEA139 /* RecursiveDeleteOperation.h */,
+				4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */,
+			);
+			name = Operation;
+			sourceTree = "<group>";
+		};
 		4F9FE4C61702E12C0098B9B9 /* PSTCollectionView */ = {
 			isa = PBXGroup;
 			children = (
@@ -3029,12 +3048,15 @@
 		4FD9375F16D6023400ED6677 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4F2D22E1176AF31500FEA139 /* Operation */,
 				763A01D2172130B20082CC9E /* EFDataDefines.h */,
 				765A82D1175F074200448B64 /* DataSource */,
 				76A150B41717D1CB00751C92 /* Service */,
 				763A01CC17212A090082CC9E /* Object */,
 				78A98EFC1561169E009E0806 /* Entity */,
 				4FD9376016D6025500ED6677 /* Extention */,
+				4F2D22D0176994EE00FEA139 /* EXFEModel.h */,
+				4F2D22D1176994EE00FEA139 /* EXFEModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -5882,6 +5904,8 @@
 				76BC7B12176EB9C7003F4FBA /* EFRunLoopOperation.m in Sources */,
 				76BC7B2E17701E4B003F4FBA /* EFIOOperation.m in Sources */,
 				76BC7B7517706C35003F4FBA /* EFIOManagementOperation.m in Sources */,
+				4F2D22D3176994EE00FEA139 /* EXFEModel.m in Sources */,
+				4F2D22E5176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6066,6 +6090,8 @@
 				76BC7B13176EB9C7003F4FBA /* EFRunLoopOperation.m in Sources */,
 				76BC7B2F17701E4B003F4FBA /* EFIOOperation.m in Sources */,
 				76BC7B7617706C35003F4FBA /* EFIOManagementOperation.m in Sources */,
+				4F2D22D4176994EE00FEA139 /* EXFEModel.m in Sources */,
+				4F2D22E6176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6250,6 +6276,8 @@
 				76BC7B11176EB9C7003F4FBA /* EFRunLoopOperation.m in Sources */,
 				76BC7B2D17701E4B003F4FBA /* EFIOOperation.m in Sources */,
 				76BC7B7417706C35003F4FBA /* EFIOManagementOperation.m in Sources */,
+				4F2D22D2176994EE00FEA139 /* EXFEModel.m in Sources */,
+				4F2D22E4176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

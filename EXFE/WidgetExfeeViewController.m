@@ -220,7 +220,8 @@ typedef enum {
         [_selected_invitation setRsvp_status:@"REMOVED"];
         
         Identity *myidentity = [self.exfee getMyInvitation].identity;
-        [[EFAPIServer sharedInstance] editExfee:self.exfee
+        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        [app.model.apiServer editExfee:self.exfee
                                      byIdentity:myidentity
                                         success:^(Exfee *exfee) {
                                             self.selected_invitation = nil;
@@ -956,7 +957,8 @@ typedef enum {
                 
                 Identity *myidentity = [self.exfee getMyInvitation].identity;
                 
-                [[EFAPIServer sharedInstance] editExfee:exfee
+                AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                [app.model.apiServer editExfee:exfee
                                              byIdentity:myidentity
                                                 success:^(Exfee *editedExfee){
                                                     [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -1145,7 +1147,8 @@ typedef enum {
 - (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
     
     Identity *myidentity = [self.exfee getMyInvitation].identity;
-    [[EFAPIServer sharedInstance] submitRsvp:status
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer submitRsvp:status
                                           on:_invitation
                                   myIdentity:[myidentity.identity_id intValue]
                                      onExfee:[self.exfee.exfee_id intValue]
@@ -1165,7 +1168,8 @@ typedef enum {
                                                      NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
                                                      
                                                      CrossGroupViewController *crossGroupViewController = viewControllers[0];
-                                                     [[EFAPIServer sharedInstance] loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue]
+                                                     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                                                     [app.model.apiServer loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue]
                                                                                             updatedtime:@""
                                                                                                 success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                                                                     if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {

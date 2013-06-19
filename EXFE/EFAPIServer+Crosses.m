@@ -22,7 +22,7 @@
         updatedtime = [Util encodeToPercentEscapeString:updatedtime];
     }
     
-    NSDictionary *param = @{@"token": self.user_token};
+    NSDictionary *param = @{@"token": self.model.userToken};
     NSString *endpoint = [NSString stringWithFormat:@"crosses/%u?updated_at=%@", corss_id, updatedtime];
     
     [[RKObjectManager sharedManager] getObjectsAtPath:endpoint
@@ -58,7 +58,7 @@
     manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
-    NSString *endpoint = [NSString stringWithFormat:@"crosses/gather?token=%@", self.user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"crosses/gather?token=%@", self.model.userToken];
     
     RKObjectRequestOperation *operation = [manager appropriateObjectRequestOperationWithObject:cross
                                                                                         method:RKRequestMethodPOST
@@ -119,7 +119,7 @@
     manager.HTTPClient.parameterEncoding= AFJSONParameterEncoding;
     manager.requestSerializationMIMEType = RKMIMETypeJSON;
     
-    NSString *endpoint = [NSString stringWithFormat:@"crosses/%u/edit?token=%@", [cross.cross_id intValue], self.user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"crosses/%u/edit?token=%@", [cross.cross_id intValue], self.model.userToken];
     
     [manager postObject:cross
                    path:endpoint

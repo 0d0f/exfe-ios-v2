@@ -877,8 +877,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         NSDictionary *dict = [Util parseIdentityString:identityText byProvider:provider];
         NSString *external_username = [dict valueForKeyPath:@"external_username"];
         if (provider != kProviderUnknown) {
-            EFAPIServer *server = [EFAPIServer sharedInstance];
-            [server getRegFlagBy:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            [app.model.apiServer getRegFlagBy:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                     id code = [responseObject valueForKeyPath:@"meta.code"];
                     if (code) {
@@ -908,15 +908,20 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
 }
 
-
-- (void)loadUserAndExit
+- (void)loadUserAndExit:(NSInteger)user_id withToken:(NSString*)token
 {
-    [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [app switchContextByUserId:user_id];
+    app.model.userToken = token;
+    [app.model saveUserData];
+    
+    [app.model.apiServer loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         [self SigninDidFinish];
     }
-                                        failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                            [self SigninDidFinish];
-                                        }];
+                               failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                   [self SigninDidFinish];
+                               }];
 }
 
 - (void)SigninDidFinish
@@ -964,7 +969,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             
             NSDictionary *dict = [Util parseIdentityString:identity byProvider:provider];
             NSString *external_username = [dict valueForKeyPath:@"external_username"];
-            [[EFAPIServer sharedInstance] verifyIdentity:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            [app.model.apiServer verifyIdentity:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                     NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
                     if (code) {
@@ -1055,7 +1061,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     Provider provider = [Util matchedProvider:identityText];
     NSDictionary *dict = [Util parseIdentityString:identityText byProvider:provider];
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
-    [[EFAPIServer sharedInstance] signIn:external_username with:provider password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer signIn:external_username with:provider password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
         sender.enabled = YES;
         [self hideIndicator];
         
@@ -1064,11 +1071,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             if (code) {
                 NSInteger c = [code integerValue];
                 switch (c) {
-                    case 200:
-                        
-                        [self loadUserAndExit];
-                        
-                        break;
+                    case 200:{
+                        NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
+                        NSString *t = [responseObject valueForKeyPath:@"response.token"];
+                        [self loadUserAndExit:[u integerValue] withToken:t];
+                    }   break;
                     case 403:{
                         // response.body={"meta":{"code":403,"errorType":"failed","errorDetail":{"registration_flag":"SIGN_UP"}},"response":{}}
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
@@ -1145,7 +1152,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     NSString *external_username = [dict valueForKeyPath:@"external_username"];
     
     [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
-    [[EFAPIServer sharedInstance] signUp:external_username with:provider name:_inputUsername.text password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer signUp:external_username with:provider name:_inputUsername.text password:_inputPassword.text success:^(AFHTTPRequestOperation *operation, id responseObject) {
         sender.enabled = YES;
         [self hideIndicator];
         
@@ -1154,9 +1162,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             if (code) {
                 NSInteger c = [code integerValue];
                 switch (c) {
-                    case 200:
-                        [self loadUserAndExit];
-                        break;
+                    case 200:{
+                        NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
+                        NSString *t = [responseObject valueForKeyPath:@"response.token"];
+                        [self loadUserAndExit:[u integerValue] withToken:t];
+                    }  break;
                     case 400:{
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
                         if ([@"weak_password" isEqualToString:errorType]) {
@@ -1259,14 +1269,17 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                               hud.customView = bigspin;
                                               [bigspin release];
                                               
-                                              [[EFAPIServer sharedInstance] reverseAuth:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                              AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                                              [app.model.apiServer reverseAuth:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                   if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                                       
                                                       NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
                                                       switch ([code integerValue]) {
                                                           case 200:{
-                                                              [self loadUserAndExit];
+                                                              NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
+                                                              NSString *t = [responseObject valueForKeyPath:@"response.token"];
+                                                              [self loadUserAndExit:[u integerValue] withToken:t];
                                                               // ask for more permissions
                                                               //                            NSArray *permissions = @[@"user_photos", @"friends_photos"];
                                                               //                            [[FBSession activeSession] requestNewReadPermissions:permissions completionHandler:^(FBSession *session, NSError *error) {
@@ -1430,7 +1443,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     scaleAnimation.removedOnCompletion = NO;
     [sender.layer addAnimation:scaleAnimation forKey:@"scale"];
     
-    [[EFAPIServer sharedInstance] forgetPassword:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer forgetPassword:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
         sender.enabled = YES;
         [sender.layer removeAllAnimations];
         sender.layer.transform = CATransform3DIdentity;
@@ -1552,14 +1566,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     //save token/user id/ username
     if ([userid integerValue] > 0 && token.length > 0) {
-        EFAPIServer *server = [EFAPIServer sharedInstance];
-        server.user_id = [userid integerValue];
-        server.user_token = token;
-//        server.user_name = username;
-        [server saveUserData];
+        [self loadUserAndExit:[userid integerValue] withToken:token];
+    } else {
+        [self SigninDidFinish];
     }
-    
-    [self loadUserAndExit];
 }
 
 #pragma mark UITextFieldDelegate
@@ -1641,13 +1651,16 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
             NSDictionary *params = [Util splitQuery:responseStr];
             
-            [[EFAPIServer sharedInstance] reverseAuth:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            [app.model.apiServer reverseAuth:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                     
                     NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
                     if ([code integerValue] == 200) {
-                        [self loadUserAndExit];
+                        NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
+                        NSString *t = [responseObject valueForKeyPath:@"response.token"];
+                        [self loadUserAndExit:[u integerValue] withToken:t];
                     }
                     //400: invalid_token
                     //400: no_provider

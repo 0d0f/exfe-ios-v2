@@ -316,7 +316,8 @@
     [super viewDidAppear:animated];
     
     NSString *updated_at = _cross.updated_at;
-    [[EFAPIServer sharedInstance] loadCrossWithCrossId:[_cross.cross_id intValue]
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer loadCrossWithCrossId:[_cross.cross_id intValue]
                                            updatedtime:updated_at
                                                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                    if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
@@ -1347,7 +1348,8 @@
 - (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
     Identity *myidentity = [_cross.exfee getMyInvitation].identity;
     
-    [[EFAPIServer sharedInstance] submitRsvp:status
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer submitRsvp:status
                                           on:_invitation
                                   myIdentity:[myidentity.identity_id intValue]
                                      onExfee:[_cross.exfee.exfee_id intValue]
@@ -1361,7 +1363,8 @@
                                                      [alert show];
                                                      [alert release];
                                                  } else if ([[meta objectForKey:@"code"] intValue] == 200) {
-                                                     [[EFAPIServer sharedInstance] loadCrossWithCrossId:[_cross.cross_id intValue]
+                                                     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                                                     [app.model.apiServer loadCrossWithCrossId:[_cross.cross_id intValue]
                                                                                             updatedtime:@""
                                                                                                 success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                                                                     if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
@@ -1436,7 +1439,8 @@
     [bigspin release];
     
     _cross.by_identity=[_cross.exfee getMyInvitation].identity;
-    [[EFAPIServer sharedInstance] editCross:_cross
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer editCross:_cross
                                     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
                                         if (operation.HTTPRequestOperation.response.statusCode == 200) {

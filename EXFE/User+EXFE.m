@@ -37,7 +37,8 @@
 
 
 + (User*) getDefaultUser{
-    return [User getUserById:[EFAPIServer sharedInstance].user_id];
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    return [User getUserById:app.model.userId];
 }
 
 + (User*) getUserById:(int)userId{
