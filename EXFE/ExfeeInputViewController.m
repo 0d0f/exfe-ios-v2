@@ -483,7 +483,8 @@ static char identitykey;
     [exfee addInvitations:set];
     
     Identity *myidentity = [self.exfee getMyInvitation].identity;
-    [[EFAPIServer sharedInstance] editExfee:exfee
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer editExfee:exfee
                                  byIdentity:myidentity
                                     success:^(Exfee *exfee) {
                                         self.exfee = exfee;
@@ -515,7 +516,8 @@ static char identitykey;
     if(addressbookType== EXFE_ADDRESSBOOK){
         if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
             showInputinSuggestion=YES;
-            [[EFAPIServer sharedInstance] loadSuggest:exfeeInput.text
+            AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            [app.model.apiServer loadSuggest:exfeeInput.text
                                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                   [self loadIdentitiesFromDataStore:[exfeeList getInput]];
                                               }
@@ -929,7 +931,8 @@ static char identitykey;
             if([self showErrorHint]==YES)
                 return YES;
             showInputinSuggestion=YES;
-            [[EFAPIServer sharedInstance] loadSuggest:input
+            AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            [app.model.apiServer loadSuggest:input
                                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                   [self loadIdentitiesFromDataStore:[exfeeList getInput]];
                                               }

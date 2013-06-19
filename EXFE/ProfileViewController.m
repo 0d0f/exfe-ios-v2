@@ -151,7 +151,8 @@
 }
 
 - (void) syncUser{
-    [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                          self.user = [User getDefaultUser];
                                          [self refreshUI];
                                      }
@@ -190,7 +191,8 @@
                                 UITextField *field = [alertView textFieldAtIndex:0];
                                 NSString *name = field.text;
                                 if (name && name.length > 0) {
-                                    [[EFAPIServer sharedInstance] updateName:name success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                                    [app.model.apiServer updateName:name success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                             NSDictionary *body=responseObject;
                                             if([body isKindOfClass:[NSDictionary class]]) {
@@ -494,7 +496,8 @@
                                     UITextField *field = [alertView textFieldAtIndex:0];
                                     NSString *name = field.text;
                                     if (name && name.length > 0) {
-                                        [[EFAPIServer sharedInstance] updateIdentity:identity name:name andBio:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                                        [app.model.apiServer updateIdentity:identity name:name andBio:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                                 NSDictionary *body=responseObject;
                                                 if([body isKindOfClass:[NSDictionary class]]) {
@@ -560,7 +563,8 @@
 
 - (void) deleteIdentity:(int)identity_id{
     
-    [[EFAPIServer sharedInstance] removeUserIdentity:identity_id
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer removeUserIdentity:identity_id
                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                  if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                                      NSDictionary *body=responseObject;
@@ -575,7 +579,9 @@
                                                                      if(identity_id_str!=nil && user_id_str!=nil){
                                                                          int response_identity_id=[identity_id_str intValue];
                                                                          int response_user_id=[user_id_str intValue];
-                                                                         if(response_identity_id==identity_id && response_user_id == [EFAPIServer sharedInstance].user_id){
+                                                                         AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                                                                         
+                                                                         if(response_identity_id==identity_id && response_user_id == app.model.userId){
                                                                              [self deleteIdentityUI:identity_id];
                                                                          }
                                                                      }
@@ -630,7 +636,8 @@
 
 - (void) doVerify:(int)identity_id{
     
-    [[EFAPIServer sharedInstance] verifyUserIdentity:identity_id
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer verifyUserIdentity:identity_id
                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                  if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                                      NSDictionary *body=responseObject;

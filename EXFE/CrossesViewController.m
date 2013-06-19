@@ -120,7 +120,8 @@
     [topview release];
     [super viewDidLoad];
     
-    if ([[EFAPIServer sharedInstance] isLoggedIn]) {
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    if ([app.model isLoggedIn]) {
         // 过渡动画
         UIGraphicsBeginImageContext(self.view.bounds.size);
         [[UIImage imageNamed:@"home_bg.png"] drawInRect:self.view.bounds];
@@ -347,7 +348,8 @@
     }
     
     //  source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]
-    [[EFAPIServer sharedInstance] loadCrossesAfter:updated_at
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer loadCrossesAfter:updated_at
                                            success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                
                                                int notification=0;
@@ -671,10 +673,12 @@
             cell.time = @"";
         }
         
+        
+        AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
         NSString *avatarimgurl=nil;
         for(Invitation *invitation in cross.exfee.invitations) {
             NSInteger connected_uid = [invitation.identity.connected_user_id integerValue];
-            if (connected_uid == [EFAPIServer sharedInstance].user_id) {
+            if (connected_uid == app.user_id) {
                 if(invitation && invitation.invited_by &&
                    invitation.invited_by.avatar_filename ) {
                     avatarimgurl=invitation.invited_by.avatar_filename;

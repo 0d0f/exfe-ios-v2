@@ -250,7 +250,8 @@
             updated_at = post.updated_at;
         }
     }
-    [[EFAPIServer sharedInstance] loadConversationWithExfeeId:exfee_id
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer loadConversationWithExfeeId:exfee_id
                                                   updatedtime:updated_at
                                                       success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                           Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
@@ -633,7 +634,8 @@
     [Flurry logEvent:@"SEND_CONVERSATION"];
     
     [inputToolbar setInputEnabled:NO];
-    [[EFAPIServer sharedInstance] postConversation:content
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer postConversation:content
                                                 by:myIdentity
                                                 on:exfee_id
                                            success:^(AFHTTPRequestOperation *operation, id responseObject) {

@@ -7,7 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EXFEContext.h"
+#import <CoreData/CoreData.h>
+#import <RestKit/RestKit.h>
+
+@class EFAPIServer;
 
 @interface EXFEModel : NSObject{
     NSUInteger                      _sequenceNumber;
@@ -20,11 +23,24 @@
 // various bits of bookkeeping, including resetting the cache of photos
 // if that debugging option has been set.
 
-- (id)init;
+- (id)initWithUser:(NSInteger)user_id;
 
 
-@property (nonatomic, retain, readwrite) EXFEContext *              exfeContext;
+@property (nonatomic, retain, readwrite) NSManagedObjectContext *   exfeContext;
+@property (nonatomic, assign, readonly) NSInteger                   userId;
+@property (nonatomic, retain, readwrite) NSString *                 userToken;
+@property (nonatomic, retain, readonly) NSMutableDictionary *       userConfig;
+@property (nonatomic, retain, readonly) RKObjectManager *           objectManager;
+@property (nonatomic, retain, readonly) EFAPIServer *               apiServer;
 
+#pragma mark Token and User ID manager
+
+- (void)saveUserData;
+- (void)loaduserData;
+- (void)clearUserData;
+- (BOOL)isLoggedIn;
+
+#pragma mark ---
 - (void)start;
 // Starts up the gallery (finds or creates a cache database and kicks off the initial
 // sync).

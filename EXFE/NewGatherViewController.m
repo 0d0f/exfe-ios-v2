@@ -560,7 +560,8 @@
     }
     [Flurry logEvent:@"GATHER_SEND"];
     
-    [[EFAPIServer sharedInstance] gatherCross:_cross
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer gatherCross:_cross
                                       success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                           [MBProgressHUD hideHUDForView:self.view animated:YES];
                                           AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];

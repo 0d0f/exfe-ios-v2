@@ -20,7 +20,7 @@
         updatedtime = [Util encodeToPercentEscapeString:updatedtime];
     }
     
-    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{@"token": self.user_token}];
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{@"token": self.model.userToken}];
     if (updatedtime.length > 0) {
         [param addEntriesFromDictionary:@{ @"updated_at": updatedtime}];
     }
@@ -64,7 +64,7 @@
                                @"type": @"post",
                                @"via": @"iOS"};
     
-    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u/add?token=%@", exfee_id, self.user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"conversation/%u/add?token=%@", exfee_id, self.model.userToken];
     RKObjectManager *manager=[RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
     

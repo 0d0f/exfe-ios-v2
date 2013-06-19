@@ -133,7 +133,8 @@
 
 - (void)getIdentityWithSuccess:(void (^)(Identity *identity))success failure:(void (^)(NSError *error))failure {
     self.status = kEFRoughIdentityGetIdentityStatusLoading;
-    [[EFAPIServer sharedInstance] getIdentitiesWithParams:@[[self dictionaryValue]]
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer getIdentitiesWithParams:@[[self dictionaryValue]]
                                                   success:^(NSArray *identities){
                                                       self.identity = identities[0];
                                                       self.status = kEFRoughIdentityGetIdentityStatusSuccess;
