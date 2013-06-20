@@ -15,6 +15,8 @@
 #import "EFAPIServer.h"
 #import "EFLandingViewController.h"
 #import "Util.h"
+#import "EFKit.h"
+#import "EFLoadMeOperation.h"
 
 @implementation AppDelegate
 @synthesize window = _window;
@@ -190,7 +192,10 @@
     EFAPIServer *server = self.model.apiServer;
     // Load User
     if (self.model.isLoggedIn == YES){
-        [server loadMeSuccess:nil failure:nil];
+//        [server loadMeSuccess:nil failure:nil];
+        EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:[EFLoadMeOperation operationWithModel:self.model]];
+        [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+        
     }
     // Load Background List
     [server getAvailableBackgroundsWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -372,7 +377,10 @@
             self.model.userToken = token;
             [self.model saveUserData];
             
-            [self.model.apiServer loadMeSuccess:nil failure:nil];
+//            [self.model.apiServer loadMeSuccess:nil failure:nil];
+            EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:[EFLoadMeOperation operationWithModel:self.model]];
+            [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+            
             [self signinDidFinish];
             [self processUrlHandler:url];
         } else {
@@ -410,7 +418,10 @@
                                                                                                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                                                                                                if(code)
                                                                                                    if([code intValue]==200) {
-                                                                                                       [server loadMeSuccess:nil failure:nil];
+//                                                                                                       [server loadMeSuccess:nil failure:nil];
+                                                                                                       EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:[EFLoadMeOperation operationWithModel:self.model]];
+                                                                                                       [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+                                                                                                       
                                                                                                        [self processUrlHandler:url];
                                                                                                    }
                                                                                            }

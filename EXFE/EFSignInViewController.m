@@ -22,7 +22,8 @@
 #import "UILabel+EXFE.h"
 #import "EFIdentityTextField.h"
 #import "TWAPIManager.h"
-
+#import "EFKit.h"
+#import "EFLoadMeOperation.h"
 
 typedef NS_ENUM(NSUInteger, EFStage){
     kStageStart,
@@ -389,7 +390,15 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     [self setStage:kStageStart];
-
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleLoadMeSuccess:)
+                                                 name:kEFNotificationNameLoadMeSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleLoadMeFailure::)
+                                                 name:kEFNotificationNameLoadMeFailure
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -415,6 +424,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.inputIdentity = nil;
     self.imageIdentity = nil;
     self.extIdentity = nil;
@@ -908,6 +918,14 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
 }
 
+- (void)handleLoadMeSuccess:(NSNotification *)notif {
+    [self SigninDidFinish];
+}
+
+- (void)handleLoadMeFailure:(NSNotification *)notif {
+    [self SigninDidFinish];
+}
+
 - (void)loadUserAndExit:(NSInteger)user_id withToken:(NSString*)token
 {
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
@@ -916,12 +934,15 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     app.model.userToken = token;
     [app.model saveUserData];
     
-    [app.model.apiServer loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-        [self SigninDidFinish];
-    }
-                               failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                   [self SigninDidFinish];
-                               }];
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:[EFLoadMeOperation operationWithModel:app.model]];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+    
+//    [app.model.apiServer loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+//        [self SigninDidFinish];
+//    }
+//                               failure:^(RKObjectRequestOperation *operation, NSError *error) {
+//                                   [self SigninDidFinish];
+//                               }];
 }
 
 - (void)SigninDidFinish

@@ -17,6 +17,7 @@
 #import "EFAPIServer.h"
 #import "EFRomeViewController.h"
 #import "EFKit.h"
+#import "EFLoadMeOperation.h"
 
 
 #define DECTOR_HEIGHT                    (100)
@@ -143,6 +144,10 @@
     [tapHeaderRecognizer release];
     
     [self syncUser];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleLoadMeSuccess:)
+                                                 name:kEFNotificationNameLoadMeSuccess
+                                               object:nil];
 }
 
 - (void)gotoBack:(UIButton*)sender{
@@ -150,15 +155,23 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
+- (void)handleLoadMeSuccess:(NSNotification *)notif {
+    self.user = [User getDefaultUser];
+    [self refreshUI];
+}
+
 - (void) syncUser{
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model.apiServer loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                         self.user = [User getDefaultUser];
-                                         [self refreshUI];
-                                     }
-                                     failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//                                         NSLog(@"Error!:%@",error);
-                                     }];
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:[EFLoadMeOperation operationWithModel:app.model]];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+    
+//    [app.model.apiServer loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+//                                         self.user = [User getDefaultUser];
+//                                         [self refreshUI];
+//                                     }
+//                                     failure:^(RKObjectRequestOperation *operation, NSError *error) {
+////                                         NSLog(@"Error!:%@",error);
+//                                     }];
 }
 
 

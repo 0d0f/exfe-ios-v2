@@ -16,4 +16,7 @@ typedef enum {
     kEFIOOperationTypeWrite,
 } EFIOOperationType;
 
+typedef void (^EFNetworkOperationSuccess)(id data);
+typedef void (^EFNetworkOperationFailure)(NSError *error);
+
 #endif
