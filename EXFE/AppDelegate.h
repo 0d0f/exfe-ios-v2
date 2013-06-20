@@ -31,10 +31,7 @@
 @property (nonatomic, retain, readwrite) UINavigationController *navigationController;
 @property (nonatomic, retain, readwrite) CrossesViewController *crossesViewController;
 
-@property (nonatomic, assign, readwrite) NSInteger user_id;
-@property (nonatomic, copy, readwrite) NSString *user_token;
-
-- (void)switchContextByUserId:(NSInteger)user_id;
+- (void)switchContextByUserId:(NSInteger)user_id withAbandon:(BOOL)flag;
 -(void)signinDidFinish;
 -(void)signoutDidFinish;
 -(void)gatherCrossDidFinish;

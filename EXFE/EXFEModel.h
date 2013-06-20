@@ -24,6 +24,7 @@
 // if that debugging option has been set.
 
 - (id)initWithUser:(NSInteger)user_id;
+- (void)abandonCachePath;
 
 
 @property (nonatomic, retain, readwrite) NSManagedObjectContext *   exfeContext;

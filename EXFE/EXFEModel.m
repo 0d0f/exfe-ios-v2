@@ -41,6 +41,7 @@
 
 static NSString * kInfoFileName        = @"exfeInfo.plist";
 static NSString * kDatabaseFileName    = @"user.sqlite";
+static NSString * kDefaultNameTemplate = @"default.%@";
 static NSString * kNameTemplate        = @"user_%i.%@";
 static NSString * kExtension           = @"exfe";
 //static NSString * kPhotosDirectoryName = @"images";
@@ -354,51 +355,18 @@ static NSString * kExtension           = @"exfe";
     return fetchRequest;
 }
 
-- (NSString *)galleryCachePathForOurGallery
-// Try to find the gallery cache for our gallery URL string.
+- (void)abandonCachePath
 {
-    NSString *          result;
-    NSFileManager *     fileManager;
-    NSString *          cachesDirectoryPath;
-    NSArray *           potentialGalleries;
-    NSString *          galleryName;
-
-    
-    fileManager = [NSFileManager defaultManager];
-    assert(fileManager != nil);
-    
-    cachesDirectoryPath = [[self class] cachesDirectoryPath];
-    assert(cachesDirectoryPath != nil);
-    
-    // First look through the caches directory for a gallery cache whose info file
-    // matches the gallery URL string we're looking for.
-    
-    potentialGalleries = [fileManager contentsOfDirectoryAtPath:cachesDirectoryPath error:NULL];
-    assert(potentialGalleries != nil);
-    
-    result = nil;
-    for (galleryName in potentialGalleries) {
-
-    }
-    
-
-    
-    return result;
-}
-
-- (void)abandonGalleryCacheAtPath:(NSString *)galleryCachePath
-// Abandons the specified gallery cache directory.  We do this simply by removing the gallery
-// info file.  The directory will be deleted when the application is next launched.
-{
-    assert(galleryCachePath != nil);
-    
-//    [[QLog log] logWithFormat:@"gallery %zu abandon '%@'", (size_t) self.sequenceNumber, [galleryCachePath lastPathComponent]];
-    
-    [[self class] abandonGalleryCacheAtPath:galleryCachePath];
+    NSString *cachePath = [self userPath];
+//    assert(cachePath != nil);
+    [[self class] abandonUserCacheAtPath:cachePath];
 }
 
 - (NSString *)userPath
 {
+    if (self.userId == 0) {
+        return [[EXFEModel exfeUserDirectoryPath] stringByAppendingPathComponent: [NSString stringWithFormat:kDefaultNameTemplate, kExtension]];
+    }
     return [[EXFEModel exfeUserDirectoryPath] stringByAppendingPathComponent: [NSString stringWithFormat:kNameTemplate, self.userId, kExtension]];
 }
 
@@ -473,14 +441,7 @@ static NSString * kExtension           = @"exfe";
     if (success) {
         
         NSURL *baseURL = [NSURL URLWithString:API_ROOT];
-        
         RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
-        
-//        RKObjectManager *objectManager = [RKObjectManager sharedManager];
-//        if(objectManager == nil){
-//            objectManager = [RKObjectManager managerWithBaseURL:baseURL];
-//            [RKObjectManager setSharedManager:objectManager];
-//        }
         
         RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:model];
         objectManager.managedObjectStore = managedObjectStore;
@@ -526,7 +487,7 @@ static NSString * kExtension           = @"exfe";
         // the hope that our next attempt will work better.
         
         if (userDirectoryPath != nil) {
-            [self abandonGalleryCacheAtPath:userDirectoryPath];
+            [self abandonCachePath];
         }
     }
     return success;

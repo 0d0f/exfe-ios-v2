@@ -96,6 +96,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     CSLinearLayoutView *linearLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:self.view.bounds] autorelease];
     linearLayoutView.orientation = CSLinearLayoutViewOrientationVertical;
     linearLayoutView.alwaysBounceVertical = YES;
+    linearLayoutView.delegate = self;
     self.rootView = linearLayoutView;
     [self.view addSubview:linearLayoutView];
     
@@ -912,7 +913,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 {
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
     
-    [app switchContextByUserId:user_id];
+    [app switchContextByUserId:user_id withAbandon:NO];
     app.model.userToken = token;
     [app.model saveUserData];
     
@@ -1554,6 +1555,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
     }
 }
+
+#pragma mark UIScrollViewDelegate
+
+
 
 #pragma mark OAuthlogin Delegate
 - (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {

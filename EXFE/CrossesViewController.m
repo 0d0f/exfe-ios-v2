@@ -678,7 +678,7 @@
         NSString *avatarimgurl=nil;
         for(Invitation *invitation in cross.exfee.invitations) {
             NSInteger connected_uid = [invitation.identity.connected_user_id integerValue];
-            if (connected_uid == app.user_id) {
+            if (connected_uid == app.model.userId) {
                 if(invitation && invitation.invited_by &&
                    invitation.invited_by.avatar_filename ) {
                     avatarimgurl=invitation.invited_by.avatar_filename;

@@ -27,45 +27,6 @@
     [super dealloc];
 }
 
-#pragma mark USER / TOKEN API
-- (void)saveUserData
-{
-    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    [ud setObject:self.user_token forKey:@"access_token"];
-    [ud setObject:[NSString stringWithFormat:@"%i",self.user_id] forKey:@"userid"];
-    [ud synchronize];
-}
-
-- (void)loaduserData
-{
-    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    [ud synchronize];
-    self.user_token = [ud stringForKey:@"access_token"];
-    self.user_id = [[ud stringForKey:@"userid"] integerValue];
-}
-
-- (void)clearUserData
-{
-    self.user_id = 0;
-    self.user_token = @"";
-    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    [ud removeObjectForKey:@"access_token"];
-    [ud removeObjectForKey:@"userid"];
-    [ud synchronize];
-}
-
-- (BOOL)isLoggedIn
-{
-    if (self.user_id > 0 && self.user_token.length > 0) {
-        return YES;
-    }
-    [self loaduserData];
-    if (self.user_id > 0 && self.user_token.length > 0) {
-        return YES;
-    }
-    return NO;
-}
-
 #pragma mark UIApplicationDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -111,7 +72,7 @@
     
     NSInteger user_id = 0;
     user_id = [[userDefaults stringForKey:@"userid"] integerValue];
-    [self switchContextByUserId:user_id];
+    [self switchContextByUserId:user_id withAbandon:NO];
     
     //    [[NSNotificationCenter defaultCenter] addObserver:self
     //                                             selector:@selector(observeContextSave:)
@@ -368,7 +329,7 @@
         if (![server isLoggedIn]) {
             // sign in
             
-            [self switchContextByUserId:[user_id integerValue]];
+            [self switchContextByUserId:[user_id integerValue] withAbandon:NO];
             self.model.userToken = token;
             [self.model saveUserData];
             
@@ -498,10 +459,7 @@
 - (void)signoutDidFinish {
     [Flurry logEvent:@"ACTION_DID_SIGN_OUT"];
     
-    [self.model clearUserData];
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    [ud removeObjectForKey:@"access_token"];
-    [ud removeObjectForKey:@"userid"];
     [ud removeObjectForKey:@"devicetoken"];
     [ud removeObjectForKey:@"exfee_updated_at"];
     [ud removeObjectForKey:@"ifdevicetokenSave"];
@@ -510,7 +468,7 @@
     [ud removeObjectForKey:@"push_token"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    [self switchContextByUserId:0];
+    [self switchContextByUserId:0 withAbandon:YES];
     
     CrossesViewController *rootViewController = self.crossesViewController;
     [rootViewController emptyView];
@@ -519,10 +477,14 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (void)switchContextByUserId:(NSInteger)user_id
+- (void)switchContextByUserId:(NSInteger)user_id withAbandon:(BOOL)flag
 {
     if (self.model == nil || self.model.userId != user_id) {
         [self.model stop];
+        if (flag && self.model.userId > 0) {
+            [self.model abandonCachePath];
+            [self.model clearUserData];
+        }
         EXFEModel * model = [[EXFEModel alloc] initWithUser:user_id];
         self.model = model;
         [self.model start];
