@@ -14,5 +14,7 @@
 #import "EFRunLoopOperation.h"
 #import "EFIOManagementOperation.h"
 #import "EFIOOperation.h"
+#import "EFNetworkOperation.h"
+#import "EFNetworkManagementOperation.h"
 
 #endif

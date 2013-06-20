@@ -19,6 +19,10 @@
 // All completeHanlder will invoke on main thread.
 - (void)addIOManagementOperation:(NSOperation *)operation completeHandler:(CompleteBlock)completeHandler;
 - (void)addIOOperation:(NSOperation *)operation completeHandler:(CompleteBlock)completeHandler;
+
+- (void)addNetworkManagementOperation:(NSOperation *)operation completeHandler:(CompleteBlock)completeHandler;
+- (void)addNetworkOperation:(NSOperation *)operation completeHandler:(CompleteBlock)completeHandler;
+
 - (void)addCPUOperation:(NSOperation *)operation completeHandler:(CompleteBlock)completeHandler;
 
 - (void)cancelOperation:(NSOperation *)operation;

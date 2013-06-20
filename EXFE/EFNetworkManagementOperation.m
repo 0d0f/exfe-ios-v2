@@ -1,0 +1,54 @@
+//
+//  EFNetworkManagementOperation.m
+//  EXFE
+//
+//  Created by 0day on 13-6-20.
+//
+//
+
+#import "EFNetworkManagementOperation.h"
+
+#import "EFKit.h"
+
+@interface EFNetworkManagementOperation ()
+
+@property (nonatomic, retain) EFNetworkOperation *networkOperation;
+
+@end
+
+@implementation EFNetworkManagementOperation
+
+- (id)init {
+    return [self initWithNetworkOperation:nil];
+}
+
+- (id)initWithNetworkOperation:(EFNetworkOperation *)operation {
+    self = [super init];
+    if (self) {
+        self.networkOperation = operation;
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    [_networkOperation release];
+    [super dealloc];
+}
+
+- (void)operationDidStart {
+    [super operationDidStart];
+    
+    NSAssert(self.networkOperation, @"network operation shouldn't be nill.");
+    
+    [[EFQueueManager defaultManager] addNetworkOperation:self.networkOperation
+                                         completeHandler:^{
+                                             [self finish];
+                                         }];
+}
+
+- (void)operationWillFinish {
+    [super operationWillFinish];
+}
+
+@end

@@ -12,12 +12,19 @@
 
 #define kDefaultIOQueueConcurentOperationCount      (4)
 #define kDefaultIORunloopThreadPriority             (0.3f)
+#define kDefaultNetworkQueueConcurentOperationCount (4)
+#define kDefaultNetworkRunloopThreadPriority        (0.3f)
 
 @interface EFQueueManager ()
 @property (nonatomic, retain) NSThread              *ioRunLoopThread;
+@property (nonatomic, retain) NSThread              *networkRunLoopThread;
 
 @property (nonatomic, retain) NSOperationQueue      *ioManagementQueue;
 @property (nonatomic, retain) NSOperationQueue      *ioQueue;
+
+@property (nonatomic, retain) NSOperationQueue      *networkManagementQueue;
+@property (nonatomic, retain) NSOperationQueue      *networkQueue;
+
 @property (nonatomic, retain) NSOperationQueue      *cpuQueue;
 
 @property (nonatomic, retain) NSMutableDictionary   *runningOperationToHandlerMap;
@@ -47,20 +54,33 @@
 - (id)init {
     self = [super init];
     if (self) {
+        // io
         _ioManagementQueue = [[NSOperationQueue alloc] init];
         _ioManagementQueue.maxConcurrentOperationCount = NSIntegerMax;
         
         _ioQueue = [[NSOperationQueue alloc] init];
         _ioQueue.maxConcurrentOperationCount = kDefaultIOQueueConcurentOperationCount;
         
+        _ioRunLoopThread = [[NSThread alloc] initWithTarget:self selector:@selector(ioRunloopThreadEntry) object:nil];
+        _ioRunLoopThread.threadPriority = kDefaultIORunloopThreadPriority;
+        [_ioRunLoopThread start];
+        
+        // network
+        _networkManagementQueue = [[NSOperationQueue alloc] init];
+        _networkManagementQueue.maxConcurrentOperationCount = NSIntegerMax;
+        
+        _networkQueue = [[NSOperationQueue alloc] init];
+        _networkQueue.maxConcurrentOperationCount = kDefaultNetworkQueueConcurentOperationCount;
+        
+        _networkRunLoopThread = [[NSThread alloc] initWithTarget:self selector:@selector(networkRunLoopThreadEntry) object:nil];
+        _networkRunLoopThread.threadPriority = kDefaultNetworkRunloopThreadPriority;
+        [_networkRunLoopThread start];
+        
+        // cpu
         _cpuQueue = [[NSOperationQueue alloc] init];
         _cpuQueue.maxConcurrentOperationCount = 1;
         
         _runningOperationToHandlerMap = [[NSMutableDictionary alloc] init];
-        
-        _ioRunLoopThread = [[NSThread alloc] initWithTarget:self selector:@selector(ioRunloopThreadEntry) object:nil];
-        _ioRunLoopThread.threadPriority = kDefaultIORunloopThreadPriority;
-        [_ioRunLoopThread start];
     }
     
     return self;
@@ -76,7 +96,15 @@
     }
 }
 
-#pragma mark - KVo
+- (void)networkRunLoopThreadEntry {
+    while (YES) {
+        @autoreleasepool {
+            [[NSRunLoop currentRunLoop] run];
+        }
+    }
+}
+
+#pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([object isKindOfClass:[NSOperation class]] && [keyPath isEqualToString:@"isFinished"]) {
@@ -100,7 +128,9 @@
 - (void)addOperation:(NSOperation *)operation toQueue:(NSOperationQueue *)queue completeHandler:(CompleteBlock)handler {
     if (handler) {
         @synchronized (self) {
-            [self.runningOperationToHandlerMap setObject:handler forKey:[NSValue valueWithNonretainedObject:operation]];
+            CompleteBlock block = Block_copy(handler);
+            [self.runningOperationToHandlerMap setObject:block forKey:[NSValue valueWithNonretainedObject:operation]];
+            Block_release(block);
         }
     }
     
@@ -116,12 +146,16 @@
     
     @synchronized (self) {
         completeBlock = [self.runningOperationToHandlerMap objectForKey:[NSValue valueWithNonretainedObject:operation]];
+        if (completeBlock) {
+            [completeBlock retain];
+        }
         [self.runningOperationToHandlerMap removeObjectForKey:[NSValue valueWithNonretainedObject:operation]];
     }
     
     if (![operation isCancelled] && completeBlock) {
         dispatch_async(dispatch_get_main_queue(), ^{
             completeBlock();
+            Block_release(completeBlock);
         });
     }
 }
@@ -130,7 +164,6 @@
 
 - (void)addIOManagementOperation:(NSOperation *)operation completeHandler:(CompleteBlock)completeHandler {
     NSParameterAssert(operation);
-    NSParameterAssert(completeHandler);
     
     if ([operation respondsToSelector:@selector(setRunLoopThread:)]) {
         if ([(id)operation runLoopThread] == nil) {
@@ -142,7 +175,6 @@
 
 - (void)addIOOperation:(NSOperation *)operation completeHandler:(CompleteBlock)completeHandler {
     NSParameterAssert(operation);
-    NSParameterAssert(completeHandler);
     
     if ([operation respondsToSelector:@selector(setRunLoopThread:)]) {
         if ([(id)operation runLoopThread] == nil) {
@@ -152,9 +184,30 @@
     [self addOperation:operation toQueue:self.ioQueue completeHandler:completeHandler];
 }
 
+- (void)addNetworkManagementOperation:(NSOperation *)operation completeHandler:(CompleteBlock)completeHandler {
+    NSParameterAssert(operation);
+    
+    if ([operation respondsToSelector:@selector(setRunLoopThread:)]) {
+        if ([(id)operation runLoopThread] == nil) {
+            [(id)operation setRunLoopThread:self.networkRunLoopThread];
+        }
+    }
+    [self addOperation:operation toQueue:self.networkManagementQueue completeHandler:completeHandler];
+}
+
+- (void)addNetworkOperation:(NSOperation *)operation completeHandler:(CompleteBlock)completeHandler {
+    NSParameterAssert(operation);
+    
+    if ([operation respondsToSelector:@selector(setRunLoopThread:)]) {
+        if ([(id)operation runLoopThread] == nil) {
+            [(id)operation setRunLoopThread:self.networkRunLoopThread];
+        }
+    }
+    [self addOperation:operation toQueue:self.networkQueue completeHandler:completeHandler];
+}
+
 - (void)addCPUOperation:(NSOperation *)operation completeHandler:(CompleteBlock)completeHandler {
     NSParameterAssert(operation);
-    NSParameterAssert(completeHandler);
     
     [self addOperation:operation toQueue:self.cpuQueue completeHandler:completeHandler];
 }

@@ -1521,6 +1521,15 @@
 		76BC7B7417706C35003F4FBA /* EFIOManagementOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B7317706C35003F4FBA /* EFIOManagementOperation.m */; };
 		76BC7B7517706C35003F4FBA /* EFIOManagementOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B7317706C35003F4FBA /* EFIOManagementOperation.m */; };
 		76BC7B7617706C35003F4FBA /* EFIOManagementOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B7317706C35003F4FBA /* EFIOManagementOperation.m */; };
+		76BC7B8E1772B925003F4FBA /* EFNetworkOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B8D1772B925003F4FBA /* EFNetworkOperation.m */; };
+		76BC7B8F1772B925003F4FBA /* EFNetworkOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B8D1772B925003F4FBA /* EFNetworkOperation.m */; };
+		76BC7B901772B925003F4FBA /* EFNetworkOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B8D1772B925003F4FBA /* EFNetworkOperation.m */; };
+		76BC7B9A1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B991772B93A003F4FBA /* EFNetworkManagementOperation.m */; };
+		76BC7B9B1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B991772B93A003F4FBA /* EFNetworkManagementOperation.m */; };
+		76BC7B9C1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B991772B93A003F4FBA /* EFNetworkManagementOperation.m */; };
+		76BC7BA41772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7BA31772EEA5003F4FBA /* EFLoadMeOperation.m */; };
+		76BC7BA51772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7BA31772EEA5003F4FBA /* EFLoadMeOperation.m */; };
+		76BC7BA61772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7BA31772EEA5003F4FBA /* EFLoadMeOperation.m */; };
 		76C29C201754E9D10084C27F /* tabshadow_conv.png in Resources */ = {isa = PBXBuildFile; fileRef = 76C29C1E1754E9D10084C27F /* tabshadow_conv.png */; };
 		76C29C211754E9D10084C27F /* tabshadow_conv.png in Resources */ = {isa = PBXBuildFile; fileRef = 76C29C1E1754E9D10084C27F /* tabshadow_conv.png */; };
 		76C29C221754E9D10084C27F /* tabshadow_conv.png in Resources */ = {isa = PBXBuildFile; fileRef = 76C29C1E1754E9D10084C27F /* tabshadow_conv.png */; };
@@ -2398,6 +2407,12 @@
 		76BC7B7317706C35003F4FBA /* EFIOManagementOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFIOManagementOperation.m; sourceTree = "<group>"; };
 		76BC7B7C17719C87003F4FBA /* EFQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFQueue.h; sourceTree = "<group>"; };
 		76BC7B7D17719CC6003F4FBA /* EFCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFCache.h; sourceTree = "<group>"; };
+		76BC7B8C1772B925003F4FBA /* EFNetworkOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFNetworkOperation.h; sourceTree = "<group>"; };
+		76BC7B8D1772B925003F4FBA /* EFNetworkOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFNetworkOperation.m; sourceTree = "<group>"; };
+		76BC7B981772B93A003F4FBA /* EFNetworkManagementOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFNetworkManagementOperation.h; sourceTree = "<group>"; };
+		76BC7B991772B93A003F4FBA /* EFNetworkManagementOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFNetworkManagementOperation.m; sourceTree = "<group>"; };
+		76BC7BA21772EEA5003F4FBA /* EFLoadMeOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLoadMeOperation.h; sourceTree = "<group>"; };
+		76BC7BA31772EEA5003F4FBA /* EFLoadMeOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLoadMeOperation.m; sourceTree = "<group>"; };
 		76C29C1E1754E9D10084C27F /* tabshadow_conv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabshadow_conv.png; sourceTree = "<group>"; };
 		76C29C1F1754E9D10084C27F /* tabshadow_conv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabshadow_conv@2x.png"; sourceTree = "<group>"; };
 		76D1A801171D5DFA00A35BBD /* EFChoosePeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewController.h; sourceTree = "<group>"; };
@@ -2917,6 +2932,8 @@
 			children = (
 				4F2D22E2176AF32E00FEA139 /* RecursiveDeleteOperation.h */,
 				4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */,
+				76BC7BA21772EEA5003F4FBA /* EFLoadMeOperation.h */,
+				76BC7BA31772EEA5003F4FBA /* EFLoadMeOperation.m */,
 			);
 			name = Operation;
 			sourceTree = "<group>";
@@ -3394,6 +3411,10 @@
 		76BC7B7B17715475003F4FBA /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				76BC7B8C1772B925003F4FBA /* EFNetworkOperation.h */,
+				76BC7B8D1772B925003F4FBA /* EFNetworkOperation.m */,
+				76BC7B981772B93A003F4FBA /* EFNetworkManagementOperation.h */,
+				76BC7B991772B93A003F4FBA /* EFNetworkManagementOperation.m */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -5906,6 +5927,9 @@
 				76BC7B7517706C35003F4FBA /* EFIOManagementOperation.m in Sources */,
 				4F2D22D3176994EE00FEA139 /* EXFEModel.m in Sources */,
 				4F2D22E5176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */,
+				76BC7B8F1772B925003F4FBA /* EFNetworkOperation.m in Sources */,
+				76BC7B9B1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */,
+				76BC7BA51772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6092,6 +6116,9 @@
 				76BC7B7617706C35003F4FBA /* EFIOManagementOperation.m in Sources */,
 				4F2D22D4176994EE00FEA139 /* EXFEModel.m in Sources */,
 				4F2D22E6176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */,
+				76BC7B901772B925003F4FBA /* EFNetworkOperation.m in Sources */,
+				76BC7B9C1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */,
+				76BC7BA61772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6278,6 +6305,9 @@
 				76BC7B7417706C35003F4FBA /* EFIOManagementOperation.m in Sources */,
 				4F2D22D2176994EE00FEA139 /* EXFEModel.m in Sources */,
 				4F2D22E4176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */,
+				76BC7B8E1772B925003F4FBA /* EFNetworkOperation.m in Sources */,
+				76BC7B9A1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */,
+				76BC7BA41772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -113,7 +113,7 @@
 - (void)start {
     // any thread
     
-    assert(self.runLoopOperationState == kEFRunLoopOperationStateFinished);
+    assert(self.runLoopOperationState != kEFRunLoopOperationStateFinished);
     
     self.runLoopOperationState = kEFRunLoopOperationStateExecuting;
     
