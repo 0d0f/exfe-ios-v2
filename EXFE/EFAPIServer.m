@@ -690,7 +690,7 @@
 {
     NSDictionary *param = @{@"token": self.model.userToken};
     NSString *endpoint = [NSString stringWithFormat:@"users/%u", self.model.userId];
-    [[RKObjectManager sharedManager] getObjectsAtPath:endpoint
+    [self.model.objectManager getObjectsAtPath:endpoint
                                            parameters:param
                                               success:^(RKObjectRequestOperation *operation, id responseObject){
                                                   [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];

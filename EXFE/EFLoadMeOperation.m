@@ -26,6 +26,7 @@ NSString *kEFNotificationNameLoadMeFailure = @"notification.loadMe.failure";
     [super operationDidStart];
     
     NSAssert(self.model, @"model shouldn't be nill.");
+    NSAssert(self.model.apiServer, @"api shouldn't be nill.");
     [self.model.apiServer loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
         self.state = kEFNetworkOperationStateSuccess;
         
