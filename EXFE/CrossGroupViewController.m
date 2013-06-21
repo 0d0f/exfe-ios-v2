@@ -1547,6 +1547,9 @@
     if (sender) {
         CGPoint newLocation = [rootView convertPoint:sender.frame.origin fromView:sender.superview];
         CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), newLocation.y + SMALL_SLOT, 50, 44);
+        if (sender.tag == kPopupTypeEditTitle) {
+            original = CGRectMake(CGRectGetWidth(self.view.frame), newLocation.y + CGRectGetHeight(sender.frame) / 2 - 44 / 2,50, 44);
+        }
         view.frame = original;
     }
     
