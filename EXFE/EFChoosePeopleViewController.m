@@ -15,7 +15,6 @@
 #import "EXAddressBookService.h"
 #import "Identity.h"
 #import "Invitation.h"
-#import "ImgCache.h"
 #import "Util.h"
 #import "EFSearchBar.h"
 #import "LocalContact+EXFE.h"

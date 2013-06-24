@@ -21,11 +21,11 @@
 #import "Util.h"
 #import "UILabel+EXFE.h"
 #import "TTTAttributedLabel.h"
-#import "ImgCache.h"
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
 #import "EFAPI.h"
 #import "OAuthLoginViewController.h"
+#import "EFKit.h"
 
 typedef NS_ENUM(NSUInteger, EFViewTag) {
     kViewTagNone,
@@ -384,9 +384,24 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 {
     NSString *avatar_filename = [respDict valueForKeyPath:@"identity.avatar_filename"];
     if (avatar_filename.length > 0) {
-        UIImage *def = [UIImage imageNamed:@"portrait_default.png"];
+        UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
         _imageIdentity.contentMode = UIViewContentModeScaleAspectFill;
-        [[ImgCache sharedManager] fillAvatar:_imageIdentity with:avatar_filename byDefault:def];
+        
+        if (!avatar_filename) {
+            _imageIdentity.image = defaultImage;
+        } else {
+            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:avatar_filename]) {
+                _imageIdentity.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:avatar_filename];
+            } else {
+                _imageIdentity.image = defaultImage;
+                [[EFDataManager imageManager] cachedImageForKey:avatar_filename
+                                                completeHandler:^(UIImage *image){
+                                                    if (image) {
+                                                        _imageIdentity.image = image;
+                                                    }
+                                                }];
+            }
+        }
     } else {
         NSString *provider = [respDict valueForKeyPath:@"identity.provider"];
         [self fillIdentityHint:[Identity getProviderCode:provider]];

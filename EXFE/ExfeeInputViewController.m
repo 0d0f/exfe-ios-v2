@@ -11,6 +11,7 @@
 #import "EFAPI.h"
 #import "WCAlertView.h"
 #import "EXAddressBookService.h"
+#import "EFKit.h"
 
 @interface ExfeeInputViewController ()
 
@@ -808,27 +809,27 @@ static char identitykey;
             cell.providerIcon=icon;
             cell.providerIconSet=nil;
         }
-        if(identity.avatar_filename!=nil) {
-            UIImage *avatar = [[ImgCache sharedManager] getImgFromCache:identity.avatar_filename];
-            if(avatar==nil || [avatar isEqual:[NSNull null]])
-            {
-                cell.avatar=[UIImage imageNamed:@"portrait_default.png"];
-                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                dispatch_async(imgQueue, ^{
-                    UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                            cell.avatar=avatar;
-                        }
-                    });
-                });
-                dispatch_release(imgQueue);
-            }
-            else
-                cell.avatar=avatar;
-        }
         
+        NSString *imageKey = identity.avatar_filename;
+        UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
+        
+        if (!imageKey) {
+            cell.avatar = defaultImage;
+        } else {
+            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+                cell.avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+            } else {
+                cell.avatar = defaultImage;
+                [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                                completeHandler:^(UIImage *image){
+                                                    if (image) {
+                                                        cell.avatar = image;
+                                                    }
+                                                }];
+            }
+        }
     }
+    
     return cell;
 }
 

@@ -11,8 +11,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "LocalContact.h"
 #import "Identity.h"
-#import "ImgCache.h"
 #import "Util.h"
+#import "EFKit.h"
 
 @implementation GatherExfeeInputCell
 
@@ -144,26 +144,24 @@
         self.providerIcon = icon;
         self.providerIconSet = nil;
     }
-    if (identity.avatar_filename) {
-        UIImage *avatar = [[ImgCache sharedManager] getImgFromCache:identity.avatar_filename];
-        if (!avatar || [avatar isEqual:[NSNull null]]) {
-            self.avatar = [UIImage imageNamed:@"portrait_default.png"];
-            
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-                UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(avatar!=nil && ![avatar isEqual:[NSNull null]]) {
-                        self.avatar=avatar;
-                    }
-                });
-            });
-            dispatch_release(imgQueue);
+    NSString *imageKey = identity.avatar_filename;
+    UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
+    
+    if (!imageKey) {
+        self.avatar = defaultImage;
+    } else {
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+            self.avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
         } else {
-            self.avatar=avatar;
+            self.avatar = defaultImage;
+            [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                            completeHandler:^(UIImage *image){
+                                                if (image) {
+                                                    self.avatar = image;
+                                                }
+                                            }];
         }
     }
-
 }
 
 #pragma mark -

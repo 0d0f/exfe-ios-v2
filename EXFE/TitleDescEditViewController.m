@@ -8,6 +8,8 @@
 
 #import "TitleDescEditViewController.h"
 
+#import "EFKit.h"
+
 #define LARGE_SLOT                       (16)
 #define SMALL_SLOT                      (5)
 
@@ -235,24 +237,26 @@
     //    keyboardIsVisible = NO;
 }
 
-- (void) setBackground:(NSString *)_imgurl{
-    if(_imgurl!=nil && ![_imgurl isEqualToString:@""]){
-            UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:_imgurl];
-            if(backimg == nil || [backimg isEqual:[NSNull null]]){
-                dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                dispatch_async(imgQueue, ^{
-                    UIImage *backimg=[[ImgCache sharedManager] getImgFrom:_imgurl];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
-                            dectorView.image = backimg;
-                            //[self setLayoutDirty];
-                        }
-                    });
-                });
-                dispatch_release(imgQueue);
-            }else{
-                dectorView.image = backimg;
+- (void)setBackground:(NSString *)_imgurl {
+    if (_imgurl!=nil && ![_imgurl isEqualToString:@""]) {
+        NSString *imageKey = _imgurl;
+        UIImage *defaultImage = nil;
+        
+        if (!imageKey) {
+            dectorView.image = defaultImage;
+        } else {
+            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+                dectorView.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+            } else {
+                dectorView.image = defaultImage;
+                [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                                completeHandler:^(UIImage *image){
+                                                    if (image) {
+                                                        dectorView.image = image;
+                                                    }
+                                                }];
             }
+        }
     }
 }
 

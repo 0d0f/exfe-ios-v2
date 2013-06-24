@@ -14,7 +14,6 @@
 #import "Identity+EXFE.h"
 #import "Rsvp.h"
 #import "CrossCard.h"
-#import "ImgCache.h"
 #import "Util.h"
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
@@ -593,9 +592,14 @@
         User *_user = [User getDefaultUser];
         NSString *imgName = _user.avatar_filename;
         
-        [[ImgCache sharedManager] fillAvatarWith:imgName byDefault:nil using:^(UIImage *image) {
-            self.headView.headImage = image;
-        }];
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imgName]) {
+            self.headView.headImage = [[EFDataManager imageManager] cachedImageInMemoryForKey:imgName];
+        } else {
+            [[EFDataManager imageManager] cachedImageForKey:imgName
+                                            completeHandler:^(UIImage *image){
+                                                self.headView.headImage = image;
+                                            }];
+        }
         
         return profileCell;
     } else if (1 == indexPath.section) {
@@ -707,25 +711,21 @@
 //                [users release];
             }
         }
-        if(avatarimgurl==nil)
-          cell.avatar = nil;
-        else{
-          UIImage *avatarImg=[[ImgCache sharedManager] getImgFromCache:avatarimgurl];
-          if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-              UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatarimgurl];
-              dispatch_async(dispatch_get_main_queue(), ^{
-                if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
-                  cell.avatar=avatar;
-                }
-              });
-            });
-            dispatch_release(imgQueue);
-          }else{
-            cell.avatar = avatarImg;
-          }
+        if (!avatarimgurl) {
+            cell.avatar = nil;
+        } else {
+            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:avatarimgurl]) {
+                cell.avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:avatarimgurl];
+            } else {
+                [[EFDataManager imageManager] cachedImageForKey:avatarimgurl
+                                                completeHandler:^(UIImage *image){
+                                                    if (image) {
+                                                        cell.avatar = image;
+                                                    }
+                                                }];
+            }
         }
+        
       NSString *backimgurl=nil;
         NSArray *widgets = cross.widget;
         for(NSDictionary *widget in widgets) {
@@ -989,27 +989,23 @@
             
             if (url && url.length > 0) {
                 NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
-                UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
                 
-                if (backimg == nil || [backimg isEqual:[NSNull null]]) {
-                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                    dispatch_async(imgQueue, ^{
-                        // Not in Cache
-                        tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
-                        UIImage *backimg = [[ImgCache sharedManager] getImgFrom:imgurl];
-                        
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if (backimg != nil && ![backimg isEqual:[NSNull null]]) {
-                                // Fill after download
-                                tabBarViewController.tabBar.backgroundImage = backimg;
-                            }
-                        });
-                    });
-                    dispatch_release(imgQueue);
+                if (!imgurl) {
+                    tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
                 } else {
-                    // Find in cache
-                    tabBarViewController.tabBar.backgroundImage = backimg;
+                    if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imgurl]) {
+                        tabBarViewController.tabBar.backgroundImage = [[EFDataManager imageManager] cachedImageInMemoryForKey:imgurl];
+                    } else {
+                        tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+                        [[EFDataManager imageManager] cachedImageForKey:imgurl
+                                                        completeHandler:^(UIImage *image){
+                                                            if (image) {
+                                                                tabBarViewController.tabBar.backgroundImage = image;
+                                                            }
+                                                        }];
+                    }
                 }
+                
                 flag = YES;
                 break;
             }

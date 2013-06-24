@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ImgCache.h"
 #import "Identity.h"
 #import "Invitation.h"
 #import "Util.h"

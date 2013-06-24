@@ -10,7 +10,6 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "Util.h"
-#import "ImgCache.h"
 #import "LocalContact.h"
 #import "Identity+EXFE.h"
 #import "RoughIdentity.h"
