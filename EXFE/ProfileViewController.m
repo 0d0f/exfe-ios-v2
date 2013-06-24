@@ -127,15 +127,8 @@
     tableview.opaque = NO;
     tableview.backgroundView = nil;
     tableview.frame = CGRectMake(0, DECTOR_HEIGHT, CGRectGetWidth(b), CGRectGetHeight(b) - DECTOR_HEIGHT);
-    
-    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
-    [gestureRecognizer setCancelsTouchesInView:NO];
-    [tableview addGestureRecognizer:gestureRecognizer];
-    [gestureRecognizer release];
-    
-    tableview.delegate=self;
-    tableview.dataSource=self;
-    
+    tableview.delegate = self;
+    tableview.dataSource = self;
     
     [self refreshUI];
     
@@ -172,18 +165,6 @@
 //                                     failure:^(RKObjectRequestOperation *operation, NSError *error) {
 ////                                         NSLog(@"Error!:%@",error);
 //                                     }];
-}
-
-
-- (void)touchesBegan:(UITapGestureRecognizer*)sender{
-    CGPoint location= [sender locationInView:footerView];
-    
-    CGRect signoutbuttonRect = [buttonsignout frame];
-    if(CGRectContainsPoint(signoutbuttonRect, location))
-    {
-        [self Logout];
-    }
-    
 }
 
 - (void)tapProfileHeader:(UITapGestureRecognizer*)sender
