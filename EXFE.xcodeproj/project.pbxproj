@@ -1483,6 +1483,9 @@
 		765BAC2C176AF683007ADD83 /* EFDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 765BAC2B176AF683007ADD83 /* EFDataManager.m */; };
 		765BAC2D176AF683007ADD83 /* EFDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 765BAC2B176AF683007ADD83 /* EFDataManager.m */; };
 		765BAC2E176AF683007ADD83 /* EFDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 765BAC2B176AF683007ADD83 /* EFDataManager.m */; };
+		765E150E17745235003F4827 /* EFDataManager+Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 765E150D17745235003F4827 /* EFDataManager+Image.m */; };
+		765E150F17745235003F4827 /* EFDataManager+Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 765E150D17745235003F4827 /* EFDataManager+Image.m */; };
+		765E151017745235003F4827 /* EFDataManager+Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 765E150D17745235003F4827 /* EFDataManager+Image.m */; };
 		7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
@@ -1563,6 +1566,9 @@
 		76D1FE031740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */; };
 		76D1FE041740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */; };
 		76D1FE051740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */; };
+		76D2DE131778061F00E8C53E /* EFDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D2DE121778061F00E8C53E /* EFDownloadOperation.m */; };
+		76D2DE141778061F00E8C53E /* EFDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D2DE121778061F00E8C53E /* EFDownloadOperation.m */; };
+		76D2DE151778061F00E8C53E /* EFDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D2DE121778061F00E8C53E /* EFDownloadOperation.m */; };
 		76DED7C3171BEDE000C2F27E /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76DED7CE171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
 		76DED7CF171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
@@ -2381,6 +2387,8 @@
 		765BAC1F176AF58F007ADD83 /* EFDataCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFDataCache.m; sourceTree = "<group>"; };
 		765BAC2A176AF683007ADD83 /* EFDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDataManager.h; sourceTree = "<group>"; };
 		765BAC2B176AF683007ADD83 /* EFDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFDataManager.m; sourceTree = "<group>"; };
+		765E150C17745235003F4827 /* EFDataManager+Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFDataManager+Image.h"; sourceTree = "<group>"; };
+		765E150D17745235003F4827 /* EFDataManager+Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFDataManager+Image.m"; sourceTree = "<group>"; };
 		7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorHandlerCenter.h; sourceTree = "<group>"; };
 		7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorHandlerCenter.m; sourceTree = "<group>"; };
 		7670126A1729054500B5445E /* EFPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPopoverController.m; sourceTree = "<group>"; };
@@ -2433,6 +2441,8 @@
 		76D1FE011740FF9800D271B2 /* EFAPIServer+Profile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFAPIServer+Profile.h"; sourceTree = "<group>"; };
 		76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFAPIServer+Profile.m"; sourceTree = "<group>"; };
 		76D1FE06174100AA00D271B2 /* EFAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAPI.h; sourceTree = "<group>"; };
+		76D2DE111778061F00E8C53E /* EFDownloadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDownloadOperation.h; sourceTree = "<group>"; };
+		76D2DE121778061F00E8C53E /* EFDownloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFDownloadOperation.m; sourceTree = "<group>"; };
 		76D9657A1743D07000485325 /* EFConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFConfig.h; sourceTree = "<group>"; };
 		76DED7CC171C06A900C2F27E /* UILog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILog.h; sourceTree = "<group>"; };
 		76DED7CD171C06A900C2F27E /* UILog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILog.m; sourceTree = "<group>"; };
@@ -3342,6 +3352,7 @@
 			isa = PBXGroup;
 			children = (
 				76BC7B7D17719CC6003F4FBA /* EFCache.h */,
+				765E15181774523A003F4827 /* Image (Category) */,
 				76BC7B7E17719D45003F4FBA /* Base */,
 				765A82F1175F255800448B64 /* EFImageManager.h */,
 				765A82F2175F255800448B64 /* EFImageManager.m */,
@@ -3349,6 +3360,17 @@
 				765A82E3175F120D00448B64 /* EFImageCache.m */,
 			);
 			name = Cache;
+			sourceTree = "<group>";
+		};
+		765E15181774523A003F4827 /* Image (Category) */ = {
+			isa = PBXGroup;
+			children = (
+				765E150C17745235003F4827 /* EFDataManager+Image.h */,
+				765E150D17745235003F4827 /* EFDataManager+Image.m */,
+				76D2DE111778061F00E8C53E /* EFDownloadOperation.h */,
+				76D2DE121778061F00E8C53E /* EFDownloadOperation.m */,
+			);
+			name = "Image (Category)";
 			sourceTree = "<group>";
 		};
 		767012621729053400B5445E /* EFKit */ = {
@@ -5930,6 +5952,8 @@
 				76BC7B8F1772B925003F4FBA /* EFNetworkOperation.m in Sources */,
 				76BC7B9B1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */,
 				76BC7BA51772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */,
+				765E150F17745235003F4827 /* EFDataManager+Image.m in Sources */,
+				76D2DE141778061F00E8C53E /* EFDownloadOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6119,6 +6143,8 @@
 				76BC7B901772B925003F4FBA /* EFNetworkOperation.m in Sources */,
 				76BC7B9C1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */,
 				76BC7BA61772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */,
+				765E151017745235003F4827 /* EFDataManager+Image.m in Sources */,
+				76D2DE151778061F00E8C53E /* EFDownloadOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6308,6 +6334,8 @@
 				76BC7B8E1772B925003F4FBA /* EFNetworkOperation.m in Sources */,
 				76BC7B9A1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */,
 				76BC7BA41772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */,
+				765E150E17745235003F4827 /* EFDataManager+Image.m in Sources */,
+				76D2DE131778061F00E8C53E /* EFDownloadOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,7 +15,7 @@
 #import "Identity+EXFE.h"
 #import "RoughIdentity.h"
 #import "EFContactObject.h"
-#import "EFImageManager.h"
+#import "EFKit.h"
 
 #pragma mark - BackgroundView
 @interface EFChoosePeopleBackgroundView : UIView
@@ -315,14 +315,19 @@
         self.userNameLabel.text = contactObject.name;
         self.userNameLabel.frame = (CGRect){{56, 12}, {190, 26}};
         if (contactObject.imageKey) {
-            [[EFImageManager defaultManager] imageForKey:contactObject.imageKey
-                                       completionHandler:^(UIImage *image){
-                                           if (image && contactObject == self.contactObject) {
-                                               self.avatarImageView.image = image;
-                                           } else {
-                                               self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
-                                           }
-                                        }];
+            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:contactObject.imageKey]) {
+                self.avatarImageView.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:contactObject.imageKey];
+            } else {
+                self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
+                [[EFDataManager imageManager] cachedImageForKey:contactObject.imageKey
+                                                completeHandler:^(UIImage *image){
+                                                    if (image && contactObject == self.contactObject) {
+                                                        self.avatarImageView.image = image;
+                                                    } else {
+                                                        self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
+                                                    }
+                                                }];
+            }
         } else {
             self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
         }
