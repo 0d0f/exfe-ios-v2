@@ -267,6 +267,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         label.shadowColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
         label.shadowOffset = (CGSize){0, 1.0f};
         label.numberOfLines = (style == kEFTabBarStyleDoubleHeight) ? 2 : 1;
+        label.tag = 0x0101;
         [self addSubview:label];
         _titleLabel = label;
         

@@ -25,17 +25,16 @@
 @class EXFEModel;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
+
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, retain, readwrite) EXFEModel *model;
 @property (nonatomic, retain, readwrite) UINavigationController *navigationController;
 @property (nonatomic, retain, readwrite) CrossesViewController *crossesViewController;
 
+- (void)switchContextByUserId:(NSInteger)user_id withAbandon:(BOOL)flag;
 -(void)signinDidFinish;
 -(void)signoutDidFinish;
 -(void)gatherCrossDidFinish;
 -(void)crossUpdateDidFinish:(int)cross_id;
 -(void)showLanding:(UIViewController*)parent;
-- (void)cleandb;
-- (void)createdb;
-- (void)processUrlHandler:(NSURL*)url;
 @end

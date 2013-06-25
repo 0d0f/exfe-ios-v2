@@ -15,4 +15,6 @@
     #import "EFConfig.h"
     #import "Constants.h"
     #import "Flurry/Flurry.h"
+    #import "AppDelegate.h"
+    #import "EXFEModel.h"
 #endif

@@ -7,13 +7,21 @@
 //
 
 #import "EXFEModel.h"
+#import <RestKit/RestKit.h>
+
+#import "EFAPI.h"
+#import "RecursiveDeleteOperation.h"
+#import "ModelMapping.h"
 
 @interface EXFEModel ()
 
 // read/write variants of public properties
+@property (nonatomic, assign, readwrite) NSInteger                  userId;
 
 @property (nonatomic, retain, readwrite) NSEntityDescription *      crossEntry;
 @property (nonatomic, retain, readwrite ) NSEntityDescription *      exfeeEntry;
+@property (nonatomic, retain, readwrite) RKObjectManager *           objectManager;
+@property (nonatomic, retain, readwrite) EFAPIServer *               apiServer;
 
 // private properties
 @property (nonatomic, assign, readonly ) NSUInteger                 sequenceNumber;
@@ -33,8 +41,10 @@
 
 static NSString * kInfoFileName        = @"exfeInfo.plist";
 static NSString * kDatabaseFileName    = @"user.sqlite";
-static NSString * kNameTemplate = @"user_%.9f.%@";
-static NSString * kExtension    = @"exfe";
+static NSString * kDefaultNameTemplate = @"default.%@";
+static NSString * kNameTemplate        = @"user_%i.%@";
+static NSString * kExtension           = @"exfe";
+//static NSString * kPhotosDirectoryName = @"images";
 
 + (NSString *)cachesDirectoryPath
 // Returns the path to the caches directory.  This is a class method because it's
@@ -52,6 +62,25 @@ static NSString * kExtension    = @"exfe";
     return result;
 }
 
++ (NSString *)appSupportDirectoryPath
+{
+    NSString *      result;
+    NSArray *       paths;
+    
+    result = nil;
+    paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    if ( (paths != nil) && ([paths count] != 0) ) {
+        assert([[paths objectAtIndex:0] isKindOfClass:[NSString class]]);
+        result = [paths objectAtIndex:0];
+    }
+    return result;
+}
+
++ (NSString *)exfeUserDirectoryPath
+{
+    return [[self appSupportDirectoryPath] stringByAppendingPathComponent:@"users"];
+}
+
 + (void)abandonUserCacheAtPath:(NSString *)userPath
 {
     (void) [[NSFileManager defaultManager] removeItemAtPath:[userPath stringByAppendingPathComponent:kInfoFileName] error:NULL];
@@ -63,10 +92,10 @@ static NSString * kExtension    = @"exfe";
     NSUserDefaults *    userDefaults;
     NSFileManager *     fileManager;
     BOOL                clearAllCaches;
-    NSString *          cachesDirectoryPath;
+    NSString *          usersDirectoryPath;
     NSArray *           potentialUserPathNames;
     NSMutableArray *    deletableUserPaths;
-    NSMutableArray *    liveGalleryCachePathsAndDates;
+    NSMutableArray *    liveUserCachePathsAndDates;
     
     fileManager = [NSFileManager defaultManager];
     assert(fileManager != nil);
@@ -74,56 +103,58 @@ static NSString * kExtension    = @"exfe";
     userDefaults = [NSUserDefaults standardUserDefaults];
     assert(userDefaults != nil);
     
-    cachesDirectoryPath = [self cachesDirectoryPath];
-    assert(cachesDirectoryPath != nil);
-    
-    // See if we've been asked to nuke all gallery caches.
-    
-    clearAllCaches = [userDefaults boolForKey:@"galleryClearCache"];
-    if (clearAllCaches) {
-//        [[QLog log] logWithFormat:@"gallery clear cache"];
-        
-        [userDefaults removeObjectForKey:@"galleryClearCache"];
-        [userDefaults synchronize];
+    usersDirectoryPath = [self exfeUserDirectoryPath];
+    assert(usersDirectoryPath != nil);
+    BOOL isDir  = NO;
+    if(![fileManager fileExistsAtPath:usersDirectoryPath isDirectory:&isDir]){
+        if(![fileManager createDirectoryAtPath:usersDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL]){
+            NSLog(@"Error: Create folder failed %@", usersDirectoryPath);
+        } else {
+            NSLog(@"OK: Created folder %@", usersDirectoryPath);
+        }
     }
     
-    // Walk the list of gallery caches looking for abandoned ones (or, if we're
-    // clearing all caches, do them all).  Add the targeted gallery caches
-    // to our list of things to delete.  Also, for any galleries that remain,
-    // put the path and the mod date in a list so that we can then find the
-    // oldest galleries and delete them.
+    
+    // Check if need clean up all users' folder
+    clearAllCaches = [userDefaults boolForKey:@"userClerCache"];
+    if (clearAllCaches) {
+        // reset flag
+        [userDefaults removeObjectForKey:@"userClerCache"];
+        [userDefaults synchronize];
+    }
     
     deletableUserPaths = [NSMutableArray array];
     assert(deletableUserPaths != nil);
     
-    potentialUserPathNames = [fileManager contentsOfDirectoryAtPath:cachesDirectoryPath error:NULL];
+    potentialUserPathNames = [fileManager contentsOfDirectoryAtPath:usersDirectoryPath error:NULL];
     assert(potentialUserPathNames != nil);
     
-    liveGalleryCachePathsAndDates = [NSMutableArray array];
-    assert(liveGalleryCachePathsAndDates != nil);
+    liveUserCachePathsAndDates = [NSMutableArray array];
+    assert(liveUserCachePathsAndDates != nil);
     
+    // Delete abandon users' folder, store live folder
     for (NSString * userPathName in potentialUserPathNames) {
         if ([userPathName hasSuffix:kExtension]) {
-            NSString *      galleryCachePath;
-            NSString *      galleryInfoFilePath;
-            NSString *      galleryDatabaseFilePath;
+            NSString *      userCachePath;
+            NSString *      userInfoFilePath;
+            NSString *      userDatabaseFilePath;
             
-            galleryCachePath = [cachesDirectoryPath stringByAppendingPathComponent:userPathName];
-            assert(galleryCachePath != nil);
+            userCachePath = [usersDirectoryPath stringByAppendingPathComponent:userPathName];
+            assert(userCachePath != nil);
             
-            galleryInfoFilePath = [galleryCachePath stringByAppendingPathComponent:kInfoFileName];
-            assert(galleryInfoFilePath != nil);
+            userInfoFilePath = [userCachePath stringByAppendingPathComponent:kInfoFileName];
+            assert(userInfoFilePath != nil);
             
-            galleryDatabaseFilePath = [galleryCachePath stringByAppendingPathComponent:kDatabaseFileName];
-            assert(galleryDatabaseFilePath != nil);
+            userDatabaseFilePath = [userCachePath stringByAppendingPathComponent:kDatabaseFileName];
+            assert(userDatabaseFilePath != nil);
             
             if (clearAllCaches) {
 //                [[QLog log] logWithFormat:@"gallery clear '%@'", galleryCacheName];
-                (void) [fileManager removeItemAtPath:galleryInfoFilePath error:NULL];
-                [deletableUserPaths addObject:galleryCachePath];
-            } else if ( ! [fileManager fileExistsAtPath:galleryInfoFilePath]) {
+                (void) [fileManager removeItemAtPath:userInfoFilePath error:NULL];
+                [deletableUserPaths addObject:userCachePath];
+            } else if ( ! [fileManager fileExistsAtPath:userInfoFilePath]) {
 //                [[QLog log] logWithFormat:@"gallery delete abandoned '%@'", galleryCacheName];
-                [deletableUserPaths addObject:galleryCachePath];
+                [deletableUserPaths addObject:userCachePath];
             } else {
                 NSDate *    modDate;
                 
@@ -132,14 +163,14 @@ static NSString * kExtension    = @"exfe";
                 // If that succeeds, add a dictionary containing the gallery cache path and the
                 // mod date to the list of live gallery caches.
                 
-                modDate = [[fileManager attributesOfItemAtPath:galleryDatabaseFilePath error:NULL] objectForKey:NSFileModificationDate];
+                modDate = [[fileManager attributesOfItemAtPath:userDatabaseFilePath error:NULL] objectForKey:NSFileModificationDate];
                 if (modDate == nil) {
 //                    [[QLog log] logWithFormat:@"gallery delete invalid '%@'", galleryCacheName];
-                    [deletableUserPaths addObject:galleryCachePath];
+                    [deletableUserPaths addObject:userCachePath];
                 } else {
                     assert([modDate isKindOfClass:[NSDate class]]);
-                    [liveGalleryCachePathsAndDates addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                              galleryCachePath,   @"path",
+                    [liveUserCachePathsAndDates addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                              userCachePath,   @"path",
                                                               modDate,            @"modDate",
                                                               nil
                                                               ]];
@@ -148,14 +179,12 @@ static NSString * kExtension    = @"exfe";
         }
     }
     
-    // See if we've exceeded our gallery cache limit, in which case we keep abandoning the oldest
-    // gallery cache until we're under that limit.
-    
-    [liveGalleryCachePathsAndDates sortUsingDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"modDate" ascending:YES] autorelease]]];
-    while ( [liveGalleryCachePathsAndDates count] > 3 ) {
+    // Remove old user folders for over limit.
+    [liveUserCachePathsAndDates sortUsingDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"modDate" ascending:YES] autorelease]]];
+    while ( [liveUserCachePathsAndDates count] > 3 ) {
         NSString *  path;
         
-        path = [[liveGalleryCachePathsAndDates objectAtIndex:0] objectForKey:@"path"];
+        path = [[liveUserCachePathsAndDates objectAtIndex:0] objectForKey:@"path"];
         assert([path isKindOfClass:[NSString class]]);
         
 //        [[QLog log] logWithFormat:@"gallery abandon and delete '%@'", [path lastPathComponent]];
@@ -163,7 +192,7 @@ static NSString * kExtension    = @"exfe";
         [self abandonUserCacheAtPath:path];
         [deletableUserPaths addObject:path];
         
-        [liveGalleryCachePathsAndDates removeObjectAtIndex:0];
+        [liveUserCachePathsAndDates removeObjectAtIndex:0];
     }
     
     // Start an operation to delete the targeted gallery caches.  This happens on a
@@ -177,24 +206,24 @@ static NSString * kExtension    = @"exfe";
     // relaunched.
     
     if ( [deletableUserPaths count] != 0 ) {
-//        static NSOperationQueue *   sGalleryDeleteQueue;
-//        RecursiveDeleteOperation *  op;
-//        
-//        sGalleryDeleteQueue = [[NSOperationQueue alloc] init];
-//        assert(sGalleryDeleteQueue != nil);
-//        
-//        op = [[[RecursiveDeleteOperation alloc] initWithPaths:deletableGalleryCachePaths] autorelease];
-//        assert(op != nil);
-//        
-//        if ( [op respondsToSelector:@selector(setThreadPriority:)] ) {
-//            [op setThreadPriority:0.1];
-//        }
-//        
-//        [sGalleryDeleteQueue addOperation:op];
+        static NSOperationQueue *   sUserCacheDeleteQueue;
+        RecursiveDeleteOperation *  op;
+        
+        sUserCacheDeleteQueue = [[NSOperationQueue alloc] init];
+        assert(sUserCacheDeleteQueue != nil);
+        
+        op = [[[RecursiveDeleteOperation alloc] initWithPaths:deletableUserPaths] autorelease];
+        assert(op != nil);
+        
+        if ( [op respondsToSelector:@selector(setThreadPriority:)] ) {
+            [op setThreadPriority:0.1];
+        }
+        
+        [sUserCacheDeleteQueue addOperation:op];
     }
 }
 
-- (id)init
+- (id)initWithUser:(NSInteger)user_id
 {
     
     // The initialisation method is very simple.  All of the heavy lifting is done
@@ -204,6 +233,7 @@ static NSString * kExtension    = @"exfe";
     if (self != nil) {
         static NSUInteger sNextGallerySequenceNumber;
         
+        self->_userId = user_id;
         self->_sequenceNumber = sNextGallerySequenceNumber;
         sNextGallerySequenceNumber += 1;
         
@@ -228,6 +258,47 @@ static NSString * kExtension    = @"exfe";
 }
 
 @synthesize sequenceNumber   = _sequenceNumber;
+
+
+#pragma mark Token and User ID manager
+
+- (void)saveUserData
+{
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:self.userToken forKey:@"access_token"];
+    [ud setObject:[NSString stringWithFormat:@"%i",self.userId] forKey:@"userid"];
+    [ud synchronize];
+}
+
+- (void)loaduserData
+{
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    [ud synchronize];
+    self.userToken = [ud stringForKey:@"access_token"];
+    self.userId = [[ud stringForKey:@"userid"] integerValue];
+}
+
+- (void)clearUserData
+{
+    self.userId = 0;
+    self.userToken = @"";
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    [ud removeObjectForKey:@"access_token"];
+    [ud removeObjectForKey:@"userid"];
+    [ud synchronize];
+}
+
+- (BOOL)isLoggedIn
+{
+    if (self.userId > 0 && self.userToken.length > 0) {
+        return YES;
+    }
+    [self loaduserData];
+    if (self.userId > 0 && self.userToken.length > 0) {
+        return YES;
+    }
+    return NO;
+}
 
 - (void)didBecomeActive:(NSNotification *)note
 {
@@ -284,70 +355,32 @@ static NSString * kExtension    = @"exfe";
     return fetchRequest;
 }
 
-- (NSString *)galleryCachePathForOurGallery
-// Try to find the gallery cache for our gallery URL string.
+- (void)abandonCachePath
 {
-    NSString *          result;
-    NSFileManager *     fileManager;
-    NSString *          cachesDirectoryPath;
-    NSArray *           potentialGalleries;
-    NSString *          galleryName;
-
-    
-    fileManager = [NSFileManager defaultManager];
-    assert(fileManager != nil);
-    
-    cachesDirectoryPath = [[self class] cachesDirectoryPath];
-    assert(cachesDirectoryPath != nil);
-    
-    // First look through the caches directory for a gallery cache whose info file
-    // matches the gallery URL string we're looking for.
-    
-    potentialGalleries = [fileManager contentsOfDirectoryAtPath:cachesDirectoryPath error:NULL];
-    assert(potentialGalleries != nil);
-    
-    result = nil;
-    for (galleryName in potentialGalleries) {
-
-    }
-    
-
-    
-    return result;
-}
-
-- (void)abandonGalleryCacheAtPath:(NSString *)galleryCachePath
-// Abandons the specified gallery cache directory.  We do this simply by removing the gallery
-// info file.  The directory will be deleted when the application is next launched.
-{
-    assert(galleryCachePath != nil);
-    
-//    [[QLog log] logWithFormat:@"gallery %zu abandon '%@'", (size_t) self.sequenceNumber, [galleryCachePath lastPathComponent]];
-    
-    [[self class] abandonGalleryCacheAtPath:galleryCachePath];
+    NSString *cachePath = [self userPath];
+//    assert(cachePath != nil);
+    [[self class] abandonUserCacheAtPath:cachePath];
 }
 
 - (NSString *)userPath
 {
-    assert(self.exfeContext != nil);
-    return self.exfeContext.userPath;
+    if (self.userId == 0) {
+        return [[EXFEModel exfeUserDirectoryPath] stringByAppendingPathComponent: [NSString stringWithFormat:kDefaultNameTemplate, kExtension]];
+    }
+    return [[EXFEModel exfeUserDirectoryPath] stringByAppendingPathComponent: [NSString stringWithFormat:kNameTemplate, self.userId, kExtension]];
 }
 
 - (BOOL)setupContext
-// Attempt to start up the gallery cache for our gallery URL string, either by finding an existing
-// cache or by creating one from scratch.  On success, self.galleryCachePath will point to that
-// gallery cache and self.galleryContext will be the managed object context for the database
-// within the gallery cache.
 {
     BOOL                            success;
     NSError *                       error;
     NSFileManager *                 fileManager;
-    NSString *                      galleryCachePath;
-    NSString *                      photosDirectoryPath;
-    BOOL                            isDir;
+    NSString *                      userDirectoryPath;
+//    NSString *                      plistURL;
+//    BOOL                            isDir;
+    NSString *                      databasePath;
     NSURL *                         databaseURL;
     NSManagedObjectModel *          model;
-    NSPersistentStoreCoordinator *  psc;
     
     
 //    [[QLog log] logWithFormat:@"gallery %zu starting", (size_t) self.sequenceNumber];
@@ -357,71 +390,83 @@ static NSString * kExtension    = @"exfe";
     fileManager = [NSFileManager defaultManager];
     assert(fileManager != nil);
     
-    // Find the gallery cache directory for this gallery.
+    userDirectoryPath = [self userPath];
+    success = (userDirectoryPath != nil);
     
-    galleryCachePath = [self galleryCachePathForOurGallery];
-    success = (galleryCachePath != nil);
     
-    // Create the "Photos" directory if it doesn't already exist.
+    // Start up Core Data in the user directory.
     if (success) {
-//        photosDirectoryPath = [galleryCachePath stringByAppendingPathComponent:kPhotosDirectoryName];
-//        assert(photosDirectoryPath != nil);
-//        
-//        success = [fileManager fileExistsAtPath:photosDirectoryPath isDirectory:&isDir] && isDir;
-//        if ( ! success ) {
-//            success = [fileManager createDirectoryAtPath:photosDirectoryPath withIntermediateDirectories:NO attributes:NULL error:NULL];
-//        }
-    }
-    
-    // Start up Core Data in the gallery directory.
-    
-    if (success) {
-        NSString *      modelPath;
         
-        modelPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"Photos" ofType:@"mom"];
-        assert(modelPath != nil);
-        
-        model = [[[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:modelPath]] autorelease];
+        model = [NSManagedObjectModel mergedModelFromBundles:nil];
         success = (model != nil);
     }
+    
     if (success) {
-        databaseURL = [NSURL fileURLWithPath:[galleryCachePath stringByAppendingPathComponent:kDatabaseFileName]];
+        databasePath = [userDirectoryPath stringByAppendingPathComponent:kDatabaseFileName];
+        databaseURL = [NSURL fileURLWithPath:databasePath];
         assert(databaseURL != nil);
         
-        psc = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model] autorelease];
-        success = (psc != nil);
-    }
-    if (success) {
-        success = [psc addPersistentStoreWithType:NSSQLiteStoreType
-                                    configuration:nil
-                                              URL:databaseURL
-                                          options:nil
-                                            error:&error
-                   ] != nil;
-        if (success) {
-            error = nil;
+        NSFileManager *fileManager= [NSFileManager defaultManager];
+        BOOL isDir  = NO;
+        if(![fileManager fileExistsAtPath:userDirectoryPath isDirectory:&isDir]){
+            if(![fileManager createDirectoryAtPath:userDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL]){
+                NSLog(@"Error: Create folder failed %@", userDirectoryPath);
+            } else {
+                if (self.userId > 0) {
+                    // create exfeInfo.plist to prevent abandon
+                    NSMutableDictionary *exfeInfo = [NSMutableDictionary dictionary];
+                    [exfeInfo setValue:[NSString stringWithFormat:@"%u", self.userId] forKey:@"user_id"];
+                    [exfeInfo removeObjectForKey:@"exfee_updated_at"];
+                    [exfeInfo setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
+                    
+                    NSString *plistPath = [userDirectoryPath stringByAppendingPathComponent:kInfoFileName];
+                    [exfeInfo writeToFile:plistPath atomically:YES];
+                }
+            }
         }
     }
     
+    
+    // Setup DB version data
+//    NSNumber* db_version=[userDefaults objectForKey:@"db_version"];
+//    
+//    if (db_version==nil || [db_version intValue] < APP_DB_VERSION) {
+//        [userDefaults setObject:nil forKey:@"exfee_updated_at"];
+//        [userDefaults setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
+//    }
+
+
+    
+    
     if (success) {
-        EXFEContext *   context;
         
-        // Everything has gone well, so we create a managed object context from our persistent
-        // store.  Note that we use a subclass of NSManagedObjectContext, PhotoGalleryContext, which
-        // carries along some state that the managed objects (specifically the Photo objects) need
-        // access to.
+        NSURL *baseURL = [NSURL URLWithString:API_ROOT];
+        RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
         
-        context = [[[EXFEContext alloc] initWithUserPath:galleryCachePath] autorelease];
-        assert(context != nil);
+        RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:model];
+        objectManager.managedObjectStore = managedObjectStore;
+        [managedObjectStore createPersistentStoreCoordinator];
         
-        [context setPersistentStoreCoordinator:psc];
+        NSError *error;
+        NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:databasePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
+        NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
         
-        // In older versions of the code various folks observed our photoGalleryContext property
-        // and did clever things when it changed.  So it was important to not set that property
-        // until everything as fully up and running.  That no longer happens, but I've kept the
-        // configure-before-set code because it seems like the right thing to do.
+        // Create the managed object contexts
+        [managedObjectStore createManagedObjectContexts];
         
-        self.exfeContext = context;
+        self.objectManager = objectManager;
+        [RKObjectManager setSharedManager:objectManager];
+        self.exfeContext = managedObjectStore.persistentStoreManagedObjectContext;
+        self.apiServer = [[EFAPIServer alloc] initWithModel:self];
+        
+        // Configure a managed object cache to ensure we do not create duplicate objects
+        managedObjectStore.managedObjectCache = [[[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext] autorelease];
+        
+        NSArray *descriptors = objectManager.requestDescriptors;
+        if(descriptors==nil || [descriptors count]==0) {
+            [ModelMapping buildMapping];
+        }
+        
         
         // Subscribe to the context changed notification so that we can auto-save.
         
@@ -441,8 +486,8 @@ static NSString * kExtension    = @"exfe";
         // Also, if we found or created a gallery cache but failed to start up in it, abandon it in
         // the hope that our next attempt will work better.
         
-        if (galleryCachePath != nil) {
-            [self abandonGalleryCacheAtPath:galleryCachePath];
+        if (userDirectoryPath != nil) {
+            [self abandonCachePath];
         }
     }
     return success;

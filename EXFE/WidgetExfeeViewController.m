@@ -20,7 +20,6 @@
 #import "ExfeeCollectionViewCell.h"
 #import "ExfeeAddCollectionViewCell.h"
 #import "Util.h"
-#import "ImgCache.h"
 #import "DateTimeUtil.h"
 #import "NSString+EXFE.h"
 #import "EFContactViewController.h"
@@ -30,6 +29,7 @@
 #import "Cross.h"
 #import "IdentityId+EXFE.h"
 #import "EFAPI.h"
+#import "EFKit.h"
 #import "RoughIdentity.h"
 #import "EFContactObject.h"
 
@@ -220,7 +220,8 @@ typedef enum {
         [_selected_invitation setRsvp_status:@"REMOVED"];
         
         Identity *myidentity = [self.exfee getMyInvitation].identity;
-        [[EFAPIServer sharedInstance] editExfee:self.exfee
+        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        [app.model.apiServer editExfee:self.exfee
                                      byIdentity:myidentity
                                         success:^(Exfee *exfee) {
                                             self.selected_invitation = nil;
@@ -827,7 +828,25 @@ typedef enum {
                         break;
                 }
                 
-                [[ImgCache sharedManager] fillAvatar:cell.avatar with:inv.identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"]];
+                NSString *imageKey = inv.identity.avatar_filename;
+                UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
+                
+                if (!imageKey) {
+                    cell.avatar.image = defaultImage;
+                } else {
+                    if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+                        cell.avatar.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+                    } else {
+                        cell.avatar.image = defaultImage;
+                        [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                                        completeHandler:^(UIImage *image){
+                                                            if (image) {
+                                                                cell.avatar.image = image;
+                                                            }
+                                                        }];
+                    }
+                }
+                
                 cell.invitation_id = inv.invitation_id;
 //                cell.mates = 10;
                 cell.mates = [inv.mates integerValue];
@@ -956,7 +975,8 @@ typedef enum {
                 
                 Identity *myidentity = [self.exfee getMyInvitation].identity;
                 
-                [[EFAPIServer sharedInstance] editExfee:exfee
+                AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                [app.model.apiServer editExfee:exfee
                                              byIdentity:myidentity
                                                 success:^(Exfee *editedExfee){
                                                     [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -1145,7 +1165,8 @@ typedef enum {
 - (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
     
     Identity *myidentity = [self.exfee getMyInvitation].identity;
-    [[EFAPIServer sharedInstance] submitRsvp:status
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer submitRsvp:status
                                           on:_invitation
                                   myIdentity:[myidentity.identity_id intValue]
                                      onExfee:[self.exfee.exfee_id intValue]
@@ -1165,7 +1186,8 @@ typedef enum {
                                                      NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
                                                      
                                                      CrossGroupViewController *crossGroupViewController = viewControllers[0];
-                                                     [[EFAPIServer sharedInstance] loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue]
+                                                     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                                                     [app.model.apiServer loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue]
                                                                                             updatedtime:@""
                                                                                                 success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                                                                     if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {

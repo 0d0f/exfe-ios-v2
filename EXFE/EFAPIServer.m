@@ -11,6 +11,7 @@
 #import "Util.h"
 #import "Exfee+EXFE.h"
 #import "EFKit.h"
+#import "EXFEModel.h"
 
 @interface EFAPIServer (Private)
 - (void)_handleSuccessWithRequestOperation:(NSOperation *)operation andResponseObject:(id)object;
@@ -21,67 +22,50 @@
 
 #pragma mark Initializtion
 
-- (id)init
+- (id)initWithModel:(EXFEModel*)model
 {
     self = [super init];
     if (self) {
         // Initialization code
-        self.user_id = 0;
-        self.user_token = @"";
+//        self.user_id = 0;
+//        self.user_token = @"";
+        self.model = model;
     }
     return self;
 }
 
-+ (EFAPIServer *)sharedInstance
-{
-    static EFAPIServer *sharedInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[EFAPIServer alloc] init];
-        // Do any other initialisation stuff here
-        [sharedInstance loaduserData];
-    });
-    return sharedInstance;
-}
+//+ (EFAPIServer *)sharedInstance
+//{
+//    static EFAPIServer *sharedInstance = nil;
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        sharedInstance = [[EFAPIServer alloc] init];
+//        // Do any other initialisation stuff here
+//        [sharedInstance loaduserData];
+//    });
+//    return sharedInstance;
+//}
 
 #pragma mark Token and User ID manager
 
 - (void)saveUserData
-{
-    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    [ud setObject:self.user_token forKey:@"access_token"];
-    [ud setObject:[NSString stringWithFormat:@"%i",self.user_id] forKey:@"userid"];
-    [ud synchronize];
+{ 
+    return [self.model saveUserData];
 }
 
 - (void)loaduserData
 {
-    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    [ud synchronize];
-    self.user_token = [ud stringForKey:@"access_token"];
-    self.user_id = [[ud stringForKey:@"userid"] integerValue];
+    return [self.model loaduserData];
 }
 
 - (void)clearUserData
 {
-    self.user_id = 0;
-    self.user_token = @"";
-    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    [ud removeObjectForKey:@"access_token"];
-    [ud removeObjectForKey:@"userid"];
-    [ud synchronize];
+    return [self.model clearUserData];
 }
 
 - (BOOL)isLoggedIn
 {
-    if (self.user_id > 0 && self.user_token.length > 0) {
-        return YES;
-    }
-    [self loaduserData];
-    if (self.user_id > 0 && self.user_token.length > 0) {
-        return YES;
-    }
-    return NO;
+    return [self.model isLoggedIn];
 }
 
 #pragma mark Public API (Token Free)
@@ -458,17 +442,6 @@
                       parameters:params
                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
                              [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
-                             
-                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
-                                 NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-                                 if ([code integerValue] == 200) {
-                                     NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
-                                     NSString *t = [responseObject valueForKeyPath:@"response.token"];
-                                     self.user_id  = [u integerValue];
-                                     self.user_token = t;
-                                     [self saveUserData];
-                                 }
-                             }
                              if (success) {
                                  dispatch_async(dispatch_get_main_queue(), ^{
                                      success(operation, responseObject);
@@ -489,9 +462,9 @@
                  success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                  failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    NSString *endpoint = [NSString stringWithFormat:@"users/%u/signout?token=%@",self.user_id, self.user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/signout?token=%@",self.model.userId, self.model.userToken];
     RKObjectManager *manager = [RKObjectManager sharedManager] ;
-    NSDictionary *params = @{@"udid":udid,@"os_name":@"iOS"};
+    NSDictionary *params = @{@"udid":udid, @"os_name":@"iOS"};
     manager.HTTPClient.parameterEncoding=AFJSONParameterEncoding;
     [manager.HTTPClient postPath:endpoint
                       parameters:params
@@ -536,17 +509,6 @@
                       parameters:params
                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
                              [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
-                             
-                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
-                                 NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-                                 if ([code integerValue] == 200) {
-                                     NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
-                                     NSString *t = [responseObject valueForKeyPath:@"response.token"];
-                                     self.user_id  = [u integerValue];
-                                     self.user_token = t;
-                                     [self saveUserData];
-                                 }
-                             }
                              if (success) {
                                  dispatch_async(dispatch_get_main_queue(), ^{
                                      success(operation, responseObject);
@@ -594,17 +556,6 @@
                       parameters:params
                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
                              [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
-                             
-                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
-                                 NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-                                 if ([code integerValue] == 200) {
-                                     NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
-                                     NSString *t = [responseObject valueForKeyPath:@"response.token"];
-                                     self.user_id  = [u integerValue];
-                                     self.user_token = t;
-                                     [self saveUserData];
-                                 }
-                             }
                              if (success) {
                                  dispatch_async(dispatch_get_main_queue(), ^{
                                      success(operation, responseObject);
@@ -626,7 +577,7 @@
           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    NSString *endpoint = [NSString stringWithFormat:@"users/%u/regdevice?token=%@", self.user_id, self.user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/regdevice?token=%@", self.model.userId, self.model.userToken];
     RKObjectManager *manager = [RKObjectManager sharedManager] ;
     
     NSDictionary *param = @{@"udid": pushToken,
@@ -672,7 +623,7 @@
                  success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                  failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
 {
-    [self loadCrossesBy:self.user_id
+    [self loadCrossesBy:self.model.userId
             updatedtime:updatedtime
                 success:^(RKObjectRequestOperation *operation, id responseObject){
                     [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
@@ -702,12 +653,12 @@
     NSDictionary *param = nil;
     if (updatedtime != nil && ![updatedtime isEqualToString:@""]){
         updatedtime = [Util encodeToPercentEscapeString:updatedtime];
-        param = @{@"token": self.user_token,
+        param = @{@"token": self.model.userToken,
                   @"updated_at": updatedtime};
     } else {
-        param = @{@"token": self.user_token};
+        param = @{@"token": self.model.userToken};
     }
-    NSString *endpoint = [NSString stringWithFormat:@"users/%u/crosses", self.user_id];
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/crosses", self.model.userId];
     
     [[RKObjectManager sharedManager] getObjectsAtPath:endpoint
                                            parameters:param
@@ -737,9 +688,10 @@
 - (void)loadMeSuccess:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
            failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
 {
-    NSDictionary *param = @{@"token": self.user_token};
-    NSString *endpoint = [NSString stringWithFormat:@"users/%u", self.user_id];
-    [[RKObjectManager sharedManager] getObjectsAtPath:endpoint
+    NSAssert(self.model.userToken, @"Token should not be nil.");
+    NSDictionary *param = @{@"token": self.model.userToken};
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u", self.model.userId];
+    [self.model.objectManager getObjectsAtPath:endpoint
                                            parameters:param
                                               success:^(RKObjectRequestOperation *operation, id responseObject){
                                                   [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
@@ -766,8 +718,18 @@
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     NSParameterAssert(user_id > 0);
-    NSParameterAssert(self.user_token.length > 0);
-    NSDictionary *param = @{@"token": self.user_token};
+    NSParameterAssert(self.model.userToken.length > 0);
+    [self loadUserBy:user_id withToken:self.model.userToken success:success failure:failure];
+}
+
+- (void)loadUserBy:(NSInteger)user_id
+         withToken:(NSString*)token
+           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSParameterAssert(user_id > 0);
+    NSParameterAssert(token > 0);
+    NSDictionary *param = @{@"token": token};
     NSString *endpoint = [NSString stringWithFormat:@"users/%u",user_id];
     [[RKObjectManager sharedManager].HTTPClient getPath:endpoint
                                              parameters:param
@@ -808,7 +770,7 @@
     }
     [idlist appendString:@"]"];
     NSDictionary *param = @{@"browsing_identity_token":token, @"identity_ids":idlist};
-    NSString *endpoint = [NSString stringWithFormat:@"users/%u/mergeIdentities?token=%@", self.user_id, self.user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/mergeIdentities?token=%@", self.model.userId, self.model.userToken];
                      
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     [[RKObjectManager sharedManager].HTTPClient postPath:endpoint
@@ -843,7 +805,7 @@
     // eg:  exfe://oauthcallback/
     NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
     
-    NSString *endpoint = [NSString stringWithFormat:@"users/VerifyUserIdentity?token=%@", self.user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"users/VerifyUserIdentity?token=%@", self.model.userToken];
     NSDictionary *param = @{@"identity_id":[NSNumber numberWithInt:identity_id],@"device_callback":callback,@"device":@"iOS"};
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
@@ -875,7 +837,7 @@
                    success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    NSString *endpoint = [NSString stringWithFormat:@"users/%u/deleteIdentity?token=%@", self.user_id, self.user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/deleteIdentity?token=%@", self.model.userId, self.model.userToken];
     NSDictionary *param = @{@"identity_id":[NSNumber numberWithInt:identity_id]};
                             
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
@@ -911,7 +873,7 @@
                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     
-    NSString *endpoint = [NSString stringWithFormat:@"identities/%i/update?token=%@", [identity.identity_id intValue], self.user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"identities/%i/update?token=%@", [identity.identity_id intValue], self.model.userToken];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
@@ -950,7 +912,7 @@
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     
-    NSString *endpoint = [NSString stringWithFormat:@"users/update?token=%@",[EFAPIServer sharedInstance].user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"users/update?token=%@", self.model.userToken];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
@@ -984,7 +946,7 @@
               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     
-    NSString *endpoint = [NSString stringWithFormat:@"users/%u/addIdentity?token=%@", [EFAPIServer sharedInstance].user_id, [EFAPIServer sharedInstance].user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/addIdentity?token=%@", self.model.userId, self.model.userToken];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
@@ -1033,7 +995,7 @@
         return;
     }
     
-    NSString *endpoint = [NSString stringWithFormat:@"users/%u/addIdentity?token=%@", [EFAPIServer sharedInstance].user_id, [EFAPIServer sharedInstance].user_token];
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/addIdentity?token=%@", self.model.userId, self.model.userToken];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;

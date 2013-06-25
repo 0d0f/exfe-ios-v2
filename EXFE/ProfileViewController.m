@@ -8,7 +8,6 @@
 
 #import "ProfileViewController.h"
 #import <BlocksKit/BlocksKit.h>
-#import "ImgCache.h"
 #import "User+EXFE.h"
 #import "Identity+EXFE.h"
 #import "CrossesViewController.h"
@@ -17,6 +16,7 @@
 #import "EFAPIServer.h"
 #import "EFRomeViewController.h"
 #import "EFKit.h"
+#import "EFLoadMeOperation.h"
 
 
 #define DECTOR_HEIGHT                    (100)
@@ -126,15 +126,8 @@
     tableview.opaque = NO;
     tableview.backgroundView = nil;
     tableview.frame = CGRectMake(0, DECTOR_HEIGHT, CGRectGetWidth(b), CGRectGetHeight(b) - DECTOR_HEIGHT);
-    
-    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
-    [gestureRecognizer setCancelsTouchesInView:NO];
-    [tableview addGestureRecognizer:gestureRecognizer];
-    [gestureRecognizer release];
-    
-    tableview.delegate=self;
-    tableview.dataSource=self;
-    
+    tableview.delegate = self;
+    tableview.dataSource = self;
     
     [self refreshUI];
     
@@ -143,6 +136,10 @@
     [tapHeaderRecognizer release];
     
     [self syncUser];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleLoadMeSuccess:)
+                                                 name:kEFNotificationNameLoadMeSuccess
+                                               object:nil];
 }
 
 - (void)gotoBack:(UIButton*)sender{
@@ -150,26 +147,23 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (void) syncUser{
-    [[EFAPIServer sharedInstance] loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                         self.user = [User getDefaultUser];
-                                         [self refreshUI];
-                                     }
-                                     failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//                                         NSLog(@"Error!:%@",error);
-                                     }];
+- (void)handleLoadMeSuccess:(NSNotification *)notif {
+    self.user = [User getDefaultUser];
+    [self refreshUI];
 }
 
-
-- (void)touchesBegan:(UITapGestureRecognizer*)sender{
-    CGPoint location= [sender locationInView:footerView];
+- (void) syncUser{
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:[EFLoadMeOperation operationWithModel:app.model]];
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
     
-    CGRect signoutbuttonRect = [buttonsignout frame];
-    if(CGRectContainsPoint(signoutbuttonRect, location))
-    {
-        [self Logout];
-    }
-    
+//    [app.model.apiServer loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+//                                         self.user = [User getDefaultUser];
+//                                         [self refreshUI];
+//                                     }
+//                                     failure:^(RKObjectRequestOperation *operation, NSError *error) {
+////                                         NSLog(@"Error!:%@",error);
+//                                     }];
 }
 
 - (void)tapProfileHeader:(UITapGestureRecognizer*)sender
@@ -190,7 +184,8 @@
                                 UITextField *field = [alertView textFieldAtIndex:0];
                                 NSString *name = field.text;
                                 if (name && name.length > 0) {
-                                    [[EFAPIServer sharedInstance] updateName:name success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                                    [app.model.apiServer updateName:name success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                             NSDictionary *body=responseObject;
                                             if([body isKindOfClass:[NSDictionary class]]) {
@@ -246,7 +241,25 @@
 - (void)fillProfileHeader:(User *)user{
     if (user) {
         username.text = user.name;
-        [[ImgCache sharedManager] fillAvatar:useravatar with:user.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"]];
+        
+        NSString *imageKey = user.avatar_filename;
+        UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
+        
+        if (!imageKey) {
+            useravatar.image = defaultImage;
+        } else {
+            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+                useravatar.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+            } else {
+                useravatar.image = defaultImage;
+                [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                                completeHandler:^(UIImage *image){
+                                                    if (image) {
+                                                        useravatar.image = image;
+                                                    }
+                                                }];
+            }
+        }
     }
 }
 
@@ -333,12 +346,25 @@
     
     if([indexPath section]==0)
     {
+        NSString *imageKey = identity.avatar_filename;
+        UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
         
-        [[ImgCache sharedManager] fillAvatarWith: identity.avatar_filename
-                                       byDefault: [UIImage imageNamed:@"portrait_default.png"]
-                                          using: ^(UIImage* image){
-                                              [cell setAvartar:image];
-                                          }];
+        if (!imageKey) {
+            [cell setAvartar:defaultImage];
+        } else {
+            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+                UIImage *image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+                [cell setAvartar:image];
+            } else {
+                [cell setAvartar:defaultImage];
+                [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                                completeHandler:^(UIImage *image){
+                                                    if (image) {
+                                                        [cell setAvartar:image];
+                                                    }
+                                                }];
+            }
+        }
         
         [cell setLabelName:[identity getDisplayName]];
         [cell setLabelIdentity:[identity getDisplayIdentity]];
@@ -494,7 +520,8 @@
                                     UITextField *field = [alertView textFieldAtIndex:0];
                                     NSString *name = field.text;
                                     if (name && name.length > 0) {
-                                        [[EFAPIServer sharedInstance] updateIdentity:identity name:name andBio:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                                        [app.model.apiServer updateIdentity:identity name:name andBio:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                                 NSDictionary *body=responseObject;
                                                 if([body isKindOfClass:[NSDictionary class]]) {
@@ -560,7 +587,8 @@
 
 - (void) deleteIdentity:(int)identity_id{
     
-    [[EFAPIServer sharedInstance] removeUserIdentity:identity_id
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer removeUserIdentity:identity_id
                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                  if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                                      NSDictionary *body=responseObject;
@@ -575,7 +603,9 @@
                                                                      if(identity_id_str!=nil && user_id_str!=nil){
                                                                          int response_identity_id=[identity_id_str intValue];
                                                                          int response_user_id=[user_id_str intValue];
-                                                                         if(response_identity_id==identity_id && response_user_id == [EFAPIServer sharedInstance].user_id){
+                                                                         AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                                                                         
+                                                                         if(response_identity_id==identity_id && response_user_id == app.model.userId){
                                                                              [self deleteIdentityUI:identity_id];
                                                                          }
                                                                      }
@@ -630,7 +660,8 @@
 
 - (void) doVerify:(int)identity_id{
     
-    [[EFAPIServer sharedInstance] verifyUserIdentity:identity_id
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer verifyUserIdentity:identity_id
                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                  if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                                      NSDictionary *body=responseObject;

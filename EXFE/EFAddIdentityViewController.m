@@ -21,11 +21,11 @@
 #import "Util.h"
 #import "UILabel+EXFE.h"
 #import "TTTAttributedLabel.h"
-#import "ImgCache.h"
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
 #import "EFAPI.h"
 #import "OAuthLoginViewController.h"
+#import "EFKit.h"
 
 typedef NS_ENUM(NSUInteger, EFViewTag) {
     kViewTagNone,
@@ -384,9 +384,24 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 {
     NSString *avatar_filename = [respDict valueForKeyPath:@"identity.avatar_filename"];
     if (avatar_filename.length > 0) {
-        UIImage *def = [UIImage imageNamed:@"portrait_default.png"];
+        UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
         _imageIdentity.contentMode = UIViewContentModeScaleAspectFill;
-        [[ImgCache sharedManager] fillAvatar:_imageIdentity with:avatar_filename byDefault:def];
+        
+        if (!avatar_filename) {
+            _imageIdentity.image = defaultImage;
+        } else {
+            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:avatar_filename]) {
+                _imageIdentity.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:avatar_filename];
+            } else {
+                _imageIdentity.image = defaultImage;
+                [[EFDataManager imageManager] cachedImageForKey:avatar_filename
+                                                completeHandler:^(UIImage *image){
+                                                    if (image) {
+                                                        _imageIdentity.image = image;
+                                                    }
+                                                }];
+            }
+        }
     } else {
         NSString *provider = [respDict valueForKeyPath:@"identity.provider"];
         [self fillIdentityHint:[Identity getProviderCode:provider]];
@@ -543,7 +558,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         NSDictionary *dict = [Util parseIdentityString:identity byProvider:provider];
         NSString *external_username = [dict valueForKeyPath:@"external_username"];
         if (provider != kProviderUnknown) {
-            EFAPIServer *server = [EFAPIServer sharedInstance];
+            AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            EFAPIServer *server = app.model.apiServer;
             [server getRegFlagBy:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                     id code = [responseObject valueForKeyPath:@"meta.code"];
@@ -642,7 +658,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         param = @{@"device_callback": callback, @"device": @"iOS"};
     }
     
-    [[EFAPIServer sharedInstance] addIdentityBy:[dict valueForKeyPath:@"external_username"] withProvider:provider param:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer addIdentityBy:[dict valueForKeyPath:@"external_username"] withProvider:provider param:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
         sender.enabled = YES;
         [self hideIndicator];
         
@@ -788,7 +805,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                               hud.customView = bigspin;
                                               [bigspin release];
                                               
-                                              [[EFAPIServer sharedInstance] addReverseAuthIdentity:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                              AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                                              [app.model.apiServer addReverseAuthIdentity:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                   if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                                       NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
@@ -1015,7 +1033,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
             NSDictionary *params = [Util splitQuery:responseStr];
             
-            [[EFAPIServer sharedInstance] addReverseAuthIdentity:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            [app.model.apiServer addReverseAuthIdentity:kProviderTwitter withToken:[params valueForKey:@"oauth_token"] andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                     

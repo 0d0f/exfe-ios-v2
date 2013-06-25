@@ -9,7 +9,6 @@
 #import "NewGatherViewController.h"
 #import <BlocksKit/BlocksKit.h>
 #import "Util.h"
-#import "ImgCache.h"
 #import "MapPin.h"
 #import "Place+Helper.h"
 #import "CrossTime+Helper.h"
@@ -23,6 +22,7 @@
 #import "RoughIdentity.h"
 #import "IdentityId.h"
 #import "Identity+EXFE.h"
+#import "EFKit.h"
 
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -560,7 +560,8 @@
     }
     [Flurry logEvent:@"GATHER_SEND"];
     
-    [[EFAPIServer sharedInstance] gatherCross:_cross
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer gatherCross:_cross
                                       success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                           [MBProgressHUD hideHUDForView:self.view animated:YES];
                                           AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -621,62 +622,68 @@
     
 }
 
-- (void) fillBackground:(NSArray*)widgets{
+- (void)fillBackground:(NSArray*)widgets {
     BOOL flag = NO;
-    for(NSDictionary *widget in widgets) {
-        if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
+    for (NSDictionary *widget in widgets) {
+        if ([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
             NSString* url = [widget objectForKey:@"image"];
+            
             if (url && url.length > 0) {
-                NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
-                UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
-                if(backimg == nil || [backimg isEqual:[NSNull null]]){
-                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                    dispatch_async(imgQueue, ^{
-                        dectorView.image = [UIImage imageNamed:@"x_titlebg_default.jpg"];
-                        UIImage *backimg=[[ImgCache sharedManager] getImgFrom:imgurl];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if(backimg!=nil && ![backimg isEqual:[NSNull null]]){
-                                if(dectorView.image!=nil){
-                                    CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-                                    fadeoutAnimation.fillMode = kCAFillModeForwards;
-                                    fadeoutAnimation.duration=0.5;
-                                    fadeoutAnimation.removedOnCompletion =NO;
-                                    fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
-                                    fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
-                                    [dectorView.layer addAnimation:fadeoutAnimation forKey:@"fadeout"];
-                                }
-                                dectorView.image = backimg;
-                                CABasicAnimation *fadeinAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-                                fadeinAnimation.fillMode = kCAFillModeForwards;
-                                fadeinAnimation.duration=0.5;
-                                fadeinAnimation.removedOnCompletion =NO;
-                                fadeinAnimation.fromValue=[NSNumber numberWithFloat:0.0];
-                                fadeinAnimation.toValue=[NSNumber numberWithFloat:1.0];
-                                [dectorView.layer addAnimation:fadeinAnimation forKey:@"fadein"];
-                            }
-                        });
-                    });
-                    dispatch_release(imgQueue);
-                }else{
-                    if(dectorView.image!=nil){
-                        CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-                        fadeoutAnimation.fillMode = kCAFillModeForwards;
-                        fadeoutAnimation.duration=0.5;
-                        fadeoutAnimation.removedOnCompletion =NO;
-                        fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
-                        fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
-                        [dectorView.layer addAnimation:fadeoutAnimation forKey:@"fadeout"];
+                NSString *imageKey = [Util getBackgroundLink:[widget objectForKey:@"image"]];
+                UIImage *defaultImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+                
+                if (!imageKey) {
+                    dectorView.image = defaultImage;
+                } else {
+                    if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+                        if (dectorView.image != nil) {
+                            CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+                            fadeoutAnimation.fillMode = kCAFillModeForwards;
+                            fadeoutAnimation.duration=0.5;
+                            fadeoutAnimation.removedOnCompletion =NO;
+                            fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
+                            fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
+                            [dectorView.layer addAnimation:fadeoutAnimation forKey:@"fadeout"];
+                        }
+                        
+                        dectorView.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+                        
+                        CABasicAnimation *fadeinAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+                        fadeinAnimation.fillMode = kCAFillModeForwards;
+                        fadeinAnimation.duration=0.5;
+                        fadeinAnimation.removedOnCompletion =NO;
+                        fadeinAnimation.fromValue=[NSNumber numberWithFloat:0.0];
+                        fadeinAnimation.toValue=[NSNumber numberWithFloat:1.0];
+                        [dectorView.layer addAnimation:fadeinAnimation forKey:@"fadein"];
+                    } else {
+                        dectorView.image = defaultImage;
+                        [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                                        completeHandler:^(UIImage *image){
+                                                            if (image) {
+                                                                if (dectorView.image != nil) {
+                                                                    CABasicAnimation *fadeoutAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+                                                                    fadeoutAnimation.fillMode = kCAFillModeForwards;
+                                                                    fadeoutAnimation.duration=0.5;
+                                                                    fadeoutAnimation.removedOnCompletion =NO;
+                                                                    fadeoutAnimation.fromValue=[NSNumber numberWithFloat:1.0];
+                                                                    fadeoutAnimation.toValue=[NSNumber numberWithFloat:0.0];
+                                                                    [dectorView.layer addAnimation:fadeoutAnimation forKey:@"fadeout"];
+                                                                }
+                                                                
+                                                                dectorView.image = image;
+                                                                
+                                                                CABasicAnimation *fadeinAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+                                                                fadeinAnimation.fillMode = kCAFillModeForwards;
+                                                                fadeinAnimation.duration=0.5;
+                                                                fadeinAnimation.removedOnCompletion =NO;
+                                                                fadeinAnimation.fromValue=[NSNumber numberWithFloat:0.0];
+                                                                fadeinAnimation.toValue=[NSNumber numberWithFloat:1.0];
+                                                                [dectorView.layer addAnimation:fadeinAnimation forKey:@"fadein"];
+                                                            }
+                                                        }];
                     }
-                    dectorView.image = backimg;
-                    CABasicAnimation *fadeinAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
-                    fadeinAnimation.fillMode = kCAFillModeForwards;
-                    fadeinAnimation.duration=0.5;
-                    fadeinAnimation.removedOnCompletion =NO;
-                    fadeinAnimation.fromValue=[NSNumber numberWithFloat:0.0];
-                    fadeinAnimation.toValue=[NSNumber numberWithFloat:1.0];
-                    [dectorView.layer addAnimation:fadeinAnimation forKey:@"fadein"];
-
                 }
+                
                 flag = YES;
                 break;
             }
@@ -971,10 +978,28 @@
   
     Identity *identity = invitation.identity;
     
-    [[ImgCache sharedManager] fillAvatarWith:identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"] using:^(UIImage *image) {
-        item.avatar = image;
+    NSString *imageKey = identity.avatar_filename;
+    UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
+    
+    if (!imageKey) {
+        item.avatar = defaultImage;
         [item setNeedsDisplay];
-    }];
+    } else {
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+            item.avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+        } else {
+            item.avatar = defaultImage;
+            [item setNeedsDisplay];
+            [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                            completeHandler:^(UIImage *image){
+                                                if (image) {
+                                                    item.avatar = image;
+                                                    [item setNeedsDisplay];
+                                                }
+                                            }];
+        }
+    }
+    
     return item;
 }
 

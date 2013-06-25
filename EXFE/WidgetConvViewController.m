@@ -10,9 +10,9 @@
 
 #import "Post.h"
 #import "PostCell.h"
-#import "ImgCache.h"
 #import "Util.h"
 #import "EFAPI.h"
+#import "EFKit.h"
 #import "CrossGroupViewController.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -250,7 +250,8 @@
             updated_at = post.updated_at;
         }
     }
-    [[EFAPIServer sharedInstance] loadConversationWithExfeeId:exfee_id
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer loadConversationWithExfeeId:exfee_id
                                                   updatedtime:updated_at
                                                       success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                           Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
@@ -613,14 +614,24 @@
         cell.separator=cellsepator;
     [cell setShowTime:NO];
     
+    NSString *imageKey = post.by_identity.avatar_filename;
+    UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
     
-    [[ImgCache sharedManager] fillAvatarWith:post.by_identity.avatar_filename
-                                   byDefault:[UIImage imageNamed:@"portrait_default.png"]
-                                       using:^(UIImage *image) {
-                                           cell.avatar = image;
-                                       }];
-    
-    
+    if (!imageKey) {
+        cell.avatar = defaultImage;
+    } else {
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+            cell.avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+        } else {
+            cell.avatar = defaultImage;
+            [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                            completeHandler:^(UIImage *image){
+                                                if (image) {
+                                                    cell.avatar = image;
+                                                }
+                                            }];
+        }
+    }
     
 	return cell;
 }
@@ -633,7 +644,8 @@
     [Flurry logEvent:@"SEND_CONVERSATION"];
     
     [inputToolbar setInputEnabled:NO];
-    [[EFAPIServer sharedInstance] postConversation:content
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer postConversation:content
                                                 by:myIdentity
                                                 on:exfee_id
                                            success:^(AFHTTPRequestOperation *operation, id responseObject) {

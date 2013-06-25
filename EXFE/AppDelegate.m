@@ -15,6 +15,8 @@
 #import "EFAPIServer.h"
 #import "EFLandingViewController.h"
 #import "Util.h"
+#import "EFKit.h"
+#import "EFLoadMeOperation.h"
 
 @implementation AppDelegate
 @synthesize window = _window;
@@ -27,6 +29,7 @@
     [super dealloc];
 }
 
+#pragma mark UIApplicationDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Setup Flurry
@@ -51,36 +54,51 @@
 #ifdef DEBUG
     NSLog(@"API ROOT: %@", API_ROOT);
 #endif
+    
+    NSUserDefaults *    userDefaults;
+    
+    // Clean some on-distk garbage.
+    [EXFEModel applicationStartup];
+    
+    // Monitor network usage
+    // [[NetworkManager sharedManager] addObserver:self forKeyPath:@"networkInUse" options:NSKeyValueObservingOptionInitial context:NULL];
+    
+    // If the "applicationClearSetup" user default is set, clear our preferences.
+    // This provides an easy way to get back to the initial state while debugging.
+    userDefaults = [NSUserDefaults standardUserDefaults];
+    if ( [userDefaults boolForKey:@"applicationClearSetup"] ) {
+        [userDefaults removeObjectForKey:@"applicationClearSetup"];
+        // remove other keys
+        [userDefaults removeObjectForKey:@"userid"];
+    }
+    
+    NSInteger user_id = 0;
+    user_id = [[userDefaults stringForKey:@"userid"] integerValue];
+    [self switchContextByUserId:user_id withAbandon:NO];
+    
     //    [[NSNotificationCenter defaultCenter] addObserver:self
     //                                             selector:@selector(observeContextSave:)
     //                                                 name:NSManagedObjectContextDidSaveNotification
     //                                               object:nil];
-    // Setup DB version data
-    NSNumber* db_version=[[NSUserDefaults standardUserDefaults] objectForKey:@"db_version"];
-    
-    if (db_version==nil || [db_version intValue] < APP_DB_VERSION) {
-        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"exfee_updated_at"];
-        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
-    }
+
     
     // Setup AFNetwork
     [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
-    [self createdb];
+    
     
     // Setup APN Push
     [self requestForPush];
+    
     NSDictionary *userinfo = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     
     // Setup root UIViewController
     CrossesViewController *crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
     crossviewController.needHeaderAnimation = userinfo ? NO : YES;
-    
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
-    
     self.crossesViewController = crossviewController;
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.rootViewController = self.navigationController;
-    [self.window addSubview:self.navigationController.view];
+//    [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
@@ -132,10 +150,13 @@
     [self.window makeKeyAndVisible];
 #endif
     
-    EFAPIServer *server = [EFAPIServer sharedInstance];
+    EFAPIServer *server = self.model.apiServer;
     // Load User
-    if ([server isLoggedIn] == YES){
-        [server loadMeSuccess:nil failure:nil];
+    if (self.model.isLoggedIn == YES){
+//        [server loadMeSuccess:nil failure:nil];
+        EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:[EFLoadMeOperation operationWithModel:self.model]];
+        [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+        
     }
     // Load Background List
     [server getAvailableBackgroundsWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -171,7 +192,7 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
-    if ([EFAPIServer sharedInstance].user_id > 0) {
+    if (self.model.apiServer && self.model.userId > 0) {
         [self.crossesViewController refreshCrosses:@"crossupdateview"];
     }
 }
@@ -194,7 +215,7 @@
 // request for APN
 - (void)requestForPush
 {
-    if ([[EFAPIServer sharedInstance] isLoggedIn] == YES) {
+    if ([self.model isLoggedIn] == YES) {
         NSString* ifdevicetokenSave = [[NSUserDefaults standardUserDefaults] stringForKey:@"ifdevicetokenSave"];
         if( ifdevicetokenSave == nil)
         {
@@ -210,7 +231,10 @@
     
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
         return;
-    [[EFAPIServer sharedInstance] regDevice:tokenAsString success:nil failure:nil];
+    
+    if (self.model.userId > 0 && self.model.isLoggedIn) {
+        [self.model.apiServer regDevice:tokenAsString success:nil failure:nil];
+    }
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
@@ -264,39 +288,6 @@
 }
 
 #pragma mark -
-- (void)createdb {
-    [Flurry logEvent:@"CREATE_DB"];
-    NSURL *baseURL = [NSURL URLWithString:API_ROOT];
-//    NSLog(@"API Server: %@", baseURL);
-    
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    if(objectManager == nil){
-        objectManager = [RKObjectManager managerWithBaseURL:baseURL];
-        [RKObjectManager setSharedManager:objectManager];
-    }
-    
-    NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-    RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
-    objectManager.managedObjectStore = managedObjectStore;
-    
-    [managedObjectStore createPersistentStoreCoordinator];
-    
-    NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
-    //  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
-    NSError *error;
-    NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
-    NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
-    
-    // Create the managed object contexts
-    [managedObjectStore createManagedObjectContexts];
-    
-    // Configure a managed object cache to ensure we do not create duplicate objects
-    managedObjectStore.managedObjectCache = [[[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext] autorelease];
-    NSArray *descriptors=objectManager.requestDescriptors;
-    if(descriptors==nil || [descriptors count]==0)
-        [ModelMapping buildMapping];
-    
-}
 
 - (void)showLanding:(UIViewController*)parent {
     EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
@@ -304,7 +295,7 @@
 }
 
 - (void)signinDidFinish {
-    if ([[EFAPIServer sharedInstance] isLoggedIn]) {
+    if ([self.model isLoggedIn]) {
         [self requestForPush];
         
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
@@ -313,7 +304,9 @@
         CrossesViewController *crossViewController = self.crossesViewController;
         [crossViewController refreshCrosses:@"crossview_init"];
         [crossViewController loadObjectsFromDataStore];
-        [crossViewController dismissModalViewControllerAnimated:YES];
+        
+        [self.navigationController dismissModalViewControllerAnimated:YES];
+//        [crossViewController dismissModalViewControllerAnimated:YES];
     }
 }
 
@@ -339,30 +332,32 @@
     //NSString *identity_id = [params objectForKey:@"identity_id"];
     
     if (token.length > 0 && [user_id intValue] > 0){
-        EFAPIServer *server = [EFAPIServer sharedInstance];
+        EFAPIServer *server = self.model.apiServer;
         if (![server isLoggedIn]) {
             // sign in
-            [server clearUserData];
-            server.user_token = token;
-            server.user_id = [user_id integerValue];
-            [server saveUserData];
-            [server loadMeSuccess:nil failure:nil];
+            
+            [self switchContextByUserId:[user_id integerValue] withAbandon:NO];
+            self.model.userToken = token;
+            [self.model saveUserData];
+            
+//            [self.model.apiServer loadMeSuccess:nil failure:nil];
+            EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:[EFLoadMeOperation operationWithModel:self.model]];
+            [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+            
             [self signinDidFinish];
             [self processUrlHandler:url];
         } else {
-            if ([user_id integerValue] == server.user_id) {
+            if ([user_id integerValue] == self.model.userId) {
                 // refresh token
-                server.user_token = token;
-                [server saveUserData];
+                self.model.userToken = token;
+                [self.model saveUserData];
                 [self processUrlHandler:url];
             } else {
                 // merge identities
                 
                 // Load identities to merge from another user
-                EFAPIServer *tempServer = [[[EFAPIServer alloc] init] autorelease];
-                tempServer.user_id = [user_id integerValue];
-                tempServer.user_token = token;
-                [tempServer loadUserBy:tempServer.user_id
+                [server loadUserBy:[user_id integerValue]
+                             withToken:token
                                success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                    NSDictionary *body = responseObject;
                                    if([body isKindOfClass:[NSDictionary class]]) {
@@ -386,7 +381,10 @@
                                                                                                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
                                                                                                if(code)
                                                                                                    if([code intValue]==200) {
-                                                                                                       [server loadMeSuccess:nil failure:nil];
+//                                                                                                       [server loadMeSuccess:nil failure:nil];
+                                                                                                       EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:[EFLoadMeOperation operationWithModel:self.model]];
+                                                                                                       [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+                                                                                                       
                                                                                                        [self processUrlHandler:url];
                                                                                                    }
                                                                                            }
@@ -428,7 +426,7 @@
         if (pathComps.count  == 2) {
             int cross_id = [[pathComps objectAtIndex:1] intValue];
             if ( cross_id > 0) {
-                if ([[EFAPIServer sharedInstance] isLoggedIn]) {
+                if ([self.model isLoggedIn]) {
                     if ([crossViewController pushToCross:cross_id] == NO) {
                         [crossViewController refreshCrosses:@"pushtocross" withCrossId:cross_id];
                     }
@@ -443,7 +441,7 @@
         if (pathComps.count  == 2) {
             int cross_id = [[pathComps objectAtIndex:1] intValue];
             if (cross_id > 0){
-                if ([[EFAPIServer sharedInstance] isLoggedIn]) {
+                if ([self.model isLoggedIn]) {
                     if ([crossViewController pushToConversation:cross_id] == NO) {
                         [crossViewController refreshCrosses:@"pushtoconversation" withCrossId:cross_id];
                     }
@@ -454,7 +452,7 @@
         if (self.navigationController.viewControllers.count > 1) {
             [self.navigationController popToRootViewControllerAnimated:NO];
         }
-        if ([[EFAPIServer sharedInstance] isLoggedIn]) {
+        if ([self.model isLoggedIn]) {
             [crossViewController ShowProfileView];
         }
     }
@@ -474,10 +472,7 @@
 - (void)signoutDidFinish {
     [Flurry logEvent:@"ACTION_DID_SIGN_OUT"];
     
-    [[EFAPIServer sharedInstance] clearUserData];
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    [ud removeObjectForKey:@"access_token"];
-    [ud removeObjectForKey:@"userid"];
     [ud removeObjectForKey:@"devicetoken"];
     [ud removeObjectForKey:@"exfee_updated_at"];
     [ud removeObjectForKey:@"ifdevicetokenSave"];
@@ -485,43 +480,29 @@
     [ud removeObjectForKey:@"udid"];
     [ud removeObjectForKey:@"push_token"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-
-    [self cleandb];
+    
+    [self switchContextByUserId:0 withAbandon:YES];
     
     CrossesViewController *rootViewController = self.crossesViewController;
     [rootViewController emptyView];
-    [self showLanding:rootViewController];
     
     [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
+    [self.navigationController presentModalViewController:viewController animated:NO];
 }
 
-- (void) cleandb{
-    [Flurry logEvent:@"CLEAN_DB"];
-    NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:DBNAME];
-    //  NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
-    //  NSLog(@"%@",storePath);
-    
-    NSURL *storeURL = [NSURL fileURLWithPath:storePath];
-    NSError *error = nil;
-    if ([[NSFileManager defaultManager] fileExistsAtPath:storeURL.path]) {
-        if ([[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error]) {
-            
-            RKObjectManager *objectManager = [RKObjectManager sharedManager];
-            [ [NSURLCache sharedURLCache] removeAllCachedResponses];
-            
-            objectManager.managedObjectStore.managedObjectCache=nil;
-            objectManager.managedObjectStore = nil;
-            //      objectManager removeRequestDescriptor:(RKRequestDescriptor *)
-            for ( RKRequestDescriptor * requestdesc in objectManager.requestDescriptors){
-                [objectManager removeRequestDescriptor:requestdesc];
-            }
-            for ( RKResponseDescriptor * responsedesc in objectManager.responseDescriptors){
-                [objectManager removeResponseDescriptor:responsedesc];
-            }
-            
-            
-            [self createdb];
+- (void)switchContextByUserId:(NSInteger)user_id withAbandon:(BOOL)flag
+{
+    if (self.model == nil || self.model.userId != user_id) {
+        [self.model stop];
+        if (flag && self.model.userId > 0) {
+            [self.model abandonCachePath];
+            [self.model clearUserData];
         }
+        EXFEModel * model = [[EXFEModel alloc] initWithUser:user_id];
+        self.model = model;
+        [self.model start];
     }
 }
 

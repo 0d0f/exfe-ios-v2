@@ -11,15 +11,17 @@
 #import "Identity+EXFE.h"
 
 @class Exfee;
-@interface EFAPIServer : NSObject
+@class EXFEModel;
 
-@property (nonatomic, assign) NSInteger user_id;
-@property (nonatomic, copy) NSString *user_token;
+@interface EFAPIServer : NSObject {
+
+}
+@property (nonatomic, unsafe_unretained) EXFEModel *     model;
 
 #pragma mark Initializtion
 
-- (id)init;
-+ (EFAPIServer *)sharedInstance;
+- (id)initWithModel:(EXFEModel*)model;
+//+ (EFAPIServer *)sharedInstance;
 
 #pragma mark Token and User ID manager
 
@@ -123,6 +125,11 @@
               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 - (void)loadUserBy:(NSInteger)user_id
+           success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+           failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)loadUserBy:(NSInteger)user_id
+         withToken:(NSString*)token
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 

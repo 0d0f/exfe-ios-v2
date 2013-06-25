@@ -11,7 +11,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import <BlocksKit/BlocksKit.h>
 #import "Util.h"
-#import "ImgCache.h"
 #import "EXLabel.h"
 #import "EXRSVPStatusView.h"
 #import "MapPin.h"
@@ -28,6 +27,7 @@
 #import "WidgetExfeeViewController.h"
 #import "NSString+EXFE.h"
 #import "EFAPI.h"
+#import "EFKit.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -256,8 +256,23 @@
             
         }
     }];
+//    mapTap.handlerDelay = 0.3;
     mapTap.delegate = self;
-    [mapView addGestureRecognizer:mapTap];
+//    [mapView addGestureRecognizer:mapTap];
+    
+    for (UIView* v in mapView.subviews) {
+        NSLog(@"%@", v);
+        for (UIGestureRecognizer* g in [v gestureRecognizers]) {
+            NSLog(@"%@", g);
+            if ([g isKindOfClass:[UITapGestureRecognizer class]]) {
+                UITapGestureRecognizer *tap = (UITapGestureRecognizer *)g;
+                if (tap.numberOfTapsRequired == 2) {
+                    [mapTap requireGestureRecognizerToFail:tap];
+                    [v addGestureRecognizer:mapTap];
+                }
+            }
+        }
+    }
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [container addGestureRecognizer:gestureRecognizer];
@@ -316,7 +331,8 @@
     [super viewDidAppear:animated];
     
     NSString *updated_at = _cross.updated_at;
-    [[EFAPIServer sharedInstance] loadCrossWithCrossId:[_cross.cross_id intValue]
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer loadCrossWithCrossId:[_cross.cross_id intValue]
                                            updatedtime:updated_at
                                                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                    if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
@@ -770,12 +786,26 @@
     EXInvitationItem *item = [[EXInvitationItem alloc] initWithInvitation:invitation];
     item.isMe = [[User getDefaultUser] isMe:invitation.identity];
     
-    [[ImgCache sharedManager] fillAvatarWith:invitation.identity.avatar_filename
-                                   byDefault:[UIImage imageNamed:@"portrait_default.png"]
-                                       using:^(UIImage *image) {
-                                           item.avatar = image;
-                                           [item setNeedsDisplay];
-                                      }];
+    NSString *imageKey = invitation.identity.avatar_filename;
+    UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
+    
+    if (!imageKey) {
+        item.avatar = defaultImage;
+    } else {
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+            item.avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+            [item setNeedsDisplay];
+        } else {
+            item.avatar = defaultImage;
+            [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                            completeHandler:^(UIImage *image){
+                                                if (image) {
+                                                    item.avatar = image;
+                                                    [item setNeedsDisplay];
+                                                }
+                                            }];
+        }
+    }
     
     return [item autorelease];
 }
@@ -949,16 +979,32 @@
 }
 
 #pragma mark － TODO gesture handler
-
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    CGPoint location = [gestureRecognizer locationInView:gestureRecognizer.view];
-    CGPoint center = gestureRecognizer.view.center;
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    CGPoint location = [touch locationInView:gestureRecognizer.view];
     
-    if (ABS(location.x - center.x) < 30 && ABS(location.y - center.y) < 30) {
-        return NO;
+    if (mapView.annotations.count > 0) {
+        for (id < MKAnnotation> annotation in mapView.annotations) {
+             CGPoint p = [mapView convertCoordinate:annotation.coordinate toPointToView:gestureRecognizer.view];
+            // disable gesture detect when near annotations.
+            if (ABS(location.x - p.x) < 30 && ABS(location.y - p.y) < 30) {
+                return NO;
+            }
+        }
     }
-    
     return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    if ([otherGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+        UITapGestureRecognizer * tap = (UITapGestureRecognizer *)otherGestureRecognizer;
+        // allow orignal single tap 
+        if (tap.numberOfTapsRequired == 1 && tap.numberOfTouchesRequired == 1) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)hidePopupIfShown {
@@ -1347,7 +1393,8 @@
 - (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
     Identity *myidentity = [_cross.exfee getMyInvitation].identity;
     
-    [[EFAPIServer sharedInstance] submitRsvp:status
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer submitRsvp:status
                                           on:_invitation
                                   myIdentity:[myidentity.identity_id intValue]
                                      onExfee:[_cross.exfee.exfee_id intValue]
@@ -1361,7 +1408,8 @@
                                                      [alert show];
                                                      [alert release];
                                                  } else if ([[meta objectForKey:@"code"] intValue] == 200) {
-                                                     [[EFAPIServer sharedInstance] loadCrossWithCrossId:[_cross.cross_id intValue]
+                                                     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+                                                     [app.model.apiServer loadCrossWithCrossId:[_cross.cross_id intValue]
                                                                                             updatedtime:@""
                                                                                                 success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                                                                     if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
@@ -1436,7 +1484,8 @@
     [bigspin release];
     
     _cross.by_identity=[_cross.exfee getMyInvitation].identity;
-    [[EFAPIServer sharedInstance] editCross:_cross
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer editCross:_cross
                                     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
                                         if (operation.HTTPRequestOperation.response.statusCode == 200) {
@@ -1543,6 +1592,9 @@
     if (sender) {
         CGPoint newLocation = [rootView convertPoint:sender.frame.origin fromView:sender.superview];
         CGRect original = CGRectMake(CGRectGetWidth(self.view.frame), newLocation.y + SMALL_SLOT, 50, 44);
+        if (sender.tag == kPopupTypeEditTitle) {
+            original = CGRectMake(CGRectGetWidth(self.view.frame), newLocation.y + CGRectGetHeight(sender.frame) / 2 - 44 / 2,50, 44);
+        }
         view.frame = original;
     }
     

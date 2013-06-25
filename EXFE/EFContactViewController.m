@@ -390,7 +390,8 @@
         NSDictionary *matchedDictionary = [Util parseIdentityString:searchText byProvider:provider];
         self.searchResultRoughIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
         NSString *cachedSearchText = [[searchText copy] autorelease];
-        [[EFAPIServer sharedInstance] getIdentitiesWithParams:@[matchedDictionary]
+        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        [app.model.apiServer getIdentitiesWithParams:@[matchedDictionary]
                                                       success:^(NSArray *identities){
                                                           Identity *identity = (Identity *)identities[0];
                                                           

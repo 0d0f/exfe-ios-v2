@@ -11,8 +11,8 @@
 #import "User+EXFE.h"
 #import "LocalContact+EXFE.h"
 #import "Identity+EXFE.h"
-#import "EFImageManager.h"
 #import "RoughIdentity.h"
+#import "EFKit.h"
 
 @interface EFContactObject (Private)
 - (void)_init;
@@ -112,7 +112,9 @@
         
         if (localContact.avatar) {
             UIImage *avatarImage = [UIImage imageWithData:localContact.avatar];
-            [[EFImageManager defaultManager] cacheImage:avatarImage forKey:localContact.indexfield];
+            [[EFDataManager imageManager] cacheImage:avatarImage forKey:localContact.indexfield shouldWriteToDisk:YES];
+            
+//            [[EFImageManager defaultManager] cacheImage:avatarImage forKey:localContact.indexfield];
         }
         
         self.roughIdentities = [localContact roughIdentities];

@@ -12,7 +12,7 @@
 #import "EFPasswordField.h"
 #import "TTTAttributedLabel.h"
 
-@interface EFSignInViewController : UIViewController<OAuthLoginViewControllerDelegate, UITextFieldDelegate>
+@interface EFSignInViewController : UIViewController<OAuthLoginViewControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, retain) CSLinearLayoutView *rootView;
 @property (nonatomic, retain) UITextField *inputIdentity;

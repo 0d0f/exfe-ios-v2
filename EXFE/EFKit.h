@@ -22,4 +22,8 @@
 #import "EFTabBarItem.h"
 #import "EFTabBarViewController.h"
 
+#import "EFQueue.h"
+
+#import "EFCache.h"
+
 #endif

@@ -15,7 +15,6 @@
 #import "EXAddressBookService.h"
 #import "Identity.h"
 #import "Invitation.h"
-#import "ImgCache.h"
 #import "Util.h"
 #import "EFSearchBar.h"
 #import "LocalContact+EXFE.h"
@@ -427,7 +426,8 @@
         NSDictionary *matchedDictionary = [Util parseIdentityString:searchText byProvider:provider];
         self.searchResultRoughtIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
         NSString *cachedSearchText = [[searchText copy] autorelease];
-        [[EFAPIServer sharedInstance] getIdentitiesWithParams:@[matchedDictionary]
+        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        [app.model.apiServer getIdentitiesWithParams:@[matchedDictionary]
                                                       success:^(NSArray *identities){
                                                           self.searchResultRoughtIdentity.identity = identities[0];
                                                           

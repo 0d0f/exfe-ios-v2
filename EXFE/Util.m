@@ -1089,7 +1089,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     if (udid == nil){
         udid = @"";
     }
-    [[EFAPIServer sharedInstance] signOutUsingUdid:udid success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [app.model.apiServer signOutUsingUdid:udid success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
         }
         [app signoutDidFinish];
@@ -1248,7 +1248,8 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         [formatter release];
     }
     if (last_time == nil || ABS([Util daysBetween:last_time and:[NSDate date]]) > 3){
-        [[EFAPIServer sharedInstance] checkAppVersionSuccess:^(AFHTTPRequestOperation *operation, id JSON) {
+        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        [app.model.apiServer checkAppVersionSuccess:^(AFHTTPRequestOperation *operation, id JSON) {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterFullStyle];
             NSString *now_string = [formatter stringFromDate:[NSDate date]];

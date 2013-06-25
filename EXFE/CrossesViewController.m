@@ -8,13 +8,13 @@
 
 #import "CrossesViewController.h"
 #import "ProfileViewController.h"
+#import "EFLandingViewController.h"
 #import "Cross.h"
 #import "Exfee+EXFE.h"
 #import "User+EXFE.h"
 #import "Identity+EXFE.h"
 #import "Rsvp.h"
 #import "CrossCard.h"
-#import "ImgCache.h"
 #import "Util.h"
 #import "CrossTime+Helper.h"
 #import "EFTime+Helper.h"
@@ -120,7 +120,8 @@
     [topview release];
     [super viewDidLoad];
     
-    if ([[EFAPIServer sharedInstance] isLoggedIn]) {
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    if ([app.model isLoggedIn]) {
         // 过渡动画
         UIGraphicsBeginImageContext(self.view.bounds.size);
         [[UIImage imageNamed:@"home_bg.png"] drawInRect:self.view.bounds];
@@ -176,9 +177,10 @@
     } else {
         [self.headView showAnimated:NO];
         
-        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [app showLanding:self];
-
+//        EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
+        EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
+        [app.window.rootViewController presentModalViewController:viewController animated:NO];
+        
     }
     
     default_background=[UIImage imageNamed:@"x_titlebg_default.jpg"];
@@ -347,7 +349,8 @@
     }
     
     //  source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]
-    [[EFAPIServer sharedInstance] loadCrossesAfter:updated_at
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model.apiServer loadCrossesAfter:updated_at
                                            success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                
                                                int notification=0;
@@ -553,8 +556,9 @@
     if (alertView.tag == 500) {
         if (buttonIndex == alertView.firstOtherButtonIndex) {
             [Util signout];
-            AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            [app showLanding:self];
+            
+            EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
+            [self presentModalViewController:viewController animated:NO];
         }
     }
 }
@@ -591,9 +595,14 @@
         User *_user = [User getDefaultUser];
         NSString *imgName = _user.avatar_filename;
         
-        [[ImgCache sharedManager] fillAvatarWith:imgName byDefault:nil using:^(UIImage *image) {
-            self.headView.headImage = image;
-        }];
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imgName]) {
+            self.headView.headImage = [[EFDataManager imageManager] cachedImageInMemoryForKey:imgName];
+        } else {
+            [[EFDataManager imageManager] cachedImageForKey:imgName
+                                            completeHandler:^(UIImage *image){
+                                                self.headView.headImage = image;
+                                            }];
+        }
         
         return profileCell;
     } else if (1 == indexPath.section) {
@@ -671,10 +680,12 @@
             cell.time = @"";
         }
         
+        
+        AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
         NSString *avatarimgurl=nil;
         for(Invitation *invitation in cross.exfee.invitations) {
             NSInteger connected_uid = [invitation.identity.connected_user_id integerValue];
-            if (connected_uid == [EFAPIServer sharedInstance].user_id) {
+            if (connected_uid == app.model.userId) {
                 if(invitation && invitation.invited_by &&
                    invitation.invited_by.avatar_filename ) {
                     avatarimgurl=invitation.invited_by.avatar_filename;
@@ -703,25 +714,21 @@
 //                [users release];
             }
         }
-        if(avatarimgurl==nil)
-          cell.avatar = nil;
-        else{
-          UIImage *avatarImg=[[ImgCache sharedManager] getImgFromCache:avatarimgurl];
-          if(avatarImg == nil || [avatarImg isEqual:[NSNull null]]){
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-              UIImage *avatar = [[ImgCache sharedManager] getImgFrom:avatarimgurl];
-              dispatch_async(dispatch_get_main_queue(), ^{
-                if(avatar != nil && ![avatar isEqual:[NSNull null]]) {
-                  cell.avatar=avatar;
-                }
-              });
-            });
-            dispatch_release(imgQueue);
-          }else{
-            cell.avatar = avatarImg;
-          }
+        if (!avatarimgurl) {
+            cell.avatar = nil;
+        } else {
+            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:avatarimgurl]) {
+                cell.avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:avatarimgurl];
+            } else {
+                [[EFDataManager imageManager] cachedImageForKey:avatarimgurl
+                                                completeHandler:^(UIImage *image){
+                                                    if (image) {
+                                                        cell.avatar = image;
+                                                    }
+                                                }];
+            }
         }
+        
       NSString *backimgurl=nil;
         NSArray *widgets = cross.widget;
         for(NSDictionary *widget in widgets) {
@@ -985,27 +992,23 @@
             
             if (url && url.length > 0) {
                 NSString *imgurl = [Util getBackgroundLink:[widget objectForKey:@"image"]];
-                UIImage *backimg = [[ImgCache sharedManager] getImgFromCache:imgurl];
                 
-                if (backimg == nil || [backimg isEqual:[NSNull null]]) {
-                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                    dispatch_async(imgQueue, ^{
-                        // Not in Cache
-                        tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
-                        UIImage *backimg = [[ImgCache sharedManager] getImgFrom:imgurl];
-                        
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if (backimg != nil && ![backimg isEqual:[NSNull null]]) {
-                                // Fill after download
-                                tabBarViewController.tabBar.backgroundImage = backimg;
-                            }
-                        });
-                    });
-                    dispatch_release(imgQueue);
+                if (!imgurl) {
+                    tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
                 } else {
-                    // Find in cache
-                    tabBarViewController.tabBar.backgroundImage = backimg;
+                    if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imgurl]) {
+                        tabBarViewController.tabBar.backgroundImage = [[EFDataManager imageManager] cachedImageInMemoryForKey:imgurl];
+                    } else {
+                        tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
+                        [[EFDataManager imageManager] cachedImageForKey:imgurl
+                                                        completeHandler:^(UIImage *image){
+                                                            if (image) {
+                                                                tabBarViewController.tabBar.backgroundImage = image;
+                                                            }
+                                                        }];
+                    }
                 }
+                
                 flag = YES;
                 break;
             }
