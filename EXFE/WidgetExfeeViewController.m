@@ -20,7 +20,6 @@
 #import "ExfeeCollectionViewCell.h"
 #import "ExfeeAddCollectionViewCell.h"
 #import "Util.h"
-#import "ImgCache.h"
 #import "DateTimeUtil.h"
 #import "NSString+EXFE.h"
 #import "EFContactViewController.h"
@@ -30,6 +29,7 @@
 #import "Cross.h"
 #import "IdentityId+EXFE.h"
 #import "EFAPI.h"
+#import "EFKit.h"
 #import "RoughIdentity.h"
 #import "EFContactObject.h"
 
@@ -828,7 +828,25 @@ typedef enum {
                         break;
                 }
                 
-                [[ImgCache sharedManager] fillAvatar:cell.avatar with:inv.identity.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"]];
+                NSString *imageKey = inv.identity.avatar_filename;
+                UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
+                
+                if (!imageKey) {
+                    cell.avatar.image = defaultImage;
+                } else {
+                    if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+                        cell.avatar.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+                    } else {
+                        cell.avatar.image = defaultImage;
+                        [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                                        completeHandler:^(UIImage *image){
+                                                            if (image) {
+                                                                cell.avatar.image = image;
+                                                            }
+                                                        }];
+                    }
+                }
+                
                 cell.invitation_id = inv.invitation_id;
 //                cell.mates = 10;
                 cell.mates = [inv.mates integerValue];

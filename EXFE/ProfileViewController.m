@@ -8,7 +8,6 @@
 
 #import "ProfileViewController.h"
 #import <BlocksKit/BlocksKit.h>
-#import "ImgCache.h"
 #import "User+EXFE.h"
 #import "Identity+EXFE.h"
 #import "CrossesViewController.h"
@@ -242,7 +241,25 @@
 - (void)fillProfileHeader:(User *)user{
     if (user) {
         username.text = user.name;
-        [[ImgCache sharedManager] fillAvatar:useravatar with:user.avatar_filename byDefault:[UIImage imageNamed:@"portrait_default.png"]];
+        
+        NSString *imageKey = user.avatar_filename;
+        UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
+        
+        if (!imageKey) {
+            useravatar.image = defaultImage;
+        } else {
+            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+                useravatar.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+            } else {
+                useravatar.image = defaultImage;
+                [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                                completeHandler:^(UIImage *image){
+                                                    if (image) {
+                                                        useravatar.image = image;
+                                                    }
+                                                }];
+            }
+        }
     }
 }
 
@@ -329,12 +346,25 @@
     
     if([indexPath section]==0)
     {
+        NSString *imageKey = identity.avatar_filename;
+        UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
         
-        [[ImgCache sharedManager] fillAvatarWith: identity.avatar_filename
-                                       byDefault: [UIImage imageNamed:@"portrait_default.png"]
-                                          using: ^(UIImage* image){
-                                              [cell setAvartar:image];
-                                          }];
+        if (!imageKey) {
+            [cell setAvartar:defaultImage];
+        } else {
+            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+                UIImage *image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+                [cell setAvartar:image];
+            } else {
+                [cell setAvartar:defaultImage];
+                [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                                completeHandler:^(UIImage *image){
+                                                    if (image) {
+                                                        [cell setAvartar:image];
+                                                    }
+                                                }];
+            }
+        }
         
         [cell setLabelName:[identity getDisplayName]];
         [cell setLabelIdentity:[identity getDisplayIdentity]];

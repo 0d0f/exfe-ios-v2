@@ -11,7 +11,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import <BlocksKit/BlocksKit.h>
 #import "Util.h"
-#import "ImgCache.h"
 #import "EXLabel.h"
 #import "EXRSVPStatusView.h"
 #import "MapPin.h"
@@ -28,6 +27,7 @@
 #import "WidgetExfeeViewController.h"
 #import "NSString+EXFE.h"
 #import "EFAPI.h"
+#import "EFKit.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -786,12 +786,26 @@
     EXInvitationItem *item = [[EXInvitationItem alloc] initWithInvitation:invitation];
     item.isMe = [[User getDefaultUser] isMe:invitation.identity];
     
-    [[ImgCache sharedManager] fillAvatarWith:invitation.identity.avatar_filename
-                                   byDefault:[UIImage imageNamed:@"portrait_default.png"]
-                                       using:^(UIImage *image) {
-                                           item.avatar = image;
-                                           [item setNeedsDisplay];
-                                      }];
+    NSString *imageKey = invitation.identity.avatar_filename;
+    UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
+    
+    if (!imageKey) {
+        item.avatar = defaultImage;
+    } else {
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+            item.avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+            [item setNeedsDisplay];
+        } else {
+            item.avatar = defaultImage;
+            [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                            completeHandler:^(UIImage *image){
+                                                if (image) {
+                                                    item.avatar = image;
+                                                    [item setNeedsDisplay];
+                                                }
+                                            }];
+        }
+    }
     
     return [item autorelease];
 }

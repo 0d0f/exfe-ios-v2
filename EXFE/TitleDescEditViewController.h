@@ -10,7 +10,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "EXGradientToolbarView.h"
 #import "EXAttributedLabel.h"
-#import "ImgCache.h"
 #import "Util.h"
 #import "NewGatherViewController.h"
 #import "SSTextView.h"

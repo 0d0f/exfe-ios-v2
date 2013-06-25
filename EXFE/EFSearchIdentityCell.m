@@ -11,8 +11,8 @@
 #import "EFPopoverController.h"
 #import "EFSearchTipViewController.h"
 #import "RoughIdentity.h"
-#import "ImgCache.h"
 #import "EFContactObject.h"
+#import "EFKit.h"
 
 @implementation EFSearchIdentityCell {
     EFPopoverController *_popoverController;
@@ -127,23 +127,21 @@
         UIImage *providerIcon = [UIImage imageNamed:[NSString stringWithFormat:@"identity_%@_18_grey.png", providerName]];
         self.providerIcon = providerIcon;
         if (identity) {
-            if (identity.avatar_filename) {
-                UIImage *avatar = [[ImgCache sharedManager] getImgFromCache:identity.avatar_filename];
-                if (!avatar || [avatar isEqual:[NSNull null]]) {
-                    self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
-                    
-                    dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-                    dispatch_async(imgQueue, ^{
-                        UIImage *avatar = [[ImgCache sharedManager] getImgFrom:identity.avatar_filename];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if (avatar != nil && ![avatar isEqual:[NSNull null]]) {
-                                self.avatarImageView.image = avatar;
-                            }
-                        });
-                    });
-                    dispatch_release(imgQueue);
+            NSString *imageKey = identity.avatar_filename;
+            UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
+            
+            if (!imageKey) {
+                self.avatarImageView.image = defaultImage;
+            } else {
+                if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+                    self.avatarImageView.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
                 } else {
-                    self.avatarImageView.image = avatar;
+                    [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                                    completeHandler:^(UIImage *image){
+                                                        if (image) {
+                                                            self.avatarImageView.image = image;
+                                                        }
+                                                    }];
                 }
             }
         } else {

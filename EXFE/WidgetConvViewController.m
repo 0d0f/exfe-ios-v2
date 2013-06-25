@@ -10,9 +10,9 @@
 
 #import "Post.h"
 #import "PostCell.h"
-#import "ImgCache.h"
 #import "Util.h"
 #import "EFAPI.h"
+#import "EFKit.h"
 #import "CrossGroupViewController.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -614,14 +614,24 @@
         cell.separator=cellsepator;
     [cell setShowTime:NO];
     
+    NSString *imageKey = post.by_identity.avatar_filename;
+    UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
     
-    [[ImgCache sharedManager] fillAvatarWith:post.by_identity.avatar_filename
-                                   byDefault:[UIImage imageNamed:@"portrait_default.png"]
-                                       using:^(UIImage *image) {
-                                           cell.avatar = image;
-                                       }];
-    
-    
+    if (!imageKey) {
+        cell.avatar = defaultImage;
+    } else {
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+            cell.avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
+        } else {
+            cell.avatar = defaultImage;
+            [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                            completeHandler:^(UIImage *image){
+                                                if (image) {
+                                                    cell.avatar = image;
+                                                }
+                                            }];
+        }
+    }
     
 	return cell;
 }

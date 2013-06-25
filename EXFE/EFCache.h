@@ -11,5 +11,6 @@
 
 #import "EFDataCache.h"
 #import "EFDataManager.h"
+#import "EFDataManager+Image.h"
 
 #endif

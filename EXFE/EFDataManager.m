@@ -28,19 +28,16 @@
 - (id)init {
     self = [super init];
     if (self) {
+        self.dataCache = [[[EFDataCache alloc] init] autorelease];
         self.queueManager = [EFQueueManager defaultManager];
-        
         self.cachePath = [kDefaultCachePath stringByExpandingTildeInPath];
-        
-        if (![[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:self.cachePath withIntermediateDirectories:YES attributes:NULL error:NULL];
-        }
     }
     
     return self;
 }
 
 - (void)dealloc {
+    [_dataCache release];
     [_queueManager release];
     [_cachePath release];
     [super dealloc];
@@ -118,6 +115,25 @@
 }
 
 #pragma mark - Setter
+
+- (void)setCachePath:(NSString *)cachePath {
+    if ([_cachePath isEqualToString:cachePath]) {
+        return;
+    }
+    
+    if (_cachePath) {
+        [_cachePath release];
+        _cachePath = nil;
+    }
+    if (cachePath) {
+        cachePath = [cachePath stringByExpandingTildeInPath];
+        _cachePath = [cachePath copy];
+        
+        if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath]) {
+            [[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:NULL error:NULL];
+        }
+    }
+}
 
 - (void)cacheData:(NSData *)data forKey:(NSString *)aKey shouldWriteToDisk:(BOOL)writeToDisk {
     NSParameterAssert(data);

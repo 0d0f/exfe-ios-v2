@@ -16,5 +16,6 @@
 #import "EFIOOperation.h"
 #import "EFNetworkOperation.h"
 #import "EFNetworkManagementOperation.h"
+#import "EFDownloadOperation.h"
 
 #endif
