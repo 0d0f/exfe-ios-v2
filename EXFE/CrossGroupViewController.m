@@ -256,8 +256,23 @@
             
         }
     }];
+//    mapTap.handlerDelay = 0.3;
     mapTap.delegate = self;
-    [mapView addGestureRecognizer:mapTap];
+//    [mapView addGestureRecognizer:mapTap];
+    
+    for (UIView* v in mapView.subviews) {
+        NSLog(@"%@", v);
+        for (UIGestureRecognizer* g in [v gestureRecognizers]) {
+            NSLog(@"%@", g);
+            if ([g isKindOfClass:[UITapGestureRecognizer class]]) {
+                UITapGestureRecognizer *tap = (UITapGestureRecognizer *)g;
+                if (tap.numberOfTapsRequired == 2) {
+                    [mapTap requireGestureRecognizerToFail:tap];
+                    [v addGestureRecognizer:mapTap];
+                }
+            }
+        }
+    }
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [container addGestureRecognizer:gestureRecognizer];
@@ -950,16 +965,32 @@
 }
 
 #pragma mark － TODO gesture handler
-
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    CGPoint location = [gestureRecognizer locationInView:gestureRecognizer.view];
-    CGPoint center = gestureRecognizer.view.center;
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    CGPoint location = [touch locationInView:gestureRecognizer.view];
     
-    if (ABS(location.x - center.x) < 30 && ABS(location.y - center.y) < 30) {
-        return NO;
+    if (mapView.annotations.count > 0) {
+        for (id < MKAnnotation> annotation in mapView.annotations) {
+             CGPoint p = [mapView convertCoordinate:annotation.coordinate toPointToView:gestureRecognizer.view];
+            // disable gesture detect when near annotations.
+            if (ABS(location.x - p.x) < 30 && ABS(location.y - p.y) < 30) {
+                return NO;
+            }
+        }
     }
-    
     return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    if ([otherGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+        UITapGestureRecognizer * tap = (UITapGestureRecognizer *)otherGestureRecognizer;
+        // allow orignal single tap 
+        if (tap.numberOfTapsRequired == 1 && tap.numberOfTouchesRequired == 1) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)hidePopupIfShown {
