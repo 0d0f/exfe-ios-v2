@@ -151,7 +151,7 @@
         descView.shadowColor = [UIColor whiteColor];
         descView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         descView.backgroundColor = [UIColor clearColor];
-        descView.lineBreakMode = NSLineBreakByWordWrapping;
+        descView.lineBreakMode = NSLineBreakByTruncatingTail;
         descView.tag = kViewTagDescription;
         [container addSubview:descView];
         
