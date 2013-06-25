@@ -98,7 +98,7 @@
     self.crossesViewController = crossviewController;
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.rootViewController = self.navigationController;
-    [self.window addSubview:self.navigationController.view];
+//    [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
@@ -304,7 +304,9 @@
         CrossesViewController *crossViewController = self.crossesViewController;
         [crossViewController refreshCrosses:@"crossview_init"];
         [crossViewController loadObjectsFromDataStore];
-        [crossViewController dismissModalViewControllerAnimated:YES];
+        
+        [self.navigationController dismissModalViewControllerAnimated:YES];
+//        [crossViewController dismissModalViewControllerAnimated:YES];
     }
 }
 
@@ -483,9 +485,11 @@
     
     CrossesViewController *rootViewController = self.crossesViewController;
     [rootViewController emptyView];
-    [self showLanding:rootViewController];
     
     [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
+    [self.navigationController presentModalViewController:viewController animated:NO];
 }
 
 - (void)switchContextByUserId:(NSInteger)user_id withAbandon:(BOOL)flag

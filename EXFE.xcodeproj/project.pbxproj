@@ -1076,7 +1076,7 @@
 		4FB377F917378342001FA1B2 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F317378324001FA1B2 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4FB377FA17378347001FA1B2 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F51737832D001FA1B2 /* Twitter.framework */; };
 		4FB377FC173795C2001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; };
-		4FB377FD173795C9001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; };
+		4FB377FD173795C9001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4FB377FE173795D1001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4FB37804173A285C001FA1B2 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB37803173A285C001FA1B2 /* FacebookSDK.framework */; };
 		4FB3780C173A287E001FA1B2 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB37803173A285C001FA1B2 /* FacebookSDK.framework */; };

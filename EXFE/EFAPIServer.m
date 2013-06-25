@@ -688,6 +688,7 @@
 - (void)loadMeSuccess:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
            failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
 {
+    NSAssert(self.model.userToken, @"Token should not be nil.");
     NSDictionary *param = @{@"token": self.model.userToken};
     NSString *endpoint = [NSString stringWithFormat:@"users/%u", self.model.userId];
     [self.model.objectManager getObjectsAtPath:endpoint

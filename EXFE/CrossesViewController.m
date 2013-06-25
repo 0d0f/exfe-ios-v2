@@ -8,6 +8,7 @@
 
 #import "CrossesViewController.h"
 #import "ProfileViewController.h"
+#import "EFLandingViewController.h"
 #import "Cross.h"
 #import "Exfee+EXFE.h"
 #import "User+EXFE.h"
@@ -177,9 +178,10 @@
     } else {
         [self.headView showAnimated:NO];
         
-        AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        [app showLanding:self];
-
+//        EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
+        EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
+        [app.window.rootViewController presentModalViewController:viewController animated:NO];
+        
     }
     
     default_background=[UIImage imageNamed:@"x_titlebg_default.jpg"];
@@ -555,8 +557,9 @@
     if (alertView.tag == 500) {
         if (buttonIndex == alertView.firstOtherButtonIndex) {
             [Util signout];
-            AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            [app showLanding:self];
+            
+            EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
+            [self presentModalViewController:viewController animated:NO];
         }
     }
 }
