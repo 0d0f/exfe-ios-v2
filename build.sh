@@ -59,6 +59,17 @@ if [ "$PROJECT" = "" ] ; then
   exit 1;
 fi
 
+EXFE_VER=m2B
+for TEMP in $(expr $(date '+%y') - 10) $(expr $(date '+%m')) $(expr $(date '+%d'))
+do
+  if [ $TEMP -ge 10 ]
+    then
+      TEMP=$(printf \\$(printf '%03o' $(expr 55 + $TEMP)))
+  fi
+  EXFE_VER=$EXFE_VER$TEMP
+done
+/usr/libexec/PlistBuddy -c "Set :EXFE-build $EXFE_VER" EXFE/$PROJECT-Info.plist 
+
 SCHEME=$PROJECT
 PROJECT_FILE="$PROJECT.xcodeproj"
 BUILD="xcodebuild"
