@@ -23,8 +23,15 @@
 }
 
 - (void)loadUserByUserId:(NSInteger)userId {
+    [self loadUserByUserId:userId andToken:self.userToken];
+}
+
+- (void)loadUserByUserId:(NSInteger)userId andToken:(NSString *)token {
+    NSParameterAssert(token);
+    
     EFLoadUserOperation *loadUserOperation = [EFLoadUserOperation operationWithModel:self];
     loadUserOperation.userId = userId;
+    loadUserOperation.token = token;
     EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:loadUserOperation];
     
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];

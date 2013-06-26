@@ -14,6 +14,8 @@ NSString *kEFNotificationNameLoadMeFailure = @"notification.loadMe.failure";
 @implementation EFLoadMeOperation
 
 - (id)initWithModel:(EXFEModel *)model {
+    NSParameterAssert(model);
+    
     self = [super initWithModel:model];
     if (self) {
         self.successNotificationName = kEFNotificationNameLoadMeSuccess;

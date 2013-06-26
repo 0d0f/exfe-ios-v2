@@ -30,6 +30,8 @@
 }
 
 - (void)dealloc {
+    [_successUserInfo release];
+    [_failureUserInfo release];
     [_successNotificationName release];
     [_failureNotificationName release];
     [_error release];
@@ -47,17 +49,19 @@
         if (kEFNetworkOperationStateSuccess == self.state) {
             if (self.successNotificationName && self.successNotificationName.length) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:self.successNotificationName object:nil];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:self.successNotificationName object:self.successUserInfo];
                 });
             }
         } else if (kEFNetworkOperationStateFailure == self.state) {
             if (self.failureNotificationName && self.failureNotificationName.length) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    NSDictionary *userInfo = nil;
                     if (self.error) {
-                        userInfo = @{@"error": self.error};
+                        if (self.failureUserInfo) {
+                            self.failureUserInfo = [NSMutableDictionary dictionaryWithCapacity:1];
+                        }
+                        [self.failureUserInfo setValue:self.error forKey:@"error"];
                     }
-                    [[NSNotificationCenter defaultCenter] postNotificationName:self.successNotificationName object:nil userInfo:userInfo];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:self.successNotificationName object:nil userInfo:self.failureUserInfo];
                 });
             }
         }
