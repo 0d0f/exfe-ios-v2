@@ -26,6 +26,7 @@
 #import "EFKit.h"
 #import "WidgetConvViewController.h"
 #import "WidgetExfeeViewController.h"
+#import "EFLoadMeOperation.h"
 
 
 @interface CrossesViewController ()
@@ -262,6 +263,12 @@
     }
     [self refreshWelcome];
     
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleLoadMeSuccess:)
+                                                 name:kEFNotificationNameLoadMeSuccess
+                                               object:nil];
 }
 
 - (Cross*) crossWithId:(int)cross_id{
@@ -279,7 +286,7 @@
 }
 
 - (void)dealloc {
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     if (self.crossChangeObserver) {
         [[NSNotificationCenter defaultCenter] removeObserver:self.crossChangeObserver];
     }
@@ -305,6 +312,12 @@
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     [self.tableView reloadData];
+}
+
+- (void)handleLoadMeSuccess:(NSNotification *)notif {
+    NSRange range = NSMakeRange(0, 1);
+    NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
+    [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)ShowProfileView{
