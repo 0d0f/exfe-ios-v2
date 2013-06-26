@@ -26,6 +26,11 @@ NSString *kEFNotificationNameLoadUserFailure = @"notification.loadUser.failure";
     return self;
 }
 
+- (void)dealloc {
+    [_token release];
+    [super dealloc];
+}
+
 - (void)operationDidStart {
     [super operationDidStart];
     

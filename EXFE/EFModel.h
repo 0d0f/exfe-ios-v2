@@ -15,5 +15,6 @@
 
 #import "EXFEModel+UserAPI.h"
 #import "EXFEModel+ConversationAPI.h"
+#import "EXFEModel+Crosses.h"
 
 #endif

@@ -1585,6 +1585,12 @@
 		76E96BC1177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BC0177AEEE400C06ECD /* EXFEModel+ConversationAPI.m */; };
 		76E96BC2177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BC0177AEEE400C06ECD /* EXFEModel+ConversationAPI.m */; };
 		76E96BC3177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BC0177AEEE400C06ECD /* EXFEModel+ConversationAPI.m */; };
+		76E96BC6177AF9B100C06ECD /* EXFEModel+Crosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BC5177AF9B100C06ECD /* EXFEModel+Crosses.m */; };
+		76E96BC7177AF9B100C06ECD /* EXFEModel+Crosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BC5177AF9B100C06ECD /* EXFEModel+Crosses.m */; };
+		76E96BC8177AF9B100C06ECD /* EXFEModel+Crosses.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BC5177AF9B100C06ECD /* EXFEModel+Crosses.m */; };
+		76E96BCC177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BCB177AFA0D00C06ECD /* EFLoadCrossOperation.m */; };
+		76E96BCD177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BCB177AFA0D00C06ECD /* EFLoadCrossOperation.m */; };
+		76E96BCE177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BCB177AFA0D00C06ECD /* EFLoadCrossOperation.m */; };
 		76F6B30C1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
 		76F6B30D1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
 		76F6B30E1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
@@ -2469,6 +2475,10 @@
 		76E96BBB177AEBE100C06ECD /* EFLoadConversationOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLoadConversationOperation.m; sourceTree = "<group>"; };
 		76E96BBF177AEEE400C06ECD /* EXFEModel+ConversationAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EXFEModel+ConversationAPI.h"; sourceTree = "<group>"; };
 		76E96BC0177AEEE400C06ECD /* EXFEModel+ConversationAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EXFEModel+ConversationAPI.m"; sourceTree = "<group>"; };
+		76E96BC4177AF9B000C06ECD /* EXFEModel+Crosses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EXFEModel+Crosses.h"; sourceTree = "<group>"; };
+		76E96BC5177AF9B100C06ECD /* EXFEModel+Crosses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EXFEModel+Crosses.m"; sourceTree = "<group>"; };
+		76E96BCA177AFA0D00C06ECD /* EFLoadCrossOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLoadCrossOperation.h; sourceTree = "<group>"; };
+		76E96BCB177AFA0D00C06ECD /* EFLoadCrossOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLoadCrossOperation.m; sourceTree = "<group>"; };
 		76F6B30A1740A59A008B39C1 /* EFErrorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorMessage.h; sourceTree = "<group>"; };
 		76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorMessage.m; sourceTree = "<group>"; };
 		76F6B3101740B5C1008B39C1 /* EFKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFKit.h; sourceTree = "<group>"; };
@@ -2965,6 +2975,7 @@
 			children = (
 				76E96BB3177AB35B00C06ECD /* EFAPIOperations.h */,
 				76E96BB1177AB2E100C06ECD /* EFNotificationDefines.h */,
+				76E96BC9177AF9EB00C06ECD /* Crosses API Operation */,
 				76E96BB9177AEBAE00C06ECD /* Conversation API Operation */,
 				76E96BB2177AB2EE00C06ECD /* User API Operation */,
 				4F2D22E2176AF32E00FEA139 /* RecursiveDeleteOperation.h */,
@@ -3503,6 +3514,8 @@
 				76E96BAC177AAD2500C06ECD /* EXFEModel+UserAPI.m */,
 				76E96BBF177AEEE400C06ECD /* EXFEModel+ConversationAPI.h */,
 				76E96BC0177AEEE400C06ECD /* EXFEModel+ConversationAPI.m */,
+				76E96BC4177AF9B000C06ECD /* EXFEModel+Crosses.h */,
+				76E96BC5177AF9B100C06ECD /* EXFEModel+Crosses.m */,
 			);
 			name = "Category API";
 			sourceTree = "<group>";
@@ -3525,6 +3538,15 @@
 				76E96BBB177AEBE100C06ECD /* EFLoadConversationOperation.m */,
 			);
 			name = "Conversation API Operation";
+			sourceTree = "<group>";
+		};
+		76E96BC9177AF9EB00C06ECD /* Crosses API Operation */ = {
+			isa = PBXGroup;
+			children = (
+				76E96BCA177AFA0D00C06ECD /* EFLoadCrossOperation.h */,
+				76E96BCB177AFA0D00C06ECD /* EFLoadCrossOperation.m */,
+			);
+			name = "Crosses API Operation";
 			sourceTree = "<group>";
 		};
 		7811787815DA81CE00A4BBCF /* identity */ = {
@@ -6024,6 +6046,8 @@
 				76E96BB7177AC29C00C06ECD /* EFLoadUserOperation.m in Sources */,
 				76E96BBD177AEBE100C06ECD /* EFLoadConversationOperation.m in Sources */,
 				76E96BC2177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */,
+				76E96BC7177AF9B100C06ECD /* EXFEModel+Crosses.m in Sources */,
+				76E96BCD177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6219,6 +6243,8 @@
 				76E96BB8177AC29C00C06ECD /* EFLoadUserOperation.m in Sources */,
 				76E96BBE177AEBE100C06ECD /* EFLoadConversationOperation.m in Sources */,
 				76E96BC3177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */,
+				76E96BC8177AF9B100C06ECD /* EXFEModel+Crosses.m in Sources */,
+				76E96BCE177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6414,6 +6440,8 @@
 				76E96BB6177AC29C00C06ECD /* EFLoadUserOperation.m in Sources */,
 				76E96BBC177AEBE100C06ECD /* EFLoadConversationOperation.m in Sources */,
 				76E96BC1177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */,
+				76E96BC6177AF9B100C06ECD /* EXFEModel+Crosses.m in Sources */,
+				76E96BCC177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

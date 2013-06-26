@@ -28,6 +28,7 @@
 #import "NSString+EXFE.h"
 #import "EFAPI.h"
 #import "EFKit.h"
+#import "EFModel.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
 #define ALTERNATIVE_TEXT_HIEGHT          (15)
@@ -286,6 +287,11 @@
     swipeLeftRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
     swipeLeftRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:swipeLeftRecognizer];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameLoadCrossSuccess
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -331,25 +337,9 @@
     [super viewDidAppear:animated];
     
     NSString *updated_at = _cross.updated_at;
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model.apiServer loadCrossWithCrossId:[_cross.cross_id intValue]
-                                           updatedtime:updated_at
-                                               success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                                   if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
-                                                       Meta* meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                                                       if ([meta.code intValue] == 403){
-                                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                                           alert.tag = 403;
-                                                           [alert show];
-                                                           [alert release];
-                                                       } else if([meta.code intValue] == 200) {
-                                                           [self refreshUI];
-                                                       }
-                                                   }
-                                               }
-                                               failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                                   
-                                               }];
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [app.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:updated_at];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -359,6 +349,8 @@
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     [_shadowImage release];
     [descView release];
     [exfeeShowview release];
@@ -377,6 +369,30 @@
     [swipeLeftRecognizer release];
 
     [super dealloc];
+}
+
+#pragma mark - Notification Handler
+
+- (void)handleNotification:(NSNotification *)notificaiton {
+    NSString *name = notificaiton.name;
+    
+    if ([name isEqualToString:kEFNotificationNameLoadCrossSuccess]) {
+        NSDictionary *userInfo = notificaiton.userInfo;
+        
+        Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
+        if ([meta.code intValue] == 403) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control"
+                                                            message:@"You have no access to this private ·X·."
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            alert.tag = 403;
+            [alert show];
+            [alert release];
+        } else if ([meta.code intValue] == 200) {
+            [self refreshUI];
+        }
+    }
 }
 
 #pragma mark - Setter && Getter
@@ -1409,18 +1425,7 @@
                                                      [alert release];
                                                  } else if ([[meta objectForKey:@"code"] intValue] == 200) {
                                                      AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-                                                     [app.model.apiServer loadCrossWithCrossId:[_cross.cross_id intValue]
-                                                                                            updatedtime:@""
-                                                                                                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                                                                                    if ([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
-                                                                                                        Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                                                                                                        if ([meta.code intValue]==200) {
-                                                                                                            [self refreshUI];
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                                failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                                                                                }];
+                                                     [app.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:@""];
                                                      
                                                      [self refreshUI];
                                                  }
