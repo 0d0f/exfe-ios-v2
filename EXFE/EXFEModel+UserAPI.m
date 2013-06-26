@@ -32,6 +32,7 @@
     EFLoadUserOperation *loadUserOperation = [EFLoadUserOperation operationWithModel:self];
     loadUserOperation.userId = userId;
     loadUserOperation.token = token;
+    
     EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:loadUserOperation];
     
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];

@@ -1579,6 +1579,12 @@
 		76E96BB6177AC29C00C06ECD /* EFLoadUserOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BB5177AC29C00C06ECD /* EFLoadUserOperation.m */; };
 		76E96BB7177AC29C00C06ECD /* EFLoadUserOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BB5177AC29C00C06ECD /* EFLoadUserOperation.m */; };
 		76E96BB8177AC29C00C06ECD /* EFLoadUserOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BB5177AC29C00C06ECD /* EFLoadUserOperation.m */; };
+		76E96BBC177AEBE100C06ECD /* EFLoadConversationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BBB177AEBE100C06ECD /* EFLoadConversationOperation.m */; };
+		76E96BBD177AEBE100C06ECD /* EFLoadConversationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BBB177AEBE100C06ECD /* EFLoadConversationOperation.m */; };
+		76E96BBE177AEBE100C06ECD /* EFLoadConversationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BBB177AEBE100C06ECD /* EFLoadConversationOperation.m */; };
+		76E96BC1177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BC0177AEEE400C06ECD /* EXFEModel+ConversationAPI.m */; };
+		76E96BC2177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BC0177AEEE400C06ECD /* EXFEModel+ConversationAPI.m */; };
+		76E96BC3177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 76E96BC0177AEEE400C06ECD /* EXFEModel+ConversationAPI.m */; };
 		76F6B30C1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
 		76F6B30D1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
 		76F6B30E1740A59B008B39C1 /* EFErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */; };
@@ -2459,6 +2465,10 @@
 		76E96BB3177AB35B00C06ECD /* EFAPIOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAPIOperations.h; sourceTree = "<group>"; };
 		76E96BB4177AC29C00C06ECD /* EFLoadUserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLoadUserOperation.h; sourceTree = "<group>"; };
 		76E96BB5177AC29C00C06ECD /* EFLoadUserOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLoadUserOperation.m; sourceTree = "<group>"; };
+		76E96BBA177AEBE100C06ECD /* EFLoadConversationOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLoadConversationOperation.h; sourceTree = "<group>"; };
+		76E96BBB177AEBE100C06ECD /* EFLoadConversationOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLoadConversationOperation.m; sourceTree = "<group>"; };
+		76E96BBF177AEEE400C06ECD /* EXFEModel+ConversationAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EXFEModel+ConversationAPI.h"; sourceTree = "<group>"; };
+		76E96BC0177AEEE400C06ECD /* EXFEModel+ConversationAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EXFEModel+ConversationAPI.m"; sourceTree = "<group>"; };
 		76F6B30A1740A59A008B39C1 /* EFErrorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorMessage.h; sourceTree = "<group>"; };
 		76F6B30B1740A59A008B39C1 /* EFErrorMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorMessage.m; sourceTree = "<group>"; };
 		76F6B3101740B5C1008B39C1 /* EFKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFKit.h; sourceTree = "<group>"; };
@@ -2955,6 +2965,7 @@
 			children = (
 				76E96BB3177AB35B00C06ECD /* EFAPIOperations.h */,
 				76E96BB1177AB2E100C06ECD /* EFNotificationDefines.h */,
+				76E96BB9177AEBAE00C06ECD /* Conversation API Operation */,
 				76E96BB2177AB2EE00C06ECD /* User API Operation */,
 				4F2D22E2176AF32E00FEA139 /* RecursiveDeleteOperation.h */,
 				4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */,
@@ -3490,6 +3501,8 @@
 			children = (
 				76E96BAB177AAD2500C06ECD /* EXFEModel+UserAPI.h */,
 				76E96BAC177AAD2500C06ECD /* EXFEModel+UserAPI.m */,
+				76E96BBF177AEEE400C06ECD /* EXFEModel+ConversationAPI.h */,
+				76E96BC0177AEEE400C06ECD /* EXFEModel+ConversationAPI.m */,
 			);
 			name = "Category API";
 			sourceTree = "<group>";
@@ -3503,6 +3516,15 @@
 				76E96BB5177AC29C00C06ECD /* EFLoadUserOperation.m */,
 			);
 			name = "User API Operation";
+			sourceTree = "<group>";
+		};
+		76E96BB9177AEBAE00C06ECD /* Conversation API Operation */ = {
+			isa = PBXGroup;
+			children = (
+				76E96BBA177AEBE100C06ECD /* EFLoadConversationOperation.h */,
+				76E96BBB177AEBE100C06ECD /* EFLoadConversationOperation.m */,
+			);
+			name = "Conversation API Operation";
 			sourceTree = "<group>";
 		};
 		7811787815DA81CE00A4BBCF /* identity */ = {
@@ -6000,6 +6022,8 @@
 				76D2DE141778061F00E8C53E /* EFDownloadOperation.m in Sources */,
 				76E96BAE177AAD2500C06ECD /* EXFEModel+UserAPI.m in Sources */,
 				76E96BB7177AC29C00C06ECD /* EFLoadUserOperation.m in Sources */,
+				76E96BBD177AEBE100C06ECD /* EFLoadConversationOperation.m in Sources */,
+				76E96BC2177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6193,6 +6217,8 @@
 				76D2DE151778061F00E8C53E /* EFDownloadOperation.m in Sources */,
 				76E96BAF177AAD2500C06ECD /* EXFEModel+UserAPI.m in Sources */,
 				76E96BB8177AC29C00C06ECD /* EFLoadUserOperation.m in Sources */,
+				76E96BBE177AEBE100C06ECD /* EFLoadConversationOperation.m in Sources */,
+				76E96BC3177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6386,6 +6412,8 @@
 				76D2DE131778061F00E8C53E /* EFDownloadOperation.m in Sources */,
 				76E96BAD177AAD2500C06ECD /* EXFEModel+UserAPI.m in Sources */,
 				76E96BB6177AC29C00C06ECD /* EFLoadUserOperation.m in Sources */,
+				76E96BBC177AEBE100C06ECD /* EFLoadConversationOperation.m in Sources */,
+				76E96BC1177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
