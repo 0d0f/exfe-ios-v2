@@ -26,7 +26,7 @@
 #import "EFKit.h"
 #import "WidgetConvViewController.h"
 #import "WidgetExfeeViewController.h"
-#import "EFLoadMeOperation.h"
+#import "EFModel.h"
 
 
 @interface CrossesViewController ()

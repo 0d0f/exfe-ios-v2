@@ -8,9 +8,5 @@
 
 #import "EFNetworkOperation.h"
 
-extern NSString *kEFNotificationNameLoadMeSuccess;
-extern NSString *kEFNotificationNameLoadMeFailure;
-
 @interface EFLoadMeOperation : EFNetworkOperation
-
 @end

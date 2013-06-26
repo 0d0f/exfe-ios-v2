@@ -16,7 +16,7 @@
 #import "EFAPIServer.h"
 #import "EFRomeViewController.h"
 #import "EFKit.h"
-#import "EFLoadMeOperation.h"
+#import "EFModel.h"
 
 
 #define DECTOR_HEIGHT                    (100)
@@ -152,18 +152,9 @@
     [self refreshUI];
 }
 
-- (void) syncUser{
+- (void)syncUser {
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:[EFLoadMeOperation operationWithModel:app.model]];
-    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
-    
-//    [app.model.apiServer loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-//                                         self.user = [User getDefaultUser];
-//                                         [self refreshUI];
-//                                     }
-//                                     failure:^(RKObjectRequestOperation *operation, NSError *error) {
-////                                         NSLog(@"Error!:%@",error);
-//                                     }];
+    [app.model loadMe];
 }
 
 - (void)tapProfileHeader:(UITapGestureRecognizer*)sender

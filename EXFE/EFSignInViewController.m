@@ -22,7 +22,7 @@
 #import "EFIdentityTextField.h"
 #import "TWAPIManager.h"
 #import "EFKit.h"
-#import "EFLoadMeOperation.h"
+#import "EFModel.h"
 
 typedef NS_ENUM(NSUInteger, EFStage){
     kStageStart,
@@ -945,15 +945,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     app.model.userToken = token;
     [app.model saveUserData];
     
-    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:[EFLoadMeOperation operationWithModel:app.model]];
-    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
-    
-//    [app.model.apiServer loadMeSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-//        [self SigninDidFinish];
-//    }
-//                               failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//                                   [self SigninDidFinish];
-//                               }];
+    [app.model loadMe];
 }
 
 - (void)SigninDidFinish
