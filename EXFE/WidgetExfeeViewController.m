@@ -30,6 +30,7 @@
 #import "IdentityId+EXFE.h"
 #import "EFAPI.h"
 #import "EFKit.h"
+#import "EFModel.h"
 #import "RoughIdentity.h"
 #import "EFContactObject.h"
 
@@ -153,6 +154,10 @@ typedef enum {
     invTable.tag = kTableOrigin;
     [self.view addSubview:invTable];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameLoadCrossSuccess
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -176,6 +181,8 @@ typedef enum {
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     [_shadowImage release];
 //    [invName release];
 //    [invHostFlag release];
@@ -208,12 +215,29 @@ typedef enum {
         [self.onExitBlock invoke];
     }
 }
-#pragma mark Click handler
+#pragma mark - Notification handler
 
+- (void)handleNotification:(NSNotification *)notification {
+    NSString *name = notification.name;
+    
+    if ([name isEqualToString:kEFNotificationNameLoadCrossSuccess]) {
+        NSDictionary *userInfo = notification.userInfo;
+        
+        Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
+        if ([meta.code intValue] == 200) {
+            NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
+            NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
+            
+            CrossGroupViewController *crossGroupViewController = viewControllers[0];
+            self.exfee = crossGroupViewController.cross.exfee;
+            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+            [exfeeContainer reloadData];
+            [self reloadSelected];
+        }
+    }
+}
 
-
-
-#pragma mark UIActionSheetDelegate
+#pragma mark - UIActionSheetDelegate
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     if (buttonIndex == actionSheet.destructiveButtonIndex) {
@@ -1187,21 +1211,8 @@ typedef enum {
                                                      
                                                      CrossGroupViewController *crossGroupViewController = viewControllers[0];
                                                      AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-                                                     [app.model.apiServer loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue]
-                                                                                            updatedtime:@""
-                                                                                                success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                                                                                    if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]]) {
-                                                                                                        Meta *meta = (Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
-                                                                                                        if ([meta.code intValue]==200) {
-                                                                                                            self.exfee = crossGroupViewController.cross.exfee;
-                                                                                                            self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
-                                                                                                            [exfeeContainer reloadData];
-                                                                                                            [self reloadSelected];
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                                failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                                                                                }];
+                                                     
+                                                     [app.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue] updatedTime:@""];
                                                      
                                                      self.exfee = crossGroupViewController.cross.exfee;
                                                      [exfeeContainer reloadData];

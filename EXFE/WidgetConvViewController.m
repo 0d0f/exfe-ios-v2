@@ -13,6 +13,7 @@
 #import "Util.h"
 #import "EFAPI.h"
 #import "EFKit.h"
+#import "EFModel.h"
 #import "CrossGroupViewController.h"
 
 #define MAIN_TEXT_HIEGHT                 (21)
@@ -135,14 +136,20 @@
     [self refreshConversation];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameLoadConversationSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameLoadConversationFailure
+                                               object:nil];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
 #ifdef __IPHONE_5_0
     float version = [[[UIDevice currentDevice] systemVersion] floatValue];
@@ -157,6 +164,7 @@
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     RKObjectManager* manager =[RKObjectManager sharedManager];
     [manager.operationQueue cancelAllOperations];
     [_shadowImage release];
@@ -169,6 +177,24 @@
 
     [super dealloc];
 }
+
+#pragma mark - Notification Handler
+
+- (void)handleNotification:(NSNotification *)notification {
+    NSString *name = notification.name;
+    
+    if ([name isEqualToString:kEFNotificationNameLoadConversationSuccess]) {
+        NSDictionary *userInfo = notification.userInfo;
+        Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
+        if (meta != nil && 200 == [meta.code intValue]) {
+            [self loadObjectsFromDataStore];
+        }
+    } else if ([name isEqualToString:kEFNotificationNameLoadConversationFailure]) {
+        [self showOrHideHint];
+    }
+}
+
+#pragma mark -
 
 - (void)keyboardWillShow:(NSNotification *)notification
 {
@@ -235,37 +261,17 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
--(void) refreshConversation{
+- (void)refreshConversation {
     NSString *updated_at = @"";
-    if([_posts count] > 0)
-    {
-        Post *post=[_posts objectAtIndex:0];
-        if(post && post.updated_at!=nil)
-        {
-//            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-//            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-//            updated_at = [formatter stringFromDate:post.updated_at];
-//            [formatter release];
+    if ([_posts count] > 0) {
+        Post *post = [_posts objectAtIndex:0];
+        if (post && post.updated_at != nil) {
             updated_at = post.updated_at;
         }
     }
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model.apiServer loadConversationWithExfeeId:exfee_id
-                                                  updatedtime:updated_at
-                                                      success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                                          Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
-                                                          if (meta != nil) {
-                                                              if ([meta.code intValue] == 200) {
-                                                                  [self loadObjectsFromDataStore];
-                                                              }
-                                                          } else {
-                                                              //show error hint
-                                                          }
-                                                      }
-                                                      failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                                          [self showOrHideHint];
-                                                      }];
+    
+    AppDelegate *app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    [app.model loadConversationWithExfeeId:exfee_id updatedTime:updated_at];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
@@ -296,7 +302,6 @@
         }
     }
     [self showOrHideHint];
-    
 }
 
 - (CGSize)textWidthForHeight:(CGFloat)inHeight withAttributedString:(NSAttributedString *)attributedString {

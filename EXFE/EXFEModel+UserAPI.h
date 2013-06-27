@@ -12,5 +12,6 @@
 
 - (void)loadMe;
 - (void)loadUserByUserId:(NSInteger)userId;
+- (void)loadUserByUserId:(NSInteger)userId andToken:(NSString *)token;
 
 @end

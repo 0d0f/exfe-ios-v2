@@ -17,4 +17,12 @@ extern NSString *kEFNotificationNameLoadMeFailure;
 extern NSString *kEFNotificationNameLoadUserSuccess;
 extern NSString *kEFNotificationNameLoadUserFailure;
 
+// defined in EFLoadConversationOperation.m
+extern NSString *kEFNotificationNameLoadConversationSuccess;
+extern NSString *kEFNotificationNameLoadConversationFailure;
+
+// defined in EFLoadCrossOperation.m
+extern NSString *kEFNotificationNameLoadCrossSuccess;
+extern NSString *kEFNotificationNameLoadCrossFailure;
+
 #endif

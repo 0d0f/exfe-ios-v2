@@ -15,5 +15,7 @@
 // User API
 #import "EFLoadMeOperation.h"
 #import "EFLoadUserOperation.h"
+#import "EFLoadConversationOperation.h"
+#import "EFLoadCrossOperation.h"
 
 #endif
