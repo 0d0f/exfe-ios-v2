@@ -37,4 +37,8 @@ extern NSString *kEFNotificaiotnNameGetPlacesNearbyFailure;
 extern NSString *kEFNotificationNameGetPlacesByTitleSuccess;
 extern NSString *kEFNotificationNameGetPlacesByTitleFailure;
 
+// defined in EFLoadSuggestOperation.m
+extern NSString *kEFNotificationNameLoadSuggestSuccess;
+extern NSString *kEFNotificationNameLoadSuggestFailure;
+
 #endif

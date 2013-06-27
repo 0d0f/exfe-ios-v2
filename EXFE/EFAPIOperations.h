@@ -27,4 +27,7 @@
 #import "EFGetPlacesNearbyOperation.h"
 #import "EFGetPlacesByTitleOperation.h"
 
+// Profile API
+#import "EFLoadSuggestOperation.h"
+
 #endif

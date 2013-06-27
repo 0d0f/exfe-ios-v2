@@ -10,4 +10,6 @@
 
 @interface EXFEModel (Profile)
 
+- (void)loadSuggestWithKey:(NSString *)key;
+
 @end

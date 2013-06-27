@@ -46,7 +46,7 @@ NSString *kEFNotificationNameGetPlacesByTitleFailure = @"notification.getPlacesB
                                        NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:responseObject];
                                        [userInfo setValue:self.title forKey:@"title"];
                                        [userInfo setValue:[NSValue valueWithMKCoordinate:self.location] forKey:@"location"];
-                                       self.successUserInfo = responseObject;
+                                       self.successUserInfo = userInfo;
                                        
                                        [self finish];
                                    }

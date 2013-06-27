@@ -12,6 +12,7 @@
 #import "WCAlertView.h"
 #import "EXAddressBookService.h"
 #import "EFKit.h"
+#import "EFModel.h"
 
 @interface ExfeeInputViewController ()
 
@@ -139,6 +140,11 @@ static char identitykey;
     NSString *filename = [docsPath stringByAppendingPathComponent:@"localcontacts"];
     localcontacts=[[NSKeyedUnarchiver unarchiveObjectWithFile:filename] copy];
 //    _filteredlocalcontacts = [localcontacts retain];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameLoadSuggestSuccess
+                                               object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -217,6 +223,18 @@ static char identitykey;
           [self reloadLocalAddressBook];
     }
 }
+
+#pragma mark - Notification Handler
+
+- (void)handleNotification:(NSNotification *)notification {
+    NSString *name = notification.name;
+    
+    if ([name isEqualToString:kEFNotificationNameLoadSuggestSuccess]) {
+        [self loadIdentitiesFromDataStore:[exfeeList getInput]];
+    }
+}
+
+#pragma mark -
 
 - (void) copyMoreContactsFromIdx:(int)idx{
     dispatch_queue_t loadingQueue = dispatch_queue_create("loading addressbook", NULL);
@@ -339,6 +357,7 @@ static char identitykey;
 
 }
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [inputlefticon release];
     [errorHinticon release];
     [errorHintLabel release];
@@ -513,27 +532,22 @@ static char identitykey;
         [self addExfeeToCross];
     }
 }
-- (IBAction)textDidChange:(UITextField*)textField{
-    if(addressbookType== EXFE_ADDRESSBOOK){
+- (IBAction)textDidChange:(UITextField*)textField {
+    if (addressbookType == EXFE_ADDRESSBOOK) {
         if(exfeeInput.text!=nil && exfeeInput.text.length>=1) {
             showInputinSuggestion=YES;
-            AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-            [app.model.apiServer loadSuggest:exfeeInput.text
-                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                  [self loadIdentitiesFromDataStore:[exfeeList getInput]];
-                                              }
-                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                              }];
+            AppDelegate *app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            [app.model loadSuggestWithKey:exfeeInput.text];
         }
-        if(exfeeInput.text==nil || [exfeeInput.text isEqualToString:@""])
-        {
-            if(suggestIdentities!=nil){
+        
+        if (exfeeInput.text == nil || [exfeeInput.text isEqualToString:@""]) {
+            if (suggestIdentities != nil) {
                 [suggestIdentities release];
-                suggestIdentities=nil;
+                suggestIdentities = nil;
                 [suggestionTable reloadData];
             }
         }
-    }else if(addressbookType== LOCAL_ADDRESSBOOK){
+    } else if(addressbookType == LOCAL_ADDRESSBOOK) {
 
     }
     
@@ -933,12 +947,7 @@ static char identitykey;
                 return YES;
             showInputinSuggestion=YES;
             AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-            [app.model.apiServer loadSuggest:input
-                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                  [self loadIdentitiesFromDataStore:[exfeeList getInput]];
-                                              }
-                                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                              }];
+            [app.model loadSuggestWithKey:input];
             
             [self loadIdentitiesFromDataStore:input];
         }

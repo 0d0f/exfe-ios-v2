@@ -29,7 +29,15 @@
 }
 
 - (void)getPlacesByTitle:(NSString *)title location:(CLLocationCoordinate2D)location {
-
+    EFGetPlacesByTitleOperation *getPlacesBytTitleOperation = [EFGetPlacesByTitleOperation operationWithModel:self];
+    getPlacesBytTitleOperation.title = title;
+    getPlacesBytTitleOperation.location = location;
+    
+    EFNetworkManagementOperation *managementOperation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:getPlacesBytTitleOperation];
+    
+    [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
+    
+    [managementOperation release];
 }
 
 @end
