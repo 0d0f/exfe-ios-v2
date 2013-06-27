@@ -303,7 +303,6 @@
         [crossViewController loadObjectsFromDataStore];
         
         [self.navigationController dismissModalViewControllerAnimated:YES];
-//        [crossViewController dismissModalViewControllerAnimated:YES];
     }
 }
 

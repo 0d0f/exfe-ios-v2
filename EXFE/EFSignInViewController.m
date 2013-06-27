@@ -390,15 +390,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
     [self setStage:kStageStart];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleLoadMeSuccess:)
-                                                 name:kEFNotificationNameLoadMeSuccess
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleLoadMeFailure::)
-                                                 name:kEFNotificationNameLoadMeFailure
-                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -929,14 +920,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
 }
 
-- (void)handleLoadMeSuccess:(NSNotification *)notif {
-    [self SigninDidFinish];
-}
-
-- (void)handleLoadMeFailure:(NSNotification *)notif {
-    [self SigninDidFinish];
-}
-
 - (void)loadUserAndExit:(NSInteger)user_id withToken:(NSString*)token
 {
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
@@ -946,15 +929,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [app.model saveUserData];
     
     [app.model loadMe];
-}
-
-- (void)SigninDidFinish
-{
-    AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     [app signinDidFinish];
 }
-
-
 
 #pragma mark -
 #pragma mark Button / View Click Handler
@@ -1596,7 +1573,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     if ([userid integerValue] > 0 && token.length > 0) {
         [self loadUserAndExit:[userid integerValue] withToken:token];
     } else {
-        [self SigninDidFinish];
+        // Error?
     }
 }
 

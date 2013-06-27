@@ -606,17 +606,18 @@
         }
         
         User *_user = [User getDefaultUser];
-        NSString *imgName = _user.avatar_filename;
-        
-        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imgName]) {
-            self.headView.headImage = [[EFDataManager imageManager] cachedImageInMemoryForKey:imgName];
-        } else {
-            [[EFDataManager imageManager] cachedImageForKey:imgName
-                                            completeHandler:^(UIImage *image){
-                                                self.headView.headImage = image;
-                                            }];
+        if (_user) {
+            NSString *imgName = _user.avatar_filename;
+            
+            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imgName]) {
+                self.headView.headImage = [[EFDataManager imageManager] cachedImageInMemoryForKey:imgName];
+            } else {
+                [[EFDataManager imageManager] cachedImageForKey:imgName
+                                                completeHandler:^(UIImage *image){
+                                                    self.headView.headImage = image;
+                                                }];
+            }
         }
-        
         return profileCell;
     } else if (1 == indexPath.section) {
         if (self.crossList == nil) {
