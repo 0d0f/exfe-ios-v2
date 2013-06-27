@@ -15,7 +15,16 @@
 // User API
 #import "EFLoadMeOperation.h"
 #import "EFLoadUserOperation.h"
+
+// Conversation API
 #import "EFLoadConversationOperation.h"
+
+// Crosses API
 #import "EFLoadCrossOperation.h"
+
+// Place API
+#import "EFReverseGeocodingOperation.h"
+#import "EFGetPlacesNearbyOperation.h"
+#import "EFGetPlacesByTitleOperation.h"
 
 #endif
