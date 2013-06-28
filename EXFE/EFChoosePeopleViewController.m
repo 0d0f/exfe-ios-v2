@@ -668,7 +668,7 @@
             label.backgroundColor = [UIColor clearColor];
             label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
             label.textColor = [UIColor COLOR_ALUMINUM];
-            label.text = @"Show all contacts";
+            label.text = NSLocalizedString(@"Show all contacts", nil);
             [cell.contentView addSubview:label];
             [label release];
         }
@@ -841,7 +841,7 @@
                                      customizationBlock:^(WCAlertView *alertView) {
                                          alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
                                          UITextField *textField = [alertView textFieldAtIndex:0];
-                                         textField.placeholder = @"Enter contact name";
+                                         textField.placeholder = NSLocalizedString(@"Enter contact name", nil);
                                          textField.textAlignment = UITextAlignmentCenter;
                                      }
                                         completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {

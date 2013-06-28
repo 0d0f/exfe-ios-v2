@@ -80,25 +80,25 @@
     if ([_invitation.rsvp_status isEqualToString:@"ACCEPTED"]){
         rsvpicon=[UIImage imageNamed:@"rsvp_accepted_stroke_26blue.png"];
         rsvplabel.textColor=FONT_COLOR_HL;
-        rsvpstatustext=@"Accepted";
+        rsvpstatustext=NSLocalizedString(@"Accepted", nil);
     } else if ([_invitation.rsvp_status isEqualToString:@"DECLINED"]){
         rsvpicon=[UIImage imageNamed:@"rsvp_unavailable_stroke_26g5.png"];
-        rsvpstatustext=@"Unavailable";
+        rsvpstatustext=NSLocalizedString(@"Unavailable", nil);
         rsvplabel.textColor=FONT_COLOR_51;
         
     } else if ([_invitation.rsvp_status isEqualToString:@"INTERESTED"]){
         rsvpicon=[UIImage imageNamed:@"rsvp_pending_stroke_26g5.png"];
-        rsvpstatustext=@"Interested";
+        rsvpstatustext=NSLocalizedString(@"Interested", nil);
         rsvplabel.textColor=FONT_COLOR_51;
     } else{
         rsvpicon=[UIImage imageNamed:@"rsvp_pending_stroke_26g5.png"];
-        rsvpstatustext=@"Pending";
+        rsvpstatustext=NSLocalizedString(@"Pending", nil);
         rsvplabel.textColor=FONT_COLOR_51;
     }
     
     if([_invitation.identity.unreachable boolValue]==YES){
         rsvpicon=[UIImage imageNamed:@"portrait_exclaim.png"];
-        rsvpstatustext=@"Contact unreachable";
+        rsvpstatustext=NSLocalizedString(@"Contact unreachable", nil);
         rsvplabel.textColor=[UIColor colorWithRed:229/255.0 green:46/255.0 blue:83/255.0 alpha:1];
     }
     

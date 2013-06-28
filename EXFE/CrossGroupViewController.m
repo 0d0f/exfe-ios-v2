@@ -262,9 +262,7 @@
 //    [mapView addGestureRecognizer:mapTap];
     
     for (UIView* v in mapView.subviews) {
-        NSLog(@"%@", v);
         for (UIGestureRecognizer* g in [v gestureRecognizers]) {
-            NSLog(@"%@", g);
             if ([g isKindOfClass:[UITapGestureRecognizer class]]) {
                 UITapGestureRecognizer *tap = (UITapGestureRecognizer *)g;
                 if (tap.numberOfTapsRequired == 2) {
@@ -381,10 +379,10 @@
         
         Meta *meta = (Meta *)[userInfo objectForKey:@"meta"];
         if ([meta.code intValue] == 403) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control"
-                                                            message:@"You have no access to this private ·X·."
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Control", nil)
+                                                            message:NSLocalizedString(@"You have no access to this private ·X·.", nil)
                                                            delegate:self
-                                                  cancelButtonTitle:@"OK"
+                                                  cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                   otherButtonTitles:nil];
             alert.tag = 403;
             [alert show];
@@ -489,9 +487,9 @@
         NSString *title = [[time getTimeTitle] sentenceCapitalizedString];
         [title retain];
         if (title == nil || title.length == 0) {
-            timeRelView.text = @"Sometime";
+            timeRelView.text = NSLocalizedString(@"Sometime", nil);
             timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
-            timeAbsView.text = @"Pick a time";
+            timeAbsView.text = NSLocalizedString(@"Pick a time", nil);
             timeAbsView.hidden = NO;
             timeZoneView.text = @"";
             timeZoneView.hidden = YES;
@@ -528,9 +526,9 @@
         }
         [title release];
     } else {
-        timeRelView.text = @"Sometime";
+        timeRelView.text = NSLocalizedString(@"Sometime", nil);
         timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
-        timeAbsView.text = @"Pick a time";
+        timeAbsView.text = NSLocalizedString(@"Pick a time", nil);
         timeAbsView.hidden = NO;
         timeZoneView.text = @"";
         timeZoneView.hidden = YES;
@@ -541,9 +539,9 @@
 
 - (void)fillPlace:(Place*)place {
     if (place == nil || [place isEmpty]) {
-        placeTitleView.text = @"Somewhere";
+        placeTitleView.text = NSLocalizedString(@"Somewhere", nil);
         placeDescView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
-        placeDescView.text = @"Choose a place";
+        placeDescView.text = NSLocalizedString(@"Choose a place", nil);
         placeDescView.hidden = NO;
         mapView.hidden = YES;
         [self setLayoutDirty];
@@ -561,7 +559,7 @@
                 placeDescView.hidden = YES;
             }
         } else {
-            placeTitleView.text = @"Somewhere";
+            placeTitleView.text = NSLocalizedString(@"Somewhere", nil);
             placeDescView.hidden = YES;
             //mapView.hidden = YES;
         }
@@ -583,7 +581,7 @@
             [mapView removeAnnotations:mapView.annotations];
             NSString *placeTitle = place.title;
             if (placeTitle == nil || place.title.length == 0) {
-                placeTitle = @"Somewhere";
+                placeTitle = NSLocalizedString(@"Somewhere", nil);
             }
             MapPin *pin = [[MapPin alloc] initWithCoordinates:region.center placeName:placeTitle description:@""];
             [mapView addAnnotation:pin];
@@ -1419,7 +1417,7 @@
                                              if([responseObject isKindOfClass:[NSDictionary class]]) {
                                                  NSDictionary* meta=(NSDictionary*)[responseObject objectForKey:@"meta"];
                                                  if ([[meta objectForKey:@"code"] intValue] == 403) {
-                                                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Privacy Control" message:@"You have no access to this private ·X·." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Control", nil) message:NSLocalizedString(@"You have no access to this private ·X·.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                                                      alert.tag = 403;
                                                      [alert show];
                                                      [alert release];

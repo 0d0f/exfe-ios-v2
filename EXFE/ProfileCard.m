@@ -150,7 +150,7 @@
     CGContextSaveGState(currentContext);
     CGContextTranslateCTM(currentContext, 0, self.bounds.size.height);
     CGContextScaleCTM(currentContext, 1.0, -1.0);
-    NSString * gather = @"Gather a ·X·";
+    NSString * gather = NSLocalizedString(@"Gather a ·X·", nil);
     
     NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:gather];
     CTFontRef fontRef= CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);

@@ -96,7 +96,7 @@
         descView.shadowOffset = CGSizeMake(0.0f, 1.0f);
         descView.backgroundColor = [UIColor colorWithWhite:0.96 alpha:1];
         descView.lineBreakMode = NSLineBreakByWordWrapping;
-        descView.placeholder = @"Take some notes";
+        descView.placeholder = NSLocalizedString(@"Take some notes", nil);
         descView.placehlderColor = [UIColor COLOR_WA(0xA3, 0xFF)];
         descView.text = @"";
         descView.minimumHeight = 44;
@@ -232,7 +232,7 @@
 
     UIButton *btngather=[UIButton buttonWithType:UIButtonTypeCustom];
     [btngather setFrame:CGRectMake(99, 8, 122, 32)];
-    [btngather setTitle:@"Gather" forState:UIControlStateNormal];
+    [btngather setTitle:NSLocalizedString(@"Gather", nil) forState:UIControlStateNormal];
     btngather.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
     [btngather.titleLabel setShadowColor:[UIColor COLOR_RGBA(0, 0, 0, 122)]];
     [btngather.titleLabel setShadowOffset:CGSizeMake(0, -1)];
@@ -263,7 +263,7 @@
 
     UIButton *pickdone=[UIButton buttonWithType:UIButtonTypeCustom];
     [pickdone setFrame:CGRectMake(265, 7, 50, 30)];
-    [pickdone setTitle:@"Done" forState:UIControlStateNormal];
+    [pickdone setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
     [pickdone.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     [pickdone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     pickdone.titleLabel.shadowColor=[UIColor blackColor];
@@ -274,7 +274,7 @@
     [pickertoolbar addSubview:pickdone];
 
     UILabel *pickerlabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 10, 140, 23)];
-    pickerlabel.text=@"Host as identity:";
+    pickerlabel.text=NSLocalizedString(@"Host as identity:", nil);
     pickerlabel.font=[UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     pickerlabel.textColor=[UIColor whiteColor];
     pickerlabel.backgroundColor=[UIColor clearColor];
@@ -716,9 +716,9 @@
         NSString *title = [[time getTimeTitle] sentenceCapitalizedString];
         [title retain];
         if (title == nil || title.length == 0) {
-            timeRelView.text = @"Sometime";
+            timeRelView.text = NSLocalizedString(@"Sometime", nil);
             timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
-            timeAbsView.text = @"Pick a time";
+            timeAbsView.text = NSLocalizedString(@"Pick a time", nil);
             timeAbsView.hidden = NO;
             timeZoneView.text = @"";
             timeZoneView.hidden = YES;
@@ -755,9 +755,9 @@
         }
         [title release];
     }else{
-        timeRelView.text = @"Sometime";
+        timeRelView.text = NSLocalizedString(@"Sometime", nil);
         timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
-        timeAbsView.text = @"Pick a time";
+        timeAbsView.text = NSLocalizedString(@"Pick a time", nil);
         timeAbsView.hidden = NO;
         timeZoneView.text = @"";
         timeZoneView.hidden = YES;
@@ -767,9 +767,9 @@
 
 - (void)fillPlace:(Place*)place{
     if(place == nil || [place isEmpty]){
-        placeTitleView.text = @"Somewhere";
+        placeTitleView.text = NSLocalizedString(@"Somewhere", nil);
         placeDescView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
-        placeDescView.text = @"Choose a place";
+        placeDescView.text = NSLocalizedString(@"Choose a place", nil);
         placeDescView.hidden = NO;
         mapView.hidden = YES;
         [self setLayoutDirty];
@@ -787,7 +787,7 @@
                 placeDescView.hidden = YES;
             }
         }else{
-            placeTitleView.text = @"Somewhere";
+            placeTitleView.text = NSLocalizedString(@"Somewhere", nil);
             placeDescView.hidden = YES;
         }
         

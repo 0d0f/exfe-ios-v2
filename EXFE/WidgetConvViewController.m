@@ -87,7 +87,7 @@
         UILabel *no_posts = [[UILabel alloc] initWithFrame:CGRectMake(50, 60, 260, 51)];
         no_posts.textAlignment = NSTextAlignmentCenter;
         no_posts.textColor = [UIColor COLOR_WA(0x6B, 0xFF)];
-        no_posts.text = @"No post in conversation,\n yet.";
+        no_posts.text = NSLocalizedString(@"No post in conversation,\n yet.", nil);
         no_posts.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
         no_posts.backgroundColor = [UIColor clearColor];
         no_posts.numberOfLines = 2;

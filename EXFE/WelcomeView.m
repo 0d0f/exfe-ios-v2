@@ -24,7 +24,7 @@
 //        [gobutton setFrame:CGRectMake(50, self.frame.size.height-30-44, 200, 44)];
         
         closebutton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [closebutton setTitle:@"Close" forState:UIControlStateNormal];
+        [closebutton setTitle:NSLocalizedString(@"Close", nil) forState:UIControlStateNormal];
         [closebutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
         [closebutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
         [closebutton setBackgroundImage:[[UIImage imageNamed:@"btn_dark_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
@@ -45,7 +45,7 @@
 }
 - (void) initWelcome1{
     
-    NSString *str1=@"Thanks for using EXFE\nThe group utility for gathering.\n\nWe save you from calling up every one RSVP, losing in endless emails and messages off the point.\n\n·X· (cross) is a gathering of people, for any intent. It’s private by default, everything inside is accessible to only attendees. When you get an idea to call up friends to do something together, just Gather a ·X·.\n\nEXFE your friends.";
+    NSString *str1=NSLocalizedString(@"Thanks for using EXFE\nThe group utility for gathering.\n\nWe save you from calling up every one RSVP, losing in endless emails and messages off the point.\n\n·X· (cross) is a gathering of people, for any intent. It’s private by default, everything inside is accessible to only attendees. When you get an idea to call up friends to do something together, just Gather a ·X·.\n\nEXFE your friends.", nil);
     
     
     welcome1 = [[NSMutableAttributedString alloc] initWithString:str1];
@@ -70,15 +70,15 @@
         {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
     };
     CTParagraphStyleRef pstyle = CTParagraphStyleCreate(psetting, 3);
-    [welcome1 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)pstyle range:NSMakeRange(0,[@"Thanks for using EXFE\nThe group utility for gathering." length])];
+    [welcome1 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)pstyle range:NSMakeRange(0,[NSLocalizedString(@"Thanks for using EXFE\nThe group utility for gathering.", nil) length])];
     [welcome1 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 15.0, NULL) range:NSMakeRange(0,[welcome1 length])];
 
     [welcome1 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL) range:NSMakeRange(0,[@"Thanks for using EXFE" length])];
     
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor whiteColor].CGColor range:NSMakeRange(0,[welcome1 length])];
-    [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[@"Thanks for using " length],4)];
+    [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[NSLocalizedString(@"Thanks for using ", nil) length],4)];
 
-    [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[@"Thanks for using EXFE\nThe group utility for gathering.\n\nWe save you from calling up every one RSVP, losing in endless emails and messages off the point.\n\n" length],3)];
+    [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[NSLocalizedString(@"Thanks for using EXFE\nThe group utility for gathering.\n\nWe save you from calling up every one RSVP, losing in endless emails and messages off the point.\n\n", nil) length],3)];
 
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([welcome1 length]-[@".\n\nEXFE your friends." length]-3,3)];
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([welcome1 length]-[@" your friends." length]-4,4)];

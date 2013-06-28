@@ -18,7 +18,7 @@
         {
             signinbutton=[UIButton buttonWithType:UIButtonTypeCustom];
             [signinbutton setFrame:CGRectMake(14, 10, 126, 31)];
-            [signinbutton setTitle:@"Start" forState:UIControlStateNormal];
+            [signinbutton setTitle:NSLocalizedString(@"Start", nil) forState:UIControlStateNormal];
             [signinbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:14]];
             [signinbutton setTitleColor:FONT_COLOR_51 forState:UIControlStateNormal];
             [signinbutton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -32,7 +32,7 @@
         else if([style isEqualToString:@"signin"]){
             signinbutton=[UIButton buttonWithType:UIButtonTypeCustom];
             [signinbutton setFrame:CGRectMake(14, 16, 129, 18)];
-            [signinbutton setTitle:@"Welcome to EXFE" forState:UIControlStateNormal];
+            [signinbutton setTitle:NSLocalizedString(@"Welcome to EXFE", nil) forState:UIControlStateNormal];
             [signinbutton addTarget:delegate action:@selector(welcomeButtonPress:) forControlEvents:UIControlEventTouchUpInside];
 
             [signinbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:16]];

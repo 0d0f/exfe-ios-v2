@@ -62,7 +62,7 @@
     
     inputplace=[[UITextField alloc] initWithFrame:CGRectMake(54, 13.5, 195-18, 18.5)];
     inputplace.tag=401;
-    inputplace.placeholder=@"Search place";
+    inputplace.placeholder=NSLocalizedString(@"Search place", nil);
     [inputplace setFont:[UIFont fontWithName:@"HelveticaNeue" size:18]];
     inputplace.delegate=self;
     [inputplace setAutocorrectionType:UITextAutocorrectionTypeNo];
@@ -79,7 +79,7 @@
 
     rightbutton=[UIButton buttonWithType:UIButtonTypeCustom];
     [rightbutton setFrame:CGRectMake(265, 7, 50, 30)];
-    [rightbutton setTitle:@"Done" forState:UIControlStateNormal];
+    [rightbutton setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
     [rightbutton setBackgroundImage:[[UIImage imageNamed:@"btn_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 3, 0,3)] forState:UIControlStateNormal];
     [rightbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
 
@@ -684,7 +684,7 @@
 - (void) clearplace{
     
     UIActionSheet *actionSheet = [UIActionSheet actionSheetWithTitle:@""];
-    [actionSheet setDestructiveButtonWithTitle:@"Clear place" handler:^{
+    [actionSheet setDestructiveButtonWithTitle:NSLocalizedString(@"Clear place", nil) handler:^{
         
         isnotinputplace = YES;
         [self storeSelectedPlace:nil];
@@ -702,7 +702,7 @@
         [_tableView reloadData];
     }];
     [actionSheet setCancelButtonWithTitle:@"Cancel" handler:^{
-        placeedit.PlaceTitle.text = @"Right there on map";
+        placeedit.PlaceTitle.text = NSLocalizedString(@"Right there on map", nil);
         [placeedit.PlaceTitle setSelectedTextRange:[placeedit.PlaceTitle textRangeFromPosition:placeedit.PlaceTitle.beginningOfDocument toPosition:placeedit.PlaceTitle.endOfDocument]];
 
 //        [placeedit.PlaceTitle selectAll:placeedit.PlaceTitle];
@@ -828,7 +828,7 @@
         case 0:{
             [[cell textLabel] setTextColor:FONT_COLOR_HL];
             cell.textLabel.text = [self.customPlace valueForKey:@"title"];
-            cell.detailTextLabel.text = @"No place found. Tap arrow to edit.";
+            cell.detailTextLabel.text = NSLocalizedString(@"No place found. Tap arrow to edit.", nil);
         }
             break;
         case 1:{

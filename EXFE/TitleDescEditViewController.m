@@ -90,7 +90,7 @@
     [toolbar addSubview:btncancel];
 
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [doneButton setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
     [doneButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     doneButton.frame = CGRectMake(255+5+5, 7, 50, 30);
     [doneButton addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
@@ -105,7 +105,7 @@
     descView.textAlignment = NSTextAlignmentLeft;
     descView.backgroundColor=[UIColor whiteColor];
     descView.contentInset = UIEdgeInsetsMake(8, 0, 0, 0);
-    descView.placeholder = @"Take some note";
+    descView.placeholder = NSLocalizedString(@"Take some note", nil);
     [self.view addSubview:descView];
 
     headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 122,  DECTOR_HEIGHT, 122, DECTOR_HEIGHT_EXTRA) ];
@@ -186,7 +186,7 @@
     CGRect rect = descView.frame;
     rect.size.height=self.view.frame.size.height-(dectorView.frame.origin.y+dectorView.frame.size.height)-keyboardheight-toolbar.frame.size.height;
     [descView setFrame:rect];
-    if([descView.text isEqualToString:@"Take some note"])
+    if([descView.text isEqualToString:NSLocalizedString(@"Take some note", nil)])
         descView.text=@"";
     
 //    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {

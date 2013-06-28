@@ -229,7 +229,7 @@
     
     if (time == nil || time.length == 0) {
         [[UIColor COLOR_ALUMINUM] set];
-        [@"Sometime" drawInRect:timeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+        [NSLocalizedString(@"Sometime", nil) drawInRect:timeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     }else{
         if (hlTime){
             [[UIColor COLOR_BLUE_SEA] set];
@@ -242,7 +242,7 @@
     
     if (place == nil || place.length == 0) {
         [[UIColor COLOR_ALUMINUM] set];
-        [@"Somewhere" drawInRect:placeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
+        [NSLocalizedString(@"Somewhere", nil) drawInRect:placeRect withFont:font17 lineBreakMode:UILineBreakModeTailTruncation alignment:UITextAlignmentLeft];
     }else{
         if (hlPlace){
             [[UIColor COLOR_BLUE_SEA] set];

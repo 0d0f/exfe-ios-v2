@@ -63,7 +63,7 @@ static char identitykey;
     
     [btnLocal setFrame:CGRectMake(0, 38, self.view.frame.size.width/2, 39)];
     [btnLocal addTarget:self action:@selector(reloadLocalAddressBook) forControlEvents:UIControlEventTouchUpInside];
-    [btnLocal setTitle:@"Phone contacts" forState:UIControlStateNormal];
+    [btnLocal setTitle:NSLocalizedString(@"Phone contacts", nil) forState:UIControlStateNormal];
     [btnLocal.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     [btnLocal setTitleColor:FONT_COLOR_51 forState:UIControlStateNormal];
 
@@ -75,7 +75,7 @@ static char identitykey;
     btnEXFE=[UIButton buttonWithType:UIButtonTypeCustom];
     [btnEXFE setFrame:CGRectMake(self.view.frame.size.width/2, 38, self.view.frame.size.width/2, 39)];
     [btnEXFE addTarget:self action:@selector(reloadExfeAddressBook) forControlEvents:UIControlEventTouchUpInside];
-    [btnEXFE setTitle:@"Exfees" forState:UIControlStateNormal];
+    [btnEXFE setTitle:NSLocalizedString(@"Exfees", nil) forState:UIControlStateNormal];
     [btnEXFE.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     [btnEXFE setTitleColor:FONT_COLOR_51 forState:UIControlStateNormal];
     [btnEXFE setBackgroundImage:nil forState:UIControlStateNormal];
@@ -127,7 +127,7 @@ static char identitykey;
     [backimg release];
     
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [doneButton setTitle:@"Add" forState:UIControlStateNormal];
+    [doneButton setTitle:NSLocalizedString(@"Add", nil) forState:UIControlStateNormal];
     [doneButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     doneButton.frame = CGRectMake(255+5+5, 7, 50, 30);
     [doneButton addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
@@ -677,7 +677,7 @@ static char identitykey;
             [self addBubbleByInputString:input name:@"" provider:provider];
         } else {
             if ((name == nil || name.length == 0) && [Util isAcceptedPhoneNumber:input]) {
-                [WCAlertView showAlertWithTitle:@"Set name for"
+                [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set name for", nil)
                                         message:input
                              customizationBlock:^(WCAlertView *alertView) {
                                  alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
@@ -694,7 +694,7 @@ static char identitykey;
                                         [self addBubbleByInputString:input name:inputName provider:provider];
                                     }
                                 }
-                              cancelButtonTitle:@"Set"
+                              cancelButtonTitle:NSLocalizedString(@"Set", nil)
                               otherButtonTitles:nil];
                 
             } else {

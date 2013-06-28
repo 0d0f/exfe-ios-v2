@@ -96,7 +96,7 @@
     [allattribstring release];
     
     CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 10.0, NULL);
-    NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:@"Accepted"];
+    NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Accepted", nil)];
     [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
     [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_25.CGColor range:NSMakeRange(0,[textstring length])];
     

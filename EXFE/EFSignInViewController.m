@@ -120,7 +120,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     {// Input Identity Field
         UITextField *textfield = [[EFIdentityTextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-        textfield.placeholder = @"Enter email or phone";
+        textfield.placeholder = NSLocalizedString(@"Enter email or phone", nil);
         textfield.borderStyle = UITextBorderStyleNone;
         textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
         textfield.keyboardType = UIKeyboardTypeEmailAddress;
@@ -185,7 +185,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         textfield.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
         textfield.delegate = self;
         [textfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-        textfield.placeholder = @"Set display name";
+        textfield.placeholder = NSLocalizedString(@"Set display name", nil);
         UIView *stub = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 55, 40)];
         textfield.leftView = stub;
         textfield.leftViewMode = UITextFieldViewModeAlways;
@@ -201,7 +201,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     {// Start button
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(0, 0, 290, 48);
-        [btn setTitle:@"Start" forState:UIControlStateNormal];
+        [btn setTitle:NSLocalizedString(@"Start", nil) forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [btn setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
@@ -217,7 +217,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     {// Start with new account
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(0, 0, 290, 48);
-        [btn setTitle:@"Start with new account" forState:UIControlStateNormal];
+        [btn setTitle:NSLocalizedString(@"Start with new account", nil) forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [btn setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
@@ -233,7 +233,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     {// Start over
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(0, 0, 290, 48);
-        [btn setTitle:@"Start over" forState:UIControlStateNormal];
+        [btn setTitle:NSLocalizedString(@"Start over", nil) forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [btn setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
@@ -248,7 +248,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     {// Verification Title
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 40)];
-        label.text = @"Verification";
+        label.text = NSLocalizedString(@"Verification", nil);
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0];
         label.backgroundColor = [UIColor clearColor];
         [label wrapContent];
@@ -258,7 +258,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     {// Verification Description
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 80)];
-        label.text = @"This number requires verification before proceeding. Verification request is sent, please check your message for instructions.";
+        label.text = NSLocalizedString(@"This number requires verification before proceeding. Verification request is sent, please check your message for instructions.", nil);
         label.numberOfLines = 0;
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
@@ -332,7 +332,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         button.frame = CGRectMake(0, 0, 70, 70);
         button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [button setTitle:@"Facebook" forState:UIControlStateNormal];
+        [button setTitle:NSLocalizedString(@"Facebook", nil) forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
         UIImage *image = [UIImage imageNamed:@"identity_facebook_50btn.png"];
         [button setImage:image forState:UIControlStateNormal];
@@ -361,7 +361,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         button.frame = CGRectMake(0, 0, 70, 70);
         button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [button setTitle:@"Twitter" forState:UIControlStateNormal];
+        [button setTitle:NSLocalizedString(@"Twitter", nil) forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
         UIImage *image = [UIImage imageNamed:@"identity_twitter_50btn.png"];
         [button setImage:image forState:UIControlStateNormal];
@@ -503,7 +503,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _line2.hidden = YES;
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 100);
             _inputIdentity.returnKeyType = UIReturnKeyNext;
-            _inputPassword.placeholder = @"Enter password";
+            _inputPassword.placeholder = NSLocalizedString(@"Enter password", nil);
             _inputPassword.returnKeyType = UIReturnKeyDone;
             _inputPassword.btnForgot.hidden = NO;
             [_inputPassword becomeFirstResponder];
@@ -559,7 +559,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             _line2.hidden = NO;
             _textFieldFrame.frame = CGRectMake(15, 20, 290, 150);
             _inputIdentity.returnKeyType = UIReturnKeyNext;
-            _inputPassword.placeholder = @"Set EXFE password";
+            _inputPassword.placeholder = NSLocalizedString(@"Set EXFE password", nil);
             _inputPassword.returnKeyType = UIReturnKeyNext;
             _inputPassword.btnForgot.hidden = YES;
             [_inputPassword becomeFirstResponder];
@@ -592,11 +592,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             Provider p = [Util matchedProvider:[_inputIdentity.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
             switch (p) {
                 case kProviderPhone:
-                    _labelVerifyDescription.text = @"This number requires verification before proceeding. Verification request is sent, please check your message for instructions.";
+                    _labelVerifyDescription.text = NSLocalizedString(@"This number requires verification before proceeding. Verification request is sent, please check your message for instructions.", nil);
                     break;
                     
                 default:
-                    _labelVerifyDescription.text = @"This email requires verification before proceeding. Verification request is sent, please check your email for instructions.";
+                    _labelVerifyDescription.text = NSLocalizedString(@"This email requires verification before proceeding. Verification request is sent, please check your email for instructions.", nil);
                     break;
             }
             
@@ -941,7 +941,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     Provider provider = [Util candidateProvider:identity];
     
     if (provider == kProviderUnknown) {
-        [self showErrorInfo:@"Invalid identity." dockOn:_inputIdentity];
+        [self showErrorInfo:NSLocalizedString(@"Invalid identity.", nil) dockOn:_inputIdentity];
         return;
     }
     
@@ -1052,7 +1052,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         return;
     }
     if (_inputPassword.text.length == 0) {
-        [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
+        [self showErrorInfo:NSLocalizedString(@"Invalid password.", nil) dockOn:_inputPassword];
         return;
     }
     sender.enabled = NO;
@@ -1084,7 +1084,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                             NSString *registration_flag = [responseObject valueForKeyPath:@"meta.errorDetail.registration_flag"];
                             if ([@"SIGN_UP" isEqualToString:registration_flag]) {
                             } else if ([@"SIGN_IN" isEqualToString:registration_flag]){
-                                [self showErrorInfo:@"Authentication failed." dockOn:_inputPassword];
+                                [self showErrorInfo:NSLocalizedString(@"Authentication failed.", nil) dockOn:_inputPassword];
                                 break;
                             } else if ([@"AUTHENTICATE" isEqualToString:registration_flag]){
                                 
@@ -1134,14 +1134,14 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         return;
     }
     if (_inputPassword.text.length == 0) {
-        [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
+        [self showErrorInfo:NSLocalizedString(@"Invalid password.", nil) dockOn:_inputPassword];
         sender.enabled = YES;
         return;
     }
     
     if (_inputUsername.text.length == 0) {
         // show "Invalid name."
-        [self showErrorInfo:@"Invalid name." dockOn:_inputUsername];
+        [self showErrorInfo:NSLocalizedString(@"Invalid name.", nil) dockOn:_inputUsername];
         sender.enabled = YES;
         return;
     }
@@ -1171,9 +1171,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                     case 400:{
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
                         if ([@"weak_password" isEqualToString:errorType]) {
-                            [self showErrorInfo:@"Invalid password." dockOn:_inputPassword];
+                            [self showErrorInfo:NSLocalizedString(@"Invalid password.", nil) dockOn:_inputPassword];
                         } else if ([@"invalid_username" isEqualToString:errorType]) {
-                            [self showErrorInfo:@"Invalid name." dockOn:_inputPassword];
+                            [self showErrorInfo:NSLocalizedString(@"Invalid name.", nil) dockOn:_inputPassword];
                         }
                     }  break;
                     case 403:
@@ -1290,7 +1290,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                                               break;
                                                           case 400:{
                                                               if ([@"invalid_token" isEqualToString:[responseObject valueForKeyPath:@"meta.errorType"]] ) {
-                                                                  [self showInlineError:@"Invalid token." with:@"There is something wrong. Please try again later."];
+                                                                  [self showInlineError:NSLocalizedString(@"Invalid token.", nil) with:NSLocalizedString(@"There is something wrong. Please try again later.", nil)];
                                                                   
                                                                   [self syncFBAccount];
                                                                   
@@ -1329,7 +1329,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                               
                                           case FBSessionStateClosedLoginFailed:
 //                                              [self showInlineError:@"Login Failed." with:@"There is something wrong. Please try again later."];
-                                              [self showInlineError:@"Authorization failed." with:@"Please check your network connection and account setting in Settings app."];
+                                              [self showInlineError:NSLocalizedString(@"Authorization failed.", nil) with:NSLocalizedString(@"Please check your network connection and account setting in Settings app.", nil)];
                                               [self syncFBAccount];
                                               break;
                                           default:
@@ -1355,13 +1355,13 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 if ([TWAPIManager isLocalTwitterAccountAvailable] && _accounts.count > 0) {
                     if ([TWAPIManager isLocalTwitterAccountAvailable]) {
                         if (_accounts.count > 1) {
-                            UIActionSheet *sheet = [UIActionSheet actionSheetWithTitle:@"Choose an Account"];
+                            UIActionSheet *sheet = [UIActionSheet actionSheetWithTitle:NSLocalizedString(@"Choose an Account", nil)];
                             for (ACAccount *acct in _accounts) {
                                 [sheet addButtonWithTitle:acct.username handler:^{
                                     [self performReverseAuthForAccount:acct];
                                 }];
                             }
-                            sheet.cancelButtonIndex = [sheet setCancelButtonWithTitle:@"Cancel" handler:^{
+                            sheet.cancelButtonIndex = [sheet setCancelButtonWithTitle:NSLocalizedString(@"Cancel", nil) handler:^{
                                 // cancel
                             }];
                             [sheet showInView:self.view];
@@ -1405,7 +1405,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 }
             } else {
                 
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Set up Twitter account" message:@"Please allow EXFE to use your Twitter account. Go to the Settings app, select Twitter to set up." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:NSLocalizedString(@"Please allow EXFE to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                 [alert show];
                 
             }
@@ -1459,34 +1459,34 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         NSString *msg = nil;
                         switch (provider) {
                             case kProviderPhone:
-                                msg = @"Password reset request is sent, please check your message for instructions.";
+                                msg = NSLocalizedString(@"Password reset request is sent, please check your message for instructions.", nil);
                                 break;
                                 
                             default:
-                                msg = @"Password reset request is sent, please check your email for instructions.";
+                                msg = NSLocalizedString(@"Password reset request is sent, please check your email for instructions.", nil);
                                 break;
                         }
-                        [UIAlertView showAlertViewWithTitle:@"Forget Password?" message:msg cancelButtonTitle:@"OK" otherButtonTitles:nil handler:nil];
+                        [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Forget Password?", nil) message:msg cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil handler:nil];
                     } break;
                     case 400:{
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
                         if ([@"identity_does_not_exist" isEqualToString:errorType]
                                   || [@"identity_is_being_verified" isEqualToString:errorType]){
-                            [self showInlineError:@"Invalid account." with:@"Please check your input above."];
+                            [self showInlineError:NSLocalizedString(@"Invalid account.", nil) with:NSLocalizedString(@"Please check your input above.", nil)];
                         }
                     }  break;
                     case 429:{
                         NSString *msg = nil;
                         switch (provider) {
                             case kProviderPhone:
-                                msg = @"Request should be responded usually in seconds, please wait for awhile.";
+                                msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile.", nil);
                                 break;
                                 
                             default:
-                                msg = @"Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.";
+                                msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.", nil);
                                 break;
                         }
-                        [self showInlineError:@"Request too frequently." with:msg];
+                        [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:msg];
                     }  break;
                     case 500:{
                         // 500 - failed
@@ -1713,7 +1713,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 //                        [self showInlineError:@"Failed to connect twitter server." with:@"Please retry or wait awhile."];
                         break;
                     case NSURLErrorUserCancelledAuthentication:
-                        [self showInlineError:@"Authorization failed." with:@"Please check your network connection and account setting in Settings app."];
+                        [self showInlineError:NSLocalizedString(@"Authorization failed.", nil) with:NSLocalizedString(@"Please check your network connection and account setting in Settings app.", nil)];
                         break;
                     default:
                         break;

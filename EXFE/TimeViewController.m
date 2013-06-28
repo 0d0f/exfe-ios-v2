@@ -95,7 +95,7 @@
     
     
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [doneButton setTitle:@"Save" forState:UIControlStateNormal];
+    [doneButton setTitle:NSLocalizedString(@"Save", nil) forState:UIControlStateNormal];
     [doneButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     doneButton.frame = CGRectMake(265, 7, 50, 31);
     [doneButton addTarget:self action:@selector(Done:) forControlEvents:UIControlEventTouchUpInside];
@@ -108,7 +108,21 @@
     _tableView.dataSource=self;
     _tableView.delegate=self;
     [self.view addSubview:_tableView];
-    _times=[[NSArray alloc] initWithObjects:@"Clear Time",@"All-day",@"Breakfast",@"Morning", @"Brunch", @"Lunch", @"Noon", @"Afternoon", @"Tea-break", @"Dinner", @"Evening", @"Night", @"Midnight", @"Daybreak", nil];
+    _times=[[NSArray alloc] initWithObjects:NSLocalizedString(@"Clear Time", nil),
+            NSLocalizedString(@"All-day", nil),
+            NSLocalizedString(@"Breakfast",nil),
+            NSLocalizedString(@"Morning", nil),
+            NSLocalizedString(@"Brunch", nil),
+            NSLocalizedString(@"Lunch", nil),
+            NSLocalizedString(@"Noon", nil),
+            NSLocalizedString(@"Afternoon", nil),
+            NSLocalizedString(@"Tea-break", nil),
+            NSLocalizedString(@"Dinner", nil),
+            NSLocalizedString(@"Evening", nil),
+            NSLocalizedString(@"Night", nil),
+            NSLocalizedString(@"Midnight", nil),
+            NSLocalizedString(@"Daybreak", nil),
+            nil];
     NSLocale *locale = [NSLocale currentLocale];
     NSCalendar *cal = [NSCalendar currentCalendar];
     [cal setLocale:locale];

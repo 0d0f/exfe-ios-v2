@@ -82,32 +82,32 @@ typedef enum {
     if (self) {
         // Custom initialization
         
-        rsvpDict = @{ @"header": @"Set response to:",
-                      @"item0": @{ @"main": @"Accepted",
+        rsvpDict = @{ @"header": NSLocalizedString(@"Set response to:", nil),
+                      @"item0": @{ @"main": NSLocalizedString(@"Accepted", nil),
                                    @"style": @"Highlight"
                                    },
-                      @"item1": @{ @"main": @"Unavailable",
+                      @"item1": @{ @"main": NSLocalizedString(@"Unavailable", nil),
                                    @"style": @"Normal"
                                    },
-                      @"item2": @{ @"main": @"Interested",
+                      @"item2": @{ @"main": NSLocalizedString(@"Interested", nil),
                                    @"style": @"Normal"
 //                                   },
-//                      @"item3": @{ @"main": @"+ mates...",
+//                      @"item3": @{ @"main": NSLocalizedString(@"+ mates...", nil),
 //                                   @"style": @"Lowlight"
                                    }
                       };
         [rsvpDict retain];
-        myRsvpDict = @{ @"header": @"Set response to:",
-                        @"item0": @{ @"main": @"I'm in",
+        myRsvpDict = @{ @"header": NSLocalizedString(@"Set response to:", nil),
+                        @"item0": @{ @"main": NSLocalizedString(@"I'm in", nil),
                                      @"style": @"Highlight"
                                      },
-                        @"item1": @{ @"main": @"Unavailable",
+                        @"item1": @{ @"main": NSLocalizedString(@"Unavailable", nil),
                                      @"style": @"Normal"
                                      },
-                        @"item2": @{ @"main": @"Interested",
+                        @"item2": @{ @"main": NSLocalizedString(@"Interested", nil),
                                      @"style": @"Normal"
 //                                     },
-//                        @"item3": @{ @"main": @"+ mates...",
+//                        @"item3": @{ @"main": NSLocalizedString(@"+ mates...", nil),
 //                                     @"style": @"Lowlight"
                                      }
                         };
@@ -271,16 +271,16 @@ typedef enum {
 - (void)removeInvitation
 {
     
-    NSString *title = @"People will no longer have access to any information in this ·X·. Please confirm to remove.";
-    NSString *destTitle = @"Remove from this ·X·";
+    NSString *title = NSLocalizedString(@"People will no longer have access to any information in this ·X·. Please confirm to remove.", nil);
+    NSString *destTitle = NSLocalizedString(@"Remove from this ·X·", nil);
     if ([[User getDefaultUser] isMe:_selected_invitation.identity]) {
-        title = @"You will no longer have access to any information in this ·X· once left. Please confirm to leave.";
-        destTitle = @"Leave from this ·X·";
+        title = NSLocalizedString(@"You will no longer have access to any information in this ·X· once left. Please confirm to leave.", nil);
+        destTitle = NSLocalizedString(@"Leave from this ·X·", nil);
     }
     
     UIActionSheet *popupQuery = [[UIActionSheet alloc] initWithTitle:title
                                                             delegate:self
-                                                   cancelButtonTitle:@"Cancel"
+                                                   cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
                                               destructiveButtonTitle:destTitle
                                                    otherButtonTitles:nil];
 	popupQuery.actionSheetStyle = UIActionSheetStyleDefault;
@@ -368,16 +368,17 @@ typedef enum {
                         
                         CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
                         CTFontRef textfontref2 = CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 18.0, NULL);
-                        NSAttributedString *acceptStr = [[NSMutableAttributedString alloc] initWithString:@"Accepted"
+                        NSString *raw = @"Aƈƈḗƥŧḗḓ"; // NSLocalizedString(@"Accepted", nil);
+                        NSAttributedString *acceptStr = [[NSMutableAttributedString alloc] initWithString:raw
                                                                                                attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
                                                          (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
                         
                         if ([inv.mates intValue] > 0) {
-                            NSString *strWithMates = [NSString stringWithFormat:@"[Accepted] with %i mates", [inv.mates intValue]];
+                            NSString *strWithMates = [NSString stringWithFormat:@"%@ with %i mates", raw, [inv.mates intValue]];
                             NSMutableAttributedString *fullStr = [[NSMutableAttributedString alloc] initWithString:strWithMates
                                                                                                         attributes:@{(NSString*)kCTFontAttributeName:(id)textfontref2,
                                                                   (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
-                            [fullStr replaceCharactersInRange:[strWithMates rangeOfString:@"[Accepted]"] withAttributedString:acceptStr];
+                            [fullStr replaceCharactersInRange:[strWithMates rangeOfString:raw] withAttributedString:acceptStr];
                             invRsvpLabel.attributedText = fullStr;
                             [invRsvpLabel setNeedsDisplay];
                             [fullStr release];
@@ -443,7 +444,7 @@ typedef enum {
                 }
                 if ([inv.identity.unreachable boolValue]){
                     CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-                    NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Unreachable contact"
+                    NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Unreachable contact", nil)
                                                                                          attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
                                                    (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)].CGColor}];
                     invRsvpLabel.attributedText = pending;
@@ -461,9 +462,9 @@ typedef enum {
                 }
                 if ([inv.updated_by.connected_user_id intValue]!= [inv.identity.connected_user_id intValue]){
                     if (altString && altString.length > 0) {
-                        altString = [NSString stringWithFormat:@"Set by %@ %@", [inv.updated_by getDisplayName], altString];
+                        altString = [NSString stringWithFormat:NSLocalizedString(@"Set by %@ %@", nil), [inv.updated_by getDisplayName], altString];
                     }else{
-                        altString = [NSString stringWithFormat:@"Set by %@", [inv.updated_by getDisplayName]];
+                        altString = [NSString stringWithFormat:NSLocalizedString(@"Set by %@", nil), [inv.updated_by getDisplayName]];
                     }
                 }
                 invRsvpAltLabel.text = [altString sentenceCapitalizedString];
@@ -651,7 +652,7 @@ typedef enum {
                 [tableHeader.contentView addSubview:invHostFlag];
                 
                 invHostText = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
-                invHostText.text = @"HOST";
+                invHostText.text = NSLocalizedString(@"HOST", nil);
                 invHostText.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
                 invHostText.textColor = [UIColor COLOR_BLUE_EXFE];
                 [invHostText sizeToFit];
@@ -721,7 +722,7 @@ typedef enum {
                 
                 bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(36, 16, 40, 33)];
                 bioTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
-                bioTitle.text = @"Bio";
+                bioTitle.text = NSLocalizedString(@"Bio", nil);
                 [bioTitle sizeToFit];
                 bioTitle.textColor = [UIColor COLOR_BLACK];
                 bioTitle.backgroundColor = [UIColor clearColor];
@@ -831,7 +832,7 @@ typedef enum {
         {
             if (row == self.sortedInvitations.count) {
                 ExfeeAddCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Add Cell" forIndexPath:indexPath];
-                cell.description.text = [NSString stringWithFormat:@"%u / %u", [self.exfee.accepted integerValue], self.sortedInvitations.count];
+                cell.description.text = [NSString stringWithFormat:NSLocalizedString(@"%u / %u", nil), [self.exfee.accepted integerValue], self.sortedInvitations.count];
                 return cell;
             } else {
                 ExfeeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Exfee Cell" forIndexPath:indexPath];

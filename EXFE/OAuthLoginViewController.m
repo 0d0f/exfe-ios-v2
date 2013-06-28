@@ -69,7 +69,7 @@
     [Flurry logEvent:@"OAUTH_SIGN_IN"];
     toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 47)];
     [toolbar setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navbar.png"]]];
-	self.title = @"Sign In";
+	self.title = NSLocalizedString(@"Sign In", nil);
     UIImage *btn_dark = [UIImage imageNamed:@"btn_dark.png"];
     UIImageView *backimg=[[UIImageView alloc] initWithFrame:CGRectMake(5, 7, 50, 30)];
     backimg.image=btn_dark;
@@ -80,7 +80,7 @@
 
     cancelbutton=[UIButton buttonWithType:UIButtonTypeCustom];
     [cancelbutton setFrame:CGRectMake(5, 7, 50, 30)];
-    [cancelbutton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cancelbutton setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
     [cancelbutton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
     [cancelbutton setTitleColor:FONT_COLOR_FA forState:UIControlStateNormal];
     
@@ -90,10 +90,10 @@
     titlelabel=[[UILabel alloc] initWithFrame:CGRectMake(65, 10, 230, 24)];
     switch (_provider) {
         case kProviderTwitter:
-            titlelabel.text = @"Twitter Authorization";
+            titlelabel.text = NSLocalizedString(@"Twitter Authorization", nil);
             break;
         case kProviderFacebook:
-            titlelabel.text = @"Facebook Authorization";
+            titlelabel.text = NSLocalizedString(@"Facebook Authorization", nil);
             break;
         default:
             break;

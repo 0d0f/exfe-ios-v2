@@ -80,7 +80,7 @@
         
         if([self Itemscontain:itemlist string:@"Unavailable"]){
             UIButton *btnUnavailable=[UIButton buttonWithType:UIButtonTypeCustom];
-            [btnUnavailable setTitle:@"Unavailable" forState:UIControlStateNormal];
+            [btnUnavailable setTitle:NSLocalizedString(@"Unavailable", nil) forState:UIControlStateNormal];
             [btnUnavailable.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
             [btnUnavailable setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [btnUnavailable setFrame:CGRectMake(0, y, 125, 44)];
@@ -101,7 +101,7 @@
 
         if([self Itemscontain:itemlist string:@"Interested"]){
             UIButton *btnPending=[UIButton buttonWithType:UIButtonTypeCustom];
-            [btnPending setTitle:@"Interested" forState:UIControlStateNormal];
+            [btnPending setTitle:NSLocalizedString(@"Interested", nil) forState:UIControlStateNormal];
             [btnPending.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
             [btnPending setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [btnPending setFrame:CGRectMake(0, y, 125, 44)];
@@ -122,7 +122,7 @@
         }
         if([self Itemscontain:itemlist string:@"Delete"]){
             UIButton *btnDelete=[UIButton buttonWithType:UIButtonTypeCustom];
-            [btnDelete setTitle:@"Delete" forState:UIControlStateNormal];
+            [btnDelete setTitle:NSLocalizedString(@"Delete", nil) forState:UIControlStateNormal];
             [btnDelete.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
             [btnDelete setTitleColor:[UIColor colorWithRed:229/255.0 green:46/255.0 blue:83/255.0 alpha:1] forState:UIControlStateNormal];
             [btnDelete setFrame:CGRectMake(0, y, 125, 44)];

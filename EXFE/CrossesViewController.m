@@ -203,7 +203,7 @@
     label_profile.backgroundColor = [UIColor clearColor];
     label_profile.textColor = [UIColor COLOR_WA(0x6B, 0xFF)];
     label_profile.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
-    label_profile.text = @"Manage identities to \nreveal who your are.";
+    label_profile.text = NSLocalizedString(@"Manage identities to \nreveal who your are.", nil);
     label_profile.numberOfLines = 2;
     [label_profile sizeToFit];
     //label_profile.hidden = YES;
@@ -214,7 +214,7 @@
     label_gather.textColor = [UIColor COLOR_WA(0x6B, 0xFF)];
     label_gather.textAlignment = NSTextAlignmentRight;
     label_gather.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
-    label_gather.text = @"Hang out with\n friends.";
+    label_gather.text = NSLocalizedString(@"Hang out with\n friends.", nil);
     label_gather.numberOfLines = 2;
     [label_gather sizeToFit];
     //label_gather.hidden = YES;
@@ -222,7 +222,7 @@
     [self.view addSubview:label_gather];
     
     welcome_exfe = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(32, 250, 260, 35)];
-    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"Welcome to EXFE"];
+    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Welcome to EXFE", nil)];
     CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 30.0, NULL);
     [attrStr addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0, [attrStr length])];
     [attrStr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLACK].CGColor range:NSMakeRange(0,11)];
@@ -247,7 +247,7 @@
     welcome_more.textColor = [UIColor COLOR_WA(0x6B, 0xFF)];
     welcome_more.textAlignment = NSTextAlignmentRight;
     welcome_more.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
-    welcome_more.text = @"The group utility for gathering.";
+    welcome_more.text = NSLocalizedString(@"The group utility for gathering.", nil);
     [welcome_more sizeToFit];
     //welcome_more.hidden = YES;
     welcome_more.frame = CGRectOffset(welcome_more.frame, 160 - CGRectGetMidX(welcome_more.frame), 0);
@@ -673,7 +673,7 @@
             cell.place = @"";
         }else if (cross.place.title == nil || [cross.place.title isEqualToString:@""]){
             if ([cross.place hasGeo]) {
-                cell.place = @"Somewhere"; // We did have location without title
+                cell.place = NSLocalizedString(@"Somewhere", nil); // We did have location without title
             }else{
                 cell.place = @"";
             }

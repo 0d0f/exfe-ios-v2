@@ -162,7 +162,7 @@
     CGPoint location = [sender locationInView:sender.view];
 //    UIView *tappedView = [sender.view hitTest:location withEvent:nil];
     if (CGRectContainsPoint(username.frame, location)) {
-        [WCAlertView showAlertWithTitle:@"Set name"
+        [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set name", nil)
                                 message:nil
                      customizationBlock:^(WCAlertView *alertView) {
                          alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
@@ -198,8 +198,8 @@
                                 }
                             }
                         }
-                      cancelButtonTitle:@"Cancel"
-                      otherButtonTitles:@"Set", nil];
+                      cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                      otherButtonTitles:NSLocalizedString(@"Set", nil), nil];
         
     } else if (CGRectContainsPoint(useravatar.frame, location)){
         FullScreenViewController *viewcontroller = [[FullScreenViewController alloc] initWithNibName:@"FullScreenViewController" bundle:nil];
@@ -329,7 +329,7 @@
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"addidentitybutton"] autorelease];
         }
-        cell.textLabel.text = @"Add identity...";
+        cell.textLabel.text = NSLocalizedString(@"Add identity...", nil);
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
         return cell;
     }
@@ -424,7 +424,7 @@
             footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 10+62+44)];
             
             buttonsignout = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
-            [buttonsignout setTitle:@"Sign out" forState:UIControlStateNormal];
+            [buttonsignout setTitle:NSLocalizedString(@"Sign out", nil) forState:UIControlStateNormal];
             [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
             [buttonsignout setTitleColor:[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)] forState:UIControlStateNormal];
             //        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
@@ -434,7 +434,7 @@
             [footerView addSubview:buttonsignout];
             
             UIButton *buttonrome = [UIButton buttonWithType:UIButtonTypeCustom];
-            [buttonrome setTitle:@"“Rome wasn't built in a day.”" forState:UIControlStateNormal];
+            [buttonrome setTitle:NSLocalizedString(@"“Rome wasn't built in a day.”", nil) forState:UIControlStateNormal];
             [buttonrome.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:16]];
             [buttonrome setTitleColor:[UIColor COLOR_RGB(127, 127, 127)] forState:UIControlStateNormal];
             [buttonrome setFrame:CGRectMake(40, 20, 240, 25)];
@@ -497,7 +497,7 @@
                 return;
             }
             
-            [WCAlertView showAlertWithTitle:@"Set name for"
+            [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set name for", nil)
                                     message:[identity getDisplayIdentity]
                          customizationBlock:^(WCAlertView *alertView) {
                              alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
@@ -633,14 +633,14 @@
     if(identity_id>0 && identity!=nil) {
         
         if([identity.provider isEqualToString:@"twitter"] || [identity.provider isEqualToString:@"facebook"]){
-            NSString *msg=@"Identity authorization has been revoked, please re-authorize.";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Identity Verification" message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Re-authorize",nil];
+            NSString *msg=NSLocalizedString(@"Identity authorization has been revoked, please re-authorize.", nil);
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Identity Verification", nil) message:msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Re-authorize", nil), nil];
             alert.tag=identity_id;
             [alert show];
             [alert release];
         }else{
-            NSString *msg=@"Unverified identity, please check your email for instructions.\nRe-send verification email?";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Identity Verification" message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send",nil];
+            NSString *msg=NSLocalizedString(@"Unverified identity, please check your email for instructions.\nRe-send verification email?", nil);
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Identity Verification", nil) message:msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Send", nil), nil];
             alert.tag=identity_id;
             [alert show];
             [alert release];

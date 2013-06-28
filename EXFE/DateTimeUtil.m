@@ -190,50 +190,50 @@ static NSDate* s_Now = nil;
         NSInteger m = -minutes;
         if (m == 0){
             if (type == 1) {
-                return @"now";
+                return NSLocalizedString(@"now", nil);
             }else{
-                return @"seconds ago";
+                return NSLocalizedString(@"seconds ago", nil);
             }
         }else if (m >= 1 && m < 30){
             if (type == 1) {
-                return @"now";
+                return NSLocalizedString(@"now", nil);
             }else{
-                return [NSString stringWithFormat:@"%i minutes ago", m];
+                return [NSString stringWithFormat:NSLocalizedString(@"%i minutes ago", nil), m];
             }
         }else if (m >= 30 && m < 60){
             if (type == 1) {
-                return @"just now";
+                return NSLocalizedString(@"just now", nil);
             }else{
-                return [NSString stringWithFormat:@"%i minutes ago", m];
+                return [NSString stringWithFormat:NSLocalizedString(@"%i minutes ago", nil), m];
             }
         }else if (m >= 60 && m < 82){
-            return @"an hour ago";
+            return NSLocalizedString(@"an hour ago", nil);
         }else if (m >= 82 && m <  108){
-            return @"1.5 hours ago";
+            return NSLocalizedString(@"1.5 hours ago", nil);
         }else if (m >= 108 && m < 720){
             int h = (m + 12) / 60;
-            return [NSString stringWithFormat:@"%i hours ago", h];
+            return [NSString stringWithFormat:NSLocalizedString(@"%i hours ago", nil), h];
         }else if (m >= 720 && m < 43200){
             NSInteger dateSpan = [DateTimeUtil daysWithinEraFromDate:target toDate:base];
             if (m >= 720 && m < 1440){
                 if (dateSpan == 1){
-                    return @"yesterday";
+                    return NSLocalizedString(@"yesterday", nil);
                 }else{
                     int h = (m + 12) / 60;
-                    return [NSString stringWithFormat:@"%i hours ago", h];
+                    return [NSString stringWithFormat:NSLocalizedString(@"%i hours ago", nil), h];
                 }
             }else if (m >= 1440 && m < 2880){
                 if (dateSpan == 1){
-                    return @"yesterday";
+                    return NSLocalizedString(@"yesterday", nil);
                 }else{
-                    return @"two days ago";
+                    return NSLocalizedString(@"two days ago", nil);
                 }
             }else /*if (m >= 2880 && m < 43200)*/{
                 if (dateSpan == 2){
-                    return @"two days ago";
+                    return NSLocalizedString(@"two days ago", nil);
                 }else{
                     //NSInteger dd = (m + 1439) / 1440;
-                    return [NSString stringWithFormat:@"%i days ago", dateSpan];
+                    return [NSString stringWithFormat:NSLocalizedString(@"%i days ago", nil), dateSpan];
                 }
             }
         }else{
@@ -242,61 +242,61 @@ static NSDate* s_Now = nil;
             
             NSString *years = nil;
             if (yy == 1) {// tricky for English only
-                years = [NSString stringWithFormat:@"%i year", yy];
+                years = [NSString stringWithFormat:NSLocalizedString(@"%i year", nil), yy];
             }else{
-                years = [NSString stringWithFormat:@"%i years", yy];
+                years = [NSString stringWithFormat:NSLocalizedString(@"%i years", nil), yy];
             }
             
             NSString *months = nil;
             if (mm == 1) {// tricky for English only
-                months = [NSString stringWithFormat:@"%i month", mm];
+                months = [NSString stringWithFormat:NSLocalizedString(@"%i month", nil), mm];
             }else{
-                months = [NSString stringWithFormat:@"%i months", mm];
+                months = [NSString stringWithFormat:NSLocalizedString(@"%i months", nil), mm];
             }
             
             if (yy == 0){
                 if (mm == 0) {
                     return @""; //ERROR
                 }else{
-                    return [NSString stringWithFormat:@"%@ ago", months];
+                    return [NSString stringWithFormat:NSLocalizedString(@"%@ ago", nil), months];
                 }
             }else{
                 if (mm == 0) {
-                    return [NSString stringWithFormat:@"%@ ago", years];
+                    return [NSString stringWithFormat:NSLocalizedString(@"%@ ago", nil), years];
                 }else{
-                    return [NSString stringWithFormat:@"%@ %@ ago", years, months];
+                    return [NSString stringWithFormat:NSLocalizedString(@"%@ %@ ago", nil), years, months];
                 }
             }
         }
     }else{
         NSInteger m = minutes;
         if (m >=1 && m < 60){
-            return [NSString stringWithFormat:@"in %i minutes", m];
+            return [NSString stringWithFormat:NSLocalizedString(@"in %i minutes", nil), m];
         }else if (m >= 60 && m < 82){
-            return @"in one hour";
+            return NSLocalizedString(@"in one hour", nil);
         }else if (m >= 82 && m < 108){
-            return @"in 1.5 hours";
+            return NSLocalizedString(@"in 1.5 hours", nil);
         }else if (m >= 108 && m < 720){
             int h = (m + 12) / 60;
-            return [NSString stringWithFormat:@"in %i hours", h];
+            return [NSString stringWithFormat:NSLocalizedString(@"in %i hours", nil), h];
         }else if (m >= 720 && m < 43200){
             NSInteger dateSpan = [DateTimeUtil daysWithinEraFromDate:base toDate:target];
             if (m >= 720 && m < 1440){
                 if (dateSpan == 1){
-                    return @"tomorrow";
+                    return NSLocalizedString(@"tomorrow", nil);
                 }else{
                     int h = (m + 12) / 60;
-                    return [NSString stringWithFormat:@"in %i hours", h];
+                    return [NSString stringWithFormat:NSLocalizedString(@"in %i hours", nil), h];
                 }
             }else if (m >= 1440 && m < 2880){
                 if (dateSpan == 1){
-                    return @"tomorrow";
+                    return NSLocalizedString(@"tomorrow", nil);
                 }else{
-                    return @"in two days";
+                    return NSLocalizedString(@"in two days", nil);
                 }
             }else /*if (m >= 2880 && m < 43200)*/{
                 if (dateSpan == 2){
-                    return @"in two days";
+                    return NSLocalizedString(@"in two days", nil);
                 }else{
                     //NSInteger dd = (m + 1439) / 1440;
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -306,7 +306,7 @@ static NSDate* s_Now = nil;
                     [usLocale release];
                     NSString *weekday = [dateFormatter stringFromDate:target];
                     [dateFormatter release];
-                    return [NSString stringWithFormat:@"%@. in %i days", weekday, dateSpan];
+                    return [NSString stringWithFormat:NSLocalizedString(@"%@. in %i days", nil), weekday, dateSpan];
                 }
             }
         }else{
@@ -315,29 +315,29 @@ static NSDate* s_Now = nil;
             
             NSString *years = nil;
             if (yy == 1) {// tricky for English only
-                years = [NSString stringWithFormat:@"%i year", yy];
+                years = [NSString stringWithFormat:NSLocalizedString(@"%i year", nil), yy];
             }else{
-                years = [NSString stringWithFormat:@"%i years", yy];
+                years = [NSString stringWithFormat:NSLocalizedString(@"%i years", nil), yy];
             }
             
             NSString *months = nil;
             if (mm == 1) {// tricky for English only
-                months = [NSString stringWithFormat:@"%i month", mm];
+                months = [NSString stringWithFormat:NSLocalizedString(@"%i month", nil), mm];
             }else{
-                months = [NSString stringWithFormat:@"%i months", mm];
+                months = [NSString stringWithFormat:NSLocalizedString(@"%i months", nil), mm];
             }
             
             if (yy == 0){
                 if (mm == 0) {
                     return @""; //ERROR
                 }else{
-                    return [NSString stringWithFormat:@"in %@", months];
+                    return [NSString stringWithFormat:NSLocalizedString(@"in %@", nil), months];
                 }
             }else{
                 if (mm == 0) {
-                    return [NSString stringWithFormat:@"in %@", years];
+                    return [NSString stringWithFormat:NSLocalizedString(@"in %@", nil), years];
                 }else{
-                    return [NSString stringWithFormat:@"in %@ %@", years, months];
+                    return [NSString stringWithFormat:NSLocalizedString(@"in %@ %@", nil), years, months];
                 }
             }
         }

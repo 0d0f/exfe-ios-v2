@@ -48,7 +48,7 @@
         [self.contentView addSubview:invHostFlag];
 
         invHostText = [[UILabel alloc] initWithFrame:CGRectMake(180, 25, 57, 12)];
-        invHostText.text = @"HOST";
+        invHostText.text = NSLocalizedString(@"HOST", nil);
         invHostText.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10];
         invHostText.textColor = [UIColor COLOR_BLUE_EXFE];
         [invHostText sizeToFit];
@@ -165,7 +165,7 @@
             
             CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
             CTFontRef textfontref2 = CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 18.0, NULL);
-            NSAttributedString *acceptStr = [[NSMutableAttributedString alloc] initWithString:@"Accepted"
+            NSAttributedString *acceptStr = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Accepted", nil)
                                                                                    attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
                                              (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
             
@@ -192,7 +192,7 @@
             invRsvpImage.image = [UIImage imageNamed:@"rsvp_unavailable_stroke_26g5"];
             
             CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-            NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Unavailable"
+            NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Unavailable", nil)
                                                                                  attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
                                            (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
             invRsvpLabel.attributedText = pending;
@@ -206,7 +206,7 @@
             invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
             
             CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-            NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Intersted"
+            NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Intersted", nil)
                                                                                  attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
                                            (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
             invRsvpLabel.attributedText = pending;
@@ -228,7 +228,7 @@
             invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
             
             CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-            NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Pending"
+            NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Pending", nil)
                                                                                  attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
                                            (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
             invRsvpLabel.attributedText = pending;
@@ -240,7 +240,7 @@
     }
     if (self.unreachable){
         CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Unreachable contact"
+        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Unreachable contact", nil)
                                                                              attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
                                        (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)].CGColor}];
         invRsvpLabel.attributedText = pending;

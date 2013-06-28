@@ -181,7 +181,7 @@
                                 [self addSubview:acceptlabel];
                             }
                             [acceptlabel setFrame:CGRectMake(x, y-12, 60, 17)];
-                            acceptlabel.text=@"Accepted";
+                            acceptlabel.text=NSLocalizedString(@"Accepted", nil);
                             acceptlabel.leftInset = 5;
                             acceptlabel.topInset = 0;
                             acceptlabel.bottomInset = 1;

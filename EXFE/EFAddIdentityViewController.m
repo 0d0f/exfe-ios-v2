@@ -96,7 +96,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     [self.toolbar.layer setShadowOffset:CGSizeMake(0, 0)];
     
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, CGRectGetWidth(self.toolbar.bounds) - 20, CGRectGetHeight(self.toolbar.bounds))];
-    title.text = @"Add identity";
+    title.text = NSLocalizedString(@"Add identity", nil);
     title.textAlignment = NSTextAlignmentCenter;
     title.textColor = [UIColor COLOR_CARBON];
     title.shadowColor = [UIColor COLOR_WHITE];
@@ -132,7 +132,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     {// Input Identity Field
         UITextField *textfield = [[EFIdentityTextField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-        textfield.placeholder = @"Enter email or phone";
+        textfield.placeholder = NSLocalizedString(@"Enter email or phone", nil);
         textfield.borderStyle = UITextBorderStyleNone;
         textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
         textfield.keyboardType = UIKeyboardTypeEmailAddress;
@@ -180,7 +180,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     {// Start button
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(0, 0, 290, 48);
-        [btn setTitle:@"Add and verify" forState:UIControlStateNormal];
+        [btn setTitle:NSLocalizedString(@"Add and verify", nil) forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [btn setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
@@ -277,7 +277,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         button.frame = CGRectMake(0, 0, 70, 70);
         button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [button setTitle:@"Facebook" forState:UIControlStateNormal];
+        [button setTitle:NSLocalizedString(@"Facebook", nil) forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
         UIImage *image = [UIImage imageNamed:@"identity_facebook_50btn.png"];
         [button setImage:image forState:UIControlStateNormal];
@@ -306,7 +306,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         button.frame = CGRectMake(0, 0, 70, 70);
         button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [button setTitle:@"Twitter" forState:UIControlStateNormal];
+        [button setTitle:NSLocalizedString(@"Twitter", nil) forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0];
         UIImage *image = [UIImage imageNamed:@"identity_twitter_50btn.png"];
         [button setImage:image forState:UIControlStateNormal];
@@ -638,7 +638,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     provider = [Util matchedProvider:identity];
     if (provider == kProviderUnknown) {
-        [self showErrorInfo:@"Invalid identity." dockOn:_inputIdentity];
+        [self showErrorInfo:NSLocalizedString(@"Invalid identity.", nil) dockOn:_inputIdentity];
         sender.enabled = YES;
         return;
     }
@@ -699,9 +699,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                 [oauth release];
                                 
                             }else{
-                                NSString * message = @"Verification is sent. Please check your email for instructions.";
+                                NSString * message = NSLocalizedString(@"Verification is sent. Please check your email for instructions.", nil);
                                 if (provider == kProviderPhone) {
-                                    message = @"Verification is sent. Please check your message for instructions.";
+                                    message = NSLocalizedString(@"Verification is sent. Please check your message for instructions.", nil);
                                 }
                                 
                                 UIAlertView *alertView = [UIAlertView alertViewWithTitle:@"Verification" message:message];
@@ -716,7 +716,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         // [code integerValue] == 403
                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
                         if ([@"failed" isEqualToString:errorType]) {
-                            [self showInlineError:@"Adding invitation failed." with:@"Please check spell and retry."];
+                            [self showInlineError:NSLocalizedString(@"Adding invitation failed.", nil) with:NSLocalizedString(@"Please check spell and retry.", nil)];
                         }
                     }
                         break;
@@ -826,7 +826,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                                               case 4:{
                                                                   // [code integerValue] == 403
                                                                   if ([@"invalid_token" isEqualToString:[responseObject valueForKeyPath:@"meta.errorType"]] ) {
-                                                                      [self showInlineError:@"Invalid token." with:@"There is something wrong. Please try again later."];
+                                                                      [self showInlineError:NSLocalizedString(@"Invalid token.", nil) with:NSLocalizedString(@"There is something wrong. Please try again later.", nil)];
                                                                       
                                                                       [self syncFBAccount];
                                                                       
@@ -866,7 +866,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                               break;
                                               
                                           case FBSessionStateClosedLoginFailed:
-                                              [self showInlineError:@"Authorization failed." with:@"Please check your network connection and account setting in Settings app."];
+                                              [self showInlineError:NSLocalizedString(@"Authorization failed.", nil) with:NSLocalizedString(@"Please check your network connection and account setting in Settings app.", nil)];
                                               
                                               [self syncFBAccount];
                                               break;
@@ -893,13 +893,13 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 if ([TWAPIManager isLocalTwitterAccountAvailable] && _accounts.count > 0) {
                     if ([TWAPIManager isLocalTwitterAccountAvailable]) {
                         if (_accounts.count > 1) {
-                            UIActionSheet *sheet = [UIActionSheet actionSheetWithTitle:@"Choose an Account"];
+                            UIActionSheet *sheet = [UIActionSheet actionSheetWithTitle:NSLocalizedString(@"Choose an Account", nil)];
                             for (ACAccount *acct in _accounts) {
                                 [sheet addButtonWithTitle:acct.username handler:^{
                                     [self performReverseAuthForAccount:acct];
                                 }];
                             }
-                            sheet.cancelButtonIndex = [sheet setCancelButtonWithTitle:@"Cancel" handler:^{
+                            sheet.cancelButtonIndex = [sheet setCancelButtonWithTitle:NSLocalizedString(@"Cancel", nil) handler:^{
                                 // cancel
                             }];
                             [sheet showInView:self.view];
@@ -943,7 +943,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 }
             } else {
                 
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Set up Twitter account" message:@"Please allow EXFE to use your Twitter account. Go to the Settings app, select Twitter to set up." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:NSLocalizedString(@"Please allow EXFE to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                 [alert show];
                 
             }
@@ -1097,7 +1097,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         //                        [self showInlineError:@"Failed to connect twitter server." with:@"Please retry or wait awhile."];
                         break;
                     case NSURLErrorUserCancelledAuthentication:
-                        [self showInlineError:@"Authorization failed." with:@"Please check your network connection and account setting in Settings app."];
+                        [self showInlineError:NSLocalizedString(@"Authorization failed.", nil) with:NSLocalizedString(@"Please check your network connection and account setting in Settings app.", nil)];
                     default:
                         break;
                 }
