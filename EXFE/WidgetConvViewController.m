@@ -40,9 +40,9 @@
 @synthesize inputToolbar;
 
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithModel:(EXFEModel *)exfeModel
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithModel:exfeModel];
     if (self) {
         // Custom initialization
         self.posts = [NSMutableArray array];

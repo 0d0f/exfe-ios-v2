@@ -34,7 +34,7 @@
 @end
 
 @interface CrossesViewController (Private)
-- (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross;
+- (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross withModel:(EXFEModel*)model;
 @end
 
 @implementation CrossesViewController
@@ -449,20 +449,19 @@
                                                            // show update hints
                                                        }
                                                        if ([source isEqualToString:@"gatherview"]) {
-                                                           AppDelegate *app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
                                                            [app.navigationController dismissModalViewControllerAnimated:YES];
                                                        }
                                                        else if([source isEqualToString:@"pushtocross"]) {
                                                            Cross *cross = [self crossWithId:cross_id];
                                                            
-                                                           EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
+                                                           EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
                                                            [self.navigationController pushViewController:tabBarViewController animated:NO];
                                                        }
                                                        else if([source isEqualToString:@"pushtoconversation"]) {
                                                            Cross *cross = [self crossWithId:cross_id];
                                                            
                                                            Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
-                                                           EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
+                                                           EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
                                                            tabBarViewController.viewWillAppearHandler = ^{
                                                                NSUInteger toJumpIndex = [tabBarViewController indexOfViewControllerForClass:toJumpClass];
                                                                NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
@@ -830,8 +829,8 @@
                 [self.tableView endUpdates];
             }
         }
-        
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
+        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
         [self.navigationController pushViewController:tabBarViewController animated:YES];
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -872,8 +871,8 @@
     Cross *cross = [self crossWithId:cross_id];
     if (cross != nil) {
         [self.navigationController popToRootViewControllerAnimated:NO];
-        
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
+        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
         [self.navigationController pushViewController:tabBarViewController animated:NO];
         
         return YES;
@@ -887,9 +886,9 @@
     
     if (cross != nil) {
         [self.navigationController popToRootViewControllerAnimated:NO];
-        
+        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
         Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
         tabBarViewController.viewWillAppearHandler = ^{
             NSUInteger toJumpIndex = [tabBarViewController indexOfViewControllerForClass:toJumpClass];
             NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
@@ -914,8 +913,9 @@
     
     Cross *cross = [self crossWithId:cross_id];
     if (cross != nil) {
+        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
         Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
-        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross];
+        EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
         tabBarViewController.viewWillAppearHandler = ^{
             NSUInteger toJumpIndex = [tabBarViewController indexOfViewControllerForClass:toJumpClass];
             NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
@@ -931,7 +931,8 @@
 
 - (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross {
     // CrossGroupViewController
-    CrossGroupViewController *crossGroupViewController = [[CrossGroupViewController alloc] initWithNibName:@"CrossGroupViewController" bundle:nil];
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    CrossGroupViewController *crossGroupViewController = [[CrossGroupViewController alloc] initWithModel:app.model];
     crossGroupViewController.cross = cross;
     
     EFTabBarItem *tabBarItem1 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_x_30.png"]];
@@ -942,7 +943,7 @@
     crossGroupViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
     
     // ConvViewController
-    WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithNibName:@"WidgetConvViewController" bundle:nil] ;
+    WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithModel:app.model] ;
     // prepare data for conversation
     conversationViewController.exfee_id = [cross.exfee.exfee_id intValue];
     Invitation* myInvitation = [cross.exfee getMyInvitation];
@@ -962,7 +963,7 @@
     conversationViewController.shadowImage = [UIImage imageNamed:@"tabshadow_conv.png"];
     
     // ExfeeViewController
-    WidgetExfeeViewController *exfeeViewController = [[WidgetExfeeViewController alloc] initWithNibName:@"WidgetExfeeViewController" bundle:nil];
+    WidgetExfeeViewController *exfeeViewController = [[WidgetExfeeViewController alloc] initWithModel:app.model];
     exfeeViewController.exfee = cross.exfee;
     exfeeViewController.onExitBlock = ^{
         [crossGroupViewController performSelector:@selector(fillExfee:)

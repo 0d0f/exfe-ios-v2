@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
+#import "EFViewController.h"
 #import "Identity+EXFE.h"
 #import <RestKit/RestKit.h>
 #import "UIInputToolbar.h"
@@ -26,7 +27,7 @@
 #define kKeyboardHeightPortrait 216
 #define kKeyboardHeightLandscape 140
 
-@interface WidgetConvViewController : UIViewController
+@interface WidgetConvViewController : EFViewController
 <
 UIInputToolbarDelegate,
 UIExpandingTextViewDelegate,

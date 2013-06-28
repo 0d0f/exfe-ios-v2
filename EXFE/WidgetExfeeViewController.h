@@ -5,6 +5,7 @@
 //  Created by Stony Wang on 13-3-11.
 //
 //
+#import "EFViewController.h"
 #import "EXAttributedLabel.h"
 #import "PSTCollectionView.h"
 #import "EXBasicMenu.h"
@@ -21,7 +22,7 @@ typedef enum {
     ScrollDirectionCrazy,
 } ScrollDirection;
 
-@interface WidgetExfeeViewController : UIViewController
+@interface WidgetExfeeViewController : EFViewController
 <
 UITableViewDataSource,
 UITableViewDelegate,

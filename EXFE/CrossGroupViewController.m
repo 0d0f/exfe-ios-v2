@@ -106,9 +106,9 @@
 @synthesize headerStyle = _headerStyle;
 @synthesize widgetId = _widgetId;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithModel:(EXFEModel*) exfeModel
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithModel:exfeModel];
     if (self) {
         // Custom initialization
         _headerStyle = kHeaderStyleFull;
@@ -335,9 +335,8 @@
     [super viewDidAppear:animated];
     
     NSString *updated_at = _cross.updated_at;
-    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [app.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:updated_at];
+    [self.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:updated_at];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -1407,8 +1406,7 @@
 - (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
     Identity *myidentity = [_cross.exfee getMyInvitation].identity;
     
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model.apiServer submitRsvp:status
+    [self.model.apiServer submitRsvp:status
                                           on:_invitation
                                   myIdentity:[myidentity.identity_id intValue]
                                      onExfee:[_cross.exfee.exfee_id intValue]
@@ -1422,8 +1420,7 @@
                                                      [alert show];
                                                      [alert release];
                                                  } else if ([[meta objectForKey:@"code"] intValue] == 200) {
-                                                     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-                                                     [app.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:@""];
+                                                     [self.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:@""];
                                                      
                                                      [self refreshUI];
                                                  }
@@ -1487,8 +1484,7 @@
     [bigspin release];
     
     _cross.by_identity=[_cross.exfee getMyInvitation].identity;
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model.apiServer editCross:_cross
+    [self.model.apiServer editCross:_cross
                                     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                         AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
                                         if (operation.HTTPRequestOperation.response.statusCode == 200) {

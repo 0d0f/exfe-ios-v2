@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import <RestKit/RestKit.h>
+#import "EFViewController.h"
 #import "EditCrossDelegate.h"
 #import "EXImagesCollectionView.h"
 #import "EXRSVPMenuView.h"
@@ -28,7 +29,7 @@
 #define kWidgetConversation    2
 #define kWidgetExfee           3
 
-@interface CrossGroupViewController : UIViewController
+@interface CrossGroupViewController : EFViewController
 <
 EXImagesCollectionDataSource,
 EXImagesCollectionDelegate,
