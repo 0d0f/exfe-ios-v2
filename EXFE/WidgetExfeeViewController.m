@@ -368,17 +368,18 @@ typedef enum {
                         
                         CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
                         CTFontRef textfontref2 = CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 18.0, NULL);
-                        NSString *raw = @"Aƈƈḗƥŧḗḓ"; // NSLocalizedString(@"Accepted", nil);
+                        NSString *raw = NSLocalizedString(@"Accepted", nil);
+                        NSString *placeholder = [NSString stringWithFormat:@"[%@]", raw];
                         NSAttributedString *acceptStr = [[NSMutableAttributedString alloc] initWithString:raw
                                                                                                attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
                                                          (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
                         
                         if ([inv.mates intValue] > 0) {
-                            NSString *strWithMates = [NSString stringWithFormat:@"%@ with %i mates", raw, [inv.mates intValue]];
+                            NSString *strWithMates = [NSString stringWithFormat:NSLocalizedString(@"%@ with %i mates", @"Accepted with n mates"), placeholder, [inv.mates intValue]];
                             NSMutableAttributedString *fullStr = [[NSMutableAttributedString alloc] initWithString:strWithMates
                                                                                                         attributes:@{(NSString*)kCTFontAttributeName:(id)textfontref2,
                                                                   (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
-                            [fullStr replaceCharactersInRange:[strWithMates rangeOfString:raw] withAttributedString:acceptStr];
+                            [fullStr replaceCharactersInRange:[strWithMates rangeOfString:placeholder] withAttributedString:acceptStr];
                             invRsvpLabel.attributedText = fullStr;
                             [invRsvpLabel setNeedsDisplay];
                             [fullStr release];
@@ -396,7 +397,7 @@ typedef enum {
                         invRsvpImage.image = [UIImage imageNamed:@"rsvp_unavailable_stroke_26g5"];
                         
                         CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-                        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Unavailable"
+                        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Unavailable", nil)
                                                                                              attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
                                                        (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
                         invRsvpLabel.attributedText = pending;
@@ -410,7 +411,7 @@ typedef enum {
                         invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
                         
                         CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-                        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Intersted"
+                        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Interested", nil)
                                                                                              attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
                                                        (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
                         invRsvpLabel.attributedText = pending;
@@ -432,7 +433,7 @@ typedef enum {
                         invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
                         
                         CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-                        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:@"Pending"
+                        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Pending", nil)
                                                                                              attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
                                                        (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
                         invRsvpLabel.attributedText = pending;
