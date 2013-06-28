@@ -9,6 +9,7 @@
 #import "PlaceViewController.h"
 #import <BlocksKit/BlocksKit.h>
 #import "EFAPI.h"
+#import "EFModel.h"
 
 @interface PlaceViewController ()
 
@@ -204,6 +205,16 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editingDidBegan:) name:UITextFieldTextDidBeginEditingNotification object:inputplace];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:placeedit.PlaceTitle];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:placeedit.PlaceDesc];
+    
+    // model
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameReverseGeocodingSuccess
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:kEFNotificationNameGetPlacesByTitleSuccess
+                                               object:nil];
 }
 
 - (void)regEvent
@@ -245,8 +256,7 @@
 
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidBeginEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [locationManager release];
     self.placeResults = nil;
@@ -259,6 +269,65 @@
 }
 
 
+
+#pragma mark - Notification Handler
+
+- (void)handleNotification:(NSNotification *)notification {
+    NSString *name = notification.name;
+    
+    if ([name isEqualToString:kEFNotificationNameReverseGeocodingSuccess]) {
+        NSDictionary *userInfo = notification.userInfo;
+        
+        NSString *status = [userInfo valueForKeyPath:@"status"];
+        if (status != nil &&[status isEqualToString:@"OK"]) {
+            NSArray *results = [userInfo valueForKeyPath:@"results"];
+            if ([results count] > 0) {
+                NSDictionary *p = [results objectAtIndex:0];
+                
+                if (placeedit.PlaceDesc.text.length == 0) {
+                    NSString *formatted_address = [p valueForKeyPath:@"formatted_address"];
+                    
+                    placeedit.PlaceDesc.text = formatted_address;
+                    [self.customPlace setValue:formatted_address forKey:@"description"];
+                    [placeedit setNeedsDisplay];
+                }
+            }
+        }
+    } else if ([name isEqualToString:kEFNotificationNameGetPlacesByTitleSuccess]) {
+        NSDictionary *userInfo = notification.userInfo;
+        
+        if ([userInfo isKindOfClass:[NSDictionary class]]) {
+            NSString *status = [userInfo objectForKey:@"status"];
+            NSString *keyword = [userInfo valueForKey:@"title"];
+            CLLocationCoordinate2D location = [[userInfo valueForKey:@"location"] MKCoordinateValue];
+            
+            if (status != nil && [status isEqualToString:@"OK"]) {
+                NSArray *results = [userInfo objectForKey:@"results"];
+                [self reloadPlaceData:results withKeyword:keyword];
+                
+                NSString *inputText = inputplace.text;
+                
+                if ([keyword isEqualToString:inputText]) {
+                    
+                    [self.customPlace removeAllObjects];
+                    [self.customPlace setValue:keyword forKey:@"title"];
+                    
+                    [self.placeResults removeAllObjects];
+                    [self saveResultsFromGooglePlaceAPI:results];
+                    [_tableView reloadData];
+                    [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+                    
+                    [self drawMapAnnontations:self.placeResults];
+                    
+                    [self showMapOverviewNear:location];
+                    
+                    [self setViewStyle:EXPlaceViewStyleShowPlaceDetail];
+                }
+                
+            }
+        }
+    }
+}
 
 #pragma mark handler
 - (void) Close{
@@ -276,10 +345,10 @@
         
 //        self.selecetedPlace.title = [self.customPlace valueForKeyPath:@"title"];
 //        self.selecetedPlace.place_description = [self.customPlace valueForKeyPath:@"description"];
-//        
+//
 //        NSString * latitude =  [self.customPlace valueForKey:@"lat"];
 //        NSString * longitude = [self.customPlace valueForKey:@"lng"] ;
-//        
+//
 //        if (latitude.length > 0 && longitude.length > 0) {
 //            self.selecetedPlace.lat = latitude;
 //            self.selecetedPlace.lng = longitude;
@@ -546,30 +615,7 @@
     [self showMapOverviewNear:kCLLocationCoordinate2DInvalid];
     
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model.apiServer reverseGeocodingWithLocation:annotation.coordinate
-                                                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                           if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
-                                                               NSDictionary *body = (NSDictionary*)responseObject;
-                                                                   NSString *status = [body valueForKeyPath:@"status"];
-                                                                   if (status != nil &&[status isEqualToString:@"OK"]) {
-                                                                       NSArray *results = [body valueForKeyPath:@"results"];
-                                                                       if ([results count] > 0) {
-                                                                           NSDictionary *p = [results objectAtIndex:0];
-                                                                           
-                                                                           if (placeedit.PlaceDesc.text.length == 0) {
-                                                                               NSString *formatted_address = [p valueForKeyPath:@"formatted_address"];
-                                                                               
-                                                                               placeedit.PlaceDesc.text = formatted_address;
-                                                                               [self.customPlace setValue:formatted_address forKey:@"description"];
-                                                                               [placeedit setNeedsDisplay];
-                                                                           }
-                                                                       }
-                                                                   }
-                                                           }
-                                                       }
-                                                       failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                           ;
-                                                       }];
+    [app.model reverseGeocodingWithLocation:annotation.coordinate];
 }
 
 - (void)showMapAt:(CLLocationCoordinate2D)location
@@ -1198,43 +1244,8 @@
 }
 
 - (void)searchPlaceByKeyword:(NSString*)keyword near:(CLLocationCoordinate2D)location{
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model.apiServer getPlacesByTitle:keyword
-                                          location:location
-                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                               if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
-                                                   NSDictionary *body = (NSDictionary*)responseObject;
-                                                   if ([body isKindOfClass:[NSDictionary class]]) {
-                                                       NSString *status = [body objectForKey:@"status"];
-                                                       if (status != nil && [status isEqualToString:@"OK"]) {
-                                                           NSArray *results = [body objectForKey:@"results"];
-                                                           [self reloadPlaceData:results withKeyword:keyword];
-                                                           
-                                                           NSString *inputText = inputplace.text;
-                                                           
-                                                           if ([keyword isEqualToString:inputText]) {
-                                                               
-                                                               [self.customPlace removeAllObjects];
-                                                               [self.customPlace setValue:keyword forKey:@"title"];
-                                                               
-                                                               [self.placeResults removeAllObjects];
-                                                               [self saveResultsFromGooglePlaceAPI:results];
-                                                               [_tableView reloadData];
-                                                               [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-                                                               
-                                                               [self drawMapAnnontations:self.placeResults];
-                                                               
-                                                               [self showMapOverviewNear:location];
-                                                               
-                                                               [self setViewStyle:EXPlaceViewStyleShowPlaceDetail];
-                                                           }
-                                                           
-                                                       }
-                                                   }
-                                               }
-                                           }
-                                           failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                           }];
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [app.model getPlacesByTitle:keyword location:location];
 }
 
 

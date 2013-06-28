@@ -25,4 +25,20 @@ extern NSString *kEFNotificationNameLoadConversationFailure;
 extern NSString *kEFNotificationNameLoadCrossSuccess;
 extern NSString *kEFNotificationNameLoadCrossFailure;
 
+// defined in EFReverseGeocodingOperation.m
+extern NSString *kEFNotificationNameReverseGeocodingSuccess;
+extern NSString *kEFNotificationNameReverseGeocodingFailure;
+
+// defined in EFGetPlacesNearbyOperation.m
+extern NSString *kEFNotificaiotnNameGetPlacesNearbySuccess;
+extern NSString *kEFNotificaiotnNameGetPlacesNearbyFailure;
+
+// defined in EFGetPlacesByTitleOperation.m
+extern NSString *kEFNotificationNameGetPlacesByTitleSuccess;
+extern NSString *kEFNotificationNameGetPlacesByTitleFailure;
+
+// defined in EFLoadSuggestOperation.m
+extern NSString *kEFNotificationNameLoadSuggestSuccess;
+extern NSString *kEFNotificationNameLoadSuggestFailure;
+
 #endif

@@ -1516,6 +1516,24 @@
 		769206221749E08100B3D64A /* portrait_circle_clear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7692061E1749E08100B3D64A /* portrait_circle_clear@2x.png */; };
 		769206231749E08100B3D64A /* portrait_circle_clear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7692061E1749E08100B3D64A /* portrait_circle_clear@2x.png */; };
 		769206241749E08100B3D64A /* portrait_circle_clear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7692061E1749E08100B3D64A /* portrait_circle_clear@2x.png */; };
+		769794D3177BEC820052A1DC /* EXFEModel+Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794D2177BEC820052A1DC /* EXFEModel+Place.m */; };
+		769794D4177BEC820052A1DC /* EXFEModel+Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794D2177BEC820052A1DC /* EXFEModel+Place.m */; };
+		769794D5177BEC820052A1DC /* EXFEModel+Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794D2177BEC820052A1DC /* EXFEModel+Place.m */; };
+		769794DF177BEC8C0052A1DC /* EXFEModel+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794DE177BEC8C0052A1DC /* EXFEModel+Profile.m */; };
+		769794E0177BEC8C0052A1DC /* EXFEModel+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794DE177BEC8C0052A1DC /* EXFEModel+Profile.m */; };
+		769794E1177BEC8C0052A1DC /* EXFEModel+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794DE177BEC8C0052A1DC /* EXFEModel+Profile.m */; };
+		769794E5177C01D50052A1DC /* EFReverseGeocodingOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794E4177C01D50052A1DC /* EFReverseGeocodingOperation.m */; };
+		769794E6177C01D50052A1DC /* EFReverseGeocodingOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794E4177C01D50052A1DC /* EFReverseGeocodingOperation.m */; };
+		769794E7177C01D50052A1DC /* EFReverseGeocodingOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794E4177C01D50052A1DC /* EFReverseGeocodingOperation.m */; };
+		769794EA177C01EF0052A1DC /* EFGetPlacesNearbyOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794E9177C01EF0052A1DC /* EFGetPlacesNearbyOperation.m */; };
+		769794EB177C01EF0052A1DC /* EFGetPlacesNearbyOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794E9177C01EF0052A1DC /* EFGetPlacesNearbyOperation.m */; };
+		769794EC177C01EF0052A1DC /* EFGetPlacesNearbyOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794E9177C01EF0052A1DC /* EFGetPlacesNearbyOperation.m */; };
+		769794EF177C02280052A1DC /* EFGetPlacesByTitleOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794EE177C02280052A1DC /* EFGetPlacesByTitleOperation.m */; };
+		769794F0177C02280052A1DC /* EFGetPlacesByTitleOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794EE177C02280052A1DC /* EFGetPlacesByTitleOperation.m */; };
+		769794F1177C02280052A1DC /* EFGetPlacesByTitleOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794EE177C02280052A1DC /* EFGetPlacesByTitleOperation.m */; };
+		769794FA177C26AD0052A1DC /* EFLoadSuggestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794F9177C26AD0052A1DC /* EFLoadSuggestOperation.m */; };
+		769794FB177C26AD0052A1DC /* EFLoadSuggestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794F9177C26AD0052A1DC /* EFLoadSuggestOperation.m */; };
+		769794FC177C26AD0052A1DC /* EFLoadSuggestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794F9177C26AD0052A1DC /* EFLoadSuggestOperation.m */; };
 		76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76BC7B0A176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
@@ -2428,6 +2446,18 @@
 		769206121749DB0700B3D64A /* EFHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFHeadView.m; sourceTree = "<group>"; };
 		7692061D1749E08100B3D64A /* portrait_circle_clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_circle_clear.png; sourceTree = "<group>"; };
 		7692061E1749E08100B3D64A /* portrait_circle_clear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_circle_clear@2x.png"; sourceTree = "<group>"; };
+		769794D1177BEC820052A1DC /* EXFEModel+Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EXFEModel+Place.h"; sourceTree = "<group>"; };
+		769794D2177BEC820052A1DC /* EXFEModel+Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EXFEModel+Place.m"; sourceTree = "<group>"; };
+		769794DD177BEC8C0052A1DC /* EXFEModel+Profile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EXFEModel+Profile.h"; sourceTree = "<group>"; };
+		769794DE177BEC8C0052A1DC /* EXFEModel+Profile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EXFEModel+Profile.m"; sourceTree = "<group>"; };
+		769794E3177C01D50052A1DC /* EFReverseGeocodingOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFReverseGeocodingOperation.h; sourceTree = "<group>"; };
+		769794E4177C01D50052A1DC /* EFReverseGeocodingOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFReverseGeocodingOperation.m; sourceTree = "<group>"; };
+		769794E8177C01EF0052A1DC /* EFGetPlacesNearbyOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFGetPlacesNearbyOperation.h; sourceTree = "<group>"; };
+		769794E9177C01EF0052A1DC /* EFGetPlacesNearbyOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFGetPlacesNearbyOperation.m; sourceTree = "<group>"; };
+		769794ED177C02280052A1DC /* EFGetPlacesByTitleOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFGetPlacesByTitleOperation.h; sourceTree = "<group>"; };
+		769794EE177C02280052A1DC /* EFGetPlacesByTitleOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFGetPlacesByTitleOperation.m; sourceTree = "<group>"; };
+		769794F8177C26AD0052A1DC /* EFLoadSuggestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLoadSuggestOperation.h; sourceTree = "<group>"; };
+		769794F9177C26AD0052A1DC /* EFLoadSuggestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLoadSuggestOperation.m; sourceTree = "<group>"; };
 		76A150BC1717D23400751C92 /* EXAddressBookService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAddressBookService.h; sourceTree = "<group>"; };
 		76A150BD1717D23500751C92 /* EXAddressBookService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAddressBookService.m; sourceTree = "<group>"; };
 		76BC7B08176EAC3D003F4FBA /* EFQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFQueueManager.h; sourceTree = "<group>"; };
@@ -2983,6 +3013,8 @@
 			children = (
 				76E96BB3177AB35B00C06ECD /* EFAPIOperations.h */,
 				76E96BB1177AB2E100C06ECD /* EFNotificationDefines.h */,
+				769794F2177C267F0052A1DC /* Profile API Operation */,
+				769794E2177C01AA0052A1DC /* Place API Operation */,
 				76E96BC9177AF9EB00C06ECD /* Crosses API Operation */,
 				76E96BB9177AEBAE00C06ECD /* Conversation API Operation */,
 				76E96BB2177AB2EE00C06ECD /* User API Operation */,
@@ -3447,6 +3479,28 @@
 			name = EFKit;
 			sourceTree = "<group>";
 		};
+		769794E2177C01AA0052A1DC /* Place API Operation */ = {
+			isa = PBXGroup;
+			children = (
+				769794E3177C01D50052A1DC /* EFReverseGeocodingOperation.h */,
+				769794E4177C01D50052A1DC /* EFReverseGeocodingOperation.m */,
+				769794E8177C01EF0052A1DC /* EFGetPlacesNearbyOperation.h */,
+				769794E9177C01EF0052A1DC /* EFGetPlacesNearbyOperation.m */,
+				769794ED177C02280052A1DC /* EFGetPlacesByTitleOperation.h */,
+				769794EE177C02280052A1DC /* EFGetPlacesByTitleOperation.m */,
+			);
+			name = "Place API Operation";
+			sourceTree = "<group>";
+		};
+		769794F2177C267F0052A1DC /* Profile API Operation */ = {
+			isa = PBXGroup;
+			children = (
+				769794F8177C26AD0052A1DC /* EFLoadSuggestOperation.h */,
+				769794F9177C26AD0052A1DC /* EFLoadSuggestOperation.m */,
+			);
+			name = "Profile API Operation";
+			sourceTree = "<group>";
+		};
 		76A150B41717D1CB00751C92 /* Service */ = {
 			isa = PBXGroup;
 			children = (
@@ -3541,6 +3595,10 @@
 				76E96BC0177AEEE400C06ECD /* EXFEModel+ConversationAPI.m */,
 				76E96BC4177AF9B000C06ECD /* EXFEModel+Crosses.h */,
 				76E96BC5177AF9B100C06ECD /* EXFEModel+Crosses.m */,
+				769794D1177BEC820052A1DC /* EXFEModel+Place.h */,
+				769794D2177BEC820052A1DC /* EXFEModel+Place.m */,
+				769794DD177BEC8C0052A1DC /* EXFEModel+Profile.h */,
+				769794DE177BEC8C0052A1DC /* EXFEModel+Profile.m */,
 			);
 			name = "Category API";
 			sourceTree = "<group>";
@@ -6081,6 +6139,12 @@
 				76E96BC2177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */,
 				76E96BC7177AF9B100C06ECD /* EXFEModel+Crosses.m in Sources */,
 				76E96BCD177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */,
+				769794D4177BEC820052A1DC /* EXFEModel+Place.m in Sources */,
+				769794E0177BEC8C0052A1DC /* EXFEModel+Profile.m in Sources */,
+				769794E6177C01D50052A1DC /* EFReverseGeocodingOperation.m in Sources */,
+				769794EB177C01EF0052A1DC /* EFGetPlacesNearbyOperation.m in Sources */,
+				769794F0177C02280052A1DC /* EFGetPlacesByTitleOperation.m in Sources */,
+				769794FB177C26AD0052A1DC /* EFLoadSuggestOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6278,6 +6342,12 @@
 				76E96BC3177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */,
 				76E96BC8177AF9B100C06ECD /* EXFEModel+Crosses.m in Sources */,
 				76E96BCE177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */,
+				769794D5177BEC820052A1DC /* EXFEModel+Place.m in Sources */,
+				769794E1177BEC8C0052A1DC /* EXFEModel+Profile.m in Sources */,
+				769794E7177C01D50052A1DC /* EFReverseGeocodingOperation.m in Sources */,
+				769794EC177C01EF0052A1DC /* EFGetPlacesNearbyOperation.m in Sources */,
+				769794F1177C02280052A1DC /* EFGetPlacesByTitleOperation.m in Sources */,
+				769794FC177C26AD0052A1DC /* EFLoadSuggestOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6475,6 +6545,12 @@
 				76E96BC1177AEEE400C06ECD /* EXFEModel+ConversationAPI.m in Sources */,
 				76E96BC6177AF9B100C06ECD /* EXFEModel+Crosses.m in Sources */,
 				76E96BCC177AFA0D00C06ECD /* EFLoadCrossOperation.m in Sources */,
+				769794D3177BEC820052A1DC /* EXFEModel+Place.m in Sources */,
+				769794DF177BEC8C0052A1DC /* EXFEModel+Profile.m in Sources */,
+				769794E5177C01D50052A1DC /* EFReverseGeocodingOperation.m in Sources */,
+				769794EA177C01EF0052A1DC /* EFGetPlacesNearbyOperation.m in Sources */,
+				769794EF177C02280052A1DC /* EFGetPlacesByTitleOperation.m in Sources */,
+				769794FA177C26AD0052A1DC /* EFLoadSuggestOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

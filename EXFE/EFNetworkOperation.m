@@ -49,7 +49,7 @@
         if (kEFNetworkOperationStateSuccess == self.state) {
             if (self.successNotificationName && self.successNotificationName.length) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:self.successNotificationName object:self.successUserInfo];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:self.successNotificationName object:nil userInfo:self.successUserInfo];
                 });
             }
         } else if (kEFNetworkOperationStateFailure == self.state) {
