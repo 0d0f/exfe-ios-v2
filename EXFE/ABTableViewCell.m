@@ -30,13 +30,14 @@
 #import "ABTableViewCell.h"
 
 @interface ABTableViewCellView : UIView
+@property (nonatomic, assign) ABTableViewCell   *tableViewCell;
 @end
 
 @implementation ABTableViewCellView
 
 - (void)drawRect:(CGRect)r
 {
-	[(ABTableViewCell *)[self superview] drawContentView:r];
+    [self.tableViewCell drawContentView:r];
 }
 
 @end
@@ -52,6 +53,7 @@
         contentView = [[ABTableViewCellView alloc] initWithFrame:CGRectZero];
         contentView.opaque = YES;
         contentView.backgroundColor = [UIColor whiteColor];
+        ((ABTableViewCellView *)contentView).tableViewCell = self;
         [self addSubview:contentView];
         [contentView release];
     }
