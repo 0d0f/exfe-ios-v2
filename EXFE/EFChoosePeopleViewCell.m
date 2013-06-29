@@ -61,6 +61,37 @@
     CGGradientRelease(gradient);
     CGColorSpaceRelease(colorSpace);
     
+    // avatar
+    UIImage *avatarImage = nil;
+    EFContactObject *contactObject = self.cell.contactObject;
+    
+    if (contactObject.imageKey) {
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:contactObject.imageKey]) {
+            avatarImage = [[EFDataManager imageManager] cachedImageInMemoryForKey:contactObject.imageKey];
+        } else {
+            avatarImage = [UIImage imageNamed:@"portrait_default.png"];
+            [[EFDataManager imageManager] cachedImageForKey:contactObject.imageKey
+                                            completeHandler:^(UIImage *image){
+                                                if (image && contactObject == self.cell.contactObject) {
+                                                    [self setNeedsDisplay];
+                                                }
+                                            }];
+        }
+    } else {
+        avatarImage = [UIImage imageNamed:@"portrait_default.png"];
+    }
+    
+    CGRect avatarRect = (CGRect){{10, 5}, {40, 40}};
+    CGFloat cornerRadius = 3.0f;
+    
+    CGContextSaveGState(context);
+    CGPathRef clipPath = [UIBezierPath bezierPathWithRoundedRect:avatarRect cornerRadius:cornerRadius].CGPath;
+    CGContextAddPath(context, clipPath);
+    CGContextClip(context);
+    [avatarImage drawInRect:avatarRect];
+    CGContextRestoreGState(context);
+    
+    // provider image
     if (self.cell.providerIconList != nil) {
         [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
         int i = 1;
@@ -123,6 +154,37 @@
     CGGradientRelease(gradient);
     CGColorSpaceRelease(colorSpace);
     
+    // avatar image
+    UIImage *avatarImage = nil;
+    EFContactObject *contactObject = self.cell.contactObject;
+    
+    if (contactObject.imageKey) {
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:contactObject.imageKey]) {
+            avatarImage = [[EFDataManager imageManager] cachedImageInMemoryForKey:contactObject.imageKey];
+        } else {
+            avatarImage = [UIImage imageNamed:@"portrait_default.png"];
+            [[EFDataManager imageManager] cachedImageForKey:contactObject.imageKey
+                                            completeHandler:^(UIImage *image){
+                                                if (image && contactObject == self.cell.contactObject) {
+                                                    [self setNeedsDisplay];
+                                                }
+                                            }];
+        }
+    } else {
+        avatarImage = [UIImage imageNamed:@"portrait_default.png"];
+    }
+    
+    CGRect avatarRect = (CGRect){{10, 5}, {40, 40}};
+    CGFloat cornerRadius = 3.0f;
+    
+    CGContextSaveGState(context);
+    CGPathRef clipPath = [UIBezierPath bezierPathWithRoundedRect:avatarRect cornerRadius:cornerRadius].CGPath;
+    CGContextAddPath(context, clipPath);
+    CGContextClip(context);
+    [avatarImage drawInRect:avatarRect];
+    CGContextRestoreGState(context);
+    
+    // provider image
     if (self.cell.providerIconList != nil) {
         [self.cell.providerIcon drawInRect:CGRectMake(self.frame.size.width - 18 - 10, (CGRectGetHeight(self.frame) - 18) * 0.5f, 18, 18)];
         int i = 1;
@@ -142,6 +204,7 @@
 
 #pragma mark - SelectedBackgroundView
 @interface EFChoosePeopleSelectedBackgroundView : UIView
+@property (nonatomic, assign) EFChoosePeopleViewCell *cell;
 @end
 @implementation EFChoosePeopleSelectedBackgroundView
 
@@ -184,6 +247,37 @@
     CGGradientRelease(gradient);
     CGColorSpaceRelease(colorSpace);
     
+    // avatar image
+    UIImage *avatarImage = nil;
+    EFContactObject *contactObject = self.cell.contactObject;
+    
+    if (contactObject.imageKey) {
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:contactObject.imageKey]) {
+            avatarImage = [[EFDataManager imageManager] cachedImageInMemoryForKey:contactObject.imageKey];
+        } else {
+            avatarImage = [UIImage imageNamed:@"portrait_default.png"];
+            [[EFDataManager imageManager] cachedImageForKey:contactObject.imageKey
+                                            completeHandler:^(UIImage *image){
+                                                if (image && contactObject == self.cell.contactObject) {
+                                                    [self setNeedsDisplay];
+                                                }
+                                            }];
+        }
+    } else {
+        avatarImage = [UIImage imageNamed:@"portrait_default.png"];
+    }
+    
+    CGRect avatarRect = (CGRect){{10, 5}, {40, 40}};
+    CGFloat cornerRadius = 3.0f;
+    
+    CGContextSaveGState(context);
+    CGPathRef clipPath = [UIBezierPath bezierPathWithRoundedRect:avatarRect cornerRadius:cornerRadius].CGPath;
+    CGContextAddPath(context, clipPath);
+    CGContextClip(context);
+    [avatarImage drawInRect:avatarRect];
+    CGContextRestoreGState(context);
+    
+    // accept image
     [[UIImage imageNamed:@"rsvp_accepted_18w.png"] drawInRect:(CGRect){{CGRectGetWidth(self.frame) - 18 -10, (CGRectGetHeight(self.frame) - 18) * 0.5f}, {18, 18}}];
 }
 @end
@@ -244,6 +338,7 @@
         [backgroundView release];
         
         EFChoosePeopleSelectedBackgroundView *selectedBackgroundView = [[EFChoosePeopleSelectedBackgroundView alloc] initWithFrame:bounds];
+        selectedBackgroundView.cell = self;
         self.multipleSelectionBackgroundView = selectedBackgroundView;
         [selectedBackgroundView release];
     }
@@ -313,23 +408,23 @@
         
         self.userNameLabel.text = contactObject.name;
         self.userNameLabel.frame = (CGRect){{56, 12}, {190, 26}};
-        if (contactObject.imageKey) {
-            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:contactObject.imageKey]) {
-                self.avatarImageView.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:contactObject.imageKey];
-            } else {
-                self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
-                [[EFDataManager imageManager] cachedImageForKey:contactObject.imageKey
-                                                completeHandler:^(UIImage *image){
-                                                    if (image && contactObject == self.contactObject) {
-                                                        self.avatarImageView.image = image;
-                                                    } else {
-                                                        self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
-                                                    }
-                                                }];
-            }
-        } else {
-            self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
-        }
+//        if (contactObject.imageKey) {
+//            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:contactObject.imageKey]) {
+//                self.avatarImageView.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:contactObject.imageKey];
+//            } else {
+//                self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
+//                [[EFDataManager imageManager] cachedImageForKey:contactObject.imageKey
+//                                                completeHandler:^(UIImage *image){
+//                                                    if (image && contactObject == self.contactObject) {
+//                                                        self.avatarImageView.image = image;
+//                                                    } else {
+//                                                        self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
+//                                                    }
+//                                                }];
+//            }
+//        } else {
+//            self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
+//        }
         
         if (1 == contactObject.roughIdentities.count) {
             NSString *iconName = [NSString stringWithFormat:@"identity_%@_18_grey.png", ((RoughIdentity *)contactObject.roughIdentities[0]).provider];

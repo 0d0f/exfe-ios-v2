@@ -80,6 +80,9 @@
     
     [self.queueManager addIOManagementOperation:ioManagementOperation
                                 completeHandler:^{
+                                    if (ioManagementOperation.data) {
+                                        [self cacheData:ioManagementOperation.data forKey:aKey shouldWriteToDisk:NO];
+                                    }
                                     if (handler) {
                                         handler(ioManagementOperation.data);
                                     }
