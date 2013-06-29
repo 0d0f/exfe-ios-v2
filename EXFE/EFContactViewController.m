@@ -21,8 +21,13 @@
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
 
+#define kHeaderViewHeight   (23.0f)
+
 @interface EFContactTableViewSectionHeaderView : UIView
-@property (nonatomic, retain) UILabel *titleLabel;
+@property (nonatomic, retain) UILabel       *titleLabel;
+@property (nonatomic, retain) UIImageView   *arrorwView;
+- (void)show;
+- (void)hidden;
 @end
 
 @implementation EFContactTableViewSectionHeaderView
@@ -37,21 +42,56 @@
         [self addSubview:backgroundImageView];
         [backgroundImageView release];
         
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{10, 0}, {300, 20}}];
+        self.arrorwView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"header_arrow.png"]] autorelease];
+        self.arrorwView.frame = (CGRect){{CGRectGetWidth(frame) - 20, 0}, {16, CGRectGetHeight(frame)}};
+        [self addSubview:self.arrorwView];
+        
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{10, floor((CGRectGetHeight(frame) - 20.0f) * 0.5f)}, {300, 20}}];
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.textColor = [UIColor whiteColor];
         titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12];
         [self addSubview:titleLabel];
         self.titleLabel = titleLabel;
         [titleLabel release];
+        
+        [self show];
     }
     
     return self;
 }
 
 - (void)dealloc {
+    [_arrorwView release];
     [_titleLabel release];
     [super dealloc];
+}
+
+- (void)show {
+    CATransform3D newTransform = CATransform3DMakeRotation(M_PI_2, 0.0f, 0.0f, 1.0f);
+    
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+    animation.duration = 0.233f;
+    animation.fromValue = [self.arrorwView.layer valueForKey:@"transfomr"];
+    animation.toValue = [NSValue valueWithCATransform3D:newTransform];
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    animation.fillMode = kCAFillModeForwards;
+    
+    [self.arrorwView.layer addAnimation:animation forKey:nil];
+    self.arrorwView.layer.transform = newTransform;
+}
+
+- (void)hidden {
+    CATransform3D newTransform = CATransform3DIdentity;
+    
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+    animation.duration = 0.233f;
+    animation.fromValue = [self.arrorwView.layer valueForKey:@"transfomr"];
+    animation.toValue = [NSValue valueWithCATransform3D:newTransform];
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    animation.fillMode = kCAFillModeForwards;
+    
+    [self.arrorwView.layer addAnimation:animation forKey:nil];
+    self.arrorwView.layer.transform = newTransform;
 }
 
 @end
@@ -346,20 +386,20 @@
         } else {
             NSNumber *sectionState = [self.tableViewSectionStateDict valueForKey:[NSString stringWithFormat:@"%d", section]];
             if (sectionState) {
-                return 19.0f;
+                return kHeaderViewHeight;
             }
             
-            return [self tableView:tableView numberOfRowsInSection:section] ? 19.0f : 0.0f;
+            return [self tableView:tableView numberOfRowsInSection:section] ? kHeaderViewHeight : 0.0f;
         }
     }
     
     if (0 != section && section + 1 < [self searchTableViewNumberOfSections]) {
         NSNumber *sectionState = [self.searchTableViewSectionStateDict valueForKey:[NSString stringWithFormat:@"%d", section]];
         if (sectionState) {
-            return 19.0f;
+            return kHeaderViewHeight;
         }
         
-        return [self tableView:tableView numberOfRowsInSection:section] ? 19.0f : 0.0f;
+        return [self tableView:tableView numberOfRowsInSection:section] ? kHeaderViewHeight : 0.0f;
     } else {
         return 0.0f;
     }
@@ -531,7 +571,8 @@
 - (void)handleHeaderViewTap:(UITapGestureRecognizer *)gesture {
     UITableView *tableView = self.tableView;
     NSMutableDictionary *sectionStateDict = self.tableViewSectionStateDict;
-    NSInteger section = gesture.view.tag;
+    EFContactTableViewSectionHeaderView *headerView = (EFContactTableViewSectionHeaderView *)gesture.view;
+    NSInteger section = headerView.tag;
     
     if (self.searchDisplayController.isActive) {
         tableView = self.searchDisplayController.searchResultsTableView;
@@ -579,8 +620,10 @@
     [tableView beginUpdates];
     if (isHidden) {
         [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+        [headerView hidden];
     } else {
         [tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+        [headerView show];
     }
     [tableView endUpdates];
     
@@ -607,7 +650,7 @@
         return nil;
     
     CGRect screanBounds = [UIScreen mainScreen].bounds;
-    EFContactTableViewSectionHeaderView *titleView = [[[EFContactTableViewSectionHeaderView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), 20}}] autorelease];
+    EFContactTableViewSectionHeaderView *titleView = [[[EFContactTableViewSectionHeaderView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), kHeaderViewHeight + 3}}] autorelease];
     titleView.titleLabel.text = title;
     
     return titleView;

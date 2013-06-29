@@ -1372,6 +1372,12 @@
 		76073D11174F8802007CBFC3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76073D10174F8802007CBFC3 /* MessageUI.framework */; };
 		76073D12174F880B007CBFC3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76073D10174F8802007CBFC3 /* MessageUI.framework */; };
 		76073D13174F8811007CBFC3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76073D10174F8802007CBFC3 /* MessageUI.framework */; };
+		761559BB177F1A2B00ABB62B /* header_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559B9177F1A2B00ABB62B /* header_arrow.png */; };
+		761559BC177F1A2B00ABB62B /* header_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559B9177F1A2B00ABB62B /* header_arrow.png */; };
+		761559BD177F1A2B00ABB62B /* header_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559B9177F1A2B00ABB62B /* header_arrow.png */; };
+		761559BE177F1A2B00ABB62B /* header_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559BA177F1A2B00ABB62B /* header_arrow@2x.png */; };
+		761559BF177F1A2B00ABB62B /* header_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559BA177F1A2B00ABB62B /* header_arrow@2x.png */; };
+		761559C0177F1A2B00ABB62B /* header_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559BA177F1A2B00ABB62B /* header_arrow@2x.png */; };
 		7615B33B172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
 		7615B33C172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
 		7615B33D172AB7D200C54031 /* EFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7615B33A172AB7D200C54031 /* EFLabel.m */; };
@@ -2366,6 +2372,8 @@
 		76073D08174F6EA5007CBFC3 /* EFRomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRomeViewController.m; sourceTree = "<group>"; };
 		76073D09174F6EA5007CBFC3 /* EFRomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFRomeViewController.xib; sourceTree = "<group>"; };
 		76073D10174F8802007CBFC3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		761559B9177F1A2B00ABB62B /* header_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header_arrow.png; sourceTree = "<group>"; };
+		761559BA177F1A2B00ABB62B /* header_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header_arrow@2x.png"; sourceTree = "<group>"; };
 		7615B339172AB7D200C54031 /* EFLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLabel.h; sourceTree = "<group>"; };
 		7615B33A172AB7D200C54031 /* EFLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLabel.m; sourceTree = "<group>"; };
 		76295DB2174B2112002F5CEF /* EFTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTabBar.h; sourceTree = "<group>"; };
@@ -3715,6 +3723,8 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				761559B9177F1A2B00ABB62B /* header_arrow.png */,
+				761559BA177F1A2B00ABB62B /* header_arrow@2x.png */,
 				76C29C1E1754E9D10084C27F /* tabshadow_conv.png */,
 				76C29C1F1754E9D10084C27F /* tabshadow_conv@2x.png */,
 				76073CF4174F3B87007CBFC3 /* 0d0f */,
@@ -5075,6 +5085,8 @@
 				765A82FD175F4F4C00448B64 /* EFContactViewController.xib in Resources */,
 				4FE77629177C1CA200B20A32 /* Localizable.strings in Resources */,
 				4FE7762F177C1E6200B20A32 /* Localizable.strings in Resources */,
+				761559BC177F1A2B00ABB62B /* header_arrow.png in Resources */,
+				761559BF177F1A2B00ABB62B /* header_arrow@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5486,6 +5498,8 @@
 				765A82FE175F4F4C00448B64 /* EFContactViewController.xib in Resources */,
 				4FE7762A177C1CA200B20A32 /* Localizable.strings in Resources */,
 				4FE77630177C1E6200B20A32 /* Localizable.strings in Resources */,
+				761559BD177F1A2B00ABB62B /* header_arrow.png in Resources */,
+				761559C0177F1A2B00ABB62B /* header_arrow@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5895,6 +5909,8 @@
 				765A82FC175F4F4C00448B64 /* EFContactViewController.xib in Resources */,
 				4FE77628177C1CA200B20A32 /* Localizable.strings in Resources */,
 				4FE7762E177C1E6200B20A32 /* Localizable.strings in Resources */,
+				761559BB177F1A2B00ABB62B /* header_arrow.png in Resources */,
+				761559BE177F1A2B00ABB62B /* header_arrow@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

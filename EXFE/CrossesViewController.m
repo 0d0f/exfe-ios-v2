@@ -929,10 +929,10 @@
 
 #pragma mark - Private
 
-- (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross {
+- (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross withModel:(EXFEModel *)model {
     // CrossGroupViewController
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    CrossGroupViewController *crossGroupViewController = [[CrossGroupViewController alloc] initWithModel:app.model];
+    CrossGroupViewController *crossGroupViewController = [[CrossGroupViewController alloc] initWithModel:model];
     crossGroupViewController.cross = cross;
     
     EFTabBarItem *tabBarItem1 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_x_30.png"]];
@@ -943,7 +943,7 @@
     crossGroupViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
     
     // ConvViewController
-    WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithModel:app.model] ;
+    WidgetConvViewController *conversationViewController =  [[WidgetConvViewController alloc] initWithModel:model] ;
     // prepare data for conversation
     conversationViewController.exfee_id = [cross.exfee.exfee_id intValue];
     Invitation* myInvitation = [cross.exfee getMyInvitation];
@@ -963,7 +963,7 @@
     conversationViewController.shadowImage = [UIImage imageNamed:@"tabshadow_conv.png"];
     
     // ExfeeViewController
-    WidgetExfeeViewController *exfeeViewController = [[WidgetExfeeViewController alloc] initWithModel:app.model];
+    WidgetExfeeViewController *exfeeViewController = [[WidgetExfeeViewController alloc] initWithModel:model];
     exfeeViewController.exfee = cross.exfee;
     exfeeViewController.onExitBlock = ^{
         [crossGroupViewController performSelector:@selector(fillExfee:)
