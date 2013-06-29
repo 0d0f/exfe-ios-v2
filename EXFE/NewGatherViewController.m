@@ -1055,7 +1055,8 @@
                 }
                 
                 for (int i = 1; i < object.roughIdentities.count; i++) {
-                    IdentityId *identityId = [object.roughIdentities[i] identityIdValue];
+                    RoughIdentity *roughIdentity = object.roughIdentities[i];
+                    IdentityId *identityId = [roughIdentity identityIdValue];
                     [invitation addNotification_identitiesObject:identityId];
                 }
                 

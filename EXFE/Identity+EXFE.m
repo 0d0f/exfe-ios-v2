@@ -145,7 +145,7 @@
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"IdentityId" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
     IdentityId *identityId = [[[IdentityId alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
-    identityId.identity_id = [NSString stringWithFormat:@"%@@%@", self.external_id, self.provider];
+    identityId.identity_id = [NSString stringWithFormat:@"%@@%@", self.external_username, self.provider];
     
     return identityId;
 }
