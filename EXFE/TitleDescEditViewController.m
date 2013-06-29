@@ -105,7 +105,7 @@
     descView.textAlignment = NSTextAlignmentLeft;
     descView.backgroundColor=[UIColor whiteColor];
     descView.contentInset = UIEdgeInsetsMake(8, 0, 0, 0);
-    descView.placeholder = NSLocalizedString(@"Take some note", nil);
+    descView.placeholder = NSLocalizedString(@"Take some notes", nil);
     [self.view addSubview:descView];
 
     headview = [[EXCurveView alloc] initWithFrame:CGRectMake(0, toolbar.frame.size.height, self.view.frame.size.width, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA) withCurveFrame:CGRectMake(CGRectGetWidth(b) - 122,  DECTOR_HEIGHT, 122, DECTOR_HEIGHT_EXTRA) ];
@@ -186,7 +186,7 @@
     CGRect rect = descView.frame;
     rect.size.height=self.view.frame.size.height-(dectorView.frame.origin.y+dectorView.frame.size.height)-keyboardheight-toolbar.frame.size.height;
     [descView setFrame:rect];
-    if([descView.text isEqualToString:NSLocalizedString(@"Take some note", nil)])
+    if([descView.text isEqualToString:NSLocalizedString(@"Take some notes", nil)])
         descView.text=@"";
     
 //    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {

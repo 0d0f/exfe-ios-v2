@@ -62,6 +62,9 @@
 
 @property (nonatomic, retain) NSIndexPath *identityIndexPath;
 
+@property (nonatomic, retain) NSMutableDictionary *tableViewSectionStateDict;
+@property (nonatomic, retain) NSMutableDictionary *searchTableViewSectionStateDict;
+
 @property (nonatomic, retain) UIView *topTapView;
 @property (nonatomic, retain) UIView *bottomTapView;
 
@@ -202,9 +205,14 @@
     
     self.tableView.scrollsToTop = YES;
     self.activityTableView = self.tableView;
+    
+    self.tableViewSectionStateDict = [NSMutableDictionary dictionaryWithCapacity:3];
+    self.searchTableViewSectionStateDict = [NSMutableDictionary dictionaryWithCapacity:3];
 }
 
 - (void)dealloc {
+    [_searchTableViewSectionStateDict release];
+    [_tableViewSectionStateDict release];
     [_topTapView release];
     [_bottomTapView release];
     [_contactDataSource release];
@@ -308,15 +316,27 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *headerView = nil;
     if (tableView == self.tableView) {
-        return [self tableViewHeaderInSection:section];
+        headerView = [self tableViewHeaderInSection:section];
     } else {
         if (section < [self searchTableViewNumberOfSections]) {
-            return [self searchTableViewHeaderInSection:section];
+            headerView = [self searchTableViewHeaderInSection:section];
         } else {
-            return nil;
+            headerView = nil;
         }
     }
+    
+    if (headerView) {
+        headerView.tag = section;
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                              action:@selector(handleHeaderViewTap:)];
+        [headerView addGestureRecognizer:tap];
+        [tap release];
+    }
+    
+    return headerView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -324,11 +344,21 @@
         if (0 == section) {
             return 0.0f;
         } else {
+            NSNumber *sectionState = [self.tableViewSectionStateDict valueForKey:[NSString stringWithFormat:@"%d", section]];
+            if (sectionState) {
+                return 19.0f;
+            }
+            
             return [self tableView:tableView numberOfRowsInSection:section] ? 19.0f : 0.0f;
         }
     }
     
     if (0 != section && section + 1 < [self searchTableViewNumberOfSections]) {
+        NSNumber *sectionState = [self.searchTableViewSectionStateDict valueForKey:[NSString stringWithFormat:@"%d", section]];
+        if (sectionState) {
+            return 19.0f;
+        }
+        
         return [self tableView:tableView numberOfRowsInSection:section] ? 19.0f : 0.0f;
     } else {
         return 0.0f;
@@ -441,6 +471,7 @@
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller willHideSearchResultsTableView:(UITableView *)tableView {
     self.identityIndexPath = nil;
+    [self.searchTableViewSectionStateDict removeAllObjects];
     [self.tableView reloadData];
 }
 
@@ -495,6 +526,65 @@
 
 - (void)handleTap:(UITapGestureRecognizer *)gesture {
     [self _deleteIdentityCellForTableView:self.activityTableView];
+}
+
+- (void)handleHeaderViewTap:(UITapGestureRecognizer *)gesture {
+    UITableView *tableView = self.tableView;
+    NSMutableDictionary *sectionStateDict = self.tableViewSectionStateDict;
+    NSInteger section = gesture.view.tag;
+    
+    if (self.searchDisplayController.isActive) {
+        tableView = self.searchDisplayController.searchResultsTableView;
+        sectionStateDict = self.searchTableViewSectionStateDict;
+    }
+    
+    NSNumber *sectionState = [sectionStateDict valueForKey:[NSString stringWithFormat:@"%d", section]];
+    BOOL isHidden = NO;
+    if (sectionState) {
+        isHidden = [sectionState boolValue];
+    }
+    
+    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+    
+    if (isHidden) {
+        isHidden = !isHidden;
+        [sectionStateDict setValue:[NSNumber numberWithBool:isHidden] forKey:[NSString stringWithFormat:@"%d", section]];
+        
+        NSUInteger count = 0;
+        if (tableView == self.tableView) {
+            count = [self tableViewNumberOfRowsInSection:section];
+        } else {
+            count = [self searchTableViewNumberOfRowsInSection:section];
+        }
+        
+        for (int i = 0; i < count; i++) {
+            [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:section]];
+        }
+    } else {
+        NSUInteger count = 0;
+        if (tableView == self.tableView) {
+            count = [self tableViewNumberOfRowsInSection:section];
+        } else {
+            count = [self searchTableViewNumberOfRowsInSection:section];
+        }
+        
+        for (int i = 0; i < count; i++) {
+            [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:section]];
+        }
+        
+        isHidden = !isHidden;
+        [sectionStateDict setValue:[NSNumber numberWithBool:isHidden] forKey:[NSString stringWithFormat:@"%d", section]];
+    }
+    
+    [tableView beginUpdates];
+    if (isHidden) {
+        [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+    } else {
+        [tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+    }
+    [tableView endUpdates];
+    
+    [indexPaths release];
 }
 
 #pragma mark -
@@ -554,6 +644,14 @@
     NSUInteger count = [self.contactDataSource numberOfRowsInSection:section];
     if (self.identityIndexPath && section == self.identityIndexPath.section) {
         count++;
+    }
+    
+    NSNumber *sectionState = [self.tableViewSectionStateDict valueForKey:[NSString stringWithFormat:@"%d", section]];
+    if (sectionState) {
+        BOOL isHidden = [sectionState boolValue];
+        if (isHidden) {
+            count = 0;
+        }
     }
     
     return count;
@@ -653,6 +751,14 @@
             }
         } else {
             count = 1;
+        }
+    }
+    
+    NSNumber *sectionState = [self.searchTableViewSectionStateDict valueForKey:[NSString stringWithFormat:@"%d", cachedSection]];
+    if (sectionState) {
+        BOOL isHidden = [sectionState boolValue];
+        if (isHidden) {
+            count = 0;
         }
     }
     
