@@ -1507,6 +1507,9 @@
 		7670127A1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
 		7670127B1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
 		7670127C1729086100B5445E /* EFSearchTipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767012761729086100B5445E /* EFSearchTipViewController.xib */; };
+		7686099E17817BC700534731 /* NSString+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 7686099D17817BC700534731 /* NSString+Format.m */; };
+		7686099F17817BC700534731 /* NSString+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 7686099D17817BC700534731 /* NSString+Format.m */; };
+		768609A017817BC700534731 /* NSString+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 7686099D17817BC700534731 /* NSString+Format.m */; };
 		769206131749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
 		769206141749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
 		769206151749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
@@ -2443,6 +2446,8 @@
 		767012741729086100B5445E /* EFSearchTipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchTipViewController.h; sourceTree = "<group>"; };
 		767012751729086100B5445E /* EFSearchTipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchTipViewController.m; sourceTree = "<group>"; };
 		767012761729086100B5445E /* EFSearchTipViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFSearchTipViewController.xib; sourceTree = "<group>"; };
+		7686099C17817BC700534731 /* NSString+Format.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Format.h"; sourceTree = "<group>"; };
+		7686099D17817BC700534731 /* NSString+Format.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Format.m"; sourceTree = "<group>"; };
 		769206111749DB0700B3D64A /* EFHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFHeadView.h; sourceTree = "<group>"; };
 		769206121749DB0700B3D64A /* EFHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFHeadView.m; sourceTree = "<group>"; };
 		7692061D1749E08100B3D64A /* portrait_circle_clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_circle_clear.png; sourceTree = "<group>"; };
@@ -3229,6 +3234,8 @@
 				4FED88F71712BCE500858D05 /* NSString+EXFE.m */,
 				765A82E7175F217400448B64 /* NSString+MD5.h */,
 				765A82E8175F217400448B64 /* NSString+MD5.m */,
+				7686099C17817BC700534731 /* NSString+Format.h */,
+				7686099D17817BC700534731 /* NSString+Format.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -6145,6 +6152,7 @@
 				769794F0177C02280052A1DC /* EFGetPlacesByTitleOperation.m in Sources */,
 				769794FB177C26AD0052A1DC /* EFLoadSuggestOperation.m in Sources */,
 				4FFCDFC5177D8BA100E1EAC3 /* EFViewController.m in Sources */,
+				7686099F17817BC700534731 /* NSString+Format.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6349,6 +6357,7 @@
 				769794F1177C02280052A1DC /* EFGetPlacesByTitleOperation.m in Sources */,
 				769794FC177C26AD0052A1DC /* EFLoadSuggestOperation.m in Sources */,
 				4FFCDFC6177D8BA100E1EAC3 /* EFViewController.m in Sources */,
+				768609A017817BC700534731 /* NSString+Format.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6553,6 +6562,7 @@
 				769794EF177C02280052A1DC /* EFGetPlacesByTitleOperation.m in Sources */,
 				769794FA177C26AD0052A1DC /* EFLoadSuggestOperation.m in Sources */,
 				4FFCDFC4177D8BA100E1EAC3 /* EFViewController.m in Sources */,
+				7686099E17817BC700534731 /* NSString+Format.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
