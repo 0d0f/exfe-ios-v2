@@ -10,6 +10,7 @@
 
 #import "EFContactObject.h"
 #import "EFModel.h"
+#import "NSString+Format.h"
 
 @interface EFSearchContactDataSouce ()
 @property (nonatomic, retain) NSMutableArray *sections;
@@ -160,6 +161,8 @@
     }
     
     [self.suggestContactObjects removeAllObjects];
+    
+    searchKeyWord = [searchKeyWord stringWithoutSpace];
     
     if (searchKeyWord && searchKeyWord.length) {
         _searchKeyWord = [searchKeyWord copy];

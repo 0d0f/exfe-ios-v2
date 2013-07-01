@@ -20,6 +20,7 @@
 #import "WCAlertView.h"
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
+#import "NSString+Format.h"
 
 #define kHeaderViewHeight   (23.0f)
 
@@ -330,7 +331,7 @@
         }
     };
     
-    if (self.contactSearchBar.text.length && self.searchDisplayController.isActive) {
+    if ([self.contactSearchBar.text stringWithoutSpace].length && self.searchDisplayController.isActive) {
         [self _selectSearchResultWithCompleteHandler:^{
             block();
         }];
@@ -460,6 +461,8 @@
 #pragma mark - UISearchBarDelegate
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    searchText = [searchText stringWithoutSpace];
+    
     Provider provider = [Util matchedProvider:searchText];
     if (provider != kProviderUnknown) {
         NSDictionary *matchedDictionary = [Util parseIdentityString:searchText byProvider:provider];
@@ -487,7 +490,7 @@
         self.searchResultRoughIdentity = nil;
     }
     
-    self.searchContactDataSource.searchKeyWord = searchText;
+    self.searchContactDataSource.searchKeyWord = [searchText stringWithoutSpace];
 }
 
 #pragma mark -
@@ -834,7 +837,7 @@
     if (!searchCell) {
         searchCell = [[[EFSearchIdentityCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[EFSearchIdentityCell reuseIdentifier]] autorelease];
     }
-    NSString *keyWord = self.contactSearchBar.text;
+    NSString *keyWord = [self.contactSearchBar.text stringWithoutSpace];
     Provider candidateProvider = [Util candidateProvider:keyWord];
     Provider matchedProvider = [Util matchedProvider:keyWord];
     
@@ -1030,7 +1033,7 @@
 }
 
 - (void)_selectSearchResultWithCompleteHandler:(void (^)(void))handler {
-    NSString *keyWord = self.contactSearchBar.text;
+    NSString *keyWord = [self.contactSearchBar.text stringWithoutSpace];
     Provider matchedProvider = [Util matchedProvider:keyWord];
     
     if (kProviderUnknown != matchedProvider) {
@@ -1039,11 +1042,11 @@
         
         if (kProviderPhone == matchedProvider) {
             NSString *message = nil;
-            if ([self.contactSearchBar.text hasPrefix:@"+"]) {
-                message = self.contactSearchBar.text;
+            if ([keyWord hasPrefix:@"+"]) {
+                message = keyWord;
             } else {
                 NSString *countryCode = [Util getTelephoneCountryCode];
-                message = [NSString stringWithFormat:@"+%@ %@", countryCode, self.contactSearchBar.text];
+                message = [NSString stringWithFormat:@"+%@ %@", countryCode, keyWord];
             }
             
             [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set invitee name", nil)
