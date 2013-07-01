@@ -133,9 +133,10 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
 {
     if (self.currentViewController != nil) {
         [self.view endEditing:YES];
-        [self performBlock:^(id sender) {
-            [self swapChildViewController:0 param:nil];
-        } afterDelay:0.233];
+//        [self performBlock:^(id sender) {
+//            [self swapChildViewController:0 param:nil];
+//        } afterDelay:0.233];
+        [self swapChildViewController:0 param:nil];
     }
 }
 

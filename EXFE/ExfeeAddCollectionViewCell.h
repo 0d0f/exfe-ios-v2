@@ -16,5 +16,6 @@
 
 @property (nonatomic, readonly) UILabel *description;
 @property (nonatomic, readonly) UIImageView *avatar;
+@property (nonatomic, readonly) UILabel *rsvp;
 
 @end

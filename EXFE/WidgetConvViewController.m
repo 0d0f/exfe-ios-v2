@@ -59,6 +59,8 @@
     
     CrossGroupViewController *crossGroupViewController = viewControllers[0];
     crossGroupViewController.cross.conversation_count = 0;
+    
+    [self refreshConversation];
 }
 
 - (void)viewDidLoad
@@ -132,8 +134,6 @@
     [inputaccessoryview setAlpha: 0.8];
     
     [self loadObjectsFromDataStore];
-    
-    [self refreshConversation];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusbarResize) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -270,8 +270,7 @@
         }
     }
     
-    AppDelegate *app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model loadConversationWithExfeeId:exfee_id updatedTime:updated_at];
+    [self.model loadConversationWithExfeeId:exfee_id updatedTime:updated_at];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
@@ -649,8 +648,7 @@
     [Flurry logEvent:@"SEND_CONVERSATION"];
     
     [inputToolbar setInputEnabled:NO];
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model.apiServer postConversation:content
+    [self.model.apiServer postConversation:content
                                                 by:myIdentity
                                                 on:exfee_id
                                            success:^(AFHTTPRequestOperation *operation, id responseObject) {

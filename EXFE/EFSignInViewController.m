@@ -95,10 +95,23 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     // create the linear layout view
     CSLinearLayoutView *linearLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:self.view.bounds] autorelease];
     linearLayoutView.orientation = CSLinearLayoutViewOrientationVertical;
-    linearLayoutView.alwaysBounceVertical = YES;
+//    linearLayoutView.alwaysBounceVertical = YES;
+    linearLayoutView.bounces = NO;
     linearLayoutView.delegate = self;
     self.rootView = linearLayoutView;
     [self.view addSubview:linearLayoutView];
+    
+    UISwipeGestureRecognizer * swipeRightRecognizer = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+            if ([sender.view isKindOfClass:[UIScrollView class]]){
+                UIScrollView * scrollView = (UIScrollView *)sender.view;
+                    NSLog(@"ageaf");
+                    if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
+                        [self.parentViewController performSelector:@selector(hideStart)];
+                    }
+            }
+    }];
+    swipeRightRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
+    [linearLayoutView addGestureRecognizer:swipeRightRecognizer];
     
     {// TextField Frame
         UIImage *img = [[UIImage imageNamed:@"textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 9, 15, 9)];
@@ -1555,10 +1568,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
     }
 }
-
-#pragma mark UIScrollViewDelegate
-
-
 
 #pragma mark OAuthlogin Delegate
 - (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
