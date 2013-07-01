@@ -87,7 +87,8 @@
 //                                    (floorf(REFRESH_HEADER_HEIGHT - 44) / 2),
 //                                    27, 44);
 
-    refreshSpinner =[[EXSpinView alloc] initWithPoint:CGPointMake(self.view.frame.size.width/2-10, floorf((REFRESH_HEADER_HEIGHT - 20) / 2)) size:18];
+    refreshSpinner =[[EXSpinView alloc] initWithPoint:CGPointMake(self.view.frame.size.width/2-10, floorf((REFRESH_HEADER_HEIGHT - 20) / 2)) size:18 style:kEXSpinViewStyleEXFE];
+
 //    [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 //    floorf(floorf(REFRESH_HEADER_HEIGHT - 20) / 2)
     
