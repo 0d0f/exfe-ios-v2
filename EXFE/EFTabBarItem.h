@@ -25,6 +25,8 @@ typedef enum {
 @property (nonatomic, retain) UIImage *image;
 @property (nonatomic, retain) UIImage *highlightImage;
 
+@property (nonatomic, assign) BOOL shouldPop;   // Default as NO. when set to YES, the tab button will pop to left.
+
 @property (nonatomic, assign) EFTabBarItemState tabBarItemState;    // default as kEFTabBarItemStateNormal
 @property (nonatomic, assign) EFTabBarItemLevel tabBarItemLevel;    // default as kEFTabBarItemLevelNormal
 

@@ -235,7 +235,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 - (void)_addGestureRecognizers;
 - (EFTabBarItemControl *)_preSelectedButton;
 - (EFTabBarItemControl *)_selectedButton;
-- (CGRect)_buttonFrameAtIndex:(NSUInteger)index;
+- (CGRect)_buttonFrameAtIndex:(NSInteger)index;
 - (void)_setSelectedIndex:(NSUInteger)index;
 - (void)_changeTitleFrameAimated:(BOOL)animated;
 - (void)_addMaskWindow;
@@ -326,7 +326,8 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         // button base view
         UIView *baseView = [[UIView alloc] initWithFrame:(CGRect){{0, CGRectGetHeight(frame) - kTabBarButtonSize.height}, {CGRectGetWidth(frame), kTabBarButtonSize.height}}];
         baseView.backgroundColor = [UIColor clearColor];
-        [self addSubview:baseView];
+        baseView.clipsToBounds = NO;
+        [self.backgroundView addSubview:baseView];
         self.buttonBaseView = baseView;
         [baseView release];
         
@@ -360,6 +361,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     self.originWindow = nil;
     self.window = nil;
     self.tabBarViewController = nil;
+    self.tabBarItems = nil;
     [_outerShadowLayer release];
     [_gestureView release];
     [_backgroundView release];
@@ -376,8 +378,15 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         [self _changeTitleFrameAimated:YES];
     } else if (object == self.tabBarViewController && [keyPath isEqualToString:@"selectedIndex"]) {
         UIViewController<EFTabBarDataSource> *viewController = (UIViewController<EFTabBarDataSource> *)self.tabBarViewController.viewControllers[self.tabBarViewController.selectedIndex];
-//        self.outerShadowLayer.shadowColor = viewController.shadowColor.CGColor;
         self.shadowImageView.image = viewController.shadowImage;
+    } else if ([object isKindOfClass:[EFTabBarItem class]] && [keyPath isEqualToString:@"shouldPop"]) {
+        NSUInteger index = [self.tabBarItems indexOfObject:object];
+        NSAssert(index != NSNotFound, @"index shouldn't be NSNotFound");
+        EFTabBarItemControl *button = (EFTabBarItemControl *)self.buttons[index];
+        
+        if (((EFTabBarItem *)object).shouldPop) {
+            [self _popButton:button];
+        }
     }
 }
 
@@ -388,12 +397,23 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         return;
     
     if (_tabBarItems) {
+        for (EFTabBarItem *item in _tabBarItems) {
+            [item removeObserver:self
+                      forKeyPath:@"shouldPop"];
+        }
         [_tabBarItems release];
         _tabBarItems = nil;
     }
     
     if (tabBarItems) {
         _tabBarItems = [tabBarItems retain];
+        for (EFTabBarItem *item in tabBarItems) {
+            [item addObserver:self
+                   forKeyPath:@"shouldPop"
+                      options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                      context:NULL];
+        }
+        
         [self _resetButtons];
         [self _layoutButtons];
     }
@@ -451,21 +471,26 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 - (void)buttonPressed:(EFTabBarItemControl *)sender {
     NSUInteger index = [self.buttons indexOfObject:sender];
     
-    if (self.isButtonsShowed) {
-        if (index != self.tabBarViewController.selectedIndex) {
-            self.shadowImageView.alpha = 0.0f;
-            [UIView animateWithDuration:0.233f
-                             animations:^{
-                                 self.shadowImageView.alpha = 1.0f;
-                             } completion:^(BOOL finished){
-                             }];
-            
-            [self.tabBarViewController setSelectedIndex:index
-                                               animated:YES];
-        }
-        [self _dismissButtonsAnimated:YES];
+    if (sender.tabBarItem.shouldPop) {
+        [self _setSelectedIndex:index];
     } else {
-        [self _showButtonsAnimated:YES];
+        if (self.isButtonsShowed) {
+            if (index != self.tabBarViewController.selectedIndex) {
+                self.shadowImageView.alpha = 0.0f;
+                [UIView animateWithDuration:0.233f
+                                 animations:^{
+                                     self.shadowImageView.alpha = 1.0f;
+                                 } completion:^(BOOL finished){
+                                 }];
+                
+                [self.tabBarViewController setSelectedIndex:index
+                                                   animated:YES];
+            }
+            
+            [self _dismissButtonsAnimated:YES];
+        } else {
+            [self _showButtonsAnimated:YES];
+        }
     }
 }
 
@@ -539,11 +564,9 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 #pragma mark - Private
 
 - (void)_popButton:(EFTabBarItemControl *)button {
-#warning TODO
-}
-
-- (void)_dismissButton:(EFTabBarItemControl *)button {
-#warning TODO    
+    if (!self.isButtonsShowed) {
+        [self _dismissButtonsAnimated:YES];
+    }
 }
 
 - (void)_resetButtons {
@@ -558,7 +581,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     // resize button base view
     NSUInteger count = [self.tabBarItems count];
     CGRect baseViewFrame = self.buttonBaseView.frame;
-    baseViewFrame.size.width = count * (kTabBarButtonSize.width + kButtonSpacing) - kButtonSpacing;
+    baseViewFrame.size.width = (count + 1) * (kTabBarButtonSize.width + kButtonSpacing) - kButtonSpacing;
     self.buttonBaseView.frame = baseViewFrame;
     
     // add buttons
@@ -588,20 +611,11 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         button.tabBarItemTitleDidChangeHandler = ^(EFTabBarItemControl *control){
             if (control.tabBarItem.title.length) {
                 [self _popButton:control];
-            } else {
-                [self _dismissButton:control];
             }
         };
         
-        if (!i) {
-            CGRect frame = [self.buttonBaseView convertRect:[self _buttonFrameAtIndex:i] toView:self];
-            frame.origin = (CGPoint){CGRectGetWidth(self.frame) - kTabBarButtonSize.width, CGRectGetHeight(self.frame) - kTabBarButtonSize.height};
-            button.frame = frame;
-            [self addSubview:button];
-        } else {
-            button.frame = [self _buttonFrameAtIndex:i];
-            [self.buttonBaseView addSubview:button];
-        }
+        button.frame = [self _buttonFrameAtIndex:i];
+        [self.buttonBaseView addSubview:button];
         
         
         [buttons addObject:button];
@@ -618,6 +632,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 
 - (void)_showButtonsAnimated:(BOOL)animated {
     self.isButtonsShowed = YES;
+    self.gestureView.userInteractionEnabled = NO;
     
     // disable the contol swipe
     for (EFTabBarItemControl *button in self.buttons) {
@@ -638,12 +653,12 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     CGRect shadowFrame = self.shadowImageView.frame;
     if (animated) {
         CGPoint offset = (CGPoint){CGRectGetMinX(destinationFrame) - CGRectGetMinX(self.buttonBaseView.frame), CGRectGetMinY(destinationFrame) - CGRectGetMinY(self.buttonBaseView.frame)};
-        shadowFrame.origin.x += (offset.x + kTabBarButtonSize.width);
+        shadowFrame.origin.x += offset.x;
         shadowFrame.origin.y += offset.y;
     }
     
     // mask animation
-    CGPoint startPoint = (CGPoint){CGRectGetWidth(self.frame) - CGRectGetWidth(destinationFrame) + kTabBarButtonSize.width, CGRectGetHeight(self.bounds)};
+    CGPoint startPoint = (CGPoint){CGRectGetWidth(self.frame) - CGRectGetWidth(destinationFrame) + 2 * kTabBarButtonSize.width, CGRectGetHeight(self.bounds)};
     CGPoint endPoint = (CGPoint){startPoint.x - 122.0f, floor(CGRectGetHeight(self.bounds) - 20.0f)};
     
     CGPathRef maskPath = CreateMaskPath(self.bounds, startPoint, endPoint);
@@ -687,20 +702,15 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
                          [UIView setAnimationsEnabled:YES];
                      }];
     
-    // selected button animation
-    EFTabBarItemControl *selectedButton = [self _selectedButton];
+    [UIView setAnimationsEnabled:animated];
     [UIView animateWithDuration:0.233f
-                          delay:0.0f
-                        options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         CGRect frame = [self _buttonFrameAtIndex:self.tabBarViewController.selectedIndex];
-                         frame = [self.buttonBaseView convertRect:frame toView:self];
-                         selectedButton.frame = frame;
+                         for (int i = 0; i < self.buttons.count; i++) {
+                             EFTabBarItemControl *button = self.buttons[i];
+                             button.frame = [self _buttonFrameAtIndex:i];
+                         }
                      }
                      completion:^(BOOL finished){
-                         [selectedButton removeFromSuperview];
-                         selectedButton.frame = [self _buttonFrameAtIndex:self.tabBarViewController.selectedIndex];
-                         [self.buttonBaseView addSubview:selectedButton];
                          [UIView setAnimationsEnabled:YES];
                      }];
     
@@ -709,6 +719,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 
 - (void)_dismissButtonsAnimated:(BOOL)animated {
     [self _removeMaskWindow];
+    self.gestureView.userInteractionEnabled = YES;
     
     ((UIViewController<EFTabBarDataSource> *)(self.tabBarViewController.viewControllers[self.preSelectedIndex])).customTabBarItem.tabBarItemState = self.preSelectedTabBarItemState;
     
@@ -719,12 +730,12 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     
     // Destination frame
     CGRect destinationFrame = self.buttonBaseView.frame;
-    destinationFrame.origin = (CGPoint){CGRectGetWidth(self.frame), CGRectGetHeight(self.frame) - kTabBarButtonSize.height};
+    destinationFrame.origin = (CGPoint){CGRectGetWidth(self.frame) - 2 * kTabBarButtonSize.width, CGRectGetHeight(self.frame) - kTabBarButtonSize.height};
     
     CGRect shadowFrame = self.shadowImageView.frame;
     if (animated) {
         CGPoint offset = (CGPoint){CGRectGetMinX(destinationFrame) - CGRectGetMinX(self.buttonBaseView.frame), CGRectGetMinY(destinationFrame) - CGRectGetMinY(self.buttonBaseView.frame)};
-        shadowFrame.origin.x += (offset.x - kTabBarButtonSize.width);
+        shadowFrame.origin.x += offset.x;
         shadowFrame.origin.y += offset.y;
     }
     
@@ -762,23 +773,27 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     CGPathRelease(maskPath);
     CGPathRelease(shadowPath);
     
-    if (animated) {
-        // selected button animation
-        EFTabBarItemControl *selectedButton = [self _selectedButton];
-        CGRect frame = selectedButton.frame;
-        frame = [self.buttonBaseView convertRect:frame toView:self];
-        [selectedButton removeFromSuperview];
-        selectedButton.frame = frame;
-        [self addSubview:selectedButton];
-        
+    if (NSNotFound != self.tabBarViewController.selectedIndex) {
         [UIView setAnimationsEnabled:animated];
         [UIView animateWithDuration:0.233f
-                              delay:0.0f
-                            options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
-                             CGRect frame = selectedButton.frame;
-                             frame.origin = (CGPoint){CGRectGetWidth(self.frame) - kTabBarButtonSize.width, CGRectGetHeight(self.frame) - kTabBarButtonSize.height};
-                             selectedButton.frame = frame;
+                             for (int i = 0; i < self.buttons.count; i++) {
+                                 EFTabBarItemControl *button = self.buttons[i];
+                                 
+                                 if (button.tabBarItem.shouldPop) {
+                                     CGRect frame = [self _buttonFrameAtIndex:-1];
+                                     frame.origin.x += 10;
+                                     button.frame = frame;
+                                 } else {
+                                     if (i < self.tabBarViewController.selectedIndex) {
+                                         button.frame = [self _buttonFrameAtIndex:i + 1];
+                                     } else if (i > self.tabBarViewController.selectedIndex) {
+                                         button.frame = [self _buttonFrameAtIndex:i];
+                                     } else {
+                                         button.frame = [self _buttonFrameAtIndex:0];
+                                     }
+                                 }
+                             }
                          }
                          completion:^(BOOL finished){
                              [UIView setAnimationsEnabled:YES];
@@ -827,119 +842,23 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     return self.buttons[self.tabBarViewController.selectedIndex];
 }
 
-- (CGRect)_buttonFrameAtIndex:(NSUInteger)index {
-    return (CGRect){{index * (kTabBarButtonSize.width + kButtonSpacing), 0}, kTabBarButtonSize};
+- (CGRect)_buttonFrameAtIndex:(NSInteger)index {
+    return (CGRect){{(index + 1) * (kTabBarButtonSize.width + kButtonSpacing), 0}, kTabBarButtonSize};
 }
 
 - (void)_setSelectedIndex:(NSUInteger)index {
-    if (self.isButtonsShowed) {
-        if (index != self.tabBarViewController.selectedIndex) {
-            self.shadowImageView.alpha = 0.0f;
-            [UIView animateWithDuration:0.233f
-                             animations:^{
-                                 self.shadowImageView.alpha = 1.0f;
-                             } completion:^(BOOL finished){
-                             }];
-        }
-        
-        [self.tabBarViewController setSelectedIndex:index
-                                           animated:YES];
-        [self _dismissButtonsAnimated:YES];
-    } else if (index != self.tabBarViewController.selectedIndex) {
-        EFTabBarItemControl *preButton = [self _selectedButton];
-        
-        if (index != self.tabBarViewController.selectedIndex) {
-            self.shadowImageView.alpha = 0.0f;
-            [UIView animateWithDuration:0.233f
-                             animations:^{
-                                 self.shadowImageView.alpha = 1.0f;
-                             } completion:^(BOOL finished){
-                             }];
-        }
-        
-        [self.tabBarViewController setSelectedIndex:index
-                                           animated:YES];
-        
-        // Destination frame
-        CGRect destinationFrame = self.buttonBaseView.frame;
-        destinationFrame.origin = (CGPoint){CGRectGetWidth(self.frame), CGRectGetHeight(self.frame) - kTabBarButtonSize.height};
-        
-        CGRect shadowFrame = self.shadowImageView.frame;
-        CGPoint offset = (CGPoint){CGRectGetMinX(destinationFrame) - CGRectGetMinX(self.buttonBaseView.frame), CGRectGetMinY(destinationFrame) - CGRectGetMinY(self.buttonBaseView.frame)};
-        shadowFrame.origin.x += offset.x;    // (offset.x - kTabBarButtonSize.width);
-        shadowFrame.origin.y += offset.y;
-        
-        // mask animation
-        CGPoint startPoint = (CGPoint){CGRectGetWidth(self.frame), CGRectGetHeight(self.bounds)};
-        CGPoint endPoint = (CGPoint){startPoint.x - 122.0f, floor(CGRectGetHeight(self.bounds) - 20.0f)};
-        
-        CGPathRef maskPath = CreateMaskPath(self.bounds, startPoint, endPoint);
-        
-        CGRect largerRect = CGRectMake(self.bounds.origin.x,
-                                       self.bounds.origin.y,
-                                       self.bounds.size.width,
-                                       self.bounds.size.height + kInnserShadowRadius);
-        CGPoint largerStartPoint = (CGPoint){startPoint.x, startPoint.y + kInnserShadowRadius};
-        CGPoint largerEndPoint = (CGPoint){endPoint.x, endPoint.y + kInnserShadowRadius};
-        
-        CGMutablePathRef shadowPath = CreateMaskPath(largerRect, largerStartPoint, largerEndPoint);
-        CGPathAddPath(shadowPath, NULL, maskPath);
-        CGPathCloseSubpath(shadowPath);
-        
-        [self.backgroundView dismissButtonWithMaskPath:maskPath
-                                       innerShadowPath:shadowPath
-                                              animated:YES];
-        
-        CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-        shadowAnimation.duration = 0.233f;
-        shadowAnimation.fromValue = (id)self.outerShadowLayer.path;
-        shadowAnimation.toValue = (id)maskPath;
-        shadowAnimation.fillMode = kCAFillModeForwards;
-        shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        
-        [self.outerShadowLayer addAnimation:shadowAnimation forKey:@"shadowAnimation"];
-        self.outerShadowLayer.path = maskPath;
-        
-        CGPathRelease(maskPath);
-        CGPathRelease(shadowPath);
-        
-        // selected button animation
-        CGRect preButtonFrame = preButton.frame;
-        preButtonFrame = [self.buttonBaseView convertRect:preButtonFrame fromView:self];
-        [preButton removeFromSuperview];
-        preButton.frame = preButtonFrame;
-        [self.buttonBaseView addSubview:preButton];
-        
-        EFTabBarItemControl *selectedButton = [self _selectedButton];
-        CGRect frame = selectedButton.frame;
-        frame = [self.buttonBaseView convertRect:frame toView:self];
-        [selectedButton removeFromSuperview];
-        selectedButton.frame = frame;
-        [self addSubview:selectedButton];
-        
-        [UIView animateWithDuration:0.233f
-                              delay:0.0f
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             CGRect frame = selectedButton.frame;
-                             frame.origin = (CGPoint){CGRectGetWidth(self.frame) - kTabBarButtonSize.width, CGRectGetHeight(self.frame) - kTabBarButtonSize.height};
-                             selectedButton.frame = frame;
-                             
-                             CGRect preFrame = [self _buttonFrameAtIndex:[self.buttons indexOfObject:preButton]];
-                             preButton.frame = preFrame;
-                         }
-                         completion:^(BOOL finished){
-                         }];
-        
-        // buttons animation
+    if (index != self.tabBarViewController.selectedIndex) {
+        self.shadowImageView.alpha = 0.0f;
         [UIView animateWithDuration:0.233f
                          animations:^{
-                             self.buttonBaseView.frame = destinationFrame;
-                             self.shadowImageView.frame = shadowFrame;
-                         }
-                         completion:^(BOOL finished){
+                             self.shadowImageView.alpha = 1.0f;
+                         } completion:^(BOOL finished){
                          }];
     }
+    
+    [self.tabBarViewController setSelectedIndex:index
+                                       animated:YES];
+    [self _dismissButtonsAnimated:YES];
 }
 
 - (void)_changeTitleFrameAimated:(BOOL)animated {

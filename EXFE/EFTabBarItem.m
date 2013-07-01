@@ -19,6 +19,7 @@
     if (self) {
         self.titleEnable = NO;
         self.image = image;
+        self.shouldPop = NO;
     }
     
     return self;
