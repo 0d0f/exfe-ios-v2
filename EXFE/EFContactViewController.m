@@ -737,7 +737,7 @@
         return nil;
     
     CGRect screanBounds = [UIScreen mainScreen].bounds;
-    EFContactTableViewSectionHeaderView *titleView = [[[EFContactTableViewSectionHeaderView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), 20}}] autorelease];
+    EFContactTableViewSectionHeaderView *titleView = [[[EFContactTableViewSectionHeaderView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), kHeaderViewHeight + 3}}] autorelease];
     titleView.titleLabel.text = title;
     
     return titleView;
