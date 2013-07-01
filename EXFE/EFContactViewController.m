@@ -208,6 +208,11 @@
             [self.searchDisplayController.searchResultsTableView reloadData];
         }
     };
+    searchContactDataSource.suggestDidChangeHandler = ^{
+        if (self.searchDisplayController.isActive) {
+            [self.searchDisplayController.searchResultsTableView reloadData];
+        }
+    };
     self.searchContactDataSource = searchContactDataSource;
     
     // background image
@@ -753,7 +758,7 @@
     }
     
     EFContactObject *contactObject = [self _contactObjectForTableView:self.searchDisplayController.searchResultsTableView atIndexPath:indexPath];
-    [self.contactDataSource selectContactObject:contactObject];
+    [self.searchContactDataSource selectContactObject:contactObject];
     
     if (self.identityIndexPath && self.identityIndexPath.section == indexPath.section && self.identityIndexPath.row - 1 == indexPath.row) {
         [self.searchDisplayController.searchResultsTableView beginUpdates];
@@ -764,7 +769,7 @@
 
 - (void)searchTableViewDidDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     EFContactObject *contactObject = [self _contactObjectForTableView:self.searchDisplayController.searchResultsTableView atIndexPath:indexPath];
-    [self.contactDataSource deselectContactObject:contactObject];
+    [self.searchContactDataSource deselectContactObject:contactObject];
     
     if (self.identityIndexPath && self.identityIndexPath.section == indexPath.section && self.identityIndexPath.row - 1 == indexPath.row) {
         [self.searchDisplayController.searchResultsTableView beginUpdates];

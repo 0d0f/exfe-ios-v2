@@ -209,6 +209,15 @@
     }
 }
 
+- (void)removeContactObjectFromRecent:(EFContactObject *)contactObject {
+    NSParameterAssert(contactObject);
+    
+    [self.recentList removeObject:contactObject];
+    if (_dataDidChangeHandler) {
+        self.dataDidChangeHandler();
+    }
+}
+
 #pragma mark - Private
 
 - (void)_loadExfees {

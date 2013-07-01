@@ -35,7 +35,6 @@ NSString *kEFNotificationNameLoadCrossFailure = @"notification.loadCross.failure
     
     NSAssert(self.model, @"model shouldn't be nill.");
     NSAssert(self.model.apiServer, @"api shouldn't be nill.");
-    NSAssert(self.updatedTime, @"updated time shouldn't be nil.");
     
     [self.model.apiServer loadCrossWithCrossId:self.crossId
                                    updatedtime:self.updatedTime
