@@ -8,11 +8,13 @@
 
 #import "EXAddressBookService.h"
 
-#import "AppDelegate.h"
 #import <AddressBook/AddressBook.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <RestKit/RestKit.h>
+
+#import "AppDelegate.h"
+#import "NSString+Format.h"
 
 #define KeyChoosePeopleLastUpdateDate   @"Key.ChoosePeople.LastUpdateDate"
 
@@ -394,29 +396,27 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
         __block BOOL needUpdate = YES;
         
         // init localcontact
-//        dispatch_sync(dispatch_get_main_queue(), ^{
-            RKObjectManager *objectManager = [RKObjectManager sharedManager];
-            __block NSArray *localcontacts;
-            [objectManager.managedObjectStore.persistentStoreManagedObjectContext performBlockAndWait:^{
-                localcontacts = [objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil];
-            }];
+        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+        __block NSArray *localcontacts;
+        [objectManager.managedObjectStore.persistentStoreManagedObjectContext performBlockAndWait:^{
+            localcontacts = [objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil];
+        }];
+        
+        if ([localcontacts count] > 0) {
+            result= [[localcontacts objectAtIndex:0] retain];
             
-            if ([localcontacts count] > 0) {
-                result= [[localcontacts objectAtIndex:0] retain];
-                
-                // check need update
-                NSDate *recordModicationDate = ABRecordCopyValue(recordRef, kABPersonModificationDateProperty);
-                if (date && [recordModicationDate timeIntervalSinceDate:date] <= 0) {
-                    needUpdate = NO;
-                }
-            } else {
-                NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-                RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
-                    result = [[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-                }];
+            // check need update
+            NSDate *recordModicationDate = ABRecordCopyValue(recordRef, kABPersonModificationDateProperty);
+            if (date && [recordModicationDate timeIntervalSinceDate:date] <= 0) {
+                needUpdate = NO;
             }
-//        });
+        } else {
+            NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+            RKObjectManager *objectManager = [RKObjectManager sharedManager];
+            [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
+                result = [[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+            }];
+        }
         
         if (needUpdate) {
             // recordID -> uid
@@ -433,7 +433,7 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
             // kABPersonFirstNamePhoneticProperty
             CFStringRef firstNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonFirstNamePhoneticProperty);
             if ((NSString *)firstNamePhoneticRef != nil) {
-                NSString *firstNamePhonetic = (NSString *)firstNamePhoneticRef;
+                NSString *firstNamePhonetic = [(NSString *)firstNamePhoneticRef stringWithoutSpace];
                 indexfield = [indexfield stringByAppendingString:firstNamePhonetic];
                 CFRelease(firstNamePhoneticRef);
             }
@@ -441,7 +441,7 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
             // kABPersonLastNamePhoneticProperty
             CFStringRef lastNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonLastNamePhoneticProperty);
             if ((NSString *)lastNamePhoneticRef != nil) {
-                NSString *lastNamePhonetic = (NSString *)lastNamePhoneticRef;
+                NSString *lastNamePhonetic = [(NSString *)lastNamePhoneticRef stringWithoutSpace];
                 indexfield = [indexfield stringByAppendingString:lastNamePhonetic];
                 CFRelease(lastNamePhoneticRef);
             }
@@ -449,7 +449,7 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
             // kABPersonMiddleNamePhoneticProperty
             CFStringRef middleNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonMiddleNamePhoneticProperty);
             if ((NSString *)middleNamePhoneticRef != nil) {
-                NSString *middleNamePhonetic = (NSString *)middleNamePhoneticRef;
+                NSString *middleNamePhonetic = [(NSString *)middleNamePhoneticRef stringWithoutSpace];
                 indexfield = [indexfield stringByAppendingString:middleNamePhonetic];
                 CFRelease(middleNamePhoneticRef);
             }
@@ -472,17 +472,20 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
             
             // email -> emails
             if (ABMultiValueGetCount(multi_email) > 0) {
-                NSMutableArray *emails_array = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_email)] autorelease];
+                NSMutableArray *formatedEmails = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_email)] autorelease];
+                
                 for (CFIndex i = 0; i < ABMultiValueGetCount(multi_email); i++) {
                     NSString *email = (NSString*)ABMultiValueCopyValueAtIndex(multi_email, i);
                     if (email != nil) {
-                        indexfield = [indexfield stringByAppendingFormat:@" %@",email];
-                        [emails_array addObject:email];
+                        NSString *formatedEmail = [email stringWithoutSpace];
                         [email release];
+                        
+                        indexfield = [indexfield stringByAppendingFormat:@" %@",formatedEmail];
+                        [formatedEmails addObject:formatedEmail];
                     }
                 }
-                if ([emails_array count] > 0) {
-                    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:emails_array];
+                if ([formatedEmails count] > 0) {
+                    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:formatedEmails];
                     result.emails = data;
                 }
             }
@@ -539,17 +542,27 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
             for (CFIndex i = 0; i < ABMultiValueGetCount(multi_socialprofile); i++) {
                 NSDictionary *socialprofile = (NSDictionary*)ABMultiValueCopyValueAtIndex(multi_socialprofile, i);
                 
-                if ([[socialprofile objectForKey:@"service"] isEqualToString:@"twitter"] ||  [[socialprofile objectForKey:@"service"] isEqualToString:@"facebook"]) {
-                    [social_array addObject:socialprofile];
+                NSMutableDictionary *formatedSocialProfile = [NSMutableDictionary dictionaryWithCapacity:socialprofile.count];
+                [socialprofile enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+                    NSString *aKey = [(NSString *)key stringWithoutSpace];
+                    if ([obj isKindOfClass:[NSString class]]) {
+                        obj = [(NSString *)obj stringWithoutSpace];
+                    }
                     
-                    NSString *social_username = [socialprofile objectForKey:@"username"];
+                    [formatedSocialProfile setValue:obj forKey:aKey];
+                }];
+                
+                if ([[formatedSocialProfile objectForKey:@"service"] isEqualToString:@"twitter"] ||  [[formatedSocialProfile objectForKey:@"service"] isEqualToString:@"facebook"]) {
+                    [social_array addObject:formatedSocialProfile];
+                    
+                    NSString *social_username = [formatedSocialProfile objectForKey:@"username"];
                     if (social_username != nil) {
-                        if([[socialprofile objectForKey:@"service"] isEqualToString:@"twitter"])
+                        if([[formatedSocialProfile objectForKey:@"service"] isEqualToString:@"twitter"])
                             social_username = [@"@" stringByAppendingString:social_username];
-                        indexfield=[indexfield stringByAppendingFormat:@" %@",social_username];
+                        indexfield = [indexfield stringByAppendingFormat:@" %@",social_username];
                     }
                 }
-                if (socialprofile!=nil)
+                if (socialprofile != nil)
                     [socialprofile release];
             }
             
@@ -562,15 +575,25 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
             for (CFIndex i = 0; i < ABMultiValueGetCount(multi_im); i++) {
                 NSMutableArray *im_array = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_im)] autorelease];
                 
-                NSDictionary* personim = (NSDictionary*)ABMultiValueCopyValueAtIndex(multi_im, i);
+                NSDictionary *personim = (NSDictionary*)ABMultiValueCopyValueAtIndex(multi_im, i);
                 
-                if ([personim objectForKey:@"username"] != nil) {
-                    if([[personim objectForKey:@"service"] isEqualToString:@"Facebook"]) {
-                        [im_array addObject:personim];
-                        indexfield = [indexfield stringByAppendingFormat:@" %@",[personim objectForKey:@"username"]];
+                NSMutableDictionary *formatedPersonIm = [NSMutableDictionary dictionaryWithCapacity:personim.count];
+                [personim enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+                    NSString *aKey = [(NSString *)key stringWithoutSpace];
+                    if ([obj isKindOfClass:[NSString class]]) {
+                        obj = [(NSString *)obj stringWithoutSpace];
+                    }
+                    
+                    [formatedPersonIm setValue:obj forKey:aKey];
+                }];
+                
+                if ([formatedPersonIm objectForKey:@"username"] != nil) {
+                    if([[formatedPersonIm objectForKey:@"service"] isEqualToString:@"Facebook"]) {
+                        [im_array addObject:formatedPersonIm];
+                        indexfield = [indexfield stringByAppendingFormat:@" %@",[formatedPersonIm objectForKey:@"username"]];
                     }
                 }
-                if (personim!=nil)
+                if (personim != nil)
                     [personim release];
                 
                 if ([im_array count] > 0) {

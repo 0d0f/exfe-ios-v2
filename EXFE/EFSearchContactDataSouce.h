@@ -16,6 +16,7 @@
 @property (nonatomic, assign) EFContactDataSource *contactDataSource;
 @property (nonatomic, copy) NSString *searchKeyWord;
 @property (nonatomic, copy) ActionBlock keywordDidChangeHandler;
+@property (nonatomic, copy) ActionBlock suggestDidChangeHandler;
 
 + (EFSearchContactDataSouce *)defaultDataSource;
 

@@ -20,6 +20,7 @@
 #import "WCAlertView.h"
 #import "MBProgressHUD.h"
 #import "EXSpinView.h"
+#import "NSString+Format.h"
 
 #define kHeaderViewHeight   (23.0f)
 
@@ -208,6 +209,11 @@
             [self.searchDisplayController.searchResultsTableView reloadData];
         }
     };
+    searchContactDataSource.suggestDidChangeHandler = ^{
+        if (self.searchDisplayController.isActive) {
+            [self.searchDisplayController.searchResultsTableView reloadData];
+        }
+    };
     self.searchContactDataSource = searchContactDataSource;
     
     // background image
@@ -325,7 +331,7 @@
         }
     };
     
-    if (self.contactSearchBar.text.length && self.searchDisplayController.isActive) {
+    if ([self.contactSearchBar.text stringWithoutSpace].length && self.searchDisplayController.isActive) {
         [self _selectSearchResultWithCompleteHandler:^{
             block();
         }];
@@ -455,6 +461,8 @@
 #pragma mark - UISearchBarDelegate
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    searchText = [searchText stringWithoutSpace];
+    
     Provider provider = [Util matchedProvider:searchText];
     if (provider != kProviderUnknown) {
         NSDictionary *matchedDictionary = [Util parseIdentityString:searchText byProvider:provider];
@@ -482,7 +490,7 @@
         self.searchResultRoughIdentity = nil;
     }
     
-    self.searchContactDataSource.searchKeyWord = searchText;
+    self.searchContactDataSource.searchKeyWord = [searchText stringWithoutSpace];
 }
 
 #pragma mark -
@@ -737,7 +745,7 @@
         return nil;
     
     CGRect screanBounds = [UIScreen mainScreen].bounds;
-    EFContactTableViewSectionHeaderView *titleView = [[[EFContactTableViewSectionHeaderView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), 20}}] autorelease];
+    EFContactTableViewSectionHeaderView *titleView = [[[EFContactTableViewSectionHeaderView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), kHeaderViewHeight + 3}}] autorelease];
     titleView.titleLabel.text = title;
     
     return titleView;
@@ -753,7 +761,7 @@
     }
     
     EFContactObject *contactObject = [self _contactObjectForTableView:self.searchDisplayController.searchResultsTableView atIndexPath:indexPath];
-    [self.contactDataSource selectContactObject:contactObject];
+    [self.searchContactDataSource selectContactObject:contactObject];
     
     if (self.identityIndexPath && self.identityIndexPath.section == indexPath.section && self.identityIndexPath.row - 1 == indexPath.row) {
         [self.searchDisplayController.searchResultsTableView beginUpdates];
@@ -764,7 +772,7 @@
 
 - (void)searchTableViewDidDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     EFContactObject *contactObject = [self _contactObjectForTableView:self.searchDisplayController.searchResultsTableView atIndexPath:indexPath];
-    [self.contactDataSource deselectContactObject:contactObject];
+    [self.searchContactDataSource deselectContactObject:contactObject];
     
     if (self.identityIndexPath && self.identityIndexPath.section == indexPath.section && self.identityIndexPath.row - 1 == indexPath.row) {
         [self.searchDisplayController.searchResultsTableView beginUpdates];
@@ -829,7 +837,7 @@
     if (!searchCell) {
         searchCell = [[[EFSearchIdentityCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[EFSearchIdentityCell reuseIdentifier]] autorelease];
     }
-    NSString *keyWord = self.contactSearchBar.text;
+    NSString *keyWord = [self.contactSearchBar.text stringWithoutSpace];
     Provider candidateProvider = [Util candidateProvider:keyWord];
     Provider matchedProvider = [Util matchedProvider:keyWord];
     
@@ -1025,7 +1033,7 @@
 }
 
 - (void)_selectSearchResultWithCompleteHandler:(void (^)(void))handler {
-    NSString *keyWord = self.contactSearchBar.text;
+    NSString *keyWord = [self.contactSearchBar.text stringWithoutSpace];
     Provider matchedProvider = [Util matchedProvider:keyWord];
     
     if (kProviderUnknown != matchedProvider) {
@@ -1034,11 +1042,11 @@
         
         if (kProviderPhone == matchedProvider) {
             NSString *message = nil;
-            if ([self.contactSearchBar.text hasPrefix:@"+"]) {
-                message = self.contactSearchBar.text;
+            if ([keyWord hasPrefix:@"+"]) {
+                message = keyWord;
             } else {
                 NSString *countryCode = [Util getTelephoneCountryCode];
-                message = [NSString stringWithFormat:@"+%@ %@", countryCode, self.contactSearchBar.text];
+                message = [NSString stringWithFormat:@"+%@ %@", countryCode, keyWord];
             }
             
             [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set invitee name", nil)

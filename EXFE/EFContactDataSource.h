@@ -46,5 +46,6 @@ typedef void (^ActionBlock)(void);
 - (void)loadData;
 
 - (void)addContactObjectToRecent:(EFContactObject *)contactObject;
+- (void)removeContactObjectFromRecent:(EFContactObject *)contactObject;
 
 @end
