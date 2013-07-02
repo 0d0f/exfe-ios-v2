@@ -610,6 +610,21 @@ typedef enum {
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // TODO: temp walkaround The only host cannot be removed
+    if (_selected_invitation) {
+        if ([_selected_invitation.host boolValue] == YES) {
+            NSInteger count = 0;
+            for (Invitation *inv in self.sortedInvitations) {
+                if ([inv.host boolValue] == YES) {
+                    count ++;
+                }
+            }
+            if (count == 1) {
+                return NO;
+            }
+        }
+    }
+    
     NSInteger section = indexPath.section;
     switch (section) {
         case 1:
@@ -625,6 +640,21 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // TODO: temp walkaround The only host cannot be removed
+    if (_selected_invitation) {
+        if ([_selected_invitation.host boolValue] == YES) {
+            NSInteger count = 0;
+            for (Invitation *inv in self.sortedInvitations) {
+                if ([inv.host boolValue] == YES) {
+                    count ++;
+                }
+            }
+            if (count == 1) {
+                return;
+            }
+        }
+    }
+    
     [self removeInvitation];
 }
 
