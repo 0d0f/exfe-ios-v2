@@ -108,9 +108,9 @@ static NSString * kExtension           = @"exfe";
     BOOL isDir  = NO;
     if(![fileManager fileExistsAtPath:usersDirectoryPath isDirectory:&isDir]){
         if(![fileManager createDirectoryAtPath:usersDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL]){
-            NSLog(@"Error: Create folder failed %@", usersDirectoryPath);
+//            NSLog(@"Error: Create folder failed %@", usersDirectoryPath);
         } else {
-            NSLog(@"OK: Created folder %@", usersDirectoryPath);
+//            NSLog(@"OK: Created folder %@", usersDirectoryPath);
         }
     }
     
@@ -410,7 +410,7 @@ static NSString * kExtension           = @"exfe";
         BOOL isDir  = NO;
         if(![fileManager fileExistsAtPath:userDirectoryPath isDirectory:&isDir]){
             if(![fileManager createDirectoryAtPath:userDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL]){
-                NSLog(@"Error: Create folder failed %@", userDirectoryPath);
+//                NSLog(@"Error: Create folder failed %@", userDirectoryPath);
             } else {
                 if (self.userId > 0) {
                     // create exfeInfo.plist to prevent abandon

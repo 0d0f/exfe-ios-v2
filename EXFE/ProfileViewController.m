@@ -49,7 +49,7 @@
     // as well.
     
     if ([NotificationRefreshUserSelf isEqualToString:[notification name]]){
-        NSLog (@"Successfully received the test notification!");
+//        NSLog (@"Successfully received the test notification!");
         
         [self syncUser];
     }

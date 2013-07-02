@@ -104,7 +104,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     UISwipeGestureRecognizer * swipeRightRecognizer = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
             if ([sender.view isKindOfClass:[UIScrollView class]]){
                 UIScrollView * scrollView = (UIScrollView *)sender.view;
-                    NSLog(@"ageaf");
                     if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
                         [self.parentViewController performSelector:@selector(hideStart)];
                     }
