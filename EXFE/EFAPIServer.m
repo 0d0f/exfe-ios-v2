@@ -29,6 +29,7 @@
         // Initialization code
 //        self.user_id = 0;
 //        self.user_token = @"";
+        [model.objectManager.HTTPClient setDefaultHeader:@"Accept-Timezone" value:[NSTimeZone localTimeZone].name];
         self.model = model;
     }
     return self;
@@ -652,7 +653,6 @@
 {
     NSDictionary *param = nil;
     if (updatedtime != nil && ![updatedtime isEqualToString:@""]){
-        updatedtime = [Util encodeToPercentEscapeString:updatedtime];
         param = @{@"token": self.model.userToken,
                   @"updated_at": updatedtime};
     } else {
