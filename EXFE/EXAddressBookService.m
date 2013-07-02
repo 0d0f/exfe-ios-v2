@@ -386,7 +386,7 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
         ABMultiValueGetCount(multi_socialprofile) > 0 ||
         ABMultiValueGetCount(multi_im) > 0 ||
         ABMultiValueGetCount(multi_phone) > 0) {
-        NSString *indexfield = @"";
+        __block NSString *indexfield = @"";
         ABRecordID uid = ABRecordGetRecordID(recordRef);
         
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
@@ -398,211 +398,210 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
         // init localcontact
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
         __block NSArray *localcontacts;
-        [objectManager.managedObjectStore.persistentStoreManagedObjectContext performBlockAndWait:^{
+        [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
             localcontacts = [objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil];
-        }];
-        
-        if ([localcontacts count] > 0) {
-            result= [[localcontacts objectAtIndex:0] retain];
             
-            // check need update
-            NSDate *recordModicationDate = ABRecordCopyValue(recordRef, kABPersonModificationDateProperty);
-            if (date && [recordModicationDate timeIntervalSinceDate:date] <= 0) {
-                needUpdate = NO;
-            }
-        } else {
-            NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-            RKObjectManager *objectManager = [RKObjectManager sharedManager];
-            [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
+            if ([localcontacts count] > 0) {
+                result= [[localcontacts objectAtIndex:0] retain];
+                
+                // check need update
+                NSDate *recordModicationDate = ABRecordCopyValue(recordRef, kABPersonModificationDateProperty);
+                if (date && [recordModicationDate timeIntervalSinceDate:date] <= 0) {
+                    needUpdate = NO;
+                }
+            } else {
+                NSEntityDescription *localcontactEntity = [NSEntityDescription entityForName:@"LocalContact" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+                RKObjectManager *objectManager = [RKObjectManager sharedManager];
                 result = [[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-            }];
-        }
-        
-        if (needUpdate) {
-            // recordID -> uid
-            result.uid = [NSNumber numberWithInt:uid];
-            
-            // compositeName -> name
-            CFStringRef compositeName = ABRecordCopyCompositeName(recordRef);
-            if ((NSString *)compositeName != nil) {
-                result.name = (NSString *)compositeName;
-                indexfield = [indexfield stringByAppendingString:(NSString *)compositeName];
-                CFRelease(compositeName);
             }
             
-            // kABPersonFirstNamePhoneticProperty
-            CFStringRef firstNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonFirstNamePhoneticProperty);
-            if ((NSString *)firstNamePhoneticRef != nil) {
-                NSString *firstNamePhonetic = [(NSString *)firstNamePhoneticRef stringWithoutSpace];
-                indexfield = [indexfield stringByAppendingString:firstNamePhonetic];
-                CFRelease(firstNamePhoneticRef);
-            }
-            
-            // kABPersonLastNamePhoneticProperty
-            CFStringRef lastNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonLastNamePhoneticProperty);
-            if ((NSString *)lastNamePhoneticRef != nil) {
-                NSString *lastNamePhonetic = [(NSString *)lastNamePhoneticRef stringWithoutSpace];
-                indexfield = [indexfield stringByAppendingString:lastNamePhonetic];
-                CFRelease(lastNamePhoneticRef);
-            }
-            
-            // kABPersonMiddleNamePhoneticProperty
-            CFStringRef middleNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonMiddleNamePhoneticProperty);
-            if ((NSString *)middleNamePhoneticRef != nil) {
-                NSString *middleNamePhonetic = [(NSString *)middleNamePhoneticRef stringWithoutSpace];
-                indexfield = [indexfield stringByAppendingString:middleNamePhonetic];
-                CFRelease(middleNamePhoneticRef);
-            }
-            
-            // thumbnail image -> avatar
-            CFDataRef avatarDataRef = ABPersonCopyImageDataWithFormat(recordRef, kABPersonImageFormatThumbnail);
-            CGDataProviderRef avatarDataProvider = CGDataProviderCreateWithCFData (avatarDataRef);
-            CGImageRef avatarRef = NULL;
-            if (avatarDataProvider) {
-                avatarRef = CGImageCreateWithPNGDataProvider(avatarDataProvider, NULL, true, kCGRenderingIntentDefault); // try png
-                if (!avatarRef) {
-                    avatarRef = CGImageCreateWithJPEGDataProvider(avatarDataProvider, NULL, true, kCGRenderingIntentDefault);
-                }
-                CFRelease(avatarDataProvider);
-                if(avatarRef != nil){
-                    result.avatar = (NSData *)avatarDataRef;
-                    CFRelease(avatarRef);
-                }
-            }
-            
-            // email -> emails
-            if (ABMultiValueGetCount(multi_email) > 0) {
-                NSMutableArray *formatedEmails = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_email)] autorelease];
+            if (needUpdate) {
+                // recordID -> uid
+                result.uid = [NSNumber numberWithInt:uid];
                 
-                for (CFIndex i = 0; i < ABMultiValueGetCount(multi_email); i++) {
-                    NSString *email = (NSString*)ABMultiValueCopyValueAtIndex(multi_email, i);
-                    if (email != nil) {
-                        NSString *formatedEmail = [email stringWithoutSpace];
-                        [email release];
+                // compositeName -> name
+                CFStringRef compositeName = ABRecordCopyCompositeName(recordRef);
+                if ((NSString *)compositeName != nil) {
+                    result.name = (NSString *)compositeName;
+                    indexfield = [indexfield stringByAppendingString:(NSString *)compositeName];
+                    CFRelease(compositeName);
+                }
+                
+                // kABPersonFirstNamePhoneticProperty
+                CFStringRef firstNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonFirstNamePhoneticProperty);
+                if ((NSString *)firstNamePhoneticRef != nil) {
+                    NSString *firstNamePhonetic = [(NSString *)firstNamePhoneticRef stringWithoutSpace];
+                    indexfield = [indexfield stringByAppendingString:firstNamePhonetic];
+                    CFRelease(firstNamePhoneticRef);
+                }
+                
+                // kABPersonLastNamePhoneticProperty
+                CFStringRef lastNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonLastNamePhoneticProperty);
+                if ((NSString *)lastNamePhoneticRef != nil) {
+                    NSString *lastNamePhonetic = [(NSString *)lastNamePhoneticRef stringWithoutSpace];
+                    indexfield = [indexfield stringByAppendingString:lastNamePhonetic];
+                    CFRelease(lastNamePhoneticRef);
+                }
+                
+                // kABPersonMiddleNamePhoneticProperty
+                CFStringRef middleNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonMiddleNamePhoneticProperty);
+                if ((NSString *)middleNamePhoneticRef != nil) {
+                    NSString *middleNamePhonetic = [(NSString *)middleNamePhoneticRef stringWithoutSpace];
+                    indexfield = [indexfield stringByAppendingString:middleNamePhonetic];
+                    CFRelease(middleNamePhoneticRef);
+                }
+                
+                // thumbnail image -> avatar
+                CFDataRef avatarDataRef = ABPersonCopyImageDataWithFormat(recordRef, kABPersonImageFormatThumbnail);
+                CGDataProviderRef avatarDataProvider = CGDataProviderCreateWithCFData (avatarDataRef);
+                CGImageRef avatarRef = NULL;
+                if (avatarDataProvider) {
+                    avatarRef = CGImageCreateWithPNGDataProvider(avatarDataProvider, NULL, true, kCGRenderingIntentDefault); // try png
+                    if (!avatarRef) {
+                        avatarRef = CGImageCreateWithJPEGDataProvider(avatarDataProvider, NULL, true, kCGRenderingIntentDefault);
+                    }
+                    CFRelease(avatarDataProvider);
+                    if(avatarRef != nil){
+                        result.avatar = (NSData *)avatarDataRef;
+                        CFRelease(avatarRef);
+                    }
+                }
+                
+                // email -> emails
+                if (ABMultiValueGetCount(multi_email) > 0) {
+                    NSMutableArray *formatedEmails = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_email)] autorelease];
+                    
+                    for (CFIndex i = 0; i < ABMultiValueGetCount(multi_email); i++) {
+                        NSString *email = (NSString*)ABMultiValueCopyValueAtIndex(multi_email, i);
+                        if (email != nil) {
+                            NSString *formatedEmail = [email stringWithoutSpace];
+                            [email release];
+                            
+                            indexfield = [indexfield stringByAppendingFormat:@" %@",formatedEmail];
+                            [formatedEmails addObject:formatedEmail];
+                        }
+                    }
+                    if ([formatedEmails count] > 0) {
+                        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:formatedEmails];
+                        result.emails = data;
+                    }
+                }
+                
+                // phone -> phones
+                if (ABMultiValueGetCount(multi_phone) > 0) {
+                    NSMutableArray *phone_array = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_phone)] autorelease];
+                    
+                    for (CFIndex i = 0; i < ABMultiValueGetCount(multi_phone); i++) {
+                        NSString* phone = (NSString*)ABMultiValueCopyValueAtIndex(multi_phone, i);
+                        if (phone != nil) {
+                            NSString *clean_phone=@"";
+                            clean_phone=[phone stringByReplacingOccurrencesOfString:@"(" withString:@""];
+                            clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@")" withString:@""];
+                            clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+                            clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+                            clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@" " withString:@""];
+                            clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"." withString:@""];
+                            
+                            NSString *cnphoneregex = @"1([3458]|7[1-8])\\d*";
+                            NSPredicate *cnphoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", cnphoneregex];
+                            NSString *phoneresult = @"";
+                            if ([mcc isEqualToString:@"460"] || [isocode isEqualToString:@"cn"]) {
+                                if ([[clean_phone substringToIndex:2] isEqualToString:@"00"])
+                                    phoneresult = [@"+" stringByAppendingString: [clean_phone substringFromIndex:2]];
+                                else if ([[clean_phone substringToIndex:1] isEqualToString:@"+"])
+                                    phoneresult = clean_phone;
+                                else if ([cnphoneTest evaluateWithObject:clean_phone])
+                                    phoneresult = [@"+86" stringByAppendingString:clean_phone];
+                            }
+                            if ([mcc isEqualToString:@"310"] || [mcc isEqualToString:@"311"] || [isocode isEqualToString:@"us"] || [isocode isEqualToString:@"ca"]) {
+                                if ([[clean_phone substringToIndex:1] isEqualToString:@"+"])
+                                    phoneresult = clean_phone;
+                                else if ([[clean_phone substringToIndex:1] isEqualToString:@"1"])
+                                    phoneresult = [@"+" stringByAppendingString:clean_phone];
+                                else if ([clean_phone characterAtIndex:0] >= '2' && [clean_phone characterAtIndex:0] <= '9' && [clean_phone length]>=7)
+                                    phoneresult = [@"+1" stringByAppendingString:clean_phone];
+                            }
+                            if ([phoneresult length] > 0) {
+                                indexfield = [indexfield stringByAppendingFormat:@" %@",phoneresult];
+                                [phone_array addObject:phoneresult];
+                            }
+                            [phone release];
+                        }
+                    }
+                    if ([phone_array count] > 0) {
+                        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:phone_array];
+                        result.phones=data;
+                    }
+                }
+                
+                // social -> socail
+                NSMutableArray *social_array = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_socialprofile)] autorelease];
+                for (CFIndex i = 0; i < ABMultiValueGetCount(multi_socialprofile); i++) {
+                    NSDictionary *socialprofile = (NSDictionary*)ABMultiValueCopyValueAtIndex(multi_socialprofile, i);
+                    
+                    NSMutableDictionary *formatedSocialProfile = [NSMutableDictionary dictionaryWithCapacity:socialprofile.count];
+                    [socialprofile enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+                        NSString *aKey = [(NSString *)key stringWithoutSpace];
+                        if ([obj isKindOfClass:[NSString class]]) {
+                            obj = [(NSString *)obj stringWithoutSpace];
+                        }
                         
-                        indexfield = [indexfield stringByAppendingFormat:@" %@",formatedEmail];
-                        [formatedEmails addObject:formatedEmail];
-                    }
-                }
-                if ([formatedEmails count] > 0) {
-                    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:formatedEmails];
-                    result.emails = data;
-                }
-            }
-            
-            // phone -> phones
-            if (ABMultiValueGetCount(multi_phone) > 0) {
-                NSMutableArray *phone_array = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_phone)] autorelease];
-                
-                for (CFIndex i = 0; i < ABMultiValueGetCount(multi_phone); i++) {
-                    NSString* phone = (NSString*)ABMultiValueCopyValueAtIndex(multi_phone, i);
-                    if (phone != nil) {
-                        NSString *clean_phone=@"";
-                        clean_phone=[phone stringByReplacingOccurrencesOfString:@"(" withString:@""];
-                        clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@")" withString:@""];
-                        clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
-                        clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
-                        clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@" " withString:@""];
-                        clean_phone=[clean_phone stringByReplacingOccurrencesOfString:@"." withString:@""];
+                        [formatedSocialProfile setValue:obj forKey:aKey];
+                    }];
+                    
+                    if ([[formatedSocialProfile objectForKey:@"service"] isEqualToString:@"twitter"] ||  [[formatedSocialProfile objectForKey:@"service"] isEqualToString:@"facebook"]) {
+                        [social_array addObject:formatedSocialProfile];
                         
-                        NSString *cnphoneregex = @"1([3458]|7[1-8])\\d*";
-                        NSPredicate *cnphoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", cnphoneregex];
-                        NSString *phoneresult = @"";
-                        if ([mcc isEqualToString:@"460"] || [isocode isEqualToString:@"cn"]) {
-                            if ([[clean_phone substringToIndex:2] isEqualToString:@"00"])
-                                phoneresult = [@"+" stringByAppendingString: [clean_phone substringFromIndex:2]];
-                            else if ([[clean_phone substringToIndex:1] isEqualToString:@"+"])
-                                phoneresult = clean_phone;
-                            else if ([cnphoneTest evaluateWithObject:clean_phone])
-                                phoneresult = [@"+86" stringByAppendingString:clean_phone];
+                        NSString *social_username = [formatedSocialProfile objectForKey:@"username"];
+                        if (social_username != nil) {
+                            if([[formatedSocialProfile objectForKey:@"service"] isEqualToString:@"twitter"])
+                                social_username = [@"@" stringByAppendingString:social_username];
+                            indexfield = [indexfield stringByAppendingFormat:@" %@",social_username];
                         }
-                        if ([mcc isEqualToString:@"310"] || [mcc isEqualToString:@"311"] || [isocode isEqualToString:@"us"] || [isocode isEqualToString:@"ca"]) {
-                            if ([[clean_phone substringToIndex:1] isEqualToString:@"+"])
-                                phoneresult = clean_phone;
-                            else if ([[clean_phone substringToIndex:1] isEqualToString:@"1"])
-                                phoneresult = [@"+" stringByAppendingString:clean_phone];
-                            else if ([clean_phone characterAtIndex:0] >= '2' && [clean_phone characterAtIndex:0] <= '9' && [clean_phone length]>=7)
-                                phoneresult = [@"+1" stringByAppendingString:clean_phone];
+                    }
+                    if (socialprofile != nil)
+                        [socialprofile release];
+                }
+                
+                if ([social_array count] > 0) {
+                    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:social_array];
+                    result.social=data;
+                }
+                
+                // im -> im
+                for (CFIndex i = 0; i < ABMultiValueGetCount(multi_im); i++) {
+                    NSMutableArray *im_array = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_im)] autorelease];
+                    
+                    NSDictionary *personim = (NSDictionary*)ABMultiValueCopyValueAtIndex(multi_im, i);
+                    
+                    NSMutableDictionary *formatedPersonIm = [NSMutableDictionary dictionaryWithCapacity:personim.count];
+                    [personim enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+                        NSString *aKey = [(NSString *)key stringWithoutSpace];
+                        if ([obj isKindOfClass:[NSString class]]) {
+                            obj = [(NSString *)obj stringWithoutSpace];
                         }
-                        if ([phoneresult length] > 0) {
-                            indexfield = [indexfield stringByAppendingFormat:@" %@",phoneresult];
-                            [phone_array addObject:phoneresult];
+                        
+                        [formatedPersonIm setValue:obj forKey:aKey];
+                    }];
+                    
+                    if ([formatedPersonIm objectForKey:@"username"] != nil) {
+                        if([[formatedPersonIm objectForKey:@"service"] isEqualToString:@"Facebook"]) {
+                            [im_array addObject:formatedPersonIm];
+                            indexfield = [indexfield stringByAppendingFormat:@" %@",[formatedPersonIm objectForKey:@"username"]];
                         }
-                        [phone release];
                     }
-                }
-                if ([phone_array count] > 0) {
-                    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:phone_array];
-                    result.phones=data;
-                }
-            }
-            
-            // social -> socail
-            NSMutableArray *social_array = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_socialprofile)] autorelease];
-            for (CFIndex i = 0; i < ABMultiValueGetCount(multi_socialprofile); i++) {
-                NSDictionary *socialprofile = (NSDictionary*)ABMultiValueCopyValueAtIndex(multi_socialprofile, i);
-                
-                NSMutableDictionary *formatedSocialProfile = [NSMutableDictionary dictionaryWithCapacity:socialprofile.count];
-                [socialprofile enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
-                    NSString *aKey = [(NSString *)key stringWithoutSpace];
-                    if ([obj isKindOfClass:[NSString class]]) {
-                        obj = [(NSString *)obj stringWithoutSpace];
-                    }
+                    if (personim != nil)
+                        [personim release];
                     
-                    [formatedSocialProfile setValue:obj forKey:aKey];
-                }];
-                
-                if ([[formatedSocialProfile objectForKey:@"service"] isEqualToString:@"twitter"] ||  [[formatedSocialProfile objectForKey:@"service"] isEqualToString:@"facebook"]) {
-                    [social_array addObject:formatedSocialProfile];
-                    
-                    NSString *social_username = [formatedSocialProfile objectForKey:@"username"];
-                    if (social_username != nil) {
-                        if([[formatedSocialProfile objectForKey:@"service"] isEqualToString:@"twitter"])
-                            social_username = [@"@" stringByAppendingString:social_username];
-                        indexfield = [indexfield stringByAppendingFormat:@" %@",social_username];
+                    if ([im_array count] > 0) {
+                        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:im_array];
+                        result.im = data;
                     }
                 }
-                if (socialprofile != nil)
-                    [socialprofile release];
+                result.indexfield = indexfield;
             }
-            
-            if ([social_array count] > 0) {
-                NSData *data = [NSKeyedArchiver archivedDataWithRootObject:social_array];
-                result.social=data;
-            }
-            
-            // im -> im
-            for (CFIndex i = 0; i < ABMultiValueGetCount(multi_im); i++) {
-                NSMutableArray *im_array = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_im)] autorelease];
-                
-                NSDictionary *personim = (NSDictionary*)ABMultiValueCopyValueAtIndex(multi_im, i);
-                
-                NSMutableDictionary *formatedPersonIm = [NSMutableDictionary dictionaryWithCapacity:personim.count];
-                [personim enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
-                    NSString *aKey = [(NSString *)key stringWithoutSpace];
-                    if ([obj isKindOfClass:[NSString class]]) {
-                        obj = [(NSString *)obj stringWithoutSpace];
-                    }
-                    
-                    [formatedPersonIm setValue:obj forKey:aKey];
-                }];
-                
-                if ([formatedPersonIm objectForKey:@"username"] != nil) {
-                    if([[formatedPersonIm objectForKey:@"service"] isEqualToString:@"Facebook"]) {
-                        [im_array addObject:formatedPersonIm];
-                        indexfield = [indexfield stringByAppendingFormat:@" %@",[formatedPersonIm objectForKey:@"username"]];
-                    }
-                }
-                if (personim != nil)
-                    [personim release];
-                
-                if ([im_array count] > 0) {
-                    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:im_array];
-                    result.im = data;
-                }
-            }
-            result.indexfield = indexfield;
-        }
+
+        }];
     }
     
     CFRelease(multi_phone);

@@ -25,6 +25,7 @@
 - (void)_tabBarItemImageDidChange;
 - (void)_tabBarItemHighlightImageDidChange;
 - (void)_tabBarItemTitleEnableDidChange;
+- (void)_tabBarItemShouldPopDidChange;
 @end
 
 @implementation EFTabBarItemControl
@@ -127,6 +128,8 @@
                          forKeyPath:@"highlightImage"];
         [_tabBarItem removeObserver:self
                          forKeyPath:@"titleEnable"];
+        [_tabBarItem removeObserver:self
+                         forKeyPath:@"shouldPop"];
         [_tabBarItem release];
         _tabBarItem = nil;
     }
@@ -150,6 +153,10 @@
                         context:NULL];
         [tabBarItem addObserver:self
                      forKeyPath:@"titleEnable"
+                        options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                        context:NULL];
+        [tabBarItem addObserver:self
+                     forKeyPath:@"shouldPop"
                         options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                         context:NULL];
     }
@@ -179,6 +186,10 @@
         } else if ([keyPath isEqualToString:@"titleEnable"]) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self _tabBarItemTitleEnableDidChange];
+            });
+        } else if ([keyPath isEqualToString:@"shouldPop"]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self _tabBarItemShouldPopDidChange];
             });
         }
     }
@@ -226,6 +237,14 @@
 
 - (void)_tabBarItemTitleEnableDidChange {
     self.titleLabel.hidden = !self.tabBarItem.isTitleEnable;
+}
+
+- (void)_tabBarItemShouldPopDidChange {
+    if (self.tabBarItem.shouldPop) {
+        self.tabBarItem.tabBarItemState = kEFTabBarItemStateHighlight;
+    } else {
+        self.tabBarItem.tabBarItemState = kEFTabBarItemStateNormal;
+    }
 }
 
 @end
