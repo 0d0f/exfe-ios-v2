@@ -155,8 +155,6 @@
     [self.window makeKeyAndVisible];
 #endif
     
-    [self addNotificationObserver];
-    
     EFAPIServer *server = self.model.apiServer;
     // Load User
     if (self.model.isLoggedIn == YES){
@@ -213,65 +211,6 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [[FBSession activeSession] close];
-}
-
-#pragma mark - Notification handle
-
-- (void)addNotificationObserver {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleNotification:)
-                                                 name:kEFNotificationNameLoadUserSuccess
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleNotification:)
-                                                 name:kEFNotificationNameLoadUserFailure
-                                               object:nil];
-}
-
-- (void)handleNotification:(NSNotification *)notification {
-    NSString *name = notification.name;
-    if ([name isEqualToString:kEFNotificationNameLoadUserSuccess]) {
-        NSDictionary *body = notification.userInfo;
-        if([body isKindOfClass:[NSDictionary class]]) {
-            NSNumber *code = [body valueForKeyPath:@"meta.code"];
-            if(code){
-                if([code integerValue] == 200) {
-                    NSString *name = [body valueForKeyPath:@"response.user.name"];
-                    NSArray *ids = [body valueForKeyPath:@"response.user.identities.@distinctUnionOfObjects.id"];
-                    NSString *token = [body valueForKey:@"token"];
-                    
-                    void (^alertHandler)(UIAlertView *alertView, NSInteger buttonIndex) = ^(UIAlertView *alertView, NSInteger buttonIndex){
-                        if (buttonIndex == alertView.firstOtherButtonIndex ) {
-                            [self.model.apiServer mergeIdentities:ids
-                                                          byToken:token
-                                                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                              if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                                                  NSDictionary *body = responseObject;
-                                                                  
-                                                                  if ([body isKindOfClass:[NSDictionary class]]) {
-                                                                      id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
-                                                                      if (code && 200 == [code intValue]) {
-                                                                          [self.model loadMe];
-                                                                          
-                                                                          [self processUrlHandler:self.url];
-                                                                      }
-                                                                  }
-                                                              }
-                                                          } failure:nil];
-                        }
-                    };
-                    
-                    [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Merge accounts", nil)
-                                                message:[NSString stringWithFormat:NSLocalizedString(@"Merge account %@ into your current signed-in account?", nil), name]
-                                      cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                      otherButtonTitles:@[NSLocalizedString(@"Merge", nil)]
-                                                handler:alertHandler];
-                }
-            }
-        }
-    } else if ([name isEqualToString:kEFNotificationNameLoadUserFailure]) {
-        
-    }
 }
 
 #pragma mark - Push Notification
@@ -417,7 +356,47 @@
                 // merge identities
                 
                 // Load identities to merge from another user
-                [self.model loadUserByUserId:[user_id integerValue] andToken:token];
+                [server loadUserBy:[user_id integerValue]
+                             withToken:token
+                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                   NSDictionary *body = responseObject;
+                                   if([body isKindOfClass:[NSDictionary class]]) {
+                                       NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                                       if(code){
+                                           if([code integerValue] == 200) {
+                                               NSString *name = [responseObject valueForKeyPath:@"response.user.name"];
+                                               NSArray *ids = [responseObject valueForKeyPath:@"response.user.identities.@distinctUnionOfObjects.id"];
+                                               
+                                               [UIAlertView showAlertViewWithTitle:@"Merge accounts"
+                                                                           message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?", name]
+                                                                 cancelButtonTitle:@"Cancel"
+                                                                 otherButtonTitles:@[@"Merge"]
+                                                                           handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                                                               if (buttonIndex == alertView.firstOtherButtonIndex ) {
+                                                                                   
+                                                                                   [server mergeIdentities:ids byToken:token success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                                       if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                                                                           NSDictionary *body=responseObject;
+                                                                                           if ([body isKindOfClass:[NSDictionary class]]) {
+                                                                                               id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
+                                                                                               if (code && [code intValue] == 200) {
+                                                                                                   [self.model loadMe];
+                                                                                                   
+                                                                                                   [self processUrlHandler:url];
+                                                                                               }
+                                                                                           }
+                                                                                       }
+                                                                                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                                       
+                                                                                   }];
+                                                                               }
+                                                                           }];
+                                           }
+                                       }
+                                   }
+                                   
+                               }
+                               failure:nil];
             }
         }
         
