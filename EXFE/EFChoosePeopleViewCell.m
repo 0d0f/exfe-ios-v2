@@ -72,7 +72,7 @@
             avatarImage = [UIImage imageNamed:@"portrait_default.png"];
             [[EFDataManager imageManager] cachedImageForKey:contactObject.imageKey
                                             completeHandler:^(UIImage *image){
-                                                if (image && contactObject == self.cell.contactObject) {
+                                                if (self.cell && image && contactObject == self.cell.contactObject) {
                                                     [self setNeedsDisplay];
                                                 }
                                             }];
@@ -165,7 +165,7 @@
             avatarImage = [UIImage imageNamed:@"portrait_default.png"];
             [[EFDataManager imageManager] cachedImageForKey:contactObject.imageKey
                                             completeHandler:^(UIImage *image){
-                                                if (image && contactObject == self.cell.contactObject) {
+                                                if (self.cell && image && contactObject == self.cell.contactObject) {
                                                     [self setNeedsDisplay];
                                                 }
                                             }];
@@ -258,7 +258,7 @@
             avatarImage = [UIImage imageNamed:@"portrait_default.png"];
             [[EFDataManager imageManager] cachedImageForKey:contactObject.imageKey
                                             completeHandler:^(UIImage *image){
-                                                if (image && contactObject == self.cell.contactObject) {
+                                                if (self.cell && image && contactObject == self.cell.contactObject) {
                                                     [self setNeedsDisplay];
                                                 }
                                             }];
@@ -347,6 +347,9 @@
 }
 
 - (void)dealloc {
+    ((EFChoosePeopleBackgroundView *)self.backgroundView).cell = nil;
+    ((EFChoosePeopleHightedBackgroundView *)self.backgroundView).cell = nil;
+    ((EFChoosePeopleSelectedBackgroundView *)self.backgroundView).cell = nil;
     [_accessButton release];
     [_avatarImageView release];
     [_userNameLabel release];

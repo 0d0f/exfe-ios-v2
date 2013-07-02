@@ -127,7 +127,7 @@
                             identity.nickname = nickname;
                             identity.identity_id = [NSNumber numberWithInt:[identity_id intValue]];
                             
-                            EFContactObject *contactObject = [EFContactObject contactObjectWithIdentities:@[identities]];
+                            EFContactObject *contactObject = [EFContactObject contactObjectWithIdentities:@[identity]];
                             [self.suggestContactObjects addObject:contactObject];
                         }];
                     };

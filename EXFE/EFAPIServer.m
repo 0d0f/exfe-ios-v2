@@ -1041,7 +1041,6 @@
     NSParameterAssert(NSURLErrorBadURL != error.code);
     NSParameterAssert(NSURLErrorUnsupportedURL != error.code);
     NSParameterAssert(NSURLErrorCannotDecodeRawData != error.code);
-    NSParameterAssert(NSURLErrorCannotDecodeContentData != error.code);
     NSParameterAssert(NSURLErrorCannotParseResponse != error.code);
     
     if ([error.domain isEqualToString:NSURLErrorDomain]) {
