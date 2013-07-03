@@ -15,8 +15,8 @@ typedef void (^HeadViewDidShowBlock)(void);
 
 @interface EFHeadView : UIView
 
-@property (nonatomic, retain) UIImage *headImage;
-@property (nonatomic, retain) UILabel *titleLabel;
+@property (nonatomic, strong) UIImage *headImage;
+@property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, assign, getter = isShowed) BOOL showed;
 
 // action handler

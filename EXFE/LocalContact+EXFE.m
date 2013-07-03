@@ -95,8 +95,7 @@ NSString *kEFProviderNameTwitter = @"twitter";
         }
     }
     
-    NSArray *result = [[identities copy] autorelease];
-    [identities release];
+    NSArray *result = [identities copy];
     
     return result;
 }

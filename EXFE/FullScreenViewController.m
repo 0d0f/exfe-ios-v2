@@ -28,7 +28,7 @@
     [super viewDidLoad];
 //    [Flurry logEvent:@"FULL_SCREEN"];
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-    self.view=[[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds] autorelease];
+    self.view=[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view.backgroundColor=[UIColor blackColor];
     imageview=[[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [self.view addSubview:imageview];
@@ -44,7 +44,6 @@
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [self.view addGestureRecognizer:gestureRecognizer];
-    [gestureRecognizer release];
 
 
     // Do any additional setup after loading the view from its nib.
@@ -57,16 +56,11 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
-- (void)dealloc
-{
-	[super dealloc];
-}
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);
 //    statusBarHidden = YES;
 
-    [imageview release];
 //    [self.view release];
     [self dismissModalViewControllerAnimated:YES];
 }

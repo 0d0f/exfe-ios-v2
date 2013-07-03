@@ -12,10 +12,10 @@
 
 @interface EFTime : NSManagedObject
 
-@property (nonatomic, retain) NSString * date;
-@property (nonatomic, retain) NSString * date_word;
-@property (nonatomic, retain) NSString * time;
-@property (nonatomic, retain) NSString * time_word;
-@property (nonatomic, retain) NSString * timezone;
+@property (nonatomic, strong) NSString * date;
+@property (nonatomic, strong) NSString * date_word;
+@property (nonatomic, strong) NSString * time;
+@property (nonatomic, strong) NSString * time_word;
+@property (nonatomic, strong) NSString * timezone;
 
 @end

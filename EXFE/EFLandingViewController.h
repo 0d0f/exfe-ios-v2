@@ -10,12 +10,12 @@
 
 @interface EFLandingViewController : UIViewController
 
-@property (nonatomic, retain) IBOutlet UILabel *labelEXFE;
-@property (nonatomic, retain) IBOutlet UILabel *labelDescription;
-@property (nonatomic, retain) IBOutlet UIImageView *imgEXFELogo;
-@property (nonatomic, retain) IBOutlet UILabel *labelStart;
-@property (nonatomic, retain) IBOutlet UIImageView *imgHead;
+@property (nonatomic, strong) IBOutlet UILabel *labelEXFE;
+@property (nonatomic, strong) IBOutlet UILabel *labelDescription;
+@property (nonatomic, strong) IBOutlet UIImageView *imgEXFELogo;
+@property (nonatomic, strong) IBOutlet UILabel *labelStart;
+@property (nonatomic, strong) IBOutlet UIImageView *imgHead;
 
-@property (nonatomic, retain) UIViewController *currentViewController;
+@property (nonatomic, strong) UIViewController *currentViewController;
 
 @end

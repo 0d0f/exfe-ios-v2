@@ -30,7 +30,7 @@
 
 @interface WidgetConvViewController ()
 
-@property (nonatomic, retain) NSMutableArray* posts;
+@property (nonatomic, strong) NSMutableArray* posts;
 
 @end
 
@@ -82,7 +82,7 @@
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [_tableView addGestureRecognizer:gestureRecognizer];
-    [gestureRecognizer release];
+//    [gestureRecognizer release];
     
     hintGroup = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(b), 100, CGRectGetWidth(b), CGRectGetHeight(b) - 100 - 42)];
     {
@@ -94,7 +94,7 @@
         no_posts.backgroundColor = [UIColor clearColor];
         no_posts.numberOfLines = 2;
         [hintGroup addSubview:no_posts];
-        [no_posts release];
+//        [no_posts release];
     }
     hintGroup.hidden = YES;
     [self.view  addSubview:hintGroup];
@@ -159,24 +159,26 @@
     }
 #endif
 
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     RKObjectManager* manager =[RKObjectManager sharedManager];
     [manager.operationQueue cancelAllOperations];
-    [_shadowImage release];
-	self.posts = nil;;
-    [cellbackground release];
-    [cellsepator release];
-    [avatarframe release];
-    [_tableView release];
-    [inputToolbar release];
-
-    [super dealloc];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+    self.posts = nil;
 }
+
+//- (void)dealloc {
+//    
+////    [_shadowImage release];
+//	
+////    [cellbackground release];
+////    [cellsepator release];
+////    [avatarframe release];
+////    [_tableView release];
+////    [inputToolbar release];
+//
+//    [super dealloc];
+//}
 
 #pragma mark - Notification Handler
 
@@ -304,7 +306,7 @@
 }
 
 - (CGSize)textWidthForHeight:(CGFloat)inHeight withAttributedString:(NSAttributedString *)attributedString {
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef) attributedString);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge  CFAttributedStringRef) attributedString);
     int textLength = [attributedString length];
     CFRange range;
     CGFloat maxWidth  = 200.0f;
@@ -395,7 +397,7 @@
                 [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
                 [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                 NSDate *post_created_at = [formatter dateFromString:post.created_at];
-                [formatter release];
+//                [formatter release];
 
               
                 if(post && !timetextlayer){
@@ -419,10 +421,10 @@
                     NSString *datestr=[dateformat stringFromDate:post_created_at];
                     [dateformat setDateFormat:@"HH:mm:ss"];
                     NSString *timestr=[dateformat stringFromDate:post_created_at];
-                    [dateformat release];
+//                    [dateformat release];
                     NSString *timestring=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:timestring];
-                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)timefontref range:NSMakeRange(0,[timestring length])];
+                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)timefontref range:NSMakeRange(0,[timestring length])];
                     [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[timestring length])];
                 }
                 else if(showTimeMode==1)
@@ -437,13 +439,13 @@
                     NSString *datestring=[dateformat_to stringFromDate:post_created_at];
                     [dateformat_to setDateFormat:@"h:mm a"];
                     NSString *timestring=[dateformat_to stringFromDate:post_created_at];
-                    [locale_to release];
-                    [dateformat_to release];
+//                    [locale_to release];
+//                    [dateformat_to release];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",datestring,timestring]];
-                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)timefontref range:NSMakeRange(0,[datestring length])];
+                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)timefontref range:NSMakeRange(0,[datestring length])];
                     [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[datestring length])];
 
-                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)timefontref9 range:NSMakeRange([datestring length]+1,[timestring length])];
+                    [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)timefontref9 range:NSMakeRange([datestring length]+1,[timestring length])];
                     [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_CCC.CGColor range:NSMakeRange([datestring length]+1,[timestring length])];
                     textheight=28;
                 }
@@ -460,7 +462,7 @@
                 [timetextlayer setString:timeattribstring];
                 [CATransaction commit];
 
-                [timeattribstring release];
+//                [timeattribstring release];
                 [timetextlayer removeAnimationForKey:@"fadeout"];
                 [NSObject cancelPreviousPerformRequestsWithTarget:self];
                 [self performSelector:@selector(hiddenTime) withObject:nil afterDelay:2];
@@ -530,7 +532,7 @@
             [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
             [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             NSDate *post_created_at = [formatter dateFromString:post.created_at];
-            [formatter release];
+//            [formatter release];
 
 
             NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
@@ -539,29 +541,29 @@
             NSString *datestr=[dateformat stringFromDate:post_created_at];
             [dateformat setDateFormat:@"HH:mm:ss"];
             NSString *timestr=[dateformat stringFromDate:post_created_at];
-            [dateformat release];
+//            [dateformat release];
             NSString *relative=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
 
             NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
             [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
             [dateformat_to setDateFormat:@"h:mm a MMM d"];
             NSString *datestring=[dateformat_to stringFromDate:post_created_at];
-            [dateformat_to release];
+//            [dateformat_to release];
 
             NSMutableAttributedString *timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",relative,datestring]];
             CTFontRef timefontref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL);
             CTFontRef timefontref9=CTFontCreateWithName(CFSTR("HelveticaNeue"), 9.0, NULL);
-            [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)timefontref range:NSMakeRange(0,[relative length])];
+            [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)timefontref range:NSMakeRange(0,[relative length])];
             [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[relative length])];
 
-            [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)timefontref9 range:NSMakeRange([relative length]+1,[datestring length])];
+            [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)timefontref9 range:NSMakeRange([relative length]+1,[datestring length])];
             [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_CCC.CGColor range:NSMakeRange([relative length]+1,[datestring length])];
             CFRelease(timefontref);
             CFRelease(timefontref9);
             CGSize timesize=[self textWidthForHeight:28 withAttributedString:timeattribstring];
             [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (timesize.width + 4 * 2),  25, timesize.width + 8, timesize.height + 2)];
             [floattimetextlayer setString:timeattribstring];
-            [timeattribstring release];
+//            [timeattribstring release];
             topcellPath=path.row;
         }
     }
@@ -583,15 +585,15 @@
 
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@  %@",name,post.content]];
     CTFontRef boldfontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 14.0, NULL);
-    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)boldfontref range:NSMakeRange(0,[name length])];
+    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)boldfontref range:NSMakeRange(0,[name length])];
     CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL);
-    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange([name length]+2,[post.content length])];
+    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)fontref range:NSMakeRange([name length]+2,[post.content length])];
 
     CFRelease(boldfontref);
     CFRelease(fontref);
     
     CGSize size= [CTUtil CTSizeOfString:attributedString minLineHeight:20 linespacing:0 constraint:constraint];
-    [attributedString release];
+//    [attributedString release];
     CGFloat height = MAX(size.height, 20.0);
     return height + (CELL_CONTENT_MARGIN_TOP+CELL_CONTENT_MARGIN_BOTTOM);
 }
@@ -601,7 +603,7 @@
     PostCell *cell =[tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     
 	if (nil == cell) {
-        cell = [[[PostCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
+        cell = [[PostCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
 

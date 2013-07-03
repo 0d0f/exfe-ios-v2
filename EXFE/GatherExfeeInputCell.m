@@ -42,27 +42,21 @@
 
 #pragma mark - Getter && Setter
 - (void)setTitle:(NSString *)s {
-    [_title release];
 	_title = [s copy];
 	[self setNeedsDisplay]; 
 }
 
 - (void)setAvatar:(UIImage *)a {
-	[_avatar release];
 	_avatar = [a copy];
 	[self setNeedsDisplay]; 
 }
 
 - (void)setProviderIcon:(UIImage *)a {
-	[_providerIcon release];
 	_providerIcon = [a copy];
 	[self setNeedsDisplay]; 
 }
 
 - (void)setProviderIconSet:(NSArray *)s{
-    if (_providerIconSet != nil) {
-        [_providerIconSet release];
-    }
     
     _providerIconSet = [s copy];
     [self setNeedsDisplay];
@@ -130,7 +124,6 @@
 //        [button addTarget:self action:@selector(checkButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
         self.accessoryView = button;
     }
-    [iconset release];
 }
 
 - (void)customWithIdentity:(Identity *)identity {
@@ -185,7 +178,7 @@
                                (id)[UIColor COLOR_RGB(0xFC, 0xFC, 0xFC)].CGColor,
                                (id)[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)].CGColor, nil];
     CGFloat gradientLocations[] = {0, 1};
-    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)gradientColors, gradientLocations);
+    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)gradientColors, gradientLocations);
     
     //// Rectangle Drawing
     UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRect: CGRectMake(-0.5f, -0.5f, CGRectGetWidth(self.frame) + 1.0f, CGRectGetHeight(self.frame) + 0.5f)];

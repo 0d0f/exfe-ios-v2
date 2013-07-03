@@ -24,15 +24,15 @@
 @class EFContactObject;
 @interface EFChoosePeopleViewCell : UITableViewCell
 
-@property (retain, nonatomic) UIImageView *avatarImageView;
-@property (retain, nonatomic) EFLabel *userNameLabel;
-@property (nonatomic, retain) UIImage *providerIcon;
-@property (nonatomic, retain) NSArray *providerIconList;
-@property (nonatomic, assign) id<EFChoosePeopleViewCellDelegate> delegate;
-@property (nonatomic, assign) id<EFChoosePeopleViewCellDataSource> dataSource;
-@property (nonatomic, retain) UIButton *accessButton;
+@property (strong, nonatomic) UIImageView *avatarImageView;
+@property (strong, nonatomic) EFLabel *userNameLabel;
+@property (nonatomic, strong) UIImage *providerIcon;
+@property (nonatomic, strong) NSArray *providerIconList;
+@property (nonatomic, weak) id<EFChoosePeopleViewCellDelegate> delegate;
+@property (nonatomic, weak) id<EFChoosePeopleViewCellDataSource> dataSource;
+@property (nonatomic, strong) UIButton *accessButton;
 
-@property (nonatomic, retain) EFContactObject *contactObject;
+@property (nonatomic, strong) EFContactObject *contactObject;
 
 + (NSString *)reuseIdentifier;
 

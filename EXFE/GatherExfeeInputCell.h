@@ -12,10 +12,10 @@
 @class Identity;
 @interface GatherExfeeInputCell : ABTableViewCell
 
-@property (nonatomic, retain) UIImage *avatar;
-@property (nonatomic, retain) UIImage *providerIcon;
-@property (nonatomic, retain) NSString *title;
-@property (nonatomic, retain) NSArray *providerIconSet;
+@property (nonatomic, strong) UIImage *avatar;
+@property (nonatomic, strong) UIImage *providerIcon;
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSArray *providerIconSet;
 
 - (void)customWithLocalContact:(LocalContact *)localContact;
 - (void)customWithIdentity:(Identity *)identity;

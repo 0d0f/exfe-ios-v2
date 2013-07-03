@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
     UIGestureRecognizer * tapBack;
 }
 
-@property (nonatomic, retain) EFSignInViewController *signInViewController;
+@property (nonatomic, strong) EFSignInViewController *signInViewController;
 @end
 
 @implementation EFLandingViewController
@@ -156,7 +156,6 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
                     ;
                 };
                 self.signInViewController = viewController;
-                [viewController release];
                 
                 CGRect frame = viewController.view.frame;
                 frameY = CGRectGetMinY(frame);

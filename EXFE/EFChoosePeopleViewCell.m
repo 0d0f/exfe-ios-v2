@@ -18,7 +18,7 @@
 
 #pragma mark - BackgroundView
 @interface EFChoosePeopleBackgroundView : UIView
-@property (nonatomic, assign) EFChoosePeopleViewCell *cell;
+@property (nonatomic, weak) EFChoosePeopleViewCell *cell;
 @end
 @implementation EFChoosePeopleBackgroundView
 
@@ -43,7 +43,7 @@
     NSArray *gradientColors = @[(id)[UIColor COLOR_RGB(0xFC, 0xFC, 0xFC)].CGColor,
                                 (id)[UIColor COLOR_RGB(0xFA, 0xFA, 0xFA)].CGColor];
     CGFloat gradientLocations[] = {0, 1};
-    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)gradientColors, gradientLocations);
+    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)gradientColors, gradientLocations);
     
     //// Rectangle Drawing
     UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRect: CGRectMake(-0.5f, -0.5f, CGRectGetWidth(self.frame) + 1.0f, CGRectGetHeight(self.frame) + 0.5f)];
@@ -111,7 +111,7 @@
 
 #pragma mark - BackgroundView
 @interface EFChoosePeopleHightedBackgroundView : UIView
-@property (nonatomic, assign) EFChoosePeopleViewCell *cell;
+@property (nonatomic, weak) EFChoosePeopleViewCell *cell;
 @end
 @implementation EFChoosePeopleHightedBackgroundView
 
@@ -136,7 +136,7 @@
     NSArray *gradientColors = @[(id)[UIColor COLOR_RGB(0xE6, 0xE6, 0xE6)].CGColor,
                                 (id)[UIColor COLOR_RGB(0xE6, 0xE6, 0xE6)].CGColor];
     CGFloat gradientLocations[] = {0, 1};
-    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)gradientColors, gradientLocations);
+    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)gradientColors, gradientLocations);
     
     //// Rectangle Drawing
     UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRect: CGRectMake(-0.5f, -0.5f, CGRectGetWidth(self.frame) + 1.0f, CGRectGetHeight(self.frame) + 0.5f)];
@@ -204,7 +204,7 @@
 
 #pragma mark - SelectedBackgroundView
 @interface EFChoosePeopleSelectedBackgroundView : UIView
-@property (nonatomic, assign) EFChoosePeopleViewCell *cell;
+@property (nonatomic, weak) EFChoosePeopleViewCell *cell;
 @end
 @implementation EFChoosePeopleSelectedBackgroundView
 
@@ -229,7 +229,7 @@
     NSArray *gradientColors = @[(id)[UIColor COLOR_BLUE_EXFE].CGColor,
                                 (id)[UIColor COLOR_BLUE_EXFE].CGColor];
     CGFloat gradientLocations[] = {0, 1};
-    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)gradientColors, gradientLocations);
+    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)gradientColors, gradientLocations);
     
     //// Rectangle Drawing
     UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRect: CGRectMake(-0.5f, -0.5f, CGRectGetWidth(self.frame) + 1.0f, CGRectGetHeight(self.frame) + 0.5f)];
@@ -307,7 +307,6 @@
         imageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
         [self.contentView addSubview:imageView];
         self.avatarImageView = imageView;
-        [imageView release];
         
         // username label
         EFLabel *label = [[EFLabel alloc] initWithFrame:(CGRect){{56, 12}, {190, 26}}];
@@ -320,7 +319,6 @@
         }
         [self.contentView addSubview:label];
         self.userNameLabel = label;
-        [label release];
         
         // button
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -335,12 +333,10 @@
         EFChoosePeopleBackgroundView *backgroundView = [[EFChoosePeopleBackgroundView alloc] initWithFrame:bounds];
         backgroundView.cell = self;
         self.backgroundView = backgroundView;
-        [backgroundView release];
         
         EFChoosePeopleSelectedBackgroundView *selectedBackgroundView = [[EFChoosePeopleSelectedBackgroundView alloc] initWithFrame:bounds];
         selectedBackgroundView.cell = self;
         self.multipleSelectionBackgroundView = selectedBackgroundView;
-        [selectedBackgroundView release];
     }
     
     return self;
@@ -350,12 +346,6 @@
     ((EFChoosePeopleBackgroundView *)self.backgroundView).cell = nil;
     ((EFChoosePeopleHightedBackgroundView *)self.backgroundView).cell = nil;
     ((EFChoosePeopleSelectedBackgroundView *)self.backgroundView).cell = nil;
-    [_accessButton release];
-    [_avatarImageView release];
-    [_userNameLabel release];
-    [_providerIconList release];
-    [_providerIcon release];
-    [super dealloc];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -376,12 +366,10 @@
             EFChoosePeopleHightedBackgroundView *backgroundView = [[EFChoosePeopleHightedBackgroundView alloc] initWithFrame:self.bounds];
             backgroundView.cell = self;
             self.backgroundView = backgroundView;
-            [backgroundView release];
         } else {
             EFChoosePeopleBackgroundView *backgroundView = [[EFChoosePeopleBackgroundView alloc] initWithFrame:self.bounds];
             backgroundView.cell = self;
             self.backgroundView = backgroundView;
-            [backgroundView release];
         }
         
         self.userNameLabel.textColor = [UIColor blackColor];
@@ -403,11 +391,10 @@
         return;
     
     if (_contactObject) {
-        [_contactObject release];
         _contactObject = nil;
     }
     if (contactObject) {
-        _contactObject = [contactObject retain];
+        _contactObject = contactObject;
         
         self.userNameLabel.text = contactObject.name;
         self.userNameLabel.frame = (CGRect){{56, 12}, {190, 26}};
@@ -469,8 +456,6 @@
             
             self.providerIcon = nil;
             self.providerIconList = iconList;
-            [iconList release];
-            [addDict release];
         }
     }
 }

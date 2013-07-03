@@ -21,7 +21,7 @@
 }
 
 - (NSString *)realSentenceCapitalizedString {
-    __block NSMutableString *mutableSelf = [NSMutableString stringWithString:self];
+    __weak NSMutableString *mutableSelf = [NSMutableString stringWithString:self];
     [self enumerateSubstringsInRange:NSMakeRange(0, [self length])
                              options:NSStringEnumerationBySentences
                           usingBlock:^(NSString *sentence, NSRange sentenceRange, NSRange enclosingRange, BOOL *stop) {

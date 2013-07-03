@@ -19,12 +19,12 @@
 #import "LocalContact+EXFE.h"
 
 @interface EFContactDataSource ()
-@property (nonatomic, retain) NSMutableArray *sections;
-@property (nonatomic, retain) NSMutableArray *sectionTitles;
+@property (nonatomic, strong) NSMutableArray *sections;
+@property (nonatomic, strong) NSMutableArray *sectionTitles;
 
-@property (nonatomic, retain) NSMutableArray *recentList;
-@property (nonatomic, retain) NSMutableArray *exfeeList;
-@property (nonatomic, retain) NSMutableArray *contactList;
+@property (nonatomic, strong) NSMutableArray *recentList;
+@property (nonatomic, strong) NSMutableArray *exfeeList;
+@property (nonatomic, strong) NSMutableArray *contactList;
 
 @end
 
@@ -68,13 +68,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_sections release];
-    [_exfeeList release];
-    [_contactList release];
-    [_sectionTitles release];
-    [super dealloc];
-}
 
 - (NSUInteger)numberOfSections {
     return self.sections.count;
@@ -262,10 +255,8 @@
             [result addObject:contactObject];
         }
         
-        [identityDict release];
         
         [self.exfeeList addObjectsFromArray:result];
-        [result release];
         
         if (_dataDidChangeHandler) {
             self.dataDidChangeHandler();
@@ -295,7 +286,6 @@
                                                         }
                                                         
                                                         [self.contactList addObjectsFromArray:filteredContactPeople];
-                                                        [filteredContactPeople release];
                                                         
                                                         dispatch_async(dispatch_get_main_queue(), ^{
                                                             if (_dataDidChangeHandler) {

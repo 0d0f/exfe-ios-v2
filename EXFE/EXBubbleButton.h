@@ -13,6 +13,6 @@
     id customObject;
 }
 
-@property (nonatomic,retain) id customObject;
+@property (nonatomic,strong) id customObject;
 
 @end

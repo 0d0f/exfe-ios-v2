@@ -17,7 +17,7 @@
 + (id)disconnectedEntity {
     NSManagedObjectContext *context = [RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Exfee" inManagedObjectContext:context];
-    return [[[self alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:nil] autorelease];
+    return [[self alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:nil];
 }
 
 - (void)addToContext:(NSManagedObjectContext *)context {
@@ -165,7 +165,6 @@
     }
     
     NSArray* result = [NSArray arrayWithArray:sorted];
-    [sorted release];
     return result;
 }
 
@@ -246,7 +245,6 @@
     }
     
     NSArray* result = [NSArray arrayWithArray:sortedUser];
-    [sortedUser release];
     return result;
 }
 

@@ -11,7 +11,7 @@
 @class EFImageCache;
 @interface EFImageManager : NSObject
 
-@property (nonatomic, retain) EFImageCache *imageCache;
+@property (nonatomic, strong) EFImageCache *imageCache;
 @property (nonatomic, readonly, copy) NSString *cachePath;
 
 + (EFImageManager *)defaultManager;

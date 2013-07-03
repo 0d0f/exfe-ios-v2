@@ -13,11 +13,11 @@
 
 @interface Exfee : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * accepted;
-@property (nonatomic, retain) NSNumber * exfee_id;
-@property (nonatomic, retain) NSNumber * total;
-@property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) NSSet *invitations;
+@property (nonatomic, strong) NSNumber * accepted;
+@property (nonatomic, strong) NSNumber * exfee_id;
+@property (nonatomic, strong) NSNumber * total;
+@property (nonatomic, strong) NSString * type;
+@property (nonatomic, strong) NSSet *invitations;
 @end
 
 @interface Exfee (CoreDataGeneratedAccessors)

@@ -16,7 +16,7 @@ typedef void (^TabBarItemTitleDidChangeBlock)(EFTabBarItemControl *control);
 @class EFTabBarItem;
 @interface EFTabBarItemControl : UIView
 
-@property (nonatomic, retain) EFTabBarItem *tabBarItem;
+@property (nonatomic, strong) EFTabBarItem *tabBarItem;
 
 @property (nonatomic, assign) BOOL touchEnable; // Default as YES
 @property (nonatomic, copy) TouchUpInsideBlock touchUpInsideActionHandler;

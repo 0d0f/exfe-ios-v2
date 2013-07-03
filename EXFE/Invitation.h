@@ -13,20 +13,20 @@
 
 @interface Invitation : NSManagedObject
 
-@property (nonatomic, retain) NSDate * created_at;
-@property (nonatomic, retain) NSNumber * host;
-@property (nonatomic, retain) NSNumber * invitation_id;
-@property (nonatomic, retain) NSNumber * mates;
-@property (nonatomic, retain) NSString * rsvp_status;
-@property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) NSDate * updated_at;
-@property (nonatomic, retain) NSString * via;
-@property (nonatomic, retain) Identity *identity;
-@property (nonatomic, retain) Identity *invited_by;
-@property (nonatomic, retain) Identity *updated_by;
-@property (nonatomic, retain) NSOrderedSet *notification_identities;
+@property (nonatomic, strong) NSDate * created_at;
+@property (nonatomic, strong) NSNumber * host;
+@property (nonatomic, strong) NSNumber * invitation_id;
+@property (nonatomic, strong) NSNumber * mates;
+@property (nonatomic, strong) NSString * rsvp_status;
+@property (nonatomic, strong) NSString * type;
+@property (nonatomic, strong) NSDate * updated_at;
+@property (nonatomic, strong) NSString * via;
+@property (nonatomic, strong) Identity *identity;
+@property (nonatomic, strong) Identity *invited_by;
+@property (nonatomic, strong) Identity *updated_by;
+@property (nonatomic, strong) NSOrderedSet *notification_identities;
 
-@property (nonatomic, readonly, retain) NSArray *notification_identity_array;
+@property (nonatomic, readonly, strong) NSArray *notification_identity_array;
 
 @end
 

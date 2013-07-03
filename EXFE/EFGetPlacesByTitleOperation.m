@@ -27,10 +27,6 @@ NSString *kEFNotificationNameGetPlacesByTitleFailure = @"notification.getPlacesB
     return self;
 }
 
-- (void)dealloc {
-    [_title release];
-    [super dealloc];
-}
 
 - (void)operationDidStart {
     [super operationDidStart];

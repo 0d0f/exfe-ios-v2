@@ -48,22 +48,15 @@
     return self;
 }
 
-- (void)dealloc {
-    self.window = nil;
-    [_logTextView release];
-    [_dateFormatter release];
-    [super dealloc];
-}
 
 - (void)setWindow:(UIWindow *)window {
     if (_window == window)
         return;
     if (_window) {
-        [_window release];
         _window = nil;
     }
     if (window) {
-        _window = [window retain];
+        _window = window;
         [_innerWindow makeKeyAndVisible];
         [_window makeKeyWindow];
     }

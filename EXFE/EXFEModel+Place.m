@@ -21,7 +21,6 @@
     
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
     
-    [managementOperation release];
 }
 
 - (void)getPlacesNearbyWithLocation:(CLLocationCoordinate2D)location {
@@ -37,7 +36,6 @@
     
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
     
-    [managementOperation release];
 }
 
 @end

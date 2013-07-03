@@ -59,13 +59,8 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    [username release];
-    [useravatar release];
     
-    [headerView release];
     
-    [_identitiesData release];
-    [super dealloc];
 }
 - (void)viewDidLoad
 {
@@ -84,7 +79,6 @@
         UIImageView * mask = [[UIImageView alloc] initWithFrame:headerView.bounds];
         mask.image = [UIImage imageNamed:@"profile_title_mask.png"];
         [headerView addSubview:mask];
-        [mask release];
         
         username = [[UILabel alloc] initWithFrame:CGRectMake(40, DECTOR_HEIGHT / 2 - 56 / 2, 180, 56)];
         username.backgroundColor = [UIColor clearColor];
@@ -99,7 +93,6 @@
         UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(headerView.bounds), CGRectGetMaxY(headerView.bounds) - 4, CGRectGetWidth(headerView.bounds), 4)];
         [shadow setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"shadow_4up.png"]]];
         [headerView addSubview:shadow];
-        [shadow release];
     }
     [self.view addSubview:headerView];
     
@@ -133,7 +126,6 @@
     
     UITapGestureRecognizer *tapHeaderRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapProfileHeader:)];
     [headerView addGestureRecognizer:tapHeaderRecognizer];
-    [tapHeaderRecognizer release];
     
     [self syncUser];
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -207,7 +199,6 @@
         viewcontroller.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         viewcontroller.image = useravatar.image;
         [self presentModalViewController:viewcontroller animated:YES];
-        [viewcontroller release];
     }
     
 }
@@ -256,8 +247,6 @@
 
 - (void)fillProfileBody:(User*)user{
     NSArray* data = [self prepareTableData];
-    [data retain];
-    [_identitiesData release];
     _identitiesData = data;
     
     [tableview reloadData];
@@ -287,9 +276,7 @@
         return [[(Identity*)a a_order] compare:[(Identity*)b a_order]];
     }];
     
-    NSArray *identitiesData = [NSArray arrayWithObjects:[[sorted_identities_section mutableCopy] autorelease],devices_section, nil];
-    [devices_section release];
-    [identities_section release];
+    NSArray *identitiesData = [NSArray arrayWithObjects:[sorted_identities_section mutableCopy],devices_section, nil];
     return identitiesData;
 }
 
@@ -327,7 +314,7 @@
         
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"addidentitybutton"];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"addidentitybutton"] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"addidentitybutton"];
         }
         cell.textLabel.text = NSLocalizedString(@"Add identity...", nil);
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
@@ -473,8 +460,6 @@
     [presentCardController presentFromViewController:self
                                             animated:YES];
     
-    [presentCardController release];
-    [romeViewController release];
 }
 
 #pragma mark UITableViewDelegate methods
@@ -487,7 +472,7 @@
 //            AddIdentityViewController *addidentityView=[[[AddIdentityViewController alloc]initWithNibName:@"AddIdentityViewController" bundle:nil] autorelease];
 //            addidentityView.profileview=self;
             
-            EFAddIdentityViewController *addidentityView=[[[EFAddIdentityViewController alloc]initWithNibName:@"EFAddIdentityViewController" bundle:nil] autorelease];
+            EFAddIdentityViewController *addidentityView=[[EFAddIdentityViewController alloc]initWithNibName:@"EFAddIdentityViewController" bundle:nil];
 //            addidentityView.profileview=self;
             [self.navigationController pushViewController:addidentityView animated:YES];
         }else {
@@ -637,13 +622,11 @@
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Identity Verification", nil) message:msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Re-authorize", nil), nil];
             alert.tag=identity_id;
             [alert show];
-            [alert release];
         }else{
             NSString *msg=NSLocalizedString(@"Unverified identity, please check your email for instructions.\nRe-send verification email?", nil);
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Identity Verification", nil) message:msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Send", nil), nil];
             alert.tag=identity_id;
             [alert show];
-            [alert release];
             
         }
     }
@@ -693,7 +676,6 @@
                                                                          oauth.javaScriptString = nil;
                                                                      }
                                                                      [self presentModalViewController:oauth animated:YES];
-                                                                     [oauth release];
                                                                      
                                                                  }
                                                              }

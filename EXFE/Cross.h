@@ -13,20 +13,20 @@
 
 @interface Cross : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * conversation_count;
-@property (nonatomic, retain) NSDate * created_at;
-@property (nonatomic, retain) NSString * cross_description;
-@property (nonatomic, retain) NSNumber * cross_id;
-@property (nonatomic, retain) NSString * crossid_base62;
-@property (nonatomic, retain) NSDate * read_at;
-@property (nonatomic, retain) NSString * title;
-@property (nonatomic, retain) id updated;
-@property (nonatomic, retain) NSString * updated_at;
-@property (nonatomic, retain) id widget;
-@property (nonatomic, retain) Identity *by_identity;
-@property (nonatomic, retain) Exfee *exfee;
-@property (nonatomic, retain) Identity *host_identity;
-@property (nonatomic, retain) Place *place;
-@property (nonatomic, retain) CrossTime *time;
+@property (nonatomic, strong) NSNumber * conversation_count;
+@property (nonatomic, strong) NSDate * created_at;
+@property (nonatomic, strong) NSString * cross_description;
+@property (nonatomic, strong) NSNumber * cross_id;
+@property (nonatomic, strong) NSString * crossid_base62;
+@property (nonatomic, strong) NSDate * read_at;
+@property (nonatomic, strong) NSString * title;
+@property (nonatomic, strong) id updated;
+@property (nonatomic, strong) NSString * updated_at;
+@property (nonatomic, strong) id widget;
+@property (nonatomic, strong) Identity *by_identity;
+@property (nonatomic, strong) Exfee *exfee;
+@property (nonatomic, strong) Identity *host_identity;
+@property (nonatomic, strong) Place *place;
+@property (nonatomic, strong) CrossTime *time;
 
 @end

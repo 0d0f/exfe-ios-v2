@@ -13,7 +13,7 @@
 @class EFContactObject;
 @interface EFSearchContactDataSouce : NSObject
 
-@property (nonatomic, assign) EFContactDataSource *contactDataSource;
+@property (nonatomic, weak) EFContactDataSource *contactDataSource;
 @property (nonatomic, copy) NSString *searchKeyWord;
 @property (nonatomic, copy) ActionBlock keywordDidChangeHandler;
 @property (nonatomic, copy) ActionBlock suggestDidChangeHandler;

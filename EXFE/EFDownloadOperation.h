@@ -11,6 +11,6 @@
 @interface EFDownloadOperation : EFNetworkOperation
 
 @property (nonatomic, copy)   NSURL     *url;
-@property (nonatomic, retain) NSData    *data;
+@property (nonatomic, strong) NSData    *data;
 
 @end

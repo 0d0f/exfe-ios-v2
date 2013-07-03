@@ -30,6 +30,6 @@
 }
 
 @property (nonatomic, unsafe_unretained) id delegate;
-@property (nonatomic, retain) Identity * identity;
+@property (nonatomic, strong) Identity * identity;
 
 @end

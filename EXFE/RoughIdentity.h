@@ -28,7 +28,7 @@ NSCopying
 @property (nonatomic, copy, readonly) NSString *key;
 
 @property (nonatomic, assign) EFRoughIdentityGetIdentityStatus status;
-@property (nonatomic, retain) Identity *identity;
+@property (nonatomic, strong) Identity *identity;
 
 @property (nonatomic, assign, getter = isSelected) BOOL selected;   // Default as NO.
 

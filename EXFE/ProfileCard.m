@@ -23,45 +23,35 @@
     return self;
 }
 
-- (void)dealloc {
-    [avatar release];
-    [super dealloc];
-    
-}
 
 - (void)setAvatar:(UIImage *)a {
     if (avatar == a){
         return;
     }
     if (avatar != nil) {
-        [avatar release];
         avatar = nil;
         [self setNeedsDisplay];
     }
     if (a != nil) {
         //avatar = [a roundedCornerImage:40 borderSize:0];
         avatar = a;
-        [avatar retain];
         [self setNeedsDisplay];
     }
 }
 
 - (void)addProfileTarget:(id)target action:(SEL)action{
     if (profileTarget != nil){
-        [profileTarget release];
         profileTarget = nil;
         profileAction = nil;
     }
     if (target != nil){
         profileTarget  = target;
-        [profileTarget retain];
         profileAction = action;
     }
 }
 - (void)removeProfileTarget:(id)target action:(SEL)action{
     if (profileTarget != nil){
         if (profileTarget == target && profileAction == action){
-            [profileTarget release];
             profileTarget = nil;
             profileAction = nil;
         }
@@ -75,20 +65,17 @@
 
 - (void)addGatherTarget:(id)target action:(SEL)action{
     if (gatherTarget != nil){
-        [gatherTarget release];
         gatherTarget = nil;
         gatherAction = nil;
     }
     if (target != nil){
         gatherTarget  = target;
-        [gatherTarget retain];
         gatherAction = action;
     }
 }
 - (void)removeGatherTarget:(id)target action:(SEL)action{
     if (gatherTarget!= nil){
         if (gatherTarget == target && gatherAction == action){
-            [gatherTarget release];
             gatherTarget = nil;
             gatherAction = nil;
         }
@@ -154,7 +141,7 @@
     
     NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:gather];
     CTFontRef fontRef= CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
-    [string addAttribute:(NSString*)kCTFontAttributeName  value:(id)fontRef range:NSMakeRange(0,[string length])];
+    [string addAttribute:(NSString*)kCTFontAttributeName  value:(__bridge id)fontRef range:NSMakeRange(0,[string length])];
     CFRelease(fontRef);
     [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_WA(0x19, 0xFF)].CGColor range:NSMakeRange(0,9)];
     [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:NSMakeRange(9,3)];
@@ -164,10 +151,10 @@
         {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
     };
     CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(setting, 1);
-    [string addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,[string length])];
+    [string addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)paragraphstyle range:NSMakeRange(0,[string length])];
     CFRelease(paragraphstyle);
     
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)string);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)string);
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, CGRectOffset(titleRect, 0, -titlePaddingV));
     CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [string length]), path, NULL);
@@ -175,7 +162,6 @@
     CFRelease(path);
     CTFrameDraw(theFrame, currentContext);
     CFRelease(theFrame);
-    [string release];
     CGContextRestoreGState(currentContext);
     
 }

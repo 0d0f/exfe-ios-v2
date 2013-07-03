@@ -20,34 +20,24 @@
 @synthesize identity_name;
 
 - (void)setContent:(NSString *)s {
-	[content release];
 	content = [s copy];
 	[self setNeedsDisplay]; 
 }
 - (void)setAvatar:(UIImage *)a {
-	[avatar release];
 	avatar = [a copy];
 	[self setNeedsDisplay]; 
 }
 
 - (void)setTime:(NSString *)a {
-	[time release];
 	time = [a copy];
 	[self setNeedsDisplay]; 
 }
 - (void)setRelativeTime:(NSString *)a {
-	[relativetime release];
 	relativetime = [a copy];
 	[self setNeedsDisplay]; 
 }
 
 
-- (void)dealloc {
-	[content release];
-    [avatar release];
-    [time release];
-    [super dealloc];
-}
 
 
 - (id)initWithFrame:(CGRect)frame
@@ -82,12 +72,12 @@
     CTParagraphStyleRef style = CTParagraphStyleCreate(setting, 2);
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@   %@",identity_name,content]];
     CTFontRef boldfontref14=CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 14.0, NULL);
-    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)boldfontref14 range:NSMakeRange(0,[identity_name length])];
+    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)boldfontref14 range:NSMakeRange(0,[identity_name length])];
     
     CTFontRef fontref14=CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL);
-    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref14 range:NSMakeRange([identity_name length]+3,[content length])];
+    [attributedString addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)fontref14 range:NSMakeRange([identity_name length]+3,[content length])];
 
-    [attributedString addAttribute:(id)kCTParagraphStyleAttributeName value:(id)style range:NSMakeRange(0,[content length])];
+    [attributedString addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)style range:NSMakeRange(0,[content length])];
     [attributedString addAttribute:(id)kCTForegroundColorAttributeName value:(id)[FONT_COLOR_FA CGColor] range:NSMakeRange(0,[content length]+[identity_name length]+3)];
     CFRelease(boldfontref14);
     CFRelease(fontref14);
@@ -98,7 +88,7 @@
     CGContextTranslateCTM(context, 0, self.bounds.size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
     
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedString);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attributedString);
     CFRange range;
     CGSize coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [attributedString length]), nil, r.size, &range);
     CGMutablePathRef path = CGPathCreateMutable();
@@ -113,7 +103,6 @@
     
     CTFrameDraw(theFrame, context);
     CFRelease(theFrame);
-    [attributedString release];
     CGContextRestoreGState(context);
     
 }

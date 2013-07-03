@@ -31,7 +31,6 @@
         UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
         gestureRecognizer.delegate = self;
         [self addGestureRecognizer:gestureRecognizer];
-        [gestureRecognizer release];
         
         barnnerRect = CGRectZero;
         textbarRect = CGRectZero;
@@ -102,40 +101,25 @@
     }
 }
 
-- (void)dealloc {
-	[title release];
-    [avatar release];
-    [time release];
-    [place release];
-    [super dealloc];
-    
-}
 - (void)setTitle:(NSString *)s {
-	[title release];
 	title = [s copy];
 	[self setNeedsDisplay]; 
 }
 - (void)setTime:(NSString *)s {
-	[time release];
         time = [s copy];
 	[self setNeedsDisplay];
 }
 - (void)setPlace:(NSString *)s {
-	[place release];
   place = [s copy];
 	[self setNeedsDisplay];
 }
 
 - (void)setAvatar:(UIImage *)a {
-	[avatar release];
 	avatar = [a copy];
 	[self setNeedsDisplay];
 }
 
 - (void)setBannerimg:(UIImage *)image {
-  if(bannerimg!=nil){
-    [bannerimg release];
-  }
 	bannerimg = [image copy];
 	[self setNeedsDisplay];
 }
@@ -197,21 +181,21 @@
     }else{
         fontType = @"HelveticaNeue"; //[NSString stringWithString:@"blah blah"];
     }
-    CTFontRef textfontref= CTFontCreateWithName((CFStringRef)fontType, 21.0, NULL);
+    CTFontRef textfontref= CTFontCreateWithName((__bridge CFStringRef)fontType, 21.0, NULL);
     if(title == nil){
         title = @"";
     }
     NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:title];
-    [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
+    [textstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)textfontref range:NSMakeRange(0,[textstring length])];
     [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_WHITE].CGColor range:NSMakeRange(0,[textstring length])];
     CTLineBreakMode lineBreakMode = kCTLineBreakByCharWrapping;
     CTParagraphStyleSetting gathersetting[3] = {
         {kCTParagraphStyleSpecifierLineBreakMode, sizeof(lineBreakMode), &lineBreakMode}
     };
     CTParagraphStyleRef pstyle = CTParagraphStyleCreate(gathersetting, 3);
-    [textstring addAttribute:(id)kCTParagraphStyleAttributeName value:(id)pstyle range:NSMakeRange(0,[textstring length])];
+    [textstring addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)pstyle range:NSMakeRange(0,[textstring length])];
     
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)textstring);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)textstring);
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, titleRect);
     CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [title length]), path, NULL);
@@ -222,7 +206,6 @@
     CFRelease(pstyle);
     CFRelease(textfontref);
     CGContextRestoreGState(context);
-    [textstring release];
     
     UIFont *font17 = [UIFont fontWithName:@"HelveticaNeue-Light" size:15];
     // text info
@@ -274,10 +257,10 @@
                 
                 CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Medium"), 13.0, NULL);
                 NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:convCount];
-                [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
+                [textstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)textfontref range:NSMakeRange(0,[textstring length])];
                 [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_WA(0xFF, 0xFF)].CGColor range:NSMakeRange(0,[textstring length])];
                 
-                CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)textstring);
+                CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)textstring);
                 CGMutablePathRef path = CGPathCreateMutable();
                 CGPathAddRect(path, NULL, numRect);
                 CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [textstring length]), path, NULL);
@@ -287,7 +270,6 @@
                 CTFrameDraw(theFrame, context);
                 CFRelease(theFrame);
                 CGContextRestoreGState(context);
-                [textstring release];
             }
             //[convCount drawInRect:numRect withFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:13] lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentCenter];
         } else {
@@ -303,7 +285,6 @@
 
     self.selectedBackgroundView = view;
     [super setSelected:selected animated:animated];
-    [view release];
 
     // Configure the view for the selected state
 }

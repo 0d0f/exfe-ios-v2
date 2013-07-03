@@ -59,7 +59,6 @@
     inputframeview.contentMode    = UIViewContentModeScaleToFill;
     inputframeview.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
     [toolbar addSubview:inputframeview];
-    [inputframeview release];
     
     inputplace=[[UITextField alloc] initWithFrame:CGRectMake(54, 13.5, 195-18, 18.5)];
     inputplace.tag=401;
@@ -76,7 +75,6 @@
     UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(33, 13.5, 18, 18)];
     icon.image=[UIImage imageNamed:@"place_18.png"];
     [toolbar addSubview:icon];
-    [icon release];
 
     rightbutton=[UIButton buttonWithType:UIButtonTypeCustom];
     [rightbutton setFrame:CGRectMake(265, 7, 50, 30)];
@@ -110,7 +108,7 @@
       
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
         NSEntityDescription *placeEntity = [NSEntityDescription entityForName:@"Place" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-        self.selecetedPlace = [[[Place alloc] initWithEntity:placeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+        self.selecetedPlace = [[Place alloc] initWithEntity:placeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
         self.selecetedPlace.title = @"";
         self.selecetedPlace.place_description = @"";
         self.selecetedPlace.lat = @"";
@@ -222,7 +220,6 @@
     UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maplongpress:)];
     longpress.minimumPressDuration = 1.0;
     [map addGestureRecognizer:longpress];
-    [longpress release];
     
     UITapGestureRecognizer *tapMap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
         [self setViewStyle:EXPlaceViewStyleMap];
@@ -258,14 +255,6 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    [locationManager release];
-    self.placeResults = nil;
-    self.customPlace = nil;
-    [_tableView release];
-    [placeedit release];
-    [mapShadow release];
-    [inputplace release];
-    [super dealloc];
 }
 
 
@@ -552,7 +541,6 @@
         annotation.external_id = [placedict objectForKey:@"external_id"];
         annotation.index = i;
         [annotations addObject:annotation];
-        [annotation release];
         i++;
     }
     [map removeAnnotations:map.annotations];
@@ -575,7 +563,6 @@
     annotation.index = 0;
     
     [map addAnnotation:annotation];
-    [annotation release];
     
 }
 
@@ -607,7 +594,6 @@
         // custome place
     }
     [map addAnnotation:annotation];
-    [annotation release];
     [clearbutton setHidden:YES];
     
     [self setViewStyle:EXPlaceViewStyleEdit];
@@ -833,19 +819,21 @@
     NSInteger section = indexPath.section;
     
     switch (section) {
-        case 0:
+        case 0:{
             [self editPlace:self.customPlace];
             
-            break;
+        }   break;
          
-        case 1:
+        case 1:{
             [self.customPlace removeAllObjects];
             NSDictionary * dict = [self.placeResults objectAtIndex:indexPath.row];
             [self.customPlace addEntriesFromDictionary:dict];
             
             [self editPlace:self.customPlace];
-            break;
-        default:
+        }    break;
+        default:{
+            
+        }
             break;
     }
 }
@@ -860,7 +848,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     cell.backgroundColor=FONT_COLOR_250;
@@ -913,7 +901,7 @@
         return nil;
     }
     
-    MKAnnotationView *annView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil] autorelease];
+    MKAnnotationView *annView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
     annView.canShowCallout = YES;
     
     if ([((PlaceAnnotation*)annotation).external_id isEqualToString:self.selecetedPlace.external_id]) {
@@ -1067,7 +1055,7 @@
             self.selecetedPlace.external_id=@"";
             self.selecetedPlace.provider=@"";
 
-            [self showEdit:self.selecetedPlace];
+//            [self showEdit:self.selecetedPlace];
             location.latitude = annotation.coordinate.latitude;
             location.longitude = annotation.coordinate.longitude;
 
@@ -1086,7 +1074,7 @@
     }else{
         NSDictionary *placedict = [self.placeResults objectAtIndex:index];
         [self storeSelectedPlace:placedict];
-        [self showEdit:self.selecetedPlace];
+//        [self showEdit:self.selecetedPlace];
         location.latitude = [[placedict objectForKey:@"lat"] doubleValue];
         location.longitude = [[placedict objectForKey:@"lng"] doubleValue];
 

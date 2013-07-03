@@ -25,10 +25,6 @@ NSString *kEFNotificationNameLoadSuggestFailure = @"notification.loadSugget.fail
     return self;
 }
 
-- (void)dealloc {
-    [_key release];
-    [super dealloc];
-}
 
 - (void)operationDidStart {
     [super operationDidStart];

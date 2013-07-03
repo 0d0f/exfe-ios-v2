@@ -27,12 +27,12 @@
 - (void)abandonCachePath;
 
 
-@property (nonatomic, retain, readwrite) NSManagedObjectContext *   exfeContext;
+@property (nonatomic, strong, readwrite) NSManagedObjectContext *   exfeContext;
 @property (nonatomic, assign, readonly) NSInteger                   userId;
-@property (nonatomic, retain, readwrite) NSString *                 userToken;
-@property (nonatomic, retain, readonly) NSMutableDictionary *       userConfig;
-@property (nonatomic, retain, readonly) RKObjectManager *           objectManager;
-@property (nonatomic, retain, readonly) EFAPIServer *               apiServer;
+@property (nonatomic, strong, readwrite) NSString *                 userToken;
+@property (nonatomic, strong, readonly) NSMutableDictionary *       userConfig;
+@property (nonatomic, strong, readonly) RKObjectManager *           objectManager;
+@property (nonatomic, strong, readonly) EFAPIServer *               apiServer;
 
 #pragma mark Token and User ID manager
 
@@ -50,9 +50,9 @@
 - (void)stop;
 
 #pragma mark * Core Data accessors
-@property (nonatomic, retain, readonly ) NSManagedObjectContext *   managedObjectContext;       // observable
-@property (nonatomic, retain, readonly ) NSEntityDescription *      crossEntry;
-@property (nonatomic, retain, readonly ) NSEntityDescription *      exfeeEntry;
+@property (nonatomic, strong, readonly ) NSManagedObjectContext *   managedObjectContext;       // observable
+@property (nonatomic, strong, readonly ) NSEntityDescription *      crossEntry;
+@property (nonatomic, strong, readonly ) NSEntityDescription *      exfeeEntry;
 
 
 

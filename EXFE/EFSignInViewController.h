@@ -14,29 +14,29 @@
 
 @interface EFSignInViewController : UIViewController<OAuthLoginViewControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate>
 
-@property (nonatomic, retain) CSLinearLayoutView *rootView;
-@property (nonatomic, retain) UITextField *inputIdentity;
-@property (nonatomic, retain) UIImageView *imageIdentity;
-@property (nonatomic, retain) UIButton *extIdentity;
-@property (nonatomic, retain) EFPasswordField *inputPassword;
-@property (nonatomic, retain) UITextField *inputUsername;
-@property (nonatomic, retain) UIButton *btnStart;
-@property (nonatomic, retain) UIButton *btnStartNewUser;
-@property (nonatomic, retain) UIButton *btnStartOver;
+@property (nonatomic, strong) CSLinearLayoutView *rootView;
+@property (nonatomic, strong) UITextField *inputIdentity;
+@property (nonatomic, strong) UIImageView *imageIdentity;
+@property (nonatomic, strong) UIButton *extIdentity;
+@property (nonatomic, strong) EFPasswordField *inputPassword;
+@property (nonatomic, strong) UITextField *inputUsername;
+@property (nonatomic, strong) UIButton *btnStart;
+@property (nonatomic, strong) UIButton *btnStartNewUser;
+@property (nonatomic, strong) UIButton *btnStartOver;
 
-@property (nonatomic, retain) UILabel *labelVerifyTitle;
-@property (nonatomic, retain) UILabel *labelVerifyDescription;
+@property (nonatomic, strong) UILabel *labelVerifyTitle;
+@property (nonatomic, strong) UILabel *labelVerifyDescription;
 
-@property (nonatomic, retain) UILabel *hintError;
-@property (nonatomic, retain) TTTAttributedLabel *inlineError;
-@property (nonatomic, retain) UIActivityIndicatorView *indicator;
-@property (nonatomic, retain) UIImageView *textFieldFrame;
+@property (nonatomic, strong) UILabel *hintError;
+@property (nonatomic, strong) TTTAttributedLabel *inlineError;
+@property (nonatomic, strong) UIActivityIndicatorView *indicator;
+@property (nonatomic, strong) UIImageView *textFieldFrame;
 
-@property (nonatomic, retain) UIButton *btnFacebook;
-@property (nonatomic, retain) UIButton *btnTwitter;
+@property (nonatomic, strong) UIButton *btnFacebook;
+@property (nonatomic, strong) UIButton *btnTwitter;
 
 
 @property (nonatomic, copy) id onExitBlock;
-@property (nonatomic, retain) NSMutableDictionary *identityCache;
+@property (nonatomic, strong) NSMutableDictionary *identityCache;
 
 @end

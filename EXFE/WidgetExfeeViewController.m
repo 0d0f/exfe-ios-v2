@@ -96,7 +96,6 @@ typedef enum {
 //                                   @"style": @"Lowlight"
                                    }
                       };
-        [rsvpDict retain];
         myRsvpDict = @{ @"header": NSLocalizedString(@"Set response to:", nil),
                         @"item0": @{ @"main": NSLocalizedString(@"I'm in", nil),
                                      @"style": @"Highlight"
@@ -111,7 +110,6 @@ typedef enum {
 //                                     @"style": @"Lowlight"
                                      }
                         };
-        [myRsvpDict retain];
     }
     return self;
 }
@@ -183,7 +181,6 @@ typedef enum {
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    [_shadowImage release];
 //    [invName release];
 //    [invHostFlag release];
 //    [invHostText release];
@@ -193,17 +190,10 @@ typedef enum {
 //    [bioTitle release];
 //    [bioContent release];
 //    [invContent release];
-    [invTable release];
-    [flowLayout release];
     
-    [exfeeContainer release];
     
-    [rsvpMenu release];
     
-    [rsvpDict release];
-    [myRsvpDict release];
     
-    [super dealloc];
 }
 
 
@@ -286,7 +276,6 @@ typedef enum {
 	popupQuery.actionSheetStyle = UIActionSheetStyleDefault;
     
 	[popupQuery showInView:self.view];
-	[popupQuery release];
 }
 
 #pragma mark UITableViewDataSource
@@ -357,7 +346,7 @@ typedef enum {
             Invitation *inv = _selected_invitation;
             
             if (inv) {
-                NSUInteger changeFlag = kTagIdNone;
+//                NSUInteger changeFlag = kTagIdNone;
                 RsvpCode rsvp = [Invitation getRsvpCode:inv.rsvp_status];
                 
                 
@@ -371,23 +360,21 @@ typedef enum {
                         NSString *raw = NSLocalizedString(@"Accepted", nil);
                         NSString *placeholder = [NSString stringWithFormat:@"[%@]", raw];
                         NSAttributedString *acceptStr = [[NSMutableAttributedString alloc] initWithString:raw
-                                                                                               attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                                                                               attributes:@{(NSString*)kCTFontAttributeName: (__bridge id)textfontref,
                                                          (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
                         
                         if ([inv.mates intValue] > 0) {
                             NSString *strWithMates = [NSString stringWithFormat:NSLocalizedString(@"%@ with %i mates", @"Accepted with n mates"), placeholder, [inv.mates intValue]];
                             NSMutableAttributedString *fullStr = [[NSMutableAttributedString alloc] initWithString:strWithMates
-                                                                                                        attributes:@{(NSString*)kCTFontAttributeName:(id)textfontref2,
+                                                                                                        attributes:@{(NSString*)kCTFontAttributeName:(__bridge id)textfontref2,
                                                                   (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
                             [fullStr replaceCharactersInRange:[strWithMates rangeOfString:placeholder] withAttributedString:acceptStr];
                             invRsvpLabel.attributedText = fullStr;
                             [invRsvpLabel setNeedsDisplay];
-                            [fullStr release];
                         }else{
                             invRsvpLabel.attributedText = acceptStr;
                             [invRsvpLabel setNeedsDisplay];
                         }
-                        [acceptStr release];
                         CFRelease(textfontref);
                         CFRelease(textfontref2);
                     }
@@ -398,11 +385,10 @@ typedef enum {
                         
                         CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
                         NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Unavailable", nil)
-                                                                                             attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                                                                             attributes:@{(NSString*)kCTFontAttributeName: (__bridge id)textfontref,
                                                        (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
                         invRsvpLabel.attributedText = pending;
                         [invRsvpLabel setNeedsDisplay];
-                        [pending release];
                         CFRelease(textfontref);
                     }
                         break;
@@ -412,11 +398,10 @@ typedef enum {
                         
                         CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
                         NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Interested", nil)
-                                                                                             attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                                                                             attributes:@{(NSString*)kCTFontAttributeName: (__bridge id)textfontref,
                                                        (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
                         invRsvpLabel.attributedText = pending;
                         [invRsvpLabel setNeedsDisplay];
-                        [pending release];
                         CFRelease(textfontref);
                     }
                         break;
@@ -434,11 +419,10 @@ typedef enum {
                         
                         CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
                         NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Pending", nil)
-                                                                                             attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                                                                             attributes:@{(NSString*)kCTFontAttributeName: (__bridge id)textfontref,
                                                        (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
                         invRsvpLabel.attributedText = pending;
                         [invRsvpLabel setNeedsDisplay];
-                        [pending release];
                         CFRelease(textfontref);
                     }
                         break;
@@ -446,11 +430,10 @@ typedef enum {
                 if ([inv.identity.unreachable boolValue]){
                     CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
                     NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Unreachable contact", nil)
-                                                                                         attributes:@{(NSString*)kCTFontAttributeName: (id)textfontref,
+                                                                                         attributes:@{(NSString*)kCTFontAttributeName: (__bridge id)textfontref,
                                                    (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)].CGColor}];
                     invRsvpLabel.attributedText = pending;
                     [invRsvpLabel setNeedsDisplay];
-                    [pending release];
                     CFRelease(textfontref);
                 }
                 
@@ -458,7 +441,6 @@ typedef enum {
                 if (inv.updated_at != nil) {
                     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
                     NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit |NSTimeZoneCalendarUnit) fromDate:inv.updated_at];
-                    [gregorian release];
                     altString = [DateTimeUtil GetRelativeTime:comps format:0];
                 }
                 if ([inv.updated_by.connected_user_id intValue]!= [inv.identity.connected_user_id intValue]){
@@ -989,7 +971,6 @@ typedef enum {
                 EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
                 [bigspin startAnimating];
                 hud.customView = bigspin;
-                [bigspin release];
                 
                 
                 Exfee *exfee = [Exfee disconnectedEntity];
@@ -1023,11 +1004,9 @@ typedef enum {
                     }
                     
                     [invitations addObject:invitation];
-                    [invitation release];
                 }
                 
                 [exfee addInvitations:invitations];
-                [invitations release];
                 
                 Identity *myidentity = [self.exfee getMyInvitation].identity;
                 
@@ -1053,7 +1032,6 @@ typedef enum {
             [self presentViewController:viewController
                                animated:YES
                              completion:nil];
-            [viewController release];
         } else {
             [self hidePopupIfShown];
             PSTCollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];

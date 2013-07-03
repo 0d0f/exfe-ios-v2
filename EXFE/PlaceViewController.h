@@ -63,14 +63,14 @@ typedef enum {
 
 
 //@property (nonatomic,retain) UIViewController* gatherview;
-@property (nonatomic,retain) id delegate;
+@property (nonatomic,strong) id delegate;
 @property BOOL showdetailview;
 @property BOOL showtableview;
 @property BOOL isaddnew;
 
-@property (nonatomic, retain) Place *selecetedPlace;
-@property (nonatomic, retain) NSMutableDictionary *customPlace;
-@property (nonatomic, retain) NSMutableArray *placeResults;
+@property (nonatomic, strong) Place *selecetedPlace;
+@property (nonatomic, strong) NSMutableDictionary *customPlace;
+@property (nonatomic, strong) NSMutableArray *placeResults;
 
 - (void) selectPlace:(int)index editing:(BOOL)editing;
 @end

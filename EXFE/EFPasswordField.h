@@ -10,8 +10,8 @@
 
 @interface EFPasswordField : UITextField
 
-@property (nonatomic, retain) UIImageView *icon;
-@property (nonatomic, retain) UIButton *eye;
-@property (nonatomic, retain) UIButton *btnForgot;
+@property (nonatomic, strong) UIImageView *icon;
+@property (nonatomic, strong) UIButton *eye;
+@property (nonatomic, strong) UIButton *btnForgot;
 
 @end

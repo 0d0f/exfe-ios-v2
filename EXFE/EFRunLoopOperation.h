@@ -18,7 +18,7 @@ typedef enum {
 
 @interface EFRunLoopOperation : NSOperation
 
-@property (nonatomic, retain) NSThread                  *runLoopThread;
+@property (nonatomic, strong) NSThread                  *runLoopThread;
 @property (nonatomic, copy) NSSet                       *runLoopModes;
 
 @property (nonatomic, readonly) EFRunLoopOperationState runLoopOperationState;

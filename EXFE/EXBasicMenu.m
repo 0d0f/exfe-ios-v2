@@ -46,9 +46,7 @@
             responselabel.font = [UIFont fontWithName:@"HelveticaNeue" size:12];
             
             [responseview addSubview:responselabel];
-            [responselabel release];
             [self addSubview:responseview];
-            [responseview release];
             startY += CGRectGetHeight(responseview.bounds);
             extra ++;
         }
@@ -129,9 +127,7 @@
             responselabel.font = [UIFont fontWithName:@"HelveticaNeue" size:12];
             
             [responseview addSubview:responselabel];
-            [responselabel release];
             [self addSubview:responseview];
-            [responseview release];
 //            startY += CGRectGetHeight(responseview.bounds);
         }
     }

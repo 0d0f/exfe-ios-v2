@@ -39,7 +39,7 @@ typedef NS_ENUM(NSUInteger, SequencePosition){
 @property (nonatomic, assign) BOOL unreachable;
 @property (nonatomic, assign) BOOL host;
 @property (nonatomic, assign) NSUInteger mates;
-@property (nonatomic, retain) NSNumber *invitation_id;
+@property (nonatomic, strong) NSNumber *invitation_id;
 @property (nonatomic, assign) SequencePosition sequence;
 
 - (void)setRsvp:(RsvpCode)rsvp andUnreachable:(BOOL)unreachable withHost:(BOOL)host;

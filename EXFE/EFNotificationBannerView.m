@@ -19,13 +19,13 @@ typedef void (^ButtonPressedHandlerBlock)(void);
 
 @interface EFNotificationBannerView ()
 
-@property (nonatomic, retain) UIWindow *window;
-@property (nonatomic, retain) UILabel *titleLabel;
-@property (nonatomic, retain) UILabel *messageLabel;
-@property (nonatomic, retain) UIView *maskView;
-@property (nonatomic, retain) UIButton *button;
+@property (nonatomic, strong) UIWindow *window;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *messageLabel;
+@property (nonatomic, strong) UIView *maskView;
+@property (nonatomic, strong) UIButton *button;
 @property (nonatomic, copy) ButtonPressedHandlerBlock buttonPressedHandler;
-@property (nonatomic, retain) NSTimer *timer;
+@property (nonatomic, strong) NSTimer *timer;
 
 @end
 
@@ -47,7 +47,6 @@ typedef void (^ButtonPressedHandlerBlock)(void);
         maskView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.2f];
         [self addSubview:maskView];
         self.maskView = maskView;
-        [maskView release];
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{10, 4}, {260, 21}}];
         titleLabel.backgroundColor = [UIColor clearColor];
@@ -58,7 +57,6 @@ typedef void (^ButtonPressedHandlerBlock)(void);
         titleLabel.text = title;
         [self addSubview:titleLabel];
         self.titleLabel = titleLabel;
-        [titleLabel release];
         
         UILabel *messageLabel = [[UILabel alloc] initWithFrame:(CGRect){{10, 18}, {260, 18}}];
         messageLabel.backgroundColor = [UIColor clearColor];
@@ -69,7 +67,6 @@ typedef void (^ButtonPressedHandlerBlock)(void);
         messageLabel.text = message;
         [self addSubview:messageLabel];
         self.messageLabel = messageLabel;
-        [messageLabel release];
         
         if (buttonTitle && buttonTitle.length) {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -105,19 +102,11 @@ typedef void (^ButtonPressedHandlerBlock)(void);
         [window makeKeyAndVisible];
         
         self.window = window;
-        [window release];
     }
     
     return self;
 }
 
-- (void)dealloc {
-    [_maskView release];
-    [_timer release];
-    [_window release];
-    [_button release];
-    [super dealloc];
-}
 
 - (void)drawRect:(CGRect)rect {
     CGRect windowBounds = [UIScreen mainScreen].bounds;
@@ -148,7 +137,6 @@ typedef void (^ButtonPressedHandlerBlock)(void);
 #pragma mark - Public
 
 - (void)show {
-    [self retain];
     
     self.hidden = YES;
     self.alpha = 0.0f;
@@ -198,7 +186,6 @@ typedef void (^ButtonPressedHandlerBlock)(void);
         [_timer invalidate];
     }
     if (_timer) {
-        [_timer release];
         _timer = nil;
     }
     
@@ -218,14 +205,12 @@ typedef void (^ButtonPressedHandlerBlock)(void);
     [self removeFromSuperview];
     
     _window.hidden = YES;
-    [_window release];
     _window = nil;
     
     if ([self.delegate respondsToSelector:@selector(notificationBannerViewDidDismiss:)]) {
         [self.delegate notificationBannerViewDidDismiss:self];
     }
     
-    [self release];
 }
 
 @end

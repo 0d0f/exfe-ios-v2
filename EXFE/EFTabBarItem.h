@@ -22,8 +22,8 @@ typedef enum {
 
 @property (nonatomic, assign, getter = isTitleEnable) BOOL titleEnable;   // Default as NO, even set title, you should set this to YES to show title
 @property (nonatomic, copy) NSString *title;
-@property (nonatomic, retain) UIImage *image;
-@property (nonatomic, retain) UIImage *highlightImage;
+@property (nonatomic, strong) UIImage *image;
+@property (nonatomic, strong) UIImage *highlightImage;
 
 @property (nonatomic, assign) BOOL shouldPop;   // Default as NO. when set to YES, the tab button will pop to left.
 

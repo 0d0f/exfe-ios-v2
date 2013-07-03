@@ -18,7 +18,7 @@ MFMailComposeViewControllerDelegate
 
 @property (nonatomic, copy) actionBlock closeButtonPressedHandler;
 
-@property (retain, nonatomic) IBOutlet UIButton *closeButton;
+@property (strong, nonatomic) IBOutlet UIButton *closeButton;
 
 - (IBAction)closeButtonPressed:(id)sender;
 - (IBAction)sendButtonPressed:(id)sender;

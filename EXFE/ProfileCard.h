@@ -16,7 +16,7 @@
     SEL profileAction;
     SEL gatherAction;
 }
-@property (nonatomic, retain) UIImage* avatar;
+@property (nonatomic, strong) UIImage* avatar;
 
 
 - (void)addProfileTarget:(id)target action:(SEL)action;

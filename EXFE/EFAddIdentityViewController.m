@@ -44,22 +44,22 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 @property (nonatomic, strong) EXGradientToolbarView *toolbar;
 @property (nonatomic, strong) CSLinearLayoutView *rootView;
-@property (nonatomic, retain) UITextField *inputIdentity;
-@property (nonatomic, retain) UIImageView *imageIdentity;
-@property (nonatomic, retain) UIButton *btnStart;
+@property (nonatomic, strong) UITextField *inputIdentity;
+@property (nonatomic, strong) UIImageView *imageIdentity;
+@property (nonatomic, strong) UIButton *btnStart;
 
-@property (nonatomic, retain) UILabel *labelVerifyTitle;
-@property (nonatomic, retain) UILabel *labelVerifyDescription;
+@property (nonatomic, strong) UILabel *labelVerifyTitle;
+@property (nonatomic, strong) UILabel *labelVerifyDescription;
 
-@property (nonatomic, retain) UILabel *hintError;
-@property (nonatomic, retain) TTTAttributedLabel *inlineError;
-@property (nonatomic, retain) UIActivityIndicatorView *indicator;
-@property (nonatomic, retain) UIImageView *textFieldFrame;
+@property (nonatomic, strong) UILabel *hintError;
+@property (nonatomic, strong) TTTAttributedLabel *inlineError;
+@property (nonatomic, strong) UIActivityIndicatorView *indicator;
+@property (nonatomic, strong) UIImageView *textFieldFrame;
 
-@property (nonatomic, retain) UIButton *btnFacebook;
-@property (nonatomic, retain) UIButton *btnTwitter;
+@property (nonatomic, strong) UIButton *btnFacebook;
+@property (nonatomic, strong) UIButton *btnTwitter;
 
-@property (nonatomic, retain) NSMutableDictionary *identityCache;
+@property (nonatomic, strong) NSMutableDictionary *identityCache;
 
 
 @property (nonatomic, copy) NSString *lastInputIdentity;
@@ -103,7 +103,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     title.shadowOffset = CGSizeMake(0, 1);
     title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     [self.toolbar addSubview:title];
-    [title release];
     [self.view addSubview:self.toolbar];
     
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
@@ -120,7 +119,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     linearLayoutView.alwaysBounceVertical = YES;
     self.rootView = linearLayoutView;
     [self.view addSubview:linearLayoutView];
-    [linearLayoutView release];
     
     {// TextField Frame
         UIImage *img = [[UIImage imageNamed:@"textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 9, 15, 9)];
@@ -255,7 +253,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         self.inlineError = label;
     }
     
-    CSLinearLayoutView *snsLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 0, 296, 106)] autorelease];
+    CSLinearLayoutView *snsLayoutView = [[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 0, 296, 106)];
     snsLayoutView.tag = kViewTagSnsGroup;
     snsLayoutView.orientation = CSLinearLayoutViewOrientationHorizontal;
     
@@ -264,7 +262,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     UIImageView *background = [[UIImageView alloc] initWithFrame:snsLayoutView.bounds];
     background.image = [image resizableImageWithCapInsets:insets];
     [snsLayoutView addSubview:background];
-    [background release];
     
     CSLinearLayoutItem *snsItem = [CSLinearLayoutItem layoutItemForView:snsLayoutView];
     snsItem.padding = CSLinearLayoutMakePadding(21, 12, 240, 12);
@@ -357,26 +354,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     // Dispose of any resources that can be recreated.
 }
 
-- (void)dealloc
-{
-    self.inputIdentity = nil;
-    self.imageIdentity = nil;
-    self.btnStart = nil;
-    self.labelVerifyTitle = nil;
-    self.labelVerifyDescription = nil;
-    self.hintError = nil;
-    self.inlineError = nil;
-    self.indicator = nil;
-    self.btnFacebook = nil;
-    self.btnTwitter = nil;
-    self.identityCache = nil;
-    
-    self.accountStore = nil;
-    self.apiManager = nil;
-    
-    self.lastInputIdentity = nil;
-    [super dealloc];
-}
 
 #pragma mark - UI Methods
 
@@ -696,7 +673,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                     oauth.javaScriptString = nil;
                                 }
                                 [self presentModalViewController:oauth animated:YES];
-                                [oauth release];
                                 
                             }else{
                                 NSString * message = NSLocalizedString(@"Verification is sent. Please check your email for instructions.", nil);
@@ -803,7 +779,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                               EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
                                               [bigspin startAnimating];
                                               hud.customView = bigspin;
-                                              [bigspin release];
                                               
                                               AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
                                               [app.model.apiServer addReverseAuthIdentity:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -934,7 +909,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         
                         //hide the keyboard
                         [viewController.view endEditing:YES];
-                        [viewController release];
                     } else {
                         return;
                     }
@@ -1026,7 +1000,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
     [bigspin startAnimating];
     hud.customView = bigspin;
-    [bigspin release];
     
     [_apiManager performReverseAuthForAccount:acct withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
         if (!error) {

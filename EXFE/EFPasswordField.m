@@ -31,7 +31,6 @@
         self.icon = imageView;
         self.leftView = self.icon;
         self.leftViewMode = UITextFieldViewModeAlways;
-        [imageView release];
         
         UIButton *btnS = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
         btnS.backgroundColor = [UIColor clearColor];
@@ -41,14 +40,12 @@
         [btnS setImage:[UIImage imageNamed:@"pass_show.png"] forState:UIControlStateNormal];
         btnS.imageView.contentMode = UIViewContentModeCenter;
         self.eye = btnS;
-        [btnS release];
         
         UIButton *btnf = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
         btnf.backgroundColor = [UIColor clearColor];
         [btnf setImage:[UIImage imageNamed:@"pass_question.png"] forState:UIControlStateNormal];
         btnf.imageView.contentMode = UIViewContentModeCenter;
         self.btnForgot = btnf;
-        [btnf release];
         
         self.rightView = self.btnForgot;
         self.rightViewMode = UITextFieldViewModeAlways;

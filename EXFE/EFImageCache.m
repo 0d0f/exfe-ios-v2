@@ -11,7 +11,7 @@
 @implementation EFImageCache
 
 + (EFImageCache *)cache {
-    return [[[self alloc] init] autorelease];
+    return [[self alloc] init];
 }
 
 - (UIImage *)imageForKey:(NSString *)key {

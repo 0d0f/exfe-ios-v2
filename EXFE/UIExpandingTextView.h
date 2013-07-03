@@ -56,10 +56,10 @@
     int maximumNumberOfLines;
 	int minimumNumberOfLines;
 	BOOL animateHeightChange;
-	NSObject <UIExpandingTextViewDelegate> *delegate;
-	NSString *text;
-	UIFont *font;
-	UIColor *textColor;
+	NSObject <UIExpandingTextViewDelegate> *__weak delegate;
+	NSString *__weak text;
+	UIFont *__weak font;
+	UIColor *__weak textColor;
 	UITextAlignment textAlignment; 
 	NSRange selectedRange;
 	BOOL editable;
@@ -68,22 +68,22 @@
     BOOL forceSizeUpdate;
 }
 
-@property (nonatomic, retain) UITextView *internalTextView;
+@property (nonatomic, strong) UITextView *internalTextView;
 
 @property int maximumNumberOfLines;
 @property int minimumNumberOfLines;
 @property BOOL animateHeightChange;
 
-@property (assign) NSObject<UIExpandingTextViewDelegate> *delegate;
-@property (nonatomic,assign) NSString *text;
-@property (nonatomic,assign) UIFont *font;
-@property (nonatomic,assign) UIColor *textColor;
+@property (weak) NSObject<UIExpandingTextViewDelegate> *delegate;
+@property (nonatomic,weak) NSString *text;
+@property (nonatomic,weak) UIFont *font;
+@property (nonatomic,weak) UIColor *textColor;
 @property (nonatomic) UITextAlignment textAlignment;
 @property (nonatomic) NSRange selectedRange;
 @property (nonatomic,getter=isEditable) BOOL editable;
 @property (nonatomic) UIDataDetectorTypes dataDetectorTypes __OSX_AVAILABLE_STARTING(__MAC_NA, __IPHONE_3_0);
 @property (nonatomic) UIReturnKeyType returnKeyType;
-@property (nonatomic, retain) UIImageView *textViewBackgroundImage;
+@property (nonatomic, strong) UIImageView *textViewBackgroundImage;
 
 - (BOOL)hasText;
 - (void)scrollRangeToVisible:(NSRange)range;

@@ -68,15 +68,15 @@ EFTabBarDataSource
     NSDictionary *myRsvpDict;
 }
 
-@property (nonatomic, retain) Exfee *exfee;
-@property (nonatomic, retain) Invitation* selected_invitation;
-@property (nonatomic, retain) NSArray *sortedInvitations;
+@property (nonatomic, strong) Exfee *exfee;
+@property (nonatomic, strong) Invitation* selected_invitation;
+@property (nonatomic, strong) NSArray *sortedInvitations;
 @property (nonatomic, copy) id onExitBlock;
 
 // EFTabBarDataSource
-@property (nonatomic, retain) EFTabBarItem *customTabBarItem;
+@property (nonatomic, strong) EFTabBarItem *customTabBarItem;
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
-@property (nonatomic, assign) EFTabBarViewController *tabBarViewController;
+@property (nonatomic, weak) EFTabBarViewController *tabBarViewController;
 @property (nonatomic, copy) UIImage *shadowImage;
 @property (nonatomic, assign) CGRect initFrame;
 

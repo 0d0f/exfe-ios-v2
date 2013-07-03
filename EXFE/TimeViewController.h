@@ -29,7 +29,7 @@
     UITextField *timeInput;
     double editinginterval;
 }
-@property (nonatomic,retain) id delegate;
+@property (nonatomic,strong) id delegate;
 
 - (IBAction) Done:(id) sender;
 - (void) saveDate:(NSString*) time_word;

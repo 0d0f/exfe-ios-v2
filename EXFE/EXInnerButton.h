@@ -11,6 +11,6 @@
 @interface EXInnerButton : UIButton{
     UIImage* image;
 }
-@property (nonatomic,retain) UIImage *image;
+@property (nonatomic,strong) UIImage *image;
 
 @end

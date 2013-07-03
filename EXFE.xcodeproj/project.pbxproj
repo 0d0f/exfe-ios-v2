@@ -161,9 +161,9 @@
 		4F2D22E5176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */; };
 		4F2D22E6176AF32E00FEA139 /* RecursiveDeleteOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D22E3176AF32E00FEA139 /* RecursiveDeleteOperation.m */; };
 		4F3355D0168C4F4700D398C0 /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3355CF168C4F4700D398C0 /* MapPin.m */; };
-		4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F358D6F171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
+		4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
+		4F358D6F171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
 		4F63DA7C17172AA600136B7E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E971560F832009E0806 /* main.m */; };
 		4F63DA7D17172AA600136B7E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E9B1560F832009E0806 /* AppDelegate.m */; };
 		4F63DA7F17172AA600136B7E /* CrossesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E88740156244E70026D197 /* CrossesViewController.m */; };
@@ -264,19 +264,19 @@
 		4F63DAEC17172AA600136B7E /* User+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92F16F9A5B5001BB176 /* User+EXFE.m */; };
 		4F63DAED17172AA600136B7E /* WCAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA0C40916FB626B00E25C74 /* WCAlertView.m */; };
 		4F63DAEF17172AA600136B7E /* ExfeeAddCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */; };
-		4F63DAF017172AA600136B7E /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DAF117172AA600136B7E /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DAF217172AA600136B7E /* PSTCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CC1702E12C0098B9B9 /* PSTCollectionViewCell.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DAF317172AA600136B7E /* PSTCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CF1702E12C0098B9B9 /* PSTCollectionViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DAF417172AA600136B7E /* PSTCollectionViewData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D11702E12C0098B9B9 /* PSTCollectionViewData.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DAF517172AA600136B7E /* PSTCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D31702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DAF617172AA600136B7E /* PSTCollectionViewItemKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D51702E12C0098B9B9 /* PSTCollectionViewItemKey.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DAF717172AA600136B7E /* PSTCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D81702E12C0098B9B9 /* PSTCollectionViewLayout.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DAF817172AA600136B7E /* PSTCollectionViewUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DA1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DAF917172AA600136B7E /* PSTGridLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DC1702E12C0098B9B9 /* PSTGridLayoutInfo.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DAFA17172AA600136B7E /* PSTGridLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DE1702E12C0098B9B9 /* PSTGridLayoutItem.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DAFB17172AA600136B7E /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E01702E12C0098B9B9 /* PSTGridLayoutRow.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DAFC17172AA600136B7E /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4F63DAF017172AA600136B7E /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */; };
+		4F63DAF117172AA600136B7E /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */; };
+		4F63DAF217172AA600136B7E /* PSTCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CC1702E12C0098B9B9 /* PSTCollectionViewCell.m */; };
+		4F63DAF317172AA600136B7E /* PSTCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CF1702E12C0098B9B9 /* PSTCollectionViewController.m */; };
+		4F63DAF417172AA600136B7E /* PSTCollectionViewData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D11702E12C0098B9B9 /* PSTCollectionViewData.m */; };
+		4F63DAF517172AA600136B7E /* PSTCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D31702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m */; };
+		4F63DAF617172AA600136B7E /* PSTCollectionViewItemKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D51702E12C0098B9B9 /* PSTCollectionViewItemKey.m */; };
+		4F63DAF717172AA600136B7E /* PSTCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D81702E12C0098B9B9 /* PSTCollectionViewLayout.m */; };
+		4F63DAF817172AA600136B7E /* PSTCollectionViewUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DA1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m */; };
+		4F63DAF917172AA600136B7E /* PSTGridLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DC1702E12C0098B9B9 /* PSTGridLayoutInfo.m */; };
+		4F63DAFA17172AA600136B7E /* PSTGridLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DE1702E12C0098B9B9 /* PSTGridLayoutItem.m */; };
+		4F63DAFB17172AA600136B7E /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E01702E12C0098B9B9 /* PSTGridLayoutRow.m */; };
+		4F63DAFC17172AA600136B7E /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */; };
 		4F63DAFE17172AA600136B7E /* UIApplication+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE571170548770098B9B9 /* UIApplication+EXFE.m */; };
 		4F63DAFF17172AA600136B7E /* UILabel+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F67C3A31709A52D001AA816 /* UILabel+EXFE.m */; };
 		4F63DB0017172AA600136B7E /* NSString+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FED88F71712BCE500858D05 /* NSString+EXFE.m */; };
@@ -292,7 +292,7 @@
 		4F63DB0B17172AA600136B7E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF81561110C009E0806 /* QuartzCore.framework */; };
 		4F63DB0C17172AA600136B7E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF615611107009E0806 /* SystemConfiguration.framework */; };
 		4F63DB0D17172AA600136B7E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF415611100009E0806 /* Security.framework */; };
-		4F63DB0E17172AA600136B7E /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF2156110FB009E0806 /* MobileCoreServices.framework */; };
+		4F63DB0E17172AA600136B7E /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF2156110FB009E0806 /* MobileCoreServices.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4F63DB0F17172AA600136B7E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF0156110F5009E0806 /* CoreData.framework */; };
 		4F63DB1017172AA600136B7E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EEE156110F0009E0806 /* CFNetwork.framework */; };
 		4F63DB1117172AA600136B7E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
@@ -679,19 +679,19 @@
 		4F63DCBB17172B0700136B7E /* User+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F29C92F16F9A5B5001BB176 /* User+EXFE.m */; };
 		4F63DCBC17172B0700136B7E /* WCAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA0C40916FB626B00E25C74 /* WCAlertView.m */; };
 		4F63DCBE17172B0700136B7E /* ExfeeAddCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */; };
-		4F63DCBF17172B0700136B7E /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DCC017172B0700136B7E /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DCC117172B0700136B7E /* PSTCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CC1702E12C0098B9B9 /* PSTCollectionViewCell.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DCC217172B0700136B7E /* PSTCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CF1702E12C0098B9B9 /* PSTCollectionViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DCC317172B0700136B7E /* PSTCollectionViewData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D11702E12C0098B9B9 /* PSTCollectionViewData.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DCC417172B0700136B7E /* PSTCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D31702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DCC517172B0700136B7E /* PSTCollectionViewItemKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D51702E12C0098B9B9 /* PSTCollectionViewItemKey.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DCC617172B0700136B7E /* PSTCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D81702E12C0098B9B9 /* PSTCollectionViewLayout.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DCC717172B0700136B7E /* PSTCollectionViewUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DA1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DCC817172B0700136B7E /* PSTGridLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DC1702E12C0098B9B9 /* PSTGridLayoutInfo.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DCC917172B0700136B7E /* PSTGridLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DE1702E12C0098B9B9 /* PSTGridLayoutItem.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DCCA17172B0700136B7E /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E01702E12C0098B9B9 /* PSTGridLayoutRow.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F63DCCB17172B0700136B7E /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4F63DCBF17172B0700136B7E /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */; };
+		4F63DCC017172B0700136B7E /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */; };
+		4F63DCC117172B0700136B7E /* PSTCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CC1702E12C0098B9B9 /* PSTCollectionViewCell.m */; };
+		4F63DCC217172B0700136B7E /* PSTCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CF1702E12C0098B9B9 /* PSTCollectionViewController.m */; };
+		4F63DCC317172B0700136B7E /* PSTCollectionViewData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D11702E12C0098B9B9 /* PSTCollectionViewData.m */; };
+		4F63DCC417172B0700136B7E /* PSTCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D31702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m */; };
+		4F63DCC517172B0700136B7E /* PSTCollectionViewItemKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D51702E12C0098B9B9 /* PSTCollectionViewItemKey.m */; };
+		4F63DCC617172B0700136B7E /* PSTCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D81702E12C0098B9B9 /* PSTCollectionViewLayout.m */; };
+		4F63DCC717172B0700136B7E /* PSTCollectionViewUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DA1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m */; };
+		4F63DCC817172B0700136B7E /* PSTGridLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DC1702E12C0098B9B9 /* PSTGridLayoutInfo.m */; };
+		4F63DCC917172B0700136B7E /* PSTGridLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DE1702E12C0098B9B9 /* PSTGridLayoutItem.m */; };
+		4F63DCCA17172B0700136B7E /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E01702E12C0098B9B9 /* PSTGridLayoutRow.m */; };
+		4F63DCCB17172B0700136B7E /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */; };
 		4F63DCCD17172B0700136B7E /* UIApplication+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE571170548770098B9B9 /* UIApplication+EXFE.m */; };
 		4F63DCCE17172B0700136B7E /* UILabel+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F67C3A31709A52D001AA816 /* UILabel+EXFE.m */; };
 		4F63DCCF17172B0700136B7E /* NSString+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FED88F71712BCE500858D05 /* NSString+EXFE.m */; };
@@ -707,7 +707,7 @@
 		4F63DCDA17172B0700136B7E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF81561110C009E0806 /* QuartzCore.framework */; };
 		4F63DCDB17172B0700136B7E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF615611107009E0806 /* SystemConfiguration.framework */; };
 		4F63DCDC17172B0700136B7E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF415611100009E0806 /* Security.framework */; };
-		4F63DCDD17172B0700136B7E /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF2156110FB009E0806 /* MobileCoreServices.framework */; };
+		4F63DCDD17172B0700136B7E /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF2156110FB009E0806 /* MobileCoreServices.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4F63DCDE17172B0700136B7E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF0156110F5009E0806 /* CoreData.framework */; };
 		4F63DCDF17172B0700136B7E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EEE156110F0009E0806 /* CFNetwork.framework */; };
 		4F63DCE017172B0700136B7E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
@@ -1015,22 +1015,22 @@
 		4F9926FF16EF6E30003D784A /* ExfeeResponseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9926FE16EF6E30003D784A /* ExfeeResponseCell.m */; };
 		4F99270516F02AEE003D784A /* ExfeeRsvpCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F99270416F02AEE003D784A /* ExfeeRsvpCell.m */; };
 		4F99270D16F091FD003D784A /* Exfee+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F99270C16F091FD003D784A /* Exfee+EXFE.m */; };
-		4F9FACF3171DD02B00B1ADD9 /* EFAPIServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FACF2171DD02B00B1ADD9 /* EFAPIServer.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FACFB171DD35700B1ADD9 /* EFAPIServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FACF2171DD02B00B1ADD9 /* EFAPIServer.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FACFC171DD35700B1ADD9 /* EFAPIServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FACF2171DD02B00B1ADD9 /* EFAPIServer.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4E31702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4E41702E12C0098B9B9 /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4E51702E12C0098B9B9 /* PSTCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CC1702E12C0098B9B9 /* PSTCollectionViewCell.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4E61702E12C0098B9B9 /* PSTCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CF1702E12C0098B9B9 /* PSTCollectionViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4E71702E12C0098B9B9 /* PSTCollectionViewData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D11702E12C0098B9B9 /* PSTCollectionViewData.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4E81702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D31702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4E91702E12C0098B9B9 /* PSTCollectionViewItemKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D51702E12C0098B9B9 /* PSTCollectionViewItemKey.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4EA1702E12C0098B9B9 /* PSTCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D81702E12C0098B9B9 /* PSTCollectionViewLayout.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4EB1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DA1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4EC1702E12C0098B9B9 /* PSTGridLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DC1702E12C0098B9B9 /* PSTGridLayoutInfo.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4ED1702E12C0098B9B9 /* PSTGridLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DE1702E12C0098B9B9 /* PSTGridLayoutItem.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4EE1702E12C0098B9B9 /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E01702E12C0098B9B9 /* PSTGridLayoutRow.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4F9FE4EF1702E12C0098B9B9 /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4F9FACF3171DD02B00B1ADD9 /* EFAPIServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FACF2171DD02B00B1ADD9 /* EFAPIServer.m */; };
+		4F9FACFB171DD35700B1ADD9 /* EFAPIServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FACF2171DD02B00B1ADD9 /* EFAPIServer.m */; };
+		4F9FACFC171DD35700B1ADD9 /* EFAPIServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FACF2171DD02B00B1ADD9 /* EFAPIServer.m */; };
+		4F9FE4E31702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4C81702E12C0098B9B9 /* NSIndexPath+PSTCollectionViewAdditions.m */; };
+		4F9FE4E41702E12C0098B9B9 /* PSTCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CA1702E12C0098B9B9 /* PSTCollectionView.m */; };
+		4F9FE4E51702E12C0098B9B9 /* PSTCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CC1702E12C0098B9B9 /* PSTCollectionViewCell.m */; };
+		4F9FE4E61702E12C0098B9B9 /* PSTCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4CF1702E12C0098B9B9 /* PSTCollectionViewController.m */; };
+		4F9FE4E71702E12C0098B9B9 /* PSTCollectionViewData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D11702E12C0098B9B9 /* PSTCollectionViewData.m */; };
+		4F9FE4E81702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D31702E12C0098B9B9 /* PSTCollectionViewFlowLayout.m */; };
+		4F9FE4E91702E12C0098B9B9 /* PSTCollectionViewItemKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D51702E12C0098B9B9 /* PSTCollectionViewItemKey.m */; };
+		4F9FE4EA1702E12C0098B9B9 /* PSTCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4D81702E12C0098B9B9 /* PSTCollectionViewLayout.m */; };
+		4F9FE4EB1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DA1702E12C0098B9B9 /* PSTCollectionViewUpdateItem.m */; };
+		4F9FE4EC1702E12C0098B9B9 /* PSTGridLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DC1702E12C0098B9B9 /* PSTGridLayoutInfo.m */; };
+		4F9FE4ED1702E12C0098B9B9 /* PSTGridLayoutItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4DE1702E12C0098B9B9 /* PSTGridLayoutItem.m */; };
+		4F9FE4EE1702E12C0098B9B9 /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E01702E12C0098B9B9 /* PSTGridLayoutRow.m */; };
+		4F9FE4EF1702E12C0098B9B9 /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE4E21702E12C0098B9B9 /* PSTGridLayoutSection.m */; };
 		4F9FE56C1702EB6C0098B9B9 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FE5611702E8B70098B9B9 /* libBlocksKit.a */; };
 		4F9FE572170548770098B9B9 /* UIApplication+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9FE571170548770098B9B9 /* UIApplication+EXFE.m */; };
 		4FA013A516F2F4AD00F40CB6 /* Invitation+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013A416F2F4AD00F40CB6 /* Invitation+EXFE.m */; };
@@ -1046,31 +1046,31 @@
 		4FB30D251700A76B007BC66D /* widget_exfee_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB30D231700A76A007BC66D /* widget_exfee_30@2x.png */; };
 		4FB30D2B1700A7FD007BC66D /* widget_conv_30shine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB30D291700A7FC007BC66D /* widget_conv_30shine.png */; };
 		4FB30D2C1700A7FD007BC66D /* widget_conv_30shine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB30D2A1700A7FD007BC66D /* widget_conv_30shine@2x.png */; };
-		4FB377E117377CB4001FA1B2 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D617377CB4001FA1B2 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377E217377CB4001FA1B2 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D617377CB4001FA1B2 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377E317377CB4001FA1B2 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D617377CB4001FA1B2 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377E417377CB4001FA1B2 /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D817377CB4001FA1B2 /* OAuth+Additions.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377E517377CB4001FA1B2 /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D817377CB4001FA1B2 /* OAuth+Additions.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377E617377CB4001FA1B2 /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D817377CB4001FA1B2 /* OAuth+Additions.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377E717377CB4001FA1B2 /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DA17377CB4001FA1B2 /* OAuthCore.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377E817377CB4001FA1B2 /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DA17377CB4001FA1B2 /* OAuthCore.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377E917377CB4001FA1B2 /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DA17377CB4001FA1B2 /* OAuthCore.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377EA17377CB4001FA1B2 /* TWAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DC17377CB4001FA1B2 /* TWAPIManager.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377EB17377CB4001FA1B2 /* TWAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DC17377CB4001FA1B2 /* TWAPIManager.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377EC17377CB4001FA1B2 /* TWAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DC17377CB4001FA1B2 /* TWAPIManager.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377ED17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377EE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377EF17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377F017377CB4001FA1B2 /* TWSignedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377E017377CB4001FA1B2 /* TWSignedRequest.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377F117377CB4001FA1B2 /* TWSignedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377E017377CB4001FA1B2 /* TWSignedRequest.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FB377F217377CB4001FA1B2 /* TWSignedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377E017377CB4001FA1B2 /* TWSignedRequest.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FB377E117377CB4001FA1B2 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D617377CB4001FA1B2 /* NSData+Base64.m */; };
+		4FB377E217377CB4001FA1B2 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D617377CB4001FA1B2 /* NSData+Base64.m */; };
+		4FB377E317377CB4001FA1B2 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D617377CB4001FA1B2 /* NSData+Base64.m */; };
+		4FB377E417377CB4001FA1B2 /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D817377CB4001FA1B2 /* OAuth+Additions.m */; };
+		4FB377E517377CB4001FA1B2 /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D817377CB4001FA1B2 /* OAuth+Additions.m */; };
+		4FB377E617377CB4001FA1B2 /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377D817377CB4001FA1B2 /* OAuth+Additions.m */; };
+		4FB377E717377CB4001FA1B2 /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DA17377CB4001FA1B2 /* OAuthCore.m */; };
+		4FB377E817377CB4001FA1B2 /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DA17377CB4001FA1B2 /* OAuthCore.m */; };
+		4FB377E917377CB4001FA1B2 /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DA17377CB4001FA1B2 /* OAuthCore.m */; };
+		4FB377EA17377CB4001FA1B2 /* TWAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DC17377CB4001FA1B2 /* TWAPIManager.m */; };
+		4FB377EB17377CB4001FA1B2 /* TWAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DC17377CB4001FA1B2 /* TWAPIManager.m */; };
+		4FB377EC17377CB4001FA1B2 /* TWAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DC17377CB4001FA1B2 /* TWAPIManager.m */; };
+		4FB377ED17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m */; };
+		4FB377EE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m */; };
+		4FB377EF17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377DE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m */; };
+		4FB377F017377CB4001FA1B2 /* TWSignedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377E017377CB4001FA1B2 /* TWSignedRequest.m */; };
+		4FB377F117377CB4001FA1B2 /* TWSignedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377E017377CB4001FA1B2 /* TWSignedRequest.m */; };
+		4FB377F217377CB4001FA1B2 /* TWSignedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB377E017377CB4001FA1B2 /* TWSignedRequest.m */; };
 		4FB377F417378324001FA1B2 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F317378324001FA1B2 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4FB377F61737832E001FA1B2 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F51737832D001FA1B2 /* Twitter.framework */; };
 		4FB377F717378336001FA1B2 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F317378324001FA1B2 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4FB377F81737833A001FA1B2 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F51737832D001FA1B2 /* Twitter.framework */; };
 		4FB377F917378342001FA1B2 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F317378324001FA1B2 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4FB377FA17378347001FA1B2 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377F51737832D001FA1B2 /* Twitter.framework */; };
-		4FB377FC173795C2001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; };
+		4FB377FC173795C2001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4FB377FD173795C9001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4FB377FE173795D1001FA1B2 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB377FB173795C2001FA1B2 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4FB37804173A285C001FA1B2 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB37803173A285C001FA1B2 /* FacebookSDK.framework */; };
@@ -1099,9 +1099,9 @@
 		4FCC22F2173A35F600E6DB50 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FCC22F0173A35BE00E6DB50 /* AdSupport.framework */; };
 		4FCC22F3173A35FD00E6DB50 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FCC22F0173A35BE00E6DB50 /* AdSupport.framework */; };
 		4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */; };
-		4FDFA37D172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FDFA37E172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FDFA37F172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FDFA37D172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; };
+		4FDFA37E172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; };
+		4FDFA37F172A5F0C00929BC9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA37C172A5F0C00929BC9 /* TTTAttributedLabel.m */; };
 		4FDFA3C5172A794900929BC9 /* start_tri-00.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDFA389172A794800929BC9 /* start_tri-00.png */; };
 		4FDFA3C6172A794900929BC9 /* start_tri-00.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDFA389172A794800929BC9 /* start_tri-00.png */; };
 		4FDFA3C7172A794900929BC9 /* start_tri-00.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDFA389172A794800929BC9 /* start_tri-00.png */; };
@@ -1294,9 +1294,9 @@
 		4FDFA486172AE6A000929BC9 /* identity_twitter_50btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDFA482172AE69F00929BC9 /* identity_twitter_50btn@2x.png */; };
 		4FDFA487172AE6A000929BC9 /* identity_twitter_50btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDFA482172AE69F00929BC9 /* identity_twitter_50btn@2x.png */; };
 		4FDFA488172AE6A000929BC9 /* identity_twitter_50btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDFA482172AE69F00929BC9 /* identity_twitter_50btn@2x.png */; };
-		4FDFA48F172B9D8200929BC9 /* EFIdentityTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FDFA490172B9D8200929BC9 /* EFIdentityTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FDFA491172B9D8200929BC9 /* EFIdentityTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FDFA48F172B9D8200929BC9 /* EFIdentityTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */; };
+		4FDFA490172B9D8200929BC9 /* EFIdentityTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */; };
+		4FDFA491172B9D8200929BC9 /* EFIdentityTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */; };
 		4FE0C045178347040029B694 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FE7762C177C1E6200B20A32 /* Localizable.strings */; };
 		4FE0C046178347050029B694 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FE7762C177C1E6200B20A32 /* Localizable.strings */; };
 		4FE77628177C1CA200B20A32 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FE77626177C1CA200B20A32 /* Localizable.strings */; };
@@ -1307,15 +1307,15 @@
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
 		4FED88F81712BCE500858D05 /* NSString+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FED88F71712BCE500858D05 /* NSString+EXFE.m */; };
-		4FF69551171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FF69552171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FF69553171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FF69551171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; };
+		4FF69552171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; };
+		4FF69553171BDF53003DF80B /* EFSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF6954F171BDF53003DF80B /* EFSignInViewController.m */; };
 		4FF69554171BDF53003DF80B /* EFSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69550171BDF53003DF80B /* EFSignInViewController.xib */; };
 		4FF69555171BDF53003DF80B /* EFSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69550171BDF53003DF80B /* EFSignInViewController.xib */; };
 		4FF69556171BDF53003DF80B /* EFSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69550171BDF53003DF80B /* EFSignInViewController.xib */; };
-		4FF6955A171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FF6955B171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
-		4FF6955C171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FF6955A171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; };
+		4FF6955B171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; };
+		4FF6955C171BFA2B003DF80B /* EFLandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF69558171BFA2A003DF80B /* EFLandingViewController.m */; };
 		4FF6955D171BFA2B003DF80B /* EFLandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */; };
 		4FF6955E171BFA2B003DF80B /* EFLandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */; };
 		4FF6955F171BFA2B003DF80B /* EFLandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */; };
@@ -1677,7 +1677,6 @@
 		7839555115E21A520042A1D3 /* navbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7839554F15E21A520042A1D3 /* navbar@2x.png */; };
 		783BA9DF15EC82F900AD832D /* btn_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 783BA9DD15EC82F900AD832D /* btn_back.png */; };
 		783BA9E015EC82F900AD832D /* btn_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783BA9DE15EC82F900AD832D /* btn_back@2x.png */; };
-		783F1D8E16DB5193005F85B3 /* WidgetConvViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */; };
 		783F1D9416DB51A0005F85B3 /* WidgetConvViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */; };
 		783F52E616774C4100331746 /* btn_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 783F52E416774C4100331746 /* btn_blue.png */; };
 		783F52E716774C4100331746 /* btn_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783F52E516774C4100331746 /* btn_blue@2x.png */; };
@@ -1732,7 +1731,6 @@
 		7879869E15DA85F500AA631B /* portrait_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7879869D15DA85F500AA631B /* portrait_default.png */; };
 		787986B615DB6DF600AA631B /* textfield_navbar_frame.png in Resources */ = {isa = PBXBuildFile; fileRef = 787986B415DB6DF600AA631B /* textfield_navbar_frame.png */; };
 		787986B715DB6DF600AA631B /* textfield_navbar_frame@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 787986B515DB6DF600AA631B /* textfield_navbar_frame@2x.png */; };
-		7879B47816BE77AF00D3BE3C /* LocalContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 7879B47716BE77AF00D3BE3C /* LocalContact.m */; };
 		7879B47916BE77B200D3BE3C /* LocalContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 7879B47716BE77AF00D3BE3C /* LocalContact.m */; };
 		7879B47E16BE854200D3BE3C /* portrait_frame_50.png in Resources */ = {isa = PBXBuildFile; fileRef = 7879B47A16BE854200D3BE3C /* portrait_frame_50.png */; };
 		7879B47F16BE854200D3BE3C /* portrait_frame_50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7879B47B16BE854200D3BE3C /* portrait_frame_50@2x.png */; };
@@ -1795,7 +1793,7 @@
 		78A98E9C1560F832009E0806 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E9B1560F832009E0806 /* AppDelegate.m */; };
 		78A98EEF156110F0009E0806 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EEE156110F0009E0806 /* CFNetwork.framework */; };
 		78A98EF1156110F5009E0806 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF0156110F5009E0806 /* CoreData.framework */; };
-		78A98EF3156110FB009E0806 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF2156110FB009E0806 /* MobileCoreServices.framework */; };
+		78A98EF3156110FB009E0806 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF2156110FB009E0806 /* MobileCoreServices.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		78A98EF515611101009E0806 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF415611100009E0806 /* Security.framework */; };
 		78A98EF715611107009E0806 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF615611107009E0806 /* SystemConfiguration.framework */; };
 		78A98EF91561110C009E0806 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98EF81561110C009E0806 /* QuartzCore.framework */; };
@@ -1884,7 +1882,6 @@
 		78F45F4216BBB64400F364FE /* shadow_4up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F45F4016BBB64400F364FE /* shadow_4up@2x.png */; };
 		78F45F4A16BBB6C700F364FE /* back_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F45F4816BBB6C700F364FE /* back_pressed.png */; };
 		78F45F4B16BBB6C700F364FE /* back_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F45F4916BBB6C700F364FE /* back_pressed@2x.png */; };
-		78F45F5316BBBA2100F364FE /* UIUnderlinedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */; };
 		78F45F5816BBBB1200F364FE /* UIUnderlinedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */; };
 		78F9F887165383D60079BA6B /* identity_facebook_40.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F9F87D165383D50079BA6B /* identity_facebook_40.png */; };
 		78F9F888165383D60079BA6B /* identity_facebook_40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F9F87E165383D50079BA6B /* identity_facebook_40@2x.png */; };
@@ -2896,6 +2893,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F63DB0E17172AA600136B7E /* MobileCoreServices.framework in Frameworks */,
 				76073D12174F880B007CBFC3 /* MessageUI.framework in Frameworks */,
 				4FCC22F2173A35F600E6DB50 /* AdSupport.framework in Frameworks */,
 				4FCC22EE173A34AE00E6DB50 /* libsqlite3.dylib in Frameworks */,
@@ -2915,7 +2913,6 @@
 				4F63DB0B17172AA600136B7E /* QuartzCore.framework in Frameworks */,
 				4F63DB0C17172AA600136B7E /* SystemConfiguration.framework in Frameworks */,
 				4F63DB0D17172AA600136B7E /* Security.framework in Frameworks */,
-				4F63DB0E17172AA600136B7E /* MobileCoreServices.framework in Frameworks */,
 				4F63DB0F17172AA600136B7E /* CoreData.framework in Frameworks */,
 				4F63DB1017172AA600136B7E /* CFNetwork.framework in Frameworks */,
 				4F63DB1117172AA600136B7E /* UIKit.framework in Frameworks */,
@@ -2929,6 +2926,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F63DCDD17172B0700136B7E /* MobileCoreServices.framework in Frameworks */,
 				76073D13174F8811007CBFC3 /* MessageUI.framework in Frameworks */,
 				4FCC22F3173A35FD00E6DB50 /* AdSupport.framework in Frameworks */,
 				4FCC22E6173A349000E6DB50 /* libsqlite3.dylib in Frameworks */,
@@ -2948,7 +2946,6 @@
 				4F63DCDA17172B0700136B7E /* QuartzCore.framework in Frameworks */,
 				4F63DCDB17172B0700136B7E /* SystemConfiguration.framework in Frameworks */,
 				4F63DCDC17172B0700136B7E /* Security.framework in Frameworks */,
-				4F63DCDD17172B0700136B7E /* MobileCoreServices.framework in Frameworks */,
 				4F63DCDE17172B0700136B7E /* CoreData.framework in Frameworks */,
 				4F63DCDF17172B0700136B7E /* CFNetwork.framework in Frameworks */,
 				4F63DCE017172B0700136B7E /* UIKit.framework in Frameworks */,
@@ -2962,6 +2959,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78A98EF3156110FB009E0806 /* MobileCoreServices.framework in Frameworks */,
 				76073D11174F8802007CBFC3 /* MessageUI.framework in Frameworks */,
 				4FCC22F1173A35BE00E6DB50 /* AdSupport.framework in Frameworks */,
 				4FCC22EF173A34B600E6DB50 /* libsqlite3.dylib in Frameworks */,
@@ -2981,7 +2979,6 @@
 				78A98EF91561110C009E0806 /* QuartzCore.framework in Frameworks */,
 				78A98EF715611107009E0806 /* SystemConfiguration.framework in Frameworks */,
 				78A98EF515611101009E0806 /* Security.framework in Frameworks */,
-				78A98EF3156110FB009E0806 /* MobileCoreServices.framework in Frameworks */,
 				78A98EF1156110F5009E0806 /* CoreData.framework in Frameworks */,
 				78A98EEF156110F0009E0806 /* CFNetwork.framework in Frameworks */,
 				78A98E8C1560F832009E0806 /* UIKit.framework in Frameworks */,
@@ -5945,9 +5942,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F1142E216AE40B000C30179 /* EXFETests.m in Sources */,
-				78F45F5316BBBA2100F364FE /* UIUnderlinedButton.m in Sources */,
-				7879B47816BE77AF00D3BE3C /* LocalContact.m in Sources */,
-				783F1D8E16DB5193005F85B3 /* WidgetConvViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6830,6 +6824,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
@@ -6866,6 +6861,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;

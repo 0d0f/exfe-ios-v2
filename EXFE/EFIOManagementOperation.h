@@ -11,10 +11,10 @@
 @class EFIOOperation;
 @interface EFIOManagementOperation : EFRunLoopOperation
 
-@property (nonatomic, retain)   EFIOOperation       *ioOperation;
+@property (nonatomic, strong)   EFIOOperation       *ioOperation;
 
 @property (nonatomic, copy)     NSString            *savePath;
-@property (nonatomic, retain)   NSData              *data;
+@property (nonatomic, strong)   NSData              *data;
 @property (nonatomic, assign)   EFIOOperationType   operationType;
 
 @property (nonatomic, copy)     CompleteBlock       completeHandler;

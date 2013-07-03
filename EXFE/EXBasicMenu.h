@@ -31,7 +31,7 @@ typedef NS_ENUM(NSUInteger, EXMenuTextStyle){
     
 }
 
-@property (nonatomic, assign) id<EXBasicMenuDelegate> delegate;
+@property (nonatomic, weak) id<EXBasicMenuDelegate> delegate;
 
 - (id)initWithFrame:(CGRect)frame andContent:(NSDictionary*)data;
 - (void)setContent:(NSDictionary*)data;

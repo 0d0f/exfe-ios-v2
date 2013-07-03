@@ -88,16 +88,16 @@ EFTabBarDataSource
     UISwipeGestureRecognizer *swipeLeftRecognizer;
 }
 
-@property (nonatomic, retain) UIViewController *currentViewController;
-@property (nonatomic, retain) Cross* cross;
+@property (nonatomic, strong) UIViewController *currentViewController;
+@property (nonatomic, strong) Cross* cross;
 @property (nonatomic, assign) NSInteger headerStyle;
 @property (nonatomic, assign) NSUInteger widgetId;
-@property (nonatomic, retain) NSArray *sortedInvitations;
+@property (nonatomic, strong) NSArray *sortedInvitations;
 
 // EFTabBarDataSource
-@property (nonatomic, retain) EFTabBarItem *customTabBarItem;
+@property (nonatomic, strong) EFTabBarItem *customTabBarItem;
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
-@property (nonatomic, assign) EFTabBarViewController *tabBarViewController;
+@property (nonatomic, weak) EFTabBarViewController *tabBarViewController;
 @property (nonatomic, copy) UIImage *shadowImage;
 @property (nonatomic, assign) CGRect initFrame;
 

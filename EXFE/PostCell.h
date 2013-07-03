@@ -21,14 +21,14 @@
 //    float text_height;
     BOOL showtime;
 }
-@property (nonatomic,retain) NSString* content;
-@property (nonatomic,retain) NSString* time;
-@property (nonatomic,retain) NSString* relativetime;
-@property (nonatomic,retain) UIImage* avatar;
-@property (nonatomic,retain) UIImage* background;
-@property (nonatomic,retain) UIImage* separator;
-@property (nonatomic,retain) UIImage* avatarframe;
-@property (nonatomic,retain) NSString* identity_name;
+@property (nonatomic,strong) NSString* content;
+@property (nonatomic,strong) NSString* time;
+@property (nonatomic,strong) NSString* relativetime;
+@property (nonatomic,strong) UIImage* avatar;
+@property (nonatomic,strong) UIImage* background;
+@property (nonatomic,strong) UIImage* separator;
+@property (nonatomic,strong) UIImage* avatarframe;
+@property (nonatomic,strong) NSString* identity_name;
 //@property float text_height;
 
 #define FONT_SIZE 14.0f

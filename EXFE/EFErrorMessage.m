@@ -11,7 +11,7 @@
 @implementation EFErrorMessage
 
 + (EFErrorMessage *)errorMessageWithStyle:(EFErrorMessageStyle)style title:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle buttonActionHandler:(EFErrorMessageActionBlock)handler {
-    return [[[self alloc] initWithStyle:style title:title message:message buttonTitle:buttonTitle buttonActionHandler:handler] autorelease];
+    return [[self alloc] initWithStyle:style title:title message:message buttonTitle:buttonTitle buttonActionHandler:handler];
 }
 
 - (id)initWithStyle:(EFErrorMessageStyle)style title:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle buttonActionHandler:(EFErrorMessageActionBlock)handler {
@@ -27,12 +27,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_title release];
-    [_message release];
-    [_buttonTitle release];
-    [super dealloc];
-}
 
 #pragma mark - NSCopying
 

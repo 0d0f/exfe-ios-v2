@@ -71,7 +71,7 @@
     invitation.updated_by = nil;
     invitation.updated_at = [NSDate date];
     invitation.created_at = [NSDate date];
-    return [invitation autorelease];
+    return invitation;
 }
 
 - (void)replaceIdentity:(Identity*)identity{

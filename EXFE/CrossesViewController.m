@@ -30,7 +30,7 @@
 
 
 @interface CrossesViewController ()
-@property (nonatomic, retain) EFHeadView *headView;
+@property (nonatomic, strong) EFHeadView *headView;
 @end
 
 @interface CrossesViewController (Private)
@@ -71,8 +71,6 @@
 //                tempList = [dict allValues];
 //            }
 //        }
-        [tempList retain];
-        [_crossList release];
         _crossList = tempList;
     }
 }
@@ -100,7 +98,6 @@
     };
     
     self.headView = headView;
-    [headView release];
     
     //
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
@@ -118,7 +115,6 @@
     UIView *topview = [[UIView alloc] initWithFrame:CGRectMake(0, -480, 320, 480)];
     topview.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
     [self.tableView addSubview:topview];
-    [topview release];
     [super viewDidLoad];
     
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
@@ -134,7 +130,6 @@
         UIView *defaultView = [[UIView alloc] initWithFrame:self.view.bounds];
         defaultView.backgroundColor = backgroundColor;
         [self.view addSubview:defaultView];
-        [defaultView release];
         
         if (self.needHeaderAnimation) {
             self.headView.layer.transform = CATransform3DMakeScale(0.0f, 0.0f, 0.0f);
@@ -224,7 +219,7 @@
     welcome_exfe = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(32, 250, 260, 35)];
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Welcome to EXFE", nil)];
     CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 30.0, NULL);
-    [attrStr addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0, [attrStr length])];
+    [attrStr addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)fontref range:NSMakeRange(0, [attrStr length])];
     [attrStr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLACK].CGColor range:NSMakeRange(0,11)];
     [attrStr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:NSMakeRange(11,4)];
     CTTextAlignment alignment = kCTCenterTextAlignment;
@@ -232,11 +227,10 @@
         {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
     };
     CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(paragraphsetting, 3);
-    [attrStr addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,[attrStr length])];
+    [attrStr addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)paragraphstyle range:NSMakeRange(0,[attrStr length])];
     CFRelease(paragraphstyle);
     CFRelease(fontref);
     welcome_exfe.attributedText = attrStr;
-    [attrStr release];
     welcome_exfe.backgroundColor = [UIColor clearColor];
     //welcome_exfe.hidden = YES;
     welcome_exfe.frame = CGRectOffset(welcome_exfe.frame, 160 - CGRectGetMidX(welcome_exfe.frame), 0);
@@ -292,7 +286,6 @@
     }
     
     self.crossList = nil;
-    [_headView release];
     
 //    if(cellDateTime){
 //        [cellDateTime release];
@@ -300,11 +293,6 @@
 //    }
 //    [settingButton release];
 //    [gatherax release];
-    [label_profile release];
-    [label_gather release];
-    [welcome_exfe release];
-    [welcome_more release];
-    [super dealloc];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -326,14 +314,12 @@
     ProfileViewController *profileViewController=[[ProfileViewController alloc]initWithNibName:@"ProfileViewController" bundle:nil];
     profileViewController.user = [User getDefaultUser];
     [self.navigationController pushViewController:profileViewController animated:YES];
-    [profileViewController release];
     
 }
 - (void)ShowGatherView{
     NewGatherViewController *gatherViewController=[[NewGatherViewController alloc]initWithNibName:@"NewGatherViewController" bundle:nil];
     
     [self.navigationController pushViewController:gatherViewController animated:YES];
-    [gatherViewController release];
 }
 
 - (void) refreshCrosses:(NSString*)source{
@@ -349,7 +335,6 @@
         [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         updated_at = [formatter stringFromDate:date_updated_at];
-        [formatter release];
     }
     if ([source isEqualToString:@"crossview_init"]) {
         //        hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -389,7 +374,6 @@
                                                            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
                                                            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                                                            NSDate *cross_updated_at = [formatter dateFromString:cross.updated_at];
-                                                           [formatter release];
                                                            
                                                            if([updated isKindOfClass:[NSDictionary class]]){
                                                                NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
@@ -426,7 +410,6 @@
                                                                        }
                                                                    }
                                                                }
-                                                               [formatter release];
                                                            }
                                                            if(cross.updated_at!=nil){
                                                                //                  if([source isEqualToString:@"crossview"]){
@@ -462,11 +445,16 @@
                                                            
                                                            Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
                                                            EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
+                                                           __weak EFTabBarViewController * weakTab = tabBarViewController;
                                                            tabBarViewController.viewWillAppearHandler = ^{
-                                                               NSUInteger toJumpIndex = [tabBarViewController indexOfViewControllerForClass:toJumpClass];
+                                                               EFTabBarViewController * strongTab = weakTab;
+                                                               if (!strongTab) {
+                                                                   return;
+                                                               }
+                                                               NSUInteger toJumpIndex = [strongTab indexOfViewControllerForClass:toJumpClass];
                                                                NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
                                                                
-                                                               [tabBarViewController.tabBar setSelectedIndex:toJumpIndex];
+                                                               [strongTab.tabBar setSelectedIndex:toJumpIndex];
                                                            };
                                                            
                                                            [self.navigationController pushViewController:tabBarViewController animated:NO];
@@ -524,7 +512,6 @@
         }
         
         self.crossList = filteredCrosses;
-        [filteredCrosses release];
     }];
     
     [self refreshWelcome];
@@ -569,7 +556,7 @@
         if (buttonIndex == alertView.firstOtherButtonIndex) {
             [Util signout];
             
-            EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
+            EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
             [self presentModalViewController:viewController animated:NO];
         }
     }
@@ -626,7 +613,7 @@
         NSString* reuseIdentifier = @"Card Cell";
         CrossCard *cell =[self.tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
         if (nil == cell) {
-            cell = [[[CrossCard alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier] autorelease];
+            cell = [[CrossCard alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
         }
         Cross *cross=[self.crossList objectAtIndex:indexPath.row ];
         cell.cross_id=cross.cross_id;
@@ -663,7 +650,6 @@
                             cell.hlConversation=YES;
                     }
                 }
-                [formatter release];
             }
         }
         cell.title=cross.title;
@@ -815,7 +801,6 @@
                     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
                     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                     NSDate *updated_at = [formatter dateFromString:updated_at_str];
-                    [formatter release];
                     if (cross.read_at == nil) {
                         cross.read_at=updated_at;
                     } else {
@@ -889,11 +874,16 @@
         AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
         Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
         EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
+        __weak EFTabBarViewController *weakTab = tabBarViewController;
         tabBarViewController.viewWillAppearHandler = ^{
-            NSUInteger toJumpIndex = [tabBarViewController indexOfViewControllerForClass:toJumpClass];
+            EFTabBarViewController * strongTab = weakTab;
+            if (!strongTab) {
+                return;
+            }
+            NSUInteger toJumpIndex = [strongTab indexOfViewControllerForClass:toJumpClass];
             NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
             
-            [tabBarViewController.tabBar setSelectedIndex:toJumpIndex];
+            [strongTab.tabBar setSelectedIndex:toJumpIndex];
         };
         
         [self.navigationController pushViewController:tabBarViewController animated:NO];
@@ -916,11 +906,16 @@
         AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
         Class toJumpClass = NSClassFromString(@"WidgetConvViewController");
         EFTabBarViewController *tabBarViewController = [self _detailViewControllerWithCross:cross withModel:app.model];
+        __weak EFTabBarViewController *weakTab = tabBarViewController;
         tabBarViewController.viewWillAppearHandler = ^{
-            NSUInteger toJumpIndex = [tabBarViewController indexOfViewControllerForClass:toJumpClass];
+            EFTabBarViewController *strongTab = weakTab;
+            if (!strongTab) {
+                return;
+            }
+            NSUInteger toJumpIndex = [strongTab indexOfViewControllerForClass:toJumpClass];
             NSAssert(toJumpIndex != NSNotFound, @"应该必须可找到");
             
-            [tabBarViewController.tabBar setSelectedIndex:toJumpIndex];
+            [strongTab.tabBar setSelectedIndex:toJumpIndex];
         };
         
         [self.navigationController pushViewController:tabBarViewController animated:YES];
@@ -931,7 +926,6 @@
 
 - (EFTabBarViewController *)_detailViewControllerWithCross:(Cross *)cross withModel:(EXFEModel *)model {
     // CrossGroupViewController
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
     CrossGroupViewController *crossGroupViewController = [[CrossGroupViewController alloc] initWithModel:model];
     crossGroupViewController.cross = cross;
     
@@ -965,9 +959,10 @@
     // ExfeeViewController
     WidgetExfeeViewController *exfeeViewController = [[WidgetExfeeViewController alloc] initWithModel:model];
     exfeeViewController.exfee = cross.exfee;
+    __weak Exfee * weakExfee = exfeeViewController.exfee;
     exfeeViewController.onExitBlock = ^{
         [crossGroupViewController performSelector:@selector(fillExfee:)
-                                       withObject:exfeeViewController.exfee];
+                                       withObject:weakExfee];
     };
     
     EFTabBarItem *tabBarItem3 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_exfee_30.png"]];
@@ -978,14 +973,15 @@
     exfeeViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
     
     // Init TabBarViewController
-    EFTabBarViewController *tabBarViewController = [[[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController]] autorelease];
+    EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController]];
     
-    [crossGroupViewController release];
-    [conversationViewController release];
-    [exfeeViewController release];
-    
+    __weak EFTabBarViewController *weakTab = tabBarViewController;
     tabBarViewController.titlePressedHandler = ^{
-        if (crossGroupViewController == tabBarViewController.selectedViewController) {
+        EFTabBarViewController *strongTab = weakTab;
+        if (!strongTab) {
+            return;
+        }
+        if (crossGroupViewController == strongTab.selectedViewController) {
             NSInteger arg = 0x0101;
             [crossGroupViewController showPopup:arg];
         }

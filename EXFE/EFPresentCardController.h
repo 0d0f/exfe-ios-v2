@@ -10,7 +10,7 @@
 
 @interface EFPresentCardController : NSObject
 
-@property (nonatomic, retain) UIViewController *contentViewController;
+@property (nonatomic, strong) UIViewController *contentViewController;
 @property (nonatomic, assign) CGSize contentSize;   // Default as (CGSize){300.0f, 440.0f}
 
 - (id)initWithContentViewController:(UIViewController *)viewController;

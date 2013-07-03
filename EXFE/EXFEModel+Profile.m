@@ -21,7 +21,6 @@
     
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
     
-    [managementOperation release];
 }
 
 @end

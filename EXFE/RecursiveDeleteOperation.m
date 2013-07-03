@@ -30,12 +30,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [self->_paths release];
-    [self->_error release];
-    [super dealloc];
-}
 
 @synthesize paths = _paths;
 @synthesize error = _error;

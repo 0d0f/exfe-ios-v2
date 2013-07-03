@@ -13,6 +13,6 @@
         NSAttributedString *text;
 }
 
-@property (nonatomic,retain) NSAttributedString* text;
+@property (nonatomic,strong) NSAttributedString* text;
 
 @end

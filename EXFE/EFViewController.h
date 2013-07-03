@@ -11,7 +11,7 @@
 
 @interface EFViewController : UIViewController
 
-@property (nonatomic, assign) EXFEModel * model;
+@property (nonatomic, weak) EXFEModel * model;
 
 - (id)initWithModel:(EXFEModel*)exfeModel;
 

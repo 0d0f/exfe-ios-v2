@@ -31,7 +31,7 @@
         CGContextTranslateCTM(context, 0, self.bounds.size.height);
         CGContextScaleCTM(context, 1.0, -1.0);
 
-        CFAttributedStringRef attributedTextref=(CFAttributedStringRef)attributedText;
+        CFAttributedStringRef attributedTextref=(__bridge CFAttributedStringRef)attributedText;
         CTFramesetterRef framesetterattributedText = CTFramesetterCreateWithAttributedString(attributedTextref);
         CGMutablePathRef path = CGPathCreateMutable();
         CGPathAddRect(path, NULL, rect);

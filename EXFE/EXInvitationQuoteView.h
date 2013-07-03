@@ -21,10 +21,10 @@
     
 }
 
-@property (nonatomic,retain) Invitation* invitation;
-@property (nonatomic,retain) NSAttributedString* Line1;
-@property (nonatomic,retain) NSAttributedString* Line2;
-@property (nonatomic,retain) NSAttributedString* Line3;
+@property (nonatomic,strong) Invitation* invitation;
+@property (nonatomic,strong) NSAttributedString* Line1;
+@property (nonatomic,strong) NSAttributedString* Line2;
+@property (nonatomic,strong) NSAttributedString* Line3;
 @property CGPoint point;
 
 

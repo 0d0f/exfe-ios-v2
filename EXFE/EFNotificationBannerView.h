@@ -17,7 +17,7 @@
 @interface EFNotificationBannerView : UIView
 
 @property (nonatomic, assign) NSTimeInterval autoDismissTimeInterval;   // when has button, default as -1; otherwise, 4.33 secs
-@property (nonatomic, assign) id<EFNotificationBannerViewDelegate> delegate;
+@property (nonatomic, weak) id<EFNotificationBannerViewDelegate> delegate;
 
 - (id)initWithTitle:(NSString *)title message:(NSString *)message;
 - (id)initWithTitle:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle buttonPressedHandler:(void (^)(void))handler;

@@ -46,7 +46,6 @@
             // convert to UTC
             NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
             NSDate *date = [gregorian dateFromComponents:datetime];
-            [gregorian release];
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             [formatter setDateFormat:@"yyyy-MM-dd"];
@@ -54,7 +53,6 @@
             // TODO need "+00:00"
             [formatter setDateFormat:@"hh:mm:ss"];  
             self.time = [formatter stringFromDate:date];
-            [formatter release];
         }else{
             self.date = [NSString stringWithFormat:@"%.4i-%.2i-%.2i", datetime.year, datetime.month, datetime.day];
             self.time = @"";
@@ -100,25 +98,19 @@
             [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
             //[formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             NSDate *datePartial = [formatter dateFromString:fullDateTimeStr];
-            [formatter release];
             NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
             [gregorian setTimeZone:localTimeZone];
             NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit |NSTimeZoneCalendarUnit) fromDate:datePartial];
-            [comps retain];
-            [gregorian release];
-            return [comps autorelease];
+            return comps;
 
         }else{
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateFormat:@"yyyy-MM-dd"];
             [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             NSDate *datePartial = [formatter dateFromString:self.date];
-            [formatter release];
             NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
             NSDateComponents *comps = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSTimeZoneCalendarUnit) fromDate:datePartial];
-            [comps retain];
-            [gregorian release];
-            return [comps autorelease];
+            return comps;
         }
     }else{
         if ([self hasTime]){
@@ -133,13 +125,10 @@
             [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
             //[formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             NSDate *timePartial = [formatter dateFromString:fullTimeStr];
-            [formatter release];
             NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
             [gregorian setTimeZone:localTimeZone];
             NSDateComponents *comps = [gregorian components:(NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:timePartial];
-            [comps retain];
-            [gregorian release];
-            return [comps autorelease];
+            return comps;
         }else{
             return nil;
         }
@@ -165,7 +154,6 @@
         [comps setTimeZone:[time timeZone]];
     }
     [self setLocalDateComponents:comps];
-    [comps release];
 }
 
 - (NSTimeZone*) getTargetTimeZone{
@@ -192,7 +180,6 @@
 - (NSString*) getHumanReadableString:(NSTimeZone*)baseTimeZone{
     
     NSDictionary *dict = [DateTimeUtil datetimeTemplate:2];
-    [dict retain];
     
     NSString * datestr = [self date];
     //[[self date] copy];
@@ -224,7 +211,6 @@
 //            [timestr release];
             timestr = [formatter stringFromDate:localDate];
 //            [timestr retain];
-            [formatter release];
         }else{
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 //            [formatter retain];
@@ -232,7 +218,6 @@
 //            [timestr release];
             timestr = [formatter stringFromDate:localDate];
 //            [timestr retain];
-            [formatter release];
         }
 //        [comps release];
     } else {
@@ -250,14 +235,11 @@
 //            [datestr release];
             datestr = [formatter stringFromDate:date];
 //            [datestr retain];
-            [formatter release];
 //            [comps release];
         }else{
             
         }
     }
-    [gregorian release];
-    [dict release];
     
     NSString* result = nil;
     if ([self hasDate]) {

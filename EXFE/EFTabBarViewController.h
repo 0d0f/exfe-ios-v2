@@ -28,14 +28,14 @@ typedef void (^EFTabBarViewControllerBehaviorBlock)(void);
 @class EFTabBar;
 @interface EFTabBarViewController : UIViewController
 
-@property (nonatomic, readonly) EFTabBar *tabBar;
+@property (weak, nonatomic, readonly) EFTabBar *tabBar;
 @property (nonatomic, strong) NSArray *viewControllers; // should sorted by yourself, and set the tabBarItem level
 
-@property (nonatomic, assign) UIViewController<EFTabBarDataSource> *selectedViewController;
+@property (nonatomic, weak) UIViewController<EFTabBarDataSource> *selectedViewController;
 @property (nonatomic, assign) NSUInteger selectedIndex; // Init as NSNotFound
 
 @property (nonatomic, assign) NSUInteger defaultIndex;
-@property (nonatomic, assign) UIViewController<EFTabBarDataSource> *defaultViewController;
+@property (nonatomic, weak) UIViewController<EFTabBarDataSource> *defaultViewController;
 
 // action handler
 @property (nonatomic, copy) EFTabBarTitlePressedBlock titlePressedHandler;      // Default as nil.

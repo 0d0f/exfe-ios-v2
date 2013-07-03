@@ -105,7 +105,6 @@
     
     if(itemsCache!=nil){
         [itemsCache removeAllObjects];
-        [itemsCache release];
     }
     itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
     int count=[_dataSource numberOfimageCollectionView:self];
@@ -173,7 +172,6 @@
                                 maskLayer.frame = self.bounds;
                                 maskLayer.path = maskPath.CGPath;
                                 acceptlabel.layer.mask = maskLayer;
-                                [maskLayer release];
                                 
                                 [acceptlabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10]];
                                 [acceptlabel setTextColor:[UIColor colorWithRed:103/255.0 green:127/255.0 blue:153/255.0 alpha:1]];
@@ -204,7 +202,6 @@
             exfeecount.allnumber=allnum;
             exfeecount.backgroundColor=[UIColor whiteColor];
             [self addSubview:exfeecount];
-            [exfeecount release];
         }
 
         x_count++;
@@ -240,10 +237,4 @@
     }
 }
 
-- (void)dealloc {
-    [acceptlabel release];
-    if(itemsCache!=nil)
-        [itemsCache release];
-    [super dealloc];
-}
 @end

@@ -29,9 +29,9 @@
     UIImageView *background;
 }
 
-@property (nonatomic, retain) Invitation *invitation;
+@property (nonatomic, strong) Invitation *invitation;
 @property (nonatomic, unsafe_unretained) id<EXRSVPStatusViewDelegate> delegate;
-@property (nonatomic, retain) UIButton *next;
+@property (nonatomic, strong) UIButton *next;
 
 - (id)initWithFrame:(CGRect)frame;
 @end

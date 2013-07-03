@@ -13,13 +13,13 @@
 
 @interface User : NSManagedObject
 
-@property (nonatomic, retain) NSString * avatar_filename;
-@property (nonatomic, retain) NSString * bio;
-@property (nonatomic, retain) NSNumber * cross_quantity;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSString * timezone;
-@property (nonatomic, retain) NSNumber * user_id;
-@property (nonatomic, retain) NSSet *identities;
+@property (nonatomic, strong) NSString * avatar_filename;
+@property (nonatomic, strong) NSString * bio;
+@property (nonatomic, strong) NSNumber * cross_quantity;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) NSString * timezone;
+@property (nonatomic, strong) NSNumber * user_id;
+@property (nonatomic, strong) NSSet *identities;
 @end
 
 @interface User (CoreDataGeneratedAccessors)

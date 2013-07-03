@@ -48,7 +48,7 @@
     CGGradientRef gradient = NULL;
     if (_gradientColors && [_gradientColors count]) {
         CGFloat gradientLocations[] = {0, 1};
-        gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)_gradientColors, gradientLocations);
+        gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)_gradientColors, gradientLocations);
     }
     
     //// Shadow Declarations

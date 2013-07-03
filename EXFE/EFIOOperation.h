@@ -13,7 +13,7 @@
 @interface EFIOOperation : EFRunLoopOperation
 
 @property (nonatomic, copy)     NSString            *savePath;              // can't be nil. if the path is not exist, operation will create it.
-@property (nonatomic, retain)   NSData              *data;                  // can't be nil for write.
+@property (nonatomic, strong)   NSData              *data;                  // can't be nil for write.
 @property (nonatomic, assign)   EFIOOperationType   operationType;
 
 @end

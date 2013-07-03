@@ -184,7 +184,6 @@
         UIView* dectorMask = [[UIView alloc] initWithFrame:headview.bounds];
         dectorMask.backgroundColor = [UIColor COLOR_WA(0x00, 0x55)];
         [headview addSubview:dectorMask];
-        [dectorMask release];
         
         titleView = [[UILabel alloc] initWithFrame:CGRectMake(20 + TITLE_HORIZON_MARGIN, TITLE_VERTICAL_MARGIN, CGRectGetWidth(b) - 20 - TITLE_HORIZON_MARGIN * 2, DECTOR_HEIGHT - TITLE_VERTICAL_MARGIN * 2)];
         titleView.textColor = [UIColor COLOR_RGB(0xFE, 0xFF,0xFF)];
@@ -200,7 +199,6 @@
     UIImageView *headerShadow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tabshadow_x.png"]];
     headerShadow.frame = CGRectMake(0, DECTOR_HEIGHT + DECTOR_HEIGHT_EXTRA - 25, 320 * 2, 30);
     [self.view addSubview:headerShadow];
-    [headerShadow release];
     
     [self.view addSubview:headview];
     
@@ -228,7 +226,6 @@
     UIImageView *pannelbackimg=[[UIImageView alloc] initWithFrame:CGRectMake(0,0, pannel.frame.size.width, 46)];
     pannelbackimg.image=[UIImage imageNamed:@"glassbar.png"];
     [pannel addSubview:pannelbackimg];
-    [pannelbackimg release];
 
     UIButton *btngather=[UIButton buttonWithType:UIButtonTypeCustom];
     [btngather setFrame:CGRectMake(99, 8, 122, 32)];
@@ -242,7 +239,6 @@
     [btngather setBackgroundImage:[[UIImage imageNamed:@"btn_glass_blue.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0,5)] forState:UIControlStateNormal];
     [pannel addSubview:btngather];
     [self.view addSubview:pannel];
-    [pannel release];
 
     pannellight = [[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46 - 20, self.view.frame.size.width, 46)];
     pannellight.image = [UIImage imageNamed:@"glassbar_light.png"];
@@ -279,10 +275,8 @@
     pickerlabel.textColor=[UIColor whiteColor];
     pickerlabel.backgroundColor=[UIColor clearColor];
     [pickertoolbar addSubview:pickerlabel];
-    [pickerlabel release];
     
     [self.view addSubview:pickertoolbar];
-    [pickertoolbar release];
     [pickertoolbar setHidden:YES];
     
 }
@@ -332,7 +326,6 @@
     gestureRecognizer.delegate=self;
     [self.view addGestureRecognizer:gestureRecognizer];
     
-    [gestureRecognizer release];
   
 }
 
@@ -355,7 +348,7 @@
     NSManagedObjectContext *context = [RKObjectManager sharedManager].managedObjectStore.mainQueueManagedObjectContext;
     if (self.cross == nil) {
         NSEntityDescription *crossEntity = [NSEntityDescription entityForName:@"Cross" inManagedObjectContext:context];
-        self.cross = [[[Cross alloc] initWithEntity:crossEntity insertIntoManagedObjectContext:context] autorelease];
+        self.cross = [[Cross alloc] initWithEntity:crossEntity insertIntoManagedObjectContext:context];
     }
     
     NSArray *cross_default_backgrounds=[[NSUserDefaults standardUserDefaults] objectForKey:@"cross_default_backgrounds"];
@@ -366,7 +359,7 @@
     }
     NSMutableDictionary *widget=[NSMutableDictionary dictionaryWithObjectsAndKeys:default_background,@"image",@"Background",@"type", nil];
     if (self.cross.widget == nil) {
-        self.cross.widget = [[[NSMutableArray alloc] initWithCapacity:1] autorelease];
+        self.cross.widget = [[NSMutableArray alloc] initWithCapacity:1];
     }
     [_cross.widget addObject:widget];
     
@@ -376,34 +369,14 @@
     
     if (self.cross.exfee == nil) {
         NSEntityDescription *exfeeEntity = [NSEntityDescription entityForName:@"Exfee" inManagedObjectContext:context];
-        self.cross.exfee =[[[Exfee alloc] initWithEntity:exfeeEntity insertIntoManagedObjectContext:context] autorelease];
+        self.cross.exfee =[[Exfee alloc] initWithEntity:exfeeEntity insertIntoManagedObjectContext:context];
     }
-    self.cross.exfee.invitations = [[[NSMutableSet alloc] initWithCapacity:12] autorelease];
+    self.cross.exfee.invitations = [[NSMutableSet alloc] initWithCapacity:12];
     [self.cross.exfee addDefaultInvitationBy:default_identity];
     
     self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
 }
 
-- (void)dealloc {
-    
-    [descView release];
-    [exfeeShowview release];
-    [timeRelView release];
-    [timeAbsView release];
-    [timeZoneView release];
-    [placeTitleView release];
-    [placeDescView release];
-    [mapView release];
-    [container release];
-    [dectorView release];
-    [headview release];
-    [pannellight release];
-    [myIdentities release];
-    [titleView release];
-    
-    [_sortedInvitations release];
-    [super dealloc];
-}
 
 - (void)touchesBegan:(UITapGestureRecognizer*)sender{
     CGPoint location = [sender locationInView:sender.view];
@@ -440,7 +413,6 @@
         titleViewController.editFieldHint = editHint;
         [self presentModalViewController:titleViewController animated:YES];
         [titleViewController setCrossTitle:_cross.title desc:_cross.cross_description];
-        [titleViewController release];
     }
 
     if (CGRectContainsPoint([timeRelView frame], containerLocation) || CGRectContainsPoint([timeAbsView frame], containerLocation)|| CGRectContainsPoint([timeZoneView frame], containerLocation))
@@ -449,7 +421,6 @@
         timeViewController.delegate=self;
         [timeViewController setDateTime:_cross.time];
         [self presentModalViewController:timeViewController animated:YES];
-        [timeViewController release];
     }
     if (CGRectContainsPoint([placeTitleView frame], containerLocation) || CGRectContainsPoint([placeDescView frame], location))
     {
@@ -488,7 +459,7 @@
                 [context deleteObject:self.cross.time];
             }
             if (self.cross.exfee) {
-                NSSet *invitations = [[self.cross.exfee.invitations copy] autorelease];
+                NSSet *invitations = [self.cross.exfee.invitations copy];
                 for (Invitation *invitation in invitations){
                     [context deleteObject:invitation];
                 }
@@ -544,7 +515,6 @@
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
     [bigspin startAnimating];
     hud.customView = bigspin;
-    [bigspin release];
     hud.labelText = @"Loading";
   
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
@@ -553,9 +523,9 @@
     _cross.by_identity = [myIdentities objectAtIndex:0];
     if (_cross.time == nil) {
       NSEntityDescription *crosstimeEntity = [NSEntityDescription entityForName:@"CrossTime" inManagedObjectContext:context];
-      _cross.time = [[[CrossTime alloc] initWithEntity:crosstimeEntity insertIntoManagedObjectContext:context] autorelease];
+      _cross.time = [[CrossTime alloc] initWithEntity:crosstimeEntity insertIntoManagedObjectContext:context];
       NSEntityDescription *eftimeEntity = [NSEntityDescription entityForName:@"EFTime" inManagedObjectContext:context];
-      _cross.time.begin_at = [[[EFTime alloc] initWithEntity:eftimeEntity insertIntoManagedObjectContext:context] autorelease];
+      _cross.time.begin_at = [[EFTime alloc] initWithEntity:eftimeEntity insertIntoManagedObjectContext:context];
       _cross.time.begin_at.timezone = [DateTimeUtil timezoneString:[NSTimeZone localTimeZone]];
     }
     [Flurry logEvent:@"GATHER_SEND"];
@@ -594,7 +564,6 @@
         placeViewController.showtableview=YES;
     }
     [self presentModalViewController:placeViewController animated:YES];
-    [placeViewController release];
 }
 
 #pragma mark Refresh UI content methods
@@ -714,7 +683,6 @@
 - (void)fillTime:(CrossTime *)time {
     if (time != nil){
         NSString *title = [[time getTimeTitle] sentenceCapitalizedString];
-        [title retain];
         if (title == nil || title.length == 0) {
             timeRelView.text = NSLocalizedString(@"Sometime", nil);
             timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
@@ -727,14 +695,12 @@
             
             timeAbsView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
             NSString* desc = [[time getTimeDescription] sentenceCapitalizedString];
-            [desc retain];
             if(desc != nil && desc.length > 0){
                 timeAbsView.text = desc;
                 timeAbsView.hidden = NO;
                 [timeAbsView sizeToFit];
                 
                 NSString* tz = [time getTimeZoneLine];
-                [tz retain];
                 if (tz != nil && tz.length > 0) {
                     timeZoneView.hidden = NO;
                     timeZoneView.text = tz;//[tz copy];
@@ -743,7 +709,6 @@
                     timeZoneView.hidden = YES;
                     timeZoneView.text = @"";
                 }
-                [tz release];
                 
             }else{
                 timeAbsView.text = @"";
@@ -751,9 +716,7 @@
                 timeZoneView.hidden = YES;
                 timeZoneView.text = @"";
             }
-            [desc release];
         }
-        [title release];
     }else{
         timeRelView.text = NSLocalizedString(@"Sometime", nil);
         timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
@@ -810,7 +773,7 @@
 //            if (placeTitle == nil || place.title.length == 0) {
 //                placeTitle = @"Somewhere";
 //            }
-            MapPin *pin = [[[MapPin alloc] initWithCoordinates:region.center placeName:place.title description:@""] autorelease];
+            MapPin *pin = [[MapPin alloc] initWithCoordinates:region.center placeName:place.title description:@""];
             [mapView addAnnotation:pin];
             
         }else{
@@ -971,7 +934,7 @@
 - (EXInvitationItem *)imageCollectionView:(EXImagesCollectionGatherView *)imageCollectionView itemAtIndex:(int)index{
     Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
     
-    EXInvitationItem *item=[[[EXInvitationItem alloc] initWithInvitation:invitation] autorelease];
+    EXInvitationItem *item=[[EXInvitationItem alloc] initWithInvitation:invitation];
     item.backgroundColor=[UIColor clearColor];
     item.isGather=YES;
     item.isMe = [[User getDefaultUser] isMe:invitation.identity];
@@ -1061,11 +1024,9 @@
                 }
                 
                 [invitations addObject:invitation];
-                [invitation release];
             }
             
             [self.cross.exfee addInvitations:invitations];
-            [invitations release];
             
             self.sortedInvitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
             [self reFormatTitle];
@@ -1077,7 +1038,6 @@
         
         [self presentViewController:viewController animated:YES completion:nil];
         
-        [viewController release];
     } else if (index < self.sortedInvitations.count) {
         Invitation *invitation =[self.sortedInvitations objectAtIndex:index];
       
@@ -1110,7 +1070,7 @@
         static NSString *defaultPinID = @"com.exfe.pin";
         pinView = (MKAnnotationView *)[map dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
         if ( pinView == nil ){
-            pinView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID] autorelease];
+            pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID];
             pinView.canShowCallout = YES;
             pinView.image = [UIImage imageNamed:@"map_pin_blue.png"];
             
@@ -1135,7 +1095,6 @@
 - (void) showMenu:(Invitation*)_invitation items:(NSArray*)itemslist{
     if(rsvpmenu!=nil){
         [rsvpmenu removeFromSuperview];
-        [rsvpmenu release];
     }
     BOOL showtitlebar=YES;
     float titlebarheight=20;
@@ -1308,7 +1267,7 @@
     
     CGRect rowFrame = CGRectMake(0.0f, 0.0f, 300, 40);
     
-    UIView *rowview=[[[UIView alloc] initWithFrame:rowFrame] autorelease];
+    UIView *rowview=[[UIView alloc] initWithFrame:rowFrame];
     UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(30, 0,300-30,40)];
     
     label.text=username;
@@ -1316,7 +1275,6 @@
     
     rowview.backgroundColor=[UIColor clearColor];
     [rowview addSubview:label];
-    [label release];
     
     NSString *iconname=[NSString stringWithFormat:@"identity_%@_18_grey.png",provider];
     UIImage *icon=[UIImage imageNamed:iconname];
@@ -1325,7 +1283,6 @@
     imgprovider.backgroundColor=[UIColor clearColor];
     imgprovider.image=icon;
     [rowview addSubview:imgprovider];
-    [imgprovider release];
     return rowview;
 }
 
@@ -1371,7 +1328,7 @@
         
 //        NSMutableDictionary *widget=[NSMutableDictionary dictionaryWithObjectsAndKeys:default_background,@"image",@"Background",@"type", nil];
         if(_cross.widget==nil)
-            _cross.widget=[[[NSMutableArray alloc] initWithCapacity:1] autorelease];
+            _cross.widget=[[NSMutableArray alloc] initWithCapacity:1];
         else{
             for (int i=0;i<[_cross.widget count];i++){
                 NSMutableDictionary *widget=[_cross.widget objectAtIndex:i];

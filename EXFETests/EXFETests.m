@@ -77,7 +77,7 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    EFTime* eftime = [EFTime object];
+    EFTime* eftime = nil; //[EFTime object];
     eftime.date = @"2013-01-12";
     eftime.time = @"06:20:04";
     eftime.timezone = @"+08:00 CST";
@@ -89,7 +89,7 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    EFTime* eftime = [EFTime object];
+    EFTime* eftime = nil; //[EFTime object];
     eftime.date = @"2012-01-12";
     eftime.time = @"06:20:04";
     eftime.timezone = @"+08:00 CST";
@@ -99,14 +99,14 @@
 
 - (void)testCrossTimeBasicSecondsAgo
 {
-    CrossTime *xt = [CrossTime object];
+    CrossTime *xt = nil; //[CrossTime object];
     xt.origin = @"";
     xt.outputformat = [NSNumber numberWithInt:0];
     
     NSDate* today = [NSDate date];
     NSDate* target = [NSDate dateWithTimeInterval:-1 sinceDate:today];
     NSDateFormatter* fmt = [[NSDateFormatter alloc] init];
-    EFTime* eftime = [EFTime object];
+    EFTime* eftime = nil; //[EFTime object];
     [fmt setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     [fmt setDateFormat:@"yyyy-MM-dd"];
     eftime.date = [fmt stringFromDate:target];
@@ -125,14 +125,14 @@
 
 - (void)testCrossTimeBasicToday
 {
-    CrossTime *xt = [CrossTime object];
+    CrossTime *xt = nil; //[CrossTime object];
     xt.origin = @"";
     xt.outputformat = [NSNumber numberWithInt:0];
     
     NSDate* today = [NSDate date];
     NSDate* target = [NSDate dateWithTimeInterval:-1 sinceDate:today];
     NSDateFormatter* fmt = [[NSDateFormatter alloc] init];
-    EFTime* eftime = [EFTime object];
+    EFTime* eftime = nil; //[EFTime object];
     [fmt setDateFormat:@"yyyy-MM-dd"];
     eftime.date = [fmt stringFromDate:target];
     eftime.time = @"";
@@ -150,7 +150,7 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    EFTime *eftime = [EFTime object];
+    EFTime *eftime = nil; //[EFTime object];
     eftime.timezone = @"+08:00 CST";
     
     // Valid Date & Time
@@ -393,7 +393,7 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    EFTime *eftime = [EFTime object];
+    EFTime *eftime = nil; //[EFTime object];
     eftime.timezone = @"+08:00 CST";
     
     // Valid Date & Time
@@ -417,7 +417,7 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    EFTime *eftime = [EFTime object];
+    EFTime *eftime = nil; //[EFTime object];
     eftime.timezone = @"+08:00 CST";
     
     // Same timezone, full date and time
@@ -539,13 +539,13 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    CrossTime *xt = [CrossTime object];
-    xt.begin_at = [EFTime object];
+    CrossTime *xt = nil; //[CrossTime object];
+    xt.begin_at = nil; //[EFTime object];
     
     // Show original
     xt.origin = @"Original";
     xt.outputformat = [NSNumber numberWithInt:1];
-    xt.begin_at = [EFTime object];
+    xt.begin_at = nil; //[EFTime object];
     xt.begin_at.timezone = @"+08:00 CST";
     
     xt.begin_at.date = @"";
@@ -560,7 +560,7 @@
     // Show original, eat quote
     xt.origin = @"'Original'";
     xt.outputformat = [NSNumber numberWithInt:1];
-    xt.begin_at = [EFTime object];
+    xt.begin_at = nil; //[EFTime object];
     xt.begin_at.timezone = @"+08:00 CST";
     
     xt.begin_at.date = @"";
@@ -603,10 +603,10 @@
 {
     [self setNow:@"2013-01-12 14:23:05"];
     
-    CrossTime *xt = [CrossTime object];
+    CrossTime *xt = nil; //[CrossTime object];
     xt.origin = @"";
     xt.outputformat = [NSNumber numberWithInt:0];
-    xt.begin_at = [EFTime object];
+    xt.begin_at = nil; //[EFTime object];
     xt.begin_at.timezone = @"+08:00 CST";
     
     xt.begin_at.date = @"2013-01-12";

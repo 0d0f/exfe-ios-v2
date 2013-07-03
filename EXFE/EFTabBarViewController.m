@@ -11,8 +11,8 @@
 #import "EFTabBarItem.h"
 
 @interface EFTabBarViewController ()
-@property (nonatomic, retain) UIView *containView;
-@property (nonatomic, assign) UIViewController<EFTabBarDataSource> *preSelectedViewController;
+@property (nonatomic, strong) UIView *containView;
+@property (nonatomic, weak) UIViewController<EFTabBarDataSource> *preSelectedViewController;
 @end
 
 @interface EFTabBarViewController (Private)
@@ -87,12 +87,6 @@
     [super viewDidDisappear:animated];
 }
 
-- (void)dealloc {
-    [_containView release];
-    [_tabBar release];
-    [_viewControllers release];
-    [super dealloc];
-}
 
 #pragma mark - Getter && Setter
 
@@ -101,7 +95,6 @@
         return;
     
     if (_viewControllers) {
-        [_viewControllers release];
         _viewControllers = nil;
         _selectedIndex = NSNotFound;
         _selectedViewController = nil;
@@ -115,10 +108,9 @@
         }
         
         _tabBar.tabBarItems = tabBarItems;
-        [tabBarItems release];
         
         // own it
-        _viewControllers = [viewControllers retain];
+        _viewControllers = viewControllers;
         
         // select
         self.selectedIndex = 0;
@@ -208,7 +200,7 @@
 }
 
 - (NSArray *)viewControllersForClass:(Class)controllerClass {
-    NSMutableArray *viewControllers = [[[NSMutableArray alloc] initWithCapacity:[self.viewControllers count]] autorelease];
+    NSMutableArray *viewControllers = [[NSMutableArray alloc] initWithCapacity:[self.viewControllers count]];
     
     for (UIViewController *viewController in self.viewControllers) {
         if ([viewController isKindOfClass:controllerClass]) {
@@ -216,7 +208,7 @@
         }
     }
     
-    return [[viewControllers copy] autorelease];
+    return [viewControllers copy];
 }
 
 - (NSUInteger)indexOfViewControllerForClass:(Class)viewControllerClass {

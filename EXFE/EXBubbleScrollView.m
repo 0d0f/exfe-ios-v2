@@ -54,15 +54,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [inputbackgroundImage release];
-    [bubbles release];
-    [input release];
-    [backgroundview release];
-    [leftview release];
-	[super dealloc];
-}
 - (void) deleteLastBubble:(EXBubbleScrollView *)bubbleScrollView deletedbubble:(EXBubbleButton*)bubble{
     [_exdelegate deleteLastBubble:bubbleScrollView deletedbubble:bubble];
 }
@@ -163,7 +154,7 @@
     return YES;
 }
 -(NSArray*) bubbleCustomObjects{
-    NSMutableArray *mutablearray=[[[NSMutableArray alloc] initWithCapacity:12] autorelease];
+    NSMutableArray *mutablearray=[[NSMutableArray alloc] initWithCapacity:12];
     for(EXBubbleButton* bubble in bubbles){
         [mutablearray addObject:bubble.customObject];
     }

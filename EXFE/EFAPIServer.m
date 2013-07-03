@@ -227,7 +227,7 @@
                                                  void (^block)(void) = ^{
                                                      NSEntityDescription *identityEntity = [NSEntityDescription entityForName:@"Identity" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
                                                      [manager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
-                                                         Identity *identity = [[[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+                                                         Identity *identity = [[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
                                                          identity.external_id = external_id;
                                                          identity.provider = provider;
                                                          identity.avatar_filename = avatar_filename;
@@ -252,7 +252,6 @@
                                                  success(identityEntities);
                                              });
                                          }
-                                         [identityEntities release];
                                      } else {
                                          if (failure) {
                                              dispatch_async(dispatch_get_main_queue(), ^{

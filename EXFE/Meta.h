@@ -12,8 +12,8 @@
 
 @interface Meta : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * code;
-@property (nonatomic, retain) NSString * errorDetail;
-@property (nonatomic, retain) NSString * errorType;
+@property (nonatomic, strong) NSNumber * code;
+@property (nonatomic, strong) NSString * errorDetail;
+@property (nonatomic, strong) NSString * errorType;
 
 @end

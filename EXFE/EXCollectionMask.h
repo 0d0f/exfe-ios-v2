@@ -20,7 +20,7 @@
     int maxColumn;
     int maxRow;
 }
-@property (nonatomic,retain)NSMutableDictionary *itemsCache;
+@property (nonatomic,strong)NSMutableDictionary *itemsCache;
 @property int maxColumn;
 @property int maxRow;
 @property BOOL hiddenAddButton;

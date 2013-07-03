@@ -34,7 +34,6 @@
         EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
         [bigspin startAnimating];
         hud.customView=bigspin;
-        [bigspin release];
         hud.labelText = @"Loading";
     }
 }
@@ -76,7 +75,6 @@
     backimg.contentMode=UIViewContentModeScaleToFill;
     backimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
     [toolbar addSubview:backimg];
-    [backimg release];
 
     cancelbutton=[UIButton buttonWithType:UIButtonTypeCustom];
     [cancelbutton setFrame:CGRectMake(5, 7, 50, 30)];
@@ -133,15 +131,9 @@
             [self.delegate OAuthloginViewControllerDidSuccess:self userid:userid username:name external_id:external_id token:token];
             [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshUserSelf object:self];
         }
-        [parser release];
         return NO;
     }
     return YES;
-}
--(void)dealloc{
-    [toolbar release];
-    [titlelabel release];
-    [super dealloc];
 }
 - (void)viewDidUnload
 {

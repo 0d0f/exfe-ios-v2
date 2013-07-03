@@ -20,8 +20,7 @@
 {
     if (identity != _identity)
     {
-        [_identity release];
-        _identity = [identity retain];
+        _identity = identity;
         [self setNeedsDisplay];
     }
 }

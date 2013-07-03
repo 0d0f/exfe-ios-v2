@@ -16,9 +16,9 @@
     int cornerRadius;
     int arrowHeight;
 }
-@property (nonatomic,retain) UIBezierPath *transparentPath;
-@property (nonatomic,retain) UIImage *backgroundimage;
-@property (nonatomic,retain) UIColor *color;
+@property (nonatomic,strong) UIBezierPath *transparentPath;
+@property (nonatomic,strong) UIImage *backgroundimage;
+@property (nonatomic,strong) UIColor *color;
 @property int cornerRadius;
 @property int arrowHeight;
 @property BOOL gradientcolors;

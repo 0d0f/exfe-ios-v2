@@ -13,9 +13,9 @@
 #import "NSString+Format.h"
 
 @interface EFSearchContactDataSouce ()
-@property (nonatomic, retain) NSMutableArray *sections;
-@property (nonatomic, retain) NSMutableArray *sectionTitles;
-@property (nonatomic, retain) NSMutableArray *suggestContactObjects;
+@property (nonatomic, strong) NSMutableArray *sections;
+@property (nonatomic, strong) NSMutableArray *sectionTitles;
+@property (nonatomic, strong) NSMutableArray *suggestContactObjects;
 @property (nonatomic, copy)   NSString       *suggestKeyword;
 @end
 
@@ -118,7 +118,7 @@
                     void (^block)(void) = ^{
                         NSEntityDescription *identityEntity = [NSEntityDescription entityForName:@"Identity" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
                         [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
-                            Identity *identity = [[[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+                            Identity *identity = [[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
                             identity.external_id = external_id;
                             identity.provider = provider;
                             identity.avatar_filename = avatar_filename;
@@ -153,7 +153,6 @@
     
     if (_searchKeyWord) {
         self.suggestKeyword = searchKeyWord;
-        [_searchKeyWord release];
         _searchKeyWord = nil;
         
         [self.sections removeAllObjects];
@@ -258,7 +257,6 @@
             [self.sectionTitles addObject:title];
         }
         
-        [filterdContacts release];
     }
     
     if (self.suggestContactObjects.count) {

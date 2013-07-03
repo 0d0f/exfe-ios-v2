@@ -29,9 +29,6 @@
 
 @implementation EFHeadViewTopLayer
 
-- (void)dealloc {
-    [super dealloc];
-}
 
 - (void)drawInContext:(CGContextRef)ctx {
     UIColor *color = nil;
@@ -58,13 +55,13 @@
 @end
 
 @interface EFHeadView ()
-@property (nonatomic, retain) UIView *avatarView;
-@property (nonatomic, retain) CALayer *avatarLayer;
+@property (nonatomic, strong) UIView *avatarView;
+@property (nonatomic, strong) CALayer *avatarLayer;
 
-@property (nonatomic, retain) UIView *titleView;
-@property (nonatomic, retain) NSArray *titleLayers;
+@property (nonatomic, strong) UIView *titleView;
+@property (nonatomic, strong) NSArray *titleLayers;
 
-@property (nonatomic, retain) EFHeadViewTopLayer *topLayer;
+@property (nonatomic, strong) EFHeadViewTopLayer *topLayer;
 @property (assign) NSUInteger animationCount;
 
 - (void)headShowAnimated:(BOOL)animated;
@@ -114,7 +111,6 @@
         [self addSubview:avatarView];
         
         self.avatarView = avatarView;
-        [avatarView release];
         
         // title View
         UIView *titleView = [[UIView alloc] initWithFrame:kTitleViewFrame];
@@ -142,7 +138,6 @@
         }
         
         self.titleLayers = layers;
-        [layers release];
         
         // topLayer
         EFHeadViewTopLayer *topLayer = [EFHeadViewTopLayer layer];
@@ -159,16 +154,13 @@
         UITapGestureRecognizer *headTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                   action:@selector(tapHandler:)];
         [avatarView addGestureRecognizer:headTap];
-        [headTap release];
         
         UITapGestureRecognizer *titleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                    action:@selector(tapHandler:)];
         [titleView addGestureRecognizer:titleTap];
-        [titleTap release];
         
         [self insertSubview:titleView belowSubview:avatarView];
         self.titleView = titleView;
-        [titleView release];
         
         self.showed = NO;
         self.animationCount = 0;
@@ -176,13 +168,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_topLayer release];
-    [_avatarView release];
-    [_headImage release];
-    [_titleLabel release];
-    [super dealloc];
-}
 
 #pragma mark - Gesture
 
@@ -211,11 +196,10 @@
         return;
     
     if (_headImage) {
-        [_headImage release];
         _headImage = nil;
     }
     if (headImage) {
-        _headImage = [headImage retain];
+        _headImage = headImage;
         self.avatarLayer.contents = (id)headImage.CGImage;
     } else {
         self.avatarLayer.contents = nil;

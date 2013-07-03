@@ -53,8 +53,8 @@
     UIView *pickertoolbar;
     NSArray *myIdentities;
 }
-@property (nonatomic, retain) Cross* cross;
-@property (nonatomic, retain) NSArray *sortedInvitations;
+@property (nonatomic, strong) Cross* cross;
+@property (nonatomic, strong) NSArray *sortedInvitations;
 @property BOOL title_be_edit;
 
 - (void) initUI;

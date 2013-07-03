@@ -12,6 +12,6 @@
 
 @interface IdentityId : NSManagedObject
 
-@property (nonatomic, retain) NSString * identity_id;
+@property (nonatomic, strong) NSString * identity_id;
 
 @end

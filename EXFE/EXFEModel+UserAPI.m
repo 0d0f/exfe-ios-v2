@@ -19,7 +19,6 @@
     
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
     
-    [managementOperation release];
 }
 
 - (void)loadUserByUserId:(NSInteger)userId {
@@ -37,7 +36,6 @@
     
     [[EFQueueManager defaultManager] addNetworkManagementOperation:managementOperation completeHandler:nil];
     
-    [managementOperation release];
 }
 
 @end

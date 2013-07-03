@@ -12,9 +12,9 @@
 
 @interface Rsvp : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * identity_id;
-@property (nonatomic, retain) NSString * rsvp_status;
-@property (nonatomic, retain) NSNumber * by_identity_id;
-@property (nonatomic, retain) NSNumber * exfee_id;
+@property (nonatomic, strong) NSNumber * identity_id;
+@property (nonatomic, strong) NSString * rsvp_status;
+@property (nonatomic, strong) NSNumber * by_identity_id;
+@property (nonatomic, strong) NSNumber * exfee_id;
 
 @end

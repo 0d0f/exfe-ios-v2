@@ -17,7 +17,6 @@
         UIView *back=[[UIView alloc] initWithFrame:self.frame];
         back.backgroundColor=[UIColor clearColor];
         [self addSubview:back];
-        [back release];
 //		_indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 //		_indicator.frame = (CGRect){.origin.x = 2.0f, .origin.y = 3.0f, .size.width = self.frame.size.height - 6, .size.height = self.frame.size.height - 6};
 //		_indicator.hidesWhenStopped = YES;
@@ -33,12 +32,6 @@
 	return self;
 }
 
--(void)dealloc
-{
-	[_statusLabel release];
-//	[_indicator release];
-	[super dealloc];
-}
 
 -(void)showWithStatusMessage:(NSString*)msg
 {

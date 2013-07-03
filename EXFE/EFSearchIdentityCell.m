@@ -35,10 +35,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_popoverController release];
-    [super dealloc];
-}
 
 + (NSString *)reuseIdentifier {
     return NSStringFromClass([self class]);
@@ -49,7 +45,6 @@
         EFSearchTipViewController *tipViewController = [[EFSearchTipViewController alloc] initWithNibName:@"EFSearchTipViewController" bundle:nil];
         _popoverController = [[EFPopoverController alloc] initWithContentViewController:tipViewController];
         [_popoverController setContentSize:tipViewController.view.frame.size animated:YES];
-        [tipViewController release];
         
         _popoverController.backgroundArrowView.gradientColors = @[(id)[UIColor COLOR_RGBA(0x33, 0x33, 0x33, 245)].CGColor, (id)[UIColor COLOR_RGBA(0x22, 0x22, 0x22, 245)].CGColor];
         _popoverController.backgroundArrowView.strokeWidth = 0.0f;

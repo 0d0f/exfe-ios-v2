@@ -33,9 +33,8 @@
     UIButton *buttonsignout;
 }
 
-@property (nonatomic, retain) User *user;
+@property (nonatomic, strong) User *user;
 
-- (void) touchesBegan:(UITapGestureRecognizer*)sender;
 - (void) Logout;
 - (void) syncUser;
 - (void) doVerify:(int)identity_id;

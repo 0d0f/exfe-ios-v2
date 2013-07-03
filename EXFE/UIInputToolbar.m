@@ -49,13 +49,13 @@
     self.tintColor = [UIColor lightGrayColor];
     
     /* Create UIExpandingTextView input */
-    self.textView = [[[UIExpandingTextView alloc] initWithFrame:CGRectMake(10, 7+2, 300, 26)] autorelease];
+    self.textView = [[UIExpandingTextView alloc] initWithFrame:CGRectMake(10, 7+2, 300, 26)];
     self.textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(4.0f, 0.0f, 10.0f, 0.0f);
     self.textView.delegate = self;
     [self addSubview:self.textView];
     
     /* Right align the toolbar button */
-    UIBarButtonItem *flexItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
+    UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
     NSArray *items = [NSArray arrayWithObjects: flexItem, self.inputButton, nil];
     [self setItems:items animated:NO];
@@ -107,11 +107,6 @@
     self.inputButton.customView.frame = i;
 }
 
-- (void)dealloc
-{
-    [inputButton release];
-    [super dealloc];
-}
 
 
 #pragma mark -

@@ -109,8 +109,6 @@
                                                                                   handler(nil);
                                                                               }
                                                                           }];
-                           [downloadOperation release];
-                           [operation release];
                        } else {
                            handler(nil);
                        }

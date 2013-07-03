@@ -105,7 +105,6 @@ typedef void (^EFFetchPeopleCompleteBlock)(void);
                         });
                     }
                     
-                    [people release];
                 }
             }
             
@@ -171,8 +170,6 @@ typedef void (^EFFetchPeopleCompleteBlock)(void);
 
 - (void)dealloc {
     [_addressBookQueue cancelAllOperations];
-    [_addressBookQueue release];
-    [super dealloc];
 }
 
 #pragma mark - Getter && Setter
@@ -263,7 +260,6 @@ typedef void (^EFFetchPeopleCompleteBlock)(void);
     
     [_addressBookQueue addOperation:operation];
     
-    [operation release];
 }
 
 #pragma mark - Filter
@@ -369,7 +365,6 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
     CTCarrier *carrier = [netInfo subscriberCellularProvider];
     NSString *mcc = [carrier mobileCountryCode];
     NSString *isocode =[carrier isoCountryCode];
-    [netInfo release];
     
     if (!carrier) {
         // has no cellular provider
@@ -402,10 +397,10 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
             localcontacts = [objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil];
             
             if ([localcontacts count] > 0) {
-                result= [[localcontacts objectAtIndex:0] retain];
+                result= [localcontacts objectAtIndex:0];
                 
                 // check need update
-                NSDate *recordModicationDate = ABRecordCopyValue(recordRef, kABPersonModificationDateProperty);
+                NSDate *recordModicationDate = CFBridgingRelease(ABRecordCopyValue(recordRef, kABPersonModificationDateProperty));
                 if (date && [recordModicationDate timeIntervalSinceDate:date] <= 0) {
                     needUpdate = NO;
                 }
@@ -421,32 +416,32 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                 
                 // compositeName -> name
                 CFStringRef compositeName = ABRecordCopyCompositeName(recordRef);
-                if ((NSString *)compositeName != nil) {
-                    result.name = (NSString *)compositeName;
-                    indexfield = [indexfield stringByAppendingString:(NSString *)compositeName];
+                if ((__bridge NSString *)compositeName != nil) {
+                    result.name = (__bridge NSString *)compositeName;
+                    indexfield = [indexfield stringByAppendingString:(__bridge NSString *)compositeName];
                     CFRelease(compositeName);
                 }
                 
                 // kABPersonFirstNamePhoneticProperty
                 CFStringRef firstNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonFirstNamePhoneticProperty);
-                if ((NSString *)firstNamePhoneticRef != nil) {
-                    NSString *firstNamePhonetic = [(NSString *)firstNamePhoneticRef stringWithoutSpace];
+                if ((__bridge NSString *)firstNamePhoneticRef != nil) {
+                    NSString *firstNamePhonetic = [(__bridge NSString *)firstNamePhoneticRef stringWithoutSpace];
                     indexfield = [indexfield stringByAppendingString:firstNamePhonetic];
                     CFRelease(firstNamePhoneticRef);
                 }
                 
                 // kABPersonLastNamePhoneticProperty
                 CFStringRef lastNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonLastNamePhoneticProperty);
-                if ((NSString *)lastNamePhoneticRef != nil) {
-                    NSString *lastNamePhonetic = [(NSString *)lastNamePhoneticRef stringWithoutSpace];
+                if ((__bridge NSString *)lastNamePhoneticRef != nil) {
+                    NSString *lastNamePhonetic = [(__bridge NSString *)lastNamePhoneticRef stringWithoutSpace];
                     indexfield = [indexfield stringByAppendingString:lastNamePhonetic];
                     CFRelease(lastNamePhoneticRef);
                 }
                 
                 // kABPersonMiddleNamePhoneticProperty
                 CFStringRef middleNamePhoneticRef = ABRecordCopyValue(recordRef, kABPersonMiddleNamePhoneticProperty);
-                if ((NSString *)middleNamePhoneticRef != nil) {
-                    NSString *middleNamePhonetic = [(NSString *)middleNamePhoneticRef stringWithoutSpace];
+                if ((__bridge NSString *)middleNamePhoneticRef != nil) {
+                    NSString *middleNamePhonetic = [(__bridge NSString *)middleNamePhoneticRef stringWithoutSpace];
                     indexfield = [indexfield stringByAppendingString:middleNamePhonetic];
                     CFRelease(middleNamePhoneticRef);
                 }
@@ -462,20 +457,19 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                     }
                     CFRelease(avatarDataProvider);
                     if(avatarRef != nil){
-                        result.avatar = (NSData *)avatarDataRef;
+                        result.avatar = (__bridge NSData *)avatarDataRef;
                         CFRelease(avatarRef);
                     }
                 }
                 
                 // email -> emails
                 if (ABMultiValueGetCount(multi_email) > 0) {
-                    NSMutableArray *formatedEmails = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_email)] autorelease];
+                    NSMutableArray *formatedEmails = [[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_email)];
                     
                     for (CFIndex i = 0; i < ABMultiValueGetCount(multi_email); i++) {
-                        NSString *email = (NSString*)ABMultiValueCopyValueAtIndex(multi_email, i);
+                        NSString *email = (NSString*)CFBridgingRelease(ABMultiValueCopyValueAtIndex(multi_email, i));
                         if (email != nil) {
                             NSString *formatedEmail = [email stringWithoutSpace];
-                            [email release];
                             
                             indexfield = [indexfield stringByAppendingFormat:@" %@",formatedEmail];
                             [formatedEmails addObject:formatedEmail];
@@ -489,10 +483,10 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                 
                 // phone -> phones
                 if (ABMultiValueGetCount(multi_phone) > 0) {
-                    NSMutableArray *phone_array = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_phone)] autorelease];
+                    NSMutableArray *phone_array = [[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_phone)];
                     
                     for (CFIndex i = 0; i < ABMultiValueGetCount(multi_phone); i++) {
-                        NSString* phone = (NSString*)ABMultiValueCopyValueAtIndex(multi_phone, i);
+                        NSString* phone = (NSString*)CFBridgingRelease(ABMultiValueCopyValueAtIndex(multi_phone, i));
                         if (phone != nil) {
                             NSString *clean_phone=@"";
                             clean_phone=[phone stringByReplacingOccurrencesOfString:@"(" withString:@""];
@@ -525,7 +519,6 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                                 indexfield = [indexfield stringByAppendingFormat:@" %@",phoneresult];
                                 [phone_array addObject:phoneresult];
                             }
-                            [phone release];
                         }
                     }
                     if ([phone_array count] > 0) {
@@ -535,9 +528,9 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                 }
                 
                 // social -> socail
-                NSMutableArray *social_array = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_socialprofile)] autorelease];
+                NSMutableArray *social_array = [[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_socialprofile)];
                 for (CFIndex i = 0; i < ABMultiValueGetCount(multi_socialprofile); i++) {
-                    NSDictionary *socialprofile = (NSDictionary*)ABMultiValueCopyValueAtIndex(multi_socialprofile, i);
+                    NSDictionary *socialprofile = (NSDictionary*)CFBridgingRelease(ABMultiValueCopyValueAtIndex(multi_socialprofile, i));
                     
                     NSMutableDictionary *formatedSocialProfile = [NSMutableDictionary dictionaryWithCapacity:socialprofile.count];
                     [socialprofile enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
@@ -559,8 +552,6 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                             indexfield = [indexfield stringByAppendingFormat:@" %@",social_username];
                         }
                     }
-                    if (socialprofile != nil)
-                        [socialprofile release];
                 }
                 
                 if ([social_array count] > 0) {
@@ -570,9 +561,9 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                 
                 // im -> im
                 for (CFIndex i = 0; i < ABMultiValueGetCount(multi_im); i++) {
-                    NSMutableArray *im_array = [[[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_im)] autorelease];
+                    NSMutableArray *im_array = [[NSMutableArray alloc] initWithCapacity:ABMultiValueGetCount(multi_im)];
                     
-                    NSDictionary *personim = (NSDictionary*)ABMultiValueCopyValueAtIndex(multi_im, i);
+                    NSDictionary *personim = (NSDictionary*)CFBridgingRelease(ABMultiValueCopyValueAtIndex(multi_im, i));
                     
                     NSMutableDictionary *formatedPersonIm = [NSMutableDictionary dictionaryWithCapacity:personim.count];
                     [personim enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
@@ -590,8 +581,6 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
                             indexfield = [indexfield stringByAppendingFormat:@" %@",[formatedPersonIm objectForKey:@"username"]];
                         }
                     }
-                    if (personim != nil)
-                        [personim release];
                     
                     if ([im_array count] > 0) {
                         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:im_array];
@@ -609,5 +598,5 @@ inline LocalContact *LocalContactFromRecordRefAndLastUpdateDate(ABRecordRef reco
     CFRelease(multi_socialprofile);
     CFRelease(multi_im);
     
-    return [result autorelease];
+    return result;
 }

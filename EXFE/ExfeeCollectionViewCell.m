@@ -73,14 +73,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_rsvpImage release];
-    [_avatarFrame release];
-    [_matesLayer release];
-    [_matesBg release];
-    [super dealloc];
-}
 
 //- (id)initWithCoder:(NSCoder *)aDecoder {
 //    if((self = [super initWithCoder:aDecoder])) {

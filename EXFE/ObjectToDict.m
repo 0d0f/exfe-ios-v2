@@ -10,7 +10,7 @@
 
 @implementation ObjectToDict
 + (NSMutableDictionary*) ExfeeDict:(Exfee*)exfee{
-    NSMutableArray *invitations_array=[[[NSMutableArray alloc] initWithCapacity:[exfee.invitations count]] autorelease];
+    NSMutableArray *invitations_array=[[NSMutableArray alloc] initWithCapacity:[exfee.invitations count]];
     NSSet *invitations=exfee.invitations;
     if(invitations !=nil&&[invitations count]>0)
     {
@@ -30,7 +30,6 @@
     [format setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *created_at_str = [format stringFromDate:invitation.created_at];
     NSString *updated_at_str = [format stringFromDate:invitation.updated_at];
-    [format release];
     
     return [NSMutableDictionary dictionaryWithObjectsAndKeys:created_at_str,@"created_at",invitation.host,@"host",invitation.invitation_id,@"invitation_id",invitation.mates,@"mates",invitation.rsvp_status,@"rsvp_status",updated_at_str,@"updated_at",invitation.via,@"via",identity ,@"identity",by_identity,@"by_identity",nil];
 }

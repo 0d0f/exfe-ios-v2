@@ -16,18 +16,18 @@
 #define kDefaultNetworkRunloopThreadPriority        (0.3f)
 
 @interface EFQueueManager ()
-@property (nonatomic, retain) NSThread              *ioRunLoopThread;
-@property (nonatomic, retain) NSThread              *networkRunLoopThread;
+@property (nonatomic, strong) NSThread              *ioRunLoopThread;
+@property (nonatomic, strong) NSThread              *networkRunLoopThread;
 
-@property (nonatomic, retain) NSOperationQueue      *ioManagementQueue;
-@property (nonatomic, retain) NSOperationQueue      *ioQueue;
+@property (nonatomic, strong) NSOperationQueue      *ioManagementQueue;
+@property (nonatomic, strong) NSOperationQueue      *ioQueue;
 
-@property (nonatomic, retain) NSOperationQueue      *networkManagementQueue;
-@property (nonatomic, retain) NSOperationQueue      *networkQueue;
+@property (nonatomic, strong) NSOperationQueue      *networkManagementQueue;
+@property (nonatomic, strong) NSOperationQueue      *networkQueue;
 
-@property (nonatomic, retain) NSOperationQueue      *cpuQueue;
+@property (nonatomic, strong) NSOperationQueue      *cpuQueue;
 
-@property (nonatomic, retain) NSMutableDictionary   *runningOperationToHandlerMap;
+@property (nonatomic, strong) NSMutableDictionary   *runningOperationToHandlerMap;
 
 @end
 
@@ -128,9 +128,9 @@
 - (void)addOperation:(NSOperation *)operation toQueue:(NSOperationQueue *)queue completeHandler:(CompleteBlock)handler {
     if (handler) {
         @synchronized (self) {
-            CompleteBlock block = Block_copy(handler);
-            [self.runningOperationToHandlerMap setObject:block forKey:[NSValue valueWithNonretainedObject:operation]];
-            Block_release(block);
+//            CompleteBlock block = Block_copy(handler);
+            [self.runningOperationToHandlerMap setObject:handler forKey:[NSValue valueWithNonretainedObject:operation]];
+//            Block_release(block);
         }
     }
     
@@ -143,19 +143,19 @@
 
 - (void)operationDone:(NSOperation *)operation {
     CompleteBlock completeBlock = nil;
-    
+#warning ARC change mark
     @synchronized (self) {
         completeBlock = [self.runningOperationToHandlerMap objectForKey:[NSValue valueWithNonretainedObject:operation]];
-        if (completeBlock) {
-            [completeBlock retain];
-        }
+//        if (completeBlock) {
+//            [completeBlock retain];
+//        }
         [self.runningOperationToHandlerMap removeObjectForKey:[NSValue valueWithNonretainedObject:operation]];
     }
     
     if (![operation isCancelled] && completeBlock) {
         dispatch_async(dispatch_get_main_queue(), ^{
             completeBlock();
-            Block_release(completeBlock);
+//            Block_release(completeBlock);
         });
     }
 }

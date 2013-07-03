@@ -13,8 +13,8 @@
 
 @interface CrossTime : NSManagedObject
 
-@property (nonatomic, retain) NSString * origin;
-@property (nonatomic, retain) NSNumber * outputformat;
-@property (nonatomic, retain) EFTime *begin_at;
+@property (nonatomic, strong) NSString * origin;
+@property (nonatomic, strong) NSNumber * outputformat;
+@property (nonatomic, strong) EFTime *begin_at;
 
 @end

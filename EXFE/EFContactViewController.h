@@ -25,12 +25,12 @@ UISearchBarDelegate,
 UISearchDisplayDelegate
 >
 
-@property (retain, nonatomic) IBOutlet UIButton *backButton;
-@property (retain, nonatomic) IBOutlet UIButton *addButton;
-@property (retain, nonatomic) IBOutlet UITableView *tableView;
-@property (retain, nonatomic) IBOutlet EFSearchBar *contactSearchBar;
-@property (retain, nonatomic) IBOutlet UIView *navigationView;
-@property (retain, nonatomic) IBOutlet UILabel *selectCountLabel;
+@property (strong, nonatomic) IBOutlet UIButton *backButton;
+@property (strong, nonatomic) IBOutlet UIButton *addButton;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet EFSearchBar *contactSearchBar;
+@property (strong, nonatomic) IBOutlet UIView *navigationView;
+@property (strong, nonatomic) IBOutlet UILabel *selectCountLabel;
 
 @property (nonatomic, copy) AddActionBlock addActionHandler;    // Default as nil. You should set this to handle Add-Button pressed event. This block will receive a array of EFContactObject object.
 

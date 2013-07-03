@@ -27,9 +27,9 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (nonatomic, retain, readwrite) EXFEModel *model;
-@property (nonatomic, retain, readwrite) UINavigationController *navigationController;
-@property (nonatomic, retain, readwrite) CrossesViewController *crossesViewController;
+@property (nonatomic, strong, readwrite) EXFEModel *model;
+@property (nonatomic, strong, readwrite) UINavigationController *navigationController;
+@property (nonatomic, strong, readwrite) CrossesViewController *crossesViewController;
 
 - (void)switchContextByUserId:(NSInteger)user_id withAbandon:(BOOL)flag;
 -(void)signinDidFinish;

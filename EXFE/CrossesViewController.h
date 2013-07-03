@@ -37,8 +37,8 @@ CrossCardDelegate
     UILabel *welcome_more;
 }
 
-@property (nonatomic, retain) NSArray* crossList;
-@property (nonatomic, retain) id crossChangeObserver;
+@property (nonatomic, strong) NSArray* crossList;
+@property (nonatomic, strong) id crossChangeObserver;
 @property (nonatomic, assign) BOOL needHeaderAnimation;
 
 - (void)refreshCell;

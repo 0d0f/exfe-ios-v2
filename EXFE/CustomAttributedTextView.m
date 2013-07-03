@@ -21,7 +21,6 @@
 }
 
 - (void)setText:(NSString *)s {
-	[text release];
 	text = [s copy];
 	[self setNeedsDisplay];
 }
@@ -39,7 +38,7 @@
         CGContextScaleCTM(context, 1.0, -1.0);
         CGContextSetShadowWithColor(context, CGSizeMake(0, 1.0f), 1.0f, [UIColor blackColor].CGColor);
         
-        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)text);
+        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)text);
         CGMutablePathRef path = CGPathCreateMutable();
         CGPathAddRect(path, NULL, rect);
         CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [text length]), path, NULL);

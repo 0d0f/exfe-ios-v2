@@ -35,15 +35,15 @@
 {
     UIExpandingTextView *textView;
     UIBarButtonItem *inputButton;
-    NSObject <UIInputToolbarDelegate> *delegate;
+    NSObject <UIInputToolbarDelegate> *__weak delegate;
 }
 
 - (void)hidekeyboard;
 - (void)setInputEnabled:(BOOL)enabled;
 - (void)drawRect:(CGRect)rect;
 
-@property (nonatomic, retain) UIExpandingTextView *textView;
-@property (nonatomic, retain) UIBarButtonItem *inputButton;
-@property (assign) NSObject<UIInputToolbarDelegate> *delegate;
+@property (nonatomic, strong) UIExpandingTextView *textView;
+@property (nonatomic, strong) UIBarButtonItem *inputButton;
+@property (weak) NSObject<UIInputToolbarDelegate> *delegate;
 
 @end

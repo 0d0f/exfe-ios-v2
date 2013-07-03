@@ -45,7 +45,7 @@
 //    acceptednumber=55;
 
     NSMutableAttributedString *acceptedattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%i",acceptednumber]];
-    [acceptedattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)acceptedfontref range:NSMakeRange(0,[acceptedattribstring length])];
+    [acceptedattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)acceptedfontref range:NSMakeRange(0,[acceptedattribstring length])];
     [acceptedattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0,[acceptedattribstring length])];
     
     CTTextAlignment alignment = kCTCenterTextAlignment;
@@ -53,10 +53,10 @@
         {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
     };
     CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(setting, 1);
-    [acceptedattribstring addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,[acceptedattribstring length])];
+    [acceptedattribstring addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)paragraphstyle range:NSMakeRange(0,[acceptedattribstring length])];
     CFRelease(paragraphstyle);
     
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)acceptedattribstring);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)acceptedattribstring);
     CGMutablePathRef path = CGPathCreateMutable();
 
     CFRange range;
@@ -69,20 +69,19 @@
     CFRelease(acceptedfontref);
     CTFrameDraw(theFrame, currentContext);
     CFRelease(theFrame);
-    [acceptedattribstring release];
 
     
     CTFontRef allfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
 //    allnumber=88;
     NSMutableAttributedString *allattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%i",allnumber]];
-    [allattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)allfontref range:NSMakeRange(0,[allattribstring length])];
+    [allattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)allfontref range:NSMakeRange(0,[allattribstring length])];
     [allattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_51.CGColor range:NSMakeRange(0,[allattribstring length])];
     
     paragraphstyle = CTParagraphStyleCreate(setting, 1);
-    [allattribstring addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,[allattribstring length])];
+    [allattribstring addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)paragraphstyle range:NSMakeRange(0,[allattribstring length])];
     CFRelease(paragraphstyle);
     
-    framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)allattribstring);
+    framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)allattribstring);
     path = CGPathCreateMutable();
     CGSize allTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [allattribstring length]), nil, rect.size, &range);
     
@@ -93,18 +92,17 @@
     CFRelease(allfontref);
     CTFrameDraw(theFrame, currentContext);
     CFRelease(theFrame);
-    [allattribstring release];
     
     CTFontRef textfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 10.0, NULL);
     NSMutableAttributedString *textstring=[[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Accepted", nil)];
-    [textstring addAttribute:(NSString*)kCTFontAttributeName value:(id)textfontref range:NSMakeRange(0,[textstring length])];
+    [textstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)textfontref range:NSMakeRange(0,[textstring length])];
     [textstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_25.CGColor range:NSMakeRange(0,[textstring length])];
     
     paragraphstyle = CTParagraphStyleCreate(setting, 1);
-    [textstring addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,[textstring length])];
+    [textstring addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)paragraphstyle range:NSMakeRange(0,[textstring length])];
     CFRelease(paragraphstyle);
     
-    framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)textstring);
+    framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)textstring);
     path = CGPathCreateMutable();
     CGPathAddRect(path, NULL,CGRectMake(0,0, rect.size.width, 12));
     theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [textstring length]), path, NULL);
@@ -113,7 +111,6 @@
     CFRelease(textfontref);
     CTFrameDraw(theFrame, currentContext);
     CFRelease(theFrame);
-    [textstring release];
 }
 
 @end

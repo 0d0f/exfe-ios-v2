@@ -13,7 +13,7 @@
 
 @property (nonatomic, copy) NSString *searchIndex;
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic, retain) NSArray *roughIdentities;
+@property (nonatomic, strong) NSArray *roughIdentities;
 @property (nonatomic, copy) NSString *imageKey; // used to get image from cache, nil when has no image.
 
 @property (nonatomic, assign, getter = isSelected) BOOL selected;   // default as NO.

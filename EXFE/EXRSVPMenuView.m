@@ -30,10 +30,8 @@
             [responseview addSubview:responselabel];
             
             [self addSubview:responseview];
-            [responselabel release];
             y+=20;
         }
-        [responseview release];
 
         
         if([self Itemscontain:itemlist string:@"Accepted"]){
@@ -150,7 +148,6 @@
         maskLayer.frame = self.bounds;
         maskLayer.path = maskPath.CGPath;
         self.layer.mask = maskLayer;
-        [maskLayer release];
     
     }
     return self;

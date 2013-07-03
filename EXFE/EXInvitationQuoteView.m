@@ -33,7 +33,7 @@
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
     CGContextTranslateCTM(context, 0, self.bounds.size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)Line1);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)Line1);
     CFRange range;
     CGSize Line1coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [Line1 length]), nil, CGSizeMake(rect.size.width, 18), &range);
     CGRect titlerect=CGRectMake(10, rect.size.height-4-Line1coreTextSize.height+1, rect.size.width-20, Line1coreTextSize.height);
@@ -45,7 +45,7 @@
     CTFrameDraw(theFrame, context);
     CFRelease(theFrame);
     
-    CTFramesetterRef framesetterLine2 = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)Line2);
+    CTFramesetterRef framesetterLine2 = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)Line2);
     CGSize Line2coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetterLine2, CFRangeMake(0, [Line2 length]), nil, CGSizeMake(rect.size.width-20-19, 13), &range);
     CGRect line2rect=CGRectMake(10+19+3, rect.size.height-4-Line1coreTextSize.height-Line2coreTextSize.height+1, rect.size.width-20, Line2coreTextSize.height);
     CGMutablePathRef pathline2 = CGPathCreateMutable();
@@ -56,7 +56,7 @@
     CTFrameDraw(theFrameline2, context);
     CFRelease(theFrameline2);
   
-    CTFramesetterRef framesetterLine3 = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)Line3);
+    CTFramesetterRef framesetterLine3 = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)Line3);
     CGSize Line3coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetterLine3, CFRangeMake(0, [Line3 length]), nil, CGSizeMake(150, 13), &range);
     
     CGRect line3rect=CGRectMake(rect.size.width-10-150, rect.size.height-4-Line1coreTextSize.height-Line2coreTextSize.height-Line3coreTextSize.height+1, 150, Line3coreTextSize.height);

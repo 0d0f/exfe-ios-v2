@@ -35,8 +35,6 @@
 
 - (void)dealloc {
     NSAssert(kEFRunLoopOperationStateExecuting != self.runLoopOperationState, @"RunLoop should be just inited or finished.");
-    [_runLoopModes release];
-    [super dealloc];
 }
 
 #pragma mark - Core state transitions

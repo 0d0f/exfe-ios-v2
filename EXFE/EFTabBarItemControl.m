@@ -15,8 +15,8 @@
 #define kDefaultLabelFrame  ((CGRect){{15.0f, 14.5f}, {28.0f, 18.0f}})
 
 @interface EFTabBarItemControl ()
-@property (nonatomic, retain) UILabel *titleLabel;
-@property (nonatomic, retain) UIImageView *imageView;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UIImageView *imageView;
 @end
 
 @interface EFTabBarItemControl (Private)
@@ -43,7 +43,6 @@
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:kDefaultImageFrame];
         [self addSubview:imageView];
         self.imageView = imageView;
-        [imageView release];
         
         // title
         UILabel *label = [[UILabel alloc] initWithFrame:kDefaultLabelFrame];
@@ -55,19 +54,16 @@
         label.shadowOffset = (CGSize){0, 0.5f};
         [self addSubview:label];
         self.titleLabel = label;
-        [label release];
         
         // tap
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                               action:@selector(touchUpInside:)];
         [self addGestureRecognizer:tap];
-        [tap release];
         
         // Pan
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                                                     action:@selector(panHandler:)];
         [self addGestureRecognizer:pan];
-        [pan release];
         
         [tap requireGestureRecognizerToFail:pan];
         
@@ -80,10 +76,7 @@
 }
 
 - (void)dealloc {
-    [_titleLabel release];
-    [_imageView release];
     self.tabBarItem = nil;
-    [super dealloc];
 }
 
 #pragma mark - Action
@@ -130,11 +123,10 @@
                          forKeyPath:@"titleEnable"];
         [_tabBarItem removeObserver:self
                          forKeyPath:@"shouldPop"];
-        [_tabBarItem release];
         _tabBarItem = nil;
     }
     if (tabBarItem) {
-        _tabBarItem = [tabBarItem retain];
+        _tabBarItem = tabBarItem;
         [tabBarItem addObserver:self
                      forKeyPath:@"title"
                         options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew

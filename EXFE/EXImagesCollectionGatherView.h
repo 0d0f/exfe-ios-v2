@@ -61,7 +61,7 @@
 @property float nameHeight;
 @property float imageXmargin;
 @property float imageYmargin;
-@property (nonatomic,retain) NSMutableDictionary *itemsCache;
+@property (nonatomic,strong) NSMutableDictionary *itemsCache;
 
 - (void) setImageWidth:(float)width height:(float)height;
 - (void) setImageXMargin:(float)xmargin YMargin:(float)ymargin;

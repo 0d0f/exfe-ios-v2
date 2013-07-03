@@ -28,7 +28,7 @@
 - (id)init {
     self = [super init];
     if (self) {
-        self.dataCache = [[[EFDataCache alloc] init] autorelease];
+        self.dataCache = [[EFDataCache alloc] init];
         self.queueManager = [EFQueueManager defaultManager];
         self.cachePath = [kDefaultCachePath stringByExpandingTildeInPath];
     }
@@ -36,12 +36,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_dataCache release];
-    [_queueManager release];
-    [_cachePath release];
-    [super dealloc];
-}
 
 #pragma mark - Getter
 
@@ -77,17 +71,19 @@
     EFIOManagementOperation *ioManagementOperation = [[EFIOManagementOperation alloc] init];
     ioManagementOperation.operationType = kEFIOOperationTypeRead;
     ioManagementOperation.savePath = dataPath;
-    
+    __weak EFDataManager *weakSelf = self;
     [self.queueManager addIOManagementOperation:ioManagementOperation
                                 completeHandler:^{
                                     if (ioManagementOperation.data) {
-                                        [self cacheData:ioManagementOperation.data forKey:aKey shouldWriteToDisk:NO];
+                                        EFDataManager *strongSelf = weakSelf;
+                                        if (strongSelf){
+                                            [strongSelf cacheData:ioManagementOperation.data forKey:aKey shouldWriteToDisk:NO];
+                                        }
                                     }
                                     if (handler) {
                                         handler(ioManagementOperation.data);
                                     }
                                 }];
-    [ioManagementOperation release];
 }
 
 - (BOOL)isDataCachedInLocalForKey:(NSString *)aKey {
@@ -125,7 +121,6 @@
     }
     
     if (_cachePath) {
-        [_cachePath release];
         _cachePath = nil;
     }
     if (cachePath) {
@@ -155,7 +150,6 @@
         
         [self.queueManager addIOManagementOperation:operation completeHandler:nil];
         
-        [operation release];
     }
 }
 

@@ -18,11 +18,11 @@
 #define kLineWidth (kButtonWidth * 2)
 
 @interface EFPersonIdentityCellButton : UIButton
-@property (nonatomic, assign) RoughIdentity *roughIdentity;
-@property (nonatomic, retain) UIImageView *providerImageView;
-@property (nonatomic, retain) UILabel *providerExternalNameLabel;
+@property (nonatomic, weak) RoughIdentity *roughIdentity;
+@property (nonatomic, strong) UIImageView *providerImageView;
+@property (nonatomic, strong) UILabel *providerExternalNameLabel;
 @property (nonatomic, assign) BOOL isSelected;
-@property (nonatomic, retain) CAGradientLayer *gradientLayer;
+@property (nonatomic, strong) CAGradientLayer *gradientLayer;
 @end
 
 @implementation EFPersonIdentityCellButton
@@ -55,23 +55,14 @@
     label.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:14];
     [button addSubview:label];
     button.providerExternalNameLabel = label;
-    [label release];
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:(CGRect){{6, 13}, {18, 18}}];
     [button addSubview:imageView];
     button.providerImageView = imageView;
-    [imageView release];
     
     return button;
 }
 
-- (void)dealloc {
-    [_gradientLayer release];
-    [_roughIdentity release];
-    [_providerImageView release];
-    [_providerExternalNameLabel release];
-    [super dealloc];
-}
 
 - (void)setIsSelected:(BOOL)isSelected {
     if (isSelected == _isSelected)
@@ -155,18 +146,11 @@
         UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shadow_4.png"]];
         shadowImageView.frame = (CGRect){{0, 0}, {320, 4}};
         [self.contentView addSubview:shadowImageView];
-        [shadowImageView release];
     }
     
     return self;
 }
 
-- (void)dealloc {
-    [_baseView release];
-    [_buttons release];
-    [_roughIdentities release];
-    [super dealloc];
-}
 
 - (void)buttonPressed:(id)sender {
     EFPersonIdentityCellButton *button = (EFPersonIdentityCellButton *)sender;
@@ -191,12 +175,11 @@
 
 - (void)setRoughIdentities:(NSArray *)roughIdentities {
     if (_roughIdentities) {
-        [_roughIdentities release];
         _roughIdentities = nil;
     }
     
     if (roughIdentities) {
-        _roughIdentities = [roughIdentities retain];
+        _roughIdentities = roughIdentities;
         [self layoutButtons];
     }
 }

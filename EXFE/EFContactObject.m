@@ -21,15 +21,15 @@
 @implementation EFContactObject
 
 + (EFContactObject *)contactObjectWithIdentities:(NSArray *)identities {
-    return [[[self alloc] initWithIdentities:identities] autorelease];
+    return [[self alloc] initWithIdentities:identities];
 }
 
 + (EFContactObject *)contactObjectWithLocalContact:(LocalContact *)localContact {
-    return [[[self alloc] initWithLocalContact:localContact] autorelease];
+    return [[self alloc] initWithLocalContact:localContact];
 }
 
 + (EFContactObject *)contactObjectWithRoughIdentity:(RoughIdentity *)roughIdentity {
-    return [[[self alloc] initWithRoughIdentity:roughIdentity] autorelease];
+    return [[self alloc] initWithRoughIdentity:roughIdentity];
 }
 
 - (id)initWithIdentities:(NSArray *)identities {
@@ -78,10 +78,8 @@
                 [result addObject:roughIdentity1];
             }
         }
-        [roughIdentities release];
         
         self.roughIdentities = result;
-        [result release];
         
         Identity *defaultIdentity = identities[0];
         
@@ -92,8 +90,7 @@
         for (Identity *identity in identities) {
             [searchIndex appendFormat:@"%@%@%@%@", identity.external_id, identity.external_username, identity.name, identity.provider];
         }
-        self.searchIndex = [[searchIndex copy] autorelease];
-        [searchIndex release];
+        self.searchIndex = [searchIndex copy];
     }
     
     return self;
@@ -140,13 +137,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_searchIndex release];
-    [_name release];
-    [_roughIdentities release];
-    [_imageKey release];
-    [super dealloc];
-}
 
 #pragma mark - Getter && Setter
 

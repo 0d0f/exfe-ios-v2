@@ -22,7 +22,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 @implementation Util
 + (NSString*) decodeFromPercentEscapeString:(NSString*)string{
     CFStringRef sref = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,(CFStringRef) string,CFSTR(""),kCFStringEncodingUTF8);
-    NSString *s=[NSString stringWithFormat:@"%@", (NSString *)sref];
+    NSString *s=[NSString stringWithFormat:@"%@", (__bridge NSString *)sref];
     CFRelease(sref);
     return s;
 }
@@ -34,7 +34,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
                                                                     NULL,
                                                                     (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",
                                                                     kCFStringEncodingUTF8 );
-    return [(NSString *)urlString autorelease];
+    return (__bridge NSString *)urlString;
     
 }
 
@@ -47,7 +47,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
                                                                    (CFStringRef)kEFCharactersToLeaveUnescaped,
                                                                    (CFStringRef)kEFCharactersToBeEscaped,
                                                                    kCFStringEncodingUTF8);
-    return [(NSString *)urlString autorelease];
+    return (__bridge NSString *)urlString;
 }
 
 
@@ -144,13 +144,11 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
             shortdate=[shortdate stringByAppendingFormat:@" (%@)",localTimezone];
         
     }
-    [locale release];
-    [format release];
     return shortdate;
 }
 
 + (NSDictionary*) crossTimeToString:(CrossTime*)crosstime{
-    NSMutableDictionary *result=[[[NSMutableDictionary alloc]initWithCapacity:2] autorelease];
+    NSMutableDictionary *result=[[NSMutableDictionary alloc]initWithCapacity:2];
     if(crosstime==nil){
         [result setObject:@"" forKey:@"date_v2"];
         [result setObject:@"" forKey:@"date"];
@@ -168,8 +166,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     [format setDateFormat:@"yyyy"];
     NSString *localYear = [format stringFromDate:[NSDate date]];
     
-    [locale release];
-    [format release];
     NSString* cross_timezone=@"";
     if(crosstime.begin_at.timezone.length>=6 )
         cross_timezone=[crosstime.begin_at.timezone substringToIndex:6];
@@ -241,11 +237,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
             NSString *month_str=[dateformat_to stringFromDate:begin_at_date];
             [result setObject:day_str forKey:@"day"];
             [result setObject:month_str forKey:@"month"];
-            [locale_to release];
-            [dateformat_to release];
         }
-        [locale release];
-        [dateformat release];
         
         if([crosstime_date length]>=5 && [localYear isEqualToString:[crosstime_date substringToIndex:4]])
             crosstime_date=[crosstime_date substringFromIndex:5];
@@ -344,8 +336,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
     NSDate *date = [dateFormat dateFromString:datestr];
     
-    [locale release];
-    [dateFormat release];
     if(date==nil)
         return @"";
     NSDate *now = [NSDate date];
@@ -650,7 +640,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         mcc = [NSString stringWithString:[carrier mobileCountryCode]];
     //  NSString *mnc = [carrier mobileNetworkCode];
         isocode = [NSString stringWithString:[carrier isoCountryCode]];
-        [netInfo release];
     } else {
         NSLocale *locale = [NSLocale currentLocale];
         isocode = [[locale objectForKey:NSLocaleCountryCode] lowercaseString];
@@ -703,7 +692,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         NSString *isocode = [[locale objectForKey:NSLocaleCountryCode] lowercaseString];
         result = [self getTelephoneCountryCode:isocode];
     }
-    [netInfo release];
     return result;
 }
 
@@ -749,7 +737,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     if ([clean_phone hasPrefix:@"+"]) {
         phoneresult = clean_phone;
     }
-    [netInfo release];
     return phoneresult;
 }
 
@@ -769,8 +756,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         cross_timezone=[crosstime.begin_at.timezone substringToIndex:6];
     if([cross_timezone isEqualToString:localTimezone])
         is_same_timezone=YES;
-    [locale release];
-    [format release];
     
     if(is_same_timezone==YES)
         return [NSTimeZone localTimeZone];
@@ -792,7 +777,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
     [componentsToSubtract setDay: - ([weekdayComponents weekday] - [gregorian firstWeekday])];
     NSDate *beginningOfWeek = [gregorian dateByAddingComponents:componentsToSubtract toDate:today options:0];
-    [componentsToSubtract release];
     NSDateComponents *components = [gregorian components: (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate: beginningOfWeek];
     beginningOfWeek = [gregorian dateFromComponents: components];
     return beginningOfWeek;
@@ -817,8 +801,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     localTimezone=[localTimezone substringFromIndex:3];
     [format setDateFormat:@"yyyy"];
     NSString *localYear = [format stringFromDate:[NSDate date]];
-    [locale release];
-    [format release];
     
     NSString* cross_timezone=@"";
     if(crosstime.begin_at.timezone.length>=6 )
@@ -876,11 +858,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
             crosstime_date=[dateformat_to stringFromDate:begin_at_date];
             //            [dateformat_to setDateFormat:@"ccc"];
             //            week=[dateformat_to stringFromDate:begin_at_date];
-            [locale_to release];
-            [dateformat_to release];
         }
-        [locale release];
-        [dateformat release];
         
         //        if([crosstime_date length]>=5 && [localYear isEqualToString:[crosstime_date substringToIndex:4]])
         //            crosstime_date=[crosstime_date substringFromIndex:5];
@@ -996,7 +974,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
                 NSDateFormatter *weekdayformatter = [[NSDateFormatter alloc] init];
                 [weekdayformatter setDateFormat: @"EEEE"];
                 NSString *weekdaysymbol=[weekdayformatter stringFromDate:begin_at_date];
-                [weekdayformatter release];
                 
                 int beginingofweek_tobegin_at_day=[comps_firstdayofweek day];
                 if(beginingofweek_tobegin_at_day<=7)
@@ -1069,7 +1046,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         
     }
     
-    [dateformat release];
     return relativeTime;
     
 }
@@ -1133,7 +1109,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         
         alertView.tag = 500;
         [alertView show];
-        [alertView release];
     }
 }
 
@@ -1155,7 +1130,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 #endif
             alertView.tag = 500;
             [alertView show];
-            [alertView release];
         }
     }
 }
@@ -1174,7 +1148,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     if (![errormsg isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:errorTitle message:errormsg delegate:delegate cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
-        [alert release];
     }
 }
 
@@ -1192,7 +1165,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     
     NSCalendar* calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [calendar components:NSDayCalendarUnit fromDate:dt2_n toDate:dt1_n options:0];
-    [dateformat release];
     return [components day];
     //    NSInteger daysBetween = abs([components day]);
     //    return daysBetween+1;
@@ -1245,7 +1217,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         [formatter setDateStyle:NSDateFormatterFullStyle];
         
         last_time = [formatter dateFromString:last_string];
-        [formatter release];
     }
     if (last_time == nil || ABS([Util daysBetween:last_time and:[NSDate date]]) > 3){
         AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
@@ -1253,7 +1224,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterFullStyle];
             NSString *now_string = [formatter stringFromDate:[NSDate date]];
-            [formatter release];
             [[NSUserDefaults standardUserDefaults] setValue:now_string forKey:@"version_last_check_time"];
             
             NSDictionary *iosVersionObject = [JSON valueForKeyPath:@"response.ios"];

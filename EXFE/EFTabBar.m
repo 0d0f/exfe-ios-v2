@@ -49,10 +49,10 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 
 @interface EFTabBarBackgroundView : UIView
 
-@property (nonatomic, retain) UIImage *backgroundImage;
+@property (nonatomic, strong) UIImage *backgroundImage;
 
-@property (nonatomic, retain) CAShapeLayer *maskLayer;
-@property (nonatomic, retain) CAShapeLayer *innerShadowLayer;
+@property (nonatomic, strong) CAShapeLayer *maskLayer;
+@property (nonatomic, strong) CAShapeLayer *innerShadowLayer;
 
 - (void)showButtonWithMaskPath:(CGPathRef)maskPath innerShadowPath:(CGPathRef)shadowPath  animated:(BOOL)animated;
 - (void)dismissButtonWithMaskPath:(CGPathRef)maskPath innerShadowPath:(CGPathRef)shadowPath animated:(BOOL)animated;
@@ -88,12 +88,6 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     return self;
 }
 
-- (void)dealloc {
-    [_innerShadowLayer release];
-    [_maskLayer release];
-    [_backgroundImage release];
-    [super dealloc];
-}
 
 - (void)showButtonWithMaskPath:(CGPathRef)maskPath innerShadowPath:(CGPathRef)shadowPath  animated:(BOOL)animated {
     if (animated) {
@@ -101,7 +95,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         CABasicAnimation *maskAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
         maskAnimation.duration = 0.233f;
         maskAnimation.fromValue = (id)self.maskLayer.path;
-        maskAnimation.toValue = (id)maskPath;
+        maskAnimation.toValue = (__bridge id)maskPath;
         maskAnimation.fillMode = kCAFillModeForwards;
         maskAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         
@@ -111,7 +105,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
         shadowAnimation.duration = 0.233f;
         shadowAnimation.fromValue = (id)self.innerShadowLayer.path;
-        shadowAnimation.toValue = (id)shadowPath;
+        shadowAnimation.toValue = (__bridge id)shadowPath;
         shadowAnimation.fillMode = kCAFillModeForwards;
         shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         
@@ -128,7 +122,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         CABasicAnimation *maskAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
         maskAnimation.duration = 0.233f;
         maskAnimation.fromValue = (id)self.maskLayer.path;
-        maskAnimation.toValue = (id)maskPath;
+        maskAnimation.toValue = (__bridge id)maskPath;
         maskAnimation.fillMode = kCAFillModeForwards;
         maskAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         
@@ -138,7 +132,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
         shadowAnimation.duration = 0.233f;
         shadowAnimation.fromValue = (id)self.innerShadowLayer.path;
-        shadowAnimation.toValue = (id)shadowPath;
+        shadowAnimation.toValue = (__bridge id)shadowPath;
         shadowAnimation.fillMode = kCAFillModeForwards;
         shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         
@@ -154,11 +148,10 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         return;
     
     if (_backgroundImage) {
-        [_backgroundImage release];
         _backgroundImage = nil;
     }
     if (backgroundImage) {
-        _backgroundImage = [backgroundImage retain];
+        _backgroundImage = backgroundImage;
     }
     
     [self setNeedsDisplay];
@@ -210,21 +203,21 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 #pragma mark - EFTabBar
 
 @interface EFTabBar ()
-@property (nonatomic, retain) UIButton *leftButton;
-@property (nonatomic, retain) NSArray *buttons;
-@property (nonatomic, assign) EFTabBarItemControl *alertButton;
-@property (nonatomic, retain) UIView *buttonBaseView;
+@property (nonatomic, strong) UIButton *leftButton;
+@property (nonatomic, strong) NSArray *buttons;
+@property (nonatomic, weak) EFTabBarItemControl *alertButton;
+@property (nonatomic, strong) UIView *buttonBaseView;
 @property (nonatomic, assign) BOOL isButtonsShowed;
-@property (nonatomic, retain) UIImageView *shadowImageView;
-@property (nonatomic, retain) EFTabBarBackgroundView *backgroundView;
-@property (nonatomic, retain) CAShapeLayer *outerShadowLayer;
+@property (nonatomic, strong) UIImageView *shadowImageView;
+@property (nonatomic, strong) EFTabBarBackgroundView *backgroundView;
+@property (nonatomic, strong) CAShapeLayer *outerShadowLayer;
 @property (nonatomic, assign) NSUInteger preSelectedIndex;
 @property (nonatomic, assign) EFTabBarItemState preSelectedTabBarItemState;
-@property (nonatomic, retain) UIView *gestureView;
+@property (nonatomic, strong) UIView *gestureView;
 @property (nonatomic, copy) EFTabBarTitlePressedBlock titlePressedBlock;
 
-@property (nonatomic, assign) UIWindow *originWindow;
-@property (nonatomic, retain) UIWindow *window;
+@property (nonatomic, weak) UIWindow *originWindow;
+@property (nonatomic, strong) UIWindow *window;
 @end
 
 @interface EFTabBar (Private)
@@ -276,7 +269,6 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         gestureView.backgroundColor = [UIColor clearColor];
         [self addSubview:gestureView];
         self.gestureView = gestureView;
-        [gestureView release];
         
         // default background image
         self.backgroundImage = kDefaultBackgroundImage;
@@ -299,7 +291,6 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         
         [self insertSubview:outerShadowView belowSubview:label];
         
-        [outerShadowView release];
         
         // backgroundView
         _backgroundView = [[EFTabBarBackgroundView alloc] initWithFrame:kDoubleheightStyleFrame];
@@ -329,7 +320,6 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         baseView.clipsToBounds = NO;
         [self.backgroundView addSubview:baseView];
         self.buttonBaseView = baseView;
-        [baseView release];
         
         // shadow
         UIImageView *shadowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tabshadow_x.png"]];
@@ -337,7 +327,6 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         shadowImageView.frame = (CGRect){{0, CGRectGetHeight(frame) - 26}, {640, 44}};
         [self addSubview:shadowImageView];
         self.shadowImageView = shadowImageView;
-        [shadowImageView release];
         
         // gesture
         [self _addGestureRecognizers];
@@ -359,16 +348,8 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     [self.titleLabel removeObserver:self
                          forKeyPath:@"text"];
     self.originWindow = nil;
-    self.window = nil;
     self.tabBarViewController = nil;
     self.tabBarItems = nil;
-    [_outerShadowLayer release];
-    [_gestureView release];
-    [_backgroundView release];
-    [_buttons release];
-    [_leftButton release];
-    [_titleLabel release];
-    [super dealloc];
 }
 
 #pragma mark - KVO
@@ -401,12 +382,11 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
             [item removeObserver:self
                       forKeyPath:@"shouldPop"];
         }
-        [_tabBarItems release];
         _tabBarItems = nil;
     }
     
     if (tabBarItems) {
-        _tabBarItems = [tabBarItems retain];
+        _tabBarItems = tabBarItems;
         for (EFTabBarItem *item in tabBarItems) {
             [item addObserver:self
                    forKeyPath:@"shouldPop"
@@ -432,11 +412,10 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         return;
     
     if (_backgroundImage) {
-        [_backgroundImage release];
         _backgroundImage = nil;
     }
     if (backgroundImage) {
-        _backgroundImage = [backgroundImage retain];
+        _backgroundImage = backgroundImage;
     }
     
     self.backgroundView.backgroundImage = backgroundImage;
@@ -623,7 +602,6 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     }
     
     self.buttons = buttons;
-    [buttons release];
 }
 
 - (void)_layoutButtons {
@@ -681,7 +659,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
     shadowAnimation.duration = 0.233f;
     shadowAnimation.fromValue = (id)self.outerShadowLayer.path;
-    shadowAnimation.toValue = (id)maskPath;
+    shadowAnimation.toValue = (__bridge id)maskPath;
     shadowAnimation.fillMode = kCAFillModeForwards;
     shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
@@ -763,7 +741,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     CABasicAnimation *shadowAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
     shadowAnimation.duration = 0.233f;
     shadowAnimation.fromValue = (id)self.outerShadowLayer.path;
-    shadowAnimation.toValue = (id)maskPath;
+    shadowAnimation.toValue = (__bridge id)maskPath;
     shadowAnimation.fillMode = kCAFillModeForwards;
     shadowAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
@@ -820,14 +798,12 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
                                                                                 action:@selector(doubleTapHandler:)];
     doubleTap.numberOfTapsRequired = 2;
     [self.gestureView addGestureRecognizer:doubleTap];
-    [doubleTap release];
     
     // single tap
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                 action:@selector(singleTapHandler:)];
     singleTap.numberOfTapsRequired = 1;
     [self.gestureView addGestureRecognizer:singleTap];
-    [singleTap release];
     
     [singleTap requireGestureRecognizerToFail:doubleTap];
     
@@ -835,7 +811,6 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self
                                                                                 action:@selector(swipeHandler:)];
     [self.gestureView addGestureRecognizer:swipe];
-    [swipe release];
 }
 
 - (EFTabBarItemControl *)_selectedButton {
@@ -901,18 +876,16 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
     frame = CGRectOffset(frame, 0.0f, CGRectGetHeight(self.bounds) + CGRectGetHeight([UIApplication sharedApplication].statusBarFrame));
     
     if (!self.window) {
-        UIWindow *window = [[[UIWindow alloc] initWithFrame:frame] autorelease];
+        UIWindow *window = [[UIWindow alloc] initWithFrame:frame];
         window.backgroundColor = [UIColor clearColor];
         
         UITapGestureRecognizer *windowTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                     action:@selector(windowTapHandler:)];
         [window addGestureRecognizer:windowTap];
-        [windowTap release];
         
         UIPanGestureRecognizer *windowPan = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                                                           action:@selector(windowPanHandler:)];
         [window addGestureRecognizer:windowPan];
-        [windowPan release];
         
         self.window = window;
     }

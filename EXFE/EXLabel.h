@@ -17,7 +17,7 @@
 }
 
 @property (nonatomic, copy) NSString *placeholder;
-@property (nonatomic, retain) UIColor *placehlderColor;
+@property (nonatomic, strong) UIColor *placehlderColor;
 @property CGFloat minimumHeight;
 
 @end

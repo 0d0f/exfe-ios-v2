@@ -20,10 +20,9 @@
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
     dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    dateFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+    dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     [RKObjectMapping addDefaultDateFormatter:dateFormatter];
     [RKEntityMapping addDefaultDateFormatter:dateFormatter];
-    [dateFormatter release];
     
     RKManagedObjectStore *managedObjectStore= objectManager.managedObjectStore;
     // Meta Entity

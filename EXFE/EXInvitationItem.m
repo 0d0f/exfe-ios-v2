@@ -106,7 +106,7 @@
         CTFontRef matesfontref= CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 9.0, NULL);
 
         NSMutableAttributedString *matesattribstring=[[NSMutableAttributedString alloc] initWithString:[invitation.mates stringValue]];
-        [matesattribstring addAttribute:(NSString*)kCTFontAttributeName value:(id)matesfontref range:NSMakeRange(0,[matesattribstring length])];
+        [matesattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)matesfontref range:NSMakeRange(0,[matesattribstring length])];
         [matesattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor whiteColor].CGColor range:NSMakeRange(0,[matesattribstring length])];
         
         CTTextAlignment alignment = kCTCenterTextAlignment;
@@ -114,11 +114,11 @@
             {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
         };
         CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(setting, 1);
-        [matesattribstring addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,[matesattribstring length])];
+        [matesattribstring addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)paragraphstyle range:NSMakeRange(0,[matesattribstring length])];
         CFRelease(paragraphstyle);
         
         
-        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)matesattribstring);
+        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)matesattribstring);
         CGMutablePathRef path = CGPathCreateMutable();
         CGPathAddRect(path, NULL, CGRectMake(rect.size.width-14, rect.size.height-3-13.5, 13, 13));
         CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [matesattribstring length]), path, NULL);
@@ -126,7 +126,6 @@
         CFRelease(path);
         CFRelease(matesfontref);
         CTFrameDraw(theFrame, currentContext);
-        [matesattribstring release];
     }
 
     CGContextRestoreGState(currentContext);

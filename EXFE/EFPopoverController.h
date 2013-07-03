@@ -15,9 +15,9 @@
 UIGestureRecognizerDelegate
 >
 
-@property (nonatomic, retain) UIViewController *contentViewController;
+@property (nonatomic, strong) UIViewController *contentViewController;
 @property (nonatomic, assign) CGSize    contentSize;
-@property (nonatomic, retain) EFArrowView   *backgroundArrowView;
+@property (nonatomic, strong) EFArrowView   *backgroundArrowView;
 
 - (id)initWithContentViewController:(UIViewController *)controller;
 

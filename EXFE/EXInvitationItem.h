@@ -26,15 +26,15 @@
 //    NSString *name;
 }
 
-@property (nonatomic,retain) UIImage *avatar;
+@property (nonatomic,strong) UIImage *avatar;
 @property BOOL isHost;
 @property BOOL isSelected;
 @property BOOL isMe;
 @property BOOL isGather;
 @property int mates;
-@property (nonatomic,retain) NSString *rsvp_status;
+@property (nonatomic,strong) NSString *rsvp_status;
 //@property (nonatomic,retain) NSString *name;
-@property (nonatomic,retain) Invitation *invitation;
+@property (nonatomic,strong) Invitation *invitation;
 
 - (id)initWithInvitation:(Invitation*)_invitation;
 

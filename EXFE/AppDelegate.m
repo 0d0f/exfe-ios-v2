@@ -26,13 +26,6 @@
 @synthesize window = _window;
 @synthesize navigationController=_navigationController;
 
-- (void)dealloc
-{
-    [_url release];
-    [_window release];
-    [_navigationController release];
-    [super dealloc];
-}
 
 #pragma mark UIApplicationDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -97,11 +90,11 @@
     NSDictionary *userinfo = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     
     // Setup root UIViewController
-    CrossesViewController *crossviewController = [[[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil] autorelease];
+    CrossesViewController *crossviewController = [[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil];
     crossviewController.needHeaderAnimation = userinfo ? NO : YES;
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
     self.crossesViewController = crossviewController;
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = self.navigationController;
 //    [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
@@ -148,7 +141,6 @@
     label.textAlignment = NSTextAlignmentCenter;
     label.text = [NSString stringWithFormat:@"%@ @ %@", version, serverName];
     [versionWindow addSubview:label];
-    [label release];
     
     [versionWindow makeKeyAndVisible];
     
@@ -292,7 +284,7 @@
 #pragma mark -
 
 - (void)showLanding:(UIViewController*)parent {
-    EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
+    EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
     [parent presentModalViewController:viewController animated:NO];
 }
 
@@ -485,7 +477,7 @@
     
     [self.navigationController popToRootViewControllerAnimated:YES];
     
-    EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
+    EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
     [self.navigationController presentModalViewController:viewController animated:NO];
 }
 

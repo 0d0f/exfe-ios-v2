@@ -25,10 +25,6 @@ NSString *kEFNotificationNameLoadCrossFailure = @"notification.loadCross.failure
     return self;
 }
 
-- (void)dealloc {
-    [_updatedTime release];
-    [super dealloc];
-}
 
 - (void)operationDidStart {
     [super operationDidStart];

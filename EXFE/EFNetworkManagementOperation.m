@@ -12,7 +12,7 @@
 
 @interface EFNetworkManagementOperation ()
 
-@property (nonatomic, retain) EFNetworkOperation *networkOperation;
+@property (nonatomic, strong) EFNetworkOperation *networkOperation;
 
 @end
 
@@ -31,10 +31,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_networkOperation release];
-    [super dealloc];
-}
 
 - (void)operationDidStart {
     [super operationDidStart];

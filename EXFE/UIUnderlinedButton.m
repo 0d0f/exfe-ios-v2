@@ -21,7 +21,7 @@
 
 + (UIUnderlinedButton*) underlinedButton {
     UIUnderlinedButton* button = [[UIUnderlinedButton alloc] init];
-    return [button autorelease];
+    return button;
 }
 
 - (void) drawRect:(CGRect)rect {

@@ -268,12 +268,6 @@
 	return [internalTextView resignFirstResponder];
 }
 
-- (void)dealloc 
-{
-	[internalTextView release];
-    [textViewBackgroundImage release];
-    [super dealloc];
-}
 
 #pragma mark UITextView properties
 

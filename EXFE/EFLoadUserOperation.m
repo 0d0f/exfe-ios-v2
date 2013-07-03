@@ -26,10 +26,6 @@ NSString *kEFNotificationNameLoadUserFailure = @"notification.loadUser.failure";
     return self;
 }
 
-- (void)dealloc {
-    [_token release];
-    [super dealloc];
-}
 
 - (void)operationDidStart {
     [super operationDidStart];
@@ -42,7 +38,7 @@ NSString *kEFNotificationNameLoadUserFailure = @"notification.loadUser.failure";
                              success:^(AFHTTPRequestOperation *operation, id responseObject){
                                  self.state = kEFNetworkOperationStateSuccess;
                                  
-                                 NSMutableDictionary *userInfo = [[[NSMutableDictionary alloc] initWithDictionary:responseObject] autorelease];
+                                 NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:responseObject];
                                  [userInfo setValue:self.token forKey:@"token"];
                                  
                                  self.successUserInfo = userInfo;

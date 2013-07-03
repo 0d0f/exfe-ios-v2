@@ -19,18 +19,11 @@
     if (self != nil) {
         coordinate = location;
         title = placeName;
-        [title retain];
         subTitle = description;
-        [subTitle retain];
     }
     return self;
 }
 
-- (void)dealloc {
-    [title release];
-    [subTitle release];
-    [super dealloc];
-}
 
 
 @end

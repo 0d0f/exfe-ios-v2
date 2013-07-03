@@ -16,9 +16,9 @@
         {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight}
     };
     CTParagraphStyleRef style = CTParagraphStyleCreate(setting, 2);
-    [attributedString addAttribute:(id)kCTParagraphStyleAttributeName value:(id)style range:NSMakeRange(0,[attributedString length])];
+    [attributedString addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)style range:NSMakeRange(0,[attributedString length])];
 
-    CFAttributedStringRef stringref=(CFAttributedStringRef)attributedString;
+    CFAttributedStringRef stringref=(__bridge CFAttributedStringRef)attributedString;
     CTFramesetterRef framesetter=CTFramesetterCreateWithAttributedString(stringref);
     CFRange range;
     CGSize coreTextSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, [attributedString length]), nil, constraint, &range);

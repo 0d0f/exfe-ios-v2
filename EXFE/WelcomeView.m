@@ -60,7 +60,7 @@
         {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
     };
     CTParagraphStyleRef allstyle = CTParagraphStyleCreate(allsetting, 3);
-    [welcome1 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)allstyle range:NSMakeRange(0,[welcome1 length])];
+    [welcome1 addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)allstyle range:NSMakeRange(0,[welcome1 length])];
 
     alignment = kCTCenterTextAlignment;
 
@@ -70,10 +70,10 @@
         {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
     };
     CTParagraphStyleRef pstyle = CTParagraphStyleCreate(psetting, 3);
-    [welcome1 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)pstyle range:NSMakeRange(0,[NSLocalizedString(@"Thanks for using EXFE\nThe group utility for gathering.", nil) length])];
-    [welcome1 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 15.0, NULL) range:NSMakeRange(0,[welcome1 length])];
+    [welcome1 addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)pstyle range:NSMakeRange(0,[NSLocalizedString(@"Thanks for using EXFE\nThe group utility for gathering.", nil) length])];
+    [welcome1 addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 15.0, NULL) range:NSMakeRange(0,[welcome1 length])];
 
-    [welcome1 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL) range:NSMakeRange(0,[@"Thanks for using EXFE" length])];
+    [welcome1 addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL) range:NSMakeRange(0,[@"Thanks for using EXFE" length])];
     
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor whiteColor].CGColor range:NSMakeRange(0,[welcome1 length])];
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[NSLocalizedString(@"Thanks for using ", nil) length],4)];
@@ -82,7 +82,7 @@
 
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([welcome1 length]-[@".\n\nEXFE your friends." length]-3,3)];
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([welcome1 length]-[@" your friends." length]-4,4)];
-    [welcome1 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 15.0, NULL) range:NSMakeRange([welcome1 length]-[@"Gather a ·X·.\n\nEXFE your friends." length],[@"Gather a ·X·" length])];
+    [welcome1 addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 15.0, NULL) range:NSMakeRange([welcome1 length]-[@"Gather a ·X·.\n\nEXFE your friends." length],[@"Gather a ·X·" length])];
 }
 
 - (void) drawWelcome2{
@@ -97,7 +97,7 @@
     CGContextDrawImage(context,CGRectMake(73, self.frame.size.height-276.5+120+10-40, 160, 120) , romeref);
     CGImageRelease(romeref);
 
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)welcome2);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)welcome2);
     
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, CGRectMake(6+20, self.frame.size.height-40-276.5-120-40-30, 308-20*2, 276.5));
@@ -124,7 +124,7 @@
         {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
     };
     CTParagraphStyleRef allstyle = CTParagraphStyleCreate(allsetting, 3);
-    [welcome2 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)allstyle range:NSMakeRange(0,[welcome2 length])];
+    [welcome2 addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)allstyle range:NSMakeRange(0,[welcome2 length])];
 
     alignment = kCTLeftTextAlignment;
 
@@ -134,14 +134,14 @@
         {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
     };
     CTParagraphStyleRef pstyle = CTParagraphStyleCreate(psetting, 3);
-    [welcome2 addAttribute:(id)kCTParagraphStyleAttributeName value:(id)pstyle range:NSMakeRange([@"“Rome wasn't built in a day.”\n\n" length],[welcome2 length]-[@"“Rome wasn't built in a day.”\n\n" length])];
+    [welcome2 addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)pstyle range:NSMakeRange([@"“Rome wasn't built in a day.”\n\n" length],[welcome2 length]-[@"“Rome wasn't built in a day.”\n\n" length])];
     
-    [welcome2 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL) range:NSMakeRange(0,[welcome2 length])];
+    [welcome2 addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 14.0, NULL) range:NSMakeRange(0,[welcome2 length])];
     
-    [welcome2 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 14.0, NULL) range:NSMakeRange([@"“Rome wasn't built in a day.”\n\nEXFE [ˈɛksfi] is still in pilot stage. We’re building up blocks, consequently some bugs or unfinished pages may happen. Our apologies for any trouble you may encounter. Any feedback, please email " length],17)];
+    [welcome2 addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)CTFontCreateWithName(CFSTR("HelveticaNeue-Italic"), 14.0, NULL) range:NSMakeRange([@"“Rome wasn't built in a day.”\n\nEXFE [ˈɛksfi] is still in pilot stage. We’re building up blocks, consequently some bugs or unfinished pages may happen. Our apologies for any trouble you may encounter. Any feedback, please email " length],17)];
 
     
-    [welcome2 addAttribute:(NSString*)kCTFontAttributeName value:(id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 20.0, NULL) range:NSMakeRange(0,[@"“Rome wasn't built in a day.”" length])];
+    [welcome2 addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 20.0, NULL) range:NSMakeRange(0,[@"“Rome wasn't built in a day.”" length])];
     
     [welcome2 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor whiteColor].CGColor range:NSMakeRange(0,[welcome2 length])];
 
@@ -154,7 +154,7 @@
     CGContextTranslateCTM(context, 0, self.bounds.size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
     
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)welcome1);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)welcome1);
     
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, CGRectMake(6+20, self.frame.size.height-30-276.5, 308-40, 276.5));

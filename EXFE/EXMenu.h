@@ -41,7 +41,7 @@ typedef NS_ENUM(NSInteger, LayoutDirection) {
 }
 
 @property (nonatomic, assign) LayoutDirection direction;
-@property (nonatomic, assign) id<EXMenuDelegate> delegate;
-@property (nonatomic, assign) id<EXMenuDatasouce> datasource;
+@property (nonatomic, weak) id<EXMenuDelegate> delegate;
+@property (nonatomic, weak) id<EXMenuDatasouce> datasource;
 
 @end

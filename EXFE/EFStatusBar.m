@@ -14,8 +14,8 @@
 #define kRight
 
 @interface EFStatusBar ()
-@property (nonatomic, retain) UIWindow *window;
-@property (nonatomic, retain) UILabel *messageLabel;
+@property (nonatomic, strong) UIWindow *window;
+@property (nonatomic, strong) UILabel *messageLabel;
 @end
 
 @implementation EFStatusBar
@@ -44,14 +44,12 @@
         label.textAlignment = UITextAlignmentRight;
         [self addSubview:label];
         self.messageLabel = label;
-        [label release];
         
         CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
         UIWindow *window = [[UIWindow alloc] initWithFrame:(CGRect){{0, 0}, statusBarFrame.size}];
         window.backgroundColor = [UIColor clearColor];
         window.windowLevel = UIWindowLevelStatusBar;
         self.window = window;
-        [window release];
         
         [window addSubview:self];
         [window makeKeyAndVisible];
@@ -62,11 +60,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_messageLabel release];
-    [_window release];
-    [super dealloc];
-}
 
 #pragma mark - Getter && Setter
 

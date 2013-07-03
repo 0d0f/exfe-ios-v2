@@ -16,11 +16,11 @@ typedef enum {
 @class EFTabBarViewController;
 @interface EFTabBar : UIView
 
-@property (nonatomic, readonly) UILabel *titleLabel;
-@property (nonatomic, retain) UIImage *backgroundImage;
+@property (weak, nonatomic, readonly) UILabel *titleLabel;
+@property (nonatomic, strong) UIImage *backgroundImage;
 
-@property (nonatomic, retain) NSArray *tabBarItems;
-@property (nonatomic, assign) EFTabBarViewController *tabBarViewController;
+@property (nonatomic, strong) NSArray *tabBarItems;
+@property (nonatomic, weak) EFTabBarViewController *tabBarViewController;
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
 
 - (id)initWithStyle:(EFTabBarStyle)style;

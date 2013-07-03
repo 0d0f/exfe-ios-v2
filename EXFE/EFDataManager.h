@@ -12,8 +12,8 @@
 @interface EFDataManager : NSObject
 
 @property (nonatomic, copy) NSString *cachePath;
-@property (nonatomic, retain) EFDataCache *dataCache;
-@property (nonatomic, retain) EFQueueManager *queueManager;
+@property (nonatomic, strong) EFDataCache *dataCache;
+@property (nonatomic, strong) EFQueueManager *queueManager;
 
 + (EFDataManager *)defaultManager;
 

@@ -59,12 +59,6 @@
 - (void) setPlaceDescText:(NSString*)desc{
     PlaceDesc.text=desc;
 }
-- (void)dealloc{
-    [PlaceDesc release];
-    [PlaceTitle release];
-    [closeButton release]; 
-    [super dealloc];
-}
 
 - (BOOL)becomeFirstResponder {
     return [PlaceTitle becomeFirstResponder];

@@ -11,13 +11,13 @@
 
 @interface MapPin : NSObject<MKAnnotation> {
     CLLocationCoordinate2D coordinate;
-    NSString *title;
-    NSString *subTitle;
+    NSString *__weak title;
+    NSString *__weak subTitle;
 }
 
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
-@property (nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly) NSString *subTitle;
+@property (weak, nonatomic, readonly) NSString *title;
+@property (weak, nonatomic, readonly) NSString *subTitle;
 
 - (id)initWithCoordinates:(CLLocationCoordinate2D)location placeName:(NSString *)placeName description:(NSString *)description;
 @end

@@ -21,7 +21,7 @@
     int contactscount;
 }
 
-@property (nonatomic,retain) UIView *parentview;
+@property (nonatomic,strong) UIView *parentview;
 @property int contactscount;
 
 - (void) UpdatePeople:(NSDate*)lastsaved;

@@ -9,8 +9,8 @@
 #import "EXSpinView.h"
 
 @interface EXSpinView ()
-@property (nonatomic, retain) UIActivityIndicatorView   *activityIndicatorView;
-@property (nonatomic, retain) UIImageView               *imageView;
+@property (nonatomic, strong) UIActivityIndicatorView   *activityIndicatorView;
+@property (nonatomic, strong) UIImageView               *imageView;
 @end
 
 @implementation EXSpinView
@@ -23,11 +23,11 @@
         _style = style;
         
         if (kEXSpinViewStyleSystem == style) {
-            self.activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithFrame:self.bounds] autorelease];
+            self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:self.bounds];
             
             [self addSubview:self.activityIndicatorView];
         } else {
-            self.imageView = [[[UIImageView alloc] initWithFrame:self.bounds] autorelease];
+            self.imageView = [[UIImageView alloc] initWithFrame:self.bounds];
             [self addSubview:self.imageView];
             
             if (size == 18) {
@@ -56,11 +56,6 @@
     return [self initWithPoint:point size:size style:kEXSpinViewStyleSystem];
 }
 
-- (void)dealloc {
-    [_activityIndicatorView release];
-    [_imageView release];
-    [super dealloc];
-}
 
 - (void)startAnimating {
     if (kEXSpinViewStyleSystem == self.style) {

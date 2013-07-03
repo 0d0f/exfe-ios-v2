@@ -63,14 +63,13 @@
     UIImageView *icon=[[UIImageView alloc] initWithFrame:CGRectMake(33, 13.5, 18, 18)];
     icon.image=[UIImage imageNamed:@"time_18.png"];
 //    [toolbar addSubview:icon];
-    [icon release];
 
     EXAttributedLabel *viewtitle=[[EXAttributedLabel alloc] initWithFrame:CGRectMake(60, (44-30)/2, self.view.frame.size.width-60-60, 30)];
     viewtitle.backgroundColor=[UIColor clearColor];
     
     NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Edit ·X· time"];
     CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
-    [titlestr addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0, [titlestr length])];
+    [titlestr addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)fontref range:NSMakeRange(0, [titlestr length])];
     [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_51.CGColor range:NSMakeRange(0,[titlestr length])];
     [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(5,3)];
     
@@ -84,13 +83,11 @@
         {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
     };
     CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(paragraphsetting, 3);
-    [titlestr addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,[titlestr length])];
+    [titlestr addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)paragraphstyle range:NSMakeRange(0,[titlestr length])];
     CFRelease(paragraphstyle);
     CFRelease(fontref);
     viewtitle.attributedText=titlestr;
     [self.view addSubview:viewtitle];
-    [titlestr release];
-    [viewtitle release];
     
     
     
@@ -252,7 +249,6 @@
                 }
             }
         }
-        [dateformat release];
         
     }
 }
@@ -290,7 +286,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
 	NSString *timestr=[_times objectAtIndex:indexPath.row];
     if(timestr != nil){
@@ -324,11 +320,11 @@
   
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSEntityDescription *eftimeEntity = [NSEntityDescription entityForName:@"EFTime" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-    EFTime *eftime=[[[EFTime alloc] initWithEntity:eftimeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+    EFTime *eftime=[[EFTime alloc] initWithEntity:eftimeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
 
 
     NSEntityDescription *crosstimeEntity = [NSEntityDescription entityForName:@"CrossTime" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-    CrossTime *crosstime=[[[CrossTime alloc] initWithEntity:crosstimeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+    CrossTime *crosstime=[[CrossTime alloc] initWithEntity:crosstimeEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
 
     NSDate *date=datepicker.date;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -359,8 +355,6 @@
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *origin_datetime=[formatter stringFromDate:date];
 
-    [locale release];
-    [formatter release];
 
     if(time_word!=nil) {
         crosstime.outputformat=[NSNumber numberWithInt:0];
@@ -404,13 +398,6 @@
     [inputtimeword resignFirstResponder];
 //    [timeInput resignFirstResponder];
     [_tableView becomeFirstResponder];
-}
-- (void)dealloc {
-    [lasttimebutton release];
-    [_tableView release];
-    [_times release];
-//    [timeInput release];
-    [super dealloc];
 }
 
 @end

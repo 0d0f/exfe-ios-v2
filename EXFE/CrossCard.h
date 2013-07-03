@@ -39,20 +39,20 @@
     CGRect timeFadingRect;
     CGRect placeFadingRect;
     
-    id<CrossCardDelegate> delegate;
+    id<CrossCardDelegate> __weak delegate;
 }
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *time;
 @property (nonatomic, copy) NSString *place;
-@property (nonatomic, retain) UIImage *avatar;
-@property (nonatomic, retain) UIImage *bannerimg;
+@property (nonatomic, strong) UIImage *avatar;
+@property (nonatomic, strong) UIImage *bannerimg;
 @property (nonatomic) NSInteger conversationCount;
 @property (nonatomic) BOOL hlTitle;
 @property (nonatomic) BOOL hlTime;
 @property (nonatomic) BOOL hlPlace;
 @property (nonatomic) BOOL hlConversation;
-@property (nonatomic, retain) NSNumber *cross_id;
-@property (nonatomic, assign) id<CrossCardDelegate> delegate;
+@property (nonatomic, strong) NSNumber *cross_id;
+@property (nonatomic, weak) id<CrossCardDelegate> delegate;
 
 
 

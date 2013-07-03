@@ -20,7 +20,7 @@
     UIViewController *parent;
     int viewpage;
 }
-@property (nonatomic,retain) UIViewController *parent;
+@property (nonatomic,strong) UIViewController *parent;
 - (void) drawWelcome1;
 - (void) initWelcome1;
 - (void) drawWelcome2;

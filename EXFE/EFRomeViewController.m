@@ -34,10 +34,6 @@
     [self.view.layer insertSublayer:gradientLayer atIndex:0];
 }
 
-- (void)dealloc {
-    [_closeButton release];
-    [super dealloc];
-}
 - (void)viewDidUnload {
     [self setCloseButton:nil];
     [super viewDidUnload];
@@ -61,7 +57,6 @@
         [mailController setToRecipients:@[@"feedback@exfe.com"]];
         [mailController setSubject:[NSString stringWithFormat:@"Feedback (%@#%@)", version, buildNumber]];
         [self.view.window.rootViewController presentViewController:mailController animated:YES completion:nil];
-        [mailController release];
     }
 }
 

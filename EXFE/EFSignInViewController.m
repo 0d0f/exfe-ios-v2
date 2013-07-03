@@ -54,8 +54,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
    
 }
 @property (nonatomic, copy) NSString *lastInputIdentity;
-@property (nonatomic, retain) UIImageView *line1;
-@property (nonatomic, retain) UIImageView *line2;
+@property (nonatomic, strong) UIImageView *line1;
+@property (nonatomic, strong) UIImageView *line2;
 
 @property (nonatomic, strong) ACAccountStore *accountStore;
 @property (nonatomic, strong) TWAPIManager *apiManager;
@@ -93,7 +93,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     self.view.backgroundColor = [UIColor COLOR_SNOW];
     
     // create the linear layout view
-    CSLinearLayoutView *linearLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:self.view.bounds] autorelease];
+    CSLinearLayoutView *linearLayoutView = [[CSLinearLayoutView alloc] initWithFrame:self.view.bounds];
     linearLayoutView.orientation = CSLinearLayoutViewOrientationVertical;
 //    linearLayoutView.alwaysBounceVertical = YES;
     linearLayoutView.bounces = NO;
@@ -103,7 +103,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     
     UISwipeGestureRecognizer * swipeRightRecognizer = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
             if ([sender.view isKindOfClass:[UIScrollView class]]){
-                UIScrollView * scrollView = (UIScrollView *)sender.view;
+//                UIScrollView * scrollView = (UIScrollView *)sender.view;
                     if ([self.parentViewController respondsToSelector:@selector(hideStart)]) {
                         [self.parentViewController performSelector:@selector(hideStart)];
                     }
@@ -201,11 +201,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         UIView *stub = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 55, 40)];
         textfield.leftView = stub;
         textfield.leftViewMode = UITextFieldViewModeAlways;
-        [stub release];
         UIView *stub2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
         textfield.rightView = stub2;
         textfield.rightViewMode = UITextFieldViewModeAlways;
-        [stub2 release];
         self.inputUsername = textfield;
         self.inputUsername.tag = kViewTagInputUserName;
     }
@@ -322,7 +320,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         self.inlineError = label;
     }
     
-    CSLinearLayoutView *snsLayoutView = [[[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 0, 296, 106)] autorelease];
+    CSLinearLayoutView *snsLayoutView = [[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 0, 296, 106)];
     snsLayoutView.tag = kViewTagSnsGroup;
     snsLayoutView.orientation = CSLinearLayoutViewOrientationHorizontal;
     
@@ -331,7 +329,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     UIImageView *background = [[UIImageView alloc] initWithFrame:snsLayoutView.bounds];
     background.image = [image resizableImageWithCapInsets:insets];
     [snsLayoutView addSubview:background];
-    [background release];
     
     CSLinearLayoutItem *snsItem = [CSLinearLayoutItem layoutItemForView:snsLayoutView];
     snsItem.padding = CSLinearLayoutMakePadding(27, 12, 240, 12);
@@ -428,27 +425,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    self.inputIdentity = nil;
-    self.imageIdentity = nil;
-    self.extIdentity = nil;
-    self.inputPassword = nil;
-    self.inputUsername = nil;
-    self.btnStart = nil;
-    self.btnStartNewUser = nil;
-    self.btnStartOver = nil;
-    self.labelVerifyTitle = nil;
-    self.labelVerifyDescription = nil;
-    self.hintError = nil;
-    self.inlineError = nil;
-    self.indicator = nil;
-    self.btnFacebook = nil;
-    self.btnTwitter = nil;
-    self.identityCache = nil;
     
-    self.lastInputIdentity = nil;
-    self.line1 = nil;
-    self.line2 = nil;
-    [super dealloc];
 }
 
 #pragma mark - UI Methods
@@ -734,7 +711,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                 }
                 
                 [self presentModalViewController:oauth animated:YES];
-                [oauth release];
             }
                 return;
             case kProviderFacebook:
@@ -751,7 +727,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                     oauth.javaScriptString = nil;
                 }
                 [self presentModalViewController:oauth animated:YES];
-                [oauth release];
             }
                 return;
             default:
@@ -1280,7 +1255,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                               EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
                                               [bigspin startAnimating];
                                               hud.customView = bigspin;
-                                              [bigspin release];
                                               
                                               AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
                                               [app.model.apiServer reverseAuth:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -1408,7 +1382,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         
                         //hide the keyboard
                         [viewController.view endEditing:YES];
-                        [viewController release];
                     } else {
                         return;
                     }
@@ -1657,7 +1630,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
     [bigspin startAnimating];
     hud.customView = bigspin;
-    [bigspin release];
     
     [_apiManager performReverseAuthForAccount:acct withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
         if (!error) {

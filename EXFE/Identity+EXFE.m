@@ -99,12 +99,11 @@
     [request setPredicate:predicate];
     
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    NSArray *suggestwithselected = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+    NSArray *suggestwithselected = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
     
     if([suggestwithselected count] > 0){
         identity = [suggestwithselected objectAtIndex:0];
     }
-    [suggestwithselected release];
     
     return identity;
 }
@@ -144,7 +143,7 @@
 - (IdentityId *)identityIdValue {
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"IdentityId" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-    IdentityId *identityId = [[[IdentityId alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+    IdentityId *identityId = [[IdentityId alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
     identityId.identity_id = [NSString stringWithFormat:@"%@@%@", self.external_username, self.provider];
     
     return identityId;

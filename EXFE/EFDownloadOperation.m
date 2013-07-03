@@ -21,10 +21,5 @@
     [self finish];
 }
 
-- (void)dealloc {
-    [_url release];
-    [_data release];
-    [super dealloc];
-}
 
 @end

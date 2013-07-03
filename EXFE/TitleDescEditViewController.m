@@ -58,7 +58,7 @@
      NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Title & Description"];
    // NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Edit ·X·"];
     CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
-    [titlestr addAttribute:(NSString*)kCTFontAttributeName value:(id)fontref range:NSMakeRange(0, titlestr.length)];
+    [titlestr addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)fontref range:NSMakeRange(0, titlestr.length)];
     [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_51.CGColor range:NSMakeRange(0,titlestr.length)];
     //[titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(5,3)];
 
@@ -73,13 +73,11 @@
         {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
     };
     CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(paragraphsetting, 3);
-    [titlestr addAttribute:(id)kCTParagraphStyleAttributeName value:(id)paragraphstyle range:NSMakeRange(0,8)];
+    [titlestr addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)paragraphstyle range:NSMakeRange(0,8)];
     CFRelease(paragraphstyle);
     CFRelease(fontref);
     viewtitle.attributedText=titlestr;
     [self.view addSubview:viewtitle];
-    [titlestr release];
-    [viewtitle release];
     UIButton *btncancel=[UIButton buttonWithType:UIButtonTypeCustom];
     [btncancel setFrame:CGRectMake(0, 0, 20, 44)];
     btncancel.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
@@ -121,7 +119,6 @@
         UIView* dectorMask = [[UIView alloc] initWithFrame:headview.bounds];
         dectorMask.backgroundColor = [UIColor COLOR_WA(0x00, 0x55)];
         [headview addSubview:dectorMask];
-        [dectorMask release];
     }
     [self.view addSubview:headview];
     
@@ -134,7 +131,6 @@
     titleBg.backgroundColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:0.75];
     titleBg.layer.cornerRadius = 1.5;
     [headview addSubview:titleBg];
-    [titleBg release];
     
     titleView = [[UITextView alloc] initWithFrame:CGRectMake(20,15,300,55)];
     titleView.textColor = FONT_COLOR_FA;
@@ -260,11 +256,6 @@
     }
 }
 
-- (void) dealloc{
-    [super dealloc];
-    [dectorView release];
-    [headview release];
-}
 
 - (void) Close{
     [self dismissModalViewControllerAnimated:YES];

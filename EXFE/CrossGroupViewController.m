@@ -275,7 +275,6 @@
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [container addGestureRecognizer:gestureRecognizer];
-    [gestureRecognizer release];
     
     swipeRightRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
     swipeRightRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
@@ -348,24 +347,9 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    [_shadowImage release];
-    [descView release];
-    [exfeeShowview release];
-    [timeRelView release];
-    [timeAbsView release];
-    [timeZoneView release];
-    [placeTitleView release];
-    [placeDescView release];
-    [mapView release];
-    [mapShadow release];
-    [container release];
 
-    self.sortedInvitations = nil;
     
-    [swipeRightRecognizer release];
-    [swipeLeftRecognizer release];
 
-    [super dealloc];
 }
 
 #pragma mark - Notification Handler
@@ -385,7 +369,6 @@
                                                   otherButtonTitles:nil];
             alert.tag = 403;
             [alert show];
-            [alert release];
         } else if ([meta.code intValue] == 200) {
             [self refreshUI];
         }
@@ -401,12 +384,11 @@
     if (_cross) {
         [_cross removeObserver:self
                     forKeyPath:@"conversation_count"];
-        [_cross release];
         _cross = nil;
     }
     
     if (cross) {
-        _cross = [cross retain];
+        _cross = cross;
         
         // kvo
         [cross addObserver:self
@@ -486,7 +468,6 @@
 - (void)fillTime:(CrossTime*)time {
     if (time != nil) {
         NSString *title = [[time getTimeTitle] sentenceCapitalizedString];
-        [title retain];
         if (title == nil || title.length == 0) {
             timeRelView.text = NSLocalizedString(@"Sometime", nil);
             timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
@@ -499,14 +480,12 @@
             
             timeAbsView.textColor = [UIColor COLOR_WA(0x33, 0xFF)];
             NSString *desc = [[time getTimeDescription] sentenceCapitalizedString];
-            [desc retain];
             if (desc != nil && desc.length > 0) {
                 timeAbsView.text = desc;
                 timeAbsView.hidden = NO;
                 [timeAbsView sizeToFit];
                 
                 NSString* tz = [time getTimeZoneLine];
-                [tz retain];
                 if (tz != nil && tz.length > 0) {
                     timeZoneView.hidden = NO;
                     timeZoneView.text = [NSString stringWithFormat:@"(%@)", tz];
@@ -515,7 +494,6 @@
                     timeZoneView.hidden = YES;
                     timeZoneView.text = @"";
                 }
-                [tz release];
                 
             } else {
                 timeAbsView.text = @"";
@@ -523,9 +501,7 @@
                 timeZoneView.hidden = YES;
                 timeZoneView.text = @"";
             }
-            [desc release];
         }
-        [title release];
     } else {
         timeRelView.text = NSLocalizedString(@"Sometime", nil);
         timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
@@ -586,7 +562,6 @@
             }
             MapPin *pin = [[MapPin alloc] initWithCoordinates:region.center placeName:placeTitle description:@""];
             [mapView addAnnotation:pin];
-            [pin release];
             mapView.showsUserLocation = YES;
         } else {
             mapView.showsUserLocation = NO;
@@ -822,7 +797,7 @@
         }
     }
     
-    return [item autorelease];
+    return item;
 }
 
 - (void)imageCollectionView:(EXImagesCollectionView *)imageCollectionView shouldResizeHeightTo:(float)height {
@@ -934,7 +909,7 @@
         pinView = (MKAnnotationView *)[map dequeueReusableAnnotationViewWithIdentifier:defaultPinID];
         
         if (pinView == nil) {
-            pinView = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID] autorelease];
+            pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID];
             pinView.canShowCallout = YES;
             pinView.image = [UIImage imageNamed:@"map_pin_blue.png"];
             
@@ -969,8 +944,6 @@
         //        [destination openInMapsWithLaunchOptions:@{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving}];
         // Open in map app
         [MKMapItem openMapsWithItems:[NSArray arrayWithObject:destination] launchOptions:@{MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving}];
-        [destination release];
-        [placeMark release];
     } else{
         
         //using iOS 5 which has the Google Maps application
@@ -1363,7 +1336,6 @@
                                             animated:YES
                                           completion:nil];
     [titleViewController setCrossTitle:_cross.title desc:_cross.cross_description];
-    [titleViewController release];
 }
 
 - (void)showTimeView {
@@ -1373,7 +1345,6 @@
     [self.tabBarViewController presentViewController:timeViewController
                                             animated:YES
                                           completion:nil];
-    [timeViewController release];
 }
 
 - (void)showPlaceView:(NSString*)status {
@@ -1401,7 +1372,6 @@
     [self.tabBarViewController presentViewController:placeViewController
                                             animated:YES
                                           completion:nil];
-    [placeViewController release];
 }
 
 #pragma mark - API request for modification.
@@ -1420,7 +1390,6 @@
                                                      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Privacy Control", nil) message:NSLocalizedString(@"You have no access to this private ·X·.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
                                                      alert.tag = 403;
                                                      [alert show];
-                                                     [alert release];
                                                  } else if ([[meta objectForKey:@"code"] intValue] == 200) {
                                                      [self.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:@""];
                                                      
@@ -1483,7 +1452,6 @@
     EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
     [bigspin startAnimating];
     hud.customView=bigspin;
-    [bigspin release];
     
     _cross.by_identity=[_cross.exfee getMyInvitation].identity;
     [self.model.apiServer editCross:_cross
@@ -1508,7 +1476,6 @@
                                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errormsg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry",nil];
                                                 alert.tag = 201; // 201 = Save Cross
                                                 [alert show];
-                                                [alert release];
                                             }
                                         }
                                         [MBProgressHUD hideHUDForView:self.view animated:YES];

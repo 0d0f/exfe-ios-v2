@@ -56,14 +56,14 @@ EFTabBarDataSource
 }
 
 @property (nonatomic, assign) int exfee_id;
-@property (nonatomic, retain) Identity* myIdentity;
-@property (nonatomic, retain) UIInputToolbar* inputToolbar;
+@property (nonatomic, strong) Identity* myIdentity;
+@property (nonatomic, strong) UIInputToolbar* inputToolbar;
 @property (nonatomic, copy) id onExitBlock;
 
 // EFTabBarDataSource
-@property (nonatomic, retain) EFTabBarItem *customTabBarItem;
+@property (nonatomic, strong) EFTabBarItem *customTabBarItem;
 @property (nonatomic, assign) EFTabBarStyle tabBarStyle;
-@property (nonatomic, assign) EFTabBarViewController *tabBarViewController;
+@property (nonatomic, weak) EFTabBarViewController *tabBarViewController;
 @property (nonatomic, copy) UIImage *shadowImage;
 @property (nonatomic, assign) CGRect initFrame;
 

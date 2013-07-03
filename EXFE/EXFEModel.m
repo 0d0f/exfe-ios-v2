@@ -18,14 +18,14 @@
 // read/write variants of public properties
 @property (nonatomic, assign, readwrite) NSInteger                  userId;
 
-@property (nonatomic, retain, readwrite) NSEntityDescription *      crossEntry;
-@property (nonatomic, retain, readwrite ) NSEntityDescription *      exfeeEntry;
-@property (nonatomic, retain, readwrite) RKObjectManager *           objectManager;
-@property (nonatomic, retain, readwrite) EFAPIServer *               apiServer;
+@property (nonatomic, strong, readwrite) NSEntityDescription *      crossEntry;
+@property (nonatomic, strong, readwrite ) NSEntityDescription *      exfeeEntry;
+@property (nonatomic, strong, readwrite) RKObjectManager *           objectManager;
+@property (nonatomic, strong, readwrite) EFAPIServer *               apiServer;
 
 // private properties
 @property (nonatomic, assign, readonly ) NSUInteger                 sequenceNumber;
-@property (nonatomic, retain, readwrite) NSTimer *                  saveTimer;
+@property (nonatomic, strong, readwrite) NSTimer *                  saveTimer;
 
 @end
 
@@ -180,7 +180,7 @@ static NSString * kExtension           = @"exfe";
     }
     
     // Remove old user folders for over limit.
-    [liveUserCachePathsAndDates sortUsingDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"modDate" ascending:YES] autorelease]]];
+    [liveUserCachePathsAndDates sortUsingDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"modDate" ascending:YES]]];
     while ( [liveUserCachePathsAndDates count] > 3 ) {
         NSString *  path;
         
@@ -212,7 +212,7 @@ static NSString * kExtension           = @"exfe";
         sUserCacheDeleteQueue = [[NSOperationQueue alloc] init];
         assert(sUserCacheDeleteQueue != nil);
         
-        op = [[[RecursiveDeleteOperation alloc] initWithPaths:deletableUserPaths] autorelease];
+        op = [[RecursiveDeleteOperation alloc] initWithPaths:deletableUserPaths];
         assert(op != nil);
         
         if ( [op respondsToSelector:@selector(setThreadPriority:)] ) {
@@ -254,7 +254,6 @@ static NSString * kExtension           = @"exfe";
     assert(self->_crossEntry == nil);
     assert(self->_saveTimer == nil);
     
-    [super dealloc];
 }
 
 @synthesize sequenceNumber   = _sequenceNumber;
@@ -333,7 +332,7 @@ static NSString * kExtension           = @"exfe";
 {
     if (self->_crossEntry == nil) {
         assert(self.exfeContext != nil);
-        self->_crossEntry = [[NSEntityDescription entityForName:@"Cross" inManagedObjectContext:self.exfeContext] retain];
+        self->_crossEntry = [NSEntityDescription entityForName:@"Cross" inManagedObjectContext:self.exfeContext];
         assert(self->_crossEntry != nil);
     }
     return self->_crossEntry;
@@ -346,7 +345,7 @@ static NSString * kExtension           = @"exfe";
 {
     NSFetchRequest *    fetchRequest;
     
-    fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+    fetchRequest = [[NSFetchRequest alloc] init];
     assert(fetchRequest != nil);
     
     [fetchRequest setEntity:self.crossEntry];
@@ -460,7 +459,7 @@ static NSString * kExtension           = @"exfe";
         self.apiServer = [[EFAPIServer alloc] initWithModel:self];
         
         // Configure a managed object cache to ensure we do not create duplicate objects
-        managedObjectStore.managedObjectCache = [[[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext] autorelease];
+        managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
         
         NSArray *descriptors = objectManager.requestDescriptors;
         if(descriptors==nil || [descriptors count]==0) {

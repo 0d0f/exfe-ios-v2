@@ -25,8 +25,8 @@
 #define kHeaderViewHeight   (23.0f)
 
 @interface EFContactTableViewSectionHeaderView : UIView
-@property (nonatomic, retain) UILabel       *titleLabel;
-@property (nonatomic, retain) UIImageView   *arrorwView;
+@property (nonatomic, strong) UILabel       *titleLabel;
+@property (nonatomic, strong) UIImageView   *arrorwView;
 - (void)show;
 - (void)hidden;
 @end
@@ -41,9 +41,8 @@
         UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"list_title.png"]];
         backgroundImageView.frame = self.bounds;
         [self addSubview:backgroundImageView];
-        [backgroundImageView release];
         
-        self.arrorwView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"header_arrow.png"]] autorelease];
+        self.arrorwView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"header_arrow.png"]];
         self.arrorwView.frame = (CGRect){{CGRectGetWidth(frame) - 20, 0}, {16, CGRectGetHeight(frame)}};
         [self addSubview:self.arrorwView];
         
@@ -53,7 +52,6 @@
         titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12];
         [self addSubview:titleLabel];
         self.titleLabel = titleLabel;
-        [titleLabel release];
         
         [self show];
     }
@@ -61,11 +59,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_arrorwView release];
-    [_titleLabel release];
-    [super dealloc];
-}
 
 - (void)show {
     CATransform3D newTransform = CATransform3DMakeRotation(M_PI_2, 0.0f, 0.0f, 1.0f);
@@ -98,20 +91,20 @@
 @end
 
 @interface EFContactViewController ()
-@property (nonatomic, retain) EFContactDataSource *contactDataSource;
-@property (nonatomic, retain) EFSearchContactDataSouce *searchContactDataSource;
+@property (nonatomic, strong) EFContactDataSource *contactDataSource;
+@property (nonatomic, strong) EFSearchContactDataSouce *searchContactDataSource;
 
-@property (nonatomic, retain) NSIndexPath *identityIndexPath;
+@property (nonatomic, strong) NSIndexPath *identityIndexPath;
 
-@property (nonatomic, retain) NSMutableDictionary *tableViewSectionStateDict;
-@property (nonatomic, retain) NSMutableDictionary *searchTableViewSectionStateDict;
+@property (nonatomic, strong) NSMutableDictionary *tableViewSectionStateDict;
+@property (nonatomic, strong) NSMutableDictionary *searchTableViewSectionStateDict;
 
-@property (nonatomic, retain) UIView *topTapView;
-@property (nonatomic, retain) UIView *bottomTapView;
+@property (nonatomic, strong) UIView *topTapView;
+@property (nonatomic, strong) UIView *bottomTapView;
 
-@property (nonatomic, assign) UITableView *activityTableView;
+@property (nonatomic, weak) UITableView *activityTableView;
 
-@property (nonatomic, retain) RoughIdentity *searchResultRoughIdentity;
+@property (nonatomic, strong) RoughIdentity *searchResultRoughIdentity;
 
 @end
 
@@ -179,7 +172,6 @@
         EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
         [bigspin startAnimating];
         hud.customView = bigspin;
-        [bigspin release];
         hud.labelText = @"Loading";
         
         isProgressHubVisible = YES;
@@ -256,20 +248,6 @@
     self.searchTableViewSectionStateDict = [NSMutableDictionary dictionaryWithCapacity:3];
 }
 
-- (void)dealloc {
-    [_searchTableViewSectionStateDict release];
-    [_tableViewSectionStateDict release];
-    [_topTapView release];
-    [_bottomTapView release];
-    [_contactDataSource release];
-    [_tableView release];
-    [_backButton release];
-    [_contactSearchBar release];
-    [_navigationView release];
-    [_selectCountLabel release];
-    [_addButton release];
-    [super dealloc];
-}
 
 - (void)viewDidUnload {
     [self setTableView:nil];
@@ -314,7 +292,6 @@
             EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
             [bigspin startAnimating];
             hud.customView = bigspin;
-            [bigspin release];
             
             for (EFContactObject *contactObject in selectedObjects) {
                 for (RoughIdentity *roughIdentity in contactObject.roughIdentities) {
@@ -379,7 +356,6 @@
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                               action:@selector(handleHeaderViewTap:)];
         [headerView addGestureRecognizer:tap];
-        [tap release];
     }
     
     return headerView;
@@ -467,7 +443,7 @@
     if (provider != kProviderUnknown) {
         NSDictionary *matchedDictionary = [Util parseIdentityString:searchText byProvider:provider];
         self.searchResultRoughIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
-        NSString *cachedSearchText = [[searchText copy] autorelease];
+        NSString *cachedSearchText = [searchText copy];
         AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
         [app.model.apiServer getIdentitiesWithParams:@[matchedDictionary]
                                                       success:^(NSArray *identities){
@@ -635,7 +611,6 @@
     }
     [tableView endUpdates];
     
-    [indexPaths release];
 }
 
 #pragma mark -
@@ -658,7 +633,7 @@
         return nil;
     
     CGRect screanBounds = [UIScreen mainScreen].bounds;
-    EFContactTableViewSectionHeaderView *titleView = [[[EFContactTableViewSectionHeaderView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), kHeaderViewHeight + 3}}] autorelease];
+    EFContactTableViewSectionHeaderView *titleView = [[EFContactTableViewSectionHeaderView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), kHeaderViewHeight + 3}}];
     titleView.titleLabel.text = title;
     
     return titleView;
@@ -745,7 +720,7 @@
         return nil;
     
     CGRect screanBounds = [UIScreen mainScreen].bounds;
-    EFContactTableViewSectionHeaderView *titleView = [[[EFContactTableViewSectionHeaderView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), kHeaderViewHeight + 3}}] autorelease];
+    EFContactTableViewSectionHeaderView *titleView = [[EFContactTableViewSectionHeaderView alloc] initWithFrame:(CGRect){{0, -1}, {CGRectGetWidth(screanBounds), kHeaderViewHeight + 3}}];
     titleView.titleLabel.text = title;
     
     return titleView;
@@ -835,7 +810,7 @@
 - (UITableViewCell *)searchTableViewSearchingCell {
     EFSearchIdentityCell *searchCell = [self.searchDisplayController.searchResultsTableView dequeueReusableCellWithIdentifier:[EFSearchIdentityCell reuseIdentifier]];
     if (!searchCell) {
-        searchCell = [[[EFSearchIdentityCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[EFSearchIdentityCell reuseIdentifier]] autorelease];
+        searchCell = [[EFSearchIdentityCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[EFSearchIdentityCell reuseIdentifier]];
     }
     NSString *keyWord = [self.contactSearchBar.text stringWithoutSpace];
     Provider candidateProvider = [Util candidateProvider:keyWord];
@@ -859,7 +834,7 @@
     
     EFChoosePeopleViewCell *cell = [self.searchDisplayController.searchResultsTableView dequeueReusableCellWithIdentifier:ShowAllIdentity];
     if (!cell) {
-        cell = [[[EFChoosePeopleViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ShowAllIdentity] autorelease];
+        cell = [[EFChoosePeopleViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ShowAllIdentity];
         UILabel *label = [[UILabel alloc] initWithFrame:(CGRect){{0, 0}, {320, 50}}];
         label.textAlignment = UITextAlignmentCenter;
         label.backgroundColor = [UIColor clearColor];
@@ -867,7 +842,6 @@
         label.textColor = [UIColor COLOR_ALUMINUM];
         label.text = NSLocalizedString(@"Show all contacts", nil);
         [cell.contentView addSubview:label];
-        [label release];
     }
     
     return cell;
@@ -930,26 +904,22 @@
     UIView *topView = [[UIView alloc] initWithFrame:topViewFrame];
     topView.backgroundColor = [UIColor clearColor];
     [topView addGestureRecognizer:tap1];
-    [tap1 release];
     
     UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                            action:@selector(handleTap:)];
     UIView *bottomView = [[UIView alloc] initWithFrame:bottomViewFrame];
     bottomView.backgroundColor = [UIColor clearColor];
     [bottomView addGestureRecognizer:tap2];
-    [tap2 release];
     
     [tableView addSubview:topView];
     [tableView addSubview:bottomView];
     self.topTapView = topView;
     self.bottomTapView = bottomView;
-    [topView release];
-    [bottomView release];
 }
 
 - (void)_deleteIdentityCellForTableView:(UITableView *)tableView {
     if ([self _isIdentityCellInserted]) {
-        NSIndexPath *indexPathToRemove = [[self.identityIndexPath retain] autorelease];
+        NSIndexPath *indexPathToRemove = self.identityIndexPath;
         self.identityIndexPath = nil;
         
         [tableView beginUpdates];
@@ -969,7 +939,7 @@
     NSString *Identifier = [EFChoosePeopleViewCell reuseIdentifier];
     EFChoosePeopleViewCell *cell = [tableView dequeueReusableCellWithIdentifier:Identifier];
     if (nil == cell) {
-        cell = [[[EFChoosePeopleViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identifier] autorelease];
+        cell = [[EFChoosePeopleViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identifier];
         cell.delegate = self;
         cell.dataSource = self;
     }
@@ -997,7 +967,7 @@
     NSString *Identitier = NSStringFromClass([EFPersonIdentityCell class]);
     EFPersonIdentityCell *cell = [tableView dequeueReusableCellWithIdentifier:Identitier];
     if (nil == cell) {
-        cell = [[[EFPersonIdentityCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identitier] autorelease];
+        cell = [[EFPersonIdentityCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identitier];
         cell.delegate = self;
     }
     

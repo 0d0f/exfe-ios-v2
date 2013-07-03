@@ -24,7 +24,6 @@
             [vars addObject:[tempString copy]];
         }
         self.variables = vars;
-        [vars release];
     }
     return self;
 }
@@ -39,9 +38,5 @@
     return nil;
 }
 
-- (void) dealloc{
-    self.variables = nil;
-    [super dealloc];
-}
 
 @end

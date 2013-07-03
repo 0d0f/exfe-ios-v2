@@ -29,7 +29,7 @@
     id <EXRSVPMenuDelegate>delegate;
 }
 
-@property (nonatomic,retain) Invitation *invitation;
+@property (nonatomic,strong) Invitation *invitation;
 
 - (id)initWithFrame:(CGRect)frame withDelegate:(id)_delegate items:(NSArray*)itemlist showTitleBar:(BOOL)showtitlebar;
 - (void) setRsvpAccepted;

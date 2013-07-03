@@ -19,9 +19,9 @@
 typedef void (^completionBlock)(void);
 
 @interface EFPresentCardController ()
-@property (nonatomic, retain) UIView *backgroundMaskView;
-@property (nonatomic, retain) UIView *cardView;
-@property (nonatomic, retain) UIViewController *presentdingViewController;
+@property (nonatomic, strong) UIView *backgroundMaskView;
+@property (nonatomic, strong) UIView *cardView;
+@property (nonatomic, strong) UIViewController *presentdingViewController;
 @property (nonatomic, copy) completionBlock completionHandler;
 @end
 
@@ -46,20 +46,12 @@ typedef void (^completionBlock)(void);
     return self;
 }
 
-- (void)dealloc {
-    [_contentViewController release];
-    [_presentdingViewController release];
-    [_backgroundMaskView release];
-    [_cardView release];
-    [super dealloc];
-}
 
 #pragma mark - Public
 
 - (void)presentFromViewController:(UIViewController *)viewController animated:(BOOL)animated {
     NSParameterAssert(viewController);
     
-    [self retain];
     self.presentdingViewController = viewController;
     
     [self _initUI];
@@ -125,7 +117,6 @@ typedef void (^completionBlock)(void);
     if (_completionHandler) {
         self.completionHandler();
     }
-    [self release];
 }
 
 #pragma mark - Private
@@ -140,7 +131,6 @@ typedef void (^completionBlock)(void);
     backgroundMaskView.layer.opacity = 0.0f;
     [rootView addSubview:backgroundMaskView];
     self.backgroundMaskView = backgroundMaskView;
-    [backgroundMaskView release];
     
     // card view
     CGRect cardFrame = (CGRect){{floor((CGRectGetWidth(rootViewBounds) - self.contentSize.width) * 0.5f), floor(CGRectGetHeight(rootViewBounds) - self.contentSize.height)}, {self.contentSize.width, floor(self.contentSize.height + kCardCornerRadius)}};
@@ -156,7 +146,6 @@ typedef void (^completionBlock)(void);
     
     [rootView addSubview:cardView];
     self.cardView = cardView;
-    [cardView release];
 }
 
 - (void)_addGestures {
@@ -164,13 +153,11 @@ typedef void (^completionBlock)(void);
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                           action:@selector(handleTap:)];
     [self.backgroundMaskView addGestureRecognizer:tap];
-    [tap release];
     
     // pan
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                                           action:@selector(handlePan:)];
     [self.cardView addGestureRecognizer:pan];
-    [pan release];
     
     [tap requireGestureRecognizerToFail:pan];
 }

@@ -16,8 +16,8 @@
     UIButton* closeButton;
 }
 
-@property (nonatomic,retain) UITextField* PlaceTitle;
-@property (nonatomic,retain) UITextView *PlaceDesc;
+@property (nonatomic,strong) UITextField* PlaceTitle;
+@property (nonatomic,strong) UITextView *PlaceDesc;
 
 - (void) setPlaceTitleText:(NSString*)title;
 - (void) setPlaceDescText:(NSString*)desc;

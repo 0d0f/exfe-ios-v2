@@ -18,7 +18,7 @@
 
 @interface UILog : NSObject
 
-@property (nonatomic, retain) UIWindow *window;
+@property (nonatomic, strong) UIWindow *window;
 
 + (UILog *)defaultLog;
 - (void)pushMessage:(NSString *)message;

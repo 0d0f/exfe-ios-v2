@@ -15,15 +15,15 @@
 @protocol OAuthLoginViewControllerDelegate;
 @interface OAuthLoginViewController : UIViewController
 {
-    id<OAuthLoginViewControllerDelegate> delegate;
+    id<OAuthLoginViewControllerDelegate> __weak delegate;
     UIView *toolbar;
 //    IBOutlet UIWebView *webView;
     bool firstLoading;
     UIButton *cancelbutton;
     UILabel *titlelabel;
 }
-@property (nonatomic, assign) id <OAuthLoginViewControllerDelegate> delegate;
-@property (nonatomic, retain) IBOutlet UIWebView* webView;
+@property (nonatomic, weak) id <OAuthLoginViewControllerDelegate> delegate;
+@property (nonatomic, strong) IBOutlet UIWebView* webView;
 @property (nonatomic, assign) Provider provider;
 @property (nonatomic, copy) NSString *oAuthURL;
 @property (nonatomic, copy) NSString *matchedURL;

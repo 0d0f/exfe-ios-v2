@@ -12,13 +12,13 @@
 
 @interface LocalContact : NSManagedObject
 
-@property (nonatomic, retain) NSData * avatar;
-@property (nonatomic, retain) NSData * emails;
-@property (nonatomic, retain) NSData * im;
-@property (nonatomic, retain) NSString * indexfield;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSData * social;
-@property (nonatomic, retain) NSNumber * uid;
-@property (nonatomic, retain) NSData * phones;
+@property (nonatomic, strong) NSData * avatar;
+@property (nonatomic, strong) NSData * emails;
+@property (nonatomic, strong) NSData * im;
+@property (nonatomic, strong) NSString * indexfield;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) NSData * social;
+@property (nonatomic, strong) NSNumber * uid;
+@property (nonatomic, strong) NSData * phones;
 
 @end

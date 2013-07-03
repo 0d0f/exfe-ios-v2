@@ -30,7 +30,7 @@
 #import "ABTableViewCell.h"
 
 @interface ABTableViewCellView : UIView
-@property (nonatomic, assign) ABTableViewCell   *tableViewCell;
+@property (nonatomic, weak) ABTableViewCell   *tableViewCell;
 @end
 
 @implementation ABTableViewCellView
@@ -55,16 +55,11 @@
         contentView.backgroundColor = [UIColor whiteColor];
         ((ABTableViewCellView *)contentView).tableViewCell = self;
         [self addSubview:contentView];
-        [contentView release];
     }
     return self;
 }
 
 
-- (void)dealloc
-{
-	[super dealloc];
-}
 
 - (void)setNeedsDisplay
 {

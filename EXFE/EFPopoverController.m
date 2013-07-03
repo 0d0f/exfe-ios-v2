@@ -15,8 +15,8 @@
 
 
 @interface EFPopoverController ()
-@property (nonatomic, retain) UIWindow *innerWindow;
-@property (nonatomic, assign) UIWindow *originWindow;
+@property (nonatomic, strong) UIWindow *innerWindow;
+@property (nonatomic, weak) UIWindow *originWindow;
 @end
 
 @implementation EFPopoverController {
@@ -38,11 +38,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_backgroundArrowView release];
-    [_contentViewController release];
-    [super dealloc];
-}
 
 - (void)setContentSize:(CGSize)contentSize {
     [self setContentSize:contentSize animated:NO];
@@ -53,7 +48,6 @@
         return;
     _flags.isPresnted = YES;
     
-    [self retain];
     
     // cache origin window
     self.originWindow = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
@@ -65,9 +59,7 @@
                                                                           action:@selector(tapHandler:)];
     tap.delegate = self;
     [innerWindow addGestureRecognizer:tap];
-    [tap release];
     self.innerWindow = innerWindow;
-    [innerWindow release];
     
     // convert frame
     rect = [view convertRect:rect toView:self.originWindow];
@@ -217,7 +209,6 @@
                          if (handler)
                              handler();
                          
-                         [self release];
                      }];
 
 }

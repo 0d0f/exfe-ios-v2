@@ -18,8 +18,8 @@
 
 @interface EFPersonIdentityCell : UITableViewCell
 
-@property (nonatomic, retain) NSArray *roughIdentities;
-@property (nonatomic, assign) id<EFPersonIdentityCellDelegate> delegate;
+@property (nonatomic, strong) NSArray *roughIdentities;
+@property (nonatomic, weak) id<EFPersonIdentityCellDelegate> delegate;
 
 + (CGFloat)heightWithRoughIdentities:(NSArray *)identities;
 

@@ -125,7 +125,6 @@ static char identitykey;
     backimg.contentMode=UIViewContentModeScaleToFill;
     backimg.contentStretch = CGRectMake(0.5, 0.5, 0, 0);
     [toolbar addSubview:backimg];
-    [backimg release];
     
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [doneButton setTitle:NSLocalizedString(@"Add", nil) forState:UIControlStateNormal];
@@ -157,11 +156,9 @@ static char identitykey;
         EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
         [bigspin startAnimating];
         hud.customView=bigspin;
-        [bigspin release];
         hud.labelText = @"Loading";
         
         if(!_filteredlocalcontacts) {
-            [_filteredlocalcontacts release];
             _filteredlocalcontacts = nil;
         }
         
@@ -215,8 +212,6 @@ static char identitykey;
 
     } else {
       NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
-      if(_filteredlocalcontacts!=nil)
-          [_filteredlocalcontacts release];
       RKObjectManager *objectManager = [RKObjectManager sharedManager];
       _filteredlocalcontacts = [[objectManager.managedObjectStore.persistentStoreManagedObjectContext executeFetchRequest:request error:nil] mutableCopy];
       if(addressbookType == LOCAL_ADDRESSBOOK)
@@ -243,8 +238,6 @@ static char identitykey;
         dispatch_async(dispatch_get_main_queue(), ^{
             @synchronized(self){
               NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"LocalContact"];
-              if(_filteredlocalcontacts!=nil)
-                [_filteredlocalcontacts release];
               RKObjectManager *objectManager = [RKObjectManager sharedManager];
               _filteredlocalcontacts = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] mutableCopy];
             
@@ -358,13 +351,6 @@ static char identitykey;
 }
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [inputlefticon release];
-    [errorHinticon release];
-    [errorHintLabel release];
-    [errorHint release];
-    [address release];
-    [expandExfeeViewShadow release];
-    [super dealloc];
 }
 - (BOOL) showErrorHint{
     //TODO: replace with new alert view
@@ -388,10 +374,10 @@ static char identitykey;
 
 - (void) addExfeeToCross{
     NSArray *customobjects=[exfeeList bubbleCustomObjects];
-    NSMutableArray *invitations=[[[NSMutableArray alloc] initWithCapacity:[customobjects count]] autorelease];
-    NSMutableDictionary *dict=[[[NSMutableDictionary alloc] initWithCapacity:[customobjects count]] autorelease];
+    NSMutableArray *invitations=[[NSMutableArray alloc] initWithCapacity:[customobjects count]];
+    NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:[customobjects count]];
     
-    NSMutableArray *inputobjs=[[[NSMutableArray alloc] initWithCapacity:[customobjects count]] autorelease];
+    NSMutableArray *inputobjs=[[NSMutableArray alloc] initWithCapacity:[customobjects count]];
     
     for(id inputobj in customobjects){
         if([inputobj isKindOfClass:[Invitation class]]){
@@ -418,7 +404,7 @@ static char identitykey;
         }
     }
     else{
-        NSMutableArray *identities=[[[NSMutableArray alloc] initWithCapacity:[inputobjs count]] autorelease];
+        NSMutableArray *identities=[[NSMutableArray alloc] initWithCapacity:[inputobjs count]];
         for(NSDictionary *inputobj in inputobjs){
             NSString *input=[inputobj objectForKey:@"input"];
             NSString *name=[inputobj objectForKey:@"name"];
@@ -433,7 +419,6 @@ static char identitykey;
       EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
       [bigspin startAnimating];
       hud.customView=bigspin;
-      [bigspin release];
         
       NSString *endpoint = [NSString stringWithFormat:@"%@identities/get",API_ROOT];
       RKObjectManager *manager=[RKObjectManager sharedManager] ;
@@ -458,7 +443,7 @@ static char identitykey;
                       NSString *external_username=[identitydict objectForKey:@"external_username"];
 
                       NSEntityDescription *identityEntity = [NSEntityDescription entityForName:@"Identity" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
-                      Identity *identity=[[[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+                      Identity *identity=[[Identity alloc] initWithEntity:identityEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
                       identity.external_id=external_id;
                       identity.provider=provider;
                       identity.avatar_filename=avatar_filename;
@@ -469,7 +454,7 @@ static char identitykey;
 
                     
                       NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
-                      Invitation *invitation=[[[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+                      Invitation *invitation=[[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:manager.managedObjectStore.mainQueueManagedObjectContext];
                       invitation.rsvp_status=@"NORESPONSE";
                       invitation.identity=identity;
                       Invitation *myinvitation=[self.exfee getMyInvitation];
@@ -542,7 +527,6 @@ static char identitykey;
         
         if (exfeeInput.text == nil || [exfeeInput.text isEqualToString:@""]) {
             if (suggestIdentities != nil) {
-                [suggestIdentities release];
                 suggestIdentities = nil;
                 [suggestionTable reloadData];
             }
@@ -573,17 +557,15 @@ static char identitykey;
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"((external_username == %@) AND (provider== %@))",input,provider];
     [request setPredicate:predicate];
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    NSArray *suggestwithselected = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+    NSArray *suggestwithselected = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
   
     if([suggestwithselected count] > 0){
         identity = [suggestwithselected objectAtIndex:0];
     }
-    [suggestwithselected release];
     return identity;
 }
 
 - (void)loadIdentitiesFromDataStore:(NSString*)input{
-    [suggestIdentities release];
     suggestIdentities=nil;
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Identity"];
 
@@ -599,7 +581,7 @@ static char identitykey;
     [request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
     NSMutableArray *temp=[[NSMutableArray alloc]initWithCapacity:10];
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    NSArray *suggestwithselected = [[objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil] retain];
+    NSArray *suggestwithselected = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
 
   
   
@@ -630,10 +612,7 @@ static char identitykey;
             [dict setObject:@"" forKey:key];
         }
     }
-    [dict release];
-    [suggestwithselected release];
-    suggestIdentities=[temp retain];
-    [temp release];
+    suggestIdentities=temp;
     [suggestionTable reloadData];
 }
 
@@ -666,7 +645,6 @@ static char identitykey;
     if([exfeeList bubblecount]>0){
         [self changeLeftIconWhite:YES];
     }
-    [invitation release];
 }
 
 - (void) addBubbleByInputString:(NSString*)input name:(NSString*)name provider:(NSString*)provider{
@@ -738,7 +716,7 @@ static char identitykey;
     GatherExfeeInputCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
     {
-        cell = [[[GatherExfeeInputCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[GatherExfeeInputCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     if(addressbookType==LOCAL_ADDRESSBOOK)
     {
@@ -803,7 +781,6 @@ static char identitykey;
             [button addTarget:self action:@selector(checkButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = button;
         }
-        [iconset release];
     }else{
         int row=indexPath.row;
         Identity *identity=[suggestIdentities objectAtIndex:row];
@@ -868,7 +845,7 @@ static char identitykey;
       
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
         NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-        Invitation *invitation=[[[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+        Invitation *invitation=[[Invitation alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
       
         invitation.rsvp_status=@"NORESPONSE";
         invitation.identity=identity;
@@ -920,7 +897,7 @@ static char identitykey;
   [self addByInputIdentity:inputtext name:@"" provider:provider dismiss:NO];
 }
 - (id)customObject:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
-    NSDictionary *dictionary=[[[NSDictionary alloc] initWithObjectsAndKeys:input,@"name",@"id",@"id", nil ] autorelease];
+    NSDictionary *dictionary=[[NSDictionary alloc] initWithObjectsAndKeys:input,@"name",@"id",@"id", nil ];
     return dictionary;
 }
 - (BOOL)isInputValid:(EXBubbleScrollView *)bubbleScrollView input:(NSString*)input{
@@ -954,7 +931,6 @@ static char identitykey;
         if(input==nil || [input isEqualToString:@""])
         {
             if(suggestIdentities!=nil){
-                [suggestIdentities release];
                 suggestIdentities=nil;
                 [suggestionTable reloadData];
             }
@@ -963,7 +939,6 @@ static char identitykey;
         
         NSString *inputpredicate=[NSString stringWithFormat:@"*%@*",[input stringByReplacingOccurrencesOfString:@" " withString:@"*"]];
         if(_filteredlocalcontacts != nil){
-            [_filteredlocalcontacts release];
             _filteredlocalcontacts = nil;
         }
       
@@ -973,8 +948,6 @@ static char identitykey;
 
       
 //        NSFetchRequest* request = [LocalContact fetchRequest];
-        if(_filteredlocalcontacts != nil)
-            [_filteredlocalcontacts release];
         [request setPredicate:predicate];
 
         RKObjectManager *objectManager = [RKObjectManager sharedManager];
@@ -1017,7 +990,6 @@ static char identitykey;
                 NSArray *subviews=[expandExfeeView subviews];
                 for(UIView *subview in subviews){
                     [subview removeFromSuperview];
-                    [subview release];
                 }
             }
             expandExfeeViewShadow=[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 4)];
@@ -1035,12 +1007,12 @@ static char identitykey;
                 NSString *iconname=[NSString stringWithFormat:@"identity_%@_18.png",[identity objectForKey:@"provider"]];
                 UIImage *icon=[UIImage imageNamed:iconname];
                 
-                UIImageView *imgprovider=[[[UIImageView alloc] initWithFrame:CGRectMake(6, (44-18)/2, icon.size.width, icon.size.height)] autorelease];
+                UIImageView *imgprovider=[[UIImageView alloc] initWithFrame:CGRectMake(6, (44-18)/2, icon.size.width, icon.size.height)];
                 imgprovider.backgroundColor=[UIColor clearColor];
                 imgprovider.image=icon;
                 [identitycell addSubview:imgprovider];
                 
-                UILabel *labelusername=[[[UILabel alloc] initWithFrame:CGRectMake(6+18+6, 0,  cellwidth-6-18-6,40)] autorelease];
+                UILabel *labelusername=[[UILabel alloc] initWithFrame:CGRectMake(6+18+6, 0,  cellwidth-6-18-6,40)];
                 labelusername.numberOfLines = 0;
                 [labelusername setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:16]];
                 [labelusername setTextColor:[UIColor whiteColor]];
@@ -1068,14 +1040,12 @@ static char identitykey;
 //              else
 //                  [identitycell setBackgroundColor:[UIColor colorWithRed:58/255.f green:110/255.f blue:165/255.f alpha:1]];
                 [expandExfeeView addSubview:identitycell];
-                [identitycell release];
                 idx++;
             }
             if([useridentities count]%2==1){
                 UIBorderView *identitycell=[[UIBorderView alloc] initWithFrame:CGRectMake([useridentities count]%2*cellwidth, [useridentities count]/2*40, cellwidth, 40)];
                 [identitycell setBackgroundColor:FONT_COLOR_51];
                 [expandExfeeView addSubview:identitycell];
-                [identitycell release];
 
             }
             [expandExfeeView addSubview:expandExfeeViewShadow];

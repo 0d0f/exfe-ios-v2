@@ -52,8 +52,6 @@
     int x_count=0;
     int y_count=0;
     int count=maxColumn*maxRow;
-    if(grid!=nil)
-       [grid release];
     grid=[[NSMutableArray alloc]initWithCapacity:count];
     for(int i=0;i<count;i++)
     {
@@ -124,7 +122,6 @@
 //        [acceptlabel setHidden:YES];
 //    }
     [itemsCache removeAllObjects];
-    [itemsCache release];
     itemsCache=[[NSMutableDictionary alloc] initWithCapacity:12];
     int count=[_dataSource numberOfimageCollectionView:self];
     if(count >maxColumn*maxRow-1)
@@ -213,11 +210,8 @@
                 invitedstr.backgroundColor=[UIColor clearColor];
                 invitedstr.textAlignment=NSTextAlignmentLeft;
                 [addview addSubview:invitedstr];
-                [invitedstr release];
                 
                 [self addSubview:addview];
-                [addimg release];
-                [addview release];
             }
             else{
                 [addview setFrame:CGRectMake(x+5, y+5, 52, 52)];
@@ -260,12 +254,5 @@
     }
 }
 
-- (void)dealloc {
-	[grid release];
-    if(invited_num!=nil)
-       [invited_num release];
-//    [acceptlabel release];
-    [super dealloc];
-}
 
 @end

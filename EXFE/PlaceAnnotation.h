@@ -19,7 +19,7 @@
 -(id)initWithCoordinate:(CLLocationCoordinate2D) c withTitle:(NSString*)title description:(NSString*)description;
 @property int index;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
-@property (nonatomic,retain) NSString *place_title;
-@property (nonatomic,retain) NSString *place_description;
-@property (nonatomic,retain) NSString *external_id;
+@property (nonatomic,strong) NSString *place_title;
+@property (nonatomic,strong) NSString *place_description;
+@property (nonatomic,strong) NSString *external_id;
 @end

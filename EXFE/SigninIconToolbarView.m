@@ -87,14 +87,6 @@
     }
     return self;
 }
-- (void) dealloc{
-    [signinbutton release];
-    [twitterbutton release];
-    [facebookbutton release];
-    [morebutton release];
-    [super dealloc];
- 
-}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

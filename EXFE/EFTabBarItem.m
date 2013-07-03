@@ -11,7 +11,7 @@
 @implementation EFTabBarItem
 
 + (EFTabBarItem *)tabBarItemWithImage:(UIImage *)image {
-    return [[[self alloc] initWithImage:image] autorelease];
+    return [[self alloc] initWithImage:image];
 }
 
 - (id)initWithImage:(UIImage *)image {
@@ -25,9 +25,5 @@
     return self;
 }
 
-- (void)dealloc {
-    [_image release];
-    [super dealloc];
-}
 
 @end

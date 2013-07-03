@@ -9,8 +9,8 @@
 #import "EFErrorHandlerCenter.h"
 
 @interface EFErrorHandlerCenter ()
-@property (nonatomic, retain) UIWindow *window;
-@property (nonatomic, retain) NSMutableArray *errorQueue;
+@property (nonatomic, strong) UIWindow *window;
+@property (nonatomic, strong) NSMutableArray *errorQueue;
 @property (nonatomic, copy) EFErrorMessage *presentingErrorMessage;
 @end
 
@@ -45,10 +45,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_errorQueue release];
-    [super dealloc];
-}
 
 #pragma mark - Public
 
@@ -101,7 +97,6 @@
                                                               cancelButtonTitle:errorMessage.buttonTitle
                                                               otherButtonTitles:nil];
                     [alertView show];
-                    [alertView release];
                 }
                     break;
                 case kEFErrorMessageStyleBanner:
@@ -112,7 +107,6 @@
                                                                                       buttonPressedHandler:errorMessage.actionHandler];
                     bannerView.delegate = self;
                     [bannerView show];
-                    [bannerView release];
                 }
                     break;
                 default:
@@ -129,7 +123,6 @@
     }
     
     if (_presentingErrorMessage) {
-        [_presentingErrorMessage release];
         _presentingErrorMessage = nil;
     }
     EFErrorMessage *errorMessage = [self _dequeueAnErrorMessage];

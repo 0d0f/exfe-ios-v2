@@ -39,7 +39,6 @@
         UIImageView *arrow=[[UIImageView alloc] initWithFrame:CGRectMake(165.0f, (frame.size.height-15)/ 2, 12, 15)];
         arrow.image=[UIImage imageNamed:@"arrow.png"];
 //        [self addSubview:arrow];
-        [arrow release];
         
         namelabel=[[UILabel alloc] initWithFrame:CGRectMake(16, 8, 155, 20)];
         [namelabel setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:18]];
@@ -108,13 +107,6 @@
     [rsvplabel setNeedsDisplay];
 }
 
-- (void)dealloc{
-    [background release];
-    [namelabel release];
-    [rsvplabel release];
-    [rsvpbadge release];
-    [super dealloc];
-}
 
 - (void)clickToDelegate:(id)sender
 {

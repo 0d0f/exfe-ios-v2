@@ -16,11 +16,11 @@
 @synthesize key = _key;
 
 + (RoughIdentity *)identity {
-    return [[[self alloc] initWithDictionary:nil] autorelease];
+    return [[self alloc] initWithDictionary:nil];
 }
 
 + (RoughIdentity *)identityWithDictionary:(NSDictionary *)dictionary {
-    return [[[self alloc] initWithDictionary:dictionary] autorelease];
+    return [[self alloc] initWithDictionary:dictionary];
 }
 
 - (id)initWithDictionary:(NSDictionary *)dictionary {
@@ -42,14 +42,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_identity release];
-    [_key release];
-    [_provider release];
-    [_externalUsername release];
-    [_externalID release];
-    [super dealloc];
-}
 
 - (id)copyWithZone:(NSZone *)zone {
     RoughIdentity *copy = [[RoughIdentity alloc] init];
@@ -62,7 +54,7 @@
 
 - (NSString *)key {
     if (_key && _key.length)
-        return [[_key copy] autorelease];
+        return [_key copy];
     
     NSString *key = nil;
     if (_externalID && _externalID.length) {
@@ -73,9 +65,9 @@
     
     NSAssert(key != nil, @"key 为 nil");
     
-    _key = [key retain];
+    _key = key;
     
-    return [[key copy] autorelease];
+    return [key copy];
 }
 
 - (BOOL)isEqualToRoughIdentity:(RoughIdentity *)anIdentity {
@@ -96,8 +88,7 @@
         [dict setValue:self.externalID forKey:@"external_id"];
     }
     
-    NSDictionary *result = [[dict copy] autorelease];
-    [dict release];
+    NSDictionary *result = [dict copy];
     
     return result;
 }
@@ -105,7 +96,7 @@
 - (IdentityId *)identityIdValue {
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"IdentityId" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-    IdentityId *identityId = [[[IdentityId alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext] autorelease];
+    IdentityId *identityId = [[IdentityId alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
     identityId.identity_id = [NSString stringWithFormat:@"%@@%@", self.externalUsername, self.provider];
     
     return identityId;
@@ -120,11 +111,10 @@
         return;
     
     if (_identity) {
-        [_identity release];
         _identity = nil;
     }
     if (identity) {
-        _identity = [identity retain];
+        _identity = identity;
         self.status = kEFRoughIdentityGetIdentityStatusSuccess;
     } else {
         self.status = kEFRoughIdentityGetIdentityStatusReady;

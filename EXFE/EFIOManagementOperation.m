@@ -13,12 +13,6 @@
 
 @implementation EFIOManagementOperation
 
-- (void)dealloc {
-    [_savePath release];
-    [_data release];
-    
-    [super dealloc];
-}
 
 - (void)operationDidStart {
     [super operationDidStart];

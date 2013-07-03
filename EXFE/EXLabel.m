@@ -78,7 +78,6 @@
     NSString* four_lines = temp; // 4 lines
     CGSize fit4 = [four_lines sizeWithFont:self.font constrainedToSize:rect lineBreakMode:self.lineBreakMode];
     four_lines = nil;
-    [temp release];
     CGSize fitFull = [self.text sizeWithFont:self.font constrainedToSize:rect lineBreakMode:self.lineBreakMode];
     CGFloat bestHeight = fitFull.height;
     if (self.numberOfLines > 0){

@@ -29,14 +29,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_successUserInfo release];
-    [_failureUserInfo release];
-    [_successNotificationName release];
-    [_failureNotificationName release];
-    [_error release];
-    [super dealloc];
-}
 
 - (void)operationDidStart {
     [super operationDidStart];
