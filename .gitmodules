@@ -16,3 +16,6 @@
 [submodule "Vendor/TWReverseAuth"]
 	path = Vendor/TWReverseAuth
 	url = git://github.com/stonyw/TWReverseAuthSubmodule.git
+[submodule "Vendor/libPhoneNumber-iOS"]
+	path = Vendor/libPhoneNumber-iOS
+	url = https://github.com/stonyw/libPhoneNumber-iOS.git

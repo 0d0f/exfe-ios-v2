@@ -11,6 +11,11 @@
 #import <RestKit/RestKit.h>
 #import "RoughIdentity.h"
 #import "IdentityId.h"
+#import "NBPhoneNumberUtil.h"
+#import "NBPhoneNumber.h"
+#import "NBPhoneNumberDefines.h"
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
 
 @implementation Identity (EXFE)
 
@@ -79,8 +84,36 @@
     Provider p = [Identity getProviderCode:self.provider];
     switch (p) {
         case kProviderEmail:
-        case kProviderPhone:
             return self.external_id;
+        case kProviderPhone:{
+            
+            NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+            CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
+            CTCarrier *carrier = [netInfo subscriberCellularProvider];
+            NSString *isocode;
+            if (carrier) {
+                isocode = [carrier isoCountryCode];
+            } else {
+                NSLocale *locale = [NSLocale currentLocale];
+                isocode = [[locale objectForKey:NSLocaleCountryCode] lowercaseString];
+            }
+            
+            NSError *aError = nil;
+            NBPhoneNumber *myNumber = [phoneUtil parse:self.external_id defaultRegion:[isocode uppercaseString] error:&aError];
+            if (aError == nil){
+                NBEPhoneNumberFormat fmt = NBEPhoneNumberFormatNATIONAL;
+                NSString *rc = [phoneUtil getRegionCodeForNumber:myNumber];
+                if (![[isocode uppercaseString] isEqualToString:rc]) {
+                    fmt = NBEPhoneNumberFormatINTERNATIONAL;
+                }
+                
+                NSString *formatted = [phoneUtil format:myNumber numberFormat:fmt error:&aError];
+                if (aError == nil) {
+                    return formatted;
+                }
+            }
+            return self.external_id;
+        }   break;
         case kProviderTwitter:
             return [NSString stringWithFormat:@"@%@", self.external_username];
             break;
