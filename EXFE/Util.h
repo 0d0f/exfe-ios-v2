@@ -75,53 +75,44 @@ extern NSString *const EXCrossListDidChangeNotification;
 
 @interface Util : NSObject
 
-+ (NSString*) decodeFromPercentEscapeString:(NSString*)string;
-+ (NSString*) encodeToPercentEscapeString:(NSString*)string;
-+ (NSString *) EFPercentEscapedQueryStringPairMemberFromString:(NSString *)string;
-+ (UIColor*) getHighlightColor;
-+ (UIColor*) getRegularColor;
-+ (NSDictionary*) crossTimeToString:(CrossTime*)crosstime;
-+ (NSString *) formattedLongDateRelativeToNow:(NSString*)datestr;
-+ (NSString *) formattedLongDateRelativeToNowWiteDate:(NSDate*)date;
-+ (NSString *) formattedDateRelativeToNow:(NSDate*)date;
 + (NSString*) getBackgroundLink:(NSString*)imgname;
-+ (NSString*) formattedShortDate:(CrossTime*)crosstime;
-+ (NSString*) formattedLongDate:(CrossTime*)crosstime;
-+ (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
-+ (UIImage *)scaleImage:(UIImage*)image toResolution:(int)resolution;
+
+// Provider and Identity
 + (NSString*) findProvider:(NSString*)external_id;
 + (Provider)candidateProvider:(NSString*)raw;
 + (Provider)matchedProvider:(NSString*)raw;
 + (NSDictionary*)parseIdentityString:(NSString*)raw;
 + (NSDictionary*)parseIdentityString:(NSString*)raw byProvider:(Provider)p;
+
+// PhoneNumber
++ (NSString *)getDeviceCountryCode;
 + (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber;
 + (NSString*)getTelephoneCountryCode:(NSString*)isocode;
 + (NSString*)getTelephoneCountryCode;
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber;
-+ (NSTimeZone*) getTimeZoneWithCrossTime:(CrossTime*)crosstime;
 
-+ (NSString*) EXRelativeFromDateStr:(NSString*)datestr TimeStr:(NSString*)timestr type:(NSString*)type localTime:(BOOL)localtime;
-+ (NSString*) EXRelative:(CrossTime*)crosstime type:(NSString*)type localTime:(BOOL)localtime;
-+ (NSString*) getTimeTitle:(CrossTime*)crosstime localTime:(BOOL)localtime;
-+ (NSString*) getTimeDesc:(CrossTime*)crosstime;
-+ (NSDate*) beginningOfWeek:(NSDate*)date;
-+ (BOOL) isCommonDomainName:(NSString*)domainname;
-+ (void) showErrorWithMetaDict:(NSDictionary*)meta delegate:(id)delegate;
-+ (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate;
+// Deprecated Time tool in Conversation
++ (NSString*) EXRelativeFromDateStr:(NSString*)datestr TimeStr:(NSString*)timestr type:(NSString*)type localTime:(BOOL)localtime __attribute__ ((deprecated));
++ (NSDate*) beginningOfWeek:(NSDate*)date __attribute__ ((deprecated));
 
+
++ (void) showErrorWithMetaObject:(Meta*)meta delegate:(id)delegate __attribute__ ((deprecated));
 + (void) showConnectError:(NSError*)err delegate:(id)delegate;
 + (void) signout;
-+ (int)daysBetween:(NSDate *)dt1 and:(NSDate *)dt2;
-+ (NSString*) cleanInputName:(NSString*)username provider:(NSString*)provider ;
+
 + (CGRect)expandRect:(CGRect)rect;
 + (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2;
 + (CGRect)expandRect:(CGRect)rect1 with:(CGRect)rect2  with:(CGRect)rect3;
 
 + (void)checkUpdate;
 
++ (int)daysBetween:(NSDate *)dt1 and:(NSDate *)dt2;
 
 // URL query param tool
 + (NSString*)concatenateQuery:(NSDictionary*)parameters;
 + (NSDictionary*)splitQuery:(NSString*)query;
++ (NSString*) decodeFromPercentEscapeString:(NSString*)string;
++ (NSString*) encodeToPercentEscapeString:(NSString*)string;
++ (NSString *) EFPercentEscapedQueryStringPairMemberFromString:(NSString *)string;
 @end
 

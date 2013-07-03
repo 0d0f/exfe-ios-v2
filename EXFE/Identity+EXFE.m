@@ -14,8 +14,7 @@
 #import "NBPhoneNumberUtil.h"
 #import "NBPhoneNumber.h"
 #import "NBPhoneNumberDefines.h"
-#import <CoreTelephony/CTTelephonyNetworkInfo.h>
-#import <CoreTelephony/CTCarrier.h>
+#import "Util.h"
 
 @implementation Identity (EXFE)
 
@@ -87,23 +86,15 @@
             return self.external_id;
         case kProviderPhone:{
             
-            NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-            CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
-            CTCarrier *carrier = [netInfo subscriberCellularProvider];
-            NSString *isocode;
-            if (carrier) {
-                isocode = [carrier isoCountryCode];
-            } else {
-                NSLocale *locale = [NSLocale currentLocale];
-                isocode = [[locale objectForKey:NSLocaleCountryCode] lowercaseString];
-            }
+            NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];            
+            NSString * isocode = [Util getDeviceCountryCode];
             
             NSError *aError = nil;
-            NBPhoneNumber *myNumber = [phoneUtil parse:self.external_id defaultRegion:[isocode uppercaseString] error:&aError];
+            NBPhoneNumber *myNumber = [phoneUtil parse:self.external_id defaultRegion:isocode error:&aError];
             if (aError == nil){
                 NBEPhoneNumberFormat fmt = NBEPhoneNumberFormatNATIONAL;
                 NSString *rc = [phoneUtil getRegionCodeForNumber:myNumber];
-                if (![[isocode uppercaseString] isEqualToString:rc]) {
+                if (![isocode isEqualToString:rc]) {
                     fmt = NBEPhoneNumberFormatINTERNATIONAL;
                 }
                 

@@ -79,6 +79,5 @@
 - (void) onImageTouch:(CGPoint) point;
 - (void) hiddenAcceptLabel;
 
-//- (void) drawRoundRect:(CGRect) rect color:(UIColor*)color radius:(float)radius;
 
 @end
