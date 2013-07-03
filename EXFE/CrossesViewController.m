@@ -173,7 +173,6 @@
     } else {
         [self.headView showAnimated:NO];
         
-//        EFLandingViewController *viewController = [[[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil] autorelease];
         EFLandingViewController *viewController = [[EFLandingViewController alloc] initWithNibName:@"EFLandingViewController" bundle:nil];
         [app.window.rootViewController presentModalViewController:viewController animated:NO];
         
@@ -286,13 +285,6 @@
     }
     
     self.crossList = nil;
-    
-//    if(cellDateTime){
-//        [cellDateTime release];
-//        cellDateTime=nil;
-//    }
-//    [settingButton release];
-//    [gatherax release];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -710,7 +702,6 @@
 //                        }
 //                    }
 //                }
-//                [users release];
             }
         }
         if (!avatarimgurl) {

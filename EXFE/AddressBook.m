@@ -85,7 +85,6 @@
                     RKObjectManager *objectManager=[RKObjectManager sharedManager];
                   localcontact=[[LocalContact alloc] initWithEntity:localcontactEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.persistentStoreManagedObjectContext];
                 }
-//                [localcontacts release];
                 localcontact.uid=[NSNumber numberWithInt:uid];
                 
                 CFStringRef compositeName=ABRecordCopyCompositeName(ref);

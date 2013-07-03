@@ -88,7 +88,6 @@
 		4F1142D916AE40B000C30179 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8D1560F832009E0806 /* Foundation.framework */; };
 		4F1142DF16AE40B000C30179 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F1142DD16AE40B000C30179 /* InfoPlist.strings */; };
 		4F1142E216AE40B000C30179 /* EXFETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1142E116AE40B000C30179 /* EXFETests.m */; };
-		4F14689C167F1C0700872F9D /* ProfileCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F14689B167F1C0600872F9D /* ProfileCard.m */; };
 		4F15C34816E99CD4008FD99B /* EXTabLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15C34516E99CD4008FD99B /* EXTabLayer.m */; };
 		4F15C34916E99CD4008FD99B /* EXTabWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15C34716E99CD4008FD99B /* EXTabWidget.m */; };
 		4F25A1BA171FB9FF000513B5 /* CSLinearLayoutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */; };
@@ -221,7 +220,6 @@
 		4F63DABE17172AA600136B7E /* EXGradientToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A94BCA16707F2200B72DC8 /* EXGradientToolbarView.m */; };
 		4F63DABF17172AA600136B7E /* CustomAttributedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A0C1B016807F740073CCE5 /* CustomAttributedTextView.m */; };
 		4F63DAC017172AA600136B7E /* CrossCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF2484167AE89D007C04E2 /* CrossCard.m */; };
-		4F63DAC117172AA600136B7E /* ProfileCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F14689B167F1C0600872F9D /* ProfileCard.m */; };
 		4F63DAC217172AA600136B7E /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4F63DAC317172AA600136B7E /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4F63DAC417172AA600136B7E /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
@@ -636,7 +634,6 @@
 		4F63DC8D17172B0700136B7E /* EXGradientToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A94BCA16707F2200B72DC8 /* EXGradientToolbarView.m */; };
 		4F63DC8E17172B0700136B7E /* CustomAttributedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A0C1B016807F740073CCE5 /* CustomAttributedTextView.m */; };
 		4F63DC8F17172B0700136B7E /* CrossCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FBF2484167AE89D007C04E2 /* CrossCard.m */; };
-		4F63DC9017172B0700136B7E /* ProfileCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F14689B167F1C0600872F9D /* ProfileCard.m */; };
 		4F63DC9117172B0700136B7E /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4F63DC9217172B0700136B7E /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
 		4F63DC9317172B0700136B7E /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3CA1681926D00222420 /* UIImage+RoundedCorner.m */; };
@@ -2056,8 +2053,6 @@
 		4F1142E016AE40B000C30179 /* EXFETests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXFETests.h; sourceTree = "<group>"; };
 		4F1142E116AE40B000C30179 /* EXFETests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EXFETests.m; sourceTree = "<group>"; };
 		4F1142E316AE40B000C30179 /* EXFETests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EXFETests-Prefix.pch"; sourceTree = "<group>"; };
-		4F14689A167F1C0600872F9D /* ProfileCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileCard.h; sourceTree = "<group>"; };
-		4F14689B167F1C0600872F9D /* ProfileCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileCard.m; sourceTree = "<group>"; };
 		4F15C34416E99CD4008FD99B /* EXTabLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTabLayer.h; sourceTree = "<group>"; };
 		4F15C34516E99CD4008FD99B /* EXTabLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabLayer.m; sourceTree = "<group>"; };
 		4F15C34616E99CD4008FD99B /* EXTabWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTabWidget.h; sourceTree = "<group>"; };
@@ -4015,8 +4010,6 @@
 		788312A515738D2600D67103 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				4F14689A167F1C0600872F9D /* ProfileCard.h */,
-				4F14689B167F1C0600872F9D /* ProfileCard.m */,
 				78615B3A15788BCC003CF68A /* ABTableViewCell.h */,
 				78615B3B15788BCD003CF68A /* ABTableViewCell.m */,
 				4FBF2483167AE89D007C04E2 /* CrossCard.h */,
@@ -6006,7 +5999,6 @@
 				4F63DABE17172AA600136B7E /* EXGradientToolbarView.m in Sources */,
 				4F63DABF17172AA600136B7E /* CustomAttributedTextView.m in Sources */,
 				4F63DAC017172AA600136B7E /* CrossCard.m in Sources */,
-				4F63DAC117172AA600136B7E /* ProfileCard.m in Sources */,
 				4F63DAC217172AA600136B7E /* UIImage+Alpha.m in Sources */,
 				4F63DAC317172AA600136B7E /* UIImage+Resize.m in Sources */,
 				4F63DAC417172AA600136B7E /* UIImage+RoundedCorner.m in Sources */,
@@ -6211,7 +6203,6 @@
 				4F63DC8D17172B0700136B7E /* EXGradientToolbarView.m in Sources */,
 				4F63DC8E17172B0700136B7E /* CustomAttributedTextView.m in Sources */,
 				4F63DC8F17172B0700136B7E /* CrossCard.m in Sources */,
-				4F63DC9017172B0700136B7E /* ProfileCard.m in Sources */,
 				4F63DC9117172B0700136B7E /* UIImage+Alpha.m in Sources */,
 				4F63DC9217172B0700136B7E /* UIImage+Resize.m in Sources */,
 				4F63DC9317172B0700136B7E /* UIImage+RoundedCorner.m in Sources */,
@@ -6416,7 +6407,6 @@
 				78A94BCB16707F2200B72DC8 /* EXGradientToolbarView.m in Sources */,
 				78A0C1B116807F750073CCE5 /* CustomAttributedTextView.m in Sources */,
 				4FBF2485167AE89D007C04E2 /* CrossCard.m in Sources */,
-				4F14689C167F1C0700872F9D /* ProfileCard.m in Sources */,
 				4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */,
 				4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */,
 				4FE8D3CD1681926D00222420 /* UIImage+RoundedCorner.m in Sources */,

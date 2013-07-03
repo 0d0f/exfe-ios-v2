@@ -614,9 +614,10 @@ typedef enum {
         //  break;
         case 2:
             return indexPath.row == 0;
-//            return YES;
+        //  break;
         default:
             return NO;
+        //  break;
     }
 }
 
@@ -709,11 +710,13 @@ typedef enum {
             }
             return CGRectGetMaxY(invName.frame) + 4;
         }
-//            return 45.f;
+             break;
         case 1:
             return 62.f;
+        // break;
         case 2:
             return 32.f;
+        // break;
         case 3:{
             NSString *reuseIdentifier = @"Invitation_foot";
             UILabel *bioTitle = nil;
@@ -773,6 +776,7 @@ typedef enum {
         }   //break;
         default:
             return 0;
+        //  break;
     }
 }
 

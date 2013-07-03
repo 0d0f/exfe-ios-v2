@@ -82,7 +82,6 @@
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:)];
     [_tableView addGestureRecognizer:gestureRecognizer];
-//    [gestureRecognizer release];
     
     hintGroup = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(b), 100, CGRectGetWidth(b), CGRectGetHeight(b) - 100 - 42)];
     {
@@ -94,7 +93,6 @@
         no_posts.backgroundColor = [UIColor clearColor];
         no_posts.numberOfLines = 2;
         [hintGroup addSubview:no_posts];
-//        [no_posts release];
     }
     hintGroup.hidden = YES;
     [self.view  addSubview:hintGroup];
@@ -107,7 +105,6 @@
     inputToolbar.textView.delegate=self;
     [inputToolbar.textView setReturnKeyType:UIReturnKeySend];
     [self.view addSubview:inputToolbar];
-//    [self statusbarResize];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 
@@ -243,7 +240,6 @@
             //_tableviewrect.origin.y=DECTOR_HEIGHT;
             _tableviewrect.origin.y = 0;
             _tableviewrect.size.height = CGRectGetHeight(_tableView.superview.frame) - kDefaultToolbarHeight + 2;
-//          NSLog(@"tableview height:%f",_tableView.frame.size.height);
             [_tableView setFrame:_tableviewrect];
         }
 
@@ -397,7 +393,6 @@
                 [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
                 [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                 NSDate *post_created_at = [formatter dateFromString:post.created_at];
-//                [formatter release];
 
               
                 if(post && !timetextlayer){
@@ -421,7 +416,6 @@
                     NSString *datestr=[dateformat stringFromDate:post_created_at];
                     [dateformat setDateFormat:@"HH:mm:ss"];
                     NSString *timestr=[dateformat stringFromDate:post_created_at];
-//                    [dateformat release];
                     NSString *timestring=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:timestring];
                     [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)timefontref range:NSMakeRange(0,[timestring length])];
@@ -439,8 +433,6 @@
                     NSString *datestring=[dateformat_to stringFromDate:post_created_at];
                     [dateformat_to setDateFormat:@"h:mm a"];
                     NSString *timestring=[dateformat_to stringFromDate:post_created_at];
-//                    [locale_to release];
-//                    [dateformat_to release];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",datestring,timestring]];
                     [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)timefontref range:NSMakeRange(0,[datestring length])];
                     [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[datestring length])];
@@ -462,7 +454,6 @@
                 [timetextlayer setString:timeattribstring];
                 [CATransaction commit];
 
-//                [timeattribstring release];
                 [timetextlayer removeAnimationForKey:@"fadeout"];
                 [NSObject cancelPreviousPerformRequestsWithTarget:self];
                 [self performSelector:@selector(hiddenTime) withObject:nil afterDelay:2];
@@ -532,8 +523,6 @@
             [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
             [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
             NSDate *post_created_at = [formatter dateFromString:post.created_at];
-//            [formatter release];
-
 
             NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
             [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
@@ -541,14 +530,12 @@
             NSString *datestr=[dateformat stringFromDate:post_created_at];
             [dateformat setDateFormat:@"HH:mm:ss"];
             NSString *timestr=[dateformat stringFromDate:post_created_at];
-//            [dateformat release];
             NSString *relative=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
 
             NSDateFormatter *dateformat_to = [[NSDateFormatter alloc] init];
             [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
             [dateformat_to setDateFormat:@"h:mm a MMM d"];
             NSString *datestring=[dateformat_to stringFromDate:post_created_at];
-//            [dateformat_to release];
 
             NSMutableAttributedString *timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",relative,datestring]];
             CTFontRef timefontref=CTFontCreateWithName(CFSTR("HelveticaNeue"), 10.0, NULL);
@@ -563,7 +550,6 @@
             CGSize timesize=[self textWidthForHeight:28 withAttributedString:timeattribstring];
             [floattimetextlayer setFrame:CGRectMake(self.view.frame.size.width - 5 - (timesize.width + 4 * 2),  25, timesize.width + 8, timesize.height + 2)];
             [floattimetextlayer setString:timeattribstring];
-//            [timeattribstring release];
             topcellPath=path.row;
         }
     }
@@ -593,7 +579,6 @@
     CFRelease(fontref);
     
     CGSize size= [CTUtil CTSizeOfString:attributedString minLineHeight:20 linespacing:0 constraint:constraint];
-//    [attributedString release];
     CGFloat height = MAX(size.height, 20.0);
     return height + (CELL_CONTENT_MARGIN_TOP+CELL_CONTENT_MARGIN_BOTTOM);
 }

@@ -92,7 +92,6 @@
         
         if (conversationCount > 0) {
             if (CGRectContainsPoint(convRect, location)) {
-//                NSLog(@"CrossCard hit conversation");
                 if (delegate) {
                     [delegate onClickConversation:self];
                 }

@@ -106,7 +106,6 @@ static NSDate* s_Now = nil;
                     flag = flag | NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
                     flag = flag | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
                     NSDateComponents *result = [gregorian components:flag fromDate:date];
-//                    [date release];
                     return result;
                 }
             }

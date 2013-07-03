@@ -12,7 +12,6 @@
 #import "EXInnerButton.h"
 #import "EXSpinView.h"
 #import "MBProgressHUD.h"
-#import "ProfileCard.h"
 #import "CrossCard.h"
 #import "NewGatherViewController.h"
 
