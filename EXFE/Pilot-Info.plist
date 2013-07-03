@@ -30,7 +30,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.1.2</string>
+	<string>2.1.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -51,9 +51,9 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>45</string>
+	<string>46</string>
 	<key>EXFE-build</key>
-	<string>m2B35P</string>
+	<string>m2B373</string>
 	<key>FacebookAppID</key>
 	<string>624471647582234</string>
 	<key>FacebookDisplayName</key>

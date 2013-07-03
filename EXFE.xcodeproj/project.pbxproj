@@ -1297,11 +1297,11 @@
 		4FDFA48F172B9D8200929BC9 /* EFIdentityTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4FDFA490172B9D8200929BC9 /* EFIdentityTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
 		4FDFA491172B9D8200929BC9 /* EFIdentityTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		4FE0C045178347040029B694 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FE7762C177C1E6200B20A32 /* Localizable.strings */; };
+		4FE0C046178347050029B694 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FE7762C177C1E6200B20A32 /* Localizable.strings */; };
 		4FE77628177C1CA200B20A32 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FE77626177C1CA200B20A32 /* Localizable.strings */; };
 		4FE77629177C1CA200B20A32 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FE77626177C1CA200B20A32 /* Localizable.strings */; };
 		4FE7762A177C1CA200B20A32 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FE77626177C1CA200B20A32 /* Localizable.strings */; };
-		4FE7762E177C1E6200B20A32 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FE7762C177C1E6200B20A32 /* Localizable.strings */; };
-		4FE7762F177C1E6200B20A32 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FE7762C177C1E6200B20A32 /* Localizable.strings */; };
 		4FE77630177C1E6200B20A32 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FE7762C177C1E6200B20A32 /* Localizable.strings */; };
 		4FE8D3CB1681926D00222420 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C61681926C00222420 /* UIImage+Alpha.m */; };
 		4FE8D3CC1681926D00222420 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE8D3C81681926C00222420 /* UIImage+Resize.m */; };
@@ -5091,9 +5091,9 @@
 				4F05D443175C6CB00050A726 /* EFAddIdentityViewController.xib in Resources */,
 				765A82FD175F4F4C00448B64 /* EFContactViewController.xib in Resources */,
 				4FE77629177C1CA200B20A32 /* Localizable.strings in Resources */,
-				4FE7762F177C1E6200B20A32 /* Localizable.strings in Resources */,
 				761559BC177F1A2B00ABB62B /* header_arrow.png in Resources */,
 				761559BF177F1A2B00ABB62B /* header_arrow@2x.png in Resources */,
+				4FE0C045178347040029B694 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5915,9 +5915,9 @@
 				4F05D442175C6CB00050A726 /* EFAddIdentityViewController.xib in Resources */,
 				765A82FC175F4F4C00448B64 /* EFContactViewController.xib in Resources */,
 				4FE77628177C1CA200B20A32 /* Localizable.strings in Resources */,
-				4FE7762E177C1E6200B20A32 /* Localizable.strings in Resources */,
 				761559BB177F1A2B00ABB62B /* header_arrow.png in Resources */,
 				761559BE177F1A2B00ABB62B /* header_arrow@2x.png in Resources */,
+				4FE0C046178347050029B694 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
