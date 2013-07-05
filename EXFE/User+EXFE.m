@@ -35,17 +35,25 @@
     return [self sortedIdentiesBy:descriptor];
 }
 
-
 + (User*) getDefaultUser{
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
     return [User getUserById:app.model.userId];
 }
 
++ (User*) getDefaultUserFrom:(EXFEModel*)model{
+    return [User getUserFrom:model byId:model.userId];
+}
+
 + (User*) getUserById:(int)userId{
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    return [User getUserFrom:app.model byId:userId];
+}
+
++ (User*) getUserFrom:(EXFEModel*)model byId:(int)userId{
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id = %u", userId];
     [request setPredicate:predicate];
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    RKObjectManager *objectManager = model.objectManager;
     NSArray *users = [objectManager.managedObjectStore.mainQueueManagedObjectContext executeFetchRequest:request error:nil];
     if(users != nil && [users count] > 0)
     {

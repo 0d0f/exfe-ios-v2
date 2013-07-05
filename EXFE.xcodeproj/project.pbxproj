@@ -298,7 +298,6 @@
 		4F63DB1317172AA600136B7E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8F1560F832009E0806 /* CoreGraphics.framework */; };
 		4F63DB1417172AA600136B7E /* libFlurry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C4751216084B8A000B69F2 /* libFlurry.a */; };
 		4F63DB1617172AA600136B7E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 78A98E941560F832009E0806 /* InfoPlist.strings */; };
-		4F63DB1717172AA600136B7E /* CrossesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78E88741156244E70026D197 /* CrossesViewController.xib */; };
 		4F63DB1A17172AA600136B7E /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 785F6F6315820A0000BF8EA0 /* ProfileViewController.xib */; };
 		4F63DB1B17172AA600136B7E /* ProfileCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A8340A1588BBEE0019FDF5 /* ProfileCellView.xib */; };
 		4F63DB1C17172AA600136B7E /* OAuthLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */; };
@@ -712,7 +711,6 @@
 		4F63DCE217172B0700136B7E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8F1560F832009E0806 /* CoreGraphics.framework */; };
 		4F63DCE317172B0700136B7E /* libFlurry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C4751216084B8A000B69F2 /* libFlurry.a */; };
 		4F63DCE517172B0700136B7E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 78A98E941560F832009E0806 /* InfoPlist.strings */; };
-		4F63DCE617172B0700136B7E /* CrossesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78E88741156244E70026D197 /* CrossesViewController.xib */; };
 		4F63DCE917172B0700136B7E /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 785F6F6315820A0000BF8EA0 /* ProfileViewController.xib */; };
 		4F63DCEA17172B0700136B7E /* ProfileCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A8340A1588BBEE0019FDF5 /* ProfileCellView.xib */; };
 		4F63DCEB17172B0700136B7E /* OAuthLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D0A5FD158CFAD200401BCA /* OAuthLoginViewController.xib */; };
@@ -1876,7 +1874,6 @@
 		78E4EE5A1581D02B00AE6211 /* ConversationTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E4EE591581D02B00AE6211 /* ConversationTableView.m */; };
 		78E837F9156658A300763A60 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 78E837F7156658A300763A60 /* Model.xcdatamodeld */; };
 		78E88742156244E70026D197 /* CrossesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E88740156244E70026D197 /* CrossesViewController.m */; };
-		78E88743156244E70026D197 /* CrossesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78E88741156244E70026D197 /* CrossesViewController.xib */; };
 		78EAB3BF15F9FA27004C3B83 /* rome.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 78EAB3BD15F9FA27004C3B83 /* rome.jpg */; };
 		78EAB3C015F9FA27004C3B83 /* rome@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 78EAB3BE15F9FA27004C3B83 /* rome@2x.jpg */; };
 		78F057FF1599A57C00F360F2 /* PlaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F057FD1599A57B00F360F2 /* PlaceViewController.m */; };
@@ -2851,7 +2848,6 @@
 		78E837F8156658A300763A60 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		78E8873F156244E70026D197 /* CrossesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossesViewController.h; sourceTree = "<group>"; };
 		78E88740156244E70026D197 /* CrossesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossesViewController.m; sourceTree = "<group>"; };
-		78E88741156244E70026D197 /* CrossesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossesViewController.xib; sourceTree = "<group>"; };
 		78EAB3BD15F9FA27004C3B83 /* rome.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = rome.jpg; sourceTree = "<group>"; };
 		78EAB3BE15F9FA27004C3B83 /* rome@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "rome@2x.jpg"; sourceTree = "<group>"; };
 		78F057FC1599A57B00F360F2 /* PlaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaceViewController.h; sourceTree = "<group>"; };
@@ -3963,7 +3959,6 @@
 			children = (
 				78E8873F156244E70026D197 /* CrossesViewController.h */,
 				78E88740156244E70026D197 /* CrossesViewController.m */,
-				78E88741156244E70026D197 /* CrossesViewController.xib */,
 				4F3C6D8016ACEE670095AA50 /* EditCrossDelegate.h */,
 				7825A5C415A2CE3E00A853CD /* Gather */,
 				4FD9376316D6048200ED6677 /* Tab */,
@@ -4728,7 +4723,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F63DB1617172AA600136B7E /* InfoPlist.strings in Resources */,
-				4F63DB1717172AA600136B7E /* CrossesViewController.xib in Resources */,
 				4F63DB1A17172AA600136B7E /* ProfileViewController.xib in Resources */,
 				4F63DB1B17172AA600136B7E /* ProfileCellView.xib in Resources */,
 				4F63DB1C17172AA600136B7E /* OAuthLoginViewController.xib in Resources */,
@@ -5143,7 +5137,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F63DCE517172B0700136B7E /* InfoPlist.strings in Resources */,
-				4F63DCE617172B0700136B7E /* CrossesViewController.xib in Resources */,
 				4F63DCE917172B0700136B7E /* ProfileViewController.xib in Resources */,
 				4F63DCEA17172B0700136B7E /* ProfileCellView.xib in Resources */,
 				4F63DCEB17172B0700136B7E /* OAuthLoginViewController.xib in Resources */,
@@ -5557,7 +5550,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				78A98E961560F832009E0806 /* InfoPlist.strings in Resources */,
-				78E88743156244E70026D197 /* CrossesViewController.xib in Resources */,
 				785F6F6515820A0000BF8EA0 /* ProfileViewController.xib in Resources */,
 				78A8340B1588BBEE0019FDF5 /* ProfileCellView.xib in Resources */,
 				78D0A602158CFE1900401BCA /* OAuthLoginViewController.xib in Resources */,

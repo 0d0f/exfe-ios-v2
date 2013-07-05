@@ -27,6 +27,14 @@
 @synthesize navigationController=_navigationController;
 
 
+- (NSString *)defaultScheme
+{
+    NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
+    NSAssert([schemes objectAtIndex:1] != nil, @"Missing url sheme in main bundle.");
+    
+    return [schemes objectAtIndex:1];
+}
+
 #pragma mark UIApplicationDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -90,7 +98,7 @@
     NSDictionary *userinfo = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     
     // Setup root UIViewController
-    CrossesViewController *crossviewController = [[CrossesViewController alloc] initWithNibName:@"CrossesViewController" bundle:nil];
+    CrossesViewController *crossviewController = [[CrossesViewController alloc] initWithStyle:UITableViewStylePlain];
     crossviewController.needHeaderAnimation = userinfo ? NO : YES;
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:crossviewController];
     self.crossesViewController = crossviewController;
@@ -203,6 +211,11 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [[FBSession activeSession] close];
+}
+
+- (void)application:(UIApplication *)application didChangeStatusBarFrame:(CGRect)oldStatusBarFrame
+{
+    self.window.frame = [[UIScreen mainScreen] applicationFrame];
 }
 
 #pragma mark - Push Notification

@@ -14,33 +14,27 @@
 #import "MBProgressHUD.h"
 #import "CrossCard.h"
 #import "NewGatherViewController.h"
+#import "TTTAttributedLabel.h"
 
 #define CARD_VERTICAL_MARGIN      (15)
 
 @interface CrossesViewController : PullRefreshTableViewController
 <
 UIAlertViewDelegate,
-CrossCardDelegate
+CrossCardDelegate,
+UIScrollViewDelegate,
+TTTAttributedLabelDelegate
 > {
-    IBOutlet UITableView* tableView;
-    BOOL logoutflag;
     BOOL alertShowflag;
-    int current_cellrow;
     NSMutableAttributedString *gatherax;
     MBProgressHUD *hud;
     UIImage *default_background;
-    
-    UILabel *label_profile;
-    UILabel *label_gather;
-    EXAttributedLabel *welcome_exfe;
-    UILabel *welcome_more;
 }
 
 @property (nonatomic, strong) NSArray* crossList;
 @property (nonatomic, strong) id crossChangeObserver;
 @property (nonatomic, assign) BOOL needHeaderAnimation;
 
-- (void)refreshCell;
 - (void)refreshCrosses:(NSString*)source;
 - (void)refreshCrosses:(NSString*)source withCrossId:(int)cross_id;
 - (void)loadObjectsFromDataStore;
@@ -49,7 +43,6 @@ CrossCardDelegate
 - (void)ShowGatherView;
 - (Cross*)crossWithId:(int)cross_id;
 - (void)refreshTableViewWithCrossId:(int)cross_id;
-- (void)alertsignout;
 - (BOOL)pushToCross:(int)cross_id;
 - (BOOL)pushToConversation:(int)cross_id;
 - (void)onClickConversation:(UIView*)card;

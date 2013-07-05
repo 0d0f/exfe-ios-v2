@@ -12,5 +12,5 @@
 @interface EXAttributedLabel : UIView{
     NSAttributedString *attributedText;
 }
-@property (nonatomic,strong) NSAttributedString *attributedText;
+@property (nonatomic,strong) NSAttributedString *attributedText __attribute__((deprecated));
 @end

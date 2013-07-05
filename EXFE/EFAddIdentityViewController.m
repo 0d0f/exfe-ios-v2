@@ -624,18 +624,15 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *username = [dict valueForKeyPath:@"external_username"];
     
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
     NSDictionary *param = nil;
     if (provider == kProviderTwitter || provider == kProviderFacebook) {
-        NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
-        NSAssert([schemes objectAtIndex:0] != nil, @"Missing url sheme in main bundle.");
-        
         // eg:  exfe://oauthcallback/
-        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
+        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
         
         param = @{@"device_callback": callback, @"device": @"iOS"};
     }
     
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
     [app.model.apiServer addIdentityBy:[dict valueForKeyPath:@"external_username"] withProvider:provider param:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
         sender.enabled = YES;
         [self hideIndicator];

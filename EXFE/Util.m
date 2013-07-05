@@ -89,7 +89,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     NSString *phoneRegex = @"^(\\+)?\\d{5,}$";
     NSPredicate *phonelTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", phoneRegex];
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-    NSString *normalized = [phoneUtil normalizePhoneNumber:lowercase];
+    NSString *normalized = [phoneUtil normalizeDigitsOnly:lowercase];
     if ([phonelTest evaluateWithObject:normalized] == YES){
         return kProviderPhone;
     }

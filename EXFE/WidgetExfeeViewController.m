@@ -431,7 +431,7 @@ typedef enum {
                     CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
                     NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Unreachable contact", nil)
                                                                                          attributes:@{(NSString*)kCTFontAttributeName: (__bridge id)textfontref,
-                                                   (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)].CGColor}];
+                                                   (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_RED_EXFE].CGColor}];
                     invRsvpLabel.attributedText = pending;
                     [invRsvpLabel setNeedsDisplay];
                     CFRelease(textfontref);

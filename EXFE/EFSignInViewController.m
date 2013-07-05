@@ -687,11 +687,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         NSDictionary *dict = [Util parseIdentityString:identityText byProvider:provider];
         NSString *username = [dict valueForKeyPath:@"external_username"];
         
-        NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
-        NSAssert([schemes objectAtIndex:0] != nil, @"Missing url sheme in main bundle.");
-        
+        AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
         // eg:  exfe://oauthcallback/
-        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
+        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
         
         switch (provider) {
             case kProviderTwitter:
@@ -1004,15 +1002,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                             [Util showConnectError:error delegate:nil];
 //                            [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
                             
-                            //case NSURLErrorTimedOut = -1001,
-                            //NSURLErrorCannotFindHost = -1003,
-                            //NSURLErrorCannotConnectToHost = -1004,
-                            //NSURLErrorNetworkConnectionLost = -1005,
-                            //NSURLErrorDNSLookupFailed = -1006,
-                            //NSURLErrorHTTPTooManyRedirects = -1007,
-                            //NSURLErrorResourceUnavailable = -1008,
-                            //NSURLErrorNotConnectedToInternet = -1009,
-                            //NSURLErrorRedirectToNonExistentLocation = -1010,
                             //NSURLErrorInternationalRoamingOff = -1018,
                             //NSURLErrorCallIsActive = -1019,
                             //NSURLErrorDataNotAllowed = -1020,

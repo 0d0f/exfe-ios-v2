@@ -798,11 +798,9 @@
                    success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    NSArray * schemes = [[[NSBundle mainBundle] infoDictionary] valueForKeyPath:@"CFBundleURLTypes.@distinctUnionOfArrays.CFBundleURLSchemes"];
-    NSAssert([schemes objectAtIndex:0] != nil, @"Missing url sheme in main bundle.");
-    
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     // eg:  exfe://oauthcallback/
-    NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", [schemes objectAtIndex:0]];
+    NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
     
     NSString *endpoint = [NSString stringWithFormat:@"users/VerifyUserIdentity?token=%@", self.model.userToken];
     NSDictionary *param = @{@"identity_id":[NSNumber numberWithInt:identity_id],@"device_callback":callback,@"device":@"iOS"};

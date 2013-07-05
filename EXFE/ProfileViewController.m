@@ -413,7 +413,7 @@
             buttonsignout = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
             [buttonsignout setTitle:NSLocalizedString(@"Sign out", nil) forState:UIControlStateNormal];
             [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
-            [buttonsignout setTitleColor:[UIColor COLOR_RGB(0xE5, 0x2E, 0x53)] forState:UIControlStateNormal];
+            [buttonsignout setTitleColor:[UIColor COLOR_RED_EXFE] forState:UIControlStateNormal];
             //        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
             [buttonsignout setFrame:CGRectMake(200, 64, 100, 44)];
             [buttonsignout setBackgroundColor:[UIColor clearColor]];

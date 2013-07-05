@@ -7,6 +7,7 @@
 //
 
 #import "CrossesViewController.h"
+#import <BlocksKit/BlocksKit.h>
 #import "ProfileViewController.h"
 #import "EFLandingViewController.h"
 #import "Cross.h"
@@ -29,8 +30,17 @@
 #import "EFModel.h"
 
 
+
 @interface CrossesViewController ()
+
+@property (nonatomic, strong) UILabel *label_profile;
+@property (nonatomic, strong) UILabel *label_gather;
+@property (nonatomic, strong) TTTAttributedLabel *welcome_exfe;
+@property (nonatomic, strong) UILabel *welcome_more;
+@property (nonatomic, strong) UILabel *unverified_title;
+@property (nonatomic, strong) TTTAttributedLabel *unverified_description;
 @property (nonatomic, strong) EFHeadView *headView;
+
 @end
 
 @interface CrossesViewController (Private)
@@ -39,49 +49,35 @@
 
 @implementation CrossesViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)init
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super init];
     if (self) {
         // Custom initialization
     }
     return self;
 }
 
-- (void)setCrossList:(NSArray *)crossList
-{
-    if (_crossList != crossList) {
-        NSArray *tempList = crossList;
-        // WALKAROUND: clean duplicate
-//        if (tempList != nil) {
-//            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-//            for (Cross *x in crossList) {
-//                NSString *key = [x.cross_id stringValue];
-//                Cross *previous = [dict objectForKey:key];
-//                if (previous == nil) {
-//                    [dict setObject:x forKey:key];
-//                } else {
-//                    if ([DateTimeUtil secondsBetween:previous.updated_at with:x.updated_at]) {
-//                        [dict removeObjectForKey:key];
-//                        [dict setObject:x forKey:key];
-//                    }
-//                }
-//            }
-//            if (tempList.count > dict.count) {
-//                tempList = [dict allValues];
-//            }
-//        }
-        _crossList = tempList;
-    }
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
     [Flurry logEvent:@"CROSS_LIST"];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+
+    self.clearsSelectionOnViewWillAppear = YES;
+    
+    UITableView * tableView = self.tableView;
+    tableView.dataSource = self;
+    tableView.delegate = self;
+    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tableView.backgroundColor = [UIColor COLOR_WA(0xEE, 0xFF)];
+    tableView.alwaysBounceVertical = YES;
+    tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+    
+    UIView *topview = [[UIView alloc] initWithFrame:CGRectMake(0, -480, 320, 480)];
+    topview.backgroundColor = [UIColor COLOR_WA(0xEE, 0xFF)];
+    [tableView addSubview:topview];
+    
     
     // Head View
     EFHeadView *headView = [[EFHeadView alloc] initWithFrame:(CGRect){{0.0f, 9.0f}, {320.0f, 56.0f}}];
@@ -96,26 +92,7 @@
         [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView endUpdates];
     };
-    
     self.headView = headView;
-    
-    //
-    CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
-    [self.view setFrame:appFrame];
-    self.view.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
-    
-    self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
-
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[[UIImage imageNamed:@"btn_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15, 0, 6)]
-                                                      forState:UIControlStateNormal
-                                                    barMetrics:UIBarMetricsDefault];
-    current_cellrow = -1;
-    self.tableView.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
-    //UIView *topview = [[UIView alloc] initWithFrame:CGRectOffset(screenframe, 0, CGRectGetHeight(screenframe))];
-    UIView *topview = [[UIView alloc] initWithFrame:CGRectMake(0, -480, 320, 480)];
-    topview.backgroundColor = [UIColor COLOR_RGB(0xEE, 0xEE, 0xEE)];
-    [self.tableView addSubview:topview];
-    [super viewDidLoad];
     
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
     if ([app.model isLoggedIn]) {
@@ -193,58 +170,98 @@
     [default_background drawInRect:rect];
     default_background = UIGraphicsGetImageFromCurrentImageContext();
     
-    label_profile = [[UILabel alloc] initWithFrame:CGRectMake(15, 70, 130, 31)];
+    
+    UILabel *label_profile = [[UILabel alloc] initWithFrame:CGRectMake(15, 65, 200, 50)];
     label_profile.backgroundColor = [UIColor clearColor];
-    label_profile.textColor = [UIColor COLOR_WA(0x6B, 0xFF)];
-    label_profile.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
-    label_profile.text = NSLocalizedString(@"Manage identities to \nreveal who your are.", nil);
-    label_profile.numberOfLines = 2;
+    label_profile.textColor = [UIColor COLOR_GRAY];
+    label_profile.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
+    label_profile.text = NSLocalizedString(@"Your profile here.", nil);
+    label_profile.numberOfLines = 1;
     [label_profile sizeToFit];
-    //label_profile.hidden = YES;
+    self.label_profile = label_profile;
     [self.view addSubview:label_profile];
     
-    label_gather = [[UILabel alloc] initWithFrame:CGRectMake(220, 70, 130, 31)];
+    UILabel *label_gather = [[UILabel alloc] initWithFrame:CGRectMake(15, 65, 200, 50)];
     label_gather.backgroundColor = [UIColor clearColor];
-    label_gather.textColor = [UIColor COLOR_WA(0x6B, 0xFF)];
+    label_gather.textColor = [UIColor COLOR_GRAY];
     label_gather.textAlignment = NSTextAlignmentRight;
-    label_gather.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
-    label_gather.text = NSLocalizedString(@"Hang out with\n friends.", nil);
-    label_gather.numberOfLines = 2;
+    label_gather.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
+    label_gather.text = NSLocalizedString(@"Go hang out with friends.", nil);
+    label_gather.numberOfLines = 1;
     [label_gather sizeToFit];
-    //label_gather.hidden = YES;
-    label_gather.frame = CGRectOffset(label_gather.frame, 305 - CGRectGetMaxX(label_gather.frame), 0);
+    // Right Alignment
+    label_gather.frame = CGRectOffset(label_gather.frame, CGRectGetWidth(self.view.bounds) - 15 - CGRectGetMaxX(label_gather.frame), 0);
+    self.label_gather = label_gather;
     [self.view addSubview:label_gather];
     
-    welcome_exfe = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(32, 250, 260, 35)];
-    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Welcome to EXFE", nil)];
-    CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 30.0, NULL);
-    [attrStr addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)fontref range:NSMakeRange(0, [attrStr length])];
-    [attrStr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLACK].CGColor range:NSMakeRange(0,11)];
-    [attrStr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:NSMakeRange(11,4)];
-    CTTextAlignment alignment = kCTCenterTextAlignment;
-    CTParagraphStyleSetting paragraphsetting[3] = {
-        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
-    };
-    CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(paragraphsetting, 3);
-    [attrStr addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)paragraphstyle range:NSMakeRange(0,[attrStr length])];
-    CFRelease(paragraphstyle);
-    CFRelease(fontref);
-    welcome_exfe.attributedText = attrStr;
+    TTTAttributedLabel *welcome_exfe = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(15, CGRectGetMidY(self.view.bounds) - 20, 290, 100)];
     welcome_exfe.backgroundColor = [UIColor clearColor];
-    //welcome_exfe.hidden = YES;
+    welcome_exfe.textAlignment = NSTextAlignmentCenter;
+    welcome_exfe.textColor = [UIColor COLOR_CARBON];
+    welcome_exfe.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:30];
+    NSString *full = NSLocalizedString(@"Welcome to EXFE", nil);
+    
+    [welcome_exfe setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+        NSString *highlight = NSLocalizedString(@"EXFE", nil);
+        NSRange range = [[mutableAttributedString string] rangeOfString:highlight options:NSCaseInsensitiveSearch];
+        
+        [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:range];
+        
+        return mutableAttributedString;
+    }];
+    [welcome_exfe sizeToFit];
     welcome_exfe.frame = CGRectOffset(welcome_exfe.frame, 160 - CGRectGetMidX(welcome_exfe.frame), 0);
+    self.welcome_exfe = welcome_exfe;
     [self.view addSubview:welcome_exfe];
     
-    welcome_more = [[UILabel alloc] initWithFrame:CGRectMake(32, 285, 300, 23)];
+    UILabel *welcome_more = [[UILabel alloc] initWithFrame:CGRectMake(15, CGRectGetMaxY(welcome_exfe.frame), 290, 100)];
     welcome_more.backgroundColor = [UIColor clearColor];
     welcome_more.textColor = [UIColor COLOR_WA(0x6B, 0xFF)];
     welcome_more.textAlignment = NSTextAlignmentRight;
     welcome_more.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
     welcome_more.text = NSLocalizedString(@"The group utility for gathering.", nil);
     [welcome_more sizeToFit];
-    //welcome_more.hidden = YES;
     welcome_more.frame = CGRectOffset(welcome_more.frame, 160 - CGRectGetMidX(welcome_more.frame), 0);
+    self.welcome_more = welcome_more;
     [self.view addSubview:welcome_more];
+    
+    TTTAttributedLabel *unverified_description = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(15, 0, 290, 200)];
+    NSString *text = NSLocalizedString(@"To protect privacy, nothing to list here \nuntil your account is verified. Please go to verify first.", nil);
+    NSString *link_text = NSLocalizedString(@"go to verify", nil);
+    NSRange range = [text rangeOfString:link_text];
+    unverified_description.numberOfLines = 0;
+    unverified_description.backgroundColor = [UIColor COLOR_WA(0xEE, 0xFF)];
+    unverified_description.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
+    unverified_description.textColor = [UIColor COLOR_BLACK_19];
+    unverified_description.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
+    unverified_description.textAlignment = NSTextAlignmentCenter;
+    NSMutableDictionary *mutableLinkAttributes = [NSMutableDictionary dictionary];
+    [mutableLinkAttributes setObject:[UIColor COLOR_BLACK_19] forKey:(NSString*)kCTForegroundColorAttributeName];
+    [mutableLinkAttributes setObject:[NSNumber numberWithBool:YES] forKey:(NSString *)kCTUnderlineStyleAttributeName];
+    unverified_description.linkAttributes = mutableLinkAttributes;
+    unverified_description.delegate = self;
+    unverified_description.text = text;
+    
+    [unverified_description addLinkToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@://profile/", app.defaultScheme]] withRange:range];
+    [unverified_description sizeToFit];
+    
+    
+    CGFloat h = CGRectGetHeight(unverified_description.bounds);
+    unverified_description.frame = CGRectMake(15, CGRectGetHeight(self.view.bounds) - 15 - h, 290, h + 15);
+    self.unverified_description = unverified_description;
+    [self.view addSubview:unverified_description];
+    
+    UILabel *unverified_title = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 290, 200)];
+    unverified_title.font = [UIFont fontWithName:@"HelveticaNeue" size:12];
+    unverified_title.textAlignment = NSTextAlignmentCenter;
+    unverified_title.textColor = [UIColor COLOR_RED_EXFE];
+    unverified_title.backgroundColor = [UIColor COLOR_WA(0xEE, 0xFF)];
+    unverified_title.text = NSLocalizedString(@"Unverified account.", nil);
+    [unverified_title sizeToFit];
+    CGFloat hh = CGRectGetHeight(unverified_title.bounds);
+    unverified_title.frame = CGRectMake(15, CGRectGetMinY(unverified_description.frame) - hh, 290, hh);
+    self.unverified_title = unverified_title;
+    [self.view addSubview:unverified_title];
     
     if (self.crossChangeObserver == nil) {
         self.crossChangeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:EXCrossListDidChangeNotification
@@ -257,11 +274,66 @@
     [self refreshWelcome];
     
     
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(refreshWelcome)
+//                                                 name:UIApplicationWillChangeStatusBarFrameNotification
+//                                               object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshWelcome)
+                                                 name:UIApplicationDidChangeStatusBarFrameNotification
+                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleLoadMeSuccess:)
                                                  name:kEFNotificationNameLoadMeSuccess
                                                object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (self.crossChangeObserver) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self.crossChangeObserver];
+    }
+    self.crossList = nil;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    [self.tableView reloadData];
+}
+
+- (void)setCrossList:(NSArray *)crossList
+{
+    if (_crossList != crossList) {
+        NSArray *tempList = crossList;
+        // WALKAROUND: clean duplicate
+        //        if (tempList != nil) {
+        //            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        //            for (Cross *x in crossList) {
+        //                NSString *key = [x.cross_id stringValue];
+        //                Cross *previous = [dict objectForKey:key];
+        //                if (previous == nil) {
+        //                    [dict setObject:x forKey:key];
+        //                } else {
+        //                    if ([DateTimeUtil secondsBetween:previous.updated_at with:x.updated_at]) {
+        //                        [dict removeObjectForKey:key];
+        //                        [dict setObject:x forKey:key];
+        //                    }
+        //                }
+        //            }
+        //            if (tempList.count > dict.count) {
+        //                tempList = [dict allValues];
+        //            }
+        //        }
+        _crossList = tempList;
+    }
 }
 
 - (Cross*) crossWithId:(int)cross_id{
@@ -272,46 +344,11 @@
     }
     return nil;
 }
-- (void)viewDidUnload
-{
-    
-    [super viewDidUnload];
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    if (self.crossChangeObserver) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self.crossChangeObserver];
-    }
-    
-    self.crossList = nil;
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-    [self.tableView reloadData];
-}
 
 - (void)handleLoadMeSuccess:(NSNotification *)notif {
     NSRange range = NSMakeRange(0, 1);
     NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
     [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (void)ShowProfileView{
-    RKObjectManager *manager=[RKObjectManager sharedManager];
-    [manager.HTTPClient.operationQueue cancelAllOperations];
-    ProfileViewController *profileViewController=[[ProfileViewController alloc]initWithNibName:@"ProfileViewController" bundle:nil];
-    profileViewController.user = [User getDefaultUser];
-    [self.navigationController pushViewController:profileViewController animated:YES];
-    
-}
-- (void)ShowGatherView{
-    NewGatherViewController *gatherViewController=[[NewGatherViewController alloc]initWithNibName:@"NewGatherViewController" bundle:nil];
-    
-    [self.navigationController pushViewController:gatherViewController animated:YES];
 }
 
 - (void) refreshCrosses:(NSString*)source{
@@ -476,16 +513,14 @@
                                            }];
     
 }
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
 
 - (void)loadObjectsFromDataStore {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Cross"];
 	NSSortDescriptor* descriptor = [NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO];
 	[request setSortDescriptors:[NSArray arrayWithObject:descriptor]];
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    
+    AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    RKObjectManager *objectManager = app.model.objectManager;
     
     // ignore duplicate objects
     [objectManager.managedObjectStore.mainQueueManagedObjectContext performBlockAndWait:^{
@@ -510,6 +545,19 @@
     [self.tableView reloadData];
 }
 
+#pragma mark Refresh
+- (void)refreshTableViewWithCrossId:(int)cross_id {
+    for (int i = 0; i < [self.crossList count]; i++) {
+        Cross *c = [self.crossList objectAtIndex:i];
+        if ([c.cross_id intValue] == cross_id) {
+            [self.tableView beginUpdates];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:1]]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+            [self.tableView endUpdates];
+        }
+    }
+}
+
 - (void)refresh
 {
     [self refreshCrosses:@"crossupdateview"];
@@ -522,21 +570,44 @@
 - (void)refreshWelcome{
     NSInteger count = [self getCrossCount];
     
-    if (label_profile.hidden != (count > 0)) {
-        label_profile.hidden = count > 0;
+    if (self.label_profile.hidden != (count > 0)) {
+        self.label_profile.hidden = count > 0;
     }
-    if (label_gather.hidden != (count > 0)) {
-        label_gather.hidden = count > 0;
+    if (self.label_gather.hidden != (count > 0)) {
+        self.label_gather.hidden = count > 0;
     }
-    if (welcome_exfe.hidden != (count > 2)) {
-        welcome_exfe.hidden = count > 2;
+    if (self.welcome_exfe.hidden != (count > 1)) {
+        self.welcome_exfe.hidden = count > 1;
     }
-    if (welcome_more.hidden != (count > 2)) {
-        welcome_more.hidden = count > 2;
+    if (self.welcome_more.hidden != (count > 1)) {
+        self.welcome_more.hidden = count > 1;
+    }
+    
+   
+    NSSet *identites = [User getDefaultUser].identities;
+    NSUInteger c = 0;
+    for (Identity *ident in identites) {
+        if ([ident.status isEqualToString:@"VERIFYING"]) {
+            c ++;
+        }
+    }
+    BOOL needVerify = c == identites.count;
+    if (needVerify) {
+        self.unverified_description.hidden = NO;
+        self.unverified_title.hidden = NO;
+        
+        CGFloat h = CGRectGetHeight(self.unverified_description.bounds);
+        self.unverified_description.frame = CGRectMake(15, CGRectGetHeight(self.view.bounds) - h + self.tableView.contentOffset.y , 290, h);
+
+        CGFloat hh = CGRectGetHeight(self.unverified_title.bounds);
+        self.unverified_title.frame = CGRectMake(15, CGRectGetMinY(self.unverified_description.frame) - hh, 290, hh);
+    } else {
+        self.unverified_description.hidden = YES;
+        self.unverified_title.hidden = YES;
     }
 }
 
-- (void)emptyView{
+- (void)emptyView{ 
     self.crossList = nil;
     [self refreshWelcome];
     [self.tableView reloadData];
@@ -810,35 +881,15 @@
         [self.navigationController pushViewController:tabBarViewController animated:YES];
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-        current_cellrow = indexPath.row;
+//        current_cellrow = indexPath.row;
     }
 }
 
-- (void)refreshTableViewWithCrossId:(int)cross_id {
-    for (int i = 0; i < [self.crossList count]; i++) {
-        Cross *c = [self.crossList objectAtIndex:i];
-        if ([c.cross_id intValue] == cross_id) {
-            [self.tableView beginUpdates];
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:1]]
-                                  withRowAnimation:UITableViewRowAnimationNone];
-            [self.tableView endUpdates];
-        }
-    }
-}
-
-- (void)refreshCell {
-    if( current_cellrow>=0 ) {
-        [self.tableView beginUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:current_cellrow inSection:0]]
-                          withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView endUpdates];
-    }
-
-    current_cellrow = -1;
-}
-
-- (void)alertsignout {
-    [Util signout];
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [super scrollViewDidScroll:scrollView];
+    [self refreshWelcome];
 }
 
 #pragma mark - View Push methods
@@ -885,8 +936,18 @@
     return NO;
 }
 
-#pragma mark - CrossCardDelegate
+- (void)ShowProfileView{
+    ProfileViewController *profileViewController = [[ProfileViewController alloc]initWithNibName:@"ProfileViewController" bundle:nil];
+    profileViewController.user = [User getDefaultUser];
+    [self.navigationController pushViewController:profileViewController animated:YES];
+    
+}
+- (void)ShowGatherView{
+    NewGatherViewController *gatherViewController = [[NewGatherViewController alloc]initWithNibName:@"NewGatherViewController" bundle:nil];
+    [self.navigationController pushViewController:gatherViewController animated:YES];
+}
 
+#pragma mark - CrossCardDelegate
 - (void)onClickConversation:(UIView *)card {
     [Flurry logEvent:@"CLICK_CROSS_CARD_CONVERSATION"];
     CrossCard* c = (CrossCard*)card;
@@ -979,8 +1040,8 @@
     };
     
     tabBarViewController.backButtonActionHandler = ^{
-        RKObjectManager* manager = [RKObjectManager sharedManager];
-        [manager.operationQueue cancelAllOperations];
+        RKObjectManager *objectManager = model.objectManager;
+        [objectManager.operationQueue cancelAllOperations];
         [self.navigationController popToRootViewControllerAnimated:YES];
     };
     
@@ -1022,6 +1083,18 @@
     }
     
     return tabBarViewController;
+}
+
+#pragma mark TTTAttributedLabelDelegate
+/**
+ Tells the delegate that the user did select a link to a URL.
+ 
+ @param label The label whose link was selected.
+ @param url The URL for the selected link.
+ */
+- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+{
+    [[UIApplication sharedApplication] openURL:url];
 }
 
 @end
