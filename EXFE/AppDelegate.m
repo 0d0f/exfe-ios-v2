@@ -49,7 +49,7 @@
     
     // Setup RKLog
 #ifdef DEBUG
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+    RKLogConfigureByName("RestKit/Network", RKLogLevelOff);
     //    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
     RKLogConfigureByName("RestKit/CoreData", RKLogLevelOff);
     //    RKLogConfigureByName("RestKit/CoreData/Cache", RKLogLevelTrace);
@@ -104,6 +104,8 @@
     self.crossesViewController = crossviewController;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = self.navigationController;
+    CGRect appFrame = [UIScreen mainScreen].applicationFrame;
+    self.window.frame = appFrame;
 //    [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
     
@@ -215,7 +217,8 @@
 
 - (void)application:(UIApplication *)application didChangeStatusBarFrame:(CGRect)oldStatusBarFrame
 {
-    self.window.frame = [[UIScreen mainScreen] applicationFrame];
+    CGRect appFrame = [UIScreen mainScreen].applicationFrame;
+    self.window.rootViewController.view.frame = appFrame;
 }
 
 #pragma mark - Push Notification

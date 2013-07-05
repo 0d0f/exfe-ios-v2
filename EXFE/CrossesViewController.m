@@ -346,6 +346,9 @@
 }
 
 - (void)handleLoadMeSuccess:(NSNotification *)notif {
+    
+    [self refreshWelcome];
+    
     NSRange range = NSMakeRange(0, 1);
     NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
     [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
@@ -568,6 +571,8 @@
 }
 
 - (void)refreshWelcome{
+    NSLog(@"refresh: %@ appfram:%@", NSStringFromCGRect(self.view.frame), NSStringFromCGRect([UIScreen mainScreen].applicationFrame));
+    
     NSInteger count = [self getCrossCount];
     
     if (self.label_profile.hidden != (count > 0)) {
@@ -591,13 +596,18 @@
             c ++;
         }
     }
-    BOOL needVerify = c == identites.count;
+    BOOL needVerify = (c == identites.count && c > 0);
     if (needVerify) {
-        self.unverified_description.hidden = NO;
-        self.unverified_title.hidden = NO;
+        if (self.unverified_description.hidden) {
+            self.unverified_description.hidden = NO;
+        }
+        if (self.unverified_title.hidden) {
+            self.unverified_title.hidden = NO;
+        }
         
+        CGRect appFrame = [UIScreen mainScreen].applicationFrame;
         CGFloat h = CGRectGetHeight(self.unverified_description.bounds);
-        self.unverified_description.frame = CGRectMake(15, CGRectGetHeight(self.view.bounds) - h + self.tableView.contentOffset.y , 290, h);
+        self.unverified_description.frame = CGRectMake(15, CGRectGetHeight(appFrame) - h + self.tableView.contentOffset.y , 290, h);
 
         CGFloat hh = CGRectGetHeight(self.unverified_title.bounds);
         self.unverified_title.frame = CGRectMake(15, CGRectGetMinY(self.unverified_description.frame) - hh, 290, hh);
