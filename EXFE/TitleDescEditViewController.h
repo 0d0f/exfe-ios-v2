@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "EXGradientToolbarView.h"
-#import "EXAttributedLabel.h"
 #import "Util.h"
 #import "NewGatherViewController.h"
 #import "SSTextView.h"
@@ -19,7 +18,6 @@
     EXCurveView *headview;
     UIImageView *dectorView;
     UITextView *titleView;
-    //UITextView *descView;
     SSTextView *descView;
     id delegate;
     float keyboardheight;

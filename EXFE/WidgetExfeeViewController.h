@@ -6,12 +6,11 @@
 //
 //
 #import "EFViewController.h"
-#import "EXAttributedLabel.h"
 #import "PSTCollectionView.h"
 #import "EXBasicMenu.h"
 #import "UIBorderLabel.h"
 #import "EFKit.h"
-#import "ExfeeRsvpCell.h"
+#import "TTTAttributedLabel.h"
 
 typedef enum {
     ScrollDirectionNone,
@@ -41,7 +40,7 @@ EFTabBarDataSource
     UIImageView *invHostFlag;
     UILabel *invHostText;
     UIImageView *invRsvpImage;
-    EXAttributedLabel *invRsvpLabel;
+    TTTAttributedLabel *invRsvpLabel;
     UILabel *invRsvpAltLabel;
     UIButton *RemoveButton;
     

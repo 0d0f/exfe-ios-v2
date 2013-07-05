@@ -207,7 +207,6 @@
 		4F63DAAF17172AA600136B7E /* SigninIconToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB315E78B2A0091A47C /* SigninIconToolbarView.m */; };
 		4F63DAB017172AA600136B7E /* EXBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB615E78F0D0091A47C /* EXBackgroundView.m */; };
 		4F63DAB117172AA600136B7E /* ObjectToDict.m in Sources */ = {isa = PBXBuildFile; fileRef = 7818FF1515EB415E0095E92F /* ObjectToDict.m */; };
-		4F63DAB217172AA600136B7E /* EXAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDEB4815ED26210083D75B /* EXAttributedLabel.m */; };
 		4F63DAB317172AA600136B7E /* EXInvitationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FAE24315EFE04C0045DD67 /* EXInvitationItem.m */; };
 		4F63DAB417172AA600136B7E /* EXCollectionMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 789FBD8415F0980000E3BE80 /* EXCollectionMask.m */; };
 		4F63DAB517172AA600136B7E /* CustomStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */; };
@@ -620,7 +619,6 @@
 		4F63DC7E17172B0700136B7E /* SigninIconToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB315E78B2A0091A47C /* SigninIconToolbarView.m */; };
 		4F63DC7F17172B0700136B7E /* EXBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB615E78F0D0091A47C /* EXBackgroundView.m */; };
 		4F63DC8017172B0700136B7E /* ObjectToDict.m in Sources */ = {isa = PBXBuildFile; fileRef = 7818FF1515EB415E0095E92F /* ObjectToDict.m */; };
-		4F63DC8117172B0700136B7E /* EXAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDEB4815ED26210083D75B /* EXAttributedLabel.m */; };
 		4F63DC8217172B0700136B7E /* EXInvitationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FAE24315EFE04C0045DD67 /* EXInvitationItem.m */; };
 		4F63DC8317172B0700136B7E /* EXCollectionMask.m in Sources */ = {isa = PBXBuildFile; fileRef = 789FBD8415F0980000E3BE80 /* EXCollectionMask.m */; };
 		4F63DC8417172B0700136B7E /* CustomStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */; };
@@ -1850,7 +1848,6 @@
 		78B9FD3315B5498200F5E4D3 /* EXNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B9FD3215B5498200F5E4D3 /* EXNavigationBar.m */; };
 		78B9FD3615B5568D00F5E4D3 /* location.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B9FD3415B5568D00F5E4D3 /* location.png */; };
 		78B9FD3715B5568D00F5E4D3 /* location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B9FD3515B5568D00F5E4D3 /* location@2x.png */; };
-		78BDEB4915ED26210083D75B /* EXAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDEB4815ED26210083D75B /* EXAttributedLabel.m */; };
 		78C25ABA159D8211002AED1E /* EXPlaceEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C25AB9159D8211002AED1E /* EXPlaceEditView.m */; };
 		78C4751316084C56000B69F2 /* libFlurry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C4751216084B8A000B69F2 /* libFlurry.a */; };
 		78C6B9FF166349A600483D23 /* AddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C6B9FE166349A600483D23 /* AddressBook.m */; };
@@ -2811,8 +2808,6 @@
 		78B9FD3215B5498200F5E4D3 /* EXNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXNavigationBar.m; sourceTree = "<group>"; };
 		78B9FD3415B5568D00F5E4D3 /* location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location.png; sourceTree = "<group>"; };
 		78B9FD3515B5568D00F5E4D3 /* location@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "location@2x.png"; sourceTree = "<group>"; };
-		78BDEB4715ED26210083D75B /* EXAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAttributedLabel.h; sourceTree = "<group>"; };
-		78BDEB4815ED26210083D75B /* EXAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAttributedLabel.m; sourceTree = "<group>"; };
 		78C25AB8159D8211002AED1E /* EXPlaceEditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXPlaceEditView.h; sourceTree = "<group>"; };
 		78C25AB9159D8211002AED1E /* EXPlaceEditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EXPlaceEditView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		78C4751116084B8A000B69F2 /* Flurry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
@@ -4452,8 +4447,6 @@
 				78A0C1B016807F740073CCE5 /* CustomAttributedTextView.m */,
 				785659F915F3ACD60003CDF8 /* CustomStatusBar.h */,
 				785659FA15F3ACD60003CDF8 /* CustomStatusBar.m */,
-				78BDEB4715ED26210083D75B /* EXAttributedLabel.h */,
-				78BDEB4815ED26210083D75B /* EXAttributedLabel.m */,
 				78867BB515E78F0C0091A47C /* EXBackgroundView.h */,
 				78867BB615E78F0D0091A47C /* EXBackgroundView.m */,
 				78FB6B8915D6C63F00EF83B3 /* EXBubbleButton.h */,
@@ -6031,7 +6024,6 @@
 				4F63DAAF17172AA600136B7E /* SigninIconToolbarView.m in Sources */,
 				4F63DAB017172AA600136B7E /* EXBackgroundView.m in Sources */,
 				4F63DAB117172AA600136B7E /* ObjectToDict.m in Sources */,
-				4F63DAB217172AA600136B7E /* EXAttributedLabel.m in Sources */,
 				4F63DAB317172AA600136B7E /* EXInvitationItem.m in Sources */,
 				4F63DAB417172AA600136B7E /* EXCollectionMask.m in Sources */,
 				4F63DAB517172AA600136B7E /* CustomStatusBar.m in Sources */,
@@ -6240,7 +6232,6 @@
 				4F63DC7E17172B0700136B7E /* SigninIconToolbarView.m in Sources */,
 				4F63DC7F17172B0700136B7E /* EXBackgroundView.m in Sources */,
 				4F63DC8017172B0700136B7E /* ObjectToDict.m in Sources */,
-				4F63DC8117172B0700136B7E /* EXAttributedLabel.m in Sources */,
 				4F63DC8217172B0700136B7E /* EXInvitationItem.m in Sources */,
 				4F63DC8317172B0700136B7E /* EXCollectionMask.m in Sources */,
 				4F63DC8417172B0700136B7E /* CustomStatusBar.m in Sources */,
@@ -6449,7 +6440,6 @@
 				78867BB415E78B2B0091A47C /* SigninIconToolbarView.m in Sources */,
 				78867BB715E78F0D0091A47C /* EXBackgroundView.m in Sources */,
 				7818FF1615EB415E0095E92F /* ObjectToDict.m in Sources */,
-				78BDEB4915ED26210083D75B /* EXAttributedLabel.m in Sources */,
 				78FAE24415EFE04C0045DD67 /* EXInvitationItem.m in Sources */,
 				789FBD8515F0980000E3BE80 /* EXCollectionMask.m in Sources */,
 				785659FC15F3AD660003CDF8 /* CustomStatusBar.m in Sources */,

@@ -330,7 +330,9 @@ typedef enum {
                 invRsvpImage.tag = kTagIdRSVPImage;
                 [tableRsvp.contentView addSubview:invRsvpImage];
                 
-                invRsvpLabel = [[EXAttributedLabel alloc] initWithFrame:CGRectMake(75, 15, 200, 22)];
+                invRsvpLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(75, 15, 200, 22)];
+                invRsvpLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
+                invRsvpLabel.backgroundColor = [UIColor clearColor];
                 invRsvpLabel.tag = kTagIdRSVPLabel;
                 [tableRsvp.contentView addSubview:invRsvpLabel];
                 
@@ -355,54 +357,41 @@ typedef enum {
                     {
                         invRsvpImage.image = [UIImage imageNamed:@"rsvp_accepted_stroke_26blue"];
                         
-                        CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-                        CTFontRef textfontref2 = CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 18.0, NULL);
-                        NSString *raw = NSLocalizedString(@"Accepted", nil);
-                        NSString *placeholder = [NSString stringWithFormat:@"[%@]", raw];
-                        NSAttributedString *acceptStr = [[NSMutableAttributedString alloc] initWithString:raw
-                                                                                               attributes:@{(NSString*)kCTFontAttributeName: (__bridge id)textfontref,
-                                                         (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
-                        
                         if ([inv.mates intValue] > 0) {
-                            NSString *strWithMates = [NSString stringWithFormat:NSLocalizedString(@"%@ with %i mates", @"Accepted with n mates"), placeholder, [inv.mates intValue]];
-                            NSMutableAttributedString *fullStr = [[NSMutableAttributedString alloc] initWithString:strWithMates
-                                                                                                        attributes:@{(NSString*)kCTFontAttributeName:(__bridge id)textfontref2,
-                                                                  (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_BLUE_EXFE].CGColor}];
-                            [fullStr replaceCharactersInRange:[strWithMates rangeOfString:placeholder] withAttributedString:acceptStr];
-                            invRsvpLabel.attributedText = fullStr;
-                            [invRsvpLabel setNeedsDisplay];
+                            NSString *strWithMates = [NSString stringWithFormat:@"Accepted with %i mates", [inv.mates intValue]];
+                            invRsvpLabel.textColor = [UIColor COLOR_BLUE_EXFE];
+                            [invRsvpLabel setText:strWithMates afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+                                NSRange rang = [strWithMates rangeOfString:@"Accepted"];
+                                CTFontRef textfontref2 = CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 18.0, NULL);
+                                if (rang.location > 0) {
+                                    NSRange pre = NSMakeRange(0, rang.location);
+                                    [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)[UIFont fontWithName:@"HelveticaNeue-Light" size:18] range:pre];
+                                }
+                                if (rang.location + rang.length < strWithMates.length) {
+                                    NSRange sur = NSMakeRange(rang.location + rang.length, strWithMates.length - (rang.location + rang.length));
+                                    [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(id)[UIFont fontWithName:@"HelveticaNeue-Light" size:18] range:sur];
+                                }
+                                CFRelease(textfontref2);
+                                return mutableAttributedString;
+                            }];
                         }else{
-                            invRsvpLabel.attributedText = acceptStr;
-                            [invRsvpLabel setNeedsDisplay];
+                            invRsvpLabel.textColor = [UIColor COLOR_BLUE_EXFE];
+                            invRsvpLabel.text = NSLocalizedString(@"Accepted", nil);
                         }
-                        CFRelease(textfontref);
-                        CFRelease(textfontref2);
                     }
                         break;
                     case kRsvpDeclined:
                     {
                         invRsvpImage.image = [UIImage imageNamed:@"rsvp_unavailable_stroke_26g5"];
-                        
-                        CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-                        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Unavailable", nil)
-                                                                                             attributes:@{(NSString*)kCTFontAttributeName: (__bridge id)textfontref,
-                                                       (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
-                        invRsvpLabel.attributedText = pending;
-                        [invRsvpLabel setNeedsDisplay];
-                        CFRelease(textfontref);
+                        invRsvpLabel.textColor = [UIColor COLOR_ALUMINUM];
+                        invRsvpLabel.text = NSLocalizedString(@"Unavailable", nil);
                     }
                         break;
                     case kRsvpInterested:
                     {
                         invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
-                        
-                        CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-                        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Interested", nil)
-                                                                                             attributes:@{(NSString*)kCTFontAttributeName: (__bridge id)textfontref,
-                                                       (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
-                        invRsvpLabel.attributedText = pending;
-                        [invRsvpLabel setNeedsDisplay];
-                        CFRelease(textfontref);
+                        invRsvpLabel.textColor = [UIColor COLOR_ALUMINUM];
+                        invRsvpLabel.text = NSLocalizedString(@"Intersted", nil);
                     }
                         break;
                         // no use
@@ -417,24 +406,14 @@ typedef enum {
                     default:{
                         invRsvpImage.image = [UIImage imageNamed:@"rsvp_pending_stroke_26g5"];
                         
-                        CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-                        NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Pending", nil)
-                                                                                             attributes:@{(NSString*)kCTFontAttributeName: (__bridge id)textfontref,
-                                                       (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_ALUMINUM].CGColor}];
-                        invRsvpLabel.attributedText = pending;
-                        [invRsvpLabel setNeedsDisplay];
-                        CFRelease(textfontref);
+                        invRsvpLabel.textColor = [UIColor COLOR_ALUMINUM];
+                        invRsvpLabel.text = NSLocalizedString(@"Pending", nil);
                     }
                         break;
                 }
                 if ([inv.identity.unreachable boolValue]){
-                    CTFontRef textfontref = CTFontCreateWithName(CFSTR("HelveticaNeue-Bold"), 18.0, NULL);
-                    NSAttributedString *pending = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Unreachable contact", nil)
-                                                                                         attributes:@{(NSString*)kCTFontAttributeName: (__bridge id)textfontref,
-                                                   (NSString*)kCTForegroundColorAttributeName:(id)[UIColor COLOR_RED_EXFE].CGColor}];
-                    invRsvpLabel.attributedText = pending;
-                    [invRsvpLabel setNeedsDisplay];
-                    CFRelease(textfontref);
+                    invRsvpLabel.textColor = [UIColor COLOR_ALUMINUM];
+                    invRsvpLabel.text = NSLocalizedString(@"Pending", nil);
                 }
                 
                 NSString *altString = @"";

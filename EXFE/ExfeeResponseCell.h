@@ -7,7 +7,6 @@
 //
 
 #import "ABTableViewCell.h"
-#import "EXAttributedLabel.h"
 #import "Identity.h"
 
 @class ExfeeResponseCell;

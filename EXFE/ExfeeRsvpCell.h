@@ -7,7 +7,6 @@
 //
 
 #import "TTTAttributedLabel.h"
-#import "EXAttributedLabel.h"
 #import "Invitation+EXFE.h"
 
 
@@ -16,7 +15,7 @@
     UIImageView *invHostFlag;
     UILabel *invHostText;
     UIImageView *invRsvpImage;
-    EXAttributedLabel *invRsvpLabel;
+    TTTAttributedLabel *invRsvpLabel;
     UILabel *invRsvpAltLabel;
     
 }

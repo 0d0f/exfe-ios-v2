@@ -7,6 +7,7 @@
 //
 
 #import "TimeViewController.h"
+#import "TTTAttributedLabel.h"
 
 @interface TimeViewController ()
 
@@ -64,29 +65,17 @@
     icon.image=[UIImage imageNamed:@"time_18.png"];
 //    [toolbar addSubview:icon];
 
-    EXAttributedLabel *viewtitle=[[EXAttributedLabel alloc] initWithFrame:CGRectMake(60, (44-30)/2, self.view.frame.size.width-60-60, 30)];
-    viewtitle.backgroundColor=[UIColor clearColor];
-    
-    NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Edit ·X· time"];
-    CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
-    [titlestr addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)fontref range:NSMakeRange(0, [titlestr length])];
-    [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_51.CGColor range:NSMakeRange(0,[titlestr length])];
-    [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(5,3)];
-    
-    CTTextAlignment alignment = kCTCenterTextAlignment;
-    float linespaceing=1;
-    float minheight=26;
-    
-    CTParagraphStyleSetting paragraphsetting[3] = {
-        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
-        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
-        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
-    };
-    CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(paragraphsetting, 3);
-    [titlestr addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)paragraphstyle range:NSMakeRange(0,[titlestr length])];
-    CFRelease(paragraphstyle);
-    CFRelease(fontref);
-    viewtitle.attributedText=titlestr;
+    TTTAttributedLabel *viewtitle = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(60, (44-30)/2, self.view.frame.size.width-60-60, 30)];
+    viewtitle.backgroundColor = [UIColor clearColor];
+    viewtitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
+    viewtitle.textAlignment = NSTextAlignmentCenter;
+    viewtitle.textColor = FONT_COLOR_51;
+    [viewtitle setText:NSLocalizedString(@"Edit ·X· time", nil) afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+        NSRange range = [[mutableAttributedString string] rangeOfString:NSLocalizedString(@"·X·", nil) options:NSCaseInsensitiveSearch];
+        
+        [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:range];
+        return mutableAttributedString;
+    }];
     [self.view addSubview:viewtitle];
     
     

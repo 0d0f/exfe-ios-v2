@@ -7,8 +7,8 @@
 //
 
 #import "TitleDescEditViewController.h"
-
 #import "EFKit.h"
+#import "TTTAttributedLabel.h"
 
 #define LARGE_SLOT                       (16)
 #define SMALL_SLOT                      (5)
@@ -52,32 +52,14 @@
     
     [self.view addSubview:toolbar];
     
-    EXAttributedLabel *viewtitle=[[EXAttributedLabel alloc] initWithFrame:CGRectMake(60, (44-30)/2, self.view.frame.size.width-60-60, 30)];
-    viewtitle.backgroundColor=[UIColor clearColor];
-
-     NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Title & Description"];
-   // NSMutableAttributedString *titlestr=[[NSMutableAttributedString alloc] initWithString:@"Edit ·X·"];
-    CTFontRef fontref=CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 20.0, NULL);
-    [titlestr addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)fontref range:NSMakeRange(0, titlestr.length)];
-    [titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_51.CGColor range:NSMakeRange(0,titlestr.length)];
-    //[titlestr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(5,3)];
-
-    
-    CTTextAlignment alignment = kCTCenterTextAlignment;
-    float linespaceing=1;
-    float minheight=26;
-
-    CTParagraphStyleSetting paragraphsetting[3] = {
-        {kCTParagraphStyleSpecifierLineSpacing, sizeof(CGFloat), &linespaceing},
-        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat), &minheight},
-        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
-    };
-    CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(paragraphsetting, 3);
-    [titlestr addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)paragraphstyle range:NSMakeRange(0,8)];
-    CFRelease(paragraphstyle);
-    CFRelease(fontref);
-    viewtitle.attributedText=titlestr;
+    TTTAttributedLabel *viewtitle=[[TTTAttributedLabel alloc] initWithFrame:CGRectMake(60, (44-30)/2, self.view.frame.size.width-60-60, 30)];
+    viewtitle.backgroundColor = [UIColor clearColor];
+    viewtitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
+    viewtitle.textAlignment = NSTextAlignmentCenter;
+    viewtitle.textColor = FONT_COLOR_51;
+    viewtitle.text = NSLocalizedString(@"Title & Description", nil);
     [self.view addSubview:viewtitle];
+    
     UIButton *btncancel=[UIButton buttonWithType:UIButtonTypeCustom];
     [btncancel setFrame:CGRectMake(0, 0, 20, 44)];
     btncancel.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
