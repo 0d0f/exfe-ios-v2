@@ -204,7 +204,6 @@
 		4F63DAA917172AA600136B7E /* EXQuoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B2AF6715DEAB5F00451EA2 /* EXQuoteView.m */; };
 		4F63DAAA17172AA600136B7E /* EXInvitationQuoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B22F9615DF4E5B008BEA47 /* EXInvitationQuoteView.m */; };
 		4F63DAAC17172AA600136B7E /* FullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783662DA15E3F4F900F4AEAC /* FullScreenViewController.m */; };
-		4F63DAAF17172AA600136B7E /* SigninIconToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB315E78B2A0091A47C /* SigninIconToolbarView.m */; };
 		4F63DAB017172AA600136B7E /* EXBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB615E78F0D0091A47C /* EXBackgroundView.m */; };
 		4F63DAB117172AA600136B7E /* ObjectToDict.m in Sources */ = {isa = PBXBuildFile; fileRef = 7818FF1515EB415E0095E92F /* ObjectToDict.m */; };
 		4F63DAB317172AA600136B7E /* EXInvitationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FAE24315EFE04C0045DD67 /* EXInvitationItem.m */; };
@@ -616,7 +615,6 @@
 		4F63DC7817172B0700136B7E /* EXQuoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B2AF6715DEAB5F00451EA2 /* EXQuoteView.m */; };
 		4F63DC7917172B0700136B7E /* EXInvitationQuoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B22F9615DF4E5B008BEA47 /* EXInvitationQuoteView.m */; };
 		4F63DC7B17172B0700136B7E /* FullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783662DA15E3F4F900F4AEAC /* FullScreenViewController.m */; };
-		4F63DC7E17172B0700136B7E /* SigninIconToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB315E78B2A0091A47C /* SigninIconToolbarView.m */; };
 		4F63DC7F17172B0700136B7E /* EXBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB615E78F0D0091A47C /* EXBackgroundView.m */; };
 		4F63DC8017172B0700136B7E /* ObjectToDict.m in Sources */ = {isa = PBXBuildFile; fileRef = 7818FF1515EB415E0095E92F /* ObjectToDict.m */; };
 		4F63DC8217172B0700136B7E /* EXInvitationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FAE24315EFE04C0045DD67 /* EXInvitationItem.m */; };
@@ -1759,7 +1757,6 @@
 		788312AB1574A63600D67103 /* ImgCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 788312AA1574A5DE00D67103 /* ImgCache.m */; };
 		78867BAA15E750C10091A47C /* signinbar_btnbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 78867BA615E750C10091A47C /* signinbar_btnbg.png */; };
 		78867BAB15E750C10091A47C /* signinbar_btnbg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78867BA715E750C10091A47C /* signinbar_btnbg@2x.png */; };
-		78867BB415E78B2B0091A47C /* SigninIconToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB315E78B2A0091A47C /* SigninIconToolbarView.m */; };
 		78867BB715E78F0D0091A47C /* EXBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78867BB615E78F0D0091A47C /* EXBackgroundView.m */; };
 		78867BC215E794260091A47C /* textfield_bg_rect.png in Resources */ = {isa = PBXBuildFile; fileRef = 78867BBC15E794260091A47C /* textfield_bg_rect.png */; };
 		78867BC315E794260091A47C /* textfield_bg_rect@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78867BBD15E794260091A47C /* textfield_bg_rect@2x.png */; };
@@ -2698,8 +2695,6 @@
 		788312AA1574A5DE00D67103 /* ImgCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImgCache.m; sourceTree = "<group>"; };
 		78867BA615E750C10091A47C /* signinbar_btnbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = signinbar_btnbg.png; sourceTree = "<group>"; };
 		78867BA715E750C10091A47C /* signinbar_btnbg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signinbar_btnbg@2x.png"; sourceTree = "<group>"; };
-		78867BB215E78B280091A47C /* SigninIconToolbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SigninIconToolbarView.h; sourceTree = "<group>"; };
-		78867BB315E78B2A0091A47C /* SigninIconToolbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SigninIconToolbarView.m; sourceTree = "<group>"; };
 		78867BB515E78F0C0091A47C /* EXBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXBackgroundView.h; sourceTree = "<group>"; };
 		78867BB615E78F0D0091A47C /* EXBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXBackgroundView.m; sourceTree = "<group>"; };
 		78867BBC15E794260091A47C /* textfield_bg_rect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = textfield_bg_rect.png; sourceTree = "<group>"; };
@@ -3747,8 +3742,6 @@
 				785F6F6115820A0000BF8EA0 /* ProfileViewController.h */,
 				785F6F6215820A0000BF8EA0 /* ProfileViewController.m */,
 				785F6F6315820A0000BF8EA0 /* ProfileViewController.xib */,
-				78867BB215E78B280091A47C /* SigninIconToolbarView.h */,
-				78867BB315E78B2A0091A47C /* SigninIconToolbarView.m */,
 				78CAE88C15F51E6E00C2BAF2 /* WelcomeView.h */,
 				78CAE88D15F51E6E00C2BAF2 /* WelcomeView.m */,
 				76073D07174F6EA5007CBFC3 /* EFRomeViewController.h */,
@@ -6021,7 +6014,6 @@
 				4F63DAA917172AA600136B7E /* EXQuoteView.m in Sources */,
 				4F63DAAA17172AA600136B7E /* EXInvitationQuoteView.m in Sources */,
 				4F63DAAC17172AA600136B7E /* FullScreenViewController.m in Sources */,
-				4F63DAAF17172AA600136B7E /* SigninIconToolbarView.m in Sources */,
 				4F63DAB017172AA600136B7E /* EXBackgroundView.m in Sources */,
 				4F63DAB117172AA600136B7E /* ObjectToDict.m in Sources */,
 				4F63DAB317172AA600136B7E /* EXInvitationItem.m in Sources */,
@@ -6229,7 +6221,6 @@
 				4F63DC7817172B0700136B7E /* EXQuoteView.m in Sources */,
 				4F63DC7917172B0700136B7E /* EXInvitationQuoteView.m in Sources */,
 				4F63DC7B17172B0700136B7E /* FullScreenViewController.m in Sources */,
-				4F63DC7E17172B0700136B7E /* SigninIconToolbarView.m in Sources */,
 				4F63DC7F17172B0700136B7E /* EXBackgroundView.m in Sources */,
 				4F63DC8017172B0700136B7E /* ObjectToDict.m in Sources */,
 				4F63DC8217172B0700136B7E /* EXInvitationItem.m in Sources */,
@@ -6437,7 +6428,6 @@
 				78B2AF6815DEABF400451EA2 /* EXQuoteView.m in Sources */,
 				78B22F9715DF4E5B008BEA47 /* EXInvitationQuoteView.m in Sources */,
 				783662DC15E3F4F900F4AEAC /* FullScreenViewController.m in Sources */,
-				78867BB415E78B2B0091A47C /* SigninIconToolbarView.m in Sources */,
 				78867BB715E78F0D0091A47C /* EXBackgroundView.m in Sources */,
 				7818FF1615EB415E0095E92F /* ObjectToDict.m in Sources */,
 				78FAE24415EFE04C0045DD67 /* EXInvitationItem.m in Sources */,
