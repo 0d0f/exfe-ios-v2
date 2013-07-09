@@ -2,7 +2,7 @@
 //  Identity.m
 //  EXFE
 //
-//  Created by huoju on 1/29/13.
+//  Created by Stony Wang on 13-7-9.
 //
 //
 
@@ -13,7 +13,6 @@
 
 @dynamic a_order;
 @dynamic avatar_filename;
-@dynamic avatar_updated_at;
 @dynamic bio;
 @dynamic connected_user_id;
 @dynamic created_at;

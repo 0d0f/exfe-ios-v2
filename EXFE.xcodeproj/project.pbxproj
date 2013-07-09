@@ -1328,6 +1328,15 @@
 		4FF6955D171BFA2B003DF80B /* EFLandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */; };
 		4FF6955E171BFA2B003DF80B /* EFLandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */; };
 		4FF6955F171BFA2B003DF80B /* EFLandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */; };
+		4FF9D125178A89EB00D01765 /* EFEditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9D124178A89EA00D01765 /* EFEditProfileViewController.m */; };
+		4FF9D126178A89EB00D01765 /* EFEditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9D124178A89EA00D01765 /* EFEditProfileViewController.m */; };
+		4FF9D127178A89EB00D01765 /* EFEditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9D124178A89EA00D01765 /* EFEditProfileViewController.m */; };
+		4FF9D12A178A9E1A00D01765 /* EFChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9D129178A9E1A00D01765 /* EFChangePasswordViewController.m */; };
+		4FF9D12B178A9E1A00D01765 /* EFChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9D129178A9E1A00D01765 /* EFChangePasswordViewController.m */; };
+		4FF9D12C178A9E1A00D01765 /* EFChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9D129178A9E1A00D01765 /* EFChangePasswordViewController.m */; };
+		4FF9D12F178BE81D00D01765 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9D12E178BE81C00D01765 /* Device.m */; };
+		4FF9D130178BE81D00D01765 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9D12E178BE81C00D01765 /* Device.m */; };
+		4FF9D131178BE81D00D01765 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9D12E178BE81C00D01765 /* Device.m */; };
 		4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
 		4FFB149C16C0BFFF00F76D32 /* edit_30_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */; };
 		4FFB149D16C0BFFF00F76D32 /* edit_30_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */; };
@@ -2360,6 +2369,12 @@
 		4FF69557171BFA2A003DF80B /* EFLandingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLandingViewController.h; sourceTree = "<group>"; };
 		4FF69558171BFA2A003DF80B /* EFLandingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLandingViewController.m; sourceTree = "<group>"; };
 		4FF69559171BFA2B003DF80B /* EFLandingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFLandingViewController.xib; sourceTree = "<group>"; };
+		4FF9D123178A89EA00D01765 /* EFEditProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFEditProfileViewController.h; sourceTree = "<group>"; };
+		4FF9D124178A89EA00D01765 /* EFEditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFEditProfileViewController.m; sourceTree = "<group>"; };
+		4FF9D128178A9E1A00D01765 /* EFChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChangePasswordViewController.h; sourceTree = "<group>"; };
+		4FF9D129178A9E1A00D01765 /* EFChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChangePasswordViewController.m; sourceTree = "<group>"; };
+		4FF9D12D178BE81B00D01765 /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
+		4FF9D12E178BE81C00D01765 /* Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Device.m; sourceTree = "<group>"; };
 		4FFB149316BFFB9600F76D32 /* SSTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSTextView.h; sourceTree = "<group>"; };
 		4FFB149416BFFB9600F76D32 /* SSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSTextView.m; sourceTree = "<group>"; };
 		4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30_pressed.png; sourceTree = "<group>"; };
@@ -3747,6 +3762,10 @@
 				76073D07174F6EA5007CBFC3 /* EFRomeViewController.h */,
 				76073D08174F6EA5007CBFC3 /* EFRomeViewController.m */,
 				76073D09174F6EA5007CBFC3 /* EFRomeViewController.xib */,
+				4FF9D123178A89EA00D01765 /* EFEditProfileViewController.h */,
+				4FF9D124178A89EA00D01765 /* EFEditProfileViewController.m */,
+				4FF9D128178A9E1A00D01765 /* EFChangePasswordViewController.h */,
+				4FF9D129178A9E1A00D01765 /* EFChangePasswordViewController.m */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -4257,6 +4276,8 @@
 			children = (
 				78FA8C3616B7CD7900D9E876 /* Cross.h */,
 				78FA8C3716B7CD7900D9E876 /* Cross.m */,
+				4FF9D12D178BE81B00D01765 /* Device.h */,
+				4FF9D12E178BE81C00D01765 /* Device.m */,
 				782B3CA9156A604C00721150 /* CrossTime.h */,
 				782B3CAA156A604C00721150 /* CrossTime.m */,
 				782B3CA3156A604A00721150 /* EFTime.h */,
@@ -6173,6 +6194,9 @@
 				4F8507D717841B8C00BB86FA /* NBPhoneNumber.m in Sources */,
 				4F8507DA17841B8C00BB86FA /* NBPhoneNumberDesc.m in Sources */,
 				4F8507DD17841B8C00BB86FA /* NBPhoneNumberUtil.m in Sources */,
+				4FF9D126178A89EB00D01765 /* EFEditProfileViewController.m in Sources */,
+				4FF9D12B178A9E1A00D01765 /* EFChangePasswordViewController.m in Sources */,
+				4FF9D130178BE81D00D01765 /* Device.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6380,6 +6404,9 @@
 				4F8507D817841B8C00BB86FA /* NBPhoneNumber.m in Sources */,
 				4F8507DB17841B8C00BB86FA /* NBPhoneNumberDesc.m in Sources */,
 				4F8507DE17841B8C00BB86FA /* NBPhoneNumberUtil.m in Sources */,
+				4FF9D127178A89EB00D01765 /* EFEditProfileViewController.m in Sources */,
+				4FF9D12C178A9E1A00D01765 /* EFChangePasswordViewController.m in Sources */,
+				4FF9D131178BE81D00D01765 /* Device.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6587,6 +6614,9 @@
 				4F8507D617841B8C00BB86FA /* NBPhoneNumber.m in Sources */,
 				4F8507D917841B8C00BB86FA /* NBPhoneNumberDesc.m in Sources */,
 				4F8507DC17841B8C00BB86FA /* NBPhoneNumberUtil.m in Sources */,
+				4FF9D125178A89EB00D01765 /* EFEditProfileViewController.m in Sources */,
+				4FF9D12A178A9E1A00D01765 /* EFChangePasswordViewController.m in Sources */,
+				4FF9D12F178BE81D00D01765 /* Device.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

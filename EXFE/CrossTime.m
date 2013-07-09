@@ -2,8 +2,8 @@
 //  CrossTime.m
 //  EXFE
 //
-//  Created by ju huo on 5/21/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Stony Wang on 13-7-9.
+//
 //
 
 #import "CrossTime.h"

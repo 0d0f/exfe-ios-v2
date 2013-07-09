@@ -384,4 +384,13 @@ static NSDate* s_Now = nil;
     return [xxx timeIntervalSinceDate:pre];
 }
 
++ (NSDateFormatter*)defaultDateTimeFormatter
+{
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+    dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    return dateFormatter;
+}
+
 @end

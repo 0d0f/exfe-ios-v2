@@ -17,11 +17,16 @@
 #import "EFRomeViewController.h"
 #import "EFKit.h"
 #import "EFModel.h"
+#import "EFChangePasswordViewController.h"
+#import "EFEditProfileViewController.h"
 
 
 #define DECTOR_HEIGHT                    (100)
 
 @interface ProfileViewController ()
+
+@property (nonatomic, strong) UIButton *btnSignOut;
+@property (nonatomic, strong) UIButton *btnForgetPassword;
 
 @end
 
@@ -114,7 +119,13 @@
     }];
     [headerView addGestureRecognizer:swipeHeaderTap];
     
-
+    UITapGestureRecognizer *tapHeader = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+        if (sender.state == UIGestureRecognizerStateEnded) {
+            // open edit
+        }
+    }];
+    [headerView addGestureRecognizer:tapHeader];
+    
     tableview.backgroundColor = [UIColor clearColor];
     tableview.opaque = NO;
     tableview.backgroundView = nil;
@@ -410,19 +421,28 @@
         if(footerView == nil) {
             footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 10+62+44)];
             
-            buttonsignout = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
-            [buttonsignout setTitle:NSLocalizedString(@"Sign out", nil) forState:UIControlStateNormal];
-            [buttonsignout.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
-            [buttonsignout setTitleColor:[UIColor COLOR_RED_EXFE] forState:UIControlStateNormal];
+            self.btnSignOut = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
+            [self.btnSignOut setTitle:NSLocalizedString(@"Sign out", nil) forState:UIControlStateNormal];
+            [self.btnSignOut.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
+            [self.btnSignOut setTitleColor:[UIColor COLOR_RED_EXFE] forState:UIControlStateNormal];
             //        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
-            [buttonsignout setFrame:CGRectMake(200, 64, 100, 44)];
-            [buttonsignout setBackgroundColor:[UIColor clearColor]];
-            [buttonsignout addTarget:self action:@selector(Logout) forControlEvents:UIControlEventTouchUpInside];
-            [footerView addSubview:buttonsignout];
+            [self.btnSignOut setFrame:CGRectMake(200, 64, 100, 44)];
+            [self.btnSignOut sizeToFit];
+            [self.btnSignOut setBackgroundColor:[UIColor clearColor]];
+            [self.btnSignOut addTarget:self action:@selector(Logout) forControlEvents:UIControlEventTouchUpInside];
+            [footerView addSubview:self.btnSignOut];
+            
+            self.btnForgetPassword = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
+            [self.btnForgetPassword.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
+            [self.btnForgetPassword setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [self.btnForgetPassword setBackgroundColor:[UIColor clearColor]];
+            
+            [self.btnForgetPassword addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
+            [footerView addSubview:self.btnForgetPassword];
             
             UIButton *buttonrome = [UIButton buttonWithType:UIButtonTypeCustom];
             [buttonrome setTitle:NSLocalizedString(@"“Rome wasn't built in a day.”", nil) forState:UIControlStateNormal];
-            [buttonrome.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:16]];
+            [buttonrome.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:18]];
             [buttonrome setTitleColor:[UIColor COLOR_RGB(127, 127, 127)] forState:UIControlStateNormal];
             [buttonrome setFrame:CGRectMake(40, 20, 240, 25)];
             [buttonrome setBackgroundColor:[UIColor clearColor]];
@@ -434,6 +454,15 @@
             [footerView addSubview:buttonrome];
             
             
+        }
+        if ([self.user.password boolValue]) {
+            [self.btnForgetPassword setFrame:CGRectMake(25, 64, 250, 44)];
+            [self.btnForgetPassword setTitle:NSLocalizedString(@"Change password...", nil) forState:UIControlStateNormal];
+            [self.btnForgetPassword sizeToFit];
+        } else {
+            [self.btnForgetPassword setFrame:CGRectMake(25, 64, 250, 44)];
+            [self.btnForgetPassword setTitle:NSLocalizedString(@"Set password...", nil) forState:UIControlStateNormal];
+            [self.btnForgetPassword sizeToFit];
         }
         return footerView;
     }
@@ -596,6 +625,13 @@
 
 - (void) Logout {
     [Util signout];
+}
+
+- (void) forgetPwd:(id)view
+{
+    EFChangePasswordViewController *viewController = [[EFChangePasswordViewController alloc] initWithModel:self.model];
+    viewController.user = self.user;
+    [self presentModalViewController:viewController animated:YES];
 }
 
 - (Identity*) getIdentityById:(int)identity_id{

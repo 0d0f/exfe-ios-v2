@@ -12,6 +12,7 @@
 #import "Exfee+EXFE.h"
 #import "EFKit.h"
 #import "EXFEModel.h"
+#import "DateTimeUtil.h"
 
 @interface EFAPIServer (Private)
 - (void)_handleSuccessWithRequestOperation:(NSOperation *)operation andResponseObject:(id)object;
@@ -351,6 +352,41 @@
 
 // endpoint: ResetPassword
 
+
+// endpoint: Set Password
+- (void)changePassword:(NSString*)current_password
+                  with:(NSString*)new_password
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSString *endpoint = [NSString stringWithFormat:@"users/setpassword?token=%@", self.model.userToken];
+    RKObjectManager *manager = self.model.objectManager;
+    manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    
+    NSDictionary* params = @{@"current_password":current_password, @"new_password":new_password};
+    [manager.HTTPClient postPath:endpoint
+                      parameters:params
+                         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                             [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
+                             
+                             if (success) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     success(operation, responseObject);
+                                 });
+                             }
+                         }
+                         failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                             [self _handleFailureWithRequestOperation:operation andError:error];
+                             
+                             if (failure) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     failure(operation, error);
+                                 });
+                             }
+                         }];
+}
+
+
 #pragma mark Sign In, Sign Out, Sign Up and Pre Check APIs
 
 - (void)getRegFlagBy:(NSString*)identity
@@ -619,7 +655,7 @@
 
 #pragma mark Cross API
 
-- (void)loadCrossesAfter:(NSString*)updatedtime
+- (void)loadCrossesAfter:(NSDate*)updatedtime
                  success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                  failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
 {
@@ -646,18 +682,19 @@
 }
 
 - (void)loadCrossesBy:(NSInteger)user_id
-          updatedtime:(NSString*)updatedtime
+          updatedtime:(NSDate*)updatedtime
               success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
 {
+    NSString *endpoint = [NSString stringWithFormat:@"users/%u/crosses", self.model.userId];
+    
     NSDictionary *param = nil;
-    if (updatedtime != nil && ![updatedtime isEqualToString:@""]){
-        param = @{@"token": self.model.userToken,
-                  @"updated_at": updatedtime};
+    if (updatedtime != nil) {
+        NSDateFormatter *fmt = [DateTimeUtil defaultDateTimeFormatter];
+        param = @{@"token": self.model.userToken, @"updated_at": [fmt stringFromDate:updatedtime]};
     } else {
         param = @{@"token": self.model.userToken};
     }
-    NSString *endpoint = [NSString stringWithFormat:@"users/%u/crosses", self.model.userId];
     
     [[RKObjectManager sharedManager] getObjectsAtPath:endpoint
                                            parameters:param

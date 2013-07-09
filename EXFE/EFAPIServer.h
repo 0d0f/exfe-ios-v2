@@ -60,6 +60,12 @@
 
 // endpoint: ResetPassword
 
+// endpoint: Set password
+- (void)changePassword:(NSString*)current_password
+                  with:(NSString*)new_password
+               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
 #pragma mark Sign In, Sign Out, Sign Up and Pre Check APIs
 
 - (void)getRegFlagBy:(NSString*)identity
@@ -98,12 +104,12 @@
 
 #pragma mark Cross API
 
-- (void)loadCrossesAfter:(NSString*)updatedtime
+- (void)loadCrossesAfter:(NSDate*)updatedtime
                  success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                  failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 - (void)loadCrossesBy:(NSInteger)user_id
-          updatedtime:(NSString*)updatedtime
+          updatedtime:(NSDate*)updatedtime
               success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 

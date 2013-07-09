@@ -360,14 +360,7 @@
 
 - (void)refreshCrosses:(NSString*)source withCrossId:(int)cross_id {
     
-    NSString *updated_at=@"";
-    NSDate *date_updated_at = [[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-    if (date_updated_at != nil) {
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-        [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-        updated_at = [formatter stringFromDate:date_updated_at];
-    }
+    NSDate *updated_at = [[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
     if ([source isEqualToString:@"crossview_init"]) {
         //        hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
         //        hud.labelText = @"Loading";
@@ -402,10 +395,6 @@
                                                        NSArray *crosses=(NSArray*)[[mappingResult dictionary] objectForKey:@"response.crosses"];
                                                        for (Cross *cross in crosses){
                                                            id updated=cross.updated;
-                                                           NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                                                           [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-                                                           [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-                                                           NSDate *cross_updated_at = [formatter dateFromString:cross.updated_at];
                                                            
                                                            if([updated isKindOfClass:[NSDictionary class]]){
                                                                NSEnumerator *enumerator=[(NSDictionary*)updated keyEnumerator];
@@ -432,7 +421,7 @@
                                                                            
                                                                        }
                                                                        
-                                                                       if([updated_at compare: cross_updated_at] == NSOrderedDescending || [updated_at compare: cross_updated_at] == NSOrderedSame) {
+                                                                       if([updated_at compare: cross.updated_at] == NSOrderedDescending || [updated_at compare: cross.updated_at] == NSOrderedSame) {
                                                                            if([[obj objectForKey:@"identity_id"] isKindOfClass:[NSNumber class]]) {
                                                                                NSNumber *identity_id = [obj objectForKey:@"identity_id"];
                                                                                if ([[User getDefaultUser] isMeByIdentityId:identity_id] == NO){
@@ -451,9 +440,9 @@
                                                                //                      }
                                                                //                  }
                                                                if(last_updated_at==nil)
-                                                                   last_updated_at=cross_updated_at;
+                                                                   last_updated_at = cross.updated_at;
                                                                else{
-                                                                   last_updated_at=[cross_updated_at laterDate:last_updated_at];
+                                                                   last_updated_at = [cross.updated_at laterDate:last_updated_at];
                                                                }
                                                            }
                                                        }
@@ -571,7 +560,6 @@
 }
 
 - (void)refreshWelcome{
-    NSLog(@"refresh: %@ appfram:%@", NSStringFromCGRect(self.view.frame), NSStringFromCGRect([UIScreen mainScreen].applicationFrame));
     
     NSInteger count = [self getCrossCount];
     
@@ -948,6 +936,8 @@
 
 - (void)ShowProfileView{
     ProfileViewController *profileViewController = [[ProfileViewController alloc]initWithNibName:@"ProfileViewController" bundle:nil];
+    AppDelegate *app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    profileViewController.model = app.model;
     profileViewController.user = [User getDefaultUser];
     [self.navigationController pushViewController:profileViewController animated:YES];
     

@@ -13,7 +13,7 @@
 
 @implementation EXFEModel (ConversationAPI)
 
-- (void)loadConversationWithExfeeId:(int)exfeeId updatedTime:(NSString *)updatedTime {
+- (void)loadConversationWithExfeeId:(int)exfeeId updatedTime:(NSDate *)updatedTime {
     EFLoadConversationOperation *loadConversationOperation = [EFLoadConversationOperation operationWithModel:self];
     loadConversationOperation.exfeeId = exfeeId;
     loadConversationOperation.updatedTime = updatedTime;

@@ -10,6 +10,6 @@
 
 @interface EXFEModel (ConversationAPI)
 
-- (void)loadConversationWithExfeeId:(int)exfeeId updatedTime:(NSString *)updatedTime;
+- (void)loadConversationWithExfeeId:(int)exfeeId updatedTime:(NSDate *)updatedTime;
 
 @end

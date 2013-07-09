@@ -2,7 +2,7 @@
 //  IdentityId.h
 //  EXFE
 //
-//  Created by Stony Wang on 13-6-8.
+//  Created by Stony Wang on 13-7-9.
 //
 //
 
@@ -12,6 +12,6 @@
 
 @interface IdentityId : NSManagedObject
 
-@property (nonatomic, strong) NSString * identity_id;
+@property (nonatomic, retain) NSString * identity_id;
 
 @end

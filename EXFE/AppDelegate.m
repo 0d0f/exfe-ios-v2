@@ -49,7 +49,7 @@
     
     // Setup RKLog
 #ifdef DEBUG
-    RKLogConfigureByName("RestKit/Network", RKLogLevelOff);
+    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
     //    RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelDebug);
     RKLogConfigureByName("RestKit/CoreData", RKLogLevelOff);
     //    RKLogConfigureByName("RestKit/CoreData/Cache", RKLogLevelTrace);

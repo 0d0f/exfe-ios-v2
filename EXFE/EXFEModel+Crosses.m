@@ -13,7 +13,7 @@
 
 @implementation EXFEModel (Crosses)
 
-- (void)loadCrossWithCrossId:(int)crossId updatedTime:(NSString *)updatedTime {
+- (void)loadCrossWithCrossId:(int)crossId updatedTime:(NSDate *)updatedTime {
     EFLoadCrossOperation *loadCrossOperation = [EFLoadCrossOperation operationWithModel:self];
     loadCrossOperation.crossId = crossId;
     loadCrossOperation.updatedTime = updatedTime;

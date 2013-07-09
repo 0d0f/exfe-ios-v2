@@ -333,9 +333,7 @@
 {
     [super viewDidAppear:animated];
     
-    NSString *updated_at = _cross.updated_at;
-    
-    [self.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:updated_at];
+    [self.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:_cross.updated_at];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -405,6 +403,9 @@
         if ([keyPath isEqualToString:@"conversation_count"]) {
             NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"WidgetConvViewController")];
             NSAssert(viewControllers != nil && viewControllers.count, @"viewControllers 不应该为 nil 或 空");
+            if (viewControllers.count == 0) {
+                return;
+            }
             
             WidgetConvViewController *conversationViewController = viewControllers[0];
             
@@ -1391,7 +1392,7 @@
                                                      alert.tag = 403;
                                                      [alert show];
                                                  } else if ([[meta objectForKey:@"code"] intValue] == 200) {
-                                                     [self.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:@""];
+                                                     [self.model loadCrossWithCrossId:[_cross.cross_id intValue] updatedTime:nil];
                                                      
                                                      [self refreshUI];
                                                  }

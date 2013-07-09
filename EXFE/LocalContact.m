@@ -2,7 +2,7 @@
 //  LocalContact.m
 //  EXFE
 //
-//  Created by huoju on 2/21/13.
+//  Created by Stony Wang on 13-7-9.
 //
 //
 
@@ -16,8 +16,8 @@
 @dynamic im;
 @dynamic indexfield;
 @dynamic name;
+@dynamic phones;
 @dynamic social;
 @dynamic uid;
-@dynamic phones;
 
 @end

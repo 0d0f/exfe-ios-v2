@@ -2,7 +2,7 @@
 //  Invitation.m
 //  EXFE
 //
-//  Created by Stony Wang on 13-6-8.
+//  Created by Stony Wang on 13-7-9.
 //
 //
 
@@ -25,14 +25,5 @@
 @dynamic invited_by;
 @dynamic notification_identities;
 @dynamic updated_by;
-
-- (NSArray *)notification_identity_array {
-    NSMutableArray *array = [NSMutableArray arrayWithCapacity:self.notification_identities.count];
-    for (IdentityId *identityId in self.notification_identities) {
-        [array addObject:identityId.identity_id];
-    }
-    
-    return array;
-}
 
 @end

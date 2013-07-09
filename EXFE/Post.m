@@ -2,8 +2,8 @@
 //  Post.m
 //  EXFE
 //
-//  Created by ju huo on 6/6/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Stony Wang on 13-7-9.
+//
 //
 
 #import "Post.h"

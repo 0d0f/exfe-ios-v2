@@ -260,7 +260,7 @@
 }
 
 - (void)refreshConversation {
-    NSString *updated_at = @"";
+    NSDate *updated_at = nil;
     if ([_posts count] > 0) {
         Post *post = [_posts objectAtIndex:0];
         if (post && post.updated_at != nil) {
@@ -389,11 +389,6 @@
                     
                 istimehidden=NO;
                 Post *post=[_posts objectAtIndex:path.row];
-                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-                [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-                NSDate *post_created_at = [formatter dateFromString:post.created_at];
-
               
                 if(post && !timetextlayer){
                     timetextlayer=[CATextLayer layer];
@@ -413,9 +408,9 @@
                     NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
                     [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
                     [dateformat setDateFormat:@"yyyy-MM-dd"];
-                    NSString *datestr=[dateformat stringFromDate:post_created_at];
+                    NSString *datestr=[dateformat stringFromDate:post.created_at];
                     [dateformat setDateFormat:@"HH:mm:ss"];
-                    NSString *timestr=[dateformat stringFromDate:post_created_at];
+                    NSString *timestr=[dateformat stringFromDate:post.created_at];
                     NSString *timestring=[Util EXRelativeFromDateStr:datestr TimeStr:timestr type:@"conversation" localTime:NO];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:timestring];
                     [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)timefontref range:NSMakeRange(0,[timestring length])];
@@ -430,9 +425,9 @@
                     
                     [dateformat_to setTimeZone:[NSTimeZone localTimeZone]];
                     [dateformat_to setDateFormat:@"ccc, MMM d"];
-                    NSString *datestring=[dateformat_to stringFromDate:post_created_at];
+                    NSString *datestring=[dateformat_to stringFromDate:post.created_at];
                     [dateformat_to setDateFormat:@"h:mm a"];
-                    NSString *timestring=[dateformat_to stringFromDate:post_created_at];
+                    NSString *timestring=[dateformat_to stringFromDate:post.created_at];
                     timeattribstring=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@",datestring,timestring]];
                     [timeattribstring addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)timefontref range:NSMakeRange(0,[datestring length])];
                     [timeattribstring addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_FA.CGColor range:NSMakeRange(0,[datestring length])];
@@ -518,11 +513,8 @@
             
             [floattimetextlayer removeAnimationForKey:@"fadeout"];
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
-            Post *post=[_posts objectAtIndex:path.row];
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
-            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-            NSDate *post_created_at = [formatter dateFromString:post.created_at];
+            Post *post = [_posts objectAtIndex:path.row];
+            NSDate *post_created_at = post.created_at;
 
             NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
             [dateformat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];

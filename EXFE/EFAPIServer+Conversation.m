@@ -9,22 +9,23 @@
 #import "EFAPIServer+Conversation.h"
 
 #import "Util.h"
+#import "DateTimeUtil.h"
 
 @implementation EFAPIServer (Conversation)
 
 - (void)loadConversationWithExfeeId:(int)exfee_id
-                        updatedtime:(NSString*)updatedtime
+                        updatedtime:(NSDate*)updatedtime
                             success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                             failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
-    if (updatedtime!=nil && ![updatedtime isEqualToString:@""]) {
-        updatedtime = [Util encodeToPercentEscapeString:updatedtime];
-    }
-    
-    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{@"token": self.model.userToken}];
-    if (updatedtime.length > 0) {
-        [param addEntriesFromDictionary:@{ @"updated_at": updatedtime}];
-    }
     NSString *endpoint = [NSString stringWithFormat:@"conversation/%u", exfee_id];
+    
+    NSDictionary *param = nil;
+    if (updatedtime != nil) {
+        NSDateFormatter *fmt = [DateTimeUtil defaultDateTimeFormatter];
+        param = @{@"token": self.model.userToken, @"updated_at": [fmt stringFromDate:updatedtime]};
+    } else {
+        param = @{@"token": self.model.userToken};
+    }
     
     [[RKObjectManager sharedManager] getObjectsAtPath:endpoint
                                            parameters:param

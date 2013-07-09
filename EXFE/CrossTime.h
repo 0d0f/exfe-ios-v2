@@ -2,8 +2,8 @@
 //  CrossTime.h
 //  EXFE
 //
-//  Created by ju huo on 5/21/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Stony Wang on 13-7-9.
+//
 //
 
 #import <Foundation/Foundation.h>
@@ -13,8 +13,8 @@
 
 @interface CrossTime : NSManagedObject
 
-@property (nonatomic, strong) NSString * origin;
-@property (nonatomic, strong) NSNumber * outputformat;
-@property (nonatomic, strong) EFTime *begin_at;
+@property (nonatomic, retain) NSString * origin;
+@property (nonatomic, retain) NSNumber * outputformat;
+@property (nonatomic, retain) EFTime *begin_at;
 
 @end

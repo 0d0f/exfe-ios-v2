@@ -2,8 +2,8 @@
 //  Meta.h
 //  EXFE
 //
-//  Created by ju huo on 6/15/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Stony Wang on 13-7-9.
+//
 //
 
 #import <Foundation/Foundation.h>
@@ -12,8 +12,8 @@
 
 @interface Meta : NSManagedObject
 
-@property (nonatomic, strong) NSNumber * code;
-@property (nonatomic, strong) NSString * errorDetail;
-@property (nonatomic, strong) NSString * errorType;
+@property (nonatomic, retain) NSNumber * code;
+@property (nonatomic, retain) NSString * errorDetail;
+@property (nonatomic, retain) NSString * errorType;
 
 @end

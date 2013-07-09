@@ -10,6 +10,6 @@
 
 @interface EXFEModel (Crosses)
 
-- (void)loadCrossWithCrossId:(int)crossId updatedTime:(NSString *)updatedTime;
+- (void)loadCrossWithCrossId:(int)crossId updatedTime:(NSDate *)updatedTime;
 
 @end

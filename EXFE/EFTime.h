@@ -2,8 +2,8 @@
 //  EFTime.h
 //  EXFE
 //
-//  Created by ju huo on 5/21/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Stony Wang on 13-7-9.
+//
 //
 
 #import <Foundation/Foundation.h>
@@ -12,10 +12,10 @@
 
 @interface EFTime : NSManagedObject
 
-@property (nonatomic, strong) NSString * date;
-@property (nonatomic, strong) NSString * date_word;
-@property (nonatomic, strong) NSString * time;
-@property (nonatomic, strong) NSString * time_word;
-@property (nonatomic, strong) NSString * timezone;
+@property (nonatomic, retain) NSString * date;
+@property (nonatomic, retain) NSString * date_word;
+@property (nonatomic, retain) NSString * time;
+@property (nonatomic, retain) NSString * time_word;
+@property (nonatomic, retain) NSString * timezone;
 
 @end

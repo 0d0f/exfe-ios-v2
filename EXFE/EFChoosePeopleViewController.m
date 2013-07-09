@@ -836,7 +836,7 @@
                             message = [NSString stringWithFormat:@"+%@ %@", countryCode, self.searchBar.text];
                         }
                         
-                        [WCAlertView showAlertWithTitle:@"Set invitee name"
+                        [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set invitee name", nil)
                                                 message:message
                                      customizationBlock:^(WCAlertView *alertView) {
                                          alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
@@ -861,8 +861,8 @@
                                             
                                             self.hasExfeeNameSetCompletion = YES;
                                         }
-                                      cancelButtonTitle:@"Done"
-                                      otherButtonTitles:@"Cancel", nil];
+                                      cancelButtonTitle:NSLocalizedString(@"Done", nil)
+                                      otherButtonTitles:NSLocalizedString(@"Cancel", nil), nil];
                         
                         [tableView beginUpdates];
                         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];

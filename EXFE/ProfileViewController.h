@@ -16,6 +16,7 @@
 #import "CustomAttributedTextView.h"
 #import "UIUnderlinedButton.h"
 #import "OAuthLoginViewController.h"
+#import "EFModel.h"
 
 @interface ProfileViewController : UIViewController<OAuthLoginViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>{
 //    IBOutlet UIToolbar* toolbar;
@@ -30,9 +31,9 @@
     
     NSArray * _identitiesData;
     UIView *footerView;
-    UIButton *buttonsignout;
 }
 
+@property (nonatomic, strong) EXFEModel *model;
 @property (nonatomic, strong) User *user;
 
 - (void) Logout;

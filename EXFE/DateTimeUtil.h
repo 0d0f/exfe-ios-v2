@@ -36,4 +36,6 @@
 
 + (NSTimeInterval)secondsBetween:(NSString*)date1 with:(NSString*)date2;
 
++ (NSDateFormatter*)defaultDateTimeFormatter;
+
 @end

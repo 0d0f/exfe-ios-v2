@@ -407,6 +407,7 @@ static NSString * kExtension           = @"exfe";
         
         NSFileManager *fileManager= [NSFileManager defaultManager];
         BOOL isDir  = NO;
+        NSString *plistPath = [userDirectoryPath stringByAppendingPathComponent:kInfoFileName];
         if(![fileManager fileExistsAtPath:userDirectoryPath isDirectory:&isDir]){
             if(![fileManager createDirectoryAtPath:userDirectoryPath withIntermediateDirectories:YES attributes:nil error:NULL]){
 //                NSLog(@"Error: Create folder failed %@", userDirectoryPath);
@@ -415,12 +416,37 @@ static NSString * kExtension           = @"exfe";
                     // create exfeInfo.plist to prevent abandon
                     NSMutableDictionary *exfeInfo = [NSMutableDictionary dictionary];
                     [exfeInfo setValue:[NSString stringWithFormat:@"%u", self.userId] forKey:@"user_id"];
-                    [exfeInfo removeObjectForKey:@"exfee_updated_at"];
                     [exfeInfo setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
-                    
-                    NSString *plistPath = [userDirectoryPath stringByAppendingPathComponent:kInfoFileName];
                     [exfeInfo writeToFile:plistPath atomically:YES];
+                    
+                    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+                    [ud removeObjectForKey:@"exfee_updated_at"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
                 }
+            }
+        } else {
+            if (isDir) {
+                // check if need upgrade db
+                NSMutableDictionary *exfeInfo = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
+                NSNumber *app_db_version = [exfeInfo objectForKey:@"db_version"];
+                if (app_db_version == nil || [app_db_version intValue] < APP_DB_VERSION) {
+                    // upgrade db: simple way (delete it)
+                    NSError *error = nil;
+                    if ([fileManager removeItemAtPath:databasePath error:&error]) {
+                        NSLog(@"deleted");
+                        [exfeInfo setObject:[NSNumber numberWithInt:APP_DB_VERSION] forKey:@"db_version"];
+                        [exfeInfo writeToFile:plistPath atomically:YES];
+                        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+                        [ud removeObjectForKey:@"exfee_updated_at"];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    } else {
+                        // error;
+                        NSLog(@"%@", error);
+                    }
+                }
+                
+            } else {
+                // not a directory fail
             }
         }
     }

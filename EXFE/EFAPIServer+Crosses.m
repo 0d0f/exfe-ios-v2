@@ -9,21 +9,25 @@
 #import "EFAPIServer+Crosses.h"
 
 #import "Util.h"
+#import "DateTimeUtil.h"
 #import "Cross.h"
 #import "EFKit.h"
 
 @implementation EFAPIServer (Crosses)
 
 - (void)loadCrossWithCrossId:(int)corss_id
-                 updatedtime:(NSString*)updatedtime
+                 updatedtime:(NSDate*)updatedtime
                      success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                      failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
-    if (updatedtime != nil && ![updatedtime isEqualToString:@""]) {
-        updatedtime = [Util encodeToPercentEscapeString:updatedtime];
-    }
+    NSString *endpoint = [NSString stringWithFormat:@"crosses/%u", corss_id];
     
-    NSDictionary *param = @{@"token": self.model.userToken};
-    NSString *endpoint = [NSString stringWithFormat:@"crosses/%u?updated_at=%@", corss_id, updatedtime];
+    NSDictionary *param = nil;
+    if (updatedtime != nil) {
+        NSDateFormatter *fmt = [DateTimeUtil defaultDateTimeFormatter];
+        param = @{@"token": self.model.userToken, @"updated_at": [fmt stringFromDate:updatedtime]};
+    } else {
+        param = @{@"token": self.model.userToken};
+    }
     
     [[RKObjectManager sharedManager] getObjectsAtPath:endpoint
                                            parameters:param

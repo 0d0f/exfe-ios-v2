@@ -200,7 +200,6 @@ typedef enum {
 - (void)willMoveToParentViewController:(UIViewController *)parent
 {
     if (parent == nil) {
-        [self.exfee debugPrint];
         
         [self.onExitBlock invoke];
     }
@@ -1205,7 +1204,7 @@ typedef enum {
                                                      CrossGroupViewController *crossGroupViewController = viewControllers[0];
                                                      AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
                                                      
-                                                     [app.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue] updatedTime:@""];
+                                                     [app.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue] updatedTime:nil];
                                                      
                                                      self.exfee = crossGroupViewController.cross.exfee;
                                                      [exfeeContainer reloadData];

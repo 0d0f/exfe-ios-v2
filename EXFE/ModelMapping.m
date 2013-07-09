@@ -11,16 +11,14 @@
 #import "Cross.h"
 #import "Exfee+EXFE.h"
 #import "IdentityId.h"
+#import "DateTimeUtil.h"
 
 @implementation ModelMapping
 + (void) buildMapping{
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     
     // Date Formmater
-    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
-    dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    NSDateFormatter *dateFormatter = [DateTimeUtil defaultDateTimeFormatter];
     [RKObjectMapping addDefaultDateFormatter:dateFormatter];
     [RKEntityMapping addDefaultDateFormatter:dateFormatter];
     
@@ -49,7 +47,7 @@
     // Identity Request Object
     RKObjectMapping *identityrequestMapping = [RKObjectMapping requestMapping];
     [identityrequestMapping addAttributeMappingsFromDictionary:@{@"identity_id": @"id",@"a_order": @"order"}];
-    [identityrequestMapping addAttributeMappingsFromArray:@[@"name",@"nickname",@"provider",@"external_id",@"external_username",@"connected_user_id",@"bio",@"avatar_filename",@"avatar_updated_at",@"created_at",@"updated_at",@"type",@"unreachable",@"status"]];
+    [identityrequestMapping addAttributeMappingsFromArray:@[@"name",@"nickname",@"provider",@"external_id",@"external_username",@"connected_user_id",@"bio",@"avatar_filename",@"created_at",@"updated_at",@"type",@"unreachable",@"status"]];
     
     // IdentityId Entity
     RKEntityMapping *identityIdMapping = [RKEntityMapping mappingForEntityForName:@"IdentityId" inManagedObjectStore:managedObjectStore];
@@ -93,16 +91,19 @@
     
     [exfeerequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"invitations" toKeyPath:@"invitations" withMapping:invitationrequestMapping]];
     
+    // Device Entity
+    RKEntityMapping *deviceMapping = [RKEntityMapping mappingForEntityForName:@"Device" inManagedObjectStore:managedObjectStore];
+    deviceMapping.identificationAttributes = @[ @"device_id"];
+    [deviceMapping addAttributeMappingsFromDictionary:@{@"id": @"device_id", @"description": @"device_description"}];
+    [deviceMapping addAttributeMappingsFromArray:@[@"name", @"brand", @"model", @"os_name", @"os_version", @"status", @"first_connected_at",@"last_connected_at", @"disconnected_at"]];
+    
     // User Entity
     RKEntityMapping *userMapping = [RKEntityMapping mappingForEntityForName:@"User" inManagedObjectStore:managedObjectStore];
     userMapping.identificationAttributes = @[ @"user_id" ];
-    [userMapping addAttributeMappingsFromDictionary:@{@"id": @"user_id",
-     @"avatar_filename": @"avatar_filename",
-     @"bio": @"bio",
-     @"cross_quantity": @"cross_quantity",
-     @"name": @"name",
-     @"timezone": @"timezone"}];
+    [userMapping addAttributeMappingsFromDictionary:@{@"id": @"user_id"}];
+    [userMapping addAttributeMappingsFromArray:@[@"avatar_filename", @"bio", @"cross_quantity", @"name", @"timezone", @"locale", @"created_at",@"updated_at", @"password", @"webcal"]];
     [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identities" toKeyPath:@"identities" withMapping:identityMapping]];
+    [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"devices" toKeyPath:@"devices" withMapping:deviceMapping]];
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping pathPattern:nil keyPath:@"response.user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:responseDescriptor];
     
