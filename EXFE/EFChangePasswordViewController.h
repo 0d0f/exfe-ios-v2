@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAuthLoginViewController.h"
 
-@interface EFChangePasswordViewController : UIViewController<UITextFieldDelegate>
+@interface EFChangePasswordViewController : UIViewController<UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, OAuthLoginViewControllerDelegate>
 
 @property (nonatomic, strong) User * user;
 

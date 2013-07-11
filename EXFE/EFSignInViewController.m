@@ -957,32 +957,63 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             NSString *external_username = [dict valueForKeyPath:@"external_username"];
             AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
             [app.model.apiServer verifyIdentity:external_username with:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                    NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-                    if (code) {
-                        NSInteger c = [code integerValue];
-                        switch (c) {
-                            case 200:{
-                                NSString *action = [responseObject valueForKeyPath:@"response.action"];
-                                if ([@"VERIFYING" isEqualToString:action]) {
-                                    // contiue wait;
-                                } else if ([@"REDIRECT" isEqualToString:action]){
-                                    NSString *url = [responseObject valueForKeyPath:@"response.url"];
-                                    if (url) {
+                if ([operation.response statusCode] == 200 ){
+                    if( [responseObject isKindOfClass:[NSDictionary class]]){
+                        NSDictionary *body = responseObject;
+                        NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                        if (code) {
+                            NSInteger c = [code integerValue];
+                            NSInteger t = c / 100;
+                            switch (t) {
+                                case 2:{
+                                    NSString *action = [responseObject valueForKeyPath:@"response.action"];
+                                    if ([@"VERIFYING" isEqualToString:action]) {
+                                        // contiue wait;
+                                    } else if ([@"REDIRECT" isEqualToString:action]){
                                         // start oAuth by provider
+                                        NSString * url = [body valueForKeyPath:@"response.url"];
+                                        if (url.length > 0) {
+                                            NSDictionary *identity = [body valueForKeyPath:@"response.identity"];
+                                            Provider provider = [Identity getProviderCode:[identity valueForKey:@"provider"]];
+                                            
+                                            OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+                                            oauth.provider = provider;
+                                            oauth.delegate = self;
+                                            oauth.oAuthURL = url;
+                                            switch (provider) {
+                                                case kProviderTwitter:
+                                                    oauth.matchedURL = @"https://api.twitter.com/oauth/auth";
+                                                    oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", [identity valueForKey:@"external_id"]];
+                                                    break;
+                                                case kProviderFacebook:
+                                                    oauth.matchedURL = @"http://m.facebook.com/login.php?";
+                                                    oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", [identity valueForKey:@"external_username"]];
+                                                    break;
+                                                default:
+                                                    oauth.matchedURL = nil;
+                                                    oauth.javaScriptString = nil;
+                                                    break;
+                                            }
+                                            
+                                            [self presentModalViewController:oauth animated:YES];
+
+                                        }
                                     }
-                                }
-                            }    break;
-                            case 400:{
-                                NSString *errorType = [responseObject valueForKeyPath:@"meta.code"];
-                                if ([@"identity_does_not_exist" isEqualToString:errorType]) {
-                                    [self setStage:kStageSignUp];
-                                } else if ([@"no_need_to_verify" isEqualToString:errorType]) {
-                                    [self setStage:kStageSignIn];
-                                }
-                            }  break;
-                            default:
-                                break;
+                                }    break;
+                                case 4:{
+                                    if (c == 401) {
+                                        NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
+                                        if ([@"identity_does_not_exist" isEqualToString:errorType]) {
+                                            [self setStage:kStageSignUp];
+                                        } else if ([@"no_need_to_verify" isEqualToString:errorType]) {
+                                            [self setStage:kStageSignIn];
+                                        }
+                                    }
+                                    
+                                }  break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                 }

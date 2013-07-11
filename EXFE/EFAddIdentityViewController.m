@@ -624,16 +624,8 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     NSDictionary *dict = [Util parseIdentityString:_inputIdentity.text byProvider:provider];
     NSString *username = [dict valueForKeyPath:@"external_username"];
     
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    NSDictionary *param = nil;
-    if (provider == kProviderTwitter || provider == kProviderFacebook) {
-        // eg:  exfe://oauthcallback/
-        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
-        
-        param = @{@"device_callback": callback, @"device": @"iOS"};
-    }
-    
-    [app.model.apiServer addIdentityBy:[dict valueForKeyPath:@"external_username"] withProvider:provider param:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;    
+    [app.model.apiServer addIdentityBy:[dict valueForKeyPath:@"external_username"] withProvider:provider success:^(AFHTTPRequestOperation *operation, id responseObject) {
         sender.enabled = YES;
         [self hideIndicator];
         
@@ -778,62 +770,72 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                               hud.customView = bigspin;
                                               
                                               AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-                                              [app.model.apiServer addReverseAuthIdentity:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                  [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                                  if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                                      NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-                                                      if (code) {
-                                                          NSInteger type = [code integerValue] / 100;
-                                                          
-                                                          switch (type) {
-                                                              case 2:{
-                                                                  // [code integerValue] == 200
-                                                                  [self loadUserAndExit];
-                                                                  // ask for more permissions
-                                                                  //                            NSArray *permissions = @[@"user_photos", @"friends_photos"];
-                                                                  //                            [[FBSession activeSession] requestNewReadPermissions:permissions completionHandler:^(FBSession *session, NSError *error) {
-                                                                  //                                ;
-                                                                  //
-                                                              }   break;
-                                                              case 4:{
-                                                                  // [code integerValue] == 403
-                                                                  if ([@"invalid_token" isEqualToString:[responseObject valueForKeyPath:@"meta.errorType"]] ) {
-                                                                      [self showInlineError:NSLocalizedString(@"Invalid token.", nil) with:NSLocalizedString(@"There is something wrong. Please try again later.", nil)];
-                                                                      
-                                                                      [self syncFBAccount];
-                                                                      
-                                                                  }
-                                                              }
-                                                                  break;
-                                                              default:
-                                                                  break;
-                                                          }
-                                                      }
-                                                  }
-                                              } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                  if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
-                                                      switch (error.code) {
-                                                          case NSURLErrorTimedOut: //-1001
-                                                          case NSURLErrorCannotFindHost: //-1003
-                                                          case NSURLErrorCannotConnectToHost: //-1004
-                                                          case NSURLErrorNetworkConnectionLost: //-1005
-                                                          case NSURLErrorDNSLookupFailed: //-1006
-                                                          case NSURLErrorHTTPTooManyRedirects: //-1007
-                                                          case NSURLErrorResourceUnavailable: //-1008
-                                                          case NSURLErrorNotConnectedToInternet: //-1009
-                                                          case NSURLErrorRedirectToNonExistentLocation: //-1010
-                                                          case NSURLErrorServerCertificateUntrusted: //-1202
-                                                              [Util showConnectError:error delegate:nil];
-                                                              //                                                              [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
-                                                              break;
-                                                              
-                                                          default:
-                                                              break;
-                                                      }
-                                                  }
-                                                  
-                                                  [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                              }];
+                                              [app.model.apiServer addReverseAuthIdentity:kProviderFacebook
+                                                                                withToken:session.accessTokenData.accessToken
+                                                                                 andParam:params
+                                                                                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                                      [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                                                      if ([operation.response statusCode] == 200){
+                                                                                          if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                                                                                              NSDictionary *body = responseObject;
+                                                                                              NSNumber *code = [body valueForKeyPath:@"meta.code"];
+                                                                                              if (code) {
+                                                                                                  NSInteger c = [code integerValue];
+                                                                                                  NSInteger type =  c / 100;
+                                                                                                  switch (type) {
+                                                                                                      case 2:{
+                                                                                                          // [code integerValue] == 200
+                                                                                                          [self loadUserAndExit];
+                                                                                                          // ask for more permissions
+                                                                                                          //                            NSArray *permissions = @[@"user_photos", @"friends_photos"];
+                                                                                                          //                            [[FBSession activeSession] requestNewReadPermissions:permissions completionHandler:^(FBSession *session, NSError *error) {
+                                                                                                          //                                ;
+                                                                                                          //
+                                                                                                      }   break;
+                                                                                                      case 4:{
+                                                                                                          NSString *errorType = [body valueForKeyPath:@"meta.errorType"];
+                                                                                                          if ([@"invalid_token" isEqualToString:errorType] ) { // 403
+                                                                                                              [self showInlineError:NSLocalizedString(@"Invalid token.", nil) with:NSLocalizedString(@"There is something wrong. Please try again later.", nil)];
+                                                                                                              
+                                                                                                              [self syncFBAccount];
+                                                                                                              
+                                                                                                          } if ([@"invalid_oauth_token" isEqualToString:errorType]) { // 400
+                                                                                                              // TODO: ask user to login fb on phone setting
+                                                                                                          }
+                                                                                                      }
+                                                                                                          break;
+                                                                                                      default:
+                                                                                                          break;
+                                                                                                  }
+                                                                                              }
+                                                                                          }
+                                                                                      }
+                                                                                  }
+                                               
+                                                                                  failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                                      if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                                                                                          switch (error.code) {
+                                                                                              case NSURLErrorTimedOut: //-1001
+                                                                                              case NSURLErrorCannotFindHost: //-1003
+                                                                                              case NSURLErrorCannotConnectToHost: //-1004
+                                                                                              case NSURLErrorNetworkConnectionLost: //-1005
+                                                                                              case NSURLErrorDNSLookupFailed: //-1006
+                                                                                              case NSURLErrorHTTPTooManyRedirects: //-1007
+                                                                                              case NSURLErrorResourceUnavailable: //-1008
+                                                                                              case NSURLErrorNotConnectedToInternet: //-1009
+                                                                                              case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                                                                              case NSURLErrorServerCertificateUntrusted: //-1202
+                                                                                                  [Util showConnectError:error delegate:nil];
+                                                                                                  //                                                              [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                                                                                                  break;
+                                                                                                  
+                                                                                              default:
+                                                                                                  break;
+                                                                                          }
+                                                                                      }
+                                                                                      
+                                                                                      [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                                                  }];
                                           }
                                               break;
                                               

@@ -314,8 +314,6 @@
                          }];
 }
 
-// endpoint: VerifyUserIdentity
-
 - (void)forgetPassword:(NSString*)identity
                   with:(Provider)provider
                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
@@ -363,7 +361,10 @@
     RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
+    
     NSDictionary* params = @{@"current_password":current_password, @"new_password":new_password};
+    
+    
     [manager.HTTPClient postPath:endpoint
                       parameters:params
                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -767,7 +768,7 @@
     NSParameterAssert(token > 0);
     NSDictionary *param = @{@"token": token};
     NSString *endpoint = [NSString stringWithFormat:@"users/%u",user_id];
-    [[RKObjectManager sharedManager].HTTPClient getPath:endpoint
+    [self.model.objectManager.HTTPClient getPath:endpoint
                                              parameters:param
                                                 success:^(AFHTTPRequestOperation *operation, id responseObject){
                                                     [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
@@ -808,8 +809,8 @@
     NSDictionary *param = @{@"browsing_identity_token":token, @"identity_ids":idlist};
     NSString *endpoint = [NSString stringWithFormat:@"users/%u/mergeIdentities?token=%@", self.model.userId, self.model.userToken];
                      
-    [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
-    [[RKObjectManager sharedManager].HTTPClient postPath:endpoint
+    self.model.objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    [self.model.objectManager.HTTPClient postPath:endpoint
                                               parameters:param
                                                  success:^(AFHTTPRequestOperation *operation, id responseObject){
                                                      [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
@@ -831,18 +832,18 @@
                                                  }];
 }
 
-- (void)verifyUserIdentity:(int)identity_id
+// endpoint: VerifyUserIdentity
+- (void)verifyUserIdentity:(NSInteger)identity_id
                    success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    // eg:  exfe://oauthcallback/
     NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
     
     NSString *endpoint = [NSString stringWithFormat:@"users/VerifyUserIdentity?token=%@", self.model.userToken];
     NSDictionary *param = @{@"identity_id":[NSNumber numberWithInt:identity_id],@"device_callback":callback,@"device":@"iOS"};
     
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    RKObjectManager *objectManager = self.model.objectManager;
     objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     [objectManager.HTTPClient postPath:endpoint
                             parameters:param
@@ -867,14 +868,14 @@
                                }];
 }
 
-- (void)removeUserIdentity:(int)identity_id
+- (void)removeUserIdentity:(NSInteger)identity_id
                    success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
     NSString *endpoint = [NSString stringWithFormat:@"users/%u/deleteIdentity?token=%@", self.model.userId, self.model.userToken];
     NSDictionary *param = @{@"identity_id":[NSNumber numberWithInt:identity_id]};
                             
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    RKObjectManager *objectManager = self.model.objectManager;
     objectManager.HTTPClient.parameterEncoding=AFFormURLParameterEncoding;
     [objectManager.HTTPClient postPath:endpoint
                             parameters:param
@@ -909,8 +910,8 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"identities/%i/update?token=%@", [identity.identity_id intValue], self.model.userToken];
     
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    RKObjectManager *objectManager = self.model.objectManager;
+    objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
     if (name) {
         [dict setObject:name forKey:@"name"];
@@ -948,8 +949,8 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"users/update?token=%@", self.model.userToken];
     
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    RKObjectManager *objectManager = self.model.objectManager;
+    objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
     [objectManager.HTTPClient postPath:endpoint
                             parameters:@{@"name":name}
@@ -975,20 +976,22 @@
 
 - (void)addIdentityBy:(NSString*)external_username
          withProvider:(Provider)provider
-                param:(NSDictionary*)param
               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSString *endpoint = [NSString stringWithFormat:@"users/%u/addIdentity?token=%@", self.model.userId, self.model.userToken];
     
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    RKObjectManager *objectManager = self.model.objectManager;
+    objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params addEntriesFromDictionary:@{@"external_username":external_username, @"provider": [Identity getProviderString:provider]}];
-    if (param) {
-        [params addEntriesFromDictionary:param];
+    
+    if (provider == kProviderTwitter || provider == kProviderFacebook) {
+        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+        
+        [params addEntriesFromDictionary: @{@"device_callback": callback, @"device": @"iOS"}];
     }
     
     [objectManager.HTTPClient postPath:endpoint
@@ -1031,8 +1034,8 @@
     
     NSString *endpoint = [NSString stringWithFormat:@"users/%u/addIdentity?token=%@", self.model.userId, self.model.userToken];
     
-    RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    [RKObjectManager sharedManager].HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    RKObjectManager *objectManager = self.model.objectManager;
+    objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:[Identity getProviderString:provider] forKey:@"provider"];

@@ -139,11 +139,11 @@
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-- (void)verifyUserIdentity:(int)identity_id
+- (void)verifyUserIdentity:(NSInteger)identity_id
                    success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
-- (void)removeUserIdentity:(int)identity_id
+- (void)removeUserIdentity:(NSInteger)identity_id
                    success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
@@ -161,7 +161,6 @@
 
 - (void)addIdentityBy:(NSString*)external_username
          withProvider:(Provider)provider
-                param:(NSDictionary*)param
               success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
               failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 

@@ -156,8 +156,7 @@
 }
 
 - (void)syncUser {
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model loadMe];
+    [self.model loadMe];
 }
 
 - (void)tapProfileHeader:(UITapGestureRecognizer*)sender
@@ -178,8 +177,7 @@
                                 UITextField *field = [alertView textFieldAtIndex:0];
                                 NSString *name = field.text;
                                 if (name && name.length > 0) {
-                                    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-                                    [app.model.apiServer updateName:name success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                    [self.model.apiServer updateName:name success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                         if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                             NSDictionary *body=responseObject;
                                             if([body isKindOfClass:[NSDictionary class]]) {
@@ -525,8 +523,7 @@
                                     UITextField *field = [alertView textFieldAtIndex:0];
                                     NSString *name = field.text;
                                     if (name && name.length > 0) {
-                                        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-                                        [app.model.apiServer updateIdentity:identity name:name andBio:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                        [self.model.apiServer updateIdentity:identity name:name andBio:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                                 NSDictionary *body=responseObject;
                                                 if([body isKindOfClass:[NSDictionary class]]) {
@@ -592,8 +589,7 @@
 
 - (void) deleteIdentity:(int)identity_id{
     
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model.apiServer removeUserIdentity:identity_id
+    [self.model.apiServer removeUserIdentity:identity_id
                                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                  if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
                                                      NSDictionary *body=responseObject;
@@ -608,9 +604,8 @@
                                                                      if(identity_id_str!=nil && user_id_str!=nil){
                                                                          int response_identity_id=[identity_id_str intValue];
                                                                          int response_user_id=[user_id_str intValue];
-                                                                         AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
                                                                          
-                                                                         if(response_identity_id==identity_id && response_user_id == app.model.userId){
+                                                                         if(response_identity_id==identity_id && response_user_id == self.model.userId){
                                                                              [self deleteIdentityUI:identity_id];
                                                                          }
                                                                      }
@@ -629,9 +624,17 @@
 
 - (void) forgetPwd:(id)view
 {
-    EFChangePasswordViewController *viewController = [[EFChangePasswordViewController alloc] initWithModel:self.model];
-    viewController.user = self.user;
-    [self presentModalViewController:viewController animated:YES];
+    if (self.user.password) {
+        EFChangePasswordViewController *viewController = [[EFChangePasswordViewController alloc] initWithModel:self.model];
+        viewController.user = self.user;
+        [self presentModalViewController:viewController animated:YES];
+    } else {
+        // set password
+        // popup
+        //  may login verify for 401 xxx
+        // 
+    }
+    
 }
 
 - (Identity*) getIdentityById:(int)identity_id{
@@ -670,58 +673,68 @@
 
 - (void) doVerify:(int)identity_id{
     
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model.apiServer verifyUserIdentity:identity_id
-                                             success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                                     NSDictionary *body=responseObject;
-                                                     if([body isKindOfClass:[NSDictionary class]]) {
-                                                         id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                                                         if(code){
-                                                             if([code intValue]==200) {
-                                                                 NSDictionary *responseobj=[body objectForKey:@"response"];
-                                                                 if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"]  && [responseobj objectForKey:@"url"] != nil)
-                                                                 {
-//                                                                     OAuthAddIdentityViewController *oauth=[[OAuthAddIdentityViewController alloc] initWithNibName:@"OAuthAddIdentityViewController" bundle:nil];
-//                                                                     oauth.parentView=self;
-//                                                                     oauth.oauth_url=[responseobj objectForKey:@"url"];
-//                                                                     [self presentModalViewController:oauth animated:YES];
-//                                                                     [oauth release];
-                                                                     Identity *identity = [self getIdentityById:identity_id];
-                                                                     Provider provider = [Identity getProviderCode:identity.provider];
-                                                                     
-                                                                     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-                                                                     oauth.provider = provider;
-                                                                     oauth.delegate = self;
-                                                                     oauth.oAuthURL = [responseobj objectForKey:@"url"];
-                                                                     if (username) {
-                                                                         switch (provider) {
-                                                                             case kProviderTwitter:
-                                                                                 oauth.matchedURL = @"https://api.twitter.com/oauth/auth";
-                                                                                 oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", username];
-                                                                                 break;
-                                                                             case kProviderFacebook:
-                                                                                 oauth.matchedURL = @"http://m.facebook.com/login.php?";
-                                                                                 oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", username];
-                                                                                 break;
-                                                                             default:
-                                                                                 break;
-                                                                         }
-                                                                     } else {
-                                                                         oauth.matchedURL = nil;
-                                                                         oauth.javaScriptString = nil;
-                                                                     }
-                                                                     [self presentModalViewController:oauth animated:YES];
-                                                                     
-                                                                 }
-                                                             }
-                                                             else{
-                                                             }
-                                                         }
-                                                     }
-                                                 }
-                                             }
-                                             failure:nil];
+    [self.model.apiServer verifyUserIdentity:identity_id
+                                    success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                        if ([operation.response statusCode] == 200){
+                                            if([responseObject isKindOfClass:[NSDictionary class]]) {
+                                                NSDictionary *body = responseObject;
+                                                NSNumber *code = [body valueForKeyPath:@"meta.code"];
+                                                if (code) {
+                                                    NSInteger c = [code integerValue];
+                                                    NSInteger t = c / 100;
+                                                    switch (t) {
+                                                        case 2:{
+                                                            if (c == 200) {
+                                                                NSString *action = [body valueForKeyPath:@"response.action"];
+                                                                
+                                                                if ([@"REDIRECT" isEqualToString:action]) {
+                                                                    NSString * url = [body valueForKeyPath:@"response.url"];
+                                                                    if (url.length > 0) {
+                                                                        NSDictionary *identity = [body valueForKeyPath:@"response.identity"];
+                                                                        Provider provider = [Identity getProviderCode:[identity valueForKey:@"provider"]];
+                                                                        
+                                                                        OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+                                                                        oauth.provider = provider;
+                                                                        oauth.delegate = self;
+                                                                        oauth.oAuthURL = url;
+                                                                        switch (provider) {
+                                                                            case kProviderTwitter:
+                                                                                oauth.matchedURL = @"https://api.twitter.com/oauth/auth";
+                                                                                oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", [identity valueForKey:@"external_id"]];
+                                                                                break;
+                                                                            case kProviderFacebook:
+                                                                                oauth.matchedURL = @"http://m.facebook.com/login.php?";
+                                                                                oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", [identity valueForKey:@"external_username"]];
+                                                                                break;
+                                                                            default:
+                                                                                oauth.matchedURL = nil;
+                                                                                oauth.javaScriptString = nil;
+                                                                                break;
+                                                                        }
+                                                                        
+                                                                        [self presentModalViewController:oauth animated:YES];
+
+                                                                    }
+                                                                }
+                                                            }
+                                                        }  break;
+                                                        case 3:{
+                                                            
+                                                        }  break;
+                                                        case 4:{
+                                                            
+                                                        }  break;
+                                                        case 5:{
+                                                            
+                                                        }  break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    failure:nil];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
