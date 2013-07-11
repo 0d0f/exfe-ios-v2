@@ -19,6 +19,13 @@ typedef NS_ENUM(NSUInteger, Provider){
     kProviderDropbox
 } ;
 
+typedef NS_ENUM(NSUInteger, ProviderType){
+    kProviderTypeUnknown = 0,
+    kProviderTypeVerification,
+    kProviderTyperAuthorization
+} ;
+
+
 @class RoughIdentity, IdentityId;
 @interface Identity (EXFE)
 
@@ -27,6 +34,9 @@ typedef NS_ENUM(NSUInteger, Provider){
 
 + (Provider)getProviderCode:(NSString*)str;
 + (NSString*)getProviderString:(Provider)code;
++ (ProviderType)getProviderTypeByString:(NSString*)str;
++ (ProviderType)getProviderTypeByCode:(Provider)code;
+
 
 // if there's no such identity, return nil.
 + (Identity *)identityFromLocalRoughIdentity:(RoughIdentity *)roughIdentity;

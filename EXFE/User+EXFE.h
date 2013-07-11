@@ -16,5 +16,7 @@
 - (NSArray*) sortedIdentiesById;
 
 + (User*) getDefaultUser;
++ (User*) getDefaultUserFrom:(EXFEModel*)model;
 + (User*) getUserById:(int)userId;
++ (User*) getUserFrom:(EXFEModel*)model byId:(int)userId;
 @end

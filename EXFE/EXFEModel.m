@@ -443,6 +443,8 @@ static NSString * kExtension           = @"exfe";
                         // error;
                         NSLog(@"%@", error);
                     }
+                } else {
+                    NSLog(@"normal start up");
                 }
                 
             } else {

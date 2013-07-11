@@ -61,8 +61,44 @@
             //break;
         case kProviderDropbox:
             return @"dropbox";
+            //break;
         default:
             return @"";
+            break;
+    }
+}
+
++ (ProviderType)getProviderTypeByString:(NSString*)str
+{
+    return [self getProviderTypeByCode:[self getProviderCode:str]];
+}
+
++ (ProviderType)getProviderTypeByCode:(Provider)code
+{
+    switch (code) {
+        case kProviderEmail:
+            return kProviderTypeVerification;
+            //break;
+        case kProviderPhone:
+            return kProviderTypeVerification;
+            //break;
+        case kProviderTwitter:
+            return kProviderTyperAuthorization;
+            //break;
+        case kProviderFacebook:
+            return kProviderTyperAuthorization;
+            //break;
+        case kProviderInstagram:
+            return kProviderTyperAuthorization;
+            //break;
+        case kProviderFlickr:
+            return kProviderTyperAuthorization;
+            //break;
+        case kProviderDropbox:
+            return kProviderTyperAuthorization;
+            //break;
+        default:
+            return kProviderTypeUnknown;
             break;
     }
 }

@@ -2,7 +2,7 @@
 //  Device.m
 //  EXFE
 //
-//  Created by Stony Wang on 13-7-9.
+//  Created by Stony Wang on 13-7-10.
 //
 //
 
@@ -11,16 +11,16 @@
 
 @implementation Device
 
-@dynamic name;
 @dynamic brand;
-@dynamic model;
-@dynamic os_name;
-@dynamic os_version;
 @dynamic device_description;
-@dynamic status;
+@dynamic device_id;
+@dynamic disconnected_at;
 @dynamic first_connected_at;
 @dynamic last_connected_at;
-@dynamic disconnected_at;
-@dynamic device_id;
+@dynamic model;
+@dynamic name;
+@dynamic os_name;
+@dynamic os_version;
+@dynamic status;
 
 @end
