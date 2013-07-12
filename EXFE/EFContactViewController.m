@@ -439,7 +439,7 @@
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     searchText = [searchText stringWithoutSpace];
     
-    Provider provider = [Util matchedProvider:searchText];
+    Provider provider = [Util candidateProvider:searchText];
     if (provider != kProviderUnknown) {
         NSDictionary *matchedDictionary = [Util parseIdentityString:searchText byProvider:provider];
         self.searchResultRoughIdentity = [RoughIdentity identityWithDictionary:matchedDictionary];
@@ -447,6 +447,10 @@
         AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
         [app.model.apiServer getIdentitiesWithParams:@[matchedDictionary]
                                                       success:^(NSArray *identities){
+                                                          // 404 or 500 error will return an empty array
+                                                          if (identities.count == 0)
+                                                              return ;
+                                                          
                                                           Identity *identity = (Identity *)identities[0];
                                                           
                                                           if ([self.searchResultRoughIdentity isEqualToRoughIdentity:[identity roughIdentityValue]]) {
@@ -814,7 +818,6 @@
     }
     NSString *keyWord = [self.contactSearchBar.text stringWithoutSpace];
     Provider candidateProvider = [Util candidateProvider:keyWord];
-    Provider matchedProvider = [Util matchedProvider:keyWord];
     
     if (self.searchResultRoughIdentity) {
         EFContactObject *contactObject = [EFContactObject contactObjectWithRoughIdentity:self.searchResultRoughIdentity];
@@ -823,7 +826,6 @@
     
     [searchCell customWithIdentityString:keyWord
                        candidateProvider:candidateProvider
-                           matchProvider:matchedProvider
                                 identity:self.searchResultRoughIdentity.identity];
     
     return searchCell;
@@ -1006,7 +1008,7 @@
     NSString *keyWord = [self.contactSearchBar.text stringWithoutSpace];
     Provider matchedProvider = [Util matchedProvider:keyWord];
     
-    if (kProviderUnknown != matchedProvider) {
+    if (self.searchResultRoughIdentity.identity) {
         EFChoosePeopleViewCell *cell = (EFChoosePeopleViewCell *)[self.searchDisplayController.searchResultsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
         EFContactObject *contactObject = cell.contactObject;
         

@@ -78,7 +78,7 @@
 //    self.userNameLabel.textColor = [UIColor COLOR_BLUE_EXFE];
 //}
 
-- (void)customWithIdentityString:(NSString *)string candidateProvider:(Provider)candidateProvider matchProvider:(Provider)matchProvider identity:(Identity *)identity {
+- (void)customWithIdentityString:(NSString *)string candidateProvider:(Provider)candidateProvider identity:(Identity *)identity {
     NSString *providerName = nil;
     UIColor *textColor = [UIColor blackColor];
     
@@ -104,26 +104,23 @@
             break;
     }
     
-    switch (matchProvider) {
-        case kProviderPhone:
-        case kProviderFacebook:
-        case kProviderEmail:
-        case kProviderTwitter:
-        {
-            self.accessButton.hidden = YES;
-            textColor = [UIColor COLOR_BLUE_EXFE];
-        }
-            break;
-        default:
-            break;
+    if (identity) {
+        self.accessButton.hidden = YES;
+        textColor = [UIColor COLOR_BLUE_EXFE];
     }
     
-    if (!identity || ([Identity getProviderCode:identity.provider] == kProviderPhone && [identity.identity_id intValue] == 0)) {
+    self.userNameLabel.text = string;
+    UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
+    self.avatarImageView.image = defaultImage;
+    
+    if (providerName.length != 0) {
         UIImage *providerIcon = [UIImage imageNamed:[NSString stringWithFormat:@"identity_%@_18_grey.png", providerName]];
         self.providerIcon = providerIcon;
         if (identity) {
+            if (identity.name.length) {
+                self.userNameLabel.text = identity.name;
+            }
             NSString *imageKey = identity.avatar_filename;
-            UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
             
             if (!imageKey) {
                 self.avatarImageView.image = defaultImage;
@@ -142,8 +139,6 @@
         } else {
             self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
         }
-        
-        self.userNameLabel.text = string;
     }
     
     self.userNameLabel.textColor = textColor;
