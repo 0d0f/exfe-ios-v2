@@ -319,11 +319,19 @@
                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSString *endpoint = [NSString stringWithFormat:@"users/forgotpassword"];
-    RKObjectManager *manager = [RKObjectManager sharedManager] ;
+    RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
-    NSDictionary* params = @{@"external_username": identity, @"provider": [Identity getProviderString:provider]};
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithDictionary:@{@"external_username": identity, @"provider": [Identity getProviderString:provider]}];
+    
+    if (provider == kProviderTwitter || provider == kProviderFacebook) {
+        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+        
+        [params addEntriesFromDictionary: @{@"device_callback": callback, @"device": @"iOS"}];
+    }
+    
     [manager.HTTPClient postPath:endpoint
                       parameters:params
                          success:^(AFHTTPRequestOperation *operation, id responseObject){
@@ -361,9 +369,10 @@
     RKObjectManager *manager = self.model.objectManager;
     manager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     
-    
-    NSDictionary* params = @{@"current_password":current_password, @"new_password":new_password};
-    
+    NSMutableDictionary* params = [NSMutableDictionary dictionaryWithDictionary:@{@"new_password": new_password}];
+    if (current_password) {
+        [params addEntriesFromDictionary:@{@"current_password":current_password}];
+    }
     
     [manager.HTTPClient postPath:endpoint
                       parameters:params

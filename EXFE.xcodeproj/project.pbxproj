@@ -1337,6 +1337,12 @@
 		4FF9D12F178BE81D00D01765 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9D12E178BE81C00D01765 /* Device.m */; };
 		4FF9D130178BE81D00D01765 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9D12E178BE81C00D01765 /* Device.m */; };
 		4FF9D131178BE81D00D01765 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF9D12E178BE81C00D01765 /* Device.m */; };
+		4FF9D1CF1790724E00D01765 /* textbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FF9D1CD1790724800D01765 /* textbox.png */; };
+		4FF9D1D01790724E00D01765 /* textbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FF9D1CD1790724800D01765 /* textbox.png */; };
+		4FF9D1D11790724E00D01765 /* textbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FF9D1CD1790724800D01765 /* textbox.png */; };
+		4FF9D1D21790724E00D01765 /* textbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FF9D1CE1790724B00D01765 /* textbox@2x.png */; };
+		4FF9D1D31790724E00D01765 /* textbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FF9D1CE1790724B00D01765 /* textbox@2x.png */; };
+		4FF9D1D41790724E00D01765 /* textbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FF9D1CE1790724B00D01765 /* textbox@2x.png */; };
 		4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
 		4FFB149C16C0BFFF00F76D32 /* edit_30_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */; };
 		4FFB149D16C0BFFF00F76D32 /* edit_30_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FFB149B16C0BFFF00F76D32 /* edit_30_pressed@2x.png */; };
@@ -2375,6 +2381,8 @@
 		4FF9D129178A9E1A00D01765 /* EFChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChangePasswordViewController.m; sourceTree = "<group>"; };
 		4FF9D12D178BE81B00D01765 /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
 		4FF9D12E178BE81C00D01765 /* Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Device.m; sourceTree = "<group>"; };
+		4FF9D1CD1790724800D01765 /* textbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = textbox.png; sourceTree = "<group>"; };
+		4FF9D1CE1790724B00D01765 /* textbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbox@2x.png"; sourceTree = "<group>"; };
 		4FFB149316BFFB9600F76D32 /* SSTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSTextView.h; sourceTree = "<group>"; };
 		4FFB149416BFFB9600F76D32 /* SSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSTextView.m; sourceTree = "<group>"; };
 		4FFB149A16C0BFFF00F76D32 /* edit_30_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30_pressed.png; sourceTree = "<group>"; };
@@ -3773,6 +3781,8 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				4FF9D1CD1790724800D01765 /* textbox.png */,
+				4FF9D1CE1790724B00D01765 /* textbox@2x.png */,
 				761559B9177F1A2B00ABB62B /* header_arrow.png */,
 				761559BA177F1A2B00ABB62B /* header_arrow@2x.png */,
 				76C29C1E1754E9D10084C27F /* tabshadow_conv.png */,
@@ -5136,6 +5146,8 @@
 				761559BF177F1A2B00ABB62B /* header_arrow@2x.png in Resources */,
 				4FE0C045178347040029B694 /* Localizable.strings in Resources */,
 				4F8507E117841BBF00BB86FA /* NBPhoneNumberMetadata.plist in Resources */,
+				4FF9D1D01790724E00D01765 /* textbox.png in Resources */,
+				4FF9D1D31790724E00D01765 /* textbox@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5549,6 +5561,8 @@
 				761559BD177F1A2B00ABB62B /* header_arrow.png in Resources */,
 				761559C0177F1A2B00ABB62B /* header_arrow@2x.png in Resources */,
 				4F8507E217841BBF00BB86FA /* NBPhoneNumberMetadata.plist in Resources */,
+				4FF9D1D11790724E00D01765 /* textbox.png in Resources */,
+				4FF9D1D41790724E00D01765 /* textbox@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5960,6 +5974,8 @@
 				761559BE177F1A2B00ABB62B /* header_arrow@2x.png in Resources */,
 				4FE0C046178347050029B694 /* Localizable.strings in Resources */,
 				4F8507E017841BBF00BB86FA /* NBPhoneNumberMetadata.plist in Resources */,
+				4FF9D1CF1790724E00D01765 /* textbox.png in Resources */,
+				4FF9D1D21790724E00D01765 /* textbox@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

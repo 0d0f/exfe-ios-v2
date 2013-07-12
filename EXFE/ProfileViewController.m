@@ -165,49 +165,49 @@
 //    UIView *tappedView = [sender.view hitTest:location withEvent:nil];
     if (CGRectContainsPoint(username.frame, location)) {
         
-        EFEditProfileViewController* vc = [[EFEditProfileViewController alloc] initWithModel:self.model];
-        vc.user = self.user;
-        [self.navigationController pushViewController:vc animated:YES];
+//        EFEditProfileViewController* vc = [[EFEditProfileViewController alloc] initWithModel:self.model];
+//        vc.user = self.user;
+//        [self.navigationController pushViewController:vc animated:YES];
 //        [self presentModalViewController:vc animated:YES];
         
         
-//        [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set name", nil)
-//                                message:nil
-//                     customizationBlock:^(WCAlertView *alertView) {
-//                         alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-//                         UITextField *field = [alertView textFieldAtIndex:0];
-//                         field.text = username.text;
-//                         
-//                    }
-//                        completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
-//                            if (buttonIndex == 0 /*alertView.firstOtherButtonIndex*/) {
-//                                UITextField *field = [alertView textFieldAtIndex:0];
-//                                NSString *name = field.text;
-//                                if (name && name.length > 0) {
-//                                    [self.model.apiServer updateName:name success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                                        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-//                                            NSDictionary *body=responseObject;
-//                                            if([body isKindOfClass:[NSDictionary class]]) {
-//                                                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                                                if(code){
-//                                                    if([code intValue]==200) {
-//                                                        NSDictionary *responseobj=[body objectForKey:@"response"];
-//                                                        if([responseobj isKindOfClass:[NSDictionary class]]){
-//                                                            // We need new server api to support restful action to avoid following requests.
-//                                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"TestNotification" object:self];
-//                                                        }
-//                                                    }
-//                                                }
-//                                            }
-//                                        }
-//                                        
-//                                    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                    }];
-//                                }
-//                            }
-//                        }
-//                      cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-//                      otherButtonTitles:NSLocalizedString(@"Set", nil), nil];
+        [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set name", nil)
+                                message:nil
+                     customizationBlock:^(WCAlertView *alertView) {
+                         alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+                         UITextField *field = [alertView textFieldAtIndex:0];
+                         field.text = username.text;
+                         
+                    }
+                        completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
+                            if (buttonIndex == 0 /*alertView.firstOtherButtonIndex*/) {
+                                UITextField *field = [alertView textFieldAtIndex:0];
+                                NSString *name = field.text;
+                                if (name && name.length > 0) {
+                                    [self.model.apiServer updateName:name success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                            NSDictionary *body=responseObject;
+                                            if([body isKindOfClass:[NSDictionary class]]) {
+                                                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+                                                if(code){
+                                                    if([code intValue]==200) {
+                                                        NSDictionary *responseobj=[body objectForKey:@"response"];
+                                                        if([responseobj isKindOfClass:[NSDictionary class]]){
+                                                            // We need new server api to support restful action to avoid following requests.
+                                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"TestNotification" object:self];
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                    }];
+                                }
+                            }
+                        }
+                      cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                      otherButtonTitles:NSLocalizedString(@"Set", nil), nil];
         
     } else if (CGRectContainsPoint(useravatar.frame, location)){
         FullScreenViewController *viewcontroller = [[FullScreenViewController alloc] initWithNibName:@"FullScreenViewController" bundle:nil];
