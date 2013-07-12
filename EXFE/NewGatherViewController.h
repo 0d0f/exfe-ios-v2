@@ -67,7 +67,9 @@
 - (void) fillTime:(CrossTime*)time;
 - (void) fillPlace:(Place*)place;
 - (void) ShowPlaceView:(NSString*)status;
-- (void) GlassBarlightAnimation;
+
+- (void)stopGlassAnimation;
+- (void)startGlassAnimation;
 
 #pragma mark MKMapViewDelegate
 - (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated;
