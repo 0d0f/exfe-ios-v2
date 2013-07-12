@@ -33,7 +33,7 @@
     UIView *footerView;
 }
 
-@property (nonatomic, strong) EXFEModel *model;
+@property (nonatomic, weak) EXFEModel *model;
 @property (nonatomic, strong) User *user;
 
 - (void) Logout;

@@ -27,7 +27,7 @@
 
 @interface EFChangePasswordViewController ()
 
-@property (nonatomic, strong) EXFEModel *model;
+@property (nonatomic, weak) EXFEModel *model;
 
 @property (nonatomic, strong) CSLinearLayoutView *rootView;
 @property (nonatomic, strong) UITextField *oldPwdTextField;

@@ -7,16 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "User+EXFE.h"
+#import "Identity+EXFE.h"
 
 @interface EFEditProfileViewController : UIViewController
 
-@property (nonatomic, strong) NSMutableDictionary * params;
-// name
-// bio
-// external_id
-// provider
-// avatar_filename
-// provider
+@property (nonatomic, strong) User *user;
+@property (nonatomic, strong) Identity *identity;
+@property (nonatomic, assign, readonly) BOOL isEditUser;
 
-
+- (id)initWithModel:(EXFEModel*)model;
 @end
