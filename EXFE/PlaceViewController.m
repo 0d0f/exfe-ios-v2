@@ -50,7 +50,7 @@
     btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
-    [btnBack addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside];
+    [btnBack addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchDragExit];
     [toolbar addSubview:btnBack];
 
     

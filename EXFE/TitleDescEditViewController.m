@@ -65,7 +65,7 @@
     btncancel.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
     [btncancel setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btncancel setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
-    [btncancel addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside];
+    [btncancel addTarget:self action:@selector(Close) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchDragExit];
     
     [toolbar addSubview:btncancel];
 
