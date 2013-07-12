@@ -86,19 +86,15 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         return kProviderFacebook;
     }
     
-    NSString *phoneRegex = @"^(\\+)?\\d{5,}$";
-    NSPredicate *phonelTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", phoneRegex];
-    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-    NSString *normalized = [phoneUtil normalizeDigitsOnly:lowercase];
-    if ([phonelTest evaluateWithObject:normalized] == YES){
-        return kProviderPhone;
-    }
     NSString *emailRegex = @"^[_a-z0-9-\\+]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9]+)*(\\.[a-z]{2,})$";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     if ([emailTest evaluateWithObject:lowercase] == YES){
         return kProviderEmail;
     }
     
+    if ([lowercase rangeOfString:@"@"].length == 0 && [Util isValidPhoneNumber:lowercase]) {
+        return kProviderPhone;
+    }
     
     return kProviderUnknown;
 }
@@ -129,7 +125,9 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         return kProviderFacebook;
     }
     
-    if ([Util isValidPhoneNumber:lowercase]) {
+    NSString *phoneRegex = @"^+[0-9]{5, 15}";
+    NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", phoneRegex];
+    if ([phoneTest evaluateWithObject:lowercase] == YES){
         return kProviderPhone;
     }
     
