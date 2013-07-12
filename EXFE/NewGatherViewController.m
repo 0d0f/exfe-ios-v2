@@ -243,7 +243,7 @@
     pannellight = [[UIImageView alloc] initWithFrame:CGRectMake(0,screenframe.size.height - 46 - 20, self.view.frame.size.width, 46)];
     pannellight.image = [UIImage imageNamed:@"glassbar_light.png"];
     [self.view addSubview:pannellight];
-    [self GlassBarlightAnimation];
+    [self startGlassAnimation];
     
     identitypicker = [[UIPickerView alloc] initWithFrame:CGRectMake(0, screenframe.size.height-216-[UIApplication sharedApplication].statusBarFrame.size.height, self.view.frame.size.width, 216)];
     identitypicker.dataSource=self;
@@ -281,7 +281,12 @@
     
 }
 
-- (void)GlassBarlightAnimation{
+
+- (void)stopGlassAnimation {
+    [pannellight.layer removeAllAnimations];
+}
+
+- (void)startGlassAnimation {
 
     CABasicAnimation *opacityAnimation_out = [CABasicAnimation animationWithKeyPath:
                                           @"opacity"];
@@ -326,10 +331,30 @@
     gestureRecognizer.delegate=self;
     [self.view addGestureRecognizer:gestureRecognizer];
     
-  
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleNotification:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
 }
 
-#pragma mark UIScrollViewDelegate
+#pragma mark - Notification Handler
+
+- (void)handleNotification:(NSNotification *)notification {
+    NSString *name = notification.name;
+    
+    if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]) {
+        [self stopGlassAnimation];
+    } else if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]) {
+        [self startGlassAnimation];
+    }
+}
+
+#pragma mark - UIScrollViewDelegate
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [self hideMenu];
 }
