@@ -240,10 +240,14 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     
     NSError *aError = nil;
+    BOOL plus = [phonenumber hasPrefix:@"+"];
     NSString *normalized = [phoneUtil normalizePhoneNumber:phonenumber];
+    if (plus) {
+        normalized = [NSString stringWithFormat:@"+%@", normalized];
+    }
     
     NBPhoneNumber *myNumber = [phoneUtil parse:normalized defaultRegion:isoCC error:&aError];
-    if (aError != nil) {
+    if (aError == nil) {
         if ([phoneUtil isValidNumber:myNumber]) {
             NSString *formatted = [phoneUtil format:myNumber numberFormat:NBEPhoneNumberFormatE164 error:&aError];
             if (aError == nil) {
@@ -251,7 +255,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
             }
         }
     }
-    return @"";
+    return normalized;
 }
 
 + (NSDate*) beginningOfWeek:(NSDate*)date{
