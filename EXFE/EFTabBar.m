@@ -310,7 +310,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
         button.imageEdgeInsets = (UIEdgeInsets){0, -24, 0, 0};
         [button addTarget:self
                    action:@selector(backButtonPressed:)
-         forControlEvents:UIControlEventTouchUpInside];
+         forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchDragExit];
         [self addSubview:button];
         self.leftButton = button;
         
