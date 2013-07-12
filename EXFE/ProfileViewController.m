@@ -461,10 +461,12 @@
             
         }
         if ([self.user.password boolValue]) {
+            self.btnForgetPassword.hidden = NO;
             [self.btnForgetPassword setFrame:CGRectMake(25, 64, 250, 44)];
             [self.btnForgetPassword setTitle:NSLocalizedString(@"Change password...", nil) forState:UIControlStateNormal];
             [self.btnForgetPassword sizeToFit];
         } else {
+            self.btnForgetPassword.hidden = YES;
             [self.btnForgetPassword setFrame:CGRectMake(25, 64, 250, 44)];
             [self.btnForgetPassword setTitle:NSLocalizedString(@"Set password...", nil) forState:UIControlStateNormal];
             [self.btnForgetPassword sizeToFit];
