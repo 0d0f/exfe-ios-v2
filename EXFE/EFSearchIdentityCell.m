@@ -80,7 +80,6 @@
 
 - (void)customWithIdentityString:(NSString *)string candidateProvider:(Provider)candidateProvider identity:(Identity *)identity {
     NSString *providerName = nil;
-    UIColor *textColor = [UIColor blackColor];
     
     switch (candidateProvider) {
         case kProviderUnknown:
@@ -106,7 +105,11 @@
     
     if (identity) {
         self.accessButton.hidden = YES;
-        textColor = [UIColor COLOR_BLUE_EXFE];
+        self.userNameLabel.textColor = [UIColor COLOR_BLUE_EXFE];
+        self.userNameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
+    } else {
+        self.userNameLabel.textColor = [UIColor blackColor];
+        self.userNameLabel.font = [UIFont fontWithName:@"HelveticaNeue-LightItalic" size:21];
     }
     
     self.userNameLabel.text = string;
@@ -140,8 +143,6 @@
             self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
         }
     }
-    
-    self.userNameLabel.textColor = textColor;
 }
 
 @end
