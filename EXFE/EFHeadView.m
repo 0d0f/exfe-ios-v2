@@ -87,7 +87,7 @@
         avatarView.backgroundColor = [UIColor clearColor];
         
         CALayer *leftAvatarLayer = [CALayer layer];
-        leftAvatarLayer.bounds = (CGRect){{0.0f, 0.0f}, {200.0f, CGRectGetHeight(kAvatarViewFrame) + 4}};
+        leftAvatarLayer.bounds = (CGRect){{0.0f, 0.0f}, {400.0f, CGRectGetHeight(kAvatarViewFrame) + 4}};
         leftAvatarLayer.backgroundColor = backgroundColor.CGColor;
         leftAvatarLayer.anchorPoint = (CGPoint){1.0f, 0.5f};
         leftAvatarLayer.position = (CGPoint){CGRectGetWidth(avatarView.frame) * 0.5f, CGRectGetHeight(avatarView.frame) * 0.5f};
