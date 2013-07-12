@@ -53,21 +53,18 @@
 }
 
 - (NSString *)key {
-    if (_key && _key.length)
-        return [_key copy];
-    
     NSString *key = nil;
-    if (_externalID && _externalID.length) {
-        key = [NSString stringWithFormat:@"%@%@", self.externalID, self.provider];
-    } else if (_externalUsername && _externalUsername.length) {
-        key = [NSString stringWithFormat:@"%@%@", self.externalUsername, self.provider];
-    }
+    if (_externalUsername && _externalUsername.length) {
+        key = [NSString stringWithFormat:@"%@%@", [self.externalUsername lowercaseString], self.provider];
+    } else if (_externalID && _externalID.length) {
+        key = [NSString stringWithFormat:@"%@%@", [self.externalID lowercaseString], self.provider];
+    } 
     
     NSAssert(key != nil, @"key 为 nil");
     
     _key = key;
     
-    return [key copy];
+    return key;
 }
 
 - (BOOL)isEqualToRoughIdentity:(RoughIdentity *)anIdentity {
