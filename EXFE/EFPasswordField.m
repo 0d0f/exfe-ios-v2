@@ -91,9 +91,16 @@
 {
     if (self.text.length == 0) {
         self.rightView = self.btnForgot;
+        UITextFieldViewMode mode = self.btnForgot.hidden ? UITextFieldViewModeNever : UITextFieldViewModeAlways;
+        if (self.rightViewMode != mode) {
+            self.rightViewMode = mode;
+        }
     } else {
         if (self.rightView != self.eye) {
             self.rightView = self.eye;
+        }
+        if (self.rightViewMode != UITextFieldViewModeAlways) {
+            self.rightViewMode = UITextFieldViewModeAlways;
         }
     }
 }

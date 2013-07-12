@@ -8,6 +8,7 @@
 
 #import "EFChangePasswordViewController.h"
 #import <BlocksKit/BlocksKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import "EFPasswordField.h"
 #import "WCAlertView.h"
 #import "EFModel.h"
@@ -18,6 +19,8 @@
 #import "User+EXFE.h"
 #import "Identity+EXFE.h"
 #import "EFKit.h"
+#import "EXGradientToolbarView.h"
+#import "UILabel+EXFE.h"
 
 #define kTagOldPassword 233
 #define kTagFreshPassword 234
@@ -26,12 +29,17 @@
 
 @property (nonatomic, strong) EXFEModel *model;
 
+@property (nonatomic, strong) CSLinearLayoutView *rootView;
 @property (nonatomic, strong) UITextField *oldPwdTextField;
 @property (nonatomic, strong) UITextField *freshPwdTextField;
 @property (nonatomic, strong) UIButton *btnDone;
-@property (nonatomic, strong) UIButton *btnIdentity;
+//@property (nonatomic, strong) UIButton *btnIdentity;
+@property (nonatomic, strong) UIImageView *avatar;
+@property (nonatomic, strong) UILabel *name;
 @property (nonatomic, strong) UIActionSheet *pickerViewPopup;
 @property (nonatomic, strong) UIPickerView * categoryPickerView;
+@property (nonatomic, strong) UILabel *hintError;
+@property (nonatomic, strong) TTTAttributedLabel *inlineError;
 
 @property (nonatomic, strong) NSString *oldPassword;
 @property (nonatomic, strong) NSString *freshPassword;
@@ -46,7 +54,7 @@
 - (void)setSelectedIdentityIndex:(NSInteger)index
 {
     _selectedIdentityIndex = index;
-    self.identity = [[self.user.identities allObjects] objectAtIndex:_selectedIdentityIndex];
+    self.identity = [[self.user sortedIdentiesById] objectAtIndex:_selectedIdentityIndex];
 }
 
 #pragma mark - View Controller Live cycle
@@ -63,7 +71,7 @@
 {
     CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
     UIView *contentView = [[UIView alloc] initWithFrame:applicationFrame];
-    contentView.backgroundColor = [UIColor whiteColor];
+    contentView.backgroundColor = [UIColor COLOR_SNOW];
     self.view = contentView;
     
     UIImageView *fullScreen = [[UIImageView alloc] initWithFrame:self.view.bounds];
@@ -71,14 +79,24 @@
     
     UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44)];
     
+    EXGradientToolbarView *toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
+    [toolbar.layer setShadowOpacity:0.8];
+    [toolbar.layer setShadowRadius:3.0];
+    [toolbar.layer setShadowOffset:CGSizeMake(0, 0)];
+    
+    [self.view addSubview:toolbar];
+    
     UILabel *title = [[UILabel alloc] initWithFrame:header.bounds];
+    title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
+    title.textColor = [UIColor COLOR_CARBON];
     title.textAlignment = NSTextAlignmentCenter;
     title.text = NSLocalizedString(@"Change password", nil);
     [header addSubview:title];
     
-    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnBack.frame = CGRectMake(0, 0, 24, CGRectGetHeight(header.bounds));
-    btnBack.backgroundColor = [UIColor blackColor];
+    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
+    [btnBack setFrame:CGRectMake(0, 0, 20,  CGRectGetHeight(header.bounds))];
+    btnBack.backgroundColor = [UIColor COLOR_WA(0x33, 0xAA)];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
     [btnBack addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
@@ -88,15 +106,30 @@
     
     CSLinearLayoutView *layout = [[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 44)];
     
+    {// TextField Frame
+        UIImage *img = [[UIImage imageNamed:@"textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 9, 15, 9)];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:img];
+        imageView.frame = CGRectMake(15, 24, 290, 100);
+        [layout addSubview:imageView];
+    }
+    
+    {
+        UIImage *img = [UIImage imageNamed:@"list_divider.png"];
+        UIImageView *line1 = [[UIImageView alloc] initWithFrame:CGRectMake(15, 74, 290, 1)];
+        line1.image = img;
+        [layout addSubview:line1];
+    }
+    
 
-    UITextField *inputOldPassword = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+    EFPasswordField *inputOldPassword = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+    inputOldPassword.leftViewMode = UITextFieldViewModeNever;
     inputOldPassword.tag = kTagOldPassword;
     inputOldPassword.placeholder = NSLocalizedString(@"Current password", nil);
-    inputOldPassword.secureTextEntry = YES;
+    inputOldPassword.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
     inputOldPassword.delegate = self;
-    inputOldPassword.backgroundColor = [UIColor grayColor];
     inputOldPassword.borderStyle = UITextBorderStyleNone;
     inputOldPassword.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    [inputOldPassword.btnForgot addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
     CSLinearLayoutItem *item1 = [CSLinearLayoutItem layoutItemForView:inputOldPassword];
     item1.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
     item1.fillMode = CSLinearLayoutItemFillModeNormal;
@@ -104,12 +137,13 @@
     [layout addItem:item1];
     self.oldPwdTextField = inputOldPassword;
     
-    UITextField *inputFreshPassword = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+    EFPasswordField *inputFreshPassword = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+    inputFreshPassword.leftViewMode = UITextFieldViewModeNever;
+    inputFreshPassword.btnForgot.hidden = YES;
     inputFreshPassword.tag = kTagFreshPassword;
     inputFreshPassword.placeholder = NSLocalizedString(@"Set new password", nil);
-    inputFreshPassword.secureTextEntry = YES;
+    inputFreshPassword.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
     inputFreshPassword.delegate = self;
-    inputFreshPassword.backgroundColor = [UIColor lightGrayColor];
     inputFreshPassword.borderStyle = UITextBorderStyleNone;
     inputFreshPassword.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     CSLinearLayoutItem *item2 = [CSLinearLayoutItem layoutItemForView:inputFreshPassword];
@@ -165,18 +199,31 @@
     [layout addItem:item5];
     
     
-    UIButton *btnIdentity = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnIdentity.frame = CGRectMake(0, 0, 290, 50);
-    btnIdentity.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    btnIdentity.imageEdgeInsets = UIEdgeInsetsMake(5.0, 5, 5.0, 245);
-    btnIdentity.titleEdgeInsets = UIEdgeInsetsMake(5, -100, 5.0, 0);
-    btnIdentity.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    btnIdentity.backgroundColor = [UIColor brownColor];
-    // listarrow
-    [btnIdentity addTarget:self action:@selector(changeIdentity:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnIdentity = btnIdentity;
+    UIView * identityBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+    identityBar.clipsToBounds = YES;
+    identityBar.backgroundColor = [UIColor brownColor];
+    UIImageView *avatar = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 40, 40)];
+    avatar.layer.cornerRadius = 4;
+    avatar.clipsToBounds = YES;
+    self.avatar = avatar;
+    [identityBar addSubview:avatar];
     
-    CSLinearLayoutItem *item6 = [CSLinearLayoutItem layoutItemForView:btnIdentity];
+    UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(50, 5, 200, 40)];
+    name.backgroundColor = [UIColor clearColor];
+    name.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
+    name.textColor = [UIColor COLOR_BLACK_19];;
+    self.name = name;
+    [identityBar addSubview:name];
+    // listarrow
+    
+    UITapGestureRecognizer *gesture = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+        if (state == UIGestureRecognizerStateEnded) {
+            [self changeIdentity:sender.view];
+        }
+    }];
+    [identityBar addGestureRecognizer:gesture];
+    
+    CSLinearLayoutItem *item6 = [CSLinearLayoutItem layoutItemForView:identityBar];
     item6.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
     item6.fillMode = CSLinearLayoutItemFillModeNormal;
     item6.padding = CSLinearLayoutMakePadding(0, 15, 10, 15);
@@ -199,6 +246,7 @@
     [layout addItem:item7];
     
     [self.view addSubview:layout];
+    self.rootView = layout;
     
 }
 
@@ -271,25 +319,98 @@
         UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
         
         if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:avatar_filename]) {
-            [self.btnIdentity setImage: [[EFDataManager imageManager] cachedImageInMemoryForKey:avatar_filename] forState:UIControlStateNormal];
+            self.avatar.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:avatar_filename];
+            
         } else {
-            [self.btnIdentity setImage: defaultImage forState:UIControlStateNormal];
+            self.avatar.image = defaultImage;
             
             [[EFDataManager imageManager] cachedImageForKey:avatar_filename
                                             completeHandler:^(UIImage *image){
                                                 if (image) {
-                                                    [self.btnIdentity setImage: image forState:UIControlStateNormal];
+                                                    self.avatar.image = image;
                                                 }
                                             }];
         }
     }
-    [self.btnIdentity setTitle: [identity getDisplayIdentity]  forState:UIControlStateNormal];
+    self.name.text = [identity getDisplayIdentity];
 
 }
 
-- (void)showInlineError:(NSString *)error with:(NSString*)msg
+- (void)showInlineError:(NSString *)title with:(NSString *)description
 {
     // TODO: show error
+    BOOL layoutFlag = NO;
+    NSString* full = [NSString stringWithFormat:@"%@ %@", title, description];
+    
+    [_inlineError setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+        NSRange titleRange = [[mutableAttributedString string] rangeOfString:title options:NSCaseInsensitiveSearch];
+        [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[[UIColor COLOR_RED_EXFE] CGColor] range:titleRange];
+        return mutableAttributedString;
+    }];
+    
+    CSLinearLayoutItem *baseitem = nil; //[self.rootView findItemByTag:kViewTagButtonStart];
+//    if (baseitem == nil) {
+//        baseitem = [self.rootView findItemByTag:kViewTagButtonNewUser];
+//    }
+//    if (baseitem == nil) {
+//        baseitem = [self.rootView findItemByTag:kViewTagButtonStartOver];
+//    }
+//    if (baseitem == nil) {
+//        layoutFlag = YES;
+//        baseitem = [self.rootView findItemByTag:kViewTagSnsGroup];
+//    }
+    
+    if (baseitem) {
+        [_inlineError wrapContent];
+        CSLinearLayoutItem *item = [self.rootView findItemByTag:_inlineError.tag];
+        if (item == nil){
+            item = [CSLinearLayoutItem layoutItemForView:_inlineError];
+            item.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+            item.fillMode = CSLinearLayoutItemFillModeNormal;
+            [self.rootView insertItem:item beforeItem:baseitem];
+        } else {
+            [self.rootView moveItem:item beforeItem:baseitem];
+        }
+        CGFloat top = layoutFlag ? 27 : 0;
+        item.padding = CSLinearLayoutMakePadding(top, 20, 0, 20);
+    }
+}
+
+- (void)showErrorInfo:(NSString*)error dockOn:(UIView*)view
+{
+    [_hintError removeFromSuperview];
+    _hintError.text = error;
+    _hintError.backgroundColor = [UIColor COLOR_WA(250, 217)];
+    CGRect frame = _hintError.bounds;
+    frame.size.height = 44;
+    frame.size.width = 200;
+    frame.origin.x = CGRectGetMinX(view.frame) + 5 + 40 + 5;
+    frame.origin.y = CGRectGetMidY(view.frame) - CGRectGetMidY(frame);
+    _hintError.frame = frame;
+    _hintError.alpha = 1.0;
+    [self.rootView addSubview:_hintError];
+    _hintError.hidden = NO;
+    [self performBlock:^(id sender) {
+        if (_hintError.hidden == NO) {
+            [self hide:_hintError withAnmated:YES];
+        }
+    }
+            afterDelay:5];
+}
+
+- (void)hide:(UIView *)view withAnmated:(BOOL)animated
+{
+    if (animated) {
+        [UIView animateWithDuration:0.5 animations:^{
+            _hintError.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            _hintError.hidden = YES;
+            _hintError.alpha = 1.0;
+        }];
+    } else {
+        _hintError.hidden = YES;
+        _hintError.alpha = 1.0;
+    }
 }
 
 #pragma mark - UI Events
@@ -298,6 +419,16 @@
 - (void)goBack:(id)view
 {
     [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)forgetPwd:(id)view
+{
+    if ([self.oldPwdTextField isFirstResponder]) {
+        [self.oldPwdTextField resignFirstResponder];
+    }
+    if ([self.freshPwdTextField isFirstResponder]) {
+        [self.freshPwdTextField resignFirstResponder];
+    }
 }
 
 - (void)done:(id)view
@@ -473,10 +604,8 @@
                                                                  [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Verification", nil)
                                                                                              message:message
                                                                                    cancelButtonTitle:nil
-                                                                                   otherButtonTitles:@[NSLocalizedString(@"OK", nil)]
-                                                                                             handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                                                                                 ;
-                                                                                             }];
+                                                                                   otherButtonTitles:nil
+                                                                                             handler:nil];
                                                              }
                                                          }
                                                      }  break;
@@ -532,7 +661,7 @@
 #pragma mark UIPickerViewDelegate
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    Identity *identity = [self.user.identities.allObjects objectAtIndex:row];
+    Identity *identity = [[self.user sortedIdentiesById] objectAtIndex:row];
     return  [identity getDisplayIdentity];
 }
 
