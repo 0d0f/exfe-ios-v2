@@ -208,7 +208,7 @@
     btnBack.backgroundColor = [UIColor clearColor];
     [btnBack setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [btnBack setImage:[UIImage imageNamed:@"back_pressed.png"] forState:UIControlStateHighlighted];
-    [btnBack addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside];
+    [btnBack addTarget:self action:@selector(Close:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchDragExit];
     [self.view addSubview:btnBack];
     
     UISwipeGestureRecognizer *swipeHeaderTap = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
