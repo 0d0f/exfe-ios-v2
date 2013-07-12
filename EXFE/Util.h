@@ -89,6 +89,7 @@ extern NSString *const EXCrossListDidChangeNotification;
 + (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber;
 + (NSString*)getTelephoneCountryCode:(NSString*)isocode;
 + (NSString*)getTelephoneCountryCode;
++ (BOOL)isValidPhoneNumber:(NSString*)phonenumber;
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber;
 
 // Deprecated Time tool in Conversation

@@ -129,8 +129,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         return kProviderFacebook;
     }
     
-    NSString *phone = [Util formatPhoneNumber:lowercase];
-    if ([phone length] > 0){
+    if ([Util isValidPhoneNumber:lowercase]) {
         return kProviderPhone;
     }
     
@@ -233,6 +232,26 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 {
     NSString *isoCC = [self getDeviceCountryCode];
     return [self getTelephoneCountryCode:isoCC];
+}
+
++ (BOOL) isValidPhoneNumber:(NSString*)phonenumber{
+    NSString *isoCC = [self getDeviceCountryCode];
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+    
+    NSError *aError = nil;
+    BOOL plus = [phonenumber hasPrefix:@"+"];
+    NSString *normalized = [phoneUtil normalizePhoneNumber:phonenumber];
+    if (plus) {
+        normalized = [NSString stringWithFormat:@"+%@", normalized];
+    }
+    
+    return [phoneUtil isPossibleNumberString:normalized regionDialingFrom:isoCC error:&aError];
+    
+//    NBPhoneNumber *myNumber = [phoneUtil parse:normalized defaultRegion:isoCC error:&aError];
+//    if (aError == nil) {
+//        return [phoneUtil isValidNumber:myNumber];
+//    }
+//    return NO;
 }
 
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber{
