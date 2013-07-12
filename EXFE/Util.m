@@ -235,23 +235,8 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 }
 
 + (BOOL) isValidPhoneNumber:(NSString*)phonenumber{
-    NSString *isoCC = [self getDeviceCountryCode];
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-    
-    NSError *aError = nil;
-    BOOL plus = [phonenumber hasPrefix:@"+"];
-    NSString *normalized = [phoneUtil normalizePhoneNumber:phonenumber];
-    if (plus) {
-        normalized = [NSString stringWithFormat:@"+%@", normalized];
-    }
-    
-    return [phoneUtil isPossibleNumberString:normalized regionDialingFrom:isoCC error:&aError];
-    
-//    NBPhoneNumber *myNumber = [phoneUtil parse:normalized defaultRegion:isoCC error:&aError];
-//    if (aError == nil) {
-//        return [phoneUtil isValidNumber:myNumber];
-//    }
-//    return NO;
+    return [phoneUtil isViablePhoneNumber:phonenumber];
 }
 
 + (NSString*) formatPhoneNumber:(NSString*)phonenumber{
