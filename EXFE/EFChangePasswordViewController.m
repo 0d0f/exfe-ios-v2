@@ -152,7 +152,7 @@
     inputOldPassword.leftViewMode = UITextFieldViewModeNever;
     inputOldPassword.tag = kTagOldPassword;
     inputOldPassword.placeholder = NSLocalizedString(@"Current password", nil);
-    inputOldPassword.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
+    inputOldPassword.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
     inputOldPassword.delegate = self;
     inputOldPassword.borderStyle = UITextBorderStyleNone;
     inputOldPassword.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -169,7 +169,7 @@
     inputFreshPassword.btnForgot.hidden = YES;
     inputFreshPassword.tag = kTagFreshPassword;
     inputFreshPassword.placeholder = NSLocalizedString(@"Set new password", nil);
-    inputFreshPassword.font = [UIFont fontWithName:@"HelveticaNeue-Lignt" size:18];
+    inputFreshPassword.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
     inputFreshPassword.delegate = self;
     inputFreshPassword.borderStyle = UITextBorderStyleNone;
     inputFreshPassword.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -199,6 +199,7 @@
     self.btnDone = btnDone;
     
     UILabel * forgotTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+    forgotTitle.backgroundColor = [UIColor clearColor];
     forgotTitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
     forgotTitle.textColor = [UIColor COLOR_BLACK_19];
     forgotTitle.text = NSLocalizedString(@"Forgot password?", nil);
@@ -211,6 +212,7 @@
     self.forgotTitle = forgotTitle;
     
     TTTAttributedLabel * forgotDetail = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+    forgotDetail.backgroundColor = [UIColor clearColor];
     forgotDetail.numberOfLines = 0;
     forgotDetail.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     forgotDetail.textColor = [UIColor COLOR_BLACK_19];
@@ -271,7 +273,6 @@
     self.identitybar = identityBar;
     
     UIButton *btnAuth = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 290, 48)];
-    [btnAuth setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btnAuth.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
     [btnAuth setTitle:NSLocalizedString(@"Authenticate", nil) forState:UIControlStateNormal];
     [btnAuth setTitleColor:[UIColor COLOR_BLACK_19] forState:UIControlStateNormal];
