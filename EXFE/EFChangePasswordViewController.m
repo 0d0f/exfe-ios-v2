@@ -115,6 +115,7 @@
     [self.view addSubview:toolbar];
     
     UILabel *title = [[UILabel alloc] initWithFrame:header.bounds];
+    title.backgroundColor = [UIColor clearColor];
     title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     title.textColor = [UIColor COLOR_CARBON];
     title.textAlignment = NSTextAlignmentCenter;
