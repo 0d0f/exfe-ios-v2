@@ -35,6 +35,8 @@
 
 @property (nonatomic, weak) EXFEModel *model;
 
+@property (nonatomic, strong, readonly) NSArray *trustIdentities;
+
 @property (nonatomic, strong) CSLinearLayoutView *rootView;
 @property (nonatomic, strong) UITextField *oldPwdTextField;
 @property (nonatomic, strong) UITextField *freshPwdTextField;
@@ -64,7 +66,22 @@
 - (void)setSelectedIdentityIndex:(NSInteger)index
 {
     _selectedIdentityIndex = index;
-    self.identity = [[self.user sortedIdentiesById] objectAtIndex:_selectedIdentityIndex];
+    self.identity = [self.trustIdentities objectAtIndex:_selectedIdentityIndex];
+}
+
+- (void)setUser:(User *)user
+{
+    _user = user;
+    
+    NSArray* array = [self.user sortedIdentiesById];
+    NSMutableArray *ma = [[NSMutableArray alloc] initWithCapacity:array.count];
+    for (Identity *ident in array) {
+        NSString* s = ident.status;
+        if ([@"VERIFYING" isEqualToString:s] || [@"CONNECTED" isEqualToString:s] || [@"REVOKED" isEqualToString:s]) {
+            [ma addObject:ident];
+        }
+    }
+    _trustIdentities = ma;
 }
 
 #pragma mark - View Controller Live cycle
@@ -756,7 +773,7 @@
 #pragma mark UIPickerViewDelegate
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    Identity *identity = [[self.user sortedIdentiesById] objectAtIndex:row];
+    Identity *identity = [self.trustIdentities objectAtIndex:row];
     return  [identity getDisplayIdentity];
 }
 
