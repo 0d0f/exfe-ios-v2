@@ -909,7 +909,7 @@
     } else {
         annView.image = [UIImage imageNamed:@"map_pin_red.png"];
     }
-    [annView setCenterOffset:CGPointMake(0, -12)];
+    [annView setCenterOffset:CGPointMake(0, -18)];
     UIButton* butt = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
     butt.tag = ((PlaceAnnotation*)annotation).index;
     [butt addTarget:self action:@selector(editVenue:) forControlEvents: UIControlEventTouchUpInside];

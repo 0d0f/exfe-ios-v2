@@ -1098,6 +1098,7 @@
             pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultPinID];
             pinView.canShowCallout = YES;
             pinView.image = [UIImage imageNamed:@"map_pin_blue.png"];
+            pinView.centerOffset = CGPointMake(0, -18);
             
             UIButton *btnNav = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
             [btnNav addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
