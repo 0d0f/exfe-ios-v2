@@ -128,11 +128,13 @@
             NSError *aError = nil;
             NBPhoneNumber *myNumber = [phoneUtil parse:self.external_id defaultRegion:isocode error:&aError];
             if (aError == nil){
-                NBEPhoneNumberFormat fmt = NBEPhoneNumberFormatNATIONAL;
-                NSString *rc = [phoneUtil getRegionCodeForNumber:myNumber];
-                if (![isocode isEqualToString:rc]) {
-                    fmt = NBEPhoneNumberFormatINTERNATIONAL;
-                }
+                NBEPhoneNumberFormat fmt = NBEPhoneNumberFormatINTERNATIONAL;
+//                NSString *rc = [phoneUtil getRegionCodeForNumber:myNumber];
+//                if (![isocode isEqualToString:rc]) {
+//                    fmt = NBEPhoneNumberFormatINTERNATIONAL;
+//                } else {
+//                    fmt= NBEPhoneNumberFormatNATIONAL;
+//                }
                 
                 NSString *formatted = [phoneUtil format:myNumber numberFormat:fmt error:&aError];
                 if (aError == nil) {
