@@ -180,7 +180,7 @@
     inputFreshPassword.leftViewMode = UITextFieldViewModeNever;
     inputFreshPassword.btnForgot.hidden = YES;
     inputFreshPassword.tag = kTagFreshPassword;
-    inputFreshPassword.placeholder = NSLocalizedString(@"Set new password", nil);
+    inputFreshPassword.placeholder = NSLocalizedString(@"New password", nil);
     inputFreshPassword.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
     inputFreshPassword.delegate = self;
     inputFreshPassword.borderStyle = UITextBorderStyleNone;
@@ -200,7 +200,7 @@
     [btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btnDone.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
     btnDone.titleLabel.shadowOffset = CGSizeMake(0, -1);
-    [btnDone setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
+    [btnDone setTitle:NSLocalizedString(@"Change password", nil) forState:UIControlStateNormal];
     [btnDone addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
     btnDone.tag = kTagBtnDone;
     CSLinearLayoutItem *item3 = [CSLinearLayoutItem layoutItemForView:btnDone];
@@ -245,15 +245,11 @@
     self.forgotDetail = forgotDetail;
     
     UIView * identityBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-    
-    identityBar.clipsToBounds = YES;
-    UIImage *btnImage3 = [UIImage imageNamed:@"textbox.png"];
-    btnImage3 = [btnImage3 resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];    
-    UIImageView *barBackground = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-    barBackground.backgroundColor = [UIColor COLOR_RGB(0xE6, 0xE6, 0xE6)];
-    [barBackground setImage:btnImage3];
-    barBackground.layer.cornerRadius = 6;
-    [identityBar addSubview:barBackground];
+    identityBar.layer.backgroundColor = [UIColor COLOR_WA(0xE6, 0xFF)].CGColor;
+    identityBar.layer.cornerRadius = 4;
+    identityBar.layer.borderColor = [UIColor COLOR_WA(0xCC, 0xFF)].CGColor;
+    identityBar.layer.borderWidth = 1;
+    identityBar.layer.masksToBounds = NO;
     
     UIImageView *avatar = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 40, 40)];
     avatar.layer.cornerRadius = 2;
@@ -661,17 +657,16 @@
                                                      } else if (c == 401) {
                                                          if ([@"no_signin" isEqualToString:errorType]) {
                                                              // error: "Not sign in"
-                                                         } else if ([@"authenticate_timeout" isEqualToString:errorType]) {
-                                                             // error: "Authenticate timeout."
+                                                         } else if ([@"token_staled" isEqualToString:errorType]) {
+                                                             // error: "Token expired"
                                                          }
                                                      } else if (c == 403) {
                                                          if ([@"invalid_current_password" isEqualToString:errorType]) {
                                                              // error: invalid current password
                                                              [self showErrorInfo:NSLocalizedString(@"Password incorrect.", nil) dockOn:self.oldPwdTextField];
                                                          }
-                                                     }
-                                                     else if (c == 429) {
-                                                         [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:NSLocalizedString(@"Please wait a while.", nil)];
+                                                     } else if (c == 429) {
+//                                                         [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:NSLocalizedString(@"Please wait a while.", nil)];
                                                      }
                                                  }
                                                      break;
@@ -807,7 +802,14 @@
                                                      }  break;
                                                      case 4:{
                                                          NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
-                                                        if (c == 429){
+                                                         
+                                                         if (c == 401) {
+                                                             if ([@"no_signin" isEqualToString:errorType]) {
+                                                                 // error: "Not sign in"
+                                                             } else if ([@"token_staled" isEqualToString:errorType]) {
+                                                                 // error: "Token expired"
+                                                             }
+                                                         } else if (c == 429){
                                                              
                                                             NSString *msg = nil;
                                                             Provider provider = [Identity getProviderCode:self.identity.provider];
