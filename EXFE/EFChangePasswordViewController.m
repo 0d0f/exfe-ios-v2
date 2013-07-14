@@ -52,6 +52,7 @@
 @property (nonatomic, strong) UIPickerView * categoryPickerView;
 @property (nonatomic, strong) UILabel *hintError;
 @property (nonatomic, strong) TTTAttributedLabel *inlineError;
+@property (nonatomic, strong) UIActivityIndicatorView *indicator;
 
 @property (nonatomic, strong) NSString *oldPassword;
 @property (nonatomic, strong) NSString *freshPassword;
@@ -106,6 +107,7 @@
     
     UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44)];
     
+    
     EXGradientToolbarView *toolbar = [[EXGradientToolbarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     [toolbar.layer setShadowColor:[UIColor blackColor].CGColor];
     [toolbar.layer setShadowOpacity:0.8];
@@ -119,6 +121,8 @@
     title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
     title.textColor = [UIColor COLOR_CARBON];
     title.textAlignment = NSTextAlignmentCenter;
+    title.shadowColor = [UIColor COLOR_WA(0xFF, 0xBF)];
+    title.shadowOffset = CGSizeMake(0, 1);
     title.text = NSLocalizedString(@"Change password", nil);
     [header addSubview:title];
     
@@ -130,6 +134,13 @@
     [btnBack addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
     [header addSubview:btnBack];
     
+    UISwipeGestureRecognizer *swipe = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+        if (state == UIGestureRecognizerStateEnded) {
+            [btnBack sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
+    }];
+    swipe.direction = UISwipeGestureRecognizerDirectionRight;
+    [header addGestureRecognizer:swipe];
     [self.view addSubview:header];
     
     CSLinearLayoutView *layout = [[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 44)];
@@ -182,7 +193,7 @@
     self.freshPwdTextField = inputFreshPassword;
     
     UIButton *btnDone = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 290, 48)];
-    [btnDone setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btnDone setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
     UIImage *btnImage = [UIImage imageNamed:@"btn_blue_44.png"];
     btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
     [btnDone setBackgroundImage:btnImage forState:UIControlStateNormal];
@@ -217,7 +228,7 @@
     forgotDetail.numberOfLines = 0;
     forgotDetail.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     forgotDetail.textColor = [UIColor COLOR_BLACK_19];
-    NSString *full = NSLocalizedString(@"To reset your EXFE password, please authenticate with following identity.", nil);
+    NSString *full = NSLocalizedString(@"To reset EXFE password, please authenticate with your identity.", nil);
     NSString *part = NSLocalizedString(@"EXFE", nil);
     [forgotDetail setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
         NSRange titleRange = [[mutableAttributedString string] rangeOfString:part options:NSCaseInsensitiveSearch];
@@ -245,7 +256,7 @@
     [identityBar addSubview:barBackground];
     
     UIImageView *avatar = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 40, 40)];
-    avatar.layer.cornerRadius = 4;
+    avatar.layer.cornerRadius = 2;
     avatar.clipsToBounds = YES;
     self.avatar = avatar;
     [identityBar addSubview:avatar];
@@ -257,6 +268,9 @@
     self.name = name;
     [identityBar addSubview:name];
     // listarrow
+    UIImageView *down = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"chevron_d20g5.png"]];
+    down.frame = CGRectMake(260, 15, 20, 20);
+    [identityBar addSubview:down];
     
     UITapGestureRecognizer *gesture = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
         if (state == UIGestureRecognizerStateEnded) {
@@ -277,7 +291,7 @@
     btnAuth.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
     [btnAuth setTitle:NSLocalizedString(@"Authenticate", nil) forState:UIControlStateNormal];
     [btnAuth setTitleColor:[UIColor COLOR_BLACK_19] forState:UIControlStateNormal];
-    btnAuth.titleLabel.shadowColor = [UIColor whiteColor];
+    [btnAuth setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btnAuth.titleLabel.shadowOffset = CGSizeMake(0, 1);
     UIImage *btnImage2 = [UIImage imageNamed:@"btn_white_44.png"];
     btnImage2 = [btnImage2 resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
@@ -336,6 +350,12 @@
         self.inlineError = label;
     }
     
+    {
+        UIActivityIndicatorView *aiView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        aiView.frame = (CGRect){{0, 0}, {20, 20}};
+        self.indicator = aiView;
+    }
+    
 }
 
 - (void)viewDidLoad
@@ -346,6 +366,8 @@
     [self registerAsObserver];
     
     self.selectedIdentityIndex = 0;
+    
+    [self.oldPwdTextField becomeFirstResponder];
     
 }
 
@@ -372,10 +394,16 @@
                  options:(NSKeyValueObservingOptionNew |
                           NSKeyValueObservingOptionOld)
                  context:NULL];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShown:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)unregisterForChangeNotification {
     [self removeObserver:self forKeyPath:@"identity"];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -396,6 +424,35 @@
                                change:change
                               context:context];
     }
+}
+
+- (void)keyboardWillShown:(NSNotification*)aNotification
+{
+//    NSDictionary* info = [aNotification userInfo];
+//    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    [UIView animateWithDuration:0.4
+                     animations:^{
+                         self.forgotTitle.alpha = 0;
+                         self.forgotDetail.alpha = 0;
+                         self.identitybar.alpha = 0;
+                         self.btnAuth.alpha = 0;
+                         self.inlineError.alpha = 0;
+                     } completion:^(BOOL finished) {
+                         self.forgotTitle.hidden = YES;
+                         self.forgotDetail.hidden = YES;
+                         self.identitybar.hidden = YES;
+                         self.btnAuth.hidden = YES;
+                         self.inlineError.hidden = YES;
+                         
+                         self.forgotTitle.alpha = 100;
+                         self.forgotDetail.alpha = 100;
+                         self.identitybar.alpha = 100;
+                         self.btnAuth.alpha = 100;
+                         self.inlineError.alpha = 100;
+                     }];
+    
+    
 }
 
 #pragma mark - UI Refresh
@@ -435,6 +492,7 @@
         [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[[UIColor COLOR_RED_EXFE] CGColor] range:titleRange];
         return mutableAttributedString;
     }];
+    _inlineError.hidden = NO;
     
     CSLinearLayoutItem *baseitem = [self.rootView findItemByTag:kTagBtnAuth];
     if (baseitem) {
@@ -475,6 +533,21 @@
             afterDelay:5];
 }
 
+- (void)showIndicatorAt:(CGPoint)center style:(UIActivityIndicatorViewStyle)style
+{
+    [_indicator removeFromSuperview];
+    _indicator.activityIndicatorViewStyle = style;
+    _indicator.center = center;
+    [self.rootView addSubview:_indicator];
+    [_indicator startAnimating];
+}
+
+- (void)hideIndicator
+{
+    [_indicator stopAnimating];
+    [_indicator removeFromSuperview];
+}
+
 - (void)hide:(UIView *)view withAnmated:(BOOL)animated
 {
     if (animated) {
@@ -507,10 +580,26 @@
         [self.freshPwdTextField resignFirstResponder];
     }
     
+    self.forgotTitle.alpha = 0;
+    self.forgotDetail.alpha = 0;
+    self.identitybar.alpha = 0;
+    self.btnAuth.alpha = 0;
+    self.inlineError.alpha = 0;
+    
     self.forgotTitle.hidden = NO;
     self.forgotDetail.hidden = NO;
     self.identitybar.hidden = NO;
     self.btnAuth.hidden = NO;
+    [UIView animateWithDuration:0.4
+                     animations:^{
+                         self.forgotTitle.alpha = 100;
+                         self.forgotDetail.alpha = 100;
+                         self.identitybar.alpha = 100;
+                         self.btnAuth.alpha = 100;
+                         self.inlineError.alpha = 100;
+                     } ];
+    
+    
 }
 
 - (void)done:(UIControl*)view
@@ -532,11 +621,13 @@
     
     if (self.model.apiServer) {
         view.enabled = NO;
+        [self showIndicatorAt:CGPointMake(285, view.center.y) style:UIActivityIndicatorViewStyleWhite];
     }
     [self.model.apiServer changePassword:_oldPassword
                                     with:_freshPassword
                                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                      view.enabled = YES;
+                                     [self hideIndicator];
                                      if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
                                          id code = [responseObject valueForKeyPath:@"meta.code"];
                                          if (code) {
@@ -567,32 +658,21 @@
                                                              // error: "Weak password."
                                                              [self showErrorInfo:NSLocalizedString(@"Invalid password.", nil) dockOn:self.freshPwdTextField];
                                                          }
-                                                     } else if (c == 401){
+                                                     } else if (c == 401) {
                                                          if ([@"no_signin" isEqualToString:errorType]) {
                                                              // error: "Not sign in"
                                                          } else if ([@"authenticate_timeout" isEqualToString:errorType]) {
                                                              // error: "Authenticate timeout."
                                                          }
-                                                     } else if (c == 403){
+                                                     } else if (c == 403) {
                                                          if ([@"invalid_current_password" isEqualToString:errorType]) {
                                                              // error: invalid current password
                                                              [self showErrorInfo:NSLocalizedString(@"Password incorrect.", nil) dockOn:self.oldPwdTextField];
                                                          }
                                                      }
-//                                                     else if (c == 429){
-//                                                         
-//                                                         NSString *msg = nil;
-//                                                         switch (provider) {
-//                                                             case kProviderPhone:
-//                                                                 msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile.", nil);
-//                                                                 break;
-//                                                                 
-//                                                             default:
-//                                                                 msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.", nil);
-//                                                                 break;
-//                                                         }
-//                                                         [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:msg];
-//                                                     }
+                                                     else if (c == 429) {
+                                                         [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:NSLocalizedString(@"Please wait a while.", nil)];
+                                                     }
                                                  }
                                                      break;
                                                  case 5:{
@@ -607,6 +687,7 @@
                                  }
                                  failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                      view.enabled = YES;
+                                     [self hideIndicator];
                                  }];
 
 }
@@ -655,13 +736,18 @@
 
 - (void)authenticate:(UIControl*)sender
 {
+    _inlineError.hidden = YES;
     
-    sender.enabled = NO;
+    if (self.model.apiServer) {
+        sender.enabled = NO;
+        [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
+    }
     
     [self.model.apiServer forgetPassword:self.identity.external_username
                                     with:[Identity getProviderCode:self.identity.provider]
                                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                      sender.enabled = YES;
+                                     [self hideIndicator];
                                      if ([operation.response statusCode] == 200){
                                          if([responseObject isKindOfClass:[NSDictionary class]]) {
                                              NSDictionary *body = responseObject;
@@ -721,12 +807,21 @@
                                                      }  break;
                                                      case 4:{
                                                          NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
-                                                         if (c == 429) {
-                                                             if ([@"weak_password" isEqualToString:errorType]) {
-                                                                 // error: "Weak password."
-                                                                 [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.", nil)];
+                                                        if (c == 429){
+                                                             
+                                                            NSString *msg = nil;
+                                                            Provider provider = [Identity getProviderCode:self.identity.provider];
+                                                             switch (provider) {
+                                                                 case kProviderPhone:
+                                                                     msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile.", nil);
+                                                                     break;
+                                                                     
+                                                                 default:
+                                                                     msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.", nil);
+                                                                     break;
                                                              }
-                                                         } 
+                                                             [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:msg];
+                                                         }
                                                          
                                                      }  break;
                                                      case 5:{
@@ -740,6 +835,7 @@
                                      }
                                  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                      sender.enabled = YES;
+                                     [self hideIndicator];
                                  }];
     
 }
@@ -759,6 +855,29 @@
         default:
             break;
     }
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self hide:_hintError withAnmated:NO];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    switch (textField.tag) {
+        case kTagOldPassword:
+            [self.freshPwdTextField becomeFirstResponder];
+            return NO;
+            //break;
+        case kTagFreshPassword:
+            [self.btnDone sendActionsForControlEvents: UIControlEventTouchUpInside];
+            return NO;
+            //break;
+        default:
+            break;
+    }
+    
+    return YES;
 }
 
 #pragma mark UIPickerViewDataSource
