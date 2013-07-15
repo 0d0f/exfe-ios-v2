@@ -14,7 +14,6 @@
 #import "FullScreenViewController.h"
 #import "EFAddIdentityViewController.h"
 #import "CustomAttributedTextView.h"
-#import "UIUnderlinedButton.h"
 #import "OAuthLoginViewController.h"
 #import "EFModel.h"
 

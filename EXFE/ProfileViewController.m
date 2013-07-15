@@ -423,54 +423,70 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if (section == 1){
+        CGFloat padding = 10;
+        CGFloat base1line = 20;
+        CGFloat base2line = 80;
+        
         if(footerView == nil) {
-            footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 10+62+44)];
+            footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 10 + 62 + 44)];
             
-            self.btnSignOut = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
-            [self.btnSignOut setTitle:NSLocalizedString(@"Sign out", nil) forState:UIControlStateNormal];
+            
+            self.btnSignOut = [UIButton buttonWithType:UIButtonTypeCustom];
+            NSMutableAttributedString *str1 = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Sign out", nil)];
+            NSMutableAttributedString *str2 = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Sign out", nil)];
+            NSUInteger length = str1.length;
+            [str1 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, length)];
+            [str1 addAttribute:NSForegroundColorAttributeName value:[UIColor COLOR_RED_EXFE] range:NSMakeRange(0, length)];
+            [self.btnSignOut setAttributedTitle:str1 forState:UIControlStateNormal];
+            [str2 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, length)];
+            [str2 addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(0, length)];
+            [self.btnSignOut setAttributedTitle:str2 forState:UIControlStateHighlighted];
+            
             [self.btnSignOut.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
-            [self.btnSignOut setTitleColor:[UIColor COLOR_RED_EXFE] forState:UIControlStateNormal];
-            //        [buttonsignout setBackgroundImage:[[UIImage imageNamed:@"btn_red_44.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 6, 0, 6)]  forState:UIControlStateNormal];
-            [self.btnSignOut setFrame:CGRectMake(200, 64, 100, 44)];
-            [self.btnSignOut sizeToFit];
+            [self.btnSignOut setFrame:CGRectMake(197, base1line, 113, 40)];
             [self.btnSignOut setBackgroundColor:[UIColor clearColor]];
             [self.btnSignOut addTarget:self action:@selector(Logout) forControlEvents:UIControlEventTouchUpInside];
             [footerView addSubview:self.btnSignOut];
             
-            self.btnForgetPassword = [UIUnderlinedButton buttonWithType:UIButtonTypeCustom];
+            self.btnForgetPassword = [UIButton buttonWithType:UIButtonTypeCustom];
             [self.btnForgetPassword.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
-            [self.btnForgetPassword setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [self.btnForgetPassword setFrame:CGRectMake(padding, base1line, 188, 40)];
             [self.btnForgetPassword setBackgroundColor:[UIColor clearColor]];
-            
             [self.btnForgetPassword addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
             [footerView addSubview:self.btnForgetPassword];
             
             UIButton *buttonrome = [UIButton buttonWithType:UIButtonTypeCustom];
             [buttonrome setTitle:NSLocalizedString(@"“Rome wasn't built in a day.”", nil) forState:UIControlStateNormal];
-            [buttonrome.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:18]];
-            [buttonrome setTitleColor:[UIColor COLOR_RGB(127, 127, 127)] forState:UIControlStateNormal];
-            [buttonrome setFrame:CGRectMake(40, 20, 240, 25)];
+            [buttonrome.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
+            [buttonrome setTitleColor:[UIColor COLOR_BLUE_EXFE] forState:UIControlStateNormal];
+            [buttonrome setFrame:CGRectMake(35, base2line, 250, 25)];
             [buttonrome setBackgroundColor:[UIColor clearColor]];
             buttonrome.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
             buttonrome.backgroundColor = [UIColor COLOR_WA(0xE6, 0xFF)];
-            buttonrome.layer.cornerRadius = 12.5;
+            buttonrome.layer.cornerRadius = 4;
             buttonrome.layer.masksToBounds = YES;
             [buttonrome addTarget:self action:@selector(showRome) forControlEvents:UIControlEventTouchUpInside];
             [footerView addSubview:buttonrome];
-            
-            
         }
+        
+        NSString *title = nil;
         if ([self.user.password boolValue]) {
             self.btnForgetPassword.hidden = NO;
-            [self.btnForgetPassword setFrame:CGRectMake(25, 64, 250, 44)];
-            [self.btnForgetPassword setTitle:NSLocalizedString(@"Change password...", nil) forState:UIControlStateNormal];
-            [self.btnForgetPassword sizeToFit];
+            title = NSLocalizedString(@"Change password...", nil);
         } else {
             self.btnForgetPassword.hidden = YES;
-            [self.btnForgetPassword setFrame:CGRectMake(25, 64, 250, 44)];
-            [self.btnForgetPassword setTitle:NSLocalizedString(@"Set password...", nil) forState:UIControlStateNormal];
-            [self.btnForgetPassword sizeToFit];
+            title = NSLocalizedString(@"Set password...", nil);
         }
+        NSMutableAttributedString *str3 = [[NSMutableAttributedString alloc] initWithString:title];
+        NSMutableAttributedString *str4 = [[NSMutableAttributedString alloc] initWithString:title];
+        NSUInteger length = str3.length;
+        [str3 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, length)];
+        [str3 addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, length)];
+        [self.btnForgetPassword setAttributedTitle:str3 forState:UIControlStateNormal];
+        [str4 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, length)];
+        [str4 addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(0, length)];
+        [self.btnForgetPassword setAttributedTitle:str4 forState:UIControlStateHighlighted];
+        
         return footerView;
     }
     return nil;

@@ -24,7 +24,7 @@
 
 #define kTagOldPassword     233
 #define kTagFreshPassword   234
-#define kTagBtnDone         235
+#define kTagBtnChangePwd    235
 #define kTagForgetTitle     236
 #define kTagForgetDesc      237
 #define kTagIdentityBar     238
@@ -40,7 +40,7 @@
 @property (nonatomic, strong) CSLinearLayoutView *rootView;
 @property (nonatomic, strong) UITextField *oldPwdTextField;
 @property (nonatomic, strong) UITextField *freshPwdTextField;
-@property (nonatomic, strong) UIButton *btnDone;
+@property (nonatomic, strong) UIButton *btnChangePwd;
 @property (nonatomic, strong) UILabel * forgotTitle;
 @property (nonatomic, strong) UILabel * forgotDetail;
 @property (nonatomic, strong) UIView * identitybar;
@@ -192,23 +192,23 @@
     [layout addItem:item2];
     self.freshPwdTextField = inputFreshPassword;
     
-    UIButton *btnDone = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 290, 48)];
-    [btnDone setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
+    UIButton *btnChangePwd = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 290, 48)];
+    [btnChangePwd setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
     UIImage *btnImage = [UIImage imageNamed:@"btn_blue_44.png"];
     btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
-    [btnDone setBackgroundImage:btnImage forState:UIControlStateNormal];
-    [btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    btnDone.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
-    btnDone.titleLabel.shadowOffset = CGSizeMake(0, -1);
-    [btnDone setTitle:NSLocalizedString(@"Change password", nil) forState:UIControlStateNormal];
-    [btnDone addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
-    btnDone.tag = kTagBtnDone;
-    CSLinearLayoutItem *item3 = [CSLinearLayoutItem layoutItemForView:btnDone];
+    [btnChangePwd setBackgroundImage:btnImage forState:UIControlStateNormal];
+    [btnChangePwd setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    btnChangePwd.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
+    btnChangePwd.titleLabel.shadowOffset = CGSizeMake(0, -1);
+    [btnChangePwd setTitle:NSLocalizedString(@"Change password", nil) forState:UIControlStateNormal];
+    [btnChangePwd addTarget:self action:@selector(changePwd:) forControlEvents:UIControlEventTouchUpInside];
+    btnChangePwd.tag = kTagBtnChangePwd;
+    CSLinearLayoutItem *item3 = [CSLinearLayoutItem layoutItemForView:btnChangePwd];
     item3.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
     item3.fillMode = CSLinearLayoutItemFillModeNormal;
     item3.padding = CSLinearLayoutMakePadding(0, 15, 24, 15);
     [layout addItem:item3];
-    self.btnDone = btnDone;
+    self.btnChangePwd = btnChangePwd;
     
     UILabel * forgotTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
     forgotTitle.backgroundColor = [UIColor clearColor];
@@ -576,29 +576,32 @@
         [self.freshPwdTextField resignFirstResponder];
     }
     
-    self.forgotTitle.alpha = 0;
-    self.forgotDetail.alpha = 0;
-    self.identitybar.alpha = 0;
-    self.btnAuth.alpha = 0;
-    self.inlineError.alpha = 0;
     
-    self.forgotTitle.hidden = NO;
-    self.forgotDetail.hidden = NO;
-    self.identitybar.hidden = NO;
-    self.btnAuth.hidden = NO;
-    [UIView animateWithDuration:0.4
-                     animations:^{
-                         self.forgotTitle.alpha = 100;
-                         self.forgotDetail.alpha = 100;
-                         self.identitybar.alpha = 100;
-                         self.btnAuth.alpha = 100;
-                         self.inlineError.alpha = 100;
-                     } ];
-    
-    
+    if (self.forgotTitle.hidden && self.forgotDetail.hidden && self.identitybar.hidden && self.btnAuth.hidden) {
+        
+        self.forgotTitle.alpha = 0;
+        self.forgotDetail.alpha = 0;
+        self.identitybar.alpha = 0;
+        self.btnAuth.alpha = 0;
+        self.inlineError.alpha = 0;
+        
+        self.forgotTitle.hidden = NO;
+        self.forgotDetail.hidden = NO;
+        self.identitybar.hidden = NO;
+        self.btnAuth.hidden = NO;
+        [UIView animateWithDuration:0.4
+                         animations:^{
+                             self.forgotTitle.alpha = 100;
+                             self.forgotDetail.alpha = 100;
+                             self.identitybar.alpha = 100;
+                             self.btnAuth.alpha = 100;
+                             self.inlineError.alpha = 100;
+                         } ];
+        
+    }
 }
 
-- (void)done:(UIControl*)view
+- (void)changePwd:(UIControl*)view
 {
     if ([self.oldPwdTextField isFirstResponder]) {
         [self textFieldDidEndEditing:self.oldPwdTextField];
@@ -609,8 +612,14 @@
     
     NSLog(@"conver %@ to %@", self.oldPassword, self.freshPassword);
     
-    if (self.freshPassword.length <= 4) {
+    if (self.freshPassword.length < 4) {
         // error: "Invalid password."
+        [self showErrorInfo:NSLocalizedString(@"Invalid password.", nil) dockOn:self.freshPwdTextField];
+        return;
+    }
+    
+    if ([self.freshPassword isEqualToString:self.oldPassword]) {
+        // error: "same password"
         [self showErrorInfo:NSLocalizedString(@"Invalid password.", nil) dockOn:self.freshPwdTextField];
         return;
     }
@@ -639,7 +648,7 @@
                                                          _model.userToken = token;
                                                          [_model saveUserData];
                                                          
-                                                         [self goBack:_btnDone];
+                                                         [self goBack:_btnChangePwd];
                                                      } else {
                                                          // error
                                                      }
@@ -718,9 +727,6 @@
     }
 
 //    [self.categoryPickerView reloadAllComponents];
-    
-    
-    
     
     [self.pickerViewPopup showInView:self.view];
     [self.pickerViewPopup setBounds:CGRectMake(0, 0, 320, 400)];
@@ -872,7 +878,7 @@
             return NO;
             //break;
         case kTagFreshPassword:
-            [self.btnDone sendActionsForControlEvents: UIControlEventTouchUpInside];
+            [self.btnChangePwd sendActionsForControlEvents: UIControlEventTouchUpInside];
             return NO;
             //break;
         default:
@@ -959,7 +965,7 @@
                                                                                          _model.userToken = token;
                                                                                          [_model saveUserData];
                                                                                          
-                                                                                         [self goBack:_btnDone];
+                                                                                         [self goBack:_btnChangePwd];
                                                                                      } else {
                                                                                          // error
                                                                                      }
