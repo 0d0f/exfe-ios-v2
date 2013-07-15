@@ -110,8 +110,6 @@
     [btnBack addTarget:self action:@selector(gotoBack:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchDragExit];
     [self.view  addSubview:btnBack];
     
-//    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"x_bg.png"]]];
-    
     UISwipeGestureRecognizer *swipeHeaderTap = [UISwipeGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint point) {
         if (sender.state == UIGestureRecognizerStateEnded) {
             [btnBack sendActionsForControlEvents:UIControlEventTouchUpInside];
@@ -424,11 +422,12 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if (section == 1){
         CGFloat padding = 10;
-        CGFloat base1line = 20;
-        CGFloat base2line = 80;
+        CGFloat base1line = 10;
+        CGFloat base2line = 70;
         
         if(footerView == nil) {
             footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 10 + 62 + 44)];
+//            footerView.backgroundColor = [UIColor lightGrayColor];
             
             AYUIButton *btnSignOut = [AYUIButton buttonWithType:UIButtonTypeCustom];
             
@@ -516,11 +515,7 @@
     int count = [[_identitiesData objectAtIndex:indexPath.section] count];
     if (indexPath.section == 0) {
         if (count == indexPath.row) {
-//            AddIdentityViewController *addidentityView=[[[AddIdentityViewController alloc]initWithNibName:@"AddIdentityViewController" bundle:nil] autorelease];
-//            addidentityView.profileview=self;
-            
             EFAddIdentityViewController *addidentityView=[[EFAddIdentityViewController alloc]initWithNibName:@"EFAddIdentityViewController" bundle:nil];
-//            addidentityView.profileview=self;
             [self.navigationController pushViewController:addidentityView animated:YES];
         }else {
             Identity *identity = [[_identitiesData objectAtIndex:[indexPath section]]  objectAtIndex:indexPath.row];

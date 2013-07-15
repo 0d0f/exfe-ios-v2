@@ -162,6 +162,7 @@
 
     EFPasswordField *inputOldPassword = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
     inputOldPassword.leftViewMode = UITextFieldViewModeNever;
+    inputOldPassword.returnKeyType = UIReturnKeyNext;
     inputOldPassword.tag = kTagOldPassword;
     inputOldPassword.placeholder = NSLocalizedString(@"Current password", nil);
     inputOldPassword.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
@@ -179,6 +180,7 @@
     EFPasswordField *inputFreshPassword = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
     inputFreshPassword.leftViewMode = UITextFieldViewModeNever;
     inputFreshPassword.btnForgot.hidden = YES;
+    inputFreshPassword.returnKeyType = UIReturnKeyDone;
     inputFreshPassword.tag = kTagFreshPassword;
     inputFreshPassword.placeholder = NSLocalizedString(@"New password", nil);
     inputFreshPassword.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
@@ -427,26 +429,29 @@
 //    NSDictionary* info = [aNotification userInfo];
 //    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    [UIView animateWithDuration:0.4
-                     animations:^{
-                         self.forgotTitle.alpha = 0;
-                         self.forgotDetail.alpha = 0;
-                         self.identitybar.alpha = 0;
-                         self.btnAuth.alpha = 0;
-                         self.inlineError.alpha = 0;
-                     } completion:^(BOOL finished) {
-                         self.forgotTitle.hidden = YES;
-                         self.forgotDetail.hidden = YES;
-                         self.identitybar.hidden = YES;
-                         self.btnAuth.hidden = YES;
-                         self.inlineError.hidden = YES;
-                         
-                         self.forgotTitle.alpha = 100;
-                         self.forgotDetail.alpha = 100;
-                         self.identitybar.alpha = 100;
-                         self.btnAuth.alpha = 100;
-                         self.inlineError.alpha = 100;
-                     }];
+    if ([self.oldPwdTextField isFirstResponder] || [self.freshPwdTextField isFirstResponder]) {
+        
+        [UIView animateWithDuration:0.4
+                         animations:^{
+                             self.forgotTitle.alpha = 0;
+                             self.forgotDetail.alpha = 0;
+                             self.identitybar.alpha = 0;
+                             self.btnAuth.alpha = 0;
+                             self.inlineError.alpha = 0;
+                         } completion:^(BOOL finished) {
+                             self.forgotTitle.hidden = YES;
+                             self.forgotDetail.hidden = YES;
+                             self.identitybar.hidden = YES;
+                             self.btnAuth.hidden = YES;
+                             self.inlineError.hidden = YES;
+                             
+                             self.forgotTitle.alpha = 100;
+                             self.forgotDetail.alpha = 100;
+                             self.identitybar.alpha = 100;
+                             self.btnAuth.alpha = 100;
+                             self.inlineError.alpha = 100;
+                         }];
+    }
     
     
 }
@@ -529,19 +534,21 @@
             afterDelay:5];
 }
 
-- (void)showIndicatorAt:(CGPoint)center style:(UIActivityIndicatorViewStyle)style
+- (void)showErrorInfo:(NSString*)error over:(UIView*)view on:(UIView*)parent
 {
-    [_indicator removeFromSuperview];
-    _indicator.activityIndicatorViewStyle = style;
-    _indicator.center = center;
-    [self.rootView addSubview:_indicator];
-    [_indicator startAnimating];
-}
-
-- (void)hideIndicator
-{
-    [_indicator stopAnimating];
-    [_indicator removeFromSuperview];
+    [_hintError removeFromSuperview];
+    _hintError.text = error;
+    _hintError.backgroundColor = [UIColor COLOR_WA(250, 217)];
+    _hintError.frame = (CGRect){{16, 58}, {252, 35}};
+    _hintError.alpha = 1.0;
+    [parent addSubview:_hintError];
+    _hintError.hidden = NO;
+    [self performBlock:^(id sender) {
+        if (_hintError.hidden == NO) {
+            [self hide:_hintError withAnmated:YES];
+        }
+    }
+            afterDelay:5];
 }
 
 - (void)hide:(UIView *)view withAnmated:(BOOL)animated
@@ -557,6 +564,21 @@
         _hintError.hidden = YES;
         _hintError.alpha = 1.0;
     }
+}
+
+- (void)showIndicatorAt:(CGPoint)center style:(UIActivityIndicatorViewStyle)style
+{
+    [_indicator removeFromSuperview];
+    _indicator.activityIndicatorViewStyle = style;
+    _indicator.center = center;
+    [self.rootView addSubview:_indicator];
+    [_indicator startAnimating];
+}
+
+- (void)hideIndicator
+{
+    [_indicator stopAnimating];
+    [_indicator removeFromSuperview];
 }
 
 #pragma mark - UI Events
@@ -743,7 +765,7 @@
         sender.enabled = NO;
         [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
     }
-    
+
     [self.model.apiServer forgetPassword:self.identity.external_username
                                     with:[Identity getProviderCode:self.identity.provider]
                                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -934,84 +956,7 @@
         self.model.userToken = token;
         [self.model saveUserData];
         
-        [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set Password", nil)
-                                message:nil
-                     customizationBlock:^(WCAlertView *alertView) {
-                         alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
-                         UITextField *textField = [alertView textFieldAtIndex:0];
-                         textField.placeholder = NSLocalizedString(@"Set EXFE password", nil);
-                         textField.textAlignment = UITextAlignmentCenter;
-                     }
-                        completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
-                            if (buttonIndex == 0) {
-                                UITextField *field = [alertView textFieldAtIndex:0];
-                                NSString *password = [NSString stringWithString:field.text];
-                                NSLog(@"newPassword: %@", password);
-                                
-                                [self.model.apiServer changePassword:nil
-                                                                with:password
-                                                             success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                                 
-                                                                 if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                                                     NSDictionary *body = responseObject;
-                                                                     if([body isKindOfClass:[NSDictionary class]]) {
-                                                                         NSNumber *code = [body valueForKeyPath:@"meta.code"];
-                                                                         if (code) {
-                                                                             NSInteger c = [code integerValue];
-                                                                             NSInteger t = c / 100;
-                                                                             switch (t) {
-                                                                                 case 2:{
-                                                                                     // c == 200
-                                                                                     NSDictionary *resp = [responseObject valueForKeyPath:@"response"];
-                                                                                     NSString *token = [resp valueForKey:@"token"];
-                                                                                     if (token.length > 0) {
-                                                                                         _model.userToken = token;
-                                                                                         [_model saveUserData];
-                                                                                         
-                                                                                         [self goBack:_btnChangePwd];
-                                                                                     } else {
-                                                                                         // error
-                                                                                     }
-                                                                                 }
-                                                                                     break;
-                                                                                 case 3:{
-                                                                                     
-                                                                                 }  break;
-                                                                                 case 4:{
-                                                                                     NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
-                                                                                     if (c == 400) {
-                                                                                         if ([@"weak_password" isEqualToString:errorType]) {
-                                                                                             // error: "Weak password."
-                                                                                             [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"The new password is too weak. Pleas authenticate identity above again and set a more complex password.", nil)];
-                                                                                         }
-                                                                                     } else if (c == 401){
-                                                                                         if ([@"no_signin" isEqualToString:errorType]) {
-                                                                                             // error: "Not sign in"
-                                                                                         } else if ([@"authenticate_timeout" isEqualToString:errorType]) {
-                                                                                             // error: "Authenticate timeout."
-                                                                                             [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"The time is too long after the autentication. Please try authenticate identity above again.", nil)];
-                                                                                         }
-                                                                                     }
-                                                                                     
-                                                                                 }  break;
-                                                                                 case 5:{
-                                                                                     
-                                                                                 }  break;
-                                                                                 default:
-                                                                                     break;
-                                                                             }
-                                                                         }
-                                                                     }
-                                                                 }
-                                                             }
-                                                             failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                                 ;
-                                                             }];
-                            }
-                            
-                        }
-                      cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                      otherButtonTitles:NSLocalizedString(@"Done", nil), nil];
+        [self setPasswordWithErrorMessage:nil];
     } else {
         // TODO: Merge User
     }
@@ -1022,4 +967,105 @@
 
 
 #pragma mark - Private
+- (void) setPasswordWithErrorMessage:(NSString*)msg
+{
+    [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set Password", nil)
+                            message:nil
+                 customizationBlock:^(WCAlertView *alertView) {
+                     alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
+                     UITextField *textField = [alertView textFieldAtIndex:0];
+                     textField.placeholder = NSLocalizedString(@"Set EXFE password", nil);
+                     textField.textAlignment = UITextAlignmentCenter;
+//                     textField.delegate = self;
+                     if (msg) {
+                         [self showErrorInfo:msg over:textField on:[textField superview]];
+                     }
+                 }
+                    completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
+                        if (buttonIndex == 0) {
+                            UITextField *textField = [alertView textFieldAtIndex:0];
+                            NSString *password = [NSString stringWithString:textField.text];
+                            
+                            if (password.length < 4) {
+                                [self setPasswordWithErrorMessage:@"Invalid password."];
+                                return;
+                            }
+                            
+                            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                            hud.mode = MBProgressHUDModeIndeterminate;
+                            
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                                UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+                                    [hud hide:YES];
+                                }];
+                                [hud addGestureRecognizer:tap];
+                            });
+                            
+                            [self.model.apiServer changePassword:nil
+                                                            with:password
+                                                         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                             [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                             if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                                                 NSDictionary *body = responseObject;
+                                                                 if([body isKindOfClass:[NSDictionary class]]) {
+                                                                     NSNumber *code = [body valueForKeyPath:@"meta.code"];
+                                                                     if (code) {
+                                                                         NSInteger c = [code integerValue];
+                                                                         NSInteger t = c / 100;
+                                                                         switch (t) {
+                                                                             case 2:{
+                                                                                 // c == 200
+                                                                                 NSDictionary *resp = [responseObject valueForKeyPath:@"response"];
+                                                                                 NSString *token = [resp valueForKey:@"token"];
+                                                                                 if (token.length > 0) {
+                                                                                     _model.userToken = token;
+                                                                                     [_model saveUserData];
+                                                                                     
+                                                                                     [self goBack:_btnChangePwd];
+                                                                                 } else {
+                                                                                     // error
+                                                                                 }
+                                                                             }
+                                                                                 break;
+                                                                             case 3:{
+                                                                                 
+                                                                             }  break;
+                                                                             case 4:{
+                                                                                 NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
+                                                                                 if (c == 400) {
+                                                                                     if ([@"weak_password" isEqualToString:errorType]) {
+                                                                                         // error: "Weak password."
+                                                                                         [self setPasswordWithErrorMessage:@"Invalid password."];
+                                                                                         
+                                                                                     }
+                                                                                 } else if (c == 401){
+                                                                                     if ([@"no_signin" isEqualToString:errorType]) {
+                                                                                         // error: "Not sign in"
+                                                                                     } else if ([@"authenticate_timeout" isEqualToString:errorType]) {
+                                                                                         // error: "Authenticate timeout."
+                                                                                         [self showInlineError:NSLocalizedString(@"Set password failed.", nil) with:NSLocalizedString(@"The time is too long after the autentication. Please try authenticate identity above again.", nil)];
+                                                                                     }
+                                                                                 }
+                                                                                 
+                                                                             }  break;
+                                                                             case 5:{
+                                                                                 
+                                                                             }  break;
+                                                                             default:
+                                                                                 break;
+                                                                         }
+                                                                     }
+                                                                 }
+                                                             }
+                                                         }
+                                                         failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                             [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                         }];
+                        }
+                        
+                    }
+                  cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                  otherButtonTitles:NSLocalizedString(@"Done", nil), nil];
+}
+
 @end
