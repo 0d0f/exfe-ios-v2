@@ -118,7 +118,7 @@
             [self presentModalViewController:picker animated:YES];
         }else{
             // Simulator
-            NSLog(@"");
+//            NSLog(@"");
         }
         
     }];
@@ -126,7 +126,7 @@
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentModalViewController:picker animated:YES];
     }];
-    [sheet setCancelButtonWithTitle:nil handler:^{ NSLog(@"Never mind, then!"); }];
+//    [sheet setCancelButtonWithTitle:nil handler:^{ NSLog(@"Never mind, then!"); }];
     [sheet showInView:self.view];
 
 }
@@ -134,7 +134,7 @@
 #pragma mark UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    NSLog(@"didFinishPickingMediaWithInfo");
+//    NSLog(@"didFinishPickingMediaWithInfo");
     
     /*
      NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
@@ -174,7 +174,7 @@
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
-    NSLog(@"imagePickerControllerDidCancel");
+//    NSLog(@"imagePickerControllerDidCancel");
 }
 
 - (UIImage *)scaleImage:(UIImage *)image toScale:(float)scaleSize

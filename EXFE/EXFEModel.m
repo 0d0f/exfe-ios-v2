@@ -454,7 +454,7 @@ static NSString * kExtension           = @"exfe";
                     // error;
                 }
             } else {
-                NSLog(@"normal start up");
+//                NSLog(@"normal start up");
             }
         } else {
             // remove db for default user

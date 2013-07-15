@@ -632,8 +632,6 @@
         [self textFieldDidEndEditing:self.freshPwdTextField];
     }
     
-    NSLog(@"conver %@ to %@", self.oldPassword, self.freshPassword);
-    
     if (self.freshPassword.length < 4) {
         // error: "Invalid password."
         [self showErrorInfo:NSLocalizedString(@"Invalid password.", nil) dockOn:self.freshPwdTextField];
@@ -952,7 +950,6 @@
     
     if ([userid integerValue] == self.model.userId) {
         // use refresh token
-        NSLog(@"replace oldtoken: %@ to new refresh token: %@", self.model.userToken, token);
         self.model.userToken = token;
         [self.model saveUserData];
         
