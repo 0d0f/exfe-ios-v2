@@ -19,7 +19,7 @@
 #import "EFModel.h"
 #import "EFChangePasswordViewController.h"
 #import "EFEditProfileViewController.h"
-
+#import "AYUIButton.h"
 
 #define DECTOR_HEIGHT                    (100)
 
@@ -430,30 +430,29 @@
         if(footerView == nil) {
             footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 10 + 62 + 44)];
             
+            AYUIButton *btnSignOut = [AYUIButton buttonWithType:UIButtonTypeCustom];
             
-            self.btnSignOut = [UIButton buttonWithType:UIButtonTypeCustom];
-            NSMutableAttributedString *str1 = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Sign out", nil)];
-            NSMutableAttributedString *str2 = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Sign out", nil)];
-            NSUInteger length = str1.length;
+            NSMutableAttributedString *str1 = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Sign out", nil)];            NSUInteger length = str1.length;
             [str1 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, length)];
             [str1 addAttribute:NSForegroundColorAttributeName value:[UIColor COLOR_RED_EXFE] range:NSMakeRange(0, length)];
-            [self.btnSignOut setAttributedTitle:str1 forState:UIControlStateNormal];
-            [str2 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, length)];
-            [str2 addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(0, length)];
-            [self.btnSignOut setAttributedTitle:str2 forState:UIControlStateHighlighted];
+            [btnSignOut setAttributedTitle:str1 forState:UIControlStateNormal];
+            [btnSignOut.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
+            [btnSignOut setFrame:CGRectMake(197, base1line, 113, 40)];
+            [btnSignOut setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
+            [btnSignOut setBackgroundColor:[UIColor COLOR_WA(0x00, 0x0A)] forState:UIControlStateHighlighted];
+            btnSignOut.layer.cornerRadius = 4;
+            [btnSignOut addTarget:self action:@selector(Logout) forControlEvents:UIControlEventTouchUpInside];
+            [footerView addSubview:btnSignOut];
+            self.btnSignOut = btnSignOut;
             
-            [self.btnSignOut.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
-            [self.btnSignOut setFrame:CGRectMake(197, base1line, 113, 40)];
-            [self.btnSignOut setBackgroundColor:[UIColor clearColor]];
-            [self.btnSignOut addTarget:self action:@selector(Logout) forControlEvents:UIControlEventTouchUpInside];
-            [footerView addSubview:self.btnSignOut];
-            
-            self.btnForgetPassword = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.btnForgetPassword.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
-            [self.btnForgetPassword setFrame:CGRectMake(padding, base1line, 188, 40)];
-            [self.btnForgetPassword setBackgroundColor:[UIColor clearColor]];
-            [self.btnForgetPassword addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
-            [footerView addSubview:self.btnForgetPassword];
+            AYUIButton *btnForgetPassword = [AYUIButton buttonWithType:UIButtonTypeCustom];
+            [btnForgetPassword.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18]];
+            [btnForgetPassword setFrame:CGRectMake(padding, base1line, 188, 40)];
+            [btnForgetPassword setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
+            [btnForgetPassword setBackgroundColor:[UIColor COLOR_WA(0x00, 0x0A)] forState:UIControlStateHighlighted];
+            [btnForgetPassword addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
+            [footerView addSubview:btnForgetPassword];
+            self.btnForgetPassword = btnForgetPassword;
             
             UIButton *buttonrome = [UIButton buttonWithType:UIButtonTypeCustom];
             [buttonrome setTitle:NSLocalizedString(@"“Rome wasn't built in a day.”", nil) forState:UIControlStateNormal];
@@ -478,14 +477,10 @@
             title = NSLocalizedString(@"Set password...", nil);
         }
         NSMutableAttributedString *str3 = [[NSMutableAttributedString alloc] initWithString:title];
-        NSMutableAttributedString *str4 = [[NSMutableAttributedString alloc] initWithString:title];
         NSUInteger length = str3.length;
         [str3 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, length)];
         [str3 addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, length)];
         [self.btnForgetPassword setAttributedTitle:str3 forState:UIControlStateNormal];
-        [str4 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, length)];
-        [str4 addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(0, length)];
-        [self.btnForgetPassword setAttributedTitle:str4 forState:UIControlStateHighlighted];
         
         return footerView;
     }

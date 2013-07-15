@@ -90,6 +90,9 @@
 		4F1142E216AE40B000C30179 /* EXFETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1142E116AE40B000C30179 /* EXFETests.m */; };
 		4F15C34816E99CD4008FD99B /* EXTabLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15C34516E99CD4008FD99B /* EXTabLayer.m */; };
 		4F15C34916E99CD4008FD99B /* EXTabWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15C34716E99CD4008FD99B /* EXTabWidget.m */; };
+		4F1BDB7E1793F97900F7B786 /* AYUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1BDB7D1793F97900F7B786 /* AYUIButton.m */; };
+		4F1BDB7F1793F97900F7B786 /* AYUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1BDB7D1793F97900F7B786 /* AYUIButton.m */; };
+		4F1BDB801793F97900F7B786 /* AYUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1BDB7D1793F97900F7B786 /* AYUIButton.m */; };
 		4F25A1BA171FB9FF000513B5 /* CSLinearLayoutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */; };
 		4F25A1C2171FBA2A000513B5 /* CSLinearLayoutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */; };
 		4F25A1C3171FBA2B000513B5 /* CSLinearLayoutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */; };
@@ -2093,6 +2096,8 @@
 		4F15C34516E99CD4008FD99B /* EXTabLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabLayer.m; sourceTree = "<group>"; };
 		4F15C34616E99CD4008FD99B /* EXTabWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTabWidget.h; sourceTree = "<group>"; };
 		4F15C34716E99CD4008FD99B /* EXTabWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabWidget.m; sourceTree = "<group>"; };
+		4F1BDB7C1793F97900F7B786 /* AYUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AYUIButton.h; sourceTree = "<group>"; };
+		4F1BDB7D1793F97900F7B786 /* AYUIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AYUIButton.m; sourceTree = "<group>"; };
 		4F25A1B8171FB9FF000513B5 /* CSLinearLayoutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLinearLayoutView.h; path = Vendor/CSLinearLayoutView/CSLinearLayoutView/CSLinearLayoutView.h; sourceTree = SOURCE_ROOT; };
 		4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLinearLayoutView.m; path = Vendor/CSLinearLayoutView/CSLinearLayoutView/CSLinearLayoutView.m; sourceTree = SOURCE_ROOT; };
 		4F266F00168EC49900BDB9D5 /* EXLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXLabel.h; sourceTree = "<group>"; };
@@ -4024,6 +4029,8 @@
 				4FFB149416BFFB9600F76D32 /* SSTextView.m */,
 				4FA0C40816FB626B00E25C74 /* WCAlertView.h */,
 				4FA0C40916FB626B00E25C74 /* WCAlertView.m */,
+				4F1BDB7C1793F97900F7B786 /* AYUIButton.h */,
+				4F1BDB7D1793F97900F7B786 /* AYUIButton.m */,
 			);
 			name = Lib;
 			sourceTree = "<group>";
@@ -6245,6 +6252,7 @@
 				4FF9D126178A89EB00D01765 /* EFEditProfileViewController.m in Sources */,
 				4FF9D12B178A9E1A00D01765 /* EFChangePasswordViewController.m in Sources */,
 				4FF9D130178BE81D00D01765 /* Device.m in Sources */,
+				4F1BDB7F1793F97900F7B786 /* AYUIButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6455,6 +6463,7 @@
 				4FF9D127178A89EB00D01765 /* EFEditProfileViewController.m in Sources */,
 				4FF9D12C178A9E1A00D01765 /* EFChangePasswordViewController.m in Sources */,
 				4FF9D131178BE81D00D01765 /* Device.m in Sources */,
+				4F1BDB801793F97900F7B786 /* AYUIButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6665,6 +6674,7 @@
 				4FF9D125178A89EB00D01765 /* EFEditProfileViewController.m in Sources */,
 				4FF9D12A178A9E1A00D01765 /* EFChangePasswordViewController.m in Sources */,
 				4FF9D12F178BE81D00D01765 /* Device.m in Sources */,
+				4F1BDB7E1793F97900F7B786 /* AYUIButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

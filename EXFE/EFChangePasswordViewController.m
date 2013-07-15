@@ -620,7 +620,7 @@
     
     if ([self.freshPassword isEqualToString:self.oldPassword]) {
         // error: "same password"
-        [self showErrorInfo:NSLocalizedString(@"Invalid password.", nil) dockOn:self.freshPwdTextField];
+        [self showErrorInfo:NSLocalizedString(@"Same password?", nil) dockOn:self.freshPwdTextField];
         return;
     }
     
@@ -747,8 +747,8 @@
     [self.model.apiServer forgetPassword:self.identity.external_username
                                     with:[Identity getProviderCode:self.identity.provider]
                                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                     sender.enabled = YES;
-                                     [self hideIndicator];
+//                                     sender.enabled = YES;
+//                                     [self hideIndicator];
                                      if ([operation.response statusCode] == 200){
                                          if([responseObject isKindOfClass:[NSDictionary class]]) {
                                              NSDictionary *body = responseObject;
@@ -836,11 +836,14 @@
                                                          
                                                      }  break;
                                                      default:
-                                                         break;
+                                                        break;
                                                  }
                                              }
                                          }
                                      }
+                                     
+                                     sender.enabled = YES;
+                                     [self hideIndicator];
                                  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                      sender.enabled = YES;
                                      [self hideIndicator];
