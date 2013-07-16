@@ -76,9 +76,9 @@
     [welcome1 addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)CTFontCreateWithName(CFSTR("HelveticaNeue"), 21.0, NULL) range:NSMakeRange(0,[@"Thanks for using EXFE" length])];
     
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor whiteColor].CGColor range:NSMakeRange(0,[welcome1 length])];
-    [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[NSLocalizedString(@"Thanks for using ", nil) length],4)];
+    [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0 + [NSLocalizedString(@"Thanks for using", nil) length],4)];
 
-    [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0+[NSLocalizedString(@"Thanks for using EXFE\nThe group utility for gathering.\n\nWe save you from calling up every one RSVP, losing in endless emails and messages off the point.\n\n", nil) length],3)];
+    [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange(0 + [NSLocalizedString(@"Thanks for using EXFE\nThe group utility for gathering.\n\nWe save you from calling up every one RSVP, losing in endless emails and messages off the point.\n\n", nil) length],3)];
 
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([welcome1 length]-[@".\n\nEXFE your friends." length]-3,3)];
     [welcome1 addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)FONT_COLOR_HL.CGColor range:NSMakeRange([welcome1 length]-[@" your friends." length]-4,4)];
