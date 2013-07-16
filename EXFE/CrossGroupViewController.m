@@ -344,10 +344,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-
-    
-
+    self.cross = nil;
 }
 
 #pragma mark - Notification Handler
@@ -1455,6 +1452,8 @@
     [bigspin startAnimating];
     hud.customView=bigspin;
     
+    __weak typeof(self) weakSelf = self;
+    
     _cross.by_identity=[_cross.exfee getMyInvitation].identity;
     [self.model.apiServer editCross:_cross
                                     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
@@ -1465,11 +1464,11 @@
                                                 
                                                 if ([meta.code intValue] == 200) {
                                                     Cross *responsecross = [[mappingResult dictionary] objectForKey:@"response.cross"];
-                                                    if ([responsecross.cross_id intValue] == [self.cross.cross_id intValue]) {
+                                                    if ([responsecross.cross_id intValue] == [weakSelf.cross.cross_id intValue]) {
                                                         [app crossUpdateDidFinish:[responsecross.cross_id intValue]];
                                                     }
                                                 } else {
-                                                    [Util showErrorWithMetaObject:meta delegate:self];
+                                                    [Util showErrorWithMetaObject:meta delegate:weakSelf];
                                                 }
                                             }
                                         } else {
@@ -1480,7 +1479,7 @@
                                                 [alert show];
                                             }
                                         }
-                                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                        [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
                                     }
                                     failure:^(RKObjectRequestOperation *operation, NSError *error) {
                                         

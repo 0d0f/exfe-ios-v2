@@ -63,7 +63,7 @@ typedef enum {
 
 
 //@property (nonatomic,retain) UIViewController* gatherview;
-@property (nonatomic,strong) id delegate;
+@property (nonatomic, weak) id delegate;
 @property BOOL showdetailview;
 @property BOOL showtableview;
 @property BOOL isaddnew;

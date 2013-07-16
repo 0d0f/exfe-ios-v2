@@ -24,7 +24,7 @@
 @end
 
 @implementation TitleDescEditViewController
-@synthesize delegate;
+@synthesize delegate = _delegate;
 @synthesize imgurl;
 @synthesize editFieldHint;
 
@@ -243,7 +243,7 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 - (void) done:(id)sender{
-    [delegate setTitle:titleView.text Description:descView.text];
+    [self.delegate setTitle:titleView.text Description:descView.text];
     [self dismissModalViewControllerAnimated:YES];
 }
 

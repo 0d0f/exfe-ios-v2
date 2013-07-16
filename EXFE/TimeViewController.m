@@ -14,7 +14,7 @@
 @end
 
 @implementation TimeViewController
-@synthesize delegate;
+@synthesize delegate = _delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -363,7 +363,7 @@
     eftime.timezone=eftimezone;
     crosstime.begin_at=eftime;
 //    [delegate setTime:crosstime];
-    [delegate setTime:crosstime];
+    [self.delegate setTime:crosstime];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
