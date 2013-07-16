@@ -9,6 +9,7 @@
 #import "EFHeadView.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import <CoreText/CoreText.h>
 #import "Util.h"
 
 #define kDefaultHeight      (56.0f)
@@ -31,23 +32,56 @@
 
 
 - (void)drawInContext:(CGContextRef)ctx {
-    UIColor *color = nil;
+//    UIColor *color = nil;
+//    
+//    UIGraphicsPushContext(ctx);
+//    
+//    color = [UIColor COLOR_CARBON];
+//    [color set];
+//    [@"Gather a" drawAtPoint:CGPointMake(179.0f, 10.0f)
+//                    forWidth:200.0f
+//                    withFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:21]
+//              lineBreakMode:UILineBreakModeClip];
+//    
+//    color = [UIColor COLOR_BLUE_EXFE];
+//    [color set];
+//    [@"·X·" drawAtPoint:CGPointMake(262.0f, 10.0f)
+//               forWidth:40.0f
+//               withFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:21]
+//          lineBreakMode:UILineBreakModeClip];
     
-    UIGraphicsPushContext(ctx);
+    CGRect titleRect = CGRectMake(140, -5, 150, self.bounds.size.height);
+    CGFloat titlePaddingV = 5;
     
-    color = [UIColor COLOR_CARBON];
-    [color set];
-    [@"Gather a" drawAtPoint:CGPointMake(179.0f, 10.0f)
-                    forWidth:200.0f
-                    withFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:21]
-              lineBreakMode:UILineBreakModeClip];
+    CGContextSaveGState(ctx);
+    CGContextTranslateCTM(ctx, 0, self.bounds.size.height);
+    CGContextScaleCTM(ctx, 1.0, -1.0);
+    NSString * gather = NSLocalizedString(@"Gather a ·X·", nil);
     
-    color = [UIColor COLOR_BLUE_EXFE];
-    [color set];
-    [@"·X·" drawAtPoint:CGPointMake(262.0f, 10.0f)
-               forWidth:40.0f
-               withFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:21]
-          lineBreakMode:UILineBreakModeClip];
+    NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:gather];
+    CTFontRef fontRef= CTFontCreateWithName(CFSTR("HelveticaNeue-Light"), 21.0, NULL);
+    [string addAttribute:(NSString*)kCTFontAttributeName  value:(__bridge id)fontRef range:NSMakeRange(0,[string length])];
+    CFRelease(fontRef);
+    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_CARBON].CGColor range:NSMakeRange(0,9)];
+    [string addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:NSMakeRange(9,3)];
+    
+    CTTextAlignment alignment = kCTRightTextAlignment;
+    CTParagraphStyleSetting setting[1] = {
+        {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment}
+    };
+    CTParagraphStyleRef paragraphstyle = CTParagraphStyleCreate(setting, 1);
+    [string addAttribute:(id)kCTParagraphStyleAttributeName value:(__bridge id)paragraphstyle range:NSMakeRange(0,[string length])];
+    CFRelease(paragraphstyle);
+    
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)string);
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddRect(path, NULL, CGRectOffset(titleRect, 0, -titlePaddingV));
+    CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [string length]), path, NULL);
+    CFRelease(framesetter);
+    CFRelease(path);
+    CTFrameDraw(theFrame, ctx);
+    CFRelease(theFrame);
+    CGContextRestoreGState(ctx);
     
     UIGraphicsPopContext();
 }
