@@ -14,7 +14,6 @@
 @end
 
 @implementation TimeViewController
-@synthesize delegate = _delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -378,7 +377,7 @@
 }
 
 - (void) cleanDate{
-    [(NewGatherViewController*)delegate setTime:nil];
+    [(NewGatherViewController*)self.delegate setTime:nil];
 }
 
 #pragma mark UIScrollView methods

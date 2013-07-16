@@ -56,11 +56,6 @@
     return self;
 }
 
-- (void)dealloc {
-    self.tabBar.tabBarViewController = nil;
-    self.tabBar = nil;
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     

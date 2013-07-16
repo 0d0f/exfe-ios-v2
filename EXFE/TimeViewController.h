@@ -17,7 +17,6 @@
 
 @interface TimeViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>{
     IBOutlet UITextField *inputtimeword;
-    id<EditCrossDelegate> delegate;
     UITableView *_tableView;
     IBOutlet UIDatePicker *datepicker;
     NSArray* _times;
@@ -29,7 +28,7 @@
     UITextField *timeInput;
     double editinginterval;
 }
-@property (nonatomic, weak) id delegate;
+@property (nonatomic, weak) id<EditCrossDelegate> delegate;
 
 - (IBAction) Done:(id) sender;
 - (void) saveDate:(NSString*) time_word;
