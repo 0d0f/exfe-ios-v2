@@ -30,7 +30,6 @@ NSString *kEFNotificationNameLoadConversationFailure = @"notificaiton.loadConver
     
     NSAssert(self.model, @"model shouldn't be nill.");
     NSAssert(self.model.apiServer, @"api shouldn't be nill.");
-    NSAssert(self.updatedTime, @"updated time shouldn't be nil.");
     
     [self.model.apiServer loadConversationWithExfeeId:self.exfeeId
                                           updatedtime:self.updatedTime
