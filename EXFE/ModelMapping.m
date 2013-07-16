@@ -10,6 +10,7 @@
 #import <RestKit/RestKit.h>
 #import "Cross.h"
 #import "Exfee+EXFE.h"
+#import "Invitation+EXFE.h"
 #import "IdentityId.h"
 #import "DateTimeUtil.h"
 

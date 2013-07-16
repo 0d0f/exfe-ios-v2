@@ -93,6 +93,9 @@
 		4F1BDB7E1793F97900F7B786 /* AYUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1BDB7D1793F97900F7B786 /* AYUIButton.m */; };
 		4F1BDB7F1793F97900F7B786 /* AYUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1BDB7D1793F97900F7B786 /* AYUIButton.m */; };
 		4F1BDB801793F97900F7B786 /* AYUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1BDB7D1793F97900F7B786 /* AYUIButton.m */; };
+		4F1BDB8A1795464800F7B786 /* UIScreen+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1BDB891795464700F7B786 /* UIScreen+EXFE.m */; };
+		4F1BDB8B1795464800F7B786 /* UIScreen+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1BDB891795464700F7B786 /* UIScreen+EXFE.m */; };
+		4F1BDB8C1795464800F7B786 /* UIScreen+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1BDB891795464700F7B786 /* UIScreen+EXFE.m */; };
 		4F25A1BA171FB9FF000513B5 /* CSLinearLayoutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */; };
 		4F25A1C2171FBA2A000513B5 /* CSLinearLayoutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */; };
 		4F25A1C3171FBA2B000513B5 /* CSLinearLayoutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */; };
@@ -2098,6 +2101,8 @@
 		4F15C34716E99CD4008FD99B /* EXTabWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTabWidget.m; sourceTree = "<group>"; };
 		4F1BDB7C1793F97900F7B786 /* AYUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AYUIButton.h; sourceTree = "<group>"; };
 		4F1BDB7D1793F97900F7B786 /* AYUIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AYUIButton.m; sourceTree = "<group>"; };
+		4F1BDB881795464600F7B786 /* UIScreen+EXFE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScreen+EXFE.h"; sourceTree = "<group>"; };
+		4F1BDB891795464700F7B786 /* UIScreen+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScreen+EXFE.m"; sourceTree = "<group>"; };
 		4F25A1B8171FB9FF000513B5 /* CSLinearLayoutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLinearLayoutView.h; path = Vendor/CSLinearLayoutView/CSLinearLayoutView/CSLinearLayoutView.h; sourceTree = SOURCE_ROOT; };
 		4F25A1B9171FB9FF000513B5 /* CSLinearLayoutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLinearLayoutView.m; path = Vendor/CSLinearLayoutView/CSLinearLayoutView/CSLinearLayoutView.m; sourceTree = SOURCE_ROOT; };
 		4F266F00168EC49900BDB9D5 /* EXLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXLabel.h; sourceTree = "<group>"; };
@@ -3306,6 +3311,8 @@
 				765A82E8175F217400448B64 /* NSString+MD5.m */,
 				7686099C17817BC700534731 /* NSString+Format.h */,
 				7686099D17817BC700534731 /* NSString+Format.m */,
+				4F1BDB881795464600F7B786 /* UIScreen+EXFE.h */,
+				4F1BDB891795464700F7B786 /* UIScreen+EXFE.m */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -6253,6 +6260,7 @@
 				4FF9D12B178A9E1A00D01765 /* EFChangePasswordViewController.m in Sources */,
 				4FF9D130178BE81D00D01765 /* Device.m in Sources */,
 				4F1BDB7F1793F97900F7B786 /* AYUIButton.m in Sources */,
+				4F1BDB8B1795464800F7B786 /* UIScreen+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6464,6 +6472,7 @@
 				4FF9D12C178A9E1A00D01765 /* EFChangePasswordViewController.m in Sources */,
 				4FF9D131178BE81D00D01765 /* Device.m in Sources */,
 				4F1BDB801793F97900F7B786 /* AYUIButton.m in Sources */,
+				4F1BDB8C1795464800F7B786 /* UIScreen+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6675,6 +6684,7 @@
 				4FF9D12A178A9E1A00D01765 /* EFChangePasswordViewController.m in Sources */,
 				4FF9D12F178BE81D00D01765 /* Device.m in Sources */,
 				4F1BDB7E1793F97900F7B786 /* AYUIButton.m in Sources */,
+				4F1BDB8A1795464800F7B786 /* UIScreen+EXFE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

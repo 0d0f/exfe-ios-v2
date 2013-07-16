@@ -18,7 +18,11 @@ typedef NS_ENUM(NSUInteger, RsvpCode){
     kRsvpIgnored,
 };
 
+
+
 @interface Invitation (EXFE)
+
+@property (nonatomic, readonly, retain) NSArray *notification_identity_array;
 
 + (RsvpCode)getRsvpCode:(NSString*)str;
 + (NSString*)getRsvpString:(RsvpCode)code;

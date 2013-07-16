@@ -8,7 +8,7 @@
 
 #import <RestKit/RestKit.h>
 #import "Invitation+EXFE.h"
-
+#import "IdentityId+EXFE.h"
 
 @implementation Invitation (EXFE)
 
@@ -57,6 +57,15 @@
             break;
     }
     
+}
+
+- (NSArray *)notification_identity_array {
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:self.notification_identities.count];
+    for (IdentityId *identityId in self.notification_identities) {
+        [array addObject:identityId.identity_id];
+    }
+    
+    return array;
 }
 
 + (Invitation*)invitationWithIdentity:(Identity*)identity{
