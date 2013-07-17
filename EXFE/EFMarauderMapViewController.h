@@ -17,7 +17,6 @@
 
 @interface EFMarauderMapViewController : UIViewController
 <
-CLLocationManagerDelegate,
 MKMapViewDelegate,
 UITableViewDataSource,
 UITableViewDelegate,
@@ -26,8 +25,6 @@ EFTabBarDataSource
 
 @property (nonatomic, weak) EXFEModel   *model;
 @property (nonatomic, weak) Cross       *cross;
-
-@property (nonatomic, retain) CLLocationManager *locationManager;
 
 @property (weak, nonatomic) IBOutlet EFMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

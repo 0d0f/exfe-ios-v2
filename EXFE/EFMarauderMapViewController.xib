@@ -121,7 +121,6 @@
 								<string key="NSFrame">{{283, 13}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="458308029"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">2</int>
