@@ -115,5 +115,9 @@ extern NSString *const EXCrossListDidChangeNotification;
 + (NSString*) decodeFromPercentEscapeString:(NSString*)string;
 + (NSString*) encodeToPercentEscapeString:(NSString*)string;
 + (NSString *) EFPercentEscapedQueryStringPairMemberFromString:(NSString *)string;
+
+// GPS transform
++ (CLLocationCoordinate2D)earthLocationFromMarsLocation:(CLLocationCoordinate2D)marsLocation;
+
 @end
 

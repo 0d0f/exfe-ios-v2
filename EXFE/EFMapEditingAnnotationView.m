@@ -11,6 +11,16 @@
 #import <QuartzCore/QuartzCore.h>
 #import "EFMapColorButton.h"
 
+@interface EFLetterPickerView : UIView
+
+
+@end
+
+@implementation EFLetterPickerView
+
+
+@end
+
 @interface EFMapEditingAnnotationView ()
 
 @property (nonatomic, strong) EFMapColorButton  *blueButton;

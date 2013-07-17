@@ -7,6 +7,8 @@
 //
 
 #import "Util.h"
+
+#import <CoreLocation/CoreLocation.h>
 #import <math.h>
 #import <BlocksKit/BlocksKit.h>
 #import "UIApplication+EXFE.h"
@@ -16,6 +18,7 @@
 #import "NBPhoneNumberUtil.h"
 #import "NBPhoneNumber.h"
 #import "NBPhoneNumberDefines.h"
+#import "CSqlite.h"
 
 // Notification Definition
 NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
@@ -610,4 +613,38 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     }
     return parameters;
 }
+
++ (CSqlite *)gpsSqlite {
+    static CSqlite *Sqlite = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Sqlite = [[CSqlite alloc] init];
+        [Sqlite openSqlite];
+    });
+    
+    return Sqlite;
+}
+
++ (CLLocationCoordinate2D)earthLocationFromMarsLocation:(CLLocationCoordinate2D)marsLocation {
+    int TenLat = 0;
+    int TenLog = 0;
+    TenLat = (int)(marsLocation.latitude * 10);
+    TenLog = (int)(marsLocation.longitude * 10);
+    
+    NSString *sql = [[NSString alloc]initWithFormat:@"select offLat,offLog from gpsT where lat=%d and log=%d", TenLat, TenLog];
+    sqlite3_stmt *stmtL = [[self gpsSqlite] NSRunSql:sql];
+    int offLat = 0;
+    int offLog = 0;
+    
+    while (sqlite3_step(stmtL) == SQLITE_ROW) {
+        offLat = sqlite3_column_int(stmtL, 0);
+        offLog = sqlite3_column_int(stmtL, 1);
+    }
+    
+    marsLocation.latitude = marsLocation.latitude+offLat*0.0001;
+    marsLocation.longitude = marsLocation.longitude + offLog*0.0001;
+    
+    return marsLocation;
+}
+
 @end

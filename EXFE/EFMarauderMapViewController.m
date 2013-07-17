@@ -17,6 +17,7 @@
 #import "Exfee+EXFE.h"
 #import "Invitation+EXFE.h"
 #import "EFDataManager+Image.h"
+#import "Util.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 
@@ -125,6 +126,9 @@
         self.mapDataSource = [[EFMarauderMapDataSource alloc] init];
         self.dataSource = [[EFMapPeopleDataSource alloc] init];
         
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+        
         self.lock = [[NSRecursiveLock alloc] init];
         [self.dataSource addObserver:self
                           forKeyPath:@"peopleCount"
@@ -186,6 +190,14 @@
     self.tableView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, self.invitations.count * [EFMapPersonCell defaultCellHeight]}};
     
     [self _getRoute];
+    
+    [self.locationManager startUpdatingLocation];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [self.locationManager stopUpdatingLocation];
+    
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark - Gesture
@@ -369,6 +381,34 @@
     return [EFMapPersonCell defaultCellHeight];
 }
 
+#pragma mark - CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager
+	 didUpdateLocations:(NSArray *)locations {
+    CLLocation *currentLocation = locations[0];
+    
+    CLLocationCoordinate2D fixedCoordinate = [Util earthLocationFromMarsLocation:currentLocation.coordinate];
+    if (self.isInited) {
+        self.isInited = NO;
+        
+        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(fixedCoordinate, 5000.0f, 5000.0f);
+        [self.mapView setRegion:region animated:YES];
+        
+        [self initTestData];
+        [self.tableView reloadData];
+    }
+    
+    EFLocation *position = [[EFLocation alloc] init];
+    position.coordinate = fixedCoordinate;
+    position.timestamp = [NSDate date];
+    position.accuracy = currentLocation.horizontalAccuracy;
+    
+    [self.model.apiServer updateLocation:position
+                             withCrossId:[self.cross.cross_id integerValue]
+                                 success:nil
+                                 failure:nil];
+}
+
 #pragma mark - MKMapViewDelegate
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
@@ -392,6 +432,8 @@
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    return;
+    
     CLLocation *location = userLocation.location;
     
     if (self.isInited) {
