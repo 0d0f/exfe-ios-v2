@@ -19,6 +19,9 @@
 #define kModelKeyBio     @"bio"
 #define kModelKeyAvatar  @"avatar"
 
+#define kTagName    233
+#define kTagBio     234
+
 @interface EFEditProfileViewController ()
 
 @property (nonatomic, weak) EXFEModel *model;
@@ -27,7 +30,8 @@
 
 @property (nonatomic, strong) UITextField *name;
 @property (nonatomic, strong) UIImageView *avatar;
-@property (nonatomic, strong) UITextField *bio;
+@property (nonatomic, strong) SSTextView *bio;
+@property (nonatomic, strong) UILabel *identityId;
 
 @property (nonatomic, strong) UIView *header;
 @property (nonatomic, strong) UIView *footer;
@@ -67,6 +71,7 @@
     self = [super init];
     if (self) {
         self.model = model;
+        self.data = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -119,14 +124,28 @@
     [header addSubview:btnBack];
     
     UITextField *fullName = [[UITextField alloc] initWithFrame:CGRectMake(30, 15, 260, 50)];
-    fullName.backgroundColor = [UIColor blackColor];
+    fullName.backgroundColor = [UIColor clearColor];
+    fullName.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:21];
     fullName.returnKeyType = UIReturnKeyDone;
+    fullName.textColor = [UIColor whiteColor];
+    fullName.textAlignment = NSTextAlignmentCenter;
     fullName.delegate = self;
+    fullName.tag = kTagName;
     [header addSubview:fullName];
+    self.name = fullName;
     
-    UIButton *camera = [[UIButton alloc] initWithFrame:CGRectMake(270, 25, 30, 30)];
+    UILabel *identityId = [[UILabel alloc] initWithFrame:CGRectMake(30, CGRectGetHeight(header.bounds) / 2, 260, 30)];
+    identityId.backgroundColor = [UIColor clearColor];
+    identityId.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:14];
+    identityId.textColor = [UIColor whiteColor];
+    identityId.textAlignment = NSTextAlignmentCenter;
+    [header addSubview:identityId];
+    self.identityId = identityId;
+    
+    UIButton *camera = [UIButton buttonWithType:UIButtonTypeCustom];
+    camera.frame = CGRectMake(280, CGRectGetHeight(header.bounds) / 2  - 30 / 2, 30, 30);
     [camera addTarget:self action:@selector(takePicture:) forControlEvents:UIControlEventTouchUpInside];
-    camera.backgroundColor = [UIColor brownColor];
+    [camera setBackgroundImage:[UIImage imageNamed:@"camera_30.png"] forState:UIControlStateNormal];
     [header addSubview:camera];
     
     [self.view addSubview:header];
@@ -149,7 +168,9 @@
     bio.textColor = [UIColor whiteColor];
     bio.backgroundColor = [UIColor clearColor];
     bio.delegate = self;
+    bio.tag = kTagBio;
     [footer addSubview:bio];
+    self.bio = bio;
     
     [self.view addSubview:footer];
     self.footer = footer;
@@ -169,6 +190,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    [self fillUI];
+    
     [self registerAsObserver];
 }
 
@@ -203,6 +226,18 @@
     if (motion == UIEventSubtypeMotionShake)
     {
         NSLog(@"shaked");
+        
+        if (self.data.count > 0) {
+            
+            UIAlertView *alertView = [UIAlertView alertViewWithTitle:NSLocalizedString(@"Revert editing", nil) message:NSLocalizedString(@"Confirm reverting portrait or anything changed?", nil)];
+            [alertView addButtonWithTitle:NSLocalizedString(@"Revert", nil) handler:^{
+                [_data removeAllObjects];
+                self.orignalImage = nil;
+                [self fillUI];
+            }];
+            [alertView setCancelButtonWithTitle:NSLocalizedString(@"Cancel", nil) handler:nil];
+            [alertView show];
+        }
     }
 }
 
@@ -215,6 +250,18 @@
      */
     [self addObserver:self
            forKeyPath:@"orignalImage"
+              options:(NSKeyValueObservingOptionNew |
+                       NSKeyValueObservingOptionOld)
+              context:NULL];
+    
+    [self.data addObserver:self
+           forKeyPath:@"name"
+              options:(NSKeyValueObservingOptionNew |
+                       NSKeyValueObservingOptionOld)
+              context:NULL];
+    
+    [self.data addObserver:self
+           forKeyPath:@"bio"
               options:(NSKeyValueObservingOptionNew |
                        NSKeyValueObservingOptionOld)
               context:NULL];
@@ -240,8 +287,12 @@
                        context:(void *)context {
     
     if ([keyPath isEqual:@"orignalImage"]) {
-        UIImage * image = [change objectForKey:NSKeyValueChangeNewKey];
-        [self.avatar setImage:image];
+//        UIImage * image = [change objectForKey:NSKeyValueChangeNewKey];
+        [self fillAvatar:self.orignalImage];
+    } else if ([keyPath isEqual:@"name"]) {
+        [self fillUI];
+    } else if ([keyPath isEqual:@"bio"]) {
+        [self fillUI];
     } else {
         /*
          Be sure to call the superclass's implementation *if it implements it*.
@@ -295,6 +346,90 @@
 }
 
 #pragma mark - UI Refresh
+- (void)fillUI
+{
+    if (self.isEditUser) {
+        [self fillUser:self.user];
+    } else {
+        [self fillIdentity:self.identity];
+    }
+}
+
+- (void)fillUser:(User *)user
+{
+    NSString *dataName = [self.data valueForKey:@"name"];
+    if (dataName) {
+        [self fillName:dataName];
+    } else {
+        [self fillName:user.name];
+    }
+    if (self.identityId.hidden == NO) {
+        self.identityId.hidden = YES;
+        self.identityId.text = nil;
+    }
+    
+    NSString *dataBio = [self.data valueForKey:@"bio"];
+    if (dataBio) {
+        [self fillBio:dataBio];
+    } else {
+        [self fillBio:user.bio];
+    }
+
+}
+
+- (void)fillIdentity:(Identity *)identity
+{
+    
+    NSString *dataName = [self.data valueForKey:@"name"];
+    if (dataName) {
+        [self fillName:dataName];
+    } else {
+        [self fillName:identity.name];
+    }
+    [self fillIdentityDisplayName:[identity getDisplayIdentity]];
+    
+    if (self.identityId.hidden == YES) {
+        self.identityId.hidden = NO;
+    }
+    
+    CGFloat offset = CGRectGetHeight(self.name.bounds) / 2 - CGRectGetHeight(self.identityId.bounds) / 2;
+    self.name.frame = CGRectOffset(self.name.frame, 0, -offset);
+    self.identityId.frame = CGRectOffset(self.identityId.frame, 0, -offset + 2);
+    
+    NSString *dataBio = [self.data valueForKey:@"bio"];
+    if (dataBio) {
+        [self fillBio:dataBio];
+    } else {
+        [self fillBio:identity.bio];
+    }
+}
+
+- (void)fillName:(NSString *)name
+{
+    self.name.text = name;
+    CGSize size = [self.name sizeThatFits:CGSizeMake(260, 50)];
+    CGPoint p = self.header.center;
+    self.name.frame = (CGRect){{p.x - 260 / 2, p.y - size.height / 2},{260, size.height}};
+}
+
+- (void)fillIdentityDisplayName:(NSString *)displayName
+{
+    self.identityId.text = displayName;
+    CGSize size = [self.identityId sizeThatFits:CGSizeMake(260, 50)];
+    CGPoint p = self.header.center;
+    self.identityId.frame = (CGRect){{p.x - 260 / 2, p.y + size.height / 2},{260, size.height}};
+}
+
+- (void)fillAvatar:(UIImage *)image
+{
+    self.avatar.image = image;
+    self.avatar.frame = self.avatar.bounds;
+}
+
+- (void)fillBio:(NSString *)bio
+{
+    self.bio.text = bio;
+}
 
 #pragma mark - UI Events
 
@@ -311,6 +446,14 @@
 #pragma mark UIButton action
 - (void)goBack:(id)view
 {
+    if ([self.name isFirstResponder]) {
+        [self textFieldDidEndEditing:self.name];
+    }
+    
+    if ([self.bio isFirstResponder]) {
+        [self textViewDidEndEditing:self.bio];
+    }
+    
     [self dismissModalViewControllerAnimated:YES];
 }
 
@@ -342,13 +485,55 @@
 #pragma mark UITextViewDelegate
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
-    
+    switch (textView.tag) {
+        case kTagBio:
+            [self.data setValue:textView.text forKey:@"bio"];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    textView.returnKeyType = UIReturnKeyDefault;
+    return YES;
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range
+ replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"]) {
+        NSUInteger length = textView.text.length;
+        if (range.length == 0 && range.location == length) {
+            // append e enter
+            if ([textView.text hasSuffix:@"\n"]) {
+                
+                textView.text = [textView.text substringToIndex:length - 1];
+                [textView resignFirstResponder];
+                return NO;
+                
+            } else {
+                textView.returnKeyType = UIReturnKeyDone;
+                return YES;
+            }
+        }
+    }
+    return YES;
 }
 
 #pragma mark UITextFieldDelegate
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    
+    switch (textField.tag) {
+        case kTagName:
+            [self.data setValue:textField.text forKey:@"name"];
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

@@ -524,44 +524,48 @@
                 return;
             }
             
-            [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set name for", nil)
-                                    message:[identity getDisplayIdentity]
-                         customizationBlock:^(WCAlertView *alertView) {
-                             alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-                             UITextField *field = [alertView textFieldAtIndex:0];
-                             field.text = identity.name;
-                             field.placeholder = [identity getDisplayName];
-                         }
-                            completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
-                                [tableView deselectRowAtIndexPath:indexPath animated:YES];
-                                if (buttonIndex == 0 /*alertView.firstOtherButtonIndex*/) {
-                                    UITextField *field = [alertView textFieldAtIndex:0];
-                                    NSString *name = field.text;
-                                    if (name && name.length > 0) {
-                                        [self.model.apiServer updateIdentity:identity name:name andBio:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                            if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                                NSDictionary *body=responseObject;
-                                                if([body isKindOfClass:[NSDictionary class]]) {
-                                                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-                                                    if(code){
-                                                        if([code intValue]==200) {
-                                                            NSDictionary *responseobj=[body objectForKey:@"response"];
-                                                            if([responseobj isKindOfClass:[NSDictionary class]]){
-                                                                // We need new server api to support restful action to avoid following requests.
-                                                                [[NSNotificationCenter defaultCenter] postNotificationName:@"TestNotification" object:self];
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            
-                                        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                        }];
-                                    }
-                                }
-                            }
-                          cancelButtonTitle:@"Cancel"
-                          otherButtonTitles:@"Set", nil];
+            EFEditProfileViewController* vc = [[EFEditProfileViewController alloc] initWithModel:self.model];
+            vc.identity = identity;
+            [self presentModalViewController:vc animated:YES];
+            
+//            [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set name for", nil)
+//                                    message:[identity getDisplayIdentity]
+//                         customizationBlock:^(WCAlertView *alertView) {
+//                             alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+//                             UITextField *field = [alertView textFieldAtIndex:0];
+//                             field.text = identity.name;
+//                             field.placeholder = [identity getDisplayName];
+//                         }
+//                            completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
+//                                [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//                                if (buttonIndex == 0 /*alertView.firstOtherButtonIndex*/) {
+//                                    UITextField *field = [alertView textFieldAtIndex:0];
+//                                    NSString *name = field.text;
+//                                    if (name && name.length > 0) {
+//                                        [self.model.apiServer updateIdentity:identity name:name andBio:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//                                            if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+//                                                NSDictionary *body=responseObject;
+//                                                if([body isKindOfClass:[NSDictionary class]]) {
+//                                                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
+//                                                    if(code){
+//                                                        if([code intValue]==200) {
+//                                                            NSDictionary *responseobj=[body objectForKey:@"response"];
+//                                                            if([responseobj isKindOfClass:[NSDictionary class]]){
+//                                                                // We need new server api to support restful action to avoid following requests.
+//                                                                [[NSNotificationCenter defaultCenter] postNotificationName:@"TestNotification" object:self];
+//                                                            }
+//                                                        }
+//                                                    }
+//                                                }
+//                                            }
+//                                            
+//                                        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//                                        }];
+//                                    }
+//                                }
+//                            }
+//                          cancelButtonTitle:@"Cancel"
+//                          otherButtonTitles:@"Set", nil];
         }
     }
 }
