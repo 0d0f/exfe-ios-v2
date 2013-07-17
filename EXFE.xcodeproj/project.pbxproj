@@ -1644,6 +1644,9 @@
 		76B123B51796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */; };
 		76B123B61796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */; };
 		76B123B71796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */; };
+		76B123C81796496100A73E59 /* EFMarauderMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */; };
+		76B123C91796496100A73E59 /* EFMarauderMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */; };
+		76B123CA1796496100A73E59 /* EFMarauderMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */; };
 		76BC7B0A176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
 		76BC7B0B176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
 		76BC7B0C176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
@@ -2639,6 +2642,7 @@
 		76B123731796470C00A73E59 /* EFRoutePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRoutePath.m; sourceTree = "<group>"; };
 		76B123741796470C00A73E59 /* EFTouchDownGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTouchDownGestureRecognizer.h; sourceTree = "<group>"; };
 		76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTouchDownGestureRecognizer.m; sourceTree = "<group>"; };
+		76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFMarauderMapViewController.xib; sourceTree = "<group>"; };
 		76BC7B08176EAC3D003F4FBA /* EFQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFQueueManager.h; sourceTree = "<group>"; };
 		76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFQueueManager.m; sourceTree = "<group>"; };
 		76BC7B0F176EB9C7003F4FBA /* EFRunLoopOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRunLoopOperation.h; sourceTree = "<group>"; };
@@ -3821,6 +3825,7 @@
 			children = (
 				76B1236E1796470C00A73E59 /* EFMarauderMapViewController.h */,
 				76B1236F1796470C00A73E59 /* EFMarauderMapViewController.m */,
+				76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -5417,6 +5422,7 @@
 				4F77ABB51791AD1F000EE499 /* btn_blue_30@2x.png in Resources */,
 				4F77ABC11791AD4B000EE499 /* chevron_d20g5.png in Resources */,
 				4F77ABC41791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
+				76B123C91796496100A73E59 /* EFMarauderMapViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5836,6 +5842,7 @@
 				4F77ABB61791AD1F000EE499 /* btn_blue_30@2x.png in Resources */,
 				4F77ABC21791AD4B000EE499 /* chevron_d20g5.png in Resources */,
 				4F77ABC51791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
+				76B123CA1796496100A73E59 /* EFMarauderMapViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6253,6 +6260,7 @@
 				4F77ABB41791AD1F000EE499 /* btn_blue_30@2x.png in Resources */,
 				4F77ABC01791AD4B000EE499 /* chevron_d20g5.png in Resources */,
 				4F77ABC31791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
+				76B123C81796496100A73E59 /* EFMarauderMapViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
