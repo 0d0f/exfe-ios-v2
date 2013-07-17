@@ -299,7 +299,7 @@ static UIView * ReverseSubviews(UIView *view) {
     [baseView addSubview:annatationView];
     self.editingAnnotatoinView = annatationView;
     
-    self.editingState = kEFMapViewEditingStateReady;
+    self.editingState = kEFMapViewEditingStateNormal;
 }
 
 - (void)_init {
@@ -322,8 +322,6 @@ static UIView * ReverseSubviews(UIView *view) {
 //    self.touchDownGestureRecognizer.maximumNumberOfTouches = 1;
     
     [self _initEditingViews];
-    
-    self.editing = NO;
     
 //    __weak typeof(self) weakSelf = self;
 //    
@@ -462,21 +460,31 @@ static UIView * ReverseSubviews(UIView *view) {
     [self didChangeValueForKey:@"editingState"];
     
     switch (editingState) {
+        case kEFMapViewEditingStateNormal:
+            self.editing = NO;
+            self.editingBaseView.hidden = YES;
+            break;
         case kEFMapViewEditingStateEditingPath:
             self.editingPathView.hidden = NO;
             self.editingReadyView.hidden = YES;
             self.editingAnnotatoinView.hidden = YES;
+            self.editing = YES;
+            self.editingBaseView.hidden = NO;
             break;
         case kEFMapViewEditingStateEditingAnnotation:
             self.editingAnnotatoinView.hidden = NO;
             self.editingPathView.hidden = YES;
             self.editingReadyView.hidden = YES;
+            self.editing = NO;
+            self.editingBaseView.hidden = NO;
             break;
         case kEFMapViewEditingStateReady:
         default:
             self.editingReadyView.hidden = NO;
             self.editingPathView.hidden = YES;
             self.editingAnnotatoinView.hidden = YES;
+            self.editing = YES;
+            self.editingBaseView.hidden = NO;
             break;
     }
 }
@@ -497,8 +505,6 @@ static UIView * ReverseSubviews(UIView *view) {
     self.touchDownGestureRecognizer.enabled = editing ? YES : NO;
     self.tapGestureRecognizer.enabled = editing ? YES : NO;
     self.panGestureRecognizer.enabled = editing ? YES : NO;
-    
-    self.editingBaseView.hidden = editing ? NO : YES;
     
     
 //    if (editing) {

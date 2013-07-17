@@ -14,7 +14,8 @@ typedef enum {
 } EFMapOperationStyle;
 
 typedef enum {
-    kEFMapViewEditingStateReady = 0,
+    kEFMapViewEditingStateNormal = 0,
+    kEFMapViewEditingStateReady,
     kEFMapViewEditingStateEditingPath,
     kEFMapViewEditingStateEditingAnnotation,
 } EFMapViewEditingState;

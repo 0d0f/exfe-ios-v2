@@ -383,13 +383,12 @@
         self.currentCalloutAnnotation = calloutAnnotation;
         
         self.mapView.editingState = kEFMapViewEditingStateEditingAnnotation;
-        self.mapView.editing = YES;
     }
 }
 
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
     [self _hideCalloutView];
-    self.mapView.editing = NO;
+    self.mapView.editingState = kEFMapViewEditingStateNormal;
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
@@ -501,7 +500,11 @@
 #pragma mark - Action
 
 - (IBAction)parkButtonPressed:(id)sender {
-    self.mapView.editing = !self.mapView.isEditing;
+    if (kEFMapViewEditingStateEditingPath != self.mapView.editingState) {
+        self.mapView.editingState = kEFMapViewEditingStateEditingPath;
+    } else {
+        self.mapView.editingState = kEFMapViewEditingStateNormal;
+    }
 }
 
 - (IBAction)headingButtonPressed:(id)sender {
