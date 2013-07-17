@@ -10,6 +10,7 @@
 
 #import "EFAnnotation.h"
 #import "EFAnnotationView.h"
+#import "Util.h"
 
 NSString *EFNotificationRoutePathDidChange = @"notification.routePath.didChange";
 NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.didChange";
@@ -69,7 +70,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     
     [self.routeLocations addObject:routeLocation];
     EFAnnotation *annotation = [[EFAnnotation alloc] initWithStyle:self.isDestinationExisted ? kEFAnnotationStyleParkBlue : kEFAnnotationStyleDestination
-                                                        coordinate:routeLocation.coordinate
+                                                        coordinate:[Util earthLocationFromMarsLocation:routeLocation.coordinate]
                                                              title:routeLocation.title
                                                        description:routeLocation.subtitle];
     [self.routeLocationAnnotationMap setObject:annotation forKey:[NSValue valueWithNonretainedObject:routeLocation]];
@@ -86,7 +87,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 #endif
     
     EFAnnotation *annotation = [self.routeLocationAnnotationMap objectForKey:[NSValue valueWithNonretainedObject:routeLocation]];
-    annotation.coordinate = routeLocation.coordinate;
+    annotation.coordinate = [Util earthLocationFromMarsLocation:routeLocation.coordinate];
     annotation.title = routeLocation.title;
     annotation.subtitle = routeLocation.subtitle;
     

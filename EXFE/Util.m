@@ -641,10 +641,32 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         offLog = sqlite3_column_int(stmtL, 1);
     }
     
-    marsLocation.latitude = marsLocation.latitude+offLat*0.0001;
-    marsLocation.longitude = marsLocation.longitude + offLog*0.0001;
+    marsLocation.latitude = marsLocation.latitude + offLat * 0.0001;
+    marsLocation.longitude = marsLocation.longitude + offLog * 0.0001;
     
     return marsLocation;
+}
+
++ (CLLocationCoordinate2D)marsLocationFromEarthLocation:(CLLocationCoordinate2D)earthLocation {
+    int TenLat = 0;
+    int TenLog = 0;
+    TenLat = (int)(earthLocation.latitude * 10);
+    TenLog = (int)(earthLocation.longitude * 10);
+    
+    NSString *sql = [[NSString alloc]initWithFormat:@"select offLat,offLog from gpsT where lat=%d and log=%d", TenLat, TenLog];
+    sqlite3_stmt *stmtL = [[self gpsSqlite] NSRunSql:sql];
+    int offLat = 0;
+    int offLog = 0;
+    
+    while (sqlite3_step(stmtL) == SQLITE_ROW) {
+        offLat = sqlite3_column_int(stmtL, 0);
+        offLog = sqlite3_column_int(stmtL, 1);
+    }
+    
+    earthLocation.latitude = earthLocation.latitude - offLat * 0.0001;
+    earthLocation.longitude = earthLocation.longitude - offLog * 0.0001;
+    
+    return earthLocation;
 }
 
 @end

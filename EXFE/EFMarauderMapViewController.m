@@ -221,6 +221,8 @@
             startLocation = location;
             lastLocation = location;
             
+            coordinate = [Util marsLocationFromEarthLocation:coordinate];
+            
             routeLocation = [EFRouteLocation generateRouteLocationWithCoordinate:coordinate];
             routeLocation.title = @"子时正刻";
             routeLocation.subtitle = @"233 233";
@@ -246,7 +248,7 @@
             
             coordinate = [self.mapView convertPoint:lastLocation toCoordinateFromView:self.mapView];
             
-            routeLocation.coordinate = coordinate;
+            routeLocation.coordinate = [Util marsLocationFromEarthLocation:coordinate];
             [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
             [self _postRoute];
             

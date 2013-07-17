@@ -118,6 +118,7 @@ extern NSString *const EXCrossListDidChangeNotification;
 
 // GPS transform
 + (CLLocationCoordinate2D)earthLocationFromMarsLocation:(CLLocationCoordinate2D)marsLocation;
++ (CLLocationCoordinate2D)marsLocationFromEarthLocation:(CLLocationCoordinate2D)earthLocation;
 
 @end
 
