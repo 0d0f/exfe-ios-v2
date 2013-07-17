@@ -275,11 +275,12 @@ static UIView * ReverseSubviews(UIView *view) {
 }
 
 - (void)_initEditingViews {
-    CGRect viewBoundds = self.bounds;
-    CGRect baseViewFrame = (CGRect){{50.0f, CGRectGetHeight(viewBoundds) - 37.0f}, {CGRectGetWidth(viewBoundds) - 100.0f, 25.0f}};
+    CGRect viewBounds = self.bounds;
+    CGRect baseViewFrame = (CGRect){{50.0f, CGRectGetHeight(viewBounds) - 37.0f}, {CGRectGetWidth(viewBounds) - 100.0f, 25.0f}};
     
     UIView *baseView = [[UIView alloc] initWithFrame:baseViewFrame];
     baseView.backgroundColor = [UIColor clearColor];
+    baseView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
     [self addSubview:baseView];
     self.editingBaseView = baseView;
     
@@ -293,6 +294,10 @@ static UIView * ReverseSubviews(UIView *view) {
     EFMapEditingPathView *pathView = [[EFMapEditingPathView alloc] initWithFrame:pathViewFrame];
     [baseView addSubview:pathView];
     self.editingPathView = pathView;
+    
+    EFMapEditingAnnotationView *annatationView = [[EFMapEditingAnnotationView alloc] initWithFrame:baseViewBounds];
+    [baseView addSubview:annatationView];
+    self.editingAnnotatoinView = annatationView;
     
     self.editingState = kEFMapViewEditingStateReady;
 }
@@ -395,6 +400,14 @@ static UIView * ReverseSubviews(UIView *view) {
     }
     
     return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    CGRect viewBounds = self.bounds;
+    CGRect baseViewFrame = (CGRect){{50.0f, CGRectGetHeight(viewBounds) - 37.0f}, {CGRectGetWidth(viewBounds) - 100.0f, 25.0f}};
+    self.editingBaseView.frame = baseViewFrame;
 }
 
 #pragma mark - Gesture Hanlder
