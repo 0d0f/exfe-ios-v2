@@ -422,8 +422,9 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
 }
 
 - (void)setTabBarViewController:(EFTabBarViewController *)tabBarViewController {
-    if (_tabBarViewController == tabBarViewController)
+    if (_tabBarViewController == tabBarViewController) {
         return;
+    }
     
     if (_tabBarViewController) {
         [_tabBarViewController removeObserver:self
@@ -494,6 +495,7 @@ inline static CGMutablePathRef CreateMaskPath(CGRect viewBounds, CGPoint startPo
                                                                                    completion:nil];
         }
     }
+    self.tabBarViewController = nil;
 }
 
 #pragma mark - Gesture Handle

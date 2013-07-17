@@ -11,6 +11,7 @@
 #import "EFTabBarItem.h"
 
 @interface EFTabBarViewController ()
+@property (weak, nonatomic) EFTabBar *tabBar;
 @property (nonatomic, strong) UIView *containView;
 @property (nonatomic, weak) UIViewController<EFTabBarDataSource> *preSelectedViewController;
 @end

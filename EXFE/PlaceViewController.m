@@ -16,7 +16,7 @@
 @end
 
 @implementation PlaceViewController
-@synthesize delegate;
+@synthesize delegate = _delegate;
 @synthesize showdetailview;
 @synthesize isaddnew;
 @synthesize showtableview;
@@ -346,7 +346,7 @@
 //        }
     }
 
-    [delegate setPlace:self.selecetedPlace];
+    [self.delegate setPlace:self.selecetedPlace];
     [self dismissModalViewControllerAnimated:YES];
 }
 
