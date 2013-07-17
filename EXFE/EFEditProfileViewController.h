@@ -10,7 +10,7 @@
 #import "User+EXFE.h"
 #import "Identity+EXFE.h"
 
-@interface EFEditProfileViewController : UIViewController < UIImagePickerControllerDelegate>
+@interface EFEditProfileViewController : UIViewController < UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) User *user;
 @property (nonatomic, strong) Identity *identity;

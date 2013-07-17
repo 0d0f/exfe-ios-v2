@@ -468,7 +468,7 @@
         NSString *title = [[time getTimeTitle] sentenceCapitalizedString];
         if (title == nil || title.length == 0) {
             timeRelView.text = NSLocalizedString(@"Sometime", nil);
-            timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
+            timeAbsView.textColor = [UIColor COLOR_ALUMINUM];
             timeAbsView.text = NSLocalizedString(@"Pick a time", nil);
             timeAbsView.hidden = NO;
             timeZoneView.text = @"";
@@ -502,7 +502,7 @@
         }
     } else {
         timeRelView.text = NSLocalizedString(@"Sometime", nil);
-        timeAbsView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
+        timeAbsView.textColor = [UIColor COLOR_ALUMINUM];
         timeAbsView.text = NSLocalizedString(@"Pick a time", nil);
         timeAbsView.hidden = NO;
         timeZoneView.text = @"";
@@ -515,7 +515,7 @@
 - (void)fillPlace:(Place*)place {
     if (place == nil || [place isEmpty]) {
         placeTitleView.text = NSLocalizedString(@"Somewhere", nil);
-        placeDescView.textColor = [UIColor COLOR_WA(0xB2, 0xFF)];
+        placeDescView.textColor = [UIColor COLOR_ALUMINUM];
         placeDescView.text = NSLocalizedString(@"Choose a place", nil);
         placeDescView.hidden = NO;
         mapView.hidden = YES;
