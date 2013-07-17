@@ -90,7 +90,41 @@
 - (void)getRouteWithCrossId:(NSInteger)crossId
                     success:(void (^)(NSArray *routeLocations, NSArray *routePaths))successHandler
                     failure:(void (^)(NSError *error))failureHandler {
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/crosses/%d/routex/geomarks?token=%@", crossId, self.model.userToken];
     
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
+    
+    [manager.HTTPClient getPath:endpoint
+                     parameters:nil
+                        success:^(AFHTTPRequestOperation *operation, id responseObject){
+                            if (200 == operation.response.statusCode) {
+                                NSAssert([responseObject isKindOfClass:[NSArray class]], @"Should response a array");
+                                
+                                NSMutableArray *routeLocations = [[NSMutableArray alloc] init];
+                                NSMutableArray *routePaths = [[NSMutableArray alloc] init];
+                                
+                                for (NSDictionary *param in responseObject) {
+                                    NSString *type = [param valueForKey:@"type"];
+                                    if ([type isEqualToString:@"location"]) {
+                                        EFRouteLocation *location = [[EFRouteLocation alloc] initWithDictionary:param];
+                                        [routeLocations addObject:location];
+                                    } else if ([type isEqualToString:@"route"]) {
+                                        EFRoutePath *path = [[EFRoutePath alloc] initWithDictionary:param];
+                                        [routePaths addObject:path];
+                                    }
+                                }
+                                
+                                if (successHandler) {
+                                    successHandler(routeLocations, routePaths);
+                                }
+                            }
+                        }
+                        failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                            if (failureHandler) {
+                                failureHandler(error);
+                            }
+                        }];
 }
 
 @end

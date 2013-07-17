@@ -38,6 +38,7 @@
 @property (nonatomic, strong) NSRecursiveLock       *lock;
 
 @property (nonatomic) BOOL                          isEditing;
+@property (nonatomic,assign) BOOL                   isInited;
 
 @end
 
@@ -77,6 +78,7 @@
 @interface EFMarauderMapViewController (Private)
 
 - (void)_hideCalloutView;
+- (void)_getRoute;
 - (void)_postRoute;
 
 @end
@@ -88,6 +90,18 @@
         [self.mapView removeAnnotation:self.currentCalloutAnnotation];
         self.currentCalloutAnnotation = nil;
     }
+}
+
+- (void)_getRoute {
+    [self.model.apiServer getRouteWithCrossId:[self.cross.cross_id integerValue]
+                                      success:^(NSArray *routeLocations, NSArray *routePaths){
+                                          for (EFRouteLocation *routeLocation in routeLocations) {
+                                              [self.mapDataSource addRouteLocation:routeLocation toMapView:self.mapView];
+                                          }
+                                      }
+                                      failure:^(NSError *error){
+                                          NSLog(@"%@", error);
+                                      }];
 }
 
 - (void)_postRoute {
@@ -117,6 +131,7 @@
                              options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                              context:NULL];
         self.isEditing = NO;
+        self.isInited = YES;
     }
     
     return self;
@@ -139,7 +154,6 @@
     self.cleanButton.layer.cornerRadius = 15.0f;
     self.cleanButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.cleanButton.layer.borderWidth = 0.5f;
-    
     
     // tableView
     self.tableView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.6f];
@@ -170,6 +184,8 @@
     
     self.invitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
     self.tableView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, self.invitations.count * [EFMapPersonCell defaultCellHeight]}};
+    
+    [self _getRoute];
 }
 
 #pragma mark - Gesture
@@ -379,14 +395,15 @@
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     CLLocation *location = userLocation.location;
     
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    if (self.isInited) {
+        self.isInited = NO;
+        
         MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, 5000.0f, 5000.0f);
         [self.mapView setRegion:region animated:YES];
         
         [self initTestData];
         [self.tableView reloadData];
-    });
+    }
     
     EFLocation *position = [[EFLocation alloc] init];
     position.coordinate = location.coordinate;

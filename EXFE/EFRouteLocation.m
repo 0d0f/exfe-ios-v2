@@ -28,7 +28,7 @@
 - (id)initWithDictionary:(NSDictionary *)param {
     self = [super init];
     if (self) {
-        __block CLLocationDegrees longtitude, latitude;
+        __block CLLocationDegrees longitude, latitude;
         
         [param enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
             if ([key isEqualToString:@"id"]) {
@@ -58,14 +58,14 @@
                 self.title = obj;
             } else if ([key isEqualToString:@"description"]) {
                 self.subtitle = obj;
-            } else if ([key isEqualToString:@"longtitude"]) {
-                longtitude = [obj doubleValue];
+            } else if ([key isEqualToString:@"longitude"]) {
+                longitude = [obj doubleValue];
             } else if ([key isEqualToString:@"latitude"]) {
                 latitude = [obj doubleValue];
             }
         }];
         
-        self.coordinate = CLLocationCoordinate2DMake(latitude, longtitude);
+        self.coordinate = CLLocationCoordinate2DMake(latitude, longitude);
     }
     
     return self;
