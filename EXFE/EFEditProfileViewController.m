@@ -10,17 +10,19 @@
 #import <QuartzCore/QuartzCore.h>
 #import <BlocksKit/BlocksKit.h>
 #import "EFModel.h"
+#import "EFCache.h"
 #import "Util.h"
 #import "EXGradientToolbarView.h"
 #import "UIScreen+EXFE.h"
 #import "SSTextView.h"
 
-#define kModelKeyName    @"name"
-#define kModelKeyBio     @"bio"
-#define kModelKeyAvatar  @"avatar"
+#define kModelKeyName     @"name"
+#define kModelKeyBio      @"bio"
+#define kModelKeyOriginal @"original"
+#define kModelKeyAvatar   @"avatar"
 
-#define kTagName    233
-#define kTagBio     234
+#define kTagName          233
+#define kTagBio           234
 
 @interface EFEditProfileViewController ()
 
@@ -35,8 +37,6 @@
 
 @property (nonatomic, strong) UIView *header;
 @property (nonatomic, strong) UIView *footer;
-
-@property (nonatomic, strong) UIImage *orignalImage;
 
 @end
 
@@ -80,7 +80,7 @@
 {
     CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
     UIView *contentView = [[UIView alloc] initWithFrame:applicationFrame];
-    contentView.backgroundColor = [UIColor COLOR_SNOW];
+    contentView.backgroundColor = [UIColor COLOR_BLACK];
     self.view = contentView;
     
     UIImageView *fullScreen = [[UIImageView alloc] initWithFrame:self.view.bounds];
@@ -103,7 +103,7 @@
     }];
     [self.avatar addGestureRecognizer:pinchGesure];
     
-    CGFloat headerHeight = 60;
+    CGFloat headerHeight = 80;
     if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
         headerHeight = 95;
     }
@@ -175,15 +175,16 @@
     [self.view addSubview:footer];
     self.footer = footer;
     
-    
-    UILabel *hint = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(footer.bounds) - 15 * 2, 30)];
-    hint.text = NSLocalizedString(@"Cropped area displays as portrait.", nil);
-    hint.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
-    hint.textColor = [UIColor COLOR_WA(0xCC, 0xFF)];
-    hint.backgroundColor = [UIColor clearColor];
-    [hint sizeToFit];
-    hint.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2, CGRectGetHeight(self.view.bounds) - 10 - CGRectGetHeight(hint.bounds) / 2);
-    [self.view addSubview:hint];
+    if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
+        UILabel *hint = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(footer.bounds) - 15 * 2, 30)];
+        hint.text = NSLocalizedString(@"Cropped area displays as portrait.", nil);
+        hint.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
+        hint.textColor = [UIColor COLOR_WA(0xCC, 0xFF)];
+        hint.backgroundColor = [UIColor clearColor];
+        [hint sizeToFit];
+        hint.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2, CGRectGetHeight(self.view.bounds) - 10 - CGRectGetHeight(hint.bounds) / 2);
+        [self.view addSubview:hint];
+    }
 }
 
 - (void)viewDidLoad
@@ -191,7 +192,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     [self fillUI];
-    
+    [self fillAvatar];
     [self registerAsObserver];
 }
 
@@ -225,14 +226,11 @@
 {
     if (motion == UIEventSubtypeMotionShake)
     {
-        NSLog(@"shaked");
-        
         if (self.data.count > 0) {
             
             UIAlertView *alertView = [UIAlertView alertViewWithTitle:NSLocalizedString(@"Revert editing", nil) message:NSLocalizedString(@"Confirm reverting portrait or anything changed?", nil)];
             [alertView addButtonWithTitle:NSLocalizedString(@"Revert", nil) handler:^{
                 [_data removeAllObjects];
-                self.orignalImage = nil;
                 [self fillUI];
             }];
             [alertView setCancelButtonWithTitle:NSLocalizedString(@"Cancel", nil) handler:nil];
@@ -248,20 +246,20 @@
      the 'account' object and specify that both the old and new values of "openingBalance"
      should be provided in the observe… method.
      */
-    [self addObserver:self
-           forKeyPath:@"orignalImage"
+    [self.data addObserver:self
+           forKeyPath:kModelKeyOriginal
               options:(NSKeyValueObservingOptionNew |
                        NSKeyValueObservingOptionOld)
               context:NULL];
     
     [self.data addObserver:self
-           forKeyPath:@"name"
+           forKeyPath:kModelKeyName
               options:(NSKeyValueObservingOptionNew |
                        NSKeyValueObservingOptionOld)
               context:NULL];
     
     [self.data addObserver:self
-           forKeyPath:@"bio"
+           forKeyPath:kModelKeyBio
               options:(NSKeyValueObservingOptionNew |
                        NSKeyValueObservingOptionOld)
               context:NULL];
@@ -276,7 +274,9 @@
 }
 
 - (void)unregisterForChangeNotification {
-    [self removeObserver:self forKeyPath:@"orignalImage"];
+    [self.data removeObserver:self forKeyPath:kModelKeyOriginal];
+    [self.data removeObserver:self forKeyPath:kModelKeyName];
+    [self.data removeObserver:self forKeyPath:kModelKeyBio];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -286,12 +286,12 @@
                         change:(NSDictionary *)change
                        context:(void *)context {
     
-    if ([keyPath isEqual:@"orignalImage"]) {
+    if ([keyPath isEqual:kModelKeyOriginal]) {
 //        UIImage * image = [change objectForKey:NSKeyValueChangeNewKey];
-        [self fillAvatar:self.orignalImage];
-    } else if ([keyPath isEqual:@"name"]) {
+        [self avatar];
+    } else if ([keyPath isEqual:kModelKeyName]) {
         [self fillUI];
-    } else if ([keyPath isEqual:@"bio"]) {
+    } else if ([keyPath isEqual:kModelKeyBio]) {
         [self fillUI];
     } else {
         /*
@@ -357,7 +357,7 @@
 
 - (void)fillUser:(User *)user
 {
-    NSString *dataName = [self.data valueForKey:@"name"];
+    NSString *dataName = [self.data valueForKey:kModelKeyName];
     if (dataName) {
         [self fillName:dataName];
     } else {
@@ -368,19 +368,18 @@
         self.identityId.text = nil;
     }
     
-    NSString *dataBio = [self.data valueForKey:@"bio"];
+    NSString *dataBio = [self.data valueForKey:kModelKeyBio];
     if (dataBio) {
         [self fillBio:dataBio];
     } else {
         [self fillBio:user.bio];
     }
-
 }
 
 - (void)fillIdentity:(Identity *)identity
 {
     
-    NSString *dataName = [self.data valueForKey:@"name"];
+    NSString *dataName = [self.data valueForKey:kModelKeyName];
     if (dataName) {
         [self fillName:dataName];
     } else {
@@ -396,7 +395,7 @@
     self.name.frame = CGRectOffset(self.name.frame, 0, -offset);
     self.identityId.frame = CGRectOffset(self.identityId.frame, 0, -offset + 2);
     
-    NSString *dataBio = [self.data valueForKey:@"bio"];
+    NSString *dataBio = [self.data valueForKey:kModelKeyBio];
     if (dataBio) {
         [self fillBio:dataBio];
     } else {
@@ -420,8 +419,35 @@
     self.identityId.frame = (CGRect){{p.x - 260 / 2, p.y + size.height / 2},{260, size.height}};
 }
 
+- (void)fillAvatar
+{
+    UIImage *original = [self.data valueForKey:kModelKeyOriginal];
+    if (original) {
+        [self fillAvatar:original];
+    } else {
+        NSString *imageKey = nil;
+        if (self.isEditUser) {
+           imageKey = self.user.avatar_filename;
+        } else {
+            imageKey = self.identity.avatar_filename;
+        }
+        
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+            [self fillAvatar:[[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey]];
+        } else {
+            [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                            completeHandler:^(UIImage *image){
+                                                if (image) {
+                                                    [self fillAvatar:image];
+                                                }
+                                            }];
+        }
+    }
+}
+
 - (void)fillAvatar:(UIImage *)image
 {
+    self.avatar.contentMode = UIViewContentModeScaleAspectFill;
     self.avatar.image = image;
     self.avatar.frame = self.avatar.bounds;
 }
@@ -452,6 +478,31 @@
     
     if ([self.bio isFirstResponder]) {
         [self textViewDidEndEditing:self.bio];
+    }
+    
+    if (self.data.count > 0) {
+        NSString * name = [self.data valueForKey:kModelKeyName];
+        NSString * bio = [self.data valueForKey:kModelKeyBio];
+        if (name.length > 0 && bio.length > 0) {
+            if (self.isEditUser) {
+                [self.model updateUserName:name withBio:bio];
+            } else {
+                [self.model updateIdentity:self.identity withName:name withBio:bio];
+            }
+        }
+        
+        UIImage *original = [self.data valueForKey:kModelKeyOriginal];
+        if (original) {
+            CGRect avatar_frame = CGRectFromString([self.data valueForKey:kModelKeyAvatar]);
+            UIImage *avatar = nil;
+            
+            
+            if (self.isEditUser) {
+                [self.model updateUserAvatar:original withLarge:avatar withSmall:nil];
+            } else {
+                [self.model updateIdentity:self.identity withAvatar:original withLarge:avatar withSmall:nil];
+            }
+        }
     }
     
     [self dismissModalViewControllerAnimated:YES];
@@ -487,7 +538,7 @@
 {
     switch (textView.tag) {
         case kTagBio:
-            [self.data setValue:textView.text forKey:@"bio"];
+            [self.data setValue:textView.text forKey:kModelKeyBio];
             break;
             
         default:
@@ -524,11 +575,51 @@
 }
 
 #pragma mark UITextFieldDelegate
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    switch (textField.tag) {
+        case kTagName:
+            if (!self.isEditUser) {
+                if (self.identityId.hidden == NO) {
+                    
+                    [UIView animateWithDuration:0.4
+                                          delay:0
+                                        options:UIViewAnimationOptionCurveEaseInOut
+                                     animations:^{
+                                         self.identityId.alpha = 0;
+                                         self.identityId.hidden = YES;
+                                     }
+                                     completion:^(BOOL finished) {
+                                         self.identityId.alpha = 100;
+                                     }];
+                    
+                }
+            }
+            break;
+            
+        default:
+            break;
+    }
+}
+
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     switch (textField.tag) {
         case kTagName:
-            [self.data setValue:textField.text forKey:@"name"];
+            if (!self.isEditUser) {
+                if (self.identityId.hidden == YES) {
+                    self.identityId.alpha = 0;
+                    self.identityId.hidden = NO;
+                    [UIView animateWithDuration:0.4
+                                          delay:0
+                                        options:UIViewAnimationOptionCurveEaseInOut
+                                     animations:^{
+                                         self.identityId.alpha = 100;
+                                     }
+                                     completion:nil];
+                }
+            }
+            [self.data setValue:textField.text forKey:kModelKeyName];
             break;
             
         default:
@@ -554,17 +645,8 @@
     
     if ([mediaType isEqualToString:@"public.image"]){
         
-        self.orignalImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-        
-//        UIImage *scaleImage = [self scaleImage:originImage toScale:0.3];
-//        NSData *data;
-//        if (UIImagePNGRepresentation(scaleImage) == nil) {
-//            data = UIImageJPEGRepresentation(scaleImage, 1);
-//        } else {
-//            data = UIImagePNGRepresentation(scaleImage);
-//        }
-        
-//        UIImage *image = [UIImage imageWithData:data];
+        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        [self.data setValue:image forKey:kModelKeyOriginal];
         
         picker.navigationBar.hidden = YES;
     }

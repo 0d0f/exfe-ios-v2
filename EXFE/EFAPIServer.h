@@ -156,8 +156,22 @@
                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 - (void)updateName:(NSString*)name
+            andBio:(NSString*)bio
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)updateUserAvatar:(UIImage *)fullImage
+         withLargeAvatar:(UIImage *)largeImage
+         withSmallAvatar:(UIImage *)smallImage
+             success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+             failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)updateIdentityAvatar:(UIImage *)fullImage
+             withLargeAvatar:(UIImage *)largeImage
+             withSmallAvatar:(UIImage *)smallImage
+                 for:(Identity *)identity
+             success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+             failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 - (void)addIdentityBy:(NSString*)external_username
          withProvider:(Provider)provider

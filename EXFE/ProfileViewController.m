@@ -162,51 +162,9 @@
     CGPoint location = [sender locationInView:sender.view];
 //    UIView *tappedView = [sender.view hitTest:location withEvent:nil];
     if (CGRectContainsPoint(username.frame, location)) {
-        
         EFEditProfileViewController* vc = [[EFEditProfileViewController alloc] initWithModel:self.model];
         vc.user = self.user;
-//        [self.navigationController pushViewController:vc animated:YES];
         [self presentModalViewController:vc animated:YES];
-        
-        
-//        [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set name", nil)
-//                                message:nil
-//                     customizationBlock:^(WCAlertView *alertView) {
-//                         alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-//                         UITextField *field = [alertView textFieldAtIndex:0];
-//                         field.text = username.text;
-//                         
-//                    }
-//                        completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
-//                            if (buttonIndex == 0 /*alertView.firstOtherButtonIndex*/) {
-//                                UITextField *field = [alertView textFieldAtIndex:0];
-//                                NSString *name = field.text;
-//                                if (name && name.length > 0) {
-//                                    [self.model.apiServer updateName:name success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                                        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-//                                            NSDictionary *body=responseObject;
-//                                            if([body isKindOfClass:[NSDictionary class]]) {
-//                                                id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                                                if(code){
-//                                                    if([code intValue]==200) {
-//                                                        NSDictionary *responseobj=[body objectForKey:@"response"];
-//                                                        if([responseobj isKindOfClass:[NSDictionary class]]){
-//                                                            // We need new server api to support restful action to avoid following requests.
-//                                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"TestNotification" object:self];
-//                                                        }
-//                                                    }
-//                                                }
-//                                            }
-//                                        }
-//                                        
-//                                    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                    }];
-//                                }
-//                            }
-//                        }
-//                      cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-//                      otherButtonTitles:NSLocalizedString(@"Set", nil), nil];
-        
     } else if (CGRectContainsPoint(useravatar.frame, location)){
         FullScreenViewController *viewcontroller = [[FullScreenViewController alloc] initWithNibName:@"FullScreenViewController" bundle:nil];
         viewcontroller.wantsFullScreenLayout = YES;
@@ -519,53 +477,17 @@
             [self.navigationController pushViewController:addidentityView animated:YES];
         }else {
             Identity *identity = [[_identitiesData objectAtIndex:[indexPath section]]  objectAtIndex:indexPath.row];
-            Provider p = [Identity getProviderCode:identity.provider];
-            if (p != kProviderEmail && p != kProviderPhone) {
+            if (![@"CONNECTED" isEqualToString:identity.status]) {
+                return;
+            }
+            ProviderType pt = [Identity getProviderTypeByString:identity.provider];
+            if (pt != kProviderTypeVerification) {
                 return;
             }
             
             EFEditProfileViewController* vc = [[EFEditProfileViewController alloc] initWithModel:self.model];
             vc.identity = identity;
             [self presentModalViewController:vc animated:YES];
-            
-//            [WCAlertView showAlertWithTitle:NSLocalizedString(@"Set name for", nil)
-//                                    message:[identity getDisplayIdentity]
-//                         customizationBlock:^(WCAlertView *alertView) {
-//                             alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-//                             UITextField *field = [alertView textFieldAtIndex:0];
-//                             field.text = identity.name;
-//                             field.placeholder = [identity getDisplayName];
-//                         }
-//                            completionBlock:^(NSUInteger buttonIndex, WCAlertView *alertView) {
-//                                [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//                                if (buttonIndex == 0 /*alertView.firstOtherButtonIndex*/) {
-//                                    UITextField *field = [alertView textFieldAtIndex:0];
-//                                    NSString *name = field.text;
-//                                    if (name && name.length > 0) {
-//                                        [self.model.apiServer updateIdentity:identity name:name andBio:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                                            if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-//                                                NSDictionary *body=responseObject;
-//                                                if([body isKindOfClass:[NSDictionary class]]) {
-//                                                    id code=[[body objectForKey:@"meta"] objectForKey:@"code"];
-//                                                    if(code){
-//                                                        if([code intValue]==200) {
-//                                                            NSDictionary *responseobj=[body objectForKey:@"response"];
-//                                                            if([responseobj isKindOfClass:[NSDictionary class]]){
-//                                                                // We need new server api to support restful action to avoid following requests.
-//                                                                [[NSNotificationCenter defaultCenter] postNotificationName:@"TestNotification" object:self];
-//                                                            }
-//                                                        }
-//                                                    }
-//                                                }
-//                                            }
-//                                            
-//                                        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                        }];
-//                                    }
-//                                }
-//                            }
-//                          cancelButtonTitle:@"Cancel"
-//                          otherButtonTitles:@"Set", nil];
         }
     }
 }
