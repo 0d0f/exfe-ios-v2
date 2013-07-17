@@ -143,18 +143,6 @@
     
     // tableView
     self.tableView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.6f];
-	
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.distanceFilter = 1000;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-    self.locationManager.delegate = self;
-    [self.locationManager startUpdatingLocation];
-    
-    // location
-    if ([CLLocationManager headingAvailable]) {
-        self.locationManager.headingFilter = 5;
-        [self.locationManager startUpdatingHeading];
-    }
     
     // long press gesture
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
@@ -182,11 +170,6 @@
     
     self.invitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
     self.tableView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, self.invitations.count * [EFMapPersonCell defaultCellHeight]}};
-    
-    if (self.mapView.userLocation) {
-        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.mapView.userLocation.coordinate, 5000.0f, 5000.0f);
-        [self.mapView setRegion:region animated:YES];
-    }
 }
 
 #pragma mark - Gesture
