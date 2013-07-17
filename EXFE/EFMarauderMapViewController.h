@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 
+#import "EFTabBarViewController.h"
 #import "EFMapKit.h"
 
 @class EFMapPerson;
@@ -19,7 +20,8 @@
 CLLocationManagerDelegate,
 MKMapViewDelegate,
 UITableViewDataSource,
-UITableViewDelegate
+UITableViewDelegate,
+EFTabBarDataSource
 >
 
 @property (nonatomic, retain) CLLocationManager *locationManager;
@@ -30,6 +32,13 @@ UITableViewDelegate
 @property (weak, nonatomic) IBOutlet UIButton *parkButton;
 @property (weak, nonatomic) IBOutlet UIButton *headingButton;
 @property (weak, nonatomic) IBOutlet UIButton *cleanButton;
+
+// EFTabBarDataSource
+@property (nonatomic, strong) EFTabBarItem *customTabBarItem;
+@property (nonatomic, assign) EFTabBarStyle tabBarStyle;
+@property (nonatomic, weak) EFTabBarViewController *tabBarViewController;
+@property (nonatomic, copy) UIImage *shadowImage;
+@property (nonatomic, assign) CGRect initFrame;
 
 - (IBAction)parkButtonPressed:(id)sender;
 - (IBAction)headingButtonPressed:(id)sender;

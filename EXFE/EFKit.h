@@ -25,5 +25,6 @@
 #import "EFQueue.h"
 
 #import "EFCache.h"
+#import "EFMapKit.h"
 
 #endif

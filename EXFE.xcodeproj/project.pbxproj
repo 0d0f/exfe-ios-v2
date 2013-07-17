@@ -1647,6 +1647,22 @@
 		76B123C81796496100A73E59 /* EFMarauderMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */; };
 		76B123C91796496100A73E59 /* EFMarauderMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */; };
 		76B123CA1796496100A73E59 /* EFMarauderMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */; };
+		76B123CD17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */; };
+		76B123CE17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */; };
+		76B123CF17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */; };
+		76B123D41796583900A73E59 /* widget_routex_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D01796583900A73E59 /* widget_routex_30.png */; };
+		76B123D51796583900A73E59 /* widget_routex_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D01796583900A73E59 /* widget_routex_30.png */; };
+		76B123D61796583900A73E59 /* widget_routex_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D01796583900A73E59 /* widget_routex_30.png */; };
+		76B123D71796583900A73E59 /* widget_routex_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D11796583900A73E59 /* widget_routex_30@2x.png */; };
+		76B123D81796583900A73E59 /* widget_routex_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D11796583900A73E59 /* widget_routex_30@2x.png */; };
+		76B123D91796583900A73E59 /* widget_routex_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D11796583900A73E59 /* widget_routex_30@2x.png */; };
+		76B123DA1796583900A73E59 /* widget_routex_30shine.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D21796583900A73E59 /* widget_routex_30shine.png */; };
+		76B123DB1796583900A73E59 /* widget_routex_30shine.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D21796583900A73E59 /* widget_routex_30shine.png */; };
+		76B123DC1796583900A73E59 /* widget_routex_30shine.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D21796583900A73E59 /* widget_routex_30shine.png */; };
+		76B123DD1796583900A73E59 /* widget_routex_30shine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D31796583900A73E59 /* widget_routex_30shine@2x.png */; };
+		76B123DE1796583900A73E59 /* widget_routex_30shine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D31796583900A73E59 /* widget_routex_30shine@2x.png */; };
+		76B123DF1796583900A73E59 /* widget_routex_30shine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D31796583900A73E59 /* widget_routex_30shine@2x.png */; };
+		76B123E117965DDB00A73E59 /* EFDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D2DE121778061F00E8C53E /* EFDownloadOperation.m */; };
 		76BC7B0A176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
 		76BC7B0B176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
 		76BC7B0C176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
@@ -1702,7 +1718,6 @@
 		76D1FE041740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */; };
 		76D1FE051740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */; };
 		76D2DE131778061F00E8C53E /* EFDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D2DE121778061F00E8C53E /* EFDownloadOperation.m */; };
-		76D2DE141778061F00E8C53E /* EFDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D2DE121778061F00E8C53E /* EFDownloadOperation.m */; };
 		76D2DE151778061F00E8C53E /* EFDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D2DE121778061F00E8C53E /* EFDownloadOperation.m */; };
 		76DED7C3171BEDE000C2F27E /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76DED7CE171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
@@ -2643,6 +2658,12 @@
 		76B123741796470C00A73E59 /* EFTouchDownGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTouchDownGestureRecognizer.h; sourceTree = "<group>"; };
 		76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTouchDownGestureRecognizer.m; sourceTree = "<group>"; };
 		76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFMarauderMapViewController.xib; sourceTree = "<group>"; };
+		76B123CB17964B2E00A73E59 /* EFAPIServer+MadaurerMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFAPIServer+MadaurerMap.h"; sourceTree = "<group>"; };
+		76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFAPIServer+MadaurerMap.m"; sourceTree = "<group>"; };
+		76B123D01796583900A73E59 /* widget_routex_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_routex_30.png; sourceTree = "<group>"; };
+		76B123D11796583900A73E59 /* widget_routex_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_routex_30@2x.png"; sourceTree = "<group>"; };
+		76B123D21796583900A73E59 /* widget_routex_30shine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_routex_30shine.png; sourceTree = "<group>"; };
+		76B123D31796583900A73E59 /* widget_routex_30shine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_routex_30shine@2x.png"; sourceTree = "<group>"; };
 		76BC7B08176EAC3D003F4FBA /* EFQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFQueueManager.h; sourceTree = "<group>"; };
 		76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFQueueManager.m; sourceTree = "<group>"; };
 		76BC7B0F176EB9C7003F4FBA /* EFRunLoopOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRunLoopOperation.h; sourceTree = "<group>"; };
@@ -4060,6 +4081,10 @@
 				76073CDE174F3178007CBFC3 /* widget_exfee_30shine@2x.png */,
 				76073CDF174F3178007CBFC3 /* widget_x_30shine.png */,
 				76073CE0174F3178007CBFC3 /* widget_x_30shine@2x.png */,
+				76B123D01796583900A73E59 /* widget_routex_30.png */,
+				76B123D11796583900A73E59 /* widget_routex_30@2x.png */,
+				76B123D21796583900A73E59 /* widget_routex_30shine.png */,
+				76B123D31796583900A73E59 /* widget_routex_30shine@2x.png */,
 				76295DC6174BAC43002F5CEF /* xlist_top_0.png */,
 				76295DC7174BAC43002F5CEF /* xlist_top_0@2x.png */,
 				76295DC8174BAC43002F5CEF /* xlist_top_1.png */,
@@ -4606,6 +4631,8 @@
 				76D1FDFD1740F99100D271B2 /* EFAPIServer+Place.m */,
 				76D1FE011740FF9800D271B2 /* EFAPIServer+Profile.h */,
 				76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */,
+				76B123CB17964B2E00A73E59 /* EFAPIServer+MadaurerMap.h */,
+				76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -5423,6 +5450,10 @@
 				4F77ABC11791AD4B000EE499 /* chevron_d20g5.png in Resources */,
 				4F77ABC41791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
 				76B123C91796496100A73E59 /* EFMarauderMapViewController.xib in Resources */,
+				76B123D51796583900A73E59 /* widget_routex_30.png in Resources */,
+				76B123D81796583900A73E59 /* widget_routex_30@2x.png in Resources */,
+				76B123DB1796583900A73E59 /* widget_routex_30shine.png in Resources */,
+				76B123DE1796583900A73E59 /* widget_routex_30shine@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5843,6 +5874,10 @@
 				4F77ABC21791AD4B000EE499 /* chevron_d20g5.png in Resources */,
 				4F77ABC51791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
 				76B123CA1796496100A73E59 /* EFMarauderMapViewController.xib in Resources */,
+				76B123D61796583900A73E59 /* widget_routex_30.png in Resources */,
+				76B123D91796583900A73E59 /* widget_routex_30@2x.png in Resources */,
+				76B123DC1796583900A73E59 /* widget_routex_30shine.png in Resources */,
+				76B123DF1796583900A73E59 /* widget_routex_30shine@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6261,6 +6296,10 @@
 				4F77ABC01791AD4B000EE499 /* chevron_d20g5.png in Resources */,
 				4F77ABC31791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
 				76B123C81796496100A73E59 /* EFMarauderMapViewController.xib in Resources */,
+				76B123D41796583900A73E59 /* widget_routex_30.png in Resources */,
+				76B123D71796583900A73E59 /* widget_routex_30@2x.png in Resources */,
+				76B123DA1796583900A73E59 /* widget_routex_30shine.png in Resources */,
+				76B123DD1796583900A73E59 /* widget_routex_30shine@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6475,7 +6514,6 @@
 				76BC7B9B1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */,
 				76BC7BA51772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */,
 				765E150F17745235003F4827 /* EFDataManager+Image.m in Sources */,
-				76D2DE141778061F00E8C53E /* EFDownloadOperation.m in Sources */,
 				76E96BAE177AAD2500C06ECD /* EXFEModel+UserAPI.m in Sources */,
 				76E96BB7177AC29C00C06ECD /* EFLoadUserOperation.m in Sources */,
 				76E96BBD177AEBE100C06ECD /* EFLoadConversationOperation.m in Sources */,
@@ -6521,6 +6559,8 @@
 				76B123B01796470C00A73E59 /* EFRouteLocation.m in Sources */,
 				76B123B31796470C00A73E59 /* EFRoutePath.m in Sources */,
 				76B123B61796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
+				76B123CE17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */,
+				76B123E117965DDB00A73E59 /* EFDownloadOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6754,6 +6794,7 @@
 				76B123B11796470C00A73E59 /* EFRouteLocation.m in Sources */,
 				76B123B41796470C00A73E59 /* EFRoutePath.m in Sources */,
 				76B123B71796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
+				76B123CF17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6987,6 +7028,7 @@
 				76B123AF1796470C00A73E59 /* EFRouteLocation.m in Sources */,
 				76B123B21796470C00A73E59 /* EFRoutePath.m in Sources */,
 				76B123B51796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
+				76B123CD17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
