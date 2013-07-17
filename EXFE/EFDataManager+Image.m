@@ -91,24 +91,30 @@
                            // local
                            handler(image);
                        } else if ([aKey hasPrefix:@"http"]) {
-                           // network
-                           EFDownloadOperation *downloadOperation = [[EFDownloadOperation alloc] init];
-                           downloadOperation.url = [NSURL URLWithString:aKey];
-                           EFNetworkManagementOperation *operation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:downloadOperation];
-                           
-                           [[EFQueueManager defaultManager] addNetworkManagementOperation:operation
-                                                                          completeHandler:^{
-                                                                              NSData *data = downloadOperation.data;
-                                                                              
-                                                                              if (data) {
-                                                                                  [self cacheData:data forKey:aKey shouldWriteToDisk:YES];
-                                                                                  UIImage *image = [UIImage imageWithData:data];
+                           NSURL *url = [NSURL URLWithString:aKey];
+                           // we expected valid url string for aKey.
+                           if (url) {
+                               // network
+                               EFDownloadOperation *downloadOperation = [[EFDownloadOperation alloc] init];
+                               downloadOperation.url = url;
+                               EFNetworkManagementOperation *operation = [[EFNetworkManagementOperation alloc] initWithNetworkOperation:downloadOperation];
+                               
+                               [[EFQueueManager defaultManager] addNetworkManagementOperation:operation
+                                                                              completeHandler:^{
+                                                                                  NSData *data = downloadOperation.data;
                                                                                   
-                                                                                  handler(image);
-                                                                              } else {
-                                                                                  handler(nil);
-                                                                              }
-                                                                          }];
+                                                                                  if (data) {
+                                                                                      [self cacheData:data forKey:aKey shouldWriteToDisk:YES];
+                                                                                      UIImage *image = [UIImage imageWithData:data];
+                                                                                      
+                                                                                      handler(image);
+                                                                                  } else {
+                                                                                      handler(nil);
+                                                                                  }
+                                                                              }];
+                           } else {
+                               handler(nil);
+                           }
                        } else {
                            handler(nil);
                        }
