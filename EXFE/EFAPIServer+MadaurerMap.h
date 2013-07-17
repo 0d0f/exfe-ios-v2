@@ -21,10 +21,11 @@
                         success:(void (^)(NSDictionary *locations))successHandler
                         failure:(void (^)(NSError *error))failureHandler;
 
-- (void)updateRouteWithLocations:(NSArray *)locations
-                          routes:(NSArray *)routes
-                         success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
-                         failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+- (void)updateRouteWithCrossId:(NSInteger)crossId
+                     locations:(NSArray *)locations
+                        routes:(NSArray *)routes
+                       success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                       failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 - (void)getRouteWithCrossId:(NSInteger)crossId
                     success:(void (^)(NSArray *routeLocations, NSArray *routePaths))successHandler

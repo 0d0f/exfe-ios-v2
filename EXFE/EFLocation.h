@@ -11,7 +11,7 @@
 
 @interface EFLocation : NSObject
 
-@property (assign)  CLLocationCoordinate2D  coordinate2D;
+@property (assign)  CLLocationCoordinate2D  coordinate;
 @property (assign)  CGFloat                 accuracy;       // might be 0.0f
 @property (strong)  NSDate                  *timestamp;
 

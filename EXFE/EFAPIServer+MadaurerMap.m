@@ -57,11 +57,34 @@
                         }];
 }
 
-- (void)updateRouteWithLocations:(NSArray *)locations
-                          routes:(NSArray *)routes
-                         success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
-                         failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
-
+- (void)updateRouteWithCrossId:(NSInteger)crossId
+                     locations:(NSArray *)locations
+                        routes:(NSArray *)routes
+                       success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                       failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/crosses/%d/routex/geomarks?token=%@", crossId, self.model.userToken];
+    NSMutableArray *list = [[NSMutableArray alloc] init];
+    
+    for (EFRouteLocation *location in locations) {
+        NSDictionary *locationDict = [location dictionaryValue];
+        [list addObject:locationDict];
+    }
+    
+    for (EFRoutePath *path in routes) {
+        NSDictionary *pathDict = [path dictionaryValue];
+        [list addObject:pathDict];
+    }
+    
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:endpoint relativeToURL:manager.HTTPClient.baseURL]];
+    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:list options:NSJSONReadingMutableContainers error:nil];
+    request.HTTPMethod = @"POST";
+    
+    AFJSONRequestOperation *operation = [[AFJSONRequestOperation alloc] initWithRequest:request];
+    [operation setCompletionBlockWithSuccess:success failure:failure];
+    [manager.HTTPClient enqueueHTTPRequestOperation:operation];
 }
 
 - (void)getRouteWithCrossId:(NSInteger)crossId

@@ -13,7 +13,7 @@
 #import "EFTabBarViewController.h"
 #import "EFMapKit.h"
 
-@class EFMapPerson;
+@class EFMapPerson, EXFEModel, Cross;
 
 @interface EFMarauderMapViewController : UIViewController
 <
@@ -23,6 +23,9 @@ UITableViewDataSource,
 UITableViewDelegate,
 EFTabBarDataSource
 >
+
+@property (nonatomic, weak) EXFEModel   *model;
+@property (nonatomic, weak) Cross       *cross;
 
 @property (nonatomic, retain) CLLocationManager *locationManager;
 

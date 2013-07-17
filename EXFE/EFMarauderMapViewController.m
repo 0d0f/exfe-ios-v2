@@ -12,6 +12,11 @@
 #import "EFMapPersonCell.h"
 #import "EFMapColorButton.h"
 #import "EFMapKit.h"
+#import "EFAPI.h"
+#import "Cross.h"
+#import "Exfee+EXFE.h"
+#import "Invitation+EXFE.h"
+#import "EFDataManager+Image.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 
@@ -20,6 +25,7 @@
 @property (nonatomic, strong) EFMarauderMapDataSource *mapDataSource;
 @property (nonatomic, strong) EFMapPeopleDataSource *dataSource;
 @property (nonatomic, strong) MKAnnotationView      *meAnnotationView;
+@property (nonatomic, strong) NSArray               *invitations;
 
 @property (nonatomic, strong) NSMutableDictionary   *personOverlayMap;
 @property (nonatomic, strong) EFCrumPathView        *personPathOverlayView;
@@ -71,6 +77,7 @@
 @interface EFMarauderMapViewController (Private)
 
 - (void)_hideCalloutView;
+- (void)_postRoute;
 
 @end
 
@@ -81,6 +88,14 @@
         [self.mapView removeAnnotation:self.currentCalloutAnnotation];
         self.currentCalloutAnnotation = nil;
     }
+}
+
+- (void)_postRoute {
+    [self.model.apiServer updateRouteWithCrossId:[self.cross.cross_id integerValue]
+                                       locations:[self.mapDataSource allRouteLocations]
+                                          routes:nil
+                                         success:nil
+                                         failure:nil];
 }
 
 @end
@@ -95,6 +110,7 @@
         self.personOverlayMap = [[NSMutableDictionary alloc] initWithCapacity:6];
         self.mapDataSource = [[EFMarauderMapDataSource alloc] init];
         self.dataSource = [[EFMapPeopleDataSource alloc] init];
+        
         self.lock = [[NSRecursiveLock alloc] init];
         [self.dataSource addObserver:self
                           forKeyPath:@"peopleCount"
@@ -109,8 +125,6 @@
 - (void)dealloc {
     [self.dataSource removeObserver:self
                          forKeyPath:@"peopleCount"];
-    [self removeObserver:self
-              forKeyPath:@"isEditing"];
 }
 
 - (void)viewDidLoad {
@@ -163,6 +177,18 @@
     [super viewDidUnload];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.invitations = [self.cross.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+    self.tableView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, self.invitations.count * [EFMapPersonCell defaultCellHeight]}};
+    
+    if (self.mapView.userLocation) {
+        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.mapView.userLocation.coordinate, 5000.0f, 5000.0f);
+        [self.mapView setRegion:region animated:YES];
+    }
+}
+
 #pragma mark - Gesture
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)gesture
@@ -211,6 +237,7 @@
             
             routeLocation.coordinate = coordinate;
             [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+            [self _postRoute];
             
             [self.mapView selectAnnotation:annotation animated:NO];
         }
@@ -224,7 +251,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (object == self.dataSource && [keyPath isEqualToString:@"peopleCount"]) {
-        self.tableView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, self.dataSource.peopleCount * [EFMapPersonCell defaultCellHeight]}};
+//        self.tableView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, self.dataSource.peopleCount * [EFMapPersonCell defaultCellHeight]}};
     } else if (object == self && [keyPath isEqualToString:@"isEditing"]) {
         UIButton *button = self.parkButton;
         UIColor *buttonBackgroundColor = button.backgroundColor;
@@ -287,7 +314,7 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataSource.peopleCount;
+    return self.invitations.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -297,7 +324,24 @@
         cell = [[EFMapPersonCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identitier];
     }
     
-    EFMapPerson *person = [self.dataSource personAtIndex:indexPath.row];
+    Invitation *invitation = self.invitations[indexPath.row];
+    Identity *identity = invitation.identity;
+    
+    UIImage *avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:identity.avatar_filename];
+    if (!avatar) {
+        avatar = [UIImage imageNamed:@"portrait_default.png"];
+        
+        [[EFDataManager imageManager] cachedImageForKey:identity.avatar_filename
+                                        completeHandler:^(UIImage *image){
+                                            if (image) {
+                                                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                                            }
+                                        }];
+    }
+    
+    EFMapPerson *person = [[EFMapPerson alloc] init];
+    person.avatarImage = avatar;
+    
     cell.person = person;
     
     return cell;
@@ -359,6 +403,16 @@
         [self initTestData];
         [self.tableView reloadData];
     });
+    
+    EFLocation *position = [[EFLocation alloc] init];
+    position.coordinate = location.coordinate;
+    position.timestamp = [NSDate date];
+    position.accuracy = location.horizontalAccuracy;
+    
+    [self.model.apiServer updateLocation:position
+                             withCrossId:[self.cross.cross_id integerValue]
+                                 success:nil
+                                 failure:nil];
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
@@ -400,6 +454,7 @@
             routeLocation.subtitle = calloutView.annotation.subtitle;
             
             [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+            [self _postRoute];
         };
         
         return callout;

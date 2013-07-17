@@ -31,31 +31,31 @@
             }
         }];
         
-        self.coordinate2D = CLLocationCoordinate2DMake(latitude, longitude);
+        self.coordinate = CLLocationCoordinate2DMake(latitude, longitude);
     }
     
     return self;
 }
 
 - (MKMapPoint)mapPointValue {
-    return MKMapPointForCoordinate(self.coordinate2D);
+    return MKMapPointForCoordinate(self.coordinate);
 }
 
 - (NSDictionary *)dictionaryValue {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:4];
-    [dict setValue:[NSNumber numberWithDouble:[self.timestamp timeIntervalSince1970]] forKey:@"timestamp"];
+    [dict setValue:[NSNumber numberWithLongLong:(long long)[self.timestamp timeIntervalSince1970]] forKey:@"timestamp"];
     [dict setValue:[NSString stringWithFormat:@"%f", self.accuracy] forKey:@"accuracy"];
-    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate2D.longitude] forKey:@"longitude"];
-    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate2D.latitude] forKey:@"latitude"];
+    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate.longitude] forKey:@"longitude"];
+    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate.latitude] forKey:@"latitude"];
     
     return dict;
 }
 
 - (NSDictionary *)dictionaryValueWitoutAccuracy {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:3];
-    [dict setValue:[NSNumber numberWithDouble:[self.timestamp timeIntervalSince1970]] forKey:@"timestamp"];
-    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate2D.longitude] forKey:@"longitude"];
-    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate2D.latitude] forKey:@"latitude"];
+    [dict setValue:[NSNumber numberWithLongLong:(long long)[self.timestamp timeIntervalSince1970]] forKey:@"timestamp"];
+    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate.longitude] forKey:@"longitude"];
+    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate.latitude] forKey:@"latitude"];
     
     return dict;
 }

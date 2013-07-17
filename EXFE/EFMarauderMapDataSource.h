@@ -20,6 +20,7 @@
 - (EFRouteLocation *)routeLocationForAnnotation:(EFAnnotation *)annotation;
 - (EFAnnotation *)annotationForRouteLocation:(EFRouteLocation *)routeLocation;
 - (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView;
+- (NSArray *)allRouteLocations;
 
 - (void)addRoutePath:(EFRoutePath *)path;
 - (void)removeRoutePath:(EFRoutePath *)path;

@@ -121,6 +121,10 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     [mapView removeAnnotation:annotation];
 }
 
+- (NSArray *)allRouteLocations {
+    return self.routeLocations;
+}
+
 #pragma mark - RoutePath
 - (void)addRoutePath:(EFRoutePath *)path {
     [self _postPathDidChangeNotification];

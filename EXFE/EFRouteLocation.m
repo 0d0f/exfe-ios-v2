@@ -8,11 +8,19 @@
 
 #import "EFRouteLocation.h"
 
+#import "User+EXFE.h"
+
 @implementation EFRouteLocation
 
 + (EFRouteLocation *)generateRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate {
     EFRouteLocation *instance = [[self alloc] init];
+    instance.locationTytpe = kEFRouteLocationTypeDestination;
+    instance.locationId = [NSString stringWithFormat:@"%d", rand() % 255];
     instance.coordinate = coordinate;
+    instance.createdDate = [NSDate date];
+    instance.createdByUid = [NSString stringWithFormat:@"%d", [[User getDefaultUser].user_id integerValue]];
+    instance.updateDate = [NSDate date];
+    instance.updatedByUid = [NSString stringWithFormat:@"%d", [[User getDefaultUser].user_id integerValue]];
     
     return instance;
 }

@@ -1033,6 +1033,8 @@
     mapViewController.customTabBarItem = tabBarItem4;
     mapViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
     mapViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
+    mapViewController.cross = cross;
+    mapViewController.model = model;
     
     // Init TabBarViewController
     EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, mapViewController]];
