@@ -1587,6 +1587,88 @@
 		769794FC177C26AD0052A1DC /* EFLoadSuggestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 769794F9177C26AD0052A1DC /* EFLoadSuggestOperation.m */; };
 		76A150BF1717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76A150C01717D23500751C92 /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
+		76B123761796470C00A73E59 /* EFAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123461796470C00A73E59 /* EFAnnotation.m */; };
+		76B123771796470C00A73E59 /* EFAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123461796470C00A73E59 /* EFAnnotation.m */; };
+		76B123781796470C00A73E59 /* EFAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123461796470C00A73E59 /* EFAnnotation.m */; };
+		76B123791796470C00A73E59 /* EFAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123491796470C00A73E59 /* EFAnnotationView.m */; };
+		76B1237A1796470C00A73E59 /* EFAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123491796470C00A73E59 /* EFAnnotationView.m */; };
+		76B1237B1796470C00A73E59 /* EFAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123491796470C00A73E59 /* EFAnnotationView.m */; };
+		76B1237C1796470C00A73E59 /* EFCalloutAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1234B1796470C00A73E59 /* EFCalloutAnnotation.m */; };
+		76B1237D1796470C00A73E59 /* EFCalloutAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1234B1796470C00A73E59 /* EFCalloutAnnotation.m */; };
+		76B1237E1796470C00A73E59 /* EFCalloutAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1234B1796470C00A73E59 /* EFCalloutAnnotation.m */; };
+		76B1237F1796470C00A73E59 /* EFCalloutAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1234D1796470C00A73E59 /* EFCalloutAnnotationView.m */; };
+		76B123801796470C00A73E59 /* EFCalloutAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1234D1796470C00A73E59 /* EFCalloutAnnotationView.m */; };
+		76B123811796470C00A73E59 /* EFCalloutAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1234D1796470C00A73E59 /* EFCalloutAnnotationView.m */; };
+		76B123821796470C00A73E59 /* EFCrumPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1234F1796470C00A73E59 /* EFCrumPath.m */; };
+		76B123831796470C00A73E59 /* EFCrumPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1234F1796470C00A73E59 /* EFCrumPath.m */; };
+		76B123841796470C00A73E59 /* EFCrumPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1234F1796470C00A73E59 /* EFCrumPath.m */; };
+		76B123851796470C00A73E59 /* EFCrumPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123511796470C00A73E59 /* EFCrumPathView.m */; };
+		76B123861796470C00A73E59 /* EFCrumPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123511796470C00A73E59 /* EFCrumPathView.m */; };
+		76B123871796470C00A73E59 /* EFCrumPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123511796470C00A73E59 /* EFCrumPathView.m */; };
+		76B123881796470C00A73E59 /* EFLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123531796470C00A73E59 /* EFLocation.m */; };
+		76B123891796470C00A73E59 /* EFLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123531796470C00A73E59 /* EFLocation.m */; };
+		76B1238A1796470C00A73E59 /* EFLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123531796470C00A73E59 /* EFLocation.m */; };
+		76B1238B1796470C00A73E59 /* EFMapColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123551796470C00A73E59 /* EFMapColorButton.m */; };
+		76B1238C1796470C00A73E59 /* EFMapColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123551796470C00A73E59 /* EFMapColorButton.m */; };
+		76B1238D1796470C00A73E59 /* EFMapColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123551796470C00A73E59 /* EFMapColorButton.m */; };
+		76B1238E1796470C00A73E59 /* EFMapEditingAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123591796470C00A73E59 /* EFMapEditingAnnotationView.m */; };
+		76B1238F1796470C00A73E59 /* EFMapEditingAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123591796470C00A73E59 /* EFMapEditingAnnotationView.m */; };
+		76B123901796470C00A73E59 /* EFMapEditingAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123591796470C00A73E59 /* EFMapEditingAnnotationView.m */; };
+		76B123911796470C00A73E59 /* EFMapEditingPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1235B1796470C00A73E59 /* EFMapEditingPathView.m */; };
+		76B123921796470C00A73E59 /* EFMapEditingPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1235B1796470C00A73E59 /* EFMapEditingPathView.m */; };
+		76B123931796470C00A73E59 /* EFMapEditingPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1235B1796470C00A73E59 /* EFMapEditingPathView.m */; };
+		76B123941796470C00A73E59 /* EFMapEditingReadyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1235D1796470C00A73E59 /* EFMapEditingReadyView.m */; };
+		76B123951796470C00A73E59 /* EFMapEditingReadyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1235D1796470C00A73E59 /* EFMapEditingReadyView.m */; };
+		76B123961796470C00A73E59 /* EFMapEditingReadyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1235D1796470C00A73E59 /* EFMapEditingReadyView.m */; };
+		76B1239A1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123631796470C00A73E59 /* EFMapPeopleDataSource.m */; };
+		76B1239B1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123631796470C00A73E59 /* EFMapPeopleDataSource.m */; };
+		76B1239C1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123631796470C00A73E59 /* EFMapPeopleDataSource.m */; };
+		76B1239D1796470C00A73E59 /* EFMapPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123651796470C00A73E59 /* EFMapPerson.m */; };
+		76B1239E1796470C00A73E59 /* EFMapPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123651796470C00A73E59 /* EFMapPerson.m */; };
+		76B1239F1796470C00A73E59 /* EFMapPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123651796470C00A73E59 /* EFMapPerson.m */; };
+		76B123A01796470C00A73E59 /* EFMapPersonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123671796470C00A73E59 /* EFMapPersonCell.m */; };
+		76B123A11796470C00A73E59 /* EFMapPersonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123671796470C00A73E59 /* EFMapPersonCell.m */; };
+		76B123A21796470C00A73E59 /* EFMapPersonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123671796470C00A73E59 /* EFMapPersonCell.m */; };
+		76B123A31796470C00A73E59 /* EFMapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123691796470C00A73E59 /* EFMapPoint.m */; };
+		76B123A41796470C00A73E59 /* EFMapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123691796470C00A73E59 /* EFMapPoint.m */; };
+		76B123A51796470C00A73E59 /* EFMapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123691796470C00A73E59 /* EFMapPoint.m */; };
+		76B123A61796470C00A73E59 /* EFMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236B1796470C00A73E59 /* EFMapView.m */; };
+		76B123A71796470C00A73E59 /* EFMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236B1796470C00A73E59 /* EFMapView.m */; };
+		76B123A81796470C00A73E59 /* EFMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236B1796470C00A73E59 /* EFMapView.m */; };
+		76B123A91796470C00A73E59 /* EFMarauderMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236D1796470C00A73E59 /* EFMarauderMapDataSource.m */; };
+		76B123AA1796470C00A73E59 /* EFMarauderMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236D1796470C00A73E59 /* EFMarauderMapDataSource.m */; };
+		76B123AB1796470C00A73E59 /* EFMarauderMapDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236D1796470C00A73E59 /* EFMarauderMapDataSource.m */; };
+		76B123AC1796470C00A73E59 /* EFMarauderMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236F1796470C00A73E59 /* EFMarauderMapViewController.m */; };
+		76B123AD1796470C00A73E59 /* EFMarauderMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236F1796470C00A73E59 /* EFMarauderMapViewController.m */; };
+		76B123AE1796470C00A73E59 /* EFMarauderMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1236F1796470C00A73E59 /* EFMarauderMapViewController.m */; };
+		76B123AF1796470C00A73E59 /* EFRouteLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123711796470C00A73E59 /* EFRouteLocation.m */; };
+		76B123B01796470C00A73E59 /* EFRouteLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123711796470C00A73E59 /* EFRouteLocation.m */; };
+		76B123B11796470C00A73E59 /* EFRouteLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123711796470C00A73E59 /* EFRouteLocation.m */; };
+		76B123B21796470C00A73E59 /* EFRoutePath.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123731796470C00A73E59 /* EFRoutePath.m */; };
+		76B123B31796470C00A73E59 /* EFRoutePath.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123731796470C00A73E59 /* EFRoutePath.m */; };
+		76B123B41796470C00A73E59 /* EFRoutePath.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123731796470C00A73E59 /* EFRoutePath.m */; };
+		76B123B51796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */; };
+		76B123B61796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */; };
+		76B123B71796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */; };
+		76B123C81796496100A73E59 /* EFMarauderMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */; };
+		76B123C91796496100A73E59 /* EFMarauderMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */; };
+		76B123CA1796496100A73E59 /* EFMarauderMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */; };
+		76B123CD17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */; };
+		76B123CE17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */; };
+		76B123CF17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */; };
+		76B123D41796583900A73E59 /* widget_routex_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D01796583900A73E59 /* widget_routex_30.png */; };
+		76B123D51796583900A73E59 /* widget_routex_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D01796583900A73E59 /* widget_routex_30.png */; };
+		76B123D61796583900A73E59 /* widget_routex_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D01796583900A73E59 /* widget_routex_30.png */; };
+		76B123D71796583900A73E59 /* widget_routex_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D11796583900A73E59 /* widget_routex_30@2x.png */; };
+		76B123D81796583900A73E59 /* widget_routex_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D11796583900A73E59 /* widget_routex_30@2x.png */; };
+		76B123D91796583900A73E59 /* widget_routex_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D11796583900A73E59 /* widget_routex_30@2x.png */; };
+		76B123DA1796583900A73E59 /* widget_routex_30shine.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D21796583900A73E59 /* widget_routex_30shine.png */; };
+		76B123DB1796583900A73E59 /* widget_routex_30shine.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D21796583900A73E59 /* widget_routex_30shine.png */; };
+		76B123DC1796583900A73E59 /* widget_routex_30shine.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D21796583900A73E59 /* widget_routex_30shine.png */; };
+		76B123DD1796583900A73E59 /* widget_routex_30shine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D31796583900A73E59 /* widget_routex_30shine@2x.png */; };
+		76B123DE1796583900A73E59 /* widget_routex_30shine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D31796583900A73E59 /* widget_routex_30shine@2x.png */; };
+		76B123DF1796583900A73E59 /* widget_routex_30shine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B123D31796583900A73E59 /* widget_routex_30shine@2x.png */; };
+		76B123E117965DDB00A73E59 /* EFDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D2DE121778061F00E8C53E /* EFDownloadOperation.m */; };
 		76BC7B0A176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
 		76BC7B0B176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
 		76BC7B0C176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
@@ -1642,7 +1724,6 @@
 		76D1FE041740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */; };
 		76D1FE051740FF9800D271B2 /* EFAPIServer+Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */; };
 		76D2DE131778061F00E8C53E /* EFDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D2DE121778061F00E8C53E /* EFDownloadOperation.m */; };
-		76D2DE141778061F00E8C53E /* EFDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D2DE121778061F00E8C53E /* EFDownloadOperation.m */; };
 		76D2DE151778061F00E8C53E /* EFDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D2DE121778061F00E8C53E /* EFDownloadOperation.m */; };
 		76DED7C3171BEDE000C2F27E /* EXAddressBookService.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A150BD1717D23500751C92 /* EXAddressBookService.m */; };
 		76DED7CE171C06A900C2F27E /* UILog.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DED7CD171C06A900C2F27E /* UILog.m */; };
@@ -2536,6 +2617,61 @@
 		769794F9177C26AD0052A1DC /* EFLoadSuggestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLoadSuggestOperation.m; sourceTree = "<group>"; };
 		76A150BC1717D23400751C92 /* EXAddressBookService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXAddressBookService.h; sourceTree = "<group>"; };
 		76A150BD1717D23500751C92 /* EXAddressBookService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXAddressBookService.m; sourceTree = "<group>"; };
+		76B123451796470C00A73E59 /* EFAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAnnotation.h; sourceTree = "<group>"; };
+		76B123461796470C00A73E59 /* EFAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFAnnotation.m; sourceTree = "<group>"; };
+		76B123471796470C00A73E59 /* EFAnnotationDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAnnotationDataDefines.h; sourceTree = "<group>"; };
+		76B123481796470C00A73E59 /* EFAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAnnotationView.h; sourceTree = "<group>"; };
+		76B123491796470C00A73E59 /* EFAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFAnnotationView.m; sourceTree = "<group>"; };
+		76B1234A1796470C00A73E59 /* EFCalloutAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFCalloutAnnotation.h; sourceTree = "<group>"; };
+		76B1234B1796470C00A73E59 /* EFCalloutAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFCalloutAnnotation.m; sourceTree = "<group>"; };
+		76B1234C1796470C00A73E59 /* EFCalloutAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFCalloutAnnotationView.h; sourceTree = "<group>"; };
+		76B1234D1796470C00A73E59 /* EFCalloutAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFCalloutAnnotationView.m; sourceTree = "<group>"; };
+		76B1234E1796470C00A73E59 /* EFCrumPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFCrumPath.h; sourceTree = "<group>"; };
+		76B1234F1796470C00A73E59 /* EFCrumPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFCrumPath.m; sourceTree = "<group>"; };
+		76B123501796470C00A73E59 /* EFCrumPathView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFCrumPathView.h; sourceTree = "<group>"; };
+		76B123511796470C00A73E59 /* EFCrumPathView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFCrumPathView.m; sourceTree = "<group>"; };
+		76B123521796470C00A73E59 /* EFLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLocation.h; sourceTree = "<group>"; };
+		76B123531796470C00A73E59 /* EFLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLocation.m; sourceTree = "<group>"; };
+		76B123541796470C00A73E59 /* EFMapColorButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapColorButton.h; sourceTree = "<group>"; };
+		76B123551796470C00A73E59 /* EFMapColorButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapColorButton.m; sourceTree = "<group>"; };
+		76B123561796470C00A73E59 /* EFMapData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapData.h; sourceTree = "<group>"; };
+		76B123571796470C00A73E59 /* EFMapDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapDataDefines.h; sourceTree = "<group>"; };
+		76B123581796470C00A73E59 /* EFMapEditingAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapEditingAnnotationView.h; sourceTree = "<group>"; };
+		76B123591796470C00A73E59 /* EFMapEditingAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapEditingAnnotationView.m; sourceTree = "<group>"; };
+		76B1235A1796470C00A73E59 /* EFMapEditingPathView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapEditingPathView.h; sourceTree = "<group>"; };
+		76B1235B1796470C00A73E59 /* EFMapEditingPathView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapEditingPathView.m; sourceTree = "<group>"; };
+		76B1235C1796470C00A73E59 /* EFMapEditingReadyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapEditingReadyView.h; sourceTree = "<group>"; };
+		76B1235D1796470C00A73E59 /* EFMapEditingReadyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapEditingReadyView.m; sourceTree = "<group>"; };
+		76B1235F1796470C00A73E59 /* EFMapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapKit.h; sourceTree = "<group>"; };
+		76B123601796470C00A73E59 /* EFMapOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapOverlay.h; sourceTree = "<group>"; };
+		76B123611796470C00A73E59 /* EFMapOverlayDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapOverlayDataDefines.h; sourceTree = "<group>"; };
+		76B123621796470C00A73E59 /* EFMapPeopleDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapPeopleDataSource.h; sourceTree = "<group>"; };
+		76B123631796470C00A73E59 /* EFMapPeopleDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapPeopleDataSource.m; sourceTree = "<group>"; };
+		76B123641796470C00A73E59 /* EFMapPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapPerson.h; sourceTree = "<group>"; };
+		76B123651796470C00A73E59 /* EFMapPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapPerson.m; sourceTree = "<group>"; };
+		76B123661796470C00A73E59 /* EFMapPersonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapPersonCell.h; sourceTree = "<group>"; };
+		76B123671796470C00A73E59 /* EFMapPersonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapPersonCell.m; sourceTree = "<group>"; };
+		76B123681796470C00A73E59 /* EFMapPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapPoint.h; sourceTree = "<group>"; };
+		76B123691796470C00A73E59 /* EFMapPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapPoint.m; sourceTree = "<group>"; };
+		76B1236A1796470C00A73E59 /* EFMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapView.h; sourceTree = "<group>"; };
+		76B1236B1796470C00A73E59 /* EFMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapView.m; sourceTree = "<group>"; };
+		76B1236C1796470C00A73E59 /* EFMarauderMapDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMarauderMapDataSource.h; sourceTree = "<group>"; };
+		76B1236D1796470C00A73E59 /* EFMarauderMapDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMarauderMapDataSource.m; sourceTree = "<group>"; };
+		76B1236E1796470C00A73E59 /* EFMarauderMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMarauderMapViewController.h; sourceTree = "<group>"; };
+		76B1236F1796470C00A73E59 /* EFMarauderMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMarauderMapViewController.m; sourceTree = "<group>"; };
+		76B123701796470C00A73E59 /* EFRouteLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRouteLocation.h; sourceTree = "<group>"; };
+		76B123711796470C00A73E59 /* EFRouteLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRouteLocation.m; sourceTree = "<group>"; };
+		76B123721796470C00A73E59 /* EFRoutePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRoutePath.h; sourceTree = "<group>"; };
+		76B123731796470C00A73E59 /* EFRoutePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRoutePath.m; sourceTree = "<group>"; };
+		76B123741796470C00A73E59 /* EFTouchDownGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFTouchDownGestureRecognizer.h; sourceTree = "<group>"; };
+		76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTouchDownGestureRecognizer.m; sourceTree = "<group>"; };
+		76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFMarauderMapViewController.xib; sourceTree = "<group>"; };
+		76B123CB17964B2E00A73E59 /* EFAPIServer+MadaurerMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EFAPIServer+MadaurerMap.h"; sourceTree = "<group>"; };
+		76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFAPIServer+MadaurerMap.m"; sourceTree = "<group>"; };
+		76B123D01796583900A73E59 /* widget_routex_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_routex_30.png; sourceTree = "<group>"; };
+		76B123D11796583900A73E59 /* widget_routex_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_routex_30@2x.png"; sourceTree = "<group>"; };
+		76B123D21796583900A73E59 /* widget_routex_30shine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_routex_30shine.png; sourceTree = "<group>"; };
+		76B123D31796583900A73E59 /* widget_routex_30shine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_routex_30shine@2x.png"; sourceTree = "<group>"; };
 		76BC7B08176EAC3D003F4FBA /* EFQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFQueueManager.h; sourceTree = "<group>"; };
 		76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFQueueManager.m; sourceTree = "<group>"; };
 		76BC7B0F176EB9C7003F4FBA /* EFRunLoopOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRunLoopOperation.h; sourceTree = "<group>"; };
@@ -3469,6 +3605,22 @@
 			name = PresentCard;
 			sourceTree = "<group>";
 		};
+		7607AABE1796451200529F0D /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				76B1235F1796470C00A73E59 /* EFMapKit.h */,
+				76B123C31796486000A73E59 /* Control */,
+				76B123C21796485700A73E59 /* View */,
+				76B123BF179647DD00A73E59 /* Annotation */,
+				76B123C01796480100A73E59 /* Overlay */,
+				76B123C11796480E00A73E59 /* Modal */,
+				76B123C6179648C000A73E59 /* ViewController */,
+				76B123741796470C00A73E59 /* EFTouchDownGestureRecognizer.h */,
+				76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */,
+			);
+			name = Map;
+			sourceTree = "<group>";
+		};
 		76295DA8174B20B3002F5CEF /* Popover */ = {
 			isa = PBXGroup;
 			children = (
@@ -3561,6 +3713,7 @@
 			isa = PBXGroup;
 			children = (
 				76F6B3101740B5C1008B39C1 /* EFKit.h */,
+				7607AABE1796451200529F0D /* Map */,
 				76BC7B07176EAC27003F4FBA /* Queue */,
 				765A82E1175F11F800448B64 /* Cache */,
 				76073D01174F61BB007CBFC3 /* PresentCard */,
@@ -3600,6 +3753,110 @@
 				76A150BD1717D23500751C92 /* EXAddressBookService.m */,
 			);
 			name = Service;
+			sourceTree = "<group>";
+		};
+		76B123BF179647DD00A73E59 /* Annotation */ = {
+			isa = PBXGroup;
+			children = (
+				76B123471796470C00A73E59 /* EFAnnotationDataDefines.h */,
+				76B123451796470C00A73E59 /* EFAnnotation.h */,
+				76B123461796470C00A73E59 /* EFAnnotation.m */,
+				76B123481796470C00A73E59 /* EFAnnotationView.h */,
+				76B123491796470C00A73E59 /* EFAnnotationView.m */,
+				76B1234A1796470C00A73E59 /* EFCalloutAnnotation.h */,
+				76B1234B1796470C00A73E59 /* EFCalloutAnnotation.m */,
+				76B1234C1796470C00A73E59 /* EFCalloutAnnotationView.h */,
+				76B1234D1796470C00A73E59 /* EFCalloutAnnotationView.m */,
+			);
+			name = Annotation;
+			sourceTree = "<group>";
+		};
+		76B123C01796480100A73E59 /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				76B123601796470C00A73E59 /* EFMapOverlay.h */,
+				76B123611796470C00A73E59 /* EFMapOverlayDataDefines.h */,
+				76B1234F1796470C00A73E59 /* EFCrumPath.m */,
+				76B123501796470C00A73E59 /* EFCrumPathView.h */,
+				76B123511796470C00A73E59 /* EFCrumPathView.m */,
+				76B1234E1796470C00A73E59 /* EFCrumPath.h */,
+			);
+			name = Overlay;
+			sourceTree = "<group>";
+		};
+		76B123C11796480E00A73E59 /* Modal */ = {
+			isa = PBXGroup;
+			children = (
+				76B123561796470C00A73E59 /* EFMapData.h */,
+				76B123571796470C00A73E59 /* EFMapDataDefines.h */,
+				76B123C5179648A700A73E59 /* DataSource */,
+				76B123C41796489000A73E59 /* Data Structure */,
+			);
+			name = Modal;
+			sourceTree = "<group>";
+		};
+		76B123C21796485700A73E59 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				76B1236A1796470C00A73E59 /* EFMapView.h */,
+				76B1236B1796470C00A73E59 /* EFMapView.m */,
+				76B123581796470C00A73E59 /* EFMapEditingAnnotationView.h */,
+				76B123591796470C00A73E59 /* EFMapEditingAnnotationView.m */,
+				76B1235A1796470C00A73E59 /* EFMapEditingPathView.h */,
+				76B1235B1796470C00A73E59 /* EFMapEditingPathView.m */,
+				76B1235C1796470C00A73E59 /* EFMapEditingReadyView.h */,
+				76B1235D1796470C00A73E59 /* EFMapEditingReadyView.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		76B123C31796486000A73E59 /* Control */ = {
+			isa = PBXGroup;
+			children = (
+				76B123541796470C00A73E59 /* EFMapColorButton.h */,
+				76B123551796470C00A73E59 /* EFMapColorButton.m */,
+				76B123661796470C00A73E59 /* EFMapPersonCell.h */,
+				76B123671796470C00A73E59 /* EFMapPersonCell.m */,
+			);
+			name = Control;
+			sourceTree = "<group>";
+		};
+		76B123C41796489000A73E59 /* Data Structure */ = {
+			isa = PBXGroup;
+			children = (
+				76B123681796470C00A73E59 /* EFMapPoint.h */,
+				76B123691796470C00A73E59 /* EFMapPoint.m */,
+				76B123521796470C00A73E59 /* EFLocation.h */,
+				76B123531796470C00A73E59 /* EFLocation.m */,
+				76B123701796470C00A73E59 /* EFRouteLocation.h */,
+				76B123711796470C00A73E59 /* EFRouteLocation.m */,
+				76B123721796470C00A73E59 /* EFRoutePath.h */,
+				76B123731796470C00A73E59 /* EFRoutePath.m */,
+				76B123641796470C00A73E59 /* EFMapPerson.h */,
+				76B123651796470C00A73E59 /* EFMapPerson.m */,
+			);
+			name = "Data Structure";
+			sourceTree = "<group>";
+		};
+		76B123C5179648A700A73E59 /* DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				76B123621796470C00A73E59 /* EFMapPeopleDataSource.h */,
+				76B123631796470C00A73E59 /* EFMapPeopleDataSource.m */,
+				76B1236C1796470C00A73E59 /* EFMarauderMapDataSource.h */,
+				76B1236D1796470C00A73E59 /* EFMarauderMapDataSource.m */,
+			);
+			name = DataSource;
+			sourceTree = "<group>";
+		};
+		76B123C6179648C000A73E59 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				76B1236E1796470C00A73E59 /* EFMarauderMapViewController.h */,
+				76B1236F1796470C00A73E59 /* EFMarauderMapViewController.m */,
+				76B123C71796496100A73E59 /* EFMarauderMapViewController.xib */,
+			);
+			name = ViewController;
 			sourceTree = "<group>";
 		};
 		76BC7B07176EAC27003F4FBA /* Queue */ = {
@@ -3834,6 +4091,10 @@
 				76073CDE174F3178007CBFC3 /* widget_exfee_30shine@2x.png */,
 				76073CDF174F3178007CBFC3 /* widget_x_30shine.png */,
 				76073CE0174F3178007CBFC3 /* widget_x_30shine@2x.png */,
+				76B123D01796583900A73E59 /* widget_routex_30.png */,
+				76B123D11796583900A73E59 /* widget_routex_30@2x.png */,
+				76B123D21796583900A73E59 /* widget_routex_30shine.png */,
+				76B123D31796583900A73E59 /* widget_routex_30shine@2x.png */,
 				76295DC6174BAC43002F5CEF /* xlist_top_0.png */,
 				76295DC7174BAC43002F5CEF /* xlist_top_0@2x.png */,
 				76295DC8174BAC43002F5CEF /* xlist_top_1.png */,
@@ -4380,6 +4641,8 @@
 				76D1FDFD1740F99100D271B2 /* EFAPIServer+Place.m */,
 				76D1FE011740FF9800D271B2 /* EFAPIServer+Profile.h */,
 				76D1FE021740FF9800D271B2 /* EFAPIServer+Profile.m */,
+				76B123CB17964B2E00A73E59 /* EFAPIServer+MadaurerMap.h */,
+				76B123CC17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -5198,6 +5461,11 @@
 				4F77ABC41791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
 				4F7AA1B2179662E1005C4223 /* camera_30.png in Resources */,
 				4F7AA1B5179662E1005C4223 /* camera_30@2x.png in Resources */,
+				76B123C91796496100A73E59 /* EFMarauderMapViewController.xib in Resources */,
+				76B123D51796583900A73E59 /* widget_routex_30.png in Resources */,
+				76B123D81796583900A73E59 /* widget_routex_30@2x.png in Resources */,
+				76B123DB1796583900A73E59 /* widget_routex_30shine.png in Resources */,
+				76B123DE1796583900A73E59 /* widget_routex_30shine@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5619,6 +5887,11 @@
 				4F77ABC51791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
 				4F7AA1B3179662E1005C4223 /* camera_30.png in Resources */,
 				4F7AA1B6179662E1005C4223 /* camera_30@2x.png in Resources */,
+				76B123CA1796496100A73E59 /* EFMarauderMapViewController.xib in Resources */,
+				76B123D61796583900A73E59 /* widget_routex_30.png in Resources */,
+				76B123D91796583900A73E59 /* widget_routex_30@2x.png in Resources */,
+				76B123DC1796583900A73E59 /* widget_routex_30shine.png in Resources */,
+				76B123DF1796583900A73E59 /* widget_routex_30shine@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6038,6 +6311,11 @@
 				4F77ABC31791AD4B000EE499 /* chevron_d20g5@2x.png in Resources */,
 				4F7AA1B1179662E1005C4223 /* camera_30.png in Resources */,
 				4F7AA1B4179662E1005C4223 /* camera_30@2x.png in Resources */,
+				76B123C81796496100A73E59 /* EFMarauderMapViewController.xib in Resources */,
+				76B123D41796583900A73E59 /* widget_routex_30.png in Resources */,
+				76B123D71796583900A73E59 /* widget_routex_30@2x.png in Resources */,
+				76B123DA1796583900A73E59 /* widget_routex_30shine.png in Resources */,
+				76B123DD1796583900A73E59 /* widget_routex_30shine@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6252,7 +6530,6 @@
 				76BC7B9B1772B93A003F4FBA /* EFNetworkManagementOperation.m in Sources */,
 				76BC7BA51772EEA5003F4FBA /* EFLoadMeOperation.m in Sources */,
 				765E150F17745235003F4827 /* EFDataManager+Image.m in Sources */,
-				76D2DE141778061F00E8C53E /* EFDownloadOperation.m in Sources */,
 				76E96BAE177AAD2500C06ECD /* EXFEModel+UserAPI.m in Sources */,
 				76E96BB7177AC29C00C06ECD /* EFLoadUserOperation.m in Sources */,
 				76E96BBD177AEBE100C06ECD /* EFLoadConversationOperation.m in Sources */,
@@ -6277,6 +6554,29 @@
 				4FF9D130178BE81D00D01765 /* Device.m in Sources */,
 				4F1BDB7F1793F97900F7B786 /* AYUIButton.m in Sources */,
 				4F1BDB8B1795464800F7B786 /* UIScreen+EXFE.m in Sources */,
+				76B123771796470C00A73E59 /* EFAnnotation.m in Sources */,
+				76B1237A1796470C00A73E59 /* EFAnnotationView.m in Sources */,
+				76B1237D1796470C00A73E59 /* EFCalloutAnnotation.m in Sources */,
+				76B123801796470C00A73E59 /* EFCalloutAnnotationView.m in Sources */,
+				76B123831796470C00A73E59 /* EFCrumPath.m in Sources */,
+				76B123861796470C00A73E59 /* EFCrumPathView.m in Sources */,
+				76B123891796470C00A73E59 /* EFLocation.m in Sources */,
+				76B1238C1796470C00A73E59 /* EFMapColorButton.m in Sources */,
+				76B1238F1796470C00A73E59 /* EFMapEditingAnnotationView.m in Sources */,
+				76B123921796470C00A73E59 /* EFMapEditingPathView.m in Sources */,
+				76B123951796470C00A73E59 /* EFMapEditingReadyView.m in Sources */,
+				76B1239B1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */,
+				76B1239E1796470C00A73E59 /* EFMapPerson.m in Sources */,
+				76B123A11796470C00A73E59 /* EFMapPersonCell.m in Sources */,
+				76B123A41796470C00A73E59 /* EFMapPoint.m in Sources */,
+				76B123A71796470C00A73E59 /* EFMapView.m in Sources */,
+				76B123AA1796470C00A73E59 /* EFMarauderMapDataSource.m in Sources */,
+				76B123AD1796470C00A73E59 /* EFMarauderMapViewController.m in Sources */,
+				76B123B01796470C00A73E59 /* EFRouteLocation.m in Sources */,
+				76B123B31796470C00A73E59 /* EFRoutePath.m in Sources */,
+				76B123B61796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
+				76B123CE17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */,
+				76B123E117965DDB00A73E59 /* EFDownloadOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6489,6 +6789,28 @@
 				4FF9D131178BE81D00D01765 /* Device.m in Sources */,
 				4F1BDB801793F97900F7B786 /* AYUIButton.m in Sources */,
 				4F1BDB8C1795464800F7B786 /* UIScreen+EXFE.m in Sources */,
+				76B123781796470C00A73E59 /* EFAnnotation.m in Sources */,
+				76B1237B1796470C00A73E59 /* EFAnnotationView.m in Sources */,
+				76B1237E1796470C00A73E59 /* EFCalloutAnnotation.m in Sources */,
+				76B123811796470C00A73E59 /* EFCalloutAnnotationView.m in Sources */,
+				76B123841796470C00A73E59 /* EFCrumPath.m in Sources */,
+				76B123871796470C00A73E59 /* EFCrumPathView.m in Sources */,
+				76B1238A1796470C00A73E59 /* EFLocation.m in Sources */,
+				76B1238D1796470C00A73E59 /* EFMapColorButton.m in Sources */,
+				76B123901796470C00A73E59 /* EFMapEditingAnnotationView.m in Sources */,
+				76B123931796470C00A73E59 /* EFMapEditingPathView.m in Sources */,
+				76B123961796470C00A73E59 /* EFMapEditingReadyView.m in Sources */,
+				76B1239C1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */,
+				76B1239F1796470C00A73E59 /* EFMapPerson.m in Sources */,
+				76B123A21796470C00A73E59 /* EFMapPersonCell.m in Sources */,
+				76B123A51796470C00A73E59 /* EFMapPoint.m in Sources */,
+				76B123A81796470C00A73E59 /* EFMapView.m in Sources */,
+				76B123AB1796470C00A73E59 /* EFMarauderMapDataSource.m in Sources */,
+				76B123AE1796470C00A73E59 /* EFMarauderMapViewController.m in Sources */,
+				76B123B11796470C00A73E59 /* EFRouteLocation.m in Sources */,
+				76B123B41796470C00A73E59 /* EFRoutePath.m in Sources */,
+				76B123B71796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
+				76B123CF17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6701,6 +7023,28 @@
 				4FF9D12F178BE81D00D01765 /* Device.m in Sources */,
 				4F1BDB7E1793F97900F7B786 /* AYUIButton.m in Sources */,
 				4F1BDB8A1795464800F7B786 /* UIScreen+EXFE.m in Sources */,
+				76B123761796470C00A73E59 /* EFAnnotation.m in Sources */,
+				76B123791796470C00A73E59 /* EFAnnotationView.m in Sources */,
+				76B1237C1796470C00A73E59 /* EFCalloutAnnotation.m in Sources */,
+				76B1237F1796470C00A73E59 /* EFCalloutAnnotationView.m in Sources */,
+				76B123821796470C00A73E59 /* EFCrumPath.m in Sources */,
+				76B123851796470C00A73E59 /* EFCrumPathView.m in Sources */,
+				76B123881796470C00A73E59 /* EFLocation.m in Sources */,
+				76B1238B1796470C00A73E59 /* EFMapColorButton.m in Sources */,
+				76B1238E1796470C00A73E59 /* EFMapEditingAnnotationView.m in Sources */,
+				76B123911796470C00A73E59 /* EFMapEditingPathView.m in Sources */,
+				76B123941796470C00A73E59 /* EFMapEditingReadyView.m in Sources */,
+				76B1239A1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */,
+				76B1239D1796470C00A73E59 /* EFMapPerson.m in Sources */,
+				76B123A01796470C00A73E59 /* EFMapPersonCell.m in Sources */,
+				76B123A31796470C00A73E59 /* EFMapPoint.m in Sources */,
+				76B123A61796470C00A73E59 /* EFMapView.m in Sources */,
+				76B123A91796470C00A73E59 /* EFMarauderMapDataSource.m in Sources */,
+				76B123AC1796470C00A73E59 /* EFMarauderMapViewController.m in Sources */,
+				76B123AF1796470C00A73E59 /* EFRouteLocation.m in Sources */,
+				76B123B21796470C00A73E59 /* EFRoutePath.m in Sources */,
+				76B123B51796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
+				76B123CD17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

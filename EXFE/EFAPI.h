@@ -16,5 +16,6 @@
 #import "EFAPIServer+Exfee.h"
 #import "EFAPIServer+Place.h"
 #import "EFAPIServer+Profile.h"
+#import "EFAPIServer+MadaurerMap.h"
 
 #endif
