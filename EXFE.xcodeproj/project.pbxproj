@@ -1024,6 +1024,21 @@
 		4F7AA1B4179662E1005C4223 /* camera_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7AA1B0179662E1005C4223 /* camera_30@2x.png */; };
 		4F7AA1B5179662E1005C4223 /* camera_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7AA1B0179662E1005C4223 /* camera_30@2x.png */; };
 		4F7AA1B6179662E1005C4223 /* camera_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7AA1B0179662E1005C4223 /* camera_30@2x.png */; };
+		4F7AA1C417969A55005C4223 /* EFChangeUserBasicProfileOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1C317969A55005C4223 /* EFChangeUserBasicProfileOperation.m */; };
+		4F7AA1C517969A55005C4223 /* EFChangeUserBasicProfileOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1C317969A55005C4223 /* EFChangeUserBasicProfileOperation.m */; };
+		4F7AA1C617969A55005C4223 /* EFChangeUserBasicProfileOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1C317969A55005C4223 /* EFChangeUserBasicProfileOperation.m */; };
+		4F7AA1D51796A550005C4223 /* EFUpdateIdentityOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1D41796A54F005C4223 /* EFUpdateIdentityOperation.m */; };
+		4F7AA1D61796A550005C4223 /* EFUpdateIdentityOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1D41796A54F005C4223 /* EFUpdateIdentityOperation.m */; };
+		4F7AA1D71796A550005C4223 /* EFUpdateIdentityOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1D41796A54F005C4223 /* EFUpdateIdentityOperation.m */; };
+		4F7AA1DA1796B420005C4223 /* EFUpdateUserAvatarOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1D91796B41F005C4223 /* EFUpdateUserAvatarOperation.m */; };
+		4F7AA1DB1796B420005C4223 /* EFUpdateUserAvatarOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1D91796B41F005C4223 /* EFUpdateUserAvatarOperation.m */; };
+		4F7AA1DC1796B420005C4223 /* EFUpdateUserAvatarOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1D91796B41F005C4223 /* EFUpdateUserAvatarOperation.m */; };
+		4F7AA1DF1796B43E005C4223 /* EFUpdateIdentityAvatarOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1DE1796B43D005C4223 /* EFUpdateIdentityAvatarOperation.m */; };
+		4F7AA1E01796B43E005C4223 /* EFUpdateIdentityAvatarOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1DE1796B43D005C4223 /* EFUpdateIdentityAvatarOperation.m */; };
+		4F7AA1E11796B43E005C4223 /* EFUpdateIdentityAvatarOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1DE1796B43D005C4223 /* EFUpdateIdentityAvatarOperation.m */; };
+		4F7AA1E41796D38C005C4223 /* EXFEModel+IdentityAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1E31796D38B005C4223 /* EXFEModel+IdentityAPI.m */; };
+		4F7AA1E51796D38C005C4223 /* EXFEModel+IdentityAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1E31796D38B005C4223 /* EXFEModel+IdentityAPI.m */; };
+		4F7AA1E61796D38C005C4223 /* EXFEModel+IdentityAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1E31796D38B005C4223 /* EXFEModel+IdentityAPI.m */; };
 		4F8507D017841B8C00BB86FA /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8507C617841B8C00BB86FA /* NBNumberFormat.m */; };
 		4F8507D117841B8C00BB86FA /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8507C617841B8C00BB86FA /* NBNumberFormat.m */; };
 		4F8507D217841B8C00BB86FA /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8507C617841B8C00BB86FA /* NBNumberFormat.m */; };
@@ -2319,6 +2334,16 @@
 		4F77ABBF1791AD4B000EE499 /* chevron_d20g5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chevron_d20g5@2x.png"; sourceTree = "<group>"; };
 		4F7AA1AF179662E0005C4223 /* camera_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_30.png; sourceTree = "<group>"; };
 		4F7AA1B0179662E1005C4223 /* camera_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_30@2x.png"; sourceTree = "<group>"; };
+		4F7AA1C217969A55005C4223 /* EFChangeUserBasicProfileOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChangeUserBasicProfileOperation.h; sourceTree = "<group>"; };
+		4F7AA1C317969A55005C4223 /* EFChangeUserBasicProfileOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFChangeUserBasicProfileOperation.m; sourceTree = "<group>"; };
+		4F7AA1D31796A54F005C4223 /* EFUpdateIdentityOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFUpdateIdentityOperation.h; sourceTree = "<group>"; };
+		4F7AA1D41796A54F005C4223 /* EFUpdateIdentityOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFUpdateIdentityOperation.m; sourceTree = "<group>"; };
+		4F7AA1D81796B41F005C4223 /* EFUpdateUserAvatarOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFUpdateUserAvatarOperation.h; sourceTree = "<group>"; };
+		4F7AA1D91796B41F005C4223 /* EFUpdateUserAvatarOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFUpdateUserAvatarOperation.m; sourceTree = "<group>"; };
+		4F7AA1DD1796B43D005C4223 /* EFUpdateIdentityAvatarOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFUpdateIdentityAvatarOperation.h; sourceTree = "<group>"; };
+		4F7AA1DE1796B43D005C4223 /* EFUpdateIdentityAvatarOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFUpdateIdentityAvatarOperation.m; sourceTree = "<group>"; };
+		4F7AA1E21796D38B005C4223 /* EXFEModel+IdentityAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EXFEModel+IdentityAPI.h"; sourceTree = "<group>"; };
+		4F7AA1E31796D38B005C4223 /* EXFEModel+IdentityAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EXFEModel+IdentityAPI.m"; sourceTree = "<group>"; };
 		4F8507C517841B8C00BB86FA /* NBNumberFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBNumberFormat.h; path = "Vendor/libPhoneNumber-iOS/libPhoneNumber/NBNumberFormat.h"; sourceTree = SOURCE_ROOT; };
 		4F8507C617841B8C00BB86FA /* NBNumberFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBNumberFormat.m; path = "Vendor/libPhoneNumber-iOS/libPhoneNumber/NBNumberFormat.m"; sourceTree = SOURCE_ROOT; };
 		4F8507C717841B8C00BB86FA /* NBPhoneMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneMetaData.h; path = "Vendor/libPhoneNumber-iOS/libPhoneNumber/NBPhoneMetaData.h"; sourceTree = SOURCE_ROOT; };
@@ -3999,6 +4024,8 @@
 				769794D2177BEC820052A1DC /* EXFEModel+Place.m */,
 				769794DD177BEC8C0052A1DC /* EXFEModel+Profile.h */,
 				769794DE177BEC8C0052A1DC /* EXFEModel+Profile.m */,
+				4F7AA1E21796D38B005C4223 /* EXFEModel+IdentityAPI.h */,
+				4F7AA1E31796D38B005C4223 /* EXFEModel+IdentityAPI.m */,
 			);
 			name = "Category API";
 			sourceTree = "<group>";
@@ -4010,6 +4037,14 @@
 				76BC7BA31772EEA5003F4FBA /* EFLoadMeOperation.m */,
 				76E96BB4177AC29C00C06ECD /* EFLoadUserOperation.h */,
 				76E96BB5177AC29C00C06ECD /* EFLoadUserOperation.m */,
+				4F7AA1C217969A55005C4223 /* EFChangeUserBasicProfileOperation.h */,
+				4F7AA1C317969A55005C4223 /* EFChangeUserBasicProfileOperation.m */,
+				4F7AA1D31796A54F005C4223 /* EFUpdateIdentityOperation.h */,
+				4F7AA1D41796A54F005C4223 /* EFUpdateIdentityOperation.m */,
+				4F7AA1D81796B41F005C4223 /* EFUpdateUserAvatarOperation.h */,
+				4F7AA1D91796B41F005C4223 /* EFUpdateUserAvatarOperation.m */,
+				4F7AA1DD1796B43D005C4223 /* EFUpdateIdentityAvatarOperation.h */,
+				4F7AA1DE1796B43D005C4223 /* EFUpdateIdentityAvatarOperation.m */,
 			);
 			name = "User API Operation";
 			sourceTree = "<group>";
@@ -6662,6 +6697,11 @@
 				76B123CE17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */,
 				76B123E117965DDB00A73E59 /* EFDownloadOperation.m in Sources */,
 				76B124131796F44900A73E59 /* CSqlite.m in Sources */,
+				4F7AA1C517969A55005C4223 /* EFChangeUserBasicProfileOperation.m in Sources */,
+				4F7AA1D61796A550005C4223 /* EFUpdateIdentityOperation.m in Sources */,
+				4F7AA1DB1796B420005C4223 /* EFUpdateUserAvatarOperation.m in Sources */,
+				4F7AA1E01796B43E005C4223 /* EFUpdateIdentityAvatarOperation.m in Sources */,
+				4F7AA1E51796D38C005C4223 /* EXFEModel+IdentityAPI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6897,6 +6937,11 @@
 				76B123B71796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
 				76B123CF17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */,
 				76B124141796F44900A73E59 /* CSqlite.m in Sources */,
+				4F7AA1C617969A55005C4223 /* EFChangeUserBasicProfileOperation.m in Sources */,
+				4F7AA1D71796A550005C4223 /* EFUpdateIdentityOperation.m in Sources */,
+				4F7AA1DC1796B420005C4223 /* EFUpdateUserAvatarOperation.m in Sources */,
+				4F7AA1E11796B43E005C4223 /* EFUpdateIdentityAvatarOperation.m in Sources */,
+				4F7AA1E61796D38C005C4223 /* EXFEModel+IdentityAPI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7132,6 +7177,11 @@
 				76B123B51796470C00A73E59 /* EFTouchDownGestureRecognizer.m in Sources */,
 				76B123CD17964B2E00A73E59 /* EFAPIServer+MadaurerMap.m in Sources */,
 				76B124121796F44900A73E59 /* CSqlite.m in Sources */,
+				4F7AA1C417969A55005C4223 /* EFChangeUserBasicProfileOperation.m in Sources */,
+				4F7AA1D51796A550005C4223 /* EFUpdateIdentityOperation.m in Sources */,
+				4F7AA1DA1796B420005C4223 /* EFUpdateUserAvatarOperation.m in Sources */,
+				4F7AA1DF1796B43E005C4223 /* EFUpdateIdentityAvatarOperation.m in Sources */,
+				4F7AA1E41796D38C005C4223 /* EXFEModel+IdentityAPI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

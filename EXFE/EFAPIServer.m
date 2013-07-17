@@ -921,15 +921,15 @@
     
     RKObjectManager *objectManager = self.model.objectManager;
     objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:2];
     if (name) {
-        [dict setObject:name forKey:@"name"];
+        [params setObject:name forKey:@"name"];
     }
     if (bio) {
-        [dict setObject:bio forKey:@"bio"];
+        [params setObject:bio forKey:@"bio"];
     }
     [objectManager.HTTPClient postPath:endpoint
-                            parameters:dict
+                            parameters:params
                                success:^(AFHTTPRequestOperation *operation, id responseObject){
                                    [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
                                    
@@ -951,7 +951,8 @@
 }
 
 
-- (void)updateName:(NSString*)name
+- (void)updateName:(NSString *)name
+            andBio:(NSString *)bio
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
@@ -960,9 +961,15 @@
     
     RKObjectManager *objectManager = self.model.objectManager;
     objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
-    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:2];
+    if (name) {
+        [params setObject:name forKey:@"name"];
+    }
+    if (bio) {
+        [params setObject:bio forKey:@"bio"];
+    }
     [objectManager.HTTPClient postPath:endpoint
-                            parameters:@{@"name":name}
+                            parameters:params
                                success:^(AFHTTPRequestOperation *operation, id responseObject){
                                    [self _handleSuccessWithRequestOperation:operation andResponseObject:responseObject];
                                    
@@ -982,6 +989,95 @@
                                    }
                                }];
 }
+
+- (void)updateUserAvatar:(UIImage *)fullImage
+          withLargeAvatar:(UIImage *)largeImage
+         withSmallAvatar:(UIImage *)smallImage
+                 success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                 failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSParameterAssert(fullImage != nil);
+    
+    NSMutableDictionary *images = [NSMutableDictionary dictionaryWithCapacity:3];
+    if (fullImage) {
+        [images setValue:fullImage forKey:@"original"];
+    }
+    if (largeImage) {
+        [images setValue:largeImage forKey:@"320_320"];
+    }
+    if (smallImage) {
+        [images setValue:smallImage forKey:@"80_80"];
+    }
+    
+    [self updateAvatar:images for:nil success:success failure:failure];
+}
+
+- (void)updateIdentityAvatar:(NSArray *)fullImage
+             withLargeAvatar:(UIImage *)largeImage
+             withSmallAvatar:(UIImage *)smallImage
+                         for:(Identity *)identity
+                     success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                     failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSParameterAssert(fullImage != nil);
+    
+    NSMutableDictionary *images = [NSMutableDictionary dictionaryWithCapacity:3];
+    if (fullImage) {
+        [images setValue:fullImage forKey:@"original"];
+    }
+    if (largeImage) {
+        [images setValue:largeImage forKey:@"320_320"];
+    }
+    if (smallImage) {
+        [images setValue:smallImage forKey:@"80_80"];
+    }
+    
+    [self updateAvatar:images for:identity.identity_id success:success failure:failure];
+}
+
+- (void)updateAvatar:(NSDictionary *)images
+                 for:(NSNumber *)identity_id
+             success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+             failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    NSString *endpoint = [NSString stringWithFormat:@"avatar/update?token=%@", self.model.userToken];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:1];
+    if (identity_id) {
+        [params setValue:[NSString stringWithFormat:@"%@", identity_id] forKey:@"identity_id"];
+    }
+    
+    RKObjectManager *objectManager = self.model.objectManager;
+    objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    
+    NSMutableURLRequest *request = [objectManager.HTTPClient multipartFormRequestWithMethod:@"POST"
+                                                                                       path:endpoint
+                                                                                 parameters:params
+                                                                  constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
+                                                                      
+                                                                      NSArray *names = @[@"original", @"320_320", @"80_80"];
+                                                                      for (NSString *name in names) {
+                                                                          UIImage *img = [images valueForKey:name];
+                                                                          if (img) {
+                                                                              NSData *imageData = UIImageJPEGRepresentation(img, 1);
+                                                                              [formData appendPartWithFileData:imageData
+                                                                                                          name:name
+                                                                                                      fileName:[NSString stringWithFormat:@"%@.jpg", name]
+                                                                                                      mimeType:@"image/jpeg"];
+                                                                          }
+                                                                      }
+                                                                  }];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+        NSLog(@"Sent %lld of %lld bytes", totalBytesWritten, totalBytesExpectedToWrite);
+    }];
+    [operation start];
+    
+    
+    
+}
+
 
 - (void)addIdentityBy:(NSString*)external_username
          withProvider:(Provider)provider

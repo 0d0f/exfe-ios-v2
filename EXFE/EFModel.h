@@ -14,6 +14,7 @@
 #import "EXFEModel.h"
 
 #import "EXFEModel+UserAPI.h"
+#import "EXFEModel+IdentityAPI.h"
 #import "EXFEModel+ConversationAPI.h"
 #import "EXFEModel+Crosses.h"
 #import "EXFEModel+Place.h"

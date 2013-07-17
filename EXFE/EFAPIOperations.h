@@ -15,6 +15,12 @@
 // User API
 #import "EFLoadMeOperation.h"
 #import "EFLoadUserOperation.h"
+#import "EFUpdateUserAvatarOperation.h"
+#import "EFChangeUserBasicProfileOperation.h"
+
+// Identity API
+#import "EFUpdateIdentityAvatarOperation.h"
+#import "EFUpdateIdentityOperation.h"
 
 // Conversation API
 #import "EFLoadConversationOperation.h"
