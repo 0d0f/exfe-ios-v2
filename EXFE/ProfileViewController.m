@@ -63,10 +63,8 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    
-    
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -141,6 +139,26 @@
                                              selector:@selector(handleLoadMeSuccess:)
                                                  name:kEFNotificationNameLoadMeSuccess
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleUserChange:)
+                                                 name:kEFNotificationChangeUserBasicProfileSuccess
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleUserChange:)
+                                                 name:kEFNotificationUpdateUserAvatarSuccess
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleIdentityChange:)
+                                                 name:kEFNotificationUpdateIdentitySuccess
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleIdentityChange:)
+                                                 name:kEFNotificationUpdateIdentityAvatarSuccess
+                                               object:nil];
 }
 
 - (void)gotoBack:(UIButton*)sender{
@@ -151,6 +169,16 @@
 - (void)handleLoadMeSuccess:(NSNotification *)notif {
     self.user = [User getDefaultUser];
     [self refreshUI];
+}
+
+- (void)handleUserChange:(NSNotification *)notif
+{
+    [self syncUser];
+}
+
+- (void)handleIdentityChange:(NSNotification *)notif
+{
+    [self syncUser];
 }
 
 - (void)syncUser {

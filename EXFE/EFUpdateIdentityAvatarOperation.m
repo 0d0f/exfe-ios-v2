@@ -36,12 +36,33 @@ NSString *kEFNotificationUpdateIdentityAvatarFailure = @"notification.updateIden
                                withSmallAvatar:self.avatar
                                            for:self.identity
                                        success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                           self.state = kEFNetworkOperationStateSuccess;
                                            
-                                           NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:responseObject];
+                                           if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                                               NSDictionary *body = responseObject;
+                                               NSNumber *code = [body valueForKeyPath:@"meta.code"];
+                                               if(code){
+                                                   NSInteger c = [code integerValue];
+                                                   NSInteger t = c / 100;
+                                                   if (t == 2) {
+                                                       self.state = kEFNetworkOperationStateSuccess;
+                                                       
+                                                       NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"response"]];
+                                                       
+                                                       self.successUserInfo = userInfo;
+                                                       
+                                                       [self finish];
+                                                       return;
+                                                   } else {
+                                                       self.state = kEFNetworkOperationStateFailure;
+                                                       NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:[body valueForKeyPath:@"meta"]];
+                                                       self.failureUserInfo = userInfo;
+                                                       [self finish];
+                                                       return;
+                                                   }
+                                               }
+                                           }
                                            
-                                           self.successUserInfo = userInfo;
-                                           
+                                           self.state = kEFNetworkOperationStateFailure;
                                            [self finish];
                                        }
                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {

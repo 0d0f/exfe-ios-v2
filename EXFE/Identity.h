@@ -2,13 +2,14 @@
 //  Identity.h
 //  EXFE
 //
-//  Created by Stony Wang on 13-7-10.
+//  Created by Stony Wang on 13-7-18.
 //
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class Avatar;
 
 @interface Identity : NSManagedObject
 
@@ -27,5 +28,6 @@
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSNumber * unreachable;
 @property (nonatomic, retain) NSDate * updated_at;
+@property (nonatomic, retain) Avatar *avatar;
 
 @end

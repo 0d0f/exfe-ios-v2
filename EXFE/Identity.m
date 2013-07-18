@@ -2,11 +2,12 @@
 //  Identity.m
 //  EXFE
 //
-//  Created by Stony Wang on 13-7-10.
+//  Created by Stony Wang on 13-7-18.
 //
 //
 
 #import "Identity.h"
+#import "Avatar.h"
 
 
 @implementation Identity
@@ -26,5 +27,6 @@
 @dynamic type;
 @dynamic unreachable;
 @dynamic updated_at;
+@dynamic avatar;
 
 @end

@@ -241,7 +241,6 @@
 		4F63DAD317172AA600136B7E /* NewGatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78606CE01696DA3F0014806A /* NewGatherViewController.m */; };
 		4F63DAD417172AA600136B7E /* TitleDescEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78606CE5169AD2900014806A /* TitleDescEditViewController.m */; };
 		4F63DAD517172AA600136B7E /* EXCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5019F169FC504005328BE /* EXCurveView.m */; };
-		4F63DAD617172AA600136B7E /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C2F16B7CCB900D9E876 /* Identity.m */; };
 		4F63DAD717172AA600136B7E /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3216B7CD1000D9E876 /* Exfee.m */; };
 		4F63DAD817172AA600136B7E /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3716B7CD7900D9E876 /* Cross.m */; };
 		4F63DAD917172AA600136B7E /* UIUnderlinedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */; };
@@ -250,7 +249,6 @@
 		4F63DADC17172AA600136B7E /* UIBorderLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9105E516C2349400E524AC /* UIBorderLabel.m */; };
 		4F63DADD17172AA600136B7E /* CrossGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */; };
 		4F63DADE17172AA600136B7E /* WidgetConvViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */; };
-		4F63DADF17172AA600136B7E /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7835CC2816E0AEE1005001AA /* User.m */; };
 		4F63DAE017172AA600136B7E /* ModelMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 788B621016E89B200019B953 /* ModelMapping.m */; };
 		4F63DAE117172AA600136B7E /* EXTabLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15C34516E99CD4008FD99B /* EXTabLayer.m */; };
 		4F63DAE217172AA600136B7E /* EXTabWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15C34716E99CD4008FD99B /* EXTabWidget.m */; };
@@ -652,7 +650,6 @@
 		4F63DCA217172B0700136B7E /* NewGatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78606CE01696DA3F0014806A /* NewGatherViewController.m */; };
 		4F63DCA317172B0700136B7E /* TitleDescEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78606CE5169AD2900014806A /* TitleDescEditViewController.m */; };
 		4F63DCA417172B0700136B7E /* EXCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5019F169FC504005328BE /* EXCurveView.m */; };
-		4F63DCA517172B0700136B7E /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C2F16B7CCB900D9E876 /* Identity.m */; };
 		4F63DCA617172B0700136B7E /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3216B7CD1000D9E876 /* Exfee.m */; };
 		4F63DCA717172B0700136B7E /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3716B7CD7900D9E876 /* Cross.m */; };
 		4F63DCA817172B0700136B7E /* UIUnderlinedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */; };
@@ -661,7 +658,6 @@
 		4F63DCAB17172B0700136B7E /* UIBorderLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9105E516C2349400E524AC /* UIBorderLabel.m */; };
 		4F63DCAC17172B0700136B7E /* CrossGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9375216D4A57600ED6677 /* CrossGroupViewController.m */; };
 		4F63DCAD17172B0700136B7E /* WidgetConvViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783F1D8C16DB5193005F85B3 /* WidgetConvViewController.m */; };
-		4F63DCAE17172B0700136B7E /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7835CC2816E0AEE1005001AA /* User.m */; };
 		4F63DCAF17172B0700136B7E /* ModelMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 788B621016E89B200019B953 /* ModelMapping.m */; };
 		4F63DCB017172B0700136B7E /* EXTabLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15C34516E99CD4008FD99B /* EXTabLayer.m */; };
 		4F63DCB117172B0700136B7E /* EXTabWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F15C34716E99CD4008FD99B /* EXTabWidget.m */; };
@@ -1039,6 +1035,15 @@
 		4F7AA1E41796D38C005C4223 /* EXFEModel+IdentityAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1E31796D38B005C4223 /* EXFEModel+IdentityAPI.m */; };
 		4F7AA1E51796D38C005C4223 /* EXFEModel+IdentityAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1E31796D38B005C4223 /* EXFEModel+IdentityAPI.m */; };
 		4F7AA1E61796D38C005C4223 /* EXFEModel+IdentityAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1E31796D38B005C4223 /* EXFEModel+IdentityAPI.m */; };
+		4F7AA1F71797FDED005C4223 /* Avatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1F61797FDED005C4223 /* Avatar.m */; };
+		4F7AA1F81797FDED005C4223 /* Avatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1F61797FDED005C4223 /* Avatar.m */; };
+		4F7AA1F91797FDED005C4223 /* Avatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1F61797FDED005C4223 /* Avatar.m */; };
+		4F7AA1FC1797FDEE005C4223 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1FB1797FDEE005C4223 /* User.m */; };
+		4F7AA1FD1797FDEE005C4223 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1FB1797FDEE005C4223 /* User.m */; };
+		4F7AA1FE1797FDEE005C4223 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA1FB1797FDEE005C4223 /* User.m */; };
+		4F7AA201179803A5005C4223 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA200179803A5005C4223 /* Identity.m */; };
+		4F7AA202179803A5005C4223 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA200179803A5005C4223 /* Identity.m */; };
+		4F7AA203179803A5005C4223 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7AA200179803A5005C4223 /* Identity.m */; };
 		4F8507D017841B8C00BB86FA /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8507C617841B8C00BB86FA /* NBNumberFormat.m */; };
 		4F8507D117841B8C00BB86FA /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8507C617841B8C00BB86FA /* NBNumberFormat.m */; };
 		4F8507D217841B8C00BB86FA /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8507C617841B8C00BB86FA /* NBNumberFormat.m */; };
@@ -1836,7 +1841,6 @@
 		7827823915EF5332008D6F09 /* toolbar_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7827823715EF5332008D6F09 /* toolbar_pressed@2x.png */; };
 		782B3CA5156A604A00721150 /* EFTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CA4156A604A00721150 /* EFTime.m */; };
 		782B3CAB156A604C00721150 /* CrossTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B3CAA156A604C00721150 /* CrossTime.m */; };
-		7835CC2916E0AEE3005001AA /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7835CC2816E0AEE1005001AA /* User.m */; };
 		783662D115E37C1E00F4AEAC /* exclamation.png in Resources */ = {isa = PBXBuildFile; fileRef = 783662CF15E37C1E00F4AEAC /* exclamation.png */; };
 		783662D215E37C1E00F4AEAC /* exclamation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783662D015E37C1E00F4AEAC /* exclamation@2x.png */; };
 		783662DC15E3F4F900F4AEAC /* FullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 783662DA15E3F4F900F4AEAC /* FullScreenViewController.m */; };
@@ -2060,7 +2064,6 @@
 		78F9F88C165383D60079BA6B /* identity_more_40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F9F882165383D60079BA6B /* identity_more_40@2x.png */; };
 		78F9F88D165383D60079BA6B /* identity_twitter_40.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F9F883165383D60079BA6B /* identity_twitter_40.png */; };
 		78F9F88E165383D60079BA6B /* identity_twitter_40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F9F884165383D60079BA6B /* identity_twitter_40@2x.png */; };
-		78FA8C3016B7CCB900D9E876 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C2F16B7CCB900D9E876 /* Identity.m */; };
 		78FA8C3316B7CD1000D9E876 /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3216B7CD1000D9E876 /* Exfee.m */; };
 		78FA8C3816B7CD7A00D9E876 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3716B7CD7900D9E876 /* Cross.m */; };
 		78FA8C3E16B8FD6F00D9E876 /* portrait_tri.png in Resources */ = {isa = PBXBuildFile; fileRef = 78FA8C3C16B8FD6F00D9E876 /* portrait_tri.png */; };
@@ -2347,6 +2350,12 @@
 		4F7AA1DE1796B43D005C4223 /* EFUpdateIdentityAvatarOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFUpdateIdentityAvatarOperation.m; sourceTree = "<group>"; };
 		4F7AA1E21796D38B005C4223 /* EXFEModel+IdentityAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EXFEModel+IdentityAPI.h"; sourceTree = "<group>"; };
 		4F7AA1E31796D38B005C4223 /* EXFEModel+IdentityAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EXFEModel+IdentityAPI.m"; sourceTree = "<group>"; };
+		4F7AA1F51797FDED005C4223 /* Avatar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Avatar.h; sourceTree = "<group>"; };
+		4F7AA1F61797FDED005C4223 /* Avatar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Avatar.m; sourceTree = "<group>"; };
+		4F7AA1FA1797FDEE005C4223 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		4F7AA1FB1797FDEE005C4223 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		4F7AA1FF179803A4005C4223 /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
+		4F7AA200179803A5005C4223 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		4F8507C517841B8C00BB86FA /* NBNumberFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBNumberFormat.h; path = "Vendor/libPhoneNumber-iOS/libPhoneNumber/NBNumberFormat.h"; sourceTree = SOURCE_ROOT; };
 		4F8507C617841B8C00BB86FA /* NBNumberFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBNumberFormat.m; path = "Vendor/libPhoneNumber-iOS/libPhoneNumber/NBNumberFormat.m"; sourceTree = SOURCE_ROOT; };
 		4F8507C717841B8C00BB86FA /* NBPhoneMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneMetaData.h; path = "Vendor/libPhoneNumber-iOS/libPhoneNumber/NBPhoneMetaData.h"; sourceTree = SOURCE_ROOT; };
@@ -2848,8 +2857,6 @@
 		782B3CA4156A604A00721150 /* EFTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFTime.m; sourceTree = "<group>"; };
 		782B3CA9156A604C00721150 /* CrossTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossTime.h; sourceTree = "<group>"; };
 		782B3CAA156A604C00721150 /* CrossTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossTime.m; sourceTree = "<group>"; };
-		7835CC2716E0AEE0005001AA /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		7835CC2816E0AEE1005001AA /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		783662CF15E37C1E00F4AEAC /* exclamation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exclamation.png; sourceTree = "<group>"; };
 		783662D015E37C1E00F4AEAC /* exclamation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "exclamation@2x.png"; sourceTree = "<group>"; };
 		783662D915E3F4F900F4AEAC /* FullScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullScreenViewController.h; sourceTree = "<group>"; };
@@ -3128,8 +3135,6 @@
 		78F9F882165383D60079BA6B /* identity_more_40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity_more_40@2x.png"; sourceTree = "<group>"; };
 		78F9F883165383D60079BA6B /* identity_twitter_40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = identity_twitter_40.png; sourceTree = "<group>"; };
 		78F9F884165383D60079BA6B /* identity_twitter_40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity_twitter_40@2x.png"; sourceTree = "<group>"; };
-		78FA8C2E16B7CCB900D9E876 /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
-		78FA8C2F16B7CCB900D9E876 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		78FA8C3116B7CD1000D9E876 /* Exfee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exfee.h; sourceTree = "<group>"; };
 		78FA8C3216B7CD1000D9E876 /* Exfee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Exfee.m; sourceTree = "<group>"; };
 		78FA8C3616B7CD7900D9E876 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
@@ -4689,6 +4694,12 @@
 		78A98EFC1561169E009E0806 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				4F7AA1FF179803A4005C4223 /* Identity.h */,
+				4F7AA200179803A5005C4223 /* Identity.m */,
+				4F7AA1FA1797FDEE005C4223 /* User.h */,
+				4F7AA1FB1797FDEE005C4223 /* User.m */,
+				4F7AA1F51797FDED005C4223 /* Avatar.h */,
+				4F7AA1F61797FDED005C4223 /* Avatar.m */,
 				78FA8C3616B7CD7900D9E876 /* Cross.h */,
 				78FA8C3716B7CD7900D9E876 /* Cross.m */,
 				4FF9D12D178BE81B00D01765 /* Device.h */,
@@ -4701,8 +4712,6 @@
 				78FA8C3216B7CD1000D9E876 /* Exfee.m */,
 				4FFD701417633A46009836F5 /* Invitation.h */,
 				4FFD701517633A46009836F5 /* Invitation.m */,
-				78FA8C2E16B7CCB900D9E876 /* Identity.h */,
-				78FA8C2F16B7CCB900D9E876 /* Identity.m */,
 				4FFD6FFC176300F1009836F5 /* IdentityId.h */,
 				4FFD6FFD176300F1009836F5 /* IdentityId.m */,
 				7879B47616BE77AF00D3BE3C /* LocalContact.h */,
@@ -4715,8 +4724,6 @@
 				780D27A3157F368900402460 /* Post.m */,
 				78920EBA157CB0E1004F3901 /* Rsvp.h */,
 				78920EBB157CB0E1004F3901 /* Rsvp.m */,
-				7835CC2716E0AEE0005001AA /* User.h */,
-				7835CC2816E0AEE1005001AA /* User.m */,
 			);
 			name = Entity;
 			sourceTree = "<group>";
@@ -6549,7 +6556,6 @@
 				4F63DAD317172AA600136B7E /* NewGatherViewController.m in Sources */,
 				4F63DAD417172AA600136B7E /* TitleDescEditViewController.m in Sources */,
 				4F63DAD517172AA600136B7E /* EXCurveView.m in Sources */,
-				4F63DAD617172AA600136B7E /* Identity.m in Sources */,
 				4F63DAD717172AA600136B7E /* Exfee.m in Sources */,
 				4F63DAD817172AA600136B7E /* Cross.m in Sources */,
 				4F63DAD917172AA600136B7E /* UIUnderlinedButton.m in Sources */,
@@ -6558,7 +6564,6 @@
 				4F63DADC17172AA600136B7E /* UIBorderLabel.m in Sources */,
 				4F63DADD17172AA600136B7E /* CrossGroupViewController.m in Sources */,
 				4F63DADE17172AA600136B7E /* WidgetConvViewController.m in Sources */,
-				4F63DADF17172AA600136B7E /* User.m in Sources */,
 				4F63DAE017172AA600136B7E /* ModelMapping.m in Sources */,
 				4F63DAE117172AA600136B7E /* EXTabLayer.m in Sources */,
 				4F63DAE217172AA600136B7E /* EXTabWidget.m in Sources */,
@@ -6710,6 +6715,9 @@
 				4F7AA1DB1796B420005C4223 /* EFUpdateUserAvatarOperation.m in Sources */,
 				4F7AA1E01796B43E005C4223 /* EFUpdateIdentityAvatarOperation.m in Sources */,
 				4F7AA1E51796D38C005C4223 /* EXFEModel+IdentityAPI.m in Sources */,
+				4F7AA1F81797FDED005C4223 /* Avatar.m in Sources */,
+				4F7AA1FD1797FDEE005C4223 /* User.m in Sources */,
+				4F7AA202179803A5005C4223 /* Identity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6789,7 +6797,6 @@
 				4F63DCA217172B0700136B7E /* NewGatherViewController.m in Sources */,
 				4F63DCA317172B0700136B7E /* TitleDescEditViewController.m in Sources */,
 				4F63DCA417172B0700136B7E /* EXCurveView.m in Sources */,
-				4F63DCA517172B0700136B7E /* Identity.m in Sources */,
 				4F63DCA617172B0700136B7E /* Exfee.m in Sources */,
 				4F63DCA717172B0700136B7E /* Cross.m in Sources */,
 				4F63DCA817172B0700136B7E /* UIUnderlinedButton.m in Sources */,
@@ -6798,7 +6805,6 @@
 				4F63DCAB17172B0700136B7E /* UIBorderLabel.m in Sources */,
 				4F63DCAC17172B0700136B7E /* CrossGroupViewController.m in Sources */,
 				4F63DCAD17172B0700136B7E /* WidgetConvViewController.m in Sources */,
-				4F63DCAE17172B0700136B7E /* User.m in Sources */,
 				4F63DCAF17172B0700136B7E /* ModelMapping.m in Sources */,
 				4F63DCB017172B0700136B7E /* EXTabLayer.m in Sources */,
 				4F63DCB117172B0700136B7E /* EXTabWidget.m in Sources */,
@@ -6950,6 +6956,9 @@
 				4F7AA1DC1796B420005C4223 /* EFUpdateUserAvatarOperation.m in Sources */,
 				4F7AA1E11796B43E005C4223 /* EFUpdateIdentityAvatarOperation.m in Sources */,
 				4F7AA1E61796D38C005C4223 /* EXFEModel+IdentityAPI.m in Sources */,
+				4F7AA1F91797FDED005C4223 /* Avatar.m in Sources */,
+				4F7AA1FE1797FDEE005C4223 /* User.m in Sources */,
+				4F7AA203179803A5005C4223 /* Identity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7029,7 +7038,6 @@
 				78606CE21696DA3F0014806A /* NewGatherViewController.m in Sources */,
 				78606CE7169AD2920014806A /* TitleDescEditViewController.m in Sources */,
 				4FB501A0169FC504005328BE /* EXCurveView.m in Sources */,
-				78FA8C3016B7CCB900D9E876 /* Identity.m in Sources */,
 				78FA8C3316B7CD1000D9E876 /* Exfee.m in Sources */,
 				78FA8C3816B7CD7A00D9E876 /* Cross.m in Sources */,
 				78F45F5816BBBB1200F364FE /* UIUnderlinedButton.m in Sources */,
@@ -7038,7 +7046,6 @@
 				4F9105E616C2349400E524AC /* UIBorderLabel.m in Sources */,
 				4FD9375416D4A57600ED6677 /* CrossGroupViewController.m in Sources */,
 				783F1D9416DB51A0005F85B3 /* WidgetConvViewController.m in Sources */,
-				7835CC2916E0AEE3005001AA /* User.m in Sources */,
 				788B621116E89B200019B953 /* ModelMapping.m in Sources */,
 				4F15C34816E99CD4008FD99B /* EXTabLayer.m in Sources */,
 				4F15C34916E99CD4008FD99B /* EXTabWidget.m in Sources */,
@@ -7190,6 +7197,9 @@
 				4F7AA1DA1796B420005C4223 /* EFUpdateUserAvatarOperation.m in Sources */,
 				4F7AA1DF1796B43E005C4223 /* EFUpdateIdentityAvatarOperation.m in Sources */,
 				4F7AA1E41796D38C005C4223 /* EXFEModel+IdentityAPI.m in Sources */,
+				4F7AA1F71797FDED005C4223 /* Avatar.m in Sources */,
+				4F7AA1FC1797FDEE005C4223 /* User.m in Sources */,
+				4F7AA201179803A5005C4223 /* Identity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
