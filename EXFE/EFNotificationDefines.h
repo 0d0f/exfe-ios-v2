@@ -41,4 +41,20 @@ extern NSString *kEFNotificationNameGetPlacesByTitleFailure;
 extern NSString *kEFNotificationNameLoadSuggestSuccess;
 extern NSString *kEFNotificationNameLoadSuggestFailure;
 
+// define in EFChangeUserBasicProfileOperation.m
+extern NSString *kEFNotificationChangeUserBasicProfileSuccess;
+extern NSString *kEFNotificationChangeUserBasicProfileFailure;
+
+// define in EFUpdateIdentityOperation.m
+extern NSString *kEFNotificationUpdateIdentitySuccess;
+extern NSString *kEFNotificationUpdateIdentityFailure;
+
+// define in EFUpdateUserAvatarOperation.m
+extern NSString *kEFNotificationUpdateUserAvatarSuccess;
+extern NSString *kEFNotificationUpdateUserAvatarFailure;
+
+// define in EFUpdateIdentityAvatarOperation.m
+extern NSString *kEFNotificationUpdateIdentityAvatarSuccess;
+extern NSString *kEFNotificationUpdateIdentityAvatarFailure;
+
 #endif
