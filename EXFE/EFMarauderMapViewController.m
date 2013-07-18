@@ -106,11 +106,19 @@
 }
 
 - (void)_postRoute {
+#if 0 // test
+    [self.model.apiServer updateRouteWithCrossId:[self.cross.cross_id integerValue]
+                                       locations:nil
+                                          routes:nil
+                                         success:nil
+                                         failure:nil];
+#else
     [self.model.apiServer updateRouteWithCrossId:[self.cross.cross_id integerValue]
                                        locations:[self.mapDataSource allRouteLocations]
                                           routes:nil
                                          success:nil
                                          failure:nil];
+#endif
 }
 
 @end
@@ -127,6 +135,7 @@
         self.dataSource = [[EFMapPeopleDataSource alloc] init];
         
         self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
         self.locationManager.delegate = self;
         
         self.lock = [[NSRecursiveLock alloc] init];

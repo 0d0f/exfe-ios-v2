@@ -12,6 +12,46 @@
 #import "Identity+EXFE.h"
 #import "IdentityId.h"
 
+@interface EFRouteLocation (Private)
+
+- (void)_updateIconURL;
+
+@end
+
+@implementation EFRouteLocation (Private)
+
+- (void)_updateIconURL {
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSURL *baseURl = objectManager.HTTPClient.baseURL;
+    
+    switch (self.locationTytpe) {
+        case kEFRouteLocationTypeDestination:
+        {
+            NSURL *url = [NSURL URLWithString:@"/v3/icons/mapmark?content=D" relativeToURL:baseURl];
+            self.iconUrl = url;
+        }
+            break;
+        case kEFRouteLocationTypePark:
+        {
+            NSString *endPoint = nil;
+            if (kEFRouteLocationColorBlue) {
+                endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@", self.markTitle];
+            } else {
+                endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=%@", self.markTitle, @"red"];
+            }
+            NSURL *url = [NSURL URLWithString:endPoint
+                                relativeToURL:baseURl];
+            self.iconUrl = url;
+        }
+            break;
+        default:
+            break;
+    }
+
+}
+
+@end
+
 @implementation EFRouteLocation
 
 + (EFRouteLocation *)generateRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate {
@@ -19,7 +59,7 @@
     IdentityId *identityId = [identity identityIdValue];
     
     EFRouteLocation *instance = [[self alloc] init];
-    instance.locationTytpe = kEFRouteLocationTypeDestination;
+    instance.locationTytpe = kEFRouteLocationTypeUnknow;
     instance.locationId = [NSString stringWithFormat:@"%d", rand() % 255];
     instance.coordinate = coordinate;
     instance.createdDate = [NSDate date];
@@ -34,6 +74,9 @@
     self = [super init];
     if (self) {
         __block CLLocationDegrees longitude, latitude;
+        
+        self.markTitle = @"P";
+        self.markColor = kEFRouteLocationColorBlue;
         
         [param enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
             if ([key isEqualToString:@"id"]) {
@@ -58,6 +101,26 @@
                 }
             } else if ([key isEqualToString:@"icon"]) {
                 NSString *iconString = obj;
+                if (iconString) {
+                    NSArray *comps = [iconString componentsSeparatedByString:@"?"];
+                    if (comps.count == 2) {
+                        NSArray *params = [[comps lastObject] componentsSeparatedByString:@"&"];
+                        for (NSString *param in params) {
+                            NSArray *kv = [param componentsSeparatedByString:@"="];
+                            if (kv.count == 2) {
+                                if ([kv[0] isEqualToString:@"content"]) {
+                                    self.markTitle = kv[1];
+                                } else if ([kv[0] isEqualToString:@"color"]) {
+                                    if ([kv[1] isEqualToString:@"red"]) {
+                                        self.markColor = kEFRouteLocationColorRed;
+                                    } else {
+                                        self.markColor = kEFRouteLocationColorBlue;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 self.iconUrl = [NSURL URLWithString:iconString];
             } else if ([key isEqualToString:@"title"]) {
                 self.title = obj;
@@ -74,6 +137,32 @@
     }
     
     return self;
+}
+
+- (void)setLocationTytpe:(EFRouteLocationType)locationTytpe {
+    if (_locationTytpe == locationTytpe)
+        return;
+    
+    _locationTytpe = locationTytpe;
+    
+    switch (locationTytpe) {
+        case kEFRouteLocationTypeDestination:
+        {
+            self.markTitle = @"终";
+            self.markColor = kEFRouteLocationColorBlue;
+            [self _updateIconURL];
+        }
+            break;
+        case kEFRouteLocationTypePark:
+        {
+            self.markTitle = @"P";
+            self.markColor = kEFRouteLocationColorBlue;
+            [self _updateIconURL];
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 - (NSDictionary *)dictionaryValue {
@@ -94,12 +183,16 @@
     }
     [dict setValue:tags forKey:@"tags"];
     [dict setValue:[self.iconUrl absoluteString] forKey:@"icon"];
-    [dict setValue:self.title forKey:@"title"];
-    [dict setValue:self.subtitle forKey:@"desciption"];
+    [dict setValue:self.title ? self.title : @"" forKey:@"title"];
+    [dict setValue:self.subtitle ? self.subtitle : @"" forKey:@"description"];
     [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate.longitude] forKey:@"longitude"];
     [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate.latitude] forKey:@"latitude"];
     
     return dict;
+}
+
+- (void)updateIconURL {
+    [self _updateIconURL];
 }
 
 @end

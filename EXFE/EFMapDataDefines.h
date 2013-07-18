@@ -27,6 +27,11 @@ typedef enum {
     kEFRouteLocationTypeDestination
 } EFRouteLocationType;
 
+typedef enum {
+    kEFRouteLocationColorBlue = 0,
+    kEFRouteLocationColorRed
+} EFRouteLocationColor;
+
 extern NSString *EFNotificationRoutePathDidChange;
 extern NSString *EFNotificationRouteLocationDidChange;
 
