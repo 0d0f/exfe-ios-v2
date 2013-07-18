@@ -298,7 +298,7 @@
         self.editingBaseView = editingBaseView;
         
         UIView *maskView = [[UIView alloc] initWithFrame:rootView.bounds];
-        maskView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.3f];
+        maskView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.33f];
         maskView.alpha = 0.0f;
         [editingBaseView addSubview:maskView];
         self.editingMaskView = maskView;
@@ -311,7 +311,7 @@
         self.frame = frame;
         [self.editingBaseView addSubview:self];
         
-        frame = (CGRect){{10.0f, 150.0f}, {300.0f, 100.0f}};
+        frame = (CGRect){{60.0f, 200.0f}, {200.0f, 69}};
         [UIView setAnimationsEnabled:animated];
         [UIView animateWithDuration:0.233f
                          animations:^{
