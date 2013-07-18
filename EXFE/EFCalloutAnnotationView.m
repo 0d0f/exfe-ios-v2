@@ -140,7 +140,7 @@
 }
 
 - (void)_prepareOffset {
-    CGFloat offsetY = -(CGRectGetHeight(self.parentAnnotationView.frame) + CGRectGetHeight(self.frame) * 0.25f);
+    CGFloat offsetY = -(CGRectGetHeight(self.parentAnnotationView.frame) + CGRectGetHeight(self.frame) * 0.25f) + self.parentAnnotationView.centerOffset.y;
     self.centerOffset = (CGPoint){0.0f, offsetY};
 }
 

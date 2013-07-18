@@ -33,6 +33,8 @@
         
         [self reloadWithAnnotation:annotation];
         
+        self.centerOffset = (CGPoint){0.0f, -17.0f};
+        
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
         tap.numberOfTapsRequired = 1;
         [self addGestureRecognizer:tap];

@@ -66,18 +66,20 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     NSParameterAssert(routeLocation);
     NSParameterAssert(mapView);
     
-    BOOL hasDestination = NO;
-    for (EFRouteLocation *location in self.routeLocations) {
-        if (kEFRouteLocationTypeDestination == location.locationTytpe) {
-            hasDestination = YES;
-            break;
+    if (kEFRouteLocationTypeUnknow == routeLocation.locationTytpe) {
+        BOOL hasDestination = NO;
+        for (EFRouteLocation *location in self.routeLocations) {
+            if (kEFRouteLocationTypeDestination == location.locationTytpe) {
+                hasDestination = YES;
+                break;
+            }
         }
-    }
-    
-    if (!hasDestination) {
-        routeLocation.locationTytpe = kEFRouteLocationTypeDestination;
-    } else {
-        routeLocation.locationTytpe = kEFRouteLocationTypePark;
+        
+        if (!hasDestination) {
+            routeLocation.locationTytpe = kEFRouteLocationTypeDestination;
+        } else {
+            routeLocation.locationTytpe = kEFRouteLocationTypePark;
+        }
     }
     
     [self.routeLocations addObject:routeLocation];
