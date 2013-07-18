@@ -15,6 +15,7 @@
 #import "EXGradientToolbarView.h"
 #import "UIScreen+EXFE.h"
 #import "SSTextView.h"
+#import "Avatar.h"
 
 #define kModelKeyName       @"name"
 #define kModelKeyBio        @"bio"
@@ -457,9 +458,9 @@
     } else {
         NSString *imageKey = nil;
         if (self.isEditUser) {
-            imageKey = self.user.avatar_filename;
+            imageKey = self.user.avatar.original;
         } else {
-            imageKey = self.identity.avatar_filename;
+            imageKey = self.identity.avatar.original;
         }
         
         if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {

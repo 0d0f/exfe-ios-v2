@@ -24,6 +24,8 @@
     [RKEntityMapping addDefaultDateFormatter:dateFormatter];
     
     RKManagedObjectStore *managedObjectStore= objectManager.managedObjectStore;
+    
+#pragma mark Meta
     // Meta Entity
     RKEntityMapping *metaMapping = [RKEntityMapping mappingForEntityForName:@"Meta" inManagedObjectStore:managedObjectStore];
     [metaMapping addAttributeMappingsFromArray:@[@"code",@"errorDetail",@"errorType"]];
@@ -33,11 +35,19 @@
                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:metaresponseDescriptor];
     
+#pragma mark Avatar
+    RKEntityMapping *avatarMapping = [RKEntityMapping mappingForEntityForName:@"Avatar" inManagedObjectStore:managedObjectStore];
+    [avatarMapping addAttributeMappingsFromArray:@[@"original"]];
+    [avatarMapping addAttributeMappingsFromDictionary:@{@"320_320":@"base_2x", @"80_80":@"base"}];
+    
+    
+#pragma mark Identity
     // Identity Entity
     RKEntityMapping *identityMapping = [RKEntityMapping mappingForEntityForName:@"Identity" inManagedObjectStore:managedObjectStore];
     identityMapping.identificationAttributes = @[ @"identity_id" ];
     [identityMapping addAttributeMappingsFromDictionary:@{@"id": @"identity_id",@"order": @"a_order"}];
     [identityMapping addAttributeMappingsFromArray:@[@"name", @"nickname", @"bio", @"provider", @"connected_user_id", @"external_id", @"external_username", @"avatar_filename", @"created_at", @"updated_at", @"unreachable", @"type", @"status"]];
+    [identityMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"avatar" toKeyPath:@"avatar" withMapping:avatarMapping]];
     
     RKResponseDescriptor *identityResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:identityMapping
                                                                                                pathPattern:nil
@@ -50,6 +60,7 @@
     [identityrequestMapping addAttributeMappingsFromDictionary:@{@"identity_id": @"id",@"a_order": @"order"}];
     [identityrequestMapping addAttributeMappingsFromArray:@[@"name",@"nickname",@"provider",@"external_id",@"external_username",@"connected_user_id",@"bio",@"avatar_filename",@"created_at",@"updated_at",@"type",@"unreachable",@"status"]];
     
+#pragma mark IdentityId
     // IdentityId Entity
     RKEntityMapping *identityIdMapping = [RKEntityMapping mappingForEntityForName:@"IdentityId" inManagedObjectStore:managedObjectStore];
     [identityIdMapping addPropertyMapping:[RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@"identity_id"]];
@@ -60,6 +71,8 @@
                                                                                                  statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:identityIdResponseDescriptor];
     
+    
+#pragma mark Invitation
     // Invitation Entity
     RKEntityMapping *invitationMapping = [RKEntityMapping mappingForEntityForName:@"Invitation" inManagedObjectStore:managedObjectStore];
     invitationMapping.identificationAttributes = @[ @"invitation_id" ];
@@ -77,7 +90,8 @@
     [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identity" toKeyPath:@"identity" withMapping:identityrequestMapping]];
     [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"invited_by" toKeyPath:@"invited_by" withMapping:identityrequestMapping]];
     [invitationrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"updated_by" toKeyPath:@"updated_by" withMapping:identityrequestMapping]];
-    
+
+#pragma mark Exfee
     // Exfee Entity
     RKEntityMapping *exfeeMapping = [RKEntityMapping mappingForEntityForName:@"Exfee" inManagedObjectStore:managedObjectStore];
     exfeeMapping.identificationAttributes = @[ @"exfee_id" ];
@@ -92,12 +106,14 @@
     
     [exfeerequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"invitations" toKeyPath:@"invitations" withMapping:invitationrequestMapping]];
     
+#pragma mark Device
     // Device Entity
     RKEntityMapping *deviceMapping = [RKEntityMapping mappingForEntityForName:@"Device" inManagedObjectStore:managedObjectStore];
     deviceMapping.identificationAttributes = @[ @"device_id"];
     [deviceMapping addAttributeMappingsFromDictionary:@{@"id": @"device_id", @"description": @"device_description"}];
     [deviceMapping addAttributeMappingsFromArray:@[@"name", @"brand", @"model", @"os_name", @"os_version", @"status", @"first_connected_at",@"last_connected_at", @"disconnected_at"]];
-    
+
+#pragma mark User
     // User Entity
     RKEntityMapping *userMapping = [RKEntityMapping mappingForEntityForName:@"User" inManagedObjectStore:managedObjectStore];
     userMapping.identificationAttributes = @[ @"user_id" ];
@@ -105,15 +121,19 @@
     [userMapping addAttributeMappingsFromArray:@[@"avatar_filename", @"bio", @"cross_quantity", @"name", @"timezone", @"locale", @"created_at",@"updated_at", @"password", @"webcal"]];
     [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identities" toKeyPath:@"identities" withMapping:identityMapping]];
     [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"devices" toKeyPath:@"devices" withMapping:deviceMapping]];
+    [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"avatar" toKeyPath:@"avatar" withMapping:avatarMapping]];
+    
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping pathPattern:nil keyPath:@"response.user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:responseDescriptor];
     
+#pragma mark EFTime
     // EFTime Entity
     RKEntityMapping *eftimeMapping = [RKEntityMapping mappingForEntityForName:@"EFTime" inManagedObjectStore:managedObjectStore];
     [eftimeMapping addAttributeMappingsFromArray:@[@"date",@"date_word",@"time",@"time_word",@"timezone"]];
     RKObjectMapping *eftimerequestMapping = [RKObjectMapping requestMapping];
     [eftimerequestMapping addAttributeMappingsFromArray:@[@"date",@"date_word",@"time",@"time_word",@"timezone"]];
     
+#pragma mark CrossTime
     // CrossTime Entity
     RKEntityMapping *crosstimeMapping = [RKEntityMapping mappingForEntityForName:@"CrossTime" inManagedObjectStore:managedObjectStore];
     [crosstimeMapping addAttributeMappingsFromArray:@[@"origin",@"outputformat"]];
@@ -124,6 +144,7 @@
     [crosstimerequestMapping addAttributeMappingsFromArray:@[@"origin",@"outputformat"]];
     [crosstimerequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"begin_at" toKeyPath:@"begin_at" withMapping:eftimerequestMapping]];
     
+#pragma mark Place
     // Place Entity
     RKEntityMapping *placeMapping = [RKEntityMapping mappingForEntityForName:@"Place" inManagedObjectStore:managedObjectStore];
     placeMapping.identificationAttributes = @[ @"place_id" ];
@@ -131,12 +152,14 @@
      @"description": @"place_description"}];
     [placeMapping addAttributeMappingsFromArray:@[@"title",@"lat",@"lng",@"provider",@"external_id",@"created_at",@"updated_at",@"type"]];
     
+
     // Place Reqeust Object
     RKObjectMapping *placerequestMapping = [RKObjectMapping requestMapping];
     [placerequestMapping addAttributeMappingsFromDictionary:@{@"place_id": @"id",
      @"place_description": @"description"}];
     [placerequestMapping addAttributeMappingsFromArray:@[@"title",@"lat",@"lng",@"provider",@"external_id",@"created_at",@"updated_at",@"type"]];
-    
+
+#pragma mark Cross
     // Cross Entity
     RKEntityMapping *crossMapping = [RKEntityMapping mappingForEntityForName:@"Cross" inManagedObjectStore:managedObjectStore];
     crossMapping.identificationAttributes = @[ @"cross_id" ];
@@ -151,6 +174,7 @@
     [crossMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"time" toKeyPath:@"time" withMapping:crosstimeMapping]];
     [crossMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"place" toKeyPath:@"place" withMapping:placeMapping]];
     
+#pragma mark Conversation
     // Conversation Entity
     RKEntityMapping *conversationMapping = [RKEntityMapping mappingForEntityForName:@"Post" inManagedObjectStore:managedObjectStore];
     conversationMapping.identificationAttributes = @[ @"post_id" ];

@@ -2,14 +2,14 @@
 //  User.h
 //  EXFE
 //
-//  Created by Stony Wang on 13-7-10.
+//  Created by Stony Wang on 13-7-18.
 //
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Device, Identity;
+@class Avatar, Device, Identity;
 
 @interface User : NSManagedObject
 
@@ -26,6 +26,7 @@
 @property (nonatomic, retain) NSString * webcal;
 @property (nonatomic, retain) Device *devices;
 @property (nonatomic, retain) NSSet *identities;
+@property (nonatomic, retain) Avatar *avatar;
 @end
 
 @interface User (CoreDataGeneratedAccessors)

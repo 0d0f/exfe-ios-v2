@@ -2,11 +2,12 @@
 //  User.m
 //  EXFE
 //
-//  Created by Stony Wang on 13-7-10.
+//  Created by Stony Wang on 13-7-18.
 //
 //
 
 #import "User.h"
+#import "Avatar.h"
 #import "Device.h"
 #import "Identity.h"
 
@@ -26,5 +27,6 @@
 @dynamic webcal;
 @dynamic devices;
 @dynamic identities;
+@dynamic avatar;
 
 @end

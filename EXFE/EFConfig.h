@@ -12,7 +12,7 @@
 /**
  * DB version && name
  */
-#define APP_DB_VERSION 210
+#define APP_DB_VERSION 211
 
 /**
  * Flurry key
