@@ -130,11 +130,6 @@
         self.locationManager.delegate = self;
         
         self.lock = [[NSRecursiveLock alloc] init];
-        [self.dataSource addObserver:self
-                          forKeyPath:@"peopleCount"
-                             options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                             context:NULL];
-        self.isEditing = NO;
         self.isInited = YES;
     }
     
@@ -149,36 +144,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //
-    self.parkButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.parkButton.layer.borderWidth = 2.0f;
-    self.parkButton.layer.cornerRadius = 8.0f;
-    
-    // clean button
-    self.cleanButton.layer.cornerRadius = 15.0f;
-    self.cleanButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.cleanButton.layer.borderWidth = 0.5f;
-    
     // tableView
     self.tableView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.6f];
     
     // long press gesture
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    longPress.delegate = self;
     [self.mapView addGestureRecognizer:longPress];
-    
-    // kvo
-    [self addObserver:self
-           forKeyPath:@"isEditing"
-              options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-              context:NULL];
 }
 
 - (void)viewDidUnload {
     [self setTableView:nil];
-    [self setParkButton:nil];
-    [self setOperationBaseView:nil];
-    [self setCleanButton:nil];
-    [self setHeadingButton:nil];
     
     [super viewDidUnload];
 }
@@ -260,27 +236,15 @@
     }
 }
 
-#pragma mark - KVO
+#pragma mark - UIGestureRecognizerDelegate
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (object == self.dataSource && [keyPath isEqualToString:@"peopleCount"]) {
-//        self.tableView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, self.dataSource.peopleCount * [EFMapPersonCell defaultCellHeight]}};
-    } else if (object == self && [keyPath isEqualToString:@"isEditing"]) {
-        UIButton *button = self.parkButton;
-        UIColor *buttonBackgroundColor = button.backgroundColor;
-        UIColor *textColor = [button titleColorForState:UIControlStateNormal];
-        
-        button.backgroundColor = textColor;
-        [button setTitleColor:buttonBackgroundColor forState:UIControlStateNormal];
-        
-        if (self.isEditing) {
-            self.cleanButton.hidden = NO;
-            self.headingButton.hidden = YES;
-        } else {
-            self.cleanButton.hidden = YES;
-            self.headingButton.hidden = NO;
-        }
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    CGPoint location = [touch locationInView:self.mapView];
+    if (CGRectContainsPoint(self.mapView.operationBaseView.frame, location)) {
+        return NO;
     }
+    
+    return YES;
 }
 
 #pragma mark - Update

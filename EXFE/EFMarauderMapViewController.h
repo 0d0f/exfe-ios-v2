@@ -17,6 +17,7 @@
 
 @interface EFMarauderMapViewController : UIViewController
 <
+UIGestureRecognizerDelegate,
 CLLocationManagerDelegate,
 MKMapViewDelegate,
 UITableViewDataSource,
@@ -31,10 +32,6 @@ EFTabBarDataSource
 
 @property (weak, nonatomic) IBOutlet EFMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIView *operationBaseView;
-@property (weak, nonatomic) IBOutlet UIButton *parkButton;
-@property (weak, nonatomic) IBOutlet UIButton *headingButton;
-@property (weak, nonatomic) IBOutlet UIButton *cleanButton;
 
 // EFTabBarDataSource
 @property (nonatomic, strong) EFTabBarItem *customTabBarItem;

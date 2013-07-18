@@ -274,14 +274,23 @@ static UIView * ReverseSubviews(UIView *view) {
     return nil;
 }
 
+- (void)_initOperationBaseView {
+    CGRect viewBounds = self.bounds;
+    CGRect operationBaseViewFrame = (CGRect){{0.0f, CGRectGetHeight(viewBounds) - 50.0f}, {CGRectGetWidth(viewBounds), 50.0f}};
+    UIView *operationBaseView = [[UIView alloc] initWithFrame:operationBaseViewFrame];
+    [self addSubview:operationBaseView];
+    self.operationBaseView = operationBaseView;
+}
+
 - (void)_initEditingViews {
     CGRect viewBounds = self.bounds;
-    CGRect baseViewFrame = (CGRect){{50.0f, CGRectGetHeight(viewBounds) - 37.0f}, {CGRectGetWidth(viewBounds) - 100.0f, 25.0f}};
+    CGRect operationBaseViewFrame = self.operationBaseView.frame;
+    CGRect baseViewFrame = (CGRect){{50.0f, CGRectGetHeight(operationBaseViewFrame) - 37.0f}, {CGRectGetWidth(viewBounds) - 100.0f, 25.0f}};
     
     UIView *baseView = [[UIView alloc] initWithFrame:baseViewFrame];
     baseView.backgroundColor = [UIColor clearColor];
     baseView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
-    [self addSubview:baseView];
+    [self.operationBaseView addSubview:baseView];
     self.editingBaseView = baseView;
     
     CGRect baseViewBounds = baseView.bounds;
@@ -302,6 +311,35 @@ static UIView * ReverseSubviews(UIView *view) {
     self.editingState = kEFMapViewEditingStateNormal;
 }
 
+- (void)_initOperationButtons {
+    CGRect viewBounds = self.operationBaseView.bounds;
+    
+    UIButton *editingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    editingButton.layer.cornerRadius = 4.0f;
+    editingButton.backgroundColor = [UIColor blueColor];
+    editingButton.frame = (CGRect){{10.0f, 10.0f}, {30.0f, 30.0f}};
+    [editingButton addTarget:self action:@selector(editingButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.operationBaseView addSubview:editingButton];
+    self.editingButton = editingButton;
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    cancelButton.layer.cornerRadius = 15.0f;
+    cancelButton.backgroundColor = [UIColor whiteColor];
+    cancelButton.frame = (CGRect){{CGRectGetWidth(viewBounds) - 40.0f, 10.0f}, {30.0f, 30.0f}};
+    [cancelButton addTarget:self action:@selector(cancelButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.operationBaseView addSubview:cancelButton];
+    self.cancelButton = cancelButton;
+    
+    UIButton *headingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    headingButton.backgroundColor = [UIColor clearColor];
+    [headingButton setBackgroundImage:[UIImage imageNamed:@"btn_pad.png"] forState:UIControlStateNormal];
+    [headingButton setImage:[UIImage imageNamed:@"map_arrow_g5.png"] forState:UIControlStateNormal];
+    headingButton.frame = (CGRect){{CGRectGetWidth(viewBounds) - 42.0f, 10.0f}, {32.0f, 32.0f}};
+    [headingButton addTarget:self action:@selector(headingButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.operationBaseView addSubview:headingButton];
+    self.headingButton = headingButton;
+}
+
 - (void)_init {
     self.gestureView = ReverseSubviews(self);
     NSAssert(self.gestureView, @"There should be a gesture view.");
@@ -316,12 +354,14 @@ static UIView * ReverseSubviews(UIView *view) {
     [self.gestureView addGestureRecognizer:self.tapGestureRecognizer];
     [self.gestureView addGestureRecognizer:self.panGestureRecognizer];
     
+    [self _initOperationBaseView];
+    [self _initEditingViews];
+    [self _initOperationButtons];
+    
     // touch down gesture
 //    self.touchDownGestureRecognizer = [[EFTouchDownGestureRecognizer alloc] init];
 //    self.touchDownGestureRecognizer.minimumNumberOfTouches = 1;
 //    self.touchDownGestureRecognizer.maximumNumberOfTouches = 1;
-    
-    [self _initEditingViews];
     
 //    __weak typeof(self) weakSelf = self;
 //    
@@ -404,8 +444,26 @@ static UIView * ReverseSubviews(UIView *view) {
     [super layoutSubviews];
     
     CGRect viewBounds = self.bounds;
-    CGRect baseViewFrame = (CGRect){{50.0f, CGRectGetHeight(viewBounds) - 37.0f}, {CGRectGetWidth(viewBounds) - 100.0f, 25.0f}};
-    self.editingBaseView.frame = baseViewFrame;
+    CGRect operationBaseViewFrame = (CGRect){{0.0f, CGRectGetHeight(viewBounds) - 50.0f}, {CGRectGetWidth(viewBounds), 50.0f}};
+    self.operationBaseView.frame = operationBaseViewFrame;
+}
+
+#pragma mark - Action Handler
+
+- (void)editingButtonPressed:(id)sender {
+    if (kEFMapViewEditingStateEditingPath != self.editingState) {
+        self.editingState = kEFMapViewEditingStateEditingPath;
+    } else {
+        self.editingState = kEFMapViewEditingStateNormal;
+    }
+}
+
+- (void)cancelButtonPressed:(id)sender {
+    
+}
+
+- (void)headingButtonPressed:(id)sender {
+    
 }
 
 #pragma mark - Gesture Hanlder
@@ -463,6 +521,8 @@ static UIView * ReverseSubviews(UIView *view) {
         case kEFMapViewEditingStateNormal:
             self.editing = NO;
             self.editingBaseView.hidden = YES;
+            self.cancelButton.hidden = YES;
+            self.headingButton.hidden = NO;
             break;
         case kEFMapViewEditingStateEditingPath:
             self.editingPathView.hidden = NO;
@@ -470,6 +530,8 @@ static UIView * ReverseSubviews(UIView *view) {
             self.editingAnnotatoinView.hidden = YES;
             self.editing = YES;
             self.editingBaseView.hidden = NO;
+            self.cancelButton.hidden = NO;
+            self.headingButton.hidden = YES;
             break;
         case kEFMapViewEditingStateEditingAnnotation:
             self.editingAnnotatoinView.hidden = NO;
@@ -477,6 +539,8 @@ static UIView * ReverseSubviews(UIView *view) {
             self.editingReadyView.hidden = YES;
             self.editing = NO;
             self.editingBaseView.hidden = NO;
+            self.cancelButton.hidden = NO;
+            self.headingButton.hidden = YES;
             break;
         case kEFMapViewEditingStateReady:
         default:
@@ -485,6 +549,8 @@ static UIView * ReverseSubviews(UIView *view) {
             self.editingAnnotatoinView.hidden = YES;
             self.editing = YES;
             self.editingBaseView.hidden = NO;
+            self.cancelButton.hidden = NO;
+            self.headingButton.hidden = YES;
             break;
     }
 }
@@ -499,6 +565,8 @@ static UIView * ReverseSubviews(UIView *view) {
             gesture.enabled = editing ? NO : YES;
         } else if ([gesture isKindOfClass:[UIPanGestureRecognizer class]] && gesture != self.panGestureRecognizer) {
             ((UIPanGestureRecognizer *)gesture).minimumNumberOfTouches = editing ? 2 : 1;
+        } else if ([gesture isKindOfClass:[UILongPressGestureRecognizer class]]) {
+            gesture.enabled = editing ? NO : YES;
         }
     }
     

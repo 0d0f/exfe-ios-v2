@@ -1711,6 +1711,9 @@
 		76B124121796F44900A73E59 /* CSqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1240D1796F44900A73E59 /* CSqlite.m */; };
 		76B124131796F44900A73E59 /* CSqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1240D1796F44900A73E59 /* CSqlite.m */; };
 		76B124141796F44900A73E59 /* CSqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1240D1796F44900A73E59 /* CSqlite.m */; };
+		76B1241E1797C81D00A73E59 /* btn_pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B1241D1797C81D00A73E59 /* btn_pad@2x.png */; };
+		76B1241F1797C81D00A73E59 /* btn_pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B1241D1797C81D00A73E59 /* btn_pad@2x.png */; };
+		76B124201797C81D00A73E59 /* btn_pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B1241D1797C81D00A73E59 /* btn_pad@2x.png */; };
 		76BC7B0A176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
 		76BC7B0B176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
 		76BC7B0C176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
@@ -2736,6 +2739,7 @@
 		76B1240D1796F44900A73E59 /* CSqlite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSqlite.m; sourceTree = "<group>"; };
 		76B124101796F44900A73E59 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		76B124111796F44900A73E59 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
+		76B1241D1797C81D00A73E59 /* btn_pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_pad@2x.png"; sourceTree = "<group>"; };
 		76BC7B08176EAC3D003F4FBA /* EFQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFQueueManager.h; sourceTree = "<group>"; };
 		76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFQueueManager.m; sourceTree = "<group>"; };
 		76BC7B0F176EB9C7003F4FBA /* EFRunLoopOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRunLoopOperation.h; sourceTree = "<group>"; };
@@ -4160,6 +4164,7 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				76B1241D1797C81D00A73E59 /* btn_pad@2x.png */,
 				76B124071796F41F00A73E59 /* gps.db */,
 				76B1240317968C9900A73E59 /* location_btn.png */,
 				76B123E417968C5C00A73E59 /* map_arrow_12red.png */,
@@ -5569,6 +5574,7 @@
 				76B123FA17968C5C00A73E59 /* map_mark_red@2x.png in Resources */,
 				76B1240517968C9900A73E59 /* location_btn.png in Resources */,
 				76B124091796F41F00A73E59 /* gps.db in Resources */,
+				76B1241F1797C81D00A73E59 /* btn_pad@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6003,6 +6009,7 @@
 				76B123FB17968C5C00A73E59 /* map_mark_red@2x.png in Resources */,
 				76B1240617968C9900A73E59 /* location_btn.png in Resources */,
 				76B1240A1796F41F00A73E59 /* gps.db in Resources */,
+				76B124201797C81D00A73E59 /* btn_pad@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6435,6 +6442,7 @@
 				76B123F917968C5C00A73E59 /* map_mark_red@2x.png in Resources */,
 				76B1240417968C9900A73E59 /* location_btn.png in Resources */,
 				76B124081796F41F00A73E59 /* gps.db in Resources */,
+				76B1241E1797C81D00A73E59 /* btn_pad@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

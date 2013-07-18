@@ -9,18 +9,23 @@
 #import "EFRouteLocation.h"
 
 #import "User+EXFE.h"
+#import "Identity+EXFE.h"
+#import "IdentityId.h"
 
 @implementation EFRouteLocation
 
 + (EFRouteLocation *)generateRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate {
+    Identity *identity = [[User getDefaultUser] sortedIdentiesById][0];
+    IdentityId *identityId = [identity identityIdValue];
+    
     EFRouteLocation *instance = [[self alloc] init];
     instance.locationTytpe = kEFRouteLocationTypeDestination;
     instance.locationId = [NSString stringWithFormat:@"%d", rand() % 255];
     instance.coordinate = coordinate;
     instance.createdDate = [NSDate date];
-    instance.createdByUid = [NSString stringWithFormat:@"%d", [[User getDefaultUser].user_id integerValue]];
+    instance.createdByUid = identityId.identity_id;
     instance.updateDate = [NSDate date];
-    instance.updatedByUid = [NSString stringWithFormat:@"%d", [[User getDefaultUser].user_id integerValue]];
+    instance.updatedByUid = identityId.identity_id;
     
     return instance;
 }
@@ -77,9 +82,9 @@
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:12];
     [dict setValue:self.locationId forKey:@"id"];
     [dict setValue:@"location" forKey:@"type"];
-    [dict setValue:[NSNumber numberWithDouble:[self.createdDate timeIntervalSince1970]] forKey:@"created_at"];
+    [dict setValue:[NSNumber numberWithLongLong:(long long)[self.createdDate timeIntervalSince1970]] forKey:@"created_at"];
     [dict setValue:self.createdByUid forKey:@"created_by"];
-    [dict setValue:[NSNumber numberWithDouble:[self.updateDate timeIntervalSince1970]] forKey:@"updated_at"];
+    [dict setValue:[NSNumber numberWithLongLong:(long long)[self.updateDate timeIntervalSince1970]] forKey:@"updated_at"];
     [dict setValue:self.updatedByUid forKey:@"updated_by"];
     NSArray *tags = nil;
     if (kEFRouteLocationTypePark == self.locationTytpe) {
