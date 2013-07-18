@@ -36,6 +36,11 @@ typedef enum {
 @property (nonatomic, assign, getter = isEditing)   BOOL                    editing;
 @property (nonatomic, assign)                       EFMapViewEditingState   editingState;       // ONLY avaliable when editing is YES
 
+@property (nonatomic, strong)                       UIView                  *operationBaseView;
+@property (nonatomic, strong)                       UIButton                *editingButton;
+@property (nonatomic, strong)                       UIButton                *cancelButton;
+@property (nonatomic, strong)                       UIButton                *headingButton;
+
 - (void)removeSelectedPath;
 
 @end

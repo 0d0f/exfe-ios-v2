@@ -10,4 +10,6 @@
 
 @interface EFMapEditingAnnotationView : UIView
 
+@property (nonatomic, copy) NSString *markLetter;
+
 @end

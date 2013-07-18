@@ -17,6 +17,7 @@
 #import "Exfee+EXFE.h"
 #import "Invitation+EXFE.h"
 #import "EFDataManager+Image.h"
+#import "Util.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 
@@ -125,56 +126,30 @@
         self.mapDataSource = [[EFMarauderMapDataSource alloc] init];
         self.dataSource = [[EFMapPeopleDataSource alloc] init];
         
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+        
         self.lock = [[NSRecursiveLock alloc] init];
-        [self.dataSource addObserver:self
-                          forKeyPath:@"peopleCount"
-                             options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                             context:NULL];
-        self.isEditing = NO;
         self.isInited = YES;
     }
     
     return self;
 }
 
-- (void)dealloc {
-    [self.dataSource removeObserver:self
-                         forKeyPath:@"peopleCount"];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    //
-    self.parkButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.parkButton.layer.borderWidth = 2.0f;
-    self.parkButton.layer.cornerRadius = 8.0f;
-    
-    // clean button
-    self.cleanButton.layer.cornerRadius = 15.0f;
-    self.cleanButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.cleanButton.layer.borderWidth = 0.5f;
     
     // tableView
     self.tableView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.6f];
     
     // long press gesture
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    longPress.delegate = self;
     [self.mapView addGestureRecognizer:longPress];
-    
-    // kvo
-    [self addObserver:self
-           forKeyPath:@"isEditing"
-              options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-              context:NULL];
 }
 
 - (void)viewDidUnload {
     [self setTableView:nil];
-    [self setParkButton:nil];
-    [self setOperationBaseView:nil];
-    [self setCleanButton:nil];
-    [self setHeadingButton:nil];
     
     [super viewDidUnload];
 }
@@ -186,6 +161,14 @@
     self.tableView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, self.invitations.count * [EFMapPersonCell defaultCellHeight]}};
     
     [self _getRoute];
+    
+    [self.locationManager startUpdatingLocation];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [self.locationManager stopUpdatingLocation];
+    
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark - Gesture
@@ -208,6 +191,8 @@
         {
             startLocation = location;
             lastLocation = location;
+            
+            coordinate = [Util marsLocationFromEarthLocation:coordinate];
             
             routeLocation = [EFRouteLocation generateRouteLocationWithCoordinate:coordinate];
             routeLocation.title = @"子时正刻";
@@ -234,7 +219,7 @@
             
             coordinate = [self.mapView convertPoint:lastLocation toCoordinateFromView:self.mapView];
             
-            routeLocation.coordinate = coordinate;
+            routeLocation.coordinate = [Util marsLocationFromEarthLocation:coordinate];
             [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
             [self _postRoute];
             
@@ -246,27 +231,15 @@
     }
 }
 
-#pragma mark - KVO
+#pragma mark - UIGestureRecognizerDelegate
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (object == self.dataSource && [keyPath isEqualToString:@"peopleCount"]) {
-//        self.tableView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, self.dataSource.peopleCount * [EFMapPersonCell defaultCellHeight]}};
-    } else if (object == self && [keyPath isEqualToString:@"isEditing"]) {
-        UIButton *button = self.parkButton;
-        UIColor *buttonBackgroundColor = button.backgroundColor;
-        UIColor *textColor = [button titleColorForState:UIControlStateNormal];
-        
-        button.backgroundColor = textColor;
-        [button setTitleColor:buttonBackgroundColor forState:UIControlStateNormal];
-        
-        if (self.isEditing) {
-            self.cleanButton.hidden = NO;
-            self.headingButton.hidden = YES;
-        } else {
-            self.cleanButton.hidden = YES;
-            self.headingButton.hidden = NO;
-        }
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    CGPoint location = [touch locationInView:self.mapView];
+    if (CGRectContainsPoint(self.mapView.operationBaseView.frame, location)) {
+        return NO;
     }
+    
+    return YES;
 }
 
 #pragma mark - Update
@@ -369,6 +342,34 @@
     return [EFMapPersonCell defaultCellHeight];
 }
 
+#pragma mark - CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager
+	 didUpdateLocations:(NSArray *)locations {
+    CLLocation *currentLocation = locations[0];
+    
+    CLLocationCoordinate2D fixedCoordinate = [Util earthLocationFromMarsLocation:currentLocation.coordinate];
+    if (self.isInited) {
+        self.isInited = NO;
+        
+        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(fixedCoordinate, 5000.0f, 5000.0f);
+        [self.mapView setRegion:region animated:YES];
+        
+        [self initTestData];
+        [self.tableView reloadData];
+    }
+    
+    EFLocation *position = [[EFLocation alloc] init];
+    position.coordinate = fixedCoordinate;
+    position.timestamp = [NSDate date];
+    position.accuracy = currentLocation.horizontalAccuracy;
+    
+    [self.model.apiServer updateLocation:position
+                             withCrossId:[self.cross.cross_id integerValue]
+                                 success:nil
+                                 failure:nil];
+}
+
 #pragma mark - MKMapViewDelegate
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
@@ -392,6 +393,8 @@
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    return;
+    
     CLLocation *location = userLocation.location;
     
     if (self.isInited) {
