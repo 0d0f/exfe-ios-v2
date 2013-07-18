@@ -21,7 +21,11 @@
 #define kModelKeyBio        @"bio"
 #define kModelKeyOriginal   @"original"
 #define kModelKeyImageDirty @"dirty"
-//#define kModelKeyAvatar     @"avatar"
+
+#define kKeyImageFull      @"full"
+#define kKeyImageLarge     @"large"
+
+
 
 #define kTagName          233
 #define kTagBio           234
@@ -29,12 +33,16 @@
 
 #define ZOOM_STEP 1.5
 
+#pragma mark -
+#pragma mark - Private Interface
 @interface EFEditProfileViewController ()
 
+#pragma mark Gloabel Application Model
 @property (nonatomic, weak) EXFEModel *model;
-
+#pragma mark Private ViewController Model
 @property (nonatomic, strong) NSMutableDictionary *data;
 
+#pragma mark Quick Access to UI Elements
 @property (nonatomic, strong) UITextField *name;
 @property (nonatomic, strong) UIScrollView *imageScrollView;
 @property (nonatomic, strong) UIImageView *avatar;
@@ -44,15 +52,15 @@
 @property (nonatomic, strong) UIView *header;
 @property (nonatomic, strong) UIView *footer;
 
-//@property (nonatomic, strong) UIImageView *preview;
-//@property (nonatomic, strong) UIImageView *previewth;
+@property (nonatomic, strong) UIView *activeInputView;
 
 @end
 
+#pragma mark -
+#pragma mark -
 @implementation EFEditProfileViewController
 
-
-#pragma mark - Getter/Setter
+#pragma mark Getter/Setter
 - (BOOL)isEditUser
 {
     return self.user != nil;
@@ -74,7 +82,7 @@
     }
 }
 
-#pragma mark - View Controller Live cycle
+#pragma mark View Controller Life cycle
 - (id)initWithModel:(EXFEModel*)model
 {
     self = [super init];
@@ -87,11 +95,15 @@
 
 - (void)loadView
 {
+    // root view
     CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
-    UIView *contentView = [[UIView alloc] initWithFrame:applicationFrame];
+    UIScrollView *contentView = [[UIScrollView alloc] initWithFrame:applicationFrame];
     contentView.backgroundColor = [UIColor COLOR_BLACK];
+    contentView.scrollEnabled = NO;
     self.view = contentView;
     
+
+    // Lower layer
     UIScrollView *imageScrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     imageScrollView.delegate = self;
     
@@ -105,7 +117,6 @@
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
     UITapGestureRecognizer *twoFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerTap:)];
-//    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     
     [doubleTap setNumberOfTapsRequired:2];
     [twoFingerTap setNumberOfTouchesRequired:2];
@@ -113,12 +124,12 @@
     [imageView addGestureRecognizer:singleTap];
     [imageView addGestureRecognizer:doubleTap];
     [imageView addGestureRecognizer:twoFingerTap];
-//    [imageView addGestureRecognizer:panGesture];
     
     [self.view addSubview:imageScrollView];
     self.imageScrollView = imageScrollView;
 
     
+    // View port layer
     CGFloat headerHeight = 80;
     if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
         headerHeight = 95;
@@ -202,20 +213,6 @@
         hint.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2, CGRectGetHeight(self.view.bounds) - 10 - CGRectGetHeight(hint.bounds) / 2);
         [self.view addSubview:hint];
     }
-    
-//    CGFloat hh = CGRectGetHeight(self.footer.bounds) - 20;
-//    CGFloat ww = hh / CGRectGetHeight(self.view.bounds) * CGRectGetWidth(self.view.bounds);
-//    UIImageView *preview = [[UIImageView alloc] initWithFrame:CGRectMake(160, 10, ww, hh)];
-//    preview.backgroundColor = [UIColor whiteColor];
-//    preview.contentMode = UIViewContentModeScaleAspectFit;
-//    [self.footer addSubview:preview];
-//    self.preview = preview;
-//    
-//    UIImageView *preview2 = [[UIImageView alloc] initWithFrame:CGRectMake(160 + 10 + CGRectGetWidth(preview.bounds), 10 + ww / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.header.bounds), ww, ww)];
-//    preview2.backgroundColor = [UIColor whiteColor];
-//    preview2.contentMode = UIViewContentModeScaleAspectFit;
-//    [self.footer addSubview:preview2];
-//    self.previewth = preview2;
 }
 
 - (void)viewDidLoad
@@ -227,12 +224,14 @@
     [self registerAsObserver];
 }
 
--(void)viewDidAppear:(BOOL)animated {
+-(void)viewDidAppear:(BOOL)animated
+{
     [super viewDidAppear:animated];
     [self becomeFirstResponder];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
+- (void)viewWillDisappear:(BOOL)animated
+{
     [self resignFirstResponder];
     [super viewWillDisappear:animated];
 }
@@ -249,7 +248,8 @@
 }
 
 #pragma mark Override
--(BOOL)canBecomeFirstResponder {
+-(BOOL)canBecomeFirstResponder
+{
     return YES;
 }
 
@@ -271,12 +271,8 @@
 }
 
 #pragma mark KVO methods
-- (void)registerAsObserver {
-    /*
-     Register 'inspector' to receive change notifications for the "openingBalance" property of
-     the 'account' object and specify that both the old and new values of "openingBalance"
-     should be provided in the observe… method.
-     */
+- (void)registerAsObserver
+{
     [self.data addObserver:self
            forKeyPath:kModelKeyOriginal
               options:(NSKeyValueObservingOptionNew |
@@ -304,7 +300,8 @@
                                                  name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)unregisterForChangeNotification {
+- (void)unregisterForChangeNotification
+{
     [self.data removeObserver:self forKeyPath:kModelKeyOriginal];
     [self.data removeObserver:self forKeyPath:kModelKeyName];
     [self.data removeObserver:self forKeyPath:kModelKeyBio];
@@ -315,7 +312,8 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
-                       context:(void *)context {
+                       context:(void *)context
+{
     
     if ([keyPath isEqual:kModelKeyOriginal]) {
 //        UIImage * image = [change objectForKey:NSKeyValueChangeNewKey];
@@ -325,55 +323,12 @@
     } else if ([keyPath isEqual:kModelKeyBio]) {
         [self fillUI];
     } else {
-        /*
-         Be sure to call the superclass's implementation *if it implements it*.
-         NSObject does not implement the method.
-         */
+        // fallback
         [super observeValueForKeyPath:keyPath
                              ofObject:object
                                change:change
                               context:context];
     }
-}
-
-- (void)keyboardWillShown:(NSNotification*)aNotification
-{
-    //    NSDictionary* info = [aNotification userInfo];
-    //    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-}
-
-// Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    
-    CGFloat footerHeight = CGRectGetHeight(self.footer.bounds);
-    CGFloat y = CGRectGetHeight(self.view.bounds) - kbSize.height - footerHeight;
-    
-    self.footer.frame = (CGRect){{CGRectGetMinX(self.footer.frame), y}, self.footer.frame.size};
-    
-//    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-//    scrollView.contentInset = contentInsets;
-//    scrollView.scrollIndicatorInsets = contentInsets;
-//    
-//    // If active text field is hidden by keyboard, scroll it so it's visible
-//    // Your application might not need or want this behavior.
-//    CGRect aRect = self.view.frame;
-//    aRect.size.height -= kbSize.height;
-//    if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
-//        CGPoint scrollPoint = CGPointMake(0.0, activeField.frame.origin.y-kbSize.height);
-//        [scrollView setContentOffset:scrollPoint animated:YES];
-//    }
-}
-
-// Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
-{
-    CGFloat footerHeight = CGRectGetHeight(self.footer.bounds);
-    CGFloat y = CGRectGetHeight(self.view.bounds) - footerHeight;
-    
-    self.footer.frame = (CGRect){{CGRectGetMinX(self.footer.frame), y}, self.footer.frame.size};
 }
 
 #pragma mark - UI Refresh
@@ -383,6 +338,33 @@
         [self fillUser:self.user];
     } else {
         [self fillIdentity:self.identity];
+    }
+}
+
+// For performance issue. move fillAvater out of fillUI
+- (void)fillAvatar
+{
+    UIImage *original = [self.data valueForKey:kModelKeyOriginal];
+    if (original) {
+        [self fillAvatar:original];
+    } else {
+        NSString *imageKey = nil;
+        if (self.isEditUser) {
+            imageKey = self.user.avatar.original;
+        } else {
+            imageKey = self.identity.avatar.original;
+        }
+        
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
+            [self fillAvatar:[[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey]];
+        } else {
+            [[EFDataManager imageManager] cachedImageForKey:imageKey
+                                            completeHandler:^(UIImage *image){
+                                                if (image) {
+                                                    [self fillAvatar:image];
+                                                }
+                                            }];
+        }
     }
 }
 
@@ -450,32 +432,6 @@
     self.identityId.frame = (CGRect){{p.x - 260 / 2, p.y + size.height / 2},{260, size.height}};
 }
 
-- (void)fillAvatar
-{
-    UIImage *original = [self.data valueForKey:kModelKeyOriginal];
-    if (original) {
-        [self fillAvatar:original];
-    } else {
-        NSString *imageKey = nil;
-        if (self.isEditUser) {
-            imageKey = self.user.avatar.original;
-        } else {
-            imageKey = self.identity.avatar.original;
-        }
-        
-        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
-            [self fillAvatar:[[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey]];
-        } else {
-            [[EFDataManager imageManager] cachedImageForKey:imageKey
-                                            completeHandler:^(UIImage *image){
-                                                if (image) {
-                                                    [self fillAvatar:image];
-                                                }
-                                            }];
-        }
-    }
-}
-
 - (void)fillAvatar:(UIImage *)image
 {
     [self.imageScrollView setMinimumZoomScale:1.0];
@@ -512,12 +468,16 @@
 
 #pragma mark - UI Events
 
-
-- (void)handleSingleTap:(UIGestureRecognizer *)gestureRecognizer {
-    // single tap does nothing for now
+#pragma mark Gesutre
+- (void)handleSingleTap:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (self.activeInputView.tag == kTagBio) {
+        [self.bio resignFirstResponder];
+    }
 }
 
-- (void)handleDoubleTap:(UIGestureRecognizer *)gestureRecognizer {
+- (void)handleDoubleTap:(UIGestureRecognizer *)gestureRecognizer
+{
     // double tap zooms in
     float newScale = [self.imageScrollView zoomScale] * ZOOM_STEP;
     CGRect zoomRect = [self zoomRectForScale:newScale withCenter:[gestureRecognizer locationInView:gestureRecognizer.view]];
@@ -527,10 +487,10 @@
     if (!num) {
         [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
     }
-//    [self showPreview];
 }
 
-- (void)handleTwoFingerTap:(UIGestureRecognizer *)gestureRecognizer {
+- (void)handleTwoFingerTap:(UIGestureRecognizer *)gestureRecognizer
+{
     // two-finger tap zooms out
     float newScale = [self.imageScrollView zoomScale] / ZOOM_STEP;
     CGRect zoomRect = [self zoomRectForScale:newScale withCenter:[gestureRecognizer locationInView:gestureRecognizer.view]];
@@ -540,16 +500,39 @@
     if (!num) {
         [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
     }
-//    [self showPreview];
 }
 
-//- (void)handlePan:(UIPanGestureRecognizer *)recognizer {
-//    CGPoint translation = [recognizer translationInView:recognizer.view.superview];
-//    recognizer.view.center = CGPointMake(recognizer.view.center.x + translation.x,
-//                                         recognizer.view.center.y + translation.y);
-//    [recognizer setTranslation:CGPointMake(0, 0) inView:recognizer.view.superview];
-//}
+#pragma mark Keyboard
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    
+    UIScrollView *scrollView = (UIScrollView *)self.view;
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    scrollView.contentInset = contentInsets;
+    scrollView.scrollIndicatorInsets = contentInsets;
+    
+    // If active text field is hidden by keyboard, scroll it so it's visible
+    // Your application might not need or want this behavior.
+    CGRect aRect = self.view.frame;
+    aRect.size.height -= kbSize.height;
+    CGPoint origin = [self.view convertPoint:self.activeInputView.frame.origin fromView:self.activeInputView.superview];
+    if (!CGRectContainsPoint(aRect, origin) ) {
+        CGPoint scrollPoint = CGPointMake(0.0, origin.y-kbSize.height);
+        [scrollView setContentOffset:scrollPoint animated:YES];
+    }
+}
 
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    UIScrollView *scrollView = (UIScrollView *)self.view;
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    scrollView.contentInset = contentInsets;
+    scrollView.scrollIndicatorInsets = contentInsets;
+}
 
 #pragma mark UIButton action
 - (void)goBack:(id)view
@@ -574,8 +557,8 @@
         }
         
         NSDictionary *dict = [self cropedImages];
-        UIImage *full = [dict valueForKey:@"original"];
-        UIImage *large = [dict valueForKey:@"large"];
+        UIImage *full = [dict valueForKey:kKeyImageFull];
+        UIImage *large = [dict valueForKey:kKeyImageLarge];
         
         if (full) {
             if (self.isEditUser) {
@@ -609,16 +592,18 @@
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentModalViewController:picker animated:YES];
     }];
-    [sheet setCancelButtonWithTitle:nil handler:^{ NSLog(@"Never mind, then!"); }];
+    [sheet setCancelButtonWithTitle:nil handler:nil];
     [sheet showInView:self.view];
 
 }
 
+#pragma mark - Delegate
 #pragma mark UITextViewDelegate
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
     switch (textView.tag) {
         case kTagBio:
+            self.activeInputView = nil;
             [self.data setValue:textView.text forKey:kModelKeyBio];
             break;
             
@@ -627,32 +612,16 @@
     }
 }
 
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+- (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    textView.returnKeyType = UIReturnKeyDefault;
-    return YES;
-}
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range
- replacementText:(NSString *)text
-{
-    if ([text isEqualToString:@"\n"]) {
-        NSUInteger length = textView.text.length;
-        if (range.length == 0 && range.location == length) {
-            // append e enter
-            if ([textView.text hasSuffix:@"\n"]) {
-                
-                textView.text = [textView.text substringToIndex:length - 1];
-                [textView resignFirstResponder];
-                return NO;
-                
-            } else {
-                textView.returnKeyType = UIReturnKeyDone;
-                return YES;
-            }
-        }
+    switch (textView.tag) {
+        case kTagBio:
+            self.activeInputView = textView;
+            break;
+            
+        default:
+            break;
     }
-    return YES;
 }
 
 #pragma mark UITextFieldDelegate
@@ -660,6 +629,7 @@
 {
     switch (textField.tag) {
         case kTagName:
+            self.activeInputView = textField;
             if (!self.isEditUser) {
                 if (self.identityId.hidden == NO) {
                     
@@ -687,6 +657,7 @@
 {
     switch (textField.tag) {
         case kTagName:
+            self.activeInputView = nil;
             if (!self.isEditUser) {
                 if (self.identityId.hidden == YES) {
                     self.identityId.alpha = 0;
@@ -727,7 +698,6 @@
     if (!num) {
         [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
     }
-//    [self showPreview];
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
@@ -736,24 +706,18 @@
     if (!num) {
         [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
     }
-//    [self showPreview];
 }
 
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale {
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
+{
     [scrollView setZoomScale:scale+0.01 animated:NO];
     [scrollView setZoomScale:scale animated:NO];
 }
 
 #pragma mark UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    NSLog(@"didFinishPickingMediaWithInfo");
-    
-    
+{    
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
-    
-    
-    
     if ([mediaType isEqualToString:@"public.image"]){
         
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
@@ -765,23 +729,15 @@
     
 }
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
-    NSLog(@"imagePickerControllerDidCancel");
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
     [self dismissModalViewControllerAnimated:YES];
 }
 
-//- (UIImage *)scaleImage:(UIImage *)image toScale:(float)scaleSize
-//{
-//    UIGraphicsBeginImageContext(CGSizeMake(image.size.width*scaleSize,image.size.height*scaleSize));
-//    [image drawInRect:CGRectMake(0, 0, image.size.width * scaleSize, image.size.height *scaleSize)];
-//    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-//    return scaledImage;
-//}
-//
+#pragma mark - Private methods
 
-#pragma mark private
-- (UIImage*) getSubImageFrom: (UIImage*) img withRect: (CGRect) rect {
+- (UIImage*) getSubImageFrom: (UIImage*) img withRect: (CGRect) rect __deprecated
+{
     
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -836,28 +792,6 @@
     return zoomRect;
 }
 
-//- (void)showPreview
-//{
-//    NSArray *array = [self cropedImages];
-//    UIImage *full = nil;
-//    UIImage *large = nil;
-//    if (array.count > 0) {
-//        id v = [array objectAtIndex:0];
-//        if (nil != v && [NSNull null] != v) {
-//            full = v;
-//        }
-//    }
-//    if (array.count > 1) {
-//        id v = [array objectAtIndex:1];
-//        if (nil != v && [NSNull null] != v) {
-//            large = v;
-//        }
-//    }
-//    
-//    self.preview.image = full;
-//    self.previewth.image = large;
-//}
-
 - (NSDictionary *)cropedImages
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
@@ -878,22 +812,16 @@
         }
     }
     if (original) {
-        NSLog(@"avata frame: %@", NSStringFromCGRect(self.avatar.frame));
-        NSLog(@"Contenoffset %@", NSStringFromCGPoint(self.imageScrollView.contentOffset));
-        NSLog(@"Scale %f", self.imageScrollView.zoomScale);
-        
         CGRect fullRect = CGRectMake(self.imageScrollView.contentOffset.x , self.imageScrollView.contentOffset.y , CGRectGetWidth(self.view.bounds) , CGRectGetHeight(self.view.bounds) );
         CGRect largeRect = CGRectMake(self.imageScrollView.contentOffset.x , self.imageScrollView.contentOffset.y + CGRectGetHeight(self.header.bounds), 320, 320);
-        NSLog(@"corp frame: %@,  %@", NSStringFromCGRect(fullRect), NSStringFromCGRect(largeRect));
-        
         
         if (!CGRectIsEmpty(fullRect)) {
             UIImage *img = [self imageFromImageView:self.imageScrollView withCropRect:fullRect];
-            [dict setValue:img forKey:@"original"];
+            [dict setValue:img forKey:kKeyImageFull];
         }
         if (!CGRectIsEmpty(largeRect)) {
             UIImage *img = [self imageFromImageView:self.imageScrollView withCropRect:largeRect];
-            [dict setValue:img forKey:@"large"];
+            [dict setValue:img forKey:kKeyImageLarge];
         }
     }
     return [dict copy];
