@@ -81,7 +81,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     }
     
     [self.routeLocations addObject:routeLocation];
-    EFAnnotation *annotation = [[EFAnnotation alloc] initWithStyle:(routeLocation.locationTytpe == kEFRouteLocationTypeDestination) ? kEFAnnotationStyleDestination : kEFAnnotationStyleParkBlue
+    EFAnnotation *annotation = [[EFAnnotation alloc] initWithStyle:(routeLocation.locationTytpe == kEFRouteLocationTypeDestination) ? kEFAnnotationStyleDestination : ((routeLocation.markColor == kEFRouteLocationColorRed) ? kEFAnnotationStyleParkRed : kEFAnnotationStyleParkBlue)
                                                         coordinate:[Util earthLocationFromMarsLocation:routeLocation.coordinate]
                                                              title:routeLocation.title
                                                        description:routeLocation.subtitle];
@@ -106,18 +106,24 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     annotation.title = routeLocation.title;
     annotation.subtitle = routeLocation.subtitle;
     
-    annotation.markTitle = routeLocation.markTitle;
     if (kEFRouteLocationTypeDestination == routeLocation.locationTytpe) {
         annotation.style = kEFAnnotationStyleDestination;
     } else {
-        if (routeLocation.markColor == kEFAnnotationStyleParkRed) {
+        if (routeLocation.markColor == kEFRouteLocationColorRed) {
             annotation.style = kEFAnnotationStyleParkRed;
         } else {
             annotation.style = kEFAnnotationStyleParkBlue;
         }
     }
     
+    annotation.markTitle = routeLocation.markTitle;
+    
+    [self.routeLocationAnnotationMap setObject:annotation forKey:[NSValue valueWithNonretainedObject:routeLocation]];
+    
     [mapView addAnnotation:annotation];
+    
+    EFAnnotationView *annotationView = (EFAnnotationView *)[mapView viewForAnnotation:annotation];
+    [annotationView reloadWithAnnotation:annotation];
 }
 
 - (EFRouteLocation *)routeLocationForAnnotation:(EFAnnotation *)annotation {
@@ -146,6 +152,8 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     
     EFAnnotation *annotation = [self.routeLocationAnnotationMap objectForKey:[NSValue valueWithNonretainedObject:routeLocation]];
     [mapView removeAnnotation:annotation];
+    [self.routeLocationAnnotationMap removeObjectForKey:[NSValue valueWithNonretainedObject:routeLocation]];
+    [self.routeLocations removeObject:routeLocation];
 }
 
 - (NSArray *)allRouteLocations {

@@ -22,7 +22,8 @@ CLLocationManagerDelegate,
 MKMapViewDelegate,
 UITableViewDataSource,
 UITableViewDelegate,
-EFTabBarDataSource
+EFTabBarDataSource,
+EFMapViewDelegate
 >
 
 @property (nonatomic, weak) EXFEModel   *model;

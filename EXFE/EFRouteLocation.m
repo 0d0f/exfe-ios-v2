@@ -34,10 +34,10 @@
         case kEFRouteLocationTypePark:
         {
             NSString *endPoint = nil;
-            if (kEFRouteLocationColorBlue) {
-                endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@", self.markTitle];
+            if (kEFRouteLocationColorBlue == self.markColor) {
+                endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=blue", self.markTitle];
             } else {
-                endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=%@", self.markTitle, @"red"];
+                endPoint = [NSString stringWithFormat:@"/v3/icons/mapmark?content=%@&color=red", self.markTitle];
             }
             NSURL *url = [NSURL URLWithString:endPoint
                                 relativeToURL:baseURl];
@@ -47,7 +47,6 @@
         default:
             break;
     }
-
 }
 
 @end

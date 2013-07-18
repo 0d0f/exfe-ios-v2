@@ -138,6 +138,8 @@
         self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
         self.locationManager.delegate = self;
         
+        self.mapView.delegate = self;
+        
         self.lock = [[NSRecursiveLock alloc] init];
         self.isInited = YES;
     }
@@ -379,6 +381,61 @@
                                  failure:nil];
 }
 
+#pragma mark - EFMapViewDelegate
+
+- (void)mapView:(EFMapView *)mapView isChangingSelectedAnnotationTitle:(NSString *)title {
+    EFCalloutAnnotationView *calloutView = (EFCalloutAnnotationView *)[self.mapView viewForAnnotation:self.currentCalloutAnnotation];
+    EFAnnotation *annotation = calloutView.parentAnnotationView.annotation;
+    EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
+    routeLocation.markTitle = title;
+    
+    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+}
+
+- (void)mapView:(EFMapView *)mapView didChangeSelectedAnnotationTitle:(NSString *)title {
+    EFCalloutAnnotationView *calloutView = (EFCalloutAnnotationView *)[self.mapView viewForAnnotation:self.currentCalloutAnnotation];
+    EFAnnotation *annotation = calloutView.parentAnnotationView.annotation;
+    EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
+    routeLocation.markTitle = title;
+    [routeLocation updateIconURL];
+    
+    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+    [self _postRoute];
+}
+
+- (void)mapView:(EFMapView *)mapView didChangeSelectedAnnotationStyle:(EFAnnotationStyle)style {
+    EFCalloutAnnotationView *calloutView = (EFCalloutAnnotationView *)[self.mapView viewForAnnotation:self.currentCalloutAnnotation];
+    EFAnnotation *annotation = calloutView.parentAnnotationView.annotation;
+    EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
+    
+    if (kEFAnnotationStyleDestination) {
+        routeLocation.locationTytpe = kEFRouteLocationTypeDestination;
+    } else {
+        routeLocation.locationTytpe = kEFRouteLocationTypePark;
+        if (kEFAnnotationStyleParkRed == style) {
+            routeLocation.markColor = kEFRouteLocationColorRed;
+        } else {
+            routeLocation.markColor = kEFRouteLocationColorBlue;
+        }
+    }
+    
+    [routeLocation updateIconURL];
+    
+    [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
+    [self _postRoute];
+}
+
+- (void)mapViewCancelButtonPressed:(EFMapView *)mapView {
+    if (mapView.editingState == kEFMapViewEditingStateEditingAnnotation) {
+        EFCalloutAnnotationView *calloutView = (EFCalloutAnnotationView *)[self.mapView viewForAnnotation:self.currentCalloutAnnotation];
+        EFAnnotation *annotation = calloutView.parentAnnotationView.annotation;
+        EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
+        
+        [self.mapDataSource removeRouteLocation:routeLocation fromMapView:self.mapView];
+        [self _postRoute];
+    }
+}
+
 #pragma mark - MKMapViewDelegate
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
@@ -437,6 +494,8 @@
             annotationView.canShowCallout = NO;
             annotationView.mapView = self.mapView;
         }
+        
+        [annotationView reloadWithAnnotation:annotation];
         
         return annotationView;
     } else if ([annotation isKindOfClass:[EFCalloutAnnotation class]]) {

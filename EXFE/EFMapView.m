@@ -12,7 +12,6 @@
 #import "EFTouchDownGestureRecognizer.h"
 #import "EFMapEditingReadyView.h"
 #import "EFMapEditingPathView.h"
-#import "EFMapEditingAnnotationView.h"
 #import "EFMapOverlay.h"
 
 #define kOffsetY            (44.0f)
@@ -305,6 +304,7 @@ static UIView * ReverseSubviews(UIView *view) {
     self.editingPathView = pathView;
     
     EFMapEditingAnnotationView *annatationView = [[EFMapEditingAnnotationView alloc] initWithFrame:baseViewBounds];
+    annatationView.delegate = self;
     [baseView addSubview:annatationView];
     self.editingAnnotatoinView = annatationView;
     
@@ -448,6 +448,26 @@ static UIView * ReverseSubviews(UIView *view) {
     self.operationBaseView.frame = operationBaseViewFrame;
 }
 
+#pragma mark - EFMapEditingAnnotationViewDelegate
+
+- (void)mapEditingAnnotationView:(EFMapEditingAnnotationView *)view isChangingToTitle:(NSString *)title {
+    if ([self.delegate respondsToSelector:@selector(mapView:isChangingSelectedAnnotationTitle:)]) {
+        [self.delegate mapView:self isChangingSelectedAnnotationTitle:title];
+    }
+}
+
+- (void)mapEditingAnnotationView:(EFMapEditingAnnotationView *)view didChangeToTitle:(NSString *)title {
+    if ([self.delegate respondsToSelector:@selector(mapView:didChangeSelectedAnnotationTitle:)]) {
+        [self.delegate mapView:self didChangeSelectedAnnotationTitle:title];
+    }
+}
+
+- (void)mapEditingAnnotationView:(EFMapEditingAnnotationView *)view didChangeToStyle:(EFAnnotationStyle)annotationStyle {
+    if ([self.delegate respondsToSelector:@selector(mapView:didChangeSelectedAnnotationStyle:)]) {
+        [self.delegate mapView:self didChangeSelectedAnnotationStyle:annotationStyle];
+    }
+}
+
 #pragma mark - Action Handler
 
 - (void)editingButtonPressed:(id)sender {
@@ -459,7 +479,9 @@ static UIView * ReverseSubviews(UIView *view) {
 }
 
 - (void)cancelButtonPressed:(id)sender {
-    
+    if ([self.delegate respondsToSelector:@selector(mapViewCancelButtonPressed:)]) {
+        [self.delegate mapViewCancelButtonPressed:self];
+    }
 }
 
 - (void)headingButtonPressed:(id)sender {
