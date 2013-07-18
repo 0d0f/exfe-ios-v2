@@ -39,7 +39,7 @@
 @property (nonatomic, strong) NSRecursiveLock       *lock;
 
 @property (nonatomic) BOOL                          isEditing;
-@property (nonatomic,assign) BOOL                   isInited;
+@property (nonatomic, assign) BOOL                  isInited;
 
 @end
 
@@ -253,6 +253,18 @@
     return YES;
 }
 
+#pragma mark -
+
+MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
+    MKMapPoint a = MKMapPointForCoordinate(CLLocationCoordinate2DMake(
+                                                                      region.center.latitude + region.span.latitudeDelta / 2,
+                                                                      region.center.longitude - region.span.longitudeDelta / 2));
+    MKMapPoint b = MKMapPointForCoordinate(CLLocationCoordinate2DMake(
+                                                                      region.center.latitude - region.span.latitudeDelta / 2,
+                                                                      region.center.longitude + region.span.longitudeDelta / 2));
+    return MKMapRectMake(MIN(a.x, b.x), MIN(a.y, b.y), ABS(a.x - b.x), ABS(a.y - b.y));
+}
+
 #pragma mark - Update
 
 //- (void)updateOverlay {
@@ -440,6 +452,8 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     if ([view isKindOfClass:[EFAnnotationView class]]) {
+        [mapView setCenterCoordinate:view.annotation.coordinate animated:YES];
+        
         [self _hideCalloutView];
         
         EFCalloutAnnotation *calloutAnnotation = [[EFCalloutAnnotation alloc] initWithCoordinate:view.annotation.coordinate
@@ -448,7 +462,6 @@
         [mapView addAnnotation:calloutAnnotation];
         
         self.currentCalloutAnnotation = calloutAnnotation;
-        
         self.mapView.editingState = kEFMapViewEditingStateEditingAnnotation;
     }
 }

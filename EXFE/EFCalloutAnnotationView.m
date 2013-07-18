@@ -11,11 +11,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import "EFCalloutAnnotation.h"
 
-#define kTitleHeight    (35.0f)
+#define kTitleHeight    (25.0f)
 #define kTitleFont      [UIFont fontWithName:@"HelveticaNeue-Light" size:21]
 #define kSubtileHeight  (20.0f)
 #define kSubtileFont    [UIFont fontWithName:@"HelveticaNeue-Light" size:14]
 #define kDefaultWidth   (200.0f)
+#define kCornerRadius   (3.0f)
 
 @interface EFCalloutAnnotationView ()
 
@@ -24,7 +25,7 @@
 @property (nonatomic, strong) UITextField   *subtitleTextField;
 @property (nonatomic, strong) UILabel       *subtitleLabel;
 
-@property (nonatomic, strong) UIButton  *button;
+@property (nonatomic, strong) UIButton  *closeButton;
 @property (nonatomic, strong) CAGradientLayer *gradientLayer;
 
 @property (nonatomic, assign) CGRect    originalFrame;
@@ -81,7 +82,7 @@
         self.titleTextField = titleTextField;
         [self addSubview:self.titleTextField];
         
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{5.0f, 0.0f}, {kDefaultWidth - 10.0f, kTitleHeight}}];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:(CGRect){{5.0f, 2.0f}, {kDefaultWidth - 10.0f, kTitleHeight}}];
         titleLabel.font = kTitleFont;
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.text = self.annotation.title;
@@ -199,6 +200,15 @@
         [self.layer addSublayer:gradientLayer];
         self.gradientLayer = gradientLayer;
         
+        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        closeButton.frame = (CGRect){CGPointZero, {44.0f, 44.0f}};
+        [closeButton setImage:[UIImage imageNamed:@"map_remove_15"] forState:UIControlStateNormal];
+        closeButton.center = (CGPoint){190, 10};
+        [closeButton addTarget:self action:@selector(closeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        closeButton.hidden = YES;
+        [self addSubview:closeButton];
+        self.closeButton = closeButton;
+        
         self.layer.cornerRadius = 6.0f;
         self.layer.shadowColor = [UIColor blackColor].CGColor;
         self.layer.shadowOffset = (CGSize){0.0f, 1.0f};
@@ -216,7 +226,6 @@
 }
 
 - (void)didMoveToSuperview {
-//    [self _show];
     [self.superview bringSubviewToFront:self];
 }
 
@@ -250,6 +259,7 @@
         self.subtitleTextField.hidden = YES;
         self.titleLabel.hidden = NO;
         self.subtitleLabel.hidden = NO;
+        self.closeButton.hidden = YES;
         
         ((EFCalloutAnnotation *)self.annotation).title = self.titleTextField.text;
         ((EFCalloutAnnotation *)self.annotation).subtitle = self.subtitleTextField.text;
@@ -287,11 +297,13 @@
         self.subtitleTextField.hidden = NO;
         self.titleLabel.hidden = YES;
         self.subtitleLabel.hidden = YES;
+        self.closeButton.hidden = NO;
         
         UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
         UIView *editingBaseView = [[UIView alloc] initWithFrame:rootView.bounds];
         editingBaseView.backgroundColor = [UIColor clearColor];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleEditingBaseViewTap:)];
+        tap.delegate = self;
         tap.numberOfTapsRequired = 1;
         [editingBaseView addGestureRecognizer:tap];
         [rootView addSubview:editingBaseView];
@@ -325,6 +337,25 @@
         [self.titleTextField becomeFirstResponder];
     }
 }
+
+#pragma mark - Action Hanlder
+
+- (void)closeButtonPressed:(id)sender {
+    [self setEditing:NO animated:YES];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    CGPoint location = [gestureRecognizer locationInView:self];
+    if (CGRectContainsPoint(self.bounds, location)) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+#pragma mark - Gesture Handler
 
 - (void)handleEditingBaseViewTap:(UITapGestureRecognizer *)tap {
     [self setEditing:NO animated:YES];
