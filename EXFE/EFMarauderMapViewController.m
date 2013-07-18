@@ -136,11 +136,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [self.dataSource removeObserver:self
-                         forKeyPath:@"peopleCount"];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
