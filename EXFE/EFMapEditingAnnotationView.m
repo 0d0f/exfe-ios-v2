@@ -123,12 +123,14 @@
     
     CGRect buttonFrame = (CGRect){CGPointZero, {CGRectGetMidX(viewBounds) - 20.0f, CGRectGetHeight(viewBounds)}};
     EFMapColorButton *blueButton = [EFMapColorButton buttonWithColor:[UIColor colorWithRed:0.0f green:(123.0f / 255.0f) blue:1.0f alpha:1.0f]];
+    [blueButton addTarget:self action:@selector(colorButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     blueButton.frame = buttonFrame;
     [self addSubview:blueButton];
     self.blueButton = blueButton;
     
     buttonFrame.origin = (CGPoint){CGRectGetWidth(viewBounds) - CGRectGetWidth(buttonFrame), 0.0f};
     EFMapColorButton *redButton = [EFMapColorButton buttonWithColor:[UIColor colorWithRed:1.0f green:0.0f blue:(51.0f / 255.0f) alpha:1.0f]];
+    [redButton addTarget:self action:@selector(colorButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     redButton.frame = buttonFrame;
     [self addSubview:redButton];
     self.redButton = redButton;
@@ -162,10 +164,23 @@
     }
 }
 
+#pragma mark - Action Handler
+
+- (void)colorButtonPressed:(EFMapColorButton *)button {
+    if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToStyle:)]) {
+        if (button == self.blueButton) {
+            [self.delegate mapEditingAnnotationView:self didChangeToStyle:kEFAnnotationStyleParkBlue];
+        } else if (button == self.redButton) {
+            [self.delegate mapEditingAnnotationView:self didChangeToStyle:kEFAnnotationStyleParkRed];
+        }
+    }
+}
+
 #pragma mark - Event Handler
 
 static CGPoint startPoint;
 static char startChar;
+static char endChar;
 
 - (void)touchDown:(id)sender withEvent:(UIEvent *)event {
     if (!self.letterPickerView) {
@@ -194,14 +209,25 @@ static char startChar;
     
     if (c < 'A') {
         self.markLetter = @"A";
+        endChar = 'A';
     } else if (c > 'Z') {
         self.markLetter = @"Z";
+        endChar = 'Z';
     } else {
         self.markLetter = [NSString stringWithFormat:@"%c", c];
+        endChar = c;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(mapEditingAnnotationView:isChangingToTitle:)]) {
+        [self.delegate mapEditingAnnotationView:self isChangingToTitle:self.markLetter];
     }
 }
 
 - (void)touchUp:(id)sender withEvent:(UIEvent *)event {
+    if (startChar != endChar && [self.delegate respondsToSelector:@selector(mapEditingAnnotationView:didChangeToTitle:)]) {
+        [self.delegate mapEditingAnnotationView:self didChangeToTitle:self.markLetter];
+    }
+    
     self.letterPickerView.hidden = YES;
 }
 

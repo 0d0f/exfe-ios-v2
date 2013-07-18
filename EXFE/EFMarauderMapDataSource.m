@@ -17,7 +17,6 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 @interface EFMarauderMapDataSource ()
 
-@property (nonatomic, assign) BOOL                  isDestinationExisted;
 @property (nonatomic, strong) NSMutableArray        *routeLocations;
 @property (nonatomic, strong) NSMutableDictionary   *routeLocationAnnotationMap;
 
@@ -51,7 +50,6 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 - (id)init {
     self = [super init];
     if (self) {
-        self.isDestinationExisted = NO;
         self.routeLocations = [[NSMutableArray alloc] init];
         self.routeLocationAnnotationMap = [[NSMutableDictionary alloc] init];
     }
@@ -68,11 +66,28 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     NSParameterAssert(routeLocation);
     NSParameterAssert(mapView);
     
+    BOOL hasDestination = NO;
+    for (EFRouteLocation *location in self.routeLocations) {
+        if (kEFRouteLocationTypeDestination == location.locationTytpe) {
+            hasDestination = YES;
+            break;
+        }
+    }
+    
+    if (!hasDestination) {
+        routeLocation.locationTytpe = kEFRouteLocationTypeDestination;
+    } else {
+        routeLocation.locationTytpe = kEFRouteLocationTypePark;
+    }
+    
     [self.routeLocations addObject:routeLocation];
-    EFAnnotation *annotation = [[EFAnnotation alloc] initWithStyle:self.isDestinationExisted ? kEFAnnotationStyleParkBlue : kEFAnnotationStyleDestination
+    EFAnnotation *annotation = [[EFAnnotation alloc] initWithStyle:(routeLocation.locationTytpe == kEFRouteLocationTypeDestination) ? kEFAnnotationStyleDestination : ((routeLocation.markColor == kEFRouteLocationColorRed) ? kEFAnnotationStyleParkRed : kEFAnnotationStyleParkBlue)
                                                         coordinate:[Util earthLocationFromMarsLocation:routeLocation.coordinate]
                                                              title:routeLocation.title
                                                        description:routeLocation.subtitle];
+    
+    annotation.markTitle = routeLocation.markTitle;
+    
     [self.routeLocationAnnotationMap setObject:annotation forKey:[NSValue valueWithNonretainedObject:routeLocation]];
     [mapView addAnnotation:annotation];
 }
@@ -91,7 +106,24 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     annotation.title = routeLocation.title;
     annotation.subtitle = routeLocation.subtitle;
     
+    if (kEFRouteLocationTypeDestination == routeLocation.locationTytpe) {
+        annotation.style = kEFAnnotationStyleDestination;
+    } else {
+        if (routeLocation.markColor == kEFRouteLocationColorRed) {
+            annotation.style = kEFAnnotationStyleParkRed;
+        } else {
+            annotation.style = kEFAnnotationStyleParkBlue;
+        }
+    }
+    
+    annotation.markTitle = routeLocation.markTitle;
+    
+    [self.routeLocationAnnotationMap setObject:annotation forKey:[NSValue valueWithNonretainedObject:routeLocation]];
+    
     [mapView addAnnotation:annotation];
+    
+    EFAnnotationView *annotationView = (EFAnnotationView *)[mapView viewForAnnotation:annotation];
+    [annotationView reloadWithAnnotation:annotation];
 }
 
 - (EFRouteLocation *)routeLocationForAnnotation:(EFAnnotation *)annotation {
@@ -120,6 +152,8 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     
     EFAnnotation *annotation = [self.routeLocationAnnotationMap objectForKey:[NSValue valueWithNonretainedObject:routeLocation]];
     [mapView removeAnnotation:annotation];
+    [self.routeLocationAnnotationMap removeObjectForKey:[NSValue valueWithNonretainedObject:routeLocation]];
+    [self.routeLocations removeObject:routeLocation];
 }
 
 - (NSArray *)allRouteLocations {

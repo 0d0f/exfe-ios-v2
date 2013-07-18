@@ -8,6 +8,8 @@
 
 #import <MapKit/MapKit.h>
 
+#import "EFMapEditingAnnotationView.h"
+
 typedef enum {
     kEFMapOperationStyleRightHand = 0,
     kEFMapOperationStyleLeftHand
@@ -25,10 +27,16 @@ typedef enum {
 
 @optional
 - (void)mapViewDidScroll:(EFMapView *)mapView;
-
+- (void)mapView:(EFMapView *)mapView isChangingSelectedAnnotationTitle:(NSString *)title;
+- (void)mapView:(EFMapView *)mapView didChangeSelectedAnnotationTitle:(NSString *)title;
+- (void)mapView:(EFMapView *)mapView didChangeSelectedAnnotationStyle:(EFAnnotationStyle)style;
+- (void)mapViewCancelButtonPressed:(EFMapView *)mapView;
 @end
 
 @interface EFMapView : MKMapView
+<
+EFMapEditingAnnotationViewDelegate
+>
 
 @property (nonatomic, assign)                       id<EFMapViewDelegate>   delegate;
 @property (nonatomic, assign)                       EFMapOperationStyle     operationStyle;

@@ -31,11 +31,11 @@
     
     if(sqlite3_open([databasePath cStringUsingEncoding:NSASCIIStringEncoding], &database)==SQLITE_OK)
     {
-         NSLog(@"open sqlite db ok.");
+//         NSLog(@"open sqlite db ok.");
     }
     else
     {
-         NSLog(@"open sqlite db error!!!!!!!.");
+//         NSLog(@"open sqlite db error!!!!!!!.");
         
     }
     
@@ -54,7 +54,7 @@
    // char *errorMsg;
     sqlite3_stmt *statement; 
     if (sqlite3_prepare_v2(database, sql, -1, &statement, nil)==SQLITE_OK) { 
-        NSLog(@"select ok"); 
+//        NSLog(@"select ok");
     }
     return statement;
 }
@@ -64,10 +64,10 @@
    // char *errorMsg;
     sqlite3_stmt *statement; 
     if (sqlite3_prepare_v2(database, [sql UTF8String], -1, &statement, nil)==SQLITE_OK) { 
-        NSLog(@"select ok 2"); 
+//        NSLog(@"select ok 2"); 
     }
     else {
-        NSLog(@"select error 2");
+//        NSLog(@"select error 2");
     }
     return statement;
 }
@@ -77,8 +77,8 @@
     char *errorMsg;
     if (sqlite3_exec(database, [sql UTF8String], 0, 0, &errorMsg)==SQLITE_OK)
     { 
-        NSLog(@"send ok");
-        return YES;    
+//        NSLog(@"send ok");
+        return YES;
     }
     else 
     {

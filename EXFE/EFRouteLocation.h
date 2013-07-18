@@ -41,8 +41,13 @@
 @property (nonatomic, copy)     NSString                *subtitle;
 @property (nonatomic, assign)   CLLocationCoordinate2D  coordinate;
 
+@property (nonatomic, copy)     NSString                *markTitle;
+@property (nonatomic, assign)   EFRouteLocationColor    markColor;
+
 + (EFRouteLocation *)generateRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate;
 - (id)initWithDictionary:(NSDictionary *)param;
 - (NSDictionary *)dictionaryValue;
+
+- (void)updateIconURL;
 
 @end
