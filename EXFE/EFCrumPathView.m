@@ -36,7 +36,7 @@
     EFCrumPath *crumPath = (EFCrumPath *)self.overlay;
     NSArray *mapPoints = crumPath.mapPoints;
     
-    CGFloat lineWidth = MKRoadWidthAtZoomScale(zoomScale);
+    CGFloat lineWidth = 8.0f / zoomScale;
     MKMapRect clipRect = MKMapRectInset(mapRect, -lineWidth, -lineWidth);
     
     CGPathRef path = [self _pathForPoints:mapPoints
@@ -51,8 +51,7 @@
         CGContextSetLineCap(context, kCGLineCapRound);
         
         if (kEFMapLineStyleDashedLine == crumPath.lineStyle) {
-            lineWidth *= 2;
-            CGFloat dashes[] = {0.0f, lineWidth * 2};
+            CGFloat dashes[] = {0.0f, lineWidth * 4};
             CGContextSetLineDash(context, 0, dashes, 2);
         } else if (kEFMapLineStyleLine == crumPath.lineStyle) {
             lineWidth *= 0.2f;
@@ -95,7 +94,7 @@ static BOOL lineIntersectsRect(MKMapPoint p0, MKMapPoint p1, MKMapRect r)
     
     MKMapPoint *points = (MKMapPoint *)malloc(sizeof(MKMapPoint) * pointCount);
     for (int i = 0; i < pointCount; i++) {
-        EFMapPoint *mapPoint = mapPoints[i];
+        EFLocation *mapPoint = mapPoints[i];
         MKMapPoint point = [mapPoint mapPointValue];
         points[i] = point;
     }

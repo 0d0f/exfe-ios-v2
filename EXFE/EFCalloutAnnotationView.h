@@ -13,7 +13,8 @@
 @class EFCalloutAnnotation;
 @interface EFCalloutAnnotationView : MKAnnotationView
 <
-UITextFieldDelegate
+UITextFieldDelegate,
+UIGestureRecognizerDelegate
 >
 
 @property (nonatomic, strong) MKAnnotationView  *parentAnnotationView;

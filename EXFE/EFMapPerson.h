@@ -14,7 +14,8 @@
 
 @property (strong)      NSMutableArray              *pathMapPoints;
 @property (strong)      UIImage                     *avatarImage;
-@property (nonatomic)   CGFloat                     distence;
+@property (nonatomic)   CGFloat                     distance;
+@property (nonatomic)   CGFloat                     angle;
 @property (nonatomic)   EFMapPersonConnectState     connectState;
 @property (nonatomic)   EFMapPersonLocationState    locationState;
 

@@ -307,8 +307,6 @@ static UIView * ReverseSubviews(UIView *view) {
     annatationView.delegate = self;
     [baseView addSubview:annatationView];
     self.editingAnnotatoinView = annatationView;
-    
-    self.editingState = kEFMapViewEditingStateNormal;
 }
 
 - (void)_initOperationButtons {
@@ -323,8 +321,8 @@ static UIView * ReverseSubviews(UIView *view) {
     self.editingButton = editingButton;
     
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancelButton.layer.cornerRadius = 15.0f;
-    cancelButton.backgroundColor = [UIColor whiteColor];
+    cancelButton.backgroundColor = [UIColor clearColor];
+    [cancelButton setBackgroundImage:[UIImage imageNamed:@"map_remove_30.png"] forState:UIControlStateNormal];
     cancelButton.frame = (CGRect){{CGRectGetWidth(viewBounds) - 40.0f, 10.0f}, {30.0f, 30.0f}};
     [cancelButton addTarget:self action:@selector(cancelButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.operationBaseView addSubview:cancelButton];
@@ -345,18 +343,22 @@ static UIView * ReverseSubviews(UIView *view) {
     NSAssert(self.gestureView, @"There should be a gesture view.");
     
     self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    self.tapGestureRecognizer.delegate = self;
+    
+    [self.gestureView addGestureRecognizer:self.tapGestureRecognizer];
     
     self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     self.panGestureRecognizer.minimumNumberOfTouches = 1;
     self.panGestureRecognizer.maximumNumberOfTouches = 1;
     self.panGestureRecognizer.delaysTouchesBegan = NO;
     
-    [self.gestureView addGestureRecognizer:self.tapGestureRecognizer];
     [self.gestureView addGestureRecognizer:self.panGestureRecognizer];
     
     [self _initOperationBaseView];
     [self _initEditingViews];
     [self _initOperationButtons];
+    
+    self.editingState = kEFMapViewEditingStateNormal;
     
     // touch down gesture
 //    self.touchDownGestureRecognizer = [[EFTouchDownGestureRecognizer alloc] init];
@@ -471,6 +473,11 @@ static UIView * ReverseSubviews(UIView *view) {
 #pragma mark - Action Handler
 
 - (void)editingButtonPressed:(id)sender {
+    NSArray *annotations = [self selectedAnnotations];
+    if (annotations.count) {
+        [self deselectAnnotation:annotations[0] animated:YES];
+    }
+    
     if (kEFMapViewEditingStateEditingPath != self.editingState) {
         self.editingState = kEFMapViewEditingStateEditingPath;
     } else {
@@ -485,21 +492,49 @@ static UIView * ReverseSubviews(UIView *view) {
 }
 
 - (void)headingButtonPressed:(id)sender {
+    if (self.userTrackingMode == MKUserTrackingModeNone) {
+        [sender setImage:[UIImage imageNamed:@"map_arrow_blue.png"] forState:UIControlStateNormal];
+        [self setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
+    } else {
+        [sender setImage:[UIImage imageNamed:@"map_arrow_g5.png"] forState:UIControlStateNormal];
+        [self setUserTrackingMode:MKUserTrackingModeNone animated:YES];
+    }
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+        if (gestureRecognizer == self.tapGestureRecognizer) {
+            CGPoint location = [touch locationInView:gestureRecognizer.view];
+            NSArray *selectedAnnotations = [self selectedAnnotations];
+            if (selectedAnnotations.count) {
+                id<MKAnnotation> annotation = selectedAnnotations[0];
+                UIView *annotationView = [self viewForAnnotation:annotation];
+                location = [annotationView convertPoint:location fromView:gestureRecognizer.view];
+                if (CGRectContainsPoint(annotationView.bounds, location)) {
+                    return NO;
+                }
+            }
+        }
+    }
     
+    return YES;
 }
 
 #pragma mark - Gesture Hanlder
 
 - (void)handleTap:(UITapGestureRecognizer *)tap {
-    CGPoint point = [tap locationInView:self.gestureView];
-    UIGestureRecognizerState state = tap.state;
-    
-    switch (state) {
-        case UIGestureRecognizerStateBegan:
-            break;
-            [self _beginWithPoint:point];
-        default:
-            break;
+    if (tap == self.tapGestureRecognizer) {
+        UIGestureRecognizerState state = tap.state;
+        
+        switch (state) {
+            case UIGestureRecognizerStateEnded:
+                [self deselectAnnotation:[self selectedAnnotations][0] animated:YES];
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -545,6 +580,7 @@ static UIView * ReverseSubviews(UIView *view) {
             self.editingBaseView.hidden = YES;
             self.cancelButton.hidden = YES;
             self.headingButton.hidden = NO;
+            self.tapGestureRecognizer.enabled = NO;
             break;
         case kEFMapViewEditingStateEditingPath:
             self.editingPathView.hidden = NO;
@@ -554,6 +590,7 @@ static UIView * ReverseSubviews(UIView *view) {
             self.editingBaseView.hidden = NO;
             self.cancelButton.hidden = NO;
             self.headingButton.hidden = YES;
+            self.tapGestureRecognizer.enabled = NO;
             break;
         case kEFMapViewEditingStateEditingAnnotation:
             self.editingAnnotatoinView.hidden = NO;
@@ -563,6 +600,7 @@ static UIView * ReverseSubviews(UIView *view) {
             self.editingBaseView.hidden = NO;
             self.cancelButton.hidden = NO;
             self.headingButton.hidden = YES;
+            self.tapGestureRecognizer.enabled = YES;
             break;
         case kEFMapViewEditingStateReady:
         default:
@@ -573,6 +611,7 @@ static UIView * ReverseSubviews(UIView *view) {
             self.editingBaseView.hidden = NO;
             self.cancelButton.hidden = NO;
             self.headingButton.hidden = YES;
+            self.tapGestureRecognizer.enabled = NO;
             break;
     }
 }
@@ -593,17 +632,7 @@ static UIView * ReverseSubviews(UIView *view) {
     }
     
     self.touchDownGestureRecognizer.enabled = editing ? YES : NO;
-    self.tapGestureRecognizer.enabled = editing ? YES : NO;
     self.panGestureRecognizer.enabled = editing ? YES : NO;
-    
-    
-//    if (editing) {
-//        for (UIGestureRecognizer *gesture in self.gestureView.gestureRecognizers) {
-//            if ([gesture isKindOfClass:[UIPanGestureRecognizer class]] || [gesture isKindOfClass:[UILongPressGestureRecognizer class]]) {
-//                [self.touchDownGestureRecognizer requireGestureRecognizerToFail:gesture];
-//            }
-//        }
-//    }
 }
 
 @end

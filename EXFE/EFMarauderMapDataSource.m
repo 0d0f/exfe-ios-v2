@@ -11,6 +11,13 @@
 #import "EFAnnotation.h"
 #import "EFAnnotationView.h"
 #import "Util.h"
+#import "EFLocation.h"
+#import "EFRouteLocation.h"
+#import "EFRoutePath.h"
+#import "IdentityId+EXFE.h"
+
+#define kStreamingDataTypeLocaionts     @"/v3/crosses/routex/breadcrumbs"
+#define kStreamingDataTypeRoute         @"/v3/crosses/routex/geomarks"
 
 NSString *EFNotificationRoutePathDidChange = @"notification.routePath.didChange";
 NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.didChange";
@@ -19,6 +26,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 @property (nonatomic, strong) NSMutableArray        *routeLocations;
 @property (nonatomic, strong) NSMutableDictionary   *routeLocationAnnotationMap;
+@property (nonatomic, strong) EFHTTPStreaming       *httpStreaming;
 
 @end
 
@@ -47,9 +55,10 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 @implementation EFMarauderMapDataSource
 
-- (id)init {
+- (id)initWithCrossId:(NSInteger)crossId {
     self = [super init];
     if (self) {
+        self.crossId = crossId;
         self.routeLocations = [[NSMutableArray alloc] init];
         self.routeLocationAnnotationMap = [[NSMutableDictionary alloc] init];
     }
@@ -60,24 +69,40 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 - (void)addLocation:(EFLocation *)location {
 }
 
+#pragma mark - Property Accessor
+
+- (EFRouteLocation *)destinationLocation {
+    EFRouteLocation *destination = nil;
+    for (EFRouteLocation *location in self.routeLocations) {
+        if (location.locationTytpe == kEFRouteLocationTypeDestination) {
+            destination = location;
+            break;
+        }
+    }
+    
+    return destination;
+}
+
 #pragma mark - RouteLocation
 
 - (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView {
     NSParameterAssert(routeLocation);
     NSParameterAssert(mapView);
     
-    BOOL hasDestination = NO;
-    for (EFRouteLocation *location in self.routeLocations) {
-        if (kEFRouteLocationTypeDestination == location.locationTytpe) {
-            hasDestination = YES;
-            break;
+    if (kEFRouteLocationTypeUnknow == routeLocation.locationTytpe) {
+        BOOL hasDestination = NO;
+        for (EFRouteLocation *location in self.routeLocations) {
+            if (kEFRouteLocationTypeDestination == location.locationTytpe) {
+                hasDestination = YES;
+                break;
+            }
         }
-    }
-    
-    if (!hasDestination) {
-        routeLocation.locationTytpe = kEFRouteLocationTypeDestination;
-    } else {
-        routeLocation.locationTytpe = kEFRouteLocationTypePark;
+        
+        if (!hasDestination) {
+            routeLocation.locationTytpe = kEFRouteLocationTypeDestination;
+        } else {
+            routeLocation.locationTytpe = kEFRouteLocationTypePark;
+        }
     }
     
     [self.routeLocations addObject:routeLocation];
@@ -158,6 +183,78 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 - (NSArray *)allRouteLocations {
     return self.routeLocations;
+}
+
+#pragma mark - Streaming
+
+- (void)openStreaming {
+    [self closeStreaming];
+    
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    NSURL *baseURL = objectManager.HTTPClient.baseURL;
+    
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSString *userToken = delegate.model.userToken;
+    
+    NSURL *streamingURL = [NSURL URLWithString:[NSString stringWithFormat:@"/v3/crosses/%d/routex?_method=WATCH&coordinate=earth&token=%@", self.crossId, userToken] relativeToURL:baseURL];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:streamingURL];
+    request.HTTPMethod = @"POST";
+    
+    self.httpStreaming = [[EFHTTPStreaming alloc] initWithURL:streamingURL];
+    self.httpStreaming.delegate = self;
+    [self.httpStreaming open];
+}
+
+- (void)closeStreaming {
+    if (self.httpStreaming) {
+        [self.httpStreaming close];
+        self.httpStreaming = nil;
+    }
+}
+
+#pragma mark - EFHTTPStreamingDelegate
+
+- (void)completedRead:(NSString *)string {
+    NSError *error = nil;
+    NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
+    if (!data)
+        return;
+    
+    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data
+                                                                options:NSJSONReadingMutableContainers
+                                                                  error:&error];
+    if (jsonDictionary && !error) {
+        NSString *type = [jsonDictionary valueForKey:@"type"];
+        if ([type isEqualToString:kStreamingDataTypeLocaionts]) {
+            NSDictionary *locations = [jsonDictionary valueForKey:@"data"];
+            if (locations && locations.count) {
+                if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
+                    [locations enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+                        NSAssert([obj isKindOfClass:[NSArray class]], @"obj should be a location array");
+                        
+                        NSMutableArray *userLocations = [[NSMutableArray alloc] initWithCapacity:[obj count]];
+                        for (NSDictionary *locationParam in obj) {
+                            EFLocation *location = [[EFLocation alloc] initWithDictionary:locationParam];
+                            [userLocations addObject:location];
+                        }
+                        
+                        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                        NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"IdentityId" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+                        IdentityId *identityId = [[IdentityId alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
+                        identityId.identity_id = key;
+                        
+                        [self.delegate mapDataSource:self didUpdateLocations:userLocations forUser:identityId];
+                    }];
+                }
+            }
+        } else if ([type isEqualToString:kStreamingDataTypeRoute]) {
+        
+        }
+    }
+}
+
+- (void)streamEvent:(CFStreamEventType)eventType {
+    
 }
 
 #pragma mark - RoutePath

@@ -35,7 +35,8 @@ typedef enum {
 
 @interface EFMapView : MKMapView
 <
-EFMapEditingAnnotationViewDelegate
+EFMapEditingAnnotationViewDelegate,
+UIGestureRecognizerDelegate
 >
 
 @property (nonatomic, assign)                       id<EFMapViewDelegate>   delegate;

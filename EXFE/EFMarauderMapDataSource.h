@@ -9,9 +9,29 @@
 #import <Foundation/Foundation.h>
 
 #import "EFMapData.h"
+#import "EFHTTPStreaming.h"
+
+@class EFMarauderMapDataSource, IdentityId;
+@protocol EFMarauderMapDataSourceDelegate <NSObject>
+
+@optional
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(IdentityId *)identityId;
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations;
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths;
+
+@end
 
 @class EFAnnotation, EFAnnotationView, EFRouteLocation, EFLocation, EFRoutePath;
 @interface EFMarauderMapDataSource : NSObject
+<
+EFHTTPStreamingDelegate
+>
+
+@property (nonatomic, assign) NSInteger crossId;
+@property (nonatomic, weak) id <EFMarauderMapDataSourceDelegate> delegate;
+@property (nonatomic, readonly) EFRouteLocation *destinationLocation;
+
+- (id)initWithCrossId:(NSInteger)crossId;
 
 - (void)addLocation:(EFLocation *)location;
 
@@ -25,5 +45,8 @@
 - (void)addRoutePath:(EFRoutePath *)path;
 - (void)removeRoutePath:(EFRoutePath *)path;
 - (void)updateRoutePath:(EFRoutePath *)path;
+
+- (void)openStreaming;
+- (void)closeStreaming;
 
 @end

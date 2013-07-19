@@ -19,3 +19,6 @@
 [submodule "Vendor/libPhoneNumber-iOS"]
 	path = Vendor/libPhoneNumber-iOS
 	url = https://github.com/stonyw/libPhoneNumber-iOS.git
+[submodule "Vendor/SocketRocket"]
+	path = Vendor/SocketRocket
+	url = https://github.com/0day2010/SocketRocket.git
