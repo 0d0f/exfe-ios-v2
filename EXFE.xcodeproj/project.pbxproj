@@ -1728,15 +1728,6 @@
 		76B1243A1798398400A73E59 /* map_remove_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B124361798398400A73E59 /* map_remove_30@2x.png */; };
 		76B1243B1798398400A73E59 /* map_remove_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B124361798398400A73E59 /* map_remove_30@2x.png */; };
 		76B1243C1798398400A73E59 /* map_remove_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B124361798398400A73E59 /* map_remove_30@2x.png */; };
-		76B124451798EBA700A73E59 /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 76B1243E1798EBA700A73E59 /* base64.c */; };
-		76B124461798EBA700A73E59 /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 76B1243E1798EBA700A73E59 /* base64.c */; };
-		76B124471798EBA700A73E59 /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 76B1243E1798EBA700A73E59 /* base64.c */; };
-		76B124481798EBA700A73E59 /* NSData+SRB64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B124411798EBA700A73E59 /* NSData+SRB64Additions.m */; };
-		76B124491798EBA700A73E59 /* NSData+SRB64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B124411798EBA700A73E59 /* NSData+SRB64Additions.m */; };
-		76B1244A1798EBA700A73E59 /* NSData+SRB64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B124411798EBA700A73E59 /* NSData+SRB64Additions.m */; };
-		76B1244B1798EBA700A73E59 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B124441798EBA700A73E59 /* SRWebSocket.m */; };
-		76B1244C1798EBA700A73E59 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B124441798EBA700A73E59 /* SRWebSocket.m */; };
-		76B1244D1798EBA700A73E59 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B124441798EBA700A73E59 /* SRWebSocket.m */; };
 		76B1244F1798ECF100A73E59 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 76B1244E1798ECF000A73E59 /* libicucore.dylib */; };
 		76B124501798ECF800A73E59 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 76B1244E1798ECF000A73E59 /* libicucore.dylib */; };
 		76B124511798ECFD00A73E59 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 76B1244E1798ECF000A73E59 /* libicucore.dylib */; };
@@ -2776,13 +2767,6 @@
 		76B1242A1798331A00A73E59 /* map_arrow_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_arrow_blue@2x.png"; sourceTree = "<group>"; };
 		76B124351798398400A73E59 /* map_remove_15@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_remove_15@2x.png"; sourceTree = "<group>"; };
 		76B124361798398400A73E59 /* map_remove_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_remove_30@2x.png"; sourceTree = "<group>"; };
-		76B1243E1798EBA700A73E59 /* base64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base64.c; sourceTree = "<group>"; };
-		76B1243F1798EBA700A73E59 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
-		76B124401798EBA700A73E59 /* NSData+SRB64Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+SRB64Additions.h"; sourceTree = "<group>"; };
-		76B124411798EBA700A73E59 /* NSData+SRB64Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+SRB64Additions.m"; sourceTree = "<group>"; };
-		76B124421798EBA700A73E59 /* SocketRocket-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-Prefix.pch"; sourceTree = "<group>"; };
-		76B124431798EBA700A73E59 /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
-		76B124441798EBA700A73E59 /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
 		76B1244E1798ECF000A73E59 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		76B124531798F8CE00A73E59 /* EFHTTPStreaming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFHTTPStreaming.h; sourceTree = "<group>"; };
 		76B124541798F8CE00A73E59 /* EFHTTPStreaming.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFHTTPStreaming.m; sourceTree = "<group>"; };
@@ -3985,21 +3969,6 @@
 			path = Vendor/Sqlite;
 			sourceTree = SOURCE_ROOT;
 		};
-		76B1243D1798EBA700A73E59 /* SocketRocket */ = {
-			isa = PBXGroup;
-			children = (
-				76B1243E1798EBA700A73E59 /* base64.c */,
-				76B1243F1798EBA700A73E59 /* base64.h */,
-				76B124401798EBA700A73E59 /* NSData+SRB64Additions.h */,
-				76B124411798EBA700A73E59 /* NSData+SRB64Additions.m */,
-				76B124421798EBA700A73E59 /* SocketRocket-Prefix.pch */,
-				76B124431798EBA700A73E59 /* SRWebSocket.h */,
-				76B124441798EBA700A73E59 /* SRWebSocket.m */,
-			);
-			name = SocketRocket;
-			path = Vendor/SocketRocket/SocketRocket;
-			sourceTree = SOURCE_ROOT;
-		};
 		76B124521798F89F00A73E59 /* Streaming */ = {
 			isa = PBXGroup;
 			children = (
@@ -4461,7 +4430,6 @@
 		785FD54E158065610056590D /* Lib */ = {
 			isa = PBXGroup;
 			children = (
-				76B1243D1798EBA700A73E59 /* SocketRocket */,
 				76B1240B1796F44900A73E59 /* Sqlite */,
 				4F8507C417841ADA00BB86FA /* LibPhoneNumber */,
 				4FB377CC17377C7D001FA1B2 /* TWReverseAuth */,
@@ -6797,9 +6765,6 @@
 				4F7AA1F81797FDED005C4223 /* Avatar.m in Sources */,
 				4F7AA1FD1797FDEE005C4223 /* User.m in Sources */,
 				4F7AA202179803A5005C4223 /* Identity.m in Sources */,
-				76B124461798EBA700A73E59 /* base64.c in Sources */,
-				76B124491798EBA700A73E59 /* NSData+SRB64Additions.m in Sources */,
-				76B1244C1798EBA700A73E59 /* SRWebSocket.m in Sources */,
 				76B124561798F8CE00A73E59 /* EFHTTPStreaming.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7042,9 +7007,6 @@
 				4F7AA1F91797FDED005C4223 /* Avatar.m in Sources */,
 				4F7AA1FE1797FDEE005C4223 /* User.m in Sources */,
 				4F7AA203179803A5005C4223 /* Identity.m in Sources */,
-				76B124471798EBA700A73E59 /* base64.c in Sources */,
-				76B1244A1798EBA700A73E59 /* NSData+SRB64Additions.m in Sources */,
-				76B1244D1798EBA700A73E59 /* SRWebSocket.m in Sources */,
 				76B124571798F8CE00A73E59 /* EFHTTPStreaming.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7287,9 +7249,6 @@
 				4F7AA1F71797FDED005C4223 /* Avatar.m in Sources */,
 				4F7AA1FC1797FDEE005C4223 /* User.m in Sources */,
 				4F7AA201179803A5005C4223 /* Identity.m in Sources */,
-				76B124451798EBA700A73E59 /* base64.c in Sources */,
-				76B124481798EBA700A73E59 /* NSData+SRB64Additions.m in Sources */,
-				76B1244B1798EBA700A73E59 /* SRWebSocket.m in Sources */,
 				76B124551798F8CE00A73E59 /* EFHTTPStreaming.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
