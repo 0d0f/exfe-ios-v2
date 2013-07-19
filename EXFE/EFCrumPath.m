@@ -49,21 +49,21 @@
 
 #pragma mark - Public
 
-- (void)addMapPoint:(EFMapPoint *)point {
+- (void)addMapPoint:(EFLocation *)point {
     NSParameterAssert(point);
     
     [self.innerPoints addObject:point];
     [self _pointsDidChange];
 }
 
-- (void)removeMapPoint:(EFMapPoint *)point {
+- (void)removeMapPoint:(EFLocation *)point {
     NSParameterAssert(point);
     
     [self.innerPoints removeObject:point];
     [self _pointsDidChange];
 }
 
-- (void)replaceMapPointAtIndex:(NSUInteger)index withMapPoint:(EFMapPoint *)anotherPoint {
+- (void)replaceMapPointAtIndex:(NSUInteger)index withMapPoint:(EFLocation *)anotherPoint {
     NSParameterAssert(anotherPoint);
     NSAssert(index != NSNotFound, @"index should not be NSNotFound");
     
@@ -73,14 +73,14 @@
 #pragma mark - Private
 
 - (void)_pointsDidChange {
-    EFMapPoint *firstPoint = self.innerPoints[0];
+    EFLocation *firstPoint = self.innerPoints[0];
     MKMapPoint firtMapPoint = [firstPoint mapPointValue];
     CGFloat minX = firtMapPoint.x,
             minY = firtMapPoint.y,
             maxX = firtMapPoint.x,
             maxY = firtMapPoint.y;
     
-    for (EFMapPoint *mapPoint in self.innerPoints) {
+    for (EFLocation *mapPoint in self.innerPoints) {
         MKMapPoint point = [mapPoint mapPointValue];
         minX = MIN(minX, point.x);
         minY = MIN(minY, point.y);

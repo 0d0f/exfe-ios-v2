@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-#import "EFMapPoint.h"
+#import "EFLocation.h"
 #import "EFMapOverlayDataDefines.h"
 
 @interface EFCrumPath : NSObject
@@ -24,8 +24,8 @@ MKOverlay
 
 - (id)initWithMapPoints:(NSArray *)points;
 
-- (void)addMapPoint:(EFMapPoint *)point;
-- (void)removeMapPoint:(EFMapPoint *)point;
-- (void)replaceMapPointAtIndex:(NSUInteger)index withMapPoint:(EFMapPoint *)anotherPoint;
+- (void)addMapPoint:(EFLocation *)point;
+- (void)removeMapPoint:(EFLocation *)point;
+- (void)replaceMapPointAtIndex:(NSUInteger)index withMapPoint:(EFLocation *)anotherPoint;
 
 @end

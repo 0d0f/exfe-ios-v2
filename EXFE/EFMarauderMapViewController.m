@@ -17,6 +17,7 @@
 #import "Exfee+EXFE.h"
 #import "Invitation+EXFE.h"
 #import "EFDataManager+Image.h"
+#import "IdentityId.h"
 #import "Util.h"
 
 #define kAnnotationOffsetY  (-50.0f)
@@ -24,7 +25,8 @@
 @interface EFMarauderMapViewController ()
 
 @property (nonatomic, strong) EFMarauderMapDataSource *mapDataSource;
-@property (nonatomic, strong) EFMapPeopleDataSource *dataSource;
+//@property (nonatomic, strong) EFMapPeopleDataSource *dataSource;
+@property (nonatomic, strong) NSMutableDictionary   *personDictionary;
 @property (nonatomic, strong) MKAnnotationView      *meAnnotationView;
 @property (nonatomic, strong) NSArray               *invitations;
 
@@ -50,28 +52,28 @@
 @implementation EFMarauderMapViewController (Test)
 
 - (void)initTestData {
-    for (int i = 0; i < 6; i++) {
-        CLLocation *nowLocation = self.mapView.userLocation.location;
-        NSUInteger pointCount = 5;
-        NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:pointCount];
-        
-        CLLocationCoordinate2D nowLocationCoordinate = nowLocation.coordinate;
-        for (int i = 0; i < pointCount - 1; i++) {
-            EFMapPoint *point = [[EFMapPoint alloc] init];
-            point.coordinate2D = CLLocationCoordinate2DMake(nowLocationCoordinate.latitude + (rand() % 2 ? 1 : -1) * (rand() % 300) * 0.001, nowLocationCoordinate.longitude + (rand() % 2 ? 1 : -1) * (rand() % 300) * 0.001);
-            [points addObject:point];
-        }
-        EFMapPoint *point = [[EFMapPoint alloc] init];
-        point.coordinate2D = CLLocationCoordinate2DMake(nowLocationCoordinate.latitude, nowLocationCoordinate.longitude);
-        [points addObject:point];
-        
-        EFMapPerson *person = [[EFMapPerson alloc] init];
-        person.pathMapPoints = points;
-        person.distence = rand() % 300;
-        person.avatarImage = [UIImage imageNamed:[NSString stringWithFormat:@"%d", i % 6]];
-        
-        [self.dataSource addPerson:person];
-    }
+//    for (int i = 0; i < 6; i++) {
+//        CLLocation *nowLocation = self.mapView.userLocation.location;
+//        NSUInteger pointCount = 5;
+//        NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:pointCount];
+//        
+//        CLLocationCoordinate2D nowLocationCoordinate = nowLocation.coordinate;
+//        for (int i = 0; i < pointCount - 1; i++) {
+//            EFMapPoint *point = [[EFMapPoint alloc] init];
+//            point.coordinate2D = CLLocationCoordinate2DMake(nowLocationCoordinate.latitude + (rand() % 2 ? 1 : -1) * (rand() % 300) * 0.001, nowLocationCoordinate.longitude + (rand() % 2 ? 1 : -1) * (rand() % 300) * 0.001);
+//            [points addObject:point];
+//        }
+//        EFMapPoint *point = [[EFMapPoint alloc] init];
+//        point.coordinate2D = CLLocationCoordinate2DMake(nowLocationCoordinate.latitude, nowLocationCoordinate.longitude);
+//        [points addObject:point];
+//        
+//        EFMapPerson *person = [[EFMapPerson alloc] init];
+//        person.pathMapPoints = points;
+//        person.distence = rand() % 300;
+//        person.avatarImage = [UIImage imageNamed:[NSString stringWithFormat:@"%d", i % 6]];
+//        
+//        [self.dataSource addPerson:person];
+//    }
 }
 
 @end
@@ -79,6 +81,10 @@
 @interface EFMarauderMapViewController (Private)
 
 - (void)_hideCalloutView;
+
+- (void)_openStreaming;
+- (void)_closeStreaming;
+
 - (void)_getRoute;
 - (void)_postRoute;
 
@@ -91,6 +97,14 @@
         [self.mapView removeAnnotation:self.currentCalloutAnnotation];
         self.currentCalloutAnnotation = nil;
     }
+}
+
+- (void)_openStreaming {
+    [self.mapDataSource openStreaming];
+}
+
+- (void)_closeStreaming {
+    [self.mapDataSource closeStreaming];
 }
 
 - (void)_getRoute {
@@ -131,8 +145,8 @@
         self.personPositionOverlayMap = [[NSMutableDictionary alloc] initWithCapacity:6];
         self.personPositionOverlayViewMap = [[NSMutableDictionary alloc] initWithCapacity:6];
         self.personOverlayMap = [[NSMutableDictionary alloc] initWithCapacity:6];
-        self.mapDataSource = [[EFMarauderMapDataSource alloc] init];
-        self.dataSource = [[EFMapPeopleDataSource alloc] init];
+//        self.dataSource = [[EFMapPeopleDataSource alloc] init];
+        self.personDictionary = [[NSMutableDictionary alloc] initWithCapacity:6];
         
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
@@ -157,6 +171,9 @@
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     longPress.delegate = self;
     [self.mapView addGestureRecognizer:longPress];
+    
+    self.mapDataSource = [[EFMarauderMapDataSource alloc] initWithCrossId:[self.cross.cross_id integerValue]];
+    self.mapDataSource.delegate = self;
 }
 
 - (void)viewDidUnload {
@@ -172,12 +189,14 @@
     self.tableView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, self.invitations.count * [EFMapPersonCell defaultCellHeight]}};
     
     [self _getRoute];
+    [self _openStreaming];
     
     [self.locationManager startUpdatingLocation];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [self.locationManager stopUpdatingLocation];
+    [self _closeStreaming];
     
     [super viewDidDisappear:animated];
 }
@@ -349,8 +368,14 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         [self.mapView removeOverlay:self.personPathOverlayView.overlay];
     }
     
-    EFMapPerson *person = [self.dataSource personAtIndex:indexPath.row];
-    EFCrumPath *path = [[EFCrumPath alloc] initWithMapPoints:person.pathMapPoints];
+    Invitation *invitation = self.invitations[indexPath.row];
+    Identity *identity = invitation.identity;
+    IdentityId *identityId = [identity identityIdValue];
+    
+    NSArray *locations = [self.personDictionary valueForKey:identityId.identity_id];
+    if (!locations || !locations.count)
+        return;
+    EFCrumPath *path = [[EFCrumPath alloc] initWithMapPoints:locations];
     path.linecolor = [UIColor colorWithRed:1.0f
                                      green:(127.0f / 255.0f)
                                       blue:(153.0f / 255.0f)
@@ -391,6 +416,20 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                              withCrossId:[self.cross.cross_id integerValue]
                                  success:nil
                                  failure:nil];
+}
+
+#pragma mark - EFMarauderMapDataSourceDelegate
+
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(IdentityId *)identityId {
+    [self.personDictionary setValue:locations forKey:identityId.identity_id];
+}
+
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations {
+    
+}
+
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths {
+
 }
 
 #pragma mark - EFMapViewDelegate
