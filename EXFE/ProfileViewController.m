@@ -190,6 +190,7 @@
     CGPoint location = [sender locationInView:sender.view];
 //    UIView *tappedView = [sender.view hitTest:location withEvent:nil];
     if (CGRectContainsPoint(username.frame, location)) {
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
         EFEditProfileViewController* vc = [[EFEditProfileViewController alloc] initWithModel:self.model];
         vc.user = self.user;
         [self presentModalViewController:vc animated:YES];
@@ -513,9 +514,10 @@
                 return;
             }
             
+            [[UIApplication sharedApplication] setStatusBarHidden:YES];
             EFEditProfileViewController* vc = [[EFEditProfileViewController alloc] initWithModel:self.model];
             vc.identity = identity;
-            [self presentModalViewController:vc animated:YES];
+            [self presentViewController:vc animated:YES completion:nil];
         }
     }
 }

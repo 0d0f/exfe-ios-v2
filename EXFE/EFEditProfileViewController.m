@@ -43,16 +43,21 @@
 @property (nonatomic, strong) NSMutableDictionary *data;
 
 #pragma mark Quick Access to UI Elements
-@property (nonatomic, strong) UITextField *name;
+@property (nonatomic, strong) UILabel *name;
+@property (nonatomic, strong) UILabel *identityId;
+@property (nonatomic, strong) SSTextView *inputName;
 @property (nonatomic, strong) UIScrollView *imageScrollView;
 @property (nonatomic, strong) UIImageView *avatar;
+@property (nonatomic, strong) UIView *imageScrollRange;
 @property (nonatomic, strong) SSTextView *bio;
-@property (nonatomic, strong) UILabel *identityId;
 
 @property (nonatomic, strong) UIView *header;
 @property (nonatomic, strong) UIView *footer;
 
 @property (nonatomic, strong) UIView *activeInputView;
+
+@property (nonatomic, strong) UIImageView *preview;
+@property (nonatomic, strong) UIImageView *previewTh;
 
 @end
 
@@ -107,30 +112,35 @@
     UIScrollView *imageScrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     imageScrollView.delegate = self;
     
+    
+    UIView * imageScrollRange = [[UIView alloc] initWithFrame:CGRectZero];
+    [imageScrollView addSubview:imageScrollRange];
+    self.imageScrollRange = imageScrollRange;
+    
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
     imageView.backgroundColor = [UIColor clearColor];
     imageView.userInteractionEnabled = YES;
     imageView.tag = kTagZoom;
-    [imageScrollView addSubview:imageView];
+    [imageScrollRange addSubview:imageView];
     self.avatar = imageView;
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
-    UITapGestureRecognizer *twoFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerTap:)];
+//    UITapGestureRecognizer *twoFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerTap:)];
     
     [doubleTap setNumberOfTapsRequired:2];
-    [twoFingerTap setNumberOfTouchesRequired:2];
+//    [twoFingerTap setNumberOfTouchesRequired:2];
     
     [imageView addGestureRecognizer:singleTap];
     [imageView addGestureRecognizer:doubleTap];
-    [imageView addGestureRecognizer:twoFingerTap];
+//    [imageView addGestureRecognizer:twoFingerTap];
     
     [self.view addSubview:imageScrollView];
     self.imageScrollView = imageScrollView;
 
     
     // View port layer
-    CGFloat headerHeight = 80;
+    CGFloat headerHeight = 60;
     if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
         headerHeight = 95;
     }
@@ -150,16 +160,45 @@
     [btnBack addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
     [header addSubview:btnBack];
     
-    UITextField *fullName = [[UITextField alloc] initWithFrame:CGRectMake(30, 15, 260, 50)];
-    fullName.backgroundColor = [UIColor clearColor];
-    fullName.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:21];
-    fullName.returnKeyType = UIReturnKeyDone;
-    fullName.textColor = [UIColor whiteColor];
-    fullName.textAlignment = NSTextAlignmentCenter;
-    fullName.delegate = self;
-    fullName.tag = kTagName;
-    [header addSubview:fullName];
-    self.name = fullName;
+    UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 190, 97)];
+    name.backgroundColor = [UIColor clearColor];
+    name.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:21];
+    name.textColor = [UIColor whiteColor];
+    name.textAlignment = NSTextAlignmentCenter;
+    name.center = header.center;
+    name.numberOfLines = 2;
+    name.lineBreakMode = NSLineBreakByTruncatingTail;
+    [header addSubview:name];
+    self.name = name;
+    UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+        if (state == UIGestureRecognizerStateEnded) {
+            if (self.name.hidden == NO) {
+                self.name.hidden = YES;
+                self.identityId.hidden = YES;
+                NSString *dataName = [self.data valueForKey:kModelKeyName];
+                if (dataName) {
+                    self.inputName.text = dataName;
+                } else {
+                    if (self.isEditUser) {
+                        self.inputName.text = self.user.name;
+                    } else {
+                        self.inputName.text = self.identity.name;
+                    }
+                }
+                CGSize size = [self.inputName sizeThatFits:CGSizeMake(CGRectGetWidth(self.inputName.bounds), MAXFLOAT)];
+                NSLog(@"size %@ for %@", NSStringFromCGSize(size), self.inputName.text);
+                if (size.height > 70) {
+                    size.height = 70;
+                }
+                self.inputName.bounds = (CGRect){CGPointZero, {190 + 8 * 2, size.height}};
+                self.inputName.center = self.header.center;
+                self.inputName.hidden = NO;
+                [self.inputName becomeFirstResponder];
+            }
+        }
+    }];
+    name.userInteractionEnabled = YES;
+    [name addGestureRecognizer:tap];
     
     UILabel *identityId = [[UILabel alloc] initWithFrame:CGRectMake(30, CGRectGetHeight(header.bounds) / 2, 260, 30)];
     identityId.backgroundColor = [UIColor clearColor];
@@ -168,6 +207,19 @@
     identityId.textAlignment = NSTextAlignmentCenter;
     [header addSubview:identityId];
     self.identityId = identityId;
+    
+    SSTextView *inputName = [[SSTextView alloc] initWithFrame:CGRectMake(0, 0, 190 + 8 * 2, 70 + 8 * 2)];
+    inputName.backgroundColor = [UIColor clearColor];
+    inputName.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:21];
+    inputName.returnKeyType = UIReturnKeyDone;
+    inputName.textColor = [UIColor whiteColor];
+    inputName.textAlignment = NSTextAlignmentCenter;
+    inputName.delegate = self;
+    inputName.center = header.center;
+    inputName.tag = kTagName;
+    inputName.hidden = YES;
+    [header addSubview:inputName];
+    self.inputName = inputName;
     
     UIButton *camera = [UIButton buttonWithType:UIButtonTypeCustom];
     camera.frame = CGRectMake(280, CGRectGetHeight(header.bounds) / 2  - 30 / 2, 30, 30);
@@ -180,6 +232,7 @@
     
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, headerHeight + CGRectGetWidth(self.view.bounds), CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - headerHeight - CGRectGetWidth(self.view.bounds))];
     footer.backgroundColor = [UIColor COLOR_WA(0x00, 0xA9)];
+//    footer.backgroundColor = [UIColor COLOR_WA(0xFF, 0xFF)];
     
     UILabel *bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(20, 15, CGRectGetWidth(footer.bounds) - 15 * 2, 30)];
     bioTitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
@@ -189,7 +242,21 @@
     [bioTitle sizeToFit];
     [footer addSubview:bioTitle];
     
-    SSTextView *bio = [[SSTextView alloc] initWithFrame:CGRectMake(15, CGRectGetMaxY(bioTitle.frame) - 5, CGRectGetWidth(footer.bounds) - 15 * 2, CGRectGetHeight(footer.bounds) - 33 - CGRectGetMaxY(bioTitle.frame) + 10)];
+    CGFloat hintHeight = 0;
+    CGFloat marginBottom = 10;
+    if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
+        UILabel *hint = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(footer.bounds) - 15 * 2, hintHeight)];
+        hint.text = NSLocalizedString(@"Cropped area displays as portrait.", nil);
+        hint.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
+        hint.textColor = [UIColor COLOR_WA(0xCC, 0xFF)];
+        hint.backgroundColor = [UIColor clearColor];
+        [hint sizeToFit];
+        hintHeight = CGRectGetHeight(hint.bounds);
+        hint.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2, CGRectGetHeight(self.view.bounds) - marginBottom - CGRectGetHeight(hint.bounds) / 2);
+        [self.view addSubview:hint];
+    }
+    
+    SSTextView *bio = [[SSTextView alloc] initWithFrame:CGRectMake(20 - 8, CGRectGetMaxY(bioTitle.frame), CGRectGetWidth(footer.bounds) - (20 - 8) * 2, CGRectGetHeight(footer.bounds) - CGRectGetMaxY(bioTitle.frame) - hintHeight - marginBottom)];
     bio.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
     bio.placeholder = NSLocalizedString(@"Bio is empty, yet.", nil);
     bio.placeholderTextColor = [UIColor COLOR_ALUMINUM];
@@ -197,22 +264,27 @@
     bio.backgroundColor = [UIColor clearColor];
     bio.delegate = self;
     bio.tag = kTagBio;
-    [footer addSubview:bio];
+    [footer insertSubview:bio belowSubview:bioTitle];
     self.bio = bio;
     
     [self.view addSubview:footer];
     self.footer = footer;
     
-    if ([UIScreen mainScreen].ratio == UIScreenRatioLong) {
-        UILabel *hint = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(footer.bounds) - 15 * 2, 30)];
-        hint.text = NSLocalizedString(@"Cropped area displays as portrait.", nil);
-        hint.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
-        hint.textColor = [UIColor COLOR_WA(0xCC, 0xFF)];
-        hint.backgroundColor = [UIColor clearColor];
-        [hint sizeToFit];
-        hint.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2, CGRectGetHeight(self.view.bounds) - 10 - CGRectGetHeight(hint.bounds) / 2);
-        [self.view addSubview:hint];
-    }
+#ifdef DEBUG
+    UIImageView *preview = [[UIImageView alloc] initWithFrame:CGRectMake(100, 5, 80, 80 / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds))];
+    preview.backgroundColor = [UIColor whiteColor];
+    preview.contentMode = UIViewContentModeScaleAspectFit;
+    [footer addSubview:preview];
+    self.preview = preview;
+    
+    UIImageView *previewTh = [[UIImageView alloc] initWithFrame:CGRectMake(200, 5 + CGRectGetHeight(self.header.bounds) * 80 / CGRectGetWidth(self.view.bounds), 80, 80 )];
+    previewTh.backgroundColor = [UIColor whiteColor];
+    previewTh.contentMode = UIViewContentModeScaleAspectFit;
+    [footer addSubview:previewTh];
+    self.previewTh = previewTh;
+    
+#endif
+    
 }
 
 - (void)viewDidLoad
@@ -391,7 +463,6 @@
 
 - (void)fillIdentity:(Identity *)identity
 {
-    
     NSString *dataName = [self.data valueForKey:kModelKeyName];
     if (dataName) {
         [self fillName:dataName];
@@ -405,8 +476,8 @@
     }
     
     CGFloat offset = CGRectGetHeight(self.name.bounds) / 2 - CGRectGetHeight(self.identityId.bounds) / 2;
-    self.name.frame = CGRectOffset(self.name.frame, 0, -offset);
-    self.identityId.frame = CGRectOffset(self.identityId.frame, 0, -offset + 2);
+    self.name.center = CGPointMake(self.header.center.x, self.header.center.y - offset);
+    self.identityId.center = CGPointMake(self.header.center.x, CGRectGetMaxY(self.name.frame) + CGRectGetHeight(self.identityId.bounds) / 2);
     
     NSString *dataBio = [self.data valueForKey:kModelKeyBio];
     if (dataBio) {
@@ -419,9 +490,9 @@
 - (void)fillName:(NSString *)name
 {
     self.name.text = name;
-    CGSize size = [self.name sizeThatFits:CGSizeMake(260, 50)];
+    CGSize size = [self.name sizeThatFits:CGSizeMake(190, 50)];
     CGPoint p = self.header.center;
-    self.name.frame = (CGRect){{p.x - 260 / 2, p.y - size.height / 2},{260, size.height}};
+    self.name.frame = (CGRect){{p.x - 190 / 2, p.y - size.height / 2},{190, size.height}};
 }
 
 - (void)fillIdentityDisplayName:(NSString *)displayName
@@ -429,34 +500,86 @@
     self.identityId.text = displayName;
     CGSize size = [self.identityId sizeThatFits:CGSizeMake(260, 50)];
     CGPoint p = self.header.center;
-    self.identityId.frame = (CGRect){{p.x - 260 / 2, p.y + size.height / 2},{260, size.height}};
+    self.identityId.frame = (CGRect){{p.x - 190 / 2, p.y + size.height / 2},{190, size.height}};
 }
 
 - (void)fillAvatar:(UIImage *)image
 {
+    float paddingRatio = 0.5;
+    
     [self.imageScrollView setMinimumZoomScale:1.0];
     [self.imageScrollView setMaximumZoomScale:1.0];
     [self.imageScrollView setZoomScale:1.0];
     
     CGSize imageSize = image.size;
-    self.avatar.frame = (CGRect){{0, 0}, imageSize};
     
-    CGFloat scale = 1.0;
-    CGSize frameSize = self.imageScrollView.frame.size;
-    if (imageSize.width / imageSize.height > frameSize.width / frameSize.height) {
-        scale = frameSize.height / imageSize.height;
+    CGSize size = CGSizeZero;
+    
+    CGFloat ratio = 1.0;
+    
+    // Enhance content range
+    size.width = imageSize.width * (1 + paddingRatio * 2);
+    if (size.width >= 320) {
+        NSLog(@"imageSize %@", NSStringFromCGSize(imageSize));
+        // Large
+        size.height = size.width / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds);
+        NSLog(@"contentSize calculated %@", NSStringFromCGSize(size));
+        BOOL widthFillFlag = YES;
+        CGPoint center = CGPointZero;
+        if (imageSize.height > size.height) {
+            // fix for long long vertical pic
+            size.height = imageSize.height;
+            // resign width
+            size.width = size.height / CGRectGetHeight(self.view.bounds) * CGRectGetWidth(self.view.bounds);
+            widthFillFlag = NO;
+            NSLog(@"contentSize fixed %@", NSStringFromCGSize(size));
+            center = CGPointMake(size.width / (1 + paddingRatio * 2), size.height / 2);
+        } else {
+            center = CGPointMake(size.width / (1 + paddingRatio * 2), size.height * ((CGRectGetHeight(self.header.bounds) + 320 / 2) /  CGRectGetHeight(self.view.bounds)));
+        }
+        self.imageScrollRange.frame = (CGRect){CGPointZero, size};
+        self.imageScrollRange.backgroundColor = [UIColor lightGrayColor];
+        self.avatar.frame = (CGRect){CGPointZero, imageSize};
+        self.avatar.center = center;
+        self.avatar.image = image;
+        
+        if (widthFillFlag) {
+            ratio = CGRectGetWidth(self.imageScrollView.bounds) / (size.width / (1 + paddingRatio * 2));
+        } else {
+            ratio = CGRectGetHeight(self.imageScrollView.bounds) / size.height ;
+        }
+        NSLog(@"ratio: %f", ratio);
     } else {
-        scale = frameSize.width / imageSize.width;
+        NSLog(@"imageSize %@", NSStringFromCGSize(imageSize));
+        // small
+        size.width = 320;
+        size.height = size.width / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds);
+        
+        CGPoint center = CGPointZero;
+        
+        center = CGPointMake(size.width / (1 + paddingRatio * 2), size.height * ((CGRectGetHeight(self.header.bounds) + 320 / 2) /  CGRectGetHeight(self.view.bounds)));
+        
+        self.imageScrollRange.frame = (CGRect){CGPointZero, size};
+        self.imageScrollRange.backgroundColor = [UIColor lightGrayColor];
+        self.avatar.frame = (CGRect){CGPointZero, imageSize};
+        self.avatar.center = center;
+        self.avatar.image = image;
+        
+        ratio = CGRectGetWidth(self.imageScrollView.bounds) / (size.width / (1 + paddingRatio * 2));
+        
     }
-    self.avatar.image = image;
     
-    [self.imageScrollView setMinimumZoomScale:scale];
+    CGFloat scale = ratio;
+    [self.imageScrollView setMinimumZoomScale:scale / (1 + paddingRatio * 2)];
     [self.imageScrollView setMaximumZoomScale:scale * 8];
     [self.imageScrollView setZoomScale:scale];
     
+    
     CGPoint p = self.imageScrollView.contentOffset;
-    p.x = p.x / 2;
-    self.imageScrollView.contentOffset = p;
+    CGSize s = self.imageScrollView.contentSize;
+    NSLog(@"scaled params: %@, %@ at scale %f", NSStringFromCGPoint(p), NSStringFromCGSize(s), scale);
+    
+    self.imageScrollView.contentOffset = CGPointMake(self.imageScrollView.contentSize.width / 2 - 160, (CGRectGetHeight(self.header.bounds) + 160));
     
     [self.data removeObjectForKey:kModelKeyImageDirty];
 }
@@ -471,22 +594,45 @@
 #pragma mark Gesutre
 - (void)handleSingleTap:(UIGestureRecognizer *)gestureRecognizer
 {
-    if (self.activeInputView.tag == kTagBio) {
-        [self.bio resignFirstResponder];
+    if (self.activeInputView) {
+        switch (self.activeInputView.tag) {
+            case kTagName:
+                [self.activeInputView resignFirstResponder];
+                break;
+            case kTagBio:
+                [self.activeInputView resignFirstResponder];
+                break;
+            default:
+                break;
+        }
     }
 }
 
 - (void)handleDoubleTap:(UIGestureRecognizer *)gestureRecognizer
 {
-    // double tap zooms in
-    float newScale = [self.imageScrollView zoomScale] * ZOOM_STEP;
-    CGRect zoomRect = [self zoomRectForScale:newScale withCenter:[gestureRecognizer locationInView:gestureRecognizer.view]];
-    [self.imageScrollView zoomToRect:zoomRect animated:YES];
+//    // double tap zooms in
+//    float newScale = [self.imageScrollView zoomScale] * ZOOM_STEP;
+//    CGRect zoomRect = [self zoomRectForScale:newScale withCenter:[gestureRecognizer locationInView:gestureRecognizer.view]];
+//    [self.imageScrollView zoomToRect:zoomRect animated:YES];
+    if (self.imageScrollView.zoomScale != self.imageScrollView.minimumZoomScale) {
+        float f = self.imageScrollView.zoomScale;
+        CGRect r = CGRectMake(0, 0, self.imageScrollView.contentSize.width / f, self.imageScrollView.contentSize.height / f);
+        [self.imageScrollView zoomToRect:r animated:YES];
+    } else {
+        float f = self.imageScrollView.zoomScale;
+        CGRect r = CGRectMake(self.imageScrollView.contentSize.width / f / 2 / 2, CGRectGetHeight(self.header.bounds) + 160, self.imageScrollView.contentSize.width / f / 2, self.imageScrollView.contentSize.height / f / 2);
+        [self.imageScrollView zoomToRect:r animated:YES];
+        
+//         self.imageScrollView.zoomScale = self.imageScrollView.minimumZoomScale * 2;
+    }
+    
     
     id num = [self.data valueForKey:kModelKeyImageDirty];
     if (!num) {
         [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
     }
+    
+    
 }
 
 - (void)handleTwoFingerTap:(UIGestureRecognizer *)gestureRecognizer
@@ -507,7 +653,7 @@
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
     NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
     UIScrollView *scrollView = (UIScrollView *)self.view;
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
@@ -516,7 +662,7 @@
     
     // If active text field is hidden by keyboard, scroll it so it's visible
     // Your application might not need or want this behavior.
-    CGRect aRect = self.view.frame;
+    CGRect aRect = self.view.bounds;
     aRect.size.height -= kbSize.height;
     CGPoint origin = [self.view convertPoint:self.activeInputView.frame.origin fromView:self.activeInputView.superview];
     if (!CGRectContainsPoint(aRect, origin) ) {
@@ -538,7 +684,7 @@
 - (void)goBack:(id)view
 {
     if ([self.name isFirstResponder]) {
-        [self textFieldDidEndEditing:self.name];
+        [self textViewDidEndEditing:self.inputName];
     }
     
     if ([self.bio isFirstResponder]) {
@@ -561,14 +707,15 @@
         UIImage *large = [dict valueForKey:kKeyImageLarge];
         
         if (full) {
-            if (self.isEditUser) {
-                [self.model updateUserAvatar:full withLarge:large withSmall:nil];
-            } else {
-                [self.model updateIdentity:self.identity withAvatar:full withLarge:large withSmall:nil];
-            }
+//            if (self.isEditUser) {
+//                [self.model updateUserAvatar:full withLarge:large withSmall:nil];
+//            } else {
+//                [self.model updateIdentity:self.identity withAvatar:full withLarge:large withSmall:nil];
+//            }
         }
     }
     
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self dismissModalViewControllerAnimated:YES];
 }
 
@@ -602,6 +749,13 @@
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
     switch (textView.tag) {
+        case kTagName:
+            self.activeInputView = nil;
+            textView.hidden = YES;
+            self.name.hidden = NO;
+            self.identityId.hidden = YES;
+            [self.data setValue:textView.text forKey:kModelKeyName];
+            break;
         case kTagBio:
             self.activeInputView = nil;
             [self.data setValue:textView.text forKey:kModelKeyBio];
@@ -615,6 +769,9 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     switch (textView.tag) {
+        case kTagName:
+            self.activeInputView = textView;
+            break;
         case kTagBio:
             self.activeInputView = textView;
             break;
@@ -624,79 +781,79 @@
     }
 }
 
-#pragma mark UITextFieldDelegate
-- (void)textFieldDidBeginEditing:(UITextField *)textField
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    switch (textField.tag) {
-        case kTagName:
-            self.activeInputView = textField;
-            if (!self.isEditUser) {
-                if (self.identityId.hidden == NO) {
-                    
-                    [UIView animateWithDuration:0.4
-                                          delay:0
-                                        options:UIViewAnimationOptionCurveEaseInOut
-                                     animations:^{
-                                         self.identityId.alpha = 0;
-                                         self.identityId.hidden = YES;
-                                     }
-                                     completion:^(BOOL finished) {
-                                         self.identityId.alpha = 100;
-                                     }];
-                    
+    switch (textView.tag) {
+        case kTagName:{
+            if ([@"\n" isEqualToString:text]) {
+                [textView resignFirstResponder];
+                return NO;
+            }
+            NSString *original = textView.text;
+            NSMutableString *newText = [NSMutableString stringWithString:text];
+            [newText replaceOccurrencesOfString:@"\n" withString:@"\n" options:NSCaseInsensitiveSearch range:NSMakeRange(0, text.length)];
+            NSString *result = [NSString stringWithFormat:@"%@%@%@", [original substringToIndex:range.location], text, [original substringFromIndex:(range.location + range.length) ]];
+            if (result) {
+                NSData *asciiData = [result dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+                if (asciiData.length > 40) {
+                    return NO;
                 }
             }
+        }  break;
+        case kTagBio:
             break;
             
         default:
             break;
     }
+    return YES;
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
+- (void)textViewDidChange:(UITextView *)textView
 {
-    switch (textField.tag) {
-        case kTagName:
-            self.activeInputView = nil;
-            if (!self.isEditUser) {
-                if (self.identityId.hidden == YES) {
-                    self.identityId.alpha = 0;
-                    self.identityId.hidden = NO;
-                    [UIView animateWithDuration:0.4
-                                          delay:0
-                                        options:UIViewAnimationOptionCurveEaseInOut
-                                     animations:^{
-                                         self.identityId.alpha = 100;
-                                     }
-                                     completion:nil];
-                }
+    switch (textView.tag) {
+        case kTagName:{
+            CGSize size = [textView sizeThatFits:CGSizeMake(CGRectGetWidth(textView.bounds), MAXFLOAT)];
+            NSLog(@"size %@ for %@", NSStringFromCGSize(size), textView.text);
+            if (size.height > 70) {
+                size.height = 70;
             }
-            [self.data setValue:textField.text forKey:kModelKeyName];
+            textView.bounds = (CGRect){CGPointZero, {190 + 8 * 2, size.height}};
+            textView.center = self.header.center;
+            textView.contentOffset = CGPointZero;
+        }   break;
+        case kTagBio:
             break;
             
         default:
             break;
     }
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    return NO;
 }
 
 #pragma mark UIScrollViewDelegate methods
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
-    return [scrollView viewWithTag:kTagZoom];
+//    return [scrollView viewWithTag:kTagZoom];
+    return self.imageScrollRange;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    
+    CGPoint p = self.imageScrollView.contentOffset;
+    CGSize s = self.imageScrollView.contentSize;
+    NSLog(@"scrollViewDidScroll content offset size params: %@, %@", NSStringFromCGPoint(p), NSStringFromCGSize(s));
+    
     id num = [self.data valueForKey:kModelKeyImageDirty];
     if (!num) {
         [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
+    }
+    
+    if (self.preview) {
+        NSDictionary *dict = [self cropedImages];
+        self.preview.image = [dict valueForKey:kKeyImageFull];
+        self.previewTh.image = [dict valueForKey:kKeyImageLarge];
     }
 }
 
@@ -705,6 +862,12 @@
     id num = [self.data valueForKey:kModelKeyImageDirty];
     if (!num) {
         [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
+    }
+    
+    if (self.preview) {
+        NSDictionary *dict = [self cropedImages];
+        self.preview.image = [dict valueForKey:kKeyImageFull];
+        self.previewTh.image = [dict valueForKey:kKeyImageLarge];
     }
 }
 
