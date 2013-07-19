@@ -43,6 +43,9 @@
 @property (nonatomic) BOOL                          isEditing;
 @property (nonatomic, assign) BOOL                  isInited;
 
+@property (nonatomic, strong) EFLocation            *lastUpdatedLocation;
+@property (nonatomic, strong) NSTimer               *timer;
+
 @end
 
 @interface EFMarauderMapViewController (Test)
@@ -113,6 +116,9 @@
                                           for (EFRouteLocation *routeLocation in routeLocations) {
                                               [self.mapDataSource addRouteLocation:routeLocation toMapView:self.mapView];
                                           }
+                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                              [self.tableView reloadData];
+                                          });
                                       }
                                       failure:^(NSError *error){
                                           NSLog(@"%@", error);
@@ -139,6 +145,27 @@
 
 @implementation EFMarauderMapViewController
 
+double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
+	//-------------------------------------------------------------------------
+	// Algorithm found at http://www.movable-type.co.uk/scripts/latlong.html
+	//
+	// Spherical Law of Cosines
+	//
+	// Formula: θ = atan2( 	sin(Δlon) * cos(lat2),
+	//						cos(lat1) * sin(lat2) − sin(lat1) * cos(lat2) * cos(Δlon) )
+	// JavaScript:
+	//
+	//	var y = Math.sin(dLon) * Math.cos(lat2);
+	//	var x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+	//	var brng = Math.atan2(y, x).toDeg();
+	//-------------------------------------------------------------------------
+	double dLon = lon2 - lon1;
+	double y = sin(dLon) * cos(lat2);
+	double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon);
+    
+	return atan2(y, x);
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -159,6 +186,13 @@
     }
     
     return self;
+}
+
+- (void)dealloc {
+    if (self.timer) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
 }
 
 - (void)viewDidLoad {
@@ -356,6 +390,49 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     EFMapPerson *person = [[EFMapPerson alloc] init];
     person.avatarImage = avatar;
     
+    EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+    
+    NSArray *userLocations = [self.personDictionary valueForKey:[identity identityIdValue].identity_id];
+    if (userLocations && userLocations.count) {
+        EFLocation *latestLocation = userLocations[0];
+        NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:latestLocation.timestamp];
+        
+        if (timeInterval >= 0.0f && timeInterval <= 60.0f) {
+            person.connectState = kEFMapPersonConnectStateOnline;
+        } else {
+            person.connectState = kEFMapPersonConnectStateOffline;
+        }
+        
+        if (destination) {
+            CLLocationCoordinate2D destinationCoordinate = destination.coordinate;
+            CLLocation *destinationLocation = [[CLLocation alloc] initWithLatitude:destinationCoordinate.latitude longitude:destinationCoordinate.longitude];
+            
+            CLLocationCoordinate2D latestCoordinate = latestLocation.coordinate;
+            CLLocation *latestCLLocation = [[CLLocation alloc] initWithLatitude:latestCoordinate.latitude longitude:latestCoordinate.longitude];
+            
+            CLLocationDistance distance = [destinationLocation distanceFromLocation:latestCLLocation];
+            if (distance < 50.0f) {
+                person.locationState = kEFMapPersonLocationStateArrival;
+            } else {
+                person.locationState = kEFMapPersonLocationStateOnTheWay;
+            }
+            person.distance = distance;
+            
+            CGFloat angle = HeadingInRadians(
+                                             destinationCoordinate.latitude,
+                                             destinationCoordinate.longitude,
+                                             latestCoordinate.latitude,
+                                             latestCoordinate.longitude);
+            person.angle = angle;
+        } else {
+            person.locationState = kEFMapPersonLocationStateOnTheWay;
+            person.distance = 0.0f;
+        }
+    } else {
+        person.locationState = kEFMapPersonLocationStateUnknow;
+        person.connectState = kEFMapPersonConnectStateOffline;
+    }
+    
     cell.person = person;
     
     return cell;
@@ -403,8 +480,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(fixedCoordinate, 5000.0f, 5000.0f);
         [self.mapView setRegion:region animated:YES];
         
-        [self initTestData];
-        [self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
     }
     
     EFLocation *position = [[EFLocation alloc] init];
@@ -412,7 +490,22 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     position.timestamp = [NSDate date];
     position.accuracy = currentLocation.horizontalAccuracy;
     
-    [self.model.apiServer updateLocation:position
+    self.lastUpdatedLocation = position;
+    
+    if (!self.timer) {
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0f
+                                                      target:self
+                                                    selector:@selector(timerRunloop:)
+                                                    userInfo:nil
+                                                     repeats:YES];
+        [self timerRunloop:self.timer];
+    }
+}
+
+#pragma mark - Timer Runloop
+
+- (void)timerRunloop:(NSTimer *)timer {
+    [self.model.apiServer updateLocation:self.lastUpdatedLocation
                              withCrossId:[self.cross.cross_id integerValue]
                                  success:nil
                                  failure:nil];
@@ -422,6 +515,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(IdentityId *)identityId {
     [self.personDictionary setValue:locations forKey:identityId.identity_id];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations {
@@ -508,32 +604,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
     [self _hideCalloutView];
     self.mapView.editingState = kEFMapViewEditingStateNormal;
-}
-
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    return;
-    
-    CLLocation *location = userLocation.location;
-    
-    if (self.isInited) {
-        self.isInited = NO;
-        
-        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, 5000.0f, 5000.0f);
-        [self.mapView setRegion:region animated:YES];
-        
-        [self initTestData];
-        [self.tableView reloadData];
-    }
-    
-    EFLocation *position = [[EFLocation alloc] init];
-    position.coordinate = location.coordinate;
-    position.timestamp = [NSDate date];
-    position.accuracy = location.horizontalAccuracy;
-    
-    [self.model.apiServer updateLocation:position
-                             withCrossId:[self.cross.cross_id integerValue]
-                                 success:nil
-                                 failure:nil];
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {

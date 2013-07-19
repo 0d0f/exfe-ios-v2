@@ -69,6 +69,20 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 - (void)addLocation:(EFLocation *)location {
 }
 
+#pragma mark - Property Accessor
+
+- (EFRouteLocation *)destinationLocation {
+    EFRouteLocation *destination = nil;
+    for (EFRouteLocation *location in self.routeLocations) {
+        if (location.locationTytpe == kEFRouteLocationTypeDestination) {
+            destination = location;
+            break;
+        }
+    }
+    
+    return destination;
+}
+
 #pragma mark - RouteLocation
 
 - (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView {

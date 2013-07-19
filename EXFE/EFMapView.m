@@ -307,8 +307,6 @@ static UIView * ReverseSubviews(UIView *view) {
     annatationView.delegate = self;
     [baseView addSubview:annatationView];
     self.editingAnnotatoinView = annatationView;
-    
-    self.editingState = kEFMapViewEditingStateNormal;
 }
 
 - (void)_initOperationButtons {
@@ -359,6 +357,8 @@ static UIView * ReverseSubviews(UIView *view) {
     [self _initOperationBaseView];
     [self _initEditingViews];
     [self _initOperationButtons];
+    
+    self.editingState = kEFMapViewEditingStateNormal;
     
     // touch down gesture
 //    self.touchDownGestureRecognizer = [[EFTouchDownGestureRecognizer alloc] init];

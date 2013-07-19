@@ -29,6 +29,7 @@ EFHTTPStreamingDelegate
 
 @property (nonatomic, assign) NSInteger crossId;
 @property (nonatomic, weak) id <EFMarauderMapDataSourceDelegate> delegate;
+@property (nonatomic, readonly) EFRouteLocation *destinationLocation;
 
 - (id)initWithCrossId:(NSInteger)crossId;
 

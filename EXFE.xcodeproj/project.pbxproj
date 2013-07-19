@@ -1734,6 +1734,9 @@
 		76B124551798F8CE00A73E59 /* EFHTTPStreaming.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B124541798F8CE00A73E59 /* EFHTTPStreaming.m */; };
 		76B124561798F8CE00A73E59 /* EFHTTPStreaming.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B124541798F8CE00A73E59 /* EFHTTPStreaming.m */; };
 		76B124571798F8CE00A73E59 /* EFHTTPStreaming.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B124541798F8CE00A73E59 /* EFHTTPStreaming.m */; };
+		76B1245917992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B1245817992A5300A73E59 /* map_arrow_12g5@2x.png */; };
+		76B1245A17992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B1245817992A5300A73E59 /* map_arrow_12g5@2x.png */; };
+		76B1245B17992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B1245817992A5300A73E59 /* map_arrow_12g5@2x.png */; };
 		76BC7B0A176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
 		76BC7B0B176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
 		76BC7B0C176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
@@ -2770,6 +2773,7 @@
 		76B1244E1798ECF000A73E59 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		76B124531798F8CE00A73E59 /* EFHTTPStreaming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFHTTPStreaming.h; sourceTree = "<group>"; };
 		76B124541798F8CE00A73E59 /* EFHTTPStreaming.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFHTTPStreaming.m; sourceTree = "<group>"; };
+		76B1245817992A5300A73E59 /* map_arrow_12g5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_arrow_12g5@2x.png"; sourceTree = "<group>"; };
 		76BC7B08176EAC3D003F4FBA /* EFQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFQueueManager.h; sourceTree = "<group>"; };
 		76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFQueueManager.m; sourceTree = "<group>"; };
 		76BC7B0F176EB9C7003F4FBA /* EFRunLoopOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRunLoopOperation.h; sourceTree = "<group>"; };
@@ -4203,6 +4207,7 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				76B1245817992A5300A73E59 /* map_arrow_12g5@2x.png */,
 				76B124351798398400A73E59 /* map_remove_15@2x.png */,
 				76B124361798398400A73E59 /* map_remove_30@2x.png */,
 				76B1242A1798331A00A73E59 /* map_arrow_blue@2x.png */,
@@ -5623,6 +5628,7 @@
 				76B1242C1798331A00A73E59 /* map_arrow_blue@2x.png in Resources */,
 				76B124381798398400A73E59 /* map_remove_15@2x.png in Resources */,
 				76B1243B1798398400A73E59 /* map_remove_30@2x.png in Resources */,
+				76B1245A17992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6061,6 +6067,7 @@
 				76B1242D1798331A00A73E59 /* map_arrow_blue@2x.png in Resources */,
 				76B124391798398400A73E59 /* map_remove_15@2x.png in Resources */,
 				76B1243C1798398400A73E59 /* map_remove_30@2x.png in Resources */,
+				76B1245B17992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6497,6 +6504,7 @@
 				76B1242B1798331A00A73E59 /* map_arrow_blue@2x.png in Resources */,
 				76B124371798398400A73E59 /* map_remove_15@2x.png in Resources */,
 				76B1243A1798398400A73E59 /* map_remove_30@2x.png in Resources */,
+				76B1245917992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

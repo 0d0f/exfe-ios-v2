@@ -12,7 +12,7 @@
 typedef enum {
     kEFMapPersonConnectStateUnknow = 0,
     kEFMapPersonConnectStateOnline,
-    EFMapPersonConnectStateOffline,
+    kEFMapPersonConnectStateOffline,
 } EFMapPersonConnectState;
 
 typedef enum {
