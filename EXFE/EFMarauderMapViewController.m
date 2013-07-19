@@ -19,13 +19,16 @@
 #import "EFDataManager+Image.h"
 #import "IdentityId.h"
 #import "Util.h"
+#import "EFPersonAnnotation.h"
+#import "EFPersonAnnotationView.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 
 @interface EFMarauderMapViewController ()
 
 @property (nonatomic, strong) EFMarauderMapDataSource *mapDataSource;
-//@property (nonatomic, strong) EFMapPeopleDataSource *dataSource;
+
+@property (nonatomic, strong) NSMutableDictionary   *personAnnotationDictionary;
 @property (nonatomic, strong) NSMutableDictionary   *personDictionary;
 @property (nonatomic, strong) MKAnnotationView      *meAnnotationView;
 @property (nonatomic, strong) NSArray               *invitations;
@@ -48,39 +51,6 @@
 
 @end
 
-@interface EFMarauderMapViewController (Test)
-- (void)initTestData;
-@end
-
-@implementation EFMarauderMapViewController (Test)
-
-- (void)initTestData {
-//    for (int i = 0; i < 6; i++) {
-//        CLLocation *nowLocation = self.mapView.userLocation.location;
-//        NSUInteger pointCount = 5;
-//        NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:pointCount];
-//        
-//        CLLocationCoordinate2D nowLocationCoordinate = nowLocation.coordinate;
-//        for (int i = 0; i < pointCount - 1; i++) {
-//            EFMapPoint *point = [[EFMapPoint alloc] init];
-//            point.coordinate2D = CLLocationCoordinate2DMake(nowLocationCoordinate.latitude + (rand() % 2 ? 1 : -1) * (rand() % 300) * 0.001, nowLocationCoordinate.longitude + (rand() % 2 ? 1 : -1) * (rand() % 300) * 0.001);
-//            [points addObject:point];
-//        }
-//        EFMapPoint *point = [[EFMapPoint alloc] init];
-//        point.coordinate2D = CLLocationCoordinate2DMake(nowLocationCoordinate.latitude, nowLocationCoordinate.longitude);
-//        [points addObject:point];
-//        
-//        EFMapPerson *person = [[EFMapPerson alloc] init];
-//        person.pathMapPoints = points;
-//        person.distence = rand() % 300;
-//        person.avatarImage = [UIImage imageNamed:[NSString stringWithFormat:@"%d", i % 6]];
-//        
-//        [self.dataSource addPerson:person];
-//    }
-}
-
-@end
-
 @interface EFMarauderMapViewController (Private)
 
 - (void)_hideCalloutView;
@@ -90,6 +60,8 @@
 
 - (void)_getRoute;
 - (void)_postRoute;
+
+- (void)_zoomWithLocations:(NSArray *)locations;
 
 @end
 
@@ -141,24 +113,15 @@
 #endif
 }
 
+- (void)_zoomWithLocations:(NSArray *)locations {
+    
+}
+
 @end
 
 @implementation EFMarauderMapViewController
 
 double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
-	//-------------------------------------------------------------------------
-	// Algorithm found at http://www.movable-type.co.uk/scripts/latlong.html
-	//
-	// Spherical Law of Cosines
-	//
-	// Formula: θ = atan2( 	sin(Δlon) * cos(lat2),
-	//						cos(lat1) * sin(lat2) − sin(lat1) * cos(lat2) * cos(Δlon) )
-	// JavaScript:
-	//
-	//	var y = Math.sin(dLon) * Math.cos(lat2);
-	//	var x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-	//	var brng = Math.atan2(y, x).toDeg();
-	//-------------------------------------------------------------------------
 	double dLon = lon2 - lon1;
 	double y = sin(dLon) * cos(lat2);
 	double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon);
@@ -172,7 +135,8 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
         self.personPositionOverlayMap = [[NSMutableDictionary alloc] initWithCapacity:6];
         self.personPositionOverlayViewMap = [[NSMutableDictionary alloc] initWithCapacity:6];
         self.personOverlayMap = [[NSMutableDictionary alloc] initWithCapacity:6];
-//        self.dataSource = [[EFMapPeopleDataSource alloc] init];
+        
+        self.personAnnotationDictionary = [[NSMutableDictionary alloc] initWithCapacity:6];
         self.personDictionary = [[NSMutableDictionary alloc] initWithCapacity:6];
         
         self.locationManager = [[CLLocationManager alloc] init];
@@ -515,9 +479,28 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(IdentityId *)identityId {
     [self.personDictionary setValue:locations forKey:identityId.identity_id];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-    });
+    
+    if (locations && locations.count) {
+        EFPersonAnnotation *personAnnotation = [self.personAnnotationDictionary valueForKey:identityId.identity_id];
+        if (!personAnnotation) {
+            personAnnotation = [[EFPersonAnnotation alloc] init];
+            [self.personAnnotationDictionary setValue:personAnnotation forKey:identityId.identity_id];
+        }
+
+        EFLocation *lastesLocation = locations[0];
+        personAnnotation.coordinate = lastesLocation.coordinate;
+        NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:lastesLocation.timestamp];
+        if (timeInterval >= 0 && timeInterval <= 60) {
+            personAnnotation.isOnline = YES;
+        } else {
+            personAnnotation.isOnline = NO;
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.mapView addAnnotation:personAnnotation];
+            [self.tableView reloadData];
+        });
+    }
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations {
@@ -608,11 +591,11 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     if ([annotation isKindOfClass:[EFAnnotation class]]) {
-        static NSString *Identitier = @"Location";
+        static NSString *Identifier = @"Location";
         
-        EFAnnotationView *annotationView = (EFAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:Identitier];
+        EFAnnotationView *annotationView = (EFAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:Identifier];
         if (nil == annotationView) {
-            annotationView = [[EFAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identitier];
+            annotationView = [[EFAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identifier];
             annotationView.canShowCallout = NO;
             annotationView.mapView = self.mapView;
         }
@@ -621,11 +604,11 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         
         return annotationView;
     } else if ([annotation isKindOfClass:[EFCalloutAnnotation class]]) {
-        static NSString *Identitier = @"Callout";
+        static NSString *Identifier = @"Callout";
         
-        EFCalloutAnnotationView *callout = (EFCalloutAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:Identitier];
+        EFCalloutAnnotationView *callout = (EFCalloutAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:Identifier];
         if (nil == callout) {
-            callout = [[EFCalloutAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identitier];
+            callout = [[EFCalloutAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identifier];
             callout.mapView = mapView;
         }
         
@@ -651,6 +634,17 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         };
         
         return callout;
+    } else if ([annotation isKindOfClass:[EFPersonAnnotation class]]) {
+        static NSString *Identifier = @"Person";
+        
+        EFPersonAnnotationView *personAnnotationView = (EFPersonAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:Identifier];
+        if (nil == personAnnotationView) {
+            personAnnotationView = [[EFPersonAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identifier];
+            personAnnotationView.canShowCallout = NO;
+        }
+        personAnnotationView.annotation = annotation;
+        
+        return personAnnotationView;
     }
     
     return nil;

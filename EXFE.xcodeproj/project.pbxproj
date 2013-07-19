@@ -1563,6 +1563,15 @@
 		7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
 		7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */; };
+		766C9829179933D00064B5BC /* EFPersonAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 766C9828179933D00064B5BC /* EFPersonAnnotationView.m */; };
+		766C982A179933D00064B5BC /* EFPersonAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 766C9828179933D00064B5BC /* EFPersonAnnotationView.m */; };
+		766C982B179933D00064B5BC /* EFPersonAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 766C9828179933D00064B5BC /* EFPersonAnnotationView.m */; };
+		766C9835179944240064B5BC /* map_dot_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 766C9833179944240064B5BC /* map_dot_grey@2x.png */; };
+		766C9836179944240064B5BC /* map_dot_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 766C9833179944240064B5BC /* map_dot_grey@2x.png */; };
+		766C9837179944240064B5BC /* map_dot_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 766C9833179944240064B5BC /* map_dot_grey@2x.png */; };
+		766C9838179944240064B5BC /* map_dot_red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 766C9834179944240064B5BC /* map_dot_red@2x.png */; };
+		766C9839179944240064B5BC /* map_dot_red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 766C9834179944240064B5BC /* map_dot_red@2x.png */; };
+		766C983A179944240064B5BC /* map_dot_red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 766C9834179944240064B5BC /* map_dot_red@2x.png */; };
 		7670126E1729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
 		7670126F1729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
 		767012701729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
@@ -1737,6 +1746,9 @@
 		76B1245917992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B1245817992A5300A73E59 /* map_arrow_12g5@2x.png */; };
 		76B1245A17992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B1245817992A5300A73E59 /* map_arrow_12g5@2x.png */; };
 		76B1245B17992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B1245817992A5300A73E59 /* map_arrow_12g5@2x.png */; };
+		76B1245E179932A000A73E59 /* EFPersonAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1245D1799329A00A73E59 /* EFPersonAnnotation.m */; };
+		76B1245F179932A000A73E59 /* EFPersonAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1245D1799329A00A73E59 /* EFPersonAnnotation.m */; };
+		76B12460179932A000A73E59 /* EFPersonAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1245D1799329A00A73E59 /* EFPersonAnnotation.m */; };
 		76BC7B0A176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
 		76BC7B0B176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
 		76BC7B0C176EAC3D003F4FBA /* EFQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */; };
@@ -2672,6 +2684,10 @@
 		765E150D17745235003F4827 /* EFDataManager+Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EFDataManager+Image.m"; sourceTree = "<group>"; };
 		7661C7EA1738B15400133F10 /* EFErrorHandlerCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFErrorHandlerCenter.h; sourceTree = "<group>"; };
 		7661C7EB1738B15400133F10 /* EFErrorHandlerCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFErrorHandlerCenter.m; sourceTree = "<group>"; };
+		766C9827179933D00064B5BC /* EFPersonAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPersonAnnotationView.h; sourceTree = "<group>"; };
+		766C9828179933D00064B5BC /* EFPersonAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPersonAnnotationView.m; sourceTree = "<group>"; };
+		766C9833179944240064B5BC /* map_dot_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_dot_grey@2x.png"; sourceTree = "<group>"; };
+		766C9834179944240064B5BC /* map_dot_red@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_dot_red@2x.png"; sourceTree = "<group>"; };
 		7670126A1729054500B5445E /* EFPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPopoverController.m; sourceTree = "<group>"; };
 		7670126B1729054500B5445E /* EFArrowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFArrowView.m; sourceTree = "<group>"; };
 		7670126C1729054500B5445E /* EFPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPopoverController.h; sourceTree = "<group>"; };
@@ -2774,6 +2790,8 @@
 		76B124531798F8CE00A73E59 /* EFHTTPStreaming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFHTTPStreaming.h; sourceTree = "<group>"; };
 		76B124541798F8CE00A73E59 /* EFHTTPStreaming.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFHTTPStreaming.m; sourceTree = "<group>"; };
 		76B1245817992A5300A73E59 /* map_arrow_12g5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_arrow_12g5@2x.png"; sourceTree = "<group>"; };
+		76B1245C1799329700A73E59 /* EFPersonAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPersonAnnotation.h; sourceTree = "<group>"; };
+		76B1245D1799329A00A73E59 /* EFPersonAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPersonAnnotation.m; sourceTree = "<group>"; };
 		76BC7B08176EAC3D003F4FBA /* EFQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFQueueManager.h; sourceTree = "<group>"; };
 		76BC7B09176EAC3D003F4FBA /* EFQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFQueueManager.m; sourceTree = "<group>"; };
 		76BC7B0F176EB9C7003F4FBA /* EFRunLoopOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFRunLoopOperation.h; sourceTree = "<group>"; };
@@ -3861,6 +3879,10 @@
 			isa = PBXGroup;
 			children = (
 				76B123471796470C00A73E59 /* EFAnnotationDataDefines.h */,
+				76B1245C1799329700A73E59 /* EFPersonAnnotation.h */,
+				76B1245D1799329A00A73E59 /* EFPersonAnnotation.m */,
+				766C9827179933D00064B5BC /* EFPersonAnnotationView.h */,
+				766C9828179933D00064B5BC /* EFPersonAnnotationView.m */,
 				76B123451796470C00A73E59 /* EFAnnotation.h */,
 				76B123461796470C00A73E59 /* EFAnnotation.m */,
 				76B123481796470C00A73E59 /* EFAnnotationView.h */,
@@ -4207,6 +4229,8 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				766C9833179944240064B5BC /* map_dot_grey@2x.png */,
+				766C9834179944240064B5BC /* map_dot_red@2x.png */,
 				76B1245817992A5300A73E59 /* map_arrow_12g5@2x.png */,
 				76B124351798398400A73E59 /* map_remove_15@2x.png */,
 				76B124361798398400A73E59 /* map_remove_30@2x.png */,
@@ -5629,6 +5653,8 @@
 				76B124381798398400A73E59 /* map_remove_15@2x.png in Resources */,
 				76B1243B1798398400A73E59 /* map_remove_30@2x.png in Resources */,
 				76B1245A17992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */,
+				766C9836179944240064B5BC /* map_dot_grey@2x.png in Resources */,
+				766C9839179944240064B5BC /* map_dot_red@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6068,6 +6094,8 @@
 				76B124391798398400A73E59 /* map_remove_15@2x.png in Resources */,
 				76B1243C1798398400A73E59 /* map_remove_30@2x.png in Resources */,
 				76B1245B17992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */,
+				766C9837179944240064B5BC /* map_dot_grey@2x.png in Resources */,
+				766C983A179944240064B5BC /* map_dot_red@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6505,6 +6533,8 @@
 				76B124371798398400A73E59 /* map_remove_15@2x.png in Resources */,
 				76B1243A1798398400A73E59 /* map_remove_30@2x.png in Resources */,
 				76B1245917992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */,
+				766C9835179944240064B5BC /* map_dot_grey@2x.png in Resources */,
+				766C9838179944240064B5BC /* map_dot_red@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6774,6 +6804,8 @@
 				4F7AA1FD1797FDEE005C4223 /* User.m in Sources */,
 				4F7AA202179803A5005C4223 /* Identity.m in Sources */,
 				76B124561798F8CE00A73E59 /* EFHTTPStreaming.m in Sources */,
+				76B1245F179932A000A73E59 /* EFPersonAnnotation.m in Sources */,
+				766C982A179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7016,6 +7048,8 @@
 				4F7AA1FE1797FDEE005C4223 /* User.m in Sources */,
 				4F7AA203179803A5005C4223 /* Identity.m in Sources */,
 				76B124571798F8CE00A73E59 /* EFHTTPStreaming.m in Sources */,
+				76B12460179932A000A73E59 /* EFPersonAnnotation.m in Sources */,
+				766C982B179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7258,6 +7292,8 @@
 				4F7AA1FC1797FDEE005C4223 /* User.m in Sources */,
 				4F7AA201179803A5005C4223 /* Identity.m in Sources */,
 				76B124551798F8CE00A73E59 /* EFHTTPStreaming.m in Sources */,
+				76B1245E179932A000A73E59 /* EFPersonAnnotation.m in Sources */,
+				766C9829179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
