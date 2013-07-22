@@ -23,6 +23,7 @@
 #import "EFPersonAnnotationView.h"
 
 #define kAnnotationOffsetY  (-50.0f)
+#define kShadowOffset       (4.0f)
 
 @interface EFMarauderMapViewController ()
 
@@ -50,8 +51,9 @@
 @property (nonatomic, strong) EFLocation            *lastUpdatedLocation;
 @property (nonatomic, strong) NSTimer               *updateLocationTimer;
 
-//@property (nonatomic, strong) NSTimer               *updateUITimer;
 @property (nonatomic, assign) BOOL                  hasGotOffset;
+
+@property (nonatomic, strong) CAGradientLayer       *gradientLayer;
 
 @end
 
@@ -96,6 +98,7 @@
                                           }
                                           dispatch_async(dispatch_get_main_queue(), ^{
                                               [self.tableView reloadData];
+                                              [self.selfTableView reloadData];
                                           });
                                       }
                                       failure:^(NSError *error){
@@ -172,8 +175,16 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     [self.view insertSubview:mapStrokeView belowSubview:self.tableView];
     self.mapStrokeView = mapStrokeView;
     
-    // tableView
-    self.tableView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.6f];
+    // tableView baseView
+    self.leftBaseView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.6f];
+    
+    // tableView gradient
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    gradientLayer.colors = @[(id)[UIColor colorWithWhite:0.0f alpha:0.6f].CGColor, (id)[UIColor clearColor].CGColor];
+    gradientLayer.frame = (CGRect){{0, -kShadowOffset}, {CGRectGetWidth(self.tableView.frame), 2 * kShadowOffset}};
+    gradientLayer.opacity = 0.0f;
+    [self.tableView.layer addSublayer:gradientLayer];
+    self.gradientLayer = gradientLayer;
     
     // long press gesture
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
@@ -182,17 +193,13 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     
     self.mapDataSource = [[EFMarauderMapDataSource alloc] initWithCrossId:[self.cross.cross_id integerValue]];
     self.mapDataSource.delegate = self;
-    
-//    self.updateUITimer = [NSTimer scheduledTimerWithTimeInterval:0.01f
-//                                                          target:self
-//                                                        selector:@selector(uiTimerRunloop:)
-//                                                        userInfo:nil
-//                                                         repeats:YES];
 }
 
 - (void)viewDidUnload {
     [self setTableView:nil];
     
+    [self setSelfTableView:nil];
+    [self setLeftBaseView:nil];
     [super viewDidUnload];
 }
 
@@ -209,7 +216,15 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     
     self.identityIds = identityIds;
     
-    self.tableView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, self.invitations.count * [EFMapPersonCell defaultCellHeight]}};
+    CGFloat height = self.invitations.count * [EFMapPersonCell defaultCellHeight];
+    if (height + 50 > CGRectGetHeight(self.view.frame)) {
+        height = CGRectGetHeight(self.view.frame) - 50.0f;
+        self.tableView.scrollEnabled = YES;
+    } else {
+        self.tableView.scrollEnabled = NO;
+    }
+    
+    self.leftBaseView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, height}};
     
     [self _openStreaming];
     
@@ -224,11 +239,7 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
         [self.updateLocationTimer invalidate];
         self.updateLocationTimer = nil;
     }
-//    if (self.updateUITimer) {
-//        [self.updateUITimer invalidate];
-//        self.updateUITimer = nil;
-//    }
-//    
+    
     [super viewDidDisappear:animated];
 }
 
@@ -315,51 +326,16 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     return MKMapRectMake(MIN(a.x, b.x), MIN(a.y, b.y), ABS(a.x - b.x), ABS(a.y - b.y));
 }
 
-#pragma mark - Update
-
-//- (void)updateOverlay {
-//    return;
-//    
-//    static BOOL isUpdating = NO;
-//    if (isUpdating)
-//        return;
-//    isUpdating = YES;
-//    
-//    [self.lock lock];
-//    
-//    NSUInteger count = self.dataSource.peopleCount;
-//    for (int i = 0; i < count; i++) {
-//        EFMapPerson *person = [self.dataSource personAtIndex:i];
-//        EFCrumPathView *overlayView = [self.personPositionOverlayViewMap objectForKey:[NSValue valueWithNonretainedObject:person]];
-//        
-//        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-//        CGRect cellFrame = cell.frame;
-//        CGPoint rightPoint = (CGPoint){CGRectGetMaxX(cellFrame) + 10.0f, CGRectGetMidY(cellFrame)};
-//        
-//        CLLocationCoordinate2D coordinate = [self.mapView convertPoint:rightPoint toCoordinateFromView:self.tableView];
-//        EFMapPoint *point = [[EFMapPoint alloc] init];
-//        point.coordinate2D = coordinate;
-//        
-//        if (!overlayView) {
-//            EFMapPoint *positionPoint = [person.pathMapPoints lastObject];
-//            EFCrumPath *overlay = [[EFCrumPath alloc] initWithMapPoints:@[point, positionPoint]];
-//            [self.personPositionOverlayMap setObject:[NSValue valueWithNonretainedObject:person] forKey:[NSValue valueWithNonretainedObject:overlay]];
-//            [self.mapView addOverlay:overlay];
-//        } else {
-//            [((EFCrumPath *)overlayView.overlay) replaceMapPointAtIndex:0 withMapPoint:point];
-//            [overlayView setNeedsDisplayInMapRect:MKMapRectWorld];
-//        }
-//    }
-//    
-//    [self.lock unlock];
-//    
-//    isUpdating = NO;
-//}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.invitations.count;
+    if (tableView == self.tableView) {
+        return self.identityIds.count - 1;
+    } else if (tableView == self.selfTableView) {
+        return 1;
+    }
+    
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -369,7 +345,17 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         cell = [[EFMapPersonCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identitier];
     }
     
-    Invitation *invitation = self.invitations[indexPath.row];
+    Invitation *invitation = nil;
+    NSString *identityId = nil;
+    
+    if (tableView == self.tableView) {
+        invitation = self.invitations[indexPath.row + 1];
+        identityId = self.identityIds[indexPath.row + 1];
+    } else {
+        invitation = self.invitations[0];
+        identityId = self.identityIds[0];
+    }
+    
     Identity *identity = invitation.identity;
     
     UIImage *avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:identity.avatar_filename];
@@ -389,7 +375,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     EFRouteLocation *destination = self.mapDataSource.destinationLocation;
     
-    NSArray *userLocations = [self.personDictionary valueForKey:self.identityIds[indexPath.row]];
+    NSArray *userLocations = [self.personDictionary valueForKey:identityId];
     if (userLocations && userLocations.count) {
         EFLocation *latestLocation = userLocations[0];
         NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:latestLocation.timestamp];
@@ -437,15 +423,40 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 #pragma mark - UITableViewDelegate
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView == self.tableView) {
+        [CATransaction begin];
+        [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+        
+        CGRect originShadowFrame = self.gradientLayer.frame;
+        originShadowFrame.size.width = scrollView.frame.size.width;
+        originShadowFrame.origin.y = scrollView.contentOffset.y - kShadowOffset;
+        self.gradientLayer.frame = originShadowFrame;
+        
+        CGFloat opacity = fabs(scrollView.contentOffset.y / 10.0f);
+        self.gradientLayer.opacity = opacity > 1.0f ? 1.0f : opacity;
+        
+        [CATransaction commit];
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.personPathOverlayView.overlay) {
         [self.mapView removeOverlay:self.personPathOverlayView.overlay];
     }
     
-    NSArray *locations = [self.personDictionary valueForKey:self.identityIds[indexPath.row]];
+    NSArray *locations = nil;
+    
+    if (tableView == self.tableView) {
+        locations = [self.personDictionary valueForKey:self.identityIds[indexPath.row + 1]];
+    } else if (tableView == self.selfTableView) {
+        locations = [self.personDictionary valueForKey:self.identityIds[0]];
+    }
+    
     if (!locations || !locations.count)
         return;
     
+    // add overlay
     NSMutableArray *fixedLocations = [[NSMutableArray alloc] initWithCapacity:locations.count];
     for (EFLocation *location in locations) {
         EFLocation *fixedLocation = [[EFLocation alloc] initWithDictionary:[location dictionaryValue]];
@@ -462,6 +473,32 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [self.personOverlayMap setObject:@"YES" forKey:[NSValue valueWithNonretainedObject:path]];
     
     [self.mapView addOverlay:path];
+    
+    EFLocation *lastLocation = (EFLocation *)fixedLocations[0];
+    
+    // center
+    EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+    if (destination) {
+        MKMapPoint lastMapPoint = MKMapPointForCoordinate(lastLocation.coordinate);
+        MKMapPoint destinationMapPoint = MKMapPointForCoordinate([self.mapDataSource earthCoordinateToMarsCoordinate:destination.coordinate]);
+        
+        CGFloat width = fabs(lastMapPoint.x - destinationMapPoint.x);
+        CGFloat height = fabsf(lastMapPoint.y - destinationMapPoint.y);
+        CGFloat x = lastMapPoint.x - width * 2;
+        CGFloat y = lastMapPoint.y - height * 2;
+        
+        MKMapRect visibleRect = MKMapRectMake(x, y, width * 4, height * 4);
+        [self.mapView setVisibleMapRect:visibleRect animated:YES];
+    } else {
+        MKMapRect visibleMapRect = self.mapView.visibleMapRect;
+        CGFloat width = visibleMapRect.size.width;
+        if (fabsf(width) - 9800 >= 0 && fabsf(width) - 9800 <= 200) {
+            [self.mapView setCenterCoordinate:lastLocation.coordinate animated:YES];
+        } else {
+            MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(lastLocation.coordinate, 5000.0f, 5000.0f);
+            [self.mapView setRegion:region animated:YES];
+        }
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -503,6 +540,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
+                [self.selfTableView reloadData];
             });
             
             [self _getRoute];
@@ -528,10 +566,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                  failure:nil];
 }
 
-- (void)uiTimerRunloop:(NSTimer *)timer {
-        [self.mapStrokeView reloadData];
-}
-
 #pragma mark - EFMapStrokeViewDataSource
 
 - (NSUInteger)numberOfStrokesForMapStrokeView:(EFMapStrokeView *)strokeView {
@@ -542,7 +576,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     NSString *key = self.identityIds[index];
     NSArray *locations = [self.personDictionary valueForKey:key];
     
-    if (locations) {
+    if (locations && 0 != index) {
         EFLocation *lastestLocation = locations[0];
         
         CLLocationCoordinate2D coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:lastestLocation.coordinate];
@@ -583,6 +617,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     if ([identityId isEqualToString:userIdentityId]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
+            [self.selfTableView reloadData];
         });
         return;
     }
@@ -606,6 +641,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.mapView addAnnotation:personAnnotation];
             [self.tableView reloadData];
+            [self.selfTableView reloadData];
         });
     }
 }

@@ -29,12 +29,15 @@
     NSString        *_strFromStream;
 }
 
-@property (nonatomic, weak) id<EFHTTPStreamingDelegate> delegate;
+@property (nonatomic, weak)     id<EFHTTPStreamingDelegate> delegate;
+@property (nonatomic, assign)   NSUInteger                  retryTimes;     // Default as INFINITY
 
 - (id)initWithURL:(NSURL *)aURL;
 
 - (void)open;
 - (void)close;
+
+- (void)reconnect;
 
 - (void)handleReadFromStream:(CFReadStreamRef)aStream
                    eventType:(CFStreamEventType)eventType;

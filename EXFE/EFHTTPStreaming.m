@@ -8,10 +8,14 @@
 
 #import "EFHTTPStreaming.h"
 
+#define kDefaultRetryTimes  INFINITY
+
 @interface EFHTTPStreaming ()
-@property (nonatomic, strong) NSURL *url;
-@property (nonatomic, strong) NSThread *streamingThread;
-@property (nonatomic, weak) NSRunLoop   *streamingRunloop;
+
+@property (nonatomic, strong) NSURL         *url;
+@property (nonatomic, strong) NSThread      *streamingThread;
+@property (nonatomic, weak)   NSRunLoop     *streamingRunloop;
+@property (nonatomic, assign) NSUInteger    *retriedTimes;
 
 @end
 
@@ -28,6 +32,9 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
 	if (self != nil) {
 		self.url = aURL;
         _strFromStream = @"";
+        
+        self.retriedTimes = 0;
+        self.retryTimes = kDefaultRetryTimes;
         
         self.streamingThread = [[NSThread alloc] initWithTarget:self selector:@selector(streamingRunLoopThreadEntry) object:nil];
         self.streamingThread.threadPriority = 0.3f;
@@ -52,9 +59,10 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
 
 - (void)handleReadFromStream:(CFReadStreamRef)aStream
                    eventType:(CFStreamEventType)eventType {
+    
     [self.delegate streamEvent:eventType];
     
-    if (eventType == kCFStreamEventHasBytesAvailable){
+    if (eventType == kCFStreamEventHasBytesAvailable) {
         if (!_httpHeaders)
         {
             CFTypeRef message = CFReadStreamCopyProperty(_stream, kCFStreamPropertyHTTPResponseHeader);
@@ -96,6 +104,8 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
                 }
             } while (length > 0);
         }
+    } else if (eventType == kCFStreamEventErrorOccurred) {
+        [self reconnect];
     }
 }
 
@@ -106,29 +116,35 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
     _stream = CFReadStreamCreateForHTTPRequest(NULL, message);
     CFRelease(message);
     
-    
     CFStreamClientContext context = {0, (__bridge void *)(self), NULL, NULL, NULL};
-    CFReadStreamSetClient(
-                          _stream,
-                          kCFStreamEventNone | kCFStreamEventHasBytesAvailable | kCFStreamEventErrorOccurred | kCFStreamEventEndEncountered | kCFStreamEventOpenCompleted,
-                          ReadStreamCallBack,
-                          &context);
-    CFReadStreamScheduleWithRunLoop(_stream, [self.streamingRunloop getCFRunLoop], kCFRunLoopDefaultMode);
-//    CFReadStreamScheduleWithRunLoop(_stream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    CFOptionFlags flags = kCFStreamEventNone | kCFStreamEventHasBytesAvailable | kCFStreamEventErrorOccurred | kCFStreamEventEndEncountered | kCFStreamEventOpenCompleted;
     
-    if (!CFReadStreamOpen(_stream)) {
-        CFRelease(_stream);
-        NSLog(@"open stream error");
-        return;
+    if (CFReadStreamSetClient(_stream, flags, ReadStreamCallBack, &context)) {
+        CFReadStreamScheduleWithRunLoop(_stream, [self.streamingRunloop getCFRunLoop], kCFRunLoopDefaultMode);
+//        CFReadStreamScheduleWithRunLoop(_stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+        if (!CFReadStreamOpen(_stream)) {
+            CFRelease(_stream);
+            _stream = NULL;
+            
+            [self reconnect];
+            
+            return;
+        }
     }
 }
 
 - (void)close {
-//    CFReadStreamUnscheduleFromRunLoop(_stream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
-    CFReadStreamUnscheduleFromRunLoop(_stream, [self.streamingRunloop getCFRunLoop], kCFRunLoopDefaultMode);
-    CFReadStreamClose(_stream);
-    CFRelease(_stream);
-    _stream = NULL;
+    if (_stream) {
+        CFReadStreamSetClient(_stream, 0, NULL, NULL);
+        CFReadStreamClose(_stream);
+        CFRelease(_stream);
+        _stream = NULL;
+    }
+}
+
+- (void)reconnect {
+    [self close];
+    [self open];
 }
 
 @end

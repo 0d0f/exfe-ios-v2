@@ -87,7 +87,7 @@
         [self.contentView addSubview:stateImageView];
         self.stateImageView = stateImageView;
         
-        UIView *stateView = [[UIView alloc] initWithFrame:(CGRect){{5, 48}, {7, 7}}];
+        UIView *stateView = [[UIView alloc] initWithFrame:(CGRect){{7, 50}, {7, 7}}];
         stateView.layer.cornerRadius = 3.5;
         [self.contentView addSubview:stateView];
         self.stateView = stateView;
