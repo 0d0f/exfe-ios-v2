@@ -364,35 +364,15 @@ static UIView * ReverseSubviews(UIView *view) {
 //    self.touchDownGestureRecognizer = [[EFTouchDownGestureRecognizer alloc] init];
 //    self.touchDownGestureRecognizer.minimumNumberOfTouches = 1;
 //    self.touchDownGestureRecognizer.maximumNumberOfTouches = 1;
-    
+//    
 //    __weak typeof(self) weakSelf = self;
 //    
-//    self.touchDownGestureRecognizer.touchesBeganCallback = ^(NSSet *touches, UIEvent *event){
-//        UITouch *touch = [touches anyObject];
-//        CGPoint point = [touch locationInView:weakSelf.gestureView];
-//        [weakSelf _beginWithPoint:point];
-//    };
 //    self.touchDownGestureRecognizer.touchesMovedCallback = ^(NSSet *touches, UIEvent *event){
-//        UITouch *touch = [touches anyObject];
-//        CGPoint point = [touch locationInView:weakSelf.gestureView];
-//        [weakSelf _moveWithPoint:point];
-//    };
-//    self.touchDownGestureRecognizer.touchesEndedCallback = ^(NSSet *touches, UIEvent *event){
-//        UITouch *touch = [touches anyObject];
-//        CGPoint point = [touch locationInView:weakSelf.gestureView];
-//        [weakSelf _endWithPoint:point];
-//    };
-//    self.touchDownGestureRecognizer.touchesCancelledCallback = ^(NSSet *touches, UIEvent *event){
-//        NSLog(@"Cancel happend.");
-//    };
-    
-//    for (UIGestureRecognizer *gesture in self.gestureView.gestureRecognizers) {
-//        if ([gesture isKindOfClass:[UILongPressGestureRecognizer class]]) {
-//            [gesture requireGestureRecognizerToFail:self.touchDownGestureRecognizer];
+//        if ([weakSelf.delegate respondsToSelector:@selector(mapViewDidScroll:)]) {
+//            [weakSelf.delegate mapViewDidScroll:weakSelf];
 //        }
-//    }
+//    };
 //    
-//    self.touchDownGestureRecognizer.enabled = NO;
 //    [self.gestureView addGestureRecognizer:self.touchDownGestureRecognizer];
     
     self.lines = [[NSMutableArray alloc] initWithCapacity:20];
@@ -631,7 +611,6 @@ static UIView * ReverseSubviews(UIView *view) {
         }
     }
     
-    self.touchDownGestureRecognizer.enabled = editing ? YES : NO;
     self.panGestureRecognizer.enabled = editing ? YES : NO;
 }
 

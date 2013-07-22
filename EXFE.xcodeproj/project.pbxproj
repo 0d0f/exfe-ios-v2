@@ -1572,6 +1572,9 @@
 		766C9838179944240064B5BC /* map_dot_red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 766C9834179944240064B5BC /* map_dot_red@2x.png */; };
 		766C9839179944240064B5BC /* map_dot_red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 766C9834179944240064B5BC /* map_dot_red@2x.png */; };
 		766C983A179944240064B5BC /* map_dot_red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 766C9834179944240064B5BC /* map_dot_red@2x.png */; };
+		766C984B179CDD700064B5BC /* EFMapStrokeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 766C984A179CDD700064B5BC /* EFMapStrokeView.m */; };
+		766C984C179CDD700064B5BC /* EFMapStrokeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 766C984A179CDD700064B5BC /* EFMapStrokeView.m */; };
+		766C984D179CDD700064B5BC /* EFMapStrokeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 766C984A179CDD700064B5BC /* EFMapStrokeView.m */; };
 		7670126E1729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
 		7670126F1729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
 		767012701729054500B5445E /* EFPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7670126A1729054500B5445E /* EFPopoverController.m */; };
@@ -2688,6 +2691,8 @@
 		766C9828179933D00064B5BC /* EFPersonAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPersonAnnotationView.m; sourceTree = "<group>"; };
 		766C9833179944240064B5BC /* map_dot_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_dot_grey@2x.png"; sourceTree = "<group>"; };
 		766C9834179944240064B5BC /* map_dot_red@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_dot_red@2x.png"; sourceTree = "<group>"; };
+		766C9849179CDD700064B5BC /* EFMapStrokeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapStrokeView.h; sourceTree = "<group>"; };
+		766C984A179CDD700064B5BC /* EFMapStrokeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapStrokeView.m; sourceTree = "<group>"; };
 		7670126A1729054500B5445E /* EFPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPopoverController.m; sourceTree = "<group>"; };
 		7670126B1729054500B5445E /* EFArrowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFArrowView.m; sourceTree = "<group>"; };
 		7670126C1729054500B5445E /* EFPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPopoverController.h; sourceTree = "<group>"; };
@@ -3930,6 +3935,8 @@
 				76B1235B1796470C00A73E59 /* EFMapEditingPathView.m */,
 				76B1235C1796470C00A73E59 /* EFMapEditingReadyView.h */,
 				76B1235D1796470C00A73E59 /* EFMapEditingReadyView.m */,
+				766C9849179CDD700064B5BC /* EFMapStrokeView.h */,
+				766C984A179CDD700064B5BC /* EFMapStrokeView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -6806,6 +6813,7 @@
 				76B124561798F8CE00A73E59 /* EFHTTPStreaming.m in Sources */,
 				76B1245F179932A000A73E59 /* EFPersonAnnotation.m in Sources */,
 				766C982A179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
+				766C984C179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7050,6 +7058,7 @@
 				76B124571798F8CE00A73E59 /* EFHTTPStreaming.m in Sources */,
 				76B12460179932A000A73E59 /* EFPersonAnnotation.m in Sources */,
 				766C982B179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
+				766C984D179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7294,6 +7303,7 @@
 				76B124551798F8CE00A73E59 /* EFHTTPStreaming.m in Sources */,
 				76B1245E179932A000A73E59 /* EFPersonAnnotation.m in Sources */,
 				766C9829179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
+				766C984B179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

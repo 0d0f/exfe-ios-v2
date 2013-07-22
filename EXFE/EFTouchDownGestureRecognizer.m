@@ -25,41 +25,27 @@
 #pragma mark - Respionder Callback
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-//    if (touches.count >= self.minimumNumberOfTouches &&
-//        touches.count <= self.maximumNumberOfTouches &&
-//        self.state == UIGestureRecognizerStatePossible) {
-        self.state = UIGestureRecognizerStateRecognized;
-//        if (_touchesBeganCallback) {
-//            _touchesBeganCallback(touches, event);
-//        }
-//    }
+    if (_touchesBeganCallback) {
+        _touchesBeganCallback(touches, event);
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-//    if (touches.count >= self.minimumNumberOfTouches && touches.count <= self.maximumNumberOfTouches) {
-//        if (_touchesMovedCallback) {
-//            _touchesMovedCallback(touches, event);
-//        }
-//    }
-    self.state = UIGestureRecognizerStateFailed;
+    if (_touchesMovedCallback) {
+        _touchesMovedCallback(touches, event);
+    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-//    if (touches.count >= self.minimumNumberOfTouches && touches.count <= self.maximumNumberOfTouches) {
-//        if (_touchesEndedCallback) {
-//            _touchesEndedCallback(touches, event);
-//        }
-//    }
-    self.state = UIGestureRecognizerStateFailed;
+    if (_touchesEndedCallback) {
+        _touchesEndedCallback(touches, event);
+    }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-//    if (touches.count >= self.minimumNumberOfTouches && touches.count <= self.maximumNumberOfTouches) {
-//        if (_touchesCancelledCallback) {
-//            _touchesCancelledCallback(touches, event);
-//        }
-//    }
-    self.state = UIGestureRecognizerStateFailed;
+    if (_touchesCancelledCallback) {
+        _touchesCancelledCallback(touches, event);
+    }
 }
 
 #pragma mark - Override
