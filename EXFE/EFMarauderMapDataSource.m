@@ -238,12 +238,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
                             [userLocations addObject:location];
                         }
                         
-                        RKObjectManager *objectManager = [RKObjectManager sharedManager];
-                        NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"IdentityId" inManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-                        IdentityId *identityId = [[IdentityId alloc] initWithEntity:invitationEntity insertIntoManagedObjectContext:objectManager.managedObjectStore.mainQueueManagedObjectContext];
-                        identityId.identity_id = key;
-                        
-                        [self.delegate mapDataSource:self didUpdateLocations:userLocations forUser:identityId];
+                        [self.delegate mapDataSource:self didUpdateLocations:userLocations forUser:key];
                     }];
                 }
             }

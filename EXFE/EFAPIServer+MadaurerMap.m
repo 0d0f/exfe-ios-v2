@@ -12,12 +12,13 @@
 
 - (void)updateLocation:(EFLocation *)location
            withCrossId:(NSInteger)crossId
+               isEarth:(BOOL)isEarth
                success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     NSParameterAssert(location);
     NSDictionary *param = [location dictionaryValue];
     
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/crosses/%d/routex/breadcrumbs?token=%@", crossId, self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/crosses/%d/routex/breadcrumbs?coordinate=%@&token=%@", crossId, isEarth ? @"earth" : @"mars", self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
@@ -26,12 +27,13 @@
                       parameters:param
                          success:success
                          failure:failure];
-}
+}   
 
 - (void)getLocationsWithCrossId:(NSInteger)crossId
+                        isEarth:(BOOL)isEarth
                         success:(void (^)(NSDictionary *locations))successHandler
                         failure:(void (^)(NSError *error))failureHandler {
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/crosses/%d/routex/breadcrumbs?token=%@", crossId, self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/crosses/%d/routex/breadcrumbs?coordinate=%@&token=%@", crossId, isEarth ? @"earth" : @"mars", self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
@@ -60,9 +62,10 @@
 - (void)updateRouteWithCrossId:(NSInteger)crossId
                      locations:(NSArray *)locations
                         routes:(NSArray *)routes
+                       isEarth:(BOOL)isEarth
                        success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/crosses/%d/routex/geomarks?token=%@", crossId, self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/crosses/%d/routex/geomarks?coordinate=%@&token=%@", crossId, isEarth ? @"earth" : @"mars", self.model.userToken];
     NSMutableArray *list = [[NSMutableArray alloc] init];
     
     for (EFRouteLocation *location in locations) {
@@ -88,9 +91,10 @@
 }
 
 - (void)getRouteWithCrossId:(NSInteger)crossId
+                    isEarth:(BOOL)isEarth
                     success:(void (^)(NSArray *routeLocations, NSArray *routePaths))successHandler
                     failure:(void (^)(NSError *error))failureHandler {
-    NSString *endpoint = [NSString stringWithFormat:@"/v3/crosses/%d/routex/geomarks?token=%@", crossId, self.model.userToken];
+    NSString *endpoint = [NSString stringWithFormat:@"/v3/crosses/%d/routex/geomarks?coordinate=%@&token=%@", crossId, isEarth ? @"earth" : @"mars", self.model.userToken];
     
     RKObjectManager *manager = [RKObjectManager sharedManager];
     manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;

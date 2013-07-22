@@ -114,14 +114,16 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
     CFStreamClientContext context = {0, (__bridge void *)(self), NULL, NULL, NULL};
     CFReadStreamSetClient(
                           _stream,
-                          kCFStreamEventNone|kCFStreamEventHasBytesAvailable | kCFStreamEventErrorOccurred | kCFStreamEventEndEncountered | kCFStreamEventOpenCompleted,
+                          kCFStreamEventNone | kCFStreamEventHasBytesAvailable | kCFStreamEventErrorOccurred | kCFStreamEventEndEncountered | kCFStreamEventOpenCompleted,
                           ReadStreamCallBack,
                           &context);
     CFReadStreamScheduleWithRunLoop(_stream, [self.streamingRunloop getCFRunLoop], kCFRunLoopDefaultMode);
+//    CFReadStreamScheduleWithRunLoop(_stream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
 }
 
 - (void)close {
     CFReadStreamClose(_stream);
+//    CFReadStreamUnscheduleFromRunLoop(_stream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     CFReadStreamUnscheduleFromRunLoop(_stream, [self.streamingRunloop getCFRunLoop], kCFRunLoopDefaultMode);
     CFRelease(_stream);
     _stream = NULL;
