@@ -1089,6 +1089,9 @@
 		4FA013A516F2F4AD00F40CB6 /* Invitation+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013A416F2F4AD00F40CB6 /* Invitation+EXFE.m */; };
 		4FA013AB16F31B5400F40CB6 /* Identity+EXFE.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013AA16F31B5400F40CB6 /* Identity+EXFE.m */; };
 		4FA013AE16F3546A00F40CB6 /* ExfeeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA013AD16F3546A00F40CB6 /* ExfeeCollectionViewCell.m */; };
+		4FA01BD1179D2F2600988483 /* EFAuthenticationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA01BD0179D2F2600988483 /* EFAuthenticationViewController.m */; };
+		4FA01BD2179D2F2600988483 /* EFAuthenticationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA01BD0179D2F2600988483 /* EFAuthenticationViewController.m */; };
+		4FA01BD3179D2F2600988483 /* EFAuthenticationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA01BD0179D2F2600988483 /* EFAuthenticationViewController.m */; };
 		4FA0C40A16FB626B00E25C74 /* WCAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA0C40916FB626B00E25C74 /* WCAlertView.m */; };
 		4FA84B09170155DD0096FB5A /* ExfeeAddCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA84B08170155DD0096FB5A /* ExfeeAddCollectionViewCell.m */; };
 		4FAD642716968C7F001870FF /* CrossTime+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD642616968C7F001870FF /* CrossTime+Helper.m */; };
@@ -2447,6 +2450,8 @@
 		4FA013AA16F31B5400F40CB6 /* Identity+EXFE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Identity+EXFE.m"; sourceTree = "<group>"; };
 		4FA013AC16F3546A00F40CB6 /* ExfeeCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExfeeCollectionViewCell.h; sourceTree = "<group>"; };
 		4FA013AD16F3546A00F40CB6 /* ExfeeCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExfeeCollectionViewCell.m; sourceTree = "<group>"; };
+		4FA01BCF179D2F2600988483 /* EFAuthenticationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAuthenticationViewController.h; sourceTree = "<group>"; };
+		4FA01BD0179D2F2600988483 /* EFAuthenticationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFAuthenticationViewController.m; sourceTree = "<group>"; };
 		4FA0C40816FB626B00E25C74 /* WCAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAlertView.h; sourceTree = "<group>"; };
 		4FA0C40916FB626B00E25C74 /* WCAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAlertView.m; sourceTree = "<group>"; };
 		4FA84B07170155DD0096FB5A /* ExfeeAddCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExfeeAddCollectionViewCell.h; sourceTree = "<group>"; };
@@ -3701,6 +3706,8 @@
 				4F05D43C175C6CB00050A726 /* EFAddIdentityViewController.h */,
 				4F05D43D175C6CB00050A726 /* EFAddIdentityViewController.m */,
 				4F05D43E175C6CB00050A726 /* EFAddIdentityViewController.xib */,
+				4FA01BCF179D2F2600988483 /* EFAuthenticationViewController.h */,
+				4FA01BD0179D2F2600988483 /* EFAuthenticationViewController.m */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -6806,6 +6813,7 @@
 				76B1245F179932A000A73E59 /* EFPersonAnnotation.m in Sources */,
 				766C982A179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 				766C984C179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
+				4FA01BD2179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7051,6 +7059,7 @@
 				76B12460179932A000A73E59 /* EFPersonAnnotation.m in Sources */,
 				766C982B179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 				766C984D179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
+				4FA01BD3179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7296,6 +7305,7 @@
 				76B1245E179932A000A73E59 /* EFPersonAnnotation.m in Sources */,
 				766C9829179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 				766C984B179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
+				4FA01BD1179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
