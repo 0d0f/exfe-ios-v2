@@ -30,11 +30,13 @@ EFHTTPStreamingDelegate
 @property (nonatomic, assign) NSInteger crossId;
 @property (nonatomic, weak) id <EFMarauderMapDataSourceDelegate> delegate;
 @property (nonatomic, readonly) EFRouteLocation *destinationLocation;
+@property (nonatomic, assign) CGPoint   offset;                 // earth -> mars
 
 - (id)initWithCrossId:(NSInteger)crossId;
 
 - (void)addLocation:(EFLocation *)location;
 
+// All input must be on earth.
 - (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView;
 - (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView;
 - (EFRouteLocation *)routeLocationForAnnotation:(EFAnnotation *)annotation;
@@ -48,5 +50,8 @@ EFHTTPStreamingDelegate
 
 - (void)openStreaming;
 - (void)closeStreaming;
+
+- (CLLocationCoordinate2D)earthCoordinateToMarsCoordinate:(CLLocationCoordinate2D)mars;
+- (CLLocationCoordinate2D)marsCoordinateToEarthCoordinate:(CLLocationCoordinate2D)earth;
 
 @end

@@ -51,6 +51,7 @@
 @property (nonatomic, strong) NSTimer               *updateLocationTimer;
 
 @property (nonatomic, strong) NSTimer               *updateUITimer;
+@property (nonatomic, assign) BOOL                  hasGotOffset;
 
 @end
 
@@ -90,6 +91,7 @@
                                       isEarth:YES
                                       success:^(NSArray *routeLocations, NSArray *routePaths){
                                           for (EFRouteLocation *routeLocation in routeLocations) {
+//                                              routeLocation.coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:routeLocation.coordinate];
                                               [self.mapDataSource addRouteLocation:routeLocation toMapView:self.mapView];
                                           }
                                           dispatch_async(dispatch_get_main_queue(), ^{
@@ -152,17 +154,12 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
         self.mapView.delegate = self;
         
         self.lock = [[NSRecursiveLock alloc] init];
+        
         self.isInited = YES;
+        self.hasGotOffset = NO;
     }
     
     return self;
-}
-
-- (void)dealloc {
-    if (self.updateLocationTimer) {
-        [self.updateLocationTimer invalidate];
-        self.updateLocationTimer = nil;
-    }
 }
 
 - (void)viewDidLoad {
@@ -186,7 +183,7 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     self.mapDataSource = [[EFMarauderMapDataSource alloc] initWithCrossId:[self.cross.cross_id integerValue]];
     self.mapDataSource.delegate = self;
     
-    self.updateUITimer = [NSTimer scheduledTimerWithTimeInterval:0.02f
+    self.updateUITimer = [NSTimer scheduledTimerWithTimeInterval:0.01f
                                                           target:self
                                                         selector:@selector(uiTimerRunloop:)
                                                         userInfo:nil
@@ -214,7 +211,6 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     
     self.tableView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, self.invitations.count * [EFMapPersonCell defaultCellHeight]}};
     
-    [self _getRoute];
     [self _openStreaming];
     
     [self.locationManager startUpdatingLocation];
@@ -223,6 +219,15 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
 - (void)viewDidDisappear:(BOOL)animated {
     [self.locationManager stopUpdatingLocation];
     [self _closeStreaming];
+    
+    if (self.updateLocationTimer) {
+        [self.updateLocationTimer invalidate];
+        self.updateLocationTimer = nil;
+    }
+    if (self.updateUITimer) {
+        [self.updateUITimer invalidate];
+        self.updateUITimer = nil;
+    }
     
     [super viewDidDisappear:animated];
 }
@@ -248,7 +253,7 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
             startLocation = location;
             lastLocation = location;
             
-            coordinate = [Util marsLocationFromEarthLocation:coordinate];
+            coordinate = [self.mapDataSource marsCoordinateToEarthCoordinate:coordinate];
             
             routeLocation = [EFRouteLocation generateRouteLocationWithCoordinate:coordinate];
             routeLocation.title = @"子时正刻";
@@ -275,7 +280,7 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
             
             coordinate = [self.mapView convertPoint:lastLocation toCoordinateFromView:self.mapView];
             
-            routeLocation.coordinate = [Util marsLocationFromEarthLocation:coordinate];
+            routeLocation.coordinate = [self.mapDataSource marsCoordinateToEarthCoordinate:coordinate];
             [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
             [self _postRoute];
             
@@ -440,7 +445,15 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     NSArray *locations = [self.personDictionary valueForKey:self.identityIds[indexPath.row]];
     if (!locations || !locations.count)
         return;
-    EFCrumPath *path = [[EFCrumPath alloc] initWithMapPoints:locations];
+    
+    NSMutableArray *fixedLocations = [[NSMutableArray alloc] initWithCapacity:locations.count];
+    for (EFLocation *location in locations) {
+        EFLocation *fixedLocation = [[EFLocation alloc] initWithDictionary:[location dictionaryValue]];
+        fixedLocation.coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:location.coordinate];
+        [fixedLocations addObject:fixedLocation];
+    }
+    
+    EFCrumPath *path = [[EFCrumPath alloc] initWithMapPoints:fixedLocations];
     path.linecolor = [UIColor colorWithRed:1.0f
                                      green:(127.0f / 255.0f)
                                       blue:(153.0f / 255.0f)
@@ -461,18 +474,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 	 didUpdateLocations:(NSArray *)locations {
     CLLocation *currentLocation = locations[0];
     
-    CLLocationCoordinate2D fixedCoordinate = [Util earthLocationFromMarsLocation:currentLocation.coordinate];
-    if (self.isInited) {
-        self.isInited = NO;
-        
-        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(fixedCoordinate, 5000.0f, 5000.0f);
-        [self.mapView setRegion:region animated:YES];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
-    }
-    
     EFLocation *position = [[EFLocation alloc] init];
     position.coordinate = currentLocation.coordinate;
     position.timestamp = [NSDate date];
@@ -487,6 +488,25 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                     userInfo:nil
                                                      repeats:YES];
         [self timerRunloop:self.updateLocationTimer];
+        
+        while (!self.hasGotOffset) {
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                     beforeDate:[NSDate distantFuture]];
+        }
+        
+        CLLocationCoordinate2D fixedCoordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:manager.location.coordinate];
+        if (self.isInited) {
+            self.isInited = NO;
+            
+            MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(fixedCoordinate, 5000.0f, 5000.0f);
+            [self.mapView setRegion:region animated:YES];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+            
+            [self _getRoute];
+        }
     }
 }
 
@@ -496,21 +516,30 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     [self.model.apiServer updateLocation:self.lastUpdatedLocation
                              withCrossId:[self.cross.cross_id integerValue]
                                  isEarth:YES
-                                 success:nil
+                                 success:^(AFHTTPRequestOperation *operation, id responseObject){
+                                     CGFloat latitudeOffset = [[responseObject valueForKey:@"earth_to_mars_latitude"] doubleValue];
+                                     CGFloat longtitudeOffset = [[responseObject valueForKey:@"earth_to_mars_longitude"] doubleValue];
+                                     
+                                     CGPoint offset = (CGPoint){latitudeOffset, longtitudeOffset};
+                                     
+                                     self.mapDataSource.offset = offset;
+                                     self.hasGotOffset = YES;
+                                 }
                                  failure:nil];
 }
 
 - (void)uiTimerRunloop:(NSTimer *)timer {
-    static MKMapRect preMapRect;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        preMapRect = self.mapView.visibleMapRect;
-    });
-    
-    if (!MKMapRectEqualToRect(preMapRect, self.mapView.visibleMapRect)) {
-        preMapRect = self.mapView.visibleMapRect;
+//    static MKMapRect preMapRect;
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        preMapRect = self.mapView.visibleMapRect;
+//        [self.mapStrokeView reloadData];
+//    });
+//    
+//    if (!MKMapRectEqualToRect(preMapRect, self.mapView.visibleMapRect)) {
+//        preMapRect = self.mapView.visibleMapRect;
         [self.mapStrokeView reloadData];
-    }
+//    }
 }
 
 #pragma mark - EFMapStrokeViewDataSource
@@ -523,14 +552,18 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     NSString *key = self.identityIds[index];
     NSArray *locations = [self.personDictionary valueForKey:key];
     
-    if (locations) {
+    if (locations && 0 != index) {
         EFLocation *lastestLocation = locations[0];
         
-        CLLocationCoordinate2D coordinate = lastestLocation.coordinate;
+        CLLocationCoordinate2D coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:lastestLocation.coordinate];
+        
         CGPoint locationInView = [self.mapView convertCoordinate:coordinate toPointToView:self.tableView];
         if (CGRectContainsPoint(self.tableView.bounds, locationInView)) {
             return nil;
         }
+        
+        EFLocation *location = [[EFLocation alloc] init];
+        location.coordinate = coordinate;
         
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
         CGPoint avatarCenter = cell.center;
@@ -543,7 +576,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         EFLocation *avatarRightLocation = [[EFLocation alloc] init];
         avatarRightLocation.coordinate = avatarRightCoordinate;
         
-        NSArray *points = @[avatarCenterLocation, avatarRightLocation, lastestLocation];
+        NSArray *points = @[avatarCenterLocation, avatarRightLocation, location];
         
         return points;
     }
@@ -556,22 +589,30 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(NSString *)identityId {
     [self.personDictionary setValue:locations forKey:identityId];
     
+    NSString *userIdentityId = self.identityIds[0];
+    if ([identityId isEqualToString:userIdentityId]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+        return;
+    }
+    
     if (locations && locations.count) {
         EFPersonAnnotation *personAnnotation = [self.personAnnotationDictionary valueForKey:identityId];
         if (!personAnnotation) {
             personAnnotation = [[EFPersonAnnotation alloc] init];
             [self.personAnnotationDictionary setValue:personAnnotation forKey:identityId];
         }
-
+        
         EFLocation *lastesLocation = locations[0];
-        personAnnotation.coordinate = lastesLocation.coordinate;
+        personAnnotation.coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:lastesLocation.coordinate];
         NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:lastesLocation.timestamp];
         if (timeInterval >= 0 && timeInterval <= 60) {
             personAnnotation.isOnline = YES;
         } else {
             personAnnotation.isOnline = NO;
         }
-
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.mapView addAnnotation:personAnnotation];
             [self.tableView reloadData];

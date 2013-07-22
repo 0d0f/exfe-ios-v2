@@ -107,7 +107,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     
     [self.routeLocations addObject:routeLocation];
     EFAnnotation *annotation = [[EFAnnotation alloc] initWithStyle:(routeLocation.locationTytpe == kEFRouteLocationTypeDestination) ? kEFAnnotationStyleDestination : ((routeLocation.markColor == kEFRouteLocationColorRed) ? kEFAnnotationStyleParkRed : kEFAnnotationStyleParkBlue)
-                                                        coordinate:[Util earthLocationFromMarsLocation:routeLocation.coordinate]
+                                                        coordinate:[self earthCoordinateToMarsCoordinate:routeLocation.coordinate]
                                                              title:routeLocation.title
                                                        description:routeLocation.subtitle];
     
@@ -127,7 +127,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 #endif
     
     EFAnnotation *annotation = [self.routeLocationAnnotationMap objectForKey:[NSValue valueWithNonretainedObject:routeLocation]];
-    annotation.coordinate = [Util earthLocationFromMarsLocation:routeLocation.coordinate];
+    annotation.coordinate = [self earthCoordinateToMarsCoordinate:routeLocation.coordinate];
     annotation.title = routeLocation.title;
     annotation.subtitle = routeLocation.subtitle;
     
@@ -253,6 +253,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 }
 
 #pragma mark - RoutePath
+
 - (void)addRoutePath:(EFRoutePath *)path {
     [self _postPathDidChangeNotification];
 }
@@ -263,6 +264,18 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 - (void)updateRoutePath:(EFRoutePath *)path {
     [self _postPathDidChangeNotification];
+}
+
+#pragma mark - Coordinate Transform
+
+- (CLLocationCoordinate2D)earthCoordinateToMarsCoordinate:(CLLocationCoordinate2D)earth {
+    CLLocationCoordinate2D mars = CLLocationCoordinate2DMake(earth.latitude + self.offset.x, earth.longitude + self.offset.y);
+    return mars;
+}
+
+- (CLLocationCoordinate2D)marsCoordinateToEarthCoordinate:(CLLocationCoordinate2D)mars {
+    CLLocationCoordinate2D earth = CLLocationCoordinate2DMake(mars.latitude - self.offset.x, mars.longitude - self.offset.y);
+    return earth;
 }
 
 @end

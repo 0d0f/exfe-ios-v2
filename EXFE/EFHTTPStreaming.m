@@ -106,11 +106,7 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
     _stream = CFReadStreamCreateForHTTPRequest(NULL, message);
     CFRelease(message);
     
-    if (!CFReadStreamOpen(_stream)) {
-        CFRelease(_stream);
-        NSLog(@"open stream error");
-        return;
-    }
+    
     CFStreamClientContext context = {0, (__bridge void *)(self), NULL, NULL, NULL};
     CFReadStreamSetClient(
                           _stream,
@@ -119,12 +115,18 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
                           &context);
     CFReadStreamScheduleWithRunLoop(_stream, [self.streamingRunloop getCFRunLoop], kCFRunLoopDefaultMode);
 //    CFReadStreamScheduleWithRunLoop(_stream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    
+    if (!CFReadStreamOpen(_stream)) {
+        CFRelease(_stream);
+        NSLog(@"open stream error");
+        return;
+    }
 }
 
 - (void)close {
-    CFReadStreamClose(_stream);
 //    CFReadStreamUnscheduleFromRunLoop(_stream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     CFReadStreamUnscheduleFromRunLoop(_stream, [self.streamingRunloop getCFRunLoop], kCFRunLoopDefaultMode);
+    CFReadStreamClose(_stream);
     CFRelease(_stream);
     _stream = NULL;
 }
