@@ -13,6 +13,7 @@
 #import "EFTabBarViewController.h"
 #import "EFMapKit.h"
 #import "EFMarauderMapDataSource.h"
+#import "EFMapStrokeView.h"
 
 @class EFMapPerson, EXFEModel, Cross;
 
@@ -25,23 +26,25 @@ UITableViewDataSource,
 UITableViewDelegate,
 EFTabBarDataSource,
 EFMapViewDelegate,
-EFMarauderMapDataSourceDelegate
+EFMarauderMapDataSourceDelegate,
+EFMapStrokeViewDataSource
 >
 
-@property (nonatomic, weak) EXFEModel   *model;
-@property (nonatomic, weak) Cross       *cross;
+@property (nonatomic, weak)     EXFEModel               *model;
+@property (nonatomic, weak)     Cross                   *cross;
 
-@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong)   CLLocationManager       *locationManager;
 
-@property (weak, nonatomic) IBOutlet EFMapView *mapView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic)     IBOutlet EFMapView      *mapView;
+@property (weak, nonatomic)     IBOutlet UITableView    *tableView;
+@property (nonatomic, weak)     EFMapStrokeView         *mapStrokeView;
 
 // EFTabBarDataSource
-@property (nonatomic, strong) EFTabBarItem *customTabBarItem;
-@property (nonatomic, assign) EFTabBarStyle tabBarStyle;
-@property (nonatomic, weak) EFTabBarViewController *tabBarViewController;
-@property (nonatomic, copy) UIImage *shadowImage;
-@property (nonatomic, assign) CGRect initFrame;
+@property (nonatomic, strong)   EFTabBarItem            *customTabBarItem;
+@property (nonatomic, assign)   EFTabBarStyle           tabBarStyle;
+@property (nonatomic, weak)     EFTabBarViewController  *tabBarViewController;
+@property (nonatomic, copy)     UIImage                 *shadowImage;
+@property (nonatomic, assign)   CGRect                  initFrame;
 
 - (IBAction)parkButtonPressed:(id)sender;
 - (IBAction)headingButtonPressed:(id)sender;
