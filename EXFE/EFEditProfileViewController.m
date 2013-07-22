@@ -42,6 +42,8 @@
 #pragma mark Private ViewController Model
 @property (nonatomic, strong) NSMutableDictionary *data;
 
+@property (nonatomic, assign) CGPoint point;
+
 #pragma mark Quick Access to UI Elements
 @property (nonatomic, strong) UILabel *name;
 @property (nonatomic, strong) UILabel *identityId;
@@ -58,6 +60,7 @@
 
 @property (nonatomic, strong) UIImageView *preview;
 @property (nonatomic, strong) UIImageView *previewTh;
+
 
 @end
 
@@ -538,7 +541,6 @@
             center = CGPointMake(size.width / (1 + paddingRatio * 2), size.height * ((CGRectGetHeight(self.header.bounds) + 320 / 2) /  CGRectGetHeight(self.view.bounds)));
         }
         self.imageScrollRange.frame = (CGRect){CGPointZero, size};
-        self.imageScrollRange.backgroundColor = [UIColor lightGrayColor];
         self.avatar.frame = (CGRect){CGPointZero, imageSize};
         self.avatar.center = center;
         self.avatar.image = image;
@@ -574,12 +576,7 @@
     [self.imageScrollView setMaximumZoomScale:scale * 8];
     [self.imageScrollView setZoomScale:scale];
     
-    
-    CGPoint p = self.imageScrollView.contentOffset;
-    CGSize s = self.imageScrollView.contentSize;
-    NSLog(@"scaled params: %@, %@ at scale %f", NSStringFromCGPoint(p), NSStringFromCGSize(s), scale);
-    
-    self.imageScrollView.contentOffset = CGPointMake(self.imageScrollView.contentSize.width / 2 - 160, (CGRectGetHeight(self.header.bounds) + 160));
+    [self bestZoom];
     
     [self.data removeObjectForKey:kModelKeyImageDirty];
 }
@@ -610,22 +607,9 @@
 
 - (void)handleDoubleTap:(UIGestureRecognizer *)gestureRecognizer
 {
-//    // double tap zooms in
-//    float newScale = [self.imageScrollView zoomScale] * ZOOM_STEP;
-//    CGRect zoomRect = [self zoomRectForScale:newScale withCenter:[gestureRecognizer locationInView:gestureRecognizer.view]];
-//    [self.imageScrollView zoomToRect:zoomRect animated:YES];
-    if (self.imageScrollView.zoomScale != self.imageScrollView.minimumZoomScale) {
-        float f = self.imageScrollView.zoomScale;
-        CGRect r = CGRectMake(0, 0, self.imageScrollView.contentSize.width / f, self.imageScrollView.contentSize.height / f);
-        [self.imageScrollView zoomToRect:r animated:YES];
-    } else {
-        float f = self.imageScrollView.zoomScale;
-        CGRect r = CGRectMake(self.imageScrollView.contentSize.width / f / 2 / 2, CGRectGetHeight(self.header.bounds) + 160, self.imageScrollView.contentSize.width / f / 2, self.imageScrollView.contentSize.height / f / 2);
-        [self.imageScrollView zoomToRect:r animated:YES];
-        
-//         self.imageScrollView.zoomScale = self.imageScrollView.minimumZoomScale * 2;
-    }
+    [self bestZoom];
     
+//    self.imageScrollView.contentOffset = 
     
     id num = [self.data valueForKey:kModelKeyImageDirty];
     if (!num) {
@@ -707,11 +691,11 @@
         UIImage *large = [dict valueForKey:kKeyImageLarge];
         
         if (full) {
-//            if (self.isEditUser) {
-//                [self.model updateUserAvatar:full withLarge:large withSmall:nil];
-//            } else {
-//                [self.model updateIdentity:self.identity withAvatar:full withLarge:large withSmall:nil];
-//            }
+            if (self.isEditUser) {
+                [self.model updateUserAvatar:full withLarge:large withSmall:nil];
+            } else {
+                [self.model updateIdentity:self.identity withAvatar:full withLarge:large withSmall:nil];
+            }
         }
     }
     
@@ -840,21 +824,16 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    
-    CGPoint p = self.imageScrollView.contentOffset;
-    CGSize s = self.imageScrollView.contentSize;
-    NSLog(@"scrollViewDidScroll content offset size params: %@, %@", NSStringFromCGPoint(p), NSStringFromCGSize(s));
-    
     id num = [self.data valueForKey:kModelKeyImageDirty];
     if (!num) {
         [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
     }
     
-    if (self.preview) {
-        NSDictionary *dict = [self cropedImages];
-        self.preview.image = [dict valueForKey:kKeyImageFull];
-        self.previewTh.image = [dict valueForKey:kKeyImageLarge];
-    }
+//    if (self.preview) {
+//        NSDictionary *dict = [self cropedImages];
+//        self.preview.image = [dict valueForKey:kKeyImageFull];
+//        self.previewTh.image = [dict valueForKey:kKeyImageLarge];
+//    }
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
@@ -864,11 +843,11 @@
         [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
     }
     
-    if (self.preview) {
-        NSDictionary *dict = [self cropedImages];
-        self.preview.image = [dict valueForKey:kKeyImageFull];
-        self.previewTh.image = [dict valueForKey:kKeyImageLarge];
-    }
+//    if (self.preview) {
+//        NSDictionary *dict = [self cropedImages];
+//        self.preview.image = [dict valueForKey:kKeyImageFull];
+//        self.previewTh.image = [dict valueForKey:kKeyImageLarge];
+//    }
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
@@ -923,9 +902,9 @@
     return subImage;
 }
 
-- (UIImage *)imageFromImageView:(UIScrollView *)view withCropRect:(CGRect)cropRect
+- (UIImage *)imageFromImageView:(UIView *)view withCropRect:(CGRect)cropRect
 {
-    UIGraphicsBeginImageContextWithOptions(view.contentSize, view.opaque, 0.0);
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, YES, 0.0);
     [view.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage * largeImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -975,19 +954,204 @@
         }
     }
     if (original) {
-        CGRect fullRect = CGRectMake(self.imageScrollView.contentOffset.x , self.imageScrollView.contentOffset.y , CGRectGetWidth(self.view.bounds) , CGRectGetHeight(self.view.bounds) );
-        CGRect largeRect = CGRectMake(self.imageScrollView.contentOffset.x , self.imageScrollView.contentOffset.y + CGRectGetHeight(self.header.bounds), 320, 320);
+        CGRect fullRect = [self convertToScalableViewFromViewPortFull:self.view.bounds];
+        CGRect largeRect = [self convertToScalableViewFromViewPortFull:CGRectMake(0, CGRectGetHeight(self.header.bounds), 320, 320)];
         
         if (!CGRectIsEmpty(fullRect)) {
-            UIImage *img = [self imageFromImageView:self.imageScrollView withCropRect:fullRect];
+            UIImage *img = [self imageFromImageView:self.imageScrollRange withCropRect:fullRect];
             [dict setValue:img forKey:kKeyImageFull];
         }
         if (!CGRectIsEmpty(largeRect)) {
-            UIImage *img = [self imageFromImageView:self.imageScrollView withCropRect:largeRect];
+            UIImage *img = [self imageFromImageView:self.imageScrollRange withCropRect:largeRect];
             [dict setValue:img forKey:kKeyImageLarge];
         }
     }
     return [dict copy];
 }
+
+- (void)bestZoom
+{
+    if (CGRectGetWidth(self.avatar.frame) > 320) {
+        if (CGRectGetWidth(self.avatar.frame) >= CGRectGetHeight(self.avatar.frame)) {
+            CGFloat d = CGRectGetHeight(self.avatar.frame);
+            CGFloat scale = 320 / d;
+            CGRect rect = CGRectMake(self.avatar.center.x - d / 2, self.avatar.center.y - d / 2 + (CGRectGetHeight(self.view.bounds) / 2 - 320 / 2 - CGRectGetHeight(self.header.bounds)) / scale, d, d);
+            [self.imageScrollView zoomToRect:rect animated:YES];
+        } else if (CGRectGetWidth(self.avatar.frame) * (CGRectGetHeight(self.header.bounds) * 2 + 320) > CGRectGetHeight(self.avatar.frame) * 320) {
+            CGFloat d = CGRectGetWidth(self.avatar.frame);
+            CGFloat scale = 320 / d;
+            CGRect rect = CGRectMake(self.avatar.center.x - d / 2, self.avatar.center.y - d / 2 + (CGRectGetHeight(self.view.bounds) / 2 - 320 / 2 - CGRectGetHeight(self.header.bounds)) / scale, d, d);
+            [self.imageScrollView zoomToRect:rect animated:YES];
+        } else {
+            [self.imageScrollView zoomToRect:self.avatar.frame animated:YES];
+        }
+    } else {
+        CGFloat d = CGRectGetWidth(self.avatar.frame);
+        CGFloat scale = 320 / d;
+        CGRect rect = CGRectMake(self.avatar.center.x - d / 2, self.avatar.center.y - d / 2 + (CGRectGetHeight(self.view.bounds) / 2 - 320 / 2 - CGRectGetHeight(self.header.bounds)) / scale, d, d);
+        [self.imageScrollView zoomToRect:rect animated:YES];
+    }
+}
+
+
+// expand
+// w > h
+- (CGRect)expandFullScrenBaseOnWidth:(CGRect)rect
+{
+    CGRect new = CGRectZero;
+    if (CGRectGetWidth(rect) >= CGRectGetHeight(rect)) {
+        // w >= h
+//        CGFloat y1 = (CGRectGetWidth(rect) - CGRectGetHeight(rect)) / 2; //360
+//        CGFloat y2 = CGRectGetHeight(self.header.bounds) / CGRectGetWidth(self.imageScrollView.bounds) * CGRectGetWidth(rect); // 570
+        
+        new.origin.x = CGRectGetMinX(rect); // 960
+        new.origin.y = CGRectGetMinY(rect) - (CGRectGetWidth(rect) - CGRectGetHeight(rect)) / 2 - CGRectGetHeight(self.header.bounds) / CGRectGetWidth(self.imageScrollView.bounds) * CGRectGetWidth(rect); // 1530
+        new.size.width = CGRectGetWidth(rect); //1920
+        new.size.height = CGRectGetWidth(rect) / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds); // 3408
+        
+//        CGRect rect = self.avatar.frame;
+//        rect.origin.y = CGRectGetMinY(rect) - 360 - 570;
+//        rect.size.height = 3408 ;//CGRectGetHeight(rect) + 50;
+        
+//        new.origin.x = CGRectGetMinX(rect);
+//        new.origin.y = CGRectGetMinY(rect) - (CGRectGetWidth(rect) -  CGRectGetHeight(rect)) / 2 - CGRectGetHeight(self.header.bounds) / CGRectGetWidth(self.view.bounds) * CGRectGetWidth(rect);
+//        new.size.width = CGRectGetWidth(rect);
+//        new.size.height = CGRectGetWidth(rect) / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds);
+        NSLog(@"expand %@ to %@", NSStringFromCGRect(rect), NSStringFromCGRect(new));
+    } else {
+        // w < h
+        new.origin.x = CGRectGetMinX(rect);
+        
+        new.size.width = CGRectGetWidth(rect);
+        new.size.height = CGRectGetWidth(rect) * CGRectGetHeight(self.imageScrollView.bounds) / CGRectGetWidth(self.imageScrollView.bounds);
+        
+        if (CGRectGetHeight(rect) > CGRectGetHeight(new)) {
+            new.origin.y = CGRectGetMinY(rect) + (CGRectGetHeight(rect) - CGRectGetHeight(new)) * (CGRectGetHeight(self.header.bounds) + CGRectGetWidth(self.imageScrollView.bounds) / 2) / CGRectGetHeight(self.imageScrollView.bounds);
+        } else {
+            new.origin.y = CGRectGetMinY(rect) - (CGRectGetHeight(rect) - CGRectGetHeight(new)) * (CGRectGetHeight(self.header.bounds) + CGRectGetWidth(self.imageScrollView.bounds) / 2) / CGRectGetHeight(self.imageScrollView.bounds);
+        }
+        
+    }
+    return CGRectZero;
+}
+
+
+- (CGRect)expandFullfillBaseOnHeight:(CGRect)rect
+{
+    CGRect new = CGRectZero;
+    if (CGRectGetWidth(rect) >= CGRectGetHeight(rect)) {
+        // w >= h
+        
+    } else {
+        // w < h
+        new.origin.x = CGRectGetMinX(rect) - (CGRectGetHeight(rect) - CGRectGetWidth(rect)) / 2;
+        new.origin.y = CGRectGetMinY(rect) - CGRectGetHeight(self.header.bounds) / CGRectGetWidth(self.imageScrollView.bounds) * CGRectGetHeight(rect);
+        new.size.width = CGRectGetHeight(rect);
+        new.size.height = CGRectGetHeight(rect) * CGRectGetHeight(self.imageScrollView.bounds) / CGRectGetWidth(self.imageScrollView.bounds);;
+    }
+    return CGRectZero;
+}
+
+- (CGRect)expandFullScreenOnHeight:(CGRect)rect
+{
+    CGRect new = CGRectZero;
+    if (CGRectGetWidth(rect) >= CGRectGetHeight(rect)) {
+        // w >= h
+        
+    } else {
+        // w < h
+        new.origin.x = CGRectGetMinX(rect) - (CGRectGetHeight(rect) - CGRectGetWidth(rect)) / 2;
+        new.origin.y = CGRectGetMinY(rect) - CGRectGetHeight(self.header.bounds) / CGRectGetWidth(self.imageScrollView.bounds) * CGRectGetHeight(rect);
+        new.size.width = CGRectGetHeight(rect);
+        new.size.height = CGRectGetHeight(rect) * CGRectGetHeight(self.imageScrollView.bounds) / CGRectGetWidth(self.imageScrollView.bounds);;
+    }
+    return CGRectZero;
+}
+
+// convert
+- (CGRect)convertToScalableViewFromViewPortFull:(CGRect)rect withViewPort:(CGPoint)offset baseOn:(float)scale
+{
+    CGRect imageRect = CGRectZero;
+    imageRect.origin.x = (CGRectGetMinX(rect) + offset.x) / scale;
+    imageRect.origin.y = (CGRectGetMinY(rect) + offset.y) / scale;
+    imageRect.size.width = CGRectGetWidth(rect) / scale;
+    imageRect.size.height = CGRectGetHeight(rect) / scale;
+    return imageRect;
+}
+
+
+
+- (CGRect)convertToScalableViewFromViewPortFull:(CGRect)rect
+{
+    return [self convertToScalableViewFromViewPortFull:rect withViewPort:self.imageScrollView.contentOffset baseOn:self.imageScrollView.zoomScale];
+}
+
+- (CGRect)convertToScalableViewFromViewPortSquare:(CGRect)rect
+{
+    CGPoint offset = self.imageScrollView.contentOffset;
+    float scale = self.imageScrollView.zoomScale;
+    
+    CGRect imageRect = CGRectZero;
+    imageRect.origin.x = (CGRectGetMinX(rect) + offset.x + CGRectGetMinX(self.header.frame)) / scale;
+    imageRect.origin.y = (CGRectGetMinY(rect) + offset.y + CGRectGetMaxY(self.header.frame)) / scale;
+    imageRect.size.width = CGRectGetWidth(rect) / scale;
+    imageRect.size.height = CGRectGetHeight(rect) / scale;
+    return imageRect;
+}
+
+- (CGRect)convertToImageRectFromViewPortFull:(CGRect)rect
+{
+    CGPoint offset = self.imageScrollView.contentOffset;
+    float scale = self.imageScrollView.zoomScale;
+    
+    CGRect imageRect = CGRectZero;
+    imageRect.origin.x = (CGRectGetMinX(rect) + offset.x) / scale - CGRectGetMinX(self.avatar.frame);
+    imageRect.origin.y = (CGRectGetMinY(rect) + offset.y) / scale - CGRectGetMinY(self.avatar.frame);
+    imageRect.size.width = CGRectGetWidth(rect) / scale;
+    imageRect.size.height = CGRectGetHeight(rect) / scale;
+    return imageRect;
+}
+
+- (CGRect)convertToImageRectFromViewPortSquare:(CGRect)rect
+{
+    CGPoint offset = self.imageScrollView.contentOffset;
+    float scale = self.imageScrollView.zoomScale;
+    
+    CGRect imageRect = CGRectZero;
+    imageRect.origin.x = (CGRectGetMinX(rect) + offset.x + CGRectGetMinX(self.header.frame)) / scale - CGRectGetMinX(self.avatar.frame);
+    imageRect.origin.y = (CGRectGetMinY(rect) + offset.y + CGRectGetMaxY(self.header.frame)) / scale - CGRectGetMinY(self.avatar.frame);
+    imageRect.size.width = CGRectGetWidth(rect) / scale;
+    imageRect.size.height = CGRectGetHeight(rect) / scale;
+    return imageRect;
+}
+
+- (CGRect)convertToViewPortFullFromImageRect:(CGRect)rect
+{
+    CGPoint offset = self.imageScrollView.contentOffset;
+    float scale = self.imageScrollView.zoomScale;
+    
+    CGRect viewPortRect = CGRectZero;
+    viewPortRect.origin.x = (CGRectGetMinX(rect) + CGRectGetMinX(self.avatar.frame)) * scale - offset.x;
+    viewPortRect.origin.y = (CGRectGetMinY(rect) + CGRectGetMinY(self.avatar.frame)) * scale - offset.y;
+    viewPortRect.size.width = CGRectGetWidth(rect) * scale;
+    viewPortRect.size.height = CGRectGetHeight(rect) * scale;
+    
+    return viewPortRect;
+}
+
+- (CGRect)convertToViewPortSquareFromImageRect:(CGRect)rect
+{
+    CGPoint offset = self.imageScrollView.contentOffset;
+    float scale = self.imageScrollView.zoomScale;
+    
+    CGRect viewPortRect = CGRectZero;
+    viewPortRect.origin.x = (CGRectGetMinX(rect) + CGRectGetMinX(self.avatar.frame)) * scale - offset.x - CGRectGetMinX(self.header.frame);
+    viewPortRect.origin.y = (CGRectGetMinY(rect) + CGRectGetMinY(self.avatar.frame)) * scale - offset.y - CGRectGetMaxY(self.header.frame);
+    viewPortRect.size.width = CGRectGetWidth(rect) * scale;
+    viewPortRect.size.height = CGRectGetHeight(rect) * scale;
+    
+    return viewPortRect;
+}
+
 
 @end
