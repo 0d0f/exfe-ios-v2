@@ -1,15 +1,14 @@
 //
-//  EFChangePasswordViewController.m
+//  EFAuthenticationViewController.m
 //  EXFE
 //
-//  Created by Stony Wang on 13-7-8.
+//  Created by Stony Wang on 13-7-22.
 //
 //
 
-#import "EFChangePasswordViewController.h"
+#import "EFAuthenticationViewController.h"
 #import <BlocksKit/BlocksKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import "EFPasswordField.h"
 #import "WCAlertView.h"
 #import "EFModel.h"
 #import "CSLinearLayoutView.h"
@@ -22,27 +21,17 @@
 #import "EXGradientToolbarView.h"
 #import "UILabel+EXFE.h"
 
-#define kTagOldPassword     233
-#define kTagFreshPassword   234
-#define kTagBtnChangePwd    235
-#define kTagForgetTitle     236
-#define kTagForgetDesc      237
 #define kTagIdentityBar     238
 #define kTagBtnAuth         239
 #define kViewTagErrorInline 240
 
-@interface EFChangePasswordViewController ()
+@interface EFAuthenticationViewController ()
 
 @property (nonatomic, weak) EXFEModel *model;
 
 @property (nonatomic, strong, readonly) NSArray *trustIdentities;
 
 @property (nonatomic, strong) CSLinearLayoutView *rootView;
-@property (nonatomic, strong) UITextField *oldPwdTextField;
-@property (nonatomic, strong) UITextField *freshPwdTextField;
-@property (nonatomic, strong) UIButton *btnChangePwd;
-@property (nonatomic, strong) UILabel * forgotTitle;
-@property (nonatomic, strong) UILabel * forgotDetail;
 @property (nonatomic, strong) UIView * identitybar;
 @property (nonatomic, strong) UIButton *btnAuth;
 
@@ -55,14 +44,12 @@
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 @property (nonatomic, strong) UIButton *btnBack;
 
-@property (nonatomic, strong) NSString *oldPassword;
-@property (nonatomic, strong) NSString *freshPassword;
 @property (nonatomic, strong) Identity *identity;
 @property (nonatomic, assign) NSInteger selectedIdentityIndex;
 
 @end
 
-@implementation EFChangePasswordViewController
+@implementation EFAuthenticationViewController
 
 #pragma mark - Getter/Setter
 - (void)setSelectedIdentityIndex:(NSInteger)index
@@ -124,7 +111,7 @@
     title.textAlignment = NSTextAlignmentCenter;
     title.shadowColor = [UIColor COLOR_WA(0xFF, 0xBF)];
     title.shadowOffset = CGSizeMake(0, 1);
-    title.text = NSLocalizedString(@"Change password", nil);
+    title.text = NSLocalizedString(@"Authentication", nil);
     [header addSubview:title];
     
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
@@ -146,107 +133,6 @@
     [self.view addSubview:header];
     
     CSLinearLayoutView *layout = [[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 44)];
-    
-    {// TextField Frame
-        UIImage *img = [[UIImage imageNamed:@"textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 9, 15, 9)];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:img];
-        imageView.frame = CGRectMake(15, 24, 290, 100);
-        [layout addSubview:imageView];
-    }
-    
-    {
-        UIImage *img = [UIImage imageNamed:@"list_divider.png"];
-        UIImageView *line1 = [[UIImageView alloc] initWithFrame:CGRectMake(15, 74, 290, 1)];
-        line1.image = img;
-        [layout addSubview:line1];
-    }
-    
-
-    EFPasswordField *inputOldPassword = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-    inputOldPassword.leftViewMode = UITextFieldViewModeNever;
-    inputOldPassword.returnKeyType = UIReturnKeyNext;
-    inputOldPassword.tag = kTagOldPassword;
-    inputOldPassword.placeholder = NSLocalizedString(@"Current password", nil);
-    inputOldPassword.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
-    inputOldPassword.delegate = self;
-    inputOldPassword.borderStyle = UITextBorderStyleNone;
-    inputOldPassword.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    [inputOldPassword.btnForgot addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
-    CSLinearLayoutItem *item1 = [CSLinearLayoutItem layoutItemForView:inputOldPassword];
-    item1.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-    item1.fillMode = CSLinearLayoutItemFillModeNormal;
-    item1.padding = CSLinearLayoutMakePadding(24, 20, 0, 20);
-    [layout addItem:item1];
-    self.oldPwdTextField = inputOldPassword;
-    
-    EFPasswordField *inputFreshPassword = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-    inputFreshPassword.leftViewMode = UITextFieldViewModeNever;
-    inputFreshPassword.btnForgot.hidden = YES;
-    inputFreshPassword.returnKeyType = UIReturnKeyDone;
-    inputFreshPassword.tag = kTagFreshPassword;
-    inputFreshPassword.placeholder = NSLocalizedString(@"New password", nil);
-    inputFreshPassword.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
-    inputFreshPassword.delegate = self;
-    inputFreshPassword.borderStyle = UITextBorderStyleNone;
-    inputFreshPassword.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    CSLinearLayoutItem *item2 = [CSLinearLayoutItem layoutItemForView:inputFreshPassword];
-    item2.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-    item2.fillMode = CSLinearLayoutItemFillModeNormal;
-    item2.padding = CSLinearLayoutMakePadding(0, 20, 10, 20);
-    [layout addItem:item2];
-    self.freshPwdTextField = inputFreshPassword;
-    
-    UIButton *btnChangePwd = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 290, 48)];
-    [btnChangePwd setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
-    UIImage *btnImage = [UIImage imageNamed:@"btn_blue_44.png"];
-    btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
-    [btnChangePwd setBackgroundImage:btnImage forState:UIControlStateNormal];
-    [btnChangePwd setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    btnChangePwd.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
-    btnChangePwd.titleLabel.shadowOffset = CGSizeMake(0, -1);
-    [btnChangePwd setTitle:NSLocalizedString(@"Change password", nil) forState:UIControlStateNormal];
-    [btnChangePwd addTarget:self action:@selector(changePwd:) forControlEvents:UIControlEventTouchUpInside];
-    btnChangePwd.tag = kTagBtnChangePwd;
-    CSLinearLayoutItem *item3 = [CSLinearLayoutItem layoutItemForView:btnChangePwd];
-    item3.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-    item3.fillMode = CSLinearLayoutItemFillModeNormal;
-    item3.padding = CSLinearLayoutMakePadding(0, 15, 24, 15);
-    [layout addItem:item3];
-    self.btnChangePwd = btnChangePwd;
-    
-    UILabel * forgotTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-    forgotTitle.backgroundColor = [UIColor clearColor];
-    forgotTitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
-    forgotTitle.textColor = [UIColor COLOR_BLACK_19];
-    forgotTitle.text = NSLocalizedString(@"Forgot password?", nil);
-    [forgotTitle sizeToFit];
-    forgotTitle.tag = kTagForgetTitle;
-    CSLinearLayoutItem *item4 = [CSLinearLayoutItem layoutItemForView:forgotTitle];
-    item4.fillMode = CSLinearLayoutItemFillModeNormal;
-    item4.padding = CSLinearLayoutMakePadding(0, 15, 0, 15);
-    [layout addItem:item4];
-    self.forgotTitle = forgotTitle;
-    
-    TTTAttributedLabel * forgotDetail = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-    forgotDetail.backgroundColor = [UIColor clearColor];
-    forgotDetail.numberOfLines = 0;
-    forgotDetail.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
-    forgotDetail.textColor = [UIColor COLOR_BLACK_19];
-    NSString *full = NSLocalizedString(@"To reset EXFE password, please authenticate with your identity.", nil);
-    NSString *part = NSLocalizedString(@"EXFE", nil);
-    [forgotDetail setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
-        NSRange titleRange = [[mutableAttributedString string] rangeOfString:part options:NSCaseInsensitiveSearch];
-        [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[[UIColor COLOR_BLUE_EXFE] CGColor] range:titleRange];
-        return mutableAttributedString;
-    }];
-    [forgotDetail sizeToFit];
-    forgotDetail.tag = kTagForgetDesc;
-    CSLinearLayoutItem *item5 = [CSLinearLayoutItem layoutItemForView:forgotDetail];
-//    item5.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-    item5.fillMode = CSLinearLayoutItemFillModeNormal;
-    item5.padding = CSLinearLayoutMakePadding(0, 15, 10, 15);
-    [layout addItem:item5];
-    self.forgotDetail = forgotDetail;
     
     UIView * identityBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
     identityBar.layer.backgroundColor = [UIColor COLOR_WA(0xE6, 0xFF)].CGColor;
@@ -307,38 +193,6 @@
     [self.view addSubview:layout];
     self.rootView = layout;
     
-    self.forgotTitle.hidden = YES;
-    self.forgotDetail.hidden = YES;
-    self.identitybar.hidden = YES;
-    self.btnAuth.hidden = YES;
-    
-    {// Overlay error hint
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 250, 46)];
-        label.textColor = [UIColor COLOR_RED_EXFE];
-        label.font = [UIFont fontWithName:@"HelveticaNeue" size:18.0];
-        label.backgroundColor = [UIColor clearColor];
-        label.numberOfLines = 1;
-        label.backgroundColor = [UIColor whiteColor];
-        label.hidden = YES;
-        label.textAlignment = UITextAlignmentRight;
-        UITapGestureRecognizer *tap = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-            
-            [self hide:sender.view withAnmated:NO];
-            CGPoint p = [sender.view convertPoint:location toView:self.oldPwdTextField.superview];
-            if (CGRectContainsPoint(self.oldPwdTextField.frame, p)) {
-                [self.oldPwdTextField becomeFirstResponder];
-                return;
-            }
-            if (CGRectContainsPoint(self.freshPwdTextField.frame, p)) {
-                [self.freshPwdTextField becomeFirstResponder];
-                return;
-            }
-        }];
-        [label addGestureRecognizer:tap];
-        label.userInteractionEnabled = true;
-        self.hintError = label;
-    }
-    
     {// Inline error hint
         TTTAttributedLabel *label = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 280, 80)];
         label.backgroundColor = [UIColor clearColor];
@@ -355,7 +209,7 @@
         aiView.frame = (CGRect){{0, 0}, {20, 20}};
         self.indicator = aiView;
     }
-    
+
 }
 
 - (void)viewDidLoad
@@ -366,9 +220,6 @@
     [self registerAsObserver];
     
     self.selectedIdentityIndex = 0;
-    
-    [self.oldPwdTextField becomeFirstResponder];
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -390,10 +241,10 @@
      should be provided in the observe… method.
      */
     [self addObserver:self
-              forKeyPath:@"identity"
-                 options:(NSKeyValueObservingOptionNew |
-                          NSKeyValueObservingOptionOld)
-                 context:NULL];
+           forKeyPath:@"identity"
+              options:(NSKeyValueObservingOptionNew |
+                       NSKeyValueObservingOptionOld)
+              context:NULL];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShown:)
@@ -426,42 +277,10 @@
     }
 }
 
-- (void)keyboardWillShown:(NSNotification*)aNotification
-{
-//    NSDictionary* info = [aNotification userInfo];
-//    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    if ([self.oldPwdTextField isFirstResponder] || [self.freshPwdTextField isFirstResponder]) {
-        
-        [UIView animateWithDuration:0.4
-                         animations:^{
-                             self.forgotTitle.alpha = 0;
-                             self.forgotDetail.alpha = 0;
-                             self.identitybar.alpha = 0;
-                             self.btnAuth.alpha = 0;
-                             self.inlineError.alpha = 0;
-                         } completion:^(BOOL finished) {
-                             self.forgotTitle.hidden = YES;
-                             self.forgotDetail.hidden = YES;
-                             self.identitybar.hidden = YES;
-                             self.btnAuth.hidden = YES;
-                             self.inlineError.hidden = YES;
-                             
-                             self.forgotTitle.alpha = 100;
-                             self.forgotDetail.alpha = 100;
-                             self.identitybar.alpha = 100;
-                             self.btnAuth.alpha = 100;
-                             self.inlineError.alpha = 100;
-                         }];
-    }
-    
-    
-}
-
 #pragma mark - UI Refresh
 - (void) refreshIdentity:(Identity*)identity
 {
- 
+    
     NSString *avatar_filename = identity.avatar_filename;
     if (avatar_filename.length > 0) {
         UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
@@ -481,7 +300,7 @@
         }
     }
     self.name.text = [identity getDisplayIdentity];
-
+    
 }
 
 - (void)showInlineError:(NSString *)title with:(NSString *)description
@@ -591,133 +410,6 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (void)forgetPwd:(id)view
-{
-    if ([self.oldPwdTextField isFirstResponder]) {
-        [self.oldPwdTextField resignFirstResponder];
-    }
-    if ([self.freshPwdTextField isFirstResponder]) {
-        [self.freshPwdTextField resignFirstResponder];
-    }
-    
-    
-    if (self.forgotTitle.hidden && self.forgotDetail.hidden && self.identitybar.hidden && self.btnAuth.hidden) {
-        
-        self.forgotTitle.alpha = 0;
-        self.forgotDetail.alpha = 0;
-        self.identitybar.alpha = 0;
-        self.btnAuth.alpha = 0;
-        self.inlineError.alpha = 0;
-        
-        self.forgotTitle.hidden = NO;
-        self.forgotDetail.hidden = NO;
-        self.identitybar.hidden = NO;
-        self.btnAuth.hidden = NO;
-        [UIView animateWithDuration:0.4
-                         animations:^{
-                             self.forgotTitle.alpha = 100;
-                             self.forgotDetail.alpha = 100;
-                             self.identitybar.alpha = 100;
-                             self.btnAuth.alpha = 100;
-                             self.inlineError.alpha = 100;
-                         } ];
-        
-    }
-}
-
-- (void)changePwd:(UIControl*)view
-{
-    if ([self.oldPwdTextField isFirstResponder]) {
-        [self textFieldDidEndEditing:self.oldPwdTextField];
-    }
-    if ([self.freshPwdTextField isFirstResponder]) {
-        [self textFieldDidEndEditing:self.freshPwdTextField];
-    }
-    
-    if (self.freshPassword.length < 4) {
-        // error: "Invalid password."
-        [self showErrorInfo:NSLocalizedString(@"Invalid password.", nil) dockOn:self.freshPwdTextField];
-        return;
-    }
-    
-    if ([self.freshPassword isEqualToString:self.oldPassword]) {
-        // error: "same password"
-        [self showErrorInfo:NSLocalizedString(@"Same password?", nil) dockOn:self.freshPwdTextField];
-        return;
-    }
-    
-    if (self.model.apiServer) {
-        view.enabled = NO;
-        [self showIndicatorAt:CGPointMake(285, view.center.y) style:UIActivityIndicatorViewStyleWhite];
-    }
-    [self.model.apiServer changePassword:_oldPassword
-                                    with:_freshPassword
-                                 success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                     view.enabled = YES;
-                                     [self hideIndicator];
-                                     if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]) {
-                                         id code = [responseObject valueForKeyPath:@"meta.code"];
-                                         if (code) {
-                                             NSUInteger c = [code integerValue];
-                                             NSInteger type = c / 100;
-                                             
-                                             switch (type) {
-                                                 case 2:{
-                                                     // [code integerValue] == 200
-                                                     NSDictionary *resp = [responseObject valueForKeyPath:@"response"];
-                                                     NSString *token = [resp valueForKey:@"token"];
-                                                     if (token.length > 0) {
-                                                         _model.userToken = token;
-                                                         [_model saveUserData];
-                                                         
-                                                         [self goBack:_btnChangePwd];
-                                                     } else {
-                                                         // error
-                                                     }
-                                                 }   break;
-                                                 case 3: {
-                                                     
-                                                 } break;
-                                                 case 4:{
-                                                     NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
-                                                     if (c == 400) {
-                                                         if ([@"weak_password" isEqualToString:errorType]) {
-                                                             // error: "Weak password."
-                                                             [self showErrorInfo:NSLocalizedString(@"Invalid password.", nil) dockOn:self.freshPwdTextField];
-                                                         }
-                                                     } else if (c == 401) {
-                                                         if ([@"no_signin" isEqualToString:errorType]) {
-                                                             // error: "Not sign in"
-                                                         } else if ([@"token_staled" isEqualToString:errorType]) {
-                                                             // error: "Token expired"
-                                                         }
-                                                     } else if (c == 403) {
-                                                         if ([@"invalid_current_password" isEqualToString:errorType]) {
-                                                             // error: invalid current password
-                                                             [self showErrorInfo:NSLocalizedString(@"Password incorrect.", nil) dockOn:self.oldPwdTextField];
-                                                         }
-                                                     } else if (c == 429) {
-//                                                         [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:NSLocalizedString(@"Please wait a while.", nil)];
-                                                     }
-                                                 }
-                                                     break;
-                                                 case 5:{
-                                                     // faild
-                                                 }
-                                                     break;
-                                                 default:
-                                                     break;
-                                             }
-                                         }
-                                     }
-                                 }
-                                 failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                     view.enabled = YES;
-                                     [self hideIndicator];
-                                 }];
-
-}
-
 - (void)changeIdentity:(id)view
 {
     
@@ -747,8 +439,8 @@
         self.pickerViewPopup = pickerViewPopup;
         self.categoryPickerView = categoryPickerView;
     }
-
-//    [self.categoryPickerView reloadAllComponents];
+    
+    //    [self.categoryPickerView reloadAllComponents];
     
     [self.pickerViewPopup showInView:self.view];
     [self.pickerViewPopup setBounds:CGRectMake(0, 0, 320, 400)];
@@ -765,12 +457,12 @@
         sender.enabled = NO;
         [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
     }
-
+    
     [self.model.apiServer forgetPassword:self.identity.external_username
                                     with:[Identity getProviderCode:self.identity.provider]
                                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                                     sender.enabled = YES;
-//                                     [self hideIndicator];
+                                     //                                     sender.enabled = YES;
+                                     //                                     [self hideIndicator];
                                      if ([operation.response statusCode] == 200){
                                          if([responseObject isKindOfClass:[NSDictionary class]]) {
                                              NSDictionary *body = responseObject;
@@ -839,8 +531,8 @@
                                                              }
                                                          } else if (c == 429){
                                                              
-                                                            NSString *msg = nil;
-                                                            Provider provider = [Identity getProviderCode:self.identity.provider];
+                                                             NSString *msg = nil;
+                                                             Provider provider = [Identity getProviderCode:self.identity.provider];
                                                              switch (provider) {
                                                                  case kProviderPhone:
                                                                      msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile.", nil);
@@ -858,7 +550,7 @@
                                                          
                                                      }  break;
                                                      default:
-                                                        break;
+                                                         break;
                                                  }
                                              }
                                          }
@@ -871,46 +563,6 @@
                                      [self hideIndicator];
                                  }];
     
-}
-
-#pragma mark UITextFieldDelegate
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    //    if ([textField.text isEqualToString:@""])
-    //        return;
-    
-    switch (textField.tag) {
-        case kTagOldPassword:
-            self.oldPassword = textField.text;
-            break;
-        case kTagFreshPassword:
-            self.freshPassword = textField.text;
-            break;
-        default:
-            break;
-    }
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    [self hide:_hintError withAnmated:NO];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    switch (textField.tag) {
-        case kTagOldPassword:
-            [self.freshPwdTextField becomeFirstResponder];
-            return NO;
-            //break;
-        case kTagFreshPassword:
-            [self.btnChangePwd sendActionsForControlEvents: UIControlEventTouchUpInside];
-            return NO;
-            //break;
-        default:
-            break;
-    }
-    
-    return YES;
 }
 
 #pragma mark UIPickerViewDataSource
@@ -959,7 +611,7 @@
     } else {
         // TODO: Merge User
     }
-  
+    
 }
 
 #pragma mark - Helper Methods
@@ -975,7 +627,7 @@
                      UITextField *textField = [alertView textFieldAtIndex:0];
                      textField.placeholder = NSLocalizedString(@"Set EXFE password", nil);
                      textField.textAlignment = UITextAlignmentCenter;
-//                     textField.delegate = self;
+                     //                     textField.delegate = self;
                      if (msg) {
                          [self showErrorInfo:msg over:textField on:[textField superview]];
                      }
