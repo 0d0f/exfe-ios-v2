@@ -1032,7 +1032,7 @@
     
     mapViewController.customTabBarItem = tabBarItem4;
     mapViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
-    mapViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
+    mapViewController.shadowImage = nil;
     mapViewController.cross = cross;
     mapViewController.model = model;
     
