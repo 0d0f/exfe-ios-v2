@@ -50,7 +50,7 @@
 @property (nonatomic, strong) EFLocation            *lastUpdatedLocation;
 @property (nonatomic, strong) NSTimer               *updateLocationTimer;
 
-@property (nonatomic, strong) NSTimer               *updateUITimer;
+//@property (nonatomic, strong) NSTimer               *updateUITimer;
 @property (nonatomic, assign) BOOL                  hasGotOffset;
 
 @end
@@ -183,11 +183,11 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     self.mapDataSource = [[EFMarauderMapDataSource alloc] initWithCrossId:[self.cross.cross_id integerValue]];
     self.mapDataSource.delegate = self;
     
-    self.updateUITimer = [NSTimer scheduledTimerWithTimeInterval:0.01f
-                                                          target:self
-                                                        selector:@selector(uiTimerRunloop:)
-                                                        userInfo:nil
-                                                         repeats:YES];
+//    self.updateUITimer = [NSTimer scheduledTimerWithTimeInterval:0.01f
+//                                                          target:self
+//                                                        selector:@selector(uiTimerRunloop:)
+//                                                        userInfo:nil
+//                                                         repeats:YES];
 }
 
 - (void)viewDidUnload {
@@ -224,11 +224,11 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
         [self.updateLocationTimer invalidate];
         self.updateLocationTimer = nil;
     }
-    if (self.updateUITimer) {
-        [self.updateUITimer invalidate];
-        self.updateUITimer = nil;
-    }
-    
+//    if (self.updateUITimer) {
+//        [self.updateUITimer invalidate];
+//        self.updateUITimer = nil;
+//    }
+//    
     [super viewDidDisappear:animated];
 }
 
@@ -529,17 +529,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (void)uiTimerRunloop:(NSTimer *)timer {
-//    static MKMapRect preMapRect;
-//    static dispatch_once_t onceToken;
-//    dispatch_once(&onceToken, ^{
-//        preMapRect = self.mapView.visibleMapRect;
-//        [self.mapStrokeView reloadData];
-//    });
-//    
-//    if (!MKMapRectEqualToRect(preMapRect, self.mapView.visibleMapRect)) {
-//        preMapRect = self.mapView.visibleMapRect;
         [self.mapStrokeView reloadData];
-//    }
 }
 
 #pragma mark - EFMapStrokeViewDataSource
@@ -552,7 +542,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     NSString *key = self.identityIds[index];
     NSArray *locations = [self.personDictionary valueForKey:key];
     
-    if (locations && 0 != index) {
+    if (locations) {
         EFLocation *lastestLocation = locations[0];
         
         CLLocationCoordinate2D coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:lastestLocation.coordinate];
@@ -684,6 +674,15 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 #pragma mark - MKMapViewDelegate
+
+- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
+    self.mapStrokeView.hidden = YES;
+}
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    [self.mapStrokeView reloadData];
+    self.mapStrokeView.hidden = NO;
+}
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     if ([view isKindOfClass:[EFAnnotationView class]]) {

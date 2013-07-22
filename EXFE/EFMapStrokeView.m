@@ -126,6 +126,7 @@
         }
         
         [strokeColor setStroke];
+        CGContextSetShadowWithColor(context, (CGSize){0.0f, 0.0f}, 1.0f, [UIColor whiteColor].CGColor);
         [path stroke];
     }
     
