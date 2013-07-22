@@ -15,6 +15,7 @@
 @property (nonatomic, strong) User *user;
 @property (nonatomic, strong) Identity *identity;
 @property (nonatomic, assign, readonly) BOOL isEditUser;
+@property (nonatomic, assign) BOOL readonly;
 
 - (id)initWithModel:(EXFEModel*)model;
 @end

@@ -53,6 +53,7 @@
 @property (nonatomic, strong) UIView *imageScrollRange;
 @property (nonatomic, strong) SSTextView *bio;
 
+@property (nonatomic, strong) UIView *camera;
 @property (nonatomic, strong) UIView *header;
 @property (nonatomic, strong) UIView *footer;
 
@@ -90,6 +91,22 @@
     }
 }
 
+- (void)setReadonly:(BOOL)readonly
+{
+    _readonly = readonly;
+    if (readonly) {
+        [self.data removeAllObjects];
+        
+        self.camera.hidden = YES;
+        self.name.userInteractionEnabled = NO;
+        self.bio.editable = YES;
+    } else {
+        self.camera.hidden = NO;
+        self.name.userInteractionEnabled = NO;
+        self.bio.editable = NO;
+    }
+}
+
 #pragma mark View Controller Life cycle
 - (id)initWithModel:(EXFEModel*)model
 {
@@ -110,7 +127,7 @@
     contentView.scrollEnabled = NO;
     self.view = contentView;
     
-
+    
     // Lower layer
     UIScrollView *imageScrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     imageScrollView.delegate = self;
@@ -129,14 +146,11 @@
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
-//    UITapGestureRecognizer *twoFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerTap:)];
     
     [doubleTap setNumberOfTapsRequired:2];
-//    [twoFingerTap setNumberOfTouchesRequired:2];
     
     [imageView addGestureRecognizer:singleTap];
     [imageView addGestureRecognizer:doubleTap];
-//    [imageView addGestureRecognizer:twoFingerTap];
     
     [self.view addSubview:imageScrollView];
     self.imageScrollView = imageScrollView;
@@ -189,7 +203,6 @@
                     }
                 }
                 CGSize size = [self.inputName sizeThatFits:CGSizeMake(CGRectGetWidth(self.inputName.bounds), MAXFLOAT)];
-                NSLog(@"size %@ for %@", NSStringFromCGSize(size), self.inputName.text);
                 if (size.height > 70) {
                     size.height = 70;
                 }
@@ -200,7 +213,7 @@
             }
         }
     }];
-    name.userInteractionEnabled = YES;
+    name.userInteractionEnabled = !self.readonly;
     [name addGestureRecognizer:tap];
     
     UILabel *identityId = [[UILabel alloc] initWithFrame:CGRectMake(30, CGRectGetHeight(header.bounds) / 2, 260, 30)];
@@ -228,7 +241,9 @@
     camera.frame = CGRectMake(280, CGRectGetHeight(header.bounds) / 2  - 30 / 2, 30, 30);
     [camera addTarget:self action:@selector(takePicture:) forControlEvents:UIControlEventTouchUpInside];
     [camera setBackgroundImage:[UIImage imageNamed:@"camera_30.png"] forState:UIControlStateNormal];
+    camera.hidden = self.readonly;
     [header addSubview:camera];
+    self.camera = camera;
     
     [self.view addSubview:header];
     self.header = header;
@@ -267,6 +282,7 @@
     bio.backgroundColor = [UIColor clearColor];
     bio.delegate = self;
     bio.tag = kTagBio;
+    bio.editable = !self.readonly;
     [footer insertSubview:bio belowSubview:bioTitle];
     self.bio = bio;
     
@@ -274,18 +290,17 @@
     self.footer = footer;
     
 #ifdef DEBUG
-    UIImageView *preview = [[UIImageView alloc] initWithFrame:CGRectMake(100, 5, 80, 80 / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds))];
-    preview.backgroundColor = [UIColor whiteColor];
-    preview.contentMode = UIViewContentModeScaleAspectFit;
-    [footer addSubview:preview];
-    self.preview = preview;
-    
-    UIImageView *previewTh = [[UIImageView alloc] initWithFrame:CGRectMake(200, 5 + CGRectGetHeight(self.header.bounds) * 80 / CGRectGetWidth(self.view.bounds), 80, 80 )];
-    previewTh.backgroundColor = [UIColor whiteColor];
-    previewTh.contentMode = UIViewContentModeScaleAspectFit;
-    [footer addSubview:previewTh];
-    self.previewTh = previewTh;
-    
+//    UIImageView *preview = [[UIImageView alloc] initWithFrame:CGRectMake(100, 5, 80, 80 / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds))];
+//    preview.backgroundColor = [UIColor whiteColor];
+//    [footer addSubview:preview];
+//    self.preview = preview;
+//    
+//    UIImageView *previewTh = [[UIImageView alloc] initWithFrame:CGRectMake(200, 5 + CGRectGetHeight(self.header.bounds) * 80 / CGRectGetWidth(self.view.bounds), 80, 80 )];
+//    previewTh.backgroundColor = [UIColor whiteColor];
+//    [footer addSubview:previewTh];
+//    self.previewTh = previewTh;
+//    
+//    imageScrollRange.backgroundColor = [UIColor lightGrayColor];
 #endif
     
 }
@@ -523,10 +538,8 @@
     // Enhance content range
     size.width = imageSize.width * (1 + paddingRatio * 2);
     if (size.width >= 320) {
-        NSLog(@"imageSize %@", NSStringFromCGSize(imageSize));
         // Large
         size.height = size.width / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds);
-        NSLog(@"contentSize calculated %@", NSStringFromCGSize(size));
         BOOL widthFillFlag = YES;
         CGPoint center = CGPointZero;
         if (imageSize.height > size.height) {
@@ -535,7 +548,6 @@
             // resign width
             size.width = size.height / CGRectGetHeight(self.view.bounds) * CGRectGetWidth(self.view.bounds);
             widthFillFlag = NO;
-            NSLog(@"contentSize fixed %@", NSStringFromCGSize(size));
             center = CGPointMake(size.width / (1 + paddingRatio * 2), size.height / 2);
         } else {
             center = CGPointMake(size.width / (1 + paddingRatio * 2), size.height * ((CGRectGetHeight(self.header.bounds) + 320 / 2) /  CGRectGetHeight(self.view.bounds)));
@@ -550,9 +562,7 @@
         } else {
             ratio = CGRectGetHeight(self.imageScrollView.bounds) / size.height ;
         }
-        NSLog(@"ratio: %f", ratio);
     } else {
-        NSLog(@"imageSize %@", NSStringFromCGSize(imageSize));
         // small
         size.width = 320;
         size.height = size.width / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds);
@@ -562,7 +572,7 @@
         center = CGPointMake(size.width / (1 + paddingRatio * 2), size.height * ((CGRectGetHeight(self.header.bounds) + 320 / 2) /  CGRectGetHeight(self.view.bounds)));
         
         self.imageScrollRange.frame = (CGRect){CGPointZero, size};
-        self.imageScrollRange.backgroundColor = [UIColor lightGrayColor];
+//        self.imageScrollRange.backgroundColor = [UIColor lightGrayColor];
         self.avatar.frame = (CGRect){CGPointZero, imageSize};
         self.avatar.center = center;
         self.avatar.image = image;
@@ -686,15 +696,20 @@
             }
         }
         
-        NSDictionary *dict = [self cropedImages];
-        UIImage *full = [dict valueForKey:kKeyImageFull];
-        UIImage *large = [dict valueForKey:kKeyImageLarge];
+        NSNumber * dirty = [self.data valueForKey:kModelKeyImageDirty];
         
-        if (full) {
-            if (self.isEditUser) {
-                [self.model updateUserAvatar:full withLarge:large withSmall:nil];
-            } else {
-                [self.model updateIdentity:self.identity withAvatar:full withLarge:large withSmall:nil];
+        if (dirty && [dirty boolValue]) {
+            NSDictionary *dict = [self cropedImages];
+            UIImage *full = [dict valueForKey:kKeyImageFull];
+            UIImage *large_raw = [dict valueForKey:kKeyImageLarge];
+            UIImage *large = [self imageWithImage:large_raw scaledToSize:CGSizeMake(320, 320)];
+            UIImage *small = [self imageWithImage:large_raw scaledToSize:CGSizeMake(80, 80)];
+            if (full) {
+                if (self.isEditUser) {
+                    [self.model updateUserAvatar:full withLarge:large withSmall:small];
+                } else {
+                    [self.model updateIdentity:self.identity withAvatar:full withLarge:large withSmall:small];
+                }
             }
         }
     }
@@ -773,9 +788,12 @@
                 [textView resignFirstResponder];
                 return NO;
             }
+            
             NSString *original = textView.text;
             NSMutableString *newText = [NSMutableString stringWithString:text];
-            [newText replaceOccurrencesOfString:@"\n" withString:@"\n" options:NSCaseInsensitiveSearch range:NSMakeRange(0, text.length)];
+            [newText replaceOccurrencesOfString:@"\n" withString:@" " options:NSCaseInsensitiveSearch range:NSMakeRange(0, text.length)];
+            [newText replaceOccurrencesOfString:@"\t" withString:@" " options:NSCaseInsensitiveSearch range:NSMakeRange(0, text.length)];
+            [newText replaceOccurrencesOfString:@"\r" withString:@" " options:NSCaseInsensitiveSearch range:NSMakeRange(0, text.length)];
             NSString *result = [NSString stringWithFormat:@"%@%@%@", [original substringToIndex:range.location], text, [original substringFromIndex:(range.location + range.length) ]];
             if (result) {
                 NSData *asciiData = [result dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
@@ -798,7 +816,6 @@
     switch (textView.tag) {
         case kTagName:{
             CGSize size = [textView sizeThatFits:CGSizeMake(CGRectGetWidth(textView.bounds), MAXFLOAT)];
-            NSLog(@"size %@ for %@", NSStringFromCGSize(size), textView.text);
             if (size.height > 70) {
                 size.height = 70;
             }
@@ -824,29 +841,33 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    id num = [self.data valueForKey:kModelKeyImageDirty];
-    if (!num) {
-        [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
+    if (self.readonly) {
+        id num = [self.data valueForKey:kModelKeyImageDirty];
+        if (!num) {
+            [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
+        }
     }
     
 //    if (self.preview) {
 //        NSDictionary *dict = [self cropedImages];
 //        self.preview.image = [dict valueForKey:kKeyImageFull];
-//        self.previewTh.image = [dict valueForKey:kKeyImageLarge];
+//        self.previewTh.image = [self imageWithImage:[dict valueForKey:kKeyImageLarge] scaledToSize:self.previewTh.bounds.size];
 //    }
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
-    id num = [self.data valueForKey:kModelKeyImageDirty];
-    if (!num) {
-        [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
+    if (self.readonly) {
+        id num = [self.data valueForKey:kModelKeyImageDirty];
+        if (!num) {
+            [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
+        }
     }
     
 //    if (self.preview) {
 //        NSDictionary *dict = [self cropedImages];
 //        self.preview.image = [dict valueForKey:kKeyImageFull];
-//        self.previewTh.image = [dict valueForKey:kKeyImageLarge];
+//        self.previewTh.image = [self imageWithImage:[dict valueForKey:kKeyImageLarge] scaledToSize:self.previewTh.bounds.size];
 //    }
 }
 
@@ -858,7 +879,8 @@
 
 #pragma mark UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{    
+{
+    [self dismissModalViewControllerAnimated:YES];
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
     if ([mediaType isEqualToString:@"public.image"]){
         
@@ -867,7 +889,6 @@
         
         picker.navigationBar.hidden = YES;
     }
-    [self dismissModalViewControllerAnimated:YES];
     
 }
 
@@ -957,6 +978,8 @@
         CGRect fullRect = [self convertToScalableViewFromViewPortFull:self.view.bounds];
         CGRect largeRect = [self convertToScalableViewFromViewPortFull:CGRectMake(0, CGRectGetHeight(self.header.bounds), 320, 320)];
         
+        
+        
         if (!CGRectIsEmpty(fullRect)) {
             UIImage *img = [self imageFromImageView:self.imageScrollRange withCropRect:fullRect];
             [dict setValue:img forKey:kKeyImageFull];
@@ -969,27 +992,29 @@
     return [dict copy];
 }
 
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    //UIGraphicsBeginImageContext(newSize);
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
 - (void)bestZoom
 {
-    if (CGRectGetWidth(self.avatar.frame) > 320) {
-        if (CGRectGetWidth(self.avatar.frame) >= CGRectGetHeight(self.avatar.frame)) {
-            CGFloat d = CGRectGetHeight(self.avatar.frame);
-            CGFloat scale = 320 / d;
-            CGRect rect = CGRectMake(self.avatar.center.x - d / 2, self.avatar.center.y - d / 2 + (CGRectGetHeight(self.view.bounds) / 2 - 320 / 2 - CGRectGetHeight(self.header.bounds)) / scale, d, d);
-            [self.imageScrollView zoomToRect:rect animated:YES];
-        } else if (CGRectGetWidth(self.avatar.frame) * (CGRectGetHeight(self.header.bounds) * 2 + 320) > CGRectGetHeight(self.avatar.frame) * 320) {
-            CGFloat d = CGRectGetWidth(self.avatar.frame);
-            CGFloat scale = 320 / d;
-            CGRect rect = CGRectMake(self.avatar.center.x - d / 2, self.avatar.center.y - d / 2 + (CGRectGetHeight(self.view.bounds) / 2 - 320 / 2 - CGRectGetHeight(self.header.bounds)) / scale, d, d);
-            [self.imageScrollView zoomToRect:rect animated:YES];
-        } else {
-            [self.imageScrollView zoomToRect:self.avatar.frame animated:YES];
-        }
-    } else {
+    if (CGRectGetWidth(self.avatar.frame) >= CGRectGetHeight(self.avatar.frame)) {
+        CGFloat d = CGRectGetHeight(self.avatar.frame);
+        CGFloat scale = 320 / d;
+        CGRect rect = CGRectMake(self.avatar.center.x - d / 2, self.avatar.center.y - d / 2 + (CGRectGetHeight(self.view.bounds) / 2 - 320 / 2 - CGRectGetHeight(self.header.bounds)) / scale, d, d);
+        [self.imageScrollView zoomToRect:rect animated:YES];
+    } else if (CGRectGetWidth(self.avatar.frame) * (CGRectGetHeight(self.header.bounds) * 2 + 320) > CGRectGetHeight(self.avatar.frame) * 320) {
         CGFloat d = CGRectGetWidth(self.avatar.frame);
         CGFloat scale = 320 / d;
         CGRect rect = CGRectMake(self.avatar.center.x - d / 2, self.avatar.center.y - d / 2 + (CGRectGetHeight(self.view.bounds) / 2 - 320 / 2 - CGRectGetHeight(self.header.bounds)) / scale, d, d);
         [self.imageScrollView zoomToRect:rect animated:YES];
+    } else {
+        [self.imageScrollView zoomToRect:self.avatar.frame animated:YES];
     }
 }
 
@@ -1017,7 +1042,6 @@
 //        new.origin.y = CGRectGetMinY(rect) - (CGRectGetWidth(rect) -  CGRectGetHeight(rect)) / 2 - CGRectGetHeight(self.header.bounds) / CGRectGetWidth(self.view.bounds) * CGRectGetWidth(rect);
 //        new.size.width = CGRectGetWidth(rect);
 //        new.size.height = CGRectGetWidth(rect) / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds);
-        NSLog(@"expand %@ to %@", NSStringFromCGRect(rect), NSStringFromCGRect(new));
     } else {
         // w < h
         new.origin.x = CGRectGetMinX(rect);
@@ -1083,7 +1107,8 @@
 
 - (CGRect)convertToScalableViewFromViewPortFull:(CGRect)rect
 {
-    return [self convertToScalableViewFromViewPortFull:rect withViewPort:self.imageScrollView.contentOffset baseOn:self.imageScrollView.zoomScale];
+    CGRect new = [self convertToScalableViewFromViewPortFull:rect withViewPort:self.imageScrollView.contentOffset baseOn:self.imageScrollView.zoomScale];
+    return new;
 }
 
 - (CGRect)convertToScalableViewFromViewPortSquare:(CGRect)rect

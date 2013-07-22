@@ -192,6 +192,7 @@
     if (CGRectContainsPoint(username.frame, location)) {
         [[UIApplication sharedApplication] setStatusBarHidden:YES];
         EFEditProfileViewController* vc = [[EFEditProfileViewController alloc] initWithModel:self.model];
+        vc.readonly = false;
         vc.user = self.user;
         [self presentModalViewController:vc animated:YES];
     } else if (CGRectContainsPoint(useravatar.frame, location)){
@@ -510,12 +511,10 @@
                 return;
             }
             ProviderType pt = [Identity getProviderTypeByString:identity.provider];
-            if (pt != kProviderTypeVerification) {
-                return;
-            }
             
             [[UIApplication sharedApplication] setStatusBarHidden:YES];
             EFEditProfileViewController* vc = [[EFEditProfileViewController alloc] initWithModel:self.model];
+            vc.readonly = (pt == kProviderTyperAuthorization);
             vc.identity = identity;
             [self presentViewController:vc animated:YES completion:nil];
         }
