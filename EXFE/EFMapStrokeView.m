@@ -41,9 +41,18 @@
     
     [self.strokesToDraw removeAllObjects];
     
+    MKMapRect mapRect = [self.mapView visibleMapRect];
+    
     for (int i = 0; i < _flag.numberOfStrokes; i++) {
         NSArray *points = [self.dataSource strokePointsForStrokeInMapStrokeView:self atIndex:i];
-        if (points) {
+        if (points && points.count) {
+            id<EFMapStrokeViewPoint> lastPoint = [points lastObject];
+            CLLocationCoordinate2D coordinate = lastPoint.coordinate;
+            MKMapPoint mapPoint = MKMapPointForCoordinate(coordinate);
+            if (!MKMapRectContainsPoint(mapRect, mapPoint)) {
+                continue;
+            }
+            
             NSMutableArray *corvertedPoints = [[NSMutableArray alloc] initWithCapacity:points.count];
             for (id<EFMapStrokeViewPoint> point in points) {
                 CLLocationCoordinate2D coordinate = point.coordinate;
