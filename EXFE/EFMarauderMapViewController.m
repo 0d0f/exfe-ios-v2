@@ -464,13 +464,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                          [mediaMessage setThumbImage:[UIImage imageNamed:@"Icon@2x.png"]];
                                                          mediaMessage.mediaObject = extendObject;
                                                          
-//                                                         NSString *text = [NSString stringWithFormat:@"EXFE->WEIXIN TEST\n crossId: %d", [self.cross.cross_id integerValue]];
-                                                         
                                                          SendMessageToWXReq *message = [[SendMessageToWXReq alloc] init];
                                                          message.bText = NO;
                                                          message.message = mediaMessage;
-//                                                         message.bText = YES;
-//                                                         message.text = text;
                                                          [WXApi sendReq:message];
                                                          
                                                          [menu dismiss];
