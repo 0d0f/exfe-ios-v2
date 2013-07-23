@@ -17,13 +17,10 @@
 @required
 - (void)completedRead:(NSString*) str;
 
-@optional
-- (void)streamEvent:(CFStreamEventType)eventType;
-
 @end
 
 
-@interface EFHTTPStreaming : NSObject{
+@interface EFHTTPStreaming : NSObject {
     CFReadStreamRef _stream;
     NSDictionary    *_httpHeaders;
     NSString        *_strFromStream;

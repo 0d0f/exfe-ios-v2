@@ -248,10 +248,6 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     }
 }
 
-- (void)streamEvent:(CFStreamEventType)eventType {
-    
-}
-
 #pragma mark - RoutePath
 
 - (void)addRoutePath:(EFRoutePath *)path {
