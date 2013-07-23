@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import <RestKit/RestKit.h>
-#import "Flurry.h"
 #import <objc/runtime.h>
+#import "WXApi.h"
+#import "Flurry.h"
 #import "User.h"
 #import "ModelMapping.h"
 
@@ -24,7 +26,12 @@
 @class CrossesViewController;
 @class EXFEModel;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
+@interface AppDelegate : UIResponder
+<
+UIApplicationDelegate,
+UIAlertViewDelegate,
+WXApiDelegate
+>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, strong, readwrite) EXFEModel *model;

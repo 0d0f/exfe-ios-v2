@@ -20,6 +20,11 @@
 #define kFlurryKey  @"8R2R8KZG35DK6S6MDHGS"
 
 /**
+ * Weixin AppId
+ */
+#define kWeixinAppID    @"wxead9dbbbfe812a82"
+
+/**
  * Server && Twitter key && Google key
  */
 #ifdef DEBUG

@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-typedef void (^ButtonPressedHandler)(UIButton *);
+@class EFMapPopMenu;
+typedef void (^ButtonPressedHandler)(EFMapPopMenu *);
 
 @interface EFMapPopMenu : UIView
 
@@ -22,7 +23,6 @@ typedef void (^ButtonPressedHandler)(UIButton *);
 @property (nonatomic, copy) ButtonPressedHandler requestButtonPressedHandler;
 
 - (id)initWithName:(NSString *)name
-        updateTime:(NSDate *)time
      pressedHanler:(ButtonPressedHandler)handler;
 
 - (void)show;

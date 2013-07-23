@@ -21,6 +21,7 @@
 #import "Util.h"
 #import "EFPersonAnnotation.h"
 #import "EFPersonAnnotationView.h"
+#import "EFMapPopMenu.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 #define kShadowOffset       (4.0f)
@@ -450,6 +451,31 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     if (tableView == self.tableView) {
         locations = [self.personDictionary valueForKey:self.identityIds[indexPath.row + 1]];
+        
+        EFMapPopMenu *popMenu = [[EFMapPopMenu alloc] initWithName:((Invitation *)self.invitations[indexPath.row + 1]).identity.name
+                                                     pressedHanler:^(EFMapPopMenu *menu){
+                                                         WXAppExtendObject *extendObject = [WXAppExtendObject object];
+                                                         extendObject.url = @"http://exfe.com";
+                                                         extendObject.extInfo = @"test";
+                                                         
+                                                         WXMediaMessage *mediaMessage = [WXMediaMessage message];
+                                                         mediaMessage.title = @"EXFE->WEIXIN TEST";
+                                                         mediaMessage.description = @"多媒体类型";
+                                                         [mediaMessage setThumbImage:[UIImage imageNamed:@"Icon@2x.png"]];
+                                                         mediaMessage.mediaObject = extendObject;
+                                                         
+//                                                         NSString *text = [NSString stringWithFormat:@"EXFE->WEIXIN TEST\n crossId: %d", [self.cross.cross_id integerValue]];
+                                                         
+                                                         SendMessageToWXReq *message = [[SendMessageToWXReq alloc] init];
+                                                         message.bText = NO;
+                                                         message.message = mediaMessage;
+//                                                         message.bText = YES;
+//                                                         message.text = text;
+                                                         [WXApi sendReq:message];
+                                                         
+                                                         [menu dismiss];
+                                                     }];
+        [popMenu show];
     } else if (tableView == self.selfTableView) {
         locations = [self.personDictionary valueForKey:self.identityIds[0]];
     }
@@ -656,7 +682,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths {
-
+    
 }
 
 #pragma mark - EFMapViewDelegate
