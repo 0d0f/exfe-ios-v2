@@ -172,7 +172,7 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     mapStrokeView.dataSource = self;
     mapStrokeView.mapView = self.mapView;
     mapStrokeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    [self.view insertSubview:mapStrokeView belowSubview:self.tableView];
+    [self.view insertSubview:mapStrokeView belowSubview:self.leftBaseView];
     self.mapStrokeView = mapStrokeView;
     
     // tableView baseView
@@ -226,8 +226,9 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     
     self.leftBaseView.frame = (CGRect){{0.0f, 0.0f}, {50.0f, height}};
     
-    [self _openStreaming];
+    [self.mapStrokeView reloadData];
     
+    [self _openStreaming];
     [self.locationManager startUpdatingLocation];
 }
 
@@ -569,14 +570,18 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 #pragma mark - EFMapStrokeViewDataSource
 
 - (NSUInteger)numberOfStrokesForMapStrokeView:(EFMapStrokeView *)strokeView {
-    return self.invitations.count;
+    NSInteger count = self.identityIds.count - 1;
+    count = count < 0 ? 0 : count;
+    return count;
 }
 
 - (NSArray *)strokePointsForStrokeInMapStrokeView:(EFMapStrokeView *)strokeView atIndex:(NSUInteger)index {
-    NSString *key = self.identityIds[index];
+    NSUInteger dataIndex = index + 1;
+    
+    NSString *key = self.identityIds[dataIndex];
     NSArray *locations = [self.personDictionary valueForKey:key];
     
-    if (locations && 0 != index) {
+    if (locations) {
         EFLocation *lastestLocation = locations[0];
         
         CLLocationCoordinate2D coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:lastestLocation.coordinate];

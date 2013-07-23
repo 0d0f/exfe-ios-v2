@@ -1530,6 +1530,9 @@
 		764CD909173A914600627237 /* btn_white_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD905173A914600627237 /* btn_white_30@2x.png */; };
 		764CD90A173A914600627237 /* btn_white_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD905173A914600627237 /* btn_white_30@2x.png */; };
 		764CD90B173A914600627237 /* btn_white_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD905173A914600627237 /* btn_white_30@2x.png */; };
+		76555B20179E345500BCC5A7 /* EFMapPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */; };
+		76555B21179E345500BCC5A7 /* EFMapPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */; };
+		76555B22179E345500BCC5A7 /* EFMapPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */; };
 		765A82D4175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
 		765A82D5175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
 		765A82D6175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
@@ -2666,6 +2669,8 @@
 		764CD8FD173A8F9400627237 /* cautionbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cautionbar@2x.png"; sourceTree = "<group>"; };
 		764CD904173A914600627237 /* btn_white_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_white_30.png; sourceTree = "<group>"; };
 		764CD905173A914600627237 /* btn_white_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_white_30@2x.png"; sourceTree = "<group>"; };
+		76555B1E179E345500BCC5A7 /* EFMapPopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapPopMenu.h; sourceTree = "<group>"; };
+		76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapPopMenu.m; sourceTree = "<group>"; };
 		765A82D2175F076C00448B64 /* EFContactDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFContactDataSource.h; sourceTree = "<group>"; };
 		765A82D3175F076C00448B64 /* EFContactDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFContactDataSource.m; sourceTree = "<group>"; };
 		765A82D7175F0D5700448B64 /* EFSearchContactDataSouce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchContactDataSouce.h; sourceTree = "<group>"; };
@@ -3940,6 +3945,8 @@
 				76B1235D1796470C00A73E59 /* EFMapEditingReadyView.m */,
 				766C9849179CDD700064B5BC /* EFMapStrokeView.h */,
 				766C984A179CDD700064B5BC /* EFMapStrokeView.m */,
+				76555B1E179E345500BCC5A7 /* EFMapPopMenu.h */,
+				76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -6814,6 +6821,7 @@
 				766C982A179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 				766C984C179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
 				4FA01BD2179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
+				76555B21179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7060,6 +7068,7 @@
 				766C982B179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 				766C984D179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
 				4FA01BD3179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
+				76555B22179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7306,6 +7315,7 @@
 				766C9829179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 				766C984B179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
 				4FA01BD1179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
+				76555B20179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
