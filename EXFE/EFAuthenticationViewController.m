@@ -9,6 +9,11 @@
 #import "EFAuthenticationViewController.h"
 #import <BlocksKit/BlocksKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import <Social/Social.h>
+#import <Twitter/Twitter.h>
+#import <Accounts/Accounts.h>
+#import <FacebookSDK/FacebookSDK.h>
+#import "TWAPIManager.h"
 #import "WCAlertView.h"
 #import "EFModel.h"
 #import "CSLinearLayoutView.h"
@@ -20,10 +25,15 @@
 #import "EFKit.h"
 #import "EXGradientToolbarView.h"
 #import "UILabel+EXFE.h"
+#import "EFIdentityBar.h"
+#import "EFPasswordField.h"
 
 #define kTagIdentityBar     238
 #define kTagBtnAuth         239
 #define kViewTagErrorInline 240
+
+
+typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 
 @interface EFAuthenticationViewController ()
 
@@ -32,11 +42,14 @@
 @property (nonatomic, strong, readonly) NSArray *trustIdentities;
 
 @property (nonatomic, strong) CSLinearLayoutView *rootView;
-@property (nonatomic, strong) UIView * identitybar;
+@property (nonatomic, strong) CSLinearLayoutView *authView;
+@property (nonatomic, strong) CSLinearLayoutView *setpwdView;
+
+@property (nonatomic, strong) EFIdentityBar * identityBarFgt;
+@property (nonatomic, strong) EFIdentityBar * identitybarSet;
+
 @property (nonatomic, strong) UIButton *btnAuth;
 
-@property (nonatomic, strong) UIImageView *avatar;
-@property (nonatomic, strong) UILabel *name;
 @property (nonatomic, strong) UIActionSheet *pickerViewPopup;
 @property (nonatomic, strong) UIPickerView * categoryPickerView;
 @property (nonatomic, strong) UILabel *hintError;
@@ -46,6 +59,10 @@
 
 @property (nonatomic, strong) Identity *identity;
 @property (nonatomic, assign) NSInteger selectedIdentityIndex;
+
+@property (nonatomic, strong) ACAccountStore *accountStore;
+@property (nonatomic, strong) TWAPIManager *apiManager;
+@property (nonatomic, strong) NSArray *accounts;
 
 @end
 
@@ -79,6 +96,9 @@
     self = [super init];
     if (self) {
         self.model = model;
+        
+        self.accountStore = [[ACAccountStore alloc] init];
+        self.apiManager = [[TWAPIManager alloc] init];
     }
     return self;
 }
@@ -132,66 +152,236 @@
     [header addGestureRecognizer:swipe];
     [self.view addSubview:header];
     
-    CSLinearLayoutView *layout = [[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 44)];
+    CSLinearLayoutView * authLayout = [[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 44)];
+    {
+        UILabel * labelHead = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 100)];
+        labelHead.backgroundColor = [UIColor clearColor];
+        labelHead.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+        labelHead.textColor = [UIColor COLOR_BLACK_19];
+        labelHead.numberOfLines = 0;
+        labelHead.text = NSLocalizedString(@"You’re about to change important information of your account. For security concerns, please authenticate your account.", nil);
+        [labelHead sizeToFit];
+        CSLinearLayoutItem *item1 = [CSLinearLayoutItem layoutItemForView:labelHead];
+        item1.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item1.fillMode = CSLinearLayoutItemFillModeNormal;
+        item1.padding = CSLinearLayoutMakePadding(10, 15, 5, 15);
+        [authLayout addItem:item1];
+        
+        EFPasswordField *inputOldPassword = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        inputOldPassword.leftViewMode = UITextFieldViewModeNever;
+        inputOldPassword.returnKeyType = UIReturnKeyNext;
+//        inputOldPassword.tag = kTagOldPassword;
+        inputOldPassword.placeholder = NSLocalizedString(@"Current password", nil);
+        inputOldPassword.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+        inputOldPassword.delegate = self;
+        inputOldPassword.borderStyle = UITextBorderStyleNone;
+        inputOldPassword.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [inputOldPassword.btnForgot addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
+        CSLinearLayoutItem *item2 = [CSLinearLayoutItem layoutItemForView:inputOldPassword];
+        item2.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item2.fillMode = CSLinearLayoutItemFillModeNormal;
+        item2.padding = CSLinearLayoutMakePadding(5, 20, 5, 20);
+        [authLayout addItem:item2];
+//        self.oldPwdTextField = inputOldPassword;
+        
+        UIButton *btnChangePwd = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 290, 48)];
+        [btnChangePwd setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
+        UIImage *btnImage = [UIImage imageNamed:@"btn_blue_44.png"];
+        btnImage = [btnImage resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
+        [btnChangePwd setBackgroundImage:btnImage forState:UIControlStateNormal];
+        [btnChangePwd setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btnChangePwd.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
+        btnChangePwd.titleLabel.shadowOffset = CGSizeMake(0, -1);
+        [btnChangePwd setTitle:NSLocalizedString(@"Authenticate", nil) forState:UIControlStateNormal];
+        [btnChangePwd addTarget:self action:@selector(changePwd:) forControlEvents:UIControlEventTouchUpInside];
+//        btnChangePwd.tag = kTagBtnChangePwd;
+        CSLinearLayoutItem *item3 = [CSLinearLayoutItem layoutItemForView:btnChangePwd];
+        item3.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item3.fillMode = CSLinearLayoutItemFillModeNormal;
+        item3.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
+        [authLayout addItem:item3];
+//        self.btnChangePwd = btnChangePwd;
+        
+        
+        UILabel * whyTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
+        whyTitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+        whyTitle.backgroundColor = [UIColor clearColor];
+        whyTitle.textColor = [UIColor COLOR_BLACK_19];
+        whyTitle.text = NSLocalizedString(@"Why I have to do this?", nil);
+        [whyTitle sizeToFit];
+        CSLinearLayoutItem *item4 = [CSLinearLayoutItem layoutItemForView:whyTitle];
+        item4.fillMode = CSLinearLayoutItemFillModeNormal;
+        item4.hiddenType = CSLinearLayoutItemGone;
+        item4.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
+        [authLayout addItem:item4];
+        
+        UILabel * whyDesc = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, MAXFLOAT)];
+        whyDesc.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
+        whyDesc.backgroundColor = [UIColor clearColor];
+        whyDesc.textColor = [UIColor COLOR_GRAY];
+        whyDesc.numberOfLines = 0;
+        whyDesc.text = NSLocalizedString(@"Sorry for the inconvenience. Sometimes, we have to compromise on experience for your account security. Re-authentication is to avoid modification by others who can possibly use your phone.", nil);
+        [whyDesc sizeToFit];
+        CSLinearLayoutItem *item5 = [CSLinearLayoutItem layoutItemForView:whyDesc];
+        item5.fillMode = CSLinearLayoutItemFillModeNormal;
+        item5.hiddenType = CSLinearLayoutItemGone;
+        item5.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
+        [authLayout addItem:item5];
+        
+        whyTitle.hidden = YES;
+        whyDesc.hidden = YES;
+        
+        UILabel * forgotTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        forgotTitle.backgroundColor = [UIColor clearColor];
+        forgotTitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21];
+        forgotTitle.textColor = [UIColor COLOR_BLACK_19];
+        forgotTitle.text = NSLocalizedString(@"Forgot password?", nil);
+        [forgotTitle sizeToFit];
+//        forgotTitle.tag = kTagForgetTitle;
+        CSLinearLayoutItem *item6 = [CSLinearLayoutItem layoutItemForView:forgotTitle];
+        item6.fillMode = CSLinearLayoutItemFillModeNormal;
+        item6.padding = CSLinearLayoutMakePadding(0, 15, 0, 15);
+        [authLayout addItem:item6];
+//        self.forgotTitle = forgotTitle;
+        
+        TTTAttributedLabel * forgotDetail = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        forgotDetail.backgroundColor = [UIColor clearColor];
+        forgotDetail.numberOfLines = 0;
+        forgotDetail.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+        forgotDetail.textColor = [UIColor COLOR_BLACK_19];
+        NSString *full = NSLocalizedString(@"To reset EXFE password, please authenticate with your identity.", nil);
+        NSString *part = NSLocalizedString(@"EXFE", nil);
+        [forgotDetail setText:full afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+            NSRange titleRange = [[mutableAttributedString string] rangeOfString:part options:NSCaseInsensitiveSearch];
+            [mutableAttributedString addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[[UIColor COLOR_BLUE_EXFE] CGColor] range:titleRange];
+            return mutableAttributedString;
+        }];
+        [forgotDetail sizeToFit];
+//        forgotDetail.tag = kTagForgetDesc;
+        CSLinearLayoutItem *item7 = [CSLinearLayoutItem layoutItemForView:forgotDetail];
+        item7.fillMode = CSLinearLayoutItemFillModeNormal;
+        item7.padding = CSLinearLayoutMakePadding(0, 15, 10, 15);
+        [authLayout addItem:item7];
+//        self.forgotDetail = forgotDetail;
+        
+        EFIdentityBar *identityBar = [[EFIdentityBar alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        //    identityBar.backgroundColor = [UIColor blackColor];
+        UITapGestureRecognizer *gesture = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+            if (state == UIGestureRecognizerStateEnded) {
+                [self changeIdentity:sender.view];
+            }
+        }];
+        identityBar.tag = kTagIdentityBar;
+        [identityBar addGestureRecognizer:gesture];
+        CSLinearLayoutItem *item8 = [CSLinearLayoutItem layoutItemForView:identityBar];
+        item8.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item8.fillMode = CSLinearLayoutItemFillModeNormal;
+        item8.padding = CSLinearLayoutMakePadding(5, 15, 10, 15);
+        [authLayout addItem:item8];
+        self.identityBarFgt = identityBar;
+        
+        UIButton *btnAuth = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 290, 48)];
+        btnAuth.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
+        [btnAuth setTitle:NSLocalizedString(@"Authenticate", nil) forState:UIControlStateNormal];
+        [btnAuth setTitleColor:[UIColor COLOR_BLACK_19] forState:UIControlStateNormal];
+        [btnAuth setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btnAuth.titleLabel.shadowOffset = CGSizeMake(0, 1);
+        UIImage *btnImage2 = [UIImage imageNamed:@"btn_white_44.png"];
+        btnImage2 = [btnImage2 resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
+        [btnAuth setBackgroundImage:btnImage2 forState:UIControlStateNormal];
+        [btnAuth addTarget:self action:@selector(authenticate:) forControlEvents:UIControlEventTouchUpInside];
+        btnAuth.tag = kTagBtnAuth;
+        CSLinearLayoutItem *item9 = [CSLinearLayoutItem layoutItemForView:btnAuth];
+        item9.fillMode = CSLinearLayoutItemFillModeNormal;
+        item9.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
+        [authLayout addItem:item9];
+//        self.btnAuth = btnAuth;
+
+    }
+    [self.view addSubview:authLayout];
+    self.authView = authLayout;
     
-    UIView * identityBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-    identityBar.layer.backgroundColor = [UIColor COLOR_WA(0xE6, 0xFF)].CGColor;
-    identityBar.layer.cornerRadius = 4;
-    identityBar.layer.borderColor = [UIColor COLOR_WA(0xCC, 0xFF)].CGColor;
-    identityBar.layer.borderWidth = 1;
-    identityBar.layer.masksToBounds = NO;
-    
-    UIImageView *avatar = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 40, 40)];
-    avatar.layer.cornerRadius = 2;
-    avatar.clipsToBounds = YES;
-    self.avatar = avatar;
-    [identityBar addSubview:avatar];
-    
-    UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(50, 5, 200, 40)];
-    name.backgroundColor = [UIColor clearColor];
-    name.font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:18];
-    name.textColor = [UIColor COLOR_BLACK_19];;
-    self.name = name;
-    [identityBar addSubview:name];
-    // listarrow
-    UIImageView *down = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"chevron_d20g5.png"]];
-    down.frame = CGRectMake(260, 15, 20, 20);
-    [identityBar addSubview:down];
-    
-    UITapGestureRecognizer *gesture = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-        if (state == UIGestureRecognizerStateEnded) {
-            [self changeIdentity:sender.view];
-        }
-    }];
-    identityBar.tag = kTagIdentityBar;
-    [identityBar addGestureRecognizer:gesture];
-    
-    CSLinearLayoutItem *item6 = [CSLinearLayoutItem layoutItemForView:identityBar];
-    item6.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
-    item6.fillMode = CSLinearLayoutItemFillModeNormal;
-    item6.padding = CSLinearLayoutMakePadding(0, 15, 10, 15);
-    [layout addItem:item6];
-    self.identitybar = identityBar;
-    
-    UIButton *btnAuth = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 290, 48)];
-    btnAuth.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
-    [btnAuth setTitle:NSLocalizedString(@"Authenticate", nil) forState:UIControlStateNormal];
-    [btnAuth setTitleColor:[UIColor COLOR_BLACK_19] forState:UIControlStateNormal];
-    [btnAuth setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    btnAuth.titleLabel.shadowOffset = CGSizeMake(0, 1);
-    UIImage *btnImage2 = [UIImage imageNamed:@"btn_white_44.png"];
-    btnImage2 = [btnImage2 resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
-    [btnAuth setBackgroundImage:btnImage2 forState:UIControlStateNormal];
-    [btnAuth addTarget:self action:@selector(authenticate:) forControlEvents:UIControlEventTouchUpInside];
-    btnAuth.tag = kTagBtnAuth;
-    CSLinearLayoutItem *item7 = [CSLinearLayoutItem layoutItemForView:btnAuth];
-    item7.fillMode = CSLinearLayoutItemFillModeNormal;
-    item7.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
-    [layout addItem:item7];
-    self.btnAuth = btnAuth;
-    
-    [self.view addSubview:layout];
-    self.rootView = layout;
+    CSLinearLayoutView * setpwdLayout = [[CSLinearLayoutView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 44)];
+    {
+        TTTAttributedLabel * labelHead = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 290, 100)];
+        labelHead.backgroundColor = [UIColor clearColor];
+        labelHead.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+        labelHead.textColor = [UIColor COLOR_BLACK_19];
+        labelHead.numberOfLines = 0;
+        NSString *text = NSLocalizedString(@"You’re about to change import information of your account. For security concerns, please authenticate first and set your EXFE password.", nil);
+        [labelHead setText:text afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+            NSString *highlight = NSLocalizedString(@"EXFE", nil);
+            NSRange range = [[mutableAttributedString string] rangeOfString:highlight options:NSCaseInsensitiveSearch];
+            
+            [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[UIColor COLOR_BLUE_EXFE].CGColor range:range];
+            
+            return  mutableAttributedString;
+        }];
+        [labelHead sizeToFit];
+        CSLinearLayoutItem *item11 = [CSLinearLayoutItem layoutItemForView:labelHead];
+        item11.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item11.fillMode = CSLinearLayoutItemFillModeNormal;
+        item11.padding = CSLinearLayoutMakePadding(20, 15, 5, 15);
+        [setpwdLayout addItem:item11];
+        
+        EFIdentityBar *identityBar = [[EFIdentityBar alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        //    identityBar.backgroundColor = [UIColor blackColor];
+        UITapGestureRecognizer *gesture = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+            if (state == UIGestureRecognizerStateEnded) {
+                [self changeIdentity:sender.view];
+            }
+        }];
+        identityBar.tag = kTagIdentityBar;
+        [identityBar addGestureRecognizer:gesture];
+        CSLinearLayoutItem *item12 = [CSLinearLayoutItem layoutItemForView:identityBar];
+        item12.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
+        item12.fillMode = CSLinearLayoutItemFillModeNormal;
+        item12.padding = CSLinearLayoutMakePadding(5, 15, 10, 15);
+        [setpwdLayout addItem:item12];
+        self.identitybarSet = identityBar;
+        
+        UIButton *btnAuth = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 290, 48)];
+        btnAuth.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
+        [btnAuth setTitle:NSLocalizedString(@"Authenticate", nil) forState:UIControlStateNormal];
+        [btnAuth setTitleColor:[UIColor COLOR_BLACK_19] forState:UIControlStateNormal];
+        [btnAuth setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btnAuth.titleLabel.shadowOffset = CGSizeMake(0, 1);
+        UIImage *btnImage2 = [UIImage imageNamed:@"btn_white_44.png"];
+        btnImage2 = [btnImage2 resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
+        [btnAuth setBackgroundImage:btnImage2 forState:UIControlStateNormal];
+        [btnAuth addTarget:self action:@selector(authenticate:) forControlEvents:UIControlEventTouchUpInside];
+        btnAuth.tag = kTagBtnAuth;
+        CSLinearLayoutItem *item13 = [CSLinearLayoutItem layoutItemForView:btnAuth];
+        item13.fillMode = CSLinearLayoutItemFillModeNormal;
+        item13.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
+        [setpwdLayout addItem:item13];
+        self.btnAuth = btnAuth;
+        
+        UILabel * whyTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
+        whyTitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+        whyTitle.backgroundColor = [UIColor clearColor];
+        whyTitle.textColor = [UIColor COLOR_BLACK_19];
+        whyTitle.text = NSLocalizedString(@"Why I have to do this?", nil);
+        [whyTitle sizeToFit];
+        CSLinearLayoutItem *item14 = [CSLinearLayoutItem layoutItemForView:whyTitle];
+        item14.fillMode = CSLinearLayoutItemFillModeNormal;
+        item14.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
+        [setpwdLayout addItem:item14];
+        
+        UILabel * whyDesc = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, MAXFLOAT)];
+        whyDesc.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
+        whyDesc.backgroundColor = [UIColor clearColor];
+        whyDesc.textColor = [UIColor COLOR_GRAY];
+        whyDesc.numberOfLines = 0;
+        whyDesc.text = NSLocalizedString(@"Sorry for the inconvenience. Sometimes, we have to compromise on experience for your account security. Re-authentication is to avoid modification by others who can possibly use your phone.", nil);
+        [whyDesc sizeToFit];
+        CSLinearLayoutItem *item15 = [CSLinearLayoutItem layoutItemForView:whyDesc];
+        item15.fillMode = CSLinearLayoutItemFillModeNormal;
+        item15.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
+        [setpwdLayout addItem:item15];
+    }
+    [self.view addSubview:setpwdLayout];
+    self.setpwdView = setpwdLayout;
     
     {// Inline error hint
         TTTAttributedLabel *label = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 280, 80)];
@@ -216,6 +406,16 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    if ([self.user.password boolValue]) {
+        self.authView.hidden = NO;
+        self.setpwdView.hidden = YES;
+        self.rootView = self.authView;
+    } else {
+        self.authView.hidden = YES;
+        self.setpwdView.hidden = NO;
+        self.rootView = self.setpwdView;
+    }
     
     [self registerAsObserver];
     
@@ -245,16 +445,12 @@
               options:(NSKeyValueObservingOptionNew |
                        NSKeyValueObservingOptionOld)
               context:NULL];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShown:)
-                                                 name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)unregisterForChangeNotification {
     [self removeObserver:self forKeyPath:@"identity"];
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -281,25 +477,33 @@
 - (void) refreshIdentity:(Identity*)identity
 {
     
+    EFIdentityBar *bar = nil;
+    if ([self.user.password boolValue]) {
+        bar = self.identityBarFgt;
+//        bar = self.identitybarSet;
+    } else {
+        bar = self.identitybarSet;
+    }
+    
     NSString *avatar_filename = identity.avatar_filename;
     if (avatar_filename.length > 0) {
         UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
         
         if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:avatar_filename]) {
-            self.avatar.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:avatar_filename];
+            bar.avatar.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:avatar_filename];
             
         } else {
-            self.avatar.image = defaultImage;
+            bar.avatar.image = defaultImage;
             
             [[EFDataManager imageManager] cachedImageForKey:avatar_filename
                                             completeHandler:^(UIImage *image){
                                                 if (image) {
-                                                    self.avatar.image = image;
+                                                    bar.avatar.image = image;
                                                 }
                                             }];
         }
     }
-    self.name.text = [identity getDisplayIdentity];
+    bar.name.text = [identity getDisplayIdentity];
     
 }
 
@@ -402,6 +606,20 @@
     [_indicator removeFromSuperview];
 }
 
+#pragma mark - Logic Methods
+- (void)loadUserAndExit:(NSInteger)user_id withToken:(NSString*)token
+{
+    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    [app switchContextByUserId:user_id withAbandon:NO];
+    app.model.userToken = token;
+    [app.model saveUserData];
+    
+    [app.model loadMe];
+    
+    [app signinDidFinish];
+}
+
 #pragma mark - UI Events
 
 #pragma mark UIButton action
@@ -453,10 +671,17 @@
 {
     _inlineError.hidden = YES;
     
+    Provider provider = [Identity getProviderCode:self.identity.provider];
+    if (provider == kProviderTwitter) {
+        [self twitterAuth:self.identity];
+    }
+    
     if (self.model.apiServer) {
         sender.enabled = NO;
         [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
     }
+    
+    
     
     [self.model.apiServer forgetPassword:self.identity.external_username
                                     with:[Identity getProviderCode:self.identity.provider]
@@ -719,4 +944,233 @@
                   otherButtonTitles:NSLocalizedString(@"Done", nil), nil];
 }
 
+
+
+#pragma mark - temp
+
+- (void)mergeUser:(NSNumber *)newUserId with:(NSString*)newToken
+{
+    // Load identities to merge from another user
+    [self.model.apiServer loadUserBy:[newUserId integerValue]
+             withToken:newToken
+               success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                   NSDictionary *body = responseObject;
+                   if([body isKindOfClass:[NSDictionary class]]) {
+                       NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                       if(code){
+                           if([code integerValue] == 200) {
+                               NSString *name = [responseObject valueForKeyPath:@"response.user.name"];
+                               NSArray *ids = [responseObject valueForKeyPath:@"response.user.identities.@distinctUnionOfObjects.id"];
+                               
+                               [UIAlertView showAlertViewWithTitle:@"Merge accounts"
+                                                           message:[NSString stringWithFormat:@"Merge account %@ into your current signed-in account?", name]
+                                                 cancelButtonTitle:@"Cancel"
+                                                 otherButtonTitles:@[@"Merge"]
+                                                           handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                                               if (buttonIndex == alertView.firstOtherButtonIndex ) {
+                                                                   
+                                                                   [self.model.apiServer mergeIdentities:ids byToken:newToken success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                                       if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                                                           NSDictionary *body=responseObject;
+                                                                           if ([body isKindOfClass:[NSDictionary class]]) {
+                                                                               id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
+                                                                               if (code && [code intValue] == 200) {
+                                                                                   [self.model loadMe];
+                                                                                   // clean some timestamp
+                                                                                   
+                                                                                   // do following things
+                                                                               }
+                                                                           }
+                                                                       }
+                                                                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                                       
+                                                                   }];
+                                                               }
+                                                           }];
+                           }
+                       }
+                   }
+                   
+               }
+               failure:nil];
+    
+}
+
+- (void)reverseAuth:(Provider)provider WithToken:(NSString *)token withParams:(NSDictionary *)params
+{
+    [self.model.apiServer reverseAuth:kProviderTwitter withToken:token andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+            
+            NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+            if ([code integerValue] == 200) {
+                NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
+                NSString *t = [responseObject valueForKeyPath:@"response.token"];
+                
+                if ([u integerValue] == self.model.userId) {
+                    
+                    
+                } else {
+                    // TODO: merge
+//                    [self mergeUser:u with:t];
+                }
+            }
+            //400: invalid_token
+            //400: no_provider
+            //400: unsupported_provider
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+            switch (error.code) {
+                case NSURLErrorTimedOut: // -1001
+                case NSURLErrorCannotFindHost: //-1003
+                case NSURLErrorCannotConnectToHost: //-1004
+                case NSURLErrorNetworkConnectionLost: //-1005
+                case NSURLErrorDNSLookupFailed: //-1006
+                case NSURLErrorHTTPTooManyRedirects: //-1007
+                case NSURLErrorResourceUnavailable: //-1008
+                case NSURLErrorNotConnectedToInternet: //-1009
+                case NSURLErrorRedirectToNonExistentLocation: //-1010
+                case NSURLErrorServerCertificateUntrusted: //-1202
+                    [Util showConnectError:error delegate:nil];
+                    //                            [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+    }];
+}
+
+// step 1 try to auth twtiter from phone
+- (void)twitterAuth:(Identity *)identity
+{
+    NSAssert(kProviderTwitter == [Identity getProviderCode:identity.provider], @"Entry for twitter only");
+    
+    [self syncTwitterAccounts:^(NSArray *accounts) {
+        BOOL webauth = YES;
+        
+        if ([TWAPIManager isLocalTwitterAccountAvailable]) {
+            ACAccount *account = nil;
+            for (ACAccount *acct in _accounts) {
+                if ([acct.username isEqualToString: identity.external_username]) {
+                    account = acct;
+                }
+            }
+            
+            if (account) {
+                // reverse auth
+                webauth = NO;
+                [_apiManager performReverseAuthForAccount:account withHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+                    if (!error) {
+                        NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+                        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:[Util splitQuery:responseStr]];
+                        NSString *token = [params valueForKey:@"oauth_token"];
+                        [params removeObjectForKey:@"oauth_token"];
+                        [self reverseAuth:kProviderTwitter WithToken:token withParams:params];
+                    } else {
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                        if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                            switch (error.code) {
+                                case NSURLErrorTimedOut: // -1001
+                                case NSURLErrorCannotFindHost: //-1003
+                                case NSURLErrorCannotConnectToHost: //-1004
+                                case NSURLErrorNetworkConnectionLost: //-1005
+                                case NSURLErrorDNSLookupFailed: //-1006
+                                case NSURLErrorHTTPTooManyRedirects: //-1007
+                                case NSURLErrorResourceUnavailable: //-1008
+                                case NSURLErrorNotConnectedToInternet: //-1009
+                                case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                case NSURLErrorServerCertificateUntrusted: //-1202
+                                    [Util showConnectError:error delegate:nil];
+                                    //                        [self showInlineError:@"Failed to connect twitter server." with:@"Please retry or wait awhile."];
+                                    break;
+                                case NSURLErrorUserCancelledAuthentication:
+                                    [self showInlineError:NSLocalizedString(@"Authorization failed.", nil) with:NSLocalizedString(@"Please check your network connection and account setting in Settings app.", nil)];
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        
+                    }
+                }];
+            }
+        }
+     
+        if (webauth) {
+            // auth web
+            NSLog(@"twitter auth from web");
+        }
+    }];
+}
+
+- (void)syncTwitterAccounts:(TwitterAccountsHandler)block
+{
+    ACAccountType *twitterType = [_accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+    
+    ACAccountStoreRequestAccessCompletionHandler handler = ^(BOOL granted, NSError *error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (granted) {
+                self.accounts = [_accountStore accountsWithAccountType:twitterType];
+                if ([TWAPIManager isLocalTwitterAccountAvailable] && _accounts.count > 0) {
+                    if (block) {
+                        block(_accounts);
+                    }
+                } else {
+                    
+                    //http://stackoverflow.com/questions/13335795/login-user-with-twitter-in-ios-what-to-use
+                    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
+                        // iOS 6 http://stackoverflow.com/questions/13946062/twitter-framework-for-ios6-how-to-login-through-settings-from-app
+                        SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+                        tweetSheet.view.hidden = TRUE;
+                        
+                        [self presentViewController:tweetSheet animated:NO completion:^{
+                            [tweetSheet.view endEditing:YES];
+                        }];
+                    } else if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")){
+                        // iOS 5 http://stackoverflow.com/questions/9667921/prompt-login-alert-with-twitter-framework-in-ios5
+                        TWTweetComposeViewController *viewController = [[TWTweetComposeViewController alloc] init];
+                        //hide the tweet screen
+                        viewController.view.hidden = YES;
+                        
+                        //fire tweetComposeView to show "No Twitter Accounts" alert view on iOS5.1
+                        viewController.completionHandler = ^(TWTweetComposeViewControllerResult result) {
+                            if (result == TWTweetComposeViewControllerResultCancelled) {
+                                [self dismissModalViewControllerAnimated:NO];
+                            }
+                        };
+                        [self presentModalViewController:viewController animated:NO];
+                        
+                        //hide the keyboard
+                        [viewController.view endEditing:YES];
+                    } else {
+                        return;
+                    }
+                    //                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Accounts" message:@"Please configure a Twitter account in Settings.app" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    //                    [alert show];
+                }
+            } else {
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:NSLocalizedString(@"Please allow EXFE to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+                [alert show];
+                
+            }
+        });
+    };
+    
+    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")){
+        //  This method changed in iOS6. If the new version isn't available, fall back to the original (which means that we're running on iOS5+).
+        if ([_accountStore respondsToSelector:@selector(requestAccessToAccountsWithType:options:completion:)]) {
+            [_accountStore requestAccessToAccountsWithType:twitterType options:nil completion:handler];
+        }
+        else {
+            [_accountStore requestAccessToAccountsWithType:twitterType withCompletionHandler:handler];
+        }
+    }
+}
 @end

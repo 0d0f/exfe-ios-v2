@@ -83,6 +83,9 @@
 		4F05D45A175DAFAC0050A726 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F05D457175DAFAC0050A726 /* Constants.m */; };
 		4F0E159B16A95C390086AC4A /* edit_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159916A95C390086AC4A /* edit_30.png */; };
 		4F0E159C16A95C390086AC4A /* edit_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0E159A16A95C390086AC4A /* edit_30@2x.png */; };
+		4F0E3551179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0E3550179E8DF400FFA0E4 /* EFIdentityBar.m */; };
+		4F0E3552179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0E3550179E8DF400FFA0E4 /* EFIdentityBar.m */; };
+		4F0E3553179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0E3550179E8DF400FFA0E4 /* EFIdentityBar.m */; };
 		4F1142D716AE40B000C30179 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1142D616AE40B000C30179 /* SenTestingKit.framework */; };
 		4F1142D816AE40B000C30179 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8B1560F832009E0806 /* UIKit.framework */; };
 		4F1142D916AE40B000C30179 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A98E8D1560F832009E0806 /* Foundation.framework */; };
@@ -2262,6 +2265,8 @@
 		4F05D457175DAFAC0050A726 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		4F0E159916A95C390086AC4A /* edit_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_30.png; sourceTree = "<group>"; };
 		4F0E159A16A95C390086AC4A /* edit_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_30@2x.png"; sourceTree = "<group>"; };
+		4F0E354F179E8DF400FFA0E4 /* EFIdentityBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFIdentityBar.h; sourceTree = "<group>"; };
+		4F0E3550179E8DF400FFA0E4 /* EFIdentityBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFIdentityBar.m; sourceTree = "<group>"; };
 		4F1142D516AE40B000C30179 /* EXFETests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EXFETests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F1142D616AE40B000C30179 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4F1142DC16AE40B000C30179 /* EXFETests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EXFETests-Info.plist"; sourceTree = "<group>"; };
@@ -4691,6 +4696,8 @@
 				4F00546B172836F400D4B429 /* EFTextField.m */,
 				4FDFA48D172B9D8100929BC9 /* EFIdentityTextField.h */,
 				4FDFA48E172B9D8200929BC9 /* EFIdentityTextField.m */,
+				4F0E354F179E8DF400FFA0E4 /* EFIdentityBar.h */,
+				4F0E3550179E8DF400FFA0E4 /* EFIdentityBar.m */,
 			);
 			name = Control;
 			sourceTree = "<group>";
@@ -6841,6 +6848,7 @@
 				766C982A179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 				766C984C179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
 				4FA01BD2179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
+				4F0E3552179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
 				76555B21179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7088,6 +7096,7 @@
 				766C982B179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 				766C984D179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
 				4FA01BD3179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
+				4F0E3553179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
 				76555B22179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7335,6 +7344,7 @@
 				766C9829179933D00064B5BC /* EFPersonAnnotationView.m in Sources */,
 				766C984B179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
 				4FA01BD1179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
+				4F0E3551179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
 				76555B20179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
