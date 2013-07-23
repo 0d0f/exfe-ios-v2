@@ -317,7 +317,8 @@ static UIView * ReverseSubviews(UIView *view) {
     editingButton.backgroundColor = [UIColor blueColor];
     editingButton.frame = (CGRect){{10.0f, 10.0f}, {30.0f, 30.0f}};
     [editingButton addTarget:self action:@selector(editingButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.operationBaseView addSubview:editingButton];
+#warning test only
+//    [self.operationBaseView addSubview:editingButton];
     self.editingButton = editingButton;
     
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -472,13 +473,15 @@ static UIView * ReverseSubviews(UIView *view) {
 }
 
 - (void)headingButtonPressed:(id)sender {
-    if (self.userTrackingMode == MKUserTrackingModeNone) {
-        [sender setImage:[UIImage imageNamed:@"map_arrow_blue.png"] forState:UIControlStateNormal];
-        [self setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
-    } else {
-        [sender setImage:[UIImage imageNamed:@"map_arrow_g5.png"] forState:UIControlStateNormal];
-        [self setUserTrackingMode:MKUserTrackingModeNone animated:YES];
-    }
+    [self setCenterCoordinate:self.userLocation.coordinate animated:YES];
+    // TODO: heading tracking
+//    if (self.userTrackingMode == MKUserTrackingModeNone) {
+//        [sender setImage:[UIImage imageNamed:@"map_arrow_blue.png"] forState:UIControlStateNormal];
+//        [self setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
+//    } else {
+//        [sender setImage:[UIImage imageNamed:@"map_arrow_g5.png"] forState:UIControlStateNormal];
+//        [self setUserTrackingMode:MKUserTrackingModeNone animated:YES];
+//    }
 }
 
 #pragma mark - UIGestureRecognizerDelegate

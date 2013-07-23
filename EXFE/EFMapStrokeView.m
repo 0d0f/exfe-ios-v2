@@ -110,6 +110,8 @@
             width = [self.dataSource widthForStrokeInMapStrokeView:self atIndex:i];
         }
         
+        path.lineWidth = width;
+        
         for (NSArray *locations in self.strokesToDraw) {
             BOOL isFirstLocation = YES;
             for (NSValue *locationValue in locations) {
@@ -121,11 +123,11 @@
                     [path addLineToPoint:location];
                 }
             }
-            
-            [strokeColor setStroke];
-            path.lineWidth = width;
-            [path stroke];
         }
+        
+        [strokeColor setStroke];
+        CGContextSetShadowWithColor(context, (CGSize){0.0f, 0.0f}, 1.0f, [UIColor whiteColor].CGColor);
+        [path stroke];
     }
     
     CGContextRestoreGState(context);

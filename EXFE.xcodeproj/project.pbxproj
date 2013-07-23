@@ -1533,6 +1533,12 @@
 		764CD909173A914600627237 /* btn_white_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD905173A914600627237 /* btn_white_30@2x.png */; };
 		764CD90A173A914600627237 /* btn_white_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD905173A914600627237 /* btn_white_30@2x.png */; };
 		764CD90B173A914600627237 /* btn_white_30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764CD905173A914600627237 /* btn_white_30@2x.png */; };
+		76555B20179E345500BCC5A7 /* EFMapPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */; };
+		76555B21179E345500BCC5A7 /* EFMapPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */; };
+		76555B22179E345500BCC5A7 /* EFMapPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */; };
+		76555B47179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76555B44179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a */; };
+		76555B48179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76555B44179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a */; };
+		76555B49179E78CA00BCC5A7 /* libWeChatSDK_armv7_armv7s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76555B44179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a */; };
 		765A82D4175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
 		765A82D5175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
 		765A82D6175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
@@ -1728,9 +1734,6 @@
 		76B1240417968C9900A73E59 /* location_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B1240317968C9900A73E59 /* location_btn.png */; };
 		76B1240517968C9900A73E59 /* location_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B1240317968C9900A73E59 /* location_btn.png */; };
 		76B1240617968C9900A73E59 /* location_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 76B1240317968C9900A73E59 /* location_btn.png */; };
-		76B124081796F41F00A73E59 /* gps.db in Resources */ = {isa = PBXBuildFile; fileRef = 76B124071796F41F00A73E59 /* gps.db */; };
-		76B124091796F41F00A73E59 /* gps.db in Resources */ = {isa = PBXBuildFile; fileRef = 76B124071796F41F00A73E59 /* gps.db */; };
-		76B1240A1796F41F00A73E59 /* gps.db in Resources */ = {isa = PBXBuildFile; fileRef = 76B124071796F41F00A73E59 /* gps.db */; };
 		76B124121796F44900A73E59 /* CSqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1240D1796F44900A73E59 /* CSqlite.m */; };
 		76B124131796F44900A73E59 /* CSqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1240D1796F44900A73E59 /* CSqlite.m */; };
 		76B124141796F44900A73E59 /* CSqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 76B1240D1796F44900A73E59 /* CSqlite.m */; };
@@ -2674,6 +2677,11 @@
 		764CD8FD173A8F9400627237 /* cautionbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cautionbar@2x.png"; sourceTree = "<group>"; };
 		764CD904173A914600627237 /* btn_white_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_white_30.png; sourceTree = "<group>"; };
 		764CD905173A914600627237 /* btn_white_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_white_30@2x.png"; sourceTree = "<group>"; };
+		76555B1E179E345500BCC5A7 /* EFMapPopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapPopMenu.h; sourceTree = "<group>"; };
+		76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapPopMenu.m; sourceTree = "<group>"; };
+		76555B44179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeChatSDK_armv7_armv7s.a; path = SDKExport/libWeChatSDK_armv7_armv7s.a; sourceTree = "<group>"; };
+		76555B45179E78C900BCC5A7 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WXApi.h; path = SDKExport/WXApi.h; sourceTree = "<group>"; };
+		76555B46179E78C900BCC5A7 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WXApiObject.h; path = SDKExport/WXApiObject.h; sourceTree = "<group>"; };
 		765A82D2175F076C00448B64 /* EFContactDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFContactDataSource.h; sourceTree = "<group>"; };
 		765A82D3175F076C00448B64 /* EFContactDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFContactDataSource.m; sourceTree = "<group>"; };
 		765A82D7175F0D5700448B64 /* EFSearchContactDataSouce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchContactDataSouce.h; sourceTree = "<group>"; };
@@ -2792,7 +2800,6 @@
 		76B123E817968C5C00A73E59 /* map_mark_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_mark_blue@2x.png"; sourceTree = "<group>"; };
 		76B123E917968C5C00A73E59 /* map_mark_red@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_mark_red@2x.png"; sourceTree = "<group>"; };
 		76B1240317968C9900A73E59 /* location_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location_btn.png; sourceTree = "<group>"; };
-		76B124071796F41F00A73E59 /* gps.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = gps.db; sourceTree = "<group>"; };
 		76B1240C1796F44900A73E59 /* CSqlite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSqlite.h; sourceTree = "<group>"; };
 		76B1240D1796F44900A73E59 /* CSqlite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSqlite.m; sourceTree = "<group>"; };
 		76B124101796F44900A73E59 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
@@ -3255,6 +3262,7 @@
 				4F63DB1217172AA600136B7E /* Foundation.framework in Frameworks */,
 				4F63DB1317172AA600136B7E /* CoreGraphics.framework in Frameworks */,
 				4F63DB1417172AA600136B7E /* libFlurry.a in Frameworks */,
+				76555B48179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3289,6 +3297,7 @@
 				4F63DCE117172B0700136B7E /* Foundation.framework in Frameworks */,
 				4F63DCE217172B0700136B7E /* CoreGraphics.framework in Frameworks */,
 				4F63DCE317172B0700136B7E /* libFlurry.a in Frameworks */,
+				76555B49179E78CA00BCC5A7 /* libWeChatSDK_armv7_armv7s.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3323,6 +3332,7 @@
 				78A98E8E1560F832009E0806 /* Foundation.framework in Frameworks */,
 				78A98E901560F832009E0806 /* CoreGraphics.framework in Frameworks */,
 				78C4751316084C56000B69F2 /* libFlurry.a in Frameworks */,
+				76555B47179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3809,6 +3819,16 @@
 			name = Object;
 			sourceTree = "<group>";
 		};
+		76555B51179E78D600BCC5A7 /* WeixinSDK */ = {
+			isa = PBXGroup;
+			children = (
+				76555B44179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a */,
+				76555B45179E78C900BCC5A7 /* WXApi.h */,
+				76555B46179E78C900BCC5A7 /* WXApiObject.h */,
+			);
+			name = WeixinSDK;
+			sourceTree = "<group>";
+		};
 		765A82D1175F074200448B64 /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
@@ -3949,6 +3969,8 @@
 				76B1235D1796470C00A73E59 /* EFMapEditingReadyView.m */,
 				766C9849179CDD700064B5BC /* EFMapStrokeView.h */,
 				766C984A179CDD700064B5BC /* EFMapStrokeView.m */,
+				76555B1E179E345500BCC5A7 /* EFMapPopMenu.h */,
+				76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4255,7 +4277,6 @@
 				76B124361798398400A73E59 /* map_remove_30@2x.png */,
 				76B1242A1798331A00A73E59 /* map_arrow_blue@2x.png */,
 				76B1241D1797C81D00A73E59 /* btn_pad@2x.png */,
-				76B124071796F41F00A73E59 /* gps.db */,
 				76B1240317968C9900A73E59 /* location_btn.png */,
 				76B123E417968C5C00A73E59 /* map_arrow_12red.png */,
 				76B123E517968C5C00A73E59 /* map_arrow_12red@2x.png */,
@@ -4478,6 +4499,7 @@
 		785FD54E158065610056590D /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				76555B51179E78D600BCC5A7 /* WeixinSDK */,
 				76B1240B1796F44900A73E59 /* Sqlite */,
 				4F8507C417841ADA00BB86FA /* LibPhoneNumber */,
 				4FB377CC17377C7D001FA1B2 /* TWReverseAuth */,
@@ -5668,7 +5690,6 @@
 				76B123F717968C5C00A73E59 /* map_mark_blue@2x.png in Resources */,
 				76B123FA17968C5C00A73E59 /* map_mark_red@2x.png in Resources */,
 				76B1240517968C9900A73E59 /* location_btn.png in Resources */,
-				76B124091796F41F00A73E59 /* gps.db in Resources */,
 				76B1241F1797C81D00A73E59 /* btn_pad@2x.png in Resources */,
 				76B1242C1798331A00A73E59 /* map_arrow_blue@2x.png in Resources */,
 				76B124381798398400A73E59 /* map_remove_15@2x.png in Resources */,
@@ -6109,7 +6130,6 @@
 				76B123F817968C5C00A73E59 /* map_mark_blue@2x.png in Resources */,
 				76B123FB17968C5C00A73E59 /* map_mark_red@2x.png in Resources */,
 				76B1240617968C9900A73E59 /* location_btn.png in Resources */,
-				76B1240A1796F41F00A73E59 /* gps.db in Resources */,
 				76B124201797C81D00A73E59 /* btn_pad@2x.png in Resources */,
 				76B1242D1798331A00A73E59 /* map_arrow_blue@2x.png in Resources */,
 				76B124391798398400A73E59 /* map_remove_15@2x.png in Resources */,
@@ -6548,7 +6568,6 @@
 				76B123F617968C5C00A73E59 /* map_mark_blue@2x.png in Resources */,
 				76B123F917968C5C00A73E59 /* map_mark_red@2x.png in Resources */,
 				76B1240417968C9900A73E59 /* location_btn.png in Resources */,
-				76B124081796F41F00A73E59 /* gps.db in Resources */,
 				76B1241E1797C81D00A73E59 /* btn_pad@2x.png in Resources */,
 				76B1242B1798331A00A73E59 /* map_arrow_blue@2x.png in Resources */,
 				76B124371798398400A73E59 /* map_remove_15@2x.png in Resources */,
@@ -6830,6 +6849,7 @@
 				766C984C179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
 				4FA01BD2179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
 				4F0E3552179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
+				76555B21179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7077,6 +7097,7 @@
 				766C984D179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
 				4FA01BD3179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
 				4F0E3553179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
+				76555B22179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7324,6 +7345,7 @@
 				766C984B179CDD700064B5BC /* EFMapStrokeView.m in Sources */,
 				4FA01BD1179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
 				4F0E3551179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
+				76555B20179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7475,6 +7497,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/EXFE/Flurry\"",
+					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -7508,6 +7531,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/EXFE/Flurry\"",
+					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -7541,6 +7565,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/EXFE/Flurry\"",
+					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -7574,6 +7599,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/EXFE/Flurry\"",
+					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -7681,11 +7707,9 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/EXFE/Flurry\"",
+					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -7710,11 +7734,9 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/EXFE/Flurry\"",
+					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";

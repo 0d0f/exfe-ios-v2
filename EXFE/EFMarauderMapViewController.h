@@ -36,6 +36,8 @@ EFMapStrokeViewDataSource
 @property (nonatomic, strong)   CLLocationManager       *locationManager;
 
 @property (weak, nonatomic)     IBOutlet EFMapView      *mapView;
+@property (weak, nonatomic)     IBOutlet UIView         *leftBaseView;
+@property (weak, nonatomic)     IBOutlet UITableView    *selfTableView;
 @property (weak, nonatomic)     IBOutlet UITableView    *tableView;
 @property (nonatomic, weak)     EFMapStrokeView         *mapStrokeView;
 
