@@ -19,6 +19,7 @@
 #import "EFModel.h"
 #import "EFChangePasswordViewController.h"
 #import "EFEditProfileViewController.h"
+#import "EFAuthenticationViewController.h"
 #import "AYUIButton.h"
 
 #define DECTOR_HEIGHT                    (100)
@@ -417,9 +418,15 @@
             footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 10 + 62 + 44)];
 //            footerView.backgroundColor = [UIColor lightGrayColor];
             
+            UIButton *btn2Auth = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            [btn2Auth setFrame:CGRectMake(0, 0, 80, 40)];
+            [btn2Auth addTarget:self action:@selector(twoStep:) forControlEvents:UIControlEventTouchUpInside];
+            [footerView addSubview:btn2Auth];
+            
             AYUIButton *btnSignOut = [AYUIButton buttonWithType:UIButtonTypeCustom];
             
-            NSMutableAttributedString *str1 = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Sign out", nil)];            NSUInteger length = str1.length;
+            NSMutableAttributedString *str1 = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Sign out", nil)];
+            NSUInteger length = str1.length;
             [str1 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, length)];
             [str1 addAttribute:NSForegroundColorAttributeName value:[UIColor COLOR_RED_EXFE] range:NSMakeRange(0, length)];
             [btnSignOut setAttributedTitle:str1 forState:UIControlStateNormal];
@@ -605,6 +612,13 @@
         // 
     }
     
+}
+
+- (void) twoStep:(UIControl *)view
+{
+    EFAuthenticationViewController *vc = [[EFAuthenticationViewController alloc] initWithModel:self.model];
+    vc.user = self.user;
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (Identity*) getIdentityById:(int)identity_id{
