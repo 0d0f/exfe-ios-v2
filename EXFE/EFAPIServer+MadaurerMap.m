@@ -131,4 +131,32 @@
                         }];
 }
 
+- (void)getRouteXURLWithCrossId:(NSInteger)crossId
+                        success:(void (^)(NSString *))successHandler
+                        failure:(void (^)(NSError *))failureHandler {
+    NSString *endpoint = [NSString stringWithFormat:@"crosses/%d/GetRouteXUrl?token=%@", crossId, self.model.userToken];
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    manager.HTTPClient.parameterEncoding = AFJSONParameterEncoding;
+    
+    [manager.HTTPClient getPath:endpoint
+                     parameters:nil
+                        success:^(AFHTTPRequestOperation *operation, id responseObject){
+                            NSAssert([responseObject isKindOfClass:[NSDictionary class]], @"response object should be a dictionary");
+                            NSDictionary *meta = [responseObject valueForKey:@"meta"];
+                            if ([[meta valueForKey:@"code"] integerValue] == 200) {
+                                NSDictionary *response = [responseObject valueForKey:@"response"];
+                                NSString *url = [response valueForKey:@"url"];
+                                
+                                if (successHandler) {
+                                    successHandler(url);
+                                }
+                            }
+                        }
+                        failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                            if (failureHandler) {
+                                failureHandler(error);
+                            }
+                        }];
+}
+
 @end
