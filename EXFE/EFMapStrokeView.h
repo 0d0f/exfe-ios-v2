@@ -22,7 +22,7 @@
 
 @optional
 - (UIColor *)colorForStrokeInMapStrokeView:(EFMapStrokeView *)strokeView atIndex:(NSUInteger)index;     // there is a default color.
-- (CGFloat)widthForStrokeInMapStrokeView:(EFMapStrokeView *)strokeView atIndex:(NSUInteger)index;       // Default as 0.5f
+- (CGFloat)widthForStrokeInMapStrokeView:(EFMapStrokeView *)strokeView atIndex:(NSUInteger)index;       // Default as 1.0f
 
 @end
 

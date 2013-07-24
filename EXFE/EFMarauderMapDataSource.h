@@ -36,7 +36,7 @@ EFHTTPStreamingDelegate
 
 - (void)addLocation:(EFLocation *)location;
 
-// All input must be on earth.
+// All input must be on mars.
 - (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView;
 - (void)updateRouteLocation:(EFRouteLocation *)routeLocation inMapView:(MKMapView *)mapView;
 - (EFRouteLocation *)routeLocationForAnnotation:(EFAnnotation *)annotation;

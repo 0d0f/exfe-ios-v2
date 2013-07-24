@@ -9,7 +9,7 @@
 #import "EFMapStrokeView.h"
 
 #define kDefaultStrokeColor     [UIColor redColor]
-#define kDefaultStrokeWith      (0.5f)
+#define kDefaultStrokeWith      (1.0f)
 
 @interface EFMapStrokeView ()
 @property (nonatomic, strong) NSMutableArray *strokesToDraw;

@@ -107,7 +107,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     
     [self.routeLocations addObject:routeLocation];
     EFAnnotation *annotation = [[EFAnnotation alloc] initWithStyle:(routeLocation.locationTytpe == kEFRouteLocationTypeDestination) ? kEFAnnotationStyleDestination : ((routeLocation.markColor == kEFRouteLocationColorRed) ? kEFAnnotationStyleParkRed : kEFAnnotationStyleParkBlue)
-                                                        coordinate:[self earthCoordinateToMarsCoordinate:routeLocation.coordinate]
+                                                        coordinate:routeLocation.coordinate
                                                              title:routeLocation.title
                                                        description:routeLocation.subtitle];
     
@@ -127,7 +127,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 #endif
     
     EFAnnotation *annotation = [self.routeLocationAnnotationMap objectForKey:[NSValue valueWithNonretainedObject:routeLocation]];
-    annotation.coordinate = [self earthCoordinateToMarsCoordinate:routeLocation.coordinate];
+    annotation.coordinate = routeLocation.coordinate;
     annotation.title = routeLocation.title;
     annotation.subtitle = routeLocation.subtitle;
     
@@ -196,7 +196,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSString *userToken = delegate.model.userToken;
     
-    NSURL *streamingURL = [NSURL URLWithString:[NSString stringWithFormat:@"/v3/crosses/%d/routex?_method=WATCH&coordinate=earth&token=%@", self.crossId, userToken] relativeToURL:baseURL];
+    NSURL *streamingURL = [NSURL URLWithString:[NSString stringWithFormat:@"/v3/crosses/%d/routex?_method=WATCH&coordinate=mars&token=%@", self.crossId, userToken] relativeToURL:baseURL];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:streamingURL];
     request.HTTPMethod = @"POST";
     

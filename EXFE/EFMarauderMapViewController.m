@@ -24,7 +24,7 @@
 #import "EFMapPopMenu.h"
 
 #define kAnnotationOffsetY  (-50.0f)
-#define kShadowOffset       (4.0f)
+#define kShadowOffset       (3.0f)
 
 @interface EFMarauderMapViewController ()
 
@@ -54,7 +54,7 @@
 
 @property (nonatomic, assign) BOOL                  hasGotOffset;
 
-@property (nonatomic, strong) CAGradientLayer       *gradientLayer;
+@property (nonatomic, weak)   UIImageView           *tableViewShadowView;
 
 @end
 
@@ -91,10 +91,9 @@
 
 - (void)_getRoute {
     [self.model.apiServer getRouteWithCrossId:[self.cross.cross_id integerValue]
-                                      isEarth:YES
+                                      isEarth:NO
                                       success:^(NSArray *routeLocations, NSArray *routePaths){
                                           for (EFRouteLocation *routeLocation in routeLocations) {
-//                                              routeLocation.coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:routeLocation.coordinate];
                                               [self.mapDataSource addRouteLocation:routeLocation toMapView:self.mapView];
                                           }
                                           dispatch_async(dispatch_get_main_queue(), ^{
@@ -112,14 +111,14 @@
     [self.model.apiServer updateRouteWithCrossId:[self.cross.cross_id integerValue]
                                        locations:nil
                                           routes:nil
-                                         isEarth:YES
+                                         isEarth:NO
                                          success:nil
                                          failure:nil];
 #else
     [self.model.apiServer updateRouteWithCrossId:[self.cross.cross_id integerValue]
                                        locations:[self.mapDataSource allRouteLocations]
                                           routes:nil
-                                         isEarth:YES
+                                         isEarth:NO
                                          success:nil
                                          failure:nil];
 #endif
@@ -193,12 +192,18 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     self.leftBaseView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.6f];
     
     // tableView gradient
-    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.colors = @[(id)[UIColor colorWithWhite:0.0f alpha:0.6f].CGColor, (id)[UIColor clearColor].CGColor];
-    gradientLayer.frame = (CGRect){{0, -kShadowOffset}, {CGRectGetWidth(self.tableView.frame), 2 * kShadowOffset}};
-    gradientLayer.opacity = 0.0f;
-    [self.tableView.layer addSublayer:gradientLayer];
-    self.gradientLayer = gradientLayer;
+//    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+//    gradientLayer.colors = @[(id)[UIColor colorWithWhite:0.0f alpha:0.6f].CGColor, (id)[UIColor clearColor].CGColor];
+//    gradientLayer.frame = (CGRect){{0, -kShadowOffset}, {CGRectGetWidth(self.tableView.frame), 2 * kShadowOffset}};
+//    gradientLayer.opacity = 0.0f;
+//    [self.tableView.layer addSublayer:gradientLayer];
+//    self.gradientLayer = gradientLayer;
+    
+    UIImageView *tableViewShadowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_shadow_gap.png"]];
+    tableViewShadowView.frame = (CGRect){CGPointZero, {CGRectGetWidth(self.tableView.frame), kShadowOffset}};
+    tableViewShadowView.alpha = 0.0f;
+    [self.tableView addSubview:tableViewShadowView];
+    self.tableViewShadowView = tableViewShadowView;
     
     // long press gesture
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
@@ -279,8 +284,6 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
             startLocation = location;
             lastLocation = location;
             
-            coordinate = [self.mapDataSource marsCoordinateToEarthCoordinate:coordinate];
-            
             routeLocation = [EFRouteLocation generateRouteLocationWithCoordinate:coordinate];
             routeLocation.title = @"子时正刻";
             routeLocation.subtitle = @"233 233";
@@ -306,7 +309,7 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
             
             coordinate = [self.mapView convertPoint:lastLocation toCoordinateFromView:self.mapView];
             
-            routeLocation.coordinate = [self.mapDataSource marsCoordinateToEarthCoordinate:coordinate];
+            routeLocation.coordinate = coordinate;
             [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
             [self _postRoute];
             
@@ -440,18 +443,12 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == self.tableView) {
-        [CATransaction begin];
-        [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+        CGRect originShadowFrame = self.tableViewShadowView.frame;
+        originShadowFrame.origin.y = scrollView.contentOffset.y;
+        self.tableViewShadowView.frame = originShadowFrame;
         
-        CGRect originShadowFrame = self.gradientLayer.frame;
-        originShadowFrame.size.width = scrollView.frame.size.width;
-        originShadowFrame.origin.y = scrollView.contentOffset.y - kShadowOffset;
-        self.gradientLayer.frame = originShadowFrame;
-        
-        CGFloat opacity = fabs(scrollView.contentOffset.y / 10.0f);
-        self.gradientLayer.opacity = opacity > 1.0f ? 1.0f : opacity;
-        
-        [CATransaction commit];
+        CGFloat alpha = fabs(scrollView.contentOffset.y / 10.0f);
+        self.tableViewShadowView.alpha = alpha > 1.0f ? 1.0f : alpha;
     }
 }
 
@@ -465,25 +462,26 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     if (tableView == self.tableView) {
         locations = [self.personDictionary valueForKey:self.identityIds[indexPath.row + 1]];
         
+        /**
         EFMapPopMenu *popMenu = [[EFMapPopMenu alloc] initWithName:((Invitation *)self.invitations[indexPath.row + 1]).identity.name
                                                      pressedHanler:^(EFMapPopMenu *menu){
                                                          [self.model.apiServer getRouteXURLWithCrossId:[self.cross.cross_id integerValue]
                                                                                                success:^(NSString *url){
-                                                                                                   WXWebpageObject *webpageObject = [WXWebpageObject object];
-                                                                                                   webpageObject.webpageUrl = url;
-                                                                                                   
-                                                                                                   WXMediaMessage *mediaMessage = [WXMediaMessage message];
-                                                                                                   mediaMessage.title = @"请求更新方位";
-                                                                                                   mediaMessage.description = @"点我点我点我";
-                                                                                                   [mediaMessage setThumbImage:[UIImage imageNamed:@"Icon@2x.png"]];
-                                                                                                   mediaMessage.mediaObject = webpageObject;
-                                                                                                   
-                                                                                                   SendMessageToWXReq *message = [[SendMessageToWXReq alloc] init];
-                                                                                                   message.bText = YES;
-                                                                                                   message.text = url;
-//                                                                                                   message.bText = NO;
-//                                                                                                   message.message = mediaMessage;
-                                                                                                   [WXApi sendReq:message];
+//                                                                                                   WXWebpageObject *webpageObject = [WXWebpageObject object];
+//                                                                                                   webpageObject.webpageUrl = url;
+//                                                                                                   
+//                                                                                                   WXMediaMessage *mediaMessage = [WXMediaMessage message];
+//                                                                                                   mediaMessage.title = @"请求更新方位";
+//                                                                                                   mediaMessage.description = @"点我点我点我";
+//                                                                                                   [mediaMessage setThumbImage:[UIImage imageNamed:@"Icon@2x.png"]];
+//                                                                                                   mediaMessage.mediaObject = webpageObject;
+//                                                                                                   
+//                                                                                                   SendMessageToWXReq *message = [[SendMessageToWXReq alloc] init];
+//                                                                                                   message.bText = YES;
+//                                                                                                   message.text = url;
+////                                                                                                   message.bText = NO;
+////                                                                                                   message.message = mediaMessage;
+//                                                                                                   [WXApi sendReq:message];
                                                                                                    
                                                                                                    [menu dismiss];
                                                                                                }
@@ -492,6 +490,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                                                                                                }];
                                                      }];
         [popMenu show];
+         */
     } else if (tableView == self.selfTableView) {
         locations = [self.personDictionary valueForKey:self.identityIds[0]];
     }
@@ -500,14 +499,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         return;
     
     // add overlay
-    NSMutableArray *fixedLocations = [[NSMutableArray alloc] initWithCapacity:locations.count];
-    for (EFLocation *location in locations) {
-        EFLocation *fixedLocation = [[EFLocation alloc] initWithDictionary:[location dictionaryValue]];
-        fixedLocation.coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:location.coordinate];
-        [fixedLocations addObject:fixedLocation];
-    }
     
-    EFCrumPath *path = [[EFCrumPath alloc] initWithMapPoints:fixedLocations];
+    EFCrumPath *path = [[EFCrumPath alloc] initWithMapPoints:locations];
     path.linecolor = [UIColor colorWithRed:1.0f
                                      green:(127.0f / 255.0f)
                                       blue:(153.0f / 255.0f)
@@ -517,13 +510,13 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     [self.mapView addOverlay:path];
     
-    EFLocation *lastLocation = (EFLocation *)fixedLocations[0];
+    EFLocation *lastLocation = (EFLocation *)locations[0];
     
     // center
     EFRouteLocation *destination = self.mapDataSource.destinationLocation;
     if (destination) {
         MKMapPoint lastMapPoint = MKMapPointForCoordinate(lastLocation.coordinate);
-        MKMapPoint destinationMapPoint = MKMapPointForCoordinate([self.mapDataSource earthCoordinateToMarsCoordinate:destination.coordinate]);
+        MKMapPoint destinationMapPoint = MKMapPointForCoordinate(destination.coordinate);
         
         CGFloat width = fabs(lastMapPoint.x - destinationMapPoint.x);
         CGFloat height = fabsf(lastMapPoint.y - destinationMapPoint.y);
@@ -626,7 +619,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     if (locations) {
         EFLocation *lastestLocation = locations[0];
         
-        CLLocationCoordinate2D coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:lastestLocation.coordinate];
+        CLLocationCoordinate2D coordinate = lastestLocation.coordinate;
         
         CGPoint locationInView = [self.mapView convertCoordinate:coordinate toPointToView:self.tableView];
         if (CGRectContainsPoint(self.tableView.bounds, locationInView)) {
@@ -689,7 +682,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             }
             
             EFLocation *lastesLocation = locations[0];
-            personAnnotation.coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:lastesLocation.coordinate];
+            personAnnotation.coordinate = lastesLocation.coordinate;
             personAnnotation.isOnline = [self _isPersonOnline:identityId];
             
             dispatch_async(dispatch_get_main_queue(), ^{
