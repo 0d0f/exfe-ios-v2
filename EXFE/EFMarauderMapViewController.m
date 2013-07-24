@@ -68,7 +68,7 @@
 - (void)_getRoute;
 - (void)_postRoute;
 
-- (void)_zoomWithLocations:(NSArray *)locations;
+- (BOOL)_isPersonOnline:(NSString *)identityId;
 
 @end
 
@@ -125,8 +125,21 @@
 #endif
 }
 
-- (void)_zoomWithLocations:(NSArray *)locations {
+- (BOOL)_isPersonOnline:(NSString *)identityId {
+    NSArray *locations = [self.personDictionary valueForKey:identityId];
     
+    if (locations) {
+        EFLocation *lastestLocation = locations[0];
+        NSDate *lastestingUpdateTime = lastestLocation.timestamp;
+        NSTimeInterval timeInterval = [lastestingUpdateTime timeIntervalSinceNow];
+        if (timeInterval >= -60.0f) {
+            return YES;
+        } else {
+            return NO;
+        }
+    }
+    
+    return NO;
 }
 
 @end
@@ -454,22 +467,29 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         
         EFMapPopMenu *popMenu = [[EFMapPopMenu alloc] initWithName:((Invitation *)self.invitations[indexPath.row + 1]).identity.name
                                                      pressedHanler:^(EFMapPopMenu *menu){
-                                                         WXAppExtendObject *extendObject = [WXAppExtendObject object];
-                                                         extendObject.url = @"http://exfe.com";
-                                                         extendObject.extInfo = @"test";
-                                                         
-                                                         WXMediaMessage *mediaMessage = [WXMediaMessage message];
-                                                         mediaMessage.title = @"EXFE->WEIXIN TEST";
-                                                         mediaMessage.description = @"多媒体类型";
-                                                         [mediaMessage setThumbImage:[UIImage imageNamed:@"Icon@2x.png"]];
-                                                         mediaMessage.mediaObject = extendObject;
-                                                         
-                                                         SendMessageToWXReq *message = [[SendMessageToWXReq alloc] init];
-                                                         message.bText = NO;
-                                                         message.message = mediaMessage;
-                                                         [WXApi sendReq:message];
-                                                         
-                                                         [menu dismiss];
+                                                         [self.model.apiServer getRouteXURLWithCrossId:[self.cross.cross_id integerValue]
+                                                                                               success:^(NSString *url){
+                                                                                                   WXWebpageObject *webpageObject = [WXWebpageObject object];
+                                                                                                   webpageObject.webpageUrl = url;
+                                                                                                   
+                                                                                                   WXMediaMessage *mediaMessage = [WXMediaMessage message];
+                                                                                                   mediaMessage.title = @"请求更新方位";
+                                                                                                   mediaMessage.description = @"点我点我点我";
+                                                                                                   [mediaMessage setThumbImage:[UIImage imageNamed:@"Icon@2x.png"]];
+                                                                                                   mediaMessage.mediaObject = webpageObject;
+                                                                                                   
+                                                                                                   SendMessageToWXReq *message = [[SendMessageToWXReq alloc] init];
+                                                                                                   message.bText = YES;
+                                                                                                   message.text = url;
+//                                                                                                   message.bText = NO;
+//                                                                                                   message.message = mediaMessage;
+                                                                                                   [WXApi sendReq:message];
+                                                                                                   
+                                                                                                   [menu dismiss];
+                                                                                               }
+                                                                                               failure:^(NSError *error){
+                                                                                                   [menu dismiss];
+                                                                                               }];
                                                      }];
         [popMenu show];
     } else if (tableView == self.selfTableView) {
@@ -635,6 +655,17 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     return nil;
 }
 
+- (UIColor *)colorForStrokeInMapStrokeView:(EFMapStrokeView *)strokeView atIndex:(NSUInteger)index {
+    NSUInteger dataIndex = index + 1;
+    
+    NSString *key = self.identityIds[dataIndex];
+    if ([self _isPersonOnline:key]) {
+        return [UIColor COLOR_RGB(0xFF, 0x7E, 0x98)];
+    } else {
+        return [UIColor COLOR_RGB(0xB2, 0xB2, 0xB2)];
+    }
+}
+
 #pragma mark - EFMarauderMapDataSourceDelegate
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(NSString *)identityId {
@@ -650,26 +681,23 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     }
     
     if (locations && locations.count) {
-        EFPersonAnnotation *personAnnotation = [self.personAnnotationDictionary valueForKey:identityId];
-        if (!personAnnotation) {
-            personAnnotation = [[EFPersonAnnotation alloc] init];
-            [self.personAnnotationDictionary setValue:personAnnotation forKey:identityId];
+        @synchronized (self.personAnnotationDictionary) {
+            EFPersonAnnotation *personAnnotation = [self.personAnnotationDictionary valueForKey:identityId];
+            if (!personAnnotation) {
+                personAnnotation = [[EFPersonAnnotation alloc] init];
+                [self.personAnnotationDictionary setValue:personAnnotation forKey:identityId];
+            }
+            
+            EFLocation *lastesLocation = locations[0];
+            personAnnotation.coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:lastesLocation.coordinate];
+            personAnnotation.isOnline = [self _isPersonOnline:identityId];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mapView addAnnotation:personAnnotation];
+                [self.tableView reloadData];
+                [self.selfTableView reloadData];
+            });
         }
-        
-        EFLocation *lastesLocation = locations[0];
-        personAnnotation.coordinate = [self.mapDataSource earthCoordinateToMarsCoordinate:lastesLocation.coordinate];
-        NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:lastesLocation.timestamp];
-        if (timeInterval >= 0 && timeInterval <= 60) {
-            personAnnotation.isOnline = YES;
-        } else {
-            personAnnotation.isOnline = NO;
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.mapView addAnnotation:personAnnotation];
-            [self.tableView reloadData];
-            [self.selfTableView reloadData];
-        });
     }
 }
 

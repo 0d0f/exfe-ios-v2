@@ -35,4 +35,8 @@
                     success:(void (^)(NSArray *routeLocations, NSArray *routePaths))successHandler
                     failure:(void (^)(NSError *error))failureHandler;
 
+- (void)getRouteXURLWithCrossId:(NSInteger)crossId
+                        success:(void (^)(NSString *))successHandler
+                        failure:(void (^)(NSError *))failureHandler;
+
 @end

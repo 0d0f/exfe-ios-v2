@@ -45,7 +45,7 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
         UInt8 buffer[StreamBufSize];
         int length = 0;
         
-        @synchronized(self){
+        @synchronized(self) {
             do {
                 if (!CFReadStreamHasBytesAvailable(_stream)) {
                     [_delegate completedRead:[_strFromStream copy]];
