@@ -1518,6 +1518,12 @@
 		763A01CF17212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
 		763A01D017212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
 		763A01D117212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
+		763BE923179FD770003BF97C /* map_shadow_gap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE922179FD770003BF97C /* map_shadow_gap@2x.png */; };
+		763BE924179FD770003BF97C /* map_shadow_gap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE922179FD770003BF97C /* map_shadow_gap@2x.png */; };
+		763BE925179FD770003BF97C /* map_shadow_gap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE922179FD770003BF97C /* map_shadow_gap@2x.png */; };
+		763BE927179FD836003BF97C /* map_shadow_gap.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE926179FD836003BF97C /* map_shadow_gap.png */; };
+		763BE928179FD836003BF97C /* map_shadow_gap.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE926179FD836003BF97C /* map_shadow_gap.png */; };
+		763BE929179FD836003BF97C /* map_shadow_gap.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE926179FD836003BF97C /* map_shadow_gap.png */; };
 		764CD8F2173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F3173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
 		764CD8F4173A5C4600627237 /* EFNotificationBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */; };
@@ -1536,9 +1542,6 @@
 		76555B20179E345500BCC5A7 /* EFMapPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */; };
 		76555B21179E345500BCC5A7 /* EFMapPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */; };
 		76555B22179E345500BCC5A7 /* EFMapPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */; };
-		76555B47179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76555B44179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a */; };
-		76555B48179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76555B44179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a */; };
-		76555B49179E78CA00BCC5A7 /* libWeChatSDK_armv7_armv7s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76555B44179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a */; };
 		765A82D4175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
 		765A82D5175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
 		765A82D6175F076C00448B64 /* EFContactDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 765A82D3175F076C00448B64 /* EFContactDataSource.m */; };
@@ -2671,6 +2674,8 @@
 		763A01CD17212B080082CC9E /* RoughIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoughIdentity.h; sourceTree = "<group>"; };
 		763A01CE17212B080082CC9E /* RoughIdentity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoughIdentity.m; sourceTree = "<group>"; };
 		763A01D2172130B20082CC9E /* EFDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDataDefines.h; sourceTree = "<group>"; };
+		763BE922179FD770003BF97C /* map_shadow_gap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_shadow_gap@2x.png"; sourceTree = "<group>"; };
+		763BE926179FD836003BF97C /* map_shadow_gap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_shadow_gap.png; sourceTree = "<group>"; };
 		764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFNotificationBannerView.h; sourceTree = "<group>"; };
 		764CD8F1173A5C4600627237 /* EFNotificationBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFNotificationBannerView.m; sourceTree = "<group>"; };
 		764CD8FC173A8F9400627237 /* cautionbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cautionbar.png; sourceTree = "<group>"; };
@@ -2679,9 +2684,6 @@
 		764CD905173A914600627237 /* btn_white_30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_white_30@2x.png"; sourceTree = "<group>"; };
 		76555B1E179E345500BCC5A7 /* EFMapPopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMapPopMenu.h; sourceTree = "<group>"; };
 		76555B1F179E345500BCC5A7 /* EFMapPopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMapPopMenu.m; sourceTree = "<group>"; };
-		76555B44179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeChatSDK_armv7_armv7s.a; path = SDKExport/libWeChatSDK_armv7_armv7s.a; sourceTree = "<group>"; };
-		76555B45179E78C900BCC5A7 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WXApi.h; path = SDKExport/WXApi.h; sourceTree = "<group>"; };
-		76555B46179E78C900BCC5A7 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WXApiObject.h; path = SDKExport/WXApiObject.h; sourceTree = "<group>"; };
 		765A82D2175F076C00448B64 /* EFContactDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFContactDataSource.h; sourceTree = "<group>"; };
 		765A82D3175F076C00448B64 /* EFContactDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFContactDataSource.m; sourceTree = "<group>"; };
 		765A82D7175F0D5700448B64 /* EFSearchContactDataSouce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchContactDataSouce.h; sourceTree = "<group>"; };
@@ -3262,7 +3264,6 @@
 				4F63DB1217172AA600136B7E /* Foundation.framework in Frameworks */,
 				4F63DB1317172AA600136B7E /* CoreGraphics.framework in Frameworks */,
 				4F63DB1417172AA600136B7E /* libFlurry.a in Frameworks */,
-				76555B48179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3297,7 +3298,6 @@
 				4F63DCE117172B0700136B7E /* Foundation.framework in Frameworks */,
 				4F63DCE217172B0700136B7E /* CoreGraphics.framework in Frameworks */,
 				4F63DCE317172B0700136B7E /* libFlurry.a in Frameworks */,
-				76555B49179E78CA00BCC5A7 /* libWeChatSDK_armv7_armv7s.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3332,7 +3332,6 @@
 				78A98E8E1560F832009E0806 /* Foundation.framework in Frameworks */,
 				78A98E901560F832009E0806 /* CoreGraphics.framework in Frameworks */,
 				78C4751316084C56000B69F2 /* libFlurry.a in Frameworks */,
-				76555B47179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3822,9 +3821,6 @@
 		76555B51179E78D600BCC5A7 /* WeixinSDK */ = {
 			isa = PBXGroup;
 			children = (
-				76555B44179E78C900BCC5A7 /* libWeChatSDK_armv7_armv7s.a */,
-				76555B45179E78C900BCC5A7 /* WXApi.h */,
-				76555B46179E78C900BCC5A7 /* WXApiObject.h */,
 			);
 			name = WeixinSDK;
 			sourceTree = "<group>";
@@ -4270,6 +4266,8 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				763BE926179FD836003BF97C /* map_shadow_gap.png */,
+				763BE922179FD770003BF97C /* map_shadow_gap@2x.png */,
 				766C9833179944240064B5BC /* map_dot_grey@2x.png */,
 				766C9834179944240064B5BC /* map_dot_red@2x.png */,
 				76B1245817992A5300A73E59 /* map_arrow_12g5@2x.png */,
@@ -5697,6 +5695,8 @@
 				76B1245A17992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */,
 				766C9836179944240064B5BC /* map_dot_grey@2x.png in Resources */,
 				766C9839179944240064B5BC /* map_dot_red@2x.png in Resources */,
+				763BE924179FD770003BF97C /* map_shadow_gap@2x.png in Resources */,
+				763BE928179FD836003BF97C /* map_shadow_gap.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6137,6 +6137,8 @@
 				76B1245B17992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */,
 				766C9837179944240064B5BC /* map_dot_grey@2x.png in Resources */,
 				766C983A179944240064B5BC /* map_dot_red@2x.png in Resources */,
+				763BE925179FD770003BF97C /* map_shadow_gap@2x.png in Resources */,
+				763BE929179FD836003BF97C /* map_shadow_gap.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6575,6 +6577,8 @@
 				76B1245917992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */,
 				766C9835179944240064B5BC /* map_dot_grey@2x.png in Resources */,
 				766C9838179944240064B5BC /* map_dot_red@2x.png in Resources */,
+				763BE923179FD770003BF97C /* map_shadow_gap@2x.png in Resources */,
+				763BE927179FD836003BF97C /* map_shadow_gap.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7709,7 +7713,10 @@
 					"\"$(SRCROOT)/EXFE/Flurry\"",
 					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
@@ -7736,7 +7743,10 @@
 					"\"$(SRCROOT)/EXFE/Flurry\"",
 					"\"$(SRCROOT)/EXFE/SDKExport\"",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
