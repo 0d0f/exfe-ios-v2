@@ -27,6 +27,7 @@
 #import "UILabel+EXFE.h"
 #import "EFIdentityBar.h"
 #import "EFPasswordField.h"
+#import "OAuthLoginViewController.h"
 
 #define kTagPassword        233
 #define kTagBtnAuthPwd      234
@@ -807,7 +808,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
     Provider provider = [Identity getProviderCode:self.identity.provider];
     if (provider == kProviderTwitter) {
         [self twitterAuth:self.identity success:^(NSNumber *user_id, NSString *token) {
-            <#code#>
+            nil;
         } failure:nil];
     }
     
@@ -843,7 +844,20 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                                                                      
                                                                      OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
                                                                      oauth.provider = provider;
-                                                                     oauth.delegate = self;
+                                                                     oauth.onSuccess = ^(NSDictionary * params){
+                                                                         NSString *userid = [params valueForKey:@"userid"];
+                                                                         
+                                                                         if ([userid integerValue] == self.model.userId) {
+                                                                             // use refresh token
+                                                                             NSString *token = [params valueForKey:@"token"];
+                                                                             self.model.userToken = token;
+                                                                             [self.model saveUserData];
+                                                                             
+                                                                             [self setPasswordWithErrorMessage:nil];
+                                                                         } else {
+                                                                             // TODO: Merge User
+                                                                         }
+                                                                     };
                                                                      oauth.oAuthURL = url;
                                                                      switch (provider) {
                                                                          case kProviderTwitter:
@@ -1020,27 +1034,6 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 - (void)doneButtonPressed:(id)sender{
     //Do something here here with the value selected using [pickerView date] to get that value
     [self.pickerViewPopup dismissWithClickedButtonIndex:1 animated:YES];
-}
-
-#pragma mark OAuthLoginViewControllerDelegate
-- (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
-    [oauthlogin dismissModalViewControllerAnimated:YES];
-}
-
-- (void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
-{
-    [oauthloginViewController dismissModalViewControllerAnimated:YES];
-    
-    if ([userid integerValue] == self.model.userId) {
-        // use refresh token
-        self.model.userToken = token;
-        [self.model saveUserData];
-        
-        [self setPasswordWithErrorMessage:nil];
-    } else {
-        // TODO: Merge User
-    }
-    
 }
 
 #pragma mark - Helper Methods

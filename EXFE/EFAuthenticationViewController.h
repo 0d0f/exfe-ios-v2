@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OAuthLoginViewController.h"
 
 typedef BOOL (^NextStep)();
 
-@interface EFAuthenticationViewController : UIViewController<UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, OAuthLoginViewControllerDelegate>
+@interface EFAuthenticationViewController : UIViewController<UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (nonatomic, strong) User * user;
 @property (nonatomic, copy) NextStep nextStep;

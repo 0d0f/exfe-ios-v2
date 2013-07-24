@@ -14,10 +14,9 @@
 #import "FullScreenViewController.h"
 #import "EFAddIdentityViewController.h"
 #import "CustomAttributedTextView.h"
-#import "OAuthLoginViewController.h"
 #import "EFModel.h"
 
-@interface ProfileViewController : UIViewController<OAuthLoginViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>{
+@interface ProfileViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>{
 //    IBOutlet UIToolbar* toolbar;
     
     UIImageView* useravatar;

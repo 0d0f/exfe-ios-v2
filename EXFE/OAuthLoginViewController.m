@@ -13,15 +13,14 @@
 @end
 
 @implementation OAuthLoginViewController
-//@synthesize webView;
-@synthesize delegate;
-//@synthesize provider = _provider;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.onSuccess = nil;
+        self.onCancel = nil;
     }
     return self;
 }
@@ -58,8 +57,6 @@
                 [webView stringByEvaluatingJavaScriptFromString:self.javaScriptString];
             }
         }
-        
-    
     }
 }
 - (void)viewDidLoad {
@@ -111,7 +108,11 @@
 }
 
 - (void)cancel {
-    [self.delegate OAuthloginViewControllerDidCancel:self];
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (self.onCancel) {
+            self.onCancel();
+        }
+    }];
 }
 
 - (BOOL)webView:(UIWebView *)webview shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
@@ -128,9 +129,17 @@
             
             NSString *token = [parser valueForVariable:@"token"];
             NSString *external_id = [parser valueForVariable:@"external_id"];
-            [self.delegate OAuthloginViewControllerDidSuccess:self userid:userid username:name external_id:external_id token:token];
-            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshUserSelf object:self];
+            if (self.onSuccess) {
+                NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:4];
+                [params setValue:userid forKey:@"userid"];
+                [params setValue:name forKey:@"name"];
+                [params setValue:token forKey:@"token"];
+                [params setValue:external_id forKey:@"external_id"];
+                
+                self.onSuccess(params);
+            }    
         }
+        [self dismissViewControllerAnimated:YES completion:nil];
         return NO;
     }
     return YES;

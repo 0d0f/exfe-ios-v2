@@ -696,7 +696,16 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             {
                 OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
                 oauth.provider = kProviderTwitter;
-                oauth.delegate = self;
+                oauth.onSuccess = ^(NSDictionary * params){
+                    NSString * userid = [params valueForKey:@"userid"];
+                    NSString * token = [params valueForKey:@"token"];
+                    
+                    if ([userid integerValue] > 0 && token.length > 0) {
+                        [self loadUserAndExit:[userid integerValue] withToken:token];
+                    } else {
+                        // Error?
+                    }
+                };
                 oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
                 if (username) {
                     // @"https://api.twitter.com/oauth/authorize?"
@@ -715,7 +724,16 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             {
                 OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
                 oauth.provider = kProviderFacebook;
-                oauth.delegate = self;
+                oauth.onSuccess = ^(NSDictionary * params){
+                    NSString * userid = [params valueForKey:@"userid"];
+                    NSString * token = [params valueForKey:@"token"];
+                    
+                    if ([userid integerValue] > 0 && token.length > 0) {
+                        [self loadUserAndExit:[userid integerValue] withToken:token];
+                    } else {
+                        // Error?
+                    }
+                };
                 oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
                 if (username) {
                     oauth.matchedURL = @"http://m.facebook.com/login.php?";
@@ -978,7 +996,16 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                             
                                             OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
                                             oauth.provider = provider;
-                                            oauth.delegate = self;
+                                            oauth.onSuccess = ^(NSDictionary * params){
+                                                NSString * userid = [params valueForKey:@"userid"];
+                                                NSString * token = [params valueForKey:@"token"];
+                                                
+                                                if ([userid integerValue] > 0 && token.length > 0) {
+                                                    [self loadUserAndExit:[userid integerValue] withToken:token];
+                                                } else {
+                                                    // Error?
+                                                }
+                                            };
                                             oauth.oAuthURL = url;
                                             switch (provider) {
                                                 case kProviderTwitter:
@@ -1558,23 +1585,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
             self.lastInputIdentity = identity;
             [self identityDidChange:identity];
         }
-    }
-}
-
-#pragma mark OAuthlogin Delegate
-- (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
-    [oauthlogin dismissModalViewControllerAnimated:YES];
-}
-
--(void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
-{
-    [self.navigationController dismissModalViewControllerAnimated:YES];
-    
-    //save token/user id/ username
-    if ([userid integerValue] > 0 && token.length > 0) {
-        [self loadUserAndExit:[userid integerValue] withToken:token];
-    } else {
-        // Error?
     }
 }
 

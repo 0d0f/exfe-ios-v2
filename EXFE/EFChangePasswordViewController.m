@@ -22,6 +22,8 @@
 #import "EXGradientToolbarView.h"
 #import "UILabel+EXFE.h"
 
+#import "OAuthLoginViewController.h"
+
 #define kTagOldPassword     233
 #define kTagFreshPassword   234
 #define kTagBtnChangePwd    235
@@ -791,7 +793,20 @@
                                                                      
                                                                      OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
                                                                      oauth.provider = provider;
-                                                                     oauth.delegate = self;
+                                                                     oauth.onSuccess = ^(NSDictionary * params){
+                                                                         NSString *userid = [params valueForKey:@"userid"];
+                                                                         
+                                                                         if ([userid integerValue] == self.model.userId) {
+                                                                             // use refresh token
+                                                                             NSString *token = [params valueForKey:@"token"];
+                                                                             self.model.userToken = token;
+                                                                             [self.model saveUserData];
+                                                                             
+                                                                             [self setPasswordWithErrorMessage:nil];
+                                                                         } else {
+                                                                             // TODO: Merge User
+                                                                         }
+                                                                     };
                                                                      oauth.oAuthURL = url;
                                                                      switch (provider) {
                                                                          case kProviderTwitter:
@@ -939,27 +954,6 @@
 - (void)doneButtonPressed:(id)sender{
     //Do something here here with the value selected using [pickerView date] to get that value
     [self.pickerViewPopup dismissWithClickedButtonIndex:1 animated:YES];
-}
-
-#pragma mark OAuthLoginViewControllerDelegate
-- (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
-    [oauthlogin dismissModalViewControllerAnimated:YES];
-}
-
-- (void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
-{
-    [oauthloginViewController dismissModalViewControllerAnimated:YES];
-    
-    if ([userid integerValue] == self.model.userId) {
-        // use refresh token
-        self.model.userToken = token;
-        [self.model saveUserData];
-        
-        [self setPasswordWithErrorMessage:nil];
-    } else {
-        // TODO: Merge User
-    }
-  
 }
 
 #pragma mark - Helper Methods

@@ -642,7 +642,9 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                             if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"] && [responseobj objectForKey:@"url"] != nil){
                                 OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
                                 oauth.provider = provider;
-                                oauth.delegate = self;
+                                oauth.onSuccess = ^(NSDictionary *param) {
+                                    [self loadUserAndExit];
+                                };
                                 oauth.oAuthURL = [responseobj objectForKey:@"url"];
                                 if (username) {
                                     switch (provider) {
@@ -962,18 +964,6 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
     }
     
 }
-
-#pragma mark OAuthlogin Delegate
-- (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
-    [oauthlogin dismissModalViewControllerAnimated:YES];
-}
-
-- (void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
-{
-    [self.navigationController dismissModalViewControllerAnimated:YES];
-    [self loadUserAndExit];
-}
-
 
 #pragma mark UITextFieldDelegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField
