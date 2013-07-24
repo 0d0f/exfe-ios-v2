@@ -684,21 +684,7 @@
                                                                             [self syncUser];
                                                                         };
                                                                         oauth.oAuthURL = url;
-                                                                        switch (provider) {
-                                                                            case kProviderTwitter:
-                                                                                oauth.matchedURL = @"https://api.twitter.com/oauth/auth";
-                                                                                oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", [identity valueForKey:@"external_id"]];
-                                                                                break;
-                                                                            case kProviderFacebook:
-                                                                                oauth.matchedURL = @"http://m.facebook.com/login.php?";
-                                                                                oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", [identity valueForKey:@"external_username"]];
-                                                                                break;
-                                                                            default:
-                                                                                oauth.matchedURL = nil;
-                                                                                oauth.javaScriptString = nil;
-                                                                                break;
-                                                                        }
-                                                                        
+                                                                        oauth.external_username = [identity valueForKey:@"external_username"];
                                                                         [self presentModalViewController:oauth animated:YES];
 
                                                                     }

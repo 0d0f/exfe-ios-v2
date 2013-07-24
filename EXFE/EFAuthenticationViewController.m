@@ -808,7 +808,13 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
     Provider provider = [Identity getProviderCode:self.identity.provider];
     if (provider == kProviderTwitter) {
         [self twitterAuth:self.identity success:^(NSNumber *user_id, NSString *token) {
-            nil;
+            if ([user_id integerValue] == self.model.userId) {
+                
+                
+            } else {
+                // TODO: merge
+//                    [self mergeUser:u with:t];
+            };
         } failure:nil];
     }
     
@@ -816,8 +822,6 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         sender.enabled = NO;
         [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
     }
-    
-    
     
     [self.model.apiServer forgetPassword:self.identity.external_username
                                     with:[Identity getProviderCode:self.identity.provider]
@@ -859,21 +863,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                                                                          }
                                                                      };
                                                                      oauth.oAuthURL = url;
-                                                                     switch (provider) {
-                                                                         case kProviderTwitter:
-                                                                             oauth.matchedURL = @"https://api.twitter.com/oauth/auth";
-                                                                             oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", [identity valueForKey:@"external_username"]];
-                                                                             break;
-                                                                         case kProviderFacebook:
-                                                                             oauth.matchedURL = @"http://m.facebook.com/login.php?";
-                                                                             oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", [identity valueForKey:@"external_username"]];
-                                                                             break;
-                                                                         default:
-                                                                             oauth.matchedURL = nil;
-                                                                             oauth.javaScriptString = nil;
-                                                                             break;
-                                                                     }
-                                                                     
+                                                                     oauth.external_username = [identity valueForKey:@"external_username"];
                                                                      [self presentModalViewController:oauth animated:YES];
                                                                  }
                                                              } else if ([@"VERIFYING" isEqualToString:action]) {
@@ -1204,15 +1194,10 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                 NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
                 NSString *t = [responseObject valueForKeyPath:@"response.token"];
                 
-                if ([u integerValue] == self.model.userId) {
-                    if (success) {
-                        success(u, t);
-                    }
-                    
-                } else {
-                    // TODO: merge
-//                    [self mergeUser:u with:t];
+                if (success) {
+                    success(u, t);
                 }
+                
             }
             //400: invalid_token
             //400: no_provider
@@ -1247,7 +1232,8 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 // step 1 try to auth twtiter from phone
 - (void)twitterAuth:(Identity *)identity success:(void (^)(NSNumber *user_id, NSString *token))success failure:(void (^)(void))failure
 {
-    NSAssert(kProviderTwitter == [Identity getProviderCode:identity.provider], @"Entry for twitter only");
+    Provider provider = [Identity getProviderCode:identity.provider];
+    NSAssert(kProviderTwitter == provider, @"Entry for twitter only");
     
     [self syncTwitterAccounts:^(NSArray *accounts) {
         BOOL webauth = YES;
@@ -1302,7 +1288,22 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
      
         if (webauth) {
             // auth web
-            NSLog(@"twitter auth from web");
+            OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+            oauth.provider = provider;
+            oauth.onSuccess = ^(NSDictionary * params){
+                NSString *user_id = [params valueForKey:@"userid"];
+                NSNumber *userid = [NSNumber numberWithInteger:[user_id integerValue]];
+                NSString *token = [params valueForKey:@"token"];
+                if (success) {
+                    success(userid, token);
+                }
+            };
+            AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            // eg:  exfe://oauthcallback/
+            NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+            oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
+            oauth.external_username = [identity valueForKey:@"external_username"];
+            [self presentModalViewController:oauth animated:YES];
         }
     }];
 }

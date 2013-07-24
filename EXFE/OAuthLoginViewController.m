@@ -9,10 +9,34 @@
 #import "OAuthLoginViewController.h"
 #import "URLParser.h"
 //#define EXFE_OAUTH_LINK @"https://exfe.com/oauth"
+
 @interface OAuthLoginViewController ()
+@property (nonatomic, copy) NSString *matchedURL;
+@property (nonatomic, copy) NSString *javaScriptString;
 @end
 
 @implementation OAuthLoginViewController
+
+- (void)setexternal_username:(NSString *)external_username
+{
+    _external_username = external_username;
+    
+    switch (self.provider) {
+        case kProviderTwitter:
+            self.matchedURL = @"https://api.twitter.com/oauth/auth";
+            self.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", external_username];
+            
+            break;
+        case kProviderFacebook:
+            self.matchedURL = @"http://m.facebook.com/login.php?";
+            self.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", external_username];
+            break;
+        default:
+            break;
+    }
+    
+    
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -21,6 +45,8 @@
         // Custom initialization
         self.onSuccess = nil;
         self.onCancel = nil;
+        self.matchedURL = nil;
+        self.javaScriptString = nil;
     }
     return self;
 }

@@ -23,6 +23,7 @@
 #import "TWAPIManager.h"
 #import "EFKit.h"
 #import "EFModel.h"
+#import "OAuthLoginViewController.h"
 
 typedef NS_ENUM(NSUInteger, EFStage){
     kStageStart,
@@ -691,63 +692,38 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         // eg:  exfe://oauthcallback/
         NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
         
+        NSString *oAuthURL = nil;
         switch (provider) {
             case kProviderTwitter:
-            {
-                OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-                oauth.provider = kProviderTwitter;
-                oauth.onSuccess = ^(NSDictionary * params){
-                    NSString * userid = [params valueForKey:@"userid"];
-                    NSString * token = [params valueForKey:@"token"];
-                    
-                    if ([userid integerValue] > 0 && token.length > 0) {
-                        [self loadUserAndExit:[userid integerValue] withToken:token];
-                    } else {
-                        // Error?
-                    }
-                };
-                oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
-                if (username) {
-                    // @"https://api.twitter.com/oauth/authorize?"
-                    // @"https://api.twitter.com/oauth/authenticate?"
-                    oauth.matchedURL = @"https://api.twitter.com/oauth/auth";
-                    oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", username];
-                } else {
-                    oauth.matchedURL = nil;
-                    oauth.javaScriptString = nil;
-                }
-                
-                [self presentModalViewController:oauth animated:YES];
-            }
-                return;
             case kProviderFacebook:
             {
-                OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-                oauth.provider = kProviderFacebook;
-                oauth.onSuccess = ^(NSDictionary * params){
-                    NSString * userid = [params valueForKey:@"userid"];
-                    NSString * token = [params valueForKey:@"token"];
-                    
-                    if ([userid integerValue] > 0 && token.length > 0) {
-                        [self loadUserAndExit:[userid integerValue] withToken:token];
-                    } else {
-                        // Error?
-                    }
-                };
-                oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
-                if (username) {
-                    oauth.matchedURL = @"http://m.facebook.com/login.php?";
-                    oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", username];
-                } else {
-                    oauth.matchedURL = nil;
-                    oauth.javaScriptString = nil;
-                }
-                [self presentModalViewController:oauth animated:YES];
-            }
-                return;
+                oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
+            }   break;
             default:
                 break;
         }
+        
+        if (oAuthURL) {
+            OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+            oauth.provider = kProviderTwitter;
+            oauth.onSuccess = ^(NSDictionary * params){
+                NSString * userid = [params valueForKey:@"userid"];
+                NSString * token = [params valueForKey:@"token"];
+                
+                if ([userid integerValue] > 0 && token.length > 0) {
+                    [self loadUserAndExit:[userid integerValue] withToken:token];
+                } else {
+                    // Error?
+                }
+            };
+            oauth.oAuthURL = oAuthURL;
+            oauth.external_username = username;
+            [self presentModalViewController:oauth animated:YES];
+            return;
+        } else {
+            // unsupported provider
+        }
+        
     } else if([flag isEqualToString:@"SIGN_IN"]){
         [self setStage:kStageSignIn];
     }else {
@@ -1007,21 +983,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                                 }
                                             };
                                             oauth.oAuthURL = url;
-                                            switch (provider) {
-                                                case kProviderTwitter:
-                                                    oauth.matchedURL = @"https://api.twitter.com/oauth/auth";
-                                                    oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", [identity valueForKey:@"external_id"]];
-                                                    break;
-                                                case kProviderFacebook:
-                                                    oauth.matchedURL = @"http://m.facebook.com/login.php?";
-                                                    oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", [identity valueForKey:@"external_username"]];
-                                                    break;
-                                                default:
-                                                    oauth.matchedURL = nil;
-                                                    oauth.javaScriptString = nil;
-                                                    break;
-                                            }
-                                            
+                                            oauth.external_username = [identity valueForKey:@"external_username"];
                                             [self presentModalViewController:oauth animated:YES];
 
                                         }

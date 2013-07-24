@@ -642,27 +642,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                             if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"] && [responseobj objectForKey:@"url"] != nil){
                                 OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
                                 oauth.provider = provider;
+                                oauth.oAuthURL = [responseobj objectForKey:@"url"];
+                                oauth.external_username = username;
                                 oauth.onSuccess = ^(NSDictionary *param) {
                                     [self loadUserAndExit];
                                 };
-                                oauth.oAuthURL = [responseobj objectForKey:@"url"];
-                                if (username) {
-                                    switch (provider) {
-                                        case kProviderTwitter:
-                                            oauth.matchedURL = @"https://api.twitter.com/oauth/auth";
-                                            oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", username];
-                                            break;
-                                        case kProviderFacebook:
-                                            oauth.matchedURL = @"http://m.facebook.com/login.php?";
-                                            oauth.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", username];
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                } else {
-                                    oauth.matchedURL = nil;
-                                    oauth.javaScriptString = nil;
-                                }
+                                
                                 [self presentModalViewController:oauth animated:YES];
                                 
                             }else{

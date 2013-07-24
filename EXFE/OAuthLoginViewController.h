@@ -26,12 +26,11 @@ typedef void (^OAuthAuthenticateCancel)();
 @property (nonatomic, strong) IBOutlet UIWebView* webView;
 
 @property (nonatomic, assign) Provider provider;
+@property (nonatomic, copy) NSString *external_username;
 @property (nonatomic, copy) OAuthAuthenticateSuccess onSuccess;
 @property (nonatomic, copy) OAuthAuthenticateCancel onCancel;
 
 @property (nonatomic, copy) NSString *oAuthURL;
-@property (nonatomic, copy) NSString *matchedURL;
-@property (nonatomic, copy) NSString *javaScriptString;
 
 
 
