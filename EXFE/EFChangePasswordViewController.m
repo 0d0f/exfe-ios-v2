@@ -447,11 +447,11 @@
                              self.btnAuth.hidden = YES;
                              self.inlineError.hidden = YES;
                              
-                             self.forgotTitle.alpha = 100;
-                             self.forgotDetail.alpha = 100;
-                             self.identitybar.alpha = 100;
-                             self.btnAuth.alpha = 100;
-                             self.inlineError.alpha = 100;
+                             self.forgotTitle.alpha = 1;
+                             self.forgotDetail.alpha = 1;
+                             self.identitybar.alpha = 1;
+                             self.btnAuth.alpha = 1;
+                             self.inlineError.alpha = 1;
                          }];
     }
     
@@ -615,11 +615,11 @@
         self.btnAuth.hidden = NO;
         [UIView animateWithDuration:0.4
                          animations:^{
-                             self.forgotTitle.alpha = 100;
-                             self.forgotDetail.alpha = 100;
-                             self.identitybar.alpha = 100;
-                             self.btnAuth.alpha = 100;
-                             self.inlineError.alpha = 100;
+                             self.forgotTitle.alpha = 1;
+                             self.forgotDetail.alpha = 1;
+                             self.identitybar.alpha = 1;
+                             self.btnAuth.alpha = 1;
+                             self.inlineError.alpha = 1;
                          } ];
         
     }

@@ -108,8 +108,8 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
         
         [UIView animateWithDuration:0.75 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             _imgEXFELogo.frame = logo_frame;
-            _labelEXFE.alpha = 100;
-            _labelDescription.alpha = 100;
+            _labelEXFE.alpha = 1;
+            _labelDescription.alpha = 1;
             _labelStart.frame = frame;
         } completion:^(BOOL finished) {
             
@@ -200,8 +200,8 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
     NSTimeInterval delay = 0;
     switch (type) {
         case kSwitchSubViewControllerShow:{
-            _labelEXFE.alpha = 100;
-            _labelDescription.alpha = 100;
+            _labelEXFE.alpha = 1;
+            _labelDescription.alpha = 1;
 //            _labelStart.alpha = 100;
 //            _labelStart.frame = CGRectOffset(_labelStart.bounds, 0, CGRectGetHeight(self.view.bounds) - CGRectGetHeight(_labelStart.bounds));
         }   break;
@@ -228,8 +228,8 @@ typedef NS_ENUM(NSUInteger, SwitchSubViewControllerType){
                                  _labelDescription.alpha = 0;
                              }   break;
                              case kSwitchSubViewControllerDismiss:{
-                                 _labelEXFE.alpha = 100;
-                                 _labelDescription.alpha = 100;
+                                 _labelEXFE.alpha = 1;
+                                 _labelDescription.alpha = 1;
                              }   break;
                              default:
                                  break;
