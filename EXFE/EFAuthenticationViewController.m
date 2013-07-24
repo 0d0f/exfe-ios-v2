@@ -27,9 +27,14 @@
 #import "UILabel+EXFE.h"
 #import "EFIdentityBar.h"
 #import "EFPasswordField.h"
+#import "OAuthLoginViewController.h"
+
+#define kTagPassword        233
+#define kTagBtnAuthPwd      234
+#define kTagBtnAuthIdentity 235
 
 #define kTagIdentityBar     238
-#define kTagBtnAuth         239
+#define kTagBtnAuthForSet   239
 #define kViewTagErrorInline 240
 
 
@@ -40,15 +45,23 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 @property (nonatomic, weak) EXFEModel *model;
 
 @property (nonatomic, strong, readonly) NSArray *trustIdentities;
+@property (nonatomic, copy) NSString *currentPwd;
 
 @property (nonatomic, strong) CSLinearLayoutView *rootView;
 @property (nonatomic, strong) CSLinearLayoutView *authView;
 @property (nonatomic, strong) CSLinearLayoutView *setpwdView;
 
-@property (nonatomic, strong) EFIdentityBar * identityBarFgt;
+
 @property (nonatomic, strong) EFIdentityBar * identitybarSet;
 
 @property (nonatomic, strong) UIButton *btnAuth;
+@property (nonatomic, strong) UITextField *pwdTextField;
+@property (nonatomic, strong) UILabel *whyTitle1;
+@property (nonatomic, strong) UILabel *whyDesc1;
+@property (nonatomic, strong) UILabel *forgotTitle;
+@property (nonatomic, strong) UILabel *forgotDetail;
+@property (nonatomic, strong) EFIdentityBar * identityBarFgt;
+@property (nonatomic, strong) UIButton *btnAuthIdentity;
 
 @property (nonatomic, strong) UIActionSheet *pickerViewPopup;
 @property (nonatomic, strong) UIPickerView * categoryPickerView;
@@ -167,22 +180,22 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         item1.padding = CSLinearLayoutMakePadding(10, 15, 5, 15);
         [authLayout addItem:item1];
         
-        EFPasswordField *inputOldPassword = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-        inputOldPassword.leftViewMode = UITextFieldViewModeNever;
-        inputOldPassword.returnKeyType = UIReturnKeyNext;
-//        inputOldPassword.tag = kTagOldPassword;
-        inputOldPassword.placeholder = NSLocalizedString(@"Current password", nil);
-        inputOldPassword.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
-        inputOldPassword.delegate = self;
-        inputOldPassword.borderStyle = UITextBorderStyleNone;
-        inputOldPassword.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        [inputOldPassword.btnForgot addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
-        CSLinearLayoutItem *item2 = [CSLinearLayoutItem layoutItemForView:inputOldPassword];
+        EFPasswordField *inputPassword = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
+        inputPassword.leftViewMode = UITextFieldViewModeNever;
+        inputPassword.returnKeyType = UIReturnKeyNext;
+        inputPassword.tag = kTagPassword;
+        inputPassword.placeholder = NSLocalizedString(@"Current password", nil);
+        inputPassword.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+        inputPassword.delegate = self;
+        inputPassword.borderStyle = UITextBorderStyleNone;
+        inputPassword.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [inputPassword.btnForgot addTarget:self action:@selector(forgetPwd:) forControlEvents:UIControlEventTouchUpInside];
+        CSLinearLayoutItem *item2 = [CSLinearLayoutItem layoutItemForView:inputPassword];
         item2.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
         item2.fillMode = CSLinearLayoutItemFillModeNormal;
         item2.padding = CSLinearLayoutMakePadding(5, 20, 5, 20);
         [authLayout addItem:item2];
-//        self.oldPwdTextField = inputOldPassword;
+        self.pwdTextField = inputPassword;
         
         UIButton *btnChangePwd = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 290, 48)];
         [btnChangePwd setTitleShadowColor:[UIColor COLOR_WA(0x00, 0x7F)] forState:UIControlStateNormal];
@@ -193,15 +206,14 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         btnChangePwd.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:18];
         btnChangePwd.titleLabel.shadowOffset = CGSizeMake(0, -1);
         [btnChangePwd setTitle:NSLocalizedString(@"Authenticate", nil) forState:UIControlStateNormal];
-        [btnChangePwd addTarget:self action:@selector(changePwd:) forControlEvents:UIControlEventTouchUpInside];
-//        btnChangePwd.tag = kTagBtnChangePwd;
+        [btnChangePwd addTarget:self action:@selector(authWithPwd:) forControlEvents:UIControlEventTouchUpInside];
+        btnChangePwd.tag = kTagBtnAuthPwd;
         CSLinearLayoutItem *item3 = [CSLinearLayoutItem layoutItemForView:btnChangePwd];
         item3.horizontalAlignment = CSLinearLayoutItemHorizontalAlignmentCenter;
         item3.fillMode = CSLinearLayoutItemFillModeNormal;
         item3.padding = CSLinearLayoutMakePadding(5, 15, 5, 15);
         [authLayout addItem:item3];
-//        self.btnChangePwd = btnChangePwd;
-        
+        self.btnAuth = btnChangePwd;
         
         UILabel * whyTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 40)];
         whyTitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
@@ -214,6 +226,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         item4.hiddenType = CSLinearLayoutItemGone;
         item4.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
         [authLayout addItem:item4];
+        self.whyTitle1 = whyTitle;
         
         UILabel * whyDesc = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, MAXFLOAT)];
         whyDesc.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
@@ -227,9 +240,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         item5.hiddenType = CSLinearLayoutItemGone;
         item5.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
         [authLayout addItem:item5];
-        
-        whyTitle.hidden = YES;
-        whyDesc.hidden = YES;
+        self.whyDesc1 = whyDesc;
         
         UILabel * forgotTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
         forgotTitle.backgroundColor = [UIColor clearColor];
@@ -242,7 +253,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         item6.fillMode = CSLinearLayoutItemFillModeNormal;
         item6.padding = CSLinearLayoutMakePadding(0, 15, 0, 15);
         [authLayout addItem:item6];
-//        self.forgotTitle = forgotTitle;
+        self.forgotTitle = forgotTitle;
         
         TTTAttributedLabel * forgotDetail = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
         forgotDetail.backgroundColor = [UIColor clearColor];
@@ -262,10 +273,9 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         item7.fillMode = CSLinearLayoutItemFillModeNormal;
         item7.padding = CSLinearLayoutMakePadding(0, 15, 10, 15);
         [authLayout addItem:item7];
-//        self.forgotDetail = forgotDetail;
+        self.forgotDetail = forgotDetail;
         
         EFIdentityBar *identityBar = [[EFIdentityBar alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
-        //    identityBar.backgroundColor = [UIColor blackColor];
         UITapGestureRecognizer *gesture = [UITapGestureRecognizer recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
             if (state == UIGestureRecognizerStateEnded) {
                 [self changeIdentity:sender.view];
@@ -290,13 +300,17 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         btnImage2 = [btnImage2 resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
         [btnAuth setBackgroundImage:btnImage2 forState:UIControlStateNormal];
         [btnAuth addTarget:self action:@selector(authenticate:) forControlEvents:UIControlEventTouchUpInside];
-        btnAuth.tag = kTagBtnAuth;
+        btnAuth.tag = kTagBtnAuthIdentity;
         CSLinearLayoutItem *item9 = [CSLinearLayoutItem layoutItemForView:btnAuth];
         item9.fillMode = CSLinearLayoutItemFillModeNormal;
         item9.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
         [authLayout addItem:item9];
-//        self.btnAuth = btnAuth;
-
+        self.btnAuthIdentity = btnAuth;
+        
+        self.forgotTitle.hidden = YES;
+        self.forgotDetail.hidden = YES;
+        self.identityBarFgt.hidden = YES;
+        self.btnAuthIdentity.hidden = YES;
     }
     [self.view addSubview:authLayout];
     self.authView = authLayout;
@@ -350,7 +364,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         btnImage2 = [btnImage2 resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
         [btnAuth setBackgroundImage:btnImage2 forState:UIControlStateNormal];
         [btnAuth addTarget:self action:@selector(authenticate:) forControlEvents:UIControlEventTouchUpInside];
-        btnAuth.tag = kTagBtnAuth;
+        btnAuth.tag = kTagBtnAuthForSet;
         CSLinearLayoutItem *item13 = [CSLinearLayoutItem layoutItemForView:btnAuth];
         item13.fillMode = CSLinearLayoutItemFillModeNormal;
         item13.padding = CSLinearLayoutMakePadding(0, 15, 5, 15);
@@ -480,30 +494,11 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
     EFIdentityBar *bar = nil;
     if ([self.user.password boolValue]) {
         bar = self.identityBarFgt;
-//        bar = self.identitybarSet;
     } else {
         bar = self.identitybarSet;
     }
     
-    NSString *avatar_filename = identity.avatar_filename;
-    if (avatar_filename.length > 0) {
-        UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
-        
-        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:avatar_filename]) {
-            bar.avatar.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:avatar_filename];
-            
-        } else {
-            bar.avatar.image = defaultImage;
-            
-            [[EFDataManager imageManager] cachedImageForKey:avatar_filename
-                                            completeHandler:^(UIImage *image){
-                                                if (image) {
-                                                    bar.avatar.image = image;
-                                                }
-                                            }];
-        }
-    }
-    bar.name.text = [identity getDisplayIdentity];
+    bar.identity = identity;
     
 }
 
@@ -520,7 +515,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
     }];
     _inlineError.hidden = NO;
     
-    CSLinearLayoutItem *baseitem = [self.rootView findItemByTag:kTagBtnAuth];
+    CSLinearLayoutItem *baseitem = [self.rootView findItemByTag:kTagBtnAuthIdentity];
     if (baseitem) {
         [_inlineError wrapContent];
         CSLinearLayoutItem *item = [self.rootView findItemByTag:_inlineError.tag];
@@ -607,17 +602,18 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 }
 
 #pragma mark - Logic Methods
-- (void)loadUserAndExit:(NSInteger)user_id withToken:(NSString*)token
+- (void)loadUserAndDismiss:(NSInteger)user_id withToken:(NSString*)token
 {
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    NSAssert(user_id == [self.user.user_id integerValue], @"Should be same user");
     
-    [app switchContextByUserId:user_id withAbandon:NO];
-    app.model.userToken = token;
-    [app.model saveUserData];
+    self.model.userToken = token;
     
-    [app.model loadMe];
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (self.nextStep) {
+            self.nextStep();
+        }
+    }];
     
-    [app signinDidFinish];
 }
 
 #pragma mark - UI Events
@@ -626,6 +622,59 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 - (void)goBack:(UIControl*)sender
 {
     [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)forgetPwd:(id)view
+{
+    if ([self.pwdTextField isFirstResponder]) {
+        [self.pwdTextField resignFirstResponder];
+    }
+    
+    if (!self.whyTitle1.hidden && !self.whyDesc1.hidden) {
+        
+        self.whyTitle1.hidden = YES;
+        self.whyDesc1.hidden = YES;
+        [self.authView setNeedsLayout];
+        [self.authView layoutIfNeeded];
+        
+        self.whyTitle1.alpha = 1;
+        self.whyDesc1.alpha = 1;
+        self.whyTitle1.hidden = NO;
+        self.whyDesc1.hidden = NO;
+        [UIView animateWithDuration:0.4 animations:^{
+            self.whyTitle1.alpha = 0;
+            self.whyDesc1.alpha = 0;
+        } completion:^(BOOL finished) {
+            self.whyTitle1.hidden = YES;
+            self.whyDesc1.hidden = YES;
+        }];
+    }
+    
+    if (self.forgotTitle.hidden && self.forgotDetail.hidden && self.identityBarFgt.hidden && self.btnAuthIdentity.hidden) {
+        
+        self.forgotTitle.alpha = 0;
+        self.forgotDetail.alpha = 0;
+        self.identityBarFgt.alpha = 0;
+        self.btnAuthIdentity.alpha = 0;
+//        self.inlineError.alpha = 0;
+        
+        self.forgotTitle.hidden = NO;
+        self.forgotDetail.hidden = NO;
+        self.identityBarFgt.hidden = NO;
+        self.btnAuthIdentity.hidden = NO;
+        [UIView animateWithDuration:0.4
+                         animations:^{
+                             self.forgotTitle.alpha = 1;
+                             self.forgotDetail.alpha = 1;
+                             self.identityBarFgt.alpha = 1;
+                             self.btnAuthIdentity.alpha = 1;
+//                             self.inlineError.alpha = 1;
+                         } completion:^(BOOL finished) {
+                             ;
+                         }];
+    }
+    
+    
 }
 
 - (void)changeIdentity:(id)view
@@ -667,13 +716,100 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
     
 }
 
+- (void)authWithPwd:(UIControl *)sender
+{
+    if (self.trustIdentities.count == 0) {
+        return;
+    }
+    
+    if ([self.pwdTextField isFirstResponder]) {
+        [self.pwdTextField resignFirstResponder];
+    }
+    
+    Identity *identity = [self.trustIdentities objectAtIndex:0];
+    Provider provider = [Identity getProviderCode:identity.provider];
+    
+    [self.model.apiServer signIn:identity.external_username with:provider password:self.currentPwd success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        sender.enabled = YES;
+        [self hideIndicator];
+        
+        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+            NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+            if (code) {
+                NSInteger c = [code integerValue];
+                NSInteger t = c / 100;
+                
+                switch (t) {
+                    case 2:{
+                        NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
+                        NSString *t = [responseObject valueForKeyPath:@"response.token"];
+                        
+                        if ([u integerValue] == [self.user.user_id integerValue]) {
+                            // refresh token
+                            [self loadUserAndDismiss:[u integerValue] withToken:t];
+                        } else {
+                            // Merge user?
+                            
+                        }
+                        
+                        
+                    }   break;
+                    case 4:{
+                        // response.body={"meta":{"code":403,"errorType":"failed","errorDetail":{"registration_flag":"SIGN_UP"}},"response":{}}
+                        NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
+                        if ([@"failed" isEqualToString:errorType]) {
+                            NSString *registration_flag = [responseObject valueForKeyPath:@"meta.errorDetail.registration_flag"];
+                            if ([@"SIGN_UP" isEqualToString:registration_flag]) {
+                            } else if ([@"SIGN_IN" isEqualToString:registration_flag]){
+                                [self showErrorInfo:NSLocalizedString(@"Authentication failed.", nil) dockOn:self.pwdTextField];
+                                break;
+                            } else if ([@"AUTHENTICATE" isEqualToString:registration_flag]){
+                                
+                            } else if ([@"VERIFY" isEqualToString:registration_flag]){
+                            }
+                        }
+                    }   break;
+                    default:
+                        break;
+                }
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        sender.enabled = YES;
+        [self hideIndicator];
+        
+        if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+            switch (error.code) {
+                case NSURLErrorTimedOut: //-1001
+                case NSURLErrorCannotFindHost: //-1003
+                case NSURLErrorCannotConnectToHost: //-1004
+                case NSURLErrorNetworkConnectionLost: //-1005
+                case NSURLErrorDNSLookupFailed: //-1006
+                case NSURLErrorHTTPTooManyRedirects: //-1007
+                case NSURLErrorResourceUnavailable: //-1008
+                case NSURLErrorNotConnectedToInternet: //-1009
+                case NSURLErrorRedirectToNonExistentLocation: //-1010
+                case NSURLErrorServerCertificateUntrusted: //-1202
+                    [Util showConnectError:error delegate:nil];
+                    //                    [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+    }];
+}
+
 - (void)authenticate:(UIControl*)sender
 {
     _inlineError.hidden = YES;
     
     Provider provider = [Identity getProviderCode:self.identity.provider];
     if (provider == kProviderTwitter) {
-        [self twitterAuth:self.identity];
+        [self twitterAuth:self.identity success:^(NSNumber *user_id, NSString *token) {
+            nil;
+        } failure:nil];
     }
     
     if (self.model.apiServer) {
@@ -708,7 +844,20 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                                                                      
                                                                      OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
                                                                      oauth.provider = provider;
-                                                                     oauth.delegate = self;
+                                                                     oauth.onSuccess = ^(NSDictionary * params){
+                                                                         NSString *userid = [params valueForKey:@"userid"];
+                                                                         
+                                                                         if ([userid integerValue] == self.model.userId) {
+                                                                             // use refresh token
+                                                                             NSString *token = [params valueForKey:@"token"];
+                                                                             self.model.userToken = token;
+                                                                             [self.model saveUserData];
+                                                                             
+                                                                             [self setPasswordWithErrorMessage:nil];
+                                                                         } else {
+                                                                             // TODO: Merge User
+                                                                         }
+                                                                     };
                                                                      oauth.oAuthURL = url;
                                                                      switch (provider) {
                                                                          case kProviderTwitter:
@@ -790,6 +939,75 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
     
 }
 
+#pragma mark UITextFieldDelegate
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    switch (textField.tag) {
+        case kTagPassword:{
+            if (self.whyTitle1.hidden && self.whyDesc1.hidden) {
+                self.whyTitle1.alpha = 0;
+                self.whyDesc1.alpha = 0;
+                self.whyTitle1.hidden = NO;
+                self.whyDesc1.hidden = NO;
+                [UIView animateWithDuration:0.4 animations:^{
+                    self.whyTitle1.alpha = 1;
+                    self.whyDesc1.alpha = 1;
+                } completion:^(BOOL finished) {
+                    [self.authView setNeedsLayout];
+                    [self.authView layoutIfNeeded];
+                }];
+            }
+            
+            if (!self.forgotTitle.hidden && !self.forgotDetail.hidden && !self.identityBarFgt.hidden && !self.btnAuthIdentity.hidden) {
+                self.forgotTitle.alpha = 1;
+                self.forgotDetail.alpha = 1;
+                self.identityBarFgt.alpha = 1;
+                self.btnAuthIdentity.alpha = 1;
+                
+                [UIView animateWithDuration:0.4 animations:^{
+                    self.forgotTitle.alpha = 0;
+                    self.forgotDetail.alpha = 0;
+                    self.identityBarFgt.alpha = 0;
+                    self.btnAuthIdentity.alpha = 0;
+                } completion:^(BOOL finished) {
+                    self.forgotTitle.hidden = YES;
+                    self.forgotDetail.hidden = YES;
+                    self.identityBarFgt.hidden = YES;
+                    self.btnAuthIdentity.hidden = YES;
+                }];
+            }
+        }   break;
+            
+        default:
+            break;
+    }
+    
+    
+    
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    switch (textField.tag) {
+        case kTagPassword:
+            self.currentPwd = textField.text;
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    return NO;
+}
+
 #pragma mark UIPickerViewDataSource
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
@@ -816,27 +1034,6 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 - (void)doneButtonPressed:(id)sender{
     //Do something here here with the value selected using [pickerView date] to get that value
     [self.pickerViewPopup dismissWithClickedButtonIndex:1 animated:YES];
-}
-
-#pragma mark OAuthLoginViewControllerDelegate
-- (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
-    [oauthlogin dismissModalViewControllerAnimated:YES];
-}
-
-- (void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
-{
-    [oauthloginViewController dismissModalViewControllerAnimated:YES];
-    
-    if ([userid integerValue] == self.model.userId) {
-        // use refresh token
-        self.model.userToken = token;
-        [self.model saveUserData];
-        
-        [self setPasswordWithErrorMessage:nil];
-    } else {
-        // TODO: Merge User
-    }
-    
 }
 
 #pragma mark - Helper Methods
@@ -996,7 +1193,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
     
 }
 
-- (void)reverseAuth:(Provider)provider WithToken:(NSString *)token withParams:(NSDictionary *)params
+- (void)reverseAuth:(Provider)provider WithToken:(NSString *)token withParams:(NSDictionary *)params success:(void (^)(NSNumber *user_id, NSString *token))success failure:(void (^)(void))failure
 {
     [self.model.apiServer reverseAuth:kProviderTwitter withToken:token andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -1008,7 +1205,9 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                 NSString *t = [responseObject valueForKeyPath:@"response.token"];
                 
                 if ([u integerValue] == self.model.userId) {
-                    
+                    if (success) {
+                        success(u, t);
+                    }
                     
                 } else {
                     // TODO: merge
@@ -1046,7 +1245,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 }
 
 // step 1 try to auth twtiter from phone
-- (void)twitterAuth:(Identity *)identity
+- (void)twitterAuth:(Identity *)identity success:(void (^)(NSNumber *user_id, NSString *token))success failure:(void (^)(void))failure
 {
     NSAssert(kProviderTwitter == [Identity getProviderCode:identity.provider], @"Entry for twitter only");
     
@@ -1070,7 +1269,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                         NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:[Util splitQuery:responseStr]];
                         NSString *token = [params valueForKey:@"oauth_token"];
                         [params removeObjectForKey:@"oauth_token"];
-                        [self reverseAuth:kProviderTwitter WithToken:token withParams:params];
+                        [self reverseAuth:kProviderTwitter WithToken:token withParams:params success:success failure:failure];
                     } else {
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {

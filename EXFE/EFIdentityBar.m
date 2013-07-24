@@ -9,6 +9,7 @@
 #import "EFIdentityBar.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Util.h"
+#import "EFKit.h"
 
 @interface EFIdentityBar()
 
@@ -16,6 +17,31 @@
 @end
 
 @implementation EFIdentityBar
+
+- (void)setIdentity:(Identity *)identity
+{
+    _identity = identity;
+    
+    NSString *avatar_filename = identity.avatar_filename;
+    if (avatar_filename.length > 0) {
+        UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
+        
+        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:avatar_filename]) {
+            self.avatar.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:avatar_filename];
+            
+        } else {
+            self.avatar.image = defaultImage;
+            
+            [[EFDataManager imageManager] cachedImageForKey:avatar_filename
+                                            completeHandler:^(UIImage *image){
+                                                if (image) {
+                                                    self.avatar.image = image;
+                                                }
+                                            }];
+        }
+    }
+    self.name.text = [identity getDisplayIdentity];
+}
 
 - (id)initWithFrame:(CGRect)frame
 {

@@ -21,6 +21,7 @@
 #import "EFEditProfileViewController.h"
 #import "EFAuthenticationViewController.h"
 #import "AYUIButton.h"
+#import "OAuthLoginViewController.h"
 
 #define DECTOR_HEIGHT                    (100)
 
@@ -679,7 +680,9 @@
                                                                         
                                                                         OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
                                                                         oauth.provider = provider;
-                                                                        oauth.delegate = self;
+                                                                        oauth.onSuccess = ^(NSDictionary * params){
+                                                                            [self syncUser];
+                                                                        };
                                                                         oauth.oAuthURL = url;
                                                                         switch (provider) {
                                                                             case kProviderTwitter:
@@ -734,16 +737,4 @@
         }
     }
 }
-
-#pragma mark OAuthlogin Delegate
-- (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
-    [oauthlogin dismissModalViewControllerAnimated:YES];
-}
-
-- (void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token
-{
-    [self.navigationController dismissModalViewControllerAnimated:YES];
-    [self syncUser];
-}
-
 @end

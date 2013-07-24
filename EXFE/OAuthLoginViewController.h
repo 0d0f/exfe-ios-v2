@@ -12,28 +12,27 @@
 #import "EXSpinView.h"
 #import "Identity+EXFE.h"
 
-@protocol OAuthLoginViewControllerDelegate;
+
+typedef void (^OAuthAuthenticateSuccess)(NSDictionary *param);
+typedef void (^OAuthAuthenticateCancel)();
+
 @interface OAuthLoginViewController : UIViewController
 {
-    id<OAuthLoginViewControllerDelegate> __weak delegate;
     UIView *toolbar;
-//    IBOutlet UIWebView *webView;
     bool firstLoading;
     UIButton *cancelbutton;
     UILabel *titlelabel;
 }
-@property (nonatomic, weak) id <OAuthLoginViewControllerDelegate> delegate;
 @property (nonatomic, strong) IBOutlet UIWebView* webView;
+
 @property (nonatomic, assign) Provider provider;
+@property (nonatomic, copy) OAuthAuthenticateSuccess onSuccess;
+@property (nonatomic, copy) OAuthAuthenticateCancel onCancel;
+
 @property (nonatomic, copy) NSString *oAuthURL;
 @property (nonatomic, copy) NSString *matchedURL;
 @property (nonatomic, copy) NSString *javaScriptString;
 
-@end
 
-
-@protocol OAuthLoginViewControllerDelegate
--(void)OAuthloginViewControllerDidCancel:(OAuthLoginViewController *)oauthloginViewController;
--(void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token;
 
 @end
