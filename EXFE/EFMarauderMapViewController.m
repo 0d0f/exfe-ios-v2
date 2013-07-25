@@ -248,6 +248,7 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     [self.mapStrokeView reloadData];
     
     [self _openStreaming];
+    [self _getRoute];
     [self.locationManager startUpdatingLocation];
 }
 
@@ -578,8 +579,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
                 [self.tableView reloadData];
                 [self.selfTableView reloadData];
             });
-            
-            [self _getRoute];
         }
     }
 }
