@@ -419,10 +419,10 @@
             footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 10 + 62 + 44)];
 //            footerView.backgroundColor = [UIColor lightGrayColor];
             
-            UIButton *btn2Auth = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            [btn2Auth setFrame:CGRectMake(0, 0, 80, 40)];
-            [btn2Auth addTarget:self action:@selector(twoStep:) forControlEvents:UIControlEventTouchUpInside];
-            [footerView addSubview:btn2Auth];
+//            UIButton *btn2Auth = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//            [btn2Auth setFrame:CGRectMake(0, 0, 80, 40)];
+//            [btn2Auth addTarget:self action:@selector(twoStep:) forControlEvents:UIControlEventTouchUpInside];
+//            [footerView addSubview:btn2Auth];
             
             AYUIButton *btnSignOut = [AYUIButton buttonWithType:UIButtonTypeCustom];
             
@@ -678,8 +678,7 @@
                                                                         NSDictionary *identity = [body valueForKeyPath:@"response.identity"];
                                                                         Provider provider = [Identity getProviderCode:[identity valueForKey:@"provider"]];
                                                                         
-                                                                        OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-                                                                        oauth.provider = provider;
+                                                                        OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
                                                                         oauth.onSuccess = ^(NSDictionary * params){
                                                                             [self syncUser];
                                                                         };

@@ -75,7 +75,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 
 @property (nonatomic, strong) ACAccountStore *accountStore;
 @property (nonatomic, strong) TWAPIManager *apiManager;
-@property (nonatomic, strong) NSArray *accounts;
+//@property (nonatomic, strong) NSArray *accounts;
 
 @end
 
@@ -807,7 +807,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
     
     Provider provider = [Identity getProviderCode:self.identity.provider];
     if (provider == kProviderTwitter) {
-        [self twitterAuth:self.identity success:^(NSNumber *user_id, NSString *token) {
+        [self twitterAuth:self.identity.external_username withProvider:[Identity getProviderCode:self.identity.provider] success:^(NSNumber *user_id, NSString *token) {
             if ([user_id integerValue] == self.model.userId) {
                 
                 
@@ -816,6 +816,13 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 //                    [self mergeUser:u with:t];
             };
         } failure:nil];
+        return;
+    }
+    
+    if (provider == kProviderFacebook) {
+        [self facebookSignIn:nil];
+        
+        return;
     }
     
     if (self.model.apiServer) {
@@ -846,8 +853,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                                                                      NSDictionary *identity = [body valueForKeyPath:@"response.identity"];
                                                                      Provider provider = [Identity getProviderCode:[identity valueForKey:@"provider"]];
                                                                      
-                                                                     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-                                                                     oauth.provider = provider;
+                                                                     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
                                                                      oauth.onSuccess = ^(NSDictionary * params){
                                                                          NSString *userid = [params valueForKey:@"userid"];
                                                                          
@@ -1183,65 +1189,18 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
     
 }
 
-- (void)reverseAuth:(Provider)provider WithToken:(NSString *)token withParams:(NSDictionary *)params success:(void (^)(NSNumber *user_id, NSString *token))success failure:(void (^)(void))failure
-{
-    [self.model.apiServer reverseAuth:kProviderTwitter withToken:token andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-            
-            NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
-            if ([code integerValue] == 200) {
-                NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
-                NSString *t = [responseObject valueForKeyPath:@"response.token"];
-                
-                if (success) {
-                    success(u, t);
-                }
-                
-            }
-            //400: invalid_token
-            //400: no_provider
-            //400: unsupported_provider
-        }
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
-            switch (error.code) {
-                case NSURLErrorTimedOut: // -1001
-                case NSURLErrorCannotFindHost: //-1003
-                case NSURLErrorCannotConnectToHost: //-1004
-                case NSURLErrorNetworkConnectionLost: //-1005
-                case NSURLErrorDNSLookupFailed: //-1006
-                case NSURLErrorHTTPTooManyRedirects: //-1007
-                case NSURLErrorResourceUnavailable: //-1008
-                case NSURLErrorNotConnectedToInternet: //-1009
-                case NSURLErrorRedirectToNonExistentLocation: //-1010
-                case NSURLErrorServerCertificateUntrusted: //-1202
-                    [Util showConnectError:error delegate:nil];
-                    //                            [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
-                    break;
-                    
-                default:
-                    break;
-            }
-        }
-    }];
-}
 
-// step 1 try to auth twtiter from phone
-- (void)twitterAuth:(Identity *)identity success:(void (^)(NSNumber *user_id, NSString *token))success failure:(void (^)(void))failure
+- (void)twitterAuth:(NSString *)external_username withProvider:(Provider)provider success:(void (^)(NSNumber *user_id, NSString *token))success failure:(void (^)(void))failure
 {
-    Provider provider = [Identity getProviderCode:identity.provider];
     NSAssert(kProviderTwitter == provider, @"Entry for twitter only");
     
     [self syncTwitterAccounts:^(NSArray *accounts) {
         BOOL webauth = YES;
         
-        if ([TWAPIManager isLocalTwitterAccountAvailable]) {
+        if ([TWAPIManager isLocalTwitterAccountAvailable] && accounts.count > 0) {
             ACAccount *account = nil;
-            for (ACAccount *acct in _accounts) {
-                if ([acct.username isEqualToString: identity.external_username]) {
+            for (ACAccount *acct in accounts) {
+                if ([acct.username caseInsensitiveCompare:external_username] == NSOrderedSame) {
                     account = acct;
                 }
             }
@@ -1255,7 +1214,49 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                         NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:[Util splitQuery:responseStr]];
                         NSString *token = [params valueForKey:@"oauth_token"];
                         [params removeObjectForKey:@"oauth_token"];
-                        [self reverseAuth:kProviderTwitter WithToken:token withParams:params success:success failure:failure];
+                        
+                        [self.model.apiServer reverseAuth:kProviderTwitter withToken:token andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                            [MBProgressHUD hideHUDForView:self.view animated:YES];
+                            if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                
+                                NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                                if ([code integerValue] == 200) {
+                                    NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
+                                    NSString *t = [responseObject valueForKeyPath:@"response.token"];
+                                    
+                                    if (success) {
+                                        success(u, t);
+                                    }
+                                    
+                                }
+                                //400: invalid_token
+                                //400: no_provider
+                                //400: unsupported_provider
+                            }
+                            
+                        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                            [MBProgressHUD hideHUDForView:self.view animated:YES];
+                            if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                                switch (error.code) {
+                                    case NSURLErrorTimedOut: // -1001
+                                    case NSURLErrorCannotFindHost: //-1003
+                                    case NSURLErrorCannotConnectToHost: //-1004
+                                    case NSURLErrorNetworkConnectionLost: //-1005
+                                    case NSURLErrorDNSLookupFailed: //-1006
+                                    case NSURLErrorHTTPTooManyRedirects: //-1007
+                                    case NSURLErrorResourceUnavailable: //-1008
+                                    case NSURLErrorNotConnectedToInternet: //-1009
+                                    case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                    case NSURLErrorServerCertificateUntrusted: //-1202
+                                        [Util showConnectError:error delegate:nil];
+                                        //                            [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                                        break;
+                                        
+                                    default:
+                                        break;
+                                }
+                            }
+                        }];
                     } else {
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
@@ -1285,25 +1286,27 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                 }];
             }
         }
-     
+        
         if (webauth) {
             // auth web
-            OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-            oauth.provider = provider;
-            oauth.onSuccess = ^(NSDictionary * params){
-                NSString *user_id = [params valueForKey:@"userid"];
-                NSNumber *userid = [NSNumber numberWithInteger:[user_id integerValue]];
-                NSString *token = [params valueForKey:@"token"];
-                if (success) {
-                    success(userid, token);
-                }
-            };
-            AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            // eg:  exfe://oauthcallback/
-            NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
-            oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
-            oauth.external_username = [identity valueForKey:@"external_username"];
-            [self presentModalViewController:oauth animated:YES];
+            if ([Identity getProviderTypeByCode:provider] == kProviderTyperAuthorization) {
+                OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
+                oauth.external_username = external_username;
+                oauth.onSuccess = ^(NSDictionary * params){
+                    NSString *user_id = [params valueForKey:@"userid"];
+                    NSNumber *userid = [NSNumber numberWithInteger:[user_id integerValue]];
+                    NSString *token = [params valueForKey:@"token"];
+                    if (success) {
+                        success(userid, token);
+                    }
+                };
+                AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                // eg:  exfe://oauthcallback/
+                NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+                oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
+                
+                [self presentModalViewController:oauth animated:YES];
+            }
         }
     }];
 }
@@ -1316,10 +1319,10 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (granted) {
-                self.accounts = [_accountStore accountsWithAccountType:twitterType];
-                if ([TWAPIManager isLocalTwitterAccountAvailable] && _accounts.count > 0) {
+                NSArray *accounts = [_accountStore accountsWithAccountType:twitterType];
+                if ([TWAPIManager isLocalTwitterAccountAvailable] && accounts.count > 0) {
                     if (block) {
-                        block(_accounts);
+                        block(accounts);
                     }
                 } else {
                     
@@ -1351,13 +1354,17 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                     } else {
                         return;
                     }
-                    //                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Accounts" message:@"Please configure a Twitter account in Settings.app" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    //                    [alert show];
                 }
             } else {
                 
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:NSLocalizedString(@"Please allow EXFE to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-                [alert show];
+                if (block) {
+                    block(nil);
+                }
+                
+//                UIAlertView *testView = [UIAlertView alertViewWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:NSLocalizedString(@"Please allow EXFE to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil)];
+//               
+//                [testView setCancelButtonWithTitle:NSLocalizedString(@"OK", nil) handler:nil];
+//                [testView show];
                 
             }
         });
@@ -1372,5 +1379,137 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
             [_accountStore requestAccessToAccountsWithType:twitterType withCompletionHandler:handler];
         }
     }
+}
+
+
+- (void)facebookSignIn:(id)sender
+{
+    
+    ACAccountType *facebookType = [_accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook];
+    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
+                             (NSString *)ACFacebookAppIdKey, [[[NSBundle mainBundle] infoDictionary] valueForKey:@"FacebookAppID"],
+                             (NSString *)ACFacebookPermissionsKey, [NSArray arrayWithObject:@"email"],
+                             (NSString *)ACFacebookAudienceKey, ACFacebookAudienceOnlyMe,
+                             nil];
+    
+    [_accountStore requestAccessToAccountsWithType:facebookType options:options completion:^(BOOL granted, NSError *error) {
+        NSArray *accounts = [_accountStore accountsWithAccountType:facebookType];
+        NSLog(@"%@", accounts);
+        if (accounts.count > 0) {
+            ACAccount *account = [accounts objectAtIndex:0];
+            NSLog(@"identifier %@ username %@", account.identifier, account.username);
+            NSString *fullname = [[account valueForKey:@"properties"] valueForKey:@"fullname"];
+            NSString *userID = [[account valueForKey:@"properties"] valueForKey:@"uid"];
+            NSLog(@"fullname %@ userid %@", fullname, userID);
+        }
+    }];
+    
+    return;
+    [FBSession.activeSession closeAndClearTokenInformation];
+    // If a user has *never* logged into your app, request one of
+    // "email", "user_location", or "user_birthday". If you do not
+    // pass in any permissions, "email" permissions will be automatically
+    // requested for you. Other read permissions can also be included here.
+    NSArray *permissions = @[@"email"];
+    
+    [FBSession openActiveSessionWithReadPermissions:permissions
+                                       allowLoginUI:YES
+                                  completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                                      /* handle success + failure in block */
+                                      
+                                      switch (session.state) {
+                                          case FBSessionStateOpen:{
+                                              [self.view endEditing:YES];
+                                              
+                                              NSDictionary *params = @{@"oauth_expires": [NSString stringWithFormat:@"%.0f", session.accessTokenData.expirationDate.timeIntervalSince1970]};
+                                              
+                                              MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                                              hud.labelText = @"Authenticating...";
+                                              hud.mode = MBProgressHUDModeCustomView;
+                                              EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+                                              [bigspin startAnimating];
+                                              hud.customView = bigspin;
+                                              
+                                              [self.model.apiServer reverseAuth:kProviderFacebook withToken:session.accessTokenData.accessToken andParam:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                  [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                  if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
+                                                      
+                                                      NSNumber *code = [responseObject valueForKeyPath:@"meta.code"];
+                                                      switch ([code integerValue]) {
+                                                          case 200:{
+                                                              NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
+                                                              NSString *t = [responseObject valueForKeyPath:@"response.token"];
+                                                              [self loadUserAndDismiss:[u integerValue] withToken:t];
+                                                          }
+                                                              break;
+                                                          case 400:{
+                                                              if ([@"invalid_token" isEqualToString:[responseObject valueForKeyPath:@"meta.errorType"]] ) {
+                                                                  [self showInlineError:NSLocalizedString(@"Invalid token.", nil) with:NSLocalizedString(@"There is something wrong. Please try again later.", nil)];
+                                                                  
+                                                                  [self syncFBAccount];
+                                                                  
+                                                              }
+                                                          }
+                                                          default:
+                                                              break;
+                                                      }
+                                                  }
+                                              } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                  if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                                                      switch (error.code) {
+                                                          case NSURLErrorTimedOut: //-1001
+                                                          case NSURLErrorCannotFindHost: //-1003
+                                                          case NSURLErrorCannotConnectToHost: //-1004
+                                                          case NSURLErrorNetworkConnectionLost: //-1005
+                                                          case NSURLErrorDNSLookupFailed: //-1006
+                                                          case NSURLErrorHTTPTooManyRedirects: //-1007
+                                                          case NSURLErrorResourceUnavailable: //-1008
+                                                          case NSURLErrorNotConnectedToInternet: //-1009
+                                                          case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                                          case NSURLErrorServerCertificateUntrusted: //-1202
+                                                              [Util showConnectError:error delegate:nil];
+                                                              //                                                              [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
+                                                              break;
+                                                              
+                                                          default:
+                                                              break;
+                                                      }
+                                                  }
+                                                  
+                                                  [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                              }];
+                                          }
+                                              break;
+                                              
+                                          case FBSessionStateClosedLoginFailed:
+                                              //                                              [self showInlineError:@"Login Failed." with:@"There is something wrong. Please try again later."];
+                                              [self showInlineError:NSLocalizedString(@"Authorization failed.", nil) with:NSLocalizedString(@"Please check your network connection and account setting in Settings app.", nil)];
+                                              [self syncFBAccount];
+                                              break;
+                                          default:
+                                              break;
+                                      }
+                                      
+                                      
+                                  }];
+    
+}
+
+- (void)syncFBAccount
+{
+    ACAccountType *accountTypeFB = [self.accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook];
+    NSArray *fbAccounts = [self.accountStore accountsWithAccountType:accountTypeFB];
+    id account;
+    if (fbAccounts && [fbAccounts count] > 0 &&
+        (account = [fbAccounts objectAtIndex:0])){
+        
+        [self.accountStore renewCredentialsForAccount:account completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
+            //we don't actually need to inspect renewResult or error.
+            if (error){
+                
+            }
+        }];
+    }
+    
 }
 @end

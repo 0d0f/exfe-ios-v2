@@ -640,14 +640,12 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                         NSDictionary *responseobj = [responseObject objectForKey:@"response"];
                         if([responseobj isKindOfClass:[NSDictionary class]]){
                             if([[responseobj objectForKey:@"action"] isEqualToString:@"REDIRECT"] && [responseobj objectForKey:@"url"] != nil){
-                                OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-                                oauth.provider = provider;
+                                OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
                                 oauth.oAuthURL = [responseobj objectForKey:@"url"];
                                 oauth.external_username = username;
                                 oauth.onSuccess = ^(NSDictionary *param) {
                                     [self loadUserAndExit];
                                 };
-                                
                                 [self presentModalViewController:oauth animated:YES];
                                 
                             }else{
