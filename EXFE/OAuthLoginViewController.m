@@ -8,37 +8,36 @@
 
 #import "OAuthLoginViewController.h"
 #import "URLParser.h"
-//#define EXFE_OAUTH_LINK @"https://exfe.com/oauth"
 
 @interface OAuthLoginViewController ()
 @property (nonatomic, copy) NSString *matchedURL;
 @property (nonatomic, copy) NSString *javaScriptString;
+@property (nonatomic, readwrite, assign) Provider provider;
 @end
 
 @implementation OAuthLoginViewController
-
-- (void)setexternal_username:(NSString *)external_username
+- (void)setExternal_username:(NSString *)external_username
 {
     _external_username = external_username;
     
-    switch (self.provider) {
-        case kProviderTwitter:
-            self.matchedURL = @"https://api.twitter.com/oauth/auth";
-            self.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", external_username];
-            
-            break;
-        case kProviderFacebook:
-            self.matchedURL = @"http://m.facebook.com/login.php?";
-            self.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", external_username];
-            break;
-        default:
-            break;
+    if (external_username) {
+        switch (self.provider) {
+            case kProviderTwitter:
+                self.matchedURL = @"https://api.twitter.com/oauth/auth";
+                self.javaScriptString = [NSString stringWithFormat:@"document.getElementById('username_or_email').value='%@';", external_username];
+                
+                break;
+            case kProviderFacebook:
+                self.matchedURL = @"http://m.facebook.com/login.php?";
+                self.javaScriptString = [NSString stringWithFormat:@"document.getElementsByName('email')[0].value='%@';", external_username];
+                break;
+            default:
+                break;
+        }
     }
-    
-    
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil provider:(Provider)provider
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -47,44 +46,16 @@
         self.onCancel = nil;
         self.matchedURL = nil;
         self.javaScriptString = nil;
+        self.provider = provider;
+        
+        AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        // eg:  exfe://oauthcallback/
+        NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+        self.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
     }
     return self;
 }
-- (void)webViewDidStartLoad:(UIWebView *)webView
-{
-    if(firstLoading==YES)
-    {
-        MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.webView animated:YES];
-        hud.mode=MBProgressHUDModeCustomView;
-        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-        [bigspin startAnimating];
-        hud.customView=bigspin;
-        hud.labelText = @"Loading";
-    }
-}
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
-{
-    if(firstLoading==YES)
-    {
-        firstLoading=NO;
-        [MBProgressHUD hideHUDForView:self.webView animated:YES];
-    }
-    
-}
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    if(firstLoading==YES)
-    {
-        firstLoading=NO;
-        [MBProgressHUD hideHUDForView:self.webView animated:YES];
-        NSString *currentURL = webView.request.URL.absoluteString;
-        if (self.matchedURL && self.javaScriptString) {
-            if ([currentURL hasPrefix:self.matchedURL]) {
-                [webView stringByEvaluatingJavaScriptFromString:self.javaScriptString];
-            }
-        }
-    }
-}
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
@@ -141,6 +112,56 @@
     }];
 }
 
+- (void)viewDidUnload
+{
+    [self.webView stopLoading];
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    if(firstLoading==YES)
+    {
+        MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.webView animated:YES];
+        hud.mode=MBProgressHUDModeCustomView;
+        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
+        [bigspin startAnimating];
+        hud.customView=bigspin;
+        hud.labelText = @"Loading";
+    }
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    if(firstLoading==YES)
+    {
+        firstLoading=NO;
+        [MBProgressHUD hideHUDForView:self.webView animated:YES];
+    }
+    
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    if(firstLoading==YES)
+    {
+        firstLoading=NO;
+        [MBProgressHUD hideHUDForView:self.webView animated:YES];
+        NSString *currentURL = webView.request.URL.absoluteString;
+        if (self.matchedURL && self.javaScriptString) {
+            if ([currentURL hasPrefix:self.matchedURL]) {
+                [webView stringByEvaluatingJavaScriptFromString:self.javaScriptString];
+            }
+        }
+    }
+}
 - (BOOL)webView:(UIWebView *)webview shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     if ([@"oauthcallback" isEqualToString:request.URL.host] && [request.URL.parameterString rangeOfString:@"token="].location != NSNotFound) {
         
@@ -163,24 +184,12 @@
                 [params setValue:external_id forKey:@"external_id"];
                 
                 self.onSuccess(params);
-            }    
+            }
         }
         [self dismissViewControllerAnimated:YES completion:nil];
         return NO;
     }
     return YES;
-}
-- (void)viewDidUnload
-{
-    [self.webView stopLoading];
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 @end

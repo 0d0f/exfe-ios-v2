@@ -791,8 +791,7 @@
                                                                      NSDictionary *identity = [body valueForKeyPath:@"response.identity"];
                                                                      Provider provider = [Identity getProviderCode:[identity valueForKey:@"provider"]];
                                                                      
-                                                                     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-                                                                     oauth.provider = provider;
+                                                                     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
                                                                      oauth.external_username = [identity valueForKey:@"external_username"];
                                                                      oauth.oAuthURL = url;
                                                                      oauth.onSuccess = ^(NSDictionary * params){

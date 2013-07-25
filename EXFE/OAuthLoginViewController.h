@@ -25,13 +25,13 @@ typedef void (^OAuthAuthenticateCancel)();
 }
 @property (nonatomic, strong) IBOutlet UIWebView* webView;
 
-@property (nonatomic, assign) Provider provider;
+@property (nonatomic, readonly, assign) Provider provider;
 @property (nonatomic, copy) NSString *external_username;
 @property (nonatomic, copy) OAuthAuthenticateSuccess onSuccess;
 @property (nonatomic, copy) OAuthAuthenticateCancel onCancel;
 
 @property (nonatomic, copy) NSString *oAuthURL;
 
-
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil provider:(Provider)provider;
 
 @end

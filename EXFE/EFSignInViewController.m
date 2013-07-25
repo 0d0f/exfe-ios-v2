@@ -704,8 +704,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         }
         
         if (oAuthURL) {
-            OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-            oauth.provider = kProviderTwitter;
+            OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil  provider:kProviderTwitter];
             oauth.onSuccess = ^(NSDictionary * params){
                 NSString * userid = [params valueForKey:@"userid"];
                 NSString * token = [params valueForKey:@"token"];
@@ -970,8 +969,7 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
                                             NSDictionary *identity = [body valueForKeyPath:@"response.identity"];
                                             Provider provider = [Identity getProviderCode:[identity valueForKey:@"provider"]];
                                             
-                                            OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
-                                            oauth.provider = provider;
+                                            OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
                                             oauth.onSuccess = ^(NSDictionary * params){
                                                 NSString * userid = [params valueForKey:@"userid"];
                                                 NSString * token = [params valueForKey:@"token"];
