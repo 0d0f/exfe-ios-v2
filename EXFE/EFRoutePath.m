@@ -71,9 +71,9 @@
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:10];
     [dict setValue:self.pathId forKey:@"id"];
     [dict setValue:@"route" forKey:@"type"];
-    [dict setValue:[NSNumber numberWithDouble:[self.createdDate timeIntervalSince1970]] forKey:@"created_at"];
+    [dict setValue:[NSNumber numberWithLong:(long)[self.createdDate timeIntervalSince1970]] forKey:@"created_at"];
     [dict setValue:self.createdByUid forKey:@"created_by"];
-    [dict setValue:[NSNumber numberWithDouble:[self.updatedDate timeIntervalSince1970]] forKey:@"updated_at"];
+    [dict setValue:[NSNumber numberWithLong:(long)[self.updatedDate timeIntervalSince1970]] forKey:@"updated_at"];
     [dict setValue:self.updatedByUid forKey:@"updated_by"];
     [dict setValue:self.title forKey:@"title"];
     [dict setValue:self.description forKey:@"description"];

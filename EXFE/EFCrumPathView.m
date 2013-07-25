@@ -54,7 +54,6 @@
             CGFloat dashes[] = {0.0f, lineWidth * 4};
             CGContextSetLineDash(context, 0, dashes, 2);
         } else if (kEFMapLineStyleLine == crumPath.lineStyle) {
-            lineWidth *= 0.2f;
         }
         
         CGContextSetLineWidth(context, lineWidth);
