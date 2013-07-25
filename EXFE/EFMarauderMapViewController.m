@@ -35,6 +35,7 @@
 @property (nonatomic, strong) MKAnnotationView      *meAnnotationView;
 @property (nonatomic, strong) NSArray               *invitations;
 @property (nonatomic, strong) NSMutableArray        *identityIds;
+@property (nonatomic, strong) NSMutableArray        *demoPathPoints;
 
 @property (nonatomic, strong) NSMutableDictionary   *personOverlayMap;
 @property (nonatomic, strong) EFCrumPathView        *personPathOverlayView;
@@ -69,6 +70,8 @@
 - (void)_postRoute;
 
 - (BOOL)_isPersonOnline:(NSString *)identityId;
+
+- (void)_initDemo;
 
 @end
 
@@ -130,8 +133,8 @@
     if (locations) {
         EFLocation *lastestLocation = locations[0];
         NSDate *lastestingUpdateTime = lastestLocation.timestamp;
-        NSTimeInterval timeInterval = [lastestingUpdateTime timeIntervalSinceNow];
-        if (timeInterval >= -60.0f) {
+        NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:lastestingUpdateTime];
+        if (timeInterval <= 60.0f) {
             return YES;
         } else {
             return NO;
@@ -139,6 +142,11 @@
     }
     
     return NO;
+}
+
+- (void)_initDemo {
+    self.demoPathPoints = [[NSMutableArray alloc] init];
+    
 }
 
 @end
@@ -413,7 +421,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             CLLocation *latestCLLocation = [[CLLocation alloc] initWithLatitude:latestCoordinate.latitude longitude:latestCoordinate.longitude];
             
             CLLocationDistance distance = [destinationLocation distanceFromLocation:latestCLLocation];
-            if (distance < 50.0f) {
+            if (distance < 30.0f) {
                 person.locationState = kEFMapPersonLocationStateArrival;
             } else {
                 person.locationState = kEFMapPersonLocationStateOnTheWay;
