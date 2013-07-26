@@ -419,10 +419,11 @@
             footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 10 + 62 + 44)];
 //            footerView.backgroundColor = [UIColor lightGrayColor];
             
-//            UIButton *btn2Auth = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//            [btn2Auth setFrame:CGRectMake(0, 0, 80, 40)];
-//            [btn2Auth addTarget:self action:@selector(twoStep:) forControlEvents:UIControlEventTouchUpInside];
-//            [footerView addSubview:btn2Auth];
+            UIButton *btn2Auth = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            btn2Auth.titleLabel.backgroundColor = [UIColor lightGrayColor];
+            [btn2Auth setFrame:CGRectMake(20, 40, 320 - 20 * 2, 30)];
+            [btn2Auth addTarget:self action:@selector(twoStep:) forControlEvents:UIControlEventTouchUpInside];
+            [footerView addSubview:btn2Auth];
             
             AYUIButton *btnSignOut = [AYUIButton buttonWithType:UIButtonTypeCustom];
             
@@ -468,7 +469,7 @@
             self.btnForgetPassword.hidden = NO;
             title = NSLocalizedString(@"Change password...", nil);
         } else {
-            self.btnForgetPassword.hidden = YES;
+            self.btnForgetPassword.hidden = NO;
             title = NSLocalizedString(@"Set password...", nil);
         }
         NSMutableAttributedString *str3 = [[NSMutableAttributedString alloc] initWithString:title];
@@ -602,15 +603,14 @@
 
 - (void) forgetPwd:(id)view
 {
-    if (self.user.password) {
+    if ([self.user.password boolValue]) {
         EFChangePasswordViewController *viewController = [[EFChangePasswordViewController alloc] initWithModel:self.model];
         viewController.user = self.user;
         [self presentModalViewController:viewController animated:YES];
     } else {
-        // set password
-        // popup
-        //  may login verify for 401 xxx
-        // 
+        EFAuthenticationViewController *vc = [[EFAuthenticationViewController alloc] initWithModel:self.model];
+        vc.user = self.user;
+        [self presentViewController:vc animated:YES completion:nil];
     }
     
 }
@@ -619,6 +619,11 @@
 {
     EFAuthenticationViewController *vc = [[EFAuthenticationViewController alloc] initWithModel:self.model];
     vc.user = self.user;
+    vc.nextStep = ^BOOL(void){
+        NSLog(@"call next step");
+        
+        return YES;
+    };
     [self presentViewController:vc animated:YES completion:nil];
 }
 

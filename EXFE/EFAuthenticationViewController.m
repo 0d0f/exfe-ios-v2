@@ -38,7 +38,7 @@
 #define kViewTagErrorInline 240
 
 
-typedef void(^TwitterAccountsHandler)(NSArray *accounts);
+typedef void(^ACACCountsHandler)(NSArray *accounts);
 
 @interface EFAuthenticationViewController ()
 
@@ -179,6 +179,13 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         item1.fillMode = CSLinearLayoutItemFillModeNormal;
         item1.padding = CSLinearLayoutMakePadding(10, 15, 5, 15);
         [authLayout addItem:item1];
+        
+        {// TextField Frame
+            UIImage *img = [[UIImage imageNamed:@"textfield.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 9, 15, 9)];
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:img];
+            imageView.frame = CGRectMake(15, 10 + CGRectGetHeight(labelHead.bounds) + 10, 290, 50);
+            [authLayout addSubview:imageView];
+        }
         
         EFPasswordField *inputPassword = [[EFPasswordField alloc] initWithFrame:CGRectMake(0, 0, 290, 50)];
         inputPassword.leftViewMode = UITextFieldViewModeNever;
@@ -360,7 +367,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         [btnAuth setTitleColor:[UIColor COLOR_BLACK_19] forState:UIControlStateNormal];
         [btnAuth setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
         btnAuth.titleLabel.shadowOffset = CGSizeMake(0, 1);
-        UIImage *btnImage2 = [UIImage imageNamed:@"btn_white_44.png"];
+        UIImage *btnImage2 = [UIImage imageNamed:@"btn_blue_44.png"];
         btnImage2 = [btnImage2 resizableImageWithCapInsets:(UIEdgeInsets){15, 10, 15, 10}];
         [btnAuth setBackgroundImage:btnImage2 forState:UIControlStateNormal];
         [btnAuth addTarget:self action:@selector(authenticate:) forControlEvents:UIControlEventTouchUpInside];
@@ -602,18 +609,30 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 }
 
 #pragma mark - Logic Methods
-- (void)loadUserAndDismiss:(NSInteger)user_id withToken:(NSString*)token
+- (void)loadUserAndDismiss:(NSInteger)user_id withToken:(NSString*)token success:(void (^)(void))success
 {
     NSAssert(user_id == [self.user.user_id integerValue], @"Should be same user");
     
     self.model.userToken = token;
     
+    if (success) {
+        success();
+    }
+    
+}
+
+- (void)dismissSelf
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)dismissSelfWithNext
+{
     [self dismissViewControllerAnimated:YES completion:^{
         if (self.nextStep) {
             self.nextStep();
         }
     }];
-    
 }
 
 #pragma mark - UI Events
@@ -744,12 +763,15 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                         NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
                         NSString *t = [responseObject valueForKeyPath:@"response.token"];
                         
+                        id success = ^void(void){
+                            [self dismissSelfWithNext];
+                        };
+                        
                         if ([u integerValue] == [self.user.user_id integerValue]) {
-                            // refresh token
-                            [self loadUserAndDismiss:[u integerValue] withToken:t];
+                            [self loadUserAndDismiss:[u integerValue] withToken:t success:success];
                         } else {
                             // Merge user?
-                            
+                            [self mergeUser:u with:t success:success];
                         }
                         
                         
@@ -803,136 +825,20 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 
 - (void)authenticate:(UIControl*)sender
 {
-    _inlineError.hidden = YES;
-    
-    Provider provider = [Identity getProviderCode:self.identity.provider];
-    if (provider == kProviderTwitter) {
-        [self twitterAuth:self.identity.external_username withProvider:[Identity getProviderCode:self.identity.provider] success:^(NSNumber *user_id, NSString *token) {
-            if ([user_id integerValue] == self.model.userId) {
-                
-                
-            } else {
-                // TODO: merge
-//                    [self mergeUser:u with:t];
-            };
-        } failure:nil];
-        return;
-    }
-    
-    if (provider == kProviderFacebook) {
-        [self facebookSignIn:nil];
-        
-        return;
-    }
-    
-    if (self.model.apiServer) {
-        sender.enabled = NO;
-        [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
-    }
-    
-    [self.model.apiServer forgetPassword:self.identity.external_username
-                                    with:[Identity getProviderCode:self.identity.provider]
-                                 success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                     //                                     sender.enabled = YES;
-                                     //                                     [self hideIndicator];
-                                     if ([operation.response statusCode] == 200){
-                                         if([responseObject isKindOfClass:[NSDictionary class]]) {
-                                             NSDictionary *body = responseObject;
-                                             NSNumber *code = [body valueForKeyPath:@"meta.code"];
-                                             if (code) {
-                                                 NSInteger c = [code integerValue];
-                                                 NSInteger t = c / 100;
-                                                 switch (t) {
-                                                     case 2:{
-                                                         if (c == 200) {
-                                                             NSString *action = [body valueForKeyPath:@"response.action"];
-                                                             
-                                                             if ([@"REDIRECT" isEqualToString:action]) {
-                                                                 NSString * url = [body valueForKeyPath:@"response.url"];
-                                                                 if (url.length > 0) {
-                                                                     NSDictionary *identity = [body valueForKeyPath:@"response.identity"];
-                                                                     Provider provider = [Identity getProviderCode:[identity valueForKey:@"provider"]];
-                                                                     
-                                                                     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
-                                                                     oauth.onSuccess = ^(NSDictionary * params){
-                                                                         NSString *userid = [params valueForKey:@"userid"];
-                                                                         
-                                                                         if ([userid integerValue] == self.model.userId) {
-                                                                             // use refresh token
-                                                                             NSString *token = [params valueForKey:@"token"];
-                                                                             self.model.userToken = token;
-                                                                             [self.model saveUserData];
-                                                                             
-                                                                             [self setPasswordWithErrorMessage:nil];
-                                                                         } else {
-                                                                             // TODO: Merge User
-                                                                         }
-                                                                     };
-                                                                     oauth.oAuthURL = url;
-                                                                     oauth.external_username = [identity valueForKey:@"external_username"];
-                                                                     [self presentModalViewController:oauth animated:YES];
-                                                                 }
-                                                             } else if ([@"VERIFYING" isEqualToString:action]) {
-                                                                 // show verifying message
-                                                                 NSString *message = NSLocalizedString(@"Verification is sent. Please check your email for instructions.", nil);
-                                                                 if (kProviderPhone == [Identity getProviderCode:self.identity.provider]) {
-                                                                     message = NSLocalizedString(@"Verification is sent. Please check your message for instructions.", nil);
-                                                                 }
-                                                                 
-                                                                 [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Verification", nil)
-                                                                                             message:message
-                                                                                   cancelButtonTitle:nil
-                                                                                   otherButtonTitles:nil
-                                                                                             handler:nil];
-                                                             }
-                                                         }
-                                                     }  break;
-                                                     case 3:{
-                                                         
-                                                     }  break;
-                                                     case 4:{
-                                                         NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
-                                                         
-                                                         if (c == 401) {
-                                                             if ([@"no_signin" isEqualToString:errorType]) {
-                                                                 // error: "Not sign in"
-                                                             } else if ([@"token_staled" isEqualToString:errorType]) {
-                                                                 // error: "Token expired"
-                                                             }
-                                                         } else if (c == 429){
-                                                             
-                                                             NSString *msg = nil;
-                                                             Provider provider = [Identity getProviderCode:self.identity.provider];
-                                                             switch (provider) {
-                                                                 case kProviderPhone:
-                                                                     msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile.", nil);
-                                                                     break;
-                                                                     
-                                                                 default:
-                                                                     msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.", nil);
-                                                                     break;
-                                                             }
-                                                             [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:msg];
-                                                         }
-                                                         
-                                                     }  break;
-                                                     case 5:{
-                                                         
-                                                     }  break;
-                                                     default:
-                                                         break;
-                                                 }
-                                             }
-                                         }
-                                     }
-                                     
-                                     sender.enabled = YES;
-                                     [self hideIndicator];
-                                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                     sender.enabled = YES;
-                                     [self hideIndicator];
-                                 }];
-    
+    sender.enabled = NO;
+    //    [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
+    [self authenticateIdentity:self.identity
+                       success:^{
+                           sender.enabled = YES;
+                           [self hideIndicator];
+                           
+                           [self setPasswordWithErrorMessage:nil];
+                           
+                           
+                       } failure:^{
+                           sender.enabled = YES;
+                           [self hideIndicator];
+                       }];
 }
 
 #pragma mark UITextFieldDelegate
@@ -1001,6 +907,15 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    switch (textField.tag) {
+        case kTagPassword:
+            [self.btnAuth sendActionsForControlEvents:UIControlEventTouchUpInside];
+            return NO;
+            break;
+            
+        default:
+            break;
+    }
     return NO;
 }
 
@@ -1137,11 +1052,122 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                   otherButtonTitles:NSLocalizedString(@"Done", nil), nil];
 }
 
+- (void)authenticateIdentity:(Identity *)identity success:(void (^)(void))success failure:(void (^)(void))failure
+{
+    _inlineError.hidden = YES;
+    
+    Provider provider = [Identity getProviderCode:self.identity.provider];
+    
+    if (kProviderTyperAuthorization == [Identity getProviderTypeByCode:provider]) {
+        
+        id su = ^(NSNumber *user_id, NSString *token) {
+            if ([user_id integerValue] == self.model.userId) {
+                // nextStep
+                [self loadUserAndDismiss:[user_id integerValue] withToken:token success:success];
+                
+            } else {
+                // merge
+                [self mergeUser:user_id with:token success:success];
+            };
+        };
+        
+        switch (provider) {
+            case kProviderTwitter:{
+                [self twitterAuth:self.identity.external_username withProvider:[Identity getProviderCode:self.identity.provider] success:su failure:nil];
+                return;
+            }  break;
+            case kProviderFacebook:{
+                [self facebookAuthsuccess:su failure:nil];
+                return;
+            } break;
+            default:
+                break;
+        }
+    } else {
+        [self.model.apiServer forgetPassword:self.identity.external_username
+                                        with:[Identity getProviderCode:self.identity.provider]
+                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                         if ([operation.response statusCode] == 200){
+                                             if([responseObject isKindOfClass:[NSDictionary class]]) {
+                                                 NSDictionary *body = responseObject;
+                                                 NSNumber *code = [body valueForKeyPath:@"meta.code"];
+                                                 if (code) {
+                                                     NSInteger c = [code integerValue];
+                                                     NSInteger t = c / 100;
+                                                     switch (t) {
+                                                         case 2:{
+                                                             if (c == 200) {
+                                                                 NSString *action = [body valueForKeyPath:@"response.action"];
+                                                                 
+                                                                 if ([@"REDIRECT" isEqualToString:action]) {
+                                                                     // we don't expect authentication from here.
+                                                                 } else if ([@"VERIFYING" isEqualToString:action]) {
+                                                                     // show verifying message
+                                                                     NSString *message = NSLocalizedString(@"Verification is sent. Please check your email for instructions.", nil);
+                                                                     if (kProviderPhone == [Identity getProviderCode:self.identity.provider]) {
+                                                                         message = NSLocalizedString(@"Verification is sent. Please check your message for instructions.", nil);
+                                                                     }
+                                                                     
+                                                                     [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Verification", nil)
+                                                                                                 message:message
+                                                                                       cancelButtonTitle:nil
+                                                                                       otherButtonTitles:nil
+                                                                                                 handler:nil];
+                                                                 }
+                                                             }
+                                                             return;
+                                                         }  break;
+                                                         case 3:{
+                                                             
+                                                         }  break;
+                                                         case 4:{
+                                                             NSString *errorType = [responseObject valueForKeyPath:@"meta.errorType"];
+                                                             
+                                                             if (c == 401) {
+                                                                 if ([@"no_signin" isEqualToString:errorType]) {
+                                                                     // error: "Not sign in"
+                                                                 } else if ([@"token_staled" isEqualToString:errorType]) {
+                                                                     // error: "Token expired"
+                                                                 }
+                                                             } else if (c == 429){
+                                                                 
+                                                                 NSString *msg = nil;
+                                                                 Provider provider = [Identity getProviderCode:self.identity.provider];
+                                                                 switch (provider) {
+                                                                     case kProviderPhone:
+                                                                         msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile.", nil);
+                                                                         break;
+                                                                         
+                                                                     default:
+                                                                         msg = NSLocalizedString(@"Request should be responded usually in seconds, please wait for awhile. Please also check your spam email folder, it might be mistakenly filtered by your mailbox.", nil);
+                                                                         break;
+                                                                 }
+                                                                 [self showInlineError:NSLocalizedString(@"Request too frequently.", nil) with:msg];
+                                                             }
+                                                             
+                                                         }  break;
+                                                         case 5:{
+                                                             
+                                                         }  break;
+                                                         default:
+                                                             break;
+                                                     }
+                                                 }
+                                             }
+                                         }
+                                         if (failure) {
+                                             failure();
+                                         }
+                                     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                         if (failure) {
+                                             failure();
+                                         }
+                                     }];
+    }
+    
+}
 
-
-#pragma mark - temp
-
-- (void)mergeUser:(NSNumber *)newUserId with:(NSString*)newToken
+- (void)mergeUser:(NSNumber *)newUserId with:(NSString*)newToken success:(void (^)(void))success
 {
     // Load identities to merge from another user
     [self.model.apiServer loadUserBy:[newUserId integerValue]
@@ -1163,16 +1189,30 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                                                                if (buttonIndex == alertView.firstOtherButtonIndex ) {
                                                                    
                                                                    [self.model.apiServer mergeIdentities:ids byToken:newToken success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                                       if ([operation.response statusCode] == 200 && [responseObject isKindOfClass:[NSDictionary class]]){
-                                                                           NSDictionary *body=responseObject;
-                                                                           if ([body isKindOfClass:[NSDictionary class]]) {
+                                                                       if ([operation.response statusCode] == 200){
+                                                                           if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                                                                               NSDictionary *body = responseObject;
                                                                                id code = [[body objectForKey:@"meta"] objectForKey:@"code"];
-                                                                               if (code && [code intValue] == 200) {
-                                                                                   [self.model loadMe];
-                                                                                   // clean some timestamp
+                                                                               if (code) {
+                                                                                   NSInteger c = [code integerValue];
+                                                                                   NSInteger t = c / 100;
                                                                                    
-                                                                                   // do following things
+                                                                                   switch (t) {
+                                                                                       case 2:{
+                                                                                           NSNumber *user_id = [body valueForKeyPath:@"response.mergeable_user.id"];
+                                                                                           
+                                                                                           // clean some timestamp
+                                                                                           
+                                                                                           // do following things
+                                                                                           [self loadUserAndDismiss:[user_id integerValue] withToken:newToken success:success];
+                                                                                       }  break;
+                                                                                       case 4:
+                                                                                           
+                                                                                       default:
+                                                                                           break;
+                                                                                   }
                                                                                }
+                                                                               
                                                                            }
                                                                        }
                                                                    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -1311,7 +1351,7 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
     }];
 }
 
-- (void)syncTwitterAccounts:(TwitterAccountsHandler)block
+- (void)syncTwitterAccounts:(ACACCountsHandler)block
 {
     ACAccountType *twitterType = [_accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
     
@@ -1320,39 +1360,13 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
         dispatch_async(dispatch_get_main_queue(), ^{
             if (granted) {
                 NSArray *accounts = [_accountStore accountsWithAccountType:twitterType];
-                if ([TWAPIManager isLocalTwitterAccountAvailable] && accounts.count > 0) {
+                if (accounts.count > 0) {
                     if (block) {
                         block(accounts);
                     }
                 } else {
-                    
-                    //http://stackoverflow.com/questions/13335795/login-user-with-twitter-in-ios-what-to-use
-                    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
-                        // iOS 6 http://stackoverflow.com/questions/13946062/twitter-framework-for-ios6-how-to-login-through-settings-from-app
-                        SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-                        tweetSheet.view.hidden = TRUE;
-                        
-                        [self presentViewController:tweetSheet animated:NO completion:^{
-                            [tweetSheet.view endEditing:YES];
-                        }];
-                    } else if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"5.1")){
-                        // iOS 5 http://stackoverflow.com/questions/9667921/prompt-login-alert-with-twitter-framework-in-ios5
-                        TWTweetComposeViewController *viewController = [[TWTweetComposeViewController alloc] init];
-                        //hide the tweet screen
-                        viewController.view.hidden = YES;
-                        
-                        //fire tweetComposeView to show "No Twitter Accounts" alert view on iOS5.1
-                        viewController.completionHandler = ^(TWTweetComposeViewControllerResult result) {
-                            if (result == TWTweetComposeViewControllerResultCancelled) {
-                                [self dismissModalViewControllerAnimated:NO];
-                            }
-                        };
-                        [self presentModalViewController:viewController animated:NO];
-                        
-                        //hide the keyboard
-                        [viewController.view endEditing:YES];
-                    } else {
-                        return;
+                    if (block) {
+                        block(nil);
                     }
                 }
             } else {
@@ -1360,12 +1374,6 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                 if (block) {
                     block(nil);
                 }
-                
-//                UIAlertView *testView = [UIAlertView alertViewWithTitle:NSLocalizedString(@"Set up Twitter account", nil) message:NSLocalizedString(@"Please allow EXFE to use your Twitter account. Go to the Settings app, select Twitter to set up.", nil)];
-//               
-//                [testView setCancelButtonWithTitle:NSLocalizedString(@"OK", nil) handler:nil];
-//                [testView show];
-                
             }
         });
     };
@@ -1381,30 +1389,108 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
     }
 }
 
+- (void)facebookAuth:(NSString *)external_id withProvider:(Provider)provider success:(void (^)(NSNumber *user_id, NSString *token))success failure:(void (^)(void))failure
+{
+    NSAssert(kProviderTwitter == provider, @"Entry for twitter only");
+    
+    [self syncTwitterAccounts:^(NSArray *accounts) {
+        BOOL webauth = YES;
+        
+        if (accounts.count > 0) {
+            ACAccount *account = accounts.lastObject;
+            
+            if ([[[account valueForKey:@"properties"] valueForKey:@"uid"] integerValue] == [external_id integerValue]) {
+                // reverse auth
+                webauth = NO;
+                
+                
+            }
+            
+            if (webauth) {
+                // auth web
+                if ([Identity getProviderTypeByCode:provider] == kProviderTyperAuthorization) {
+                    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
+                    oauth.external_username = external_id;
+                    oauth.onSuccess = ^(NSDictionary * params){
+                        NSString *user_id = [params valueForKey:@"userid"];
+                        NSNumber *userid = [NSNumber numberWithInteger:[user_id integerValue]];
+                        NSString *token = [params valueForKey:@"token"];
+                        if (success) {
+                            success(userid, token);
+                        }
+                    };
+                    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                    // eg:  exfe://oauthcallback/
+                    NSString *callback = [NSString stringWithFormat: @"%@://oauthcallback/", app.defaultScheme];
+                    oauth.oAuthURL = [NSString stringWithFormat:@"%@/Authenticate?device=iOS&device_callback=%@&provider=%@", EXFE_OAUTH_LINK, [Util EFPercentEscapedQueryStringPairMemberFromString:callback], [Util EFPercentEscapedQueryStringPairMemberFromString:[Identity getProviderString:provider]]];
+                    
+                    [self presentModalViewController:oauth animated:YES];
+                }
+            }
+        }
+        
+    }];
+}
 
-- (void)facebookSignIn:(id)sender
+- (void)syncFacebookAccounts:(ACACCountsHandler)block
 {
     
     ACAccountType *facebookType = [_accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook];
-    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                             (NSString *)ACFacebookAppIdKey, [[[NSBundle mainBundle] infoDictionary] valueForKey:@"FacebookAppID"],
-                             (NSString *)ACFacebookPermissionsKey, [NSArray arrayWithObject:@"email"],
-                             (NSString *)ACFacebookAudienceKey, ACFacebookAudienceOnlyMe,
-                             nil];
+    NSDictionary *options = @{(NSString *)ACFacebookAppIdKey: [[[NSBundle mainBundle] infoDictionary] valueForKey:@"FacebookAppID"],
+                              (NSString *)ACFacebookPermissionsKey: [NSArray arrayWithObject:@"email"],
+                              (NSString *)ACFacebookAudienceKey: ACFacebookAudienceOnlyMe};
     
     [_accountStore requestAccessToAccountsWithType:facebookType options:options completion:^(BOOL granted, NSError *error) {
-        NSArray *accounts = [_accountStore accountsWithAccountType:facebookType];
-        NSLog(@"%@", accounts);
-        if (accounts.count > 0) {
-            ACAccount *account = [accounts objectAtIndex:0];
-            NSLog(@"identifier %@ username %@", account.identifier, account.username);
-            NSString *fullname = [[account valueForKey:@"properties"] valueForKey:@"fullname"];
-            NSString *userID = [[account valueForKey:@"properties"] valueForKey:@"uid"];
-            NSLog(@"fullname %@ userid %@", fullname, userID);
+    
+        
+        if (granted) {
+            NSArray *accounts = [_accountStore accountsWithAccountType:facebookType];
+            NSLog(@"%@", accounts);
+            if (accounts.count > 0) {
+                if (block) {
+                    block(accounts);
+                }
+//                ACAccount *account = [accounts objectAtIndex:0];
+//                NSLog(@"identifier %@ username %@", account.identifier, account.username);
+//                NSString *fullname = [[account valueForKey:@"properties"] valueForKey:@"fullname"];
+//                NSString *userID = [[account valueForKey:@"properties"] valueForKey:@"uid"];
+//                NSLog(@"fullname %@ userid %@", fullname, userID);
+//                
+//                NSURL *meurl = [NSURL URLWithString:@"https://graph.facebook.com/me"];
+//                
+//                SLRequest *merequest = [SLRequest requestForServiceType:SLServiceTypeFacebook
+//                                                          requestMethod:SLRequestMethodGET
+//                                                                    URL:meurl
+//                                                             parameters:nil];
+//                
+//                merequest.account = account;
+//                
+//                [merequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+//                    NSString *meDataString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+//                    
+//                    NSLog(@"%@", meDataString);
+//                    
+//                }];
+            } else {
+                if (block) {
+                    block(nil);
+                }
+            }
+        } else {
+            NSLog(@"ERR: %@",error);
+            // Fail gracefully...
+            
+            if (block) {
+                block(nil);
+            }
         }
     }];
     
     return;
+}
+
+- (void)facebookAuthsuccess:(void (^)(NSNumber *user_id, NSString *token))success failure:(void (^)(void))failure
+{
     [FBSession.activeSession closeAndClearTokenInformation];
     // If a user has *never* logged into your app, request one of
     // "email", "user_location", or "user_birthday". If you do not
@@ -1439,7 +1525,9 @@ typedef void(^TwitterAccountsHandler)(NSArray *accounts);
                                                           case 200:{
                                                               NSNumber *u = [responseObject valueForKeyPath:@"response.user_id"];
                                                               NSString *t = [responseObject valueForKeyPath:@"response.token"];
-                                                              [self loadUserAndDismiss:[u integerValue] withToken:t];
+                                                              if (success) {
+                                                                  success(u, t);
+                                                              }
                                                           }
                                                               break;
                                                           case 400:{
