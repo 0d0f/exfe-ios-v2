@@ -36,6 +36,10 @@
 @property (nonatomic, strong) NSArray               *invitations;
 @property (nonatomic, strong) NSMutableArray        *identityIds;
 
+@property (nonatomic, strong) NSMutableArray        *demoPathPoints;
+@property (nonatomic, strong) EFCrumPath            *demoOverlay;
+@property (nonatomic, strong) EFRoutePath           *demoRoutePath;
+
 @property (nonatomic, strong) NSMutableDictionary   *personOverlayMap;
 @property (nonatomic, strong) EFCrumPathView        *personPathOverlayView;
 
@@ -68,7 +72,12 @@
 - (void)_getRoute;
 - (void)_postRoute;
 
+- (void)_startTimer;
+- (void)_stopTimer;
+
 - (BOOL)_isPersonOnline:(NSString *)identityId;
+
+- (void)_initDemo;
 
 @end
 
@@ -117,11 +126,28 @@
 #else
     [self.model.apiServer updateRouteWithCrossId:[self.cross.cross_id integerValue]
                                        locations:[self.mapDataSource allRouteLocations]
-                                          routes:nil
+                                          routes:@[self.demoRoutePath]
                                          isEarth:NO
                                          success:nil
                                          failure:nil];
 #endif
+}
+
+- (void)_startTimer {
+    [self _stopTimer];
+    
+    self.updateLocationTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f
+                                                                target:self
+                                                              selector:@selector(timerRunloop:)
+                                                              userInfo:nil
+                                                               repeats:YES];
+}
+
+- (void)_stopTimer {
+    if (self.updateLocationTimer) {
+        [self.updateLocationTimer invalidate];
+        self.updateLocationTimer = nil;
+    }
 }
 
 - (BOOL)_isPersonOnline:(NSString *)identityId {
@@ -130,8 +156,8 @@
     if (locations) {
         EFLocation *lastestLocation = locations[0];
         NSDate *lastestingUpdateTime = lastestLocation.timestamp;
-        NSTimeInterval timeInterval = [lastestingUpdateTime timeIntervalSinceNow];
-        if (timeInterval >= -60.0f) {
+        NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:lastestingUpdateTime];
+        if (timeInterval <= 60.0f) {
             return YES;
         } else {
             return NO;
@@ -139,6 +165,54 @@
     }
     
     return NO;
+}
+
+- (void)_initDemo {
+    self.demoPathPoints = [[NSMutableArray alloc] init];
+    EFLocation *destination = [[EFLocation alloc] init];
+    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(23.114921, 113.328212);
+    destination.coordinate = coordinate;
+    [self.demoPathPoints addObject:destination];
+    
+    EFLocation *loction1 = [[EFLocation alloc] init];
+    coordinate = CLLocationCoordinate2DMake(23.118915,113.328017);
+    loction1.coordinate = coordinate;
+    [self.demoPathPoints addObject:loction1];
+    
+    EFLocation *loction2 = [[EFLocation alloc] init];
+    coordinate = CLLocationCoordinate2DMake(23.118602,113.332745);
+    loction2.coordinate = coordinate;
+    [self.demoPathPoints addObject:loction2];
+    
+    EFLocation *loction3 = [[EFLocation alloc] init];
+    coordinate = CLLocationCoordinate2DMake(23.118511,113.333832);
+    loction3.coordinate = coordinate;
+    [self.demoPathPoints addObject:loction3];
+    
+    EFLocation *loction4 = [[EFLocation alloc] init];
+    coordinate = CLLocationCoordinate2DMake(23.120837,113.333759);
+    loction4.coordinate = coordinate;
+    [self.demoPathPoints addObject:loction4];
+    
+    EFCrumPath *crumPath = [[EFCrumPath alloc] initWithMapPoints:self.demoPathPoints];
+    crumPath.linecolor = [UIColor COLOR_RGB(0x00, 0x7B, 0xFF)];
+    crumPath.lineWidth = 4.0f;
+    crumPath.lineStyle = kEFMapLineStyleLine;
+    
+    self.demoOverlay = crumPath;
+    
+    self.demoRoutePath = [[EFRoutePath alloc] init];
+    self.demoRoutePath.pathId = @"233";
+    self.demoRoutePath.createdDate = [NSDate date];
+    self.demoRoutePath.updatedDate = [NSDate date];
+    self.demoRoutePath.createdByUid = @"cfddream@wechat";
+    self.demoRoutePath.updatedByUid = @"cfddream@wechat";
+    self.demoRoutePath.title = @"";
+    self.demoRoutePath.description = @"";
+    self.demoRoutePath.strokeColor = [UIColor COLOR_RGB(0x00, 0x7B, 0xFF)];
+    self.demoRoutePath.positions = self.demoPathPoints;
+    
+    [self.mapView addOverlay:crumPath];
 }
 
 @end
@@ -178,6 +252,10 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     return self;
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -192,13 +270,6 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     self.leftBaseView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.6f];
     
     // tableView gradient
-//    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-//    gradientLayer.colors = @[(id)[UIColor colorWithWhite:0.0f alpha:0.6f].CGColor, (id)[UIColor clearColor].CGColor];
-//    gradientLayer.frame = (CGRect){{0, -kShadowOffset}, {CGRectGetWidth(self.tableView.frame), 2 * kShadowOffset}};
-//    gradientLayer.opacity = 0.0f;
-//    [self.tableView.layer addSublayer:gradientLayer];
-//    self.gradientLayer = gradientLayer;
-    
     UIImageView *tableViewShadowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_shadow_gap.png"]];
     tableViewShadowView.frame = (CGRect){CGPointZero, {CGRectGetWidth(self.tableView.frame), kShadowOffset}};
     tableViewShadowView.alpha = 0.0f;
@@ -212,6 +283,31 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     
     self.mapDataSource = [[EFMarauderMapDataSource alloc] initWithCrossId:[self.cross.cross_id integerValue]];
     self.mapDataSource.delegate = self;
+    
+    [self _initDemo];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(enterBackground)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(enterForeground)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+}
+
+- (void)enterBackground {
+    [self _closeStreaming];
+    
+    [self _stopTimer];
+    [self.locationManager stopUpdatingLocation];
+}
+
+- (void)enterForeground {
+    [self.locationManager startUpdatingLocation];
+    [self _openStreaming];
+    
+    [self _startTimer];
 }
 
 - (void)viewDidUnload {
@@ -236,8 +332,8 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     self.identityIds = identityIds;
     
     CGFloat height = self.invitations.count * [EFMapPersonCell defaultCellHeight];
-    if (height + 50 > CGRectGetHeight(self.view.frame)) {
-        height = CGRectGetHeight(self.view.frame) - 50.0f;
+    if (height + 100 > CGRectGetHeight(self.view.frame)) {
+        height = CGRectGetHeight(self.view.frame) - 100.0f;
         self.tableView.scrollEnabled = YES;
     } else {
         self.tableView.scrollEnabled = NO;
@@ -255,11 +351,7 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
 - (void)viewDidDisappear:(BOOL)animated {
     [self.locationManager stopUpdatingLocation];
     [self _closeStreaming];
-    
-    if (self.updateLocationTimer) {
-        [self.updateLocationTimer invalidate];
-        self.updateLocationTimer = nil;
-    }
+    [self _stopTimer];
     
     [super viewDidDisappear:animated];
 }
@@ -413,7 +505,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             CLLocation *latestCLLocation = [[CLLocation alloc] initWithLatitude:latestCoordinate.latitude longitude:latestCoordinate.longitude];
             
             CLLocationDistance distance = [destinationLocation distanceFromLocation:latestCLLocation];
-            if (distance < 50.0f) {
+            if (distance < 30.0f) {
                 person.locationState = kEFMapPersonLocationStateArrival;
             } else {
                 person.locationState = kEFMapPersonLocationStateOnTheWay;
@@ -450,6 +542,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         
         CGFloat alpha = fabs(scrollView.contentOffset.y / 10.0f);
         self.tableViewShadowView.alpha = alpha > 1.0f ? 1.0f : alpha;
+        
+        [self.mapStrokeView reloadData];
     }
 }
 
@@ -556,11 +650,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     self.lastUpdatedLocation = position;
     
     if (!self.updateLocationTimer) {
-        self.updateLocationTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f
-                                                      target:self
-                                                    selector:@selector(timerRunloop:)
-                                                    userInfo:nil
-                                                     repeats:YES];
+        [self _startTimer];
         [self timerRunloop:self.updateLocationTimer];
         
         while (!self.hasGotOffset) {
@@ -629,6 +719,12 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         location.coordinate = coordinate;
         
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+        
+        NSArray *visibleCells = [self.tableView visibleCells];
+        if (NSNotFound == [visibleCells indexOfObject:cell]) {
+            return nil;
+        }
+        
         CGPoint avatarCenter = cell.center;
         CLLocationCoordinate2D avatarCoordinate = [self.mapView convertPoint:avatarCenter toCoordinateFromView:self.tableView];
         EFLocation *avatarCenterLocation = [[EFLocation alloc] init];
@@ -877,6 +973,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             crumPathView = [[EFCrumPathView alloc] initWithOverlay:overlay];
             [self.personPositionOverlayViewMap setObject:crumPathView forKey:value];
         }
+    } else if (self.demoOverlay == overlay) {
+        crumPathView = [[EFCrumPathView alloc] initWithOverlay:overlay];
     }
     
     return crumPathView;

@@ -47,7 +47,22 @@
                 self.stateImageView.image = [UIImage imageNamed:@"map_arrow_12g5.png"];
             }
             
-            infoText = [NSString stringWithFormat:NSLocalizedString(@"%d米", nil), (int)self.person.distance];
+            NSUInteger distance = (NSUInteger)self.person.distance;
+            NSString *m = @"米";
+            if (distance > 1000) {
+                m = @"公里";
+                distance = distance / 1000;
+                if (distance >= 9) {
+                    distance = 9;
+                    m = @"+公里";
+                }
+            } else {
+                if (distance > 10) {
+                    distance = (distance / 10) * 10;
+                }
+            }
+            
+            infoText = [NSString stringWithFormat:NSLocalizedString(@"%d%@", nil), distance, m];
             self.stateImageView.layer.transform = CATransform3DMakeRotation(self.person.angle, 0.0f, 0.0f, 1.0f);
             self.stateImageView.hidden = NO;
             self.stateView.hidden = YES;

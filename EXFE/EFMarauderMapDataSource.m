@@ -197,6 +197,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     NSString *userToken = delegate.model.userToken;
     
     NSURL *streamingURL = [NSURL URLWithString:[NSString stringWithFormat:@"/v3/crosses/%d/routex?_method=WATCH&coordinate=mars&token=%@", self.crossId, userToken] relativeToURL:baseURL];
+//    NSLog(@"%@", [streamingURL absoluteString]);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:streamingURL];
     request.HTTPMethod = @"POST";
     

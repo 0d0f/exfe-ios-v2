@@ -206,7 +206,7 @@
         closeButton.center = (CGPoint){190, 10};
         [closeButton addTarget:self action:@selector(closeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         closeButton.hidden = YES;
-        [self addSubview:closeButton];
+//        [self addSubview:closeButton];
         self.closeButton = closeButton;
         
         self.layer.cornerRadius = 6.0f;
