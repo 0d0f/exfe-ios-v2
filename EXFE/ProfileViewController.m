@@ -419,8 +419,7 @@
             footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 10 + 62 + 44)];
 //            footerView.backgroundColor = [UIColor lightGrayColor];
             
-            UIButton *btn2Auth = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            btn2Auth.titleLabel.backgroundColor = [UIColor lightGrayColor];
+            UIButton *btn2Auth = [UIButton buttonWithType:UIButtonTypeCustom];
             [btn2Auth setFrame:CGRectMake(20, 40, 320 - 20 * 2, 30)];
             [btn2Auth addTarget:self action:@selector(twoStep:) forControlEvents:UIControlEventTouchUpInside];
             [footerView addSubview:btn2Auth];
