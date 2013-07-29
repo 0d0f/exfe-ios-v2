@@ -84,7 +84,7 @@
 
     [rightbutton addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:rightbutton];
-    [self regObserver];
+    
     
     CGRect inputframe=backgroundview.frame;
     inputbackgroundImage = [[UIImageView alloc] initWithFrame:inputframe];
@@ -195,6 +195,15 @@
     }    
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self regObserver];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 #pragma mark init
 - (void)regObserver
@@ -253,7 +262,6 @@
 
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
 }
 
@@ -715,32 +723,64 @@
 
 - (void) clearplace{
     
-    UIActionSheet *actionSheet = [UIActionSheet actionSheetWithTitle:@""];
-    [actionSheet setDestructiveButtonWithTitle:NSLocalizedString(@"Clear place", nil) handler:^{
-        
+//    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:NSLocalizedString(@"Clear place", nil) otherButtonTitles:nil];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:NSLocalizedString(@"Clear place", nil) otherButtonTitles:nil];
+//    [sheet showInView:map];
+//    AppDelegate *dele = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [sheet showInView:self.view];
+//    UIActionSheet *actionSheet = [UIActionSheet actionSheetWithTitle:@""];
+//    [actionSheet setDestructiveButtonWithTitle:NSLocalizedString(@"Clear place", nil) handler:^{
+//        
+////        isnotinputplace = YES;
+////        [self storeSelectedPlace:nil];
+////        
+////        [map removeAnnotations:[map annotations]];
+////        [placeedit setHidden:YES];
+//////        [inputplace becomeFirstResponder];
+//////        inputplace.text = @"";
+//////        [clearbutton setHidden:YES];
+////        
+//////        isnotinputplace = NO;
+////        [self.placeResults removeAllObjects];
+////        [self.customPlace removeAllObjects];
+////        [_tableView reloadData];
+//    }];
+//    [actionSheet setCancelButtonWithTitle:@"Cancel" handler:^{
+//        placeedit.PlaceTitle.text = NSLocalizedString(@"Right there on map", nil);
+//        [placeedit.PlaceTitle setSelectedTextRange:[placeedit.PlaceTitle textRangeFromPosition:placeedit.PlaceTitle.beginningOfDocument toPosition:placeedit.PlaceTitle.endOfDocument]];
+//
+////        [placeedit.PlaceTitle selectAll:placeedit.PlaceTitle];
+////        [UIMenuController sharedMenuController].menuVisible = NO;
+//    }];
+//    [actionSheet showInView:self.view];
+}
+
+#pragma mark UIActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == actionSheet.destructiveButtonIndex) {
         isnotinputplace = YES;
         [self storeSelectedPlace:nil];
-        
+
         [map removeAnnotations:[map annotations]];
         [placeedit setHidden:YES];
-//        [placeedit resignFirstResponder];
         [inputplace becomeFirstResponder];
         inputplace.text = @"";
         [clearbutton setHidden:YES];
-        
+
         isnotinputplace = NO;
         [self.placeResults removeAllObjects];
         [self.customPlace removeAllObjects];
         [_tableView reloadData];
-    }];
-    [actionSheet setCancelButtonWithTitle:@"Cancel" handler:^{
+    } else {
         placeedit.PlaceTitle.text = NSLocalizedString(@"Right there on map", nil);
         [placeedit.PlaceTitle setSelectedTextRange:[placeedit.PlaceTitle textRangeFromPosition:placeedit.PlaceTitle.beginningOfDocument toPosition:placeedit.PlaceTitle.endOfDocument]];
 
-//        [placeedit.PlaceTitle selectAll:placeedit.PlaceTitle];
-//        [UIMenuController sharedMenuController].menuVisible = NO;
-    }];
-    [actionSheet showInView:self.view];
+        [placeedit.PlaceTitle selectAll:placeedit.PlaceTitle];
+        [UIMenuController sharedMenuController].menuVisible = NO;
+    }
+    NSLog(@"%@", self.view);
+//    [actionSheet showInView:self.view];
 }
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
