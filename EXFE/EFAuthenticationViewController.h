@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef BOOL (^NextStep)();
+typedef void(^NextStep)(void);
 
 @interface EFAuthenticationViewController : UIViewController<UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
