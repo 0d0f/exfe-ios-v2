@@ -223,17 +223,11 @@
         if (!imageKey) {
             dectorView.image = defaultImage;
         } else {
-            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
-                dectorView.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
-            } else {
-                dectorView.image = defaultImage;
-                [[EFDataManager imageManager] cachedImageForKey:imageKey
-                                                completeHandler:^(UIImage *image){
-                                                    if (image) {
-                                                        dectorView.image = image;
-                                                    }
-                                                }];
-            }
+            [[EFDataManager imageManager] loadImageForView:dectorView
+                                          setImageSelector:@selector(setImage:)
+                                               placeHolder:defaultImage
+                                                       key:imageKey
+                                           completeHandler:nil];
         }
     }
 }

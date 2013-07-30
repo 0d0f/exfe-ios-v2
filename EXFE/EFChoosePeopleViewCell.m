@@ -398,23 +398,6 @@
         
         self.userNameLabel.text = contactObject.name;
         self.userNameLabel.frame = (CGRect){{56, 12}, {190, 26}};
-//        if (contactObject.imageKey) {
-//            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:contactObject.imageKey]) {
-//                self.avatarImageView.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:contactObject.imageKey];
-//            } else {
-//                self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
-//                [[EFDataManager imageManager] cachedImageForKey:contactObject.imageKey
-//                                                completeHandler:^(UIImage *image){
-//                                                    if (image && contactObject == self.contactObject) {
-//                                                        self.avatarImageView.image = image;
-//                                                    } else {
-//                                                        self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
-//                                                    }
-//                                                }];
-//            }
-//        } else {
-//            self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];
-//        }
         
         if (1 == contactObject.roughIdentities.count) {
             NSString *iconName = [NSString stringWithFormat:@"identity_%@_18_grey.png", ((RoughIdentity *)contactObject.roughIdentities[0]).provider];

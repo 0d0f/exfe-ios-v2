@@ -26,19 +26,11 @@
     if (avatar_filename.length > 0) {
         UIImage *defaultImage = [UIImage imageNamed:@"portrait_default.png"];
         
-        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:avatar_filename]) {
-            self.avatar.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:avatar_filename];
-            
-        } else {
-            self.avatar.image = defaultImage;
-            
-            [[EFDataManager imageManager] cachedImageForKey:avatar_filename
-                                            completeHandler:^(UIImage *image){
-                                                if (image) {
-                                                    self.avatar.image = image;
-                                                }
-                                            }];
-        }
+        [[EFDataManager imageManager] loadImageForView:self.avatar
+                                      setImageSelector:@selector(setImage:)
+                                           placeHolder:defaultImage
+                                                   key:avatar_filename
+                                       completeHandler:nil];
     }
     self.name.text = [identity getDisplayIdentity];
 }

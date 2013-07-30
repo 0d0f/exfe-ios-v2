@@ -854,17 +854,11 @@ typedef enum {
                 if (!imageKey) {
                     cell.avatar.image = defaultImage;
                 } else {
-                    if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
-                        cell.avatar.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
-                    } else {
-                        cell.avatar.image = defaultImage;
-                        [[EFDataManager imageManager] cachedImageForKey:imageKey
-                                                        completeHandler:^(UIImage *image){
-                                                            if (image) {
-                                                                cell.avatar.image = image;
-                                                            }
-                                                        }];
-                    }
+                    [[EFDataManager imageManager] loadImageForView:cell.avatar
+                                                  setImageSelector:@selector(setImage:)
+                                                       placeHolder:defaultImage
+                                                               key:imageKey
+                                                   completeHandler:nil];
                 }
                 
                 cell.invitation_id = inv.invitation_id;

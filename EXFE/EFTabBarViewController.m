@@ -88,6 +88,9 @@
     [super viewDidDisappear:animated];
 }
 
+- (void)dealloc {
+    self.viewControllers = nil;
+}
 
 #pragma mark - Getter && Setter
 

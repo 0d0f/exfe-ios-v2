@@ -9,6 +9,7 @@
 #import "EFDataManager+Image.h"
 
 #import "EFQueue.h"
+#import "UIImage+Resize.h"
 
 #define kImageCachePath     @"~/Library/Caches/images"
 
@@ -28,6 +29,7 @@
     self = [self init];
     if (self) {
         self.cachePath = [kImageCachePath stringByExpandingTildeInPath];
+        self.loadingMap = [[NSMutableDictionary alloc] initWithCapacity:100];
     }
     
     return self;
@@ -134,6 +136,132 @@
     NSAssert(data, @"data should not be nil.");
     
     [self cacheData:data forKey:aKey shouldWriteToDisk:writeToDisk];
+}
+
+- (void)loadImageForView:(id)view setImageSelector:(SEL)selector placeHolder:(UIImage *)placeholder key:(NSString *)aKey completeHandler:(void (^)(BOOL hasLoaded))handler {
+    NSParameterAssert(view);
+    NSParameterAssert(placeholder);
+    NSParameterAssert(aKey);
+    
+    [self.loadingMap setObject:aKey forKey:[NSValue valueWithNonretainedObject:view]];
+    
+    if ([self cachedImageInMemoryForKey:aKey]) {
+        UIImage *image = [self cachedImageInMemoryForKey:aKey];
+        NSAssert(image != nil, @"Image MUST exist in memory!");
+        
+        [view performSelector:selector withObject:image];
+        [self.loadingMap removeObjectForKey:[NSValue valueWithNonretainedObject:view]];
+        
+        if (handler) {
+            handler(YES);
+        }
+    } else {
+        [view performSelector:selector withObject:placeholder];
+        [self cachedImageForKey:aKey
+                completeHandler:^(UIImage *image){
+                    NSString *key = [self.loadingMap objectForKey:[NSValue valueWithNonretainedObject:view]];
+                    
+                    if (key && [key isEqualToString:aKey]) {
+                        if (image) {
+                            [view performSelector:selector withObject:image];
+                            if (handler) {
+                                handler(YES);
+                            }
+                        } else {
+                            if (handler) {
+                                handler(NO);
+                            }
+                        }
+                    }
+                }];
+    }
+}
+
+- (void)loadImageForView:(id)view setImageSelector:(SEL)selector size:(CGSize)size placeHolder:(UIImage *)placeholder key:(NSString *)aKey completeHandler:(void (^)(BOOL hasLoaded))handler {
+    NSString *imageKey = [aKey stringByAppendingFormat:@"_%f_%f", size.width, size.height];
+    
+    [self.loadingMap setObject:imageKey forKey:[NSValue valueWithNonretainedObject:view]];
+    
+    if ([self cachedImageInMemoryForKey:imageKey]) {
+        UIImage *image = [self cachedImageInMemoryForKey:imageKey];
+        NSAssert(image != nil, @"Image MUST exist in memory!");
+        
+        [view performSelector:selector withObject:image];
+        [self.loadingMap removeObjectForKey:[NSValue valueWithNonretainedObject:view]];
+        
+        if (handler) {
+            handler(YES);
+        }
+    } else {
+        [view performSelector:selector withObject:placeholder];
+        if ([self isImageCachedInDiskForKey:imageKey]) {
+            [self cachedImageInDiskForKey:imageKey
+                          completeHandler:^(UIImage *image){
+                              NSString *key = [self.loadingMap objectForKey:[NSValue valueWithNonretainedObject:view]];
+                              
+                              if (key && [key isEqualToString:imageKey]) {
+                                  if (image) {
+                                      [view performSelector:selector withObject:image];
+                                      if (handler) {
+                                          handler(YES);
+                                      }
+                                  } else {
+                                      if (handler) {
+                                          handler(NO);
+                                      }
+                                  }
+                                  
+                                  [self.loadingMap removeObjectForKey:[NSValue valueWithNonretainedObject:view]];
+                              }
+                          }];
+        } else {
+            [self cachedImageForKey:aKey
+                    completeHandler:^(UIImage *image){
+                        UIImage *resizedImage = nil;
+                        if (image) {
+                            resizedImage = [self resizeImage:image toSize:size];
+                            [self cacheImage:resizedImage forKey:imageKey shouldWriteToDisk:YES];
+                        }
+                        
+                        NSString *key = [self.loadingMap objectForKey:[NSValue valueWithNonretainedObject:view]];
+                        
+                        if (key && [key isEqualToString:imageKey]) {
+                            if (resizedImage) {
+                                [view performSelector:selector withObject:resizedImage];
+                                if (handler) {
+                                    handler(YES);
+                                }
+                            } else {
+                                if (handler) {
+                                    handler(NO);
+                                }
+                            }
+                            
+                            [self.loadingMap removeObjectForKey:[NSValue valueWithNonretainedObject:view]];
+                        }
+                    }];
+        }
+    }
+}
+
+- (void)cancelLoadImageForView:(UIView *)view {
+    [self.loadingMap removeObjectForKey:[NSValue valueWithNonretainedObject:view]];
+}
+
+- (UIImage *)resizeImage:(UIImage *)image toSize:(CGSize)size {
+    CGFloat scaleFactor = 1.0;
+    
+    if (image.size.width > size.width || image.size.height > size.height){
+        scaleFactor = MAX((size.width / image.size.width), (size.height / image.size.height));
+    }
+    
+    UIGraphicsBeginImageContext(size);
+    
+    CGRect rect = CGRectMake((size.width / 2 - image.size.width / 2 * scaleFactor),(0 - image.size.height * 198.0f / 495.0f * scaleFactor),image.size.width * scaleFactor,image.size.height * scaleFactor);
+    [image drawInRect:rect];
+    UIImage *backimg = UIGraphicsGetImageFromCurrentImageContext();
+    
+    return backimg;
 }
 
 @end

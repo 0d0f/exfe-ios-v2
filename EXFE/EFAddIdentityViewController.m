@@ -367,17 +367,11 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
         if (!avatar_filename) {
             _imageIdentity.image = defaultImage;
         } else {
-            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:avatar_filename]) {
-                _imageIdentity.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:avatar_filename];
-            } else {
-                _imageIdentity.image = defaultImage;
-                [[EFDataManager imageManager] cachedImageForKey:avatar_filename
-                                                completeHandler:^(UIImage *image){
-                                                    if (image) {
-                                                        _imageIdentity.image = image;
-                                                    }
-                                                }];
-            }
+            [[EFDataManager imageManager] loadImageForView:_imageIdentity
+                                          setImageSelector:@selector(setImage:)
+                                               placeHolder:defaultImage
+                                                       key:avatar_filename
+                                           completeHandler:nil];
         }
     } else {
         NSString *provider = [respDict valueForKeyPath:@"identity.provider"];

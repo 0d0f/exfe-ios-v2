@@ -15,6 +15,8 @@
 @property (nonatomic, strong) EFDataCache *dataCache;
 @property (nonatomic, strong) EFQueueManager *queueManager;
 
+@property (nonatomic, strong) NSMutableDictionary   *loadingMap;
+
 + (EFDataManager *)defaultManager;
 
 // Getter

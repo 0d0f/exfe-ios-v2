@@ -445,16 +445,11 @@
             imageKey = self.identity.avatar.original;
         }
         
-        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
-            [self fillAvatar:[[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey]];
-        } else {
-            [[EFDataManager imageManager] cachedImageForKey:imageKey
-                                            completeHandler:^(UIImage *image){
-                                                if (image) {
-                                                    [self fillAvatar:image];
-                                                }
-                                            }];
-        }
+        [[EFDataManager imageManager] loadImageForView:self
+                                      setImageSelector:@selector(fillAvatar:)
+                                           placeHolder:[UIImage imageNamed:@"portrait_default.png"]
+                                                   key:imageKey
+                                       completeHandler:nil];
     }
 }
 

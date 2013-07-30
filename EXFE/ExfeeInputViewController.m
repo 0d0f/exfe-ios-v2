@@ -807,17 +807,11 @@ static char identitykey;
         if (!imageKey) {
             cell.avatar = defaultImage;
         } else {
-            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
-                cell.avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
-            } else {
-                cell.avatar = defaultImage;
-                [[EFDataManager imageManager] cachedImageForKey:imageKey
-                                                completeHandler:^(UIImage *image){
-                                                    if (image) {
-                                                        cell.avatar = image;
-                                                    }
-                                                }];
-            }
+            [[EFDataManager imageManager] loadImageForView:cell
+                                          setImageSelector:@selector(setAvatar:)
+                                               placeHolder:defaultImage
+                                                       key:imageKey
+                                           completeHandler:nil];
         }
     }
     

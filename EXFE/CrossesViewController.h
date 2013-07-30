@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "PullRefreshTableViewController.h"
-#import "ImgCache.h"
 #import "EXInnerButton.h"
 #import "EXSpinView.h"
 #import "MBProgressHUD.h"
