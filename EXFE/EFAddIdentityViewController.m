@@ -576,6 +576,10 @@ typedef NS_ENUM(NSUInteger, EFViewTag) {
 
 - (void)loadUserAndExit
 {
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud removeObjectForKey:@"exfee_updated_at"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshUserSelf object:self];
     [self.navigationController popViewControllerAnimated:YES];
 }

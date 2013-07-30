@@ -361,15 +361,6 @@
 - (void)refreshCrosses:(NSString*)source withCrossId:(int)cross_id {
     
     NSDate *updated_at = [[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-    if ([source isEqualToString:@"crossview_init"]) {
-        //        hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        //        hud.labelText = @"Loading";
-        //        hud.mode=MBProgressHUDModeCustomView;
-        //        EXSpinView *bigspin = [[EXSpinView alloc] initWithPoint:CGPointMake(0, 0) size:40];
-        //        [bigspin startAnimating];
-        //        hud.customView=bigspin;
-        //        [bigspin release];
-    }
     
     //  source:[NSDictionary dictionaryWithObjectsAndKeys:source,@"name",[NSNumber numberWithInt:cross_id],@"cross_id", nil]
     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
@@ -379,10 +370,7 @@
                                                int notification=0;
                                                if([[mappingResult array] count]>0)
                                                {
-                                                   //        NSString *source=[objectLoader.userData objectForKey:@"name" ];
-                                                   //          NSString *exfee_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
                                                    NSDate *last_updated_at=[[NSUserDefaults standardUserDefaults] objectForKey:@"exfee_updated_at"];
-                                                   //          BOOL needsave=NO;
                                                    BOOL isError=NO;
                                                    Meta *meta=(Meta*)[[mappingResult dictionary] objectForKey:@"meta"];
                                                    if(meta!=nil){
