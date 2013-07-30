@@ -2,7 +2,7 @@
 //  Cross.h
 //  EXFE
 //
-//  Created by Stony Wang on 13-7-10.
+//  Created by Stony Wang on 13-7-30.
 //
 //
 
@@ -23,6 +23,7 @@
 @property (nonatomic, retain) id updated;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) id widget;
+@property (nonatomic, retain) NSDate * touched_at;
 @property (nonatomic, retain) Identity *by_identity;
 @property (nonatomic, retain) Exfee *exfee;
 @property (nonatomic, retain) Identity *host_identity;

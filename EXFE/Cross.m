@@ -2,7 +2,7 @@
 //  Cross.m
 //  EXFE
 //
-//  Created by Stony Wang on 13-7-10.
+//  Created by Stony Wang on 13-7-30.
 //
 //
 
@@ -25,6 +25,7 @@
 @dynamic updated;
 @dynamic updated_at;
 @dynamic widget;
+@dynamic touched_at;
 @dynamic by_identity;
 @dynamic exfee;
 @dynamic host_identity;

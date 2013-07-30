@@ -172,6 +172,9 @@
 		4F358D6D171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
 		4F358D6E171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
 		4F358D6F171D66F5005C2EE7 /* EFPasswordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */; };
+		4F39249C17A782E200EDB441 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F39249B17A782E200EDB441 /* Cross.m */; };
+		4F39249D17A782E200EDB441 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F39249B17A782E200EDB441 /* Cross.m */; };
+		4F39249E17A782E200EDB441 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F39249B17A782E200EDB441 /* Cross.m */; };
 		4F63DA7C17172AA600136B7E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E971560F832009E0806 /* main.m */; };
 		4F63DA7D17172AA600136B7E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A98E9B1560F832009E0806 /* AppDelegate.m */; };
 		4F63DA7F17172AA600136B7E /* CrossesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E88740156244E70026D197 /* CrossesViewController.m */; };
@@ -245,7 +248,6 @@
 		4F63DAD417172AA600136B7E /* TitleDescEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78606CE5169AD2900014806A /* TitleDescEditViewController.m */; };
 		4F63DAD517172AA600136B7E /* EXCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5019F169FC504005328BE /* EXCurveView.m */; };
 		4F63DAD717172AA600136B7E /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3216B7CD1000D9E876 /* Exfee.m */; };
-		4F63DAD817172AA600136B7E /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3716B7CD7900D9E876 /* Cross.m */; };
 		4F63DAD917172AA600136B7E /* UIUnderlinedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */; };
 		4F63DADA17172AA600136B7E /* LocalContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 7879B47716BE77AF00D3BE3C /* LocalContact.m */; };
 		4F63DADB17172AA600136B7E /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
@@ -654,7 +656,6 @@
 		4F63DCA317172B0700136B7E /* TitleDescEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78606CE5169AD2900014806A /* TitleDescEditViewController.m */; };
 		4F63DCA417172B0700136B7E /* EXCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5019F169FC504005328BE /* EXCurveView.m */; };
 		4F63DCA617172B0700136B7E /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3216B7CD1000D9E876 /* Exfee.m */; };
-		4F63DCA717172B0700136B7E /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3716B7CD7900D9E876 /* Cross.m */; };
 		4F63DCA817172B0700136B7E /* UIUnderlinedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F45F5216BBBA2100F364FE /* UIUnderlinedButton.m */; };
 		4F63DCA917172B0700136B7E /* LocalContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 7879B47716BE77AF00D3BE3C /* LocalContact.m */; };
 		4F63DCAA17172B0700136B7E /* SSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB149416BFFB9600F76D32 /* SSTextView.m */; };
@@ -2110,7 +2111,6 @@
 		78F9F88D165383D60079BA6B /* identity_twitter_40.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F9F883165383D60079BA6B /* identity_twitter_40.png */; };
 		78F9F88E165383D60079BA6B /* identity_twitter_40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F9F884165383D60079BA6B /* identity_twitter_40@2x.png */; };
 		78FA8C3316B7CD1000D9E876 /* Exfee.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3216B7CD1000D9E876 /* Exfee.m */; };
-		78FA8C3816B7CD7A00D9E876 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FA8C3716B7CD7900D9E876 /* Cross.m */; };
 		78FA8C3E16B8FD6F00D9E876 /* portrait_tri.png in Resources */ = {isa = PBXBuildFile; fileRef = 78FA8C3C16B8FD6F00D9E876 /* portrait_tri.png */; };
 		78FA8C3F16B8FD6F00D9E876 /* portrait_tri@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78FA8C3D16B8FD6F00D9E876 /* portrait_tri@2x.png */; };
 		78FAE24415EFE04C0045DD67 /* EXInvitationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FAE24315EFE04C0045DD67 /* EXInvitationItem.m */; };
@@ -2359,6 +2359,8 @@
 		4F3355CF168C4F4700D398C0 /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		4F358D6B171D66F5005C2EE7 /* EFPasswordField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFPasswordField.h; sourceTree = "<group>"; };
 		4F358D6C171D66F5005C2EE7 /* EFPasswordField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFPasswordField.m; sourceTree = "<group>"; };
+		4F39249A17A782E200EDB441 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
+		4F39249B17A782E200EDB441 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
 		4F3C6D8016ACEE670095AA50 /* EditCrossDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditCrossDelegate.h; sourceTree = "<group>"; };
 		4F63DC4317172AA600136B7E /* 0d0f.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 0d0f.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F63DE1017172B0700136B7E /* Pilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3204,8 +3206,6 @@
 		78F9F884165383D60079BA6B /* identity_twitter_40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "identity_twitter_40@2x.png"; sourceTree = "<group>"; };
 		78FA8C3116B7CD1000D9E876 /* Exfee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exfee.h; sourceTree = "<group>"; };
 		78FA8C3216B7CD1000D9E876 /* Exfee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Exfee.m; sourceTree = "<group>"; };
-		78FA8C3616B7CD7900D9E876 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
-		78FA8C3716B7CD7900D9E876 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
 		78FA8C3C16B8FD6F00D9E876 /* portrait_tri.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_tri.png; sourceTree = "<group>"; };
 		78FA8C3D16B8FD6F00D9E876 /* portrait_tri@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portrait_tri@2x.png"; sourceTree = "<group>"; };
 		78FAE24215EFE04C0045DD67 /* EXInvitationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXInvitationItem.h; sourceTree = "<group>"; };
@@ -4802,14 +4802,14 @@
 		78A98EFC1561169E009E0806 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				4F39249A17A782E200EDB441 /* Cross.h */,
+				4F39249B17A782E200EDB441 /* Cross.m */,
 				4F7AA1FF179803A4005C4223 /* Identity.h */,
 				4F7AA200179803A5005C4223 /* Identity.m */,
 				4F7AA1FA1797FDEE005C4223 /* User.h */,
 				4F7AA1FB1797FDEE005C4223 /* User.m */,
 				4F7AA1F51797FDED005C4223 /* Avatar.h */,
 				4F7AA1F61797FDED005C4223 /* Avatar.m */,
-				78FA8C3616B7CD7900D9E876 /* Cross.h */,
-				78FA8C3716B7CD7900D9E876 /* Cross.m */,
 				4FF9D12D178BE81B00D01765 /* Device.h */,
 				4FF9D12E178BE81C00D01765 /* Device.m */,
 				782B3CA9156A604C00721150 /* CrossTime.h */,
@@ -6686,7 +6686,6 @@
 				4F63DAD417172AA600136B7E /* TitleDescEditViewController.m in Sources */,
 				4F63DAD517172AA600136B7E /* EXCurveView.m in Sources */,
 				4F63DAD717172AA600136B7E /* Exfee.m in Sources */,
-				4F63DAD817172AA600136B7E /* Cross.m in Sources */,
 				4F63DAD917172AA600136B7E /* UIUnderlinedButton.m in Sources */,
 				4F63DADA17172AA600136B7E /* LocalContact.m in Sources */,
 				4F63DADB17172AA600136B7E /* SSTextView.m in Sources */,
@@ -6854,6 +6853,7 @@
 				4FA01BD2179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
 				4F0E3552179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
 				76555B21179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
+				4F39249D17A782E200EDB441 /* Cross.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6934,7 +6934,6 @@
 				4F63DCA317172B0700136B7E /* TitleDescEditViewController.m in Sources */,
 				4F63DCA417172B0700136B7E /* EXCurveView.m in Sources */,
 				4F63DCA617172B0700136B7E /* Exfee.m in Sources */,
-				4F63DCA717172B0700136B7E /* Cross.m in Sources */,
 				4F63DCA817172B0700136B7E /* UIUnderlinedButton.m in Sources */,
 				4F63DCA917172B0700136B7E /* LocalContact.m in Sources */,
 				4F63DCAA17172B0700136B7E /* SSTextView.m in Sources */,
@@ -7102,6 +7101,7 @@
 				4FA01BD3179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
 				4F0E3553179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
 				76555B22179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
+				4F39249E17A782E200EDB441 /* Cross.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7182,7 +7182,6 @@
 				78606CE7169AD2920014806A /* TitleDescEditViewController.m in Sources */,
 				4FB501A0169FC504005328BE /* EXCurveView.m in Sources */,
 				78FA8C3316B7CD1000D9E876 /* Exfee.m in Sources */,
-				78FA8C3816B7CD7A00D9E876 /* Cross.m in Sources */,
 				78F45F5816BBBB1200F364FE /* UIUnderlinedButton.m in Sources */,
 				7879B47916BE77B200D3BE3C /* LocalContact.m in Sources */,
 				4FFB149516BFFB9600F76D32 /* SSTextView.m in Sources */,
@@ -7350,6 +7349,7 @@
 				4FA01BD1179D2F2600988483 /* EFAuthenticationViewController.m in Sources */,
 				4F0E3551179E8DF400FFA0E4 /* EFIdentityBar.m in Sources */,
 				76555B20179E345500BCC5A7 /* EFMapPopMenu.m in Sources */,
+				4F39249C17A782E200EDB441 /* Cross.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
