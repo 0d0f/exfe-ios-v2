@@ -1016,19 +1016,19 @@
     exfeeViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
     
     // MadaurerMapViewController
-    EFMarauderMapViewController *mapViewController = [[EFMarauderMapViewController alloc] initWithNibName:@"EFMarauderMapViewController" bundle:nil];
-    
-    EFTabBarItem *tabBarItem4 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_routex_30.png"]];
-    tabBarItem4.highlightImage = [UIImage imageNamed:@"widget_routex_30shine.png"];
-    
-    mapViewController.customTabBarItem = tabBarItem4;
-    mapViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
-    mapViewController.shadowImage = nil;
-    mapViewController.cross = cross;
-    mapViewController.model = model;
+//    EFMarauderMapViewController *mapViewController = [[EFMarauderMapViewController alloc] initWithNibName:@"EFMarauderMapViewController" bundle:nil];
+//    
+//    EFTabBarItem *tabBarItem4 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_routex_30.png"]];
+//    tabBarItem4.highlightImage = [UIImage imageNamed:@"widget_routex_30shine.png"];
+//    
+//    mapViewController.customTabBarItem = tabBarItem4;
+//    mapViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
+//    mapViewController.shadowImage = nil;
+//    mapViewController.cross = cross;
+//    mapViewController.model = model;
     
     // Init TabBarViewController
-    EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, mapViewController]];
+    EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController]];
     
     __weak EFTabBarViewController *weakTab = tabBarViewController;
     tabBarViewController.titlePressedHandler = ^{
