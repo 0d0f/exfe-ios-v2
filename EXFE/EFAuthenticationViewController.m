@@ -1128,6 +1128,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                                                      // error: "Not sign in"
                                                                  } else if ([@"token_staled" isEqualToString:errorType]) {
                                                                      // error: "Token expired"
+                                                                     // retry verication/authentication again
                                                                  }
                                                              } else if (c == 429){
                                                                  

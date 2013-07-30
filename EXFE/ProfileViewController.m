@@ -250,9 +250,24 @@
     [tableview reloadData];
 }
 
+- (void)fillChangePassword:(BOOL)hasPassword
+{
+    NSString *title = nil;
+    if ([self.user.password boolValue]) {
+        title = NSLocalizedString(@"Change password...", nil);
+    } else {
+        title = NSLocalizedString(@"Set password...", nil);
+    }
+    NSMutableAttributedString *str3 = [[NSMutableAttributedString alloc] initWithString:title];
+    NSUInteger length = str3.length;
+    [str3 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, length)];
+    [str3 addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, length)];
+    [self.btnForgetPassword setAttributedTitle:str3 forState:UIControlStateNormal];
+}
+
 - (NSArray*)prepareTableData {
 
-        
+    
     NSMutableArray* identities_section=[[NSMutableArray alloc] initWithCapacity:10];
     NSMutableArray* devices_section=[[NSMutableArray alloc] initWithCapacity:5];
     
@@ -450,19 +465,7 @@
             [footerView addSubview:buttonrome];
         }
         
-        NSString *title = nil;
-        if ([self.user.password boolValue]) {
-            self.btnForgetPassword.hidden = NO;
-            title = NSLocalizedString(@"Change password...", nil);
-        } else {
-            self.btnForgetPassword.hidden = NO;
-            title = NSLocalizedString(@"Set password...", nil);
-        }
-        NSMutableAttributedString *str3 = [[NSMutableAttributedString alloc] initWithString:title];
-        NSUInteger length = str3.length;
-        [str3 addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, length)];
-        [str3 addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, length)];
-        [self.btnForgetPassword setAttributedTitle:str3 forState:UIControlStateNormal];
+        [self fillChangePassword:[self.user.password boolValue]];
         
         return footerView;
     }
@@ -596,6 +599,9 @@
     } else {
         EFAuthenticationViewController *vc = [[EFAuthenticationViewController alloc] initWithModel:self.model];
         vc.user = self.user;
+        vc.nextStep = ^void(void){
+            [self fillChangePassword:[self.user.password boolValue]];
+        };
         [self presentViewController:vc animated:YES completion:nil];
     }
     
@@ -605,10 +611,8 @@
 {
     EFAuthenticationViewController *vc = [[EFAuthenticationViewController alloc] initWithModel:self.model];
     vc.user = self.user;
-    vc.nextStep = ^BOOL(void){
+    vc.nextStep = ^void(void){
         NSLog(@"call next step");
-        
-        return YES;
     };
     [self presentViewController:vc animated:YES completion:nil];
 }
