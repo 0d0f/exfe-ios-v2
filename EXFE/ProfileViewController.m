@@ -344,7 +344,7 @@
             [cell setAvartar:defaultImage];
         } else {
             [[EFDataManager imageManager] loadImageForView:cell
-                                          setImageSelector:@selector(setAvatar:)
+                                          setImageSelector:@selector(setAvartar:)
                                                placeHolder:defaultImage
                                                        key:imageKey
                                            completeHandler:nil];
