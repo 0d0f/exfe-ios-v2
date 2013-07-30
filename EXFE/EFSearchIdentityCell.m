@@ -128,16 +128,11 @@
             if (!imageKey) {
                 self.avatarImageView.image = defaultImage;
             } else {
-                if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
-                    self.avatarImageView.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
-                } else {
-                    [[EFDataManager imageManager] cachedImageForKey:imageKey
-                                                    completeHandler:^(UIImage *image){
-                                                        if (image) {
-                                                            self.avatarImageView.image = image;
-                                                        }
-                                                    }];
-                }
+                [[EFDataManager imageManager] loadImageForView:self.avatarImageView
+                                              setImageSelector:@selector(setImage:)
+                                                   placeHolder:defaultImage
+                                                           key:imageKey
+                                               completeHandler:nil];
             }
         } else {
             self.avatarImageView.image = [UIImage imageNamed:@"portrait_default.png"];

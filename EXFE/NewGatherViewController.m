@@ -973,19 +973,13 @@
         item.avatar = defaultImage;
         [item setNeedsDisplay];
     } else {
-        if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
-            item.avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
-        } else {
-            item.avatar = defaultImage;
-            [item setNeedsDisplay];
-            [[EFDataManager imageManager] cachedImageForKey:imageKey
-                                            completeHandler:^(UIImage *image){
-                                                if (image) {
-                                                    item.avatar = image;
-                                                    [item setNeedsDisplay];
-                                                }
-                                            }];
-        }
+        [[EFDataManager imageManager] loadImageForView:item
+                                      setImageSelector:@selector(setAvatar:)
+                                           placeHolder:defaultImage
+                                                   key:imageKey
+                                       completeHandler:^(BOOL hasLoaded){
+                                           [item setNeedsDisplay];
+                                       }];
     }
     
     return item;

@@ -642,16 +642,13 @@
         
         User *_user = [User getDefaultUser];
         if (_user) {
-            NSString *imgName = _user.avatar_filename;
+            NSString *imageName = _user.avatar_filename;
             
-            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imgName]) {
-                self.headView.headImage = [[EFDataManager imageManager] cachedImageInMemoryForKey:imgName];
-            } else {
-                [[EFDataManager imageManager] cachedImageForKey:imgName
-                                                completeHandler:^(UIImage *image){
-                                                    self.headView.headImage = image;
-                                                }];
-            }
+            [[EFDataManager imageManager] loadImageForView:self.headView
+                                          setImageSelector:@selector(setHeadImage:)
+                                               placeHolder:[UIImage imageNamed:@"portrait_default.png"]
+                                                       key:imageName
+                                           completeHandler:nil];
         }
         return profileCell;
     } else if (1 == indexPath.section) {
@@ -767,51 +764,45 @@
         if (!avatarimgurl) {
             cell.avatar = nil;
         } else {
-            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:avatarimgurl]) {
-                cell.avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:avatarimgurl];
-            } else {
-                [[EFDataManager imageManager] cachedImageForKey:avatarimgurl
-                                                completeHandler:^(UIImage *image){
-                                                    if (image) {
-                                                        cell.avatar = image;
-                                                    }
-                                                }];
-            }
+            [[EFDataManager imageManager] loadImageForView:cell
+                                          setImageSelector:@selector(setAvatar:)
+                                               placeHolder:[UIImage imageNamed:@"portrait_default.png"]
+                                                       key:avatarimgurl
+                                           completeHandler:nil];
         }
         
-      NSString *backimgurl =nil;
+        NSString *backimgurl =nil;
         NSArray *widgets = cross.widget;
         for(NSDictionary *widget in widgets) {
             if([[widget objectForKey:@"type"] isEqualToString:@"Background"]) {
                 backimgurl=[Util getBackgroundLink:[widget objectForKey:@"image"]];
             }
         }
-      CGSize targetSize = CGSizeMake((320 - CARD_VERTICAL_MARGIN * 2) * [UIScreen mainScreen].scale, 44 * [UIScreen mainScreen].scale);
-      if(backimgurl==nil || backimgurl.length<=5){
-        cell.bannerimg=nil;
-      }else{
-        NSString *extname=[backimgurl substringFromIndex:[backimgurl length]-3];
-        if([extname isEqualToString:@"bg/"]){
-          cell.bannerimg=nil;
-        }else{
-          UIImage *backimg=[[ImgCache sharedManager] getImgFromCache:backimgurl withSize:targetSize];
-          if(backimg != nil && ![backimg isEqual:[NSNull null]]){
-            cell.bannerimg=backimg;
-          }
-          else
-          {
-            dispatch_queue_t imgQueue = dispatch_queue_create("fetchimg thread", NULL);
-            dispatch_async(imgQueue, ^{
-              UIImage *image=[[ImgCache sharedManager] getImgFrom:backimgurl withSize:targetSize];
-              cell.bannerimg=nil;
-              dispatch_async(dispatch_get_main_queue(), ^{
-                cell.bannerimg = image;
-              });
-            });
-            dispatch_release(imgQueue);
-          }
+        
+        CGSize targetSize = CGSizeMake((320 - CARD_VERTICAL_MARGIN * 2) * [UIScreen mainScreen].scale, 44 * [UIScreen mainScreen].scale);
+        static UIImage *defaultImage = nil;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            defaultImage = [[EFDataManager imageManager] resizeImage:[UIImage imageNamed:@"x_titlebg_default.jpg"] toSize:targetSize];
+        });
+        
+        
+        if (backimgurl == nil || backimgurl.length <= 5) {
+            cell.bannerimg = defaultImage;
+        } else {
+            NSString *extname = [backimgurl substringFromIndex:[backimgurl length] - 3];
+            
+            if ([extname isEqualToString:@"bg/"]) {
+                cell.bannerimg = defaultImage;
+            } else {
+                [[EFDataManager imageManager] loadImageForView:cell
+                                              setImageSelector:@selector(setBannerimg:)
+                                                          size:targetSize
+                                                   placeHolder:defaultImage
+                                                           key:backimgurl
+                                               completeHandler:nil];
+            }
         }
-      }
 
         cell.delegate = self;
       
@@ -1017,19 +1008,19 @@
     exfeeViewController.shadowImage = [UIImage imageNamed:@"tabshadow_x.png"];
     
     // MadaurerMapViewController
-    EFMarauderMapViewController *mapViewController = [[EFMarauderMapViewController alloc] initWithNibName:@"EFMarauderMapViewController" bundle:nil];
-    
-    EFTabBarItem *tabBarItem4 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_routex_30.png"]];
-    tabBarItem4.highlightImage = [UIImage imageNamed:@"widget_routex_30shine.png"];
-    
-    mapViewController.customTabBarItem = tabBarItem4;
-    mapViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
-    mapViewController.shadowImage = nil;
-    mapViewController.cross = cross;
-    mapViewController.model = model;
+//    EFMarauderMapViewController *mapViewController = [[EFMarauderMapViewController alloc] initWithNibName:@"EFMarauderMapViewController" bundle:nil];
+//    
+//    EFTabBarItem *tabBarItem4 = [EFTabBarItem tabBarItemWithImage:[UIImage imageNamed:@"widget_routex_30.png"]];
+//    tabBarItem4.highlightImage = [UIImage imageNamed:@"widget_routex_30shine.png"];
+//    
+//    mapViewController.customTabBarItem = tabBarItem4;
+//    mapViewController.tabBarStyle = kEFTabBarStyleDoubleHeight;
+//    mapViewController.shadowImage = nil;
+//    mapViewController.cross = cross;
+//    mapViewController.model = model;
     
     // Init TabBarViewController
-    EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController, mapViewController]];
+    EFTabBarViewController *tabBarViewController = [[EFTabBarViewController alloc] initWithViewControllers:@[crossGroupViewController, conversationViewController, exfeeViewController]];
     
     __weak EFTabBarViewController *weakTab = tabBarViewController;
     tabBarViewController.titlePressedHandler = ^{
@@ -1044,7 +1035,7 @@
     };
     
     tabBarViewController.backButtonActionHandler = ^{
-        RKObjectManager *objectManager = model.objectManager;
+        RKObjectManager *objectManager = (RKObjectManager *)model.objectManager;
         [objectManager.operationQueue cancelAllOperations];
         [self.navigationController popToRootViewControllerAnimated:YES];
     };
@@ -1062,18 +1053,12 @@
                 
                 if (!imgurl) {
                     tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
-                } else {
-                    if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imgurl]) {
-                        tabBarViewController.tabBar.backgroundImage = [[EFDataManager imageManager] cachedImageInMemoryForKey:imgurl];
-                    } else {
-                        tabBarViewController.tabBar.backgroundImage = [UIImage imageNamed:@"x_titlebg_default.jpg"];
-                        [[EFDataManager imageManager] cachedImageForKey:imgurl
-                                                        completeHandler:^(UIImage *image){
-                                                            if (image) {
-                                                                tabBarViewController.tabBar.backgroundImage = image;
-                                                            }
-                                                        }];
-                    }
+                } else { 
+                    [[EFDataManager imageManager] loadImageForView:tabBarViewController.tabBar
+                                                  setImageSelector:@selector(setBackgroundImage:)
+                                                       placeHolder:[UIImage imageNamed:@"x_titlebg_default.jpg"]
+                                                               key:imgurl
+                                                   completeHandler:nil];
                 }
                 
                 flag = YES;

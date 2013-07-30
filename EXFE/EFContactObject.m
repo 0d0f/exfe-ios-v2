@@ -110,8 +110,6 @@
         if (localContact.avatar) {
             UIImage *avatarImage = [UIImage imageWithData:localContact.avatar];
             [[EFDataManager imageManager] cacheImage:avatarImage forKey:localContact.indexfield shouldWriteToDisk:YES];
-            
-//            [[EFImageManager defaultManager] cacheImage:avatarImage forKey:localContact.indexfield];
         }
         
         self.roughIdentities = [localContact roughIdentities];

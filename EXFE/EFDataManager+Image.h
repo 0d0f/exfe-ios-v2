@@ -27,4 +27,10 @@
 // Setter
 - (void)cacheImage:(UIImage *)image forKey:(NSString *)aKey shouldWriteToDisk:(BOOL)writeToDisk;
 
+- (void)loadImageForView:(id)view setImageSelector:(SEL)selector placeHolder:(UIImage *)image key:(NSString *)aKey completeHandler:(void (^)(BOOL hasLoaded))handler;
+- (void)loadImageForView:(id)view setImageSelector:(SEL)selector size:(CGSize)size placeHolder:(UIImage *)image key:(NSString *)aKey completeHandler:(void (^)(BOOL hasLoaded))handler;
+- (void)cancelLoadImageForView:(UIView *)view;
+
+- (UIImage *)resizeImage:(UIImage *)image toSize:(CGSize)size;
+
 @end

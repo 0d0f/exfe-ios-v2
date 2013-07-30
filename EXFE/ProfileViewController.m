@@ -254,17 +254,11 @@
         if (!imageKey) {
             useravatar.image = defaultImage;
         } else {
-            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
-                useravatar.image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
-            } else {
-                useravatar.image = defaultImage;
-                [[EFDataManager imageManager] cachedImageForKey:imageKey
-                                                completeHandler:^(UIImage *image){
-                                                    if (image) {
-                                                        useravatar.image = image;
-                                                    }
-                                                }];
-            }
+            [[EFDataManager imageManager] loadImageForView:useravatar
+                                          setImageSelector:@selector(setImage:)
+                                               placeHolder:defaultImage
+                                                       key:imageKey
+                                           completeHandler:nil];
         }
     }
 }
@@ -369,18 +363,11 @@
         if (!imageKey) {
             [cell setAvartar:defaultImage];
         } else {
-            if ([[EFDataManager imageManager] isImageCachedInMemoryForKey:imageKey]) {
-                UIImage *image = [[EFDataManager imageManager] cachedImageInMemoryForKey:imageKey];
-                [cell setAvartar:image];
-            } else {
-                [cell setAvartar:defaultImage];
-                [[EFDataManager imageManager] cachedImageForKey:imageKey
-                                                completeHandler:^(UIImage *image){
-                                                    if (image) {
-                                                        [cell setAvartar:image];
-                                                    }
-                                                }];
-            }
+            [[EFDataManager imageManager] loadImageForView:cell
+                                          setImageSelector:@selector(setAvartar:)
+                                               placeHolder:defaultImage
+                                                       key:imageKey
+                                           completeHandler:nil];
         }
         
         [cell setLabelName:[identity getDisplayName]];
