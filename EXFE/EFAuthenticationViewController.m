@@ -523,6 +523,10 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
     _inlineError.hidden = NO;
     
     CSLinearLayoutItem *baseitem = [self.rootView findItemByTag:kTagBtnAuthIdentity];
+    if (baseitem == nil) {
+        baseitem = [self.rootView findItemByTag:kTagBtnAuthForSet];
+    }
+    
     if (baseitem) {
         [_inlineError wrapContent];
         CSLinearLayoutItem *item = [self.rootView findItemByTag:_inlineError.tag];
@@ -826,7 +830,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
 - (void)authenticate:(UIControl*)sender
 {
     sender.enabled = NO;
-    //    [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
+    [self showIndicatorAt:CGPointMake(285, sender.center.y) style:UIActivityIndicatorViewStyleWhite];
     [self authenticateIdentity:self.identity
                        success:^{
                            sender.enabled = YES;
@@ -1071,13 +1075,19 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
             };
         };
         
+        id fa = ^{
+            if (failure) {
+                failure();
+            }
+        };
+        
         switch (provider) {
             case kProviderTwitter:{
-                [self twitterAuth:self.identity.external_username withProvider:[Identity getProviderCode:self.identity.provider] success:su failure:nil];
+                [self twitterAuth:self.identity.external_username withProvider:[Identity getProviderCode:self.identity.provider] success:su failure:fa];
                 return;
             }  break;
             case kProviderFacebook:{
-                [self facebookAuthsuccess:su failure:nil];
+                [self facebookAuthsuccess:su failure:fa];
                 return;
             } break;
             default:
@@ -1126,9 +1136,11 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                                              if (c == 401) {
                                                                  if ([@"no_signin" isEqualToString:errorType]) {
                                                                      // error: "Not sign in"
+                                                                     [self showInlineError:NSLocalizedString(@"Authentication failed.", nil) with:NSLocalizedString(@"Please check and allow EXFE to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.", nil)];
                                                                  } else if ([@"token_staled" isEqualToString:errorType]) {
                                                                      // error: "Token expired"
                                                                      // retry verication/authentication again
+                                                                     [self showInlineError:NSLocalizedString(@"Authentication failed.", nil) with:NSLocalizedString(@"Please check and allow EXFE to use your account in Facebook menu of ‘Settings’ app. Retry or use other identity.", nil)];
                                                                  }
                                                              } else if (c == 429){
                                                                  
@@ -1394,7 +1406,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
 {
     NSAssert(kProviderTwitter == provider, @"Entry for twitter only");
     
-    [self syncTwitterAccounts:^(NSArray *accounts) {
+    [self syncFacebookAccounts:^(NSArray *accounts) {
         BOOL webauth = YES;
         
         if (accounts.count > 0) {
@@ -1529,6 +1541,8 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                                               if (success) {
                                                                   success(u, t);
                                                               }
+                                                              
+                                                              return;
                                                           }
                                                               break;
                                                           case 400:{
@@ -1542,6 +1556,9 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                                           default:
                                                               break;
                                                       }
+                                                  }
+                                                  if (failure) {
+                                                      failure();
                                                   }
                                               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                   if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
@@ -1566,6 +1583,9 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                                   }
                                                   
                                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                  if (failure) {
+                                                      failure();
+                                                  }
                                               }];
                                           }
                                               break;
@@ -1574,6 +1594,9 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                               //                                              [self showInlineError:@"Login Failed." with:@"There is something wrong. Please try again later."];
                                               [self showInlineError:NSLocalizedString(@"Authorization failed.", nil) with:NSLocalizedString(@"Please check your network connection and account setting in Settings app.", nil)];
                                               [self syncFBAccount];
+                                              if (failure) {
+                                                  failure();
+                                              }
                                               break;
                                           default:
                                               break;
