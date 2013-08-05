@@ -12,7 +12,6 @@
 #import "PlaceAnnotation.h"
 #import "NewGatherViewController.h"
 #import "EXPlaceEditView.h"
-#import "WildcardGestureRecognizer.h"
 #import "EXGradientToolbarView.h"
 #import "Util.h"
 #import <QuartzCore/QuartzCore.h>
