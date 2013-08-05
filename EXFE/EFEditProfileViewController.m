@@ -272,7 +272,6 @@
     body.hidden = YES;
     WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
     tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
-        NSLog(@"touch ...");
         if (self.activeInputView) {
             switch (self.activeInputView.tag) {
                 case kTagName:
@@ -336,7 +335,7 @@
     
     
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    indicator.center = self.view.center;
+    indicator.center = [self.view convertPoint:body.center fromView:body.superview];
     indicator.hidden = YES;
     [self.view addSubview:indicator];
     self.indicatorView = indicator;
@@ -498,11 +497,14 @@
         }
         
         self.indicatorView.hidden = NO;
+        [self.indicatorView startAnimating];
         [[EFDataManager imageManager] loadImageForView:self
                                       setImageSelector:@selector(fillAvatar:)
                                            placeHolder:nil
                                                    key:imageKey
                                        completeHandler:^(BOOL hasLoaded) {
+                                           NSLog(@"hide it");
+                                           [self.indicatorView stopAnimating];
                                            self.indicatorView.hidden = YES;
                                        }];
     }
@@ -645,7 +647,8 @@
     [self bestZoomWithAnimation:NO];
     
     self.fillAvatarFlag = NO;
-//    [self.data removeObjectForKey:kModelKeyImageDirty];
+    
+    NSLog(@"fillAvatar done");
 }
 
 - (void)fillBio:(NSString *)bio
@@ -659,8 +662,6 @@
 - (void)handleDoubleTap:(UIGestureRecognizer *)gestureRecognizer
 {
     [self bestZoomWithAnimation:YES];
-    
-//    self.imageScrollView.contentOffset = 
     
     id num = [self.data valueForKey:kModelKeyImageDirty];
     if (!num) {
@@ -872,7 +873,7 @@
     return self.imageScrollRange;
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     if (!self.readonly && !self.fillAvatarFlag) {
         id num = [self.data valueForKey:kModelKeyImageDirty];
