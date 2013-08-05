@@ -43,6 +43,7 @@
 @property (nonatomic, strong) NSMutableDictionary *data;
 
 @property (nonatomic, assign) CGPoint point;
+@property (nonatomic, assign) BOOL fillAvatarFlag;
 
 #pragma mark Quick Access to UI Elements
 @property (nonatomic, strong) UILabel *name;
@@ -118,6 +119,7 @@
     if (self) {
         self.model = model;
         self.data = [NSMutableDictionary dictionary];
+        self.fillAvatarFlag = NO;
     }
     return self;
 }
@@ -529,6 +531,8 @@
         return;
     }
     
+    self.fillAvatarFlag = YES;
+    
     float paddingRatio = 0.5;
     
     [self.imageScrollView setMinimumZoomScale:1.0];
@@ -594,7 +598,8 @@
     
     [self bestZoom];
     
-    [self.data removeObjectForKey:kModelKeyImageDirty];
+    self.fillAvatarFlag = NO;
+//    [self.data removeObjectForKey:kModelKeyImageDirty];
 }
 
 - (void)fillBio:(NSString *)bio
@@ -722,7 +727,7 @@
         }
     }
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [self dismissModalViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)takePicture:(UIControl*)view
@@ -848,7 +853,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (!self.readonly) {
+    if (!self.readonly && !self.fillAvatarFlag) {
         id num = [self.data valueForKey:kModelKeyImageDirty];
         if (!num) {
             [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
@@ -864,7 +869,7 @@
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
-    if (!self.readonly) {
+    if (!self.readonly && !self.fillAvatarFlag) {
         id num = [self.data valueForKey:kModelKeyImageDirty];
         if (!num) {
             [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
@@ -889,9 +894,14 @@
 {
     [self dismissModalViewControllerAnimated:YES];
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    
     if ([mediaType isEqualToString:@"public.image"]){
         
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+            UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+        }
+        
         [self.data setValue:image forKey:kModelKeyOriginal];
         
         picker.navigationBar.hidden = YES;
@@ -902,6 +912,11 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+{
+    //NSLog(@"Image saved.");
 }
 
 #pragma mark - Private methods

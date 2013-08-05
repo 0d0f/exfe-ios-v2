@@ -922,7 +922,7 @@
     RKObjectManager *objectManager = self.model.objectManager;
     objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:2];
-    if (name) {
+    if (name.length > 0) {
         [params setObject:name forKey:@"name"];
     }
     if (bio) {
@@ -962,7 +962,7 @@
     RKObjectManager *objectManager = self.model.objectManager;
     objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:2];
-    if (name) {
+    if (name.length > 0) {
         [params setObject:name forKey:@"name"];
     }
     if (bio) {
