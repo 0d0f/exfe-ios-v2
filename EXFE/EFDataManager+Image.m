@@ -140,7 +140,6 @@
 
 - (void)loadImageForView:(id)view setImageSelector:(SEL)selector placeHolder:(UIImage *)placeholder key:(NSString *)aKey completeHandler:(void (^)(BOOL hasLoaded))handler {
     NSParameterAssert(view);
-    NSParameterAssert(placeholder);
     NSParameterAssert(aKey);
     
     [self.loadingMap setObject:aKey forKey:[NSValue valueWithNonretainedObject:view]];

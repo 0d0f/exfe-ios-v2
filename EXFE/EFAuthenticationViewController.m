@@ -1062,7 +1062,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
     
     Provider provider = [Identity getProviderCode:self.identity.provider];
     
-    if (kProviderTyperAuthorization == [Identity getProviderTypeByCode:provider]) {
+    if (kProviderTypeAuthorization == [Identity getProviderTypeByCode:provider]) {
         
         id su = ^(NSNumber *user_id, NSString *token) {
             if ([user_id integerValue] == self.model.userId) {
@@ -1342,7 +1342,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
         
         if (webauth) {
             // auth web
-            if ([Identity getProviderTypeByCode:provider] == kProviderTyperAuthorization) {
+            if ([Identity getProviderTypeByCode:provider] == kProviderTypeAuthorization) {
                 OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
                 oauth.external_username = external_username;
                 oauth.onSuccess = ^(NSDictionary * params){
@@ -1421,7 +1421,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
             
             if (webauth) {
                 // auth web
-                if ([Identity getProviderTypeByCode:provider] == kProviderTyperAuthorization) {
+                if ([Identity getProviderTypeByCode:provider] == kProviderTypeAuthorization) {
                     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
                     oauth.external_username = external_id;
                     oauth.onSuccess = ^(NSDictionary * params){

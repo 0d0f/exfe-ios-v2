@@ -100,10 +100,14 @@
         self.camera.hidden = YES;
         self.name.userInteractionEnabled = NO;
         self.bio.editable = YES;
+        self.imageScrollView.userInteractionEnabled = NO;
+        self.imageScrollView.scrollEnabled = NO;
     } else {
         self.camera.hidden = NO;
-        self.name.userInteractionEnabled = NO;
+        self.name.userInteractionEnabled = YES;
         self.bio.editable = NO;
+        self.imageScrollView.userInteractionEnabled = YES;
+        self.imageScrollView.scrollEnabled = YES;
     }
 }
 
@@ -154,6 +158,9 @@
     
     [self.view addSubview:imageScrollView];
     self.imageScrollView = imageScrollView;
+    self.imageScrollView.userInteractionEnabled = !self.readonly;
+    self.imageScrollView.scrollEnabled = !self.readonly;
+
 
     
     // View port layer
@@ -518,6 +525,10 @@
 
 - (void)fillAvatar:(UIImage *)image
 {
+    if (!image) {
+        return;
+    }
+    
     float paddingRatio = 0.5;
     
     [self.imageScrollView setMinimumZoomScale:1.0];
@@ -672,43 +683,44 @@
 #pragma mark UIButton action
 - (void)goBack:(id)view
 {
-    if ([self.name isFirstResponder]) {
-        [self textViewDidEndEditing:self.inputName];
-    }
-    
-    if ([self.bio isFirstResponder]) {
-        [self textViewDidEndEditing:self.bio];
-    }
-    
-    if (self.data.count > 0) {
-        NSString * name = [self.data valueForKey:kModelKeyName];
-        NSString * bio = [self.data valueForKey:kModelKeyBio];
-        if (name || bio) {
-            if (self.isEditUser) {
-                [self.model updateUserName:name withBio:bio];
-            } else {
-                [self.model updateIdentity:self.identity withName:name withBio:bio];
-            }
+    if (!self.readonly) {
+        if ([self.name isFirstResponder]) {
+            [self textViewDidEndEditing:self.inputName];
         }
         
-        NSNumber * dirty = [self.data valueForKey:kModelKeyImageDirty];
+        if ([self.bio isFirstResponder]) {
+            [self textViewDidEndEditing:self.bio];
+        }
         
-        if (dirty && [dirty boolValue]) {
-            NSDictionary *dict = [self cropedImages];
-            UIImage *full = [dict valueForKey:kKeyImageFull];
-            UIImage *large_raw = [dict valueForKey:kKeyImageLarge];
-            UIImage *large = [self imageWithImage:large_raw scaledToSize:CGSizeMake(320, 320)];
-            UIImage *small = [self imageWithImage:large_raw scaledToSize:CGSizeMake(80, 80)];
-            if (full) {
+        if (self.data.count > 0) {
+            NSString * name = [self.data valueForKey:kModelKeyName];
+            NSString * bio = [self.data valueForKey:kModelKeyBio];
+            if (name || bio) {
                 if (self.isEditUser) {
-                    [self.model updateUserAvatar:full withLarge:large withSmall:small];
+                    [self.model updateUserName:name withBio:bio];
                 } else {
-                    [self.model updateIdentity:self.identity withAvatar:full withLarge:large withSmall:small];
+                    [self.model updateIdentity:self.identity withName:name withBio:bio];
+                }
+            }
+            
+            NSNumber * dirty = [self.data valueForKey:kModelKeyImageDirty];
+            
+            if (dirty && [dirty boolValue]) {
+                NSDictionary *dict = [self cropedImages];
+                UIImage *full = [dict valueForKey:kKeyImageFull];
+                UIImage *large_raw = [dict valueForKey:kKeyImageLarge];
+                UIImage *large = [self imageWithImage:large_raw scaledToSize:CGSizeMake(320, 320)];
+                UIImage *small = [self imageWithImage:large_raw scaledToSize:CGSizeMake(80, 80)];
+                if (full) {
+                    if (self.isEditUser) {
+                        [self.model updateUserAvatar:full withLarge:large withSmall:small];
+                    } else {
+                        [self.model updateIdentity:self.identity withAvatar:full withLarge:large withSmall:small];
+                    }
                 }
             }
         }
     }
-    
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self dismissModalViewControllerAnimated:YES];
 }
@@ -729,7 +741,7 @@
         }
         
     }];
-    [sheet addButtonWithTitle:NSLocalizedString(@"Pick a photo from Library", nil) handler:^{
+    [sheet addButtonWithTitle:NSLocalizedString(@"Choose a photo", nil) handler:^{
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentModalViewController:picker animated:YES];
     }];
@@ -836,7 +848,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (self.readonly) {
+    if (!self.readonly) {
         id num = [self.data valueForKey:kModelKeyImageDirty];
         if (!num) {
             [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
@@ -852,7 +864,7 @@
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
-    if (self.readonly) {
+    if (!self.readonly) {
         id num = [self.data valueForKey:kModelKeyImageDirty];
         if (!num) {
             [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];

@@ -532,7 +532,7 @@
             
             [[UIApplication sharedApplication] setStatusBarHidden:YES];
             EFEditProfileViewController* vc = [[EFEditProfileViewController alloc] initWithModel:self.model];
-            vc.readonly = (pt == kProviderTyperAuthorization);
+            vc.readonly = (pt != kProviderTypeVerification);
             vc.identity = identity;
             [self presentViewController:vc animated:YES completion:nil];
         }
