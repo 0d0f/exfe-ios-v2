@@ -128,7 +128,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
         return kProviderFacebook;
     }
     
-    NSString *phoneRegex = @"^+[0-9]{5,15}";
+    NSString *phoneRegex = @"^[+][0-9]{5,15}$";
     NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", phoneRegex];
     if ([phoneTest evaluateWithObject:lowercase] == YES){
         return kProviderPhone;
