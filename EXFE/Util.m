@@ -493,7 +493,8 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 
     NSString *errormsg = @"";
     NSString *errorTitle = @"";
-    if (err.code == 500) {
+    if (err.code == NSURLErrorBadServerResponse) {
+        // http://stackoverflow.com/questions/16759630/afnetworking-returning-reponse-in-nserror-object
         errorTitle = @"Server Error";
         errormsg = @"Sorry, something is technically wrong in the \"cloud\", we’re fixing it up.";
     } else { //NSURLError.h
