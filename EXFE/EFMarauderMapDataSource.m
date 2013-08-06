@@ -15,6 +15,9 @@
 #import "EFRouteLocation.h"
 #import "EFRoutePath.h"
 #import "IdentityId+EXFE.h"
+#import "Cross.h"
+#import "Exfee+EXFE.h"
+#import "EFAPI.h"
 
 #define kStreamingDataTypeLocaionts     @"/v3/crosses/routex/breadcrumbs"
 #define kStreamingDataTypeRoute         @"/v3/crosses/routex/geomarks"
@@ -24,8 +27,11 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 @interface EFMarauderMapDataSource ()
 
+@property (nonatomic, strong) NSMutableArray        *people;
+
 @property (nonatomic, strong) NSMutableArray        *routeLocations;
 @property (nonatomic, strong) NSMutableDictionary   *routeLocationAnnotationMap;
+
 @property (nonatomic, strong) EFHTTPStreaming       *httpStreaming;
 
 @end
@@ -34,6 +40,8 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 - (void)_postPathDidChangeNotification;
 - (void)_postLocationDidChangeNotification;
+
+- (void)_initPeople;
 
 @end
 
@@ -51,22 +59,34 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     });
 }
 
+- (void)_initPeople {
+    NSMutableArray *people = [[NSMutableArray alloc] init];
+    
+    NSArray *invitations = [self.cross.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
+    for (NSArray *invitation in invitations) {
+        EFMapPerson *person = [[EFMapPerson alloc] initWithIdentity:((Invitation *)invitation[0]).identity];
+        [people addObject:person];
+    }
+    
+    self.people = people;
+}
+
 @end
 
 @implementation EFMarauderMapDataSource
 
-- (id)initWithCrossId:(NSInteger)crossId {
+- (id)initWithCross:(Cross *)cross {
     self = [super init];
     if (self) {
-        self.crossId = crossId;
+        self.cross = cross;
+        
+        [self _initPeople];
+        
         self.routeLocations = [[NSMutableArray alloc] init];
         self.routeLocationAnnotationMap = [[NSMutableDictionary alloc] init];
     }
     
     return self;
-}
-
-- (void)addLocation:(EFLocation *)location {
 }
 
 #pragma mark - Property Accessor
@@ -81,6 +101,20 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     }
     
     return destination;
+}
+
+#pragma mark - People
+
+- (NSUInteger)numberOfPeople {
+    return self.people.count;
+}
+
+- (EFMapPerson *)me {
+    return [self personAtIndex:0];
+}
+
+- (EFMapPerson *)personAtIndex:(NSUInteger)index {
+    return self.people[index];
 }
 
 #pragma mark - RouteLocation
@@ -196,8 +230,8 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSString *userToken = delegate.model.userToken;
     
-    NSURL *streamingURL = [NSURL URLWithString:[NSString stringWithFormat:@"/v3/crosses/%d/routex?_method=WATCH&coordinate=mars&token=%@", self.crossId, userToken] relativeToURL:baseURL];
-//    NSLog(@"%@", [streamingURL absoluteString]);
+    NSInteger crossId = [self.cross.cross_id integerValue];
+    NSURL *streamingURL = [NSURL URLWithString:[NSString stringWithFormat:@"/v3/crosses/%d/routex?_method=WATCH&coordinate=mars&token=%@", crossId, userToken] relativeToURL:baseURL];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:streamingURL];
     request.HTTPMethod = @"POST";
     
@@ -211,6 +245,30 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
         [self.httpStreaming close];
         self.httpStreaming = nil;
     }
+}
+
+#pragma mark - Register
+
+- (void)registerToUpdateLocation {
+    EFAccessInfo *accessInfo = [[EFAccessInfo alloc] initWithCross:self.cross shouldSaveBreadcrumbs:YES];
+    
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate.model.apiServer postRouteXAccessInfo:@[accessInfo]
+                                           success:^{
+                                           }
+                                           failure:^(NSError *error){
+                                           }];
+}
+
+- (void)unregisterToUpdateLocation {
+    EFAccessInfo *accessInfo = [[EFAccessInfo alloc] initWithCross:self.cross shouldSaveBreadcrumbs:NO];
+    
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate.model.apiServer postRouteXAccessInfo:@[accessInfo]
+                                           success:^{
+                                           }
+                                           failure:^(NSError *error){
+                                           }];
 }
 
 #pragma mark - EFHTTPStreamingDelegate

@@ -103,6 +103,17 @@
     return [NSString stringWithFormat:@"provider:%@ externalID:%@ externalUsername:%@", self.provider, self.externalID, self.externalUsername];
 }
 
+- (void)setSelected:(BOOL)selected {
+    if (selected == _selected)
+        return;
+    _selected = selected;
+    
+    if (selected && (kEFRoughIdentityGetIdentityStatusReady == self.status || kEFRoughIdentityGetIdentityStatusFailure == self.status)) {
+        [self getIdentityWithSuccess:nil
+                             failure:nil];
+    }
+}
+
 - (void)setIdentity:(Identity *)identity {
     if (identity == _identity)
         return;

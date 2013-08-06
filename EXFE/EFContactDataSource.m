@@ -154,6 +154,19 @@
     }
 }
 
+- (void)roughtIdentityDidChangeInContactObjectAtIndexPath:(NSIndexPath *)indexPath {
+    EFContactObject *contactObject = [self contactObjectAtIndexPath:indexPath];
+    [self roughtIdentityDidChangeInContactObject:contactObject];
+}
+
+- (void)roughtIdentityDidChangeInContactObject:(EFContactObject *)object {
+    [object roughIdentitiesSelectedStateDidChange];
+    
+    if (_selectionDidChangeHandler) {
+        self.selectionDidChangeHandler();
+    }
+}
+
 - (void)clearRecentData {
     [self.recentList removeAllObjects];
 }

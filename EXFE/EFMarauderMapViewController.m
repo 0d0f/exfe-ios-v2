@@ -9,6 +9,7 @@
 #import "EFMarauderMapViewController.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import <BlocksKit/BlocksKit.h>
 #import "EFMapPersonCell.h"
 #import "EFMapColorButton.h"
 #import "EFMapKit.h"
@@ -22,6 +23,7 @@
 #import "EFPersonAnnotation.h"
 #import "EFPersonAnnotationView.h"
 #import "EFMapPopMenu.h"
+#import "EFLocationManager.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 #define kShadowOffset       (3.0f)
@@ -99,38 +101,38 @@
 }
 
 - (void)_getRoute {
-    [self.model.apiServer getRouteWithCrossId:[self.cross.cross_id integerValue]
-                                      isEarth:NO
-                                      success:^(NSArray *routeLocations, NSArray *routePaths){
-                                          for (EFRouteLocation *routeLocation in routeLocations) {
-                                              [self.mapDataSource addRouteLocation:routeLocation toMapView:self.mapView];
-                                          }
-                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                              [self.tableView reloadData];
-                                              [self.selfTableView reloadData];
-                                          });
-                                      }
-                                      failure:^(NSError *error){
-                                          NSLog(@"%@", error);
-                                      }];
+//    [self.model.apiServer getRouteWithCrossId:[self.cross.cross_id integerValue]
+//                                      isEarth:NO
+//                                      success:^(NSArray *routeLocations, NSArray *routePaths){
+//                                          for (EFRouteLocation *routeLocation in routeLocations) {
+//                                              [self.mapDataSource addRouteLocation:routeLocation toMapView:self.mapView];
+//                                          }
+//                                          dispatch_async(dispatch_get_main_queue(), ^{
+//                                              [self.tableView reloadData];
+//                                              [self.selfTableView reloadData];
+//                                          });
+//                                      }
+//                                      failure:^(NSError *error){
+//                                          NSLog(@"%@", error);
+//                                      }];
 }
 
 - (void)_postRoute {
-#if 0 // test
-    [self.model.apiServer updateRouteWithCrossId:[self.cross.cross_id integerValue]
-                                       locations:nil
-                                          routes:nil
-                                         isEarth:NO
-                                         success:nil
-                                         failure:nil];
-#else
-    [self.model.apiServer updateRouteWithCrossId:[self.cross.cross_id integerValue]
-                                       locations:[self.mapDataSource allRouteLocations]
-                                          routes:@[self.demoRoutePath]
-                                         isEarth:NO
-                                         success:nil
-                                         failure:nil];
-#endif
+//#if 0 // test
+//    [self.model.apiServer updateRouteWithCrossId:[self.cross.cross_id integerValue]
+//                                       locations:nil
+//                                          routes:nil
+//                                         isEarth:NO
+//                                         success:nil
+//                                         failure:nil];
+//#else
+//    [self.model.apiServer updateRouteWithCrossId:[self.cross.cross_id integerValue]
+//                                       locations:[self.mapDataSource allRouteLocations]
+//                                          routes:@[self.demoRoutePath]
+//                                         isEarth:NO
+//                                         success:nil
+//                                         failure:nil];
+//#endif
 }
 
 - (void)_startTimer {
@@ -237,9 +239,9 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
         self.personAnnotationDictionary = [[NSMutableDictionary alloc] initWithCapacity:6];
         self.personDictionary = [[NSMutableDictionary alloc] initWithCapacity:6];
         
-        self.locationManager = [[CLLocationManager alloc] init];
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-        self.locationManager.delegate = self;
+//        self.locationManager = [[CLLocationManager alloc] init];
+//        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+//        self.locationManager.delegate = self;
         
         self.mapView.delegate = self;
         
@@ -281,10 +283,8 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     longPress.delegate = self;
     [self.mapView addGestureRecognizer:longPress];
     
-    self.mapDataSource = [[EFMarauderMapDataSource alloc] initWithCrossId:[self.cross.cross_id integerValue]];
+    self.mapDataSource = [[EFMarauderMapDataSource alloc] initWithCross:self.cross];
     self.mapDataSource.delegate = self;
-    
-    [self _initDemo];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(enterBackground)
@@ -300,11 +300,11 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     [self _closeStreaming];
     
     [self _stopTimer];
-    [self.locationManager stopUpdatingLocation];
+//    [self.locationManager stopUpdatingLocation];
 }
 
 - (void)enterForeground {
-    [self.locationManager startUpdatingLocation];
+//    [self.locationManager startUpdatingLocation];
     [self _openStreaming];
     
     [self _startTimer];
@@ -345,15 +345,39 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     
     [self _openStreaming];
     [self _getRoute];
-    [self.locationManager startUpdatingLocation];
+    
+    if ([[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
+#warning !!! 文本替换
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"第一次使用活点地图"
+                                                            message:@"是否启用"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"残忍的拒绝"
+                                                  otherButtonTitles:@"欣然接受", nil];
+        [alertView show];
+    } else {
+        // register to update location
+        [self.mapDataSource registerToUpdateLocation];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    [self.locationManager stopUpdatingLocation];
+//    [self.locationManager stopUpdatingLocation];
     [self _closeStreaming];
     [self _stopTimer];
     
     [super viewDidDisappear:animated];
+}
+
+#pragma mark - UIAlertView
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == alertView.firstOtherButtonIndex) {
+        // register to update location
+        [self.mapDataSource registerToUpdateLocation];
+        
+        // start updating location
+        [[EFLocationManager defaultManager] startUpdatingLocation];
+    }
 }
 
 #pragma mark - Gesture
@@ -469,20 +493,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     
     Identity *identity = invitation.identity;
     
-    UIImage *avatar = [[EFDataManager imageManager] cachedImageInMemoryForKey:identity.avatar_filename];
-    if (!avatar) {
-        avatar = [UIImage imageNamed:@"portrait_default.png"];
-        
-        [[EFDataManager imageManager] cachedImageForKey:identity.avatar_filename
-                                        completeHandler:^(UIImage *image){
-                                            if (image) {
-                                                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                                            }
-                                        }];
-    }
-    
     EFMapPerson *person = [[EFMapPerson alloc] init];
-    person.avatarImage = avatar;
+    person.avatarName = identity.avatar_filename;
     
     EFRouteLocation *destination = self.mapDataSource.destinationLocation;
     
@@ -676,19 +688,19 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 #pragma mark - Timer Runloop
 
 - (void)timerRunloop:(NSTimer *)timer {
-    [self.model.apiServer updateLocation:self.lastUpdatedLocation
-                             withCrossId:[self.cross.cross_id integerValue]
-                                 isEarth:YES
-                                 success:^(AFHTTPRequestOperation *operation, id responseObject){
-                                     CGFloat latitudeOffset = [[responseObject valueForKey:@"earth_to_mars_latitude"] doubleValue];
-                                     CGFloat longtitudeOffset = [[responseObject valueForKey:@"earth_to_mars_longitude"] doubleValue];
-                                     
-                                     CGPoint offset = (CGPoint){latitudeOffset, longtitudeOffset};
-                                     
-                                     self.mapDataSource.offset = offset;
-                                     self.hasGotOffset = YES;
-                                 }
-                                 failure:nil];
+//    [self.model.apiServer updateLocation:self.lastUpdatedLocation
+//                             withCrossId:[self.cross.cross_id integerValue]
+//                                 isEarth:YES
+//                                 success:^(AFHTTPRequestOperation *operation, id responseObject){
+//                                     CGFloat latitudeOffset = [[responseObject valueForKey:@"earth_to_mars_latitude"] doubleValue];
+//                                     CGFloat longtitudeOffset = [[responseObject valueForKey:@"earth_to_mars_longitude"] doubleValue];
+//                                     
+//                                     CGPoint offset = (CGPoint){latitudeOffset, longtitudeOffset};
+//                                     
+//                                     self.mapDataSource.offset = offset;
+//                                     self.hasGotOffset = YES;
+//                                 }
+//                                 failure:nil];
 }
 
 #pragma mark - EFMapStrokeViewDataSource

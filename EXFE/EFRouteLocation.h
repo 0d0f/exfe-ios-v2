@@ -22,9 +22,10 @@
  "tags": ["place", "park"],          -> locationType
  "icon": "http://...",               -> iconUrl
  "title": "Title",                   -> title
- "description": "Description",       -> subtitle
- "longitude": "x.xxx",              |
- "latitude": "y.yyy",               |-> coordinate
+ "desc": "Description",              -> subtitle
+ "acc": a.aaa,                       -> accuracy
+ "lng": "x.xxx",                    |
+ "lat": "y.yyy",                    |-> coordinate
  }
  */
 
@@ -39,6 +40,7 @@
 @property (nonatomic, copy)     NSURL                   *iconUrl;
 @property (nonatomic, copy)     NSString                *title;
 @property (nonatomic, copy)     NSString                *subtitle;
+@property (nonatomic, assign)   CGFloat                 accuracy;
 @property (nonatomic, assign)   CLLocationCoordinate2D  coordinate;
 
 @property (nonatomic, copy)     NSString                *markTitle;

@@ -18,5 +18,8 @@
 #import "EFLocation.h"
 #import "EFRouteLocation.h"
 #import "EFRoutePath.h"
+#import "EFAccessInfo.h"
+
+#import "EFLocationManager.h"
 
 #endif

@@ -958,8 +958,17 @@ typedef enum {
                 NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
                 
                 for (EFContactObject *object in contactObjects) {
-                    RoughIdentity *roughIdentity = object.roughIdentities[0];
-                    Identity *identity = roughIdentity.identity;
+                    RoughIdentity *firstRoughIdentity = nil;
+                    for (RoughIdentity *roughtIdentity in object.roughIdentities) {
+                        if (roughtIdentity.isSelected) {
+                            firstRoughIdentity = roughtIdentity;
+                            break;
+                        }
+                    }
+                    
+                    NSAssert(firstRoughIdentity, @"MUST be at least one roughIdentity been selected.");
+                    
+                    Identity *identity = firstRoughIdentity.identity;
                     identity.name = object.name;
                     
                     NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
@@ -975,8 +984,11 @@ typedef enum {
                     }
                     
                     for (int i = 1; i < object.roughIdentities.count; i++) {
-                        IdentityId *identityId = [object.roughIdentities[i] identityIdValue];
-                        [invitation addNotification_identitiesObject:identityId];
+                        RoughIdentity *roughtIdentity = object.roughIdentities[i];
+                        if (roughtIdentity.isSelected) {
+                            IdentityId *identityId = [roughtIdentity identityIdValue];
+                            [invitation addNotification_identitiesObject:identityId];
+                        }
                     }
                     
                     [invitations addObject:invitation];
