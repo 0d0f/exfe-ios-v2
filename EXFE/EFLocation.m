@@ -19,14 +19,14 @@
         __block CLLocationDegrees latitude = 0.0f;
         
         [param enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
-            if ([key isEqualToString:@"timestamp"]) {
+            if ([key isEqualToString:@"ts"]) {
                 NSDate *timestamp = [NSDate dateWithTimeIntervalSince1970:[obj doubleValue]];
                 self.timestamp = timestamp;
-            } else if ([key isEqualToString:@"longitude"]) {
+            } else if ([key isEqualToString:@"lng"]) {
                 longitude = [obj doubleValue];
-            } else if ([key isEqualToString:@"latitude"]) {
+            } else if ([key isEqualToString:@"lat"]) {
                 latitude = [obj doubleValue];
-            } else if ([key isEqualToString:@"accuracy"]) {
+            } else if ([key isEqualToString:@"acc"]) {
                 self.accuracy = [obj doubleValue];
             }
         }];
@@ -43,19 +43,19 @@
 
 - (NSDictionary *)dictionaryValue {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:4];
-    [dict setValue:[NSNumber numberWithLongLong:(long long)[self.timestamp timeIntervalSince1970]] forKey:@"timestamp"];
-    [dict setValue:[NSString stringWithFormat:@"%f", self.accuracy] forKey:@"accuracy"];
-    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate.longitude] forKey:@"longitude"];
-    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate.latitude] forKey:@"latitude"];
+    [dict setValue:[NSNumber numberWithLongLong:(long long)[self.timestamp timeIntervalSince1970]] forKey:@"ts"];
+    [dict setValue:[NSNumber numberWithDouble:self.accuracy] forKey:@"acc"];
+    [dict setValue:[NSNumber numberWithDouble:self.coordinate.longitude] forKey:@"lng"];
+    [dict setValue:[NSNumber numberWithDouble:self.coordinate.latitude] forKey:@"lat"];
     
     return dict;
 }
 
 - (NSDictionary *)dictionaryValueWitoutAccuracy {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:3];
-    [dict setValue:[NSNumber numberWithLongLong:(long long)[self.timestamp timeIntervalSince1970]] forKey:@"timestamp"];
-    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate.longitude] forKey:@"longitude"];
-    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate.latitude] forKey:@"latitude"];
+    [dict setValue:[NSNumber numberWithLongLong:(long long)[self.timestamp timeIntervalSince1970]] forKey:@"ts"];
+    [dict setValue:[NSNumber numberWithDouble:self.coordinate.longitude] forKey:@"lng"];
+    [dict setValue:[NSNumber numberWithDouble:self.coordinate.latitude] forKey:@"lat"];
     
     return dict;
 }

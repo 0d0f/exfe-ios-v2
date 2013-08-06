@@ -10,6 +10,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "EFMapKit.h"
+#import "EFCache.h"
 
 @interface EFMapPersonCell ()
 
@@ -24,7 +25,11 @@
 @implementation EFMapPersonCell (Private)
 
 - (void)_personDidChange {
-    self.avatarImageView.image = self.person.avatarImage;
+    [[EFDataManager imageManager] loadImageForView:self.avatarImageView
+                                  setImageSelector:@selector(setImage:)
+                                       placeHolder:[UIImage imageNamed:@"portrait_default.png"]
+                                               key:self.person.avatarName
+                                   completeHandler:nil];
     
     NSString *infoText = nil;
     if (self.person.connectState == kEFMapPersonConnectStateUnknow) {

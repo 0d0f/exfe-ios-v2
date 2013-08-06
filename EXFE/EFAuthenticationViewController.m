@@ -804,7 +804,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
         sender.enabled = YES;
         [self hideIndicator];
         
-        if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+        if ([@"NSURLErrorDomain" isEqualToString:error.domain]  || [@"AFNetworkingErrorDomain" isEqualToString:error.domain]) {
             switch (error.code) {
                 case NSURLErrorTimedOut: //-1001
                 case NSURLErrorCannotFindHost: //-1003
@@ -815,6 +815,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                 case NSURLErrorResourceUnavailable: //-1008
                 case NSURLErrorNotConnectedToInternet: //-1009
                 case NSURLErrorRedirectToNonExistentLocation: //-1010
+                case NSURLErrorBadServerResponse: //-1011
                 case NSURLErrorServerCertificateUntrusted: //-1202
                     [Util showConnectError:error delegate:nil];
                     //                    [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
@@ -1062,7 +1063,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
     
     Provider provider = [Identity getProviderCode:self.identity.provider];
     
-    if (kProviderTyperAuthorization == [Identity getProviderTypeByCode:provider]) {
+    if (kProviderTypeAuthorization == [Identity getProviderTypeByCode:provider]) {
         
         id su = ^(NSNumber *user_id, NSString *token) {
             if ([user_id integerValue] == self.model.userId) {
@@ -1289,7 +1290,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                             
                         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                             [MBProgressHUD hideHUDForView:self.view animated:YES];
-                            if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                            if ([@"NSURLErrorDomain" isEqualToString:error.domain] || [@"AFNetworkingErrorDomain" isEqualToString:error.domain]) {
                                 switch (error.code) {
                                     case NSURLErrorTimedOut: // -1001
                                     case NSURLErrorCannotFindHost: //-1003
@@ -1300,6 +1301,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                     case NSURLErrorResourceUnavailable: //-1008
                                     case NSURLErrorNotConnectedToInternet: //-1009
                                     case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                    case NSURLErrorBadServerResponse: //-1011
                                     case NSURLErrorServerCertificateUntrusted: //-1202
                                         [Util showConnectError:error delegate:nil];
                                         //                            [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];
@@ -1312,7 +1314,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                         }];
                     } else {
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
-                        if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                        if ([@"NSURLErrorDomain" isEqualToString:error.domain] || [@"AFNetworkingErrorDomain" isEqualToString:error.domain]) {
                             switch (error.code) {
                                 case NSURLErrorTimedOut: // -1001
                                 case NSURLErrorCannotFindHost: //-1003
@@ -1323,6 +1325,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                 case NSURLErrorResourceUnavailable: //-1008
                                 case NSURLErrorNotConnectedToInternet: //-1009
                                 case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                case NSURLErrorBadServerResponse: //-1011
                                 case NSURLErrorServerCertificateUntrusted: //-1202
                                     [Util showConnectError:error delegate:nil];
                                     //                        [self showInlineError:@"Failed to connect twitter server." with:@"Please retry or wait awhile."];
@@ -1342,7 +1345,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
         
         if (webauth) {
             // auth web
-            if ([Identity getProviderTypeByCode:provider] == kProviderTyperAuthorization) {
+            if ([Identity getProviderTypeByCode:provider] == kProviderTypeAuthorization) {
                 OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
                 oauth.external_username = external_username;
                 oauth.onSuccess = ^(NSDictionary * params){
@@ -1421,7 +1424,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
             
             if (webauth) {
                 // auth web
-                if ([Identity getProviderTypeByCode:provider] == kProviderTyperAuthorization) {
+                if ([Identity getProviderTypeByCode:provider] == kProviderTypeAuthorization) {
                     OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil provider:provider];
                     oauth.external_username = external_id;
                     oauth.onSuccess = ^(NSDictionary * params){
@@ -1559,7 +1562,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                                       failure();
                                                   }
                                               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                                  if ([@"NSURLErrorDomain" isEqualToString:error.domain]) {
+                                                  if ([@"NSURLErrorDomain" isEqualToString:error.domain] || [@"AFNetworkingErrorDomain" isEqualToString:error.domain]) {
                                                       switch (error.code) {
                                                           case NSURLErrorTimedOut: //-1001
                                                           case NSURLErrorCannotFindHost: //-1003
@@ -1570,6 +1573,7 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                                                           case NSURLErrorResourceUnavailable: //-1008
                                                           case NSURLErrorNotConnectedToInternet: //-1009
                                                           case NSURLErrorRedirectToNonExistentLocation: //-1010
+                                                          case NSURLErrorBadServerResponse: //-1011
                                                           case NSURLErrorServerCertificateUntrusted: //-1202
                                                               [Util showConnectError:error delegate:nil];
                                                               //                                                              [self showInlineError:@"Failed to connect server." with:@"Please retry or wait awhile."];

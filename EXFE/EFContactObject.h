@@ -18,6 +18,8 @@
 
 @property (nonatomic, assign, getter = isSelected) BOOL selected;   // default as NO.
 
+- (void)roughIdentitiesSelectedStateDidChange;
+
 + (EFContactObject *)contactObjectWithIdentities:(NSArray *)identities;
 + (EFContactObject *)contactObjectWithLocalContact:(LocalContact *)localContact;
 + (EFContactObject *)contactObjectWithRoughIdentity:(RoughIdentity *)roughIdentity;

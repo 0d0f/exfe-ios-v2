@@ -1009,19 +1009,29 @@
             NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;
             
             for (EFContactObject *object in contactObjects) {
-                RoughIdentity *roughIdentity = object.roughIdentities[0];
-                Identity *identity = roughIdentity.identity;
-                identity.name = object.name;
-                
-                BOOL isContained = NO;
-                for (Invitation *invitation in self.cross.exfee.invitations) {
-                    if ([invitation.identity isEqualToIdentity:identity]) {
-                        isContained = YES;
+                RoughIdentity *firstRoughIdentity = nil;
+                for (RoughIdentity *roughtIdentity in object.roughIdentities) {
+                    if (roughtIdentity.isSelected) {
+                        firstRoughIdentity = roughtIdentity;
                         break;
                     }
                 }
-                if (isContained) {
-                    continue;
+                
+                NSAssert(firstRoughIdentity, @"MUST be at least one roughIdentity been selected.");
+                
+                Identity *identity = firstRoughIdentity.identity;
+                identity.name = object.name;
+                
+                Invitation *containedInvitation = nil;
+                for (Invitation *invitation in self.cross.exfee.invitations) {
+                    if ([invitation.identity isEqualToIdentity:identity]) {
+                        containedInvitation = invitation;
+                        break;
+                    }
+                }
+                if (containedInvitation) {
+                    // remove to re add
+                    [self.cross.exfee removeInvitationsObject:containedInvitation];
                 }
                 
                 NSEntityDescription *invitationEntity = [NSEntityDescription entityForName:@"Invitation" inManagedObjectContext:context];
@@ -1038,8 +1048,11 @@
                 
                 for (int i = 1; i < object.roughIdentities.count; i++) {
                     RoughIdentity *roughIdentity = object.roughIdentities[i];
-                    IdentityId *identityId = [roughIdentity identityIdValue];
-                    [invitation addNotification_identitiesObject:identityId];
+                    
+                    if (roughIdentity.isSelected && roughIdentity != firstRoughIdentity) {
+                        IdentityId *identityId = [roughIdentity identityIdValue];
+                        [invitation addNotification_identitiesObject:identityId];
+                    }
                 }
                 
                 [invitations addObject:invitation];

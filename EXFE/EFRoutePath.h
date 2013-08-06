@@ -22,9 +22,9 @@
  "description": "Description",                                              -> description
  "color": "rrggbbaa",                                                       -> strokeColor
  "positions": [                                                             -> positions
-     {"timestamp": 9, "longitude": "x.xxx", "latitude": "y.yyy"},
+     {"ts": 9, "lng": "x.xxx", "lat": "y.yyy"},
      ...
-     {"timestamp": 1, "longitude": "x.xxx", "latitude": "y.yyy"}
+     {"ts": 1, "lng": "x.xxx", "lat": "y.yyy"}
      ]
  }
  */

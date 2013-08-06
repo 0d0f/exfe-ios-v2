@@ -27,13 +27,14 @@ UITableViewDelegate,
 EFTabBarDataSource,
 EFMapViewDelegate,
 EFMarauderMapDataSourceDelegate,
-EFMapStrokeViewDataSource
+EFMapStrokeViewDataSource,
+UIAlertViewDelegate
 >
 
 @property (nonatomic, weak)     EXFEModel               *model;
 @property (nonatomic, weak)     Cross                   *cross;
 
-@property (nonatomic, strong)   CLLocationManager       *locationManager;
+//@property (nonatomic, strong)   CLLocationManager       *locationManager;
 
 @property (weak, nonatomic)     IBOutlet EFMapView      *mapView;
 @property (weak, nonatomic)     IBOutlet UIView         *leftBaseView;

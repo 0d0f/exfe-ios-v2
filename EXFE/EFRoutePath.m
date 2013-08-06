@@ -47,7 +47,7 @@
                 self.updatedByUid = obj;
             } else if ([key isEqualToString:@"title"]) {
                 self.title = obj;
-            } else if ([key isEqualToString:@"description"]) {
+            } else if ([key isEqualToString:@"desc"]) {
                 self.description = obj;
             } else if ([key isEqualToString:@"color"]) {
                 self.strokeColor = [self colorFromRGBA:obj];
@@ -76,7 +76,7 @@
     [dict setValue:[NSNumber numberWithLong:(long)[self.updatedDate timeIntervalSince1970]] forKey:@"updated_at"];
     [dict setValue:self.updatedByUid forKey:@"updated_by"];
     [dict setValue:self.title forKey:@"title"];
-    [dict setValue:self.description forKey:@"description"];
+    [dict setValue:self.description forKey:@"desc"];
     [dict setValue:[self RGBAStringFromColor:self.strokeColor] forKey:@"color"];
     NSMutableArray *positions = [[NSMutableArray alloc] initWithCapacity:self.positions.count];
     for (EFLocation *location in self.positions) {

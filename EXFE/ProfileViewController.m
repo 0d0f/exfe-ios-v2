@@ -215,7 +215,7 @@
         EFEditProfileViewController* vc = [[EFEditProfileViewController alloc] initWithModel:self.model];
         vc.readonly = false;
         vc.user = self.user;
-        [self presentModalViewController:vc animated:YES];
+        [self.navigationController pushViewController:vc animated:YES];
     } else if (CGRectContainsPoint(useravatar.frame, location)){
         FullScreenViewController *viewcontroller = [[FullScreenViewController alloc] initWithNibName:@"FullScreenViewController" bundle:nil];
         viewcontroller.wantsFullScreenLayout = YES;
@@ -532,9 +532,9 @@
             
             [[UIApplication sharedApplication] setStatusBarHidden:YES];
             EFEditProfileViewController* vc = [[EFEditProfileViewController alloc] initWithModel:self.model];
-            vc.readonly = (pt == kProviderTyperAuthorization);
+            vc.readonly = (pt != kProviderTypeVerification);
             vc.identity = identity;
-            [self presentViewController:vc animated:YES completion:nil];
+            [self.navigationController pushViewController:vc animated:YES];
         }
     }
 }
