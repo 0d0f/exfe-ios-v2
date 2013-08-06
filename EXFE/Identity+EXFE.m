@@ -83,19 +83,19 @@
             return kProviderTypeVerification;
             //break;
         case kProviderTwitter:
-            return kProviderTyperAuthorization;
+            return kProviderTypeAuthorization;
             //break;
         case kProviderFacebook:
-            return kProviderTyperAuthorization;
+            return kProviderTypeAuthorization;
             //break;
         case kProviderInstagram:
-            return kProviderTyperAuthorization;
+            return kProviderTypeAuthorization;
             //break;
         case kProviderFlickr:
-            return kProviderTyperAuthorization;
+            return kProviderTypeAuthorization;
             //break;
         case kProviderDropbox:
-            return kProviderTyperAuthorization;
+            return kProviderTypeAuthorization;
             //break;
         default:
             return kProviderTypeUnknown;

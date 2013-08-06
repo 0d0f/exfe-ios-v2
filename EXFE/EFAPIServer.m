@@ -922,7 +922,7 @@
     RKObjectManager *objectManager = self.model.objectManager;
     objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:2];
-    if (name) {
+    if (name.length > 0) {
         [params setObject:name forKey:@"name"];
     }
     if (bio) {
@@ -962,7 +962,7 @@
     RKObjectManager *objectManager = self.model.objectManager;
     objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:2];
-    if (name) {
+    if (name.length > 0) {
         [params setObject:name forKey:@"name"];
     }
     if (bio) {
@@ -1059,11 +1059,12 @@
                                                                       for (NSString *name in names) {
                                                                           UIImage *img = [images valueForKey:name];
                                                                           if (img) {
-                                                                              NSData *imageData = UIImageJPEGRepresentation(img, 1);
+                                                                              NSData *imageData = UIImagePNGRepresentation(img);
+                                                                              //NSData *imageData = UIImageJPEGRepresentation(img, 1);
                                                                               [formData appendPartWithFileData:imageData
                                                                                                           name:name
-                                                                                                      fileName:[NSString stringWithFormat:@"%@.jpg", name]
-                                                                                                      mimeType:@"image/jpeg"];
+                                                                                                      fileName:[NSString stringWithFormat:@"%@.png", name]
+                                                                                                      mimeType:@"image/png"];
                                                                           }
                                                                       }
                                                                   }];

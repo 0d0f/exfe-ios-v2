@@ -16,6 +16,7 @@
 #import "UIScreen+EXFE.h"
 #import "SSTextView.h"
 #import "Avatar.h"
+#import "WildcardGestureRecognizer.h"
 
 #define kModelKeyName       @"name"
 #define kModelKeyBio        @"bio"
@@ -43,6 +44,7 @@
 @property (nonatomic, strong) NSMutableDictionary *data;
 
 @property (nonatomic, assign) CGPoint point;
+@property (nonatomic, assign) BOOL fillAvatarFlag;
 
 #pragma mark Quick Access to UI Elements
 @property (nonatomic, strong) UILabel *name;
@@ -55,9 +57,12 @@
 
 @property (nonatomic, strong) UIView *camera;
 @property (nonatomic, strong) UIView *header;
+@property (nonatomic, strong) UIView *body;
 @property (nonatomic, strong) UIView *footer;
 
 @property (nonatomic, strong) UIView *activeInputView;
+
+@property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
 
 @property (nonatomic, strong) UIImageView *preview;
 @property (nonatomic, strong) UIImageView *previewTh;
@@ -100,10 +105,14 @@
         self.camera.hidden = YES;
         self.name.userInteractionEnabled = NO;
         self.bio.editable = YES;
+        self.imageScrollView.userInteractionEnabled = NO;
+        self.imageScrollView.scrollEnabled = NO;
     } else {
         self.camera.hidden = NO;
-        self.name.userInteractionEnabled = NO;
+        self.name.userInteractionEnabled = YES;
         self.bio.editable = NO;
+        self.imageScrollView.userInteractionEnabled = YES;
+        self.imageScrollView.scrollEnabled = YES;
     }
 }
 
@@ -114,6 +123,7 @@
     if (self) {
         self.model = model;
         self.data = [NSMutableDictionary dictionary];
+        self.fillAvatarFlag = NO;
     }
     return self;
 }
@@ -123,8 +133,14 @@
     // root view
     CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
     UIScrollView *contentView = [[UIScrollView alloc] initWithFrame:applicationFrame];
-    contentView.backgroundColor = [UIColor COLOR_BLACK];
+    contentView.backgroundColor = [UIColor clearColor];
     contentView.scrollEnabled = NO;
+    
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    gradientLayer.frame = contentView.bounds;
+    gradientLayer.colors = [NSArray arrayWithObjects:(id)[UIColor COLOR_WA(0x4C, 0xFF)].CGColor, (id)[UIColor COLOR_WA(0xB2, 0xFF)].CGColor, nil];
+    [contentView.layer insertSublayer:gradientLayer atIndex:0];
+
     self.view = contentView;
     
     
@@ -144,16 +160,15 @@
     [imageScrollRange addSubview:imageView];
     self.avatar = imageView;
     
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
-    
     [doubleTap setNumberOfTapsRequired:2];
-    
-    [imageView addGestureRecognizer:singleTap];
     [imageView addGestureRecognizer:doubleTap];
     
     [self.view addSubview:imageScrollView];
     self.imageScrollView = imageScrollView;
+    self.imageScrollView.userInteractionEnabled = !self.readonly;
+    self.imageScrollView.scrollEnabled = !self.readonly;
+
 
     
     // View port layer
@@ -168,6 +183,10 @@
     gradient.frame = header.bounds;
     gradient.colors = [NSArray arrayWithObjects:(id)[[[UIColor blackColor] colorWithAlphaComponent:0.6f] CGColor], (id)[[[UIColor blackColor] colorWithAlphaComponent:0.3f] CGColor], nil];
     [header.layer insertSublayer:gradient atIndex:0];
+    CALayer *line1 = [CALayer layer];
+    line1.backgroundColor = [UIColor COLOR_WA(0xFF, 0x33)].CGColor;
+    line1.frame = CGRectMake(0, headerHeight - 1, 320, 1);
+    [header.layer insertSublayer:line1 atIndex:0];
     
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom ];
     [btnBack setFrame:CGRectMake(0, 0, 20,  CGRectGetHeight(header.bounds))];
@@ -248,9 +267,34 @@
     [self.view addSubview:header];
     self.header = header;
     
-    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, headerHeight + CGRectGetWidth(self.view.bounds), CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - headerHeight - CGRectGetWidth(self.view.bounds))];
+    UIView *body = [[UIView alloc] initWithFrame:CGRectMake(0, headerHeight, CGRectGetWidth(self.view.bounds), CGRectGetWidth(self.view.bounds))];
+    body.backgroundColor = [UIColor clearColor];
+    body.hidden = YES;
+    WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
+    tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
+        if (self.activeInputView) {
+            switch (self.activeInputView.tag) {
+                case kTagName:
+                    [self.activeInputView resignFirstResponder];
+                    break;
+                case kTagBio:
+                    [self.activeInputView resignFirstResponder];
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+    [body addGestureRecognizer:tapInterceptor];
+    [self.view addSubview:body];
+    self.body = body;
+    
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(body.frame), CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(body.frame))];
     footer.backgroundColor = [UIColor COLOR_WA(0x00, 0xA9)];
-//    footer.backgroundColor = [UIColor COLOR_WA(0xFF, 0xFF)];
+    CALayer *line2 = [CALayer layer];
+    line2.backgroundColor = [UIColor COLOR_WA(0xFF, 0x33)].CGColor;
+    line2.frame = CGRectMake(0, 0, 320, 1);
+    [footer.layer insertSublayer:line2 atIndex:0];
     
     UILabel *bioTitle = [[UILabel alloc] initWithFrame:CGRectMake(20, 15, CGRectGetWidth(footer.bounds) - 15 * 2, 30)];
     bioTitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
@@ -288,6 +332,13 @@
     
     [self.view addSubview:footer];
     self.footer = footer;
+    
+    
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    indicator.center = [self.view convertPoint:body.center fromView:body.superview];
+    indicator.hidden = YES;
+    [self.view addSubview:indicator];
+    self.indicatorView = indicator;
     
 #ifdef DEBUG
 //    UIImageView *preview = [[UIImageView alloc] initWithFrame:CGRectMake(100, 5, 80, 80 / CGRectGetWidth(self.view.bounds) * CGRectGetHeight(self.view.bounds))];
@@ -445,11 +496,17 @@
             imageKey = self.identity.avatar.original;
         }
         
+        self.indicatorView.hidden = NO;
+        [self.indicatorView startAnimating];
         [[EFDataManager imageManager] loadImageForView:self
                                       setImageSelector:@selector(fillAvatar:)
-                                           placeHolder:[UIImage imageNamed:@"portrait_default.png"]
+                                           placeHolder:nil
                                                    key:imageKey
-                                       completeHandler:nil];
+                                       completeHandler:^(BOOL hasLoaded) {
+                                           NSLog(@"hide it");
+                                           [self.indicatorView stopAnimating];
+                                           self.indicatorView.hidden = YES;
+                                       }];
     }
 }
 
@@ -518,6 +575,12 @@
 
 - (void)fillAvatar:(UIImage *)image
 {
+    if (!image) {
+        return;
+    }
+    
+    self.fillAvatarFlag = YES;
+    
     float paddingRatio = 0.5;
     
     [self.imageScrollView setMinimumZoomScale:1.0];
@@ -581,9 +644,11 @@
     [self.imageScrollView setMaximumZoomScale:scale * 8];
     [self.imageScrollView setZoomScale:scale];
     
-    [self bestZoom];
+    [self bestZoomWithAnimation:NO];
     
-    [self.data removeObjectForKey:kModelKeyImageDirty];
+    self.fillAvatarFlag = NO;
+    
+    NSLog(@"fillAvatar done");
 }
 
 - (void)fillBio:(NSString *)bio
@@ -594,27 +659,9 @@
 #pragma mark - UI Events
 
 #pragma mark Gesutre
-- (void)handleSingleTap:(UIGestureRecognizer *)gestureRecognizer
-{
-    if (self.activeInputView) {
-        switch (self.activeInputView.tag) {
-            case kTagName:
-                [self.activeInputView resignFirstResponder];
-                break;
-            case kTagBio:
-                [self.activeInputView resignFirstResponder];
-                break;
-            default:
-                break;
-        }
-    }
-}
-
 - (void)handleDoubleTap:(UIGestureRecognizer *)gestureRecognizer
 {
-    [self bestZoom];
-    
-//    self.imageScrollView.contentOffset = 
+    [self bestZoomWithAnimation:YES];
     
     id num = [self.data valueForKey:kModelKeyImageDirty];
     if (!num) {
@@ -622,19 +669,6 @@
     }
     
     
-}
-
-- (void)handleTwoFingerTap:(UIGestureRecognizer *)gestureRecognizer
-{
-    // two-finger tap zooms out
-    float newScale = [self.imageScrollView zoomScale] / ZOOM_STEP;
-    CGRect zoomRect = [self zoomRectForScale:newScale withCenter:[gestureRecognizer locationInView:gestureRecognizer.view]];
-    [self.imageScrollView zoomToRect:zoomRect animated:YES];
-    
-    id num = [self.data valueForKey:kModelKeyImageDirty];
-    if (!num) {
-        [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
-    }
 }
 
 #pragma mark Keyboard
@@ -672,45 +706,46 @@
 #pragma mark UIButton action
 - (void)goBack:(id)view
 {
-    if ([self.name isFirstResponder]) {
-        [self textViewDidEndEditing:self.inputName];
-    }
-    
-    if ([self.bio isFirstResponder]) {
-        [self textViewDidEndEditing:self.bio];
-    }
-    
-    if (self.data.count > 0) {
-        NSString * name = [self.data valueForKey:kModelKeyName];
-        NSString * bio = [self.data valueForKey:kModelKeyBio];
-        if (name || bio) {
-            if (self.isEditUser) {
-                [self.model updateUserName:name withBio:bio];
-            } else {
-                [self.model updateIdentity:self.identity withName:name withBio:bio];
-            }
+    if (!self.readonly) {
+        if ([self.name isFirstResponder]) {
+            [self textViewDidEndEditing:self.inputName];
         }
         
-        NSNumber * dirty = [self.data valueForKey:kModelKeyImageDirty];
+        if ([self.bio isFirstResponder]) {
+            [self textViewDidEndEditing:self.bio];
+        }
         
-        if (dirty && [dirty boolValue]) {
-            NSDictionary *dict = [self cropedImages];
-            UIImage *full = [dict valueForKey:kKeyImageFull];
-            UIImage *large_raw = [dict valueForKey:kKeyImageLarge];
-            UIImage *large = [self imageWithImage:large_raw scaledToSize:CGSizeMake(320, 320)];
-            UIImage *small = [self imageWithImage:large_raw scaledToSize:CGSizeMake(80, 80)];
-            if (full) {
+        if (self.data.count > 0) {
+            NSString * name = [self.data valueForKey:kModelKeyName];
+            NSString * bio = [self.data valueForKey:kModelKeyBio];
+            if (name || bio) {
                 if (self.isEditUser) {
-                    [self.model updateUserAvatar:full withLarge:large withSmall:small];
+                    [self.model updateUserName:name withBio:bio];
                 } else {
-                    [self.model updateIdentity:self.identity withAvatar:full withLarge:large withSmall:small];
+                    [self.model updateIdentity:self.identity withName:name withBio:bio];
+                }
+            }
+            
+            NSNumber * dirty = [self.data valueForKey:kModelKeyImageDirty];
+            
+            if (dirty && [dirty boolValue]) {
+                NSDictionary *dict = [self cropedImages];
+                UIImage *full = [dict valueForKey:kKeyImageFull];
+                UIImage *large_raw = [dict valueForKey:kKeyImageLarge];
+                UIImage *large = [self imageWithImage:large_raw scaledToSize:CGSizeMake(320, 320)];
+                UIImage *small = [self imageWithImage:large_raw scaledToSize:CGSizeMake(80, 80)];
+                if (full) {
+                    if (self.isEditUser) {
+                        [self.model updateUserAvatar:full withLarge:large withSmall:small];
+                    } else {
+                        [self.model updateIdentity:self.identity withAvatar:full withLarge:large withSmall:small];
+                    }
                 }
             }
         }
     }
-    
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [self dismissModalViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)takePicture:(UIControl*)view
@@ -729,7 +764,7 @@
         }
         
     }];
-    [sheet addButtonWithTitle:NSLocalizedString(@"Pick a photo from Library", nil) handler:^{
+    [sheet addButtonWithTitle:NSLocalizedString(@"Choose a photo", nil) handler:^{
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentModalViewController:picker animated:YES];
     }];
@@ -745,6 +780,7 @@
     switch (textView.tag) {
         case kTagName:
             self.activeInputView = nil;
+            self.imageScrollView.scrollEnabled = !self.readonly;
             textView.hidden = YES;
             self.name.hidden = NO;
             self.identityId.hidden = YES;
@@ -752,6 +788,7 @@
             break;
         case kTagBio:
             self.activeInputView = nil;
+            self.imageScrollView.scrollEnabled = !self.readonly;
             [self.data setValue:textView.text forKey:kModelKeyBio];
             break;
             
@@ -765,9 +802,11 @@
     switch (textView.tag) {
         case kTagName:
             self.activeInputView = textView;
+            self.body.hidden = NO;
             break;
         case kTagBio:
             self.activeInputView = textView;
+            self.body.hidden = NO;
             break;
             
         default:
@@ -834,9 +873,9 @@
     return self.imageScrollRange;
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    if (self.readonly) {
+    if (!self.readonly && !self.fillAvatarFlag) {
         id num = [self.data valueForKey:kModelKeyImageDirty];
         if (!num) {
             [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
@@ -852,7 +891,7 @@
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
-    if (self.readonly) {
+    if (!self.readonly && !self.fillAvatarFlag) {
         id num = [self.data valueForKey:kModelKeyImageDirty];
         if (!num) {
             [self.data setValue:[NSNumber numberWithBool:YES] forKey:kModelKeyImageDirty];
@@ -877,9 +916,14 @@
 {
     [self dismissModalViewControllerAnimated:YES];
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    
     if ([mediaType isEqualToString:@"public.image"]){
         
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+            UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+        }
+        
         [self.data setValue:image forKey:kModelKeyOriginal];
         
         picker.navigationBar.hidden = YES;
@@ -890,6 +934,11 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+{
+    //NSLog(@"Image saved.");
 }
 
 #pragma mark - Private methods
@@ -996,20 +1045,20 @@
     return newImage;
 }
 
-- (void)bestZoom
+- (void)bestZoomWithAnimation:(BOOL)animated
 {
     if (CGRectGetWidth(self.avatar.frame) >= CGRectGetHeight(self.avatar.frame)) {
         CGFloat d = CGRectGetHeight(self.avatar.frame);
         CGFloat scale = 320 / d;
         CGRect rect = CGRectMake(self.avatar.center.x - d / 2, self.avatar.center.y - d / 2 + (CGRectGetHeight(self.view.bounds) / 2 - 320 / 2 - CGRectGetHeight(self.header.bounds)) / scale, d, d);
-        [self.imageScrollView zoomToRect:rect animated:YES];
+        [self.imageScrollView zoomToRect:rect animated:animated];
     } else if (CGRectGetWidth(self.avatar.frame) * (CGRectGetHeight(self.header.bounds) * 2 + 320) > CGRectGetHeight(self.avatar.frame) * 320) {
         CGFloat d = CGRectGetWidth(self.avatar.frame);
         CGFloat scale = 320 / d;
         CGRect rect = CGRectMake(self.avatar.center.x - d / 2, self.avatar.center.y - d / 2 + (CGRectGetHeight(self.view.bounds) / 2 - 320 / 2 - CGRectGetHeight(self.header.bounds)) / scale, d, d);
-        [self.imageScrollView zoomToRect:rect animated:YES];
+        [self.imageScrollView zoomToRect:rect animated:animated];
     } else {
-        [self.imageScrollView zoomToRect:self.avatar.frame animated:YES];
+        [self.imageScrollView zoomToRect:self.avatar.frame animated:animated];
     }
 }
 

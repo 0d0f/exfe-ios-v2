@@ -22,7 +22,7 @@ typedef NS_ENUM(NSUInteger, Provider){
 typedef NS_ENUM(NSUInteger, ProviderType){
     kProviderTypeUnknown = 0,
     kProviderTypeVerification,
-    kProviderTyperAuthorization
+    kProviderTypeAuthorization
 } ;
 
 

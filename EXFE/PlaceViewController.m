@@ -234,18 +234,6 @@
         [self setViewStyle:EXPlaceViewStyleMap];
     } delay:0.18];
     [map addGestureRecognizer:tapMap];
-    
-//    WildcardGestureRecognizer * tapInterceptor = [[WildcardGestureRecognizer alloc] init];
-//    tapInterceptor.touchesBeganCallback = ^(NSSet * touches, UIEvent * event) {
-//        UITouch * touch = [touches anyObject];
-//        if (!CGRectContainsPoint([placeedit frame], [touch locationInView:map]))
-//        {
-//            [placeedit resignFirstResponder];
-//        }
-//        [self setViewStyle:EXPlaceViewStyleMap];
-//    };
-//    [map addGestureRecognizer:tapInterceptor];
-//    [tapInterceptor release];
 }
 
 #pragma mark lifecycle
