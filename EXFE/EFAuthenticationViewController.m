@@ -1461,7 +1461,6 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
         
         if (granted) {
             NSArray *accounts = [_accountStore accountsWithAccountType:facebookType];
-            NSLog(@"%@", accounts);
             if (accounts.count > 0) {
                 if (block) {
                     block(accounts);
@@ -1493,7 +1492,6 @@ typedef void(^ACACCountsHandler)(NSArray *accounts);
                 }
             }
         } else {
-            NSLog(@"ERR: %@",error);
             // Fail gracefully...
             
             if (block) {
