@@ -62,12 +62,20 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
                     }
                 }
                 
-                NSString *to_add = [[NSString alloc] initWithBytes:buffer length:length encoding:NSASCIIStringEncoding];
+                NSString *to_add = [[NSString alloc] initWithBytes:buffer length:length encoding:NSUTF8StringEncoding];
                 if (to_add != nil) {
-                    _strFromStream = [_strFromStream stringByAppendingString:to_add];
+                    if (_strFromStream && _strFromStream.length) {
+                        _strFromStream = [_strFromStream stringByAppendingString:to_add];
+                    } else {
+                        _strFromStream = to_add;
+                    }
                     
                     if (newLineIdx > 0) {
-                        const char *stringBuffer = [_strFromStream cStringUsingEncoding:NSASCIIStringEncoding];
+                        NSData *data = [_strFromStream dataUsingEncoding:NSUTF8StringEncoding];
+                        length = [_strFromStream lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+                        char *stringBuffer = (char *)malloc(sizeof(char) * length);
+                        memcpy(stringBuffer, [data bytes], length);
+                        
                         length = strlen(stringBuffer);
                         
                         int j = 0;
@@ -79,7 +87,7 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
                                 memset(componetBuffer, 0, bufferSize);
                                 strncpy(componetBuffer, (char *)(stringBuffer + j), (i - j));
                                 
-                                NSString *component = [[NSString alloc] initWithBytes:componetBuffer length:(i - j) encoding:NSASCIIStringEncoding];
+                                NSString *component = [[NSString alloc] initWithBytes:componetBuffer length:(i - j) encoding:NSUTF8StringEncoding];
                                 
                                 free(componetBuffer);
                                 
@@ -89,20 +97,22 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
                         }
                         
                         length = length - j;
-                        if (length) {
-                            size_t bufferSize = sizeof(char) * (length - j);
+                        if (length > 0) {
+                            size_t bufferSize = sizeof(char) * (length);
                             char *componetBuffer = (char *)malloc(bufferSize);
                             
                             memset(componetBuffer, 0, bufferSize);
-                            strncpy(componetBuffer, (char *)(stringBuffer + j), (length - j));
+                            strncpy(componetBuffer, (char *)(stringBuffer + j), bufferSize);
                             
-                            NSString *component = [[NSString alloc] initWithBytes:componetBuffer length:(length - j) encoding:NSASCIIStringEncoding];
+                            NSString *component = [[NSString alloc] initWithBytes:componetBuffer length:length encoding:NSUTF8StringEncoding];
                             _strFromStream = [_strFromStream stringByAppendingString:component];
                             
                             free(componetBuffer);
                         } else {
                             _strFromStream = @"";
                         }
+                        
+                        free(stringBuffer);
                     }
                 }
             } while (length > 0);

@@ -188,9 +188,9 @@
     [dict setValue:[self.iconUrl absoluteString] forKey:@"icon"];
     [dict setValue:self.title ? self.title : @"" forKey:@"title"];
     [dict setValue:self.subtitle ? self.subtitle : @"" forKey:@"desc"];
-    [dict setValue:[NSString stringWithFormat:@"%f", self.accuracy] forKey:@"acc"];
-    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate.longitude] forKey:@"lng"];
-    [dict setValue:[NSString stringWithFormat:@"%f", self.coordinate.latitude] forKey:@"lat"];
+    [dict setValue:[NSNumber numberWithDouble:self.accuracy] forKey:@"acc"];
+    [dict setValue:[NSNumber numberWithDouble:self.coordinate.longitude] forKey:@"lng"];
+    [dict setValue:[NSNumber numberWithDouble:self.coordinate.latitude] forKey:@"lat"];
     
     return dict;
 }

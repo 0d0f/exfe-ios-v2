@@ -71,6 +71,11 @@ EFHTTPStreamingDelegate
 - (void)registerToUpdateLocation;
 - (void)unregisterToUpdateLocation;
 
+/**
+ * Factory
+ */
+- (EFRouteLocation *)createRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate;
+
 - (CLLocationCoordinate2D)earthCoordinateToMarsCoordinate:(CLLocationCoordinate2D)mars;
 - (CLLocationCoordinate2D)marsCoordinateToEarthCoordinate:(CLLocationCoordinate2D)earth;
 

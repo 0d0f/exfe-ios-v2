@@ -49,15 +49,9 @@
  */
 
 // endpoint: /routex/crosses/:cross_id/geomarks?coordinate=(earth|mars)&token=xxxxxxxx
-- (void)postRouteXCreateGeomark:(id)routeLocationOrRoutePath
-                        inCross:(Cross *)cross
-              isEarthCoordinate:(BOOL)isEarthCoordinate
-                        success:(void (^)(NSString *geomarkId))successHandler
-                        failure:(void (^)(NSError *error))failureHandler;
-
-// endpoint: /routex/crosses/:cross_id/geomarks/:geomark_id?coordinate=(earth|mars)&token=xxxxxxxx
 - (void)putRouteXUpdateGeomark:(id)routeLocationOrRoutePath
                        inCross:(Cross *)cross
+                          type:(NSString *)type
              isEarthCoordinate:(BOOL)isEarthCoordinate
                        success:(void (^)(void))successHandler
                        failure:(void (^)(NSError *error))failureHandler;
@@ -65,6 +59,7 @@
 // endpoint: /routex/crosses/:cross_id/geomarks/:geomark_id?token=xxxxxxxx
 - (void)deleteRouteXDeleteGeomark:(id)routeLocationOrRoutePath
                           inCross:(Cross *)cross
+                             type:(NSString *)type
                           success:(void (^)(void))successHandler
                           failure:(void (^)(NSError *error))failureHandler;
 

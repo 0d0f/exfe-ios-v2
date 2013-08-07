@@ -401,9 +401,7 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
             startLocation = location;
             lastLocation = location;
             
-            routeLocation = [EFRouteLocation generateRouteLocationWithCoordinate:coordinate];
-            routeLocation.title = @"子时正刻";
-            routeLocation.subtitle = @"233 233";
+            routeLocation = [self.mapDataSource createRouteLocationWithCoordinate:coordinate];
             
             [self.mapDataSource addRouteLocation:routeLocation toMapView:self.mapView];
         }
@@ -428,7 +426,6 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
             
             routeLocation.coordinate = coordinate;
             [self.mapDataSource updateRouteLocation:routeLocation inMapView:self.mapView];
-            [self _postRoute];
             
             [self.mapView selectAnnotation:annotation animated:NO];
         }
@@ -864,7 +861,6 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         EFRouteLocation *routeLocation = [self.mapDataSource routeLocationForAnnotation:annotation];
         
         [self.mapDataSource removeRouteLocation:routeLocation fromMapView:self.mapView];
-        [self _postRoute];
     }
 }
 

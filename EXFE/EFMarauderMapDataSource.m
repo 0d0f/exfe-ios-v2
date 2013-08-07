@@ -43,6 +43,8 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 - (void)_initPeople;
 
+- (NSString *)generateRouteLocationId;
+
 @end
 
 @implementation EFMarauderMapDataSource (Private)
@@ -69,6 +71,27 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     }
     
     self.people = people;
+}
+
+- (NSString *)generateRouteLocationId {
+    NSString *locationId = nil;
+    
+    while (YES) {
+        locationId = [NSString stringWithFormat:@"%ld%ld%ld%ld%ld@location", (random() % 99) + 1, random() % 100, random() % 100, random() % 100, random() % 100];
+        BOOL crashed = NO;
+        for (EFRouteLocation *routeLocation in self.routeLocations) {
+            if ([routeLocation.locationId isEqualToString:locationId]) {
+                crashed = YES;
+                break;
+            }
+        }
+        
+        if (!crashed) {
+            break;
+        }
+    }
+    
+    return locationId;
 }
 
 @end
@@ -189,6 +212,14 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     
     EFAnnotationView *annotationView = (EFAnnotationView *)[mapView viewForAnnotation:annotation];
     [annotationView reloadWithAnnotation:annotation];
+    
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate.model.apiServer putRouteXUpdateGeomark:routeLocation
+                                             inCross:self.cross
+                                                type:@"location"
+                                   isEarthCoordinate:NO
+                                             success:^{}
+                                             failure:^(NSError *error){}];
 }
 
 - (EFRouteLocation *)routeLocationForAnnotation:(EFAnnotation *)annotation {
@@ -219,6 +250,13 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     [mapView removeAnnotation:annotation];
     [self.routeLocationAnnotationMap removeObjectForKey:[NSValue valueWithNonretainedObject:routeLocation]];
     [self.routeLocations removeObject:routeLocation];
+    
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate.model.apiServer deleteRouteXDeleteGeomark:routeLocation
+                                                inCross:self.cross
+                                                   type:@"location"
+                                                success:^{}
+                                                failure:^(NSError *error){}];
 }
 
 - (NSArray *)allRouteLocations {
@@ -275,11 +313,24 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
                                            }];
 }
 
+#pragma mark - Factory
+
+- (EFRouteLocation *)createRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate {
+    EFRouteLocation *routelocation = [EFRouteLocation generateRouteLocationWithCoordinate:coordinate];
+    routelocation.locationId = [self generateRouteLocationId];
+    
+#warning TEST only
+    routelocation.title = @"子时正刻";
+    routelocation.subtitle = @"233";
+    
+    return routelocation;
+}
+
 #pragma mark - EFHTTPStreamingDelegate
 
 - (void)completedRead:(NSString *)string {
     NSError *error = nil;
-    NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
+    NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
     if (!data)
         return;
     
