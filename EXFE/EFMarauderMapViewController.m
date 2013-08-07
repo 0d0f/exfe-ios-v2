@@ -769,6 +769,8 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 #pragma mark - EFMarauderMapDataSourceDelegate
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(NSString *)identityId {
+    return;
+#warning !!! 要大改！！！！！
     [self.personDictionary setValue:locations forKey:identityId];
     
     NSString *userIdentityId = self.identityIds[0];
@@ -802,7 +804,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations {
-    
+    for (EFRouteLocation *routeLocation in locations) {
+        [dataSource addRouteLocation:routeLocation toMapView:self.mapView];
+    }
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths {

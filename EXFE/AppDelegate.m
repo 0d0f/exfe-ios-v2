@@ -182,11 +182,6 @@
                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                        }];
     
-    // Post user location if the user has posted ever.
-    if (![[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
-        [[EFLocationManager defaultManager] startUpdatingLocation];
-    }
-    
     return YES;
 }
 

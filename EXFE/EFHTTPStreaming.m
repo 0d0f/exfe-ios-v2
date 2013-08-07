@@ -47,6 +47,10 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
         
         @synchronized(self) {
             do {
+                if (!CFReadStreamHasBytesAvailable(_stream)) {
+                    return;
+                }
+                
                 memset(buffer, 0, StreamBufSize);
                 length = 0;
                 length = CFReadStreamRead(_stream, buffer, StreamBufSize);
@@ -74,7 +78,7 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
                                 
                                 memset(componetBuffer, 0, bufferSize);
                                 strncpy(componetBuffer, (char *)(stringBuffer + j), (i - j));
-                                    
+                                
                                 NSString *component = [[NSString alloc] initWithBytes:componetBuffer length:(i - j) encoding:NSASCIIStringEncoding];
                                 
                                 free(componetBuffer);
@@ -84,7 +88,8 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
                             }
                         }
                         
-                        if (j <= length - 1) {
+                        length = length - j;
+                        if (length) {
                             size_t bufferSize = sizeof(char) * (length - j);
                             char *componetBuffer = (char *)malloc(bufferSize);
                             
@@ -95,6 +100,8 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
                             _strFromStream = [_strFromStream stringByAppendingString:component];
                             
                             free(componetBuffer);
+                        } else {
+                            _strFromStream = @"";
                         }
                     }
                 }

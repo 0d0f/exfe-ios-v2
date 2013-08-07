@@ -123,6 +123,12 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     NSParameterAssert(routeLocation);
     NSParameterAssert(mapView);
     
+    NSInteger index = [self.routeLocations indexOfObject:routeLocation];
+    if (NSNotFound != index) {
+        [self updateRouteLocation:routeLocation inMapView:mapView];
+        return;
+    }
+    
     if (kEFRouteLocationTypeUnknow == routeLocation.locationTytpe) {
         BOOL hasDestination = NO;
         for (EFRouteLocation *location in self.routeLocations) {
@@ -282,26 +288,55 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
                                                                   error:&error];
     if (jsonDictionary && !error) {
         NSString *type = [jsonDictionary valueForKey:@"type"];
-        if ([type isEqualToString:kStreamingDataTypeLocaionts]) {
-            NSDictionary *locations = [jsonDictionary valueForKey:@"data"];
-            if (locations && locations.count) {
-                if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
-                    [locations enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
-                        NSAssert([obj isKindOfClass:[NSArray class]], @"obj should be a location array");
-                        
-                        NSMutableArray *userLocations = [[NSMutableArray alloc] initWithCapacity:[obj count]];
-                        for (NSDictionary *locationParam in obj) {
-                            EFLocation *location = [[EFLocation alloc] initWithDictionary:locationParam];
-                            [userLocations addObject:location];
-                        }
-                        
-                        [self.delegate mapDataSource:self didUpdateLocations:userLocations forUser:key];
-                    }];
+        BOOL isAction = !![jsonDictionary valueForKey:@"action"];
+        NSArray *tags = [jsonDictionary valueForKey:@"tags"];
+        
+        if (!isAction) {
+            // Data Update
+            if ([type isEqualToString:@"route"]) {
+                if ([tags[0] isEqualToString:@"breadcrumbs"]) {
+                    EFRouteLocation *routeLocation = [[EFRouteLocation alloc] initWithDictionary:jsonDictionary];
+                    if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
+                        NSString *identityIdString = routeLocation.locationId;
+                        [self.delegate mapDataSource:self didUpdateLocations:@[routeLocation] forUser:identityIdString];
+                    }
+                } else if ([tags[0] isEqualToString:@"geomarks"]) {
+                    EFRoutePath *routePath = [[EFRoutePath alloc] initWithDictionary:jsonDictionary];
+                    if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateRoutePaths:)]) {
+                        [self.delegate mapDataSource:self didUpdateRoutePaths:@[routePath]];
+                    }
+                }
+            } else if ([type isEqualToString:@"location"]) {
+                EFRouteLocation *routeLocation = [[EFRouteLocation alloc] initWithDictionary:jsonDictionary];
+                if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateRouteLocations:)]) {
+                    [self.delegate mapDataSource:self didUpdateRouteLocations:@[routeLocation]];
                 }
             }
-        } else if ([type isEqualToString:kStreamingDataTypeRoute]) {
-        
+        } else {
+            // Action Commond
         }
+        
+//        NSString *type = [jsonDictionary valueForKey:@"type"];
+//        if ([type isEqualToString:kStreamingDataTypeLocaionts]) {
+//            NSDictionary *locations = [jsonDictionary valueForKey:@"data"];
+//            if (locations && locations.count) {
+//                if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
+//                    [locations enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+//                        NSAssert([obj isKindOfClass:[NSArray class]], @"obj should be a location array");
+//                        
+//                        NSMutableArray *userLocations = [[NSMutableArray alloc] initWithCapacity:[obj count]];
+//                        for (NSDictionary *locationParam in obj) {
+//                            EFLocation *location = [[EFLocation alloc] initWithDictionary:locationParam];
+//                            [userLocations addObject:location];
+//                        }
+//                        
+//                        [self.delegate mapDataSource:self didUpdateLocations:userLocations forUser:key];
+//                    }];
+//                }
+//            }
+//        } else if ([type isEqualToString:kStreamingDataTypeRoute]) {
+//        
+//        }
     }
 }
 

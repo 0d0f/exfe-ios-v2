@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) NSString                  *avatarName;
 @property (nonatomic, strong) NSString                  *identityString;
+@property (nonatomic, strong) NSString                  *userIdString;
 @property (nonatomic, assign) CGFloat                   distance;
 @property (nonatomic, assign) CGFloat                   angle;
 @property (nonatomic, assign) EFMapPersonConnectState   connectState;

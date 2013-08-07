@@ -97,6 +97,8 @@
                     self.locationTytpe = kEFRouteLocationTypePark;
                 } else if ([lastTag isEqualToString:@"destination"]) {
                     self.locationTytpe = kEFRouteLocationTypeDestination;
+                } else if ([lastTag isEqualToString:@"breadcrumbs"]) {
+                    self.locationTytpe = kEFRouteLocationTypeBreadcrumb;
                 }
             } else if ([key isEqualToString:@"icon"]) {
                 NSString *iconString = obj;

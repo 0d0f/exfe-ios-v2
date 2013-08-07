@@ -12,6 +12,7 @@
 
 #define kDefaultTimerTimeInterval   (5.0f)
 #define kHasPostUserLocationKey     @"key.hasPostUserLocation"
+#define kDefaultBackgroundDuration  (1200.0f)
 
 @interface EFLocationManager ()
 
@@ -21,6 +22,8 @@
 
 @property (nonatomic, strong) NSMutableDictionary     *crossMap;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier    bgTask;
+
+@property (nonatomic, strong) NSDate            *enterBackgroundTimestamp;
 
 @end
 
@@ -159,10 +162,11 @@
     NSString *name = notif.name;
     
     if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]) {
+        self.enterBackgroundTimestamp = [NSDate date];
         [self _invalideTimer];
     } else if ([name isEqualToString:UIApplicationDidBecomeActiveNotification]) {
         if ([CLLocationManager locationServicesEnabled] && ![self isFirstTimeToPostUserLocation]) {
-            [self _fireTimer];
+            [self startUpdatingLocation];
         }
     }
 }
@@ -187,7 +191,15 @@
     }
     
     if (isInBackground) {
-        [self _postUserLocationInBackground];
+        NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:self.enterBackgroundTimestamp];
+        if (timeInterval > kDefaultBackgroundDuration) {
+            // timeout
+            [self stopUpdatingLocation];
+            return;
+        } else {
+            // post
+            [self _postUserLocationInBackground];
+        }
     }
 }
 
