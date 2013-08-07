@@ -566,12 +566,16 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
             NSString *version = [iosVersionObject valueForKey:@"version"];
             NSString *description = [iosVersionObject valueForKey:@"description"];
             NSString *url = [iosVersionObject valueForKey:@"url"];
+            
+            NSString *localVersion = [UIApplication appVersion];
             if ([UIApplication isNewVersion:version]) {
                 
-                [UIAlertView showAlertViewWithTitle:@"New version update"
-                                            message:description
-                                  cancelButtonTitle:@"Cancel"
-                                  otherButtonTitles:@[@"Update"]
+                NSString *message = [NSString stringWithFormat:NSLocalizedString(@"EXFE %@ is available. You’re using version %@. Update now?", nil), version, localVersion];
+                
+                [UIAlertView showAlertViewWithTitle:NSLocalizedString(@"Update available", nil)
+                                            message:message
+                                  cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                  otherButtonTitles:@[NSLocalizedString(@"Update", nil)]
                                             handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                                 if (buttonIndex == alertView.firstOtherButtonIndex) {
                                                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
