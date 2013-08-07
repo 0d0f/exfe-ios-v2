@@ -547,6 +547,13 @@ static NSString * kExtension           = @"exfe";
     // and we crash.
     
     if (success) {
+        
+        if (self.userId > 0 && self.isLoggedIn) {
+            NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:@"udid"];
+            if (token.length > 0) {
+                [self.apiServer regDevice:token success:nil failure:nil];
+            }
+        }
 //        [self startSync];
     } else {
         abort();

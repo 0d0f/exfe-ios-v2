@@ -282,8 +282,17 @@
                                  stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]]
                                 stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    if([[NSUserDefaults standardUserDefaults] objectForKey:@"udid"]!=nil &&  [[[NSUserDefaults standardUserDefaults] objectForKey:@"udid"] isEqualToString:tokenAsString])
-        return;
+    NSString * savedToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"push_token"];
+    if (savedToken == nil || ![savedToken isEqualToString:tokenAsString]){
+        [[NSUserDefaults standardUserDefaults] setValue:tokenAsString forKey:@"push_token"];
+    }
+    
+    NSString *savedUdid = [[NSUserDefaults standardUserDefaults] valueForKey:@"udid"];
+    if (savedUdid == nil || ![savedUdid isEqualToString:tokenAsString]) {
+        [[NSUserDefaults standardUserDefaults] setValue:tokenAsString forKey:@"udid"];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
     if (self.model.userId > 0 && self.model.isLoggedIn) {
         [self.model.apiServer regDevice:tokenAsString success:nil failure:nil];
