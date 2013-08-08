@@ -34,6 +34,8 @@ EFHTTPStreamingDelegate
 
 - (id)initWithCross:(Cross *)cross;
 
+- (void)getPeopleBreadcrumbs;
+
 /**
  * People
  */

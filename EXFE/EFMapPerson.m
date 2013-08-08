@@ -23,10 +23,21 @@
         self.angle = 0.0f;
         self.connectState = kEFMapPersonConnectStateUnknow;
         self.locationState = kEFMapPersonLocationStateUnknow;
-        self.locations = nil;
+        self.locations = [[NSMutableArray alloc] init];
     }
     
     return self;
+}
+
+- (void)setLastLocation:(EFRouteLocation *)lastLocation {
+    if (lastLocation == _lastLocation)
+        return;
+    
+    if (_lastLocation) {
+        [self.locations addObject:_lastLocation];
+    }
+    
+    _lastLocation = lastLocation;
 }
 
 @end

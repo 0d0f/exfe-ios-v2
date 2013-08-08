@@ -10,6 +10,7 @@
 
 #import "EFMapDataDefines.h"
 
+@class EFRouteLocation;
 @interface EFMapPerson : NSObject
 
 @property (nonatomic, strong) NSString                  *avatarName;
@@ -19,7 +20,9 @@
 @property (nonatomic, assign) CGFloat                   angle;
 @property (nonatomic, assign) EFMapPersonConnectState   connectState;
 @property (nonatomic, assign) EFMapPersonLocationState  locationState;
-@property (nonatomic, strong) NSMutableArray            *locations;
+
+@property (nonatomic, strong) NSMutableArray            *locations;     // from get
+@property (nonatomic, strong) EFRouteLocation           *lastLocation;  // from streaming
 
 - (id)initWithIdentity:(Identity *)identity;
 

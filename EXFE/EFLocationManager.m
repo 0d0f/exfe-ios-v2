@@ -109,7 +109,6 @@
                                                     selector:@selector(runloop:)
                                                     userInfo:nil
                                             repeats:YES];
-    [self.postTimer fire];
 }
 
 - (void)_invalideTimer {

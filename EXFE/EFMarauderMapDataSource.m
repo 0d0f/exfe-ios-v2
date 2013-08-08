@@ -28,6 +28,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 @interface EFMarauderMapDataSource ()
 
 @property (nonatomic, strong) NSMutableArray        *people;
+@property (nonatomic, strong) NSMutableDictionary   *peopleMap;
 
 @property (nonatomic, strong) NSMutableArray        *routeLocations;
 @property (nonatomic, strong) NSMutableDictionary   *routeLocationAnnotationMap;
@@ -63,14 +64,18 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 - (void)_initPeople {
     NSMutableArray *people = [[NSMutableArray alloc] init];
+    NSMutableDictionary *peopleMap = [[NSMutableDictionary alloc] init];
     
     NSArray *invitations = [self.cross.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
     for (NSArray *invitation in invitations) {
         EFMapPerson *person = [[EFMapPerson alloc] initWithIdentity:((Invitation *)invitation[0]).identity];
         [people addObject:person];
+        
+        [peopleMap setValue:person forKey:person.userIdString];
     }
     
     self.people = people;
+    self.peopleMap = peopleMap;
 }
 
 - (NSString *)generateRouteLocationId {
@@ -116,6 +121,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 - (EFRouteLocation *)destinationLocation {
     EFRouteLocation *destination = nil;
+    
     for (EFRouteLocation *location in self.routeLocations) {
         if (location.locationTytpe == kEFRouteLocationTypeDestination) {
             destination = location;
@@ -124,6 +130,38 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     }
     
     return destination;
+}
+
+#pragma mark - Request
+
+- (void)getPeopleBreadcrumbs {
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate.model.apiServer getRouteXBreadcrumbsInCross:self.cross
+                                        isEarthCoordinate:NO
+                                                  success:^(NSArray *breadcrumbs){
+                                                      for (EFRoutePath *path in breadcrumbs) {
+                                                          NSString *dirtyUserId = path.pathId;
+                                                          NSRange exfeRange = [dirtyUserId rangeOfString:@"@exfe"];
+                                                          NSAssert(exfeRange.location != NSNotFound, @"there MUST be a @exfe");
+                                                          NSString *userIdString = [dirtyUserId substringToIndex:exfeRange.location];
+                                                          
+                                                          EFMapPerson *person = [self.peopleMap valueForKey:userIdString];
+                                                          NSAssert(person, ([NSString stringWithFormat:@"map should contain a person for userId: %@", userIdString]));
+                                                          
+                                                          [person.locations removeAllObjects];
+                                                          
+                                                          [person.locations addObjectsFromArray:path.positions];
+                                                          
+                                                          if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
+                                                              [self.delegate mapDataSource:self
+                                                                        didUpdateLocations:person.locations
+                                                                                   forUser:userIdString];
+                                                          }
+                                                      }
+                                                  }
+                                                  failure:^(NSError *error){
+                                                  
+                                                  }];
 }
 
 #pragma mark - People

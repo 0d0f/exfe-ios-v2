@@ -357,6 +357,7 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     } else {
         // register to update location
         [self.mapDataSource registerToUpdateLocation];
+        [self.mapDataSource getPeopleBreadcrumbs];
     }
 }
 
@@ -374,6 +375,7 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     if (buttonIndex == alertView.firstOtherButtonIndex) {
         // register to update location
         [self.mapDataSource registerToUpdateLocation];
+        [self.mapDataSource getPeopleBreadcrumbs];
         
         // start updating location
         [[EFLocationManager defaultManager] startUpdatingLocation];
@@ -562,42 +564,15 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     }
     
     NSArray *locations = nil;
+    EFMapPerson *person = nil;
     
     if (tableView == self.tableView) {
-        locations = [self.personDictionary valueForKey:self.identityIds[indexPath.row + 1]];
-        
-        /**
-        EFMapPopMenu *popMenu = [[EFMapPopMenu alloc] initWithName:((Invitation *)self.invitations[indexPath.row + 1]).identity.name
-                                                     pressedHanler:^(EFMapPopMenu *menu){
-                                                         [self.model.apiServer getRouteXURLWithCrossId:[self.cross.cross_id integerValue]
-                                                                                               success:^(NSString *url){
-//                                                                                                   WXWebpageObject *webpageObject = [WXWebpageObject object];
-//                                                                                                   webpageObject.webpageUrl = url;
-//                                                                                                   
-//                                                                                                   WXMediaMessage *mediaMessage = [WXMediaMessage message];
-//                                                                                                   mediaMessage.title = @"请求更新方位";
-//                                                                                                   mediaMessage.description = @"点我点我点我";
-//                                                                                                   [mediaMessage setThumbImage:[UIImage imageNamed:@"Icon@2x.png"]];
-//                                                                                                   mediaMessage.mediaObject = webpageObject;
-//                                                                                                   
-//                                                                                                   SendMessageToWXReq *message = [[SendMessageToWXReq alloc] init];
-//                                                                                                   message.bText = YES;
-//                                                                                                   message.text = url;
-////                                                                                                   message.bText = NO;
-////                                                                                                   message.message = mediaMessage;
-//                                                                                                   [WXApi sendReq:message];
-                                                                                                   
-                                                                                                   [menu dismiss];
-                                                                                               }
-                                                                                               failure:^(NSError *error){
-                                                                                                   [menu dismiss];
-                                                                                               }];
-                                                     }];
-        [popMenu show];
-         */
+        person = [self.mapDataSource personAtIndex:indexPath.row + 1];
     } else if (tableView == self.selfTableView) {
-        locations = [self.personDictionary valueForKey:self.identityIds[0]];
+        person = [self.mapDataSource me];
     }
+    
+    locations = person.locations;
     
     if (!locations || !locations.count)
         return;
@@ -765,39 +740,41 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 #pragma mark - EFMarauderMapDataSourceDelegate
 
-- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(NSString *)identityId {
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(NSString *)userIdString {
+    [self.selfTableView reloadData];
+    [self.tableView reloadData];
     return;
 #warning !!! 要大改！！！！！
-    [self.personDictionary setValue:locations forKey:identityId];
-    
-    NSString *userIdentityId = self.identityIds[0];
-    if ([identityId isEqualToString:userIdentityId]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            [self.selfTableView reloadData];
-        });
-        return;
-    }
-    
-    if (locations && locations.count) {
-        @synchronized (self.personAnnotationDictionary) {
-            EFPersonAnnotation *personAnnotation = [self.personAnnotationDictionary valueForKey:identityId];
-            if (!personAnnotation) {
-                personAnnotation = [[EFPersonAnnotation alloc] init];
-                [self.personAnnotationDictionary setValue:personAnnotation forKey:identityId];
-            }
-            
-            EFLocation *lastesLocation = locations[0];
-            personAnnotation.coordinate = lastesLocation.coordinate;
-            personAnnotation.isOnline = [self _isPersonOnline:identityId];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.mapView addAnnotation:personAnnotation];
-                [self.tableView reloadData];
-                [self.selfTableView reloadData];
-            });
-        }
-    }
+//    [self.personDictionary setValue:locations forKey:identityId];
+//    
+//    NSString *userIdentityId = self.identityIds[0];
+//    if ([identityId isEqualToString:userIdentityId]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.tableView reloadData];
+//            [self.selfTableView reloadData];
+//        });
+//        return;
+//    }
+//    
+//    if (locations && locations.count) {
+//        @synchronized (self.personAnnotationDictionary) {
+//            EFPersonAnnotation *personAnnotation = [self.personAnnotationDictionary valueForKey:identityId];
+//            if (!personAnnotation) {
+//                personAnnotation = [[EFPersonAnnotation alloc] init];
+//                [self.personAnnotationDictionary setValue:personAnnotation forKey:identityId];
+//            }
+//            
+//            EFLocation *lastesLocation = locations[0];
+//            personAnnotation.coordinate = lastesLocation.coordinate;
+//            personAnnotation.isOnline = [self _isPersonOnline:identityId];
+//            
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [self.mapView addAnnotation:personAnnotation];
+//                [self.tableView reloadData];
+//                [self.selfTableView reloadData];
+//            });
+//        }
+//    }
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations {
