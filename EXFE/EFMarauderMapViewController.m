@@ -502,66 +502,76 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
         cell = [[EFMapPersonCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identitier];
     }
     
-    Invitation *invitation = nil;
-    NSString *identityId = nil;
-    
+    EFMapPerson *person = nil;
     if (tableView == self.tableView) {
-        invitation = self.invitations[indexPath.row + 1];
-        identityId = self.identityIds[indexPath.row + 1];
-    } else {
-        invitation = self.invitations[0];
-        identityId = self.identityIds[0];
-    }
-    
-    Identity *identity = invitation.identity;
-    
-    EFMapPerson *person = [[EFMapPerson alloc] init];
-    person.avatarName = identity.avatar_filename;
-    
-    EFRouteLocation *destination = self.mapDataSource.destinationLocation;
-    
-    NSArray *userLocations = [self.personDictionary valueForKey:identityId];
-    if (userLocations && userLocations.count) {
-        EFLocation *latestLocation = userLocations[0];
-        NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:latestLocation.timestamp];
-        
-        if (timeInterval >= 0.0f && timeInterval <= 60.0f) {
-            person.connectState = kEFMapPersonConnectStateOnline;
-        } else {
-            person.connectState = kEFMapPersonConnectStateOffline;
-        }
-        
-        if (destination) {
-            CLLocationCoordinate2D destinationCoordinate = destination.coordinate;
-            CLLocation *destinationLocation = [[CLLocation alloc] initWithLatitude:destinationCoordinate.latitude longitude:destinationCoordinate.longitude];
-            
-            CLLocationCoordinate2D latestCoordinate = latestLocation.coordinate;
-            CLLocation *latestCLLocation = [[CLLocation alloc] initWithLatitude:latestCoordinate.latitude longitude:latestCoordinate.longitude];
-            
-            CLLocationDistance distance = [destinationLocation distanceFromLocation:latestCLLocation];
-            if (distance < 30.0f) {
-                person.locationState = kEFMapPersonLocationStateArrival;
-            } else {
-                person.locationState = kEFMapPersonLocationStateOnTheWay;
-            }
-            person.distance = distance;
-            
-            CGFloat angle = HeadingInRadians(
-                                             destinationCoordinate.latitude,
-                                             destinationCoordinate.longitude,
-                                             latestCoordinate.latitude,
-                                             latestCoordinate.longitude);
-            person.angle = angle;
-        } else {
-            person.locationState = kEFMapPersonLocationStateOnTheWay;
-            person.distance = 0.0f;
-        }
-    } else {
-        person.locationState = kEFMapPersonLocationStateUnknow;
-        person.connectState = kEFMapPersonConnectStateOffline;
+        person  = [self.mapDataSource personAtIndex:indexPath.row + 1];
+    } else  if (tableView == self.selfTableView) {
+        person = [self.mapDataSource me];
     }
     
     cell.person = person;
+    return cell;
+    
+//    Invitation *invitation = nil;
+//    NSString *identityId = nil;
+//    
+//    if (tableView == self.tableView) {
+//        invitation = self.invitations[indexPath.row + 1];
+//        identityId = self.identityIds[indexPath.row + 1];
+//    } else {
+//        invitation = self.invitations[0];
+//        identityId = self.identityIds[0];
+//    }
+//    
+//    Identity *identity = invitation.identity;
+//    
+//    EFMapPerson *person = [[EFMapPerson alloc] init];
+//    person.avatarName = identity.avatar_filename;
+//    
+//    EFRouteLocation *destination = self.mapDataSource.destinationLocation;
+//    
+//    NSArray *userLocations = [self.personDictionary valueForKey:identityId];
+//    if (userLocations && userLocations.count) {
+//        EFLocation *latestLocation = userLocations[0];
+//        NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:latestLocation.timestamp];
+//        
+//        if (timeInterval >= 0.0f && timeInterval <= 60.0f) {
+//            person.connectState = kEFMapPersonConnectStateOnline;
+//        } else {
+//            person.connectState = kEFMapPersonConnectStateOffline;
+//        }
+//        
+//        if (destination) {
+//            CLLocationCoordinate2D destinationCoordinate = destination.coordinate;
+//            CLLocation *destinationLocation = [[CLLocation alloc] initWithLatitude:destinationCoordinate.latitude longitude:destinationCoordinate.longitude];
+//            
+//            CLLocationCoordinate2D latestCoordinate = latestLocation.coordinate;
+//            CLLocation *latestCLLocation = [[CLLocation alloc] initWithLatitude:latestCoordinate.latitude longitude:latestCoordinate.longitude];
+//            
+//            CLLocationDistance distance = [destinationLocation distanceFromLocation:latestCLLocation];
+//            if (distance < 30.0f) {
+//                person.locationState = kEFMapPersonLocationStateArrival;
+//            } else {
+//                person.locationState = kEFMapPersonLocationStateOnTheWay;
+//            }
+//            person.distance = distance;
+//            
+//            CGFloat angle = HeadingInRadians(
+//                                             destinationCoordinate.latitude,
+//                                             destinationCoordinate.longitude,
+//                                             latestCoordinate.latitude,
+//                                             latestCoordinate.longitude);
+//            person.angle = angle;
+//        } else {
+//            person.locationState = kEFMapPersonLocationStateOnTheWay;
+//            person.distance = 0.0f;
+//        }
+//    } else {
+//        person.locationState = kEFMapPersonLocationStateUnknow;
+//        person.connectState = kEFMapPersonConnectStateOffline;
+//    }
+//    
+//    cell.person = person;
     
     return cell;
 }
@@ -701,7 +711,7 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 #pragma mark - EFMapStrokeViewDataSource
 
 - (NSUInteger)numberOfStrokesForMapStrokeView:(EFMapStrokeView *)strokeView {
-    NSInteger count = self.identityIds.count - 1;
+    NSInteger count = [self.mapDataSource numberOfPeople] - 1;
     count = count < 0 ? 0 : count;
     return count;
 }
@@ -709,13 +719,11 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 - (NSArray *)strokePointsForStrokeInMapStrokeView:(EFMapStrokeView *)strokeView atIndex:(NSUInteger)index {
     NSUInteger dataIndex = index + 1;
     
-    NSString *key = self.identityIds[dataIndex];
-    NSArray *locations = [self.personDictionary valueForKey:key];
+    EFMapPerson *person = [self.mapDataSource personAtIndex:dataIndex];
+    EFLocation *lastLocation = person.lastLocation;
     
-    if (locations) {
-        EFLocation *lastestLocation = locations[0];
-        
-        CLLocationCoordinate2D coordinate = lastestLocation.coordinate;
+    if (lastLocation) {
+        CLLocationCoordinate2D coordinate = lastLocation.coordinate;
         
         CGPoint locationInView = [self.mapView convertCoordinate:coordinate toPointToView:self.tableView];
         if (CGRectContainsPoint(self.tableView.bounds, locationInView)) {
@@ -753,8 +761,9 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 - (UIColor *)colorForStrokeInMapStrokeView:(EFMapStrokeView *)strokeView atIndex:(NSUInteger)index {
     NSUInteger dataIndex = index + 1;
     
-    NSString *key = self.identityIds[dataIndex];
-    if ([self _isPersonOnline:key]) {
+    EFMapPerson *person = [self.mapDataSource personAtIndex:dataIndex];
+    
+    if (kEFMapPersonConnectStateOnline == person.connectState) {
         return [UIColor COLOR_RGB(0xFF, 0x7E, 0x98)];
     } else {
         return [UIColor COLOR_RGB(0xB2, 0xB2, 0xB2)];
@@ -764,40 +773,11 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 #pragma mark - EFMarauderMapDataSourceDelegate
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(NSString *)userIdString {
-    [self.selfTableView reloadData];
-    [self.tableView reloadData];
-    return;
-#warning !!! 要大改！！！！！
-//    [self.personDictionary setValue:locations forKey:identityId];
-//    
-//    NSString *userIdentityId = self.identityIds[0];
-//    if ([identityId isEqualToString:userIdentityId]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.tableView reloadData];
-//            [self.selfTableView reloadData];
-//        });
-//        return;
-//    }
-//    
-//    if (locations && locations.count) {
-//        @synchronized (self.personAnnotationDictionary) {
-//            EFPersonAnnotation *personAnnotation = [self.personAnnotationDictionary valueForKey:identityId];
-//            if (!personAnnotation) {
-//                personAnnotation = [[EFPersonAnnotation alloc] init];
-//                [self.personAnnotationDictionary setValue:personAnnotation forKey:identityId];
-//            }
-//            
-//            EFLocation *lastesLocation = locations[0];
-//            personAnnotation.coordinate = lastesLocation.coordinate;
-//            personAnnotation.isOnline = [self _isPersonOnline:identityId];
-//            
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self.mapView addAnnotation:personAnnotation];
-//                [self.tableView reloadData];
-//                [self.selfTableView reloadData];
-//            });
-//        }
-//    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.selfTableView reloadData];
+        [self.tableView reloadData];
+        [self.mapStrokeView reloadData];
+    });
 }
 
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations {

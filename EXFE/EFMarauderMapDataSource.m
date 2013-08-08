@@ -44,7 +44,8 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 - (void)_initPeople;
 
-- (NSString *)generateRouteLocationId;
+- (NSString *)_generateRouteLocationId;
+- (NSString *)_userIdFromDirtyUserId:(NSString *)dirtyUserId;
 
 @end
 
@@ -78,7 +79,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     self.peopleMap = peopleMap;
 }
 
-- (NSString *)generateRouteLocationId {
+- (NSString *)_generateRouteLocationId {
     NSString *locationId = nil;
     
     while (YES) {
@@ -97,6 +98,14 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     }
     
     return locationId;
+}
+
+- (NSString *)_userIdFromDirtyUserId:(NSString *)dirtyUserId {
+    NSRange exfeRange = [dirtyUserId rangeOfString:@"@exfe"];
+    NSAssert(exfeRange.location != NSNotFound, @"there MUST be a @exfe");
+    NSString *userIdString = [dirtyUserId substringToIndex:exfeRange.location];
+    
+    return userIdString;
 }
 
 @end
@@ -140,10 +149,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
                                         isEarthCoordinate:NO
                                                   success:^(NSArray *breadcrumbs){
                                                       for (EFRoutePath *path in breadcrumbs) {
-                                                          NSString *dirtyUserId = path.pathId;
-                                                          NSRange exfeRange = [dirtyUserId rangeOfString:@"@exfe"];
-                                                          NSAssert(exfeRange.location != NSNotFound, @"there MUST be a @exfe");
-                                                          NSString *userIdString = [dirtyUserId substringToIndex:exfeRange.location];
+                                                          NSString *userIdString = [self _userIdFromDirtyUserId:path.pathId];
                                                           
                                                           EFMapPerson *person = [self.peopleMap valueForKey:userIdString];
                                                           NSAssert(person, ([NSString stringWithFormat:@"map should contain a person for userId: %@", userIdString]));
@@ -355,7 +361,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 - (EFRouteLocation *)createRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate {
     EFRouteLocation *routelocation = [EFRouteLocation generateRouteLocationWithCoordinate:coordinate];
-    routelocation.locationId = [self generateRouteLocationId];
+    routelocation.locationId = [self _generateRouteLocationId];
     
 #warning TEST only
     routelocation.title = @"子时正刻";
@@ -384,10 +390,29 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
             // Data Update
             if ([type isEqualToString:@"route"]) {
                 if ([tags[0] isEqualToString:@"breadcrumbs"]) {
-                    EFRouteLocation *routeLocation = [[EFRouteLocation alloc] initWithDictionary:jsonDictionary];
+                    EFRoutePath *path = [[EFRoutePath alloc] initWithDictionary:jsonDictionary];
                     if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
-                        NSString *identityIdString = routeLocation.locationId;
-                        [self.delegate mapDataSource:self didUpdateLocations:@[routeLocation] forUser:identityIdString];
+                        NSString *userIdString = [self _userIdFromDirtyUserId:path.pathId];
+                        EFMapPerson *person = [self.peopleMap valueForKey:userIdString];
+                        
+                        person.lastLocation = path.positions[0];
+                        
+                        EFRouteLocation *destination = [self destinationLocation];
+                        if (destination) {
+                            CLLocation *destinationLocation = [[CLLocation alloc] initWithLatitude:destination.coordinate.latitude longitude:destination.coordinate.longitude];
+                            CLLocation *personLocation = [[CLLocation alloc] initWithLatitude:person.lastLocation.coordinate.latitude longitude:person.lastLocation.coordinate.longitude];
+                            CLLocationDistance distance = [destinationLocation distanceFromLocation:personLocation];
+                            person.distance = distance;
+                            if (distance < 30.0f) {
+                                person.locationState = kEFMapPersonLocationStateArrival;
+                            } else {
+                                person.locationState = kEFMapPersonLocationStateOnTheWay;
+                            }
+                        } else {
+                            person.locationState = kEFMapPersonLocationStateUnknow;
+                        }
+                        
+                        [self.delegate mapDataSource:self didUpdateLocations:path.positions forUser:userIdString];
                     }
                 } else if ([tags[0] isEqualToString:@"geomarks"]) {
                     EFRoutePath *routePath = [[EFRoutePath alloc] initWithDictionary:jsonDictionary];
@@ -404,28 +429,6 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
         } else {
             // Action Commond
         }
-        
-//        NSString *type = [jsonDictionary valueForKey:@"type"];
-//        if ([type isEqualToString:kStreamingDataTypeLocaionts]) {
-//            NSDictionary *locations = [jsonDictionary valueForKey:@"data"];
-//            if (locations && locations.count) {
-//                if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
-//                    [locations enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
-//                        NSAssert([obj isKindOfClass:[NSArray class]], @"obj should be a location array");
-//                        
-//                        NSMutableArray *userLocations = [[NSMutableArray alloc] initWithCapacity:[obj count]];
-//                        for (NSDictionary *locationParam in obj) {
-//                            EFLocation *location = [[EFLocation alloc] initWithDictionary:locationParam];
-//                            [userLocations addObject:location];
-//                        }
-//                        
-//                        [self.delegate mapDataSource:self didUpdateLocations:userLocations forUser:key];
-//                    }];
-//                }
-//            }
-//        } else if ([type isEqualToString:kStreamingDataTypeRoute]) {
-//        
-//        }
     }
 }
 

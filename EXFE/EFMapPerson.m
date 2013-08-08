@@ -10,6 +10,33 @@
 
 #import "Identity+EXFE.h"
 #import "IdentityId.h"
+#import "EFLocation.h"
+
+@interface EFMapPerson (Private)
+
+- (void)_lastLocationDidChange;
+
+@end
+
+@implementation EFMapPerson (Private)
+
+- (void)_lastLocationDidChange {
+    if (self.lastLocation) {
+        NSDate *timestamp = self.lastLocation.timestamp;
+        NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:timestamp];
+        if (timeInterval > 0.0f) {
+            if (timeInterval <= 60.0f) {
+                self.connectState = kEFMapPersonConnectStateOnline;
+            } else {
+                self.connectState = kEFMapPersonConnectStateOffline;
+            }
+        } else {
+            self.connectState = kEFMapPersonConnectStateOffline;
+        }
+    }
+}
+
+@end
 
 @implementation EFMapPerson
 
@@ -29,15 +56,21 @@
     return self;
 }
 
-- (void)setLastLocation:(EFRouteLocation *)lastLocation {
+- (void)setLastLocation:(EFLocation *)lastLocation {
     if (lastLocation == _lastLocation)
         return;
+    
+    [self willChangeValueForKey:@"lastLocation"];
     
     if (_lastLocation) {
         [self.locations addObject:_lastLocation];
     }
     
     _lastLocation = lastLocation;
+    
+    [self _lastLocationDidChange];
+    
+    [self didChangeValueForKey:@"lastLocation"];
 }
 
 @end
