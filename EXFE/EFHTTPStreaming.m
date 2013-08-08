@@ -105,9 +105,13 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
                             strncpy(componetBuffer, (char *)(stringBuffer + j), bufferSize);
                             
                             NSString *component = [[NSString alloc] initWithBytes:componetBuffer length:length encoding:NSUTF8StringEncoding];
-                            _strFromStream = [_strFromStream stringByAppendingString:component];
-                            
                             free(componetBuffer);
+                            
+                            if (!component) {
+                                return;
+                            }
+                            
+                            _strFromStream = [_strFromStream stringByAppendingString:component];
                         } else {
                             _strFromStream = @"";
                         }

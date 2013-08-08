@@ -14,7 +14,7 @@
 @interface EFAPIServer (MadaurerMap)
 
 /**
- * endpoint: /routex/user/crosses
+ * endpoint: /routex/users/crosses
  */
 - (void)postRouteXAccessInfo:(NSArray *)accessInfos
                      success:(void (^)(void))successHandler
@@ -30,7 +30,7 @@
                       success:(void (^)(CGFloat earthToMarsLatitudeOffset, CGFloat earthToMarsLongitudeOffset))successHandler
                       failure:(void (^)(NSError *error))failureHandler;
 
-// endpoint: /routex/crosses/:cross_id/breadcrumbs?coordinate=(earth|mars)&token=xxxxxx
+// endpoint: /routex/breadcrumbs/crosses/:cross_id?coordinate=(earth|mars)&token=xxxxxx
 - (void)getRouteXBreadcrumbsInCross:(Cross *)cross
                   isEarthCoordinate:(BOOL)isEarthCoordinate
                             success:(void (^)(NSArray *breadcrumbs))successHandler

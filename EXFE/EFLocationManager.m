@@ -17,6 +17,8 @@
 @interface EFLocationManager ()
 
 @property (nonatomic, strong) CLLocation        *userLocation;            // rewrite property
+@property (nonatomic, strong) CLHeading         *userHeading;             // rewrite property
+
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSTimer           *postTimer;
 
@@ -202,6 +204,11 @@
     }
 }
 
+- (void)locationManager:(CLLocationManager *)manager
+       didUpdateHeading:(CLHeading *)newHeading {
+    self.userHeading = newHeading;
+}
+
 #pragma mark - Timer Runloop
 
 - (void)runloop:(NSTimer *)timer {
@@ -221,6 +228,16 @@
 - (void)stopUpdatingLocation {
     [self _invalideTimer];
     [self.locationManager stopUpdatingLocation];
+}
+
+#pragma mark - User Heading
+
+- (void)startUpdatingHeading {
+    [self.locationManager startUpdatingHeading];
+}
+
+- (void)stopUpdatingHeading {
+    [self.locationManager stopUpdatingHeading];
 }
 
 #pragma mark - Check

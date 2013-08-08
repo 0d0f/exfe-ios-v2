@@ -16,6 +16,7 @@ CLLocationManagerDelegate
 >
 
 @property (nonatomic, readonly) CLLocation  *userLocation;      // KVO
+@property (nonatomic, readonly) CLHeading   *userHeading;       // KVO
 
 + (instancetype)defaultManager;
 
@@ -29,6 +30,12 @@ CLLocationManagerDelegate
  */
 - (void)startUpdatingLocation;
 - (void)stopUpdatingLocation;
+
+/**
+ * User Heading
+ */
+- (void)startUpdatingHeading;
+- (void)stopUpdatingHeading;
 
 /**
  * Cross Register

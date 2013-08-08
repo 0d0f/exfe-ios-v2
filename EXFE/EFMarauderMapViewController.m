@@ -346,6 +346,11 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
     [self _openStreaming];
     [self _getRoute];
     
+    [[EFLocationManager defaultManager] addObserver:self
+                                         forKeyPath:@"userHeading"
+                                            options:NSKeyValueObservingOptionNew
+                                            context:NULL];
+    
     if ([[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
 #warning !!! 文本替换
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"第一次使用活点地图"
@@ -359,14 +364,32 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
         [self.mapDataSource registerToUpdateLocation];
         [self.mapDataSource getPeopleBreadcrumbs];
     }
+    
+    [[EFLocationManager defaultManager] startUpdatingHeading];
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-//    [self.locationManager stopUpdatingLocation];
+- (void)viewWillDisappear:(BOOL)animated {
+    [[EFLocationManager defaultManager] removeObserver:self
+                                            forKeyPath:@"userHeading"];
+    [[EFLocationManager defaultManager] stopUpdatingHeading];
     [self _closeStreaming];
     [self _stopTimer];
     
     [super viewDidDisappear:animated];
+}
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (object == [EFLocationManager defaultManager] && [keyPath isEqualToString:@"userHeading"]) {
+        if (self.mapView && self.mapView.userLocation) {
+            MKAnnotationView *userLocationView = [self.mapView viewForAnnotation:self.mapView.userLocation];
+            if (userLocationView) {
+                CLLocationDirection direction = [EFLocationManager defaultManager].userHeading.trueHeading;
+                userLocationView.layer.transform = CATransform3DMakeRotation((M_PI / 160.0f) * direction, 0.0f, 0.0f, 1.0f);
+            }
+        }
+    }
 }
 
 #pragma mark - UIAlertView
@@ -874,7 +897,17 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-    if ([annotation isKindOfClass:[EFAnnotation class]]) {
+    if (annotation ==  mapView.userLocation) {
+        static NSString *Identifier = @"UserLocation";
+        MKAnnotationView *userLocationView = [mapView dequeueReusableAnnotationViewWithIdentifier:Identifier];
+        if (nil == userLocationView) {
+            userLocationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identifier];
+            userLocationView.image = [UIImage imageNamed:@"map_arrow_22blue.png"];
+            userLocationView.canShowCallout = NO;
+        }
+        
+        return userLocationView;
+    } else if ([annotation isKindOfClass:[EFAnnotation class]]) {
         static NSString *Identifier = @"Location";
         
         EFAnnotationView *annotationView = (EFAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:Identifier];
@@ -945,6 +978,12 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
             dropAnimation.duration = 0.233f;
             dropAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
             [view.layer addAnimation:dropAnimation forKey:nil];
+        } else if (view.annotation == mapView.userLocation) {
+            CLHeading *userHeading = [EFLocationManager defaultManager].userHeading;
+            if (userHeading) {
+                CLLocationDirection direction = userHeading.trueHeading;
+                view.layer.transform = CATransform3DMakeRotation((M_PI / 160.0f) * direction, 0.0f, 0.0f, 1.0f);
+            }
         }
     }
 }

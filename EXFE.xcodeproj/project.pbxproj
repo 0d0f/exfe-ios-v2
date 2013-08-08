@@ -1490,6 +1490,12 @@
 		76295DE3174BAC43002F5CEF /* xlist_top_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76295DCD174BAC43002F5CEF /* xlist_top_3@2x.png */; };
 		76295DE4174BAC43002F5CEF /* xlist_top_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76295DCD174BAC43002F5CEF /* xlist_top_3@2x.png */; };
 		76295DE5174BAC43002F5CEF /* xlist_top_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76295DCD174BAC43002F5CEF /* xlist_top_3@2x.png */; };
+		762D9F8C17B35798002A528B /* map_arrow_22blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F8A17B35798002A528B /* map_arrow_22blue.png */; };
+		762D9F8D17B35798002A528B /* map_arrow_22blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F8A17B35798002A528B /* map_arrow_22blue.png */; };
+		762D9F8E17B35798002A528B /* map_arrow_22blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F8A17B35798002A528B /* map_arrow_22blue.png */; };
+		762D9F8F17B35798002A528B /* map_arrow_22blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F8B17B35798002A528B /* map_arrow_22blue@2x.png */; };
+		762D9F9017B35798002A528B /* map_arrow_22blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F8B17B35798002A528B /* map_arrow_22blue@2x.png */; };
+		762D9F9117B35798002A528B /* map_arrow_22blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F8B17B35798002A528B /* map_arrow_22blue@2x.png */; };
 		763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
@@ -2664,6 +2670,8 @@
 		76295DCB174BAC43002F5CEF /* xlist_top_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xlist_top_2@2x.png"; sourceTree = "<group>"; };
 		76295DCC174BAC43002F5CEF /* xlist_top_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xlist_top_3.png; sourceTree = "<group>"; };
 		76295DCD174BAC43002F5CEF /* xlist_top_3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xlist_top_3@2x.png"; sourceTree = "<group>"; };
+		762D9F8A17B35798002A528B /* map_arrow_22blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_arrow_22blue.png; sourceTree = "<group>"; };
+		762D9F8B17B35798002A528B /* map_arrow_22blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_arrow_22blue@2x.png"; sourceTree = "<group>"; };
 		763A018A171EAEB10082CC9E /* EFSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchBar.h; sourceTree = "<group>"; };
 		763A018B171EAEB10082CC9E /* EFSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchBar.m; sourceTree = "<group>"; };
 		763A018F171EE8BE0082CC9E /* EFChoosePeopleViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewCell.h; sourceTree = "<group>"; };
@@ -4273,6 +4281,8 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				762D9F8A17B35798002A528B /* map_arrow_22blue.png */,
+				762D9F8B17B35798002A528B /* map_arrow_22blue@2x.png */,
 				763BE926179FD836003BF97C /* map_shadow_gap.png */,
 				763BE922179FD770003BF97C /* map_shadow_gap@2x.png */,
 				766C9833179944240064B5BC /* map_dot_grey@2x.png */,
@@ -5281,6 +5291,7 @@
 				4F63DB2317172AA600136B7E /* ExfeeInputViewController.xib in Resources */,
 				4F63DB2417172AA600136B7E /* cross_bg.png in Resources */,
 				4F63DB2517172AA600136B7E /* cross_bg@2x.png in Resources */,
+				762D9F9017B35798002A528B /* map_arrow_22blue@2x.png in Resources */,
 				4F63DB2617172AA600136B7E /* toolbar_bg.png in Resources */,
 				4F63DB2717172AA600136B7E /* toolbar_bg@2x.png in Resources */,
 				4F63DB2817172AA600136B7E /* textfield_navbar.png in Resources */,
@@ -5697,6 +5708,7 @@
 				76B1240517968C9900A73E59 /* location_btn.png in Resources */,
 				76B1241F1797C81D00A73E59 /* btn_pad@2x.png in Resources */,
 				76B1242C1798331A00A73E59 /* map_arrow_blue@2x.png in Resources */,
+				762D9F8D17B35798002A528B /* map_arrow_22blue.png in Resources */,
 				76B124381798398400A73E59 /* map_remove_15@2x.png in Resources */,
 				76B1243B1798398400A73E59 /* map_remove_30@2x.png in Resources */,
 				76B1245A17992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */,
@@ -5734,6 +5746,7 @@
 				4F63DCFC17172B0700136B7E /* exfee_18_white@2x.png in Resources */,
 				4F63DCFD17172B0700136B7E /* identity_email_18_grey.png in Resources */,
 				4F63DCFE17172B0700136B7E /* identity_email_18_grey@2x.png in Resources */,
+				762D9F9117B35798002A528B /* map_arrow_22blue@2x.png in Resources */,
 				4F63DCFF17172B0700136B7E /* identity_email_18.png in Resources */,
 				4F63DD0017172B0700136B7E /* identity_email_18@2x.png in Resources */,
 				4F63DD0117172B0700136B7E /* identity_facebook_18_grey.png in Resources */,
@@ -6041,6 +6054,7 @@
 				4FDFA3FA172A794900929BC9 /* start_tri-08@2x.png in Resources */,
 				4FDFA3FD172A794900929BC9 /* start_tri-09.png in Resources */,
 				4FDFA400172A794900929BC9 /* start_tri-09@2x.png in Resources */,
+				762D9F8E17B35798002A528B /* map_arrow_22blue.png in Resources */,
 				4FDFA403172A794900929BC9 /* start_tri-10.png in Resources */,
 				4FDFA406172A794900929BC9 /* start_tri-10@2x.png in Resources */,
 				4FDFA409172A794900929BC9 /* start_tri-11.png in Resources */,
@@ -6163,6 +6177,7 @@
 				78B9FD3715B5568D00F5E4D3 /* location@2x.png in Resources */,
 				784D697B15BFCB6B00226A23 /* gather_describe_area.png in Resources */,
 				784D697C15BFCB6B00226A23 /* gather_describe_area@2x.png in Resources */,
+				762D9F8F17B35798002A528B /* map_arrow_22blue@2x.png in Resources */,
 				78CEBFF115BFE7BE002BCA27 /* ExfeeInputViewController.xib in Resources */,
 				78465E1115C920BE00BA5C1F /* cross_bg.png in Resources */,
 				78465E1215C920BE00BA5C1F /* cross_bg@2x.png in Resources */,
@@ -6491,6 +6506,7 @@
 				4FDFA40A172A794900929BC9 /* start_tri-11@2x.png in Resources */,
 				4FDFA40D172A794900929BC9 /* start_tri-12.png in Resources */,
 				4FDFA410172A794900929BC9 /* start_tri-12@2x.png in Resources */,
+				762D9F8C17B35798002A528B /* map_arrow_22blue.png in Resources */,
 				4FDFA413172A794900929BC9 /* start_tri-13.png in Resources */,
 				4FDFA416172A794900929BC9 /* start_tri-13@2x.png in Resources */,
 				4FDFA419172A794900929BC9 /* start_tri-14.png in Resources */,
