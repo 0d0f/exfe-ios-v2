@@ -42,16 +42,29 @@
     [objectManager addResponseDescriptor:metaresponseDescriptor];
     
 #pragma mark Avatar
-    RKEntityMapping *avatarMapping = [RKEntityMapping mappingForEntityForName:@"Avatar" inManagedObjectStore:managedObjectStore];
-    [avatarMapping addAttributeMappingsFromArray:
+    RKEntityMapping *avatarEntityMapping = [RKEntityMapping mappingForEntityForName:@"Avatar" inManagedObjectStore:managedObjectStore];
+    [avatarEntityMapping addAttributeMappingsFromArray:
      @[
         @"original"
      ]
     ];
-    [avatarMapping addAttributeMappingsFromDictionary:
+    [avatarEntityMapping addAttributeMappingsFromDictionary:
      @{
         @"320_320": @"base_2x",
         @"80_80": @"base"
+     }
+    ];
+    
+    RKObjectMapping *avatarRequestObjectMapping = [RKObjectMapping requestMapping];
+    [avatarRequestObjectMapping addAttributeMappingsFromArray:
+     @[
+     @"original"
+     ]
+    ];
+    [avatarRequestObjectMapping addAttributeMappingsFromDictionary:
+     @{
+        @"base_2x": @"320_320",
+        @"base": @"80_80"
      }
     ];
     
@@ -82,7 +95,7 @@
         @"status"
      ]
     ];
-    [identityMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"avatar" toKeyPath:@"avatar" withMapping:avatarMapping]];
+    [identityMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"avatar" toKeyPath:@"avatar" withMapping:avatarEntityMapping]];
     
     RKResponseDescriptor *identityResponseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:identityMapping
                                                                                                pathPattern:nil
@@ -115,6 +128,7 @@
         @"status"
      ]
     ];
+    [identityrequestMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"avatar" toKeyPath:@"avatar" withMapping:avatarRequestObjectMapping]];
     
 #pragma mark IdentityId
     // IdentityId Entity
@@ -260,7 +274,7 @@
     ];
     [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"identities" toKeyPath:@"identities" withMapping:identityMapping]];
     [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"devices" toKeyPath:@"devices" withMapping:deviceMapping]];
-    [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"avatar" toKeyPath:@"avatar" withMapping:avatarMapping]];
+    [userMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"avatar" toKeyPath:@"avatar" withMapping:avatarEntityMapping]];
     
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping pathPattern:nil keyPath:@"response.user" statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     [objectManager addResponseDescriptor:responseDescriptor];

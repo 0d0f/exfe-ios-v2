@@ -37,7 +37,7 @@
 #pragma mark Token and User ID manager
 
 - (void)saveUserData;
-- (void)loaduserData;
+- (void)loadUserData;
 - (void)clearUserData;
 - (BOOL)isLoggedIn;
 

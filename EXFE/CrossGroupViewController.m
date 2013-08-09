@@ -399,7 +399,7 @@
     if (object == self.cross) {
         if ([keyPath isEqualToString:@"conversation_count"]) {
             NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"WidgetConvViewController")];
-            NSAssert(viewControllers != nil && viewControllers.count, @"viewControllers 不应该为 nil 或 空");
+//            NSAssert(viewControllers != nil && viewControllers.count, @"viewControllers 不应该为 nil 或 空");
             if (viewControllers.count == 0) {
                 return;
             }

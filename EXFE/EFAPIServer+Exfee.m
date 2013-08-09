@@ -11,6 +11,7 @@
 #import "EFKit.h"
 #import "Exfee+EXFE.h"
 #import "Identity+EXFE.h"
+#import "IdentityId+EXFE.h"
 #import "Meta.h"
 
 @implementation EFAPIServer (Exfee)
@@ -53,6 +54,229 @@
                                  });
                              }
                          }];
+}
+
+- (void)removeNotificationIdentity:(IdentityId *)identityId
+                              from:(Invitation *)invitation
+                           onExfee:(Exfee *)exfee
+                           success:(void (^)(Exfee *editExfee))successHandler
+                           failure:(void (^)(NSError *error))failureHandler
+{
+    NSDictionary *param = @{@"identity_id": identityId.identity_id};
+    
+    NSString *endpoint = [NSString stringWithFormat:@"exfee/%u/removenotificationidentity?token=%@", [exfee.exfee_id integerValue], self.model.userToken];
+    
+    RKObjectManager *manager = self.model.objectManager;
+//    objectManager.HTTPClient.parameterEncoding = AFFormURLParameterEncoding;
+    
+    RKObjectRequestOperation *operation = [manager appropriateObjectRequestOperationWithObject:exfee
+                                                                                        method:RKRequestMethodPOST
+                                                                                          path:endpoint
+                                                                                    parameters:param];
+    
+    // warnming handler
+    [operation setWillMapDeserializedResponseBlock:^id(id object){
+        if ([object isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *dictObject = (NSDictionary *)object;
+            NSDictionary *responseDict = [dictObject valueForKey:@"response"];
+            if (responseDict) {
+                NSNumber *exfeeQuota = [responseDict valueForKey:@"exfee_over_quota"];
+                if (exfeeQuota) {
+                    EFErrorMessage *errorMessage = [EFErrorMessage errorMessageWithStyle:kEFErrorMessageStyleAlert
+                                                                                   title:NSLocalizedString(@"Quota limit exceeded", nil)
+                                                                                 message:[NSString stringWithFormat:NSLocalizedString(@"%d people limit on gathering this ·X·. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!", nil), [exfeeQuota intValue]]
+                                                                             buttonTitle:NSLocalizedString(@"OK", nil)
+                                                                     buttonActionHandler:nil];
+                    [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];
+                }
+            }
+        }
+        
+        return object;
+    }];
+    
+    // set success && fail handler
+    [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
+        [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+                   withObject:operation
+                   withObject:mappingResult];
+        
+        if ([operation.HTTPRequestOperation.response statusCode] == 200){
+            if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+            {
+                Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
+                int code = [meta.code intValue];
+                int type = code / 100;
+                switch (type) {
+                    case 2: // HTTP OK
+                    {
+                        if (206 == code || 200 == code) {
+                            Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
+                            
+                            NSError *error = nil;
+//                            [respExfee.managedObjectContext save:&error];
+//                            [respExfee.managedObjectContext saveToPersistentStore:&error];
+                            [manager.managedObjectStore.mainQueueManagedObjectContext save:&error];
+                            [manager.managedObjectStore.mainQueueManagedObjectContext saveToPersistentStore:&error];
+                            
+                            if (successHandler) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    successHandler(respExfee);
+                                });
+                            }
+                        }
+                    }
+                        break;
+                    case 4: // Client Error
+                    {
+                        // 400 Over people mac limited
+                        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                        [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                        if (failureHandler) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                failureHandler(nil);
+                            });
+                        }
+                    }
+                        break;
+                    case 5: // Server Error
+                    {
+                        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                        [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                        if (failureHandler) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                failureHandler(nil);
+                            });
+                        }
+                    }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+                                     failure:^(RKObjectRequestOperation *operation, NSError *error){
+                                         [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+                                                    withObject:operation
+                                                    withObject:error];
+                                         
+                                         RKObjectManager *objectManager = [RKObjectManager sharedManager];
+                                         [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+                                         if (failureHandler) {
+                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                 failureHandler(error);
+                                             });
+                                         }
+                                     }];
+    
+    
+//    
+//    
+//    NSMutableURLRequest *request = [manager requestWithObject:nil method:RKRequestMethodPOST path:endpoint parameters:param];
+//    RKManagedObjectRequestOperation *operation = [manager managedObjectRequestOperationWithRequest:request
+//                                                                       managedObjectContext:self.model.objectManager.managedObjectStore.mainQueueManagedObjectContext
+//                                                                                    success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+//                                                                                        NSLog(@"Mapping result: %@", mappingResult);
+//                                                                                    }
+//                                                                                    failure:^(RKObjectRequestOperation *operation, NSError *error) {
+//                                                                                        NSLog(@"Request error: %@", error);
+//                                                                                    }];
+//
+//    operation.targetObject = exfee;
+//    
+//    [operation setWillMapDeserializedResponseBlock:^id(id deserializedResponseBody) {
+//        if ([deserializedResponseBody isKindOfClass:[NSDictionary class]]) {
+//            NSDictionary *dictObject = (NSDictionary *)deserializedResponseBody;
+//            NSDictionary *responseDict = [dictObject valueForKey:@"response"];
+//            if (responseDict) {
+//                NSNumber *exfeeQuota = [responseDict valueForKey:@"exfee_over_quota"];
+//                if (exfeeQuota) {
+//                    EFErrorMessage *errorMessage = [EFErrorMessage errorMessageWithStyle:kEFErrorMessageStyleAlert
+//                                                                                   title:NSLocalizedString(@"Quota limit exceeded", nil)
+//                                                                                 message:[NSString stringWithFormat:NSLocalizedString(@"%d people limit on gathering this ·X·. However, we’re glad to eliminate this limit during pilot period in appreciation of your early adaption. Thank you!", nil), [exfeeQuota intValue]]
+//                                                                             buttonTitle:NSLocalizedString(@"OK", nil)
+//                                                                     buttonActionHandler:nil];
+//                    [[EFErrorHandlerCenter defaultCenter] presentErrorMessage:errorMessage];
+//                }
+//            }
+//        }
+//        
+//        return deserializedResponseBody;
+//    }];
+//    
+//    [operation setCompletionBlockWithSuccess:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult){
+//        [self performSelector:@selector(_handleSuccessWithRequestOperation:andResponseObject:)
+//                   withObject:operation
+//                   withObject:mappingResult];
+//        
+//        if ([operation.HTTPRequestOperation.response statusCode] == 200){
+//            if([[mappingResult dictionary] isKindOfClass:[NSDictionary class]])
+//            {
+//                Meta *meta = (Meta *)[[mappingResult dictionary] objectForKey:@"meta"];
+//                int code = [meta.code intValue];
+//                int type = code / 100;
+//                switch (type) {
+//                    case 2: // HTTP OK
+//                    {
+//                        if (206 == code || 200 == code) {
+//                            Exfee *respExfee = [[mappingResult dictionary] objectForKey:@"response.exfee"];
+//                            NSError *error = nil;
+//                            [manager.managedObjectStore.mainQueueManagedObjectContext save:&error];
+//                            
+//                            if (successHandler) {
+//                                dispatch_async(dispatch_get_main_queue(), ^{
+//                                    successHandler(respExfee);
+//                                });
+//                            }
+//                        }
+//                    }
+//                        break;
+//                    case 4: // Client Error
+//                    {
+//                        // 400 Over people mac limited
+//                        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+//                        [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+//                        if (failureHandler) {
+//                            dispatch_async(dispatch_get_main_queue(), ^{
+//                                failureHandler(nil);
+//                            });
+//                        }
+//                    }
+//                        break;
+//                    case 5: // Server Error
+//                    {
+//                        RKObjectManager *objectManager = [RKObjectManager sharedManager];
+//                        [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+//                        if (failureHandler) {
+//                            dispatch_async(dispatch_get_main_queue(), ^{
+//                                failureHandler(nil);
+//                            });
+//                        }
+//                    }
+//                        break;
+//                    default:
+//                        break;
+//                }
+//            }
+//        }
+//    }
+//                                     failure:^(RKObjectRequestOperation *operation, NSError *error){
+//                                         [self performSelector:@selector(_handleFailureWithRequestOperation:andError:)
+//                                                    withObject:operation
+//                                                    withObject:error];
+//                                         
+//                                         RKObjectManager *objectManager = [RKObjectManager sharedManager];
+//                                         [objectManager.managedObjectStore.mainQueueManagedObjectContext rollback];
+//                                         if (failureHandler) {
+//                                             dispatch_async(dispatch_get_main_queue(), ^{
+//                                                 failureHandler(error);
+//                                             });
+//                                         }
+//                                     }];
+//
+    [manager enqueueObjectRequestOperation:operation];
+    
 }
 
 - (void)editExfee:(Exfee *)exfee

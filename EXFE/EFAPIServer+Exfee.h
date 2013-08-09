@@ -18,6 +18,12 @@
            success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
+- (void)removeNotificationIdentity:(IdentityId *)identityId
+                              from:(Invitation *)invitation
+                           onExfee:(Exfee *)exfee
+                           success:(void (^)(Exfee *editExfee))successHandler
+                           failure:(void (^)(NSError *error))failureHandler;
+
 - (void)editExfee:(Exfee *)exfee
        byIdentity:(Identity *)identity
           success:(void (^)(Exfee *editedExfee))successHandler

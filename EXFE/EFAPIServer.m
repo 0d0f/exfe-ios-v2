@@ -55,9 +55,9 @@
     return [self.model saveUserData];
 }
 
-- (void)loaduserData
+- (void)loadUserData
 {
-    return [self.model loaduserData];
+    return [self.model loadUserData];
 }
 
 - (void)clearUserData

@@ -68,6 +68,17 @@
     return array;
 }
 
+static NSString *const kItemsKey = @"Notification_identities";
+
+- (void)removeObjectFromNotification_identitiesAtIndex:(NSUInteger)idx {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self mutableOrderedSetValueForKey:kItemsKey]];
+    [tmpOrderedSet removeObjectAtIndex:idx];
+    [self setPrimitiveValue:tmpOrderedSet forKey:kItemsKey];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:kItemsKey];
+}
+
 + (Invitation*)invitationWithIdentity:(Identity*)identity{
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
     NSManagedObjectContext *context = objectManager.managedObjectStore.mainQueueManagedObjectContext;

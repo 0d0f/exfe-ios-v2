@@ -85,6 +85,14 @@
     NSInteger user_id = 0;
     user_id = [[userDefaults stringForKey:@"userid"] integerValue];
     [self switchContextByUserId:user_id withAbandon:NO];
+    if (user_id > 0) {
+        if (self.model.isLoggedIn) {
+            NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:@"udid"];
+            if (token.length > 0) {
+                [self.model.apiServer regDevice:token success:nil failure:nil];
+            }
+        }
+    }
     
     //    [[NSNotificationCenter defaultCenter] addObserver:self
     //                                             selector:@selector(observeContextSave:)
@@ -359,6 +367,11 @@
 - (void)signinDidFinish {
     if ([self.model isLoggedIn]) {
         [self requestForPush];
+        
+        NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:@"udid"];
+        if (token.length > 0) {
+            [self.model.apiServer regDevice:token success:nil failure:nil];
+        }
         
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0.0, -20.0);

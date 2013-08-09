@@ -19,7 +19,7 @@
 @property (nonatomic, assign, readwrite) NSInteger                  userId;
 
 @property (nonatomic, strong, readwrite) NSEntityDescription *      crossEntry;
-@property (nonatomic, strong, readwrite ) NSEntityDescription *      exfeeEntry;
+@property (nonatomic, strong, readwrite) NSEntityDescription *      exfeeEntry;
 @property (nonatomic, strong, readwrite) RKObjectManager *           objectManager;
 @property (nonatomic, strong, readwrite) EFAPIServer *               apiServer;
 
@@ -236,6 +236,7 @@ static NSString * kExtension           = @"exfe";
         self->_userId = user_id;
         self->_sequenceNumber = sNextGallerySequenceNumber;
         sNextGallerySequenceNumber += 1;
+
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
         
@@ -269,7 +270,7 @@ static NSString * kExtension           = @"exfe";
     [ud synchronize];
 }
 
-- (void)loaduserData
+- (void)loadUserData
 {
     NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
     [ud synchronize];
@@ -292,7 +293,7 @@ static NSString * kExtension           = @"exfe";
     if (self.userId > 0 && self.userToken.length > 0) {
         return YES;
     }
-    [self loaduserData];
+    [self loadUserData];
     if (self.userId > 0 && self.userToken.length > 0) {
         return YES;
     }
@@ -547,13 +548,6 @@ static NSString * kExtension           = @"exfe";
     // and we crash.
     
     if (success) {
-        
-        if (self.userId > 0 && self.isLoggedIn) {
-            NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:@"udid"];
-            if (token.length > 0) {
-                [self.apiServer regDevice:token success:nil failure:nil];
-            }
-        }
 //        [self startSync];
     } else {
         abort();

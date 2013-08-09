@@ -233,8 +233,7 @@ typedef enum {
         [_selected_invitation setRsvp_status:@"REMOVED"];
         
         Identity *myidentity = [self.exfee getMyInvitation].identity;
-        AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-        [app.model.apiServer editExfee:self.exfee
+        [self.model.apiServer editExfee:self.exfee
                                      byIdentity:myidentity
                                         success:^(Exfee *exfee) {
                                             self.selected_invitation = nil;
@@ -275,6 +274,33 @@ typedef enum {
 	popupQuery.actionSheetStyle = UIActionSheetStyleDefault;
     
 	[popupQuery showInView:self.view];
+}
+
+- (void)removeNotificationIdentity:(NSUInteger)index
+{
+    NSMutableOrderedSet *set = [self.selected_invitation mutableOrderedSetValueForKey:@"notification_identities"];
+    IdentityId *identity_id = [set objectAtIndex:index];
+    [set removeObjectAtIndex:index];
+    
+    [self.model.apiServer removeNotificationIdentity:identity_id
+                                                from:_selected_invitation
+                                             onExfee:self.exfee
+                                             success:^(Exfee *editExfee) {
+                                                 self.selected_invitation = nil;
+                                                 self.exfee = editExfee;
+                                                 self.sortedInvitations = [self.exfee getSortedInvitations:kInvitationSortTypeMeAcceptOthers];
+                                                 [exfeeContainer reloadData];
+                                                 [self reloadSelected];
+                                                 
+                                                 NSArray *viewControllers = [self.tabBarViewController viewControllersForClass:NSClassFromString(@"CrossGroupViewController")];
+                                                 NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
+                                                 
+                                                 CrossGroupViewController *crossGroupViewController = viewControllers[0];
+                                                 
+                                                 [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue] updatedTime:nil];
+                                             } failure:^(NSError *error) {
+                                                 NSLog(@"error %@", error);
+                                             }];
 }
 
 #pragma mark UITableViewDataSource
@@ -570,6 +596,7 @@ typedef enum {
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    BOOL lastHost = NO;
     // TODO: temp walkaround The only host cannot be removed
     if (_selected_invitation) {
         if ([_selected_invitation.host boolValue] == YES) {
@@ -580,7 +607,7 @@ typedef enum {
                 }
             }
             if (count == 1) {
-                return NO;
+                lastHost = YES;
             }
         }
     }
@@ -588,10 +615,14 @@ typedef enum {
     NSInteger section = indexPath.section;
     switch (section) {
         case 1:
-            return YES;
+            return !lastHost;
         //  break;
         case 2:
-            return indexPath.row == 0;
+            if (indexPath.row == 0) {
+                return !lastHost;
+            } else {
+                return YES;
+            }
         //  break;
         default:
             return NO;
@@ -601,6 +632,7 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    BOOL lastHost = NO;
     // TODO: temp walkaround The only host cannot be removed
     if (_selected_invitation) {
         if ([_selected_invitation.host boolValue] == YES) {
@@ -611,12 +643,32 @@ typedef enum {
                 }
             }
             if (count == 1) {
-                return;
+                lastHost = YES;
             }
         }
     }
     
-    [self removeInvitation];
+    NSInteger section = indexPath.section;
+    switch (section) {
+        case 1:
+            if (!lastHost) {
+                [self removeInvitation];
+            }
+            break;
+        case 2:
+            if (indexPath.row == 0 && !lastHost) {
+                [self removeInvitation];
+            } else {
+                // remove notification identity;
+                NSUInteger r = indexPath.row - 1;
+                [self removeNotificationIdentity:r];
+            }
+            break;
+        default:
+            break;
+    }
+    
+    
 }
 
 #pragma mark UITableViewDelegate
@@ -986,8 +1038,7 @@ typedef enum {
                 
                 Identity *myidentity = [self.exfee getMyInvitation].identity;
                 
-                AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-                [app.model.apiServer editExfee:exfee
+                [self.model.apiServer editExfee:exfee
                                              byIdentity:myidentity
                                                 success:^(Exfee *editedExfee){
                                                     [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -1175,8 +1226,7 @@ typedef enum {
 - (void)sendrsvp:(NSString*)status invitation:(Invitation*)_invitation {
     
     Identity *myidentity = [self.exfee getMyInvitation].identity;
-    AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [app.model.apiServer submitRsvp:status
+    [self.model.apiServer submitRsvp:status
                                           on:_invitation
                                   myIdentity:[myidentity.identity_id intValue]
                                      onExfee:[self.exfee.exfee_id intValue]
@@ -1196,9 +1246,8 @@ typedef enum {
                                                      NSAssert(viewControllers != nil && viewControllers.count, @"viewController 不应为空");
                                                      
                                                      CrossGroupViewController *crossGroupViewController = viewControllers[0];
-                                                     AppDelegate * app = (AppDelegate*)[UIApplication sharedApplication].delegate;
                                                      
-                                                     [app.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue] updatedTime:nil];
+                                                     [self.model loadCrossWithCrossId:[crossGroupViewController.cross.cross_id intValue] updatedTime:nil];
                                                      
                                                      self.exfee = crossGroupViewController.cross.exfee;
                                                      [exfeeContainer reloadData];
