@@ -18,6 +18,8 @@
 #import "Cross.h"
 #import "Exfee+EXFE.h"
 #import "EFAPI.h"
+#import "EFPersonAnnotation.h"
+#import "EFPersonAnnotationView.h"
 
 #define kStreamingDataTypeLocaionts     @"/v3/crosses/routex/breadcrumbs"
 #define kStreamingDataTypeRoute         @"/v3/crosses/routex/geomarks"
@@ -32,6 +34,8 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 @property (nonatomic, strong) NSMutableArray        *routeLocations;
 @property (nonatomic, strong) NSMutableDictionary   *routeLocationAnnotationMap;
+
+@property (nonatomic, strong) NSMutableDictionary   *personAnnotationMap;
 
 @property (nonatomic, strong) EFHTTPStreaming       *httpStreaming;
 
@@ -121,6 +125,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
         
         self.routeLocations = [[NSMutableArray alloc] init];
         self.routeLocationAnnotationMap = [[NSMutableDictionary alloc] init];
+        self.personAnnotationMap = [[NSMutableDictionary alloc] init];
     }
     
     return self;
@@ -161,7 +166,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
                                                           if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
                                                               [self.delegate mapDataSource:self
                                                                         didUpdateLocations:person.locations
-                                                                                   forUser:userIdString];
+                                                                                   forUser:person];
                                                           }
                                                       }
                                                   }
@@ -412,7 +417,7 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
                             person.locationState = kEFMapPersonLocationStateUnknow;
                         }
                         
-                        [self.delegate mapDataSource:self didUpdateLocations:path.positions forUser:userIdString];
+                        [self.delegate mapDataSource:self didUpdateLocations:path.positions forUser:person];
                     }
                 } else if ([tags[0] isEqualToString:@"geomarks"]) {
                     EFRoutePath *routePath = [[EFRoutePath alloc] initWithDictionary:jsonDictionary];
@@ -429,6 +434,40 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
         } else {
             // Action Commond
         }
+    }
+}
+
+#pragma mark - Person
+
+- (EFPersonAnnotation *)personAnnotationForPerson:(EFMapPerson *)person {
+    NSParameterAssert(person);
+    return [self.personAnnotationMap valueForKey:person.userIdString];
+}
+
+- (void)addPersonAnnotationForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView {
+    if ([self personAnnotationForPerson:person]) {
+        [self updatePersonAnnotationForPerson:person toMapView:mapView];
+    } else {
+        EFPersonAnnotation *personAnnotation = [[EFPersonAnnotation alloc] init];
+        personAnnotation.coordinate = person.lastLocation.coordinate;
+        personAnnotation.isOnline = (person.connectState == kEFMapPersonConnectStateOnline) ? YES : NO;
+        
+        [self.personAnnotationMap setValue:personAnnotation forKey:person.userIdString];
+        [mapView addAnnotation:personAnnotation];
+    }
+}
+
+- (void)updatePersonAnnotationForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView {
+    EFPersonAnnotation *personAnnotation = [self.personAnnotationMap valueForKey:person.userIdString];
+    if (personAnnotation) {
+        EFPersonAnnotationView *personAnnotationView = (EFPersonAnnotationView *)[mapView viewForAnnotation:personAnnotation];
+        
+        personAnnotation.coordinate = person.lastLocation.coordinate;
+        personAnnotation.isOnline = (person.connectState == kEFMapPersonConnectStateOnline) ? YES : NO;
+        
+        personAnnotationView.annotation = personAnnotation;
+    } else {
+        [self addPersonAnnotationForPerson:person toMapView:mapView];
     }
 }
 

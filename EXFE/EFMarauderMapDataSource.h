@@ -15,13 +15,13 @@
 @protocol EFMarauderMapDataSourceDelegate <NSObject>
 
 @optional
-- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(NSString *)userId;
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(EFMapPerson *)person;
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRouteLocations:(NSArray *)locations;
 - (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateRoutePaths:(NSArray *)paths;
 
 @end
 
-@class EFAnnotation, EFAnnotationView, EFRouteLocation, EFLocation, EFRoutePath, Cross;
+@class EFAnnotation, EFAnnotationView, EFRouteLocation, EFLocation, EFRoutePath, Cross, EFPersonAnnotation;
 @interface EFMarauderMapDataSource : NSObject
 <
 EFHTTPStreamingDelegate
@@ -53,6 +53,13 @@ EFHTTPStreamingDelegate
 - (EFAnnotation *)annotationForRouteLocation:(EFRouteLocation *)routeLocation;
 - (void)removeRouteLocation:(EFRouteLocation *)routeLocation fromMapView:(MKMapView *)mapView;
 - (NSArray *)allRouteLocations;
+
+/**
+ * Person
+ */
+- (EFPersonAnnotation *)personAnnotationForPerson:(EFMapPerson *)person;
+- (void)addPersonAnnotationForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView;
+- (void)updatePersonAnnotationForPerson:(EFMapPerson *)person toMapView:(MKMapView *)mapView;
 
 /**
  * Route Path

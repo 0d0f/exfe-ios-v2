@@ -772,11 +772,13 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 
 #pragma mark - EFMarauderMapDataSourceDelegate
 
-- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(NSString *)userIdString {
+- (void)mapDataSource:(EFMarauderMapDataSource *)dataSource didUpdateLocations:(NSArray *)locations forUser:(EFMapPerson *)person {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.selfTableView reloadData];
         [self.tableView reloadData];
         [self.mapStrokeView reloadData];
+        
+        [self.mapDataSource updatePersonAnnotationForPerson:person toMapView:self.mapView];
     });
 }
 
