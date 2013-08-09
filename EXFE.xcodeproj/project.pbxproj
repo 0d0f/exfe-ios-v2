@@ -1445,6 +1445,15 @@
 		76073D11174F8802007CBFC3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76073D10174F8802007CBFC3 /* MessageUI.framework */; };
 		76073D12174F880B007CBFC3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76073D10174F8802007CBFC3 /* MessageUI.framework */; };
 		76073D13174F8811007CBFC3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76073D10174F8802007CBFC3 /* MessageUI.framework */; };
+		760F2B2917B4F81B009C6A7E /* map_arrow_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = 760F2B2717B4F81B009C6A7E /* map_arrow_ring.png */; };
+		760F2B2A17B4F81B009C6A7E /* map_arrow_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = 760F2B2717B4F81B009C6A7E /* map_arrow_ring.png */; };
+		760F2B2B17B4F81B009C6A7E /* map_arrow_ring.png in Resources */ = {isa = PBXBuildFile; fileRef = 760F2B2717B4F81B009C6A7E /* map_arrow_ring.png */; };
+		760F2B2C17B4F81B009C6A7E /* map_arrow_ring@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 760F2B2817B4F81B009C6A7E /* map_arrow_ring@2x.png */; };
+		760F2B2D17B4F81B009C6A7E /* map_arrow_ring@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 760F2B2817B4F81B009C6A7E /* map_arrow_ring@2x.png */; };
+		760F2B2E17B4F81B009C6A7E /* map_arrow_ring@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 760F2B2817B4F81B009C6A7E /* map_arrow_ring@2x.png */; };
+		760F2B3817B4F841009C6A7E /* EFUserLocationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */; };
+		760F2B3917B4F841009C6A7E /* EFUserLocationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */; };
+		760F2B3A17B4F841009C6A7E /* EFUserLocationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */; };
 		761559BB177F1A2B00ABB62B /* header_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559B9177F1A2B00ABB62B /* header_arrow.png */; };
 		761559BC177F1A2B00ABB62B /* header_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559B9177F1A2B00ABB62B /* header_arrow.png */; };
 		761559BD177F1A2B00ABB62B /* header_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559B9177F1A2B00ABB62B /* header_arrow.png */; };
@@ -2659,6 +2668,10 @@
 		76073D08174F6EA5007CBFC3 /* EFRomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFRomeViewController.m; sourceTree = "<group>"; };
 		76073D09174F6EA5007CBFC3 /* EFRomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFRomeViewController.xib; sourceTree = "<group>"; };
 		76073D10174F8802007CBFC3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		760F2B2717B4F81B009C6A7E /* map_arrow_ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_arrow_ring.png; sourceTree = "<group>"; };
+		760F2B2817B4F81B009C6A7E /* map_arrow_ring@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_arrow_ring@2x.png"; sourceTree = "<group>"; };
+		760F2B3617B4F841009C6A7E /* EFUserLocationAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFUserLocationAnnotationView.h; sourceTree = "<group>"; };
+		760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFUserLocationAnnotationView.m; sourceTree = "<group>"; };
 		761559B9177F1A2B00ABB62B /* header_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header_arrow.png; sourceTree = "<group>"; };
 		761559BA177F1A2B00ABB62B /* header_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header_arrow@2x.png"; sourceTree = "<group>"; };
 		7615B339172AB7D200C54031 /* EFLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLabel.h; sourceTree = "<group>"; };
@@ -3947,6 +3960,8 @@
 				76B1234B1796470C00A73E59 /* EFCalloutAnnotation.m */,
 				76B1234C1796470C00A73E59 /* EFCalloutAnnotationView.h */,
 				76B1234D1796470C00A73E59 /* EFCalloutAnnotationView.m */,
+				760F2B3617B4F841009C6A7E /* EFUserLocationAnnotationView.h */,
+				760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */,
 			);
 			name = Annotation;
 			sourceTree = "<group>";
@@ -4293,6 +4308,8 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				760F2B2717B4F81B009C6A7E /* map_arrow_ring.png */,
+				760F2B2817B4F81B009C6A7E /* map_arrow_ring@2x.png */,
 				763AD4DD17B394C4007C7A9D /* map_arrow_14g5@2x.png */,
 				762D9F9917B36D07002A528B /* map_arrow_14red.png */,
 				762D9F9A17B36D07002A528B /* map_arrow_14red@2x.png */,
@@ -5442,6 +5459,7 @@
 				4F63DBB417172AA600136B7E /* xlist_cell.png in Resources */,
 				4F63DBB517172AA600136B7E /* xlist_cell@2x.png in Resources */,
 				4F63DBB617172AA600136B7E /* xlist_conv_badge.png in Resources */,
+				760F2B2D17B4F81B009C6A7E /* map_arrow_ring@2x.png in Resources */,
 				4F63DBB717172AA600136B7E /* xlist_conv_badge@2x.png in Resources */,
 				4F63DBB817172AA600136B7E /* xlist_fadeout.png in Resources */,
 				4F63DBB917172AA600136B7E /* xlist_fadeout@2x.png in Resources */,
@@ -5601,6 +5619,7 @@
 				4F00545F17266FD800D4B429 /* home_bar@2x.png in Resources */,
 				7670127B1729086100B5445E /* EFSearchTipViewController.xib in Resources */,
 				4F00547117292C2300D4B429 /* Pilot-Info.plist in Resources */,
+				760F2B2A17B4F81B009C6A7E /* map_arrow_ring.png in Resources */,
 				4F00548017296C4800D4B429 /* btn_white_44.png in Resources */,
 				4F00548117296C4800D4B429 /* btn_white_44@2x.png in Resources */,
 				4F00548717296F6400D4B429 /* table.png in Resources */,
@@ -5940,6 +5959,7 @@
 				4F63DDB517172B0700136B7E /* back_pressed@2x.png in Resources */,
 				4F63DDB617172B0700136B7E /* portrait_frame_50.png in Resources */,
 				4F63DDB717172B0700136B7E /* portrait_frame_50@2x.png in Resources */,
+				760F2B2B17B4F81B009C6A7E /* map_arrow_ring.png in Resources */,
 				4F63DDB817172B0700136B7E /* edit_30_pressed.png in Resources */,
 				4F63DDB917172B0700136B7E /* edit_30_pressed@2x.png in Resources */,
 				4F63DDBA17172B0700136B7E /* textfield_round.png in Resources */,
@@ -5977,6 +5997,7 @@
 				4F63DDDB17172B0700136B7E /* rsvp_pending_18w.png in Resources */,
 				4F63DDDC17172B0700136B7E /* rsvp_pending_18w@2x.png in Resources */,
 				4F63DDDD17172B0700136B7E /* rsvp_pending_26g5.png in Resources */,
+				760F2B2E17B4F81B009C6A7E /* map_arrow_ring@2x.png in Resources */,
 				4F63DDDE17172B0700136B7E /* rsvp_pending_26g5@2x.png in Resources */,
 				4F63DDDF17172B0700136B7E /* rsvp_pending_26w.png in Resources */,
 				4F63DDE017172B0700136B7E /* rsvp_pending_26w@2x.png in Resources */,
@@ -6460,6 +6481,7 @@
 				4F29C91B16F813D7001BB176 /* exfee_line_h2.png in Resources */,
 				4F29C91C16F813D7001BB176 /* exfee_line_h2@2x.png in Resources */,
 				4FB30D241700A76B007BC66D /* widget_exfee_30.png in Resources */,
+				760F2B2917B4F81B009C6A7E /* map_arrow_ring.png in Resources */,
 				4FB30D251700A76B007BC66D /* widget_exfee_30@2x.png in Resources */,
 				4FB30D2B1700A7FD007BC66D /* widget_conv_30shine.png in Resources */,
 				4FB30D2C1700A7FD007BC66D /* widget_conv_30shine@2x.png in Resources */,
@@ -6468,6 +6490,7 @@
 				4F67C3AB170D6307001AA816 /* btn_red_30inset.png in Resources */,
 				4F67C3AC170D6307001AA816 /* btn_red_30inset@2x.png in Resources */,
 				4F67C3AF170D7CD4001AA816 /* exfee_bg.png in Resources */,
+				760F2B2C17B4F81B009C6A7E /* map_arrow_ring@2x.png in Resources */,
 				4F67C3B0170D7CD4001AA816 /* exfee_bg@2x.png in Resources */,
 				4F63DE15171733C500136B7E /* 0d0f-Info.plist in Resources */,
 				4FF69554171BDF53003DF80B /* EFSignInViewController.xib in Resources */,
@@ -6821,6 +6844,7 @@
 				765A82DF175F0FEF00448B64 /* EFContactObject.m in Sources */,
 				765A82E5175F120D00448B64 /* EFImageCache.m in Sources */,
 				765A82EA175F217400448B64 /* NSString+MD5.m in Sources */,
+				760F2B3917B4F841009C6A7E /* EFUserLocationAnnotationView.m in Sources */,
 				765A82F4175F255800448B64 /* EFImageManager.m in Sources */,
 				765A82FA175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 				4FFD701717633A46009836F5 /* Invitation.m in Sources */,
@@ -7070,6 +7094,7 @@
 				765A82E0175F0FEF00448B64 /* EFContactObject.m in Sources */,
 				765A82E6175F120D00448B64 /* EFImageCache.m in Sources */,
 				765A82EB175F217400448B64 /* NSString+MD5.m in Sources */,
+				760F2B3A17B4F841009C6A7E /* EFUserLocationAnnotationView.m in Sources */,
 				765A82F5175F255800448B64 /* EFImageManager.m in Sources */,
 				765A82FB175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 				4FFD701817633A46009836F5 /* Invitation.m in Sources */,
@@ -7319,6 +7344,7 @@
 				765A82DE175F0FEF00448B64 /* EFContactObject.m in Sources */,
 				765A82E4175F120D00448B64 /* EFImageCache.m in Sources */,
 				765A82E9175F217400448B64 /* NSString+MD5.m in Sources */,
+				760F2B3817B4F841009C6A7E /* EFUserLocationAnnotationView.m in Sources */,
 				765A82F3175F255800448B64 /* EFImageManager.m in Sources */,
 				765A82F9175F4F4C00448B64 /* EFContactViewController.m in Sources */,
 				4FFD701617633A46009836F5 /* Invitation.m in Sources */,

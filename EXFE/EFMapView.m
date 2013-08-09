@@ -474,6 +474,10 @@ static UIView * ReverseSubviews(UIView *view) {
 
 - (void)headingButtonPressed:(id)sender {
     [self setCenterCoordinate:self.userLocation.coordinate animated:YES];
+    
+    if ([self.delegate respondsToSelector:@selector(mapViewHeadingButtonPressed:)]) {
+        [self.delegate mapViewHeadingButtonPressed:self];
+    }
     // TODO: heading tracking
 //    if (self.userTrackingMode == MKUserTrackingModeNone) {
 //        [sender setImage:[UIImage imageNamed:@"map_arrow_blue.png"] forState:UIControlStateNormal];

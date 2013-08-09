@@ -24,6 +24,9 @@
 #define kStreamingDataTypeLocaionts     @"/v3/crosses/routex/breadcrumbs"
 #define kStreamingDataTypeRoute         @"/v3/crosses/routex/geomarks"
 
+#define DegreesToRadians(x) (M_PI * x / 180.0)
+#define RadiandsToDegrees(x) (x * 180.0 / M_PI)
+
 NSString *EFNotificationRoutePathDidChange = @"notification.routePath.didChange";
 NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.didChange";
 
@@ -115,6 +118,20 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 @end
 
 @implementation EFMarauderMapDataSource
+
+CGFloat HeadingInAngle(CLLocationCoordinate2D destinationCoordinate, CLLocationCoordinate2D locationCoordinate) {
+    float fLat = DegreesToRadians(locationCoordinate.latitude);
+    float fLng = DegreesToRadians(locationCoordinate.longitude);
+    float tLat = DegreesToRadians(destinationCoordinate.latitude);
+    float tLng = DegreesToRadians(destinationCoordinate.longitude);
+    
+    float degree = RadiandsToDegrees(atan2(sin(tLng-fLng)*cos(tLat), cos(fLat)*sin(tLat)-sin(fLat)*cos(tLat)*cos(tLng-fLng)));
+    
+    if (degree >= 0.0f) {
+        return degree;
+    } else {
+        return 360.0f + degree;
+    }}
 
 - (id)initWithCross:(Cross *)cross {
     self = [super init];
@@ -400,8 +417,10 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
                         NSString *userIdString = [self _userIdFromDirtyUserId:path.pathId];
                         EFMapPerson *person = [self.peopleMap valueForKey:userIdString];
                         
+                        // update person last location
                         person.lastLocation = path.positions[0];
                         
+                        // update person connect state && location state && distance
                         EFRouteLocation *destination = [self destinationLocation];
                         if (destination) {
                             CLLocation *destinationLocation = [[CLLocation alloc] initWithLatitude:destination.coordinate.latitude longitude:destination.coordinate.longitude];
@@ -416,6 +435,9 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
                         } else {
                             person.locationState = kEFMapPersonLocationStateUnknow;
                         }
+                        
+                        // update person angle
+                        person.angle = HeadingInAngle(destination.coordinate, person.lastLocation.coordinate);
                         
                         [self.delegate mapDataSource:self didUpdateLocations:path.positions forUser:person];
                     }

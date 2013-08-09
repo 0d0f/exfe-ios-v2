@@ -103,7 +103,7 @@
         self.avatarImageView = avatarImageView;
         
         UIImageView *stateImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_arrow_12red.png"]];
-        stateImageView.frame = (CGRect){{5, 48}, {14, 14}};
+        stateImageView.frame = (CGRect){{4, 47}, {14, 14}};
         [self.contentView addSubview:stateImageView];
         self.stateImageView = stateImageView;
         

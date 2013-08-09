@@ -24,6 +24,7 @@
 #import "EFPersonAnnotationView.h"
 #import "EFMapPopMenu.h"
 #import "EFLocationManager.h"
+#import "EFUserLocationAnnotationView.h"
 
 #define kAnnotationOffsetY  (-50.0f)
 #define kShadowOffset       (3.0f)
@@ -221,14 +222,6 @@
 
 @implementation EFMarauderMapViewController
 
-double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
-	double dLon = lon2 - lon1;
-	double y = sin(dLon) * cos(lat2);
-	double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon);
-    
-	return atan2(y, x);
-}
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -383,10 +376,9 @@ double HeadingInRadians(double lat1, double lon1, double lat2, double lon2) {
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (object == [EFLocationManager defaultManager] && [keyPath isEqualToString:@"userHeading"]) {
         if (self.mapView && self.mapView.userLocation) {
-            MKAnnotationView *userLocationView = [self.mapView viewForAnnotation:self.mapView.userLocation];
+            EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:self.mapView.userLocation];
             if (userLocationView) {
-                CLLocationDirection direction = [EFLocationManager defaultManager].userHeading.trueHeading;
-                userLocationView.layer.transform = CATransform3DMakeRotation((M_PI / 160.0f) * direction, 0.0f, 0.0f, 1.0f);
+                userLocationView.userHeading = [EFLocationManager defaultManager].userHeading;
             }
         }
     }
@@ -846,6 +838,15 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
     }
 }
 
+- (void)mapViewHeadingButtonPressed:(EFMapView *)mapView {
+    if (self.mapView.userLocation) {
+        EFUserLocationAnnotationView *annotationView = (EFUserLocationAnnotationView *)[self.mapView viewForAnnotation:self.mapView.userLocation];
+        if (annotationView) {
+            [annotationView playAnimation];
+        }
+    }
+}
+
 #pragma mark - MKMapViewDelegate
 
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
@@ -881,10 +882,10 @@ MKMapRect MKMapRectForCoordinateRegion(MKCoordinateRegion region) {
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     if (annotation ==  mapView.userLocation) {
         static NSString *Identifier = @"UserLocation";
-        MKAnnotationView *userLocationView = [mapView dequeueReusableAnnotationViewWithIdentifier:Identifier];
+        EFUserLocationAnnotationView *userLocationView = (EFUserLocationAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:Identifier];
         if (nil == userLocationView) {
-            userLocationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identifier];
-            userLocationView.image = [UIImage imageNamed:@"map_arrow_22blue.png"];
+            userLocationView = [[EFUserLocationAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:Identifier];
+            userLocationView.image = [UIImage imageNamed:@"map_arrow_ring.png"];
             userLocationView.canShowCallout = NO;
         }
         

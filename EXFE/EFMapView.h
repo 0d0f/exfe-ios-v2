@@ -31,6 +31,7 @@ typedef enum {
 - (void)mapView:(EFMapView *)mapView didChangeSelectedAnnotationTitle:(NSString *)title;
 - (void)mapView:(EFMapView *)mapView didChangeSelectedAnnotationStyle:(EFAnnotationStyle)style;
 - (void)mapViewCancelButtonPressed:(EFMapView *)mapView;
+- (void)mapViewHeadingButtonPressed:(EFMapView *)mapView;
 @end
 
 @interface EFMapView : MKMapView
