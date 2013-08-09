@@ -527,25 +527,20 @@
 
 - (void )personIdentityCell:(EFPersonIdentityCell *)cell didSelectRoughIdentity:(RoughIdentity *)roughIdentity {
     NSIndexPath *indexPath = self.identityIndexPath;
+    
     EFContactObject *contactObject = [self _contactObjectForTableView:self.activityTableView atIndexPath:indexPath];
-    [self.contactDataSource selectContactObject:contactObject];
+    [self.contactDataSource roughtIdentityDidChangeInContactObject:contactObject];
     
     [self.activityTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section] animated:NO scrollPosition:UITableViewScrollPositionNone];
 }
 
 - (void )personIdentityCell:(EFPersonIdentityCell *)cell didDeselectRoughIdentity:(RoughIdentity *)roughIdentity {
     NSIndexPath *indexPath = self.identityIndexPath;
+    
     EFContactObject *contactObject = [self _contactObjectForTableView:self.activityTableView atIndexPath:indexPath];
+    [self.contactDataSource roughtIdentityDidChangeInContactObject:contactObject];
     
-    BOOL shouldSelected = NO;
-    for (RoughIdentity *roughIdentity in contactObject.roughIdentities) {
-        if (roughIdentity.isSelected) {
-            shouldSelected = YES;
-            break;
-        }
-    }
-    
-    if (!shouldSelected) {
+    if (!contactObject.isSelected) {
         [self.activityTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section] animated:NO];
     }
 }

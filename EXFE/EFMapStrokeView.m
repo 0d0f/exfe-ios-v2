@@ -93,12 +93,10 @@
 - (void)drawRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGContextSaveGState(context);
-    
     CGContextSetShouldAntialias(context, YES);
     
     for (int i = 0; i < _flag.numberOfStrokes; i++) {
-        UIBezierPath *path = [UIBezierPath bezierPath];
+        CGContextBeginPath(context);
         
         UIColor *strokeColor = kDefaultStrokeColor;
         if ([self.dataSource respondsToSelector:@selector(colorForStrokeInMapStrokeView:atIndex:)]) {
@@ -110,27 +108,25 @@
             width = [self.dataSource widthForStrokeInMapStrokeView:self atIndex:i];
         }
         
-        path.lineWidth = width;
+        CGContextSetLineWidth(context, width);
+        CGContextSetStrokeColorWithColor(context, strokeColor.CGColor);
+        CGContextSetShadowWithColor(context, (CGSize){0.0f, 0.0f}, 1.0f, [UIColor whiteColor].CGColor);
         
         for (NSArray *locations in self.strokesToDraw) {
             BOOL isFirstLocation = YES;
             for (NSValue *locationValue in locations) {
                 CGPoint location = [locationValue CGPointValue];
                 if (isFirstLocation) {
-                    [path moveToPoint:location];
+                    CGContextMoveToPoint(context, location.x, location.y);
                     isFirstLocation = NO;
                 } else {
-                    [path addLineToPoint:location];
+                    CGContextAddLineToPoint(context, location.x, location.y);
                 }
             }
         }
         
-        [strokeColor setStroke];
-        CGContextSetShadowWithColor(context, (CGSize){0.0f, 0.0f}, 1.0f, [UIColor whiteColor].CGColor);
-        [path stroke];
+        CGContextStrokePath(context);
     }
-    
-    CGContextRestoreGState(context);
 }
 
 #pragma mark - Public

@@ -190,6 +190,10 @@
                                        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                        }];
     
+    if (![[EFLocationManager defaultManager] isFirstTimeToPostUserLocation]) {
+        [[EFLocationManager defaultManager] startUpdatingLocation];
+    }
+    
     return YES;
 }
 

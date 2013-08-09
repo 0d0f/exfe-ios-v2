@@ -1490,6 +1490,18 @@
 		76295DE3174BAC43002F5CEF /* xlist_top_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76295DCD174BAC43002F5CEF /* xlist_top_3@2x.png */; };
 		76295DE4174BAC43002F5CEF /* xlist_top_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76295DCD174BAC43002F5CEF /* xlist_top_3@2x.png */; };
 		76295DE5174BAC43002F5CEF /* xlist_top_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 76295DCD174BAC43002F5CEF /* xlist_top_3@2x.png */; };
+		762D9F8C17B35798002A528B /* map_arrow_22blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F8A17B35798002A528B /* map_arrow_22blue.png */; };
+		762D9F8D17B35798002A528B /* map_arrow_22blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F8A17B35798002A528B /* map_arrow_22blue.png */; };
+		762D9F8E17B35798002A528B /* map_arrow_22blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F8A17B35798002A528B /* map_arrow_22blue.png */; };
+		762D9F8F17B35798002A528B /* map_arrow_22blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F8B17B35798002A528B /* map_arrow_22blue@2x.png */; };
+		762D9F9017B35798002A528B /* map_arrow_22blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F8B17B35798002A528B /* map_arrow_22blue@2x.png */; };
+		762D9F9117B35798002A528B /* map_arrow_22blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F8B17B35798002A528B /* map_arrow_22blue@2x.png */; };
+		762D9F9B17B36D07002A528B /* map_arrow_14red.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F9917B36D07002A528B /* map_arrow_14red.png */; };
+		762D9F9C17B36D07002A528B /* map_arrow_14red.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F9917B36D07002A528B /* map_arrow_14red.png */; };
+		762D9F9D17B36D07002A528B /* map_arrow_14red.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F9917B36D07002A528B /* map_arrow_14red.png */; };
+		762D9F9E17B36D07002A528B /* map_arrow_14red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F9A17B36D07002A528B /* map_arrow_14red@2x.png */; };
+		762D9F9F17B36D07002A528B /* map_arrow_14red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F9A17B36D07002A528B /* map_arrow_14red@2x.png */; };
+		762D9FA017B36D07002A528B /* map_arrow_14red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 762D9F9A17B36D07002A528B /* map_arrow_14red@2x.png */; };
 		763A018C171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018D171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
 		763A018E171EAEB10082CC9E /* EFSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A018B171EAEB10082CC9E /* EFSearchBar.m */; };
@@ -1517,6 +1529,9 @@
 		763A01CF17212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
 		763A01D017212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
 		763A01D117212B080082CC9E /* RoughIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763A01CE17212B080082CC9E /* RoughIdentity.m */; };
+		763AD4DE17B394C4007C7A9D /* map_arrow_14g5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763AD4DD17B394C4007C7A9D /* map_arrow_14g5@2x.png */; };
+		763AD4DF17B394C4007C7A9D /* map_arrow_14g5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763AD4DD17B394C4007C7A9D /* map_arrow_14g5@2x.png */; };
+		763AD4E017B394C4007C7A9D /* map_arrow_14g5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763AD4DD17B394C4007C7A9D /* map_arrow_14g5@2x.png */; };
 		763BE923179FD770003BF97C /* map_shadow_gap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE922179FD770003BF97C /* map_shadow_gap@2x.png */; };
 		763BE924179FD770003BF97C /* map_shadow_gap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE922179FD770003BF97C /* map_shadow_gap@2x.png */; };
 		763BE925179FD770003BF97C /* map_shadow_gap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 763BE922179FD770003BF97C /* map_shadow_gap@2x.png */; };
@@ -1604,6 +1619,12 @@
 		7686099E17817BC700534731 /* NSString+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 7686099D17817BC700534731 /* NSString+Format.m */; };
 		7686099F17817BC700534731 /* NSString+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 7686099D17817BC700534731 /* NSString+Format.m */; };
 		768609A017817BC700534731 /* NSString+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 7686099D17817BC700534731 /* NSString+Format.m */; };
+		7688C79617B0DE7E00CBB6E8 /* EFAccessInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7688C79517B0DE7E00CBB6E8 /* EFAccessInfo.m */; };
+		7688C79717B0DE7E00CBB6E8 /* EFAccessInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7688C79517B0DE7E00CBB6E8 /* EFAccessInfo.m */; };
+		7688C79817B0DE7E00CBB6E8 /* EFAccessInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7688C79517B0DE7E00CBB6E8 /* EFAccessInfo.m */; };
+		768DD35217A91F4A00E080C6 /* EFLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 768DD35117A91F4A00E080C6 /* EFLocationManager.m */; };
+		768DD35317A91F4A00E080C6 /* EFLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 768DD35117A91F4A00E080C6 /* EFLocationManager.m */; };
+		768DD35417A91F4A00E080C6 /* EFLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 768DD35117A91F4A00E080C6 /* EFLocationManager.m */; };
 		769206131749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
 		769206141749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
 		769206151749DB0700B3D64A /* EFHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 769206121749DB0700B3D64A /* EFHeadView.m */; };
@@ -2658,6 +2679,10 @@
 		76295DCB174BAC43002F5CEF /* xlist_top_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xlist_top_2@2x.png"; sourceTree = "<group>"; };
 		76295DCC174BAC43002F5CEF /* xlist_top_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xlist_top_3.png; sourceTree = "<group>"; };
 		76295DCD174BAC43002F5CEF /* xlist_top_3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xlist_top_3@2x.png"; sourceTree = "<group>"; };
+		762D9F8A17B35798002A528B /* map_arrow_22blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_arrow_22blue.png; sourceTree = "<group>"; };
+		762D9F8B17B35798002A528B /* map_arrow_22blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_arrow_22blue@2x.png"; sourceTree = "<group>"; };
+		762D9F9917B36D07002A528B /* map_arrow_14red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_arrow_14red.png; sourceTree = "<group>"; };
+		762D9F9A17B36D07002A528B /* map_arrow_14red@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_arrow_14red@2x.png"; sourceTree = "<group>"; };
 		763A018A171EAEB10082CC9E /* EFSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFSearchBar.h; sourceTree = "<group>"; };
 		763A018B171EAEB10082CC9E /* EFSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFSearchBar.m; sourceTree = "<group>"; };
 		763A018F171EE8BE0082CC9E /* EFChoosePeopleViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFChoosePeopleViewCell.h; sourceTree = "<group>"; };
@@ -2673,6 +2698,7 @@
 		763A01CD17212B080082CC9E /* RoughIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoughIdentity.h; sourceTree = "<group>"; };
 		763A01CE17212B080082CC9E /* RoughIdentity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoughIdentity.m; sourceTree = "<group>"; };
 		763A01D2172130B20082CC9E /* EFDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFDataDefines.h; sourceTree = "<group>"; };
+		763AD4DD17B394C4007C7A9D /* map_arrow_14g5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_arrow_14g5@2x.png"; sourceTree = "<group>"; };
 		763BE922179FD770003BF97C /* map_shadow_gap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_shadow_gap@2x.png"; sourceTree = "<group>"; };
 		763BE926179FD836003BF97C /* map_shadow_gap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_shadow_gap.png; sourceTree = "<group>"; };
 		764CD8F0173A5C4600627237 /* EFNotificationBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFNotificationBannerView.h; sourceTree = "<group>"; };
@@ -2721,6 +2747,10 @@
 		767012761729086100B5445E /* EFSearchTipViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EFSearchTipViewController.xib; sourceTree = "<group>"; };
 		7686099C17817BC700534731 /* NSString+Format.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Format.h"; sourceTree = "<group>"; };
 		7686099D17817BC700534731 /* NSString+Format.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Format.m"; sourceTree = "<group>"; };
+		7688C79417B0DE7E00CBB6E8 /* EFAccessInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFAccessInfo.h; sourceTree = "<group>"; };
+		7688C79517B0DE7E00CBB6E8 /* EFAccessInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFAccessInfo.m; sourceTree = "<group>"; };
+		768DD35017A91F4A00E080C6 /* EFLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFLocationManager.h; sourceTree = "<group>"; };
+		768DD35117A91F4A00E080C6 /* EFLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFLocationManager.m; sourceTree = "<group>"; };
 		769206111749DB0700B3D64A /* EFHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFHeadView.h; sourceTree = "<group>"; };
 		769206121749DB0700B3D64A /* EFHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFHeadView.m; sourceTree = "<group>"; };
 		7692061D1749E08100B3D64A /* portrait_circle_clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_circle_clear.png; sourceTree = "<group>"; };
@@ -3939,8 +3969,8 @@
 			children = (
 				76B123561796470C00A73E59 /* EFMapData.h */,
 				76B123571796470C00A73E59 /* EFMapDataDefines.h */,
-				76B123C5179648A700A73E59 /* DataSource */,
 				76B123C41796489000A73E59 /* Data Structure */,
+				76B123C5179648A700A73E59 /* DataSource */,
 			);
 			name = Modal;
 			sourceTree = "<group>";
@@ -3988,6 +4018,8 @@
 				76B123731796470C00A73E59 /* EFRoutePath.m */,
 				76B123641796470C00A73E59 /* EFMapPerson.h */,
 				76B123651796470C00A73E59 /* EFMapPerson.m */,
+				7688C79417B0DE7E00CBB6E8 /* EFAccessInfo.h */,
+				7688C79517B0DE7E00CBB6E8 /* EFAccessInfo.m */,
 			);
 			name = "Data Structure";
 			sourceTree = "<group>";
@@ -3999,6 +4031,8 @@
 				76B123631796470C00A73E59 /* EFMapPeopleDataSource.m */,
 				76B1236C1796470C00A73E59 /* EFMarauderMapDataSource.h */,
 				76B1236D1796470C00A73E59 /* EFMarauderMapDataSource.m */,
+				768DD35017A91F4A00E080C6 /* EFLocationManager.h */,
+				768DD35117A91F4A00E080C6 /* EFLocationManager.m */,
 			);
 			name = DataSource;
 			sourceTree = "<group>";
@@ -4259,6 +4293,11 @@
 		782B3CCB156B946100721150 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				763AD4DD17B394C4007C7A9D /* map_arrow_14g5@2x.png */,
+				762D9F9917B36D07002A528B /* map_arrow_14red.png */,
+				762D9F9A17B36D07002A528B /* map_arrow_14red@2x.png */,
+				762D9F8A17B35798002A528B /* map_arrow_22blue.png */,
+				762D9F8B17B35798002A528B /* map_arrow_22blue@2x.png */,
 				763BE926179FD836003BF97C /* map_shadow_gap.png */,
 				763BE922179FD770003BF97C /* map_shadow_gap@2x.png */,
 				766C9833179944240064B5BC /* map_dot_grey@2x.png */,
@@ -5267,6 +5306,7 @@
 				4F63DB2317172AA600136B7E /* ExfeeInputViewController.xib in Resources */,
 				4F63DB2417172AA600136B7E /* cross_bg.png in Resources */,
 				4F63DB2517172AA600136B7E /* cross_bg@2x.png in Resources */,
+				762D9F9017B35798002A528B /* map_arrow_22blue@2x.png in Resources */,
 				4F63DB2617172AA600136B7E /* toolbar_bg.png in Resources */,
 				4F63DB2717172AA600136B7E /* toolbar_bg@2x.png in Resources */,
 				4F63DB2817172AA600136B7E /* textfield_navbar.png in Resources */,
@@ -5431,6 +5471,7 @@
 				4F63DBD117172AA600136B7E /* navi_btn.png in Resources */,
 				4F63DBD217172AA600136B7E /* navi_btn@2x.png in Resources */,
 				4F63DBD317172AA600136B7E /* portrait_tri.png in Resources */,
+				762D9F9F17B36D07002A528B /* map_arrow_14red@2x.png in Resources */,
 				4F63DBD417172AA600136B7E /* portrait_tri@2x.png in Resources */,
 				4F63DBD517172AA600136B7E /* glassbar.png in Resources */,
 				4F63DBD617172AA600136B7E /* glassbar@2x.png in Resources */,
@@ -5487,6 +5528,7 @@
 				4F63DC0B17172AA600136B7E /* rsvp_pending_18g5@2x.png in Resources */,
 				4F63DC0C17172AA600136B7E /* rsvp_pending_18w.png in Resources */,
 				4F63DC0D17172AA600136B7E /* rsvp_pending_18w@2x.png in Resources */,
+				763AD4DF17B394C4007C7A9D /* map_arrow_14g5@2x.png in Resources */,
 				4F63DC0E17172AA600136B7E /* rsvp_pending_26g5.png in Resources */,
 				4F63DC0F17172AA600136B7E /* rsvp_pending_26g5@2x.png in Resources */,
 				4F63DC1017172AA600136B7E /* rsvp_pending_26w.png in Resources */,
@@ -5626,6 +5668,7 @@
 				4FDFA474172A794900929BC9 /* start_tri-29.png in Resources */,
 				4FDFA477172A794900929BC9 /* start_tri-29@2x.png in Resources */,
 				4FDFA47C172A83CB00929BC9 /* list_divider.png in Resources */,
+				762D9F9C17B36D07002A528B /* map_arrow_14red.png in Resources */,
 				4FDFA47F172A83CB00929BC9 /* list_divider@2x.png in Resources */,
 				4FDFA484172AE6A000929BC9 /* identity_facebook_50btn@2x.png in Resources */,
 				4FDFA487172AE6A000929BC9 /* identity_twitter_50btn@2x.png in Resources */,
@@ -5683,6 +5726,7 @@
 				76B1240517968C9900A73E59 /* location_btn.png in Resources */,
 				76B1241F1797C81D00A73E59 /* btn_pad@2x.png in Resources */,
 				76B1242C1798331A00A73E59 /* map_arrow_blue@2x.png in Resources */,
+				762D9F8D17B35798002A528B /* map_arrow_22blue.png in Resources */,
 				76B124381798398400A73E59 /* map_remove_15@2x.png in Resources */,
 				76B1243B1798398400A73E59 /* map_remove_30@2x.png in Resources */,
 				76B1245A17992A5300A73E59 /* map_arrow_12g5@2x.png in Resources */,
@@ -5720,6 +5764,7 @@
 				4F63DCFC17172B0700136B7E /* exfee_18_white@2x.png in Resources */,
 				4F63DCFD17172B0700136B7E /* identity_email_18_grey.png in Resources */,
 				4F63DCFE17172B0700136B7E /* identity_email_18_grey@2x.png in Resources */,
+				762D9F9117B35798002A528B /* map_arrow_22blue@2x.png in Resources */,
 				4F63DCFF17172B0700136B7E /* identity_email_18.png in Resources */,
 				4F63DD0017172B0700136B7E /* identity_email_18@2x.png in Resources */,
 				4F63DD0117172B0700136B7E /* identity_facebook_18_grey.png in Resources */,
@@ -5922,6 +5967,7 @@
 				4F63DDD217172B0700136B7E /* rsvp_dot_accepted@2x.png in Resources */,
 				4F63DDD317172B0700136B7E /* rsvp_dot_pending.png in Resources */,
 				4F63DDD417172B0700136B7E /* rsvp_dot_pending@2x.png in Resources */,
+				763AD4E017B394C4007C7A9D /* map_arrow_14g5@2x.png in Resources */,
 				4F63DDD517172B0700136B7E /* rsvp_dot_unavailable.png in Resources */,
 				4F63DDD617172B0700136B7E /* rsvp_dot_unavailable@2x.png in Resources */,
 				4F63DDD717172B0700136B7E /* rsvp_dot_unreachable.png in Resources */,
@@ -6027,7 +6073,9 @@
 				4FDFA3FA172A794900929BC9 /* start_tri-08@2x.png in Resources */,
 				4FDFA3FD172A794900929BC9 /* start_tri-09.png in Resources */,
 				4FDFA400172A794900929BC9 /* start_tri-09@2x.png in Resources */,
+				762D9F8E17B35798002A528B /* map_arrow_22blue.png in Resources */,
 				4FDFA403172A794900929BC9 /* start_tri-10.png in Resources */,
+				762D9F9D17B36D07002A528B /* map_arrow_14red.png in Resources */,
 				4FDFA406172A794900929BC9 /* start_tri-10@2x.png in Resources */,
 				4FDFA409172A794900929BC9 /* start_tri-11.png in Resources */,
 				4FDFA40C172A794900929BC9 /* start_tri-11@2x.png in Resources */,
@@ -6132,6 +6180,7 @@
 				766C983A179944240064B5BC /* map_dot_red@2x.png in Resources */,
 				763BE925179FD770003BF97C /* map_shadow_gap@2x.png in Resources */,
 				763BE929179FD836003BF97C /* map_shadow_gap.png in Resources */,
+				762D9FA017B36D07002A528B /* map_arrow_14red@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6149,6 +6198,7 @@
 				78B9FD3715B5568D00F5E4D3 /* location@2x.png in Resources */,
 				784D697B15BFCB6B00226A23 /* gather_describe_area.png in Resources */,
 				784D697C15BFCB6B00226A23 /* gather_describe_area@2x.png in Resources */,
+				762D9F8F17B35798002A528B /* map_arrow_22blue@2x.png in Resources */,
 				78CEBFF115BFE7BE002BCA27 /* ExfeeInputViewController.xib in Resources */,
 				78465E1115C920BE00BA5C1F /* cross_bg.png in Resources */,
 				78465E1215C920BE00BA5C1F /* cross_bg@2x.png in Resources */,
@@ -6178,6 +6228,7 @@
 				781178C015DA81E900A4BBCF /* identity_twitter_18@2x.png in Resources */,
 				781178C115DA81E900A4BBCF /* identity_twitter_32.png in Resources */,
 				781178C215DA81E900A4BBCF /* identity_twitter_32@2x.png in Resources */,
+				762D9F9E17B36D07002A528B /* map_arrow_14red@2x.png in Resources */,
 				7879869E15DA85F500AA631B /* portrait_default.png in Resources */,
 				787986B615DB6DF600AA631B /* textfield_navbar_frame.png in Resources */,
 				787986B715DB6DF600AA631B /* textfield_navbar_frame@2x.png in Resources */,
@@ -6471,12 +6522,14 @@
 				4FDFA3F8172A794900929BC9 /* start_tri-08@2x.png in Resources */,
 				4FDFA3FB172A794900929BC9 /* start_tri-09.png in Resources */,
 				4FDFA3FE172A794900929BC9 /* start_tri-09@2x.png in Resources */,
+				762D9F9B17B36D07002A528B /* map_arrow_14red.png in Resources */,
 				4FDFA401172A794900929BC9 /* start_tri-10.png in Resources */,
 				4FDFA404172A794900929BC9 /* start_tri-10@2x.png in Resources */,
 				4FDFA407172A794900929BC9 /* start_tri-11.png in Resources */,
 				4FDFA40A172A794900929BC9 /* start_tri-11@2x.png in Resources */,
 				4FDFA40D172A794900929BC9 /* start_tri-12.png in Resources */,
 				4FDFA410172A794900929BC9 /* start_tri-12@2x.png in Resources */,
+				762D9F8C17B35798002A528B /* map_arrow_22blue.png in Resources */,
 				4FDFA413172A794900929BC9 /* start_tri-13.png in Resources */,
 				4FDFA416172A794900929BC9 /* start_tri-13@2x.png in Resources */,
 				4FDFA419172A794900929BC9 /* start_tri-14.png in Resources */,
@@ -6529,6 +6582,7 @@
 				76295DDD174BAC43002F5CEF /* xlist_top_2@2x.png in Resources */,
 				76295DE0174BAC43002F5CEF /* xlist_top_3.png in Resources */,
 				76295DE3174BAC43002F5CEF /* xlist_top_3@2x.png in Resources */,
+				763AD4DE17B394C4007C7A9D /* map_arrow_14g5@2x.png in Resources */,
 				76073CE1174F3178007CBFC3 /* widget_exfee_30shine.png in Resources */,
 				76073CE4174F3178007CBFC3 /* widget_exfee_30shine@2x.png in Resources */,
 				76073CE7174F3178007CBFC3 /* widget_x_30shine.png in Resources */,
@@ -6743,6 +6797,7 @@
 				4FB377EE17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */,
 				4FB377F117377CB4001FA1B2 /* TWSignedRequest.m in Sources */,
 				7661C7ED1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */,
+				768DD35317A91F4A00E080C6 /* EFLocationManager.m in Sources */,
 				764CD8F3173A5C4600627237 /* EFNotificationBannerView.m in Sources */,
 				76F6B30D1740A59B008B39C1 /* EFErrorMessage.m in Sources */,
 				76F6B3161740DBCD008B39C1 /* EFStatusBar.m in Sources */,
@@ -6817,6 +6872,7 @@
 				76B1238F1796470C00A73E59 /* EFMapEditingAnnotationView.m in Sources */,
 				76B123921796470C00A73E59 /* EFMapEditingPathView.m in Sources */,
 				76B123951796470C00A73E59 /* EFMapEditingReadyView.m in Sources */,
+				7688C79717B0DE7E00CBB6E8 /* EFAccessInfo.m in Sources */,
 				76B1239B1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */,
 				76B1239E1796470C00A73E59 /* EFMapPerson.m in Sources */,
 				76B123A11796470C00A73E59 /* EFMapPersonCell.m in Sources */,
@@ -6990,6 +7046,7 @@
 				4FB377EF17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */,
 				4FB377F217377CB4001FA1B2 /* TWSignedRequest.m in Sources */,
 				7661C7EE1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */,
+				768DD35417A91F4A00E080C6 /* EFLocationManager.m in Sources */,
 				764CD8F4173A5C4600627237 /* EFNotificationBannerView.m in Sources */,
 				76F6B30E1740A59B008B39C1 /* EFErrorMessage.m in Sources */,
 				76F6B3171740DBCD008B39C1 /* EFStatusBar.m in Sources */,
@@ -7064,6 +7121,7 @@
 				76B1238D1796470C00A73E59 /* EFMapColorButton.m in Sources */,
 				76B123901796470C00A73E59 /* EFMapEditingAnnotationView.m in Sources */,
 				76B123931796470C00A73E59 /* EFMapEditingPathView.m in Sources */,
+				7688C79817B0DE7E00CBB6E8 /* EFAccessInfo.m in Sources */,
 				76B123961796470C00A73E59 /* EFMapEditingReadyView.m in Sources */,
 				76B1239C1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */,
 				76B1239F1796470C00A73E59 /* EFMapPerson.m in Sources */,
@@ -7237,6 +7295,7 @@
 				4FB377ED17377CB4001FA1B2 /* TwitterReverseOAuthResponse.m in Sources */,
 				4FB377F017377CB4001FA1B2 /* TWSignedRequest.m in Sources */,
 				7661C7EC1738B15400133F10 /* EFErrorHandlerCenter.m in Sources */,
+				768DD35217A91F4A00E080C6 /* EFLocationManager.m in Sources */,
 				764CD8F2173A5C4600627237 /* EFNotificationBannerView.m in Sources */,
 				76F6B30C1740A59B008B39C1 /* EFErrorMessage.m in Sources */,
 				76F6B3151740DBCD008B39C1 /* EFStatusBar.m in Sources */,
@@ -7311,6 +7370,7 @@
 				76B1238B1796470C00A73E59 /* EFMapColorButton.m in Sources */,
 				76B1238E1796470C00A73E59 /* EFMapEditingAnnotationView.m in Sources */,
 				76B123911796470C00A73E59 /* EFMapEditingPathView.m in Sources */,
+				7688C79617B0DE7E00CBB6E8 /* EFAccessInfo.m in Sources */,
 				76B123941796470C00A73E59 /* EFMapEditingReadyView.m in Sources */,
 				76B1239A1796470C00A73E59 /* EFMapPeopleDataSource.m in Sources */,
 				76B1239D1796470C00A73E59 /* EFMapPerson.m in Sources */,

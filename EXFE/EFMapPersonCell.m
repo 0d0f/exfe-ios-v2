@@ -10,6 +10,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "EFMapKit.h"
+#import "EFCache.h"
 
 @interface EFMapPersonCell ()
 
@@ -24,7 +25,11 @@
 @implementation EFMapPersonCell (Private)
 
 - (void)_personDidChange {
-    self.avatarImageView.image = self.person.avatarImage;
+    [[EFDataManager imageManager] loadImageForView:self.avatarImageView
+                                  setImageSelector:@selector(setImage:)
+                                       placeHolder:[UIImage imageNamed:@"portrait_default.png"]
+                                               key:self.person.avatarName
+                                   completeHandler:nil];
     
     NSString *infoText = nil;
     if (self.person.connectState == kEFMapPersonConnectStateUnknow) {
@@ -42,9 +47,9 @@
             self.stateView.hidden = NO;
         } else if (self.person.locationState == kEFMapPersonLocationStateOnTheWay) {
             if (self.person.connectState == kEFMapPersonConnectStateOnline) {
-                self.stateImageView.image = [UIImage imageNamed:@"map_arrow_12red.png"];
+                self.stateImageView.image = [UIImage imageNamed:@"map_arrow_14red.png"];
             } else if (self.person.connectState == kEFMapPersonConnectStateOffline) {
-                self.stateImageView.image = [UIImage imageNamed:@"map_arrow_12g5.png"];
+                self.stateImageView.image = [UIImage imageNamed:@"map_arrow_14g5.png"];
             }
             
             NSUInteger distance = (NSUInteger)self.person.distance;
@@ -98,7 +103,7 @@
         self.avatarImageView = avatarImageView;
         
         UIImageView *stateImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_arrow_12red.png"]];
-        stateImageView.frame = (CGRect){{5, 48}, {12, 12}};
+        stateImageView.frame = (CGRect){{5, 48}, {14, 14}};
         [self.contentView addSubview:stateImageView];
         self.stateImageView = stateImageView;
         
@@ -123,14 +128,7 @@
 }
 
 - (void)setPerson:(EFMapPerson *)person {
-    if (_person == person)
-        return;
-    
     [self willChangeValueForKey:@"person"];
-    
-    if (_person) {
-        _person = nil;
-    }
     
     _person = person;
     [self _personDidChange];

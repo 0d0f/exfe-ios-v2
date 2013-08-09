@@ -30,7 +30,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.1.4</string>
+	<string>2.1.5</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -61,15 +61,19 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>47</string>
+	<string>48</string>
 	<key>EXFE-build</key>
-	<string>m2B37F</string>
+	<string>m2B388</string>
 	<key>FacebookAppID</key>
 	<string>624471647582234</string>
 	<key>FacebookDisplayName</key>
 	<string>0D0F panda</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>

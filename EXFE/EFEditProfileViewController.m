@@ -760,7 +760,6 @@
             [self presentModalViewController:picker animated:YES];
         }else{
             // Simulator
-            NSLog(@"");
         }
         
     }];

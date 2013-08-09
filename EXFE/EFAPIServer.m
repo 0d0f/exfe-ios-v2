@@ -1182,7 +1182,8 @@
     NSParameterAssert(NSURLErrorCannotDecodeRawData != error.code);
     NSParameterAssert(NSURLErrorCannotParseResponse != error.code);
     
-    if ([error.domain isEqualToString:NSURLErrorDomain]) {
+    if ([error.domain isEqualToString:NSURLErrorDomain] ||
+        [error.domain isEqualToString:AFNetworkingErrorDomain]) {
         if (NSURLErrorCannotConnectToHost == error.code ||
             NSURLErrorNetworkConnectionLost == error.code ||
             NSURLErrorNotConnectedToInternet == error.code ||

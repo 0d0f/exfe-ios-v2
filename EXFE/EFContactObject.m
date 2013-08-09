@@ -152,17 +152,33 @@
         } else {
             roughIdentity.selected = selected;
         }
-        
-        if (selected && (kEFRoughIdentityGetIdentityStatusReady == roughIdentity.status || kEFRoughIdentityGetIdentityStatusFailure == roughIdentity.status)) {
-            [roughIdentity getIdentityWithSuccess:nil
-                                          failure:nil];
-        }
     }
     
     [self didChangeValueForKey:@"selected"];
 }
 
 #pragma mark -
+
+- (void)roughIdentitiesSelectedStateDidChange {
+    BOOL hasSelectedRoughIdentity = NO;
+    
+    for (RoughIdentity *roughtIdentity in self.roughIdentities) {
+        if (roughtIdentity.selected) {
+            hasSelectedRoughIdentity = YES;
+            break;
+        }
+    }
+    
+    [self willChangeValueForKey:@"selected"];
+    
+    if (hasSelectedRoughIdentity) {
+        _selected = YES;
+    } else {
+        _selected = NO;
+    }
+    
+    [self didChangeValueForKey:@"selected"];
+}
 
 - (void)selectRoughtIdentity:(RoughIdentity *)roughIdentity {
     NSUInteger index = [self.roughIdentities indexOfObject:roughIdentity];

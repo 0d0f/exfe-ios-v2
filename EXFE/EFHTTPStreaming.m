@@ -48,13 +48,13 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
         @synchronized(self) {
             do {
                 if (!CFReadStreamHasBytesAvailable(_stream)) {
-                    [_delegate completedRead:[_strFromStream copy]];
                     return;
                 }
                 
-                memset(buffer,0,StreamBufSize);
+                memset(buffer, 0, StreamBufSize);
                 length = 0;
                 length = CFReadStreamRead(_stream, buffer, StreamBufSize);
+                
                 int newLineIdx = -1;
                 for (int i = 0; i < length; i++) {
                     if (buffer[i] == '\n') {
@@ -62,23 +62,61 @@ void ReadStreamCallBack( CFReadStreamRef aStream, CFStreamEventType eventType, v
                     }
                 }
                 
-                NSString *to_add = [[NSString alloc] initWithBytes:buffer length:length encoding:NSASCIIStringEncoding];
+                NSString *to_add = [[NSString alloc] initWithBytes:buffer length:length encoding:NSUTF8StringEncoding];
                 if (to_add != nil) {
-                    if (newLineIdx > 0) {
-                        _strFromStream = [_strFromStream stringByAppendingString:[to_add substringToIndex:newLineIdx]];
-                    } else {
+                    if (_strFromStream && _strFromStream.length) {
                         _strFromStream = [_strFromStream stringByAppendingString:to_add];
+                    } else {
+                        _strFromStream = to_add;
                     }
                     
                     if (newLineIdx > 0) {
-                        _strFromStream = [_strFromStream stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-                        [_delegate completedRead:[_strFromStream copy]];
-                         
-                        if (newLineIdx >= to_add.length - 1) {
-                            _strFromStream = @"";
-                        } else {
-                            _strFromStream = [to_add substringFromIndex:newLineIdx];
+                        NSData *data = [_strFromStream dataUsingEncoding:NSUTF8StringEncoding];
+                        length = [_strFromStream lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+                        char *stringBuffer = (char *)malloc(sizeof(char) * length);
+                        memcpy(stringBuffer, [data bytes], length);
+                        
+                        length = strlen(stringBuffer);
+                        
+                        int j = 0;
+                        for (int i = 0; i < length; i++) {
+                            if (stringBuffer[i] == '\n') {
+                                size_t bufferSize = sizeof(char) * (i - j);
+                                char *componetBuffer = (char *)malloc(bufferSize);
+                                
+                                memset(componetBuffer, 0, bufferSize);
+                                strncpy(componetBuffer, (char *)(stringBuffer + j), (i - j));
+                                
+                                NSString *component = [[NSString alloc] initWithBytes:componetBuffer length:(i - j) encoding:NSUTF8StringEncoding];
+                                
+                                free(componetBuffer);
+                                
+                                [_delegate completedRead:component];
+                                j = i + 1;
+                            }
                         }
+                        
+                        length = length - j;
+                        if (length > 0) {
+                            size_t bufferSize = sizeof(char) * (length);
+                            char *componetBuffer = (char *)malloc(bufferSize);
+                            
+                            memset(componetBuffer, 0, bufferSize);
+                            strncpy(componetBuffer, (char *)(stringBuffer + j), bufferSize);
+                            
+                            NSString *component = [[NSString alloc] initWithBytes:componetBuffer length:length encoding:NSUTF8StringEncoding];
+                            free(componetBuffer);
+                            
+                            if (!component) {
+                                return;
+                            }
+                            
+                            _strFromStream = [_strFromStream stringByAppendingString:component];
+                        } else {
+                            _strFromStream = @"";
+                        }
+                        
+                        free(stringBuffer);
                     }
                 }
             } while (length > 0);

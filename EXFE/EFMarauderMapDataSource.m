@@ -15,6 +15,9 @@
 #import "EFRouteLocation.h"
 #import "EFRoutePath.h"
 #import "IdentityId+EXFE.h"
+#import "Cross.h"
+#import "Exfee+EXFE.h"
+#import "EFAPI.h"
 
 #define kStreamingDataTypeLocaionts     @"/v3/crosses/routex/breadcrumbs"
 #define kStreamingDataTypeRoute         @"/v3/crosses/routex/geomarks"
@@ -24,8 +27,12 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 @interface EFMarauderMapDataSource ()
 
+@property (nonatomic, strong) NSMutableArray        *people;
+@property (nonatomic, strong) NSMutableDictionary   *peopleMap;
+
 @property (nonatomic, strong) NSMutableArray        *routeLocations;
 @property (nonatomic, strong) NSMutableDictionary   *routeLocationAnnotationMap;
+
 @property (nonatomic, strong) EFHTTPStreaming       *httpStreaming;
 
 @end
@@ -34,6 +41,11 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
 
 - (void)_postPathDidChangeNotification;
 - (void)_postLocationDidChangeNotification;
+
+- (void)_initPeople;
+
+- (NSString *)_generateRouteLocationId;
+- (NSString *)_userIdFromDirtyUserId:(NSString *)dirtyUserId;
 
 @end
 
@@ -51,14 +63,62 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     });
 }
 
+- (void)_initPeople {
+    NSMutableArray *people = [[NSMutableArray alloc] init];
+    NSMutableDictionary *peopleMap = [[NSMutableDictionary alloc] init];
+    
+    NSArray *invitations = [self.cross.exfee getSortedMergedInvitations:kInvitationSortTypeMeAcceptOthers];
+    for (NSArray *invitation in invitations) {
+        EFMapPerson *person = [[EFMapPerson alloc] initWithIdentity:((Invitation *)invitation[0]).identity];
+        [people addObject:person];
+        
+        [peopleMap setValue:person forKey:person.userIdString];
+    }
+    
+    self.people = people;
+    self.peopleMap = peopleMap;
+}
+
+- (NSString *)_generateRouteLocationId {
+    NSString *locationId = nil;
+    
+    while (YES) {
+        locationId = [NSString stringWithFormat:@"%ld%ld%ld%ld%ld@location", (random() % 99) + 1, random() % 100, random() % 100, random() % 100, random() % 100];
+        BOOL crashed = NO;
+        for (EFRouteLocation *routeLocation in self.routeLocations) {
+            if ([routeLocation.locationId isEqualToString:locationId]) {
+                crashed = YES;
+                break;
+            }
+        }
+        
+        if (!crashed) {
+            break;
+        }
+    }
+    
+    return locationId;
+}
+
+- (NSString *)_userIdFromDirtyUserId:(NSString *)dirtyUserId {
+    NSRange exfeRange = [dirtyUserId rangeOfString:@"@exfe"];
+    NSAssert(exfeRange.location != NSNotFound, @"there MUST be a @exfe");
+    NSString *userIdString = [dirtyUserId substringToIndex:exfeRange.location];
+    
+    return userIdString;
+}
+
 @end
 
 @implementation EFMarauderMapDataSource
 
-- (id)initWithCrossId:(NSInteger)crossId {
+- (id)initWithCross:(Cross *)cross {
     self = [super init];
     if (self) {
-        self.crossId = crossId;
+        self.cross = cross;
+        
+        [self _initPeople];
+        
         self.routeLocations = [[NSMutableArray alloc] init];
         self.routeLocationAnnotationMap = [[NSMutableDictionary alloc] init];
     }
@@ -66,13 +126,11 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     return self;
 }
 
-- (void)addLocation:(EFLocation *)location {
-}
-
 #pragma mark - Property Accessor
 
 - (EFRouteLocation *)destinationLocation {
     EFRouteLocation *destination = nil;
+    
     for (EFRouteLocation *location in self.routeLocations) {
         if (location.locationTytpe == kEFRouteLocationTypeDestination) {
             destination = location;
@@ -83,11 +141,60 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     return destination;
 }
 
+#pragma mark - Request
+
+- (void)getPeopleBreadcrumbs {
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate.model.apiServer getRouteXBreadcrumbsInCross:self.cross
+                                        isEarthCoordinate:NO
+                                                  success:^(NSArray *breadcrumbs){
+                                                      for (EFRoutePath *path in breadcrumbs) {
+                                                          NSString *userIdString = [self _userIdFromDirtyUserId:path.pathId];
+                                                          
+                                                          EFMapPerson *person = [self.peopleMap valueForKey:userIdString];
+                                                          NSAssert(person, ([NSString stringWithFormat:@"map should contain a person for userId: %@", userIdString]));
+                                                          
+                                                          [person.locations removeAllObjects];
+                                                          
+                                                          [person.locations addObjectsFromArray:path.positions];
+                                                          
+                                                          if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
+                                                              [self.delegate mapDataSource:self
+                                                                        didUpdateLocations:person.locations
+                                                                                   forUser:userIdString];
+                                                          }
+                                                      }
+                                                  }
+                                                  failure:^(NSError *error){
+                                                  
+                                                  }];
+}
+
+#pragma mark - People
+
+- (NSUInteger)numberOfPeople {
+    return self.people.count;
+}
+
+- (EFMapPerson *)me {
+    return [self personAtIndex:0];
+}
+
+- (EFMapPerson *)personAtIndex:(NSUInteger)index {
+    return self.people[index];
+}
+
 #pragma mark - RouteLocation
 
 - (void)addRouteLocation:(EFRouteLocation *)routeLocation toMapView:(MKMapView *)mapView {
     NSParameterAssert(routeLocation);
     NSParameterAssert(mapView);
+    
+    NSInteger index = [self.routeLocations indexOfObject:routeLocation];
+    if (NSNotFound != index) {
+        [self updateRouteLocation:routeLocation inMapView:mapView];
+        return;
+    }
     
     if (kEFRouteLocationTypeUnknow == routeLocation.locationTytpe) {
         BOOL hasDestination = NO;
@@ -149,6 +256,14 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     
     EFAnnotationView *annotationView = (EFAnnotationView *)[mapView viewForAnnotation:annotation];
     [annotationView reloadWithAnnotation:annotation];
+    
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate.model.apiServer putRouteXUpdateGeomark:routeLocation
+                                             inCross:self.cross
+                                                type:@"location"
+                                   isEarthCoordinate:NO
+                                             success:^{}
+                                             failure:^(NSError *error){}];
 }
 
 - (EFRouteLocation *)routeLocationForAnnotation:(EFAnnotation *)annotation {
@@ -179,6 +294,13 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     [mapView removeAnnotation:annotation];
     [self.routeLocationAnnotationMap removeObjectForKey:[NSValue valueWithNonretainedObject:routeLocation]];
     [self.routeLocations removeObject:routeLocation];
+    
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate.model.apiServer deleteRouteXDeleteGeomark:routeLocation
+                                                inCross:self.cross
+                                                   type:@"location"
+                                                success:^{}
+                                                failure:^(NSError *error){}];
 }
 
 - (NSArray *)allRouteLocations {
@@ -196,10 +318,8 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSString *userToken = delegate.model.userToken;
     
-    NSURL *streamingURL = [NSURL URLWithString:[NSString stringWithFormat:@"/v3/crosses/%d/routex?_method=WATCH&coordinate=mars&token=%@", self.crossId, userToken] relativeToURL:baseURL];
-//    NSLog(@"%@", [streamingURL absoluteString]);
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:streamingURL];
-    request.HTTPMethod = @"POST";
+    NSInteger crossId = [self.cross.cross_id integerValue];
+    NSURL *streamingURL = [NSURL URLWithString:[NSString stringWithFormat:@"/v3/routex/crosses/%d?_method=WATCH&coordinate=mars&token=%@", crossId, userToken] relativeToURL:baseURL];
     
     self.httpStreaming = [[EFHTTPStreaming alloc] initWithURL:streamingURL];
     self.httpStreaming.delegate = self;
@@ -213,11 +333,48 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
     }
 }
 
+#pragma mark - Register
+
+- (void)registerToUpdateLocation {
+    EFAccessInfo *accessInfo = [[EFAccessInfo alloc] initWithCross:self.cross shouldSaveBreadcrumbs:YES];
+    
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate.model.apiServer postRouteXAccessInfo:@[accessInfo]
+                                           success:^{
+                                           }
+                                           failure:^(NSError *error){
+                                           }];
+}
+
+- (void)unregisterToUpdateLocation {
+    EFAccessInfo *accessInfo = [[EFAccessInfo alloc] initWithCross:self.cross shouldSaveBreadcrumbs:NO];
+    
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate.model.apiServer postRouteXAccessInfo:@[accessInfo]
+                                           success:^{
+                                           }
+                                           failure:^(NSError *error){
+                                           }];
+}
+
+#pragma mark - Factory
+
+- (EFRouteLocation *)createRouteLocationWithCoordinate:(CLLocationCoordinate2D)coordinate {
+    EFRouteLocation *routelocation = [EFRouteLocation generateRouteLocationWithCoordinate:coordinate];
+    routelocation.locationId = [self _generateRouteLocationId];
+    
+#warning TEST only
+    routelocation.title = @"子时正刻";
+    routelocation.subtitle = @"233";
+    
+    return routelocation;
+}
+
 #pragma mark - EFHTTPStreamingDelegate
 
 - (void)completedRead:(NSString *)string {
     NSError *error = nil;
-    NSData *data = [string dataUsingEncoding:NSASCIIStringEncoding];
+    NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
     if (!data)
         return;
     
@@ -226,25 +383,51 @@ NSString *EFNotificationRouteLocationDidChange = @"notification.routeLocation.di
                                                                   error:&error];
     if (jsonDictionary && !error) {
         NSString *type = [jsonDictionary valueForKey:@"type"];
-        if ([type isEqualToString:kStreamingDataTypeLocaionts]) {
-            NSDictionary *locations = [jsonDictionary valueForKey:@"data"];
-            if (locations && locations.count) {
-                if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
-                    [locations enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
-                        NSAssert([obj isKindOfClass:[NSArray class]], @"obj should be a location array");
+        BOOL isAction = !![jsonDictionary valueForKey:@"action"];
+        NSArray *tags = [jsonDictionary valueForKey:@"tags"];
+        
+        if (!isAction) {
+            // Data Update
+            if ([type isEqualToString:@"route"]) {
+                if ([tags[0] isEqualToString:@"breadcrumbs"]) {
+                    EFRoutePath *path = [[EFRoutePath alloc] initWithDictionary:jsonDictionary];
+                    if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateLocations:forUser:)]) {
+                        NSString *userIdString = [self _userIdFromDirtyUserId:path.pathId];
+                        EFMapPerson *person = [self.peopleMap valueForKey:userIdString];
                         
-                        NSMutableArray *userLocations = [[NSMutableArray alloc] initWithCapacity:[obj count]];
-                        for (NSDictionary *locationParam in obj) {
-                            EFLocation *location = [[EFLocation alloc] initWithDictionary:locationParam];
-                            [userLocations addObject:location];
+                        person.lastLocation = path.positions[0];
+                        
+                        EFRouteLocation *destination = [self destinationLocation];
+                        if (destination) {
+                            CLLocation *destinationLocation = [[CLLocation alloc] initWithLatitude:destination.coordinate.latitude longitude:destination.coordinate.longitude];
+                            CLLocation *personLocation = [[CLLocation alloc] initWithLatitude:person.lastLocation.coordinate.latitude longitude:person.lastLocation.coordinate.longitude];
+                            CLLocationDistance distance = [destinationLocation distanceFromLocation:personLocation];
+                            person.distance = distance;
+                            if (distance < 30.0f) {
+                                person.locationState = kEFMapPersonLocationStateArrival;
+                            } else {
+                                person.locationState = kEFMapPersonLocationStateOnTheWay;
+                            }
+                        } else {
+                            person.locationState = kEFMapPersonLocationStateUnknow;
                         }
                         
-                        [self.delegate mapDataSource:self didUpdateLocations:userLocations forUser:key];
-                    }];
+                        [self.delegate mapDataSource:self didUpdateLocations:path.positions forUser:userIdString];
+                    }
+                } else if ([tags[0] isEqualToString:@"geomarks"]) {
+                    EFRoutePath *routePath = [[EFRoutePath alloc] initWithDictionary:jsonDictionary];
+                    if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateRoutePaths:)]) {
+                        [self.delegate mapDataSource:self didUpdateRoutePaths:@[routePath]];
+                    }
+                }
+            } else if ([type isEqualToString:@"location"]) {
+                EFRouteLocation *routeLocation = [[EFRouteLocation alloc] initWithDictionary:jsonDictionary];
+                if ([self.delegate respondsToSelector:@selector(mapDataSource:didUpdateRouteLocations:)]) {
+                    [self.delegate mapDataSource:self didUpdateRouteLocations:@[routeLocation]];
                 }
             }
-        } else if ([type isEqualToString:kStreamingDataTypeRoute]) {
-        
+        } else {
+            // Action Commond
         }
     }
 }

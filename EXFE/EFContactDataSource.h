@@ -39,6 +39,9 @@ typedef void (^ActionBlock)(void);
 - (void)selectContactObject:(EFContactObject *)object;
 - (void)deselectContactObject:(EFContactObject *)object;
 
+- (void)roughtIdentityDidChangeInContactObjectAtIndexPath:(NSIndexPath *)indexPath;
+- (void)roughtIdentityDidChangeInContactObject:(EFContactObject *)object;
+
 - (void)clearRecentData;
 - (void)deselectAllData;
 
