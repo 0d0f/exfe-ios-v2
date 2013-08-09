@@ -19,3 +19,6 @@
 [submodule "Vendor/SocketRocket"]
 	path = Vendor/SocketRocket
 	url = https://github.com/0day2010/SocketRocket.git
+[submodule "Vendor/RestKit"]
+	path = Vendor/RestKit
+	url = https://github.com/stonyw/RestKit.git
