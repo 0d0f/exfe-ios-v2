@@ -45,15 +45,19 @@
     
     for (int i = 0; i < _flag.numberOfStrokes; i++) {
         NSArray *points = [self.dataSource strokePointsForStrokeInMapStrokeView:self atIndex:i];
+        
         if (points && points.count) {
             id<EFMapStrokeViewPoint> lastPoint = [points lastObject];
             CLLocationCoordinate2D coordinate = lastPoint.coordinate;
             MKMapPoint mapPoint = MKMapPointForCoordinate(coordinate);
+            
             if (!MKMapRectContainsPoint(mapRect, mapPoint)) {
+                [self.strokesToDraw addObject:@[]];
                 continue;
             }
             
             NSMutableArray *corvertedPoints = [[NSMutableArray alloc] initWithCapacity:points.count];
+            
             for (id<EFMapStrokeViewPoint> point in points) {
                 CLLocationCoordinate2D coordinate = point.coordinate;
                 CGPoint locationInView = [self.mapView convertCoordinate:coordinate toPointToView:self];
@@ -91,14 +95,14 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+    NSAssert(dispatch_get_current_queue() == dispatch_get_main_queue(), @"MUST be on main thread.");
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGContextSetShouldAntialias(context, YES);
     
     for (int i = 0; i < _flag.numberOfStrokes; i++) {
-        CGContextBeginPath(context);
-        
-        UIColor *strokeColor = kDefaultStrokeColor;
+        UIColor *strokeColor = nil;
         if ([self.dataSource respondsToSelector:@selector(colorForStrokeInMapStrokeView:atIndex:)]) {
             strokeColor = [self.dataSource colorForStrokeInMapStrokeView:self atIndex:i];
         }
@@ -112,16 +116,18 @@
         CGContextSetStrokeColorWithColor(context, strokeColor.CGColor);
         CGContextSetShadowWithColor(context, (CGSize){0.0f, 0.0f}, 1.0f, [UIColor whiteColor].CGColor);
         
-        for (NSArray *locations in self.strokesToDraw) {
-            BOOL isFirstLocation = YES;
-            for (NSValue *locationValue in locations) {
-                CGPoint location = [locationValue CGPointValue];
-                if (isFirstLocation) {
-                    CGContextMoveToPoint(context, location.x, location.y);
-                    isFirstLocation = NO;
-                } else {
-                    CGContextAddLineToPoint(context, location.x, location.y);
-                }
+        CGContextBeginPath(context);
+        
+        NSArray *locations = self.strokesToDraw[i];
+        
+        BOOL isFirstLocation = YES;
+        for (NSValue *locationValue in locations) {
+            CGPoint location = [locationValue CGPointValue];
+            if (isFirstLocation) {
+                CGContextMoveToPoint(context, location.x, location.y);
+                isFirstLocation = NO;
+            } else {
+                CGContextAddLineToPoint(context, location.x, location.y);
             }
         }
         
