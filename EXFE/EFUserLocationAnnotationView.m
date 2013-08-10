@@ -32,6 +32,7 @@
         self.animationView.layer.cornerRadius = 14.5f;
         self.animationView.layer.borderColor = [UIColor COLOR_RGB(0x5B, 0x9C, 0xFC)].CGColor;
         self.animationView.layer.borderWidth = 1.0f;
+        self.animationView.hidden = YES;
         [self addSubview:self.animationView];
     }
     
@@ -50,11 +51,16 @@
 }
 
 - (void)playAnimation {
+    [self.animationView.layer removeAllAnimations];
+    
+    self.animationView.hidden = NO;
+    
     CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
     scaleAnimation.duration = 1.0f;
     scaleAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     scaleAnimation.fromValue = [self.animationView.layer valueForKey:@"transform"];
     scaleAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(2.0f, 2.0f, 1.0f)];
+    scaleAnimation.delegate = self;
     [self.animationView.layer addAnimation:scaleAnimation forKey:@"scale"];
     
     CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
@@ -63,6 +69,10 @@
     opacityAnimation.fromValue = [self.animationView.layer valueForKey:@"opacity"];
     opacityAnimation.toValue = [NSNumber numberWithDouble:0.0f];
     [self.animationView.layer addAnimation:opacityAnimation forKey:@"opacity"];
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    self.animationView.hidden = YES;
 }
 
 @end
