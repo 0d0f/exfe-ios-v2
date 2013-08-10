@@ -1,6 +1,3 @@
-[submodule "RestKit"]
-	path = RestKit
-	url = git://github.com/RestKit/RestKit.git
 [submodule "Vendor/BlocksKit"]
 	path = Vendor/BlocksKit
 	url = git://github.com/stonyw/BlocksKit.git
@@ -22,3 +19,6 @@
 [submodule "Vendor/SocketRocket"]
 	path = Vendor/SocketRocket
 	url = https://github.com/0day2010/SocketRocket.git
+[submodule "Vendor/RestKit"]
+	path = Vendor/RestKit
+	url = https://github.com/stonyw/RestKit.git
