@@ -1452,6 +1452,9 @@
 		760F2B3817B4F841009C6A7E /* EFUserLocationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */; };
 		760F2B3917B4F841009C6A7E /* EFUserLocationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */; };
 		760F2B3A17B4F841009C6A7E /* EFUserLocationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 760F2B3717B4F841009C6A7E /* EFUserLocationAnnotationView.m */; };
+		761165A517B88FDA005B248A /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F9FE5611702E8B70098B9B9 /* libBlocksKit.a */; };
+		761165A617B89104005B248A /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F38E9DE17B5422700B850B6 /* libRestKit.a */; };
+		761165A717B8910D005B248A /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F38E9DE17B5422700B850B6 /* libRestKit.a */; };
 		761559BB177F1A2B00ABB62B /* header_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559B9177F1A2B00ABB62B /* header_arrow.png */; };
 		761559BC177F1A2B00ABB62B /* header_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559B9177F1A2B00ABB62B /* header_arrow.png */; };
 		761559BD177F1A2B00ABB62B /* header_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 761559B9177F1A2B00ABB62B /* header_arrow.png */; };
@@ -2244,6 +2247,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 6C3DBF8C1382F1BA00E6C9AA;
 			remoteInfo = "iOS Library";
+		};
+		761165A817B89118005B248A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F38E9D617B5422600B850B6 /* RestKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 25160D1514564E810060A5C5;
+			remoteInfo = RestKit;
+		};
+		761165AA17B8911F005B248A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F38E9D617B5422600B850B6 /* RestKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 25160D1514564E810060A5C5;
+			remoteInfo = RestKit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -3258,6 +3275,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				761165A617B89104005B248A /* libRestKit.a in Frameworks */,
 				76B124501798ECF800A73E59 /* libicucore.dylib in Frameworks */,
 				4F63DB0E17172AA600136B7E /* MobileCoreServices.framework in Frameworks */,
 				76073D12174F880B007CBFC3 /* MessageUI.framework in Frameworks */,
@@ -3291,6 +3309,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				761165A517B88FDA005B248A /* libBlocksKit.a in Frameworks */,
 				4F38E9E717B542FA00B850B6 /* libRestKit.a in Frameworks */,
 				76B124511798ECFD00A73E59 /* libicucore.dylib in Frameworks */,
 				4F63DCDD17172B0700136B7E /* MobileCoreServices.framework in Frameworks */,
@@ -3324,6 +3343,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				761165A717B8910D005B248A /* libRestKit.a in Frameworks */,
 				76B1244F1798ECF100A73E59 /* libicucore.dylib in Frameworks */,
 				78A98EF3156110FB009E0806 /* MobileCoreServices.framework in Frameworks */,
 				76073D11174F8802007CBFC3 /* MessageUI.framework in Frameworks */,
@@ -5126,6 +5146,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				761165AB17B8911F005B248A /* PBXTargetDependency */,
 				4F63DA7717172AA600136B7E /* PBXTargetDependency */,
 			);
 			name = 0d0f;
@@ -5163,6 +5184,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				761165A917B89118005B248A /* PBXTargetDependency */,
 				4F9FE56B1702EA490098B9B9 /* PBXTargetDependency */,
 			);
 			name = EXFE;
@@ -7434,6 +7456,16 @@
 			isa = PBXTargetDependency;
 			name = "iOS Library";
 			targetProxy = 4F9FE56A1702EA490098B9B9 /* PBXContainerItemProxy */;
+		};
+		761165A917B89118005B248A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RestKit;
+			targetProxy = 761165A817B89118005B248A /* PBXContainerItemProxy */;
+		};
+		761165AB17B8911F005B248A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RestKit;
+			targetProxy = 761165AA17B8911F005B248A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
