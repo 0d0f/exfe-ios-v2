@@ -27,16 +27,16 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 
 
 @implementation Util
-
+{}
 #pragma mark URL query param tool
-+ (NSString*) decodeFromPercentEscapeString:(NSString*)string{
++ (NSString*) decodeFromPercentEscapeString:(NSString*)string {
     CFStringRef sref = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,(CFStringRef) string,CFSTR(""),kCFStringEncodingUTF8);
     NSString *s=[NSString stringWithFormat:@"%@", (__bridge NSString *)sref];
     CFRelease(sref);
     return s;
 }
 
-+ (NSString*) encodeToPercentEscapeString:(NSString*)string{
++ (NSString*) encodeToPercentEscapeString:(NSString*)string {
     CFStringRef urlString = CFURLCreateStringByAddingPercentEscapes(
                                                                     NULL,
                                                                     (CFStringRef)string,
@@ -59,7 +59,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return (__bridge NSString *)urlString;
 }
 
-+ (NSString*)concatenateQuery:(NSDictionary*)parameters {
++ (NSString *) concatenateQuery:(NSDictionary *)parameters {
     if (!parameters || [parameters count] == 0){
         return nil;
     }
@@ -70,7 +70,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return [query substringFromIndex:1];
 }
 
-+ (NSDictionary*)splitQuery:(NSString*)query {
++ (NSDictionary *)splitQuery:(NSString *)query {
     if ([query length] == 0){
         return nil;
     }
@@ -88,13 +88,14 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 }
 
 #pragma mark provider
-+ (NSString*) findProvider:(NSString*)external_id{
++ (NSString *) findProvider:(NSString *)external_id
+{
     Provider p = [self matchedProvider:external_id];
     return [Identity getProviderString:p];
 }
 
 // Possible
-+ (Provider)candidateProvider:(NSString*)raw
++ (Provider) candidateProvider:(NSString *)raw
 {
     NSString *lowercase = [raw lowercaseString];
     
@@ -128,7 +129,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return kProviderUnknown;
 }
 
-+ (Provider)matchedProvider:(NSString*)raw
++ (Provider) matchedProvider:(NSString *)raw
 {
     NSString *lowercase = [raw lowercaseString];
     NSString *emailRegex = @"^[_a-z0-9-\\+]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9]+)*(\\.[a-z]{2,})$";
@@ -163,13 +164,13 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return kProviderUnknown;
 }
 
-+ (NSDictionary*)parseIdentityString:(NSString*)raw
++ (NSDictionary *) parseIdentityString:(NSString *)raw
 {
     Provider p = [self matchedProvider:raw];
     return [self parseIdentityString:raw byProvider:p];
 }
 
-+ (NSDictionary*)parseIdentityString:(NSString*)raw byProvider:(Provider)p
++ (NSDictionary *) parseIdentityString:(NSString *)raw byProvider:(Provider)p
 {
     NSString *provider = [Identity getProviderString:p];
     switch (p) {
@@ -203,7 +204,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
 }
 
 #pragma mark Telephone number helper
-+ (NSString *)getDeviceCountryCode
++ (NSString *) getDeviceCountryCode
 {
     CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [netInfo subscriberCellularProvider];
@@ -217,7 +218,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return isocode;
 }
 
-+ (BOOL)isAcceptedPhoneNumber:(NSString*)phonenumber{
++ (BOOL) isAcceptedPhoneNumber:(NSString *)phonenumber{
     
     NSString *isoCC = [self getDeviceCountryCode];
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
@@ -245,7 +246,7 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return NO;
 }
 
-+ (NSString*)getTelephoneCountryCode:(NSString*)isocode
++ (NSString *) getTelephoneCountryCode:(NSString *)isocode
 {
     NSString *uppercaseIsoCC = [isocode uppercaseString];
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
@@ -256,18 +257,20 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     return @"";
 }
 
-+ (NSString*)getTelephoneCountryCode
++ (NSString*) getTelephoneCountryCode
 {
     NSString *isoCC = [self getDeviceCountryCode];
     return [self getTelephoneCountryCode:isoCC];
 }
 
-+ (BOOL) isValidPhoneNumber:(NSString*)phonenumber{
++ (BOOL) isValidPhoneNumber:(NSString *)phonenumber
+{
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     return [phoneUtil isViablePhoneNumber:phonenumber];
 }
 
-+ (NSString*) formatPhoneNumber:(NSString*)phonenumber{
++ (NSString *) formatPhoneNumber:(NSString *)phonenumber
+{
     NSString *isoCC = [self getDeviceCountryCode];
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     
@@ -289,7 +292,6 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     }
     return normalized;
 }
-
 
 #pragma mark deprecated time date helper
 + (NSDate*) beginningOfWeek:(NSDate*)date{
@@ -460,8 +462,8 @@ NSString *const EXCrossListDidChangeNotification = @"EX_CROSS_LIST_DID_CHANGE";
     
 }
 
-+ (int)daysBetween:(NSDate *)dt1 and:(NSDate *)dt2{
-    
++ (int) daysBetween:(NSDate *)dt1 and:(NSDate *)dt2
+{
     NSDateFormatter *dateformat = [[NSDateFormatter alloc] init];
     
     [dateformat setDateFormat:@"yyyy-MM-dd"];
