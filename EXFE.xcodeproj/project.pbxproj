@@ -3786,7 +3786,6 @@
 				76B123BF179647DD00A73E59 /* Annotation */,
 				76B123C01796480100A73E59 /* Overlay */,
 				76B123C11796480E00A73E59 /* Modal */,
-				76B123C6179648C000A73E59 /* ViewController */,
 				76B123741796470C00A73E59 /* EFTouchDownGestureRecognizer.h */,
 				76B123751796470C00A73E59 /* EFTouchDownGestureRecognizer.m */,
 			);
@@ -4051,13 +4050,6 @@
 				768DD35117A91F4A00E080C6 /* EFLocationManager.m */,
 			);
 			name = DataSource;
-			sourceTree = "<group>";
-		};
-		76B123C6179648C000A73E59 /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = ViewController;
 			sourceTree = "<group>";
 		};
 		76B1240B1796F44900A73E59 /* Sqlite */ = {
