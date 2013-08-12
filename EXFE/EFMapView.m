@@ -21,6 +21,7 @@
 #define kMinDistance        (16.0f)
 #define kCircleSize         (CGSize){kMinDistance * 2.0f, kMinDistance * 2.0f}
 #define kDefaultPathColor   [UIColor colorWithRed:0.0f green:(124.0f / 255.0f) blue:1.0f alpha:1.0f]
+#define kOfflineDuration    (30.0f)
 
 @interface EFMapView ()
 
@@ -47,6 +48,8 @@
 @property (nonatomic, assign) CGFloat           maxDistance;
 @property (nonatomic, assign) BOOL              isDrawingStarted;
 
+@property (nonatomic, strong) NSTimer           *updateLocationTimer;
+
 @end
 
 @interface EFMapView (Private)
@@ -58,6 +61,9 @@
 - (void)_beginWithPoint:(CGPoint)point;
 - (void)_moveWithPoint:(CGPoint)point;
 - (void)_endWithPoint:(CGPoint)point;
+
+- (void)_fireTimer;
+- (void)_invalideTimer;
 
 @end
 
@@ -252,6 +258,25 @@
     [self setNeedsDisplay];
 }
 
+- (void)_fireTimer {
+    [self _invalideTimer];
+    self.updateLocationTimer = [NSTimer scheduledTimerWithTimeInterval:kOfflineDuration
+                                                                target:self
+                                                              selector:@selector(runloop:)
+                                                              userInfo:nil
+                                                               repeats:NO];
+}
+
+- (void)_invalideTimer {
+    if (self.updateLocationTimer) {
+        if ([self.updateLocationTimer isValid]) {
+            [self.updateLocationTimer invalidate];
+        }
+        
+        self.updateLocationTimer = nil;
+    }
+}
+
 @end
 
 @implementation EFMapView
@@ -404,6 +429,10 @@ static UIView * ReverseSubviews(UIView *view) {
     self.circleView = circleView;
 }
 
+- (void)dealloc {
+    [self _invalideTimer];
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -429,6 +458,20 @@ static UIView * ReverseSubviews(UIView *view) {
     CGRect viewBounds = self.bounds;
     CGRect operationBaseViewFrame = (CGRect){{0.0f, CGRectGetHeight(viewBounds) - 50.0f}, {CGRectGetWidth(viewBounds), 50.0f}};
     self.operationBaseView.frame = operationBaseViewFrame;
+}
+
+#pragma mark - Timer Runloop
+
+- (void)runloop:(NSTimer *)timer {
+    [self _invalideTimer];
+    [self.headingButton setImage:[UIImage imageNamed:@"map_arrow_g5.png"] forState:UIControlStateNormal];
+}
+
+#pragma mark - Public
+
+- (void)userLocationDidChange {
+    [self.headingButton setImage:[UIImage imageNamed:@"map_arrow_blue.png"] forState:UIControlStateNormal];
+    [self _fireTimer];
 }
 
 #pragma mark - EFMapEditingAnnotationViewDelegate
@@ -477,14 +520,6 @@ static UIView * ReverseSubviews(UIView *view) {
     
     if ([self.delegate respondsToSelector:@selector(mapViewHeadingButtonPressed:)]) {
         [self.delegate mapViewHeadingButtonPressed:self];
-    }
-    
-    if (self.userTrackingMode == MKUserTrackingModeNone) {
-        [sender setImage:[UIImage imageNamed:@"map_arrow_blue.png"] forState:UIControlStateNormal];
-        [self setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
-    } else {
-        [sender setImage:[UIImage imageNamed:@"map_arrow_g5.png"] forState:UIControlStateNormal];
-        [self setUserTrackingMode:MKUserTrackingModeNone animated:YES];
     }
 }
 
